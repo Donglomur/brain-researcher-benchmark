@@ -9,11 +9,18 @@ Hard-won playbook. **Core principle: difficulty comes from the science and the d
 
 ## Scope and boundary
 
-This skill owns a **frozen current-agent benchmark**: a fixed obtainable substrate, a fair
-oracle, and empirical evidence that the task separates scientific judgment from routine
-execution. It does not run an existing Harbor task and does not turn a benchmark into an
-ever-changing service. If a paper also supports a capability-open family, preserve its
-evidence packet and hand that separate decision to `self-evolvable-question-design`.
+This skill owns the benchmark branch of a bounded curation job:
+
+- `STEP0`: execute the exact paper claim or benchmark-critical lever.
+- `BENCHMARK_DRAFT`: author a frozen `BenchmarkQuestionSpec`.
+- `CALIBRATE_BENCHMARK`: run and inspect oracle, adversarial, and frontier-agent trials.
+
+It does not schedule jobs, claim topics, write a tracker, append lifecycle transitions,
+release artifacts, run an existing Harbor evaluation on behalf of another stage, or turn a
+benchmark into an evolving service. The controller owns state transitions and adjudication
+owns release. If a paper also supports a capability-open family, preserve the shared
+evidence artifact and hand that independent decision to
+`self-evolvable-question-design`.
 
 Worked examples ship alongside this skill (the `*-001` task directories at the repo root), a measured difficulty ladder:
 - **`GRADIENT-001`** — un-cued *characterise the principal gradient* → both GPT-5.5 xhigh & Claude Opus 4.8 overclaim a single identity → **FAIL** (hard).
@@ -24,25 +31,10 @@ Worked examples ship alongside this skill (the `*-001` task directories at the r
 ## Paper intake — decide whether Step 0 is warranted
 
 Do not equate a famous paper, a rising topic, or an available dataset with a benchmark
-candidate. Start with a **primary empirical or benchmark paper**, not a review, and fill the
-same packet used by `self-evolvable-question-design`:
-
-```yaml
-PaperEvidencePacket:
-  paper_id:                 # DOI/PMID/OpenAlex ID or stable citation
-  paper_kind:               # primary_empirical | methods | benchmark | review
-  claim_and_contrast:
-  target_measurement:
-  obtainable_dataset:
-  executable_method:
-  oracle_candidate:
-  reliability_ceiling:
-  current_baseline:
-  candidate_hidden_lever:
-  freshness_source:
-  evidence_status: {}       # field -> reported | verified | measured | planned | missing
-  evidence_refs: []
-```
+candidate. Start with a **primary empirical or benchmark paper**, not a review. Read
+`contracts/curation/README.md` and consume the shared
+`curation-contracts-v1.schema.json#/$defs/PaperEvidencePacket` artifact supplied by the
+job. Do not recreate an incompatible local packet.
 
 Advance only when the paper provides an exact claim/contrast, the scoring substrate is fixed
 and obtainable, the method can be executed, and the candidate truth is a real measurement.
@@ -77,9 +69,11 @@ Three outcomes decide the genre:
 | needs credentialed data (HCP/UKB) | get the data, or pick another paper |
 | fragile / doesn't reproduce | use the **measured fragility** only if it supports a fair lever or rigor task; otherwise archive |
 
-Step 0 must distinguish the paper's reported result from local evidence. Update
-`evidence_status` field by field and preserve the exact dataset, cohort, contrast, preprocessing,
-and metric used by the probe. A successful Step-0 kill is a valid output.
+Step 0 must distinguish the paper's reported result from local evidence. Update evidence
+field by field using `reported | verified | measured | planned | missing`, and preserve the
+exact dataset, cohort, contrast, preprocessing, metric, input artifacts, command log, and
+outputs used by the probe. A successful Step-0 kill is a valid output. A desk assessment,
+fixture, or planned command is not Step 0.
 
 ## Step 0.5 — Test benchmark fit before authoring the full task
 
@@ -108,28 +102,15 @@ Return one benchmark verdict before expensive calibration:
 
 Do not promote `build_hard_candidate` to “hard benchmark” until Step 5 calibration passes.
 
-For `build_hard_candidate`, `build_easy_control`, or `reframe`, emit:
-
-```yaml
-BenchmarkCandidate:
-  candidate_id:
-  paper_evidence_ref:
-  genre:
-  fixed_substrate:
-  oracle:
-  locally_measured_target:
-  failure_axis:
-  hidden_lever:
-  critical_path_status:
-  step0_evidence:
-  expected_agent_gap:
-  verifier_target:
-  calibration_plan:
-  evolvable_handoff:        # assess | not_indicated
-```
+For `build_hard_candidate`, `build_easy_control`, or `reframe`, emit a draft
+`curation-contracts-v1.schema.json#/$defs/BenchmarkQuestionSpec`. Store the failure axis
+and hidden lever as private artifact references, not in a public instruction or summary.
+Include the fixed substrate, locally measured target, oracle, verifier target,
+critical-path result, Step-0 evidence, expected agent gap, and calibration plan.
 
 This is a candidate contract, not evidence that a runnable task exists or that the benchmark
-is hard. Those claims require the corresponding lifecycle and Step 5 artifacts.
+is hard. Keep `release_status=draft`. Those claims require the corresponding runnable
+artifacts, Step 5 evidence, and independent adjudication.
 
 ## Step 1 — Pick the genre deliberately
 
@@ -241,6 +222,11 @@ Honest limit: a rigor-genre verifier still *grades a judgement* (reads the concl
   - `DEVCONN-001`: check had a `(confound…)[0,45](motion)` branch and a `reduced`→`regressed`→`motion` chain → Claude passed by writing "fMRIPrep **reduced confounds regressed (motion**, aCompCor, …)" (a nuisance-regressor list), never having checked head motion. It had even volunteered a *different* skeptical caveat (global-amplitude), so it *looked* insightful — the green light was a lie.
   Guards that hold: (1) the trap word must co-occur with a **result token** (the age/group/developmental effect, "reproduce", "anti-correlation") or a **collapse token** ("only with", "no longer significant", "vanishes under control") — proximity to the trap word alone is not enough; (2) **never put pipeline vocabulary in your trigger set** — dropping a bare `reduc\w*` (which matched "reduced confounds") was the actual fix; (3) build the adversarial set *from the real runs*: a passing agent's own pipeline sentence is your hardest negative. A judgement check is only as good as its tuning against real outputs — and the output that looks like a pass is the one to read most carefully.
 
+Record calibration in the draft `BenchmarkQuestionSpec` and return a
+`StageResult`. Use `calibration_status=calibrated` only for an actually executed, fully
+reviewed protocol. Set `release_status=adjudication_pending` at most; this skill cannot
+release the task.
+
 ## Suite-level design — don't build a monoculture
 
 A single hard task is not a benchmark. Across the suite, vary three things independently, or every task exercises the same weakness:
@@ -272,12 +258,12 @@ TASK/
 
 ## One-line flow
 
-Fill `PaperEvidencePacket` → reject reviews/unobtainable oracles → **verify the exact claim on
+Consume the shared `PaperEvidencePacket` → reject reviews/unobtainable oracles → **verify the exact claim on
 obtainable data** → measure a real lever or fragility → apply the off-critical-path
 `agent_headroom_hypothesis` → choose `build_hard_candidate`, `build_easy_control`, `reframe`,
 `archive`, or `insufficient_evidence` → only then author the task → calibrate with oracle +
 adversarial + ≥2 frontier families, k≥3 each → hand re-score why each run passed or failed →
-graduate only science failures, never format/auth/runtime failures. If the paper also exposes
+recommend adjudication only for science failures, never format/auth/runtime failures. If the paper also exposes
 an open oracle/ceiling/freshness frontier, send the unchanged packet to
 `self-evolvable-question-design`; keep the two artifacts separate.
 

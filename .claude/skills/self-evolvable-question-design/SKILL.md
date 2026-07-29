@@ -9,6 +9,11 @@ Decide whether a neuroimaging problem's difficulty **auto-regenerates for years*
 investing) or is a finite curriculum / noise-floor-capped (not). Grounded in a literature
 pass over CASP, ImageNet, Kaggle, ARC-AGI, SWE-bench, MLPerf, Brain-Score, Algonauts.
 
+This skill owns `FAMILY_DRAFT` and `CALIBRATE_FAMILY` jobs. It authors or calibrates an
+`EvolvableQuestionFamily`; it does not schedule work, claim topics, write a tracker, append
+transitions, author Harbor tasks, or release a family. The controller owns state changes and
+adjudication owns release.
+
 > **The one correction that matters:** the *verb* of a task (predict / discover / design /
 > intervene / adjudicate — the old A1–A6 archetypes) does **not** predict self-evolvability.
 > Two problems of the same archetype land on opposite sides: naturalistic encoding in
@@ -22,25 +27,10 @@ target, dataset, measurement oracle, baseline, or difficulty axis. The investabl
 question family that can generate new scored instances and raise its frontier without
 rewriting the answer key by hand.
 
-When starting from a paper, create this shared packet before scoring C1–C10. Use the same
-packet if the paper is also assessed by `tb-science-task-authoring`.
-
-```yaml
-PaperEvidencePacket:
-  paper_id:                 # DOI/PMID/OpenAlex ID or stable citation
-  paper_kind:               # primary_empirical | methods | benchmark | review
-  claim_and_contrast:
-  target_measurement:
-  obtainable_dataset:
-  executable_method:
-  oracle_candidate:
-  reliability_ceiling:
-  current_baseline:
-  candidate_hidden_lever:
-  freshness_source:
-  evidence_status: {}       # field -> reported | verified | measured | planned | missing
-  evidence_refs: []
-```
+When starting from a paper, read `contracts/curation/README.md` and consume the shared
+`curation-contracts-v1.schema.json#/$defs/PaperEvidencePacket` artifact supplied by the
+job. Use the unchanged artifact if the paper is also assessed by
+`tb-science-task-authoring`; do not recreate an incompatible local packet.
 
 Do not convert `reported` evidence into `verified` or `measured` evidence. A review can seed paper
 discovery but cannot pass the paper gate itself. Missing ceiling, baseline, oracle, or
@@ -67,39 +57,17 @@ freshness evidence means **insufficient evidence** unless it is converted into a
 5. **Human ANSWER-KEY** (A1) — capped by construction.
 6. **MODEL-AS-TRUTH / in-silico** (optimize a stimulus to drive a model unit) — **disqualified, circular** (measures agreement with *that model*, not the brain; C6).
 
-## The gate — C1–C10 (C2 is the one neuroimaging keeps failing)
+## The gate — C1–C10 and F0
 
-- **C1 reality/execution-grounded automatic oracle** — decidable, minutes, pinned data. *Necessary, NOT sufficient* (ImageNet had a perfect oracle and still saturated).
-- **C2 quantified headroom to a RAISABLE ceiling ABOVE the reliability floor.** Compute the
-  noise/reliability ceiling on the *specific* target FIRST (test-retest / split-half /
-  Brain-Score normalization). Require current-SOTA ≪ ceiling **and** the residual is
-  capability-limited, not measurement-noise-limited, **and** a way to raise the ceiling.
-  **BRUTAL AUTO-REJECT when the reliable signal is tiny or saturated:** BWAS trait effects
-  r≈.01 (Marek 2022 Nature); connectome fingerprinting ~98% (Finn 2015). *This is the gate
-  the v1 scoring skipped.*
-- **C3 exogenous, time-forward, sequestered freshness** — name the world-process emitting new
-  (problem, truth) pairs after the training cutoff + the sequestration (post-cutoff release /
-  private split / novel measurement). "Human hand-authors more of the same" = sense (a), reject.
-- **C4 capability-orthogonal gradient + a MANDATORY falsification test** — point to a natural
-  harder continuum (up the cortical hierarchy, longer horizon, OOD stimulus/subject/scanner/
-  species); then **test** that scale/compute does NOT close the gap. If scale closes it, the
-  ceiling is soft (ARC-AGI-1 lesson) → downgrade.
-- **C5 cheap, pre-committed re-targeting rule** — state in advance how difficulty ratchets at
-  saturation; prefer AUTOMATABLE (hardness knob / held-out generator / exogenous stream).
-- **C6 oracle independent of the solver** — no self-grading, no model-as-truth.
-- **C7 leakage/shortcut audit inside scoring** — site/subject/family-blocked splits + a
-  permutation null + a fresh re-test (ImageNet-v2 lesson), so a shortcut can't fake the ceiling.
-- **C8 anti-memorization by construction** — private/post-cutoff/novel-measurement split; give
-  the concrete contamination argument (public HCP/UKB/NSD/OpenNeuro get ingested).
-- **C9 validated-simulator preference** — a forward model with a difficulty knob is the
-  cleanest engine, but only past the sim-to-real gate.
-- **C10 efficiency re-opening** — after an accuracy target ceilings, re-score on
-  SAMPLE/COMPUTE/SCAN-TIME efficiency (same signal from 1/N the data). Permanently open,
-  spend-free — the answer to "raising a neuroimaging noise ceiling is grant-gated."
+Read and apply every definition in
+`contracts/curation/evolvable-rubric-v1.md`. That file is the single source of truth.
+Do not replace C3 with generic parameterized generation, C4 with generic contamination
+resistance, or C5 with an uncommitted freshness idea. C2 measurement, the C4 falsification
+test, and the F0 freshness probe must actually run before a `pass`.
 
 ## Procedure
 
-0. If starting from a paper, fill `PaperEvidencePacket`. Require a primary empirical or
+0. If starting from a paper, consume the shared `PaperEvidencePacket`. Require a primary empirical or
    benchmark paper, an exact target/contrast, an obtainable scoring substrate, and an
    executable method. Otherwise return `insufficient_evidence` or use the paper only to find
    a better primary source.
@@ -112,6 +80,8 @@ freshness evidence means **insufficient evidence** unless it is converted into a
    family is capped sense (a).
 5. Check C3/C5/C6/C7/C8. Prefer C9-simulator or C10-efficiency to re-open frontiers without spend.
 6. Define the family contract below, then **tier and report**. Note what was dropped and why.
+   In `FAMILY_DRAFT`, planned probes can support only `conditional`. In
+   `CALIBRATE_FAMILY`, preserve actual commands, inputs, outputs, versions, and lineage.
 
 ## Required output: verdict plus an evolvable family contract
 
@@ -126,26 +96,11 @@ Return one verdict:
 - `insufficient_evidence` — the paper or available artifacts do not identify a testable
   target, scoring substrate, or required measurements.
 
-For `pass` or `conditional`, emit:
-
-```yaml
-EvolvableQuestionFamily:
-  family_id:
-  seed_instances:
-  instance_generator:
-  oracle:
-  oracle_provenance:
-  reliability_ceiling:
-  current_baseline:
-  capability_gap:
-  hardness_knobs:
-  freshness_and_sequestration:
-  ratchet_rule:
-  leakage_controls:
-  efficiency_reopening:
-  retirement_condition:
-  next_probe:
-```
+For `pass` or `conditional`, emit
+`curation-contracts-v1.schema.json#/$defs/EvolvableQuestionFamily` plus the bounded
+`StageResult`. Keep `release_status=draft` in `FAMILY_DRAFT` and
+`release_status=adjudication_pending` at most in `CALIBRATE_FAMILY`. This skill cannot
+release the family.
 
 Do not return a long static list of paper-comprehension questions as the family. Every
 hardness knob must change capability demand, not merely wording or item count. State what

@@ -1,0 +1,480 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://brain-researcher.com/contracts/curation/curation-contracts-v1.schema.json",
+  "title": "Brain Researcher automated curation contracts v1",
+  "description": "Public-safe contracts for bounded scientific curation jobs and controller-owned transitions.",
+  "x-stage-transition-contract": {
+    "SCOUT": {
+      "inputs": ["unstarted"],
+      "passed": "scouted",
+      "killed": "candidate_killed"
+    },
+    "PAPER_RESOLUTION": {
+      "inputs": ["scouted"],
+      "passed": "paper_resolved",
+      "killed": "candidate_killed"
+    },
+    "DATA_PREFLIGHT": {
+      "inputs": ["paper_resolved"],
+      "passed": "data_preflighted",
+      "killed": "candidate_killed"
+    },
+    "ACQUIRE": {
+      "inputs": ["data_preflighted"],
+      "passed": "data_acquired",
+      "killed": "candidate_killed"
+    },
+    "STEP0": {
+      "inputs": ["data_acquired"],
+      "passed": "step0_passed",
+      "killed": "step0_killed"
+    },
+    "BENCHMARK_DRAFT": {
+      "inputs": ["step0_passed"],
+      "passed": "benchmark_drafted",
+      "killed": "benchmark_killed"
+    },
+    "FAMILY_DRAFT": {
+      "inputs": ["data_acquired", "step0_passed"],
+      "passed": "family_drafted",
+      "killed": "family_killed"
+    },
+    "CALIBRATE_BENCHMARK": {
+      "inputs": ["benchmark_drafted"],
+      "passed": "benchmark_calibrated",
+      "killed": "benchmark_killed"
+    },
+    "CALIBRATE_FAMILY": {
+      "inputs": ["family_drafted"],
+      "passed": "family_calibrated",
+      "killed": "family_killed"
+    },
+    "ADJUDICATE": {
+      "inputs": ["benchmark_calibrated", "family_calibrated"],
+      "released": "released",
+      "retired": "retired"
+    }
+  },
+  "$defs": {
+    "Sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "ArtifactVisibility": {
+      "type": "string",
+      "enum": ["public", "author_private", "oracle_private", "restricted"]
+    },
+    "ArtifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "uri", "sha256", "media_type", "visibility"],
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "uri": {"type": "string", "minLength": 1, "maxLength": 2048},
+        "sha256": {"$ref": "#/$defs/Sha256"},
+        "media_type": {"type": "string", "minLength": 1, "maxLength": 128},
+        "visibility": {"$ref": "#/$defs/ArtifactVisibility"}
+      }
+    },
+    "PrivateArtifactRef": {
+      "allOf": [
+        {"$ref": "#/$defs/ArtifactRef"},
+        {
+          "properties": {
+            "visibility": {
+              "type": "string",
+              "enum": ["author_private", "oracle_private", "restricted"]
+            }
+          }
+        }
+      ]
+    },
+    "ExecutedBy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent", "model_snapshot", "skill_sha", "tool_manifest_ref"],
+      "properties": {
+        "agent": {"type": "string", "minLength": 1},
+        "model_snapshot": {"type": "string", "minLength": 1},
+        "skill_sha": {"$ref": "#/$defs/Sha256"},
+        "tool_manifest_ref": {"$ref": "#/$defs/ArtifactRef"}
+      }
+    },
+    "Actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["human_owner", "executed_by", "human_reviewed_by"],
+      "properties": {
+        "human_owner": {"type": "string", "minLength": 1},
+        "executed_by": {"$ref": "#/$defs/ExecutedBy"},
+        "human_reviewed_by": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "EvidenceStatus": {
+      "type": "string",
+      "enum": ["reported", "verified", "measured", "planned", "missing"]
+    },
+    "EvidenceItem": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["field", "status", "evidence_refs"],
+      "properties": {
+        "field": {"type": "string", "minLength": 1},
+        "status": {"$ref": "#/$defs/EvidenceStatus"},
+        "value": {},
+        "evidence_refs": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/ArtifactRef"}
+        },
+        "probe": {
+          "type": ["object", "null"],
+          "additionalProperties": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"status": {"const": "measured"}},
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "evidence_refs": {"minItems": 1}
+            }
+          }
+        }
+      ]
+    },
+    "PaperEvidencePacket": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "paper_id",
+        "paper_kind",
+        "claim_and_contrast",
+        "target_measurement",
+        "evidence"
+      ],
+      "properties": {
+        "paper_id": {"type": "string", "minLength": 1},
+        "paper_kind": {
+          "type": "string",
+          "enum": ["primary_empirical", "methods", "benchmark", "review"]
+        },
+        "claim_and_contrast": {"type": "string", "minLength": 1},
+        "target_measurement": {"type": "string", "minLength": 1},
+        "dataset_refs": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/ArtifactRef"}
+        },
+        "method_refs": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/ArtifactRef"}
+        },
+        "evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/EvidenceItem"}
+        }
+      }
+    },
+    "Stage": {
+      "type": "string",
+      "enum": [
+        "SCOUT",
+        "PAPER_RESOLUTION",
+        "DATA_PREFLIGHT",
+        "ACQUIRE",
+        "STEP0",
+        "BENCHMARK_DRAFT",
+        "FAMILY_DRAFT",
+        "CALIBRATE_BENCHMARK",
+        "CALIBRATE_FAMILY",
+        "ADJUDICATE"
+      ]
+    },
+    "CurationState": {
+      "type": "string",
+      "enum": [
+        "unstarted",
+        "scouted",
+        "paper_resolved",
+        "data_preflighted",
+        "data_acquired",
+        "step0_passed",
+        "benchmark_drafted",
+        "family_drafted",
+        "benchmark_calibrated",
+        "family_calibrated",
+        "blocked",
+        "candidate_killed",
+        "step0_killed",
+        "benchmark_killed",
+        "family_killed",
+        "released",
+        "retired"
+      ]
+    },
+    "StageOutcome": {
+      "type": "string",
+      "enum": ["passed", "killed", "blocked", "retry"]
+    },
+    "CurationJob": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "schema_version",
+        "job_id",
+        "opportunity_id",
+        "stage",
+        "attempt_id",
+        "input_artifact_refs",
+        "allowed_budget_ref",
+        "skill_sha",
+        "actor"
+      ],
+      "properties": {
+        "schema_version": {"const": "curation-job-v1"},
+        "job_id": {"type": "string", "minLength": 1},
+        "opportunity_id": {"type": "string", "minLength": 1},
+        "candidate_id": {"type": ["string", "null"]},
+        "stage": {"$ref": "#/$defs/Stage"},
+        "attempt_id": {"type": "string", "minLength": 1},
+        "input_artifact_refs": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/ArtifactRef"}
+        },
+        "allowed_budget_ref": {"$ref": "#/$defs/ArtifactRef"},
+        "skill_sha": {"$ref": "#/$defs/Sha256"},
+        "actor": {"$ref": "#/$defs/Actor"},
+        "required_output_schema": {"type": "string", "minLength": 1}
+      }
+    },
+    "StageResult": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "schema_version",
+        "job_id",
+        "opportunity_id",
+        "stage",
+        "outcome",
+        "artifact_refs",
+        "evidence",
+        "deviations",
+        "next_stage_candidate",
+        "next_job_inputs",
+        "maximum_defensible_claim",
+        "public_summary"
+      ],
+      "properties": {
+        "schema_version": {"const": "curation-stage-result-v1"},
+        "job_id": {"type": "string", "minLength": 1},
+        "opportunity_id": {"type": "string", "minLength": 1},
+        "candidate_id": {"type": ["string", "null"]},
+        "stage": {"$ref": "#/$defs/Stage"},
+        "outcome": {"$ref": "#/$defs/StageOutcome"},
+        "artifact_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/ArtifactRef"}
+        },
+        "evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/EvidenceItem"}
+        },
+        "deviations": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "next_stage_candidate": {
+          "oneOf": [
+            {"$ref": "#/$defs/Stage"},
+            {"type": "null"}
+          ]
+        },
+        "next_job_inputs": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/ArtifactRef"}
+        },
+        "maximum_defensible_claim": {"type": "string"},
+        "public_summary": {"type": "string"},
+        "private_handoff_ref": {
+          "oneOf": [
+            {"$ref": "#/$defs/ArtifactRef"},
+            {"type": "null"}
+          ]
+        }
+      }
+    },
+    "CurationTransition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "transition_id",
+        "job_id",
+        "opportunity_id",
+        "candidate_id",
+        "stage",
+        "from_state",
+        "to_state",
+        "outcome",
+        "actor",
+        "artifact_refs"
+      ],
+      "properties": {
+        "schema_version": {"const": "CurationTransitionV1"},
+        "transition_id": {"type": "string", "minLength": 1},
+        "job_id": {"type": "string", "minLength": 1},
+        "opportunity_id": {"type": "string", "minLength": 1},
+        "candidate_id": {"type": "string", "minLength": 1},
+        "stage": {"$ref": "#/$defs/Stage"},
+        "from_state": {"$ref": "#/$defs/CurationState"},
+        "to_state": {"$ref": "#/$defs/CurationState"},
+        "outcome": {
+          "type": "string",
+          "enum": ["passed", "killed", "blocked", "retry", "released", "retired"]
+        },
+        "actor": {"$ref": "#/$defs/Actor"},
+        "artifact_refs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {"$ref": "#/$defs/ArtifactRef"}
+        },
+        "maximum_defensible_claim": {"type": "string", "minLength": 1, "maxLength": 4000},
+        "public_summary": {"type": "string", "minLength": 1, "maxLength": 4000}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"outcome": {"const": "released"}},
+            "required": ["outcome"]
+          },
+          "then": {
+            "required": ["maximum_defensible_claim"],
+            "properties": {
+              "actor": {
+                "properties": {
+                  "human_reviewed_by": {"type": "string", "minLength": 1}
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "BenchmarkQuestionSpec": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "schema_version",
+        "question_id",
+        "opportunity_id",
+        "public_instruction_ref",
+        "fixed_substrate_ref",
+        "expected_output_schema_ref",
+        "oracle_ref",
+        "verifier_ref",
+        "required_artifact_refs",
+        "calibration_status",
+        "release_status"
+      ],
+      "properties": {
+        "schema_version": {"const": "benchmark-question-spec-v1"},
+        "question_id": {"type": "string", "minLength": 1},
+        "opportunity_id": {"type": "string", "minLength": 1},
+        "paper_candidate_id": {"type": ["string", "null"]},
+        "public_instruction_ref": {"$ref": "#/$defs/ArtifactRef"},
+        "fixed_substrate_ref": {"$ref": "#/$defs/ArtifactRef"},
+        "expected_output_schema_ref": {"$ref": "#/$defs/ArtifactRef"},
+        "oracle_ref": {"$ref": "#/$defs/ArtifactRef"},
+        "verifier_ref": {"$ref": "#/$defs/ArtifactRef"},
+        "required_artifact_refs": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/ArtifactRef"}
+        },
+        "private_failure_axis_ref": {
+          "$ref": "#/$defs/PrivateArtifactRef"
+        },
+        "private_hidden_lever_ref": {
+          "$ref": "#/$defs/PrivateArtifactRef"
+        },
+        "calibration_status": {
+          "type": "string",
+          "enum": ["not_run", "preliminary", "calibrated"]
+        },
+        "release_status": {
+          "type": "string",
+          "enum": ["draft", "adjudication_pending"]
+        }
+      }
+    },
+    "EvolvableQuestionFamily": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "schema_version",
+        "family_id",
+        "opportunity_id",
+        "seed_instance_refs",
+        "instance_generator_ref",
+        "instance_schema_ref",
+        "oracle_ref",
+        "oracle_provenance",
+        "criteria_evidence",
+        "freshness_source",
+        "sequestration_policy",
+        "ratchet_rule",
+        "lineage_ref",
+        "leakage_controls",
+        "retirement_condition",
+        "calibration_status",
+        "release_status"
+      ],
+      "properties": {
+        "schema_version": {"const": "evolvable-question-family-v1"},
+        "family_id": {"type": "string", "minLength": 1},
+        "opportunity_id": {"type": "string", "minLength": 1},
+        "paper_candidate_ids": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "seed_instance_refs": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/ArtifactRef"}
+        },
+        "instance_generator_ref": {"$ref": "#/$defs/ArtifactRef"},
+        "instance_schema_ref": {"$ref": "#/$defs/ArtifactRef"},
+        "oracle_ref": {"$ref": "#/$defs/ArtifactRef"},
+        "oracle_provenance": {"type": "string", "minLength": 1},
+        "criteria_evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/EvidenceItem"}
+        },
+        "freshness_source": {"type": "string", "minLength": 1},
+        "sequestration_policy": {"type": "string", "minLength": 1},
+        "ratchet_rule": {"type": "string", "minLength": 1},
+        "lineage_ref": {"$ref": "#/$defs/ArtifactRef"},
+        "leakage_controls": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "retirement_condition": {"type": "string", "minLength": 1},
+        "calibration_status": {
+          "type": "string",
+          "enum": ["not_run", "preliminary", "calibrated"]
+        },
+        "release_status": {
+          "type": "string",
+          "enum": ["draft", "adjudication_pending"]
+        }
+      }
+    }
+  }
+}
