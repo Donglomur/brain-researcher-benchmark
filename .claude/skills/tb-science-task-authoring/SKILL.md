@@ -1,17 +1,19 @@
 ---
 name: tb-science-task-authoring
-description: Author or harden a terminal-bench-science / Harbor benchmark task from a scientific paper (neuroimaging-focused). Covers choosing reproduction vs rigor genre, the empirical difficulty ladder that actually defeats frontier agents, the choice-dependence lever for making a reproduction hard (un-cued GSR/band-pass/ROI sensitivity), the no-fake-traps rule, writing a human-looking + schema-robust verifier, and oracle/agent calibration with hand re-scoring. Use when converting a paper into a tb-science/Harbor task, when a task "isn't hard enough", or when a verifier looks machine-generated.
+description: Triage an empirical neuroimaging paper for conversion into a fair, sufficiently hard terminal-bench-science / Harbor benchmark, then author or harden the task. Use when deciding whether a paper has an obtainable measurement oracle and real agent headroom, choosing reproduction vs rigor genre, validating an un-cued off-critical-path failure axis, building a human-looking schema-robust verifier, or calibrating oracle, adversarial, and frontier-agent runs. Produces a benchmark verdict and task contract; genuinely capability-open families are handed to self-evolvable-question-design.
 ---
 
 # Authoring hard tb-science (Harbor) tasks from papers
 
 Hard-won playbook. **Core principle: difficulty comes from the science and the data, not from elaborate scoring.** A weighted multi-layer rubric with regex-scored claims is both *easy to defeat* and *obviously machine-generated*.
 
-## When to use
-- Converting a neuroimaging paper into a tb-science / Harbor benchmark task.
-- A task "isn't hard enough" — frontier agents pass it; you need the difficulty ladder + choice-dependence lever.
-- A verifier looks machine-generated (weighted rubric / artifact-contract trio) and needs a human-looking, schema-robust rewrite.
-- NOT for: running an existing task (that's Harbor CLI); non-benchmark reproduction (use `neuroprogram-real-fmri`).
+## Scope and boundary
+
+This skill owns a **frozen current-agent benchmark**: a fixed obtainable substrate, a fair
+oracle, and empirical evidence that the task separates scientific judgment from routine
+execution. It does not run an existing Harbor task and does not turn a benchmark into an
+ever-changing service. If a paper also supports a capability-open family, preserve its
+evidence packet and hand that separate decision to `self-evolvable-question-design`.
 
 Worked examples ship alongside this skill (the `*-001` task directories at the repo root), a measured difficulty ladder:
 - **`GRADIENT-001`** — un-cued *characterise the principal gradient* → both GPT-5.5 xhigh & Claude Opus 4.8 overclaim a single identity → **FAIL** (hard).
@@ -19,9 +21,52 @@ Worked examples ship alongside this skill (the `*-001` task directories at the r
 - **`SOCIALBRAIN-001`** — reproduce Richardson's headline anti-correlation, but it only holds under GSR (an un-cued, contested choice) → both run one default pipeline and give a flat verdict → **FAIL** (hard reproduction).
 - **`DEVCONN-001`** — reproduce the developmental local-to-distributed connectivity result; children move ~2× more, so it's a head-motion confound (collapses under motion control) → agents compute it, none volunteer the motion check → **FAIL** (GPT-5.5 4/4, Claude 3/3; the *wrong-cause* axis).
 
+## Paper intake — decide whether Step 0 is warranted
+
+Do not equate a famous paper, a rising topic, or an available dataset with a benchmark
+candidate. Start with a **primary empirical or benchmark paper**, not a review, and fill the
+same packet used by `self-evolvable-question-design`:
+
+```yaml
+PaperEvidencePacket:
+  paper_id:                 # DOI/PMID/OpenAlex ID or stable citation
+  paper_kind:               # primary_empirical | methods | benchmark | review
+  claim_and_contrast:
+  target_measurement:
+  obtainable_dataset:
+  executable_method:
+  oracle_candidate:
+  reliability_ceiling:
+  current_baseline:
+  candidate_hidden_lever:
+  freshness_source:
+  evidence_status: {}       # field -> reported | verified | measured | planned | missing
+  evidence_refs: []
+```
+
+Advance only when the paper provides an exact claim/contrast, the scoring substrate is fixed
+and obtainable, the method can be executed, and the candidate truth is a real measurement.
+Use reviews only to locate a primary source. Record missing or credential-blocked inputs as
+`insufficient_evidence`; do not silently substitute another dataset or headline.
+
+At intake, return one provisional route:
+
+- `advance_to_step0` — the measurement and method are testable.
+- `needs_data` — the claim is testable but the required dataset is not currently obtainable.
+- `archive` — no fair fixed oracle, no executable claim, or only a fabricated/open-corpus key.
+- `assess_evolvable` — the paper suggests a real oracle, headroom, and repeatable frontier;
+  pass the unchanged packet to `self-evolvable-question-design`. This may coexist with
+  `advance_to_step0`.
+
 ## Step 0 — Validate the result reproduces BEFORE building anything
 
 The single most important gate. **Never assume the paper's headline reproduces on data you can actually get.**
+
+**Prerequisite — the ground-truth substrate rule (check this first, it disqualifies whole task ideas):** the task's ground truth must be a **reproducible measurement on a fixed, obtainable dataset** — NOT (a) something you fabricate, nor (b) an aggregation over an open, incomplete literature corpus. Two ideas died on exactly this:
+- *Fabricated verification* (hand-build an analysis, inject a flaw, grade against your own description) — the "truth" is invented, and a competent solver who reads the code gets marked wrong.
+- *Reverse inference via meta-analysis* (Neurosynth/ALE) — the "truth" is an aggregation over a corpus you can't fully obtain or control (you can't find all the papers); it drifts with the corpus and is dominated by artifacts (e.g. top "terms" for dACC were anatomical self-labels, not cognition). Not a stable oracle.
+The shipped tasks pass this rule: the truth is a number reproduced on a fixed dataset (ds000228). If a candidate's answer key isn't a reproducible measurement on a fixed obtainable dataset, stop — pick a different paper.
+
 - Empirically run the paper's method on the accessible cohort first (a throwaway script).
 - Example failure: Margulies-2016 "G1 = DMN-apex" is **HCP-specific** and does NOT reproduce on `nilearn.fetch_development_fmri` (ds000228); the apex network even flips across band-pass/subsample choices. Only discovered by running it.
 
@@ -30,17 +75,71 @@ Three outcomes decide the genre:
 |---|---|
 | yes, robustly | **reproduction task** (paper → result) — cleanest |
 | needs credentialed data (HCP/UKB) | get the data, or pick another paper |
-| fragile / doesn't reproduce | don't fake a reproduction — the **fragility itself** becomes the task (rigor genre) |
+| fragile / doesn't reproduce | use the **measured fragility** only if it supports a fair lever or rigor task; otherwise archive |
+
+Step 0 must distinguish the paper's reported result from local evidence. Update
+`evidence_status` field by field and preserve the exact dataset, cohort, contrast, preprocessing,
+and metric used by the probe. A successful Step-0 kill is a valid output.
+
+## Step 0.5 — Test benchmark fit before authoring the full task
+
+A real effect or real lever is necessary but not sufficient. Write an explicit
+`agent_headroom_hypothesis` and apply the **critical-path test**:
+
+> To complete exactly what the instruction asks, must a competent agent already make this
+> correction or analytic choice?
+
+If yes, the candidate is likely an easy control. Subject-grouped CV, an obvious site
+covariate, TIV adjustment, or a lever named by the task ID/required outputs is usually
+telegraphed. Prefer a scientifically necessary check that is **off the requested execution
+path**, absent from the task name and output schema, and discoverable only by interrogating
+the result.
+
+Return one benchmark verdict before expensive calibration:
+
+- `build_hard_candidate` — Step 0 passed and an off-critical-path un-cued failure axis is
+  plausible.
+- `build_easy_control` — scientifically valid and useful for calibration, but no credible
+  frontier-agent gap is expected.
+- `reframe` — the headline is unfair, but a different locally measured claim or fragility can
+  support an honest task.
+- `archive` — no fair oracle, no real lever, or no remaining agent headroom.
+- `insufficient_evidence` — a named data or execution probe remains open.
+
+Do not promote `build_hard_candidate` to “hard benchmark” until Step 5 calibration passes.
+
+For `build_hard_candidate`, `build_easy_control`, or `reframe`, emit:
+
+```yaml
+BenchmarkCandidate:
+  candidate_id:
+  paper_evidence_ref:
+  genre:
+  fixed_substrate:
+  oracle:
+  locally_measured_target:
+  failure_axis:
+  hidden_lever:
+  critical_path_status:
+  step0_evidence:
+  expected_agent_gap:
+  verifier_target:
+  calibration_plan:
+  evolvable_handoff:        # assess | not_indicated
+```
+
+This is a candidate contract, not evidence that a runnable task exists or that the benchmark
+is hard. Those claims require the corresponding lifecycle and Step 5 artifacts.
 
 ## Step 1 — Pick the genre deliberately
 
 | | reproduction (paper→result) | process / rigor |
 |---|---|---|
 | instruction | condensed methods section | condensed methods section |
-| ground truth | the paper's reported number | correct scientific *behaviour* |
+| ground truth | the locally reproduced target derived from the paper | correct scientific *behaviour* |
 | verifier | **one numeric match** (± tolerance) | reads the conclusion and *judges* |
 | looks human | natively | needs care (judgement ≠ number) |
-| precondition | result must reproduce | none |
+| precondition | result must reproduce locally | measured fragility/failure axis from Step 0 |
 
 Reproduction is cleaner and more authentic — *prefer it*. But note (measured): a clean reproduction of a **robust** result is **not hard** — frontier agents just run the pipeline and report it honestly (measured: an easy fully-pinned control variant, both agents pass). To make a reproduction *hard* without leaving the genre, see the next section — you inject un-cued judgement by choosing a result that is **choice-dependent**, keeping the verifier mostly numeric + one honesty check. Fall back to the pure rigor genre only when the result won't reproduce at all, or you specifically want to test open-ended judgement.
 
@@ -56,6 +155,11 @@ Validated against GPT-5.5 xhigh and Claude Opus 4.8:
    - **The cue is load-bearing: cued, they do it right; un-cued, they don't.** The frontier gap is metacognitive, not compute.
 
 **Takeaway: to make it hard, don't add more rigor requirements — test what the agent won't do unprompted.**
+
+The failure axis must also be **off the critical path and not telegraphed**. A standard
+correction can have a dramatic Step-0 effect and still be easy if the requested analysis
+forces the agent to decide it. Difficulty is an empirical property of the agent population,
+not an intrinsic property of the paper.
 
 Note the failure is symmetric: agents are confidently wrong in *either* direction. On `SOCIALBRAIN-001` both flatly concluded "doesn't reproduce" — a confident *refutation* that missed the result reproduces under a choice they never tried. Under- and over-claiming are the same un-cued-judgement gap.
 
@@ -168,7 +272,14 @@ TASK/
 
 ## One-line flow
 
-Pick paper → **verify it reproduces on obtainable data** → if it does, reproduction task (numeric verifier); to make it *hard*, pick a result that hinges on one un-cued choice (GSR/band-pass/ROI) and **validate the lever flips it**; if it doesn't reproduce at all, an un-cued rigor task on the real fragility → validate every trap/lever is real → write a short human-looking, schema-robust verifier → calibrate with oracle + adversarial + a real agent, **re-scoring the real agent output by hand** (and check *why* it passes/fails).
+Fill `PaperEvidencePacket` → reject reviews/unobtainable oracles → **verify the exact claim on
+obtainable data** → measure a real lever or fragility → apply the off-critical-path
+`agent_headroom_hypothesis` → choose `build_hard_candidate`, `build_easy_control`, `reframe`,
+`archive`, or `insufficient_evidence` → only then author the task → calibrate with oracle +
+adversarial + ≥2 frontier families, k≥3 each → hand re-score why each run passed or failed →
+graduate only science failures, never format/auth/runtime failures. If the paper also exposes
+an open oracle/ceiling/freshness frontier, send the unchanged packet to
+`self-evolvable-question-design`; keep the two artifacts separate.
 
 ## Related memory
 `project_tbscience_gradient_trap_experiments.md` (running Harbor oracle/agent on the GRADIENT task; the un-cued-vs-cued difficulty findings).

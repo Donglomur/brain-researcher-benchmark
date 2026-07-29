@@ -85,21 +85,45 @@ Notes:
   matched. Read the run that **looks** like a pass most carefully (see the verifier
   false-positive lesson in the skill).
 
-## Authoring new tasks
+## Paper triage and authoring new tasks
 
-The whole how-to is one Claude Code skill: **`tb-science-task-authoring`**
-(`.claude/skills/tb-science-task-authoring/SKILL.md`). Install it so it loads in any
-session, then invoke `/tb-science-task-authoring`:
+Paper intake uses two separate skills:
+
+- **`tb-science-task-authoring`** decides whether a paper can become a fair,
+  sufficiently difficult frozen benchmark, then guides task authoring.
+- **`self-evolvable-question-design`** independently decides whether the paper can
+  anchor a capability-open family with an executable oracle, measured headroom,
+  and a concrete freshness or ratchet mechanism.
+
+They share a `PaperEvidencePacket`, but they do not merge into one artifact. The
+same paper may route to `benchmark_only`, `evolvable_only`, `both`, or `neither`.
+
+For a new coding agent:
 
 ```bash
+git clone https://github.com/brain-researcher/brain-researcher-benchmark.git
+cd brain-researcher-benchmark
 mkdir -p ~/.claude/skills/tb-science-task-authoring
+mkdir -p ~/.claude/skills/self-evolvable-question-design
 cp .claude/skills/tb-science-task-authoring/SKILL.md ~/.claude/skills/tb-science-task-authoring/
+cp .claude/skills/self-evolvable-question-design/SKILL.md ~/.claude/skills/self-evolvable-question-design/
 ```
 
-It covers Step 0 (kill the paper cheaply if the result/lever doesn't reproduce — that's
-a logged success, not a failure) through Step 5 (run the frontier agents and hand
-re-score), the failure-axis taxonomy, the cache-mount recipe, and hard-won lessons
-(e.g. verifier keyword checks that pass an agent which only *names* the confound).
+Then copy [`TOPIC_TRIAGE_CONTROLLER_PROMPT.md`](TOPIC_TRIAGE_CONTROLLER_PROMPT.md),
+fill in one private tracker URL and one assigned topic, and give it to the agent.
+The controller requires three evidence stages:
+
+- `desk`: paper resolution and evidence planning only. It cannot earn
+  `hard=yes` or an evolvable `pass`.
+- `step0`: reproduce the paper claim or benchmark-critical lever on obtainable
+  data.
+- `calibrated`: oracle, adversarial checks, and at least two frontier model
+  families with `k>=3`, hand-rescored.
+
+The benchmark skill covers Step 0 through Step 5, the failure-axis taxonomy,
+schema-robust verifiers, and the empirical difficulty gate. The evolvable skill
+tests C1-C10, with special emphasis on a measured C2 reliability-ceiling gap and
+an F0 freshness probe.
 
 To contribute a task (fork → PR, and the definition of done a PR must meet), see
 **[`CONTRIBUTING.md`](CONTRIBUTING.md)**.
@@ -110,6 +134,8 @@ To contribute a task (fork → PR, and the definition of done a PR must meet), s
 |---|---|
 | `GRADIENT-001/` · `SOCIALBRAIN-001/` · `DEVCONN-001/` | the three example tasks (Harbor format) |
 | `.claude/skills/tb-science-task-authoring/SKILL.md` | the authoring skill (the craft) |
+| `.claude/skills/self-evolvable-question-design/SKILL.md` | the capability-open question-family gate |
+| `TOPIC_TRIAGE_CONTROLLER_PROMPT.md` | one-topic prompt that applies both skills and writes evidence back |
 | `RESULTS.md` | measured difficulty of the three tasks (hand re-scored, with honesty notes) |
 | `CONTRIBUTING.md` | how to contribute a task (fork → PR) + the definition of done |
 | `INTERN_GUIDE.md` | team process: daily contract, difficulty ratchet, environment, definition-of-done |
