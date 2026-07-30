@@ -85,21 +85,50 @@ Notes:
   matched. Read the run that **looks** like a pass most carefully (see the verifier
   false-positive lesson in the skill).
 
-## Authoring new tasks
+## Paper triage and authoring new tasks
 
-The whole how-to is one Claude Code skill: **`tb-science-task-authoring`**
-(`.claude/skills/tb-science-task-authoring/SKILL.md`). Install it so it loads in any
-session, then invoke `/tb-science-task-authoring`:
+Paper intake uses two separate skills:
+
+- **`tb-science-task-authoring`** decides whether a paper can become a fair,
+  sufficiently difficult frozen benchmark, then guides task authoring.
+- **`self-evolvable-question-design`** independently decides whether the paper can
+  anchor a capability-open family with an executable oracle, measured headroom,
+  and a concrete freshness or ratchet mechanism.
+
+They consume the same immutable `PaperEvidencePacket`, defined once under
+[`contracts/curation/`](contracts/curation/), but produce separate artifacts. The same paper
+may support a frozen benchmark, an evolvable family, both, or neither.
+
+For a new coding agent:
 
 ```bash
+git clone https://github.com/brain-researcher/brain-researcher-benchmark.git
+cd brain-researcher-benchmark
 mkdir -p ~/.claude/skills/tb-science-task-authoring
+mkdir -p ~/.claude/skills/self-evolvable-question-design
 cp .claude/skills/tb-science-task-authoring/SKILL.md ~/.claude/skills/tb-science-task-authoring/
+cp .claude/skills/self-evolvable-question-design/SKILL.md ~/.claude/skills/self-evolvable-question-design/
 ```
 
-It covers Step 0 (kill the paper cheaply if the result/lever doesn't reproduce — that's
-a logged success, not a failure) through Step 5 (run the frontier agents and hand
-re-score), the failure-axis taxonomy, the cache-mount recipe, and hard-won lessons
-(e.g. verifier keyword checks that pass an agent which only *names* the confound).
+Run a durable scheduler/controller outside the model session. For each leased job, fill
+[`TOPIC_TRIAGE_CONTROLLER_PROMPT.md`](TOPIC_TRIAGE_CONTROLLER_PROMPT.md) with one immutable
+`CurationJob` and start one clean worker session. The worker processes exactly that stage,
+returns one `StageResult`, and stops.
+
+The authority boundary is deliberate:
+
+- the scheduler selects work, owns leases/retries, validates results, appends immutable
+  `CurationTransition` records, and updates the tracker projection;
+- the worker does scientific work for one supplied job, but does not select a topic, claim
+  another job, write the tracker, append transitions, or declare a release;
+- independent adjudication is the only path to `released`.
+
+The benchmark skill owns `STEP0`, `BENCHMARK_DRAFT`, and `CALIBRATE_BENCHMARK`. The
+evolvable skill owns `FAMILY_DRAFT` and `CALIBRATE_FAMILY`, applying the canonical C1-C10
+and F0 rubric. Paper resolution or another desk-only pass is not Step 0. A planned command,
+fixture, or schema-valid draft is not real scientific execution. Likewise, a task is not
+calibrated until its oracle, adversarial, and target model runs actually execute and are
+reviewed.
 
 To contribute a task (fork → PR, and the definition of done a PR must meet), see
 **[`CONTRIBUTING.md`](CONTRIBUTING.md)**.
@@ -110,6 +139,9 @@ To contribute a task (fork → PR, and the definition of done a PR must meet), s
 |---|---|
 | `GRADIENT-001/` · `SOCIALBRAIN-001/` · `DEVCONN-001/` | the three example tasks (Harbor format) |
 | `.claude/skills/tb-science-task-authoring/SKILL.md` | the authoring skill (the craft) |
+| `.claude/skills/self-evolvable-question-design/SKILL.md` | the capability-open question-family gate |
+| `TOPIC_TRIAGE_CONTROLLER_PROMPT.md` | bounded one-job scientific worker prompt |
+| `contracts/curation/` | shared public contracts, lifecycle rules, and canonical C1-C10/F0 rubric |
 | `RESULTS.md` | measured difficulty of the three tasks (hand re-scored, with honesty notes) |
 | `CONTRIBUTING.md` | how to contribute a task (fork → PR) + the definition of done |
 | `INTERN_GUIDE.md` | team process: daily contract, difficulty ratchet, environment, definition-of-done |
