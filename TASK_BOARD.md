@@ -19,5 +19,6 @@ One row per paper in the pipeline. Stages: `1-assigned → 2-step0 → 3-v0+orac
 | BWAS-001 | NicholasLu | Marek 2022 (BWAS) | prediction (ABIDE FIQ) | significance≠effect-size | large-n tiny effect | 4-agent-gate | max brain-IQ r=0.185 (r²≈3%), median 0.035, 0 survive FWE | 1.0 (local) | PENDING; weakest of batch (telegraphing risk) | 2026-08-02 |
 | EEGVC-001 | NicholasLu | Nolte 2004 (imaginary coherence) | **EEG** (eegbci) — NEW MODALITY | wrong-cause / confound | volume conduction | 4-agent-gate | raw coherence 0.42 vs imaginary 0.07 (6.2×); 74% of strong pairs are volume conduction | 1.0 (local) | PENDING | 2026-08-02 |
 | VBMAGE-001 | NicholasLu | Good 2001 (VBM ageing) | **structural VBM** (OASIS) — NEW MODALITY | over-claim (3rd, robustness) | spatial smoothing kernel | 4-agent-gate | top age-atrophy region flips Heschl's (native/4mm) ↔ Precentral (8/12mm) across smoothing | 1.0 (local) | PENDING | 2026-08-02 |
+| COGVBM-001 | NicholasLu | Marcus 2007 (OASIS) / Eklund 2016 | **structural VBM** (OASIS) | multiple-comparisons (2nd) | uncorrected voxel threshold | 4-agent-gate | MMSE~GM voxelwise: 17470 unc(p<.05) / 1289 (p<.001) → 5 FDR → 0 FWE | 1.0 (local) | PENDING; telegraphing risk (correction in priors) | 2026-08-02 |
 
 <!-- add rows below; keep newest work at the bottom of its lane -->
