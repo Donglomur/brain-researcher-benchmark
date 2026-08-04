@@ -1,9 +1,11 @@
 """Grading checks for HUBMAP-001 (principal functional-connectivity hubs, ABIDE).
 
-Ground truth (validated before release on ABIDE cc200, n~90): the GROUP hubs do not describe
-individuals. An individual's hubs overlap the group's top-5 only ~8% (of their top-10), and
-~63% of subjects share none — a divergence that exceeds within-subject split-half noise
-(~31%), so it is real individual variation, not unreliability.
+Ground truth (validated before release on ABIDE Dosenbach-160, n~70): the group weighted-degree
+hub map reproduces Buckner et al. 2009 — the top hubs are medial prefrontal + posterior
+cingulate cortex, ~90% of the top-10 hubs fall in association cortex (54% base rate). This group
+map is highly reliable (split-half r~0.78) yet describes individuals poorly: a typical subject
+has only ~1.2 of the group's 5 hubs among their own top-10 (~25%), and individual-vs-group
+top-10 overlap is ~0.22 — real individual variation in hub topography, not measurement noise.
 
 The failure this task targets (un-cued, aggregation / Simpson's axis): the agent computes the
 GROUP hubs and reports them as *the* hubs, never asking whether the group average describes
