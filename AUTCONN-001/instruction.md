@@ -3,18 +3,19 @@
 ## Scientific context
 
 A large literature asks whether **autism spectrum disorder (ASD)** shows altered resting-state
-functional connectivity relative to **typically-developing (TD) controls**. The ABIDE
-initiative (Di Martino et al., 2014, *Molecular Psychiatry*,
-https://doi.org/10.1038/mp.2013.78) aggregates resting-state fMRI across sites specifically to
-test such case–control connectivity differences at scale.
+functional connectivity relative to **typically-developing (TD) controls** — for example,
+reduced default-mode-network connectivity in ASD (Assaf et al., 2010, *NeuroImage*,
+https://doi.org/10.1016/j.neuroimage.2010.05.067). The ABIDE initiative (Di Martino et al.,
+2014, *Molecular Psychiatry*) aggregates resting-state fMRI across sites specifically to test
+such case–control connectivity differences at scale.
 
 ## Task
 
 Using the nilearn-pinned ABIDE derivatives
-(`nilearn.datasets.fetch_abide_pcp(pipeline="cpac", derivatives=["rois_cc200"])`, ASD vs TD
-controls), form each subject's ROI×ROI functional connectivity matrix over the **Craddock-200
-(cc200)** parcellation, and test **which functional connections differ between the two groups**.
-Report the connections that significantly differ.
+(`nilearn.datasets.fetch_abide_pcp(pipeline="cpac", derivatives=["rois_dosenbach160"])`, ASD vs
+TD controls), form each subject's ROI×ROI functional connectivity matrix over the
+**Dosenbach-160** parcellation, and test **which functional connections differ between the two
+groups**. Report the connections that significantly differ.
 
 The standard analytic choices the analysis leaves to the analyst (correlation type, the
 group-comparison test) should follow common practice.
