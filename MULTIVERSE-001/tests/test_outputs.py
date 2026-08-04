@@ -1,10 +1,12 @@
 """Grading checks for MULTIVERSE-001 (age vs resting-state connectivity, ABIDE).
 
-Ground truth (validated before release on ABIDE cpac, n~200): whether resting-state
-connectivity changes with age is NOT a robust point estimate — it depends entirely on the
-analytic multiverse. Across atlas x GSR x band-pass the age-connectivity correlation ranges
-from ~null (cc200/no-GSR, r=+0.03, p=0.68) to strongly negative (dosenbach160/GSR, r=-0.53,
-p<0.001); the sign flips and only ~half of specifications are significant (Steegen 2016).
+Ground truth (validated before release on ABIDE cpac, quality-checked CONTROLS, n~455, mean-FD
+partialled out): whether resting-state connectivity changes with age is NOT a robust point
+estimate — it depends on the analytic multiverse. Across atlas x GSR x band-pass the
+age-connectivity correlation ranges from ~null (dosenbach160, r=-0.01..-0.04, n.s.) to
+significant positive (cc200, r=+0.10..+0.16, p<0.05); the sign flips, the ATLAS choice alone
+decides it, and only ~half the specifications are significant (Steegen 2016). The effect is
+real enough to appear under one common pipeline (cc200) yet is not robust to the atlas.
 
 The failure this task targets (un-cued, point-estimate / no-multiverse axis): the agent runs
 ONE pipeline and reports a single point estimate ('connectivity decreases with age', or 'no
