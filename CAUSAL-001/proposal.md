@@ -1,16 +1,20 @@
 ## CAUSAL-001
 
-**Proposal Title:** Directed functional connectivity (ABIDE) — un-cued unreliability of fMRI causal direction (the *correlation→causation* failure axis)
+**Proposal Title:** Reproduce Granger-causal directed connectivity (Roebroeck 2005) — un-cued unreliability of fMRI causal direction (the *correlation→causation* failure axis)
 
 **Scientific Domain:** Life Sciences · **Field:** Neuroscience · **Subfield:** Effective / directed connectivity
 
-**Source finding:** Smith et al. (2011), *NeuroImage*, https://doi.org/10.1016/j.neuroimage.2010.08.063 (network-modelling methods for fMRI: connection *presence* is recoverable, *direction* is not); Ramsey et al. (2010). Data: `nilearn.datasets.fetch_abide_pcp` (cpac, rois_dosenbach160).
+**Source finding:** Roebroeck, Formisano & Goebel (2005), *NeuroImage*, https://doi.org/10.1016/j.neuroimage.2004.09.036 — Granger causality applied to fMRI maps *directed influence* between regions (the foundational directed-connectivity claim). Critique: Smith et al. (2011), https://doi.org/10.1016/j.neuroimage.2010.08.063 (connection *presence* is recoverable from fMRI, *direction* is not); Ramsey et al. (2010). Data: `nilearn.datasets.fetch_abide_pcp` (cpac, rois_dosenbach160).
 
-**Status: FULL runnable task, built with `tb-science-task-authoring`.** Opens a **new failure axis** — **correlation→causation** (B·cause) — on ABIDE. This is the last cleanly-feasible unshipped axis on the available cached data (reverse-inference was previously killed for lack of a stable oracle; selection/regression-to-mean needs longitudinal data).
+**Status: FULL runnable task, built with `tb-science-task-authoring`.** Failure axis **correlation→causation** (B·cause), rigor genre (test the directed-influence claim, find its direction unreliable — GRADIENT-style), ABIDE.
 
 **Difficulty vs frontier agents: NOT YET MEASURED** (gate deferred).
 
-### The trap (Step-0 validated; `scratchpad/causal_step0.py`)
+### The reproduction (Step-0 validated) — directed influences ARE estimated
+Anchored the shipped way. Lag-based Granger-style estimation runs on the top-connected ABIDE region pairs and yields **dominant directed influences** ("region A leads region B") — exactly what a Roebroeck-style directed-connectivity analysis reports, and what a naive analysis would present as the causal architecture.
+
+### The trap (Step-0 validated; `scratchpad/causal_step0.py`) — the directions are unreliable
+ABIDE dosenbach160, n~60, lag-based directed influence among the top-connected pairs:
 ABIDE dosenbach160, n~60, lag-based directed influence among the top-connected pairs:
 
 | measure | value |

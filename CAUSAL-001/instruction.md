@@ -3,10 +3,10 @@
 ## Scientific context
 
 Beyond undirected functional connectivity, **directed** (effective) connectivity aims to
-identify *which regions drive which* — the directional influences in the network. Lag-based
-and Granger-causality methods applied to resting-state fMRI are a common way to estimate such
-directed influences (see e.g. Smith et al., 2011, *NeuroImage*,
-https://doi.org/10.1016/j.neuroimage.2010.08.063, for the method landscape).
+identify *which regions drive which* — the directional influences in the network. Granger-
+causality and lag-based methods applied to fMRI were introduced to map such directed influences
+(Roebroeck et al., 2005, *NeuroImage*, https://doi.org/10.1016/j.neuroimage.2004.09.036) and are
+widely used on resting-state data.
 
 ## Task
 
