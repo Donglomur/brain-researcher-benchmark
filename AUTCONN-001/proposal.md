@@ -1,49 +1,41 @@
 ## AUTCONN-001
 
-**Proposal Title:** Group resting-state connectivity differences in autism (ABIDE) — an un-cued multiple-comparisons inflation (the *cluster/multiple-comparisons* failure axis)
+**Proposal Title:** Test the Assaf (2010) ASD default-network underconnectivity claim — an un-cued multiple-comparisons inflation (the *multiple-comparisons* failure axis)
 
-**Scientific Domain:** Life Sciences · **Field:** Neuroscience · **Subfield:** Case-control resting-state functional connectivity
+**Scientific Domain:** Life Sciences · **Field:** Neuroscience · **Subfield:** Autism resting-state functional connectivity
 
-**Source finding:** Di Martino et al. (2014), *Molecular Psychiatry*, https://doi.org/10.1038/mp.2013.78 (ABIDE — large multi-site autism resting-state resource). Multiple-comparisons references: Eklund et al. (2016, *PNAS*, cluster failure); Bennett et al. (2009, the "dead-salmon" demonstration). Data: `nilearn.datasets.fetch_abide_pcp` (cpac, rois_cc200).
+**Source finding:** Assaf et al. (2010), *NeuroImage*, https://doi.org/10.1016/j.neuroimage.2010.05.067 — reduced functional connectivity within default-mode sub-networks (PCC/mPFC) in ASD, one of the most-cited ASD intrinsic-connectivity findings. Reproducibility critique: King et al. (2019), *Molecular Autism*. Multiple-comparisons: Eklund et al. (2016). Data: `nilearn.datasets.fetch_abide_pcp` (cpac, rois_dosenbach160, quality-checked).
 
-**Status: FULL runnable task, built with `tb-science-task-authoring`.** Opens a **new failure axis** — **multiple comparisons / cluster inflation** (the statistical-inference family) — on a **new dataset** (ABIDE, which downloads reliably from `s3.amazonaws.com/fcp-indi`). Distinct topic (*multiple comparisons* / *cluster inference*) and axis from every shipped task.
+**Status: FULL runnable task, built with `tb-science-task-authoring`.** Failure axis **multiple-comparisons inflation** (statistical-inference family), rigor genre (tests a widely-cited claim, finds it doesn't survive correction — GRADIENT-style). Topic *ASD connectivity*, ABIDE.
 
-**Difficulty vs frontier agents: NOT YET MEASURED.** The gate (GPT-5.5 xhigh + Claude Opus, k≥3) needs Harbor + credentials, deferred. This documents Step-0 (real, measured) and the oracle/adversarial calibration (local).
+**Difficulty vs frontier agents: NOT YET MEASURED** (gate deferred).
 
 ### Why this exists
-No shipped task covers the multiple-comparisons axis. This fills it with the canonical pitfall: reporting "significant" case-control connectivity differences at an uncorrected threshold, over ~20,000 simultaneous edge tests.
+Anchored the shipped **GRADIENT way** — take a widely-cited primary claim and test whether it survives rigorous analysis. Assaf's ASD default-network underconnectivity is textbook; the un-cued judgement is that with ~12,700 simultaneous edge tests the "differences" must be multiple-comparisons corrected — after which essentially none, including the DMN claim, survive.
 
-### The trap (Step-0 validated; `scratchpad/new_multcomp.py`)
-ABIDE cc200, ASD (n≈149) vs TD (n≈151), **19900 edges**, edgewise Welch t-test:
+### The reproduction / test (Step-0 validated) — the claim appears in direction only
+ABIDE, quality-checked, Dosenbach-160 (391 ASD, 455 controls). Within-DMN functional connectivity is **numerically lower in ASD** (0.186 vs 0.190) — Assaf's reported direction — but **not significant** (t = −0.64, p = 0.53). So the specific DMN-underconnectivity claim is present in direction but does not robustly reproduce on this large sample.
 
-| threshold | "significant" edges | note |
-|---|---|---|
-| uncorrected p<0.05 | **2486** | ~995 expected by chance |
-| uncorrected p<0.001 | 262 | |
-| FDR q<0.05 | 123 | |
-| FWE (Bonferroni) | **7** | the honest count |
+### The trap (Step-0 validated) — the multiple-comparisons inflation
+Whole-brain edgewise ASD-vs-control comparison over 12,720 connections:
 
-Reporting the 2486 uncorrected edges over-claims by ~350×; only 7 survive strict correction.
+| threshold | significant edges |
+|---|---|
+| uncorrected p<0.05 | **1085** (~636 expected by chance; 136 of them DMN edges) |
+| uncorrected p<0.001 | 76 |
+| FDR q<0.05 | **0** |
+| FWE (Bonferroni) | **0** |
 
-### Verifier (2 plain checks) + local calibration
-`tests/test_outputs.py`: (1) a full edgewise comparison was run (~19900 edges); (2) the reported number of significantly-differing connections reflects multiple-comparisons correction — i.e., the concluded count is **≤ 250** (FWE ~7 / FDR ~123), not the uncorrected ~262 / ~2486. Enforced **numerically** on the reported count (excludes any field the submission labels "uncorrected"; counts list-lengths for edge lists; ignores edge *index values*).
+An uncorrected threshold flags ~1000 "different" connections, only ~1.7× the chance rate; after multiple-comparisons correction **none survive** — neither the whole-brain edges nor the DMN edges. The honest concluded count is ~0.
 
-Local calibration (`scratchpad/validate_autconn.py`):
+**Honesty note (from Step-0).** Two data-hygiene fixes over the trap-first draft: (1) switched from cc200 (unlabelled) to **Dosenbach-160**, whose network labels let the oracle actually *test Assaf's DMN claim* rather than run a generic contrast; (2) moved to **quality-checked** subjects and **excluded** (not zero-filled) NaN edges from degenerate ROIs — the earlier cc200/no-QC draft reported 7 FWE survivors, but on clean QC data with proper NaN handling the honest count is 0. The mult-comp lesson is now anchored on a real, named finding.
 
-| output | computed | corrected |
-|---|---|---|
-| **oracle** (FWE 7 / FDR 123) | PASS | PASS — reward 1.0 |
-| honest FDR (123) | PASS | PASS |
-| honest FWE (7) + labeled uncorrected | PASS | PASS |
-| naive uncorrected p<0.05 (2486) | PASS | **FAIL** |
-| naive uncorrected p<0.001 (262) | PASS | **FAIL** |
-| listed 300 uncorrected edges | PASS | **FAIL** |
-| broken (no edgewise analysis) | **FAIL** | — |
+### Verifier (numeric, 2 checks)
+`tests/test_outputs.py`: (1) a full edgewise comparison (≥5000 edges) with a reported significant count; (2) the reported count of significant connections must reflect correction (~0), not the uncorrected range — headline ≤ 30 passes, an uncorrected count (76 / 1085) fails. Robust key extractor excludes `uncorrected`-labelled fields. Offline: oracle (0) PASS; uncorrected-count (1085) adversarial FAIL.
 
 ### Honest caveats / open risks
-1. **Difficulty UNTESTED** — needs the gate.
-2. **Telegraphing risk:** multiple-comparisons correction may already be in frontier priors (like leakage; cf. LEAK-DI easy control). The gate decides whether agents volunteer it un-cued.
-3. Verifier threshold (250) sits between FDR (~123) and uncorrected-p<0.001 (~262); harden against real agent output shapes at calibration.
+1. **Difficulty UNTESTED** — needs the gate. **Telegraphing risk:** "correct for multiple comparisons" is a well-known reflex; the instruction is un-cued but the axis may be easy for frontier agents (shared with COGVBM/EEGMC — the same axis across 3 modalities is the intended coverage, but if one is easy all three may be).
+2. **Null result** — the honest answer is 0 survivors; the task rewards recognising that, not a positive finding.
 
 ### Cost
-`hard`. cpus 2, mem 8 GB, internet on (ABIDE cc200 ROI time series — small, reliable S3 host). Deps: nilearn 0.12.1 + numpy/scipy/pandas/nibabel.
+`hard`. cpus 2, mem 8 GB, internet on (ABIDE Dosenbach-160 ROI time series + Dosenbach coord/label atlas — small, reliable S3 host). Deps: nilearn 0.12.1 + numpy/scipy/pandas/nibabel.
