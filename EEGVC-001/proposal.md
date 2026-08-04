@@ -4,13 +4,16 @@
 
 **Scientific Domain:** Life Sciences · **Field:** Neuroscience · **Subfield:** EEG functional connectivity
 
-**Source finding:** Nolte et al. (2004), *Clinical Neurophysiology*, https://doi.org/10.1016/j.clinph.2004.04.029 (imaginary coherence is insensitive to zero-lag volume conduction). Dataset: PhysioNet EEG Motor Movement/Imagery (Schalk et al. 2004) via `mne.datasets.eegbci`.
+**Source finding:** Nunez et al. (1997), *Electroencephalogr Clin Neurophysiol*, https://doi.org/10.1016/S0013-4694(97)00066-7 — EEG alpha-band coherence as a measure of large-scale functional connectivity (the claim being applied). Volume-conduction solution: Nolte et al. (2004), https://doi.org/10.1016/j.clinph.2004.04.029 (imaginary coherence is insensitive to zero-lag volume conduction). Dataset: PhysioNet EEG Motor Movement/Imagery (Schalk et al. 2004) via `mne.datasets.eegbci`.
 
-**Status: FULL runnable task, built with `tb-science-task-authoring`.** **First task on the EEG modality** — the whole shipped + session suite was fMRI (connectivity/decoding); this breaks the single-modality monoculture. The failure axis (**wrong-cause / confound**) is shipped (DEVCONN motion), but on a **new modality** it fills a fresh axis×modality cell (the anti-monoculture point).
+**Status: FULL runnable task, built with `tb-science-task-authoring`.** Failure axis **wrong-cause / confound** (shipped in DEVCONN, here on a **new modality — EEG**, the anti-monoculture point), rigor genre.
 
 **Difficulty vs frontier agents: NOT YET MEASURED** (gate deferred).
 
-### The trap (Step-0 validated; `scratchpad/eeg_step0.py`)
+### The reproduction (Step-0 validated) — strong alpha coherence, as reported
+eegbci subject 1 run 6, 64 ch, average reference: alpha-band (8–13 Hz) inter-electrode coherence is high (mean **0.417**), with many strongly "connected" electrode pairs — reproducing the standard picture of dense EEG alpha connectivity that a coherence analysis would report.
+
+### The trap (Step-0 validated; `scratchpad/eeg_step0.py`) — most of it is volume conduction
 eegbci subject 1 run 6, 64 ch, average reference, alpha 8–13 Hz:
 
 | measure | value |

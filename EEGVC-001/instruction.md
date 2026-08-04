@@ -4,8 +4,9 @@
 
 EEG **functional connectivity** — synchronisation between scalp electrodes — is a standard
 measure of large-scale neural coordination. **Coherence** in the **alpha band (8–13 Hz)** is
-one of the most widely used connectivity measures, and identifying the strongly connected
-electrode pairs is a common analysis goal in EEG.
+one of the most widely used EEG connectivity measures (Nunez et al., 1997,
+*Electroencephalogr Clin Neurophysiol*, https://doi.org/10.1016/S0013-4694(97)00066-7), and
+identifying the strongly connected electrode pairs is a common analysis goal in EEG.
 
 ## Task
 
