@@ -170,5 +170,5 @@ group hubs as *the* hubs over-generalises the average to every subject; hub orga
 be characterised per individual.
 """)
 print(f"OK: buckner_reproduced={buckner_reproduced}; group hubs {group_top.tolist()}; "
-      f"assoc_top15={frac_assoc_top15:.2f}; split_r={split_r:.2f}; "
+      f"assoc_top10={frac_assoc_top10:.2f}; split_r={split_r:.2f}; "
       f"indiv_share_top5={present_frac.mean():.2f}")
