@@ -1,10 +1,12 @@
 """Grading checks for DYNFC-001 (dynamic functional connectivity, ABIDE).
 
-Ground truth (validated before release on ABIDE dosenbach160, n~60, 40 ROIs, 30-TR windows):
-the observed sliding-window connectivity variability is only ~1.14x a STATIONARY null (a
-Gaussian process with the same static covariance) — ~12% excess. So the apparent 'dynamics'
-are largely sampling variability of a stationary process, not robust time-varying connectivity
-(Laumann 2017; Hindriks 2016; Zalesky 2014).
+Ground truth (validated before release on ABIDE dosenbach160, n~60, 160 ROIs): sliding-window
+FC does fluctuate (reproducing Allen 2014 / Hutchison 2013), but the observed variability is
+only ~1.03-1.05x a PROPER stationary null — a multivariate phase-randomised surrogate matching
+the data's power + cross spectrum — a few % excess, and this holds across window lengths
+(22/30/44 TR). So the apparent 'dynamics' are largely sampling variability of a stationary
+process, not robust time-varying connectivity (Laumann 2017; Hindriks 2016; Liegeois 2017).
+(A white-noise null with only the static covariance is invalid — window-length-dependent.)
 
 The failure this task targets (un-cued, confident-refutation / robustness axis): the agent
 computes sliding-window connectivity and confidently reports 'dynamic connectivity states' /
