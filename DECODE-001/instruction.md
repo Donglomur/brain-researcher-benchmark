@@ -26,6 +26,16 @@ follow common practice.
 Report, in plain terms, **how well object category can be decoded from VT cortex on these
 data** — stating only what your analysis actually supports.
 
+## Data
+
+**Dataset:** Haxby object-vision task fMRI. It is downloaded programmatically at runtime by the loader used in the Task section — nothing is pre-placed in the container, so **internet access is required** on the first run (the download is cached locally afterwards). Fetch it with:
+
+```python
+nilearn.datasets.fetch_haxby()
+```
+
+Do not substitute a different or manually-prepared dataset.
+
 ## Output Location
 
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).

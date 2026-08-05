@@ -22,6 +22,16 @@ connections) should follow common practice.
 Report, in plain terms, **whether and how strongly functional connectivity is associated with
 IQ on these data** — stating only what your analysis actually supports.
 
+## Data
+
+**Dataset:** ABIDE resting-state (Craddock-200) + FIQ phenotype. It is downloaded programmatically at runtime by the loader used in the Task section — nothing is pre-placed in the container, so **internet access is required** on the first run (the download is cached locally afterwards). Fetch it with:
+
+```python
+nilearn.datasets.fetch_abide_pcp(pipeline="cpac", derivatives=["rois_cc200"])
+```
+
+Do not substitute a different or manually-prepared dataset.
+
 ## Output Location
 
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).

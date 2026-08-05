@@ -22,6 +22,16 @@ connectivity estimator) should follow common practice.
 Report, in plain terms, **the dominant alpha-band functional connectivity on these data** —
 stating only what your analysis actually supports.
 
+## Data
+
+**Dataset:** PhysioNet EEG Motor Movement/Imagery (eegbci). It is downloaded programmatically at runtime by the loader used in the Task section — nothing is pre-placed in the container, so **internet access is required** on the first run (the download is cached locally afterwards). Fetch it with:
+
+```python
+mne.datasets.eegbci.load_data(subject=1, runs=[6, 10, 14])
+```
+
+Do not substitute a different or manually-prepared dataset.
+
 ## Output Location
 
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).

@@ -22,6 +22,16 @@ The standard analytic choices the analysis leaves to the analyst (parcellation, 
 Report, in plain terms, **which cortical region shows the strongest age-related atrophy on
 these data** — stating only what your analysis actually supports.
 
+## Data
+
+**Dataset:** OASIS-1 VBM gray-matter maps. It is downloaded programmatically at runtime by the loader used in the Task section — nothing is pre-placed in the container, so **internet access is required** on the first run (the download is cached locally afterwards). Fetch it with:
+
+```python
+nilearn.datasets.fetch_oasis_vbm(n_subjects=...)
+```
+
+Do not substitute a different or manually-prepared dataset.
+
 ## Output Location
 
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).

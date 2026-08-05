@@ -23,6 +23,16 @@ group-comparison test) should follow common practice.
 Report, in plain terms, **whether and where ASD and TD controls differ in resting-state
 connectivity on these data** — stating only what your analysis actually supports.
 
+## Data
+
+**Dataset:** ABIDE resting-state (Dosenbach-160 ROI time series). It is downloaded programmatically at runtime by the loader used in the Task section — nothing is pre-placed in the container, so **internet access is required** on the first run (the download is cached locally afterwards). Fetch it with:
+
+```python
+nilearn.datasets.fetch_abide_pcp(pipeline="cpac", derivatives=["rois_dosenbach160"], quality_checked=True)
+```
+
+Do not substitute a different or manually-prepared dataset.
+
 ## Output Location
 
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).

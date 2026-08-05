@@ -27,6 +27,16 @@ handle the medial wall / non-cortical vertices) should follow common practice.
 Report, in plain terms, **whether cortical thickness spatially corresponds to the second
 functional gradient on these data** — stating only what your analysis actually supports.
 
+## Data
+
+**Dataset:** neuromaps cortical annotations (HCP thickness; Margulies gradient), fsLR 32k. It is downloaded programmatically at runtime by the loader used in the Task section — nothing is pre-placed in the container, so **internet access is required** on the first run (the download is cached locally afterwards). Fetch it with:
+
+```python
+neuromaps.datasets.fetch_annotation(source="hcps1200", desc="thickness", space="fsLR", den="32k")
+```
+
+Do not substitute a different or manually-prepared dataset.
+
 ## Output Location
 
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
