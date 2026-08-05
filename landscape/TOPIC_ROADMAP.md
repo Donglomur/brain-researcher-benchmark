@@ -7,7 +7,7 @@ Generated 2026-08-04 from `landscape/results/{landscape_topic_summary, topic_pap
 **Caveat:** the *anchor* shown is the landscape rank-1 (often a review/canonical — pick a *primary* empirical paper from the topic's lower ranks for Step-0). The *hard read* is a HEURISTIC prior (category + axis fit + this session's Step-0 experience) — **Step-0 is the real decider.**
 
 
-**Status tally:** ✅ 11 built · ❌ 10 dropped · ⭐ 2 promising-new · 🔵 30 candidate · ⚪ 58 likely-easy/infra.
+**Status tally:** ✅ 11 built · ❌ 11 dropped · ⭐ 2 promising-new · 🔵 29 candidate · ⚪ 58 likely-easy/infra.
 
 
 ## inference (42)
@@ -23,7 +23,7 @@ Generated 2026-08-04 from `landscape/results/{landscape_topic_summary, topic_pap
 | convolutional neural network | 🔵 | CNN shortcut/leakage — overlaps DECODE | Haxby et al. (2001) — *Distributed and overlapping representations of faces and objects in ve* [MVPA / perception] |
 | human connectome project | ⚪ | DATASET (enabler for structure-function / BWAS axes) | Van Essen et al. (2013) — *The WU-Minn Human Connectome Project: an overview* [dataset / consortium] |
 | external validation | 🔵 | in-sample vs out-of-sample gap — leakage variant | Varoquaux (2018) — *Cross-validation failure: small sample sizes lead to large error bars* [ML validation / sample size] |
-| graph theory | 🔵 | graph-metric threshold-dependence — over-claim (overlaps GRADIENT/HUBMAP) | Rubinov & Sporns (2010) — *Complex network measures of brain connectivity: uses and interpretatio* [graph theory / network metrics] |
+| graph theory | ❌ | dropped — small-world verdict robust (σ>1 at all thresholds); no trap | Rubinov & Sporns (2010) — *Complex network measures of brain connectivity: uses and interpretatio* [graph theory / network metrics] |
 | explainability | ⭐ | saliency maps fail sanity checks (Adebayo 2018) — NEW axis (interpretability illusion) | Haufe et al. (2014) — *On the interpretation of weight vectors of linear models in multivaria* [model interpretability] |
 | dynamic functional connectivity | ✅ | BUILT → DYNFC | Allen et al. (2014) — *Tracking whole-brain connectivity dynamics in the resting state* [dynamic FC pipeline] |
 | quality control | ⚪ | infrastructure, not an analysis trap | Esteban et al. (2017) — *MRIQC: Advancing the automatic prediction of image quality in MRI from* [quality control pipeline] |
