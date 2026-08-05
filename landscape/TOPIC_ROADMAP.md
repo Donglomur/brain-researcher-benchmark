@@ -7,7 +7,7 @@ Generated 2026-08-04 from `landscape/results/{landscape_topic_summary, topic_pap
 **Caveat:** the *anchor* shown is the landscape rank-1 (often a review/canonical — pick a *primary* empirical paper from the topic's lower ranks for Step-0). The *hard read* is a HEURISTIC prior (category + axis fit + this session's Step-0 experience) — **Step-0 is the real decider.**
 
 
-**Status tally:** ✅ 11 built · ❌ 11 dropped · ⭐ 2 promising-new · 🔵 29 candidate · ⚪ 58 likely-easy/infra.
+**Status tally:** ✅ 12 built · ❌ 12 dropped · ⭐ 2 promising-new · 🔵 27 candidate · ⚪ 58 likely-easy/infra.
 
 
 ## inference (42)
@@ -47,13 +47,13 @@ Generated 2026-08-04 from `landscape/results/{landscape_topic_summary, topic_pap
 | individualized parcellation | 🔵 | parcellation-dependence of results — robustness | Finn et al. (2015) — *Functional connectome fingerprinting: identifying individuals using pa* [connectome fingerprinting] |
 | fmriprep | ⚪ | pipeline infrastructure — enabler | Esteban et al. (2019) — *fMRIPrep: a robust preprocessing pipeline for functional MRI* [preprocessing pipeline] |
 | preregistration | ⚪ | meta-science — not a data trap | Poldrack et al. (2017) — *Scanning the horizon: towards transparent and reproducible neuroimagin* [reproducibility / open science] |
-| cluster inference | 🔵 | cluster-extent false positives (Eklund 2016) — mult-comp (AUTCONN covers) | Eklund et al. (2016) — *Cluster failure: Why fMRI inferences for spatial extent have inflated * [statistical inference / cluster correction] |
+| cluster inference | ❌ | dropped — task activation robust (891-2034 survive FWE); no trap | Eklund et al. (2016) — *Cluster failure: Why fMRI inferences for spatial extent have inflated * [statistical inference / cluster correction] |
 | neurovault | ⚪ | repository infrastructure | Gorgolewski et al. (2015) — *NeuroVault.org: a web-based repository for collecting and sharing unth* [data repository / statistical maps] |
 | bids | ⚪ | standard/infrastructure | Gorgolewski et al. (2016) — *The Brain Imaging Data Structure, a format for organizing and describi* [standard / data organization] |
 | enigma | ⚪ | consortium/DATASET (enabler) | Thompson et al. (2014) — *The ENIGMA Consortium: large-scale collaborative analyses of neuroimag* [consortium / harmonized analysis] |
 | imaging genetics | 🔵 | genome-scale multiple comparisons — mult-comp variant | Thompson et al. (2014) — *The ENIGMA Consortium: large-scale collaborative analyses of neuroimag* [consortium / harmonized analysis] |
 | data sharing | ⚪ | meta-science/infrastructure | Markiewicz et al. (2021) — *The OpenNeuro resource for sharing of neuroscience data* [data repository / BIDS] |
-| independent component analysis | 🔵 | ICA component selection/reliability — novel-ish | Beckmann & Smith (2004) — *Probabilistic independent component analysis for functional magnetic r* [ICA / fMRI decomposition] |
+| independent component analysis | ✅ | BUILT → ICA | Beckmann & Smith (2004) — *Probabilistic independent component analysis for functional magnetic r* [ICA / fMRI decomposition] |
 | statistical parametric mapping | 🔵 | SPM cluster inference — mult-comp (AUTCONN covers) | Friston et al. (1994) — *Statistical parametric maps in functional imaging: A general linear ap* [statistical modeling / GLM] |
 | reproducibility | ✅ | BUILT → MULTIVERSE | Poldrack et al. (2017) — *Scanning the horizon: towards transparent and reproducible neuroimagin* [reproducibility / open science] |
 
