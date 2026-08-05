@@ -7,7 +7,7 @@ Generated 2026-08-04 from `landscape/results/{landscape_topic_summary, topic_pap
 **Caveat:** the *anchor* shown is the landscape rank-1 (often a review/canonical — pick a *primary* empirical paper from the topic's lower ranks for Step-0). The *hard read* is a HEURISTIC prior (category + axis fit + this session's Step-0 experience) — **Step-0 is the real decider.**
 
 
-**Status tally:** ✅ 10 built · ❌ 9 dropped · ⭐ 3 promising-new · 🔵 31 candidate · ⚪ 58 likely-easy/infra.
+**Status tally:** ✅ 11 built · ❌ 10 dropped · ⭐ 2 promising-new · 🔵 30 candidate · ⚪ 58 likely-easy/infra.
 
 
 ## inference (42)
@@ -32,7 +32,7 @@ Generated 2026-08-04 from `landscape/results/{landscape_topic_summary, topic_pap
 | harmonization | ⚪ | ComBat over-correction; site-confound already an easy-control | Johnson et al. (2007) — *Adjusting batch effects in microarray expression data using empirical * [ComBat / batch effects] |
 | abcd study | ⚪ | DATASET (enabler for BWAS / developmental axes) | Casey et al. (2018) — *The Adolescent Brain Cognitive Development (ABCD) study: Imaging acqui* [dataset / cohort acquisition] |
 | graph neural network | 🔵 | GNN leakage on connectomes — overlaps DECODE | Rubinov & Sporns (2010) — *Complex network measures of brain connectivity: uses and interpretatio* [graph theory / network metrics] |
-| connectome-based predictive modeling | 🔵 | CPM leakage across folds (Shen 2017) — leakage variant of DECODE | Finn et al. (2015) — *Functional connectome fingerprinting: identifying individuals using pa* [connectome fingerprinting] |
+| connectome-based predictive modeling | ❌ | dropped — CPM leakage weak (+0.065 at n=455); DECODE covers | Finn et al. (2015) — *Functional connectome fingerprinting: identifying individuals using pa* [connectome fingerprinting] |
 | multiple comparisons | ✅ | BUILT → AUTCONN | Friston et al. (1994) — *Statistical parametric maps in functional imaging: A general linear ap* [statistical modeling / GLM] |
 | sample size | 🔵 | power/winner's-curse — effect-size (BWAS covers) | Marek et al. (2022) — *Reproducible brain-wide association studies require thousands of indiv* [sample size / BWAS] |
 | uk biobank | ⚪ | DATASET (enabler for BWAS / imaging-genetics) | Miller et al. (2016) — *Multimodal population brain imaging in the UK Biobank prospective epid* [dataset / cohort pipeline] |
@@ -77,7 +77,7 @@ Generated 2026-08-04 from `landscape/results/{landscape_topic_summary, topic_pap
 | tractography | ⭐ | diffusion false positives (Maier-Hein 2017) — NEW modality; needs dipy | Behrens et al. (2003) — *Non-invasive mapping of connections between human thalamus and cortex * [probabilistic tractography / thalamus] |
 | segmentation | ⚪ | descriptive/organization — likely easy unless a robustness lever exists | Fischl et al. (2002) — *Whole brain segmentation: automated labeling of neuroanatomical struct* [segmentation / subcortical labels] |
 | structure-function coupling | ✅ | BUILT → MAPCORR | Rubinov & Sporns (2010) — *Complex network measures of brain connectivity: uses and interpretatio* [graph theory / network metrics] |
-| modularity | ⭐ | module/community identity flips with threshold+algorithm — over-claim/robustness | Rubinov & Sporns (2010) — *Complex network measures of brain connectivity: uses and interpretatio* [graph theory / network metrics] |
+| modularity | ✅ | BUILT → MODULAR | Rubinov & Sporns (2010) — *Complex network measures of brain connectivity: uses and interpretatio* [graph theory / network metrics] |
 | cortical thickness | 🔵 | smoothing/software dependence — over-claim (VBMAGE-like) | Dale et al. (1999) — *Cortical surface-based analysis I: Segmentation and surface reconstruc* [surface reconstruction] |
 | surface reconstruction | ⚪ | descriptive/organization — likely easy unless a robustness lever exists | Dale et al. (1999) — *Cortical surface-based analysis I: Segmentation and surface reconstruc* [surface reconstruction] |
 | surface area | ⚪ | descriptive/organization — likely easy unless a robustness lever exists | Dale et al. (1999) — *Cortical surface-based analysis I: Segmentation and surface reconstruc* [surface reconstruction] |
