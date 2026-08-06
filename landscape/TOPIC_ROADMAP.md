@@ -28,14 +28,24 @@ After the full-coverage Step-0 sweep, **all 39 BLOCKED and all 32 DROPPED topics
 - **2 verified-real but Step-0-dropped**: *convolutional neural network* (deep ≯ linear — real but
   grades softly / cluster-redundant), *neurodevelopment* (range-restriction — over-clusters with
   BRAINAGE+BWAS). 27 other DROPPED topics confirmed.
+- **New-axis hunt on cached data (same day):** **+1 built — BASERATE-001** ← *classification/biomarker*:
+  base-rate paradox — ABIDE sex (~84% male), classifier raw acc 0.818 ≤ majority baseline 0.845 while
+  balanced acc 0.60 / AUC 0.72 show only modest skill (Varoquaux 2017). 3 candidates tested and
+  **honestly dropped**: circular analysis (only 2× inflation, overlaps DECODE/BWAS), outlier-driven
+  correlation (ABIDE FIQ edges are robust — Spearman agrees, n too large), Simpson's paradox (pooled
+  brain–age r vanishes rather than reverses within-site → HARMON's confound territory). Hit rate ~1/4
+  → the cached-data vein is near its ceiling.
 - **BLOCKED**: the only feasible bucket — **diffusion** (tractography/DWI/white-matter/FA/structural
   connectivity) — was *tested* via dipy Stanford HARDI and is **robust** (streamline count 1.0× across
   tracking params) → confirm-blocked with evidence. **MEG** ≈ near-duplicate of EEGVC-001. The
   remaining 32 (MRS/qMRI/SWI/ASL/PET/high-field, UKB/ENIGMA/genetics, clinical cohorts, surface/seg,
   task-cognitive) are genuinely data-gated. **No new tasks from BLOCKED.**
 
-**Net: +3 built** (→ 19 built by this file's accounting; the live repo has more tasks added since the
-2026-08-04 generation). Tally line above is the 2026-08-04 baseline; see the record files for current.
+**Net: +4 built** this pass (GMVOL, SPMAR, INTERP from DROPPED rescue; BASERATE from the new-axis
+hunt). NicholasLu suite **14 → 18**. Remaining growth toward ~50 is now **data-gated** — the 39
+BLOCKED topics need cohorts/modalities with no public single-command fetch (UKB/HCP/ABCD/ENIGMA/
+imaging-genetics; PET/MRS/qMRI/ASL/SWI/high-field; clinical cohorts). Tally line above is the
+2026-08-04 baseline; the record files are current.
 
 
 ## inference (42)
