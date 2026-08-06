@@ -7,7 +7,7 @@ Generated 2026-08-04 from `landscape/results/{landscape_topic_summary, topic_pap
 **Caveat:** the *anchor* shown is the landscape rank-1 (often a review/canonical — pick a *primary* empirical paper from the topic's lower ranks for Step-0). The *hard read* is a HEURISTIC prior (category + axis fit + this session's Step-0 experience) — **Step-0 is the real decider.**
 
 
-**Status tally:** ✅ 12 built · ❌ 12 dropped · ⭐ 2 promising-new · 🔵 27 candidate · ⚪ 58 likely-easy/infra.
+**Status tally:** ✅ 16 built · ❌ 12 dropped · ⭐ 2 promising-new · 🔵 25 candidate · ⚪ 56 likely-easy/infra.
 
 
 ## inference (42)
@@ -16,7 +16,7 @@ Generated 2026-08-04 from `landscape/results/{landscape_topic_summary, topic_pap
 |---|---|---|---|
 | network neuroscience | ✅ | BUILT → CAUSAL | Rubinov & Sporns (2010) — *Complex network measures of brain connectivity: uses and interpretatio* [graph theory / network metrics] |
 | deep learning | 🔵 | DL leakage / shortcut learning — overlaps DECODE | Haxby et al. (2001) — *Distributed and overlapping representations of faces and objects in ve* [MVPA / perception] |
-| prediction | 🔵 | prediction leakage / optimism — overlaps DECODE/BWAS | Shen et al. (2017) — *Using connectome-based predictive modeling to predict individual behav* [predictive modeling protocol] |
+| prediction | ✅ | BUILT → BRAINAGE | Shen et al. (2017) — *Using connectome-based predictive modeling to predict individual behav* [predictive modeling protocol] |
 | machine learning | ✅ | BUILT → DECODE | Abraham et al. (2014) — *Machine learning for neuroimaging with scikit-learn* [software / ML pipeline] |
 | biomarker | 🔵 | biomarker over-claim / tiny effect — overlaps BWAS | Woo et al. (2017) — *Building better biomarkers: brain models in translational neuroimaging* [biomarker validation framework] |
 | classification | 🔵 | classifier leakage / accuracy inflation — overlaps DECODE | Abraham et al. (2014) — *Machine learning for neuroimaging with scikit-learn* [software / ML pipeline] |
@@ -29,14 +29,14 @@ Generated 2026-08-04 from `landscape/results/{landscape_topic_summary, topic_pap
 | quality control | ⚪ | infrastructure, not an analysis trap | Esteban et al. (2017) — *MRIQC: Advancing the automatic prediction of image quality in MRI from* [quality control pipeline] |
 | treatment response | ⚪ | clinical prediction; leakage — needs trial data | Woo et al. (2017) — *Building better biomarkers: brain models in translational neuroimaging* [biomarker validation framework] |
 | site effects | ❌ | dropped — easy-control (existing AGE-SITE task) | Johnson et al. (2007) — *Adjusting batch effects in microarray expression data using empirical * [ComBat / batch effects] |
-| harmonization | ⚪ | ComBat over-correction; site-confound already an easy-control | Johnson et al. (2007) — *Adjusting batch effects in microarray expression data using empirical * [ComBat / batch effects] |
+| harmonization | ✅ | BUILT → HARMON | Johnson et al. (2007) — *Adjusting batch effects in microarray expression data using empirical * [ComBat / batch effects] |
 | abcd study | ⚪ | DATASET (enabler for BWAS / developmental axes) | Casey et al. (2018) — *The Adolescent Brain Cognitive Development (ABCD) study: Imaging acqui* [dataset / cohort acquisition] |
 | graph neural network | 🔵 | GNN leakage on connectomes — overlaps DECODE | Rubinov & Sporns (2010) — *Complex network measures of brain connectivity: uses and interpretatio* [graph theory / network metrics] |
 | connectome-based predictive modeling | ❌ | dropped — CPM leakage weak (+0.065 at n=455); DECODE covers | Finn et al. (2015) — *Functional connectome fingerprinting: identifying individuals using pa* [connectome fingerprinting] |
 | multiple comparisons | ✅ | BUILT → AUTCONN | Friston et al. (1994) — *Statistical parametric maps in functional imaging: A general linear ap* [statistical modeling / GLM] |
 | sample size | 🔵 | power/winner's-curse — effect-size (BWAS covers) | Marek et al. (2022) — *Reproducible brain-wide association studies require thousands of indiv* [sample size / BWAS] |
 | uk biobank | ⚪ | DATASET (enabler for BWAS / imaging-genetics) | Miller et al. (2016) — *Multimodal population brain imaging in the UK Biobank prospective epid* [dataset / cohort pipeline] |
-| normative modeling | 🔵 | deviation-score artifacts — novel-ish (needs big cohort) | Marquand et al. (2016) — *Understanding heterogeneity in clinical cohorts using normative models* [normative modeling] |
+| normative modeling | ✅ | BUILT → BRAINAGE | Marquand et al. (2016) — *Understanding heterogeneity in clinical cohorts using normative models* [normative modeling] |
 | effect size | ❌ | dropped — one-directional; BWAS covers | Marek et al. (2022) — *Reproducible brain-wide association studies require thousands of indiv* [sample size / BWAS] |
 | statistical power | ❌ | dropped — BWAS covers | Marek et al. (2022) — *Reproducible brain-wide association studies require thousands of indiv* [sample size / BWAS] |
 | precision functional mapping | ❌ | dropped — HUBMAP covers (aggregation) | Finn et al. (2015) — *Functional connectome fingerprinting: identifying individuals using pa* [connectome fingerprinting] |
@@ -126,7 +126,7 @@ Generated 2026-08-04 from `landscape/results/{landscape_topic_summary, topic_pap
 | stroke | ⚪ | phenotype — likely easy (reproduction agents can solve) unless a confound lever exists | Bates et al. (2003) — *Voxel-based lesion-symptom mapping* [lesion-symptom mapping pipeline] |
 | parkinson disease | ⚪ | phenotype — likely easy (reproduction agents can solve) unless a confound lever exists | Marek et al. (2011) — *The Parkinson Progression Marker Initiative (PPMI)* [dataset / Parkinson cohort] |
 | neurodevelopment | ⚪ | phenotype — likely easy (reproduction agents can solve) unless a confound lever exists | Dosenbach et al. (2010) — *Prediction of individual brain maturity using fMRI* [predictive modeling / development] |
-| brain age | ⚪ | phenotype — likely easy (reproduction agents can solve) unless a confound lever exists | Marquand et al. (2016) — *Understanding heterogeneity in clinical cohorts using normative models* [normative modeling] |
+| brain age | ✅ | BUILT → BRAINAGE | Marquand et al. (2016) — *Understanding heterogeneity in clinical cohorts using normative models* [normative modeling] |
 | mild cognitive impairment | ❌ | dropped — MMSE~GM absent on OASIS (COGVBM) | Jack et al. (2010) — *Hypothetical model of dynamic biomarkers of the Alzheimer's pathologic* [disease biomarker model] |
 | reward | ⚪ | phenotype — likely easy (reproduction agents can solve) unless a confound lever exists | Knutson et al. (2001) — *Anticipation of increasing monetary reward selectively recruits nucleu* [reward task fMRI] |
 | bipolar disorder | ⚪ | phenotype — likely easy (reproduction agents can solve) unless a confound lever exists | Hibar et al. (2016) — *Subcortical volumetric abnormalities in bipolar disorder* [ENIGMA / bipolar disorder] |
