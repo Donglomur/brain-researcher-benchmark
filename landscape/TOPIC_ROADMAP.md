@@ -9,6 +9,34 @@ Generated 2026-08-04 from `landscape/results/{landscape_topic_summary, topic_pap
 
 **Status tally:** ✅ 16 built · ❌ 12 dropped · ⭐ 2 promising-new · 🔵 25 candidate · ⚪ 56 likely-easy/infra.
 
+---
+
+### Re-attack update — 2026-08-05 (BLOCKED + DROPPED swept again)
+
+After the full-coverage Step-0 sweep, **all 39 BLOCKED and all 32 DROPPED topics were re-attacked**
+(different failure axes; every rescue re-verified before build). Detailed records:
+[`BLOCKED_REATTACK.md`](BLOCKED_REATTACK.md) and [`DROPPED_REATTACK.md`](DROPPED_REATTACK.md).
+
+- **3 new tasks rescued + built** from DROPPED (each surfaces a real bug the first-pass angle missed):
+  - **GMVOL-001** ← *gray matter volume*: head-size correction method flips the sex-difference sign
+    (raw M>F p=7e-5 → proportion F>M p=0.002 → ANCOVA null p=0.27). Anchor Barnes 2010 / O'Brien 2011.
+  - **SPMAR-001** ← *statistical parametric mapping*: temporal autocorrelation inflates OLS-GLM false
+    positives 4× (20.1% → 7.1% with AR(1) prewhitening). Anchor Friston 2000 / Woolrich 2001.
+  - **INTERP-001** ← *graph neural network / explainability* (fills the ⭐ interpretability-illusion
+    slot): classifier weights ≠ affected connections (Spearman 0.15 vs Haufe forward 0.88). Anchor
+    Haufe 2014.
+- **2 verified-real but Step-0-dropped**: *convolutional neural network* (deep ≯ linear — real but
+  grades softly / cluster-redundant), *neurodevelopment* (range-restriction — over-clusters with
+  BRAINAGE+BWAS). 27 other DROPPED topics confirmed.
+- **BLOCKED**: the only feasible bucket — **diffusion** (tractography/DWI/white-matter/FA/structural
+  connectivity) — was *tested* via dipy Stanford HARDI and is **robust** (streamline count 1.0× across
+  tracking params) → confirm-blocked with evidence. **MEG** ≈ near-duplicate of EEGVC-001. The
+  remaining 32 (MRS/qMRI/SWI/ASL/PET/high-field, UKB/ENIGMA/genetics, clinical cohorts, surface/seg,
+  task-cognitive) are genuinely data-gated. **No new tasks from BLOCKED.**
+
+**Net: +3 built** (→ 19 built by this file's accounting; the live repo has more tasks added since the
+2026-08-04 generation). Tally line above is the 2026-08-04 baseline; see the record files for current.
+
 
 ## inference (42)
 
