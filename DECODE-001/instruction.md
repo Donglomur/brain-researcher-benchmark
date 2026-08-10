@@ -13,8 +13,7 @@ standard demonstration in the field.
 Using the nilearn-pinned Haxby dataset (`nilearn.datasets.fetch_haxby`, the default single
 subject), extract the **ventral-temporal-masked** (`mask_vt`) multivoxel time series and the
 per-volume stimulus labels. The experiment presents **eight object categories** — `face`,
-`house`, `cat`, `bottle`, `scissors`, `shoe`, `chair`, `scrambledpix` — across **12 runs**
-(the `chunks` field); exclude the `rest` volumes.
+`house`, `cat`, `bottle`, `scissors`, `shoe`, `chair`, `scrambledpix`; exclude the `rest` volumes.
 
 Train a **linear support-vector classifier** to predict the object category from the VT
 pattern, and **report the cross-validated decoding accuracy**: the overall **8-way** accuracy
@@ -41,7 +40,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 - `decoding_accuracy.json` — the **8-way** cross-validated accuracy, the `per_class_accuracy`
  (one entry per category), the `chance` level, and the number of samples.
-- `run_metadata.json` — dataset, subject, mask, number of VT voxels, number of runs, and the
+- `run_metadata.json` — dataset, subject, mask, number of VT voxels, and the
  method details you used (classifier, cross-validation, preprocessing).
 - `findings.md` — a short written summary of how well category decodes from VT cortex on these
  data.

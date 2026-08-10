@@ -51,7 +51,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `cluster.json` — the number of subjects and the cluster-extent result (e.g. surviving cluster count
- / cluster-size threshold / false-positive rate) your analysis supports.
+ / cluster-size threshold).
 - `run_metadata.json` — dataset, number of subjects, and the method used.
 - `findings.md` — a short written summary of how many clusters are significant.
 

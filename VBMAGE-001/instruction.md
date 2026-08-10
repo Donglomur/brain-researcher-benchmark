@@ -35,9 +35,8 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `atrophy.json` — the `top_atrophy_region` (the cortical region with the strongest age-related
- atrophy), its age–gray-matter correlation, `n_subjects`, and the analytic choices you made
- (parcellation, smoothing).
-- `run_metadata.json` — dataset, parcellation, number of subjects, smoothing, analytic choices.
+ atrophy), its age–gray-matter correlation, `n_subjects`, and the analytic choices you made.
+- `run_metadata.json` — dataset, parcellation, number of subjects, analytic choices.
 - `findings.md` — a short written summary of which region atrophies most with age.
 
 ## Failure handling

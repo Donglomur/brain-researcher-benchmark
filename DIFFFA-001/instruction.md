@@ -34,7 +34,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `fa.json` — the number of white-matter voxels and a summary of the lowest-FA / lowest-integrity
- white-matter regions your analysis supports.
+ white-matter regions.
 - `run_metadata.json` — dataset and the method used.
 - `findings.md` — a short written summary of which white-matter regions have the lowest integrity.
 

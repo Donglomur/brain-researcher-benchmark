@@ -30,7 +30,7 @@ DATA = Path(__file__).resolve().parent.parent / "data" / "cnp_connectomes.npz"
 
 
 def fail(reason):
-    (OUT / "specificity.json").write_text(json.dumps({"status": "failed_precondition", "reason": reason}))
+    (OUT / "classification.json").write_text(json.dumps({"status": "failed_precondition", "reason": reason}))
     (OUT / "run_metadata.json").write_text(json.dumps({"status": "failed_precondition", "reason": reason}, indent=2))
     (OUT / "findings.md").write_text(f"# Failed precondition\n\n{reason}\n")
     sys.stderr.write(reason + "\n")
@@ -83,7 +83,7 @@ R = np.array([transfer(s) for s in range(30)])
 schz_self, bip_auc, adhd_auc = [float(v) for v in R.mean(0)]
 bip_sd, adhd_sd = float(R[:, 1].std()), float(R[:, 2].std())
 
-(OUT / "specificity.json").write_text(json.dumps({
+(OUT / "classification.json").write_text(json.dumps({
     "dataset": "UCLA CNP (OpenNeuro ds000030) functional connectomes",
     "n_per_group": {g: int((y == g).sum()) for g in ["CONTROL", "SCHZ", "BIPOLAR", "ADHD"]},
     "schizophrenia_vs_control_cv_auc": schz_cv_auc,

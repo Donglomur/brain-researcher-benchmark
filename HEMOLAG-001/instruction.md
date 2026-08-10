@@ -37,7 +37,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `connectivity.json` — the number of subjects and a summary of the lowest-connectivity /
- "disconnected" regions your analysis supports.
+ "disconnected" regions.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
 - `findings.md` — a short written summary of which regions are most disconnected.
 

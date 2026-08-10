@@ -36,8 +36,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `ecolog.json` — the number of subjects/sites and the connectivity-age relationship your analysis
  supports.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
-- `findings.md` — a short written summary of the connectivity-age relationship and how confident you are
- it reflects how connectivity changes with age.
+- `findings.md` — a short written summary of the connectivity-age relationship.
 
 ## Failure handling
 

@@ -4,9 +4,7 @@
 
 A large literature relates individual differences in **functional connectivity** to cognitive
 and behavioural phenotypes — including **IQ**. The ABIDE resource provides resting-state fMRI
-and full-scale IQ (`FIQ`) for a large sample, enabling a brain-wide association analysis (see
-Marek et al., 2021, *Nature*, https://doi.org/10.1038/s41586-022-04492-9, for the
-brain-wide-association landscape).
+and full-scale IQ (`FIQ`) for a large sample, enabling a brain-wide association analysis.
 
 ## Task
 

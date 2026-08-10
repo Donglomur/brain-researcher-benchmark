@@ -18,7 +18,7 @@ biomarker for schizophrenia**.
 **Dataset:** resting-state functional connectomes for the UCLA CNP cohort (OpenNeuro **ds000030**),
 provided analysis-ready in `data/cnp_connectomes.npz` (npz with `X` = subjects × 1128 connectome edges
 over the Harvard-Oxford 48-ROI cortical atlas, `y` = diagnosis label per subject, `subjects` = IDs).
-The groups are `CONTROL`, `SCHZ` (schizophrenia), `BIPOLAR` (bipolar disorder), and `ADHD`.
+`y` holds each subject's diagnosis label.
 
 ```python
 import numpy as np
@@ -37,8 +37,8 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
-- `specificity.json` — the number of subjects per group and the schizophrenia-classification
- performance your analysis supports.
+- `classification.json` — the number of subjects per group and the schizophrenia-classification
+ performance.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
 - `findings.md` — a short written summary of how well connectivity classifies schizophrenia and
  whether it is a valid schizophrenia biomarker.
@@ -46,4 +46,4 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Failure handling
 
 If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a non-empty reason, and
-still write parseable `run_metadata.json`, `specificity.json`, and `findings.md`.
+still write parseable `run_metadata.json`, `classification.json`, and `findings.md`.

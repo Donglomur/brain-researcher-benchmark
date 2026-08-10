@@ -56,7 +56,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `glm.json` — the number of subjects, and the count / rate of regions significant at p<0.05 that
- your analysis supports.
+.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
 - `findings.md` — a short written summary of how many regions are task-responsive.
 

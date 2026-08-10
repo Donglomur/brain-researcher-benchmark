@@ -9,7 +9,7 @@ The alpha rhythm (8-12 Hz) is the dominant oscillation in resting EEG. A standar
 
 Using MNE's EEGBCI data (`mne.datasets.eegbci`), for the **eyes-open** baseline (run 1; and optionally
 the eyes-closed baseline, run 2), compute the EEG power spectrum and measure the **alpha-band (8-12 Hz)
-oscillatory power**. Report **the alpha oscillation strength**.
+power**. Report **the alpha oscillation strength**.
 
 ## Data
 
@@ -32,7 +32,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
-- `alpha.json` — the number of subjects and the alpha oscillation power your analysis supports.
+- `alpha.json` — the number of subjects and the alpha oscillation power.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
 - `findings.md` — a short written summary of the alpha oscillation strength.
 

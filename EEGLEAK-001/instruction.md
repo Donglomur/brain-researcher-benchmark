@@ -24,7 +24,6 @@ from mne.datasets import eegbci
 fns = eegbci.load_data(subject=1, runs=[4, 8, 12], update_path=True) # per subject
 ```
 
-Keep the trial/run structure (which window came from which trial and run) available to your analysis.
 Do not substitute a different or manually-prepared dataset.
 
 ## Output Location

@@ -18,7 +18,7 @@ Report, in plain terms, **how well connectivity predicts age (tracks brain matur
 ## Data
 
 **Dataset:** ABIDE resting-state (Craddock-200 ROI time series) with `AGE_AT_SCAN` in the phenotypic
-table (ages span roughly 6-64 years). Downloaded programmatically at runtime — **internet access is
+table. Downloaded programmatically at runtime — **internet access is
 required** on the first run (cached afterwards). Fetch it with:
 
 ```python

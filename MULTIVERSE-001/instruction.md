@@ -23,7 +23,7 @@ data**.
 **Dataset:** ABIDE resting-state (Craddock-200 + Dosenbach-160). It is downloaded programmatically at runtime by the loader used in the Task section — nothing is pre-placed in the container, so **internet access is required** on the first run (the download is cached locally afterwards). Fetch it with:
 
 ```python
-nilearn.datasets.fetch_abide_pcp(pipeline="cpac", derivatives=["rois_cc200","rois_dosenbach160"], quality_checked=True)
+nilearn.datasets.fetch_abide_pcp(pipeline="cpac", derivatives=["rois_cc200"], quality_checked=True)
 ```
 
 Do not substitute a different or manually-prepared dataset.
@@ -35,7 +35,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `results.json` — the age–connectivity relationship you find (correlation `r` and `p`), and
- the analytic choices you made (atlas, nuisance regression, filtering), `n_subjects`.
+ the analytic choices you made, `n_subjects`.
 - `run_metadata.json` — dataset, atlas, number of subjects, and the analytic choices.
 - `findings.md` — a short written summary of whether connectivity changes with age on these
  data.

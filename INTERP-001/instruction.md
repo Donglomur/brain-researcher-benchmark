@@ -37,7 +37,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `affected_connections.json` — the number of subjects/edges, the classifier used, and the top
- affected connections (or a summary of how they were identified) that your analysis supports.
+ affected connections (or a summary of how they were identified).
 - `run_metadata.json` — dataset, number of subjects, and the method used.
 - `findings.md` — a short written summary of which connections are affected in autism.
 

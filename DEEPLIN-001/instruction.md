@@ -35,7 +35,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
-- `models.json` — the number of subjects and the classification accuracy your analysis supports.
+- `models.json` — the number of subjects and the classification accuracy.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
 - `findings.md` — a short written summary of how accurately autism can be classified.
 

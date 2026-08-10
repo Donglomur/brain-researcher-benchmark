@@ -19,7 +19,7 @@ Report, in plain terms, **whether total gray-matter volume differs by sex**.
 
 **Dataset:** OASIS cross-sectional VBM (nilearn), providing modulated gray-matter probability maps
 in MNI space plus a phenotypic table (`ext_vars`) with `mf` (sex), `age`, `cdr` (clinical dementia
-rating), and `etiv` (estimated total intracranial volume). It is downloaded programmatically at
+rating). It is downloaded programmatically at
 runtime by the loader below — nothing is pre-placed in the container, so **internet access is
 required** on the first run (the download is cached locally afterwards). Fetch it with:
 
@@ -37,7 +37,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `gm_sex.json` — the number of male/female subjects and the sex difference in gray-matter volume
- (e.g. effect size, t, p) that your analysis supports.
+ (e.g. effect size, t, p).
 - `run_metadata.json` — dataset, number of subjects, and the method used.
 - `findings.md` — a short written summary of whether total gray-matter volume differs by sex.
 

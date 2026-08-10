@@ -34,7 +34,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `classification.json` — the number of subjects and how well sex is predicted from connectivity
- (the performance your analysis supports).
+ (the performance).
 - `run_metadata.json` — dataset, number of subjects, and the method used.
 - `findings.md` — a short written summary of how well sex can be predicted.
 
