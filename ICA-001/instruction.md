@@ -12,7 +12,7 @@ goal.
 
 Using the nilearn-pinned ABIDE derivatives
 (`nilearn.datasets.fetch_abide_pcp(pipeline="cpac", derivatives=["rois_dosenbach160"])`),
-decompose the group resting-state ROI time series with **ICA** on the concatenated group data over the **Dosenbach-160** parcellation and **report the
+decompose the group resting-state ROI time series with **ICA** (e.g. `sklearn.decomposition.FastICA`) on the concatenated group data over the **Dosenbach-160** parcellation and **report the
 components / networks** you recover.
 
 Report, in plain terms, **the resting-state components / networks you find on these data**.

@@ -11,7 +11,7 @@ https://doi.org/10.1006/nimg.2001.0786).
 
 Using the nilearn-pinned OASIS VBM gray-matter maps
 (`nilearn.datasets.fetch_oasis_vbm`, which ship `gray_matter_maps` and an `ext_vars` table with
-`age`), relate **regional gray-matter** to **age** across subjects over a cortical parcellation, and **identify the cortical region showing the strongest age-related
+`age`), relate **regional gray-matter** to **age** across subjects over a cortical parcellation (e.g. Harvard-Oxford), and **identify the cortical region showing the strongest age-related
 atrophy** (the most negative gray-matter–age relationship). Report which region atrophies most
 with age.
 

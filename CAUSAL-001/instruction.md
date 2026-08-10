@@ -13,7 +13,7 @@ widely used on resting-state data.
 Using the nilearn-pinned ABIDE derivatives
 (`nilearn.datasets.fetch_abide_pcp(pipeline="cpac", derivatives=["rois_dosenbach160"])`),
 estimate the **directed functional connectivity** among the most strongly connected regions
-using a **lag-based** approach, and identify the **dominant directed
+using a **lag-based (Granger-style)** approach, and identify the **dominant directed
 influences** — which region leads / drives which.
 
 Report, in plain terms, **the dominant directed influences you find in the resting-state
