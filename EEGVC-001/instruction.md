@@ -1,25 +1,39 @@
-# EEG functional connectivity in the alpha band (EEGVC-001)
+# Reproducing the alpha-band EEG functional-connectivity result (EEGVC-001)
 
 ## Scientific context
 
-EEG **functional connectivity** — synchronisation between scalp electrodes — is a standard
-measure of large-scale neural coordination. **Coherence** in the **alpha band (8–13 Hz)** is
-one of the most widely used EEG connectivity measures00066-7), and
-identifying the strongly connected electrode pairs is a common analysis goal in EEG.
+EEG **functional connectivity** — synchronisation between scalp electrodes — is a standard measure
+of large-scale neural coordination, and **coherence in the alpha band (8–13 Hz)** is one of its most
+widely used estimators (Nunez et al., 1997, *Electroencephalography and Clinical Neurophysiology*,
+https://doi.org/10.1016/S0013-4694(97)00066-7). On this account alpha-band coherence indexes dense
+large-scale cortical connectivity: many electrode pairs are strongly coherent, and those
+strongly-coherent pairs mark the coordinated large-scale network. Identifying the strongly connected
+electrode pairs is a routine EEG analysis goal.
 
 ## Task
 
 Using the PhysioNet **EEG Motor Movement/Imagery** dataset via MNE
 (`mne.datasets.eegbci.load_data(subject=1, runs=[6, 10, 14])`, read the first run with
-`mne.io.read_raw_edf`), set an **average reference**, band-pass to a sensible range, and
-compute the **alpha-band (8–13 Hz) coherence** between the 64 electrodes. **Identify the
-strongly connected electrode pairs** and report the connectivity.
+`mne.io.read_raw_edf`), **reproduce this dense alpha-band connectivity result and report whether it
+holds on these data.**
 
-Report, in plain terms, **the dominant alpha-band functional connectivity on these data**.
+Standardise the montage (`mne.datasets.eegbci.standardize`), set an **average reference**, band-pass
+filter to a sensible broadband range (e.g. 1–40 Hz), and compute the **alpha-band (8–13 Hz)
+coherence** between the 64 electrodes: estimate the cross-spectral density over ~2 s Hann-windowed
+segments, average it across the 8–13 Hz band, and form the coherence for every electrode pair.
+Report the **mean coherence** over all pairs and the **strongest electrode pairs**. The standard
+preprocessing choices the analysis leaves to the analyst (filtering, windowing, segment length,
+signal normalisation) should follow common practice.
+
+Report, in plain terms, **whether the dense alpha-band connectivity result reproduces on these
+data** — stating only what your analysis actually supports.
 
 ## Data
 
-**Dataset:** PhysioNet EEG Motor Movement/Imagery (eegbci). It is downloaded programmatically at runtime by the loader used in the Task section — nothing is pre-placed in the container, so **internet access is required** on the first run (the download is cached locally afterwards). Fetch it with:
+**Dataset:** PhysioNet EEG Motor Movement/Imagery (eegbci). It is downloaded programmatically at
+runtime by the loader used in the Task section — nothing is pre-placed in the container, so
+**internet access is required** on the first run (the download is cached locally afterwards). Fetch
+it with:
 
 ```python
 mne.datasets.eegbci.load_data(subject=1, runs=[6, 10, 14])
@@ -33,12 +47,14 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
-- `connectivity.json` — the `top_connections` (each an electrode pair with its coherence
- value), the `mean_coherence` over all pairs, and `n_channels`.
-- `run_metadata.json` — dataset, number of channels, reference, band, and the analytic choices.
-- `findings.md` — a short written summary of the dominant alpha-band connectivity.
+- `connectivity.json` — the `top_connections` (each an electrode pair with its coherence value), the
+  `mean_coherence` over all pairs, and `n_channels`.
+- `run_metadata.json` — dataset, number of channels, reference, band, and the analytic choices you
+  made.
+- `findings.md` — a short written summary stating whether the dense alpha-band connectivity result
+  reproduces on these data. State only what your analysis actually supports.
 
 ## Failure handling
 
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a non-empty
-reason, and still write parseable `run_metadata.json`, `connectivity.json`, and `findings.md`.
+If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a non-empty reason,
+and still write parseable `run_metadata.json`, `connectivity.json`, and `findings.md`.

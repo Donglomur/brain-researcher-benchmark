@@ -1,28 +1,39 @@
-# Resting-state networks from ICA (ICA-001)
+# Reproducing the ICA resting-state networks (ICA-001)
 
 ## Scientific context
 
 **Independent component analysis (ICA)** of resting-state fMRI is a standard way to recover
-**resting-state networks (RSNs)** — a decomposition of the data into spatially independent
-components interpreted as functional networks (Beckmann et al., 2005; Smith et al., 2009,
-https://doi.org/10.1073/pnas.0905267106). Identifying the RSNs / components is a common analysis
-goal.
+**resting-state networks (RSNs)** — the data are decomposed into a set of spatially independent
+components interpreted as the brain's major functional networks. Beckmann et al. (2005) and
+Smith et al. (2009, *PNAS*, https://doi.org/10.1073/pnas.0905267106) reported that ICA of
+resting fMRI recovers a canonical set of RSNs (default-mode, visual, sensorimotor,
+fronto-parietal, and so on), a decomposition that has become one of the most-reported summaries
+of resting-state brain organisation.
 
 ## Task
 
 Using the nilearn-pinned ABIDE derivatives
-(`nilearn.datasets.fetch_abide_pcp(pipeline="cpac", derivatives=["rois_dosenbach160"])`),
-decompose the group resting-state ROI time series with **ICA** (e.g. `sklearn.decomposition.FastICA`) on the concatenated group data over the **Dosenbach-160** parcellation and **report the
-components / networks** you recover.
+(`nilearn.datasets.fetch_abide_pcp(pipeline="cpac", derivatives=["rois_dosenbach160"], quality_checked=True)`,
+the control subjects), **reproduce this ICA resting-state-network decomposition and report
+whether it holds on these data.**
 
-Report, in plain terms, **the resting-state components / networks you find on these data**.
+For each subject, z-score each ROI time series over the **Dosenbach-160** parcellation, then
+**concatenate the subjects' time series** into a single group data matrix and decompose it with
+**ICA** (e.g. `sklearn.decomposition.FastICA`) at a **model order** (number of components)
+chosen following common practice (a common choice is ~20). Report the **components / networks**
+you recover. Standard implementation choices the method leaves to the analyst (the number of
+components, temporal filtering, signal normalisation, sign handling) should follow common
+practice.
+
+Report, in plain terms, **the resting-state components / networks you find and whether the RSN
+result holds on these data** — stating only what your analysis actually supports.
 
 ## Data
 
-**Dataset:** ABIDE resting-state (Dosenbach-160 ROI time series). It is downloaded programmatically
-at runtime by the loader in the Task section — nothing is pre-placed in the container, so
-**internet access is required** on the first run (the download is cached locally afterwards).
-Fetch it with:
+**Dataset:** ABIDE resting-state (Dosenbach-160 ROI time series). It is downloaded
+programmatically at runtime by the loader in the Task section — nothing is pre-placed in the
+container, so **internet access is required** on the first run (the download is cached locally
+afterwards). Fetch it with:
 
 ```python
 nilearn.datasets.fetch_abide_pcp(pipeline="cpac", derivatives=["rois_dosenbach160"], quality_checked=True)
@@ -37,11 +48,12 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `components.json` — the number of components (model order) and a description of the components
- recovered; `n_subjects`.
+  recovered; `n_subjects`.
 - `run_metadata.json` — dataset, atlas, number of subjects, and the ICA method / model order used.
-- `findings.md` — a short written summary of the components / networks.
+- `findings.md` — a short written summary of the components / networks and whether the RSN result
+  holds on these data. State only what your analysis actually supports.
 
 ## Failure handling
 
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a non-empty reason,
-and still write parseable `run_metadata.json`, `components.json`, and `findings.md`.
+If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a non-empty
+reason, and still write parseable `run_metadata.json`, `components.json`, and `findings.md`.

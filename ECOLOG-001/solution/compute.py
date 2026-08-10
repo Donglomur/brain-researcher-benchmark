@@ -26,7 +26,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 
 
 def fail(reason):
-    (OUT / "ecolog.json").write_text(json.dumps({"status": "failed_precondition", "reason": reason}))
+    (OUT / "connectivity_age.json").write_text(json.dumps({"status": "failed_precondition", "reason": reason}))
     (OUT / "run_metadata.json").write_text(json.dumps({"status": "failed_precondition", "reason": reason}, indent=2))
     (OUT / "findings.md").write_text(f"# Failed precondition\n\n{reason}\n")
     sys.stderr.write(reason + "\n")
@@ -78,7 +78,7 @@ for s in np.unique(site):
         sm.append(float(mfc[m].mean())); sy.append(float(age[m].mean())); nper.append(int(m.sum()))
 r_eco = float(pearsonr(sm, sy)[0])
 
-(OUT / "ecolog.json").write_text(json.dumps({
+(OUT / "connectivity_age.json").write_text(json.dumps({
     "dataset": "ABIDE (rois_cc200)", "n_subjects": int(len(ts)), "n_sites": len(sm),
     "individual_level_meanFC_age_r": r_ind,
     "site_mean_ecological_meanFC_age_r": r_eco,
