@@ -18,11 +18,7 @@ sites (`SITE_ID` in the phenotypic table).
 (harmonized) connectivity **predicts chronological age** (`AGE_AT_SCAN`) — report the accuracy of
 age prediction on the harmonized data.
 
-The standard analytic choices the analysis leaves to the analyst (the harmonization method, the
-predictor, the cross-validation) should follow common practice.
-
-Report, in plain terms, **how well connectivity predicts age after harmonizing across sites** —
-stating only what your analysis actually supports.
+Report, in plain terms, **how well connectivity predicts age after harmonizing across sites**.
 
 ## Data
 
@@ -44,10 +40,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `harmonization.json` — the number of sites, and how well connectivity predicts age (e.g. the
-  correlation of predicted vs true age) after harmonization; `n_subjects`.
+ correlation of predicted vs true age) after harmonization; `n_subjects`.
 - `run_metadata.json` — dataset, number of subjects/sites, and the method used.
-- `findings.md` — a short written summary of how well the harmonized connectivity predicts age and
-  how confident you are. State only what your analysis actually supports.
+- `findings.md` — a short written summary of how well the harmonized connectivity predicts age.
 
 ## Failure handling
 

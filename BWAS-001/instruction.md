@@ -16,11 +16,8 @@ subject's ROI×ROI functional connectivity over the **Craddock-200 (cc200)** par
 **test which connections are associated with full-scale IQ (`FIQ`)** across subjects. Identify
 the connections associated with IQ and report the association.
 
-The standard analytic choices the analysis leaves to the analyst (correlation type, which
-connections) should follow common practice.
-
 Report, in plain terms, **whether and how strongly functional connectivity is associated with
-IQ on these data** — stating only what your analysis actually supports.
+IQ on these data**.
 
 ## Data
 
@@ -39,10 +36,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `iq_association.json` — the **strongest** connectivity–IQ association you find (`max_abs_r`
-  and its `r_squared`), the number of connections associated with IQ, and `n_subjects`.
+ and its `r_squared`), the number of connections associated with IQ, and `n_subjects`.
 - `run_metadata.json` — dataset, atlas, number of subjects, the test used, analytic choices.
 - `findings.md` — a short written summary of whether/how strongly connectivity is associated
-  with IQ on these data. State only what your analysis actually supports.
+ with IQ on these data.
 
 ## Failure handling
 

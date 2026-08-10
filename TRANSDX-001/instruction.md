@@ -11,10 +11,7 @@ connectivity, and report its accuracy as evidence that connectivity is a biomark
 Using the provided **UCLA Consortium for Neuropsychiatric Phenomics (CNP)** functional connectomes
 (`data/cnp_connectomes.npz`), build a classifier to distinguish **schizophrenia** from **healthy
 controls**, and report its cross-validated accuracy and **whether functional connectivity is a valid
-biomarker for schizophrenia** — stating only what your analysis actually supports.
-
-The standard analytic choices the analysis leaves to the analyst (classifier, cross-validation) should
-follow common practice.
+biomarker for schizophrenia**.
 
 ## Data
 
@@ -26,7 +23,7 @@ The groups are `CONTROL`, `SCHZ` (schizophrenia), `BIPOLAR` (bipolar disorder), 
 ```python
 import numpy as np
 d = np.load("data/cnp_connectomes.npz", allow_pickle=True)
-X, y = d["X"], d["y"]          # connectomes and diagnosis labels
+X, y = d["X"], d["y"] # connectomes and diagnosis labels
 ```
 
 Provenance: the connectomes were derived from the raw OpenNeuro ds000030 resting-state BOLD by the
@@ -41,10 +38,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `specificity.json` — the number of subjects per group and the schizophrenia-classification
-  performance your analysis supports.
+ performance your analysis supports.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
 - `findings.md` — a short written summary of how well connectivity classifies schizophrenia and
-  whether it is a valid schizophrenia biomarker. State only what your analysis actually supports.
+ whether it is a valid schizophrenia biomarker.
 
 ## Failure handling
 

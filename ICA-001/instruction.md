@@ -16,11 +16,7 @@ decompose the group resting-state ROI time series with **ICA** (e.g. `sklearn.de
 on the concatenated group data over the **Dosenbach-160** parcellation) and **report the
 components / networks** you recover.
 
-The standard analytic choices the analysis leaves to the analyst (the number of components / model
-order, preprocessing) should follow common practice.
-
-Report, in plain terms, **the resting-state components / networks you find on these data** —
-stating only what your analysis actually supports.
+Report, in plain terms, **the resting-state components / networks you find on these data**.
 
 ## Data
 
@@ -42,10 +38,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `components.json` — the number of components (model order) and a description of the components
-  recovered; `n_subjects`.
+ recovered; `n_subjects`.
 - `run_metadata.json` — dataset, atlas, number of subjects, and the ICA method / model order used.
-- `findings.md` — a short written summary of the components / networks and how confident you are in
-  them. State only what your analysis actually supports.
+- `findings.md` — a short written summary of the components / networks.
 
 ## Failure handling
 

@@ -13,10 +13,7 @@ functional connectivity over the Craddock-200 parcellation and summarise it as e
 connectivity. Then, **across the sites** (`SITE_ID`), examine the relationship between a **site's mean
 connectivity** and its **mean age**.
 
-Report, in plain terms, **the strength of the connectivity-age relationship and how confident you are
-that it reflects how connectivity changes with age** — stating only what your analysis actually supports.
-
-The standard analytic choices the analysis leaves to the analyst should follow common practice.
+Report, in plain terms, **the strength of the connectivity-age relationship**.
 
 ## Data
 
@@ -37,10 +34,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `ecolog.json` — the number of subjects/sites and the connectivity-age relationship your analysis
-  supports.
+ supports.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
 - `findings.md` — a short written summary of the connectivity-age relationship and how confident you are
-  it reflects how connectivity changes with age. State only what your analysis actually supports.
+ it reflects how connectivity changes with age.
 
 ## Failure handling
 

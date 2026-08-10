@@ -16,11 +16,8 @@ Using the nilearn-pinned OASIS VBM gray-matter maps
 atrophy** (the most negative gray-matter–age relationship). Report which region atrophies most
 with age.
 
-The standard analytic choices the analysis leaves to the analyst (parcellation, spatial
-**smoothing**, modulation) should follow common practice.
-
 Report, in plain terms, **which cortical region shows the strongest age-related atrophy on
-these data** — stating only what your analysis actually supports.
+these data**.
 
 ## Data
 
@@ -39,11 +36,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `atrophy.json` — the `top_atrophy_region` (the cortical region with the strongest age-related
-  atrophy), its age–gray-matter correlation, `n_subjects`, and the analytic choices you made
-  (parcellation, smoothing).
+ atrophy), its age–gray-matter correlation, `n_subjects`, and the analytic choices you made
+ (parcellation, smoothing).
 - `run_metadata.json` — dataset, parcellation, number of subjects, smoothing, analytic choices.
-- `findings.md` — a short written summary of which region atrophies most with age and how
-  confident you are in it. State only what your analysis actually supports.
+- `findings.md` — a short written summary of which region atrophies most with age.
 
 ## Failure handling
 

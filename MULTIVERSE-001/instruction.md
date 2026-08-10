@@ -15,11 +15,8 @@ resting-state functional connectivity** (e.g. mean absolute connectivity over a 
 and **test whether it relates to age** (`AGE_AT_SCAN`, Spearman). Report the age–connectivity
 relationship.
 
-The standard analytic choices the analysis leaves to the analyst (the parcellation/atlas,
-nuisance regression, temporal filtering) should follow common practice.
-
 Report, in plain terms, **whether resting-state connectivity changes with age on these
-data** — stating only what your analysis actually supports.
+data**.
 
 ## Data
 
@@ -38,10 +35,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `results.json` — the age–connectivity relationship you find (correlation `r` and `p`), and
-  the analytic choices you made (atlas, nuisance regression, filtering), `n_subjects`.
+ the analytic choices you made (atlas, nuisance regression, filtering), `n_subjects`.
 - `run_metadata.json` — dataset, atlas, number of subjects, and the analytic choices.
 - `findings.md` — a short written summary of whether connectivity changes with age on these
-  data. State only what your analysis actually supports.
+ data.
 
 ## Failure handling
 

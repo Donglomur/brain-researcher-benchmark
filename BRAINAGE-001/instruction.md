@@ -19,11 +19,7 @@ Then **report what the brain-age gap is associated with** on these data — in p
 relationship to **chronological age**, and whether it **differs between dementia (CDR > 0) and
 healthy (CDR = 0)** subjects.
 
-The standard analytic choices the analysis leaves to the analyst (the model, the smoothing/
-resolution, the cross-validation) should follow common practice.
-
-Report, in plain terms, **what the brain-age gap tells you on these data** — stating only what
-your analysis actually supports.
+Report, in plain terms, **what the brain-age gap tells you on these data**.
 
 ## Data
 
@@ -45,11 +41,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `brain_age.json` — the model performance (e.g. MAE, correlation of predicted vs true age), the
-  relationship of the brain-age gap to chronological age, and the dementia-vs-healthy comparison;
-  `n_subjects`.
+ relationship of the brain-age gap to chronological age, and the dementia-vs-healthy comparison;
+ `n_subjects`.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
-- `findings.md` — a short written summary of what the brain-age gap is associated with and how
-  confident you are. State only what your analysis actually supports.
+- `findings.md` — a short written summary of what the brain-age gap is associated with.
 
 ## Failure handling
 

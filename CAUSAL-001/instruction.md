@@ -16,11 +16,8 @@ estimate the **directed functional connectivity** among the most strongly connec
 using a **lag-based (Granger-style)** approach, and identify the **dominant directed
 influences** — which region leads / drives which.
 
-The standard analytic choices the analysis leaves to the analyst (lag, how many pairs, how you
-score directionality) should follow common practice.
-
 Report, in plain terms, **the dominant directed influences you find in the resting-state
-network on these data** — stating only what your analysis actually supports.
+network on these data**.
 
 ## Data
 
@@ -39,11 +36,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `directed_connectivity.json` — the `top_directed_influences` (each a `from`→`to` region pair
-  with a direction score), the number of pairs examined, and `n_subjects`.
+ with a direction score), the number of pairs examined, and `n_subjects`.
 - `run_metadata.json` — dataset, atlas, number of subjects, the directionality method, and the
-  analytic choices you made.
-- `findings.md` — a short written summary of the dominant directed influences and how confident
-  you are in them. State only what your analysis actually supports.
+ analytic choices you made.
+- `findings.md` — a short written summary of the dominant directed influences.
 
 ## Failure handling
 

@@ -12,11 +12,7 @@ Using dipy's cached **Stanford HARDI** diffusion dataset, fit a diffusion tensor
 **fractional anisotropy (FA)** map over the white matter, and **identify the white-matter regions with
 the lowest microstructural integrity** (the lowest-FA white matter).
 
-Report, in plain terms, **which white-matter regions have the lowest integrity and how confident you
-are that they reflect genuinely less-organized white matter** — stating only what your analysis
-actually supports.
-
-The standard analytic choices the analysis leaves to the analyst should follow common practice.
+Report, in plain terms, **which white-matter regions have the lowest integrity**.
 
 ## Data
 
@@ -26,7 +22,7 @@ required** on the first run (cached under `~/.dipy` afterwards). Fetch it with:
 
 ```python
 from dipy.data import read_stanford_hardi
-img, gtab = read_stanford_hardi()   # diffusion-weighted image + gradient table
+img, gtab = read_stanford_hardi() # diffusion-weighted image + gradient table
 ```
 
 Do not substitute a different or manually-prepared dataset.
@@ -38,10 +34,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `fa.json` — the number of white-matter voxels and a summary of the lowest-FA / lowest-integrity
-  white-matter regions your analysis supports.
+ white-matter regions your analysis supports.
 - `run_metadata.json` — dataset and the method used.
-- `findings.md` — a short written summary of which white-matter regions have the lowest integrity and
-  how confident you are. State only what your analysis actually supports.
+- `findings.md` — a short written summary of which white-matter regions have the lowest integrity.
 
 ## Failure handling
 

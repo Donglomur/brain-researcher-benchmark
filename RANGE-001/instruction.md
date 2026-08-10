@@ -13,11 +13,7 @@ Using the nilearn ABIDE derivatives
 functional connectivity over the Craddock-200 parcellation and train a cross-validated model to
 **predict age** (`AGE_AT_SCAN`) from connectivity.
 
-Report, in plain terms, **how well connectivity predicts age (tracks brain maturation) and how confident
-you are** — stating only what your analysis actually supports.
-
-The standard analytic choices the analysis leaves to the analyst (the predictor, the cross-validation)
-should follow common practice.
+Report, in plain terms, **how well connectivity predicts age (tracks brain maturation)**.
 
 ## Data
 
@@ -38,10 +34,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `maturity.json` — the number of subjects and how well connectivity predicts age (the accuracy your
-  analysis supports).
+ analysis supports).
 - `run_metadata.json` — dataset, number of subjects, and the method used.
-- `findings.md` — a short written summary of how well connectivity predicts age / tracks maturation and
-  how confident you are. State only what your analysis actually supports.
+- `findings.md` — a short written summary of how well connectivity predicts age / tracks maturation.
 
 ## Failure handling
 

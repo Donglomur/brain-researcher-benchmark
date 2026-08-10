@@ -13,10 +13,7 @@ Using the nilearn OASIS VBM dataset
 modulated gray-matter maps, and test whether it **differs by sex** in **healthy adults**
 (`cdr == 0` in the phenotypic table `ext_vars`; sex is the `mf` column).
 
-Report, in plain terms, **whether total gray-matter volume differs by sex and how confident you
-are** — stating only what your analysis actually supports.
-
-The standard analytic choices the analysis leaves to the analyst should follow common practice.
+Report, in plain terms, **whether total gray-matter volume differs by sex**.
 
 ## Data
 
@@ -28,7 +25,7 @@ required** on the first run (the download is cached locally afterwards). Fetch i
 
 ```python
 from nilearn.datasets import fetch_oasis_vbm
-oasis = fetch_oasis_vbm(n_subjects=403)   # oasis.gray_matter_maps, oasis.ext_vars
+oasis = fetch_oasis_vbm(n_subjects=403) # oasis.gray_matter_maps, oasis.ext_vars
 ```
 
 Do not substitute a different or manually-prepared dataset.
@@ -40,10 +37,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `gm_sex.json` — the number of male/female subjects and the sex difference in gray-matter volume
-  (e.g. effect size, t, p) that your analysis supports.
+ (e.g. effect size, t, p) that your analysis supports.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
-- `findings.md` — a short written summary of whether total gray-matter volume differs by sex and how
-  confident you are. State only what your analysis actually supports.
+- `findings.md` — a short written summary of whether total gray-matter volume differs by sex.
 
 ## Failure handling
 

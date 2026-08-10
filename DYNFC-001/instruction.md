@@ -16,11 +16,8 @@ compute **time-resolved (sliding-window) functional connectivity** for each subj
 **characterise how connectivity fluctuates over time** — for example, the magnitude of
 window-to-window connectivity variability, and/or any recurring connectivity states.
 
-The standard analytic choices the analysis leaves to the analyst (window length, correlation
-type) should follow common practice.
-
 Report, in plain terms, **what you find about the temporal dynamics of resting-state
-connectivity on these data** — stating only what your analysis actually supports.
+connectivity on these data**.
 
 ## Data
 
@@ -39,12 +36,12 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `dynamics.json` — a quantitative measure of the **time-resolved connectivity variability**
-  (e.g. mean window-to-window standard deviation of edges), the window length, `n_subjects`,
-  and any dynamic states you identify.
+ (e.g. mean window-to-window standard deviation of edges), the window length, `n_subjects`,
+ and any dynamic states you identify.
 - `run_metadata.json` — dataset, atlas, number of subjects, window length, and the analytic
-  choices you made.
+ choices you made.
 - `findings.md` — a short written summary of what you found about the temporal dynamics of
-  connectivity. State only what your analysis actually supports.
+ connectivity.
 
 ## Failure handling
 

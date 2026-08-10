@@ -16,11 +16,7 @@ Using the PhysioNet **EEG Motor Movement/Imagery** dataset via MNE
 compute the **alpha-band (8–13 Hz) coherence** between the 64 electrodes. **Identify the
 strongly connected electrode pairs** and report the connectivity.
 
-The standard analytic choices the analysis leaves to the analyst (window length, exact band,
-connectivity estimator) should follow common practice.
-
-Report, in plain terms, **the dominant alpha-band functional connectivity on these data** —
-stating only what your analysis actually supports.
+Report, in plain terms, **the dominant alpha-band functional connectivity on these data**.
 
 ## Data
 
@@ -39,10 +35,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `connectivity.json` — the `top_connections` (each an electrode pair with its coherence
-  value), the `mean_coherence` over all pairs, and `n_channels`.
+ value), the `mean_coherence` over all pairs, and `n_channels`.
 - `run_metadata.json` — dataset, number of channels, reference, band, and the analytic choices.
-- `findings.md` — a short written summary of the dominant alpha-band connectivity and how
-  confident you are in it. State only what your analysis actually supports.
+- `findings.md` — a short written summary of the dominant alpha-band connectivity.
 
 ## Failure handling
 

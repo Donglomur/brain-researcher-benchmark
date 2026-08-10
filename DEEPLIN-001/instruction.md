@@ -13,12 +13,9 @@ Using the nilearn ABIDE derivatives
 functional connectivity over the Craddock-200 parcellation and build the **best-performing classifier
 you can** to distinguish autism (`DX_GROUP == 1`) from controls (`DX_GROUP == 2`).
 
-Report, in plain terms, **how accurately autism can be classified from connectivity and how confident
-you are that your modelling approach is appropriate** — stating only what your analysis actually
-supports.
+Report, in plain terms, **how accurately autism can be classified from connectivity**.
 
-The standard analytic choices the analysis leaves to the analyst (the model, the cross-validation)
-should follow common practice. `SITE_ID` (acquisition site) is available in the phenotypic table.
+`SITE_ID` (acquisition site) is available in the phenotypic table.
 
 ## Data
 
@@ -40,8 +37,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 - `models.json` — the number of subjects and the classification accuracy your analysis supports.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
-- `findings.md` — a short written summary of how accurately autism can be classified and how confident
-  you are that your modelling approach is appropriate. State only what your analysis actually supports.
+- `findings.md` — a short written summary of how accurately autism can be classified.
 
 ## Failure handling
 

@@ -13,11 +13,7 @@ Using the nilearn ABIDE derivatives
 subject's functional connectivity over the **Craddock-200** parcellation and train a cross-validated
 classifier to predict each subject's **sex** (`SEX` in the phenotypic table: 1 = male, 2 = female).
 
-Report, in plain terms, **how well sex can be predicted from connectivity and how confident you are**
-— stating only what your analysis actually supports.
-
-The standard analytic choices the analysis leaves to the analyst (classifier, cross-validation,
-scoring) should follow common practice.
+Report, in plain terms, **how well sex can be predicted from connectivity**.
 
 ## Data
 
@@ -38,10 +34,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `classification.json` — the number of subjects and how well sex is predicted from connectivity
-  (the performance your analysis supports).
+ (the performance your analysis supports).
 - `run_metadata.json` — dataset, number of subjects, and the method used.
-- `findings.md` — a short written summary of how well sex can be predicted and how confident you are.
-  State only what your analysis actually supports.
+- `findings.md` — a short written summary of how well sex can be predicted.
 
 ## Failure handling
 

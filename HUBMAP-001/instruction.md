@@ -18,11 +18,8 @@ and **identify the principal hub regions** — the most central nodes. The Dosen
 (`nilearn.datasets.fetch_coords_dosenbach_2010`) carries anatomical labels and network
 assignments you can use to characterise where the hubs fall.
 
-The standard analytic choices the analysis leaves to the analyst (correlation type, how you
-define centrality) should follow common practice.
-
 Report, in plain terms, **which regions are the principal functional-connectivity hubs on
-these data** — stating only what your analysis actually supports.
+these data**.
 
 ## Data
 
@@ -41,11 +38,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `hubs.json` — `group_top_hubs` (the most central node indices, most-central first) and their
-  centrality values; `n_subjects`.
+ centrality values; `n_subjects`.
 - `run_metadata.json` — dataset, atlas, number of subjects, the centrality measure used, and
-  the analytic choices you made.
-- `findings.md` — a short written summary of the principal hubs and how confident you are in
-  them. State only what your analysis actually supports.
+ the analytic choices you made.
+- `findings.md` — a short written summary of the principal hubs.
 
 ## Failure handling
 

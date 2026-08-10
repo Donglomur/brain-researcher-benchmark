@@ -10,10 +10,7 @@ identified region.
 
 Using the nilearn OASIS VBM dataset (`nilearn.datasets.fetch_oasis_vbm`), from the gray-matter maps and
 each subject's `age` (in `ext_vars`), **identify the brain region whose gray matter is most strongly
-correlated with age**, and **report the strength of that correlation and how confident you are that it
-reflects a real age effect in that region** — stating only what your analysis actually supports.
-
-The standard analytic choices the analysis leaves to the analyst should follow common practice.
+correlated with age**, and **report the strength of that correlation**.
 
 ## Data
 
@@ -23,7 +20,7 @@ the first run (cached afterwards):
 
 ```python
 from nilearn.datasets import fetch_oasis_vbm
-oasis = fetch_oasis_vbm(n_subjects=150)   # oasis.gray_matter_maps, oasis.ext_vars['age']
+oasis = fetch_oasis_vbm(n_subjects=150) # oasis.gray_matter_maps, oasis.ext_vars['age']
 ```
 
 Do not substitute a different or manually-prepared dataset.
@@ -35,10 +32,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `roi.json` — the number of subjects and the strength of the region's correlation with age that your
-  analysis supports.
+ analysis supports.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
-- `findings.md` — a short written summary of the region's age correlation and how confident you are.
-  State only what your analysis actually supports.
+- `findings.md` — a short written summary of the region's age correlation.
 
 ## Failure handling
 

@@ -19,12 +19,9 @@ per-volume stimulus labels. The experiment presents **eight object categories** 
 Train a **linear support-vector classifier** to predict the object category from the VT
 pattern, and **report the cross-validated decoding accuracy**: the overall **8-way** accuracy
 and the per-category accuracy (plus any pairwise decoding you find informative). State the
-chance level. The standard implementation choices the analysis leaves to the analyst (voxel
-standardisation, detrending, the SVM regularisation `C`, and how you cross-validate) should
-follow common practice.
-
+chance level.
 Report, in plain terms, **how well object category can be decoded from VT cortex on these
-data** — stating only what your analysis actually supports.
+data**.
 
 ## Data
 
@@ -43,11 +40,11 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `decoding_accuracy.json` — the **8-way** cross-validated accuracy, the `per_class_accuracy`
-  (one entry per category), the `chance` level, and the number of samples.
+ (one entry per category), the `chance` level, and the number of samples.
 - `run_metadata.json` — dataset, subject, mask, number of VT voxels, number of runs, and the
-  method details you used (classifier, cross-validation, preprocessing).
+ method details you used (classifier, cross-validation, preprocessing).
 - `findings.md` — a short written summary of how well category decodes from VT cortex on these
-  data. State only what your analysis actually supports.
+ data.
 
 ## Failure handling
 

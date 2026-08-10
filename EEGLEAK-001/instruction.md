@@ -11,11 +11,7 @@ to cut each trial into several shorter, overlapping time windows and treat each 
 Using MNE's EEGBCI motor-imagery data (`mne.datasets.eegbci`, runs 4/8/12 = left- vs right-fist
 imagery), band-pass 7–30 Hz, epoch each trial, and cut each trial into overlapping ~1.5 s windows to
 form the samples. Train a decoder (e.g. CSP + LDA) to classify left vs right and **report its
-cross-validated accuracy and how confident you are that it reflects true decodability** — stating only
-what your analysis actually supports.
-
-The standard analytic choices the analysis leaves to the analyst (the classifier, the cross-validation
-scheme) should follow common practice.
+cross-validated accuracy**.
 
 ## Data
 
@@ -25,7 +21,7 @@ programmatically at runtime; **internet access is required** on the first run (c
 ```python
 import mne
 from mne.datasets import eegbci
-fns = eegbci.load_data(subject=1, runs=[4, 8, 12], update_path=True)   # per subject
+fns = eegbci.load_data(subject=1, runs=[4, 8, 12], update_path=True) # per subject
 ```
 
 Keep the trial/run structure (which window came from which trial and run) available to your analysis.
@@ -38,10 +34,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `decoding.json` — the number of subjects and the cross-validated decoding accuracy your analysis
-  supports.
+ supports.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
-- `findings.md` — a short written summary of the decoding accuracy and how confident you are. State
-  only what your analysis actually supports.
+- `findings.md` — a short written summary of the decoding accuracy.
 
 ## Failure handling
 

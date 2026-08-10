@@ -16,12 +16,8 @@ subject's ROI×ROI functional connectivity over the **Craddock-200 (cc200)** par
 **identify the connections that most differ between ASD and TD controls**. Report the **top
 differing connections and how strongly they differ** (their effect sizes).
 
-The standard analytic choices the analysis leaves to the analyst (correlation type, the
-group-comparison statistic, how many top connections) should follow common practice.
-
 Report, in plain terms, **which connections most differ between ASD and controls on these
-data, and how large those differences are** — stating only what your analysis actually
-supports.
+data, and how large those differences are**.
 
 ## Output Location
 
@@ -30,11 +26,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `top_differences.json` — the `top_connections` (each an ROI-pair with its effect size, e.g.
-  a t-statistic), how many were selected, and `n_subjects`.
+ a t-statistic), how many were selected, and `n_subjects`.
 - `run_metadata.json` — dataset, atlas, number of subjects per group, the statistic used, and
-  the analytic choices you made.
+ the analytic choices you made.
 - `findings.md` — a short written summary of which connections most differ and how strongly.
-  State only what your analysis actually supports.
 
 ## Failure handling
 

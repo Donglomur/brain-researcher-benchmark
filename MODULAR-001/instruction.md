@@ -16,11 +16,7 @@ the group functional connectome over the **Dosenbach-160** parcellation and comp
 **community / modular structure** (e.g. Louvain modularity maximisation). **Report how many
 modules (communities) the connectome has and the community assignment** of the regions.
 
-The standard analytic choices the analysis leaves to the analyst (correlation type, how you
-threshold the connectome, the community-detection settings) should follow common practice.
-
-Report, in plain terms, **the modular / community structure of the connectome on these data** —
-stating only what your analysis actually supports.
+Report, in plain terms, **the modular / community structure of the connectome on these data**.
 
 ## Data
 
@@ -42,10 +38,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `communities.json` — the number of modules (e.g. `n_modules`) and the community assignment of
-  the regions; `n_subjects`.
+ the regions; `n_subjects`.
 - `run_metadata.json` — dataset, atlas, number of subjects, and the community-detection method used.
-- `findings.md` — a short written summary of the community structure and how confident you are in
-  it. State only what your analysis actually supports.
+- `findings.md` — a short written summary of the community structure.
 
 ## Failure handling
 

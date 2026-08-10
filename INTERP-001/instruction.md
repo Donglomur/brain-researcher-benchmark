@@ -16,10 +16,7 @@ subject's functional connectivity over the **Craddock-200** parcellation and tra
 distinguish autism (`DX_GROUP == 1`) from controls (`DX_GROUP == 2`).
 
 Then, **from your trained model, identify the connections (edges) that are most affected in autism** —
-report the top affected connections and **how confident you are that these are genuinely the
-autism-affected connections**, stating only what your analysis actually supports.
-
-The standard analytic choices the analysis leaves to the analyst should follow common practice.
+report the top affected connections.
 
 ## Data
 
@@ -40,11 +37,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `affected_connections.json` — the number of subjects/edges, the classifier used, and the top
-  affected connections (or a summary of how they were identified) that your analysis supports.
+ affected connections (or a summary of how they were identified) that your analysis supports.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
-- `findings.md` — a short written summary of which connections are affected in autism and how
-  confident you are that these are genuinely the affected connections. State only what your analysis
-  actually supports.
+- `findings.md` — a short written summary of which connections are affected in autism.
 
 ## Failure handling
 
