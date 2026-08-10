@@ -11,7 +11,7 @@ range (Di Martino et al., 2014, *Molecular Psychiatry*, https://doi.org/10.1038/
 
 Using the nilearn-pinned ABIDE derivatives
 (`nilearn.datasets.fetch_abide_pcp(pipeline="cpac")`), compute each subject's **overall
-resting-state functional connectivity** (e.g. mean absolute connectivity over a parcellation)
+resting-state functional connectivity**
 and **test whether it relates to age** (`AGE_AT_SCAN`, Spearman). Report the age–connectivity
 relationship.
 

@@ -13,7 +13,7 @@ analysis goal.
 Using the nilearn-pinned ABIDE derivatives
 (`nilearn.datasets.fetch_abide_pcp(pipeline="cpac", derivatives=["rois_dosenbach160"])`), build
 the group functional connectome over the **Dosenbach-160** parcellation and compute its
-**community / modular structure** (e.g. Louvain modularity maximisation). **Report how many
+**community / modular structure**. **Report how many
 modules (communities) the connectome has and the community assignment** of the regions.
 
 Report, in plain terms, **the modular / community structure of the connectome on these data**.

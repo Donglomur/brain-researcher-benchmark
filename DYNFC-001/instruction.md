@@ -13,8 +13,7 @@ https://doi.org/10.1016/j.neuroimage.2013.05.079; Allen et al., 2014).
 Using the nilearn-pinned ABIDE derivatives
 (`nilearn.datasets.fetch_abide_pcp(pipeline="cpac", derivatives=["rois_dosenbach160"])`),
 compute **time-resolved (sliding-window) functional connectivity** for each subject and
-**characterise how connectivity fluctuates over time** — for example, the magnitude of
-window-to-window connectivity variability, and/or any recurring connectivity states.
+**characterise how connectivity fluctuates over time**, including any recurring connectivity states.
 
 Report, in plain terms, **what you find about the temporal dynamics of resting-state
 connectivity on these data**.
@@ -35,8 +34,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
-- `dynamics.json` — a quantitative measure of the **time-resolved connectivity variability**
- (e.g. mean window-to-window standard deviation of edges), the window length, `n_subjects`,
+- `dynamics.json` — a quantitative measure of the **time-resolved connectivity variability**, the window length, `n_subjects`,
  and any dynamic states you identify.
 - `run_metadata.json` — dataset, atlas, number of subjects, window length, and the analytic
  choices you made.

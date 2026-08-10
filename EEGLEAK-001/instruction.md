@@ -10,7 +10,7 @@ to cut each trial into several shorter, overlapping time windows and treat each 
 
 Using MNE's EEGBCI motor-imagery data (`mne.datasets.eegbci`, runs 4/8/12 = left- vs right-fist
 imagery), band-pass 7–30 Hz, epoch each trial, and cut each trial into overlapping ~1.5 s windows to
-form the samples. Train a decoder (e.g. CSP + LDA) to classify left vs right and **report its
+form the samples. Train a decoder to classify left vs right and **report its
 cross-validated accuracy**.
 
 ## Data

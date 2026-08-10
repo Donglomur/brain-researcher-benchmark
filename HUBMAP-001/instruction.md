@@ -13,7 +13,7 @@ functional connectome is a common analysis goal.
 Using the nilearn-pinned ABIDE derivatives
 (`nilearn.datasets.fetch_abide_pcp(pipeline="cpac", derivatives=["rois_dosenbach160"])`), form
 each subject's ROI×ROI functional connectivity matrix over the **Dosenbach-160** parcellation,
-build the group connectome, compute node **centrality** (e.g. degree centrality / strength),
+build the group connectome, compute node **centrality**,
 and **identify the principal hub regions** — the most central nodes. The Dosenbach-160 atlas
 (`nilearn.datasets.fetch_coords_dosenbach_2010`) carries anatomical labels and network
 assignments you can use to characterise where the hubs fall.
