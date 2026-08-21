@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "CONNPLV-002"
+title = "Leakage-corrected source-space MEG connectivity (orthogonalised AEC-c) of a heterogeneous cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic source-space MEG connectivity cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-connplv-cohort"
+source_paper = "Colclough et al. 2015, NeuroImage (symmetric multivariate leakage correction, 10.1016/j.neuroimage.2015.03.071); Hipp et al. 2012, Nat. Neurosci. (pairwise orthogonalised amplitude-envelope correlation, 10.1038/nn.3101); Brookes et al. 2012, NeuroImage (AEC)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
