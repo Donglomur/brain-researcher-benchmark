@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "FNIRS-002"
+title = "Haemoglobin concentration changes from a heterogeneous continuous-wave fNIRS cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic continuous-wave fNIRS cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-cw-fnirs"
+source_paper = "Delpy et al. 1988, Phys. Med. Biol. (modified Beer-Lambert law / differential pathlength factor, 10.1088/0031-9155/33/12/008); Bale, Elwell & Tachtsidis 2016, J. Biomed. Opt. (broadband NIRS cytochrome-c-oxidase, 10.1117/1.JBO.21.9.091307)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
