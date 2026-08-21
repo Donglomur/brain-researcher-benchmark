@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "APTPH-002"
+title = "pH-weighted amide-proton-transfer (APT) CEST ratiometric indices over a heterogeneous Z-spectrum cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic APT-CEST Z-spectrum cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-aptph-cohort"
+source_paper = "McVicar et al. 2014, J. Cereb. Blood Flow Metab. (concentration-independent AACID pH imaging, 10.1038/jcbfm.2014.12); Zhou et al. 2003, Nat. Med. (amide proton transfer / APT-CEST, 10.1038/nm907)"
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
