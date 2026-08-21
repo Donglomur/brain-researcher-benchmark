@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "IVIM-002"
+title = "Intravoxel incoherent motion (IVIM) fitting of a heterogeneous diffusion cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic IVIM diffusion cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-ivim-cohort"
+source_paper = "Le Bihan et al. 1988, Radiology (Separation of diffusion and perfusion in intravoxel incoherent motion MR imaging, 10.1148/radiology.168.2.3393671); Le Bihan et al. 1986, Radiology (MR imaging of intravoxel incoherent motions, 10.1148/radiology.161.2.3763909)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
