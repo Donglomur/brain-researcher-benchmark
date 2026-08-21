@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "VSASL-002"
+title = "Velocity-selective ASL (VS-ASL) cerebral blood flow quantification"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic velocity-selective ASL perfusion cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-vsasl-cohort"
+source_paper = "Wong et al. 2006, MRM (velocity-selective arterial spin labeling, 10.1002/mrm.20906); Guo et al. 2021, MRM (velocity-selective inversion ASL); Alsop et al. 2015, MRM (recommended implementation for ASL CBF quantification)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
