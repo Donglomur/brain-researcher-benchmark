@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "MPF-002"
+title = "Macromolecular-proton-fraction (MPF) mapping of a heterogeneous fast-qMT cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic quantitative-mri-relaxometry cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-mpf-cohort"
+source_paper = "Yarnykh 2012, MRM (fast single-point macromolecular-proton-fraction mapping, 10.1002/mrm.23224); Sled & Pike 2001, MRM (quantitative two-pool MT model, 10.1002/mrm.1278); Morrison & Henkelman 1995, MRM (super-Lorentzian bound-pool lineshape)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
