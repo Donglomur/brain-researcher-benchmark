@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "FMRIDENOISE-002"
+title = "Confound denoising of a heterogeneous resting-state fMRI cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic resting-state fMRI confound cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-fmridenoise-cohort"
+source_paper = "Behzadi et al. 2007, NeuroImage (aCompCor, 10.1016/j.neuroimage.2007.04.042); Glover et al. 2000, MRM (RETROICOR, 10.1002/1522-2594(200007)44:1<162::AID-MRM23>3.0.CO;2-E); Friston et al. 1996, MRM (motion-parameter expansion, 10.1002/mrm.1910350312)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
