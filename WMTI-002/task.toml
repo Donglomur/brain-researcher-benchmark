@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "WMTI-002"
+title = "White-matter-tract-integrity (WMTI) mapping of a heterogeneous diffusion-kurtosis cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic diffusion-mri-microstructure cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-wmti-cohort"
+source_paper = "Fieremans, Jensen & Helpern 2011, NeuroImage (WMTI white-matter two-compartment model, 10.1016/j.neuroimage.2011.06.006); Jensen et al. 2005, MRM (diffusional kurtosis imaging, 10.1002/mrm.20508)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
