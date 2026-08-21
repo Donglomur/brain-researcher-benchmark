@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "FLOW4D-002"
+title = "Phase-contrast / 4D-flow velocity quantification of a heterogeneous cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic phase-contrast / 4D-flow velocity cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-flow4d-cohort"
+source_paper = "Markl et al. 2012, JMRI (4D flow MRI, 10.1002/jmri.23632); Pelc et al. 1991, JMRI (phase-contrast cine velocity mapping, 10.1002/jmri.1880010405); Bernstein et al. 1998, MRM (concomitant-field / background-phase correction)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
