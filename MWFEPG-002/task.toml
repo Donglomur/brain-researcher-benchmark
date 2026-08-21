@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "MWFEPG-002"
+title = "Myelin water fraction from an EPG-corrected multi-echo-T2 cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic multi-echo-T2 myelin-water cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-mwf-epg-cohort"
+source_paper = "Prasloski et al. 2012, MRM (stimulated-echo (EPG) correction for multicomponent T2 / myelin-water analysis, 10.1002/mrm.23157); MacKay et al. 1994, MRM (in-vivo myelin-water imaging, 10.1002/mrm.1910310614)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
