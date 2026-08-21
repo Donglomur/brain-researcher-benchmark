@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "STRAIN-002"
+title = "Cardiac-induced brain micro-displacement and strain from gated phase MRI"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic gated brain-motion (DENSE / phase-contrast) cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-strain-cohort"
+source_paper = "Soellinger et al. 2009, MRM (3D cine displacement-encoded MRI of pulsatile brain motion, 10.1002/mrm.21802); Sloots et al. 2020, NeuroImage (cardiac/respiration-induced brain deformations quantified with high-field MRI, 10.1016/j.neuroimage.2019.116526); Aletras et al. 1999, JMR (DENSE displacement encoding, 10.1006/jmre.1998.1676)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
