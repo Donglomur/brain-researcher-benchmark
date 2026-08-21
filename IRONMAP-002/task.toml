@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "IRONMAP-002"
+title = "Regional brain-iron mapping from R2* and susceptibility"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic multi-echo GRE / QSM brain-iron cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-ironmap-cohort"
+source_paper = "Langkammer et al. 2010, Radiology (R2* as MR biomarker of brain iron, postmortem validation, 10.1148/radiol.10100495); Langkammer et al. 2012, NeuroImage (QSM as a measure of brain iron, postmortem validation, 10.1016/j.neuroimage.2012.05.049); Hallgren & Sourander 1958, J. Neurochem. (regional non-heme iron)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
