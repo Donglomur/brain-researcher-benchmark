@@ -1,0 +1,200 @@
+{
+  "note": "BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, never under environment/data). Grading RECOMPUTES every map from the saved input maps (NaN-aware robust combine of the myelin repeats) with a held-out reference and never trusts these planted numbers.",
+  "robustness_axes": "A MAJORITY of subjects carry unannounced single-repeat myelin corruption over DISJOINT tissue-voxel subsets, EACH spread across the three repeats so no single repeat is clean: (1) SPIKE (additive motion artifact) -- rejected by a per-voxel MEDIAN, propagated by a MEAN; (2) FAILED-FIT NaN -- rejected only by a NaN-AWARE combine (nanmedian / drop-the-NaN), PROPAGATED by a plain np.median (which returns NaN) and by a plain mean. A NaN-aware single-outlier-rejecting combine recovers the true index; a plain-median combine poisons MVF (required finite) and the g-ratio at the NaN voxels.",
+  "subjects": {
+    "sub-01": {
+      "kind": "FULL",
+      "myelin_model": "mtsat",
+      "mvf_calibration": 0.1,
+      "neurite_model": "noddi",
+      "myelin_spiked": true,
+      "myelin_nan": true,
+      "computable_maps": [
+        "MVF",
+        "FVF",
+        "g_ratio"
+      ],
+      "planted_tissue_means": {
+        "MVF": {
+          "GM": 0.05498782629976671,
+          "WM": 0.27849177981756806,
+          "CSF": 0.00472011894790346
+        },
+        "FVF": {
+          "GM": 0.2994095649490952,
+          "WM": 0.5508191869188966,
+          "CSF": 0.0210546140367216
+        }
+      }
+    },
+    "sub-02": {
+      "kind": "FULL",
+      "myelin_model": "mtv",
+      "mvf_calibration": 1.0,
+      "neurite_model": "restricted",
+      "myelin_spiked": false,
+      "myelin_nan": true,
+      "computable_maps": [
+        "MVF",
+        "FVF",
+        "g_ratio"
+      ],
+      "planted_tissue_means": {
+        "MVF": {
+          "GM": 0.05512625222619524,
+          "WM": 0.2771406842415142,
+          "CSF": 0.004125232883451679
+        },
+        "FVF": {
+          "GM": 0.30023669726725627,
+          "WM": 0.5545387643376868,
+          "CSF": 0.02092554154278586
+        }
+      }
+    },
+    "sub-03": {
+      "kind": "FULL",
+      "myelin_model": "mtsat",
+      "mvf_calibration": 0.092,
+      "neurite_model": "noddi",
+      "myelin_spiked": true,
+      "myelin_nan": true,
+      "computable_maps": [
+        "MVF",
+        "FVF",
+        "g_ratio"
+      ],
+      "planted_tissue_means": {
+        "MVF": {
+          "GM": 0.05665118997331039,
+          "WM": 0.27899653239021527,
+          "CSF": 0.004716505673728478
+        },
+        "FVF": {
+          "GM": 0.2995053891547524,
+          "WM": 0.5511687937269926,
+          "CSF": 0.019845564891550874
+        }
+      }
+    },
+    "sub-04": {
+      "kind": "FULL",
+      "myelin_model": "mtv",
+      "mvf_calibration": 1.0,
+      "neurite_model": "noddi",
+      "myelin_spiked": false,
+      "myelin_nan": true,
+      "computable_maps": [
+        "MVF",
+        "FVF",
+        "g_ratio"
+      ],
+      "planted_tissue_means": {
+        "MVF": {
+          "GM": 0.05501248112985252,
+          "WM": 0.28188638803540783,
+          "CSF": 0.004080850301403894
+        },
+        "FVF": {
+          "GM": 0.30149559557962125,
+          "WM": 0.5540221141872492,
+          "CSF": 0.021554603288846067
+        }
+      }
+    },
+    "sub-05": {
+      "kind": "FULL",
+      "myelin_model": "mtsat",
+      "mvf_calibration": 0.108,
+      "neurite_model": "restricted",
+      "myelin_spiked": true,
+      "myelin_nan": true,
+      "computable_maps": [
+        "MVF",
+        "FVF",
+        "g_ratio"
+      ],
+      "planted_tissue_means": {
+        "MVF": {
+          "GM": 0.054945209783249314,
+          "WM": 0.2789170340479679,
+          "CSF": 0.004441192282166953
+        },
+        "FVF": {
+          "GM": 0.3001149283186131,
+          "WM": 0.5576162693329588,
+          "CSF": 0.021484097222994363
+        }
+      }
+    },
+    "sub-06": {
+      "kind": "MYELIN_ONLY",
+      "myelin_model": "mtsat",
+      "mvf_calibration": 0.115,
+      "neurite_model": "dti",
+      "myelin_spiked": false,
+      "myelin_nan": true,
+      "computable_maps": [
+        "MVF"
+      ],
+      "planted_tissue_means": {
+        "MVF": {
+          "GM": 0.055443029125696874,
+          "WM": 0.27922615667957346,
+          "CSF": 0.004986831343297249
+        },
+        "FVF": {
+          "GM": 0.2991317902539021,
+          "WM": 0.5531554719516334,
+          "CSF": 0.01973749373702721
+        }
+      }
+    },
+    "sub-07": {
+      "kind": "NEURITE_ONLY",
+      "myelin_model": "t1w",
+      "mvf_calibration": 0.0,
+      "neurite_model": "noddi",
+      "myelin_spiked": false,
+      "myelin_nan": false,
+      "computable_maps": [
+        "FVF"
+      ],
+      "planted_tissue_means": {
+        "MVF": {
+          "GM": 0.054528200581932605,
+          "WM": 0.2794831246379111,
+          "CSF": 0.004846864139211697
+        },
+        "FVF": {
+          "GM": 0.2986716439459653,
+          "WM": 0.5546088983775355,
+          "CSF": 0.02052335760548877
+        }
+      }
+    },
+    "sub-08": {
+      "kind": "MYELIN_ONLY",
+      "myelin_model": "mtsat",
+      "mvf_calibration": 0.105,
+      "neurite_model": "dti",
+      "myelin_spiked": true,
+      "myelin_nan": false,
+      "computable_maps": [
+        "MVF"
+      ],
+      "planted_tissue_means": {
+        "MVF": {
+          "GM": 0.05510518338088999,
+          "WM": 0.27991153592680523,
+          "CSF": 0.004952189317619892
+        },
+        "FVF": {
+          "GM": 0.3006415785773716,
+          "WM": 0.5472129690269991,
+          "CSF": 0.021231190296519965
+        }
+      }
+    }
+  }
+}
