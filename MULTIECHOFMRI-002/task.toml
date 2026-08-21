@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "MULTIECHOFMRI-002"
+title = "Multi-echo fMRI T2* mapping and the optimal echo combination across a heterogeneous cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic multi-echo fMRI cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-multiechofmri-cohort"
+source_paper = "Posse et al. 1999, MRM (multi-echo BOLD optimal combination, 10.1002/(SICI)1522-2594(199907)42:1<87::AID-MRM13>3.0.CO;2-O); Kundu et al. 2012, NeuroImage (multi-echo EPI / tedana, 10.1016/j.neuroimage.2011.12.028)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
