@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "QSMTOTAL-002"
+title = "Total quantitative susceptibility mapping (QSM) of a heterogeneous cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic QSM (susceptibility) cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-qsm-total-cohort"
+source_paper = "Wang & Liu 2015, MRM (quantitative susceptibility mapping framework and dipole field model, 10.1002/mrm.25358); Bilgic et al. 2014, MRM (closed-form L2/Tikhonov-regularised dipole inversion, 10.1002/mrm.25029)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
