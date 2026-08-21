@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "RSI-002"
+title = "Restriction-spectrum imaging (RSI) of a heterogeneous multi-shell diffusion cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic diffusion-mri-microstructure cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-rsi-cohort"
+source_paper = "White et al. 2013, Human Brain Mapping (Restriction Spectrum Imaging, 10.1002/hbm.22081); Kaden et al. 2016, NeuroImage (spherical-mean technique for multi-compartment microstructure, 10.1016/j.neuroimage.2016.06.002)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
