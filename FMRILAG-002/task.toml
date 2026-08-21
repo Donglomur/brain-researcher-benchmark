@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "FMRILAG-002"
+title = "Hemodynamic-lag mapping of a resting-state BOLD cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic resting-state BOLD cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-fmrilag-cohort"
+source_paper = "Tong & Frederick 2010, NeuroImage (global low-frequency oscillation lag, 10.1016/j.neuroimage.2010.06.049); Tong et al. 2019, Front. Neurosci. (systemic low-frequency hemodynamic 'noise' in resting-state BOLD, 10.3389/fnins.2019.00787)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
