@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "VASO-002"
+title = "VASO cerebral-blood-volume quantification for a heterogeneous cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic VASO functional cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-vaso-cohort"
+source_paper = "Lu et al. 2003, MRM (Functional MRI based on changes in vascular space occupancy / VASO, 10.1002/mrm.10519); Huber et al. 2014, MRM (Slab-selective, BOLD-corrected VASO / SS-SI-VASO at 7 T, 10.1002/mrm.24916)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
