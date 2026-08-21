@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "VESSELSIZE-002"
+title = "Vessel-size imaging (VSI) from a heterogeneous dynamic-susceptibility-contrast cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic dynamic-susceptibility-contrast vessel-size-imaging cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-vsi-dsc"
+source_paper = "Tropès et al. 2001, Magn. Reson. Med. (vessel-size imaging); Jensen & Chandra 2000, Magn. Reson. Med. (vessel-density index Q); Boxerman, Schmainda & Weisskoff 2006, AJNR (contrast-agent leakage correction)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
