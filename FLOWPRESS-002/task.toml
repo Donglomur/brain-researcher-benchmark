@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "FLOWPRESS-002"
+title = "Relative pressure mapping from a heterogeneous 4D-flow / phase-contrast cohort by pressure-Poisson integration"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic 4D-flow / phase-contrast velocity cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-flowpress-cohort"
+source_paper = "Ebbers & Farneback 2009, J. Magn. Reson. Imaging (pressure-Poisson relative pressure from velocity MRI, 10.1002/jmri.21641); Krittian et al. 2012, Med. Image Anal. (direct relative-cardiovascular-pressure computation, 10.1016/j.media.2012.04.003)"
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
