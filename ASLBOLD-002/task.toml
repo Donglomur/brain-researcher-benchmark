@@ -1,0 +1,30 @@
+version = "1.1"
+instruction_version = "1.0"
+test_version = "1.0"
+
+[metadata]
+task_id = "ASLBOLD-002"
+title = "Dual-echo simultaneous ASL+BOLD: perfusion, BOLD and calibrated CMRO2 of a heterogeneous pCASL cohort"
+category = "Reconstruction"
+difficulty = "hard"
+dataset_source = "Synthetic dual-echo pCASL ASL+BOLD cohort, deterministically generated (synth_build/generate_fixtures.py); planted ground truth held out under synth_build/fixture_spec.json"
+dataset_id = "synthetic-aslbold-cohort"
+source_paper = "Davis et al. 1998, PNAS (calibrated fMRI / Davis model, 10.1073/pnas.95.4.1834); Alsop et al. 2015, MRM (recommended pCASL implementation, 10.1002/mrm.25197); Hoge et al. 1999, MRM (deoxyhemoglobin dilution model)"
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0
+allow_internet = false
+
+[verifier.env]
+
+[solution.env]
