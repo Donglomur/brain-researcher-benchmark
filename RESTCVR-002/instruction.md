@@ -14,10 +14,37 @@ all. **Compute a map only where the subject's acquisition determines it; where i
 that map.** There is no reference pipeline provided — implement the estimators yourself and get
 the timing, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the BOLD (and
-PetCO2) data by a held-out reference and compared voxel-by-voxel over the gradeable brain voxels.
-Partial cohorts and partial map sets are scored proportionally, so produce every map you can
-support and omit the rest.
+## What is graded
+Grading is **outcome-based and voxelwise against the true underlying physiology**. Each map you
+write is compared voxel-by-voxel, over the gradeable brain voxels, to the *true* map that
+generated the signals (the reference model run on the noise-free, artefact-free BOLD+PetCO2).
+**Any scientifically valid estimator is accepted** — whichever sub-frame lag refinement,
+regressor upsampling, linear algebra, or robust spike-censoring scheme you prefer — because
+every correct method recovers the same physiology within tolerance. You are **not** required to
+reproduce any particular reference implementation's output. Each (subject × map) is scored
+independently and partial cohorts/map-sets are scored proportionally, so produce every map you
+can support and omit the rest.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Gross motion-spike frames.** In a **majority of subjects, a few individual BOLD frames are
+  grossly corrupted** (large motion-driven intensity spikes) and are physically inconsistent
+  with the rest of the run. **You must detect and censor such corrupted frames robustly before
+  the fit** — an uncensored spike distorts the temporal mean, the detrending, the lag search and
+  the reactivity slope. *Which* subjects and *which* frames are affected is **not disclosed** —
+  you must find them from the data. Any scientifically valid robust scheme is acceptable.
+- **A low-SNR cluster.** Each subject also carries a spatial cluster of poorly-reactive,
+  high-noise voxels; these fall below the grader's reliability floor and are **excluded from the
+  graded voxel set** (you do not need to special-case them, but do write finite values there).
+- **Continuous (sub-frame) lag.** Because the natural drive is slow and smooth, the true
+  per-voxel delay is a *fraction of a TR* and of **either sign**; an integer-frame (`k·TR`) peak
+  is too coarse and must be refined to sub-frame resolution.
+
+Modest measurement noise is present throughout and needs no special handling beyond an ordinary
+fit. The resting-state CVR / systemic-low-frequency-oscillation method is the standard one
+(Liu et al. 2017, *NeuroImage*, https://doi.org/10.1016/j.neuroimage.2016.11.054; Tong &
+Frederick 2014, *NeuroImage*).
 
 ## Shared conventions and output contract (`/app/data/protocol.json`)
 A single JSON with the conventions common to all subjects: the **percent-BOLD model**, the
