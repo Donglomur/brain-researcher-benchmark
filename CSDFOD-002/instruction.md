@@ -13,8 +13,15 @@ order, one shell) will not fit them all. There is no reference implementation pr
 build the estimator yourself and get the spherical-harmonic algebra, the per-subject single-fibre
 response, and the deconvolution right.
 
-Grading is **outcome-based and voxelwise**: the FOD peaks you write are compared against a
-held-out reference over the brain-mask voxels.
+Grading is **outcome-based and voxelwise against the true underlying fibre geometry**. The FOD
+peaks and single-fibre response you write are compared, over the brain-mask voxels, to the *true*
+fibre configuration that generated the signals (the planted peak directions and per-voxel fibre
+count; the isotropic voxels that carry no fibre; the subject's single-fibre response). **Any
+scientifically valid estimator is accepted** — any SH basis, response estimator, dense evaluation
+grid, peak search, or robust volume-rejection scheme — because peak directions are invariant to the
+SH convention and to the overall FOD scale, so every correct method recovers the same geometry
+within tolerance. You are **not** required to reproduce any particular reference implementation's
+output.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the diffusion **signal
@@ -26,6 +33,22 @@ subject's own high-anisotropy voxels — it is not provided), the **FOD / peak d
 (the AFD-normalised amplitude `ghat`, the amplitude and separation thresholds that define a
 peak, and that near-isotropic voxels have **no** peak), the **coordinate frame**, and the exact
 **output spec**. Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted DW volumes.** In a **majority of subjects, a cluster of diffusion-weighted
+  volumes on the FOD shell is grossly corrupted** (e.g. a sustained bulk-motion / signal-dropout
+  event: several angularly-nearby directions scaled far off, angularly incoherent so they are not
+  fibre-like). Left in, they bias the FOD peaks and the estimated response. **You must detect and
+  reject such corrupted volumes robustly before the spherical-harmonic fit.** *Which* subjects and
+  *which* volumes are affected is **not disclosed** — you must find them from the data. Any
+  scientifically valid robust scheme is acceptable (a robust per-volume log-residual outlier test,
+  etc.); a fit over all volumes recovers biased peaks/counts on the affected subjects and fails
+  those panels.
+
+Modest Rician noise is present on every volume and does **not** need special handling beyond an
+ordinary fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `n_vox`, `n_meas`, the `shells` present (each `b` and its direction count),

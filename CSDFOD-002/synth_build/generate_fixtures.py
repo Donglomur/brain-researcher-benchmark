@@ -27,8 +27,10 @@ recovers the fibre orientation distributions (FODs):
                       (motion spikes / dropouts, angularly incoherent so they are detectable)
                       that bias the FOD unless detected and rejected before the SH fit.
 
-The planted fibre directions / fractions below are PROVENANCE ONLY. Grading RECOMPUTES every
-FOD from the saved signals with a held-out reference and never trusts these numbers.
+Grading compares the submission against the HELD-OUT PLANTED PHYSIOLOGY (tests/planted_truth.npz,
+built by synth_build/build_truth.py = the reference run on the NOISE-FREE, CORRUPTION-FREE signal),
+accepting any scientifically valid estimator that recovers it within tolerance. The planted fibre
+configuration and the clean signal never leave synth_build/ / tests/.
 """
 import json
 from pathlib import Path
@@ -221,6 +223,11 @@ def build_subject(sid, cfg):
                     sig += frac[k] * (1 - fiso) * tensor_atten(b, g[None, :], dirs[k], lpar, lperp)[0]
             true[mi, v] = S0 * sig
 
+    # NOISE-FREE, CORRUPTION-FREE signal (held-out truth only; NEVER written under
+    # environment/data). The reference run on this yields the convention-invariant physical
+    # FOD peaks / response the acquisition supports.
+    sig_clean = true.copy()
+
     # gross corruption of a CLUSTER of DW volumes on the FOD (outermost) shell: a sustained
     # motion / signal-dropout event hits several angularly-nearby directions at once, biasing
     # the FOD directionally unless the outlier volumes are detected and rejected. The dropout /
@@ -246,7 +253,8 @@ def build_subject(sid, cfg):
     n2 = nz.normal(0.0, sigma, true.shape)
     meas = np.sqrt((true + n1) ** 2 + n2 ** 2).astype(np.float32)
 
-    return dict(sig=meas, bvals=bvals, bvecs=bvecs.astype(np.float32), labels=labels,
+    return dict(sig=meas, sig_clean=sig_clean.astype(np.float32),
+                bvals=bvals, bvecs=bvecs.astype(np.float32), labels=labels,
                 planted=planted, shell_slices=shell_slices, corrupt_idx=sorted(corrupt_idx),
                 sigma=sigma)
 
@@ -324,8 +332,9 @@ def write_protocol():
 def main():
     write_protocol()
     prov = {"note": ("BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, "
-                     "never under environment/data). Grading RECOMPUTES every FOD from the saved "
-                     "signals with a held-out reference and never trusts these planted numbers."),
+                     "never under environment/data). Grading compares the submission against the "
+                     "HELD-OUT PLANTED PHYSIOLOGY (tests/planted_truth.npz, built by build_truth.py "
+                     "= the reference run on the noise-free, corruption-free signal)."),
             "S0": S0, "canonical_kernel": CANON, "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():
