@@ -13,9 +13,32 @@ only where the data determine it; where they do not, omit that region.** There i
 tool provided — implement the estimator yourself and get the normalization, partial-volume
 handling, units, and per-subject adaptation right.
 
-Grading is **outcome-based**: each SUVR you write is recomputed from the PET by a held-out
-reference and compared value-by-value. Partial cohorts and partial region sets are scored
-proportionally, so produce every SUVR you can support and omit the rest.
+Grading is **outcome-based against the true underlying physiology**: each SUVR you write is
+compared to the *true* region-to-reference activity ratio that the acquisition determines.
+**Any scientifically valid estimator is accepted** — FFT or zero-padded PSF, direct or
+pseudo-inverse GTM solve, any robust regional-mean rule — because every correct method recovers
+the same ratio within tolerance. You are **not** required to reproduce any particular reference
+implementation's output. Partial cohorts and partial region sets are scored proportionally, so
+produce every SUVR you can support and omit the rest.
+
+## Robustness / data-quality contract  (READ THIS)
+The reconstructed PET is realistic, not clean. Handle the following robustly; *which* subjects
+and *which* voxels are affected is **not disclosed** — you must find them from the data:
+
+- **Gross reference-region spill-in.** On a **majority of subjects**, a compact cluster of the
+  **reference-region** voxels is grossly contaminated (hot spill-in / reconstruction artifact,
+  several-fold above the region). Because SUVR divides by the reference mean, a plain mean that
+  folds these in biases **every** target region. **Detect and reject** such gross voxels before
+  forming the reference mean.
+- **Gross target-region dead voxels.** On **several subjects**, a compact cluster of a target
+  region's voxels is dead / near-zero (low-count). **Detect and reject** these before that
+  region's mean. The contamination is gross (far outside the natural within-region PSF-blur
+  spread), so any reasonable robust window drops exactly the same voxels.
+
+These are the only lever beyond the pinned conventions (the per-subject reference region, the
+GTM-vs-uncorrected PVC fork, the PSF sigma, and the omit rule for a target region with too few
+valid in-mask voxels, all already specified above). Modest reconstruction noise is present and
+does **not** need special handling beyond an ordinary regional mean.
 
 ## Graded quantity (`/app/data/protocol.json`)
 A single JSON fixes the physics and conventions common to all subjects and **defines the
