@@ -193,14 +193,22 @@ def write_protocol():
 def main():
     write_protocol()
     prov = {"note": ("BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, "
-                     "never under environment/data). Grading RECOMPUTES the reference GRAPPA "
-                     "reconstruction from the saved undersampled + ACS data with a held-out core "
-                     "and never trusts these planted numbers."),
+                     "never under environment/data). Grading compares the submission against the "
+                     "HELD-OUT PLANTED PHYSIOLOGY (tests/planted_truth.npz): the fully-sampled "
+                     "true coil-combined magnitude (RSS over the live coils of the clean full "
+                     "k-space), up to a single global scale. Any valid GRAPPA reconstruction "
+                     "recovers it within tolerance; no particular reference fitter is required."),
             "grid": {"n_coils": NC, "n_pe": NPE, "n_ro": NRO, "sens_bandlimit": D},
             "subjects": {}}
+    planted_npz = {}                       # held-out ground truth for the verifier
     total = 0
     for sid, cfg in COHORT.items():
         s = build_subject(sid, cfg)
+        # ---- held-out planted ground truth (goes to tests/, never under environment/data) ----
+        # true_mag = fully-sampled RSS over the LIVE coils of the clean full k-space; the object
+        # mask is true_mag > MASK_THR*max. Grading is up to a single global (median) scale.
+        planted_npz[f"{sid}__true_mag"] = np.asarray(s["true_mag"], np.float64)
+        planted_npz[f"{sid}__mask"] = s["mask"].astype(bool)
         d = DATA / sid
         d.mkdir(parents=True, exist_ok=True)
         np.save(d / "kspace.npy", s["Kacq"])
@@ -231,6 +239,14 @@ def main():
     prov["artifact_note"] = ("corrupt rows are per-subject ACS motion outliers to be rejected; "
                              "dead coils are noise-only channels to be excluded from fit + RSS")
     (HERE / "fixture_spec.json").write_text(json.dumps(prov, indent=2, default=str))
+
+    # Held-out planted ground truth for the verifier. Lives in tests/ (shipped with the grader,
+    # NEVER under environment/data), so the agent cannot see the fully-sampled true image.
+    tests_dir = HERE.parent / "tests"
+    tests_dir.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(tests_dir / "planted_truth.npz", **planted_npz)
+    print(f"wrote held-out planted truth: {tests_dir/'planted_truth.npz'} "
+          f"({len(planted_npz)} arrays)")
     print(f"TOTAL data size: {total // 1024} KB")
 
 
