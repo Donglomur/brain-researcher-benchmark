@@ -15,9 +15,34 @@ reliably determine it; where they do not, leave it out.** There is no reference 
 provided — implement the inversion yourself and get the physics, units, and per-subject
 adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the velocity
-movies by a held-out reference and compared pixel-by-pixel over the in-field pixels. Partial
-cohorts and partial maps are scored proportionally, so produce every map you can support.
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared, pixel-by-pixel over the in-field pixels, to the *true* per-region Young's
+modulus (kPa) that generated the movies. **Any scientifically valid estimator is accepted** —
+any cross-correlation back-end, sub-sample refinement, aggregation, or usability criterion —
+because the adjacent-trace time-of-flight delay is exactly `dx/c` and every correct method
+converges to the same speed and the same usable set. You are **not** required to reproduce any
+particular reference implementation's output. Partial cohorts and partial maps are scored
+proportionally, so produce every map you can support.
+
+## Robustness / data-quality contract  (READ THIS)
+The tracked velocity movies are realistic, not clean, and **not every region is estimable from
+every subject's data**. Handle the following robustly; *which* regions are affected is **not
+disclosed** — you must find them from the data:
+
+- **Far-field decay.** Beyond a push's usable lateral range the wave amplitude falls below the
+  tracking noise, so those regions carry **no recoverable speed** and must be **masked (NaN)**,
+  not fit to a spurious value. Having two pushes does **not** guarantee full coverage — two
+  same-side pushes leave the opposite far side dead from both, so a multi-push subject can still
+  have a genuinely un-estimable region.
+- **Reflection artefact.** A stiff inclusion reflects the wave; inside such a region a
+  comparable-amplitude reverse-propagating copy overlaps the forward wave, de-cohering the
+  adjacent traces so a naive delay is spurious — that region is **not reliably estimable** and
+  must be **masked (NaN)**. The contamination is gross, so any reasonable consistency check
+  (dispersion of the per-pair delays, etc.) flags the same regions.
+
+Modest tracking noise is present on every frame and does **not** need special handling beyond an
+ordinary time-of-flight estimate; the region speed is spatially constant, so coherently
+combining the depth rows (and every usable push) makes the estimate robust.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the **speed estimator**
