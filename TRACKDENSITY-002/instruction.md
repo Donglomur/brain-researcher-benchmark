@@ -10,9 +10,13 @@ The cohort is **heterogeneous**: tractograms differ in size, voxel grid and worl
 not every subject's tractogram supports every map — **compute a map only where the subject's
 tractogram determines it, and omit it otherwise** (see the support rule below).
 
-Grading is **outcome-based and cellwise**: each map you write is recomputed from the streamlines
-by a held-out reference and compared cell-by-cell. Partial cohorts and partial map sets are
-scored proportionally, so produce every map you can support and omit the rest.
+Grading is **outcome-based and cellwise against the true track density**: each map you write is
+compared cell-by-cell to the *true* per-cell count of the anatomical streamlines (track density is
+deterministic geometry — given the streamlines the count is an exact integer). **Any scientifically
+valid implementation is accepted** — any exact sub-voxel segment/voxel traversal, any fragment
+threshold inside the length gap — because every correct method returns the identical counts. You
+are **not** required to reproduce any particular reference traversal's output. Partial cohorts and
+partial map sets are scored proportionally, so produce every map you can support and omit the rest.
 
 ## Shared conventions and output contract (`/app/data/protocol.json`)
 A single JSON with the conventions common to all subjects: the streamline **storage format**, the
@@ -41,6 +45,17 @@ particular:
   millimetres, concatenated end-to-end.
 - `offsets.npy` — an int64 array of length `n_streamlines + 1`: streamline `k` is
   `streamlines[offsets[k] : offsets[k+1]]` (CSR layout).
+
+## Robustness / data-quality contract  (READ THIS)
+The tractograms are raw, not clean:
+
+- **Spurious fragment streamlines.** In a **majority of subjects, the raw tractogram carries many
+  spurious/truncated streamlines** — tiny stubs far shorter than any anatomical streamline (the
+  real-vs-fragment length distribution is grossly bimodal with a wide empty gap). If counted, they
+  stipple the track-density map with false density. **You must exclude such short fragment
+  streamlines before counting** (any length threshold inside the bimodal gap yields the identical
+  kept set). *Which* subjects carry fragments and *which* streamlines they are is **not disclosed**
+  — you must find them from the data.
 
 ## Support rule (which maps to produce)
 - `tdi_native` — the native-grid track density — is produced for **every** subject.

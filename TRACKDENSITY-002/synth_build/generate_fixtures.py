@@ -18,9 +18,10 @@ The cohort is DELIBERATELY heterogeneous so that no single fixed recipe works:
                        (>= ~24 mm) -- which must be excluded before counting.
   * grid / affine    : native shape, anisotropic voxel size and world origin vary per subject.
 
-The provided data are HONEST (they are exactly the streamlines/grids); nothing here is graded
-directly. Grading RECOMPUTES every count map from the saved streamlines with a held-out
-reference (``tdi_pipeline`` + ``tdi_ref``) and never trusts any planted number.
+The provided data are HONEST (they are exactly the streamlines/grids). Grading compares each
+submission against the HELD-OUT PLANTED per-cell counts (tests/planted_truth.npz, built by
+synth_build/build_truth.py = the exact track density of the anatomical streamlines), accepting any
+valid exact-traversal implementation that reproduces them.
 """
 import json
 from pathlib import Path
@@ -208,8 +209,9 @@ def write_protocol():
 def main():
     write_protocol()
     prov = {"note": ("BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, "
-                     "never under environment/data). Grading RECOMPUTES every count map from the "
-                     "saved streamlines with a held-out reference and trusts none of these numbers."),
+                     "never under environment/data). Grading compares each submission against the "
+                     "HELD-OUT PLANTED counts (tests/planted_truth.npz), accepting any valid "
+                     "exact-traversal implementation that reproduces them."),
             "factor": FACTOR, "n_min": N_MIN, "l_min_mm_gap": [FRAG_LEN_MAX, REAL_LEN_MIN],
             "subjects": {}}
     total = 0
