@@ -14,9 +14,37 @@ all. **Compute a quantity only where the subject's acquisition determines it; wh
 not, omit it.** There is no reference solver provided — implement the estimators yourself and
 get the physics, the units, and the per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals
-by a held-out reference and compared voxel-by-voxel over the tissue labels. Partial cohorts
-and partial map sets are scored proportionally, so produce every map you can support.
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared voxel-by-voxel, over the tissue labels, to the *true* per-voxel sodium
+concentration (mmol/L) and effective T2* (ms) that generated the signals. **Any scientifically
+valid estimator is accepted** — weighted or unweighted log-linear relaxation fit, median-ratio
+or through-origin phantom calibration, whichever SNR threshold and robust bad-tube rejection you
+prefer — because every correct method recovers the same absolute physiology within tolerance.
+You are **not** required to reproduce any particular reference implementation's output. Partial
+cohorts and partial map sets are scored proportionally, so produce every map you can support.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean, and the absolute mmol/L scale is only as good as the
+calibration and the SNR handling. Handle all of the following robustly; *which* sessions and
+*which* voxels are affected is **not disclosed** — you must find them from the data:
+
+- **A grossly mis-calibrated reference tube.** In a **minority of sessions**, one of the
+  external reference phantom tubes is grossly mis-calibrated (its corrected signal is
+  inconsistent with the through-origin trend of the other tubes by tens of percent). **You must
+  detect and reject such an outlier tube before fitting the calibration slope**, or the entire
+  TSC scale of that session is biased. Any scientifically valid robust scheme is acceptable
+  (a MAD/z outlier test on the per-tube gain ratio, etc.); the clean tubes scatter only ~1–2 %.
+- **Low-SNR signal-void voxels.** In a **minority of sessions**, a compact cluster of near-noise
+  voxels (susceptibility dropout) sits inside the parenchyma. These carry no reliable signal and
+  are unrecoverable — **exclude them** (write them non-finite or ~0), do **not** report them as a
+  spurious concentration.
+- **B1+ / receive / T1-saturation correction.** The transmit (`b1.npy`) and receive
+  (`rxsens.npy`) maps are inhomogeneous on some sessions; ignoring either biases TSC. The true
+  flip is `a = B1 × radians(alpha_deg)` and enters the saturation factor everywhere (tissue and
+  phantom voxels alike).
+
+Rician noise (modest, tissue SNR ≈ 30+) is present on every voxel and does **not** need special
+handling beyond an ordinary fit.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the SPGR **signal
