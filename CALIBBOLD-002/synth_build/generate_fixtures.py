@@ -144,7 +144,11 @@ def _timeseries(S0_vox, active_vox, n_base, n_act, noise_sd, rng, corrupt):
     return frames
 
 
-def build_subject(sid, cfg):
+def build_subject(sid, cfg, add_artifacts=True):
+    """Build one subject. With ``add_artifacts=False`` the frame noise AND the gross motion-frame
+    corruption are switched off (clean, held-out truth); the low-CBF drop-out voxels are kept
+    (they are physiology, not an artifact). The ``add_artifacts=True`` path is bit-for-bit the
+    shipped data (identical RNG draw order)."""
     field = cfg["field"]
     beta = BETA_OF_FIELD[field]
     brain, label, gm_mask = geometry(cfg["seed"])
@@ -172,12 +176,15 @@ def build_subject(sid, cfg):
     noise_cbf = 0.015 * CBF_GM                               # ASL frame noise (absolute)
 
     # motion-corrupted frames (whole-volume). one in baseline, one in active per run.
-    if cfg["motion"]:
+    if cfg["motion"] and add_artifacts:
         corrupt_task = [(2, 0.20), (10, 2.6)]
         corrupt_cal = [(3, 2.4), (11, 0.18)]
     else:
         corrupt_task = []
         corrupt_cal = []
+    if not add_artifacts:
+        noise_bold = 0.0
+        noise_cbf = 0.0
 
     runs = {}
     # ---- TASK run ----
@@ -285,8 +292,10 @@ def write_protocol():
 def main():
     write_protocol()
     prov = {"note": ("BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, "
-                     "never under environment/data). Grading RECOMPUTES every map from the saved "
-                     "timeseries with a held-out reference and never trusts these planted numbers."),
+                     "never under environment/data). Grading compares against the HELD-OUT PLANTED "
+                     "PHYSIOLOGY (tests/planted_truth.npz = the reference run on the noise-free, "
+                     "motion-free timeseries, built by synth_build/build_truth.py); any valid "
+                     "estimator that recovers it within tolerance passes."),
             "constants": {"alpha": ALPHA, "beta_by_field": BETA_OF_FIELD, "phi": PHI, "eps": EPSILON},
             "subjects": {}}
     total = 0
