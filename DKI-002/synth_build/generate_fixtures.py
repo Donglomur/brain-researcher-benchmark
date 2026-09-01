@@ -191,6 +191,8 @@ def build_subject(sid, cfg):
             true[:, v] = np.exp(logsig)
             planted["D"].append(D); planted["Wt"].append(Wt15); planted["MD"][v] = MD
 
+    clean = true.copy()                               # noise-free, corruption-free signal (held-out truth)
+
     # gross corruption of a handful of DW (non-b0) volumes: alternating spike / dropout.
     corrupt_idx = []
     if cfg["corrupt"] > 0:
@@ -211,7 +213,8 @@ def build_subject(sid, cfg):
     meas = np.sqrt((true + n1) ** 2 + n2 ** 2).astype(np.float32)
 
     mask = (labels == 1) | (labels == 2)             # graded tissue mask: WM + GM
-    return dict(sig=meas, bvals=bvals, bvecs=bvecs.astype(np.float32), labels=labels,
+    return dict(sig=meas, clean=clean.astype(np.float32), bvals=bvals,
+                bvecs=bvecs.astype(np.float32), labels=labels,
                 mask=mask, planted=planted, corrupt_idx=sorted(corrupt_idx), sigma=sigma)
 
 

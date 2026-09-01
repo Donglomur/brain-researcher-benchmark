@@ -12,8 +12,13 @@ subject's acquisition determines it; where it does not, omit that map.** There i
 provided — implement the estimators yourself and get the model, units, and per-subject
 adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals
-by a held-out reference and compared voxel-by-voxel inside the brain-tissue mask.
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared voxel-by-voxel, inside the brain-tissue mask, to the *true* metric that
+generated the signals. **Any scientifically valid estimator is accepted** (ordinary or weighted
+least squares, any dense direction set for the kurtosis averages, any robust volume-rejection
+scheme) — every correct method recovers the same physical metrics within tolerance. You are
+**not** required to match any particular reference implementation. Each (subject × map) is
+scored independently.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the DKI **signal
@@ -43,6 +48,20 @@ the **tissue legend**. Read it before you start. In brief:
 
 `MK`, `AK`, `RK` are dimensionless. These are rotation-invariant physical quantities; the
 directional averages are over the whole sphere / the perpendicular ring, not a fixed triad.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted volumes.** In a **majority of subjects, a handful of diffusion-weighted
+  volumes are grossly corrupted** (motion spikes / signal dropouts) and are physically
+  inconsistent with the diffusion-kurtosis decay of the rest of that subject's data. **You must
+  detect and reject these corrupted volumes robustly before fitting** the tensor(s). *Which*
+  subjects and *which* volumes are affected is **not disclosed** — find them from the data.
+  Any scientifically valid robust scheme is acceptable (robust regression, log-residual outlier
+  rejection, etc.); a non-robust fit over all volumes recovers a biased tensor/kurtosis on the
+  affected subjects and fails those panels.
+- **Rician noise** (modest, per-subject SNR) is present on every volume and needs no special
+  handling beyond an ordinary fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `n_vox`, `n_meas`, the `shells` list (`b`, `n_dir`), and the file names.
