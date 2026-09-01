@@ -205,6 +205,19 @@ def build_subject(sid, cfg):
     r2s[region == COR] = a_w * fe[region == COR] + b_w
     r2s[region == REF] = 0.6 * b_w
 
+    # ---- NOISE-FREE reference values for the held-out planted truth (no rng draws here so the
+    #      shipped noisy arrays stay byte-identical). The vessel/calc outliers are DECLARED
+    #      physical outliers excluded by the announced validity window, so they are KEPT (at
+    #      their clean gross values) -- only the Rician noise and the motion-corrupted echo are
+    #      the "corruption" removed for the clean-signal target. ---------------------------
+    chi_ref_clean = np.zeros(nvox)
+    for rname, lab in [("deep_gray_nuclei", DGM), ("white_matter", WM)]:
+        a, b = CHI_CAL[rname]
+        chi_ref_clean[region == lab] = a * fe[region == lab] + b
+    chi_ref_clean[region == COR] = -0.010
+    chi_ref_clean[region == REF] = 0.0
+    r2s_clean = r2s.copy()
+
     # ---- gross vessel / calcification outliers (paramagnetic / diamagnetic) ----------------
     mask = (region == WM) | (region == DGM)
     outlier = np.zeros(nvox, bool)
@@ -222,6 +235,11 @@ def build_subject(sid, cfg):
         chi_ref[calcs] = -0.42 + 0.03 * orng.standard_normal(calcs.size)  # diamagnetic  -
         r2s[calcs] = 180.0 + 5.0 * orng.standard_normal(calcs.size)
         outlier[pick] = True
+        # clean gross values (no noise) at exactly the same outlier voxels
+        chi_ref_clean[veins] = 0.55
+        r2s_clean[veins] = 250.0
+        chi_ref_clean[calcs] = -0.42
+        r2s_clean[calcs] = 180.0
 
     # ---- proton-density amplitude / receive (cancels in R2*) -------------------------------
     pd = 1.0 + 0.05 * _smooth(np.random.default_rng(cfg["seed"] + 77), *_coords(), n=3)
@@ -240,13 +258,19 @@ def build_subject(sid, cfg):
         n1 = rng.normal(0.0, noise, nvox); n2 = rng.normal(0.0, noise, nvox)
         sig[j] = np.sqrt((clean + n1) ** 2 + n2 ** 2)              # Rician magnitude
 
+    # ---- NOISE-FREE, motion-artifact-free multi-echo signal (held-out truth) ---------------
+    sig_clean = np.stack([S0 * np.exp(-te * r2s_clean) for te in te_s], axis=0)
+
     # ---- provided (un-referenced) susceptibility map ---------------------------------------
     chi_offset = chi_field(sid, cfg["seed"])
     chi_provided = chi_ref + chi_offset
+    chi_provided_clean = chi_ref_clean + chi_offset
 
     planted = {"fe": fe, "r2s": r2s, "chi_ref": chi_ref, "region": region, "nuc_id": nuc_id,
                "outlier": outlier, "chi_offset": chi_offset}
-    return region, chi_provided.astype(np.float32), sig.astype(np.float32), planted, te_s
+    clean = {"chi_provided": chi_provided_clean.astype(np.float32),
+             "sig": sig_clean.astype(np.float32)}
+    return region, chi_provided.astype(np.float32), sig.astype(np.float32), planted, te_s, clean
 
 
 # ------------------------------------------------------------------ writers
@@ -318,7 +342,7 @@ def main():
             "gain": GAIN, "fe_window": [FE_MIN, FE_MAX], "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():
-        region, chi_provided, sig, planted, te_s = build_subject(sid, cfg)
+        region, chi_provided, sig, planted, te_s, _clean = build_subject(sid, cfg)
         d = DATA / sid
         d.mkdir(parents=True, exist_ok=True)
         mask = (region == WM) | (region == DGM)

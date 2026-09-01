@@ -14,9 +14,14 @@ acquisition determines it; where it does not, omit that map.** There is no recon
 provided — implement the estimators yourself and get the physics, units, referencing and
 per-subject/per-region adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals by
-a held-out reference and compared voxel-by-voxel inside the brain mask. Each (subject × map) is
-scored independently, so produce every map you can support and omit the rest.
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared voxel-by-voxel, inside the brain mask, to the *true* iron concentration that
+generated the signals (calibrated through the pinned model, with the validity window applied).
+**Any scientifically valid estimator is accepted** — ordinary or weighted least squares, any
+robust corrupted-echo rejection scheme — because every correct method recovers the same
+physiology within tolerance; you are **not** required to reproduce any particular reference
+implementation. Each (subject × map) is scored independently, so produce every map you can
+support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the definitions and conventions common to all subjects. **Read it before you
@@ -31,6 +36,24 @@ start.** It pins:
 - the **validity window**: report `NaN` for any voxel whose calibrated iron falls outside the
   physical range stated there;
 - the **region legend** and the **units**.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted echoes.** In a **minority of the multi-echo subjects, one echo volume is
+  grossly corrupted** (e.g. by motion) and is physically inconsistent with the mono-exponential
+  decay of the rest of that subject's echo train. **You must detect and reject such a corrupted
+  echo robustly before fitting** R2\*. *Which* subjects and *which* echo are affected is **not
+  disclosed** — you must find them from the data. Any scientifically valid robust scheme is
+  acceptable (robust regression, outlier rejection on the log-signal residuals, etc.); a
+  non-robust fit over all echoes recovers the wrong R2\* — hence the wrong R2\*-based iron — on
+  the affected subjects and fails those panels.
+- **Gross susceptibility outliers.** A fraction of voxels are veins / calcifications with grossly
+  paramagnetic / diamagnetic susceptibility (and R2\*); their calibrated iron falls outside the
+  validity window and is therefore reported `NaN`, exactly as the protocol's validity-window
+  convention prescribes. Applying that window handles them; no special detection is required.
+- **Rician noise** (modest) is present on every echo and needs no special handling beyond an
+  ordinary fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `field_T`, `f0_mhz`, `n_vox`, `tr_ms`, a `gre` block (`file`, `te_ms`,
