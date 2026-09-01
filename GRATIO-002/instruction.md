@@ -12,8 +12,14 @@ fit them all. **Compute a map only where the subject's inputs determine it; wher
 omit that map.** There is no reference implementation provided — combine the maps yourself and
 get the definitions, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the inputs by
-a held-out reference and compared voxel-by-voxel inside the brain mask.
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared voxel-by-voxel, inside the brain mask, to the *true* map that generated the
+data (the pinned definitions evaluated on the recoverable inputs — the myelin index recovered
+from its repeats, and the neurite maps as acquired). **Any scientifically valid estimator is
+accepted** — any NaN-aware robust repeat combine, the pinned volume-fraction arithmetic,
+whatever validity floor for the g-ratio — because every correct method recovers the same maps
+within tolerance. You are **not** required to reproduce any particular reference implementation's
+output.
 
 ## Shared definitions and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects. Read it before you start.
@@ -32,6 +38,26 @@ The pinned definitions (dimensionless fractions throughout):
   Where a myelinated axonal compartment is **not** present — the volume fractions are not
   physically positive (`AVF` collapses toward zero, e.g. CSF / near-void voxels) — the g-ratio
   is **undefined** and must be written as **NaN**, not a spurious number.
+
+## Robustness / data-quality contract  (READ THIS)
+The inputs are realistic, not clean:
+
+- **The myelin index is delivered as repeats that must be combined robustly.** `myelin.files`
+  lists several nominally-identical repeats of the same index. In a **majority of subjects, some
+  repeats carry unannounced single-repeat corruption**: a localised **motion/spike** artifact
+  (a large additive offset in one repeat) and/or a **failed-fit `NaN`** (the standard qMRI
+  sentinel for a voxel where the quantitative fit did not converge in that repeat). The
+  corruptions are spread across the repeats so that **no single repeat is clean**, but each voxel
+  is hit in **at most one** repeat by **at most one** artifact. You must combine the repeats with
+  a **NaN-aware, single-outlier-rejecting** combine (e.g. a per-voxel NaN-aware median): a plain
+  mean propagates the spike (and is poisoned by the NaN), and a NaN-*unaware* median returns
+  `NaN` wherever any repeat is `NaN` — poisoning the myelin index, MVF (which must be finite over
+  the mask) and the g-ratio there. *Which* subjects / repeats / voxels are affected is **not
+  disclosed**.
+- **Not every provided file is a usable quantitative map.** The sidecar's `model` fields declare
+  what each input actually is. A myelin `model` of `t1w`, or a neurite `model` of `dti`, is a
+  **non-quantitative decoy**: the corresponding map (and any g-ratio depending on it) is **not
+  computable and must be omitted** — trusting the mere presence of a file is wrong.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `n_vox`, `tissue_file`, `mask_file`, a `myelin` block (`model`,
