@@ -16,8 +16,10 @@ heterogeneous shell layouts so no single recipe works:
   * responses   : PINNED (single set of tissue diffusivities, given in protocol.json) and
                   used to forward-simulate every subject -- the agent must NOT estimate them.
 
-The planted fractions + FOD directions below are PROVENANCE ONLY. Grading RECOMPUTES every
-quantity from the saved signals with a held-out reference and never trusts these numbers.
+The planted fractions + FOD directions below are BUILD PROVENANCE. The graded ground truth is
+the reference decomposition run on the NOISE-/CORRUPTION-FREE signal (built by
+synth_build/build_truth.py -> tests/planted_truth.npz); the verifier compares the submission to
+that convention-invariant physical target and accepts any scientifically valid estimator.
 """
 import json
 import sys
@@ -158,6 +160,7 @@ def build_subject(sid, cfg):
     bvals = [0.0, 0.0]
     bvecs = [np.zeros(3), np.zeros(3)]
     rows = [np.ones(nvox), np.ones(nvox)]            # two b0 volumes (attenuation 1)
+    clean_rows = [np.ones(nvox), np.ones(nvox)]      # noise-/corruption-free counterpart
     corrupt_map = {}
     for (cb, ci, fac) in cfg["corrupt"]:
         corrupt_map.setdefault(round(cb), []).append((ci, fac))
@@ -178,6 +181,7 @@ def build_subject(sid, cfg):
                 else:
                     s_wm = R.wm_powder(b)             # isotropic WM (no fibre) -> powder
                 s[v] = aWM[v] * s_wm + fGM[v] * R.gm_response(b) + fCSF[v] * R.csf_response(b)
+            clean_rows.append(s.copy())              # pristine signal (held-out ground truth)
             fac = None
             for (ci, cf) in clist:
                 if ci == j:
@@ -187,6 +191,7 @@ def build_subject(sid, cfg):
             bvals.append(b); bvecs.append(gi); rows.append(s)
 
     sig = np.stack(rows, axis=0)                     # (n_meas, nvox), attenuation (S0=1)
+    clean = np.stack(clean_rows, axis=0).astype(np.float32)   # noise-/corruption-free
     # Rician noise on the (S0-scaled) signal
     noise = cfg["noise"]
     n1 = rng.normal(0, noise, sig.shape); n2 = rng.normal(0, noise, sig.shape)
@@ -194,7 +199,7 @@ def build_subject(sid, cfg):
     sig[:, ~mask] = np.abs(rng.normal(0, noise, (sig.shape[0], (~mask).sum())))  # background
     bvals = np.array(bvals); bvecs = np.array(bvecs)
     planted = {"aWM": aWM, "fGM": fGM, "fCSF": fCSF, "label": label, "fibres": fibres}
-    return mask, bvals, bvecs, sig, planted
+    return mask, bvals, bvecs, sig, clean, planted
 
 
 # ------------------------------------------------------------------ writers
@@ -270,7 +275,7 @@ def main():
             "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():
-        mask, bvals, bvecs, sig, planted = build_subject(sid, cfg)
+        mask, bvals, bvecs, sig, _clean, planted = build_subject(sid, cfg)
         d = DATA / sid
         d.mkdir(parents=True, exist_ok=True)
         np.save(d / "dwi.npy", sig.astype(np.float32))

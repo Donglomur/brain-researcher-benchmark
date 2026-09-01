@@ -11,10 +11,21 @@ The cohort is **heterogeneous**: every subject's sidecar declares the shells it 
 acquired, and you must adapt the analysis per subject — a pipeline that assumes one fixed
 recipe will not fit them all. There is no reference implementation provided: build the
 multi-tissue spherical-deconvolution estimator yourself and get the spherical-harmonic algebra,
-the per-tissue convolution, and the tissue unmixing right.
+the per-tissue convolution, and the tissue unmixing right. The model follows multi-tissue
+constrained spherical deconvolution (Jeurissen et al. 2014, *NeuroImage*; Tournier et al. 2007,
+*NeuroImage*).
 
-Grading is **outcome-based and voxelwise**: each quantity you write is recomputed from the
-signals by a held-out reference and compared voxel-by-voxel inside the brain mask.
+## What is graded
+Grading is **outcome-based and voxelwise against the true underlying physiology**. Each
+quantity you write is compared voxel-by-voxel, inside the brain mask, to the *true* tissue
+signal fractions / WM-FOD peaks that generated the signals (the pinned-response decomposition of
+the noise- and artifact-free signal). **Any scientifically valid estimator is accepted** — any
+spherical-harmonic basis, spherical-mean or full-deconvolution route, dense-sphere peak search,
+or robust corrupted-volume scheme — because every correct method recovers the same physical
+quantities within tolerance. You are **not** required to reproduce any particular reference
+implementation's output. Each (subject × quantity) is scored independently and partial
+cohorts/quantity-sets are scored proportionally, so produce everything you can support and omit
+the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects. Read it before you
@@ -38,6 +49,22 @@ start. It defines:
   relative / separation / anisotropy thresholds that define a peak (and that near-isotropic
   voxels have **no** peak);
 - the exact **output spec**.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted diffusion volumes.** In a **majority of subjects, one to three individual
+  diffusion-weighted volumes are grossly corrupted** (e.g. by motion — spikes or signal
+  dropouts) and are physically inconsistent with the smooth angular signal of the rest of that
+  shell. **You must detect and reject such corrupted volumes robustly before computing the
+  tissue fractions and the WM FOD.** *Which* subjects and *which* volumes are affected is **not
+  disclosed** — you must find them from the data. Any scientifically valid robust scheme is
+  acceptable (robust regression, outlier rejection on the per-shell angular residuals, etc.); a
+  non-robust fit over all volumes recovers the wrong fractions and FOD on the affected subjects
+  and fails those panels.
+- **Rician noise** (modest) is present on every volume and does **not** need special handling
+  beyond an ordinary fit; the graded tolerance already covers its direction-averaged noise
+  floor.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `n_vox`, `n_meas`, the `shells` present (each `b` and its direction count),
