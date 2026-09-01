@@ -160,8 +160,13 @@ def build_subject(sid, cfg):
     nz = np.random.default_rng(cfg["seed"] + 3000)
     n_ts = ts_ms.size
     series = np.zeros((n_ts, X.size))
+    # noise-free, corruption-free recovery series -> the convention-invariant physical truth
+    # (held out for grading; NEVER written under environment/data). Built here in lock-step with
+    # the noisy series WITHOUT consuming any extra RNG, so agent-visible signals are unchanged.
+    clean_series = np.zeros((n_ts, X.size))
     for j, ts in enumerate(ts_ms):
         clean = A * (1.0 - f * np.exp(-ts / T1))       # noiseless recovery
+        clean_series[j] = clean                        # artefact-free, noise-free
         for (ci, fac) in cfg["corrupt"]:
             if ci == j:
                 clean = clean * fac                    # gross motion corruption of a whole frame
@@ -177,7 +182,8 @@ def build_subject(sid, cfg):
         if cfg["scheme"] == "single":
             computable.append("Bratio")
     planted = {"T1": T1, "Bratio": np.full(X.size, f), "A": A}
-    return mask, label, series.astype(np.float32), planted, ts_ms, determinable, computable
+    return (mask, label, series.astype(np.float32), clean_series.astype(np.float32),
+            planted, ts_ms, determinable, computable)
 
 
 # ------------------------------------------------------------------ writers
@@ -237,7 +243,7 @@ def main():
             "gain": GAIN, "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():
-        mask, label, series, planted, ts_ms, determinable, computable = build_subject(sid, cfg)
+        mask, label, series, _clean, planted, ts_ms, determinable, computable = build_subject(sid, cfg)
         d = DATA / sid
         d.mkdir(parents=True, exist_ok=True)
         np.save(d / "series.npy", series)

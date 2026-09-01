@@ -13,10 +13,32 @@ recipe will not fit them all. **Estimate a map only where the subject's acquisit
 it; where it does not, omit that map.** There is no reference fitter provided — implement the
 estimator yourself and get the model, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the recovery
-series by a held-out reference fit and compared voxel-by-voxel inside the brain mask. Partial
-cohorts and partial map sets are scored proportionally, so produce every map you can support and
-omit the rest.
+## What is graded
+Grading is **outcome-based and voxelwise against the true underlying physiology**. Each map you
+write is compared voxel-by-voxel, inside the brain mask, to the *true* quantitative map that
+generated the signals (the model run on the noise-free, artefact-free recovery series). **Any
+scientifically valid least-squares fit is accepted** — whichever nonlinear solver,
+initialisation, or robust frame-rejection scheme you use — because saturation recovery carries no
+inversion-efficiency / Look–Locker ambiguity and every correct fit recovers the same T1 and B/A
+within tolerance. You are **not** required to reproduce any particular reference implementation's
+output. Each (subject × map) panel is scored independently and partial cohorts/map-sets are
+scored proportionally, so produce every map you can support and omit the rest.
+
+## Robustness / data-quality contract  (READ THIS)
+The recovery series are realistic, not clean:
+
+- **Gross motion-corrupted frames.** In a **majority of subjects, one or two whole recovery
+  frames are grossly corrupted** (scaled by a large motion factor) and are physically
+  inconsistent with the saturation-recovery curve of the rest of the series. **You must detect
+  and reject such corrupted frames robustly before the fit** — an uncorrected frame biases T1
+  (and B/A). *Which* subjects and *which* frames are affected is **not disclosed** — you must
+  find them from the data (they are gross outliers of the per-frame fit residual, far above the
+  ~1–2 % noise floor). Any scientifically valid robust scheme is acceptable.
+
+Modest Rician noise is present on every frame and needs no special handling beyond an ordinary
+fit. Select the recovery model from the sidecar's `sat_scheme` (2-parameter for `train`,
+3-parameter for `single`) and apply the determinability rule (minimum distinct `TS`) — a wrong
+model or a wrongly-emitted/omitted map fails the affected panels.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the saturation-recovery
