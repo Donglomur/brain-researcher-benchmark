@@ -13,10 +13,14 @@ analysis per subject — a pipeline that assumes one fixed recipe will not fit t
 that map.** There is no reference fitter provided — implement the estimators yourself and get
 the spin-physics, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the echo
-train by a held-out reference and compared voxel-by-voxel inside the brain mask. Partial
-cohorts and partial map sets are scored proportionally, so produce every map you can support
-and omit the rest.
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared voxel-by-voxel, inside the brain mask, to the *true* quantity that generated
+the echo train. **Any scientifically valid estimator is accepted** — a grid search or a
+per-voxel Levenberg-Marquardt EPG fit, whichever robust echo-screening scheme you prefer,
+equilibrium regrowth included or neglected — because every correct method recovers the same
+physiology within tolerance; you are **not** required to reproduce any particular reference
+implementation. Each (subject × map) is scored independently, so produce every map you can
+support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the **CPMG signal
@@ -37,6 +41,23 @@ train modelled by the **Extended Phase Graph** — when refocusing is imperfect 
 
 Read `protocol.json` before you start — it fixes the excitation/refocusing convention, the
 decay-only EPG relaxation model, the unit of each quantity, and the tissue legend.
+
+## Robustness / data-quality contract  (READ THIS)
+The echo trains are realistic, not clean:
+
+- **Imperfect refocusing.** On most subjects the per-voxel refocusing flip is well below the
+  nominal 180° (`kappa < 1`), so stimulated and secondary echoes contaminate the train and a
+  naive mono-exponential T2 is badly biased — the EPG stimulated-echo model is **required** (as
+  the protocol's signal model states).
+- **Grossly deviant first echo.** In a **majority of subjects the first echo is grossly
+  deviant** (a common CPMG artefact) and is physically inconsistent with the EPG decay of the
+  rest of that subject's train. **You must detect and reject such a corrupted leading echo
+  robustly before the fit is trusted.** *Which* subjects are affected is **not disclosed** — you
+  must find it from the data. Any scientifically valid robust scheme is acceptable; a fit that
+  keeps a grossly deviant first echo recovers the wrong T2/flip on the affected subjects and
+  fails those panels.
+- **Rician noise** (modest, per-subject) is present on every echo and needs no special handling
+  beyond an ordinary fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `field_T`, `n_vox`, `n_echoes`, `esp_ms` (echo spacing), `te_ms` (the echo

@@ -159,12 +159,15 @@ def build_subject(sid, cfg):
 
     nz = np.random.default_rng(cfg["seed"] + 3000)
     sig = np.zeros((ne, X.size))
+    sig_clean = np.zeros((ne, X.size))                                  # noise-free, artifact-free
     for vi in range(X.size):
         if not mask[vi]:
             continue
-        clean = A[vi] * epg_cpmg(kappa[vi], T2[vi], t1, esp, ne)
+        base = A[vi] * epg_cpmg(kappa[vi], T2[vi], t1, esp, ne)
+        sig_clean[:, vi] = base                                        # held-out truth (no echo1 dev)
+        clean = base
         if cfg["echo1"] is not None:
-            clean = clean.copy(); clean[0] = clean[0] * cfg["echo1"]     # gross first-echo dev
+            clean = base.copy(); clean[0] = clean[0] * cfg["echo1"]     # gross first-echo dev
         n1 = nz.normal(0.0, cfg["noise"], ne)
         n2 = nz.normal(0.0, cfg["noise"], ne)
         sig[:, vi] = np.sqrt((clean + n1) ** 2 + n2 ** 2)               # Rician magnitude
@@ -176,7 +179,7 @@ def build_subject(sid, cfg):
         sig[:, vi] = np.sqrt(n1 ** 2 + n2 ** 2)
 
     planted = {"T2": T2, "flip": kappa * 180.0, "kappa": kappa, "A": A}
-    return mask, label, sig.astype(np.float32), planted
+    return mask, label, sig.astype(np.float32), planted, sig_clean.astype(np.float32)
 
 
 # ------------------------------------------------------------------ writers
@@ -240,7 +243,7 @@ def main():
             "gain": GAIN, "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():
-        mask, label, sig, planted = build_subject(sid, cfg)
+        mask, label, sig, planted, _clean = build_subject(sid, cfg)
         d = DATA / sid
         d.mkdir(parents=True, exist_ok=True)
         np.save(d / "mese.npy", sig)
