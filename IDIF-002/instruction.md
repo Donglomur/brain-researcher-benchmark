@@ -16,9 +16,15 @@ is determinable only when blood was sampled; where it is not, omit it.** There i
 tool provided — implement the estimators yourself and get the physics, units, and per-subject
 adaptation right.
 
-Grading is **outcome-based and per-region**: each map you write is recomputed from the TACs by a
-held-out reference and compared region-by-region. Partial cohorts and partial outputs are scored
-proportionally, so produce every map you can support and omit the one you cannot.
+Grading is **outcome-based and per-region against the true underlying kinetics**: each map you
+write is compared region-by-region to the *true* graphical macro-parameter that generated the
+data (the reference IDIF + graphical analysis run on the clean, artifact-free TACs). **Any
+scientifically valid estimator is accepted** — a different carotid voxel selection, a different
+corrupted-frame detector, a different OLS backend, framewise or trapezoidal integration —
+because every correct method recovers the same macro-parameter within tolerance. You are **not**
+required to reproduce any particular reference implementation's output. Partial cohorts and
+partial outputs are scored proportionally, so produce every map you can support and omit the one
+you cannot.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the **IDIF model**
@@ -26,6 +32,30 @@ A single JSON with the physics and conventions common to all subjects: the **IDI
 samples, the exact **kinetic-outcome definitions** (Logan `VT` for reversible tracers, Patlak
 `Ki` for irreversible), the **unit** of each quantity, and the **output fork**. Read it before
 you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The carotid ROI and the TACs are realistic, not clean. Handle these per subject:
+
+- **Contaminated carotid voxels.** The carotid candidate voxels include **partial-volume /
+  tissue-contaminated voxels** (an attenuated bolus peak with heavy tissue spillover) that must
+  be **excluded** before you average the blood voxels into `A(t)`. Averaging them in biases the
+  input function (and hence the recovery calibration and the absolute VT/Ki). *Which* voxels are
+  contaminated is **not disclosed** — identify them from the data (their shape differs from a
+  true blood voxel).
+- **Grossly motion-corrupted frames.** In a **majority of subjects, one or two individual
+  carotid frames on the bolus tail are grossly corrupted** (a motion/dead-frame drop, or a
+  spike) and are inconsistent with the smooth input-function shape. **You must detect and reject
+  such frames robustly before integrating the input function.** A tail-frame corruption barely
+  moves a Logan (reversible) cumulative-integral slope but grossly biases a Patlak (irreversible)
+  slope, so a pipeline that skips frame rejection is punished on the irreversible subjects'
+  absolute Ki **and** their scale-free Krel. *Which* subjects and *which* frames are affected is
+  **not disclosed**.
+- **Tracer-class model fork.** Use the graphical model fixed by the subject's `tracer_class` —
+  **Logan** for `reversible`, **Patlak** for `irreversible`. The wrong graphical model biases
+  both outputs.
+
+Modest count noise is present on every TAC and needs no special handling beyond the ordinary
+averaging / graphical fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `tracer_class` (`reversible` / `irreversible`), `frame_start_s` and

@@ -184,7 +184,11 @@ COHORT = {
 }
 
 
-def build_subject(sid, cfg):
+def build_subject(sid, cfg, clean=False):
+    """Build one subject's TACs. With clean=True the caller passes a config with noise=0,
+    contam=0, corrupt=[] and this switches off the residual blood-sample noise too, so the
+    reference run on the result yields the convention-invariant graphical macro-parameters used
+    as the held-out grading target. clean=False (the default) reproduces the shipped fixtures."""
     rng = np.random.default_rng(cfg["seed"])
     starts, ends = make_schedule(cfg["sched"])
     tmid_s = 0.5 * (starts + ends)
@@ -243,7 +247,7 @@ def build_subject(sid, cfg):
         cand = np.where((tmid_min >= 30.0) & (tmid_min <= 57.0))[0]
         pick = cand[np.linspace(0, len(cand) - 1, 3).astype(int)]
         for fi in pick:
-            val = float(cp_frame[fi] * (1.0 + rng.normal(0.0, 0.02)))
+            val = float(cp_frame[fi] * (1.0 + (0.0 if clean else rng.normal(0.0, 0.02))))
             samples.append({"t_min": float(tmid_min[fi]), "value": max(val, 0.0)})
 
     return dict(starts=starts, ends=ends, carotid=carotid, periv=periv_frame,
@@ -302,8 +306,11 @@ def write_protocol():
 def main():
     write_protocol()
     prov = {"note": ("BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, "
-                     "never under environment/data). Grading RECOMPUTES every outcome from the "
-                     "saved TACs with a held-out reference and never trusts these planted numbers."),
+                     "never under environment/data). Grading compares the submission against the "
+                     "HELD-OUT PLANTED PHYSIOLOGY (tests/planted_truth.npz, built by "
+                     "synth_build/build_truth.py -- the reference run on the clean, artifact-free "
+                     "TACs), accepting any valid estimator within tolerance; it never trusts "
+                     "these provenance numbers."),
             "n_regions": N_REGIONS, "reference_region_index": REF_REGION, "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():
