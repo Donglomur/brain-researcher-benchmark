@@ -20,8 +20,10 @@ PetCO2 sampling interval, start offset and units; the agent must READ it and ada
                        censored before the fit; a spatial low-SNR cluster is left below the
                        grader's correlation floor.
 
-The planted maps below are PROVENANCE ONLY. Grading RECOMPUTES every map from the saved BOLD +
-PetCO2 with a held-out reference and never trusts these numbers.
+Grading compares the submission against the HELD-OUT PLANTED PHYSIOLOGY (tests/planted_truth.npz,
+built by synth_build/build_truth.py = the reference run on the NOISE-FREE, SPIKE-FREE signal),
+accepting any scientifically valid estimator that recovers it within tolerance. The planted maps
+and the clean signal never leave synth_build/ / tests/.
 """
 import json
 import sys
@@ -198,6 +200,10 @@ def build_subject(sid, cfg):
     pct = pct + lin[None, :] * (2.0 * tnorm)[:, None]
     pct = pct + cyc[None, :] * np.cos(2 * np.pi * 1.0 * (frames / n)[:, None] + cph[None, :])
 
+    # NOISE-FREE, SPIKE-FREE percent BOLD (held-out truth only; keeps the declared drift, which
+    # the pinned detrend removes). Captured before thermal noise and before the gross spikes.
+    pct_clean = pct.copy()
+
     # noise (boosted inside the low-SNR cluster)
     nz = np.random.default_rng(seed + 3000)
     nsd = np.full(X.size, cfg["noise"])
@@ -209,6 +215,7 @@ def build_subject(sid, cfg):
     # raw BOLD magnitude with a per-voxel baseline; percent conversion removes the baseline
     S0 = 1000.0 * (1.0 + 0.05 * _smooth(np.random.default_rng(seed + 77), X, _Y, _Z, n=2))
     S = S0[None, :] * (1.0 + pct / 100.0)
+    S_clean = S0[None, :] * (1.0 + pct_clean / 100.0)          # never written under environment/data
 
     # gross motion spikes (multiplicative, whole-frame) -- to be censored
     for (fr, a) in cfg["spikes"]:
@@ -230,7 +237,7 @@ def build_subject(sid, cfg):
         petco2 = dict(vals=trace.astype(np.float32), dt=dt, start=start, units=cfg["units"])
 
     planted = {"cvr": cvr, "k": kf, "lag_s": kf * tr}
-    return mask, label, S.astype(np.float32), petco2, planted
+    return mask, label, S.astype(np.float32), petco2, planted, S_clean.astype(np.float32)
 
 
 # ------------------------------------------------------------------ writers
@@ -283,12 +290,13 @@ def write_protocol():
 def main():
     write_protocol()
     prov = {"note": ("BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, "
-                     "never under environment/data). Grading RECOMPUTES every map from the saved "
-                     "BOLD + PetCO2 with a held-out reference and never trusts these planted numbers."),
+                     "never under environment/data). Grading compares the submission against the "
+                     "HELD-OUT PLANTED PHYSIOLOGY (tests/planted_truth.npz, built by build_truth.py "
+                     "= the reference run on the noise-free, spike-free signal)."),
             "grid": GRID, "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():
-        mask, label, S, petco2, planted = build_subject(sid, cfg)
+        mask, label, S, petco2, planted, _S_clean = build_subject(sid, cfg)
         d = DATA / sid
         d.mkdir(parents=True, exist_ok=True)
         np.save(d / "bold.npy", S)

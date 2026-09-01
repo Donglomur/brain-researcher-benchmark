@@ -12,10 +12,13 @@ recipe will not fit them all. **Compute a map only where the subject's acquisiti
 it; where it does not, omit that map.** There is no reference pipeline provided — implement the
 estimators yourself and get the timing, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the BOLD and
-CO2 data by a held-out reference and compared voxel-by-voxel inside the brain mask. Partial
-cohorts and partial map sets are scored proportionally, so produce every map you can support and
-omit the rest.
+Grading is **outcome-based and voxelwise against the true underlying physiology**. Each map you
+write is compared voxel-by-voxel, over the well-determined brain voxels, to the *true* physical
+quantity that generated the signals (the planted hemodynamic lag; the planted reactivity). **Any
+scientifically valid estimator is accepted** — any backend, spike detector, or per-voxel lag
+search — because every correct method recovers the same lag/CVR within tolerance. You are **not**
+required to reproduce any particular reference implementation's output. Partial cohorts and partial
+map sets are scored proportionally, so produce every map you can support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the conventions common to all subjects: the **BOLD percent-signal model**,
@@ -25,6 +28,21 @@ external trace exists), the exact **lag definition** (the integer-frame shift `�
 either sign, maximizing the detrended Pearson correlation), the exact **CVR definition** (the
 detrended slope at the optimal lag, in %BOLD per mmHg, determinable only for an mmHg regressor),
 the **unit** of each quantity, and the **tissue legend**. Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted frames.** In a **minority of subjects, a few individual BOLD frames are
+  grossly motion-corrupted** (whole-frame signal spikes) and are physically inconsistent with the
+  rest of the run. **You must detect and censor such corrupted frames robustly before the lag /
+  CVR fit** (the framewise brain-mean signal exposes them). *Which* subjects and *which* frames are
+  affected is **not disclosed** — you must find them from the data. Any scientifically valid robust
+  scheme is acceptable (a robust MAD outlier test on the framewise mean, etc.); a fit that leaves
+  the spikes in recovers the wrong lag/CVR on the affected subjects and fails those panels.
+
+Modest measurement noise is present on every frame (and a spatial low-reactivity / high-noise
+region is left below the grader's well-determined floor, so it is not graded); ordinary detrending
+plus the lag fit handle the noise with no special treatment.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `n_time`, `n_vox`, `tr_ms`, `regressor_source`
