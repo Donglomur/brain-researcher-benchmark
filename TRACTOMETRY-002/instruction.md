@@ -13,10 +13,14 @@ will not fit them all. **Report a node only where the bundle determines it; wher
 omit that node.** There is no profiling tool provided — implement it yourself and get the
 coordinate handling, sampling, node correspondence, and per-subject adaptation right.
 
-Grading is **outcome-based and node-wise**: each profile you write is recomputed from the
-streamlines and volumes by a held-out reference and compared node-by-node. Each (subject × scalar)
-is scored independently and partial results are scored proportionally, so produce every profile
-you can and omit only what the data cannot support.
+Grading is **outcome-based and node-wise against the true bundle profile**: each profile you write
+is compared node-by-node to the *true* along-tract mean of the anatomical bundle (the AFQ-style
+profile of Yeatman et al. 2012). **Any scientifically valid estimator is accepted** — any trilinear
+backend, any robust spatial-outlier prune — because the bundle-core scalar is flat over the core
+(so the per-node mean is invariant to the averaging weights) and every correct method recovers the
+same profile within tolerance. You are **not** required to reproduce any particular reference
+implementation's output. Each (subject × scalar) is scored independently and partial results are
+scored proportionally, so produce every profile you can and omit only what the data cannot support.
 
 ## Shared conventions and output contract (`/app/data/protocol.json`)
 A single JSON with the conventions common to all subjects: the **coordinate convention** (the
@@ -27,6 +31,17 @@ scalar volume, converting world→voxel via `inv(affine)`), the **node definitio
 (nearest-reference-node assignment; a node's value is the mean over the bundle's streamlines of
 each streamline's mean sample at that node), the **omit rule** (undeterminable nodes → NaN), and
 the **output spec** and **units**. Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The bundles are realistic, not clean:
+
+- **Spurious off-core streamlines.** In a **majority of subjects, a few streamlines have strayed
+  well out of the bundle core** (roughly 10 mm off, into low-FA / high-MD tissue) — gross spatial
+  outliers. If they are included in the per-node mean they drag every node value toward background.
+  **You must detect and prune such gross spatial-outlier streamlines before averaging** (any
+  reasonable robust criterion works — they sit ~10 mm off a ~1 mm-wide core). *Which* subjects
+  carry them and *which* streamlines they are is **not disclosed** — you must find them from the
+  data. A small measurement noise is present on the scalar volumes and needs no special handling.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `space` (`"world"` or `"voxel"`), `n_nodes`, `n_streamlines`, `voxel_size`,

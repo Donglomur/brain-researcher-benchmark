@@ -21,12 +21,14 @@ SIDECAR honestly declares what it needs and the agent must READ it + adapt from 
                        data; undeterminable nodes are OMITTED (NaN).
   * per-subject affine (voxel size / origin) and node FA/MD profiles vary.
 
-HIDDEN (never announced): a MAJORITY of subjects carry a few SPURIOUS streamlines that have
-strayed ~13 mm out of the bundle core (into low-FA / high-MD tissue). They are gross spatial
-outliers; unless they are pruned before averaging, every node mean is biased.
+DECLARED (public robustness contract), realization hidden: a MAJORITY of subjects carry a few
+SPURIOUS streamlines that have strayed ~11 mm out of the bundle core (into low-FA / high-MD
+tissue). They are gross spatial outliers; unless they are pruned before averaging, every node mean
+is biased. Which subjects / streamlines are spurious is not disclosed.
 
-The planted numbers below are PROVENANCE ONLY. Grading RECOMPUTES every profile from the saved
-data with a held-out reference and never trusts these numbers.
+Grading compares each submission against the HELD-OUT PLANTED profiles (tests/planted_truth.npz,
+built by synth_build/build_truth.py = the reference profiler on the inlier-only bundle), accepting
+any valid estimator that recovers them within tolerance.
 """
 import json
 from pathlib import Path
@@ -272,8 +274,9 @@ def write_protocol():
 def main():
     write_protocol()
     prov = {"note": ("BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, never "
-                     "under environment/data). Grading RECOMPUTES every profile from the saved data "
-                     "with a held-out reference and never trusts these numbers."),
+                     "under environment/data). Grading compares each submission against the HELD-OUT "
+                     "PLANTED profiles (tests/planted_truth.npz), accepting any valid estimator that "
+                     "recovers them within tolerance."),
             "n_nodes": N_NODES, "k_min": K_MIN, "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():
