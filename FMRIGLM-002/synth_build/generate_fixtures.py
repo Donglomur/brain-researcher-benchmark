@@ -240,7 +240,15 @@ def write_protocol(hrf):
         "nuisance": (
             "Include as nuisance regressors the 6 realignment parameters (motion.npy, columns "
             "[tx,ty,tz in mm, rx,ry,rz in rad]) and a degree-2 polynomial drift basis "
-            "[1, tn, tn^2] with tn=(0..N-1)/(N-1). No temporal derivatives or other expansions."),
+            "[1, tn, tn^2] with tn=(0..N-1)/(N-1); no temporal derivatives. In addition, a "
+            "minority of frames in a majority of runs are grossly corrupted by a transient head "
+            "motion (a framewise displacement far above the run's floor); DETECT those frames "
+            "from the realignment parameters and MODEL THEM OUT before the fit -- one unit-impulse "
+            "(spike) regressor per corrupted frame, or equivalently by censoring those frames -- "
+            "or the task and modulation betas and t-statistics are biased on the affected runs. "
+            "WHICH frames are corrupted is not given; detect them from the data (any framewise-"
+            "displacement threshold that separates the gross transients from the small baseline "
+            "floor selects the same frames). Runs with no corrupted frame need no such regressor."),
         "prewhitening": (
             "Fit with AR(1) prewhitening. Estimate ONE pooled AR(1) coefficient per run from the "
             "OLS residuals over the brain-mask voxels, rho = (sum over mask voxels and t>=1 of "

@@ -13,8 +13,16 @@ sidecar and events table and adapt the design — one fixed recipe will not fit 
 There is no GLM library provided — implement the design build, prewhitening, and inference
 yourself and get the conventions, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the BOLD,
-events, and motion by a held-out reference and compared voxel-by-voxel inside the brain mask.
+Grading is **outcome-based and voxelwise**: each map you write is compared, voxel-by-voxel
+inside the brain mask, to the held-out target produced by the **pinned** first-level GLM defined
+below. Because every convention the graded quantities depend on is pinned exactly (the provided
+HRF, the design/convolution, the modulation regressor, the drift, the motion-spike modelling,
+and the AR(1) prewhitening with N−p degrees of freedom), the beta and t-statistic are **uniquely
+determined by the data** — **any correct implementation of the pinned conventions recovers the
+same values within tolerance** (an FFT or a direct convolution, an explicit whitening matrix or
+the Prais–Winsten transform, any linear-algebra backend all agree). You are **not** required to
+reproduce any particular reference implementation's code. Each (subject × quantity) is scored
+independently, so produce every quantity you can support and omit the rest.
 
 ## Shared design + inference contract (`/app/data/protocol.json`, `/app/data/hrf.npy`)
 `protocol.json` pins every convention the graded quantities depend on and MUST be followed
@@ -31,6 +39,23 @@ exactly:
 
 Read it before you start. The betas carry the HRF/design scale, so following these conventions
 exactly is what makes your numbers comparable to the reference.
+
+## Robustness / data-quality contract  (READ THIS)
+The runs are realistic, not clean:
+
+- **Gross motion-spike frames.** In a **majority of subjects a few individual frames are
+  grossly corrupted by a transient head motion** — a framewise displacement far above the run's
+  small baseline floor, accompanied by a large BOLD transient that the 6 realignment parameters
+  do **not** capture. You must **detect these frames from the realignment parameters and model
+  them out before the fit** — one unit-impulse (spike) regressor per corrupted frame, or
+  equivalently by censoring those frames — or the task and modulation betas and t-statistics are
+  biased on the affected runs. **Which** frames (and which subjects) are corrupted is **not
+  disclosed**; detect them from the data. Any framewise-displacement threshold that separates the
+  gross transients from the baseline floor selects the same frames, and a **minority of runs have
+  no corrupted frame** and need no spike regressor.
+
+The AR(1) temporal autocorrelation is handled by the pinned prewhitening and needs no special
+treatment beyond it.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `tr_s`, `n_frames`, `n_vox`, and the file names below.
