@@ -239,8 +239,19 @@ def build_subject(sid, cfg):
                "parent_fraction": [float(x) for x in parent_fraction],
                "plasma_to_blood_ratio": float(ratio)}
 
+    # NOISE-FREE, MOTION-FREE clean measured TAC (decay-UNcorrected, exactly as the reference
+    # expects on disk). No rng draws here, so tac_meas above and every saved byte are unchanged.
+    # Used ONLY by synth_build/build_truth.py to derive the held-out target.
+    tac_clean = decay_uncorrect_frames(tac_true_dc, tmid, half)
+
     return dict(dur=dur, start=start, tmid=tmid, half=half, mask=mask, label=label,
-                tac=tac_meas, aif=aif, planted=planted, motion=mf)
+                tac=tac_meas, tac_clean=tac_clean, aif=aif, planted=planted, motion=mf)
+
+
+def decay_uncorrect_frames(tac_dc, tmid, half):
+    """Decay-UNcorrect a (n_frames, n_vox) decay-corrected TAC to on-disk convention (per frame)."""
+    lam = np.log(2.0) / float(half)
+    return np.asarray(tac_dc, float) * np.exp(-lam * np.asarray(tmid, float))[:, None]
 
 
 def plasma_sampling(total):

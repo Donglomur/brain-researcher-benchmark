@@ -13,9 +13,14 @@ reversible — so **a single fixed Patlak recipe will not fit every subject or e
 fitting code is provided; implement the estimators yourself and get the physics, units, decay, and
 per-subject / per-voxel adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the TACs by a
-held-out reference and compared voxel-by-voxel inside the brain mask. Partial cohorts and partial
-maps are scored proportionally, so produce every map you can support and omit the rest.
+Grading is **outcome-based and voxelwise against the true underlying kinetics**: each map you
+write is compared voxel-by-voxel, inside the brain mask, to the *planted* parametric map that
+generated the TACs. **Any scientifically valid estimator is accepted** — Gjedde-Patlak, plasma
+Logan, Ichise MA1 or a 2-tissue-compartment fit for the plasma maps; multilinear reference-Patlak
+for Ki_ref; whichever robust motion-frame repair you prefer — because every correct method
+recovers the same macro-parameters within tolerance. You are **not** required to reproduce any
+particular reference implementation's output. Partial cohorts and partial maps are scored
+proportionally, so produce every map you can support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 Read it first. It gives the conventions common to all subjects: the **time units** (minutes; rates
@@ -33,6 +38,25 @@ file when one is present, the **reference-region** input convention when one is 
 - **Ki_ref** — reference-Patlak relative net influx (1/min) of a reference-input, irreversibly
   trapping voxel: the slope of `C_T(t)/C_R(t)` vs `∫₀ᵗ C_R dτ / C_R(t)` over the `t ≥ t*` frames,
   with `C_R` the reference-region mean TAC.
+
+## Robustness / data-quality contract  (READ THIS)
+The TACs are realistic, not clean:
+
+- **Grossly motion-corrupted frames.** In a **subset of the subjects, a few whole frames are
+  grossly corrupted** by head motion — the frame's activity is a gross outlier of the smooth
+  tracer time-course (an abrupt jump or drop across the whole field of view). They sit in the
+  **late, highest-leverage part of the graphical-analysis window**, so a single corrupted frame
+  left in place biases the fitted slope well past tolerance. **You must detect and repair (or
+  reject) such frames robustly before forming any integral or fitting any slope.** *Which*
+  subjects and *which* frames are affected is **not disclosed** — you must find them from the
+  data, and there may be **more than one per subject**, so a one-pass "drop the single worst
+  frame" fix is not enough; iterate until the retained frames are mutually consistent. Some
+  subjects are clean. Any scientifically valid robust scheme is acceptable (iterative gross-
+  outlier detection on the global activity trend, robust regression, etc.); a non-robust fit over
+  all frames recovers the wrong parameters on the affected subjects and fails those panels.
+
+Ordinary counting noise is present on every frame and does **not** need special handling beyond
+the standard graphical/compartmental fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `isotope`, `half_life_min`, the frame schedule (`frame_start_min`,
