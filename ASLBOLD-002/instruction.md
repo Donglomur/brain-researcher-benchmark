@@ -14,9 +14,14 @@ assumes one fixed recipe will not fit them all. **Compute a map only where the s
 determines it; where it does not, omit that map.** There is no reference pipeline provided —
 implement the estimators yourself and get the physics, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the timeseries by
-a held-out reference and compared voxel-by-voxel inside the grey-matter mask. Partial cohorts and
-partial map sets are scored proportionally, so produce every map you can support and omit the rest.
+Grading is **outcome-based and voxelwise against the true underlying physiology**. Each map you
+write is compared voxel-by-voxel, inside the grey-matter mask, to the *true* quantity that
+generated the signals (the baseline CBF and the **drift-free** task responses). **Any
+scientifically valid estimator is accepted** — any surround/detrend perfusion scheme, any
+linear-drift BOLD nuisance regressor, a GLM or a block percent-change — because every correct
+method recovers the same physiology within tolerance. You are **not** required to reproduce any
+particular reference implementation's output. Each (subject × map) is scored independently, so
+produce every map you can support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the dual-echo **signal
@@ -27,6 +32,36 @@ definition and the **percent-change** convention; the **Davis (1998)** model, th
 **M-value**, and the relative-**CMRO2** inversion; the fixed model constants (`lambda`,
 `alpha_label`, the field-dependent `T1_blood`/`T1_tissue`, `alpha`, the field-dependent `beta`); the
 **unit** of each quantity; and the **tissue legend**. Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **M0 reference depends on the acquisition.** Subjects acquired with **background suppression**
+  carry a dedicated **M0 scan** (`m0.npy`); their control image is *not* a valid
+  equilibrium-magnetization reference (its static tissue is strongly suppressed), so you **must**
+  use the M0 scan. Subjects **without** a dedicated M0 scan derive M0 from the control image with
+  a saturation-recovery correction. Reading CBF off the wrong M0 over/under-scales it by a large
+  factor. `background_suppression` and the presence of `m0_file` tell you which case a subject is.
+- **Low-frequency common-mode drift.** A slow signal drift (approximately linear across the run)
+  rides on the static-tissue magnetization on a **subset of subjects** (it is a scanner/system
+  effect and appears **regardless of background suppression**). It biases **both** graded pathways
+  unless removed **consistently**:
+  - **Perfusion** — because control and label images are acquired half a TR apart, the drifting
+    static tissue (≈100× larger than the perfusion difference) leaks into a **simple pairwise**
+    control−label subtraction (≈100× amplified) as a spurious perfusion change. Use a **surround**
+    subtraction (control minus the average of the two temporally adjacent label frames) or an
+    equivalent detrended difference, which removes a linear trend exactly.
+  - **BOLD** — the control BOLD timeseries carries the drift directly, so a plain block-mean
+    active-vs-baseline contrast reads the drift as a spurious BOLD change. **Remove a linear-in-time
+    drift nuisance** (a drift regressor fitted jointly with the activation block, or any equivalent
+    detrend) before the contrast.
+
+  *Which* subjects drift is **not disclosed** — you must handle it robustly everywhere. Removing
+  the drift from only one pathway leaves the calibrated CMRO2 biased. Any scientifically valid
+  detrend is accepted.
+
+Modest Rician noise is present on every frame and does **not** need special handling beyond an
+ordinary fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `field_T`, `n_vox`, the echo times `te_ms`, the sequence `tr_s`, the

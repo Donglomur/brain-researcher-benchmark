@@ -1,5 +1,5 @@
 {
-  "note": "BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, never under environment/data). Grading RECOMPUTES every map from the saved dual-echo signals with a held-out reference and never trusts these planted numbers.",
+  "note": "BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, never under environment/data). Grading compares each submitted map against the HELD-OUT PLANTED PHYSIOLOGY (tests/planted_truth.npz = the reference run on the noise-free, drift-free signal, built by synth_build/build_truth.py); any valid estimator that recovers it within a physics-level tolerance passes.",
   "constants": {
     "lambda": 0.9,
     "alpha_label": 0.85,
@@ -65,7 +65,7 @@
       "n_echoes": 2,
       "m0scan": true,
       "calib": false,
-      "drift": false,
+      "drift": true,
       "tr_s": 4.0,
       "tau_s": 1.8,
       "pld_s": 1.8,
@@ -109,15 +109,16 @@
       "beta": 1.8,
       "n_echoes": 3,
       "m0scan": true,
-      "calib": false,
-      "drift": false,
+      "calib": true,
+      "drift": true,
       "tr_s": 4.5,
       "tau_s": 2.0,
       "pld_s": 2.0,
       "computable_maps": [
         "CBF",
         "rBOLD",
-        "rCBF"
+        "rCBF",
+        "rCMRO2"
       ],
       "planted_gm_means": {
         "CBF": 60.18414094015291,
@@ -132,7 +133,7 @@
       "n_echoes": 2,
       "m0scan": false,
       "calib": true,
-      "drift": true,
+      "drift": false,
       "tr_s": 4.0,
       "tau_s": 1.8,
       "pld_s": 1.8,
@@ -177,7 +178,7 @@
       "n_echoes": 3,
       "m0scan": false,
       "calib": false,
-      "drift": true,
+      "drift": false,
       "tr_s": 4.5,
       "tau_s": 2.0,
       "pld_s": 2.0,
