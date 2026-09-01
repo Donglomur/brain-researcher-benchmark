@@ -200,9 +200,22 @@ def build_subject(sid, cfg):
         for i, ti in enumerate(tis):
             satrec[i] = m0 * (1.0 - np.exp(-ti / T1T_TRUE)) + srn.normal(0.0, srsd, X.size)
 
+    # ---- noise-free, corruption-free CLEAN signals (held-out truth; never perturb the RNG) ----
+    clean = {
+        "control": np.tile(static + dM_meas, (n_reps, 1)),
+        "label": np.tile(static, (n_reps, 1)),
+    }
+    if cfg["m0_source"] == "m0_scan":
+        rec_clean = 1.0 - np.exp(-cfg["m0_tr"] / T1T_TRUE)
+        clean["m0_scan"] = np.tile(m0 * rec_clean, (cfg["n_m0"], 1))
+    elif cfg["m0_source"] == "sat_recovery":
+        tis = np.asarray(cfg["sat_times"], float)
+        clean["satrec"] = np.stack([m0 * (1.0 - np.exp(-ti / T1T_TRUE)) for ti in tis])
+
     planted = {
         "CBF": cbf, "M0": m0, "dM_true": dM_true, "g_bgs": g_bgs,
         "rCBF": dM_true / (float(np.median(dM_true[gm])) if gm.any() else 1.0),
+        "clean": clean,
     }
     return mask, label, names, control, label_arr, m0_scan, satrec, planted
 
@@ -274,8 +287,10 @@ def write_protocol():
 def main():
     write_protocol()
     prov = {"note": ("BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, "
-                     "never under environment/data). Grading RECOMPUTES every map from the saved "
-                     "signals with a held-out reference and never trusts these planted numbers."),
+                     "never under environment/data). Grading compares against the HELD-OUT PLANTED "
+                     "PHYSIOLOGY (tests/planted_truth.npz = the reference run on the noise-free, "
+                     "corruption-free signals, built by synth_build/build_truth.py); any valid "
+                     "estimator that recovers it within tolerance passes."),
             "constants": {"lambda": LAMBDA, "eps_bgs": EPS_BGS, "t1_tissue": T1T_PIN, "gain": GAIN},
             "subjects": {}}
     total = 0

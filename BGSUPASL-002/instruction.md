@@ -15,10 +15,13 @@ subject's acquisition determines it; where it does not, omit that map.** There i
 quantifier provided — implement the estimators yourself and get the physics, units, and
 per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals by
-a held-out reference and compared voxel-by-voxel inside the grey- and white-matter masks.
-Subjects and maps are scored independently, so produce every map you can support and omit the
-rest.
+Grading is **outcome-based and voxelwise against the true underlying physiology**. Each map you
+write is compared voxel-by-voxel, inside the grey- and white-matter masks, to the *true*
+quantity that generated the signals. **Any scientifically valid estimator is accepted** —
+whatever robust repetition rejection or saturation-recovery fit backend you prefer — because
+every correct method recovers the same physiology within tolerance. You are **not** required to
+reproduce any particular reference implementation's output. Subjects and maps are scored
+independently, so produce every map you can support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the single-compartment
@@ -29,6 +32,25 @@ correction** (`dM_true = dM_meas / eps**n_bgs`, applied before quantification); 
 sidecar's `m0_source`; the shared physical constants (partition coefficient λ, per-pulse
 inversion efficiency `eps`, pinned tissue T1); and the **tissue legend**. Read it before you
 start.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted repetitions.** In a **majority of subjects, one control/label repetition
+  (and, for an `m0_scan` subject, one M0 repetition) is grossly corrupted** (e.g. by motion — the
+  whole plane scaled by a large factor) and is physically inconsistent with the rest of the
+  repetition series. **You must detect and reject such corrupted repetitions robustly before
+  repetition-averaging** — a plain mean over all repetitions is biased by the outlier and
+  recovers the wrong perfusion difference (and M0). *Which* subjects and *which* repetitions are
+  affected is **not disclosed** — you must find them from the data. Any scientifically valid robust
+  scheme is acceptable (outlier rejection on the per-repetition level, robust averaging, etc.).
+- **Background-suppression attenuation.** Every readout is background-suppressed by `n_bgs`
+  inversion pulses (declared per subject), each attenuating the perfusion difference by the
+  per-pulse efficiency `eps`; divide it back out (`dM_true = dM_meas / eps**n_bgs`) before
+  quantifying absolute CBF (it cancels in the M0-free rCBF ratio).
+
+Modest Gaussian noise is present on every repetition and does **not** need special handling
+beyond the robust average.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `field_T`, `n_vox`, `n_reps`, `tau_s`, `pld_s`, `labeling_efficiency`,
