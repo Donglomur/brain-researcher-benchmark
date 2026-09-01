@@ -153,12 +153,14 @@ def build_subject(sid, cfg):
     Sref = GAIN * PD
     nz = np.random.default_rng(cfg["seed"] + 3000)
     mtw = np.zeros((len(points), X.size))
+    mtw_clean = np.zeros((len(points), X.size))         # noise-free, corruption-free (held-out truth)
     for i, (off, b1rms) in enumerate(points):
         w1 = R.GAMMA * b1rms * 1e-6 * B1
         deff = off - B0
         g = R.g_superlorentzian(deff)
         ratio = R.signal_ratio(f, Rex, R1f, w1, deff, g)
         clean = Sref * ratio
+        mtw_clean[i] = clean                            # before the motion corruption + noise
         if i in outliers:
             clean = clean * 0.35                        # gross whole-volume motion corruption
         n1 = nz.normal(0.0, cfg["noise"], X.size)
@@ -167,12 +169,14 @@ def build_subject(sid, cfg):
     n1 = nz.normal(0.0, cfg["noise"], X.size)
     n2 = nz.normal(0.0, cfg["noise"], X.size)
     ref = np.sqrt((Sref + n1) ** 2 + n2 ** 2)
+    ref_clean = Sref.copy()                             # noise-free reference (held-out truth)
 
     # analysis mask = brain parenchyma (GM + WM); CSF excluded (MPF ~ 0 / low SNR there)
     mask = np.isin(label, (1, 2))
     planted = {"MPF": 100.0 * f, "kf": Rex * f, "R": Rex, "f": f, "PD": PD}
     return dict(label=label, mask=mask, B1=B1, B0=B0, R1f=R1f, ref=ref.astype(np.float32),
-                mtw=mtw.astype(np.float32), points=points, planted=planted)
+                mtw=mtw.astype(np.float32), points=points, planted=planted,
+                ref_clean=ref_clean.astype(np.float32), mtw_clean=mtw_clean.astype(np.float32))
 
 
 def write_protocol():

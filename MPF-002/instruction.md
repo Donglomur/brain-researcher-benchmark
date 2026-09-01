@@ -14,9 +14,13 @@ a quantity only where the subject's acquisition determines it; where it does not
 There is no reference fitter provided — implement the estimators yourself and get the physics,
 units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals by
-a held-out reference and compared voxel-by-voxel inside the analysis mask. Partial cohorts and
-partial map sets are scored proportionally, so produce every map you can support and omit the
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared voxel-by-voxel, inside the analysis mask, to the *true* quantity that
+generated the signals. **Any scientifically valid estimator is accepted** — a different
+lineshape quadrature, a different optimizer or single-point root-finder, whichever robust
+outlier-volume rejection you prefer — because every correct method recovers the same physiology
+within tolerance; you are **not** required to reproduce any particular reference implementation.
+Each (subject × map) is scored independently, so produce every map you can support and omit the
 rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
@@ -29,6 +33,24 @@ bound-pool fraction `f`, the exchange rate `R`, `R1f`, and the saturation condit
 with the exchange rate pinned, vs. the joint constrained fit for a full Z-spectrum) and of the
 forward exchange rate **kf**, the **unit** of each quantity, and the **tissue legend**. Read it
 before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **B1+ / B0.** The saturation power scales with the transmit field (`w1 ∝ b1`, so the
+  saturation rate `∝ b1²`) and the effective offset shifts with off-resonance
+  (`Delta_eff = offset_hz − b0`). Apply `b1` and `b0` to **every** MT measurement; ignoring
+  either grossly biases MPF.
+- **Grossly corrupted MT volumes.** In a **majority of the multi-measurement (full-Z) subjects,
+  one MT-weighted volume is grossly corrupted** (a motion artefact scaling the whole volume) and
+  is physically inconsistent with the two-pool model of the rest of that subject's Z-spectrum.
+  **You must detect and reject such a corrupted volume robustly before the (MPF, exchange) fit
+  is trusted.** *Which* subjects and *which* volume are affected is **not disclosed** — find them
+  from the data. Any scientifically valid robust scheme is acceptable; a non-robust fit over all
+  volumes recovers the wrong MPF and exchange rate on the affected subjects and fails those
+  panels. (Single-point subjects have only one MT measurement and no such volume.)
+- **Rician noise** (modest, per-subject) is present on every measurement and needs no special
+  handling beyond an ordinary fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `field_T`, `f0_mhz`, `n_vox`, and a `measurements` list; each entry gives the
