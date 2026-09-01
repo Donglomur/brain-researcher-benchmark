@@ -228,8 +228,11 @@ def write_protocol():
 def main():
     write_protocol()
     prov = {"note": ("BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, "
-                     "never under environment/data). Grading RECOMPUTES every map from the saved "
-                     "Z-spectra with a held-out reference and never trusts these numbers."),
+                     "never under environment/data). Grading compares the submission against the "
+                     "HELD-OUT PLANTED PHYSIOLOGY (tests/planted_truth.npz, built by "
+                     "synth_build/build_truth.py -- the reference on the noise-free/drift-free/"
+                     "motion-free signal), accepting any valid estimator within tolerance; it "
+                     "never trusts these provenance numbers."),
             "grid": GRID, "dt_min": DT, "glucose_band_ppm": list(R.GLUCOSE_BAND),
             "rate_n_points": R.RATE_N_POINTS, "rate_min_post": R.RATE_MIN_POST, "subjects": {}}
     protocol = json.loads((DATA / "protocol.json").read_text())

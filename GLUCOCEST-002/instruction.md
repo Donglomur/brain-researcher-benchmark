@@ -12,9 +12,15 @@ dynamics, when the infusion starts, offsets, field), and you must adapt the anal
 it.** There is no reconstruction library provided — implement the physics, units, and per-subject
 adaptation yourself, and get the dynamic quantification right on the data as acquired.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the Z-spectra by
-a held-out reference and compared voxel-by-voxel inside the brain mask. Each `(subject, map)` panel
-is scored independently, so produce every map you can support and omit the rest.
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared voxel-by-voxel, inside the brain mask, to the *true* dynamic-glucoCEST map that
+generated the data (the reference computed on the noise-free, drift-free, motion-free signal).
+**Any scientifically valid estimator is accepted** — parabola or spline-grid water referencing,
+per-voxel or global drift correction, whichever interpolation and frame-rejection scheme you
+prefer — because the dynamic enhancement is a temporal difference and every correct method
+recovers the same values within tolerance. You are **not** required to reproduce any particular
+reference implementation's output. Each `(subject, map)` panel is scored independently, so produce
+every map you can support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects. **Read it before you
@@ -27,6 +33,31 @@ enhancement** `dL(t) = L(t) − L_baseline` relative to the pre-infusion baselin
 definitions and units of the two graded maps, **`auc`** (trapezoidal time-integral of `dL` over
 the post-infusion dynamics) and **`rate`** (the initial uptake slope — OLS slope of `dL` over the
 first few post-infusion dynamics), including the rule that fixes when `rate` is **determinable**.
+
+## Robustness / data-quality contract  (READ THIS)
+The Z-spectra are realistic, not clean. Three artifacts must be handled, or they masquerade as
+glucose uptake:
+
+- **Per-timepoint frequency drift.** On most subjects the scanner centre frequency **drifts over
+  the dynamic series**, so the whole Z-spectrum slides along the offset axis with time (on top of
+  the static per-voxel B0). You must **track this drift per timepoint** — locate the water
+  resonance in *each* dynamic and reference the glucose band to it — not just apply the static
+  `b0.npy` once. A minority of subjects have negligible drift. A pipeline that references only by
+  the static field map reads the drift as spurious enhancement and fails those subjects. *Which*
+  subjects drift is **not disclosed**.
+- **Grossly motion-corrupted dynamic frames.** In a **minority of subjects, one or two individual
+  post-infusion dynamic frames are grossly corrupted** (motion: the whole frame's band signal is a
+  gross temporal outlier). **Detect and reject such frames robustly** (and repair by temporal
+  interpolation) before integrating the AUC / fitting the rate. *Which* subjects and *which* frames
+  are affected is **not disclosed** — find them from the data. Any scientifically valid robust
+  scheme is acceptable.
+- **Pre-infusion baseline trend.** On some subjects the pre-infusion band signal is **not flat** but
+  drifts linearly. The dynamic-enhancement baseline `L_baseline` must be the **fitted pre-infusion
+  TREND** (a line over the pre-infusion timepoints), not a single constant level, or a genuine
+  baseline drift is read as enhancement.
+
+Modest per-point measurement noise is present on every spectrum and needs no special handling
+beyond the ordinary integrals/fits.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `zdyn.npy` — the normalised Z-spectra, a float32 array of shape `(n_time, n_offset, n_vox)`:
