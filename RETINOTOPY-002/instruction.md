@@ -13,9 +13,37 @@ whether the response is compressive), and you must adapt the analysis per subjec
 that assumes one fixed recipe will not fit them all. There is no reference fitter provided —
 implement the pRF model yourself and get the model, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the BOLD +
-stimulus by a held-out reference and compared voxel-by-voxel over the determinable voxels. Each
-`(subject, map)` panel is graded independently.
+## What is graded
+Grading is **outcome-based and voxelwise against the true pRF physiology**. Each map you write
+is compared voxel-by-voxel, over the reliably-driven voxels, to the *true* pRF parameters that
+generated the signals (eccentricity `= √(x0²+y0²)`, polar angle `= atan2(y0,x0)`, size `= σ`).
+**Any scientifically valid pRF fitter is accepted** — whichever spike censoring, grid, optimiser,
+or parameterisation you use — because the fit is well-posed and every correct method recovers the
+same pRF within tolerance. You are **not** required to reproduce any particular reference
+implementation's output. Each `(subject, map)` panel is graded independently.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Gross motion-spike timepoints.** In a **majority of subjects, a few individual timepoints
+  are grossly corrupted** by large transients across all voxels (motion). **You must detect and
+  censor these timepoints before fitting** — an uncensored spike collapses the variance-explained
+  and corrupts the pRF estimate (and wrongly pushes reliably-driven voxels below the
+  determinability threshold). *Which* subjects and *which* timepoints are affected is **not
+  disclosed** — you must find them from the data. Any scientifically valid robust scheme is
+  acceptable.
+- **Use each subject's own HRF.** `hrf.npy` is the subject's sampled haemodynamic response; its
+  peak timing varies across the cohort (canonical for some, shifted for most). Convolving with a
+  hard-coded canonical HRF biases the fit on the shifted-HRF subjects.
+- **Apply the declared model.** Where the sidecar declares a compressive (CSS) response, apply
+  the compressive exponent and report the **raw** Gaussian σ (not σ/√n).
+- **Determinability.** Only a minority of voxels carry a reliable pRF; report a voxel only where
+  its variance-explained clears the announced R2 ≥ 0.30 rule, and write NaN elsewhere.
+
+The pRF model is the standard one (Dumoulin & Wandell 2008, *NeuroImage*,
+https://doi.org/10.1016/j.neuroimage.2007.09.034; Kay et al. 2013, *J. Neurophysiol.*,
+compressive spatial summation). Modest measurement noise is present and needs no special
+handling beyond an ordinary fit.
 
 ## Shared model and output contract (`/app/data/protocol.json`)
 A single JSON with the model and conventions common to all subjects: the **pRF signal model**
