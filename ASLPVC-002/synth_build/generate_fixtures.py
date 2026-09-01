@@ -145,6 +145,7 @@ def build_subject(sid, cfg):
     CBF_GM, CBF_WM = cbf_fields(cfg)
     rng = np.random.default_rng(cfg["seed"] + 3000)
 
+    meas_clean = np.where(brain, Pgm * CBF_GM + Pwm * CBF_WM, 0.0)   # noise-free, spike-free truth
     meas = Pgm * CBF_GM + Pwm * CBF_WM                       # CSF perfusion = 0
     meas = meas + rng.normal(0.0, cfg["noise"], meas.shape)  # measurement noise
     meas = np.where(brain, meas, 0.0)
@@ -164,7 +165,8 @@ def build_subject(sid, cfg):
         corrupt_mask = cm.reshape(corrupt_mask.shape)
 
     return dict(Pgm=Pgm, Pwm=Pwm, Pcsf=Pcsf, brain=brain, label=label,
-                CBF_GM=CBF_GM, CBF_WM=CBF_WM, meas=meas, corrupt=corrupt_mask)
+                CBF_GM=CBF_GM, CBF_WM=CBF_WM, meas=meas, meas_clean=meas_clean,
+                corrupt=corrupt_mask)
 
 
 # ------------------------------------------------------------------ writers
@@ -213,9 +215,10 @@ def write_protocol():
 def main():
     write_protocol()
     prov = {"note": ("BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, "
-                     "never under environment/data). Grading RECOMPUTES the PVC from the saved "
-                     "measured CBF + fractions with a held-out reference; these planted numbers "
-                     "are never trusted."),
+                     "never under environment/data). Grading compares against the HELD-OUT PLANTED "
+                     "PHYSIOLOGY (tests/planted_truth.npz = the reference PVC run on the noise-free, "
+                     "spike-free measured CBF, built by synth_build/build_truth.py); any valid "
+                     "estimator that recovers it within tolerance passes."),
             "grid": list(GRID), "gm_base": GM_BASE, "wm_base": WM_BASE, "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():

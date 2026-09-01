@@ -14,9 +14,14 @@ subject's segmentation determines it; where it does not, omit that map.** There 
 implementation provided — implement the correction yourself and get the mixture model, the
 windowed regression, the per-subject adaptation, and the units right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the measured
-CBF and the tissue fractions by a held-out reference and compared voxel-by-voxel where the local
-fit determines that pure-tissue CBF.
+Grading is **outcome-based and voxelwise against the true underlying physiology**. Each map you
+write is compared voxel-by-voxel, where the local windowed fit determines that pure-tissue CBF, to
+the *true* pure-tissue CBF the kernel supports (the locally-constant regression estimate of the
+clean mixture — the true field varies gently within the kernel, so this is the *apparent*
+pure-tissue value any correct PVC recovers). **Any scientifically valid estimator is accepted** —
+any kernel gather, batched solve, or robust gross-spike rejection scheme — because every correct
+method recovers the same value within tolerance. You are **not** required to reproduce any
+particular reference implementation's output.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the **mixture model**
@@ -24,6 +29,22 @@ A single JSON with the physics and conventions common to all subjects: the **mix
 (the windowed least-squares regression over each subject's pinned in-plane kernel), the
 **segmentation fork** (which pure-tissue maps each segmentation supports), the **unit** of each
 quantity, the **tissue legend**, and the **grid / array layout**. Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The measured CBF is realistic, not clean:
+
+- **Grossly corrupted voxels.** In a **minority of voxels on a majority of subjects**, the
+  measured CBF is a **gross intravascular / motion spike** (values far above any plausible tissue
+  perfusion) that is physically inconsistent with the local tissue mixture. Because the PVC is a
+  *windowed* regression, one spike inside a kernel corrupts the fitted pure-tissue CBF of every
+  central voxel whose window contains it. **You must detect and reject such grossly corrupted
+  voxels robustly before (or during) the regression** — a plain least-squares fit over the raw
+  kernel turns a spike into a large spurious pure-tissue CBF. *Which* voxels are corrupted is
+  **not disclosed** — you must find them from the data. Any scientifically valid robust scheme is
+  acceptable (robust/iteratively-reweighted regression, residual-outlier rejection, etc.).
+
+Modest Gaussian measurement noise is present on every voxel and does **not** need special handling
+beyond an ordinary fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `grid_shape` (`(nx, ny, nz)`; arrays are flattened C-order, slices along the
