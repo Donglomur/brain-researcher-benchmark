@@ -17,8 +17,11 @@ refocusing flip, the transmit map); the agent must READ it and adapt:
                      that must be rejected before the fit or the whole spectrum is wrong.
   * esp / flips / B1 / noise vary per subject.
 
-The planted spectra below are PROVENANCE ONLY. Grading RECOMPUTES every map from the saved
-signals with a held-out reference and never trusts these numbers.
+The planted spectra below are BUILD PROVENANCE. The graded ground truth is the reference run on
+the NOISE-/ARTIFACT-FREE signal (built by synth_build/build_truth.py -> tests/planted_truth.npz):
+the apparent MWF/gmT2 the pinned regularised EPG inversion recovers (the inverse grid + mu differ
+from the fine forward grid, so these are apparent, convention-fixed quantities). The verifier
+compares the submission to that target and accepts any scientifically valid estimator.
 """
 import json
 from pathlib import Path
@@ -173,6 +176,7 @@ def build_subject(sid, cfg):
     cols = [epg_decay(T2, n_echo, esp, alpha) for T2 in FINE_T2]
     Afine = np.stack(cols, axis=2)                        # (n_echo, nvox, 60)
     s_clean = np.einsum("evn,vn->ev", Afine, spec) * GAIN  # (n_echo, nvox)
+    clean_pre = s_clean.copy()                            # artifact-/noise-free (held-out truth)
 
     for (j, fac) in cfg["corrupt"]:
         s_clean[j] = s_clean[j] * fac                     # gross motion-corrupted echo volume
@@ -183,7 +187,7 @@ def build_subject(sid, cfg):
     n2 = rng.normal(0.0, 1.0, s_clean.shape) * nsd
     sig = np.sqrt((s_clean + n1) ** 2 + n2 ** 2)          # Rician magnitude
 
-    return mask, label, B1, sig.astype(np.float32), spec
+    return mask, label, B1, sig.astype(np.float32), clean_pre.astype(np.float32), spec
 
 
 # ------------------------------------------------------------------ writers
@@ -248,7 +252,7 @@ def main():
             "gain": GAIN, "fine_grid_n": FINE_T2.size, "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():
-        mask, label, B1, sig, spec = build_subject(sid, cfg)
+        mask, label, B1, sig, _clean_pre, spec = build_subject(sid, cfg)
         d = DATA / sid
         d.mkdir(parents=True, exist_ok=True)
         np.save(d / "signal.npy", sig)

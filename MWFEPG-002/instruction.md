@@ -13,10 +13,18 @@ the analysis per subject — a pipeline that assumes one fixed recipe will not f
 that map.** There is no reference fitter provided — implement the estimator yourself and get
 the spin physics, the regularized inversion, the units, and the per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signal
-by a held-out reference and compared voxel-by-voxel inside the brain mask. Partial cohorts and
-partial map sets are scored proportionally, so produce every map you can support and omit the
-rest.
+## What is graded
+Grading is **outcome-based and voxelwise against the true underlying physiology**. Each map you
+write is compared voxel-by-voxel, inside the brain mask, to the *true* value the pinned model
+determines from the signal (the artifact-free reference value). Because the T2 spectrum
+inversion is ill-posed, the graded MWF/gmT2 are the values of the **pinned, convention-fixed**
+inversion (grid, regularization weight, MWF cutoff, gmT2 window all pinned in the protocol);
+**any scientifically valid estimator that implements the pinned physics is accepted** — an
+isochromat Bloch or EPG basis, any bounded-variable NNLS solver, any gross-echo detector —
+because they all recover the same value within tolerance. You are **not** required to reproduce
+any particular reference implementation's output. Each (subject × map) is scored independently
+and partial cohorts and partial map sets are scored proportionally, so produce every map you can
+support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects. Read it before you
@@ -32,6 +40,23 @@ start. It pins, exactly:
 - the **MWF** definition (short-T2 fraction, cutoff 40 ms), the **gmT2** definition
   (amplitude-weighted geometric-mean T2 over 40–200 ms), and the pinned **3-pool model** used
   for acquisitions that cannot resolve a spectrum.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted echoes.** In a **majority of subjects, one or two individual echo volumes
+  are grossly corrupted** (e.g. by motion — a large spike or drop-out) and are physically
+  inconsistent with the CPMG decay of the rest of that subject's echo train. **You must detect
+  and reject such corrupted echoes robustly before the regularized inversion** (or the 3-pool
+  fit); a fit that keeps them recovers the wrong spectrum and a wrong MWF/gmT2. *Which* subjects
+  and *which* echoes are affected is **not disclosed** — you must find them from the data. Any
+  scientifically valid robust scheme is acceptable.
+- **Imperfect refocusing.** Several subjects have a nominal refocusing flip below 180°, scaled
+  per voxel by the transmit map `b1.npy`; the true flip `alpha = B1 × radians(refocus_deg)`
+  drives stimulated echoes, so the decay is **not** mono-exponential. Use the EPG basis at the
+  true per-voxel flip — a plain `exp(-TE/T2)` basis biases the MWF.
+- **Rician noise** (modest) is present on every echo and does **not** need special handling
+  beyond the ordinary regularized fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `n_echoes`, `esp_ms` (echo spacing), `te_ms` (the echo times),
