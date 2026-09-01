@@ -14,9 +14,36 @@ acquisition determines it; where it does not, omit that map.** There is no refer
 provided — implement the estimators yourself and get the physics, units, and per-subject
 adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the phase data
-by a held-out reference and compared voxel-by-voxel. Partial cohorts and partial map sets are
-scored proportionally, so produce every map you can support and omit the rest.
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared voxel-by-voxel to the *true* per-voxel displacement magnitude (micrometres)
+and principal strain (dimensionless) that the acquisition encodes. **Any scientifically valid
+estimator is accepted** — any robust rejection/repair scheme, any equivalent background detrend,
+any correct linear algebra — because every correct method recovers the same physical
+displacement and strain within tolerance. You are **not** required to reproduce any particular
+reference implementation's output. Partial cohorts and partial map sets are scored
+proportionally, so produce every map you can support and omit the rest.
+
+## Robustness / data-quality contract  (READ THIS)
+The phase data is realistic, not clean. Handle all of the following robustly; *which* subjects,
+repetitions, and frames are affected is **not disclosed** — you must find them from the data:
+
+- **Residual planar background drift.** A residual planar phase drift (eddy-current /
+  off-resonance) contaminates a **majority of subjects**. Remove it by subtracting the
+  least-squares plane fit over the **static-tissue voxels** (`static.npy`, where the true
+  displacement is zero), as pinned in `protocol.json`; for PC apply this to each cardiac frame
+  before selecting the peak. Displacement magnitude and strain are convention-invariant only
+  after this correction.
+- **A grossly motion-corrupted repetition / frame.** A **minority of DENSE subjects** have one
+  motion-wrecked repetition and a **minority of PC subjects** have one motion-wrecked cardiac
+  frame that must be **rejected (DENSE) or repaired (PC)** before the displacement is
+  trustworthy. The corruption is gross (far from the clean signal), so any reasonable robust
+  rule (a MAD/z outlier test, temporal interpolation of a bad frame, etc.) flags the same one.
+- **DENSE vs PC acquisition fork.** DENSE encodes displacement directly; PC encodes only
+  velocity and must be integrated over the cardiac cycle (peak-displacement frame). Applying one
+  acquisition's recipe to the other recovers the wrong displacement.
+
+Modest Rician-like phase noise is present on every measurement and does **not** need special
+handling beyond an ordinary estimate.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the **displacement

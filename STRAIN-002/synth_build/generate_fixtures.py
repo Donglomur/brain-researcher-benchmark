@@ -144,58 +144,70 @@ def wrap(p):
 
 
 # ------------------------------------------------------------------ forward model
-def build_dense(cfg, env, d_true, drift):
-    """DENSE forward: per direction, (n_avg, nvox) wrapped ENC phase and (optional) REF phase."""
+def build_dense(cfg, env, d_true, drift, clean=False):
+    """DENSE forward: per direction, (n_avg, nvox) wrapped ENC phase and (optional) REF phase.
+
+    ``clean=True`` builds the noise-free / corruption-free signal (the held-out truth target);
+    callers pass drift=0 for the artifact-free clean build."""
     rng = np.random.default_rng(cfg["seed"] + 3000)
     sysbg = system_phase(cfg["seed"]) if cfg["ref"] else np.zeros((3, d_true.shape[1]))
     n_avg = 4 if cfg["avgbad"] else 2
+    noise = 0.0 if clean else PHASE_NOISE
     enc = {}
     ref = {}
     for i, dn in enumerate("xyz"):
         clean_enc = KE[i] * (d_true[i] + drift[i]) + sysbg[i]
         stack = np.empty((n_avg, d_true.shape[1]), np.float32)
         for a in range(n_avg):
-            stack[a] = wrap(clean_enc + rng.normal(0, PHASE_NOISE, d_true.shape[1]))
-        if cfg["avgbad"]:
+            stack[a] = wrap(clean_enc + rng.normal(0, noise, d_true.shape[1]))
+        if cfg["avgbad"] and not clean:
             stack[DENSE_BADREP] = rng.uniform(-np.pi, np.pi, d_true.shape[1]).astype(np.float32)
         enc[dn] = stack
         if cfg["ref"]:
             rstack = np.empty((2, d_true.shape[1]), np.float32)
             for a in range(2):
-                rstack[a] = wrap(sysbg[i] + rng.normal(0, PHASE_NOISE, d_true.shape[1]))
+                rstack[a] = wrap(sysbg[i] + rng.normal(0, noise, d_true.shape[1]))
             ref[dn] = rstack
     return enc, (ref if cfg["ref"] else None)
 
 
-def build_pc(cfg, env, d_true, drift):
-    """PC forward: per direction, (n_frames, nvox) wrapped VELOCITY phase over the cardiac cycle."""
+def build_pc(cfg, env, d_true, drift, clean=False):
+    """PC forward: per direction, (n_frames, nvox) wrapped VELOCITY phase over the cardiac cycle.
+
+    ``clean=True`` builds the noise-free / corruption-free signal (the held-out truth target);
+    callers pass drift=0 for the artifact-free clean build."""
     rng = np.random.default_rng(cfg["seed"] + 4000)
     times = np.linspace(0.0, PC_T, PC_NFRAMES)
     sd = (np.pi / PC_T) * np.sin(2 * np.pi * times / PC_T)          # velocity waveform d s/dt
     voff = drift / (PC_T / 2.0)                                     # constant velocity offset
+    noise = 0.0 if clean else PHASE_NOISE
     vel = {}
     for i, dn in enumerate("xyz"):
         stack = np.empty((PC_NFRAMES, d_true.shape[1]), np.float32)
         for t in range(PC_NFRAMES):
             v = d_true[i] * sd[t] + voff[i]                         # micrometre/s
-            ph = wrap(np.pi * v / VENC[i] + rng.normal(0, PHASE_NOISE, d_true.shape[1]))
+            ph = wrap(np.pi * v / VENC[i] + rng.normal(0, noise, d_true.shape[1]))
             stack[t] = ph
-        if cfg["framebad"]:
+        if cfg["framebad"] and not clean:
             stack[PC_BADFRAME] = rng.uniform(-np.pi, np.pi, d_true.shape[1]).astype(np.float32)
         vel[dn] = stack
     return vel, times
 
 
-def build_subject(sid, cfg):
+def build_subject(sid, cfg, clean=False):
+    """Build one subject. ``clean=True`` returns the NOISE-FREE, ARTIFACT-FREE (no drift, no
+    gross corruption) signal used to build the held-out planted truth target -- it never
+    touches the agent-visible data written by main()."""
     mask, static, label, env = geometry(cfg["seed"])
     d_true = displacement_field(cfg["seed"], env)                  # (3, nvox) micrometres
-    drift = planar_drift(cfg["seed"], cfg["drift"])                # (3, nvox) micrometres
+    drift = (np.zeros_like(d_true) if clean
+             else planar_drift(cfg["seed"], cfg["drift"]))         # (3, nvox) micrometres
     if cfg["acq"] == "dense":
-        enc, ref = build_dense(cfg, env, d_true, drift)
+        enc, ref = build_dense(cfg, env, d_true, drift, clean=clean)
         pc = None
         times = None
     else:
-        pc, times = build_pc(cfg, env, d_true, drift)
+        pc, times = build_pc(cfg, env, d_true, drift, clean=clean)
         enc = ref = None
     return dict(mask=mask, static=static, label=label, d_true=d_true, drift=drift,
                 enc=enc, ref=ref, pc=pc, times=times)
