@@ -169,6 +169,12 @@ def build_subject(sid, cfg):
     rho = bias_field(cfg["bias"], cfg["seed"])         # residual ratio bias (provided)
     g1, g2 = cfg["g1"], cfg["g2"]
 
+    # NOISE-FREE, ARTIFACT-FREE clean images (held-out ground-truth build only; never shipped).
+    # R_corr = (t1w_clean/t2w_clean)/rho = (g1/g2)*M_true = k*M_true, so the reference run on this
+    # pair yields the convention-invariant physical truth (M_true referenced/calibrated).
+    t1w_clean = B * g1 * t1_true * rho
+    t2w_clean = B * g2 * t2_true
+
     nz = np.random.default_rng(cfg["seed"] + 4000)
     n1 = 1.0 + NOISE_SD * nz.standard_normal(X.size)
     n2 = 1.0 + NOISE_SD * nz.standard_normal(X.size)
@@ -193,6 +199,7 @@ def build_subject(sid, cfg):
     planted = {
         "m_true": m_true, "k": g1 / g2, "mask": mask, "label": label,
         "roi_high": roi_high, "roi_low": roi_low, "artifact": art, "rho": rho,
+        "t1w_clean": t1w_clean, "t2w_clean": t2w_clean,
     }
     return t1_obs, t2_obs, rho, label, mask, roi_high, roi_low, planted
 
