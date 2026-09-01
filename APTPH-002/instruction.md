@@ -11,8 +11,13 @@ acquired, and you must adapt the analysis per subject — a pipeline that assume
 schedule will not fit them all. **Compute an index only where the subject's acquisition
 determines it; where it does not, omit that index.**
 
-Grading is **outcome-based and voxelwise**: each index you write is recomputed from the signals
-by a held-out reference and compared voxel-by-voxel inside the brain mask.
+Grading is **outcome-based and voxelwise against the true underlying physiology**. Each index
+you write is compared voxel-by-voxel, inside the brain mask, to the *true* ratiometric index that
+generated the signals (the B0-corrected pinned-offset ratios of the clean Z-spectrum). **Any
+scientifically valid estimator is accepted** — linear or PCHIP B0 interpolation, whichever robust
+corrupted-frame rejection scheme you prefer — because every correct method recovers the same
+indices within tolerance. You are **not** required to reproduce any particular reference
+implementation's output. Each (subject × index) is scored independently.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the conventions common to all subjects: how to form the **Z-spectrum**
@@ -31,6 +36,25 @@ of the two graded indices:
   omitted.
 
 Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **B0 inhomogeneity.** Some subjects have a strongly non-uniform B0 field (`b0.npy`, up to
+  ±0.3 ppm). The B0-corrected Z-value at true offset Ω is the measured spectrum at `Ω + b0`,
+  obtained by interpolating the acquired spectrum; ignoring B0 reads the wrong point of the
+  Z-spectrum and biases every index. Apply it at every pinned offset.
+- **Grossly corrupted offset frames.** In a **minority of subjects, one or two whole saturation
+  frames are grossly corrupted** (e.g. by motion — the entire image at one offset scaled by a
+  large factor) and are physically inconsistent with the rest of that subject's Z-spectrum.
+  **You must detect and reject such corrupted frames robustly before reading the pinned-offset
+  Z-values.** *Which* subjects and *which* offsets are affected is **not disclosed** — you must
+  find them from the data. Any scientifically valid robust scheme is acceptable (leave-one-out
+  residual outlier rejection, robust interpolation, etc.); a non-robust pipeline that reads a
+  corrupted frame recovers the wrong ratio and fails the affected panels.
+
+Modest Rician noise is present on every frame and does **not** need special handling beyond an
+ordinary read.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `n_vox`, the acquired `offsets_ppm` list, and the file names below.
