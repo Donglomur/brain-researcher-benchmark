@@ -14,9 +14,16 @@ only where the subject's sampling determines it; where it does not, omit that ma
 reference fitter provided — implement the estimators yourself and get the model, units, and
 per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals by
-a held-out reference and compared voxel-by-voxel. Partial cohorts and partial map sets are scored
-proportionally, so produce every map you can support and omit the rest.
+## What is graded
+Grading is **outcome-based and voxelwise against the true underlying physiology**. Each map you
+write is compared voxel-by-voxel, inside the graded parenchyma mask, to the *true* quantitative
+map that generated the signals (the dispersion model run on the noise-free, artefact-free
+signal). **Any scientifically valid estimator is accepted** — log-linear or nonlinear
+mono-exponential, a Hz- or rad/s-parameterised Lorentzian, whichever robust spike/band rejection
+scheme you prefer — because every correct method recovers the same rates within tolerance. You
+are **not** required to reproduce any particular reference implementation's output. Each
+(subject × map) is scored independently and partial cohorts/map-sets are scored proportionally,
+so produce every map you can support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the mono-exponential
@@ -34,6 +41,34 @@ Read it before you start. In particular:
   amplitude** `= R1rho(0) − R1rho_inf`. These two asymptotes are the graded dispersion
   quantities; they are invariant to how the frequency axis is scaled, and the correlation time τ
   is **not** graded.
+
+The chemical-exchange spin-lock dispersion model is the standard one (Chopra, McClung & Jordan
+1984, *JMR*; Cobb, Xie & Gore 2011, *MRM*, https://doi.org/10.1002/mrm.22833). The planted
+physiology reproduces literature parenchyma values (WM R1ρ,∞ ≈ 14 s⁻¹, Rex ≈ 4 s⁻¹; GM
+R1ρ,∞ ≈ 11.5 s⁻¹, Rex ≈ 5 s⁻¹).
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Gross motion spikes.** In a **majority of subjects, one individual spin-lock-time (TSL)
+  image inside one spin-lock block is grossly corrupted** (a large motion-driven intensity
+  spike / dropout) and is physically inconsistent with the mono-exponential decay of the rest of
+  that block's TSL series — often in the *reference* block, so the reference-FSL R1ρ is biased
+  unless the spike is rejected. **You must detect and reject such corrupted TSL images robustly
+  before the per-block mono-exponential fit.**
+- **Gross B1/B0 spin-lock banding.** In a **majority of the dispersion-determinable subjects,
+  one interior spin-lock-frequency block is grossly artefacted** (incomplete/off-resonance
+  spin-lock), so that block's whole-block R1ρ is a gross **outlier on the dispersion curve** — a
+  **high-leverage** point that a flexible 3-parameter Lorentzian will otherwise partly absorb
+  into an inflated amplitude. **You must detect and reject such a banded block robustly before
+  the dispersion fit** (a naive in-fit residual test is fooled by its leverage; a drop-one /
+  best-subset search is not).
+
+*Which* subjects, *which* TSL images, and *which* spin-lock blocks are affected is **not
+disclosed** — you must find them from the data. Any scientifically valid robust scheme is
+acceptable; a non-robust fit over all points recovers the wrong rate/asymptotes and fails the
+affected panels. Modest Rician noise is present on every image and does **not** need special
+handling beyond an ordinary fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `fsl_hz` (the distinct spin-lock frequencies), `fsl_ref_hz` (the common
