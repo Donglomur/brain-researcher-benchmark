@@ -271,8 +271,10 @@ def write_protocol():
 def main():
     write_protocol()
     prov = {"note": ("BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, never "
-                     "under environment/data). Grading RECOMPUTES kPL/kPB from the saved signals with a "
-                     "held-out reference and never trusts these planted numbers."),
+                     "under environment/data). Grading compares the submission against the HELD-OUT "
+                     "PLANTED PHYSIOLOGY (tests/planted_truth.npz, built by synth_build/build_truth.py "
+                     "-- the reference run on the noise-free/corruption-free signal), accepting any "
+                     "valid estimator within tolerance; it never trusts these provenance numbers."),
             "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():

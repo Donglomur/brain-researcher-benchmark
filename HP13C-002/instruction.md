@@ -13,10 +13,14 @@ recipe will not fit them all. **Estimate a rate only where the subject's acquisi
 it; where it does not, omit that map.** There is no reference fitter provided — implement the
 kinetic estimator yourself and get the model, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals by
-a held-out reference and compared voxel-by-voxel inside the brain mask. Partial cohorts and
-partial map sets are scored proportionally, so produce every map you can support and omit the
-rest.
+Grading is **outcome-based and voxelwise against the true underlying kinetics**: each map you
+write is compared voxel-by-voxel, inside the brain mask, to the *true* apparent rate that
+generated the signals (the reference fit on the noise-free, corruption-free signal). **Any
+scientifically valid estimator is accepted** — a different forward integrator, a different
+optimiser, a different gross-frame detector — because every correct method recovers the same
+apparent rate within tolerance. You are **not** required to reproduce any particular reference
+implementation's output. Partial cohorts and partial map sets are scored proportionally, so
+produce every map you can support and omit the rest.
 
 ## Shared kinetic model and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the two-/three-site
@@ -26,6 +30,28 @@ flip angle, with RF depletion between frames), the **inflow convention** (how a 
 input function versus a compact bolus enters the model), the exact **estimator** definition for
 the rate constants (a signal-domain least-squares fit with the common signal amplitude profiled
 out), the **units**, and the **tissue legend**. Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean. Four things must be handled per subject (their per-subject
+realisation is declared in each sidecar or must be found in the data):
+
+- **Inflow model.** A subject imaged during a **continuous infusion** provides a `vif_file`; the
+  forward model must be **driven by that inflow**. A subject given a **compact bolus** has no VIF
+  and is a **closed system** decaying from its initial magnetization. Using the wrong inflow model
+  biases kPL by ~40–50%.
+- **Site count.** A subject that resolves a **bicarbonate channel** needs the **three-site** model
+  (fit kPL and kPB); a **pyruvate+lactate-only** subject needs the **two-site** model (fit kPL;
+  **omit** kPB). Fitting a two-site model to three-site data mis-attributes the →HCO3 loss and
+  biases kPL — the model choice is coupled, not cosmetic.
+- **Fixed relaxation and excitation.** The per-subject **T1 constants** and **per-frame flip
+  angles** are given and must be threaded into the discrete kinetic model (wrong T1 / flips →
+  biased rate).
+- **Grossly corrupted dynamic frames.** In a **majority of subjects, one or two individual
+  dynamic frames are grossly corrupted** (an RF-spike or signal-dropout timepoint) and are
+  inconsistent with the smooth kinetic time-course. **You must detect and reject such frames
+  robustly before the fit.** *Which* subjects and *which* frames are affected is **not
+  disclosed** — find them from the data. Every subject's late frames are additionally low-SNR as
+  the hyperpolarization decays (an ordinary fit handles this; no special treatment needed).
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `tr_s`, `n_frames`, `n_vox`, `times_s`, an `inflow` tag, and a `metabolites`
