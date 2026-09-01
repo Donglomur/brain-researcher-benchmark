@@ -14,9 +14,13 @@ where the acquisition determines it; where it does not, omit it.** There is no r
 provided — implement the wall-shear computation yourself and get the physics, units, and
 per-subject adaptation right.
 
-Grading is **outcome-based and per wall node**: each map you write is recomputed from the
-velocity field by a held-out reference and compared node-by-node. Partial cohorts and partial
-map sets are scored proportionally, so produce every map you can support and omit the rest.
+Grading is **outcome-based and per wall node against the true underlying physiology**: each map
+you write is compared node-by-node to the *true* wall-shear-stress quantity that the velocity
+field encodes. **Any scientifically valid estimator is accepted** — any background fit, any
+high-breakdown near-wall gradient estimator — because every correct method recovers the same
+physical quantity within tolerance; you are **not** required to reproduce any particular reference
+implementation's output. Partial cohorts and partial map sets are scored proportionally, so
+produce every map you can support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the conventions common to all subjects: the **velocity-field layout**, the
@@ -25,6 +29,27 @@ with their axis-aligned inward normals), the **WSS definition** (τ = viscosity 
 gradient of the wall-**tangential** velocity, with the pinned `viscosity_pas` and the exact
 cm/s·mm → Pa unit conversion), and the exact **output spec** (`tawss`, `wss_peak`, `osi`, with
 OSI determinable only for a multi-frame 3-directional acquisition). Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The velocity field is realistic, not clean:
+
+- **Background / eddy-current offset.** In a **majority of subjects** the reconstructed velocity
+  carries a smooth first-order (linear) spatial **background offset** (eddy-current phase) added
+  to every component. **You must estimate it from the STATIC (non-lumen) tissue and subtract it**
+  before the near-wall gradient — the static tissue has zero true velocity, so a plane fit there
+  recovers the offset; left in, it biases the wall-normal gradient. It is a no-op on the subjects
+  that have none.
+- **Grossly corrupted near-wall voxels.** The outermost lumen voxel along each inward normal is
+  grossly **partial-volume** biased, and on a minority of subjects a few near-wall voxels are
+  **phase-wrap aliased** (velocity off by ±2·VENC). These are physically inconsistent with the
+  linear near-wall profile and **must be rejected** — use a **high-breakdown** near-wall gradient
+  estimator (e.g. Theil–Sen / repeated-median, or explicit outlier rejection) that tolerates up
+  to a couple of gross outliers among the near-wall samples. *Which* subjects/voxels are affected
+  is **not disclosed**; any scientifically valid robust scheme is acceptable. A naive stencil that
+  uses the corrupted voxels recovers the wrong gradient and fails those nodes.
+
+Modest velocity noise is present and does **not** need special handling beyond the ordinary
+near-wall fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `acquisition` (`"3dir"` or `"tp"`), `grid_shape` (`[nz,ny,nx]`, C-order),
