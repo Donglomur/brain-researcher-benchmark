@@ -18,8 +18,17 @@ The cohort is **heterogeneous**: every subject's sidecar declares the shells it 
 acquired, and you must adapt the analysis per subject — a pipeline that assumes one fixed recipe
 will not fit them all.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signal by
-a held-out reference and compared voxel-by-voxel inside the brain mask.
+## What is graded
+Grading is **outcome-based and voxelwise against the true underlying physiology**. Each map you
+write is compared voxel-by-voxel, inside the brain mask, to the *true* per-voxel fibre
+configuration the pinned model determines from the signal (the artifact-free reference result).
+Because the fibre count is a model-selection (ARD) decision and the fit is nonlinear, the graded
+count/fractions/orientations are the values of the **pinned, convention-fixed** estimator
+(signal model, S0 normalisation, ARD SSE thresholds, diffusivity fork, fibre ordering all pinned
+in the protocol); **any scientifically valid estimator that implements the pinned model is
+accepted** — a different optimiser, robust rejection, or initialisation — because they all
+recover the same configuration within tolerance. You are **not** required to reproduce any
+particular reference implementation's output.
 
 ## Shared model and output contract (`/app/data/protocol.json`)
 A single JSON with the model and conventions common to all subjects: the **ball-and-stick
@@ -29,6 +38,20 @@ single-shell), the **fibre-count model-selection rule** (the exact sum-of-square
 that decides 0 vs 1 vs 2 fibres), the **estimator** (a deterministic bounded least-squares fit),
 the **fibre ordering** (by decreasing volume fraction), and the **output specification**. Read
 it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted gradient volumes.** In a **majority of subjects, a few whole gradient
+  volumes are grossly corrupted** (e.g. by motion — a dropout or spike, affecting that volume
+  across all voxels) and are physically inconsistent with the diffusion signal of the rest of
+  the acquisition. **You must detect and reject such corrupted volumes robustly before fitting**
+  the ball-and-stick model; a fit that keeps them recovers the wrong fibre count, fractions and
+  orientations. *Which* subjects and *which* volumes are affected is **not disclosed** — you
+  must find them from the data (e.g. as gross outliers of a diffusion-tensor log-linear residual
+  aggregated across voxels). Any scientifically valid robust scheme is acceptable.
+- **Rician noise** (modest) is present on every volume and does **not** need special handling
+  beyond the ordinary bounded least-squares fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `n_vox`, `n_meas`, `shells`, `single_shell`, `fixed_diffusivity_mm2_s`, and

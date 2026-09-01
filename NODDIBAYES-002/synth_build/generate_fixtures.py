@@ -15,8 +15,11 @@ hard-coded recipe works:
     and must be rejected before fitting; a minority are clean.
   * gradient directions, direction counts, b-values and SNR vary per subject.
 
-Planted parameters below are PROVENANCE ONLY.  Grading RECOMPUTES every map from the saved
-signal with a held-out reference and never trusts these numbers.
+Planted parameters below are BUILD PROVENANCE. The graded ground truth is the reference run on
+the NOISE-/CORRUPTION-FREE signal (built by synth_build/build_truth.py -> tests/planted_truth.npz):
+the apparent fibre configuration (count, fractions, orientations) the pinned ball-and-stick fit +
+ARD rule recovers -- model-selection-sensitive, so an apparent, convention-fixed quantity. The
+verifier compares the submission to that target and accepts any scientifically valid estimator.
 """
 import json
 import sys
@@ -186,6 +189,7 @@ def build_subject(sid, cfg):
     S0 = 1000.0 * (1.0 + 0.1 * rng.standard_normal(len(vtype)))   # per-voxel receive amplitude
     M = bvals.size
     dwi = np.zeros((M, len(vtype)), float)
+    dwi_clean = np.zeros((M, len(vtype)), float)                  # noise-/corruption-free (held-out)
     nz = np.random.default_rng(cfg["seed"] + 909)
     sigma = 1.0 / cfg["snr"]                                       # noise sd relative to S0
     dwi_idx = np.where(bvals > 50.0)[0]
@@ -195,6 +199,7 @@ def build_subject(sid, cfg):
         else:
             clean = forward(bvals, bvecs, d_vox[i], f1[i], f2[i], v1[i], v2[i])
         sig = S0[i] * clean
+        dwi_clean[:, i] = sig                                      # pristine signal (held-out truth)
         n1 = nz.normal(0, sigma * S0[i], M)
         n2 = nz.normal(0, sigma * S0[i], M)
         dwi[:, i] = np.sqrt((sig + n1) ** 2 + n2 ** 2)            # Rician magnitude
@@ -205,7 +210,7 @@ def build_subject(sid, cfg):
 
     counts = np.array([{"bg": 0, "iso": 0, "single": 1, "cross": 2}[t] for t in vtype])
     planted = dict(v1=v1, v2=v2, f1=f1, f2=f2, count=counts, d=d_vox, ang=ang)
-    return mask, vtype, bvals, bvecs, dwi, planted, single_shell
+    return mask, vtype, bvals, bvecs, dwi, dwi_clean, planted, single_shell
 
 
 # ------------------------------------------------------------------ writers
@@ -256,7 +261,7 @@ def main():
             "D_FIX": D_FIX, "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():
-        mask, vtype, bvals, bvecs, dwi, planted, single_shell = build_subject(sid, cfg)
+        mask, vtype, bvals, bvecs, dwi, _dwi_clean, planted, single_shell = build_subject(sid, cfg)
         d = DATA / sid
         d.mkdir(parents=True, exist_ok=True)
         np.save(d / "dwi.npy", dwi.astype(np.float32))
