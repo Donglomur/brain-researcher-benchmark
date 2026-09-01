@@ -11,8 +11,13 @@ defined only where the subject's shells constrain it — compute a quantity only
 acquisition supports it and **omit** it otherwise. There is no reference fitter provided —
 implement the estimators yourself and get the physics, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals by
-a held-out reference and compared voxel-by-voxel inside the brain mask.
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared voxel-by-voxel, inside the brain mask, to the *true* metric that generated the
+signals. **Any scientifically valid estimator is accepted** — different linear algebra,
+normalise-first or joint-intercept, whichever robust within-shell volume-rejection scheme you
+prefer — because every correct method recovers the same physical metrics within tolerance; you
+are **not** required to reproduce any particular reference implementation. Each (subject × map)
+is scored independently.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the **powder-average**
@@ -29,6 +34,21 @@ the **tissue legend**. Read it before you start. In brief:
   giving `[ln S0, MSD, MSD²·MSK]`; then `MSK = (third coefficient) / MSD²`. With `b=0` plus a
   **single** non-zero shell only `[1, −b]` is determined (**MSD alone**); **MSK is then not
   computable and must be omitted**.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted volumes.** In a **majority of subjects, one or two diffusion-weighted
+  volumes are grossly corrupted** (a motion spike or signal dropout scaling the whole volume)
+  and are physically inconsistent with the rest of that shell's directions. **You must detect
+  and reject such corrupted volumes robustly before the per-shell powder average**, or the
+  powder mean (hence MSD/MSK) is biased. *Which* subjects and *which* volumes are affected is
+  **not disclosed** — find them from the data. Any scientifically valid robust scheme is
+  acceptable (within-shell log-level outlier rejection, robust averaging, etc.); a non-robust
+  arithmetic mean over all volumes recovers the wrong metrics on the affected subjects and fails
+  those panels.
+- **Rician noise** (modest, per-subject SNR) is present on every volume and needs no special
+  handling beyond an ordinary fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `n_vox`, `n_vol`, and the file names below.

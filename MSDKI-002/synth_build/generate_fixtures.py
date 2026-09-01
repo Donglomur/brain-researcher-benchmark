@@ -143,9 +143,11 @@ def build_subject(sid, cfg):
     bvals = []
     bvecs = []
     vols = []
+    vols_clean = []                                       # noise-free, corruption-free (held-out truth)
     nz = np.random.default_rng(cfg["seed"] + 3000)
 
     def add_volume(bval, gvec, clean):
+        vols_clean.append(np.asarray(clean, float).astype(np.float32))   # pre-corruption, pre-noise
         for (cb, ci, fac) in cfg["corrupt"]:
             if cb == bval and ci == len(_local[bval]):
                 clean = clean * fac
@@ -180,10 +182,11 @@ def build_subject(sid, cfg):
             add_volume(b, dirs[di], direc_clean[di])
 
     dwi = np.stack(vols, axis=0)                          # (n_vol, nvox)
+    dwi_clean = np.stack(vols_clean, axis=0)              # (n_vol, nvox) held-out truth
     bvals = np.asarray(bvals, dtype=np.float32)
     bvecs = np.asarray(bvecs, dtype=np.float32)
     planted = {"MSD": MSD, "MSK": MSK, "S0": S0}
-    return mask, label, dwi, bvals, bvecs, planted
+    return mask, label, dwi, bvals, bvecs, planted, dwi_clean
 
 
 # ------------------------------------------------------------------ writers
@@ -234,7 +237,7 @@ def main():
             "s0_gain": S0_GAIN, "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():
-        mask, label, dwi, bvals, bvecs, planted = build_subject(sid, cfg)
+        mask, label, dwi, bvals, bvecs, planted, _clean = build_subject(sid, cfg)
         d = DATA / sid
         d.mkdir(parents=True, exist_ok=True)
         np.save(d / "dwi.npy", dwi)
