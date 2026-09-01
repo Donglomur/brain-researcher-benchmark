@@ -12,8 +12,13 @@ the analysis per subject, because a pipeline that assumes one fixed recipe will 
 There is no reference pipeline provided — implement the estimator yourself and get the timing,
 sign, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: the lag map you write is recomputed from the BOLD
-data by a held-out reference and compared voxel-by-voxel inside the brain mask.
+Grading is **outcome-based and voxelwise**: the lag map you write is compared voxel-by-voxel
+inside the brain mask to the *true underlying hemodynamic lag* — the held-out planted lag,
+measured on the noise-free, spike-free signal relative to the same reference convention. **Any
+scientifically valid estimator is accepted** (any spike detector, FFT or direct cross-
+correlation, per-voxel peak search), because every correct method recovers the same lag within
+tolerance. You are **not** required to reproduce any particular reference implementation's
+output.
 
 ## Shared conventions and output contract (`/app/data/protocol.json`)
 A single JSON with the conventions common to all subjects: the **signal model**, the **reference
@@ -24,6 +29,23 @@ definition** (the integer-frame lagged Pearson cross-correlation, its peak refin
 precision by parabolic interpolation, and the sign convention), the **significance convention**
 (which voxels carry a lag and which must be omitted), the **unit** of the lag, and the **tissue
 legend**. Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The runs are realistic, not clean:
+
+- **Gross motion-spike frames.** In a **majority of subjects a few frames are grossly corrupted
+  by a motion transient** — a whole-brain intensity jump. **You must detect and censor these
+  frames before the cross-correlation**, or the correlation is pulled toward zero lag and the lag
+  estimate (and the significance decision) is biased. *Which* frames (and which subjects) are
+  corrupted is **not disclosed**; detect them from the data (a robust framewise-outlier rule). A
+  **minority of runs have no corrupted frame** and need no censoring.
+- **Reference fork (restated).** On some subjects the whole-brain global signal is dominated by a
+  non-neural artifact rather than the shared hemodynamic fluctuation; there you must restrict the
+  reference to gray matter. Which subjects is **not disclosed** — infer it from the data (compare
+  the global and gray-matter candidate references).
+- **Non-vascular / low-SNR voxels.** A region of voxels does not follow the driver (its peak
+  correlation is at the noise floor); those voxels carry no significant lag and must be **omitted**
+  (NaN), not reported.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `n_time`, `n_vox`, `tr_ms`, and the file names below.

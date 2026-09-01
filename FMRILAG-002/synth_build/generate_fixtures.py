@@ -174,9 +174,15 @@ def build_subject(sid, cfg):
     noise_rng = np.random.default_rng(cfg["seed"] + 900)
     art_amp = 7.0 * NEURAL_AMP                  # artifact voxels: several x the neural amplitude
     bold = np.zeros((n, nvox), np.float64)
+    clean = np.zeros((n, nvox), np.float64)     # NOISE-FREE, SPIKE-FREE signal (keeps the driver,
+    #                                             the non-neural artifact, and the drift -- these
+    #                                             are genuine signal features, incl. what forces
+    #                                             the reference fork); used ONLY to build the
+    #                                             held-out planted truth (tests/), never saved.
     base = 1000.0                               # arbitrary baseline (removed by detrend)
     for v in range(nvox):
         if not mask[v]:
+            clean[:, v] = base
             bold[:, v] = base + noise_rng.normal(0, cfg["noise"], n)
             continue
         neural = amp[v] * np.interp(frame_t - tau[v], tf, g_fine)
@@ -184,6 +190,7 @@ def build_subject(sid, cfg):
         if artifact_vox[v]:
             sig = sig + art_amp * np.interp(frame_t - 0.0, tf, a_fine)
         drift = 0.15 * NEURAL_AMP * np.sin(2 * np.pi * (0.2 / (n * tr)) * frame_t + v)
+        clean[:, v] = base + sig + drift
         bold[:, v] = base + sig + drift + noise_rng.normal(0, cfg["noise"], n)
 
     # --- inject gross motion-spike frames (whole-brain intensity jump at lag 0) ----------
@@ -198,7 +205,8 @@ def build_subject(sid, cfg):
             bold[t, mask] += jump + srng.normal(0, 0.3 * abs(jump), int(mask.sum()))
 
     planted = {"tau": tau, "amp": amp, "dropout": dropout, "artifact_vox": artifact_vox,
-               "spike_frames": spike_frames, "label": label, "mask": mask}
+               "spike_frames": spike_frames, "label": label, "mask": mask,
+               "clean": clean.astype(np.float32)}
     return bold.astype(np.float32), mask, label, planted
 
 
