@@ -14,9 +14,14 @@ one fixed recipe will not fit them all. **Compute a map only where the subject's
 determines it; where it does not, omit that map.** There is no reference quantifier provided —
 implement the estimators yourself and get the physics, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals by
-a held-out reference and compared voxel-by-voxel inside the grey- and white-matter mask. Subjects
-and maps are scored independently, so produce every map you can support and omit the rest.
+Grading is **outcome-based and voxelwise against the true underlying perfusion**: each map you
+write is compared voxel-by-voxel, inside the grey- and white-matter mask, to the *planted*
+perfusion parameter that generated the signals. **Any scientifically valid estimator is
+accepted** — the model-free measured-AIF solve for a crusher pair, the model-based (f, ATT)
+kinetic fit otherwise, whichever robust repetition-averaging scheme you prefer — because every
+correct method recovers the same physiology within tolerance. You are **not** required to
+reproduce any particular reference implementation's output. Subjects and maps are scored
+independently, so produce every map you can support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the single-compartment
@@ -46,6 +51,23 @@ legend**. Read it before you start.
 - **aBV** — arterial blood volume fraction, **dimensionless**. The T1-corrected area of the
   measured arterial curve, normalised by `2·alpha·(M0/lambda)·tau`. **Determinable only where a
   crusher pair exists.**
+
+## Robustness / data-quality contract  (READ THIS)
+The repetition stacks are realistic, not clean:
+
+- **Grossly motion-corrupted TI repetitions.** In a **subset of the subjects, a few whole
+  repetitions are grossly corrupted** by motion (the entire repetition — all inversion times —
+  is scaled up or down relative to the rest). **You must detect and reject such repetitions
+  robustly before forming the per-TI repetition average**; a non-robust (plain) average is
+  biased by them and recovers the wrong CBF/aBV on the affected subjects. *Which* subjects and
+  *which* repetitions are affected is **not disclosed** — find them from the data; some subjects
+  are clean. Any scientifically valid robust scheme is acceptable (per-repetition gross-outlier
+  rejection, a robust mean, etc.).
+- **Undefined-inversion voxels.** Voxels with ~0 equilibrium magnetization (`m0.npy`) have an
+  undefined inversion and must be zeroed rather than divided through.
+
+Per-voxel measurement noise (modest) is present on every repetition and does **not** need
+special handling beyond the ordinary average/fit.
 
 ## Required outputs (`/app/output/sub-XX/`)
 Write one float32 `.npy` per **computable** map, each of shape `(n_vox,)` in the subject's voxel
