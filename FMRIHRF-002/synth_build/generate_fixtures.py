@@ -113,6 +113,11 @@ def build_subject(sid, cfg):
         hv = hrf(lag_t, peak_v[v], width_v[v]) * amp[v]
         Y[:, v] = np.convolve(stick, hv)[:n_t]
 
+    # NOISE-FREE, ARTIFACT-FREE signal (no drift nuisance, no thermal noise, no motion spikes) in
+    # the percent-BOLD convention -- used ONLY to build the held-out planted truth (tests/), never
+    # saved under environment/data. This is the true evoked physiology the design determines.
+    clean_pctbold = (Y - Y.mean(axis=0, keepdims=True)).astype(np.float32)
+
     # slow drift (low frequency, mean-removed later), per-voxel scaled
     tnorm = np.linspace(0, 1, n_t)
     drift = np.zeros((n_t, NVOX))
@@ -138,7 +143,7 @@ def build_subject(sid, cfg):
     # percent-BOLD convention: remove temporal mean per voxel
     Y = Y - Y.mean(axis=0, keepdims=True)
 
-    planted = {"amp": amp, "peak_v": peak_v, "width_v": width_v}
+    planted = {"amp": amp, "peak_v": peak_v, "width_v": width_v, "clean": clean_pctbold}
     return Y.astype(np.float32), mask, onsets, of, planted, spike_frames, L
 
 

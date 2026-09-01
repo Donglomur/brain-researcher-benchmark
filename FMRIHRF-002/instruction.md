@@ -12,9 +12,13 @@ design determines it; where it does not, omit that parameter.** There is no refe
 provided — implement the estimator yourself and get the units, timing, and per-subject
 adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the run by a
-held-out reference and compared voxel-by-voxel inside the mask. Partial cohorts and partial map
-sets are scored proportionally, so produce every map you can support and omit the rest.
+Grading is **outcome-based and voxelwise**: each map you write is compared voxel-by-voxel inside
+the mask to the *true underlying evoked physiology* — the held-out planted response, summarised
+on the noise-free, artifact-free signal. **Any scientifically valid estimator is accepted** (any
+FIR construction, solver, drift model, spike detector, or curve-summary reader), because every
+correct method recovers the same shape summaries within tolerance. You are **not** required to
+reproduce any particular reference implementation's output. Partial cohorts and partial map sets
+are scored proportionally, so produce every map you can support and omit the rest.
 
 ## Shared model and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the **signal model**
@@ -27,6 +31,21 @@ the onset regressors alone — is well conditioned; for a rapid, fixed short-int
 overlapping responses make those columns near-collinear and the shape is not identifiable), the
 exact definitions and **units** of each reported quantity, and the specified peak-normalised
 **canonical HRF**. Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The runs are realistic, not clean:
+
+- **Gross motion-spike frames.** In a **majority of subjects a few individual frames are grossly
+  corrupted by a motion transient** — a large global BOLD deflection, some placed near target
+  onsets. **You must detect and censor (or otherwise model out) these frames before the fit**, or
+  the estimated response — and therefore the amplitude, time-to-peak, and FWHM — is biased,
+  especially in the low-amplitude voxels. *Which* frames (and which subjects) are corrupted is
+  **not disclosed**; detect them from the data (e.g. a robust DVARS / frame-to-frame outlier
+  rule). A **minority of runs have no corrupted frame** and need no censoring.
+- **Slow drift.** A low-frequency drift nuisance is present in every run and must be modelled
+  (a high-pass / DCT drift basis, ~1/128 Hz) so it does not leak into the response estimate.
+
+These are per-frame / per-run nuisances to be modelled or censored, not whole-subject rejections.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `tr_s` (TR, seconds), `n_frames`, `n_vox`, `target_onsets_s` (the target-event
