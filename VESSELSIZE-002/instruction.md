@@ -12,8 +12,13 @@ and you must adapt the analysis per subject — **compute a map only where the s
 acquisition determines it, and omit it otherwise.** There is no reference pipeline provided —
 implement the estimators yourself and get the physics, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals
-by a held-out reference and compared voxel-by-voxel inside the brain mask.
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared voxel-by-voxel, inside the brain mask, to the *true* map that generated the
+signals. **Any scientifically valid estimator is accepted** — any Boxerman–Weisskoff leakage-
+correction linear algebra, any peak/ratio estimator, any integration scheme — because every
+correct method recovers the same physical quantities within tolerance; you are **not** required
+to reproduce any particular reference implementation's output. Each (subject × map) is scored
+independently.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the DSC **signal model**
@@ -21,6 +26,27 @@ A single JSON with the physics and conventions common to all subjects: the DSC *
 (the WM-normalised first-pass gradient-echo integral), **vessel_radius** (the vessel-size index,
 with its pinned constants and the bolus-peak convention) and **Q** (the vessel-density index),
 the **unit** of each quantity, and the **tissue legend**. Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Contrast-agent leakage (BBB breakdown).** In a **majority of subjects, a sub-region has
+  blood–brain-barrier leakage**: the gradient-echo `DeltaR2*(t)` curve there is corrupted by a
+  slowly-accumulating **T1 extravasation term** that is physically inconsistent with the
+  intravascular first-pass response of the surrounding tissue. **You must detect and remove this
+  leakage before the rCBV integral** (a Boxerman–Weisskoff two-parameter fit of each voxel's curve
+  against a leakage-free reference curve, e.g. the white-matter mean, recovers and subtracts the
+  extravasation term; it is a no-op where there is no leakage). Left uncorrected it biases rCBV
+  and the bolus-peak vessel maps on the affected voxels. *Which* subjects and *which* voxels leak
+  is **not disclosed** — you must find them from the data; any scientifically valid leakage-
+  correction scheme is acceptable.
+- **Recirculation second pass.** Every bolus has a second (recirculation) pass after the first;
+  rCBV integrates the **first pass only** (the window `[n_baseline, first_pass_end)` is given in
+  the sidecar). Integrating past it biases the WM-normalised rCBV, because the recirculation
+  fraction is tissue-dependent.
+
+Modest additive noise is present on every frame and does **not** need special handling beyond the
+ordinary conversion and integration.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `field_T`, `n_vox`, `n_frames`, `n_baseline` (pre-bolus frames),
