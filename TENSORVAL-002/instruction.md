@@ -13,9 +13,17 @@ subject's acquired encoding set determines it; where it does not, omit that map.
 reference fitter provided — implement the estimators yourself and get the physics, units, and
 per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals by a
-held-out reference and compared voxel-by-voxel inside the brain mask. Each (subject, map) is scored
-on its own, so produce every map a subject supports and omit the rest.
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared voxel-by-voxel to the *true* quantitative map that generated the powder signals
+(the tensor-valued encoding model of Westin et al. 2016). **Any scientifically valid estimator is
+accepted** — any robust gross-volume rejection, any ordinary-least-squares assembly of the
+shared-MD joint powder fit, any equivalent `V_iso`/`V_aniso` solve — because every correct method
+recovers the same physical quantities within tolerance. You are **not** required to reproduce any
+particular reference implementation's output. Each (subject, map) is scored on its own, so produce
+every map a subject supports and omit the rest. Every map is graded over the whole brain mask
+**except microFA**, which is graded over brain **parenchyma (grey + white matter)** — microscopic
+FA is defined where microscopic anisotropy exists, and in free-water CSF it is ≈ 0 and
+ill-conditioned (still write a full-length map; the CSF voxels simply are not graded for microFA).
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the b-tensor **encoding
@@ -43,6 +51,20 @@ convention** (the normalised anisotropy `b_Delta`: LTE `+1`, PTE `-1/2`, STE `0`
 
 `V_iso`, `V_aniso` are recovered from the per-shape curvatures via
 `C2_s = V_iso + (4/5)·b_Delta(s)²·V_aniso`.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted volumes.** In a **majority of subjects, one or two individual
+  diffusion-weighted volumes are grossly corrupted** (motion signal-dropout / spike) and are
+  physically inconsistent with the powder decay of the rest of that subject's acquisition. **You
+  must detect and reject such corrupted volumes robustly before the joint powder fit**, or the
+  shared MD and the per-shape curvatures — and every downstream kurtosis map — are biased. *Which*
+  subjects and *which* volumes are affected is **not disclosed** — you must find them from the
+  data. Any scientifically valid robust scheme is acceptable (robust regression, outlier rejection
+  on the log-signal residuals, etc.); a non-robust fit over all volumes recovers the wrong maps on
+  the affected subjects and fails those panels. Modest Rician noise is present on every volume and
+  needs no special handling beyond an ordinary fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `n_vox`, `n_vol`, the list `shapes` of distinct b-tensor shapes acquired, and
