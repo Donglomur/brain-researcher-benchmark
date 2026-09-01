@@ -15,9 +15,14 @@ the analysis per subject — a pipeline that assumes one fixed recipe will not f
 that map.** No fitter is provided — implement the estimators yourself and get the physics, units,
 and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals by
-a held-out reference and compared voxel-by-voxel inside the brain mask. Partial cohorts and
-partial map sets are scored proportionally, so produce every map you can support and omit the rest.
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared voxel-by-voxel, inside the brain mask, to the *planted* quantity that generated
+the signals. **Any scientifically valid estimator is accepted** — any robust log-linear or
+nonlinear mono-exponential relaxation fit, whichever gross-echo rejection scheme you prefer,
+followed by the pinned chi-separation closed form — because every correct method recovers the
+same physiology within tolerance. You are **not** required to reproduce any particular reference
+implementation's output. Partial cohorts and partial map sets are scored proportionally, so
+produce every map you can support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the mono-exponential
@@ -37,6 +42,22 @@ given total susceptibility `chi_tot` and `R2′` into the two sources. Read it b
   produced by QSM.
 - `tissue.npy` — per-voxel tissue label (`(n_vox,)`; see the protocol legend).
 - `mask.npy` — the brain mask (`(n_vox,)`; maps are graded over these voxels).
+
+## Robustness / data-quality contract  (READ THIS)
+The magnitude trains are realistic, not clean:
+
+- **Grossly corrupted echo volumes.** In a **subset of the subjects, one whole echo volume**
+  (in the GRE train or the SE train) **is grossly corrupted** (e.g. by motion) and is physically
+  inconsistent with the mono-exponential decay of the rest of that train — a gross spike or
+  dropout. **You must detect and reject such a corrupted echo robustly before fitting** the
+  relaxation rate; a non-robust fit over all echoes recovers the wrong R2\*/R2 (and hence the
+  wrong R2′ and separation) on the affected subjects. *Which* subjects and *which* echoes are
+  affected is **not disclosed** — find them from the data; some subjects are clean. Any
+  scientifically valid robust scheme is acceptable (outlier rejection on the log-signal
+  residuals, robust regression, etc.).
+
+Rician noise (modest) is present on every echo and does **not** need special handling beyond an
+ordinary fit.
 
 ## Required outputs (`/app/output/sub-XX/`)
 Write one float32 `.npy` per **computable** map, each of shape `(n_vox,)` in the subject's voxel
