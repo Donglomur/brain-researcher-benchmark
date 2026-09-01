@@ -12,9 +12,14 @@ you must adapt the analysis accordingly — **a single fixed quantification reci
 all subjects.** No fitting code is provided; implement the kinetic estimators yourself and get
 the physics, constants, and per-subject/per-region choice of model right.
 
-Grading is **outcome-based**: each quantity you report is recomputed from the TACs by a
-held-out reference and compared within a tolerance. Partial cohorts are scored proportionally,
-so quantify every region you can and report each under the single quantity its data support.
+Grading is **outcome-based against the true underlying kinetics**: each quantity you report is
+compared to the *planted* kinetic macro-parameter that generated the TACs. **Any scientifically
+valid estimator is accepted** — SRTM/SRTM2, MRTM/MRTM2 or reference Logan for BPND; plasma
+Logan, Ichise MA1 or a 2-tissue-compartment fit for VT; a Patlak plot or a 2TCM fit for Ki —
+because every correct method recovers the same macro-parameter within tolerance. You are **not**
+required to reproduce any particular reference implementation's output. Partial cohorts are
+scored proportionally, so quantify every region you can and report each under the single quantity
+its data support.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 Read it first. It gives the conventions common to all subjects: the **time units** (minutes;
@@ -29,6 +34,21 @@ graded quantities:
   (`BPND = DVR − 1`), a convention-invariant equilibrium ratio.
 - **VT** — total distribution volume (mL/cm³) of a reversible plasma-input tracer.
 - **Ki** — irreversible net influx rate constant (mL/cm³/min) of a trapping plasma-input tracer.
+
+## Robustness / data-quality contract  (READ THIS)
+The TACs are realistic, not clean:
+
+- **Heavy counting noise.** A **subset of the subjects carry heavy counting noise** (concentrated
+  in the late frames, which the decay-correction of a short-half-life isotope amplifies). At this
+  noise level an **ordinary graphical slope is biased** — in particular an OLS reference-Logan
+  DVR is strongly *under*estimated, and a free per-region reference `k2'` is unstable — so it does
+  **not** recover the true binding potential. **You must use a noise-robust estimator**: for the
+  reference-tissue subjects, SRTM2 / MRTM2 with the sidecar's fixed reference `k2'` (or an
+  equivalent noise-robust reference-tissue fit); the same principle applies to the plasma maps
+  (prefer MA1 / Patlak over a ratio-space OLS slope). *Which* subjects are noisy is **not
+  disclosed** — you must judge from the data; some subjects are low-noise anchors where even a
+  naive slope survives. Any scientifically valid noise-robust estimator is accepted; a biased
+  naive slope recovers the wrong value on the noisy subjects and fails those panels.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `tracer`, `isotope`, `half_life_min`, the frame schedule
