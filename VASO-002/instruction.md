@@ -14,9 +14,13 @@ fit them all. **Compute a map only where the subject's acquisition determines it
 not, omit that map.** There is no reference pipeline provided — implement the estimators yourself
 and get the physics, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals by
-a held-out reference and compared voxel-by-voxel inside the grey+white-matter region of interest.
-Subjects and maps are scored independently, so produce every map you can support and omit the rest.
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared voxel-by-voxel, inside the grey+white-matter region of interest, to the *true*
+task-evoked change that generated the signals. **Any scientifically valid estimator is accepted**
+— any robust frame-rejection scheme, any code path — because every correct method recovers the
+same physiology within tolerance; you are **not** required to reproduce any particular reference
+implementation's output. Subjects and maps are scored independently, so produce every map you can
+support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the blood-nulled and
@@ -26,6 +30,27 @@ modulation), the exact pinned **definitions** of the graded quantities (`dCBV_ta
 and `dBOLD` in percent), the pinned **baseline CBV** `V0`, the averaging **conventions**, the
 **units**, and the **tissue legend**. Read it before you start — the graded quantities are fixed
 by those definitions.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted frames.** In a **majority of subjects, a few individual time frames are
+  grossly corrupted** (motion / inversion-failure events that scale a whole frame's signal by a
+  large factor) and are physically inconsistent with the rest of the run. **You must detect and
+  reject such corrupted frames robustly before forming the block means** for `dCBV` and `dBOLD`.
+  *Which* subjects and *which* frames are affected is **not disclosed** — you must find them from
+  the data. Any scientifically valid robust scheme is acceptable (temporal-outlier rejection on a
+  per-frame summary statistic, robust averaging, etc.); a non-robust average over all frames will
+  recover the wrong block means on the affected subjects and fail those panels. The corruptions
+  are gross (far larger than the few-percent physiological block-to-block modulation), so a wide
+  robust margin rejects them without dropping any legitimate frame.
+- **BOLD contamination on SS-SI-VASO subjects.** On the SS-SI-VASO subjects the blood-nulled
+  signal carries an activation-driven T2\*/BOLD weighting that must be removed with the not-nulled
+  image (`Vc = nulled/not-nulled`); using the raw nulled signal biases — and can even sign-flip —
+  the CBV change. See the BOLD correction in the protocol.
+
+Modest additive noise is present on every frame and does **not** need special handling beyond the
+ordinary block averaging.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `acquisition` (`SS-SI-VASO` or `VASO`), `te_ms`, `ti_ms`, `tr_ms`, `n_vox`,
