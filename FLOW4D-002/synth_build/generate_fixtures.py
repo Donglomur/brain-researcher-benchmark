@@ -121,17 +121,27 @@ def build_subject(sid, cfg):
 
     out_enc = []
     for (nm, d, venc, vtrue, has_bg) in encodings:
+        # NOISE-FREE, ARTIFACT-FREE clean phase (no eddy background, no air noise) -- the encoded
+        # true velocity only, wrapped by the acquisition into (-pi, pi] (aliasing preserved where
+        # vtrue exceeds VENC). Used ONLY to build the held-out planted truth (tests/), never saved
+        # under environment/data. Computed before the noise draw so the RNG order is unchanged.
+        theta_true = np.pi * vtrue / venc
+        phase_clean = np.angle(mag * np.exp(1j * theta_true)).astype(np.float32)
+
         theta = np.pi * vtrue / venc + (phi_bg if has_bg else 0.0)   # total phase (may exceed pi)
         clean = mag * np.exp(1j * theta)
         noise = rng.normal(0.0, cfg["noise"], mag.size) + 1j * rng.normal(0.0, cfg["noise"], mag.size)
         meas = clean + noise
         out_enc.append({"name": nm, "dir": d, "venc": venc,
                         "phase": np.angle(meas).astype(np.float32),
+                        "phase_clean": phase_clean,
                         "mag_contrib": np.abs(meas)})
     # measured magnitude: the mean magnitude across encodes (all share the same anatomy)
     meas_mag = np.mean([e["mag_contrib"] for e in out_enc], axis=0).astype(np.float32)
+    # clean magnitude: identical anatomy, no noise (all encodes share it) -> the planted-truth mag
+    clean_mag = mag.astype(np.float32)
     return {"lumen": lumen, "tissue": tissue, "roi": roi, "meas_mag": meas_mag,
-            "encodings": out_enc, "n_hat": (0.0, 0.0, 1.0)}
+            "clean_mag": clean_mag, "encodings": out_enc, "n_hat": (0.0, 0.0, 1.0)}
 
 
 # ------------------------------------------------------------------ planted truth (provenance)

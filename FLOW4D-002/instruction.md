@@ -13,9 +13,14 @@ subject's acquisition determines it; where it does not, omit it.** There is no r
 provided — implement the velocity reconstruction yourself and get the physics, units, and
 per-subject adaptation right.
 
-Grading is **outcome-based**: each quantity you write is recomputed from the images by a
-held-out reference and compared to it. Partial cohorts and partial quantity sets are scored
-proportionally, so produce every quantity you can support and omit the rest.
+Grading is **outcome-based and physical**: each quantity you write is compared to the *true
+underlying flow* that generated the images — the held-out planted velocity field, quantified on
+the noise-free, artifact-free signal. **Any scientifically valid estimator is accepted** (any
+lumen threshold, any background-fit order, any aliasing-unwrap scheme, any noise masking),
+because every correct method recovers the same convention-invariant velocity magnitudes within
+tolerance. You are **not** required to reproduce any particular reference implementation's
+output. Partial cohorts and partial quantity sets are scored proportionally, so produce every
+quantity you can support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the conventions common to all subjects: the **velocity convention**
@@ -26,6 +31,26 @@ lumen), the **net flow** (`Q = Σ_lumen (v · n̂) · pixel_area`, in mL/s, repo
 and determinable only where the acquisition encodes a component along the slice normal `n̂`),
 the **lumen** definition, the **units**, and the exact **output spec**. Read it before you
 start.
+
+## Robustness / data-quality contract  (READ THIS)
+The images are realistic, not clean:
+
+- **Eddy-current / background-phase drift.** A **majority of subjects** carry a smooth
+  background-phase offset (a planar eddy-current drift over the whole field of view) that puts a
+  spurious velocity on static tissue. **You must fit it over static tissue — excluding the
+  vessel lumen and the low-signal air — and remove it** (in phase space) before quantifying
+  velocity, or the peak and net flow are biased. *Which* subjects carry it is **not disclosed**;
+  a minority have none. Any scientifically valid background-fit (planar, quadratic, …) is
+  accepted.
+- **Single-band phase aliasing.** In a **majority of subjects the peak velocity exceeds the
+  VENC**, so the phase-difference image **aliases**: the vessel core wraps into a
+  physically-impossible reverse-flow value, and you **must detect and unwrap it** (single-band:
+  the wrapped forward-flow core gets `+2·VENC`) before the velocity is trustworthy. Subjects
+  within VENC must **not** be unwrapped. *Which* subjects alias is **not disclosed** — find it
+  from the data.
+- **Air noise.** The field of view outside the tissue is pure noise (random phase); its low
+  magnitude must mask it out of both the lumen segmentation and the background fit, or it
+  corrupts both.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `grid_shape` (`[ny, nx]`, row-major), `slice_normal` (a 3-vector `n̂`),
