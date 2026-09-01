@@ -14,9 +14,13 @@ calibration determines it; where it does not, omit the map.** There is no refere
 provided — implement the estimator yourself and get the physics, units, and per-subject
 adaptation right.
 
-Grading is **outcome-based and voxelwise**: the CBF map you write is recomputed from the signals
-by a held-out reference and compared voxel-by-voxel inside the grey- and white-matter masks.
-Subjects are scored independently, so produce every map you can support and omit the rest.
+Grading is **outcome-based and voxelwise against the true underlying physiology**: the CBF map you
+write is compared voxel-by-voxel, inside the grey- and white-matter masks, to the *true* CBF that
+generated the signals. **Any scientifically valid estimator is accepted** — any robust repetition
+average, any M0 arithmetic, any linear algebra — because every correct method recovers the same
+physiology within tolerance; you are **not** required to reproduce any particular reference
+implementation's output. Subjects (and each subject's GM / WM regions) are scored independently,
+so produce every map you can support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the transit-time-insensitive
@@ -25,6 +29,28 @@ single-compartment **signal model** relating the repetition-averaged perfusion d
 inversion) and their constants, the **M0 calibration** paths, the shared physical constants
 (blood T1, partition coefficient, labeling efficiencies), the **unit** of CBF, and the **tissue
 legend**. Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted repetitions.** In a **majority of subjects, one or two individual
+  label/control repetitions are grossly corrupted** (a whole image scaled by a large motion /
+  inversion-failure factor) and are physically inconsistent with the other repetitions. **You
+  must detect and reject such corrupted repetitions robustly before averaging** the perfusion
+  difference `dM = <control> − <label>` (and any control-derived M0). *Which* subjects and *which*
+  repetitions are affected is **not disclosed** — you must find them from the data. Any
+  scientifically valid robust scheme is acceptable (outlier rejection on a per-repetition summary
+  statistic, a per-voxel median, robust averaging, …); a plain mean over all repetitions recovers
+  the wrong `dM`/M0 on the affected subjects and fails those panels. The corruptions are gross
+  (far larger than the per-repetition noise scatter), so a wide robust margin rejects them without
+  dropping any legitimate repetition.
+- **Module and calibration forks.** The labeling module (VSS vs VSI) sets **both** κ and α, and
+  the M0-calibration path depends on what the subject provides (a fully-relaxed M0 scan, a
+  saturation-recovery-corrected proton-density control, or none → omit). Applying the wrong module
+  math or the wrong M0 path biases CBF. See the protocol.
+
+Modest additive noise is present on every repetition and does **not** need special handling beyond
+the ordinary robust average.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `field_T`, `n_vox`, `label_module`, `cutoff_velocity_cm_s`, `TI_s`, `n_reps`,
