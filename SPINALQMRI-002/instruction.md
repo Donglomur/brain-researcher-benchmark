@@ -12,9 +12,35 @@ pipeline that assumes one fixed recipe will not fit them all. **Compute a map on
 subject's acquisition determines it; where it does not, omit that map.** No fitter is provided —
 implement the estimators yourself and get the physics, units, and per-subject adaptation right.
 
-Grading is **outcome-based**: each map you write is recomputed from the images by a held-out
-reference and compared inside the cord ROI. Partial cohorts and partial map sets are scored
-proportionally, so produce every map you can support and omit the rest.
+Grading is **outcome-based against the true underlying physiology**: each map you write is
+compared, inside the cord ROI, to the *true* per-voxel MTR (p.u.) and R1 (1/s) that generated
+the images. **Any scientifically valid estimator is accepted** — any robust outlier rule, any
+linear algebra — because every correct method recovers the same physiology within tolerance.
+You are **not** required to reproduce any particular reference implementation's output. Partial
+cohorts and partial map sets are scored proportionally, so produce every map you can support and
+omit the rest.
+
+## Robustness / data-quality contract  (READ THIS)
+The provided cord segmentation is an **ROI, not a guarantee**, and the images are realistic, not
+clean. Handle all of the following robustly; *which* levels and *which* voxels are affected is
+**not disclosed** — you must find them from the data:
+
+- **CSF partial-volume over-inclusion.** On a **majority of levels**, the cord ROI
+  (`cord_mask.npy`) **over-includes** a few free-water / CSF voxels at the cord boundary; their
+  quantitative value collapses toward CSF (MTR toward zero, R1 far below cord). **Detect and
+  exclude** such voxels (write them `NaN` in the per-voxel map and drop them from the per-level
+  mean).
+- **Gross cord-motion / CSF-pulsation voxels.** A **subset of levels** additionally carry a few
+  true-cord voxels whose signal is thrown grossly off by motion / pulsation (value far from the
+  clean-cord cluster). **Detect and exclude** these too. Any reasonable robust rule (a per-level
+  MAD / z outlier test on the quantitative value, etc.) removes the same voxels — the
+  contamination is gross, a wide gap from the tight clean-cord distribution.
+- **B1+ transmit inhomogeneity (VFA/R1).** VFA subjects ship a per-voxel transmit map
+  (`b1.npy`), uniform on some subjects and ±25 % inhomogeneous on others. The true flip is
+  `a = B1 × radians(flip_deg)`; ignoring it biases R1.
+
+Modest Rician noise is present on every image and does **not** need special handling beyond an
+ordinary estimate.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the conventions common to all subjects: the **MTR** definition, the **R1**

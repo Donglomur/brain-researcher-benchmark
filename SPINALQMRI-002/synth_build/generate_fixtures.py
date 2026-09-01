@@ -166,6 +166,12 @@ def build_subject(sid, cfg):
     s_lo = np.zeros((nl, VOX), np.float32); s_hi = np.zeros((nl, VOX), np.float32)
     prov = {"MTR": {}, "R1": {}, "n_over": [], "n_motion_mt": [], "n_motion_vfa": []}
 
+    # held-out planted truth (per level): the true cord, the over-inclusion / motion masks, and
+    # the true per-voxel MTR (p.u.) and R1 (1/s) used to synthesise the signals.
+    truth = {"cord": np.zeros((nl, VOX), bool), "over": np.zeros((nl, VOX), bool),
+             "mmot": np.zeros((nl, VOX), bool), "vmot": np.zeros((nl, VOX), bool),
+             "mtr_true": np.zeros((nl, VOX)), "r1_true": np.zeros((nl, VOX))}
+
     for li in range(nl):
         grng = np.random.default_rng(cfg["seed"] * 131 + li)
         label, cord, geom = geometry(grng)
@@ -180,6 +186,8 @@ def build_subject(sid, cfg):
         # cord ROI provided to the agent = true cord + a few over-included CSF voxels
         mask_li = cord | over
         cord_mask[li] = mask_li
+        truth["cord"][li] = cord; truth["over"][li] = over
+        truth["mtr_true"][li] = mtr_true; truth["r1_true"][li] = r1_true
 
         b1_li = b1_field(cfg["b1"], np.random.default_rng(cfg["seed"] * 977 + li)) if want_vfa \
             else np.ones(VOX)
@@ -197,6 +205,7 @@ def build_subject(sid, cfg):
                 fac = np.where(grng.random(VOX) < 0.5, 3.2, 0.15)
                 on_clean = np.where(sel, on_clean * fac, on_clean)
                 mmot = sel
+            truth["mmot"][li] = mmot
             s_off[li] = _rician(off_clean, SD_MT, nrng)
             s_on[li] = _rician(on_clean, SD_MT, nrng)
             prov["n_motion_mt"].append(int(mmot.sum()))
@@ -218,6 +227,7 @@ def build_subject(sid, cfg):
                 fac = np.where(grng.random(VOX) < 0.5, 3.0, 0.2)
                 hi_clean = np.where(sel, hi_clean * fac, hi_clean)
                 vmot = sel
+            truth["vmot"][li] = vmot
             s_lo[li] = _rician(lo_clean, SD_VFA, nrng)
             s_hi[li] = _rician(hi_clean, SD_VFA, nrng)
             prov["n_motion_vfa"].append(int(vmot.sum()))
@@ -231,7 +241,7 @@ def build_subject(sid, cfg):
         arrays["mt_off"] = s_off; arrays["mt_on"] = s_on
     if want_vfa:
         arrays["fa_lo"] = s_lo; arrays["fa_hi"] = s_hi; arrays["b1"] = b1.astype(np.float32)
-    return arrays, prov, want_mt, want_vfa
+    return arrays, prov, want_mt, want_vfa, truth
 
 
 # ---- protocol --------------------------------------------------------------------
@@ -285,7 +295,7 @@ def main():
                 "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():
-        arrays, prov, want_mt, want_vfa = build_subject(sid, cfg)
+        arrays, prov, want_mt, want_vfa, _truth = build_subject(sid, cfg)
         d = DATA / sid
         d.mkdir(parents=True, exist_ok=True)
         np.save(d / "cord_mask.npy", arrays["cord_mask"].astype(np.bool_))
