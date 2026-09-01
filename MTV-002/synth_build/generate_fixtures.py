@@ -26,8 +26,10 @@ map is provided, the tissue legend); the agent must READ it and the DATA and ada
                     estimated ROBUSTLY (the high mode), not as the CSF mean/median.
   * field / rx amplitude / echo count vary per subject.
 
-The planted maps below are PROVENANCE ONLY. Grading RECOMPUTES every quantity from the saved
-signals with a held-out reference and never trusts these numbers.
+The planted maps below are BUILD PROVENANCE. The graded ground truth is the reference run on the
+NOISE-/CORRUPTION-FREE signal (built by synth_build/build_truth.py -> tests/planted_truth.npz);
+the verifier compares the submission to that convention-invariant physical target (the apparent
+quantities the acquisition supports) and accepts any scientifically valid estimator.
 """
 import json
 import sys
@@ -177,8 +179,10 @@ def build_subject(sid, cfg):
     nz = np.random.default_rng(cfg["seed"] + 3000)
     noise = 0.007 * GAIN
     sig = np.zeros((te_s.size, X.size))
+    clean_sig = np.zeros((te_s.size, X.size))                # noise-/corruption-free counterpart
     for j, te in enumerate(te_s):
         clean = S0 * np.exp(-te * r2s)
+        clean_sig[j] = clean                                 # pristine signal (held-out truth)
         for (ci, fac) in cfg["corrupt"]:
             if ci == j:
                 clean = clean * fac                          # gross motion corruption
@@ -187,7 +191,7 @@ def build_subject(sid, cfg):
         sig[j] = np.sqrt((clean + n1) ** 2 + n2 ** 2)        # Rician magnitude
 
     planted = {"wf": wf, "r2star": r2s, "mtv": 1.0 - wf}
-    return mask, label, rx, sig.astype(np.float32), planted, te_s
+    return mask, label, rx, sig.astype(np.float32), clean_sig.astype(np.float32), planted, te_s
 
 
 # ------------------------------------------------------------------ writers
@@ -249,7 +253,7 @@ def main():
             "gain": GAIN, "subjects": {}}
     total = 0
     for sid, cfg in COHORT.items():
-        mask, label, rx, sig, planted, te_s = build_subject(sid, cfg)
+        mask, label, rx, sig, _clean_sig, planted, te_s = build_subject(sid, cfg)
         d = DATA / sid
         d.mkdir(parents=True, exist_ok=True)
         np.save(d / "pdw.npy", sig)

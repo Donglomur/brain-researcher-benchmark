@@ -13,14 +13,23 @@ only where the subject's acquisition determines it; where it does not, omit that
 There is no reference pipeline provided — implement the estimators yourself and get the physics,
 units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals by
-a held-out reference and compared voxel-by-voxel inside the brain mask.
+## What is graded
+Grading is **outcome-based and voxelwise against the true underlying physiology**. Each map you
+write is compared voxel-by-voxel, inside the brain mask, to the *true* quantity that generated
+the signals (the receive-corrected, pure-water/WM-anchored decomposition of the noise- and
+artifact-free signal). **Any scientifically valid estimator is accepted** — any linear algebra
+for the log-linear TE=0 fit, any robust echo-rejection scheme, any robust pure-water estimator —
+because every correct method recovers the same physical quantity within tolerance. You are
+**not** required to reproduce any particular reference implementation's output. Each
+(subject × map) is scored independently and partial cohorts/map-sets are scored proportionally,
+so produce every map you can support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the **signal model**, the
 definition of the **TE=0 intercept `S0`** and **`R2star`**, the **receive-sensitivity
-convention**, and the exact definitions of the graded quantities. Read it before you start. In
-brief:
+convention**, and the exact definitions of the graded quantities. The MTV / water-content model
+follows Mezer et al. 2013, *Nat. Med.* and Volz et al. 2012, *NeuroImage*. Read it before you
+start. In brief:
 
 - The measured signal is `S(TE) = S0 * exp(-TE * R2star)`, where `S0` (the TE=0 intercept) is the
   apparent proton density `M0 = G * rx * WF`: `G` a global receive/scale gain (unknown, and it
@@ -31,6 +40,24 @@ brief:
   **`R2star`** (1/s) is the corresponding slope, determinable only for a multi-echo subject.
 - The **receive-corrected proton density** is `PD = S0 / rx` when the sidecar ships an `rx_file`;
   when it does not, the acquisition is already receive-corrected (`rx = 1`).
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted echoes.** In a **majority of the multi-echo subjects, one or two
+  individual echo volumes are grossly corrupted** (e.g. by motion) and are physically
+  inconsistent with the mono-exponential decay of the rest of that subject's echo train. **You
+  must detect and reject such corrupted echoes robustly before fitting the TE=0 intercept `S0`
+  and `R2star`.** *Which* subjects and *which* echoes are affected is **not disclosed** — you
+  must find them from the data. A non-robust fit over all echoes recovers the wrong `S0`/`R2star`
+  on the affected subjects and fails those panels.
+- **Partial-volumed CSF.** In a **majority of the CSF-ROI subjects, most CSF voxels are heavily
+  partial-volumed** with parenchyma, so their water fraction lies *below* pure water. The
+  pure-water reference `PD_water` must therefore be estimated **robustly** (the high mode / pure
+  cluster of the CSF proton density), **not** as the CSF mean or median — a mean/median pins
+  `PD_water` too low and biases the absolute MTV.
+- **Rician noise** (modest) is present on every echo and does **not** need special handling
+  beyond an ordinary fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `field_T`, `n_vox`, `tr_ms`, `te_ms` (the echo times), `pdw_file`, `rx_file`
