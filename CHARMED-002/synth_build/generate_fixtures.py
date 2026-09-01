@@ -24,8 +24,10 @@ b-values, gradient directions, and pulse timing (delta, Delta); the agent must R
   * tissue       : a brain-like white/grey/CSF layout; CSF/isotropic voxels are isotropic with a
                    restricted fraction near zero.
 
-The planted maps below are PROVENANCE ONLY. Grading RECOMPUTES every map from the saved signals
-with a held-out reference and never trusts these numbers.
+Grading compares the submission against the HELD-OUT PLANTED PHYSIOLOGY (tests/planted_truth.npz,
+built by synth_build/build_truth.py = the reference fit on the NOISE-FREE, CORRUPTION-FREE signal),
+accepting any scientifically valid estimator that recovers it within a physics-level tolerance. The
+per-voxel planted parameters and the clean signal never leave synth_build/ / tests/.
 """
 import json
 import sys
@@ -198,6 +200,12 @@ def build_subject(sid, cfg):
     for j in range(X.size):
         sig[:, j] = charmed_signal(fr[j], dpar[j], dperp[j], nvec[j], bvals, bvecs, delta, Delta)
 
+    # NOISE-FREE, CORRUPTION-FREE signal (held-out truth only; NEVER written under
+    # environment/data). The reference fit run on this recovers the convention-invariant
+    # physical estimands (planted f/MD_hindered for determinable subjects; the apparent
+    # lowest-shell DTI MD for every subject).
+    sig_clean = sig.copy()
+
     # corrupt whole DWI volumes (a specific direction ordinal within a shell)
     corrupt_idx = []
     for (sval, ordn, fac) in cfg["corrupt"]:
@@ -213,6 +221,7 @@ def build_subject(sid, cfg):
     planted = {"f_restricted": fr, "MD_hindered": (dpar + 2 * dperp) / 3.0 * 1e9,
                "MD_dti_lowshell": None}
     return dict(mask=mask, label=label, bvals=bvals, bvecs=bvecs, sig=sig.astype(np.float32),
+                sig_clean=sig_clean.astype(np.float32),
                 delta=cfg["delta"], Delta=cfg["Delta"], planted=planted, corrupt_idx=corrupt_idx)
 
 
@@ -281,8 +290,9 @@ def write_protocol():
 def main():
     write_protocol()
     prov = {"note": ("BUILD PROVENANCE ONLY -- NOT shipped to the agent (kept in synth_build/, "
-                     "never under environment/data). Grading RECOMPUTES every map from the saved "
-                     "signals with a held-out reference and never trusts these planted numbers."),
+                     "never under environment/data). Grading compares the submission against the "
+                     "HELD-OUT PLANTED PHYSIOLOGY (tests/planted_truth.npz, built by build_truth.py "
+                     "= the reference fit on the noise-free, corruption-free signal)."),
             "pinned": {"R_m": R_CYL, "D_r_m2_s": D_R, "gamma": GAMMA},
             "grading": {"f_restricted": "brain mask & tissue in {GM,WM}",
                         "MD_hindered": "brain mask & tissue in {GM,WM}",

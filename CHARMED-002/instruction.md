@@ -13,10 +13,14 @@ all. **Compute a quantity only where the subject's acquisition determines it; wh
 omit that map.** There is no reference fitter provided — implement the estimators yourself and
 get the physics, units, and per-subject adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals by
-a held-out reference and compared voxel-by-voxel inside the brain mask. Partial cohorts and
-partial map sets are scored proportionally, so produce every map you can support and omit the
-rest.
+Grading is **outcome-based and voxelwise against the true underlying physiology**. Each map you
+write is compared voxel-by-voxel, inside the graded region, to the *true* physical quantity that
+generated the signals (the planted restricted fraction and hindered mean diffusivity; the
+identifiable lowest-shell DTI mean diffusivity). **Any scientifically valid estimator is accepted**
+— a full or reduced nonlinear CHARMED fit, any optimiser, whichever robust volume-rejection scheme
+you prefer — because every correct method recovers the same physics within tolerance. You are
+**not** required to reproduce any particular reference implementation's output. Partial cohorts and
+partial map sets are scored proportionally, so produce every map you can support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the two-compartment
@@ -35,6 +39,22 @@ Delta)`, and the exact definitions and **units** of each graded quantity:
   from the same fit. Same determinability as `f_restricted`.
 
 Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted whole DWI volumes.** In a **majority of subjects, several individual
+  diffusion-weighted volumes are grossly corrupted** (e.g. bulk-motion signal dropout: a whole
+  volume scaled far below the signal expected for its b-value and direction) and are physically
+  inconsistent with the rest of that subject's acquisition. **You must detect and reject such
+  corrupted volumes robustly before fitting** the DTI tensor and the CHARMED model. *Which*
+  subjects and *which* volumes are affected is **not disclosed** — you must find them from the
+  data. Any scientifically valid robust scheme is acceptable (a per-shell robust outlier test
+  against a per-voxel angular baseline, robust regression, etc.); a fit over all volumes recovers a
+  biased MD / hindered MD on the affected subjects and fails those panels.
+
+Modest Rician noise is present on every volume and does **not** need special handling beyond an
+ordinary fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `n_vox`, `n_meas`, the per-volume `bvals` (s/mm²) and unit `bvecs`, the pulse
