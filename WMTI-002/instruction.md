@@ -13,8 +13,12 @@ acquisition and the model determine it; where they do not, omit it.** There is n
 fitter provided — implement the estimators yourself and get the physics, units, and per-subject
 adaptation right.
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from the signals by
-a held-out reference and compared voxel-by-voxel inside the brain mask. Partial cohorts and
+Grading is **outcome-based and voxelwise against the true underlying physiology**: each map you
+write is compared voxel-by-voxel, inside the brain mask, to the *true* WMTI parameter map that
+generated the signals. **Any scientifically valid estimator is accepted** — weighted or ordinary
+least squares, sphere-maximum or analytic radial kurtosis, any robust gross-volume rejection —
+because every correct method recovers the same physiology within tolerance; you are **not**
+required to reproduce any particular reference implementation's output. Partial cohorts and
 partial map sets are scored proportionally, so produce every map you can support and omit the
 rest.
 
@@ -26,6 +30,28 @@ least two distinct non-zero b-shells**, the **WMTI definitions** (`AWF`, `Da`, `
 `De_perp`, `tortuosity`) in the diffusion-tensor eigenframe with the exact branch and the
 `AWF = Kmax/(Kmax+3)` convention, the **validity domain** of the two-compartment model, the
 **unit** of each quantity, and the tissue conventions. Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The signals are realistic, not clean:
+
+- **Grossly corrupted diffusion volumes.** In a **majority of the multi-shell subjects, one to
+  three individual diffusion volumes are grossly corrupted** (signal dropout / spike scaling a
+  whole volume) and are physically inconsistent with the mono-/bi-exponential decay of the rest
+  of the acquisition. **You must detect and reject such corrupted volumes robustly before the
+  DKI tensor fit** — an un-rejected volume biases the log-linear fit and therefore every WMTI
+  parameter. *Which* subjects and *which* volumes are affected is **not disclosed** — you must
+  find them from the data. Any scientifically valid robust scheme is acceptable (outlier
+  rejection on the whole-volume log-residual, robust regression, etc.); a plain fit over all
+  volumes recovers the wrong tensors on the affected subjects and fails those panels. The
+  corruptions are gross (far larger than the ordinary noise), so a wide robust margin rejects
+  them without dropping any legitimate volume.
+- **Validity domain (declared in the protocol).** The two-compartment WMTI model holds only in
+  coherent, highly-anisotropic single-fibre white matter; in low-anisotropy voxels (grey matter,
+  CSF, partial volume) the model is invalid and every WMTI parameter is **undefined** there —
+  leave those voxels non-finite (NaN).
+
+Modest Gaussian noise is present on every volume and does **not** need special handling beyond
+the ordinary fit.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `n_vox`, `n_vol`, and the file names below.
