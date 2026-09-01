@@ -11,8 +11,15 @@ The cohort is **heterogeneous**: each subject's sidecar declares how its trainin
 represented and what files it provides, and you must adapt the analysis per subject — a pipeline
 that assumes one fixed recipe will not fit them all.
 
-Grading is **outcome-based**: for each subject your predicted test responses are recomputed and
-compared against a held-out reference fit. Partial cohorts and partial voxel sets are scored
+Grading is **outcome-based and against the true underlying receptive fields**: for each subject
+your predicted test-response columns are compared, by **correlation across the test stimuli**,
+to the *true* noise-free response `F_test · W_true` that generated the data, and your keep/exclude
+decision is compared to the *true* signal-vs-noise voxel mask. **Any scientifically valid
+estimator is accepted** — SVD/GCV ridge, whatever cross-validation, explicit-intercept HRF
+deconvolution, whatever reliability threshold — because every correct method recovers the same
+receptive-field *direction*; you are **not** required to reproduce any particular reference
+implementation's output. Correlation grading makes the score scale/offset invariant, so any
+global gain or regularisation strength cancels. Partial cohorts and partial voxel sets are scored
 proportionally, so produce the best prediction you can for every voxel you can support.
 
 ## Shared model and output contract (`/app/data/protocol.json`)
@@ -23,6 +30,29 @@ for the time-course subjects), the **canonical HRF** samples to use, the **fitta
 exclusion** convention, the **grading metric** (predictions are scored by their *correlation*
 across the test stimuli, so any global gain, offset, or regularisation strength cancels — only
 the receptive-field direction is graded), and the exact **output spec**. Read it before you start.
+
+## Robustness / data-quality contract  (READ THIS)
+The data are realistic, not clean. Three things must be handled correctly:
+
+- **Pure-noise voxels.** A **substantial minority of voxels in every subject carry no stimulus
+  tuning at all** (pure noise): their receptive field is un-fittable and they must be **excluded**
+  from the prediction (write NaN down the whole test column), not predicted. *How many* and
+  *which* voxels are noise is **not disclosed** — judge reliability from the data itself (e.g.
+  cross-validated predictive accuracy), not from any threshold we supply. Predicting a noise
+  voxel as if it were tuned, or excluding a genuinely tuned voxel, costs you the keep/exclude
+  panel.
+- **Grossly corrupted training samples.** In a **minority of subjects, a few individual training
+  samples are grossly corrupted** (motion spikes: a large shared offset across all voxels on
+  those stimulus rows) and are inconsistent with the rest of that subject's data. **You must
+  detect and reject such corrupted samples robustly before fitting** the receptive fields; a
+  non-robust least-squares fit over all samples is biased and recovers the wrong direction on the
+  affected subjects. *Which* subjects and *which* samples are affected is **not disclosed** — find
+  them from the data. Any scientifically valid robust scheme is acceptable (robust regression,
+  robust-z outlier rejection on the per-sample response, etc.).
+- **Time-course subjects.** For a `timeseries` subject the per-stimulus amplitudes are **not**
+  provided directly; you must recover them by **HRF deconvolution** of the BOLD time-course at the
+  stimulus onsets (see the protocol) before fitting. Treating the raw time-course as if it were
+  per-stimulus amplitudes recovers the wrong receptive field.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `n_vox`, `n_train`, `n_test`, `n_features`, `response_kind`, and the file
