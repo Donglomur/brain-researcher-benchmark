@@ -10,9 +10,15 @@ The cohort is **heterogeneous**: every subject's sidecar declares the saturation
 actually acquired, and you must adapt the analysis per subject — **compute a pool's amplitude
 only where the subject's sampling can identify it; where it cannot, omit that map.**
 
-Grading is **outcome-based and voxelwise**: each amplitude map you write is recomputed from the
-signals by a held-out reference and compared voxel-by-voxel inside the brain mask. Partial map
-sets are scored proportionally, so produce every map you can support and omit the rest.
+Grading is **outcome-based and voxelwise**: each amplitude map you write is compared
+voxel-by-voxel, inside the brain mask, against a **held-out target** — the amplitudes the
+**fully-specified pinned model below** produces on these exact signals. **Any scientifically
+valid implementation of that pinned estimator is accepted** (the grader runs no reference code
+and prefers no particular linear-algebra library); because the pool centres and widths are
+fixed, the amplitudes are the unique ordinary-least-squares coefficients of a fixed linear basis,
+so an SVD pseudo-inverse, a QR solve, the normal equations, or any equivalent recover the same
+values. Partial map sets are scored proportionally, so produce every map you can support and
+omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects. **Read it before you
@@ -30,6 +36,19 @@ start.** It pins:
   (`eta` = the per-voxel saturation-efficiency factor in `b1.npy`; divide it out);
 - the **identifiability rule** deciding, from a subject's acquired offsets, which CEST pools are
   determinable (and which must be omitted), and the exact **output spec**.
+
+## Robustness / data-quality contract (READ THIS)
+The saturation stacks are **not clean**. A subset of the subjects carry one or two **grossly
+motion-corrupted saturation frames** — a whole offset image scaled up or down by a large factor
+— mixed in among the good frames. These corrupted frames are **gross, unambiguous outliers**
+(their per-voxel signal is off by tens of percent to several-fold, far outside the noise), and
+they will **badly bias the fitted amplitudes** if left in. You must **detect and reject them per
+subject before the least-squares fit** (any robust criterion works — the corrupted frames stand
+out dramatically from the smooth Z-spectrum; the held-out target is the pinned fit with exactly
+those gross outliers removed). **Which subjects are affected, and which frames, is not
+disclosed** — discover it from the data. Do **not** discard clean frames: throwing away good
+saturation offsets changes the fit and is itself an error. Subjects with no corrupted frames
+need no rejection.
 
 ## Per subject (`/app/data/sub-XX/`)
 - `sidecar.json` — `field_T`, `f0_mhz`, `n_vox`, `n_offset`, the `offsets_ppm` list, and the
