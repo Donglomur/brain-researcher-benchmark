@@ -11,9 +11,12 @@ sampled (short-time, long-time, or a single time), and you must adapt the analys
 a pipeline that assumes one fixed recipe will not fit them all. **Estimate a quantity only where
 the subject's diffusion-time sampling determines it; where it does not, omit it.**
 
-Grading is **outcome-based and voxelwise**: each map you write is recomputed from `D(t)` by a
-held-out reference and compared voxel-by-voxel inside the brain mask. Partial cohorts and partial
-map sets are scored proportionally, so produce every map you can support and omit the rest.
+Grading is **outcome-based and voxelwise**: each map you write is compared, voxel-by-voxel inside
+the brain mask, against a **held-out target** — the value the fully-specified estimator below
+produces on this `D(t)`. **Any scientifically valid implementation of that estimator is accepted**
+(the grader does not require one particular fitter's code, only the stated conventions and a
+correct fit). Partial cohorts and partial map sets are scored proportionally, so produce every map
+you can support and omit the rest.
 
 ## Shared physics and output contract (`/app/data/protocol.json`)
 A single JSON with the physics and conventions common to all subjects: the **short-time** law
@@ -46,6 +49,18 @@ order:
   determinable**.
 
 Do **not** write a file for a map the subject's diffusion-time sampling cannot support.
+
+## Robustness / data-quality contract (READ THIS)
+The `D(t)` volumes are real measurements, and **a minority of the diffusion-time volumes are
+grossly corrupted** — a small number of whole time points (motion / low-SNR long-time artefacts)
+carry an outlier offset far outside the clean per-voxel scatter. **You must detect and reject
+these gross-outlier diffusion-time volumes before the least-squares fit**; a fit that keeps them
+returns biased intercepts and slopes (and hence biased `D0`/`SV`/`Dinf`/`Dref`) on exactly the
+affected subjects. The corruption is well separated from the clean scatter, so any high-breakdown
+robust rule identifies the same volumes. **Which** subjects and **which** time volumes are
+corrupted is deliberately not disclosed — discover it from the data. Uncorrupted subjects need no
+rejection and must not be distorted by an over-aggressive rule. The target each map is graded
+against is the fully-specified fit **with the corrupted volumes removed**.
 
 ## Failure handling
 If a subject cannot be processed for an unexpected reason, still write valid `.npy` files for the

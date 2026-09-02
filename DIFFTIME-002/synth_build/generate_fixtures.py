@@ -18,12 +18,15 @@ the agent must READ it and adapt:
   * SINGLE-time subjects sample one diffusion time only -> neither intercept is determinable;
     only the measured D at that time is reportable.
 
-Hidden robustness (NOT announced to the agent): a MAJORITY of subjects carry one or two
-grossly corrupted diffusion-time volumes (motion/low-SNR long-time artefacts) that must be
-rejected before the linear fit; a non-robust fit is biased on exactly those subjects.
+Declared robustness (the REQUIREMENT is announced to the agent in instruction.md's data-quality
+contract; only the REALIZATION is hidden): a MAJORITY of subjects carry one or two grossly
+corrupted diffusion-time volumes (motion/low-SNR long-time artefacts) that must be rejected
+before the linear fit; a non-robust fit is biased on exactly those subjects.
 
-The planted maps below are PROVENANCE ONLY.  Grading RECOMPUTES every map from the saved
-D(t) with a held-out reference and never trusts these numbers.
+The planted maps below are PROVENANCE ONLY.  Grading compares each submitted map against a
+held-out PINNED-METHOD TARGET (tests/planted_truth.npz = the fully-specified public estimator run
+on the actual D(t) with the corrupted volumes removed, built by synth_build/build_truth.py) and
+never trusts these planted numbers.
 """
 import json
 import sys
