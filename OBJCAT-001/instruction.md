@@ -6,15 +6,15 @@ Haxby et al. (2001, *Science* 293:2425, https://doi.org/10.1126/science.1063736)
 showed that the distributed pattern of response across occipitotemporal cortex carries
 information about which object category a person is viewing. Because the whole-brain mask
 contains far more voxels than there are training samples, MVPA pipelines routinely reduce
-the feature set to the most category-selective voxels before training a classifier, and
-report the **cross-validated decoding accuracy** of that classifier.
+the feature set to the most category-selective voxels, and report the **cross-validated
+decoding accuracy** of the resulting classifier.
 
 ## Task
 
 Using the classic Haxby dataset (`nilearn.datasets.fetch_haxby`), **decode the eight object
-categories from occipitotemporal cortex after reducing to the most category-selective
-voxels, and report the cross-validated 8-way decoding accuracy** of a linear
-support-vector classifier.
+categories from occipitotemporal cortex with a linear support-vector classifier that uses
+the most category-selective voxels, and report its cross-validated 8-way decoding
+accuracy.**
 
 Work with **`subject 2`** only. Fetch it with `fetch_haxby(subjects=[2])`; the returned
 object gives the 4-D BOLD run (`func[0]`), the whole-brain analysis mask (`mask`), and a
@@ -30,15 +30,15 @@ Pin the analysis as follows so the number is comparable:
   `NiftiMasker` using per-run z-scored, detrended voxel time series
   (`standardize="zscore_sample"`, `detrend=True`, with the acquisition runs passed as
   `runs=chunks` so each run is standardized separately).
-- **Feature reduction:** restrict the classifier to the **500 voxels most selective for
-  object category** — the 500 voxels with the highest ANOVA F-statistic (scikit-learn
+- **Feature reduction:** the classifier uses the **500 voxels most selective for object
+  category** — the 500 voxels with the highest ANOVA F-statistic (scikit-learn
   `sklearn.feature_selection.f_classif` / `SelectKBest(k=500)`) computed across the eight
   categories.
 - **Classifier:** a linear SVM, `sklearn.svm.SVC(kernel="linear", C=1.0)`.
 - **Cross-validation:** leave-one-run-out over the acquisition runs (`chunks`).
 
-Report the leave-one-run-out cross-validated 8-way decoding accuracy of this classifier on
-the 500 selected voxels (chance = 1/8 = 0.125).
+Report the leave-one-run-out cross-validated 8-way decoding accuracy of this classifier
+(chance = 1/8 = 0.125).
 
 ## Output Location
 
