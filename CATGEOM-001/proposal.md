@@ -28,22 +28,38 @@ Subject 3, `mask_vt` (307 voxels), 8 categories × 12 runs, `1 − Pearson corre
 
 Gap **≈ 0.40** (a sign flip). The cross-run value is a small positive across subjects 1–5 (+0.017 … +0.056) while the within-run value is strongly negative on every subject (−0.35 … −0.51), so the lever is robust; subject 3 is pinned for a single reproducible number (its cross-run value is the furthest of the five from zero). The correct value is stable across `standardize` in {`zscore_sample`, `zscore`}. (Removing the per-run cocktail-blank mean — a non-default extra step outside the pinned `1 − Pearson correlation` recipe — raises both branches but the within-run branch stays the higher one; the verifier's window rejects it.)
 
+### Hardening (2026-09) — tighten so the natural all-pairs RDM no longer passes
+
+The original window (±0.13 around +0.056) admitted the **natural all-pairs RDM (+0.032)** — the most likely un-cued default, and precisely the answer that misses the lever. Fixing it required re-measuring the two families on the real streamed data (nilearn 0.13.1, subject 3, 12 runs):
+
+| run handling | discriminability | family |
+|---|---|---|
+| cross-run pooled (CORRECT) | **+0.0563** | fully cross-run |
+| cross-run per-run-pair averaged | **+0.0628** | fully cross-run |
+| cross-run leave-one-run-out (cross-validated) | **+0.134** | fully cross-run |
+| all-pairs full RDM (NAIVE, natural default) | **+0.0321** | same-run-contaminated |
+| within-run RDMs averaged (NAIVE) | **−0.346** | same-run-contaminated |
+
+The two families are cleanly separated by an **empty gap (+0.032 → +0.056)**: any method that lets same-run pairs into the between-category mean lands at +0.032 **or below** (the natural full RDM mixes in ~8% same-run pairs, whose shared within-run noise deflates the between-category dissimilarity), while any **fully-cross-run** method lands at +0.056 **or above**. So the graded band is now the asymmetric **[+0.044, +0.15]** — floor inside the gap, ceiling generous enough to admit even the leave-one-run-out cross-validated variant (+0.134). This confirms **within-run averaging is a plausible default** (averaging per-run RDMs is a real RSA habit, and it is the −0.346 trap) AND catches the even-more-plausible all-pairs default; no de-cuing of the instruction was needed (it never names runs-as-nuisance, cross-validation, same-run, or leakage).
+
 ### Verifier (2 plain checks; `tests/test_outputs.py`)
 
 Short reviewer-style pytest, schema-robust, no rubric:
 1. **discriminability reported** — a parseable index in [−1, 1] exists.
-2. **cross-run discriminability reproduced** — the reported index is within **0.13** of the cross-run value **+0.056**. Values are gathered at any depth from any JSON (discriminability/index/structure-keyed scalars, with within-run / per-run / naive / artifact / raw-dissimilarity / spread keys excluded) and from prose (numbers next to "discriminability"). The window admits the all-pairs variant (+0.03) and rejects the within-run artifact (−0.35, which is 0.40 away).
+2. **fully-cross-run discriminability reproduced** — the reported index falls in the band **[+0.044, +0.15]**. Values are gathered at any depth from any JSON (discriminability/index/structure-keyed scalars, with within-run / per-run / naive / artifact / raw-dissimilarity / spread keys excluded) and from prose (numbers next to "discriminability"); `best` is the parsed value nearest the cross-run estimate. The band fails BOTH the natural all-pairs RDM (+0.032) and the within-run artifact (−0.346) and passes every fully-cross-run estimate (+0.056, +0.063, +0.134).
 
-### Discrimination (validated locally)
+### Discrimination (re-validated on real streamed data)
 
 | submission | reported discriminability | verdict |
 |---|---|---|
-| reference oracle (cross-run; also records the within-run value under a descriptive `*_within_run_artifact` key) | +0.056 | **PASS** |
-| naive within-run RDM averaged (everything else identical) | −0.346 | **FAIL** |
-| all-pairs RDM (same-run included, ~correct) | +0.032 | **PASS** |
-| prose-only "discriminability index … +0.056" | +0.056 | **PASS** |
+| reference oracle (cross-run; also records the within-run value under a descriptive `*_within_run_artifact` key) | +0.0563 | **PASS** |
+| cross-run per-run-pair averaged | +0.0628 | **PASS** |
+| cross-run leave-one-run-out (cross-validated) | +0.134 | **PASS** (fair to a CV variant) |
+| **all-pairs full RDM (same-run included, natural default)** | **+0.0321** | **FAIL** (now excluded) |
+| partial/asymmetric all-pairs | +0.009 | **FAIL** |
+| within-run RDM averaged (NAIVE) | −0.346 | **FAIL** |
 
-Verifier robustness checked: a submission that reports BOTH the honest +0.056 and a within-run comparison (−0.346 under a `within_run`/`artifact` key) still passes, because the artifact value is excluded from the headline candidates; the honest value is what is graded. A within-run + cocktail-blank combination (+0.20) is rejected by the window; a cross-run + cocktail value (+0.16) passes (it is on the correct side of the lever).
+Verifier robustness checked: a submission that reports BOTH the honest +0.056 and a within-run comparison (−0.346 under a `within_run`/`artifact` key) still passes, because the artifact value is excluded from the headline candidates; the honest value is what is graded. The reference oracle records its within-run contrast under `discriminability_within_run_artifact` (excluded by the `artifact` key filter), so its headline +0.0563 is what is graded.
 
 ### Distinctness from the shipped Haxby tasks
 
