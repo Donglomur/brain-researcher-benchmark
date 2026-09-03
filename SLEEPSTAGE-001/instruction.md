@@ -37,11 +37,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `staging_results.json` — the headline result as
   `{"cv_scheme": <str>, "accuracy": <float>, "cohen_kappa": <float>,
   "n_subjects": 6, "n_epochs": <int>, "n_classes": 5}`.
-- `per_fold.csv` — one row per cross-validation fold:
-  `fold, n_test_epochs, accuracy, kappa` (`fold` is any identifier for the fold).
 - `run_metadata.json` — dataset id, subjects, channels, epoch length, class mapping,
   features, classifier, and the cross-validation scheme you used.
-- `findings.md` — a short written summary (a few sentences) stating the cross-validated
+- `findings.md` — a short written summary (a few sentences) reporting the cross-validated
   staging accuracy and Cohen kappa you obtained. State only what your analysis actually
   supports.
 
