@@ -31,12 +31,20 @@ The M100 **amplitude** (peak GFP) on this dataset is ~58 fT and is remarkably ro
 
 `tests/test_outputs.py`: (1) an M100 latency averaged over the standard-tone trials is reported; (2) the reported latency is the **acoustic-onset-aligned** value (`|reported − 93.3| < 8.0 ms`) — the raw-trigger value (~107.5 ms) is well outside and fails; (3) `findings.md` reports a latency consistent with `m100.json`. The grader searches the output at any depth, requires a latency-ish key with a plausible-millisecond magnitude, and **excludes** explicitly-labelled trigger/reference/delay/amplitude/metadata fields (so the reference `latency_from_raw_trigger_ms_for_reference` field is never mistaken for the answer). No weighted rubric / score.json.
 
-### Validation (MEASURED locally)
+### Validation (MEASURED locally, re-validated this revision)
 
-- **Oracle** (`solution/compute.py`, bst_auditory run 1, 200 standard tones): M100 latency = **93.3 ms** (raw-trigger 107.5 ms for contrast); verifier **PASS (3/3)**. End-to-end through the real `mne.datasets.brainstorm.bst_auditory.data_path(accept=True)` fetcher.
-- **Naive** raw-trigger fixture (107.5 ms): verifier **FAIL** (`test_m100_latency_is_acoustic_onset_aligned`). Task has teeth.
+- **Oracle** (`solution/compute.py`, bst_auditory run 1, 200 standard tones): M100 latency = **93.3 ms** (raw-trigger 107.5 ms, delay 13.9 ms for contrast); verifier **PASS (3/3)**. End-to-end through the real `mne.datasets.brainstorm.bst_auditory.data_path(accept=True)` fetcher.
+- **Naive** raw-trigger fixture (107.5 ms): verifier **FAIL** (`test_m100_latency_is_acoustic_onset_aligned`).
+- **Over-claim** fixture (107.5 ms as a "definitive" latency) and **hedge** fixture (107.5 ms with a vague caveat, never re-timed to the sound): verifier **FAIL** — the headline number is still the raw-trigger value.
+- **Defensible-correct** fixture (acoustic-onset-aligned 94.0 ms via a slightly different audio-onset threshold): verifier **PASS** — the ±8 ms band accepts the robust 92–94 ms family.
 - Data fetches at runtime via the MNE brainstorm fetcher (no credentials; `accept=True`); `allow_internet=true`.
 - **Step-5 frontier calibration PENDING** (maintainer step).
+
+### Step-5 note — RECOGNITION-FROM-TRAINING RISK (read before gating)
+
+The trigger-delay correction on this dataset is **not obscure**: it is a headline step of the *official Brainstorm* `bst_auditory` tutorial ("Detect the sound onset / stimulus delay", the audio channel `UADC001` used to recover the true onset) and of the corresponding **MNE-Python** `brainstorm_auditory` example. Both are long-standing, widely-mirrored public documents almost certainly in frontier models' training corpora. So a model that reports ~93 ms may be **recalling the documented ~14 ms correction for this specific named dataset** rather than *discovering* the trigger–acoustic mismatch un-cued from the data. Two consequences for the maintainer at Step 5:
+1. **A pass here is weaker evidence of the un-cued judgement** than a pass on a task whose lever is not tied to a famous tutorial for the *same* recording. Read the agent's trace: did it independently reason from `UADC001` / inspect the trigger-vs-audio timing, or did it cite/recall the Brainstorm "trigger delay" step? Only the former demonstrates the metacognitive skill this suite targets.
+2. **Consider a transfer check** to separate recall from reasoning — e.g. run the same lever on a recording where the delay is *not* tutorial-documented (another Brainstorm run, or a re-timed/renamed copy), or perturb the delay. If the model only "knows" the ~14 ms for the canonical named file, that is recognition, not the skill. The naive-vs-correct **fail** direction is unaffected by this (a model that reports 107.5 ms failed regardless); the caveat is strictly about how much credit a **pass** earns.
 
 ### Cost
 
