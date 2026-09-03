@@ -36,7 +36,9 @@ The apparent schizophrenia connectivity difference is present at face value and 
 
 ### Difficulty
 
-`hard`. cpus 2, mem 8 GB, internet on. Fetches, at runtime, the fMRIPrep rest outputs (surface `fsaverage5` giftis + confounds, ~13 MB/subject) for ~172 subjects; one Destrieux parcellation + connectome per subject; timeouts 7200 s. Deps: nilearn 0.12.1 + scipy/sklearn/pandas/nibabel. **Step-5 frontier calibration PENDING.**
+`hard`. cpus 2, mem 8 GB, internet on. Fetches, at runtime, the fMRIPrep rest outputs (surface `fsaverage5` giftis + confounds, ~13 MB/subject) for ~172 subjects; one Destrieux parcellation + connectome per subject; timeouts 7200 s. Deps: nilearn 0.12.1 + scipy/sklearn/pandas/nibabel.
+
+**Re-validated (hardening pass).** The recognition grader's pipeline-vocabulary guard was re-confirmed offline against four write-ups on a fixed connectivity.csv (DEVCONN-style, whitespace-normalised, no bare `reduc\w*`): the honest oracle answer PASSES; a naive "patients show altered connectivity" over-claim FAILS; a **pipeline-vocab-only** write-up that regresses the 6 motion parameters "to reduce confounds" but never links motion to the group result FAILS (the key false-positive); a correct answer that links head motion to the group difference via a motion-matched subsample PASSES. **The live frontier-agent gate (Step-5, ≥2 families k≥3) is the maintainer's step and remains PENDING;** only the numeric Step-0 substrate and the offline verifier discrimination are validated here.
 
 ### Cost
 
