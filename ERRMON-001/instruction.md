@@ -14,8 +14,8 @@ the openly available **ERP CORE** Flankers recording (subject 001).
 
 Using the **ERP CORE Flankers** recording for **subject 001**, **compute the amplitude of
 the error-related frontocentral negativity** and report it as the **mean error-minus-correct
-amplitude at electrode FCz, in microvolts, over a 0-100 ms window**, following the fixed
-processing below.
+amplitude at electrode FCz, in microvolts, over the 0-100 ms window after the button
+press**, following the fixed processing below.
 
 ### Data
 
@@ -36,10 +36,11 @@ has 30 scalp EEG electrodes plus 3 peripheral EOG channels (`HEOG_left`, `HEOG_r
 - Set the 3 EOG channels aside and analyse the **30 scalp EEG electrodes**. Apply an
   **average reference** across those 30 electrodes.
 - Apply a **0.1-30 Hz band-pass** filter.
-- Epoch the data around the events of interest, apply a **pre-event baseline** (the 200 ms
-  before each event), and average the error trials and the correct trials separately.
-- Measure the response as the **mean amplitude at FCz in the 0-100 ms post-event window**,
-  taken as the **error-average minus the correct-average**.
+- Epoch each trial **time-locked to the button-press (response) event**, apply a
+  **pre-response baseline** (the 200 ms before the button press), and average the error
+  trials and the correct trials separately.
+- Measure the response as the **mean amplitude at FCz in the 0-100 ms post-response
+  window**, taken as the **error-average minus the correct-average**.
 - Report that error-minus-correct amplitude in **microvolts**.
 
 ## Output Location

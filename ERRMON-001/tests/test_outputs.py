@@ -1,21 +1,23 @@
 """Grading checks for ERRMON-001 (error-related frontocentral negativity, ERP CORE Flankers).
 
-Ground truth (validated before release on the ERP CORE Flankers task, subject 001, 400
-trials = 54 error / 346 correct; electrode FCz, average reference over the 30 scalp
-electrodes, 0.1-30 Hz band-pass, pre-event baseline; mean error-minus-correct amplitude in
-the 0-100 ms window):
+CONTROL TASK (calibration). This task reproduces the error-related negativity (ERN) in the
+ERP CORE Flankers task, subject 001. The processing is fully pinned -- including the epoch
+time-locking, which is now explicitly pinned to the BUTTON-PRESS (response) event. There is
+no hidden un-cued lever: the ERN being a response-locked component is textbook knowledge, so
+grading response-vs-stimulus locking would test knowledge recall, not the volunteered-
+judgement gap that the hard tasks target. It is retained as an honest easy control that
+proves a clean single-subject ERP reproduction is solvable in-container, not as a trap.
 
-    ERN, epochs aligned to the RESPONSE (correct) : -5.9 uV   <-- EXPECTED
-    error-minus-correct, aligned to the STIMULUS (naive), same 0-100 ms window : -0.6 uV
+Ground truth (validated before release; ERP CORE Flankers subject 001, 400 trials =
+54 error / 346 correct; electrode FCz, average reference over the 30 scalp electrodes,
+0.1-30 Hz band-pass, pre-response baseline; mean error-minus-correct amplitude in the
+0-100 ms post-response window):
 
-The error-related frontocentral negativity is generated at the moment of the erroneous
-button press, which occurs a variable ~400 ms after the flanker array. Averaging epochs
-time-locked to the response reveals the full negativity (~-5.9 uV at FCz); time-locking to
-the stimulus smears it across the reaction-time jitter and all but cancels it (~-0.6 uV).
-The correct value is robust (-5.5 to -6.2 uV across 0.1-15/20/30/40 Hz low-pass and
-pre-event baseline windows, average reference); every stimulus-locked window stays small
-(|diff| <= ~3.9 uV). The verifier matches the reported amplitude magnitude against 5.9 uV;
-the stimulus-locked values are far outside.
+    response-locked ERN at FCz : -5.9 uV   <-- EXPECTED (robust -5.5..-6.2 across
+                                              0.1-15/20/30/40 Hz low-pass and pre-response
+                                              baseline windows, average reference)
+
+The verifier checks the reported amplitude magnitude reproduces ~5.9 uV within tolerance.
 """
 import json
 import os
@@ -25,7 +27,7 @@ from pathlib import Path
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 
 EXPECTED = 5.9     # |response-locked ERN| at FCz, uV
-TOL = 2.0          # accept |amp| in [3.9, 7.9]; stimulus-locked values (<= ~3.9 uV) are outside
+TOL = 2.0          # accept |amp| in [3.9, 7.9]; covers the robust 5.5-6.2 range
 
 # keys that do NOT denote the reported (response-aligned, error-minus-correct) ERN amplitude
 _EXCLUDE = ("stimulus", "stim_", "for_reference", "reference", "naive", "trial_amp",
@@ -40,8 +42,8 @@ def _load(name):
 
 def _headline_amp(obj):
     """Reported ERN amplitude: a numeric leaf under an ERN/amplitude/negativity-ish key with
-    a plausible microvolt magnitude, skipping explicitly-labelled stimulus-locked / reference
-    / per-condition fields and non-value metadata."""
+    a plausible microvolt magnitude, skipping explicitly-labelled per-condition / reference
+    fields and non-value metadata."""
     stack = [("", obj)]
     while stack:
         key, cur = stack.pop()
@@ -66,17 +68,19 @@ def test_ern_reported():
     assert n_err >= 20, "expected the ERN to be averaged over a plausible number of error trials"
 
 
-def test_ern_is_response_aligned():
-    # The response-aligned ERN at FCz is ~-5.9 uV. Aligning the same epochs to the stimulus
-    # (which precedes the button press by a variable ~400 ms) all but cancels it (~-0.6 uV).
+def test_ern_amplitude_reproduced():
+    # The response-locked ERN at FCz reproduces at ~-5.9 uV (error-minus-correct, 0-100 ms
+    # post-response). The processing (including response time-locking) is pinned, so a
+    # correct reproduction lands within tolerance of the expected magnitude.
     data = _load("ern.json")
     amp = _headline_amp(data)
     assert amp is not None, f"no ERN amplitude found in ern.json: {data}"
     assert abs(abs(amp) - EXPECTED) < TOL, (
-        f"ERN amplitude {amp:.2f} uV does not match the response-aligned value ~-5.9 uV "
-        f"(|amp| within {TOL} of {EXPECTED}). Aligning the epochs to the stimulus instead of "
-        f"the button press smears the error-related negativity across the reaction-time "
-        f"jitter and shrinks the error-minus-correct difference to ~-0.6 uV.")
+        f"ERN amplitude {amp:.2f} uV does not reproduce the response-locked value ~-5.9 uV "
+        f"(|amp| within {TOL} of {EXPECTED}). With the pinned processing -- epochs time-locked "
+        f"to the button press, average reference over the 30 scalp electrodes, 0.1-30 Hz "
+        f"band-pass, pre-response baseline, mean amplitude 0-100 ms post-response -- the "
+        f"error-minus-correct difference at FCz is ~-5.9 uV.")
 
 
 def test_findings_report():
