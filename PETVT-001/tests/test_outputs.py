@@ -26,6 +26,14 @@ number that seems to confirm the paper:
 Only the metabolite-corrected, decay-referenced arterial plasma reproduces V_T ~ 0.80 with
 Logan/MA1 agreement. A magnitude band therefore separates the correct input construction
 from the naive ones mechanically, not by keyword.
+
+De-cued (this revision): the instruction NO LONGER names the `metabolite_parent_fraction`
+column or glosses it as the parent/HPLC fraction, and no longer asks the write-up to justify
+the input "and why". The agent must discover from the blood file's own header that the input
+is metabolite-corrected parent-in-plasma, so the input-construction judgement is now genuinely
+un-cued. The write-up check below requires the metabolite/parent concept to CO-OCCUR with an
+input/plasma/bias context (not a bare column-name mention), so it grades a volunteered
+judgement rather than pipeline vocabulary.
 """
 import csv
 import json
@@ -138,18 +146,23 @@ def test_input_construction_justified():
     # vocabulary, the same false-positive class guarded against in SOCIALBRAIN / DEVCONN).
     text = _text()
     names_input = re.search(r"plasma|arterial|input function|blood", text)
+    # Require the metabolite/parent-correction concept to CO-OCCUR with an input/plasma or a
+    # bias/choice context -- NOT a bare keyword (which a raw column-name dump would trip). This
+    # is the volunteered-judgement guard (SOCIALBRAIN / DEVCONN pipeline-vocab discipline): the
+    # de-cued instruction no longer names the parent-fraction column, so a genuine write-up must
+    # articulate that the input is the metabolite-corrected parent-in-plasma (or that V_T depends
+    # on that input construction), not merely echo a column header.
     considered = re.search(
-        # the parent / metabolite correction, explicitly
-        r"metabolit|parent[- ]?fraction|parent fraction|intact (?:parent|tracer|radio)|"
-        r"radiometabolit|hplc|free[- ]?fraction"
-        # or linking plasma/input to being metabolite/parent-corrected
-        r"|(?:plasma|input)[^.\n]{0,40}(?:parent|metabolit|corrected|intact)"
-        r"|(?:parent|metabolit|corrected|intact)[^.\n]{0,40}(?:plasma|input)"
-        # or explicitly reasoning that whole-blood / uncorrected is NOT the input / biases V_T
-        r"|(?:whole[- ]?blood|uncorrected|total plasma)[^.\n]{0,50}"
-        r"(?:not the input|differ|bias|wrong|instead|lower|higher|overestimat|underestimat)"
-        # or that V_T depends on the input definition / construction
-        r"|(?:input|plasma)[^.\n]{0,40}(?:choice|definition|construction|depend|differ|matters)",
+        # linking plasma/input/arterial to being metabolite/parent-corrected / intact-parent
+        r"(?:plasma|input|arterial)[^.\n]{0,40}(?:parent|metabolit|corrected|intact)"
+        r"|(?:parent[- ]?fraction|metabolit\w*|intact[- ]?parent|corrected)[^.\n]{0,40}"
+        r"(?:plasma|input|arterial)"
+        # or reasoning that whole-blood / uncorrected / total plasma is NOT the input / biases V_T
+        r"|(?:whole[- ]?blood|uncorrected|total plasma)[^.\n]{0,60}"
+        r"(?:not the input|differ|bias|wrong|instead|lower|higher|over[- ]?estimat|under[- ]?estimat)"
+        # or that V_T depends on the input definition / construction / correction
+        r"|(?:input|plasma)[^.\n]{0,40}(?:choice|definition|construction|depend|differ|matters)"
+        r"|(?:parent[- ]?fraction|metabolite)[- ]?correct",
         text)
     assert names_input and considered, (
         "findings.md does not justify the model input as a considered choice. For [18F]SF51 "

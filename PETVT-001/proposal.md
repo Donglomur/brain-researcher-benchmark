@@ -6,7 +6,11 @@
 
 **Source finding:** first-in-human evaluation of [18F]SF51, a candidate TSPO (18 kDa translocator protein) radioligand (OpenNeuro **ds005619**, CC0; Yan et al.; monkey precursor Yan et al. 2023 *EJNMMI* 50:2962). Invasive kinetics: Logan et al. 1990 (graphical V_T); Ichise et al. 2002 (MA1); 2TCM. Dataset ships **PETPrep-extracted regional TACs** + **arterial blood** (plasma activity, HPLC parent fraction, whole blood), fetched at runtime from OpenNeuro (open, no credentials, snapshot 1.1.0).
 
-**Status: FULL runnable task.** Second real-data PET task (after PETREF-001) and the first **invasive / arterial-input** one. New on three axes vs PETREF: **dataset** (ds005619, not ds001420), **tracer/target** (TSPO [18F]SF51, not SERT [11C]DASB), and **quantification family** (arterial-input **V_T**, not reference-tissue **BP_ND**). Genre: **reproduction** with an un-cued input-construction judgement.
+**Status: FULL runnable task — DE-CUED this revision; grader re-validated on real data.** Second real-data PET task (after PETREF-001) and the first **invasive / arterial-input** one. New on three axes vs PETREF: **dataset** (ds005619, not ds001420), **tracer/target** (TSPO [18F]SF51, not SERT [11C]DASB), and **quantification family** (arterial-input **V_T**, not reference-tissue **BP_ND**). Genre: **reproduction** with an un-cued input-construction judgement.
+
+### De-cue (why this revision exists)
+
+The input-construction judgement was partly **cued**: the instruction enumerated the blood column `metabolite_parent_fraction` and glossed it as "the intact-parent fraction of plasma radioactivity, from HPLC" — handing the agent the exact correction to apply — and the `findings.md` requirement asked it to justify its input "and why." This revision **withholds that cue**: the instruction no longer names or glosses the parent-fraction column (it points the agent to inspect the blood file's own header) and drops the "and why." The agent must now discover from the header that the input is metabolite-corrected parent-in-plasma, so the judgement is genuinely un-cued. The write-up check (`test_input_construction_justified`) was tightened to require the metabolite/parent concept to **co-occur** with an input/plasma/bias context — a bare column-name echo no longer passes.
 
 ### Why this exists (new axis: invasive input)
 
@@ -39,7 +43,7 @@ The input to an arterial-input V_T is the **metabolite-corrected arterial plasma
 | **whole-blood** instead of plasma | 0.448 | **−44 %** |
 | plasma left on a different **decay** footing than the TACs | 1.011 | **+27 %** (Logan also fails to plateau: 16 % t* drift) |
 
-The decay convention is proven, not assumed: Logan V_T drift over t* is minimised at **exactly one** decay-correction of the raw blood (+16 % at N=0, **+5 % at N=1**, −6 % at N=2), i.e. the samples are stored un-decay-corrected and must be brought onto the TACs' injection-time footing. The decay footing is stated as a data fact in `instruction.md` (well-posedness); the **plasma-vs-whole-blood and parent-fraction corrections are left un-cued** — those carry the −35 %/−44 % gaps.
+The decay convention is proven, not assumed: Logan V_T drift over t* is minimised at **exactly one** decay-correction of the raw blood (+16 % at N=0, **+5 % at N=1**, −6 % at N=2), i.e. the samples are stored un-decay-corrected and must be brought onto the TACs' injection-time footing. The instruction states only the neutral data facts (samples recorded at draw time; radioactivity in Bq/mL) and points the agent to the blood file header; the **plasma-vs-whole-blood and parent-fraction corrections are now fully un-cued** (the parent-fraction column is no longer named or glossed) — those carry the −35 %/−44 % gaps.
 
 **Adversarial property:** the two naive inputs push V_T **lower** (0.45–0.51) — *even more* consistent with the paper's "V_T < 1" headline than the correct 0.80. An agent that skips the parent-fraction correction or grabs whole-blood gets a number that *feels confirmed*. This is the trap.
 
@@ -47,21 +51,20 @@ The decay convention is proven, not assumed: Logan V_T drift over t* is minimise
 
 ### Verifier (3 plain checks, human-looking pytest)
 
-`tests/test_outputs.py`: (1) cortical V_T present for the ~7-participant cohort, physiologically plausible, and an invasive V_T estimator actually named; (2) **reproduction** — cohort-mean cortical V_T in the validated band **[0.68, 0.92]** AND a ≥1.6× per-participant spread (the ~2× genotype range); (3) **input justified** — `findings.md` states the model input as a considered choice (the parent-fraction/metabolite correction, or that V_T depends on the input definition), not merely "we used the arterial input" (pipeline vocabulary — the same false-positive class guarded against in SOCIALBRAIN/DEVCONN). Check 2 is the mechanical discriminator: you cannot land in [0.68, 0.92] without the correct input construction.
+`tests/test_outputs.py`: (1) cortical V_T present for the ~7-participant cohort, physiologically plausible, and an invasive V_T estimator actually named; (2) **reproduction** — cohort-mean cortical V_T in the validated band **[0.68, 0.92]** AND a ≥1.6× per-participant spread (the ~2× genotype range); (3) **input justified** — `findings.md` articulates the model input as a considered choice, with the metabolite/parent-correction concept **co-occurring** with an input/plasma or a bias/choice context (or an explicit statement that V_T depends on the input construction), not merely "we used the arterial input" and not a bare column-name echo (the same pipeline-vocabulary false-positive class guarded against in SOCIALBRAIN/DEVCONN). Check 2 is the mechanical discriminator: you cannot land in [0.68, 0.92] without the correct input construction; check 3 additionally requires the agent to have *volunteered* the judgement now that the cue is withheld.
 
-**Offline discrimination (measured, this build):**
+**Offline discrimination (re-validated on real data, this revision):**
 
 | output | check1 | check2 (reproduce) | check3 (justify) | verdict |
 |---|---|---|---|---|
-| reference solution (Logan, metabolite-corrected plasma) | PASS | PASS (0.797) | PASS | **PASS** |
+| reference solution (Logan, metabolite-corrected plasma, full reasoning) | PASS | PASS (0.797) | PASS | **PASS** |
 | whole-blood input | PASS | **FAIL** (0.448) | **FAIL** | **FAIL** |
-| plasma, no metabolite correction | PASS | **FAIL** (0.514) | **FAIL** | **FAIL** |
-| plasma, not decay-referenced | PASS | **FAIL** (1.011) | PASS | **FAIL** |
-| correct V_T but generic "arterial input" report | PASS | PASS (0.797) | **FAIL** | **FAIL** |
+| plasma, no metabolite correction | PASS | **FAIL** (0.514) | — | **FAIL** |
+| correct V_T but terse "arterial input" report (no volunteered judgement) | PASS | PASS (0.797) | **FAIL** | **FAIL** |
 
 ### Difficulty — NOT yet gated (frontier runs pending)
 
-Oracle passes (reward 1.0 offline; the reference `compute.py` fetches live OpenNeuro and writes the three artefacts; `harbor -a oracle` to confirm in-container). Adversarial input choices fail as tabulated. The **≥2-frontier-family, k≥3 difficulty gate has not been run** (no Harbor/agent access in this authoring session). **Honest expectation:** because building a metabolite-corrected plasma input from a raw blood file is a real expert step that naive pipelines skip — and because the naive shortcut returns an *even more paper-consistent* number — this is a plausible **hard** candidate; but until the gate runs it is recorded as **untested difficulty**. If agents pass, the ratchet is to also withhold the decay-footing note (adding that third input trap) rather than adding rigor.
+Oracle passes (reward 1.0 offline on live-fetched real data this revision; the reference `compute.py` fetches live OpenNeuro and writes the three artefacts; `harbor -a oracle` to confirm in-container). Adversarial input choices fail as tabulated. The **≥2-frontier-family, k≥3 difficulty gate has not been run** (no Harbor/agent access in this authoring session). **Honest expectation:** the input-construction judgement is now genuinely un-cued (the parent-fraction column is withheld from the instruction) and the naive shortcuts return an *even more paper-consistent* number, so this is a plausible **hard** candidate; but until the gate runs it is recorded as **untested difficulty**. If agents still pass, the remaining ratchet is to also withhold the decay-footing note (adding a third input trap) rather than adding rigor.
 
 ### Data provenance / reliability caveats
 

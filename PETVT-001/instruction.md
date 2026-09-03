@@ -37,11 +37,10 @@ sub-XX:ses-baseline:pet:sub-XX_ses-baseline_trc-sf51_recording-manual_blood.tsv
   (seconds) and one column per FreeSurfer/gtmseg region, among them the cortical
   gray-matter regions `ctx-lh-*` / `ctx-rh-*`, plus subcortical and cerebellar regions, all
   in **Bq/mL**. The TAC values are **decay-corrected to injection time**.
-* The **blood** TSV has one row per sample. Columns are `time` (seconds, relative to
-  injection), `plasma_radioactivity` (Bq/mL), `metabolite_parent_fraction` (the intact-parent
-  fraction of plasma radioactivity, from HPLC), and `whole_blood_radioactivity` (Bq/mL). The
-  samples are recorded **at draw time**. Rows with `time == 0` after the first sample are
-  padding and should be ignored.
+* The **blood** TSV has one row per sample, recorded **at draw time**. It carries the sample
+  `time` (seconds, relative to injection) and the measured blood/plasma radioactivity in
+  **Bq/mL**; inspect the file header for the full set of measured quantities it provides.
+  Rows with `time == 0` after the first sample are padding and should be ignored.
 
 ## Task
 
@@ -68,7 +67,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   the per-participant and mean cortical V_T.
 - `findings.md` — a short written summary: the per-participant and mean cortical V_T, how
   V_T varies across the cohort, and an account of the model input you built from the blood
-  recording and the estimator you used and why. State only what your analysis supports.
+  recording and the estimator you used. State only what your analysis supports.
 
 ## Failure handling
 
