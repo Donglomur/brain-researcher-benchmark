@@ -36,6 +36,12 @@ Pin the analysis as follows so the number is comparable:
 - **Quantity:** the **inter-subject correlation** of the movie time course in each of the
   three visual regions, averaged over the three regions. Report a single headline value
   (chance ≈ 0).
+- **ISC estimator:** either standard estimator is acceptable — **pairwise** ISC (the mean
+  Pearson correlation between every pair of participants) or **leave-one-out** ISC (each
+  participant correlated with the mean of the others). Both are conventional (Nastase et al.
+  2019); state in `run_metadata.json` which one you used. The leave-one-out estimate is
+  systematically higher than the pairwise one because it correlates against a higher-SNR
+  template, so report the estimator alongside the value.
 
 Report the inter-subject correlation of the visual-cortex movie response.
 

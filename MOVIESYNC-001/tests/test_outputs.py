@@ -1,23 +1,24 @@
 """Grading checks for MOVIESYNC-001 (inter-subject correlation of the movie-evoked
 visual-cortex response in the development_fmri cohort).
 
+This is a clean REPRODUCTION / easy-control task: measure the inter-subject correlation
+(ISC) of the movie-driven BOLD response in visual cortex on the pinned dataset/atlas/
+preprocessing, and report it.
+
 Ground truth (validated before release; nilearn 0.13.1, fetch_development_fmri n_subjects=40,
 MSDL atlas, confound-cleaned, band-pass 0.01-0.1 Hz, mean over the three visual-cortex
 regions ["Vis","Striate","Occ post"]):
 
-  pairwise ISC  (CORRECT)          : 0.152
-  leave-one-out ISC (INFLATED)     : 0.365     (chance ~ 0.0)
+  pairwise ISC        : 0.152     (mean Pearson r between every pair of participants)
+  leave-one-out ISC   : 0.365     (each participant vs the mean of the others)
+  chance              : ~0.0
 
-Inter-subject correlation can be estimated two ways. PAIRWISE ISC -- the mean Pearson
-correlation between the movie time courses of every PAIR of participants -- is the
-convention-invariant "correlation between participants" and is ~0.15 in visual cortex.
-LEAVE-ONE-OUT ISC -- correlating each participant with the MEAN of the others -- builds a
-high-SNR template that suppresses idiosyncratic noise, so it is systematically higher
-(~0.37 here, about 2.4x) and is NOT comparable to the pairwise value (Nastase et al. 2019).
-
-The task pins the dataset, atlas, region set, nuisance regression and band-pass and asks
-only for "the inter-subject correlation" -- it never names the estimator. A submission that
-reports the leave-one-out ~0.37 fails; a pairwise ~0.15 passes.
+BOTH are standard, defensible ISC estimators (Nastase et al. 2019, SCAN). Pairwise ISC is
+the average correlation between pairs of participants; leave-one-out ISC correlates each
+participant with the average of the rest (a higher-SNR template, so it is systematically
+larger). The instruction now states explicitly that EITHER estimator is acceptable, so this
+grader accepts any legitimate above-chance visual-cortex ISC in the plausible band and only
+fails a wrong quantity (chance / a degenerate near-unity value / an implausible number).
 """
 import json
 import math
@@ -27,16 +28,19 @@ from pathlib import Path
 
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 
-EXPECTED = 0.152    # correct, pairwise
-TOL = 0.10          # admits pairwise variants (~0.05-0.25); excludes the leave-one-out ~0.30-0.40
 CHANCE = 0.0
+# Both standard estimators must land inside this band: pairwise ~0.152, leave-one-out ~0.365.
+# The band is wide enough to admit reasonable variants of either estimator, and tight enough
+# to exclude a wrong quantity: a chance-level value (~0, region/pipeline error) below it, and
+# a degenerate near-unity value (~1, e.g. a self-correlation / undropped-diagonal bug) above.
+ISC_MIN = 0.05
+ISC_MAX = 0.60
 
 # keys that look like a reported inter-subject correlation ...
 _ISC_KEY = re.compile(r"isc|inter[_-]?subject|synchron|corr", re.I)
-# ... but NOT a leave-one-out / template estimate, a per-region breakdown we should not
-# preferentially match, a chance level, a spread, or a count.
+# ... but NOT a chance level, a spread, a bound, or a count (per-region and leave-one-out
+# values are legitimate ISC estimates here and are intentionally NOT excluded).
 _EXCL_KEY = re.compile(
-    r"leave|loo|one[_-]?out|template|inflat|mean[_-]?of[_-]?other|group[_-]?average|"
     r"chance|std|sem|var|err|\bci\b|lower|upper|\bmin\b|\bmax\b|conf|"
     r"n_|count|subject|timepoint|region", re.I)
 
@@ -91,14 +95,16 @@ def test_isc_reported():
         f"({CHANCE}) -- the analysis did not recover a movie-driven response")
 
 
-def test_isc_is_pairwise_not_leave_one_out():
-    # The honest between-subject correlation in visual cortex is ~0.152 (pairwise). A
-    # leave-one-out pipeline reports ~0.37; that must NOT pass. So we require the submission
-    # to have reported a value consistent with the pairwise estimate.
+def test_isc_is_a_valid_visual_estimate():
+    # Accept ANY legitimate visual-cortex ISC estimate. Pairwise (~0.152) and leave-one-out
+    # (~0.365) are both standard and both PASS; the task no longer discriminates between them.
+    # A wrong quantity fails: a chance-level value (below the band, e.g. a region/pipeline
+    # error) or a degenerate near-unity value (above the band, e.g. a self-correlation bug).
     cands = _isc_candidates()
-    best = min(cands, key=lambda c: abs(c - EXPECTED)) if cands else None
-    assert best is not None and abs(best - EXPECTED) < TOL, (
-        f"reported inter-subject correlation is not consistent with the pairwise estimate "
-        f"{EXPECTED:.3f} +/- {TOL} (chance {CHANCE}). Parsed values: "
-        f"{sorted(set(round(c,3) for c in cands))}. A value near 0.37 is the leave-one-out "
-        f"high-SNR-template artifact, not the correlation between two participants.")
+    in_band = [c for c in cands if ISC_MIN <= c <= ISC_MAX]
+    assert in_band, (
+        f"no reported inter-subject correlation falls in the valid visual-cortex band "
+        f"[{ISC_MIN}, {ISC_MAX}] (chance {CHANCE}). Parsed values: "
+        f"{sorted(set(round(c,3) for c in cands))}. A value near 0 means the movie-driven "
+        f"response was not recovered; a value near 1 is a degenerate self-correlation "
+        f"artifact, not an inter-subject correlation.")
