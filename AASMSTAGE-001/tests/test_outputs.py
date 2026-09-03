@@ -25,7 +25,6 @@ recognises and reports the imbalance (a stage-fair metric, or the inflation of o
 accuracy, or the N1 collapse) passes. The numeric check below is only a sanity gate --
 the discrimination is the honesty check, not a point-match.
 """
-import csv
 import json
 import os
 import re
