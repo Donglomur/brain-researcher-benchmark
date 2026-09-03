@@ -58,8 +58,8 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `run_metadata.json` — dataset id, snapshot, target region, reference region, model, and
   the per-scan and mean putamen BP_ND.
 - `findings.md` — a short written summary: the per-scan and mean putamen BP_ND, the
-  test-retest reproducibility, and an account of the reference region and model you used
-  and why. State only what your analysis supports.
+  test-retest reproducibility, and the reference region and model you used. State only what
+  your analysis supports.
 
 ## Failure handling
 

@@ -1,4 +1,6 @@
-"""Grading checks for PETREF-001.
+"""Grading checks for PETREF-001 — a clean REPRODUCTION / easy control: estimate putamen
+BP_ND from the [11C]DASB test-retest TACs with a reference-tissue kinetic model and report
+a reproducible value.
 
 Ground truth (established in Step-0 on the PETPrep-derived regional TACs of OpenNeuro
 ds001420, [11C]DASB test-retest, 2 participants x test/retest):
@@ -8,15 +10,17 @@ ds001420, [11C]DASB test-retest, 2 participants x test/retest):
     mean 1.920, test-retest ~2-3%.
   SRTM, Logan-ref and Ichise MRTM agree to ~2% (1.90-1.99).
   Whole-cerebellum reference (the pre-computed `reference` column, which folds in
-    cerebellar white matter + vermis) gives ~1.86, ~3% lower -- a real, un-cued
-    reference-region choice.
+    cerebellar white matter + vermis) gives ~1.86, ~3% lower.
 
-A correct answer (1) does proper reference-tissue kinetic modelling -> BP_ND ~1.9 that
-is REPRODUCIBLE across the four scans, and (2) reports its reference region as a
-considered choice for this tracer (cerebellar gray matter, not whole cerebellum).
+Both reference-region choices (cerebellar gray matter ~1.92 and whole cerebellum ~1.86) and
+all three estimators (SRTM/Logan/MRTM) fall in the accepted band, so the grader passes ANY
+valid reference-tissue BP_ND. The earlier "reference-region justified" check was dropped: the
+instruction cued it (it asked the write-up to justify the reference and why), so it was not an
+un-cued judgement and did not belong in a clean control.
 
-The shortcut this rules out: a non-kinetic target/reference "SUV ratio - 1" on this
-~54-min (non-equilibrium) scan gives per-scan values that scatter widely
+A correct answer does proper reference-tissue kinetic modelling -> BP_ND ~1.9 that is
+REPRODUCIBLE across the four scans. The shortcut this rules out: a non-kinetic target/reference
+"SUV ratio - 1" on this ~54-min (non-equilibrium) scan gives per-scan values that scatter widely
 (2.18/2.04/1.61/1.72; coefficient of variation ~13% vs ~2% for real BP_ND), so a
 clustering/reproducibility check separates kinetic modelling from a ratio.
 """
@@ -92,26 +96,3 @@ def test_reproduces_putamen_bp():
         f"the four putamen estimates scatter too much (CV {cv:.1%}) to be reference-tissue "
         "BP_ND -- a target/reference SUV ratio on this ~54-min scan is not at equilibrium "
         "and is not reproducible across scans; use a kinetic reference-tissue model")
-
-
-def test_reference_region_justified():
-    # The un-cued judgement: a reference-tissue BP_ND is only as good as its reference
-    # region, and for [11C]DASB the whole cerebellum (which folds in cerebellar white
-    # matter and the vermis) is not the same as cerebellar gray matter. An honest report
-    # states its reference region AS A CONSIDERED CHOICE for this tracer -- not merely
-    # "I used the cerebellum" (which is pipeline vocabulary, the same false-positive class
-    # as SOCIALBRAIN's GSR / DEVCONN's motion). It must show the sub-region distinction or
-    # say the estimate depends on the reference definition.
-    text = _text()
-    names_ref = re.search(r"cerebell", text)
-    # a considered reference choice: a gray/white/vermis/cortex distinction, OR an explicit
-    # statement that the reference-region definition/choice affects the estimate.
-    considered = re.search(
-        r"gr[ae]y[- ]?matter|white[- ]?matter|\bvermis\b|cortex only|cerebellar cortex"
-        r"|whole cerebellum|reference[^.\n]{0,40}(choice|definition|selection|depend|differ|matters)"
-        r"|(choice|definition|selection|depend|differ)[^.\n]{0,40}reference", text)
-    assert names_ref and considered, (
-        "findings.md does not justify the reference region as a considered choice for "
-        "[11C]DASB. Naming 'the cerebellum reference' is not enough: the whole cerebellum "
-        "(white matter + vermis) differs from cerebellar gray matter, and the report should "
-        "say which was used and that BP_ND depends on that reference-region definition.")
