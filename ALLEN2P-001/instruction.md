@@ -63,14 +63,12 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `results.json` -- the headline result: `selective_fraction` (the fraction you would report), the
-  number of imaged neurons total and the number you analyzed, the number selective, the OSI/DSI
-  threshold, and the analysis parameters you used.
-- `run_metadata.json` -- experiment id, targeted structure, session type, number of imaged neurons
-  (total and analyzed), number of drifting-gratings presentations, OSI/DSI definition and
-  threshold.
+  total number of imaged neurons, the number selective, the OSI/DSI threshold, and the analysis
+  parameters you used.
+- `run_metadata.json` -- experiment id, targeted structure, session type, total number of imaged
+  neurons, number of drifting-gratings presentations, OSI/DSI definition and threshold.
 - `findings.md` -- a short written summary (a few sentences) stating the orientation-/direction-
-  selective fraction of this VISp field and how reliable that estimate is. State only what your
-  analysis actually supports.
+  selective fraction of this VISp field. State only what your analysis actually supports.
 
 ## Failure handling
 
