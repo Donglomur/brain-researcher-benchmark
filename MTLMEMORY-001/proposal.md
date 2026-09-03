@@ -37,9 +37,36 @@ The agent, told to report the mean new/old AUC of the memory-selective neurons, 
 
 `tests/test_outputs.py`: (1) a real analysis ran -- a plausible pooled MTL neuron count (~1864) and a small memory-selective proportion; (2) **numeric reproduction** -- the headline single-neuron new/old AUC (a value the submission labelled inflated / same-trials / naive is never taken as the headline) matches **0.51 ± 0.06**, which fails the circular ~0.63; (3) light honesty check -- findings.md describes the new/old analysis and the headline is the honest independent-selection value. Accepts the AUC as a fraction or a percentage and searches the output at any depth.
 
-### Difficulty -- Step-5 frontier calibration PENDING
+### Hardening pass (tb-science bar)
 
-Oracle **reward 1.0** (reference `solution/compute.py` streams all DANDI 000004 assets and reports ~0.51 via held-out selection); naive baseline (select + score memory-selective neurons on the same trials) reports ~0.63 → **reward 0**. The ≥2-frontier-family gate (GPT-5.x + Claude, k≥3 each) is a maintainer step and is **not yet run**.
+The verifier was already at the reproduction-genre bar: numeric teeth (headline new/old AUC
+must reproduce **0.51 ± 0.06**, failing the circular ~0.63), a schema-robust headline
+extractor that searches any depth and **never takes a value the submission itself labelled
+inflated / naive / same-trials / all-trials / cross-… when the selection leaked**, and a
+light findings honesty check. No verifier change needed.
+
+The one residual cue was in the instruction: the "standard implementation choices" sentence
+had spelled out the lever almost verbatim -- "exactly which trials are used to identify a
+neuron as memory-selective and to fix its preferred direction, versus which trials are used to
+measure its new/old AUC." That structurally telegraphs the selection-vs-measurement (held-out)
+split -- the double-dipping lever this task turns on -- even while avoiding the words
+"held-out"/"cross-validate"/"circular". It was replaced with a generic list of innocuous
+choices (tie handling in the rank-sum / ROC, treatment of few-trial neurons), so the
+double-dipping insight is now fully un-cued; the mild "and how reliable that estimate is"
+findings nudge was dropped for the same reason. The pinned method (rank-sum p<0.05 selection,
+`max(AUC, 1-AUC)` preferred direction) is untouched and remains compatible with the honest
+independent-selection analysis, so fairness is preserved.
+
+**Re-validation (offline, four constructed outputs):** oracle-pass (honest 0.512 headline with
+the naive 0.629 present-but-labelled -- exclusion works) / naive-fail (0.629 headline) /
+over-claim-hedge-fail (cross-validated ONLY the AUC → still 0.63, with a prose "may be inflated"
+caveat -- the numeric teeth reject it, and the leak-is-in-selection subtlety is caught because
+the *value* is 0.63 regardless of the label) / defensible-alternative-pass (nested independent
+selection giving 0.503) = **Y/Y/Y/Y**.
+
+### Difficulty -- Step-5 frontier calibration PENDING (maintainer gate)
+
+Oracle **reward 1.0** (reference `solution/compute.py` streams all DANDI 000004 assets and reports ~0.51 via held-out selection); naive baseline (select + score memory-selective neurons on the same trials) reports ~0.63 → **reward 0**. The numeric ground truth (naive 0.629 / held-out 0.511) is Step-0-locked and unchanged by this hardening (instruction-only). The ≥2-frontier-family gate (GPT-5.x + Claude, k≥3 each) -- does a frontier agent, now un-cued, recognise the selection circularity and report the honest ~0.51, or execute the pinned method literally and report the inflated ~0.63? -- is the maintainer's Step-5 gate and **cannot be run here**.
 
 ### Cost
 

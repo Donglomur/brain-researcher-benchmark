@@ -46,11 +46,11 @@ Pinned analysis choices (use exactly these so the reported numbers are comparabl
 Report the **mean single-neuron new/old ROC AUC over the memory-selective neurons** (the headline
 number), and the **proportion of MTL neurons that are memory-selective**.
 
-Standard implementation choices the brief leaves to the analyst -- in particular exactly which
-trials are used to identify a neuron as memory-selective and to fix its preferred direction, versus
-which trials are used to measure its new/old AUC -- should follow common practice for a defensible
-single-neuron discriminability estimate. Report a mean new/old AUC you would stand behind as the
-single-neuron memory signal, stating only what your analysis actually supports.
+Standard implementation choices the brief leaves to the analyst -- for example tie handling in the
+rank-sum test and in the ROC computation, and how neurons with very few trials are treated -- should
+follow common practice for a defensible single-neuron discriminability estimate. Report a mean
+new/old AUC you would stand behind as the single-neuron memory signal, stating only what your
+analysis actually supports.
 
 ## Output Location
 
@@ -66,8 +66,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   memory-selective, region, phase, response window, and your definitions of memory-selective and of
   the new/old AUC.
 - `findings.md` -- a short written summary (a few sentences) stating the single-neuron new/old
-  discriminability of memory-selective MTL neurons and how reliable that estimate is. State only
-  what your analysis actually supports.
+  discriminability of memory-selective MTL neurons. State only what your analysis actually supports.
 
 ## Failure handling
 
