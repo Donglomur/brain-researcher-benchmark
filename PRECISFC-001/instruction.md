@@ -50,7 +50,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `reliability.csv` — one row per subject:
-  `subject_id, n_sessions, frames_total, frames_retained, reliability`.
+  `subject_id, n_sessions, n_frames, reliability`.
 - `reliability_stats.json` — the per-subject reliability values and a group-level reliability
   summary, plus the number of subjects.
 - `run_metadata.json` — dataset id, subjects, sessions, atlas, the reliability metric, and the

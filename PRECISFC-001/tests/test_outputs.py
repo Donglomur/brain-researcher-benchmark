@@ -59,9 +59,12 @@ def test_recognises_data_quality_controls():
     # A flat "the connectome is reliable" (no controls), or naming only one, fails.
     text = _findings()
 
-    # (A) frame-censoring recognised, tied to motion/frames
+    # (A) frame-censoring recognised, tied to motion/frames.
+    # NB: no bare "\bmask\w*" -- it false-positives on ordinary preprocessing vocabulary
+    # ("we applied a brain mask to the volumes"), which is unrelated to motion frame-censoring.
+    # The supplied artifact is a *temporal* mask (tmask), so we key on censor/scrub/temporal-mask.
     FRAME = r"(?:frame|volume|timepoint|time-point)"
-    CENS = r"(?:censor\w*|scrub\w*|temporal mask|tmask|\bmask\w*)"
+    CENS = r"(?:censor\w*|scrub\w*|temporal[- ]?mask|tmask)"
     recognises_censoring = bool(
         re.search(rf"{CENS}[^.]{{0,40}}{FRAME}", text)
         or re.search(rf"{FRAME}[^.]{{0,40}}{CENS}", text)
@@ -71,8 +74,13 @@ def test_recognises_data_quality_controls():
         or ("frame censor" in text) or ("motion censor" in text))
 
     # (B) low-quality-subject exclusion recognised (either name the subjects, or the concept
-    # of dropping the drowsy/high-motion/low-quality subject/s).
-    SUBJ = r"(?:msc-?08|msc-?09|subject|participant|drows\w*|low[- ]?quality|high[- ]?motion|excessive motion)"
+    # of dropping the drowsy/low-quality subject/s). This is the un-cued gate and must be
+    # independent of control (A): bare "high-motion"/"excessive motion" are DELIBERATELY excluded
+    # from the subject set, because "removed high-motion frames" is frame-*censoring* (control A),
+    # not subject exclusion -- keeping them here would let a censoring-only write-up self-satisfy
+    # both halves. Those descriptors still count when anchored to a named subject (MSC08/MSC09)
+    # via the specific patterns below (e.g. "MSC09 ... excessive motion ... excluded").
+    SUBJ = r"(?:msc-?08|msc-?09|subject|participant|drows\w*|low[- ]?quality)"
     DROP = r"(?:exclud\w*|drop\w*|discard\w*|remov\w*|omit\w*|left out|set aside|leav\w* out)"
     recognises_exclusion = bool(
         re.search(rf"{DROP}[^.]{{0,60}}{SUBJ}", text)

@@ -163,10 +163,13 @@ excl_only = float(np.mean([per[s]["reliability_all_frames"] for s in included]))
 import csv
 with open(OUT / "reliability.csv", "w", newline="") as f:
     w = csv.writer(f)
-    w.writerow(["subject_id", "n_sessions", "frames_total", "frames_retained", "reliability"])
+    # neutral frame-count column (n_frames = frames that entered the connectome); the
+    # per-subject retention / censoring breakdown lives in reliability_stats.json and findings.md
+    # so the required schema does not telegraph the (un-cued) motion frame-censoring control.
+    w.writerow(["subject_id", "n_sessions", "n_frames", "reliability"])
     for s in SUBJECTS:
         p = per[s]
-        w.writerow([s, p["n_sessions"], p["frames_total"], p["frames_retained"],
+        w.writerow([s, p["n_sessions"], p["frames_retained"],
                     f"{p['reliability_censored']:.6f}"])
 
 (OUT / "reliability_stats.json").write_text(json.dumps({
