@@ -31,20 +31,36 @@ Built the 40 Schaefer-100 correlation connectomes and computed per-participant *
 
 The instruction names the metric (global efficiency), the data, the atlas, and the deliverable ("which participants are the most integrated"), and lists graph construction / thresholding generically among the unspecified "standard choices" — but **never** says the answer depends on the absolute-vs-density-matched thresholding convention, nor that an absolute threshold confounds efficiency with overall connectivity. A naive analyst picks one absolute cutoff, ranks, and confidently names the "most integrated" participants — an ordering that is really the overall-connectivity ordering. The warranted conclusion is that the ranking is **convention/density dependent** and density must be matched to compare integration fairly.
 
-### Verifier (4 plain checks, human-looking pytest; mirrors GRADIENT-001)
+### Verifier (4 plain checks, human-looking pytest) — hardened to a NUMERIC top-k contrast
 
-`tests/test_outputs.py`: (1) per-participant global efficiency actually computed (≥10 participants, values in (0,1), non-constant); (2) a participant ranking / most-integrated set reported; (3) **robustness checked** — the submission examined more than one thresholding convention/level (a ≥2-config robustness report, or prose naming both conventions / a density sweep), not a single arbitrary threshold; (4) **not over-claimed** — findings report the ranking as convention/density dependent, or note that a fixed absolute threshold confounds efficiency with overall connectivity strength and that density must be matched — rather than a single confident absolute-threshold ordering.
+The pre-hardening check 4 was a prose over-claim check (does `findings.md` call the ranking
+convention/density dependent). As the proposal below anticipated, that is **hedge-passable**: an
+agent can write "the ranking may depend on the thresholding convention / graph density" while
+still reporting the naive absolute-threshold ordering as the answer. The **ratchet named in the
+original difficulty note has now been applied**: check 4 is a **numeric top-k contrast** — it
+grades the *reported* most-integrated set against two release ground-truth top-8 sets computed
+on the pinned data (density-matched vs absolute), and passes only if the reported ranking is
+**closer to the density-matched set than to the absolute one**. Reproducing the density-matched
+ranking *requires actually density-matching*; prose cannot substitute.
 
-**Offline discrimination (measured, this build):**
+`tests/test_outputs.py`: (1) per-participant global efficiency actually computed (≥10 participants, values in (0,1), non-constant); (2) a participant ranking / most-integrated set reported; (3) **engaged with the thresholding convention** — a ≥2-config report, prose naming both conventions / a density sweep, **or** an explicit density-matched/proportional (top-X%/edge-density) method (a submission that simply does the right thing is not failed here); (4) **numeric top-k contrast (the teeth)** — the reported most-integrated set overlaps the density-matched ground-truth top-8 by ≥2 **and** by strictly more than the absolute-threshold top-8 (a preprocessing-robust fallback, Route B, also passes a submission that numerically reports the efficiency↔strength confound with the correct sign under both conventions).
 
-| output | check1 | check2 | check3 (robustness) | check4 (not over-claimed) | verdict |
+The two ground-truth top-8 sets are **essentially disjoint** (overlap 0/8; density-matched Spearman −0.28 vs absolute). The contrast — not exact identity — is graded, so it is robust: in the Step-0 probe **every** density-matched variant (5 densities × 2 preprocessings, incl. no-confound regression) landed with DM-overlap ≥2 and > ABS-overlap, while every absolute cutoff and the pure strength ranking did the reverse.
+
+**Offline discrimination (measured on the real cached ADHD-200 connectomes, this build):**
+
+| output | check1 | check2 | check3 | check4 (numeric top-k) | verdict |
 |---|---|---|---|---|---|
-| reference solution (both conventions, density-matched, confound reported) | PASS | PASS | PASS | PASS | **PASS** |
-| naive single absolute-threshold confident ranking | PASS | PASS | **FAIL** | **FAIL** | **FAIL** |
+| reference solution (density-matched headline, confound reported) | PASS | PASS | PASS | PASS (dm 8/8, ab 0/8) | **PASS** |
+| naive single absolute-threshold confident ranking | PASS | PASS | **FAIL** | **FAIL** (dm 0/8, ab 8/8) | **FAIL** |
+| **hedge** — absolute ranking as headline + prose "ranking may depend on threshold/density" | PASS | PASS | PASS | **FAIL** (dm 0/8, ab 8/8) | **FAIL** |
+| defensible alternative — single-density (10%) proportional/density-matched ranking | PASS | PASS | PASS | PASS (dm 7/8, ab 1/8) | **PASS** |
 
-### Difficulty — NOT yet gated (frontier runs pending)
+The **hedge row is the point of the hardening**: prose caveats no longer pass; the reported ranking must actually be the density-matched one.
 
-Oracle passes (reward 1.0 offline; `harbor -a oracle` to confirm in-container). The naive single-threshold ranking fails as tabulated. The **≥2-frontier-family, k≥3 difficulty gate has not been run** (no Harbor/agent access this session) — **Step-5 frontier calibration PENDING**. Honest expectation & over-claim caveat: like GRADIENT-001, checks 3–4 are partly prose-gated, so a savvy agent that hedges about thresholding could pass without the full analysis; the discrimination is against the *default* behavior of thresholding once and reporting a confident ranking. If the gate shows agents pass by hedging, the ratchet is to convert to a reproduction that grades the density-matched ranking against the absolute one numerically (a specific top-k contrast) rather than the prose acknowledgement.
+### Difficulty — Step-5 frontier calibration PENDING (maintainer gate)
+
+Oracle passes (**reward 1.0**, re-verified this build by running the reference `compute.py` on the cached ADHD-200/Schaefer data: n=40, rank-corr prop-vs-abs −0.28, eff↔strength corr +0.86 absolute / −0.57 density-matched — matching Step-0). Naive and hedge fail as tabulated. The **≥2-frontier-family, k≥3 gate** — does GPT-5.x / Claude, un-cued, density-match and report the fair ranking, or threshold absolutely once and report a confident (strength-confounded) ordering? — is the maintainer's Step-5 step and **cannot be run here** (no Harbor/agent access this session). Note the numeric grade also means a maintainer must regenerate the two ground-truth top-8 sets if the pinned nilearn `fetch_adhd` subject list or atlas ever changes.
 
 ### Data provenance / reliability caveats
 

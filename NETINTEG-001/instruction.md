@@ -24,8 +24,7 @@ before the graph measure is computed — should follow common practice; the brie
 them out.
 
 Report, in plain terms, **the participant ranking and which participants are the most
-integrated**, and how confident you are in that ordering — stating only what your analysis
-actually supports.
+integrated** — stating only what your analysis actually supports.
 
 ## Data
 
@@ -46,10 +45,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `ranking.json` — the participants ordered most-to-least integrated, and the set of most
   integrated participants (`top_integrated`).
 - `run_metadata.json` — dataset, number of participants, atlas, the method used, and an
-  `integration_conclusion` field stating, in plain terms, what your ranking is and how robust
-  it is.
-- `findings.md` — a short written summary of the ranking, which participants are most
-  integrated, and how confident you are. State only what your analysis actually supports.
+  `integration_conclusion` field stating, in plain terms, what your ranking is.
+- `findings.md` — a short written summary of the ranking and which participants are most
+  integrated. State only what your analysis actually supports.
 
 ## Failure handling
 
