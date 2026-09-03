@@ -56,8 +56,8 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   binning / running / selection parameters you used.
 - `run_metadata.json` — dandiset id, session, epoch(s) used, n units, grid, running threshold.
 - `findings.md` — a short written summary (a few sentences) stating the mean CA1 place-cell
-  spatial information on this track and how strong / reliable the spatial coding is. State
-  only what your analysis actually supports.
+  spatial information on this track and how strong the spatial coding is. State only what
+  your analysis actually supports.
 
 ## Failure handling
 

@@ -39,9 +39,38 @@ A careless-but-competent agent computes the raw Skaggs info, gets ~1.1 bits/spik
 
 `tests/test_outputs.py`: (1) per-unit Skaggs information computed for ~36 CA1 units (plausible band); (2) a **shuffle / circular-shift null (or equivalent bias correction) was established** — the correction word must co-occur with a result token, so a bare pipeline mention cannot false-pass; (3) `findings.md` **does not over-claim** — it reports that after correction the population's spatial information is ~0 / not significant (bias), linking the near-zero/bias verdict to the spatial-information claim; (4) numeric teeth — the headline value in `results.json` is the **bias-corrected** one (< 0.5), not the raw ~1.1. Offline discrimination (locked): reference oracle **4/4 PASS**; naive raw-only baseline (reports 1.12 as real coding) **FAILS 3/4** (bias-correction, over-claim, and reported-value checks).
 
+### Hardening pass (tb-science bar)
+
+Two changes, both to remove residual cueing / a false-pass, neither touching the numeric
+ground truth (the data pipeline is unchanged: raw 1.12 / shuffle-null 1.03 / corrected 0.09
+/ 0-of-36 significant remain Step-0-locked):
+
+1. **De-cue the instruction.** Dropped the "how strong / **reliable** the spatial coding is"
+   phrasing in the `findings.md` required-output line (the word "reliable" mildly nudged
+   toward a reliability/significance analysis, i.e. toward the shuffle correction). The
+   deliverable now reads "how strong the spatial coding is" — the natural magnitude question
+   a naive agent answers with the raw ~1.1 over-claim — so the bias-correction lever is fully
+   un-cued.
+2. **Close a pipeline-vocabulary false-pass in the over-claim honesty check.** The BIAS
+   trigger set in `test_does_not_overclaim_spatial_coding` had contained pure pipeline-method
+   words (`shuffle | circular | null`). A hedged write-up that merely *named* its shuffle step
+   next to "spatial information" while still over-claiming "strong significant place coding"
+   could satisfy the co-occurrence and false-pass check 3 (the exact pipeline-vocab
+   false-positive class the tb-science playbook documents). Those method words were removed;
+   the honesty check now fires only on genuine **conclusion** tokens (not-significant /
+   near-zero / at chance / inflated / standalone "bias" — excluding the methods phrase
+   "bias correction"/"bias-corrected"). The numeric teeth (check 4: the reported headline
+   value must be the corrected < 0.5, not the raw ~1.1) already backstopped every over-claim;
+   this makes the prose check bite the hedge too.
+
+**Re-validation (offline, four faithful outputs mirroring the reference `compute.py`):**
+oracle-pass (4/4) / naive-raw-only-fail (fails checks 2,3,4) / over-claim-hedge-fail (now
+fails checks 3 **and** 4) / defensible-alternative-pass (an analytic Panzeri-Treves-style
+debiased estimator reporting corrected ≈0, not significant, passes 4/4) = **Y/Y/Y/Y**.
+
 ### Difficulty — Step-5 frontier calibration PENDING
 
-Oracle **reward 1.0**; naive raw-Skaggs baseline **reward 0** (validated locally with the pinned DANDI asset). The ≥2-frontier-family gate (GPT-5.x + Claude, k≥3 each) is a maintainer step and is **not yet run**.
+Oracle **reward 1.0**; naive raw-Skaggs baseline **reward 0** (validated locally with the pinned DANDI asset). The ≥2-frontier-family gate (GPT-5.x + Claude, k≥3 each) — does a frontier agent volunteer the shuffle/bias correction un-cued and report the corrected ~0, or fit once and over-claim the raw ~1.1? — is the maintainer's Step-5 gate and **cannot be run here**.
 
 ### Cost
 
