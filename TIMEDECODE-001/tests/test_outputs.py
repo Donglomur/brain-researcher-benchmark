@@ -14,11 +14,21 @@ each 0.05-0.45 s post-stimulus time sample of every trial is one example; Standa
   of trials it has seen and the accuracy is inflated. The honest estimate keeps every
   trial wholly on one side of the split (StratifiedGroupKFold / GroupKFold by trial).
 
-  The trial-grouped accuracy is tightly clustered across reasonable un-pinned choices
-  (StratifiedGroupKFold vs plain GroupKFold, fold count, logistic vs LDA, small window
-  shifts): ~0.66-0.70. Every random-k-fold scheme is >= 0.77. The accept window below
-  (0.615-0.725) passes any genuine trial-grouped estimate and fails the inflated
-  random-k-fold value.
+  Note (hardening): the instruction pins only the FOLD COUNT (5) for reproducibility;
+  the fold-construction scheme is explicitly left to the analyst's judgement, so a plain
+  random k-fold is a *choice the agent makes*, not a scheme the brief endorses. The
+  un-cued judgement is recognising that the pooled (trial x time) samples are not
+  independent and grouping the folds by trial; nothing in the brief mentions trials,
+  grouping, independence, or leakage.
+
+  Accept band re-validated on the real MNE sample data across every defensible choice:
+    trial-grouped (leakage-free)   StratifiedGroupKFold(5)=0.666  (10)=0.683
+                                   GroupKFold(5)=0.689  (10)=0.689  LeaveOneGroupOut=0.688
+                                   StratifiedGroupKFold(5)+LDA=0.667      -> 0.665..0.689
+    pooled random k-fold (leaky)   StratifiedKFold(5)=0.791 (10)=0.792  KFold(5)=0.789
+                                   KFold(10)=0.790  StratifiedKFold(5)+LDA=0.794 -> >=0.789
+  The accept window (0.615-0.725) passes every genuine trial-grouped estimate (margin
+  >= 0.036 to the upper edge) and fails every random-k-fold value (>= 0.064 above it).
 """
 import csv
 import json

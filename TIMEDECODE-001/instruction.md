@@ -29,7 +29,10 @@ Pin the pipeline so the result reproduces:
   and all time samples in the window.
 - Standardise the features (`StandardScaler`) and classify with
   `LogisticRegression(max_iter=1000)`.
-- Evaluate with **5-fold cross-validation** and report the mean accuracy over the folds.
+- Estimate the decoding accuracy by cross-validation using **5 folds**, and report the
+  mean accuracy across folds. The fold count is fixed at 5 for reproducibility; the
+  cross-validation scheme itself (how the folds are constructed) is left to your
+  judgement and should follow sound cross-validation practice.
 
 Report the **decoding accuracy** (chance = 0.5 for this two-class problem).
 
