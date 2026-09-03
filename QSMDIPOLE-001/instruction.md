@@ -34,6 +34,14 @@ regularised Tikhonov) dipole inversion with the Lorentz-corrected dipole kernel
 `χ̂(k) = conj(D)·field̂(k) / (|D|² + reg·E(k))` with `reg = 0.09`, then multiply the image-space
 susceptibility by the brain mask. Report susceptibility in **ppb** (1 ppm = 1000 ppb).
 
+**Referencing (report on the native scale).** Report the reconstruction directly, on the native
+scale produced by the pinned inversion — **do not subtract a CSF/ventricle or white-matter
+reference offset**. Absolute QSM values are only defined up to a reference, but the provided
+tissue field is already zero-mean, so a closed-form inversion returns a map already on the same
+implicit scale as the STI χ₃₃ reference (brain-mask mean ≈ 0); reporting it directly is what
+reproduces the reference. You may report either the per-nucleus **mean or median** susceptibility
+(both reproduce the reference to within tolerance on the pinned recipe).
+
 ## Output Location
 
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).

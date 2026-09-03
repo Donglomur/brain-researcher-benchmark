@@ -1,4 +1,6 @@
-"""Grading checks for QSMDIPOLE-001 (reproduce deep-gray susceptibility vs the STI reference).
+"""Grading checks for QSMDIPOLE-001 — a clean REPRODUCTION / easy control: reconstruct the
+deep-gray susceptibility of the QSM-2016-challenge subject from the single-orientation tissue
+field with the fully pinned recipe, and reproduce the held-out STI chi_33 reference.
 
 Ground truth (measured before release on the QSM Reconstruction Challenge 2016 subject, from the
 held-out STI chi_33 reference map — the 12-orientation susceptibility-tensor solution that is the
@@ -8,22 +10,23 @@ challenge's ground truth and is NOT shipped under /app/data):
   (also: caudate 66.5, thalamus 65.0, substantia nigra 144.2, red nucleus 99.1)
 
 The task ships the single-orientation local tissue field (phs_tissue), the brain mask and the
-labelled ROI mask, and PINS the reconstruction recipe (closed-form L2 / gradient-regularized
-Tikhonov dipole inversion, reg=0.09) in protocol.json. A faithful reconstruction of that recipe,
-reported on its native scale, reproduces the STI reference's deep-gray susceptibility to within
-~6 ppb (globus pallidus 153, putamen 78). Validated discrimination (STEP-0):
+labelled ROI mask, and FULLY PINS the reconstruction recipe (closed-form L2 / gradient-
+regularized Tikhonov dipole inversion, reg=0.09) AND the referencing (report on the native
+scale — the instruction states this explicitly). This is an honest easy control: an agent that
+follows the pinned recipe reproduces the STI reference's deep-gray susceptibility to within
+~6 ppb (globus pallidus 153, putamen 78). Validated on real data (mean OR median, pinned reg):
 
-  reference (pinned recipe, native scale)         GP 153 / PUT 78   -> PASS
-  CSF/ventricle-referenced report (offset ~14 ppb) GP 139 / PUT 64  -> FAIL (GP)
-  whole-brain -> white-matter re-reference         GP 173 / PUT 97  -> FAIL
-  differently-regularized inversion (plain Tikhonov) GP 98 / PUT 50  -> FAIL
+  reference, native scale, median   GP 153 / PUT 78   -> PASS
+  reference, native scale, mean     GP 151 / PUT 75   -> PASS
+  CSF/ventricle-referenced (offset ~14 ppb) GP 139 / PUT 64  -> FAIL (did not follow the pinned
+                                                                  native-scale referencing)
+  white-matter re-reference (+19 ppb)       GP 173 / PUT 97  -> FAIL
+  differently-regularized inversion (plain Tikhonov) GP 98 / PUT 50  -> FAIL (wrong recipe)
 
-The un-cued judgement is the referencing convention: absolute QSM values are only defined up to a
-reference, and a closed-form inversion of the (zero-mean) tissue field is already on the STI
-reference's scale. Subtracting a CSF or white-matter reference offset — a common habit when
-reporting "absolute" deep-gray susceptibility — moves every value off that scale. Because the STI
-reference itself is held out, the reported values can only land near the targets by actually
-reconstructing on the correct scale (they cannot be guessed).
+Because the STI reference itself is held out, the reported values can only land near the targets
+by actually reconstructing with the pinned recipe on the correct scale (they cannot be guessed).
+The grader therefore passes any correct-referenced reconstruction of the pinned recipe (mean or
+median) and fails a wrong recipe or a report re-referenced off the pinned native scale.
 """
 import csv
 import json
@@ -90,9 +93,10 @@ def test_susceptibility_map_written():
 
 def test_reproduces_sti_reference_deep_gray():
     # The headline check: the reported deep-gray susceptibilities must reproduce the held-out STI
-    # chi_33 reference. A faithful reconstruction on its native scale does; a report that has been
-    # re-referenced to CSF/ventricles or white matter (or produced by a different inversion) does
-    # not — its globus-pallidus value in particular lands well outside tolerance.
+    # chi_33 reference. The instruction pins the recipe AND the native-scale referencing, so any
+    # faithful reconstruction (mean or median, reg=0.09, native scale) passes; a report re-
+    # referenced to CSF/ventricles or white matter, or produced by a different inversion, does not
+    # — its globus-pallidus value in particular lands well outside tolerance.
     vals = _by_label(_rows())
     misses = []
     for lab, (name, target) in TARGET_PPB.items():
@@ -103,7 +107,6 @@ def test_reproduces_sti_reference_deep_gray():
     assert not misses, (
         "reported deep-gray susceptibility does not reproduce the STI chi_33 reference: "
         + "; ".join(misses)
-        + ". Check the reconstruction recipe (closed-form L2 with reg=0.09) and, in particular, "
-        "the referencing convention — the reconstruction should be reported on its native scale "
-        "(the same scale as the STI reference), without subtracting a CSF/ventricle or "
-        "white-matter reference offset.")
+        + ". Follow the pinned recipe (closed-form L2 with reg=0.09) and report on the native "
+        "scale as instructed — the same scale as the STI reference — without subtracting a "
+        "CSF/ventricle or white-matter reference offset.")
