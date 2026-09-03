@@ -45,6 +45,8 @@ Short reviewer-style pytest, schema-robust, no rubric:
 
 Verifier robustness: a submission that reports BOTH the honest 0.737 and a leaky comparison (0.867 under a `random_kfold`/`leaky` key) still passes, because the leaky value is excluded from the headline candidates.
 
+**Hardening pass — re-validated (offline).** The numeric discrimination was re-confirmed against four write-ups: honest leave-one-site-out (0.737) PASSES; naive random-fold (0.867) FAILS; a **GroupKFold-by-`SITE_ID`** site-blocked variant (0.755) PASSES; and a "discovered-both" write-up that reports the leaky 0.867 *and* the honest 0.737 PASSES (the grader locks onto the site-blocked headline). Because grading is numeric, there is no prose pipeline-vocabulary false-positive vector here; the equivalent guard is the exclusion of the leaky/random-fold headline, which bites. The only site reference in `instruction.md` is the factual `SITE_ID` column plus a descriptive `n_sites` output — an accepted mild cue that discloses that sites exist but never that eye status is confounded with site or that the folds must be site-blocked. **The live frontier-agent gate (Step-5, ≥2 families k≥3, hand-rescored) remains the maintainer's step (PENDING).**
+
 ### Distinctness
 
 Different dataset (ABIDE multi-site resting-state FC) and different nuisance (acquisition **site/scanner** batch fingerprint) from the shipped Haxby within-subject temporal-autocorrelation CV task (VTDECODE/DECODE) and from OBJCAT's feature-selection circularity. Existing ABIDE tasks target group-difference multiple-comparisons (AUTCONN/AUTISMDMN) or significance-vs-effect-size (BWAS); none address cross-validation site leakage in a decoder. The mandate lists "scanner" as a valid TASK-1 confound.
