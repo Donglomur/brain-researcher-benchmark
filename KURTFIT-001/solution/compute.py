@@ -92,10 +92,24 @@ if n_wm < 500:
 
 mk_wm = float(np.mean(mk_map[wm]))
 
-# for context only: the all-shell fit (what a naive pipeline reports)
-gtab_all = gradient_table(bvals, bvecs)
-mk_all = dki.DiffusionKurtosisModel(gtab_all).fit(data_s, mask=wm).mk(MK_MIN, MK_MAX)
-mk_wm_allshell = float(np.mean(mk_all[wm]))
+# The discovery: MK is b-shell-cap-dependent. Sweep the cap over the SAME fixed WM
+# ROI to expose the multiverse (this is what an un-cued single-fit pipeline never does).
+mk_by_cap = {}
+for cap in (1000, 1400, 2000, 2500, 3000):
+    s = bvals <= (cap + 50)
+    if len({int(round(b)) for b in bvals[s] if b > 50}) < 2:
+        continue
+    g = gradient_table(bvals[s], bvecs[s])
+    mkc = dki.DiffusionKurtosisModel(g).fit(data_s[..., s], mask=wm).mk(MK_MIN, MK_MAX)
+    mk_by_cap[cap] = float(np.mean(mkc[wm & np.isfinite(mkc)]))
+
+# the all-shell fit is what a naive pipeline reports as "the" WM MK
+mk_wm_allshell = mk_by_cap.get(3000)
+if mk_wm_allshell is None:
+    gtab_all = gradient_table(bvals, bvecs)
+    mk_all = dki.DiffusionKurtosisModel(gtab_all).fit(data_s, mask=wm).mk(MK_MIN, MK_MAX)
+    mk_wm_allshell = float(np.mean(mk_all[wm]))
+mk_spread = max(mk_by_cap.values()) - min(mk_by_cap.values())
 
 (OUT / "dki_results.json").write_text(json.dumps({
     "status": "ok",
@@ -104,6 +118,8 @@ mk_wm_allshell = float(np.mean(mk_all[wm]))
     "b_max_used": float(bvals[sel].max()),
     "shells_used": sorted({int(round(b)) for b in bvals[sel]}),
     "mean_kurtosis_wm_allshell": mk_wm_allshell,
+    "mean_kurtosis_wm_by_bcap": {str(k): round(v, 4) for k, v in mk_by_cap.items()},
+    "mk_shell_cap_spread": round(mk_spread, 4),
 }, indent=2))
 
 (OUT / "run_metadata.json").write_text(json.dumps({
@@ -117,20 +133,27 @@ mk_wm_allshell = float(np.mean(mk_all[wm]))
     "n_wm_voxels": n_wm,
 }, indent=2))
 
+_sweep = "  ".join(f"b<={k}: {v:.3f}" for k, v in sorted(mk_by_cap.items()))
 (OUT / "findings.md").write_text(f"""# KURTFIT-001 - mean kurtosis in white matter
 
 Fitting the diffusion-kurtosis model to the CFIN multi-shell data and averaging
-the mean-kurtosis map over white matter (tensor FA > {FA_WM}, {n_wm} voxels):
+the mean-kurtosis map over white matter (tensor FA > {FA_WM}, {n_wm} voxels).
 
-**Mean kurtosis (MK) in white matter = {mk_wm:.3f}.**
+**The white-matter mean kurtosis is NOT a single number: it depends on the b-shell
+cap.** Sweeping the maximum b-value included in the DKI fit over the same WM ROI:
 
-DKI is a cumulant expansion of the diffusion signal that is only valid at moderate
-b-values; beyond b ~ 2000-2500 s/mm^2 the quadratic kurtosis term no longer
-describes the signal. The fit was therefore restricted to b <= {int(BMAX)} s/mm^2.
-For comparison, fitting *all* shells up to b = {int(bvals.max())} s/mm^2 pulls MK
-down to {mk_wm_allshell:.3f} - a downward bias of {mk_wm - mk_wm_allshell:.3f}
-driven by the high-b shells where the cumulant expansion breaks down. The value
-reported above uses the moderate-b fit.
+    {_sweep}
+
+MK falls monotonically from {max(mk_by_cap.values()):.3f} to {min(mk_by_cap.values()):.3f}
+(a spread of {mk_spread:.3f}, ~{100*mk_spread/max(mk_by_cap.values()):.0f}%) as higher-b
+shells are added. The reason is methodological: DKI is a cumulant (Taylor) expansion of
+the diffusion signal that is only valid at moderate b; beyond b ~ 2000-2500 s/mm^2 the
+quadratic kurtosis term no longer describes the signal, so **including the high-b shells
+biases MK downward**. Throwing all shells (up to b = {int(bvals.max())} s/mm^2) at the
+model gives MK = {mk_wm_allshell:.3f}, whereas the moderate-b fit (b <= {int(BMAX)}) gives
+MK = **{mk_wm:.3f}** -- the value to report for a valid DKI estimate. A single "the
+white-matter mean kurtosis" without this shell-cap caveat over-states the precision of
+the measurement.
 """)
 
 print(f"OK: MK_wm(b<=2000)={mk_wm:.4f}  MK_wm(all shells)={mk_wm_allshell:.4f}  "

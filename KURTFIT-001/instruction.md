@@ -26,8 +26,8 @@ Pin the following so the number is reproducible:
 - **Mean kurtosis:** dipy's `mk` with kurtosis clipped to the range **[0, 3]**.
 
 Other standard implementation details the DKI method leaves to the analyst (fit
-estimator, exactly which shells enter the model, how the tensors are conditioned)
-should follow common DKI practice; the brief does not spell them out.
+estimator, how the tensors are conditioned) should follow common DKI practice; the
+brief does not spell them out.
 
 ## Output Location
 
@@ -39,8 +39,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   your MK map), `n_wm_voxels`, and the b-values / shells your fit used.
 - `run_metadata.json` — dataset id, shells available vs used, WM definition, and
   the preprocessing you applied.
-- `findings.md` — a short written summary reporting the white-matter mean kurtosis
-  and how you obtained it. State only what your analysis actually supports.
+- `findings.md` — a short written summary reporting the white-matter mean kurtosis,
+  how you obtained it, and how you interpret it: what the number does and does not
+  tell you, and any caveats your analysis supports.
 
 ## Failure handling
 
