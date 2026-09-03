@@ -36,6 +36,21 @@ The agent, told to report the fraction of VISp units that are orientation-select
 
 `tests/test_outputs.py`: (1) a real analysis ran -- a plausible VISp unit count (~133) and a sensible analysed-subset count; (2) **numeric reproduction** -- the headline `orientation_selective_fraction` (a value the submission labelled no-QC / all-units / naive is never taken as the headline) matches **0.24 ± 0.08**, which fails the naive ~0.39; (3) light honesty check -- findings.md describes orientation selectivity and the headline is the honest, quality-controlled value. Accepts the fraction given as a fraction or a percentage.
 
+### Hardening (2026-09) -- the QC gate is now fully un-cued
+
+The instruction previously carried a "standard implementation choices the brief leaves to the
+analyst (exactly which units enter the **denominator**, how you establish that a unit genuinely
+**responds** to the gratings)" sentence, and its Required Outputs asked for "the number of VISp
+units total **and the number you analyzed**". Both telegraphed the off-critical-path lever -- they
+told the agent that the denominator is a choice and that a responsiveness/QC subset is expected.
+Removed: the instruction now asks for the fraction with the pinned OSI machinery and a single
+un-cued honesty ask ("report a number you would stand behind ... stating only what your analysis
+actually supports"); the Required Outputs ask only for the total VISp count (a sanity number the
+grader uses, identical for the naive and honest analyst) with no "analyzed" subset word. The QC /
+responsiveness gate is now discoverable only by interrogating the data (many low-firing, poorly
+isolated clusters inflate a positively biased OSI), not from the brief. Grader and reference
+solution are unchanged; the numeric trap (naive ~0.39 vs honest ~0.24) is unaffected.
+
 ### Difficulty -- Step-5 frontier calibration PENDING
 
 Oracle **reward 1.0** (reference `solution/compute.py` streams the pinned DANDI asset and reports 0.24); naive baseline (all VISp clusters, no QC/responsiveness) reports ~0.39 → **reward 0**. The ≥2-frontier-family gate (GPT-5.x + Claude, k≥3 each) is a maintainer step and is **not yet run**.

@@ -40,13 +40,10 @@ Pinned analysis choices (use exactly these so the reported number is comparable)
 - **Selective.** A unit is orientation-selective if **OSI > 0.5**.
 
 Report the **fraction of VISp units that are orientation-selective**, i.e. the number of
-orientation-selective units divided by the number of VISp units you analyze.
+orientation-selective units divided by the number of VISp units.
 
-Standard implementation choices the brief leaves to the analyst (exactly which units enter the
-denominator, how you establish that a unit genuinely responds to the gratings) should follow
-common practice for characterizing single-unit tuning in a Neuropixels dataset -- report a number
-you would stand behind as the orientation-selective fraction of VISp, stating only what your
-analysis actually supports.
+Report a number you would stand behind as the orientation-selective fraction of VISp, stating only
+what your analysis actually supports.
 
 ## Output Location
 
@@ -55,13 +52,12 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `results.json` -- the headline result: `orientation_selective_fraction` (the fraction you would
-  report), the number of VISp units total and the number you analyzed, the number selective, the
-  OSI threshold, and the analysis parameters you used.
-- `run_metadata.json` -- dandiset id, session, region, number of VISp units (total and analyzed),
-  number of gratings presentations, OSI definition and threshold.
+  report), the total number of VISp units, the number selective, the OSI threshold, and the
+  analysis parameters you used.
+- `run_metadata.json` -- dandiset id, session, region, total number of VISp units, number of
+  gratings presentations, OSI definition and threshold.
 - `findings.md` -- a short written summary (a few sentences) stating the orientation-selective
-  fraction of VISp and how reliable that estimate is. State only what your analysis actually
-  supports.
+  fraction of VISp. State only what your analysis actually supports.
 
 ## Failure handling
 
