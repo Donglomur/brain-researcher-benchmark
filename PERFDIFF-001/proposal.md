@@ -29,6 +29,19 @@ ROI-mean f ranges **0.12–0.21** across estimators; per-voxel it spans ~**0.03�
 
 **Offline discrimination (locked):** oracle (trr + segmented, reports the range) → **3/3 PASS**. Two realistic naive outputs, built from real runs: (a) single default `trr`, confident "f = 0.21" → checks 2 **and** 3 FAIL; (b) *ran both* fitters but still reports one confident f and only names the methods in a pipeline line → check 3 **FAIL** (the pipeline-naming false-pass the GRADIENT/DEVCONN reviews warned about, defeated here). So the failure is the un-cued over-claim, not a format bug.
 
+### Hardening pass (tb-science bar)
+
+Verifier was already at the GRADIENT-001 bar: three plain reviewer-style checks, numbers
+searched at any json depth, and the over-claim honesty check already GUARDED so the
+dependence phrase must **co-occur** with an f / D\* result token (naming two fitters in a
+methods list does not pass). The only residual cue was a mild reliability nudge in the
+`findings.md` required-output line ("and how confident you are in it") — for THIS task the
+trap *is* over-confidence in the single f, so that phrase was more on-the-nose than the
+generic GRADIENT-001 wording. It was stripped; the deliverable now just asks for the
+values. No verifier change. Re-validated offline against four constructed outputs (oracle,
+single-fitter naive, ran-both-but-overclaims, and a defensible trr+varpro alternative):
+oracle-pass / naive-fail / overclaim-fail / fair-alt-pass = Y/Y/Y/Y.
+
 ### Difficulty — Step-5 frontier calibration PENDING
 
 Oracle **reward 1.0** (locked locally). The ≥2-frontier-family gate (does GPT-5.x / Claude volunteer the estimator-sensitivity check and report f as a range, or fit once and assert a single perfusion fraction?) is a maintainer step. Prior: IVIM fit-method dependence is a specialist caveat an un-cued agent is unlikely to volunteer — the dipy IVIM tutorial fits a single estimator — so the over-claim trap has teeth.

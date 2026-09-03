@@ -36,8 +36,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `run_metadata.json` — dataset id, number of b-values, the ROI, and the fitting
   choices you made.
 - `findings.md` — a short written summary reporting the ROI perfusion fraction f
-  (and D, D\*) and how confident you are in it. State only what your analysis
-  actually supports.
+  (and D, D\*). State only what your analysis actually supports.
 
 ## Failure handling
 
