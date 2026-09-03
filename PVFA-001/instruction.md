@@ -51,8 +51,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `run_metadata.json` — dataset id, shells available vs used, the region
   definition, and the preprocessing you applied.
 - `findings.md` — a short written summary reporting the periventricular
-  white-matter FA and how you obtained it. State only what your analysis actually
-  supports.
+  white-matter FA, how you obtained it, and how you interpret it: what the number
+  does and does not tell you about the underlying tissue, and any caveats your
+  analysis supports.
 
 ## Failure handling
 
