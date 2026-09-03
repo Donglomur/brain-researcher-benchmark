@@ -19,9 +19,7 @@ b = 0, 1000, 2000, 3500 s/mm^2), **estimate the fibre orientation distribution (
 by spherical deconvolution and report the fraction of white-matter voxels in the
 centrum-semiovale ROI defined below whose fODF contains a crossing (>= 2 peaks).**
 
-Pin the measurement exactly as follows so the crossing fraction is well defined; the
-only thing left to your judgement is how the fODF itself is estimated from this
-acquisition.
+Pin the measurement exactly as follows so the crossing fraction is well defined.
 
 ### Region of interest (fixed)
 
