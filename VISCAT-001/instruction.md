@@ -48,12 +48,8 @@ Pinned analysis choices (use exactly these so the reported numbers are comparabl
 Report the **mean single-neuron preferred-category-vs-rest ROC AUC over the category-selective
 neurons** (the headline number), and the **proportion of MTL neurons that are category-selective**.
 
-Standard implementation choices the brief leaves to the analyst -- in particular exactly which trials
-are used to identify a neuron as category-selective and to fix its preferred category, versus which
-trials are used to measure its preferred-category-vs-rest AUC -- should follow common practice for a
-defensible single-neuron discriminability estimate. Report a mean preferred-category-vs-rest AUC you
-would stand behind as the single-neuron visual-category signal, stating only what your analysis
-actually supports.
+Report a mean preferred-category-vs-rest AUC you would stand behind as the single-neuron
+visual-category signal, stating only what your analysis actually supports.
 
 ## Output Location
 
@@ -69,8 +65,8 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   category-selective, region, phase, response window, and your definitions of category-selective and
   of the preferred-category-vs-rest AUC.
 - `findings.md` -- a short written summary (a few sentences) stating the single-neuron
-  preferred-category-vs-rest discriminability of category-selective MTL neurons and how reliable that
-  estimate is. State only what your analysis actually supports.
+  preferred-category-vs-rest discriminability of category-selective MTL neurons. State only what your
+  analysis actually supports.
 
 ## Failure handling
 
