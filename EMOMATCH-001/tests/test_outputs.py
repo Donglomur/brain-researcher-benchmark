@@ -117,13 +117,24 @@ def test_recognises_time_on_task_confound():
            r"fronto-?pariet\w*|prefront\w*|\bpfc\b|insula\w*|cingulate|salien\w*|"
            r"cognitive[- ]control|control network|dorsal[- ]?atten\w*|attention|widespread|"
            r"distributed|broad\w*|parietal|cluster\w*|region\w*)")
+    # a NARROW result token for the collapse branches: identical to RES but WITHOUT the bare
+    # "response" alternative, which collides with the pipeline term "response time" / "reaction
+    # time" (TOT) and would let a nuisance-regressor sentence self-satisfy the result linkage.
+    RESN = (r"(?:emotion\w*|affect\w*|face\w*|activation|activ\w*|contrast|effect|network|"
+            r"fronto-?pariet\w*|prefront\w*|\bpfc\b|insula\w*|cingulate|salien\w*|"
+            r"cognitive[- ]control|control network|dorsal[- ]?atten\w*|attention|widespread|"
+            r"distributed|broad\w*|parietal|cluster\w*|region\w*)")
     # confound / attribution
     CONF = (r"(?:confound\w*|artif\w*|spurious|driv\w*|explain\w*|attribut\w*|account\w*|due to|"
             r"reflect\w*|not (?:truly |really |necessarily )?emotion[- ]specific|not specific|"
             r"rather than emotion|mislead\w*|inflat\w*|contaminat\w*)")
-    # collapse under control of duration / RT
+    # collapse under control of duration / RT.
+    # NB: no bare "reduc\w*" -- it false-positives on pipeline vocabulary ("modelled response
+    # time as a parametric regressor, which reduced residual variance"), exactly the collision
+    # dropped in DEVCONN-001 / CLINCONN-001. The remaining tokens are strong collapse words that
+    # a nuisance-regressor description does not use.
     COLL = (r"(?:no longer|not signif\w*|not statistically|n\.?s\.|vanish\w*|disappear\w*|"
-            r"attenuat\w*|abolish\w*|collaps\w*|null|gone|absent|weaken\w*|reduc\w*|shrink\w*|"
+            r"attenuat\w*|abolish\w*|collaps\w*|null|gone|absent|weaken\w*|shrink\w*|"
             r"revers\w*|does not survive|doesn't survive|did not survive|not robust|"
             r"drop\w* (?:to|out)|falls? to)")
     CTRL = (r"(?:control\w*|adjust\w*|regress\w*|model\w*|includ\w*|account\w*|covar\w*|"
@@ -133,12 +144,15 @@ def test_recognises_time_on_task_confound():
         rf"{TOT}[^.\n]{{0,90}}{CONF}[^.\n]{{0,90}}{RES}"
         rf"|{RES}[^.\n]{{0,90}}{CONF}[^.\n]{{0,90}}{TOT}"
         rf"|{RES}[^.\n]{{0,70}}{TOT}[^.\n]{{0,40}}(?:confound|artif|driv|attribut|not (?:emotion[- ]specific|specific))"
-        # B) controlling duration/RT collapses the broad effect  (control -> TOT -> collapse)
-        rf"|{CTRL}[^.\n]{{0,40}}(?:for |the )?{TOT}[^.\n]{{0,130}}{COLL}"
-        # C) TOT -> control/model -> collapse
-        rf"|{TOT}[^.\n]{{0,90}}(?:{CTRL})[^.\n]{{0,110}}{COLL}"
+        # B) controlling duration/RT collapses the broad effect  (control -> TOT -> RESULT -> collapse).
+        #    The RESULT token (RESN) is required so a bare nuisance-pipeline sentence
+        #    ("modelled response time ... which reduced variance") cannot self-satisfy the branch:
+        #    the collapse must be OF the emotion / broad activation, not of residual variance.
+        rf"|{CTRL}[^.\n]{{0,40}}(?:for |the )?{TOT}[^.\n]{{0,110}}{RESN}[^.\n]{{0,60}}{COLL}"
+        # C) TOT -> control/model -> RESULT -> collapse
+        rf"|{TOT}[^.\n]{{0,80}}(?:{CTRL})[^.\n]{{0,80}}{RESN}[^.\n]{{0,50}}{COLL}"
         # D) the broad activation collapses when duration/RT is modelled
-        rf"|{RES}[^.\n]{{0,90}}{COLL}[^.\n]{{0,90}}(?:{CTRL}[^.\n]{{0,30}})?{TOT}"
+        rf"|{RESN}[^.\n]{{0,90}}{COLL}[^.\n]{{0,90}}(?:{CTRL}[^.\n]{{0,30}})?{TOT}"
         # E) emotion trials take longer, explicitly tied to driving/explaining the activation
         rf"|emotion[^.\n]{{0,40}}(?:longer|slower|more time)[^.\n]{{0,120}}(?:{CONF}|{COLL})", text)
     assert mentions_tot and recognises, (

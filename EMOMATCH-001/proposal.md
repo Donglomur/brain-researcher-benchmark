@@ -66,5 +66,26 @@ RT is modelled, while amygdala/fusiform survive. No weighted rubric.
   (SOCIALBRAIN-001) or selection (SELECT-001) axes — it is the reaction-time / time-on-task
   first-level modelling confound.
 
+## Hardening pass — recognition B-branch fix (re-validated offline)
+The recognition grader's collapse-branches carried the recurring pipeline-vocabulary
+false-positive: a write-up that "**regressed … response_time … reduced** residual variance"
+(nuisance-regressor prose, never linking RT to the emotion result) FALSE-PASSED the old
+`control → RT → collapse` branch, because `reduc\w*` was in the collapse set and the branch did
+not require a result token. Fix (mirroring the proven DEVCONN-001 / CLINCONN-001 change):
+(1) dropped bare `reduc\w*` from the collapse set — it collides with "reduced residual variance";
+(2) added a **narrow result token** (`RESN`, identical to the result set but WITHOUT the bare
+`response` alternative, which itself collides with "response/reaction time") and now require it
+between the RT term and the collapse token in branches B/C/D, so the collapse must be OF the
+emotion / broad activation, not of residual variance.
+
+Re-validated on a fixed `activation.csv` + `group_stats.json` against six write-ups:
+honest oracle **PASS**; alternate correct-link phrasing (RT-difference → insula/dlPFC vanishes)
+**PASS**; second correct-link phrasing **PASS**; naive "broad emotion network" over-claim
+**FAIL**; the `regress…response_time…reduced` pipeline-vocab write-up **FAIL** (the key
+false-positive, now closed); a second pipeline-vocab write-up with a strong collapse word
+("no longer showed collinearity") but no result link **FAIL** (the `RESN` requirement bites).
+
 ## Step-5 frontier calibration
-PENDING (oracle validated locally; frontier-agent runs to be scored under Harbor).
+PENDING. Oracle-pass and the offline verifier discrimination above are validated locally; the
+**live frontier-agent gate (≥2 families, k≥3, hand-rescored) is the maintainer's Step-5** and
+has not been run here.
