@@ -52,20 +52,34 @@ convention-invariant, reproducible quantity; the naive "no change" read fails it
 ### Verifier (3 plain checks, GRADIENT-001 style)
 `tests/test_outputs.py`: (1) a per-subject connectome analysis over a real lifespan slice
 (>=40 subjects) with at least one summary-vs-age correlation; (2) **insight linked to the result** —
-a NETWORK-LEVEL organization summary DECLINES with age: an organization-named negative age
-correlation (<= -0.12), OR a within-vs-between divergence (between rises relative to within by
->= 0.08), OR a clearly-labelled negative segregation correlation in the prose; the global/mean
-summary is excluded; (3) honesty / no over-claim — `findings.md` reports the organization
-declines / de-differentiates with age, not "connectivity is unchanged across the lifespan." No
-weighted rubric, no score.json.
+network SEGREGATION DECLINES with age: a segregation/de-differentiation/modularity-named negative
+age correlation (<= -0.12), OR a within-vs-between divergence (between rises relative to within by
+>= 0.08), OR a clearly-labelled negative segregation/de-differentiation/modularity correlation in
+the prose; the global/mean summary is excluded; (3) honesty / no over-claim — `findings.md` reports
+the network segregation declines / de-differentiates with age, not "connectivity is unchanged across
+the lifespan." No weighted rubric, no score.json.
 
-### Discrimination (validated locally)
-| solution | segregation-vs-age reported | verdict |
+**Hardening (this pass, per the tb-science audit — "tighten so a generic network metric alone can't
+pass without the global-mean-hides-de-differentiation insight; grade that specific over-claim").**
+Both judgement checks previously accepted a bare **"organization"/"integration"** label on any
+negative-with-age correlation, so a generic network metric could stand in for the insight. The
+accepted vocabulary is now restricted to genuine **segregation / within-vs-between / de-differentiation
+/ modularity** (a "network organization index declines with age" no longer passes); the graded
+over-claim is specifically the **"connectivity is stable with age"** null read off the flat global
+mean. Modularity — a genuine de-differentiation summary — still passes; a terse segregation-declines
+answer still passes (the global-mean contrast is not required, keeping a defensible-correct answer
+fair).
+
+### Discrimination (re-validated against the hardened grader)
+| solution | reported | verdict |
 |---|---|---|
-| reference / oracle (KMeans-7 segregation) | r = -0.28 | **PASS 3/3** |
-| alt-correct (within/between divergence, no "segregation" keyword) | between +0.14 vs within +0.03 | **PASS 3/3** |
-| naive (global mean FC only, concludes "stable") | none (+0.15 global) | **FAIL 1/3** |
-| wrong (claims segregation INCREASES) | r = +0.30 | **FAIL 1/3** |
+| reference / oracle (KMeans-7 segregation) | seg r = -0.28 | **PASS 3/3** |
+| alt-correct (within/between divergence, no "segregation" keyword) | between +0.14 vs within +0.03, "de-differentiate" | **PASS 3/3** |
+| modularity-correct (Newman Q declines, generic but genuine de-diff metric) | Q r = -0.19 | **PASS 3/3** |
+| segregation-terse (declines, no global-mean contrast) | seg r = -0.27 | **PASS 3/3** |
+| naive (global mean FC only, concludes "stable") | +0.15 global only | **FAIL** |
+| **generic metric labelled "organization" declines** (loophole) | "org index" r = -0.20 | **FAIL** (closed) |
+| wrong (claims segregation INCREASES) | seg r = +0.30 | **FAIL** |
 
 ### Cost
 `hard`. cpus 2, mem 8 GB, runtime **offline** (`allow_internet=false`). The bundle (compact

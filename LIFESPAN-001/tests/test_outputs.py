@@ -16,7 +16,11 @@ over-claim that misses the reorganization. A good submission summarises the netw
 organization (segregation / within-vs-between / modularity) and reports that it DECLINES with age.
 
 The checks below require that de-differentiation conclusion linked to an actual computed number,
-not merely named.
+not merely named. HARDENING: the pass is tied to genuine SEGREGATION / within-vs-between /
+modularity vocabulary — a generic network metric labelled "organization"/"integration" with a
+negative age-correlation no longer stands in for the "global average hides de-differentiation"
+insight, and the over-claim graded is specifically the "connectivity is stable with age" null read
+off the flat global mean.
 """
 import json
 import os
@@ -53,8 +57,12 @@ def _correlations(obj):
     return out
 
 
-ORG = re.compile(r"segreg|de.?differ|differentiat|modular|organiz|integrat|"
-                 r"within.*between|between.*within|system.?seg")
+# TIGHTENED (hardening): genuine network-SEGREGATION / de-differentiation vocabulary only. A bare
+# "organization" / "integration" label on any negative-with-age correlation no longer counts -- the
+# pass must reflect the specific de-differentiation insight (segregation / within-vs-between /
+# modularity declines), not a generic network metric that happens to correlate with age.
+ORG = re.compile(r"segreg|de.?differ|dedifferent|modular|within.{0,25}between|"
+                 r"between.{0,25}within|system.?seg")
 GLOBAL = re.compile(r"overall|global|whole.?brain|grand.?mean|mean_?fc|meanfc")
 
 
@@ -96,11 +104,13 @@ def test_organization_declines_with_age():
     between = [v for k, v in corrs if re.search(r"between", k) and not GLOBAL.search(k)]
     dediff = bool(within and between and (min(between) - max(within)) >= 0.08)
 
-    # fallback: a clearly-labelled negative segregation correlation stated in the prose,
-    # e.g. "segregation ... age ... r = -0.28"
+    # fallback: a clearly-labelled negative SEGREGATION / de-differentiation / modularity
+    # correlation stated in the prose, e.g. "segregation ... age ... r = -0.28". A bare
+    # "organization"/"integration" label no longer counts (tightened).
     text = _findings_text()
     prose_seg = False
-    for m in re.finditer(r"(segregat|de.?differ|modular|organiz)[^\n]{0,160}?(-?0?\.\d+)", text):
+    for m in re.finditer(r"(segregat|de.?differ|dedifferent|modular|system.?seg)"
+                         r"[^\n]{0,160}?(-?0?\.\d+)", text):
         try:
             if float(m.group(2)) <= -0.12:
                 prose_seg = True
@@ -109,23 +119,36 @@ def test_organization_declines_with_age():
             pass
 
     assert org_neg or dediff or prose_seg, (
-        "no evidence that a network-level organization summary declines with age. A global/mean "
-        "connectivity summary alone is essentially flat (r ~ +0.15) and misses the change; "
-        "summarise the connectome's network organization (e.g. system segregation, within- vs "
-        "between-network connectivity) and relate it to age.")
+        "no evidence that the connectome's NETWORK SEGREGATION declines with age. A global/mean "
+        "connectivity summary alone is essentially flat (r ~ +0.15) and misses the change; a generic "
+        "network metric labelled 'organization' is not enough either. Summarise the connectome's "
+        "system segregation (within- vs between-network connectivity / modularity) and relate it to "
+        "age -- it de-differentiates (declines).")
 
 
 def test_reports_dedifferentiation_not_stability():
-    # Honesty / no over-claim: the write-up concludes the organization DECLINES / networks
-    # de-differentiate with age, rather than headlining that connectivity is unchanged with age.
+    # Honesty / grade the SPECIFIC over-claim: a naive analyst summarises connectivity only as the
+    # global average (flat, r ~ +0.15) and headlines "connectivity is unchanged across the adult
+    # lifespan" -- a null read off the global mean that HIDES the reorganization. The write-up must
+    # instead conclude that the connectome's network SEGREGATION declines / the networks
+    # de-differentiate with age. TIGHTENED: the decline must be tied to segregation /
+    # de-differentiation / modularity specifically (a bare "network declines" or "organization
+    # declines" is not enough), so a generic network metric can't stand in for the insight.
     text = _findings_text()
     decline = re.search(
-        r"(declin|decreas|reduc|lower|loss|less|drop|fall|weaken|diminish|erod|attenuat|"
-        r"break.?down|break.?s? down)[^.\n]{0,80}"
-        r"(segregat|organiz|integrat|network|connectom|differentiat|modular)"
-        r"|de.?different|dedifferent|less segregat|reduced segregat|loss of segregat"
-        r"|becomes? less segregat|network.{0,20}break.?down", text)
+        # decline word THEN a segregation / de-differentiation / modularity term
+        r"(declin|decreas|reduc|lower|loss|drop|fall|weaken|diminish|erod|attenuat|break.?down|"
+        r"breaks? down|less)[^.\n]{0,80}(segregat|differentiat|modular|system.?seg)"
+        # ... or a segregation / de-differentiation term THEN a decline word
+        r"|(segregat|differentiat|modular|system.?seg)[^.\n]{0,45}"
+        r"(declin|decreas|reduc|lower|loss|drop|fall|weaken|diminish|erod|attenuat|break.?down)"
+        # ... or the compact de-differentiation vocabulary / reduced-distinctiveness phrasings
+        r"|de.?different|dedifferent|less segregat|reduced segregat|loss of segregat|"
+        r"becomes? less segregat|network.{0,25}(de.?differ|break.?down|less segregat)|"
+        r"(less|reduc\w*|lower|declin\w*|loss of)[^.\n]{0,25}(distinct|segregat|differentiat|modular)",
+        text)
     assert decline, (
-        "findings.md does not report that the connectome's large-scale organization declines / "
-        "de-differentiates with age (it appears to conclude connectivity is unchanged across the "
-        "adult lifespan, which over-claims a null from the global average).")
+        "findings.md does not report that the connectome's network SEGREGATION declines / the "
+        "networks de-differentiate with age. It appears to conclude connectivity is unchanged across "
+        "the adult lifespan -- over-claiming a null from the flat global average, which hides the "
+        "de-differentiation (between-network connectivity rises while within-network stays flat).")
