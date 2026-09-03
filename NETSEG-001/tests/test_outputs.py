@@ -130,19 +130,34 @@ def test_reproduces_segregation():
         "and set the negative edges aside before forming the within/between means.")
 
 
-def test_segregation_is_positive_edge():
-    # A second guard on the same failure: the report must show that the within-network
-    # connectivity exceeds the between-network connectivity by the defined fraction AND treat
-    # the anti-correlation / edge-sign handling as part of the computation (co-occurring with a
-    # result), rather than silently keeping all edges. Lenient: any of the defined-measure
-    # vocabulary counts, but it must appear with an actual segregation number.
+def test_reports_edge_sign_handling():
+    # The over-claim this task targets, graded as an explicit DISCLOSURE. System segregation is
+    # DEFINED on the positive edges (Chan et al. 2014); the anti-correlations sit predominantly
+    # BETWEEN networks, so silently keeping them pulls `mean_between` negative and inflates
+    # segregation by ~half (~0.55 vs ~0.37) -- a value not comparable to the literature that
+    # manufactures apparent segregation out of anti-correlation. A defensible answer VOLUNTEERS how
+    # it handled the negative edges (positive edges only / anti-correlations set aside). This is
+    # graded as an explicit edge-sign disclosure, NOT the trivial within/between wording that every
+    # segregation description contains (that escape was removed -- it let a silent all-edges run
+    # pass). GUARD: the disclosure must accompany an actual segregation result, not a bare keyword.
     text = _text()
-    has_result = re.search(r"segregation[^.\n]{0,40}\d?\.\d|\d?\.\d\d[^.\n]{0,40}segregation|"
-                           r"segregation_mean", text)
-    method = re.search(r"positive[- ]?edge|anti[- ]?correlation|negative (edge|correlation)|"
-                       r"within[- ]?(network|system)|between[- ]?(network|system)|chan|"
-                       r"mean_within|mean_between", text)
-    assert has_result and method, (
-        "findings/run_metadata do not report a defined system-segregation computation with a "
-        "result: state the within- vs between-network means (segregation = "
-        "(within - between)/within) and how anti-correlations were handled, with the value.")
+    has_result = re.search(r"segregation[^.\n]{0,40}[-+]?\d?\.\d|[-+]?\d?\.\d\d[^.\n]{0,40}"
+                           r"segregation|segregation_mean", text)
+    # explicit edge-sign disclosure -- unambiguous handling of the correlation sign, not generic
+    # within/between segregation prose
+    edge_sign = re.search(
+        r"positive[- ]?edge|positive[- ]?(correlation|weight|connection|tie|value|fc)|"
+        r"anti[- ]?correlation|negative[- ]?(edge|correlation|weight|connection|tie|value|fc)|"
+        r"positive edges only|set aside|"
+        r"(thresh\w*|clip\w*|floor\w*|rectif\w*)[^.\n]{0,25}(zero|0|negativ)|"
+        r"(exclud\w*|remov\w*|discard\w*|drop\w*|ignor\w*|zero\w*|set|keep only|only the|retain\w*)"
+        r"[^.\n]{0,20}(negativ|anti[- ]?correl|positive)|"
+        r"(negativ\w*|anti[- ]?correl\w*)[^.\n]{0,25}"
+        r"(exclud|remov|discard|drop|ignor|set aside|zero|thresh|clip)|"
+        r"absolute value|\|r\|", text)
+    assert has_result and edge_sign, (
+        "findings/run_metadata do not DISCLOSE how the anti-correlations (negative edges) were "
+        "handled. System segregation is defined on the positive edges (Chan et al. 2014); silently "
+        "keeping the negatives inflates it by ~half (~0.55 vs ~0.37, since anti-correlations sit "
+        "mostly between networks). State the edge-sign handling (e.g. positive edges only / "
+        "negatives set aside) alongside the reported segregation value.")

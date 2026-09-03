@@ -35,19 +35,24 @@ The **direction** of the negative-edge lever is robust, but the **absolute** seg
 
 ### Verifier (3 plain checks, human-looking pytest)
 
-`tests/test_outputs.py`: (1) per-participant segregation present for the ~40-participant cohort, plausible range, varies across subjects, and a within-vs-between-network segregation analysis named; (2) **reproduction** — cohort-mean segregation in the validated band **[0.32, 0.47]**; (3) a defined-segregation computation is reported alongside a result (within/between means or edge-sign handling co-occurring with the value). Check 2 is the mechanical discriminator.
+`tests/test_outputs.py`: (1) per-participant segregation present for the ~40-participant cohort, plausible range, varies across subjects, and a within-vs-between-network segregation analysis named; (2) **reproduction** — cohort-mean segregation in the validated band **[0.32, 0.47]**; (3) **explicit edge-sign DISCLOSURE** — the write-up must state how the anti-correlations / negative edges were handled (positive edges only / anti-correlations set aside / negatives thresholded to zero / |r|), co-occurring with a reported segregation value.
 
-**Offline discrimination (measured, this build):**
+**Hardening (this pass, per the tb-science audit — "require an explicit edge-sign robustness disclosure graded as the over-claim; else control").** Check 3 previously accepted the *trivial within/between wording that every segregation description contains* (`within-network`, `between-network`, `mean_within`, …) — so a silent all-edges run passed it, leaving the negative-edge lever gated by the numeric band alone. Check 3 now **drops that escape** and requires a genuine edge-sign disclosure (unambiguous handling of the correlation sign). The over-claim — silently keeping the anti-correlations and reporting the inflated ~0.55 as "system segregation" — now fails BOTH the band and the disclosure; a defensible positive-edge answer that names its edge handling passes both. The reference solution already emits this disclosure (findings.md "Edge-sign handling" section + run_metadata `edge_handling` / `metric: …positive-edge`).
 
-| output | check1 | check2 (reproduce) | check3 | verdict |
+**Offline discrimination (re-validated against the hardened grader):**
+
+| output | seg value | band | disclosure | verdict |
 |---|---|---|---|---|
-| reference solution (positive-edge, confounds) | PASS | PASS (0.374) | PASS | **PASS** |
-| all edges kept (confounds) | PASS | **FAIL** (0.554) | PASS | **FAIL** |
-| all edges + confounds skipped | PASS | **FAIL** (0.309) | PASS | **FAIL** |
+| reference / oracle (positive-edge, confounds; real nilearn run) | 0.374 | PASS | PASS | **PASS 3/3** |
+| defensible-alt (positive-edge ~0.40, "negatives clipped to zero") | 0.40 | PASS | PASS | **PASS 3/3** |
+| naive (all edges kept, no edge-sign disclosure) | 0.55 | **FAIL** | **FAIL** | **FAIL** |
+| over-claim ("strongly segregated", 0.56, no disclosure) | 0.56 | **FAIL** | **FAIL** | **FAIL** |
+| hedge (all edges 0.55, discloses it kept anti-correlations) | 0.55 | **FAIL** | pass | **FAIL** (band) |
+| terse-correct (positive-edge 0.37, no edge-sign disclosure) | 0.37 | PASS | **FAIL** | **FAIL** (disclosure gate bites) |
 
 ### Difficulty — NOT yet gated (frontier runs pending)
 
-Oracle passes (reward 1.0 offline; `compute.py` fetches live nilearn data and writes the three artefacts). The all-edges naive outputs fail as tabulated. The **≥2-frontier-family, k≥3 difficulty gate has not been run** (no Harbor/agent access in this authoring session) — recorded as **untested difficulty**. Honest expectation: an agent that computes segregation with all edges (a very common default) lands ~50% high; one that applies the positive-edge definition passes. If frontier agents pass easily, the ratchet is to move to a signed/weighted segregation variant or add a second (thresholding) lever, not to add rigor.
+Oracle passes (reward 1.0; re-run on the real nilearn data this pass, cohort-mean 0.374). The all-edges naive outputs fail as tabulated. The **≥2-frontier-family, k≥3 difficulty gate has not been run** (no Harbor/agent access in this authoring session) — recorded as **untested difficulty**. Honest expectation: an agent that computes segregation with all edges (a very common default) lands ~50% high AND omits the edge-sign disclosure — failing on both the band and the honesty gate; one that applies the positive-edge definition and names it passes. The strengthened disclosure gate means an agent must now *volunteer* the negative-edge handling (the un-cued metacognitive step), not merely land near the right number. If frontier agents pass easily, the ratchet is to move to a signed/weighted segregation variant or add a second (thresholding) lever, not to add rigor.
 
 ### Data provenance / reliability caveats
 
