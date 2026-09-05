@@ -21,7 +21,17 @@ while still selecting the neurons on all trials -- the leak is in the SELECTION.
 memory-selective neurons (and their preferred direction) on independent trials and measuring the AUC
 on held-out trials removes the inflation, giving ~0.51 (chance) -- the memory-selective fraction is
 itself at the chance false-positive rate, so out of sample the single-neuron memory signal in mean
-firing rate essentially vanishes. A reported ~0.63 fails the numeric match.
+firing rate essentially vanishes.
+
+Grading (fair OR-escape, ALLEN2P-/VISCAT-style, GRADIENT/SOCIALBRAIN judgement genre). The brief
+pins the selection (rank-sum p<0.05) and the preferred-direction measure (max(AUC, 1-AUC)) but
+leaves the selection-vs-measurement TRIAL SPLIT to the analyst. A submission PASSES if EITHER the
+headline AUC reproduces the honest independent-selection value ~0.51, OR the write-up VOLUNTEERS the
+non-independence (names the double-dipping / winner's curse tied to the result, or describes the
+held-out split it used). Only an un-caveated inflated ~0.63 -- read off the same trials and reported
+as the memory signal -- fails. This removes a reverse-gotcha: an agent that faithfully computes the
+pinned same-trials quantity and HONESTLY flags it as double-dipping-inflated is not failed for not
+silently deviating from the pinned procedure.
 """
 import json
 import os
@@ -106,26 +116,64 @@ def _headline_auc(res):
     return None
 
 
-def test_new_old_auc_reproduces_independent_selection_value():
+def _report_text():
+    blob = ""
+    for name in ("findings.md", "results.json", "run_metadata.json"):
+        p = OUT / name
+        if p.exists():
+            blob += "\n" + p.read_text(encoding="utf-8")
+    return blob.lower()
+
+
+# a token that shows the honesty statement is tied to the actual RESULT, not a bare pipeline word
+_RESULT = (r"(auc|roc|discrimin|memory|select|estimat|signal|new.?old|novel|familiar|"
+           r"same[- ]?trial|inflat|optimist|winner|value)")
+# an independent / held-out estimation scheme (unambiguous -- not naive pipeline vocabulary)
+_INDEP = (r"(held[- ]?out|cross[- ]?validat|out[- ]?of[- ]?sample|leave[- ]?one[- ]?out|nested cv|"
+          r"(independent|separate|different|train\w*|test\w*|two|odd|even|other|remaining)"
+          r"[^.\n]{0,20}(trial|split|set|sample|fold|half|halve|partition))")
+
+
+def _caught_double_dipping(text):
+    names_bias = re.search(
+        r"(double[- ]?dip|winner'?s?[- ]?curse|circular|non[- ]?independen|selection bias|"
+        r"over[- ]?fit|in[- ]?sample bias|regress\w* to the mean)[^.\n]{0,90}" + _RESULT
+        + r"|" + _RESULT + r"[^.\n]{0,90}(double[- ]?dip|winner'?s?[- ]?curse|circular|"
+        r"non[- ]?independen|selection bias|over[- ]?fit|in[- ]?sample bias)"
+        r"|(inflat|optimist|overestimat|biased? up\w*|upward\w* bias)[^.\n]{0,70}"
+        r"(auc|selection|same[- ]?trial|memory|select|winner)"
+        r"|(same|identical)[- ]?trials?[^.\n]{0,70}(inflat|bias|circular|optimist|winner|auc)",
+        text)
+    uses_independent = re.search(
+        _INDEP + r"[^.\n]{0,90}" + _RESULT
+        + r"|(select\w*|prefer\w*|identif\w*|memory|measur\w*|scor\w*|estimat\w*|auc|evaluat\w*)"
+        r"[^.\n]{0,90}" + _INDEP,
+        text)
+    return bool(names_bias or uses_independent)
+
+
+def test_new_old_discriminability_honest_or_caught():
+    # Fair judgement gate with an OR escape (ALLEN2P-/VISCAT-style). PASS if EITHER
+    #   (A) the headline AUC reproduces the honest independent-selection value ~0.51 +/- TOL, OR
+    #   (B) the write-up VOLUNTEERS the non-independence -- names the double-dipping / winner's curse
+    #       tied to the result, or describes the held-out / independent split it used.
+    # Only an un-caveated inflated AUC (~0.63 read off the same trials, reported as the memory signal)
+    # fails. The bias/independence claim must co-occur with a RESULT token so a bare pipeline word
+    # does not pass (GRADIENT/SOCIALBRAIN guard).
     res = _results()
     auc = _headline_auc(res)
-    assert auc is not None, "results.json exposes no single-neuron new/old ROC AUC"
-    assert abs(auc - EXPECTED) <= TOL, (
-        f"reported single-neuron new/old AUC {auc:.3f} does not reproduce the honest value "
-        f"{EXPECTED:.2f} +/- {TOL:.2f}. A ~0.63 AUC comes from selecting the memory-selective "
-        f"neurons and measuring their new/old discriminability on the SAME recognition trials, which "
-        f"is circular (the neurons were picked because their firing separated novel from familiar, "
-        f"so on the identical trials the AUC is inflated by a winner's curse). Selecting the neurons "
-        f"and their preferred direction on independent (held-out) trials gives ~0.51 -- essentially "
-        f"chance, consistent with the memory-selective fraction being at the chance false-positive "
-        f"rate.")
-
-
-def test_findings_report_is_not_the_inflated_value():
-    text = (OUT / "findings.md").read_text(encoding="utf-8").lower()
+    text = _report_text()
     assert re.search(r"new.?old|novel|familiar|memory|auc|discrimin", text), \
         "findings.md does not describe the new/old memory analysis"
-    res = _results()
-    auc = _headline_auc(res)
-    assert auc is not None and abs(auc - EXPECTED) <= TOL, \
-        "headline new/old AUC in results.json is not the honest independent-selection value"
+
+    honest_number = auc is not None and abs(auc - EXPECTED) <= TOL
+    caught = _caught_double_dipping(text)
+    assert honest_number or caught, (
+        f"reported single-neuron new/old AUC {('%.3f' % auc) if auc is not None else 'None'} is an "
+        f"un-caveated inflated value. A ~0.63 AUC comes from selecting the memory-selective neurons "
+        f"(and their preferred novelty/familiarity direction) and measuring the new/old AUC on the "
+        f"SAME recognition trials -- circular (winner's curse / double dipping, Kriegeskorte 2009). "
+        f"Either report the honest independent-selection value (~{EXPECTED:.2f}: select neurons + "
+        f"direction on held-out trials -- essentially chance, since the memory-selective fraction is "
+        f"itself at the chance false-positive rate), OR explicitly flag the reported value as "
+        f"inflated by the same-trials non-independence (double dipping).")
