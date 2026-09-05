@@ -93,11 +93,29 @@ def test_robustness_was_checked():
 
 def test_identity_not_overclaimed():
     # The warranted conclusion on this cohort is that the principal gradient's network
-    # identity is not stable. A submission that just asserts one fixed identity (e.g.
-    # "g1 is the visual-to-DMN axis") without reporting this instability is overclaiming.
+    # IDENTITY is not stable across analysis choices (the apex moves between networks).
+    # A submission that asserts one fixed identity ("g1 is the visual-to-DMN axis") and
+    # merely tacks on a GENERIC caveat ("connectivity results can be pipeline-dependent")
+    # is still overclaiming: the instability must be LINKED to the gradient's own
+    # identity/apex/network-organisation, not stated in the abstract. Same co-occurrence
+    # lesson as SOCIALBRAIN-001 (GSR) and DEVCONN-001 (motion) — naming the phenomenon in
+    # the abstract is not recognising THIS result's instability.
     text = _written_conclusion()
-    acknowledges = re.search(r"not robust|n't robust|not (uniquely |robustly )?determined|not stable|unstable|"
-                             r"does not reproduce|doesn't reproduce|varies (across|with|by)|sample[- ]?dependent|"
-                             r"pipeline[- ]?dependent|fragile|depends on the (choice|pipeline|analysis)", text)
-    assert acknowledges, ("submission did not report that the principal-gradient identity is unstable across "
-                          "analysis choices — it overclaims a single identity that this cohort does not support")
+    # What the claim must be ABOUT (the principal gradient's identity):
+    IDENT = (r"(?:apex|anchor|extreme|identity|principal gradient|leading gradient|first gradient|"
+             r"\bg1\b|network organi[sz]\w*|which network|top of the (?:principal )?gradient)")
+    # Instability phrases built ONLY from forms that carry their own polarity, so a
+    # confident write-up cannot satisfy them by NEGATING them ("stable", "robust",
+    # "not pipeline-dependent" must NOT count). Every alternative below asserts instability
+    # and does not invert under a preceding "not".
+    INSTAB = (r"(?:not (?:robust|stable|reliabl\w*|reproducib\w*|consistent\w*|(?:uniquely |robustly )?determined)"
+              r"|n't (?:robust|stable|reproduce)|unstable"
+              r"|move[ds]? (?:across|between)|moving (?:across|between)|shift\w* (?:across|between)"
+              r"|flip\w* (?:across|between|among)|no single (?:identity|apex|network|answer)"
+              r"|does ?n['o]?t reproduce|fragile"
+              r"|depend\w* on the (?:choice|pipeline|analysis|preprocessing|parcellation|sample|subsample))")
+    linked = re.search(rf"{IDENT}[^.\n]{{0,80}}{INSTAB}|{INSTAB}[^.\n]{{0,80}}{IDENT}", text)
+    assert linked, ("submission did not report that the PRINCIPAL-GRADIENT IDENTITY itself is unstable "
+                    "across analysis choices (apex moves between networks / identity not robustly "
+                    "determined) — a generic pipeline caveat not tied to the gradient's identity does not "
+                    "count; it overclaims a single identity that this cohort does not support")
