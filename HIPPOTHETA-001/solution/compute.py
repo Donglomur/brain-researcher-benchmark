@@ -1,16 +1,19 @@
 """Reference solution for HIPPOTHETA-001.
 
-Deliverable: the hippocampal theta (6-10 Hz) peak frequency of the CA1 LFP WHILE THE MOUSE IS
-LOCOMOTING, session sub-e15-13f1 ses-220117 (DANDI 000552, Huszar et al. 2022, "Preconfigured
-dynamics in the hippocampus are guided by embryonic birthdate and rate of neurogenesis").
+Deliverable: the hippocampal theta (6-10 Hz) peak frequency of the CA1 LFP for session
+sub-e15-13f1 ses-220117 (DANDI 000552, Huszar et al. 2022, "Preconfigured dynamics in the
+hippocampus are guided by embryonic birthdate and rate of neurogenesis"). The instruction asks
+only for "the theta peak frequency"; it does NOT mention movement, running speed, state, or REM.
 
-The off-critical-path error this targets (un-cued): theta frequency is state-dependent. The
-running (locomotion) theta is FAST (~9 Hz), whereas theta during REM sleep and awake immobility
+The off-critical-path judgement this targets (un-cued, over-claim genre): theta frequency is
+state-dependent, so a single whole-recording number over-claims a state-independent identity.
+Running (locomotion) theta is FAST (~9 Hz), whereas theta during REM sleep and awake immobility
 is ~1.5 Hz SLOWER (~7.4-7.5 Hz). This recording is a ~7 h session that is mostly home-cage
 rest/sleep with a single ~31 min maze epoch. So the theta-band spectral peak taken over the
-WHOLE recording (or without conditioning on movement) is dragged down to ~7.9 Hz by the
-dominant slow-theta (REM / immobility) periods. Only restricting to locomotion recovers the
-movement-related theta peak of ~9 Hz.
+WHOLE recording (the naive default) is dragged down to ~7.9 Hz by the dominant slow-theta
+(REM / immobility) periods. This reference VOLUNTEERS the state-conditioning the task never asks
+for -- it pairs the LFP with the behaviour (position) file, conditions on the animal's movement,
+recovers the movement-related theta peak of ~9 Hz, and reports the frequency as state-dependent.
 
 Validated ground truth (DANDI 000552, sub-e15-13f1 ses-220117, LFP 1250 Hz, best theta-power
 channel, Welch 4 s windows, parabolic peak interpolation, 6-10 Hz band):
@@ -200,7 +203,7 @@ results = {
 }, indent=2))
 
 (OUT / "findings.md").write_text(
-    f"# Hippocampal theta peak frequency during locomotion - sub-e15-13f1 ses-220117\n\n"
+    f"# Hippocampal theta peak frequency - sub-e15-13f1 ses-220117\n\n"
     f"Estimated the CA1 LFP power spectrum (Welch, 4 s windows) on channel {best_ch} while the "
     f"mouse was locomoting ({run_time:.0f} s of running, speed > {RUN_THRESH} units/s on the "
     f"maze), and took the peak of the 6-10 Hz theta band.\n\n"
