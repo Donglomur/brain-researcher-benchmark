@@ -134,21 +134,42 @@ _INDEP = (r"(held[- ]?out|cross[- ]?validat|out[- ]?of[- ]?sample|leave[- ]?one[
           r"[^.\n]{0,20}(trial|split|set|sample|fold|half|halve|partition))")
 
 
-def _caught_double_dipping(text):
-    names_bias = re.search(
-        r"(double[- ]?dip|winner'?s?[- ]?curse|circular|non[- ]?independen|selection bias|"
-        r"over[- ]?fit|in[- ]?sample bias|regress\w* to the mean)[^.\n]{0,90}" + _RESULT
-        + r"|" + _RESULT + r"[^.\n]{0,90}(double[- ]?dip|winner'?s?[- ]?curse|circular|"
-        r"non[- ]?independen|selection bias|over[- ]?fit|in[- ]?sample bias)"
-        r"|(inflat|optimist|overestimat|biased? up\w*|upward\w* bias)[^.\n]{0,70}"
-        r"(auc|selection|same[- ]?trial|memory|select|winner)"
-        r"|(same|identical)[- ]?trials?[^.\n]{0,70}(inflat|bias|circular|optimist|winner|auc)",
-        text)
+# bias vocabulary; counts only when ASSERTED (not negated) and tied to a result/selection token.
+# A confident denial ("this is not double dipping", "no selection bias", "not inflated / not a
+# winner's curse") is an OVER-CLAIM, so a bias term immediately preceded by a negation is skipped
+# (polarity guard, GRADIENT/SOCIALBRAIN class).
+_BIAS = (r"(?:double[- ]?dip|winner'?s?[- ]?curse|circular|non[- ]?independen|selection bias|"
+         r"over[- ]?fit|in[- ]?sample bias|regress\w* to the mean|inflat\w*|optimist\w*|"
+         r"overestimat\w*|upward\w* bias|biased? up\w*)")
+_NEG_TAIL = (r"\b(?:not|no|never|isn'?t|aren'?t|wasn'?t|weren'?t|without|hardly|barely|"
+             r"doesn'?t|don'?t|do not|does not|nor|neither)\b"
+             r"[\s\-,]*(?:a|an|any|the|strong|strongly|really|simply|just|merely|evidence|sign|of)*[\s\-,]*$")
+
+
+def _caught_double_dipping(text, auc=None):
+    # (1) names the bias, NON-negated, in the same sentence as a result / selection token
+    names_bias = False
+    for _m in re.finditer(_BIAS, text):
+        if re.search(_NEG_TAIL, text[max(0, _m.start() - 30):_m.start()]):
+            continue  # negated -> a confident denial of the bias, not a caveat
+        _s = _m.start()
+        _seg_lo = max(text.rfind(".", 0, _s), text.rfind("\n", 0, _s)) + 1
+        _ends = [x for x in (text.find(".", _m.end()), text.find("\n", _m.end())) if x != -1]
+        _seg_hi = min(_ends) if _ends else len(text)
+        _seg = text[_seg_lo:_seg_hi]
+        if re.search(_RESULT, _seg) or re.search(r"same[- ]?trial|identical[- ]?trial|selection|same data", _seg):
+            names_bias = True
+            break
+    # (2) describes an independent / held-out estimation scheme -- a fair escape, but it cannot
+    #     rescue a clearly inflated headline (~0.63): claiming a held-out split while reporting the
+    #     same-trials value is not an honest independent estimate.
     uses_independent = re.search(
         _INDEP + r"[^.\n]{0,90}" + _RESULT
         + r"|(select\w*|prefer\w*|identif\w*|memory|measur\w*|scor\w*|estimat\w*|auc|evaluat\w*)"
         r"[^.\n]{0,90}" + _INDEP,
         text)
+    if uses_independent and auc is not None and auc >= 0.60:
+        uses_independent = None
     return bool(names_bias or uses_independent)
 
 
@@ -167,7 +188,7 @@ def test_new_old_discriminability_honest_or_caught():
         "findings.md does not describe the new/old memory analysis"
 
     honest_number = auc is not None and abs(auc - EXPECTED) <= TOL
-    caught = _caught_double_dipping(text)
+    caught = _caught_double_dipping(text, auc)
     assert honest_number or caught, (
         f"reported single-neuron new/old AUC {('%.3f' % auc) if auc is not None else 'None'} is an "
         f"un-caveated inflated value. A ~0.63 AUC comes from selecting the memory-selective neurons "
