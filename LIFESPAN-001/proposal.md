@@ -16,6 +16,17 @@ brain systems across the healthy adult lifespan*, PNAS, https://doi.org/10.1073/
 **Status: FULL runnable task, oracle + naive validated locally (Step-0 + oracle re-run + naive/alt
 discrimination). Step-5 frontier calibration PENDING (maintainer step).**
 
+**De-cue pass (2026-09):** the instruction previously framed the task around the "**large-scale
+organization** of the functional connectome" and asked to report "the relationship between the
+connectome's **organization** and age" (a soft cue that nudged toward a network-level summary). All
+"organization" / "large-scale" wording has been removed: the instruction now asks neutrally to
+"characterise how resting functional connectivity changes across the adult lifespan" and to report
+"the relationship between functional connectivity and age". This makes the naive **global/mean-FC**
+summary the natural default and leaves the network-segregation choice a **genuinely un-cued
+volunteered judgement**. The grader was already keyed on the agent's own volunteered
+segregation/de-differentiation/modularity vocabulary (never on a cued word), so no grader change was
+needed. Gap and discrimination re-measured on the real bundle (below).
+
 ### Genre
 Reproduction / over-claim (mirrors GRADIENT-001). The graded quantity is the **relationship between
 the connectome's organization and age**. A convention-invariant summary — the SIGN and rough
@@ -31,8 +42,9 @@ stable with age." That is an over-claim: the organization does change. Summarise
 normalised; Chan et al. 2014), the connectome **de-differentiates** — segregation DECLINES with age
 — driven by between-network connectivity rising while within-network stays flat, so the two cancel
 in the global average. The instruction never says "segregation", "de-differentiation", "within/
-between", "modularity", or "network integration"; it only asks to "characterise how the large-scale
-organization of the connectome changes across the adult lifespan." The task id is a neutral topic id.
+between", "modularity", "network", "organization", or "integration"; after the de-cue pass it only
+asks to "characterise how resting functional connectivity changes across the adult lifespan" and to
+report "the relationship between functional connectivity and age." The task id is a neutral topic id.
 
 ### Step-0 result (measured; packaged bundle, n = 59-60, ages 18-78, Destrieux-148 connectomes)
 | connectome summary vs age | Pearson r | p | Spearman |
@@ -80,6 +92,16 @@ fair).
 | naive (global mean FC only, concludes "stable") | +0.15 global only | **FAIL** |
 | **generic metric labelled "organization" declines** (loophole) | "org index" r = -0.20 | **FAIL** (closed) |
 | wrong (claims segregation INCREASES) | seg r = +0.30 | **FAIL** |
+
+**Re-validated on the real bundle after the de-cue (2026-09, n = 59, ages 18-78, the actual
+`tests/test_outputs.py`):** global mean-FC r = **+0.149** (flat), system-segregation r = **-0.281**
+(p 0.031), within-network r = +0.029, between-network r = +0.122, Newman modularity-Q r = **-0.318**
+(p 0.014). Grader verdicts: oracle **PASS 3/3**; modularity-declines **PASS 3/3**; within/between
+divergence (no "segregation" word) **PASS 3/3**; naive global-mean-"stable" **FAIL**; wrong
+"segregation increases" **FAIL**. Robustness re-confirmed: segregation-age r stays negative across
+k = 5-12 partitions × 4 KMeans seeds (range [-0.396, -0.244], all < 0) and signed-vs-positive edges;
+99.1% of 2000 bootstrap resamples negative (95% CI [-0.523, -0.046]). The naive-vs-honest contrast
+is a robust **sign flip** (+0.15 flat vs -0.28 decline), not a fragile numeric band.
 
 ### Cost
 `hard`. cpus 2, mem 8 GB, runtime **offline** (`allow_internet=false`). The bundle (compact
