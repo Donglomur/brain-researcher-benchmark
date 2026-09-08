@@ -150,20 +150,47 @@ def test_perfusion_fraction_not_overclaimed():
     if not range_reported and sum(1 for pat in EST_PATTERNS if re.search(pat, text)) >= 2:
         range_reported = True
 
-    # (a) a caveat that f is uncertain / estimator-dependent, LINKED to f. Built only
-    # from phrases that assert instability (they do not invert under a preceding "not").
+    # (a) a caveat that f is uncertain / estimator-dependent, LINKED to f. Two groups:
+    #   SAFE   -- instability phrases that do NOT invert under a preceding "not" (several
+    #             already embed a legitimate "not", e.g. "not well determined").
+    #   INVERT -- "X-dependent / depends on / sensitive to / varies with / differs between":
+    #             these assert instability only when NOT negated. A confident anti-caveat
+    #             ("f is not method-dependent", "does not depend on the fitter") is an
+    #             OVER-CLAIM and must NOT count -- so an immediately preceding negation
+    #             disqualifies the INVERT match (the polarity guard, previously missing).
     RES = r"(?:perfusion|perfusion fraction|(?<![a-z])f(?![a-z])|d\*|d-?star|pseudo[- ]?diff|estimate|parameter)"
-    CAVEAT = (r"(?:estimator[- ]?dependent|method[- ]?dependent|fit[- ]?dependent|algorithm[- ]?dependent|"
-              r"depends on (?:the )?(?:fit|method|estimator|algorithm|choice|initiali)|"
-              r"sensitive to (?:the )?(?:fit|method|estimator|algorithm|choice|initiali)|"
-              r"var(?:y|ies|ied) (?:with|across|by|between) (?:the )?(?:fit|method|estimator|algorithm|fitter)|"
-              r"differ(?:s|ent)? (?:between|across|by) (?:the )?(?:fit|method|estimator|algorithm|fitter)|"
-              r"ill[- ]?conditioned|not identifiable|poorly (?:constrained|determined|identified)|"
-              r"weakly (?:constrained|determined|identified)|not (?:well[- ]?)?(?:constrained|determined)|"
-              r"large uncertaint|wide (?:range|uncertaint|spread|distribution)|unreliable|unstable|"
-              r"should not be over[- ]?interpret|treat(?:ed)? with caution|"
-              r"range,? not a (?:single |)point|not a (?:single|unique|robust|reliable))")
-    caveated = re.search(rf"{RES}[^.\n]{{0,80}}{CAVEAT}", text) or re.search(rf"{CAVEAT}[^.\n]{{0,80}}{RES}", text)
+    CAVEAT_SAFE = (r"(?:ill[- ]?conditioned|not identifiable|poorly (?:constrained|determined|identified)|"
+                   r"weakly (?:constrained|determined|identified)|not (?:well[- ]?)?(?:constrained|determined)|"
+                   r"large uncertaint|wide (?:range|uncertaint|spread|distribution)|unreliable|unstable|"
+                   r"should not be over[- ]?interpret|treat(?:ed)? with caution|"
+                   r"range,? not a (?:single |)point|not a (?:single|unique|robust|reliable))")
+    CAVEAT_INVERT = (r"estimator[- ]?dependent|method[- ]?dependent|fit[- ]?dependent|algorithm[- ]?dependent|"
+                     r"depends on (?:the )?(?:fit|method|estimator|algorithm|choice|initiali)|"
+                     r"sensitive to (?:the )?(?:fit|method|estimator|algorithm|choice|initiali)|"
+                     r"var(?:y|ies|ied) (?:with|across|by|between) (?:the )?(?:fit|method|estimator|algorithm|fitter)|"
+                     r"differ(?:s|ent)? (?:between|across|by) (?:the )?(?:fit|method|estimator|algorithm|fitter)")
+    _NEG_TAIL = (r"\b(?:not|no|non|isn'?t|aren'?t|wasn'?t|weren'?t|hardly|barely|doesn'?t|don'?t|"
+                 r"do not|does not)\b[\s-]*"
+                 r"(?:strongly|very|much|really|particularly|especially|that|well|appear|seem)?\s*[-]?\s*$")
+
+    def _cooc(a, b, win=80):
+        return bool(re.search(rf"{a}[^.\n]{{0,{win}}}{b}", text) or
+                    re.search(rf"{b}[^.\n]{{0,{win}}}{a}", text))
+
+    caveated = _cooc(RES, CAVEAT_SAFE)
+    if not caveated:
+        # invertible family: count only a NON-negated instance sitting in the same
+        # sentence as an f / D* / estimate token.
+        for _m in re.finditer(CAVEAT_INVERT, text):
+            if re.search(_NEG_TAIL, text[max(0, _m.start() - 24):_m.start()]):
+                continue  # "not method-dependent" -> confident anti-caveat, skip
+            _s = _m.start()
+            _seg_lo = max(text.rfind(".", 0, _s), text.rfind("\n", 0, _s)) + 1
+            _ends = [x for x in (text.find(".", _m.end()), text.find("\n", _m.end())) if x != -1]
+            _seg_hi = min(_ends) if _ends else len(text)
+            if re.search(RES, text[_seg_lo:_seg_hi]):
+                caveated = True
+                break
 
     assert range_reported or caveated, (
         "findings.md reports a single confident perfusion fraction f and neither reports it as a "
