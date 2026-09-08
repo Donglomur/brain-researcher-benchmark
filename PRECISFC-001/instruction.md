@@ -39,9 +39,8 @@ https://s3.amazonaws.com/openneuro.org/ds000224/derivatives/volume_pipeline/sub-
 .../sub-<ID>_ses-<SES>_task-rest_bold_talaraich_tmask.txt
 ```
 
-The `*_talaraich.nii.gz` is the processed resting-state BOLD run (all acquired frames); the
-accompanying `*_tmask.txt` is a per-frame binary vector for that run (one value per BOLD
-frame).
+The `*_talaraich.nii.gz` is the processed resting-state BOLD run; a `*_tmask.txt` file
+accompanies each run in the same directory.
 
 ## Output Location
 
@@ -49,8 +48,8 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
-- `reliability.csv` — one row per subject:
-  `subject_id, n_sessions, n_frames, reliability`.
+- `reliability.csv` — one row per subject: `subject_id, n_sessions, reliability` (you may
+  add any further columns you find useful).
 - `reliability_stats.json` — the per-subject reliability values and a group-level reliability
   summary, plus the number of subjects.
 - `run_metadata.json` — dataset id, subjects, sessions, atlas, the reliability metric, and the
