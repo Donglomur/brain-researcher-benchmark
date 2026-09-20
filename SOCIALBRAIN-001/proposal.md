@@ -52,3 +52,51 @@ Both ran a single standard pipeline, got the null, and gave a flat verdict — *
 ### Cost
 
 `hard`. cpus 2, mem 8 GB, internet on (downloads all 155 ds000228 subjects + whole-brain global-signal extraction for the GSR pipeline; timeouts 5400 s). Agent runtimes ~16–22 min. Deps: nilearn 0.12.1 + scipy/sklearn/pandas/nibabel.
+
+---
+
+## Proof-of-work rebuild (verifier hardening, 2026-09)
+
+The prior grader **never opened `age_effects.json`** (which holds the headline r/p): it checked
+only that `network_connectivity.csv` had in-range columns and that `findings.md` contained a
+GSR-dependence sentence — so fabricated per-subject rows plus a keyword sentence passed. This
+pass applies the suite-wide **proof-of-work** contract (`scratchpad/PROOF_OF_WORK_SPEC.md`).
+
+**Held-out reference (`tests/reference.npz`, built from `solution/compute.py`, never shipped to
+the agent).** Per-subject within-ToM, within-pain, across-network (standard clean, **no GSR**) and
+across-network (**with GSR**) for the 122 children + 33 adults of the nilearn-pinned ds000228,
+plus age/group. Discriminating statistics: children's Spearman(age, across-network) is
+**−0.069 (p = 0.45, n.s.)** without GSR and **−0.343 (p = 1.1e-4)** with GSR — the finding
+reproduces *only* under GSR. (The no-GSR↔GSR per-subject across-network correlation is 0.71,
+so GSR is a large, real shift, not noise.)
+
+**Four grading pillars** (`tests/test_outputs.py` + `tests/proof_of_work.py`):
+1. **Exact subjects + per-item values** — `network_connectivity.csv` must cover ≥90 % of the real
+   subjects, be non-constant, and its per-subject standard-clean across-network (and within-ToM)
+   must track the held-out reference (cross-subject r ≥ 0.80, per-subject |Δ| ≤ 0.08).
+2. **Recompute** — the children's Spearman(age, across-network) recomputed from the submitted rows
+   must equal the standard-clean reference (−0.069) *and* the reported `age_effects.json` value.
+3. **Discriminating number(s)** — the **GSR-dependence** graded as numbers: the reported
+   across-network vs age correlation must be ~null without GSR (~−0.07) and clearly negative with
+   GSR (~−0.34), with GSR pulling it markedly more negative. A run that did only one pipeline has
+   only one number and fails.
+4. **Secondary prose** — negation-aware GSR-dependence recognition; not the sole gate.
+
+**Validation (subprocess pytest per case, `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`):**
+
+| case | result |
+|---|---|
+| honest (oracle reference values) | PASS |
+| no `network_connectivity.csv` | FAIL |
+| constant across-network table | FAIL |
+| non-constant fabricated (real IDs, shuffled, right-ish headline) | FAIL |
+| naive standard-clean-only (real no-GSR rows, "does not reproduce", **no GSR number**) | FAIL (pillar 3) |
+| naive GSR-only (GSR across as primary, "reproduces") | FAIL (pillars 2, 3) |
+
+Note the naive standard-clean-only case passes pillars 1–2 (its rows are the real no-GSR values)
+and fails **precisely** at the discriminating GSR number — the intended teeth.
+
+**Packaging.** Real subjects pinned via `tests/reference.npz`. The raw ds000228 derivatives exceed
+GitHub's 100 MB/file limit, so `allow_internet=true` + runtime fetch are retained; baking the
+derived per-subject ROI series is a maintainer follow-up. Reference built on
+`fetch_development_fmri(n_subjects=155)` with the pinned ToM/pain ROIs, both pipelines.
