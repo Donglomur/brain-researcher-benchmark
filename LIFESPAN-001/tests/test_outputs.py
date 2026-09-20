@@ -1,154 +1,186 @@
-"""Grading checks for LIFESPAN-001.
+"""Proof-of-work grader for LIFESPAN-001 — how the resting connectome's organization changes
+across the adult lifespan (NKI), summarised as global mean FC vs system segregation.
 
-Ground truth (validated before release on the packaged NKI surface bundle, n = 59-60, ages 18-78,
-148-region Destrieux connectomes):
+The previous verifier checked shapes + a keyword sentence. This grader validates the EXACT
+packaged NKI subjects and their per-subject connectome summaries against a held-out reference
+(tests/reference.npz), recomputes BOTH age relationships FROM the submitted rows, and grades the
+scientific judgement AS NUMBERS: the naive summary (global mean FC) is ~flat with age while the
+correct summary (system segregation) DECLINES (de-differentiation), matching the held-out
+reference. Keyword prose is only secondary.
 
-    overall / mean functional connectivity vs age : r = +0.15  (p ~ 0.26)   -> essentially FLAT
-    system segregation vs age                     : r = -0.28  (p ~ 0.03)   -> DECLINES
-        (within-network FC vs age flat ~ 0.0; between-network FC vs age rises ~ +0.12; the two
-         cancel in the global average. Robust: segregation-age r in [-0.40, -0.24] across 5-12
-         network partitions and seeds; >99% of bootstrap resamples negative; Spearman -0.36.)
-
-So the resting connectome's large-scale organization DOES change across the adult lifespan: its
-networks de-differentiate (segregation declines). A submission that summarises "connectivity" only
-as the global average finds no age effect and concludes connectivity is stable with age — an
-over-claim that misses the reorganization. A good submission summarises the network-level
-organization (segregation / within-vs-between / modularity) and reports that it DECLINES with age.
-
-The checks below require that de-differentiation conclusion linked to an actual computed number,
-not merely named. HARDENING: the pass is tied to genuine SEGREGATION / within-vs-between /
-modularity vocabulary — a generic network metric labelled "organization"/"integration" with a
-negative age-correlation no longer stands in for the "global average hides de-differentiation"
-insight, and the over-claim graded is specifically the "connectivity is stable with age" null read
-off the flat global mean.
+Reference (packaged NKI Destrieux-148 region time series, n=59, ages 18-78):
+  global mean FC vs age      r = +0.15 (p 0.26)   <- naive summary, ~no change
+  system segregation vs age  r = -0.28 (p 0.03)   <- declines (de-differentiation)
+  within vs age +0.03 (flat) ; between vs age +0.12 (rises) -> drives the segregation decline
 """
 import json
 import os
 import re
+import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import proof_of_work as pw  # noqa: E402
+
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+REF_PATH = Path(__file__).resolve().parent / "reference.npz"
+_R = r"pearsonr|pearson|^r$|^rvalue$|^corr|correlation"
 
 
-def _load_json(name):
-    return json.loads((OUT / name).read_text(encoding="utf-8"))
+def _reference():
+    assert REF_PATH.exists(), "held-out reference tests/reference.npz is missing"
+    return pw.load_reference(REF_PATH)
 
 
-def _walk(obj, path=""):
-    """Yield (lowercased_key_path, value) for every leaf in a nested json object."""
-    if isinstance(obj, dict):
-        for k, v in obj.items():
-            yield from _walk(v, f"{path}.{k}".lower())
-    elif isinstance(obj, (list, tuple)):
-        for x in obj:
-            yield from _walk(x, path)
-    else:
-        yield path, obj
+def _submitted():
+    p = OUT / "connectome_summary.csv"
+    assert p.exists(), (
+        "missing required per-subject output connectome_summary.csv (subject_id, age, "
+        "global_connectivity, system_segregation, ...)")
+    return pw.load_submitted(p)
 
 
-def _correlations(obj):
-    """(key_path, value) pairs whose value is a plausible correlation in [-1, 1]."""
-    out = []
-    for k, v in _walk(obj):
-        if isinstance(v, bool):
-            continue
-        if isinstance(v, (int, float)) and -1.01 <= v <= 1.01:
-            out.append((k, float(v)))
-    return out
+def _results():
+    p = OUT / "results.json"
+    assert p.exists(), "missing required output results.json"
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception as e:
+        raise AssertionError(f"results.json is not valid JSON: {e}")
 
 
-# TIGHTENED (hardening): genuine network-SEGREGATION / de-differentiation vocabulary only. A bare
-# "organization" / "integration" label on any negative-with-age correlation no longer counts -- the
-# pass must reflect the specific de-differentiation insight (segregation / within-vs-between /
-# modularity declines), not a generic network metric that happens to correlate with age.
-ORG = re.compile(r"segreg|de.?differ|dedifferent|modular|within.{0,25}between|"
-                 r"between.{0,25}within|system.?seg")
-GLOBAL = re.compile(r"overall|global|whole.?brain|grand.?mean|mean_?fc|meanfc")
+def _findings():
+    return re.sub(r"\s+", " ", (OUT / "findings.md").read_text(encoding="utf-8").lower())
 
 
-def _findings_text():
-    blob = ""
-    for name in ("findings.md", "results.json", "run_metadata.json"):
-        p = OUT / name
-        if p.exists():
-            blob += "\n" + p.read_text(encoding="utf-8")
-    return blob.lower()
+def _r_glob(j):
+    # leaf_re selects the pearson-r leaf, so path_exclude only needs branch (not quantity) filters
+    return pw.find_path_number(j, path_include=["overall"], leaf_re=_R,
+                               path_exclude=["segreg", "within", "between"],
+                               prefer=["overall", "global", "mean"]) or \
+        pw.find_path_number(j, path_include=["global"], leaf_re=_R,
+                            path_exclude=["segreg", "within", "between"])
 
 
-def test_connectomes_and_subjects():
-    # A real per-subject connectome analysis over a reasonable slice of the cohort.
-    res = _load_json("results.json")
-    corrs = _correlations(res)
-    n = None
-    for k, v in _walk(res):
-        if re.search(r"n_?subj|nsub|n_?sample|\bn\b", k) and isinstance(v, (int, float)) \
-                and not isinstance(v, bool) and v >= 20:
-            n = int(v)
-            break
-    assert n is not None and n >= 40, f"expected a lifespan cohort (>=40 subjects), got {n}"
-    assert corrs, "results.json reports no correlation between a connectome summary and age"
+def _r_seg(j):
+    return pw.find_path_number(j, path_include=["segreg"], leaf_re=_R,
+                               path_exclude=["within", "between"])
 
 
-def test_organization_declines_with_age():
-    # The insight linked to the result: a NETWORK-LEVEL organization summary
-    # (segregation / within-vs-between / modularity) DECLINES with age. Accept either an
-    # explicitly organization-named negative age-correlation, or a within/between divergence
-    # (between-network connectivity rises relative to within with age = de-differentiation).
-    res = _load_json("results.json")
-    corrs = _correlations(res)
-
-    org_neg = [v for k, v in corrs
-               if ORG.search(k) and not GLOBAL.search(k) and v <= -0.12]
-
-    within = [v for k, v in corrs if re.search(r"within", k) and not GLOBAL.search(k)]
-    between = [v for k, v in corrs if re.search(r"between", k) and not GLOBAL.search(k)]
-    dediff = bool(within and between and (min(between) - max(within)) >= 0.08)
-
-    # fallback: a clearly-labelled negative SEGREGATION / de-differentiation / modularity
-    # correlation stated in the prose, e.g. "segregation ... age ... r = -0.28". A bare
-    # "organization"/"integration" label no longer counts (tightened).
-    text = _findings_text()
-    prose_seg = False
-    for m in re.finditer(r"(segregat|de.?differ|dedifferent|modular|system.?seg)"
-                         r"[^\n]{0,160}?(-?0?\.\d+)", text):
-        try:
-            if float(m.group(2)) <= -0.12:
-                prose_seg = True
-                break
-        except ValueError:
-            pass
-
-    assert org_neg or dediff or prose_seg, (
-        "no evidence that the connectome's NETWORK SEGREGATION declines with age. A global/mean "
-        "connectivity summary alone is essentially flat (r ~ +0.15) and misses the change; a generic "
-        "network metric labelled 'organization' is not enough either. Summarise the connectome's "
-        "system segregation (within- vs between-network connectivity / modularity) and relate it to "
-        "age -- it de-differentiates (declines).")
+def _r_named(j, name):
+    return pw.find_path_number(j, path_include=[name], leaf_re=_R,
+                               path_exclude=["segreg", "overall"])
 
 
-def test_reports_dedifferentiation_not_stability():
-    # Honesty / grade the SPECIFIC over-claim: a naive analyst summarises connectivity only as the
-    # global average (flat, r ~ +0.15) and headlines "connectivity is unchanged across the adult
-    # lifespan" -- a null read off the global mean that HIDES the reorganization. The write-up must
-    # instead conclude that the connectome's network SEGREGATION declines / the networks
-    # de-differentiate with age. TIGHTENED: the decline must be tied to segregation /
-    # de-differentiation / modularity specifically (a bare "network declines" or "organization
-    # declines" is not enough), so a generic network metric can't stand in for the insight.
-    text = _findings_text()
-    decline = re.search(
-        # decline word THEN a segregation / de-differentiation / modularity term
-        r"(declin|decreas|reduc|lower|loss|drop|fall|weaken|diminish|erod|attenuat|break.?down|"
-        r"breaks? down|less)[^.\n]{0,80}(segregat|differentiat|modular|system.?seg)"
-        # ... or a segregation / de-differentiation term THEN a decline word
-        r"|(segregat|differentiat|modular|system.?seg)[^.\n]{0,45}"
-        r"(declin|decreas|reduc|lower|loss|drop|fall|weaken|diminish|erod|attenuat|break.?down)"
-        # ... or the compact de-differentiation vocabulary / reduced-distinctiveness phrasings
-        r"|de.?different|dedifferent|less segregat|reduced segregat|loss of segregat|"
-        r"becomes? less segregat|network.{0,25}(de.?differ|break.?down|less segregat)|"
-        r"(less|reduc\w*|lower|declin\w*|loss of)[^.\n]{0,25}(distinct|segregat|differentiat|modular)",
+# ------------------------------------------------------------------ well-formedness
+def test_outputs_present_and_wellformed():
+    sub = _submitted()
+    assert len(sub) >= 40, f"connectome_summary.csv must carry per-subject rows; parsed {len(sub)}"
+    j = _results()
+    assert isinstance(j, dict) and j, "results.json empty"
+
+
+# ------------------------------------------------------------------ pillar 1
+def test_proof_of_work_subjects_and_values():
+    ref = _reference(); sub = _submitted()
+    pw.check_subjects_and_values(sub, ref, ref["stats"])
+
+
+# ------------------------------------------------------------------ pillar 2
+def test_recompute_both_age_relationships_from_rows():
+    ref = _reference(); sub = _submitted(); st = ref["stats"]; j = _results()
+    matched = [i for i in ref["ids"] if i in sub and sub[i]["age"] is not None]
+    import math
+    ages = [sub[i]["age"] for i in matched]
+
+    r_glob_rows = pw.pearson([sub[i]["global"] for i in matched], ages)
+    assert math.isfinite(r_glob_rows), "cannot recompute global-vs-age r from the submitted rows"
+    assert abs(r_glob_rows - st["r_glob"]) <= st["RECOMP_GLOB_TOL"], (
+        f"global-vs-age r recomputed from the rows ({r_glob_rows:+.3f}) does not match the reference "
+        f"({st['r_glob']:+.3f}, tol {st['RECOMP_GLOB_TOL']}).")
+    rep_glob = _r_glob(j)
+    assert rep_glob is not None and abs(r_glob_rows - rep_glob) <= st["RECOMP_GLOB_TOL"] + 0.02, (
+        f"reported global-vs-age r ({rep_glob}) is not what the submitted rows produce "
+        f"({r_glob_rows:+.3f}); CSV and JSON disagree.")
+
+    if all(sub[i]["seg"] is not None for i in matched):
+        r_seg_rows = pw.pearson([sub[i]["seg"] for i in matched], ages)
+        assert abs(r_seg_rows - st["r_seg"]) <= st["RECOMP_SEG_TOL"], (
+            f"segregation-vs-age r recomputed from the rows ({r_seg_rows:+.3f}) does not match the "
+            f"reference ({st['r_seg']:+.3f}, tol {st['RECOMP_SEG_TOL']}).")
+        rep_seg = _r_seg(j)
+        assert rep_seg is not None and abs(r_seg_rows - rep_seg) <= st["RECOMP_SEG_TOL"] + 0.02, (
+            f"reported segregation-vs-age r ({rep_seg}) is not what the submitted rows produce "
+            f"({r_seg_rows:+.3f}); CSV and JSON disagree.")
+
+
+# ------------------------------------------------------------------ pillar 3 (judgement as numbers)
+def test_conclusion_segregation_declines_global_flat_numeric():
+    ref = _reference(); st = ref["stats"]; j = _results()
+    r_glob = _r_glob(j)
+    r_seg = _r_seg(j)
+    assert r_glob is not None, "results.json does not report the global mean FC vs age correlation"
+    assert r_seg is not None, (
+        "results.json does not report the SYSTEM SEGREGATION vs age correlation. The judgement graded "
+        "here is that the connectome's organization (network segregation) changes with age even though "
+        "the global mean is ~flat; report the segregation-vs-age relationship.")
+
+    # (a) global mean FC is ~flat with age (the naive summary shows little/no change).
+    assert abs(r_glob) <= st["GLOB_MAX_ABS"], (
+        f"reported global-vs-age r = {r_glob:+.3f} is not the ~flat naive summary "
+        f"(reference {st['r_glob']:+.3f}); overall mean connectivity is roughly unchanged with age.")
+
+    # (b) system segregation DECLINES with age (clearly negative), matching the reference.
+    assert r_seg <= st["SEG_MAX"], (
+        f"reported segregation-vs-age r = {r_seg:+.3f} is not the negative decline the organization "
+        f"shows (reference {st['r_seg']:+.3f}); the networks de-differentiate with age.")
+    assert abs(r_seg - st["r_seg"]) <= 0.12, (
+        f"reported segregation-vs-age r = {r_seg:+.3f} is far from the reference ({st['r_seg']:+.3f}).")
+
+    # (c) segregation is clearly MORE negative than the global summary (the dissociation).
+    assert r_glob - r_seg >= st["SEG_GLOB_GAP"], (
+        f"the segregation summary ({r_seg:+.3f}) is not meaningfully more negative than the global "
+        f"summary ({r_glob:+.3f}); the point is that organization changes where the global average "
+        f"does not.")
+
+    # (d) de-differentiation mechanism, when reported: between-network rises above within-network.
+    r_w = _r_named(j, "within")
+    r_b = _r_named(j, "between")
+    if r_w is not None and r_b is not None:
+        assert r_b > r_w, (
+            f"reported between-network vs age r ({r_b:+.3f}) does not exceed within-network "
+            f"({r_w:+.3f}); the segregation decline is driven by between-network connectivity rising.")
+
+
+# ------------------------------------------------------------------ secondary prose signal
+def test_findings_engage_segregation_and_avoid_flat_null():
+    """SECONDARY (numbers carry the grade). findings.md must report that network
+    segregation/organization DECLINES with age (de-differentiation) while overall mean
+    connectivity is ~unchanged, and must NOT conclude a flat 'connectivity does not change with
+    age' null read off the global average."""
+    text = _findings()
+    seg = re.search(r"(?:segregation|de-?differentiat\w*|organi[sz]ation|within-?\s*minus-?\s*between|"
+                    r"network\s+differ\w*|system\s+segregation)", text)
+    declines = re.search(r"(?:declin\w*|decreas\w*|reduc\w*|lower\w*|falls?|drops?|negativ\w*|"
+                         r"de-?differentiat\w*|less\s+segregat\w*|weaken\w*)", text)
+    flatglobal = re.search(r"(?:overall|global|mean)\s+(?:mean\s+)?(?:connectivity|fc)[^.\n]{0,60}"
+                           r"(?:unchanged|flat|stable|no\s+(?:significant\s+)?(?:change|relationship)|"
+                           r"not\s+(?:signif\w*|relat\w*)|roughly\s+constant|little\s+change)", text)
+    assert seg and declines, (
+        "findings.md does not report that network segregation / connectome organization declines "
+        "with age (de-differentiation).")
+    assert flatglobal, (
+        "findings.md does not report that the naive summary (overall/global mean connectivity) is "
+        "roughly unchanged with age -- the contrast that makes the segregation decline the point.")
+
+    # over-claim guard: must not conclude a flat 'connectivity does not change with age' as THE result.
+    null_concl = re.search(
+        r"(?:conclude\w*|therefore|thus|so\s+that|overall,?)[^.\n]{0,60}"
+        r"(?:connectivity|connectome)[^.\n]{0,40}(?:does not|doesn.t|no)\s+(?:change|vary|differ)[^.\n]{0,20}(?:with\s+age|across)"
+        r"|resting[- ]?state\s+connectivity\s+(?:is\s+)?(?:stable|unchanged|does not change)\s+(?:with\s+age|across the\s+(?:adult\s+)?lifespan)",
         text)
-    assert decline, (
-        "findings.md does not report that the connectome's network SEGREGATION declines / the "
-        "networks de-differentiate with age. It appears to conclude connectivity is unchanged across "
-        "the adult lifespan -- over-claiming a null from the flat global average, which hides the "
-        "de-differentiation (between-network connectivity rises while within-network stays flat).")
+    disclaim = re.search(r"(?:but|however|misleading|only\s+the\s+global|organi[sz]ation\s+(?:does|still)|"
+                         r"segregation\s+(?:declin|decreas|still))", text)
+    assert not (null_concl and not disclaim), (
+        "findings.md over-claims a flat 'connectivity does not change with age' conclusion from the "
+        "global average; the connectome's organization (segregation) does change (declines).")

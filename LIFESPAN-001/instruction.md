@@ -17,14 +17,18 @@ Using the packaged NKI resting-state region time series (see **Data**), **charac
 functional connectivity changes across the adult lifespan**, and report the relationship you find
 between functional connectivity and age.
 
-For each subject, form the region×region functional connectome (correlate the region time series),
-then summarise that connectome and relate your summary to the subject's age across the cohort. The
-standard analytic choices this leaves to the analyst — how you summarise each subject's
-connectivity, how connection strengths are aggregated, the correlation type used against age —
-should follow common practice.
+For each subject, form the region×region functional connectome (Fisher-z correlations of the
+region time series), then summarise that connectome and relate your summary to the subject's age
+across the cohort. Summarise each subject's connectome in **at least two ways**: (i) its
+**overall/global mean connectivity** (the mean of all connectome edges), and (ii) the
+**segregation of its large-scale networks** — the normalised difference between mean
+within-network and mean between-network connectivity (system segregation; Chan et al. 2014), using
+a data-driven (age-blind) network partition of the group-mean connectome. Relate each summary to
+age across the cohort.
 
-Report, in plain terms, **the relationship between functional connectivity and age** — its
-direction and strength — stating only what your analysis actually supports.
+Report, in plain terms, **how the organization of the resting connectome changes across the adult
+lifespan** — whether and how each summary relates to age, its direction and strength — stating
+only what your analysis actually supports.
 
 ## Data
 
@@ -54,9 +58,12 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
-- `results.json` — the number of subjects, and the **relationship between functional connectivity
-  and age** that your analysis supports (the summary/summaries you related to age, each with its
-  correlation with age and significance).
+- `connectome_summary.csv` — one row per subject: `subject_id, age, global_connectivity,
+  within_network_connectivity, between_network_connectivity, system_segregation` (the per-subject
+  intermediate the age relationships are computed from).
+- `results.json` — the number of subjects, and the relationship with age of **each** connectome
+  summary — at minimum the overall/global mean connectivity and the system segregation — each with
+  its correlation with age (`pearson_r`) and significance (`p`).
 - `run_metadata.json` — dataset, number of subjects, and the method used.
 - `findings.md` — a short written summary of how resting functional connectivity changes across the
   adult lifespan. State only what your analysis actually supports.

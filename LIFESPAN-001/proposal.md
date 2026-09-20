@@ -123,3 +123,20 @@ Deps: numpy/scipy/scikit-learn/pandas/nibabel/nilearn (pinned).
   cancels the within/between dissociation) — the same reason system segregation was introduced.
 - Step-5 frontier calibration (>=2 frontier families, k>=3, hand re-scored) is the maintainer gate
   and is PENDING; this proposal ships the oracle-pass + naive-fail evidence.
+
+### Proof-of-work rework (held-out reference)
+
+The verifier was upgraded to the proof-of-work contract (PROOF_OF_WORK_SPEC.md). `solution/compute.py`
+now also emits the per-subject intermediate table `connectome_summary.csv` (subject_id, age,
+global/within/between connectivity, system segregation). A held-out reference (`tests/reference.npz`,
+never shipped to the agent) was built by running the oracle on the packaged NKI Destrieux-148 region
+time series (n=59, ages 18–78, sklearn 1.5.2 = the image stack). It stores each subject's global
+connectivity, segregation and age and the discriminating statistics (global-vs-age r = +0.15, n.s.;
+segregation-vs-age r = −0.28, p 0.03; within +0.03 / between +0.12). The grader now (1) matches the
+submitted per-subject global connectivity to the reference tightly (partition-independent; cross-subject
+r ≥ 0.95) and segregation more loosely (cross-subject r ≥ 0.80, partition-dependent), plus real ages;
+(2) recomputes BOTH age correlations from the submitted rows and cross-checks the reported JSON; and
+(3) grades the segregation-vs-global dissociation as numbers (global ~flat, segregation declines,
+segregation clearly more negative). Validated by subprocess pytest: honest PASS; no-table / constant /
+fabricated / naive (global-only, flat-null over-claim) / right-headline-fake-rows all FAIL. `tests/test.sh`
+now installs numpy for the grader. The NKI bundle is baked at image-build (`allow_internet=false`).

@@ -52,6 +52,8 @@ try:
     d = np.load(BUNDLE, allow_pickle=True)
     TS = d["timeseries"].astype(np.float64)   # (N, T, R)
     age = d["age"].astype(float)
+    subj = ([str(s) for s in d["subject"]] if "subject" in d.files
+            else [f"sub-{i:03d}" for i in range(len(age))])
 except Exception as e:
     fail(f"could not load bundle {BUNDLE}: {e}")
 
@@ -87,6 +89,17 @@ r_seg, p_seg = stats.pearsonr(segregation, age)
 rho_seg, prho_seg = stats.spearmanr(segregation, age)
 r_within, _ = stats.pearsonr(w, age)
 r_between, _ = stats.pearsonr(b, age)
+
+# ---- required output: per-subject connectome summaries (the intermediate table that the two
+#      age relationships are computed from) ----
+import csv
+with open(OUT / "connectome_summary.csv", "w", newline="") as f:
+    wr = csv.writer(f)
+    wr.writerow(["subject_id", "age", "global_connectivity", "within_network_connectivity",
+                 "between_network_connectivity", "system_segregation"])
+    for i in range(N):
+        wr.writerow([subj[i], f"{age[i]:.4f}", f"{global_fc[i]:.6f}", f"{w[i]:.6f}",
+                     f"{b[i]:.6f}", f"{segregation[i]:.6f}"])
 
 results = {
     "n_subjects": int(N),
