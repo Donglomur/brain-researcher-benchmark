@@ -50,3 +50,26 @@ This axis was attempted twice before and **both attempts are closed, unmerged** 
 ### Cost / engineering
 
 `hard`. cpus 2, mem 8 GB, `allow_internet=true`. Runtime fetch: two neuromaps annotations + the fsLR sphere atlas (OSF) and the Schaefer dlabel (raw.githubusercontent). Compute is light (400-parcel spin, 1000 rotations, < 1 min). **Reliability caveat (skill's osf note):** neuromaps pulls from OSF, which throttles/times-out under repeated fresh pulls; external CI runners may hit this. During dev/agent runs the host `~/neuromaps-data` cache removes the download. Deps pinned to a verified-together set (neuromaps 0.0.7 + brainsmash 0.11.0 + numpy 2.2.6 / scipy 1.17.0 / nibabel 5.4.2 / nilearn 0.13.1); brainsmash is installed so the honest surrogate route is available as well as the spin. `source_paper` DOIs are the two canonical spin-null method papers (verified).
+
+## Proof-of-work verifier (v-pow, 2026-09)
+
+Held-out reference `tests/reference.npz` (from `solution/compute.py`, never shipped): per-parcel
+`gradient2` + `thickness` for the 400 Schaefer parcels + `ref_stats` (r=-0.222, parametric
+p=7.1e-6, spin p=0.453, spin-null mean/sd 0.016/0.257, not significant). reference.npz sha256
+6a5cbda8ff9f364a. Task stays **un-cued** (the spin/spatial null is volunteered).
+
+Pillars (subprocess-validated): (1) per-parcel gradient2 (matched by |corr|, sign convention is
+free) and thickness track the held-out reference across parcels (cross-parcel r>=0.95, non-
+constant) -> the real neuromaps annotations were parcellated with the pinned atlas; (2) recompute
+|Pearson r| across parcels FROM the rows == reference == reported; (3) the volunteered spatial-
+null result graded as numbers -> a spin/surrogate p > 0.05 (non-significant), the parametric p
+< 0.01 (anti-conservative contrast), and the spin-null distribution WIDE (sd >= 0.10; a label
+shuffle is narrow ~1/sqrt(n)); (secondary) the spatial-autocorrelation prose.
+
+Validation matrix: honest PASS | no-table FAIL | constant FAIL | fabricated parcels FAIL | naive
+(parametric only, significant) FAIL | wrong-null-called-spin (narrow, significant) FAIL |
+defensible (variogram/BrainSMASH surrogate) PASS.
+
+Packaging: pinned neuromaps annotations (margulies2016 fcgradient02, hcps1200 thickness, fsLR32k)
++ Schaefer-2018 400x7 dlabel from CBIG; nilearn 0.13.1 + neuromaps 0.0.7. Data runtime-fetched,
+`allow_internet=true` retained. Baking the parcellated maps is a maintainer follow-up.

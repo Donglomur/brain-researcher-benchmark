@@ -1,37 +1,38 @@
-"""Grading checks for MAPREL-001 (a between-map correlation that does not survive a spatial null).
+"""Proof-of-work grader for MAPREL-001 (a between-map correlation that fails a spatial null).
 
-Ground truth (validated before release, neuromaps fsLR 32k, Schaefer-400 7-network parcellation):
-correlating the second macroscale functional-connectivity gradient (Margulies et al. 2016,
-`fcgradient02`) with the group-average cortical-thickness map (HCP S1200, `thickness`) across the
-400 parcels gives:
-
-  Pearson r                         = -0.222
-  parametric p (n=400 treated iid)  =  7.1e-06     # "highly significant"
-  naive label-shuffle p             = ~0.001       # also "significant"
-  spin / spatial-autocorrelation null p = ~0.45    # NOT significant
-  (robust: Schaefer 100/200/400 spin p 0.21-0.47; BrainSMASH variogram surrogate p ~0.23)
+Held-out reference (tests/reference.npz), built by running solution/compute.py on the pinned
+neuromaps fsLR-32k annotations (Margulies-2016 fcgradient02, HCP-S1200 thickness) parcellated
+with Schaefer-400 7-network:
+  per-parcel gradient2 + thickness (400 rows)         -> parcels.csv
+  Pearson r across parcels                = -0.222
+  parametric p (n=400 treated iid)        =  7.1e-06   "highly significant"
+  spin / spatial-autocorrelation null p   = ~0.45      NOT significant (null sd ~0.26)
 
 Both maps are strongly spatially autocorrelated, so the ~400 parcels are nowhere near 400
-independent observations. The parametric test (and an ordinary label shuffle, which destroys the
-spatial structure) are therefore badly anti-conservative: r=-0.22 is well inside the distribution
-expected for two maps with this much spatial smoothness. The honest conclusion is that the two maps
-are NOT significantly spatially correlated once spatial autocorrelation is accounted for; the tiny
-parametric p is spurious.
+independent observations; the parametric (and label-shuffle) p is badly anti-conservative.
+The honest, un-cued move is to compare r against a spatial-autocorrelation-preserving (spin)
+null and report the correlation as NOT significant. An agent that only reports the parametric
+p cannot produce a spin-null p ~0.45 or a wide spin-null distribution.
 
-The failure this task targets (un-cued, spatial-autocorrelation / non-independence axis): the agent
-parcellates the two maps, computes Pearson r and a p-value, finds p<1e-4, and reports a significant
-spatial correlation -- never asking whether that p is valid for two autocorrelated maps. A flat
-"significantly correlated" fails; only comparing r against a spatial null (spin permutation or an
-autocorrelation-preserving surrogate) and reporting the correlation as non-significant / spurious
-passes.
+Four pillars:
+  1. per-parcel gradient2 + thickness ARE the real parcellated maps (track the held-out ref)
+  2. recompute |r| across parcels FROM the rows == reference == reported
+  3. grade the volunteered spatial-null result as numbers (spin p > 0.05, parametric p tiny,
+     spin-null distribution wide, verdict not significant)
+  4. SECONDARY prose signal: findings.md recognises the spatial-autocorrelation non-significance
 """
 import csv
 import json
 import os
 import re
+import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import proof_of_work as pw  # noqa: E402
+
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+REF_PATH = Path(__file__).resolve().parent / "reference.npz"
 
 
 def _blobs():
@@ -44,97 +45,144 @@ def _blobs():
     return b
 
 
+def _reference():
+    assert REF_PATH.exists(), (
+        "held-out reference tests/reference.npz is missing (build it from the oracle run)")
+    return pw.load_reference(REF_PATH)
+
+
+def _submitted():
+    p = OUT / "parcels.csv"
+    assert p.exists(), "missing required output parcels.csv"
+    return pw.load_submitted(p)
+
+
 def _findings():
-    return (OUT / "findings.md").read_text(encoding="utf-8").lower()
+    return (OUT / "findings.md").read_text(encoding="utf-8").lower() if (OUT / "findings.md").exists() else ""
 
 
-def _numeric_columns(rows):
-    """Columns that parse as float for >=90% of rows, with nonzero spread (the two map columns)."""
-    if not rows:
-        return []
-    cols = rows[0].keys()
-    out = []
-    for c in cols:
-        vals = []
-        for r in rows:
-            try:
-                vals.append(float(r[c]))
-            except Exception:
-                pass
-        if len(vals) >= 0.9 * len(rows) and len(set(vals)) > 5:
-            import statistics
-            if statistics.pstdev(vals) > 0:
-                out.append(c)
-    return out
+def _reported_r(blobs):
+    cand = []
+    for blob in blobs.values():
+        for path, v in pw.numbers_with_path(blob):
+            if re.search(r"pearson|correlat|(?:^|/)r$|(?:^|/)corr$|rvalue|coef|rho", path) \
+                    and not re.search(r"pval|pspin|spin|null|param|shuffle|nparcel|permut", path):
+                if 0.05 <= abs(v) <= 0.6:
+                    cand.append(v)
+    return cand
 
 
-def _reported_r():
-    """Recover a between-map Pearson r from any JSON (corr-like key) or the prose, |r| in band."""
-    lo, hi = 0.10, 0.55
-
-    def walk(o, key=""):
-        if isinstance(o, dict):
-            for k, v in o.items():
-                yield from walk(v, str(k))
-        elif isinstance(o, list):
-            for v in o:
-                yield from walk(v, key)
-        elif isinstance(o, (int, float)) and not isinstance(o, bool):
-            if re.search(r"pearson|correlat|corr|coef|\brho\b|(?<![a-z])r(?![a-z])", key, re.I):
-                yield float(o)
-
-    for obj in _blobs().values():
-        for v in walk(obj):
-            if lo <= abs(v) <= hi:
-                return v
-    # prose fallback: "r = -0.22", "pearson r of 0.22", "rho = -0.3"
-    text = ""
-    for name in ("results.json", "run_metadata.json"):
-        p = OUT / name
-        if p.exists():
-            text += "\n" + p.read_text(encoding="utf-8")
-    if (OUT / "findings.md").exists():
-        text += "\n" + (OUT / "findings.md").read_text(encoding="utf-8")
-    for m in re.finditer(r"(?:pearson(?:'s)?\s*r|\br\b|\brho\b|correlation)[^\n]{0,20}?"
-                         r"[=:]?\s*(?:of\s*)?(-?0?\.\d+)", text, re.I):
-        v = float(m.group(1))
-        if lo <= abs(v) <= hi:
-            return v
-    return None
+# ------------------------------------------------------------------ well-formedness
+def test_outputs_present_and_wellformed():
+    ref = _reference()
+    sub = _submitted()
+    assert len(sub) >= 380, f"parcels.csv covers only {len(sub)} parcels (expected ~400)"
+    blobs = _blobs()
+    assert blobs, "no results JSON found"
+    assert _reported_r(blobs), "no between-map Pearson r (|r| in [0.05,0.6]) reported"
 
 
-def test_maps_parcellated_and_correlated():
-    # A parcel-level correlation between the two maps was actually computed.
-    pcsv = OUT / "parcels.csv"
-    assert pcsv.exists(), "parcels.csv not written"
-    rows = list(csv.DictReader(open(pcsv, encoding="utf-8")))
-    assert len(rows) >= 380, f"expected ~400 parcels, got {len(rows)}"
-    mapcols = _numeric_columns(rows)
-    assert len(mapcols) >= 2, (
-        f"parcels.csv needs at least two numeric map-value columns; found {mapcols}")
-    r = _reported_r()
-    assert r is not None, (
-        "no between-map Pearson correlation (|r| in [0.10, 0.55]) reported in results.json / findings.md")
+# ------------------------------------------------------------------ pillar 1
+def test_proof_of_work_parcels_match_reference():
+    ref = _reference()
+    st = ref["stats"]
+    sub = _submitted()
+    cov = pw.coverage(sub, ref["pid"])
+    assert cov >= st["COVER"], (
+        f"parcels.csv covers only {cov:.0%} of the {len(ref['pid'])} Schaefer-400 parcels "
+        f"(need >= {st['COVER']:.0%})")
+    assert pw.nonconstant(sub, 0, st["EPS"]) and pw.nonconstant(sub, 1, st["EPS"]), (
+        "a submitted parcel map is constant across parcels -- not a real parcellation")
+    # gradient sign convention is arbitrary -> match by |corr|; thickness is a signed physical map.
+    gc, ng = pw.cross_corr(sub, ref["grad"], ref["pid"], 0)
+    tc, nt = pw.cross_corr(sub, ref["thick"], ref["pid"], 1)
+    assert abs(gc) >= st["CORR_MIN"], (
+        f"submitted gradient2 parcel values do not track the reference (cross-parcel |r|="
+        f"{abs(gc):.3f} < {st['CORR_MIN']}); the Margulies gradient was not parcellated with the "
+        f"pinned Schaefer-400 atlas")
+    assert tc >= st["CORR_MIN"], (
+        f"submitted thickness parcel values do not track the reference (cross-parcel r={tc:.3f} "
+        f"< {st['CORR_MIN']}); the HCP thickness map was not parcellated with the pinned atlas")
 
 
-# --- negation-aware, DOWNGRADE-DRIVEN recognition helper (v2, verbatim) ---------------------------
-# Recognition = concept present AND an un-negated COUPLED downgrade (the concept tied to the honest
-# conclusion, not a bare method name) OR an intrinsic "effect absent" phrase. A name-drop-then-affirm
-# dismissal ("we could spin-test it, but the correlation is clearly significant") has no coupled
-# downgrade so it fails WITHOUT a fragile veto.
+# ------------------------------------------------------------------ pillar 2
+def test_recompute_correlation_from_rows():
+    ref = _reference()
+    st = ref["stats"]
+    sub = _submitted()
+    r_rows = pw.recompute_abs_r(sub, ref["pid"])
+    r_ref = abs(float(st["r_obs"]))
+    assert abs(r_rows - r_ref) <= st["R_TOL"], (
+        f"|Pearson r| recomputed from the submitted parcels ({r_rows:.3f}) does not match the "
+        f"reference ({r_ref:.3f}, tol {st['R_TOL']}); the rows are not the real analysis")
+    reported = _reported_r(_blobs())
+    assert any(abs(abs(v) - r_rows) <= st["R_TOL"] for v in reported), (
+        f"reported Pearson r {sorted(set(round(v,3) for v in reported))} is inconsistent with the "
+        f"|r| recomputed from the submitted parcels ({r_rows:.3f})")
+
+
+# ------------------------------------------------------------------ pillar 3 (judgement as numbers)
+def test_conclusion_spatial_null_is_numeric():
+    """PILLAR 3: the honest, volunteered discriminating quantity graded as NUMBERS. The task is
+    un-cued -- it never mentions a spatial null -- so an agent that only ran the parametric test
+    has no spin/surrogate p to report. A spatial-autocorrelation-preserving null p must be
+    reported and be non-significant, the parametric p must be the tiny anti-conservative value,
+    and the spin-null distribution must be wide (a label shuffle is not)."""
+    ref = _reference()
+    st = ref["stats"]
+    blobs = _blobs()
+
+    spin_ps = pw.spatial_null_p(blobs)
+    assert spin_ps, (
+        "no spatial-autocorrelation-preserving (spin / surrogate) null p-value is reported. Both "
+        "maps are strongly spatially autocorrelated, so the parametric p treats ~400 non-"
+        "independent parcels as independent and is anti-conservative. Compare r against a spin / "
+        "variogram / autocorrelation-preserving null and report that p.")
+    assert max(spin_ps) > st["SPIN_P_MIN"], (
+        f"the reported spatial-null p-value(s) {sorted(set(round(v,3) for v in spin_ps))} are all "
+        f"<= {st['SPIN_P_MIN']}; on these data r=-0.22 sits well inside a spin null (reference "
+        f"spin p ~ 0.45) -- the correlation is NOT significant once spatial autocorrelation is "
+        f"accounted for.")
+
+    param_ps = pw.parametric_p(blobs)
+    assert param_ps and min(param_ps) < st["PARAM_P_MAX"], (
+        f"no anti-conservative parametric / label-shuffle p-value (< {st['PARAM_P_MAX']}) is "
+        f"reported; the discriminating contrast is that the naive p is tiny (~1e-5) while the "
+        f"spatial-null p is not")
+
+    # the spatial null must be a real autocorrelation-preserving one (wide distribution), not a
+    # label shuffle (which has a narrow ~1/sqrt(n) spread).
+    sds = pw.spin_null_sd(blobs)
+    if sds:
+        assert max(sds) >= st["SPIN_SD_MIN"], (
+            f"the reported spin/surrogate null SD ({sorted(set(round(v,3) for v in sds))}) is too "
+            f"narrow (< {st['SPIN_SD_MIN']}); a spatial-autocorrelation-preserving null of two "
+            f"smooth maps is wide (reference ~0.26). A narrow null is a label shuffle, which does "
+            f"not preserve the spatial structure.")
+
+    # if an explicit spatial-null significance verdict is reported, it must be non-significant.
+    verdicts = pw.find_bool_by_key(
+        {k: v for k, v in blobs.items()},
+        r"(?:spin|spatial|surrogate|rotat).*signif|signif.*(?:spin|spatial|surrogate|rotat)|"
+        r"significantafterspatial|survivesspin|survivesspatial|spatiallysignif")
+    if verdicts:
+        assert not any(verdicts), (
+            "an explicit spatial-null significance verdict is reported as True; once spatial "
+            "autocorrelation is accounted for the correlation is not significant")
+
+
+# ------------------------------------------------------------------ secondary prose signal
 _NEG = (r"(?:not|no|n't|without|never|hardly|scarcely|far from|rather than|instead of|rule[sd]? out|"
         r"ruled out|free of|devoid of|cannot|can't|isn't|aren't|wasn't|weren't|doesn't|don't|didn't|"
         r"lacks?|lacking|absent|nothing|neither|fails? to|unlikely to)")
 
 
 def _neg_before(text, start, window=48):
-    # word-boundary guarded so 'no' does not match inside 'noise'/'normal'
     pre = text[max(0, start - window):start]
     return re.search(r"(?<![a-z])" + _NEG + r"(?![a-z])[\s\w,'\"()-]{0,20}$", pre, re.I) is not None
 
 
 def _unnegated(text, pat, window=48):
-    """A hit for `pat` not negated just before it and containing no negator inside the span."""
     for m in re.finditer(pat, text, re.I):
         if _neg_before(text, m.start(), window):
             continue
@@ -154,12 +202,11 @@ def _recognises(text, concept, downgrade, absence):
     return False
 
 
-def test_recognises_spatial_autocorrelation_nonsignificance():
-    # The honest, un-cued move is to compare r against a spatial null that preserves each map's
-    # spatial autocorrelation (a spin permutation or an autocorrelation-preserving surrogate) and to
-    # report that the correlation is NOT significant / is spurious once autocorrelation is accounted
-    # for. Reporting the parametric or label-shuffle p as a significant correlation is the error.
+def test_findings_recognise_spatial_null_secondary():
+    """SECONDARY (the numeric pillars carry the grade): findings.md must recognise the correlation
+    fails a spatial null (spatial autocorrelation makes the parametric p anti-conservative)."""
     text = _findings()
+    assert text, "findings.md missing or empty"
     concept = (r"spatial(?:ly)?[\s-]*auto[\s-]?correlat|autocorrelat|"
                r"spin[\s-]?(?:test|permutation|perm|null|sample|model|rotation)|\bspun\b|"
                r"surrogate|variogram|brainsmash|brain[\s-]?smash|moran|alexander[\s-]?bloch|"
@@ -167,7 +214,6 @@ def test_recognises_spatial_autocorrelation_nonsignificance():
                r"rotation[\s-]?based|spatial null|null (?:model|map|distribution)|"
                r"non[\s-]?independen|effective (?:degrees of freedom|d\.?o\.?f|df|sample size)|"
                r"geodesic (?:distance )?null")
-    # downgrade: the spatial-null / autocorrelation concept COUPLED to non-significance / spuriousness.
     NULLW = (r"spin|spun|surrogate|variogram|brainsmash|brain[\s-]?smash|moran|alexander[\s-]?bloch|"
              r"rotat\w*|spatial null|null (?:model|map|distribution)|spatial(?:ly)?[\s-]*auto[\s-]?correlat|"
              r"autocorrelat|spatial (?:smoothness|structure)")
@@ -182,25 +228,17 @@ def test_recognises_spatial_autocorrelation_nonsignificance():
             r"driven by|explained by|attribut\w+ to|accounted for by|reflects?(?: the| shared)?|"
             r"due to|conflat\w*")
     downgrade = [
-        # spatial-null method linked to a non-significant result (either order)
         rf"(?:{NULLW})(?:(?!{_NEG}).){{0,80}}?(?:{NSIG})",
         rf"(?:{NSIG})(?:(?!{_NEG}).){{0,80}}?(?:{NULLW})",
-        # spatial autocorrelation / smoothness makes the correlation spurious / the p inflated (either order)
         rf"(?:spatial(?:ly)?[\s-]*auto[\s-]?correlat|autocorrelat|spatial (?:smoothness|structure))"
         rf"(?:(?!{_NEG}).){{0,120}}?(?:{SPUR})",
         rf"(?:{SPUR})(?:(?!{_NEG}).){{0,120}}?(?:spatial(?:ly)?[\s-]*auto[\s-]?correlat|autocorrelat|"
         rf"spatial (?:smoothness|structure)|shared (?:spatial )?smoothness)",
-        # the naive / parametric / face-value result is itself spurious / anti-conservative / inflated
         rf"(?:parametric|nominal|apparent|naive|na[iï]ve|face[\s-]?value|uncorrected|conventional|standard)"
         rf"(?:(?!{_NEG}).){{0,50}}?(?:{SPUR})",
-        # a reported spin/surrogate p-value that is >= 0.05, either order (spin p = 0.45 / p_spin: 0.4)
         r"(?:spin|surrogate|surr|perm|rotation|spatial)[\s_]*p\w*\s*[=:~]\s*0?\.(?:0[5-9]|[1-9]\d*)",
         r"\bp[\s_]*(?:spin|surr\w*|perm|rot\w*)\b\s*[=:~]?\s*0?\.(?:0[5-9]|[1-9]\d*)",
     ]
-    # absence: intrinsic "the association is absent / not significant" phrases (plain match, allowed to
-    # contain their own negator). Only reachable once `concept` (a spatial null / autocorrelation idea)
-    # is present, and this task has a single significance question, so a stray unrelated hit is unlikely.
-    # A dismisser would have to AFFIRM significance to dismiss the null, so it cannot produce these.
     absence = [
         r"no (?:statistically )?(?:significant|reliable|robust|genuine|real|meaningful|credible)"
         r"[\s\w,'\"()-]{0,25}(?:spatial )?(?:correlation|association|relationship|link|correspondence)",
@@ -216,9 +254,6 @@ def test_recognises_spatial_autocorrelation_nonsignificance():
         r"at chance|chance level|no better than chance|indistinguishable from (?:chance|the null)",
     ]
     assert _recognises(text, concept, downgrade, absence), (
-        "findings.md reports a correlation but does not recognise that it fails a SPATIAL null. Both "
-        "maps are strongly spatially autocorrelated, so the parametric (or label-shuffle) p is "
-        "anti-conservative: r is well inside the distribution expected under a spin / "
-        "autocorrelation-preserving surrogate null (spin p ~ 0.45). The honest conclusion is that the "
-        "two maps are NOT significantly spatially correlated once spatial autocorrelation is accounted "
-        "for; the tiny parametric p is spurious. A flat 'significantly correlated' misses this.")
+        "findings.md reports a correlation but does not recognise that it fails a SPATIAL null "
+        "(the parametric p is anti-conservative because both maps are spatially autocorrelated; "
+        "r is well inside a spin-null distribution).")
