@@ -16,6 +16,11 @@ Everything else is pinned (subjects, recording, channels, 30-s epochs, the 5-cla
 mapping, the relative band-power features, and a 200-tree random forest), so only the
 CV scheme moves the number. Validated on the pinned subject set (see findings.md):
 subject-wise accuracy is materially LOWER than the random-k-fold accuracy.
+
+Proof-of-work deliverable: a PER-SUBJECT table (per_subject.csv) with each held-out
+subject's test-epoch count, leave-one-subject-out accuracy and Cohen kappa. The group
+subject-wise accuracy is the epoch-weighted mean of these per-subject accuracies; the
+random-k-fold accuracy (higher, leaky) is reported only for contrast.
 """
 import csv
 import json
@@ -110,10 +115,11 @@ for tr, te in logo.split(X, y, g):
     clf = rf().fit(X[tr], y[tr])
     pred = clf.predict(X[te])
     subj = int(g[te][0])
-    rows.append(dict(fold=f"subject_{subj}", n_test_epochs=int(len(te)),
+    rows.append(dict(subject=subj, fold=f"subject_{subj}", n_test_epochs=int(len(te)),
                      accuracy=float(accuracy_score(y[te], pred)),
                      kappa=float(cohen_kappa_score(y[te], pred))))
     yt.append(y[te]); yp.append(pred)
+rows.sort(key=lambda r: r["subject"])
 yt = np.concatenate(yt); yp = np.concatenate(yp)
 acc_subj = float(accuracy_score(yt, yp))
 kappa_subj = float(cohen_kappa_score(yt, yp))
@@ -128,11 +134,21 @@ yt2 = np.concatenate(yt2); yp2 = np.concatenate(yp2)
 acc_rand = float(accuracy_score(yt2, yp2))
 kappa_rand = float(cohen_kappa_score(yt2, yp2))
 
+# PER-SUBJECT proof-of-work table
+with open(OUT / "per_subject.csv", "w", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=["subject", "n_test_epochs", "accuracy", "kappa"])
+    w.writeheader()
+    for r in rows:
+        w.writerow(dict(subject=r["subject"], n_test_epochs=r["n_test_epochs"],
+                        accuracy=round(r["accuracy"], 6), kappa=round(r["kappa"], 6)))
+
+# retained per-fold table (same content, fold-labelled)
 with open(OUT / "per_fold.csv", "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=["fold", "n_test_epochs", "accuracy", "kappa"])
     w.writeheader()
     for r in rows:
-        w.writerow(r)
+        w.writerow(dict(fold=r["fold"], n_test_epochs=r["n_test_epochs"],
+                        accuracy=round(r["accuracy"], 6), kappa=round(r["kappa"], 6)))
 
 (OUT / "staging_results.json").write_text(json.dumps({
     "cv_scheme": "leave-one-subject-out",
@@ -144,6 +160,7 @@ with open(OUT / "per_fold.csv", "w", newline="") as f:
     "classes": CLASS_NAMES,
     "random_kfold_accuracy_for_reference": acc_rand,
     "random_kfold_kappa_for_reference": kappa_rand,
+    "per_subject_csv": "per_subject.csv",
 }, indent=2))
 
 (OUT / "run_metadata.json").write_text(json.dumps({
@@ -169,7 +186,8 @@ cross-validation -- is:
 * **accuracy = {acc_subj:.3f}**
 * **Cohen kappa = {kappa_subj:.3f}**
 
-over {len(y)} epochs across the 5 AASM classes ({", ".join(CLASS_NAMES)}).
+over {len(y)} epochs across the 5 AASM classes ({", ".join(CLASS_NAMES)}). Per-subject
+leave-one-subject-out accuracy and kappa are in `per_subject.csv`.
 
 ## Why subject-wise, not random k-fold
 Consecutive 30-s epochs from one night are highly autocorrelated and share subject

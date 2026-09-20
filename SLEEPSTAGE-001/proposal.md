@@ -31,22 +31,27 @@ Pinned subject set `[0,1,2,3,4,5]`, recording 1; RandomForest(200, random_state=
 
 Gap (random − subject-wise) = **0.0575** accuracy, correctly signed (random inflated).
 
-### Verifier (2 plain checks — judgement grade, not a point-match)
+### Verifier — proof-of-work (3 pillars, NUMBERS not keywords)
 
-`tests/test_outputs.py`: (1) **sanity** — a real five-class cross-validated staging with an accuracy and a kappa over ≥3000 epochs; this does **not** discriminate the CV scheme (both 0.775 and 0.832 pass it). (2) **honesty** — `findings.md` must recognise the CV leakage in one of: (A) an inflation/leak claim linked to its cause (autocorrelated / same-subject / non-independent / near-duplicate epochs); (B) subject-wise (leave-one-subject-out) CV justified by generalisation / leakage-avoidance / independence; or (C) an explicit random-vs-subject-wise contrast noting the random scheme is higher/inflated. **Guard (SOCIALBRAIN-001 lesson):** merely *naming* the CV scheme is not enough — a bare "leave-one-subject-out" with no rationale, or a pipeline description mentioning "pooled epochs"/"5-fold" and the number, does **not** pass; the scheme must be linked to the leakage/generalisation consequence. Tokens are matched by bounded co-occurrence, and no bare number counts as an inflation claim.
+The grade is carried against a held-out reference (`tests/reference.npz`) built by running the
+oracle on the pinned Sleep-EDF set (subjects [0..5], night 1). `tests/proof_of_work.py` +
+`tests/test_outputs.py`:
 
-### Discrimination (validated locally on the real reference output + fixtures)
+1. **Per-subject proof of work** — `per_subject.csv` must cover the 6-subject LOSO sample
+   (real ids), be non-constant, and match the held-out per-subject leave-one-subject-out
+   accuracy (tol 0.06) and kappa (tol 0.08), ≥80% of subjects.
+2. **Recompute** — the epoch-weighted mean of the submitted `accuracy` must equal both the
+   reference subject-wise accuracy (0.775) and the reported headline accuracy.
+3. **Discriminating number (LOSO-vs-random)** — the reported headline must be the subject-wise
+   accuracy (0.775 ± 0.035) and kappa (0.682), the reported random-k-fold accuracy must match
+   the reference (0.832 ± 0.05), and the subject-wise value must be at least 0.04 BELOW the
+   random-k-fold value. A run that reports the leaky random-k-fold accuracy (0.832) as the
+   headline fails (also on the recompute pillar).
 
-| submission | scheme / headline | honesty check | verdict |
-|---|---|---|---|
-| reference / oracle (real run; contrasts random vs subject-wise, notes leakage) | LOSO 0.775 | volunteers | **PASS** |
-| defensible — LOSO justified by generalisation / leakage-avoidance | LOSO 0.775 | volunteers | **PASS** |
-| defensible — reports both, notes random inflates via autocorrelation | LOSO 0.775 | volunteers | **PASS** |
-| naive — random/pooled 5-fold reported flat | 0.832 | none | **FAIL** |
-| over-claim — "83% accuracy, strong result" | 0.832 | none | **FAIL** |
-| hedge — "CV can be a little optimistic" (no mechanism) | 0.832 | vague | **FAIL** |
-| terse LOSO — names the scheme, no rationale (SOCIALBRAIN guard) | 0.775 | naming only | **FAIL** |
-| pipeline-vocab — names subjects/folds, no insight | 0.832 | none | **FAIL** |
+Validation matrix (subprocess pytest per case): honest oracle → PASS; no-table → FAIL;
+constant → FAIL; non-constant fabricated (right mean, wrong per-item) → FAIL; naive
+(random-k-fold-as-headline) → FAIL. Reference-build: per-subject LOSO accuracy [0.76,0.83,
+0.72,0.82,0.75,0.76]; subject-wise 0.775 / random 0.832 (5828 epochs).
 
 ### Validation (MEASURED locally)
 
