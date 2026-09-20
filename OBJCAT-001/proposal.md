@@ -36,24 +36,53 @@ Subject 2, whole-brain mask (39912 voxels), 864 object volumes across 12 runs, K
 
 Gap **≈ +0.10** for the circular choice. Robustness: the split is **invariant to the SVM `C`** over {0.5, 1.0, 5.0} (nested 0.656 / circular 0.757 for all three). The gap is subject- and K-dependent, so both are pinned: subject 2 (a clean +0.10 gap) and K=500. Context — decoding **all 39912 voxels with no selection** gives only **0.314** (curse of dimensionality), so the 500-voxel reduction is genuinely load-bearing and both a no-selection submission (0.31) and a circular submission (0.76) miss the honest 0.66.
 
-### Verifier (3 plain checks; `tests/test_outputs.py`)
+### Verifier — PROOF OF WORK (`tests/test_outputs.py` + `tests/proof_of_work.py`)
 
-Short reviewer-style pytest, schema-robust, no rubric:
-1. **accuracy reported** — a parseable, well-above-chance 8-way decoding accuracy exists.
-2. **non-circular accuracy reproduced** — the reported accuracy is within **0.045** of the nested value **0.656**. Accuracies are gathered at any depth from any JSON (accuracy/score-keyed scalars, with per-fold / chance / std / train / and explicitly-circular|select_once|naive keys excluded) and from prose. A circular ~0.757 is 0.101 away → fails; the honest ~0.656 → passes.
-3. **double-dipping risk volunteered** — the write-up states the category-driven selection was re-fit **inside each CV fold** (training runs only), OR that selecting once on all data would be **circular** and **inflate** the accuracy by letting the selection see the held-out fold. Guarded against pipeline-vocabulary false-positives: the lever concept must **co-occur** with a nesting action or an inflation/leakage consequence (a bare "SelectKBest"/"cross-validation"/"double dipping" keyword does not pass).
+Rebuilt to the proof-of-work contract (`PROOF_OF_WORK_SPEC.md`): a passing submission must be
+impossible to produce without running the real nested leave-one-run-out decoding on the real
+subject. A **held-out reference** (`tests/reference.npz`, built by running `solution/compute.py`
+and kept out of the container) stores the per-run held-out accuracies of the NESTED pipeline keyed
+by acquisition run, plus the discriminating nested (0.656) vs circular select-once (0.757) numbers.
+The single headline is made non-guessable by the required **per-fold breakdown** (`per_fold.csv`).
+Three pillars, all required:
 
-### Discrimination (re-validated on real data, this revision)
+1. **per-fold table matches the held-out reference** — the submitted per-run held-out accuracies
+   are the REAL nested values (keyed by held-out run; within-tol fraction ≥ 0.7 OR correlation
+   ≥ 0.8), non-constant. A fabricated table or a circular pipeline's per-run numbers do not match.
+2. **headline recomputes** — reported `cv_accuracy` = mean of the submitted per-fold rows AND the
+   nested reference **0.656** (± 0.06). (A circular run that reports 0.656 but submits its own
+   ~0.757 per-fold rows fails the recompute.)
+3. **nested, not circular** — the reported accuracy is materially below the circular value
+   (~0.757) by ≥ 0.05; any circular contrast the submission reports must itself be the real ~0.757.
+   A secondary prose guard requires the write-up to describe the evaluation.
 
-| submission | cv_accuracy | check2 | check3 | verdict |
-|---|---|---|---|---|
-| reference oracle (nested; explains nesting + circularity) | 0.656 | PASS | PASS | **PASS** |
-| naive select-once (circular; everything else identical) | 0.757 | **FAIL** | **FAIL** | **FAIL** |
-| **silent-but-correct** nested (right number, terse write-up) | 0.656 | PASS | **FAIL** | **FAIL** |
-| no-selection all-voxel decode (non-compliant) | 0.314 | **FAIL** | **FAIL** | **FAIL** |
-| circular + buzzword hedge ("double dipping" un-linked) | 0.757 | **FAIL** | **FAIL** | **FAIL** |
+### Discrimination — validated locally via SUBPROCESS pytest (uvx, container-matched)
 
-Check 3 makes this a **volunteered-skepticism** task: getting the honest number is necessary (check 2) but not sufficient — the agent must also notice and report the double-dipping risk. Verifier robustness preserved: a submission that reports BOTH the honest 0.656 and a circular comparison (0.757 under a `select_once`/`circular` key or in prose) still passes check 2, because the circular value is excluded from the headline JSON candidates and check 2 grades the candidate closest to the nested estimate.
+| submission | verdict | why |
+|---|---|---|
+| reference oracle (nested; per_fold.csv + cv_accuracy 0.656) | **PASS** | all checks |
+| no per_fold.csv | **FAIL** | pillar 1 (+2) |
+| constant per-fold table (all = 0.656) | **FAIL** | pillar 1 non-constant guard |
+| non-constant fabricated table (right mean 0.656, wrong per-fold) | **FAIL** | pillar 1 |
+| naive random-fold table + cv_accuracy 0.757 | **FAIL** | pillars 2, 3 |
+| **realistic circular** select-once (real per-run values, cv_accuracy 0.757) | **FAIL** | pillars 1, 2, 3 |
+
+The realistic circular adversary — a genuine select-once pipeline with its true per-run held-out
+accuracies — is the strongest attack and is rejected on all three pillars: its per-run numbers do
+not match the nested reference, and its 0.757 headline fails the nested match.
+
+### Reference provenance / packaging
+
+- **Held-out reference** `tests/reference.npz` from `solution/compute.py` on Haxby subject-2
+  (nilearn 0.13.1 / scikit-learn 1.8.0): `ref_run_ids` = runs 0–11, `ref_fold_acc` = nested
+  per-run held-out accuracies, `ref_stats.nested_accuracy` = 0.6562,
+  `ref_stats.circular_accuracy` = 0.7569. Never ships to the container.
+- **Pinned inputs:** Haxby **subject 2**, whole-brain `mask`, drop `rest`, per-run masker,
+  `SelectKBest(f_classif, k=500)`, `SVC(linear, C=1)`, leave-one-run-out. Deterministic dataset,
+  so the per-run numbers reproduce exactly on the pinned stack.
+- **Packaging follow-up (maintainer):** raw subject fetch ~300 MB (> 90 MB bake threshold), so
+  runtime fetch + `allow_internet=true` are kept; baking the derived whole-brain masked series
+  to set `allow_internet=false` is a cheap follow-up.
 
 ### Step 5 — frontier calibration: PENDING (maintainer)
 

@@ -50,6 +50,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   cross-validated 8-way decoding accuracy you obtained, plus `n_samples`, `n_voxels`
   (voxels in the mask before reduction), `n_selected` (500), `n_categories`, `n_runs`, and
   `chance`.
+- `per_fold.csv` — one row per leave-one-run-out fold, with columns
+  `fold, held_out_run, n_test_samples, accuracy` (the held-out accuracy of each fold).
+  Your reported `cv_accuracy` must be the mean of these per-fold accuracies.
 - `run_metadata.json` — dataset id, subject, mask, and the preprocessing / feature-reduction
   / classifier choices you made.
 - `findings.md` — a short written summary stating the cross-validated 8-way decoding

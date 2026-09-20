@@ -81,16 +81,35 @@ def main() -> None:
     n_runs = int(len(np.unique(runs)))
     logo = LeaveOneGroupOut()
 
-    # CORRECT: ANOVA voxel selection is re-fit INSIDE each training fold (nested)
+    # CORRECT: ANOVA voxel selection is re-fit INSIDE each training fold (nested).
+    # Iterate the folds by hand so the per-fold held-out accuracy is keyed to the run held out.
+    from sklearn.base import clone
     pipe = Pipeline([("sel", SelectKBest(f_classif, k=K)),
                      ("svc", SVC(kernel="linear", C=1.0))])
-    nested_scores = cross_val_score(pipe, X, y, cv=logo, groups=runs)
+    per_run = {}
+    for tr, te in logo.split(X, y, groups=runs):
+        held = int(np.unique(runs[te])[0])
+        m = clone(pipe)
+        m.fit(X[tr], y[tr])
+        per_run[held] = (float(m.score(X[te], y[te])), int(len(te)))
+    held_runs = sorted(per_run)
+    nested_scores = np.array([per_run[r][0] for r in held_runs])
     cv_accuracy = float(nested_scores.mean())
 
     # For the write-up only: what a select-once (circular) pipeline would have reported.
     X_sel = SelectKBest(f_classif, k=K).fit(X, y).transform(X)
     circ_scores = cross_val_score(SVC(kernel="linear", C=1.0), X_sel, y, cv=logo, groups=runs)
     circular_accuracy = float(circ_scores.mean())
+
+    # required intermediate: one row per cross-validation fold (held-out run + its accuracy),
+    # so the single headline accuracy is backed by a validated per-fold breakdown.
+    import csv as _csv
+    with open(OUTPUT_DIR / "per_fold.csv", "w", newline="", encoding="utf-8") as fh:
+        w = _csv.writer(fh)
+        w.writerow(["fold", "held_out_run", "n_test_samples", "accuracy"])
+        for i, r in enumerate(held_runs, start=1):
+            acc, nte = per_run[r]
+            w.writerow([i, r, nte, round(acc, 6)])
 
     wj("decoding_results.json", {
         "cv_accuracy": round(cv_accuracy, 4),
