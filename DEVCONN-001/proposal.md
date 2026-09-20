@@ -48,3 +48,50 @@ Both families, every run, fail for the same un-cued **wrong-cause** reason: they
 ### Cost
 
 `hard`. cpus 2, mem 8 GB, internet on (downloads all 155 ds000228 subjects; one Power-264 sphere extraction per subject; timeouts 7200 s). Deps: nilearn 0.12.1 + scipy/sklearn/pandas/nibabel. Dev/agent runs may mount the host `nilearn_data` cache to skip the osf download (local flag only, never committed).
+
+---
+
+## Proof-of-work rebuild (verifier hardening, 2026-09)
+
+The prior grader **never opened `age_effects.json`** (which holds the headline r/p): it checked
+only that `connectivity.csv` had in-range short/long columns for both groups and that `findings.md`
+contained a motion-confound sentence — so **fabricated per-subject rows + a keyword sentence
+passed**. This pass applies the suite-wide **proof-of-work** contract
+(`scratchpad/PROOF_OF_WORK_SPEC.md`).
+
+**Held-out reference (`tests/reference.npz`, built from `solution/compute.py`, never shipped to
+the agent).** Per-subject short-range / long-range / segregation for the 122 children + 33 adults
+of the nilearn-pinned ds000228 (Power-264 5 mm spheres), plus age/group. Discriminating statistics:
+the raw maturational age~short-range effect is **r_s = −0.204 (p = 0.011)** and collapses under a
+mean-FD partial correlation to **r = −0.031 (p = 0.70)**; children move far more than adults
+(mean FD **0.371** vs **0.187**, MWU p = 4e-6).
+
+**Four grading pillars** (`tests/test_outputs.py` + `tests/proof_of_work.py`):
+1. **Exact subjects + per-item values** — `connectivity.csv` must cover ≥90 % of the real subjects,
+   be non-constant, and its per-subject short-range must track the held-out reference
+   (cross-subject r ≥ 0.85, per-subject |Δ| ≤ 0.04).
+2. **Recompute** — the all-subjects Spearman(age, short-range) recomputed from the submitted rows
+   must equal the raw maturational reference (−0.204) and the reported JSON.
+3. **Discriminating number(s)** — the **motion collapse** graded as numbers: the raw age~short
+   effect must be negative (~−0.20) *and* the mean-FD partial correlation must be ~null
+   (|r| ≤ 0.12), a markedly smaller magnitude; children's mean FD must exceed adults'. A run that
+   never did the motion check cannot report the partial correlation.
+4. **Secondary prose** — the existing negation-aware motion-confound recognition; not the sole gate.
+
+**Validation (subprocess pytest per case, `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`):**
+
+| case | result |
+|---|---|
+| honest (oracle reference values) | PASS |
+| no `connectivity.csv` | FAIL |
+| constant short-range table | FAIL |
+| non-constant fabricated (real IDs, shuffled short-range) | FAIL |
+| naive (real short/long rows + raw effect, **no motion control**) | FAIL (pillar 3) |
+
+The naive run passes pillars 1–2 (its rows are the real per-subject values) and fails **precisely**
+at the discriminating motion-controlled number — the intended teeth.
+
+**Packaging.** Real subjects pinned via `tests/reference.npz`. The raw ds000228 derivatives exceed
+GitHub's 100 MB/file limit, so `allow_internet=true` + runtime fetch are retained; baking the
+derived per-subject ROI series is a maintainer follow-up. Reference built on
+`fetch_development_fmri()` (all 155 subjects) + Power-2011 264-ROI 5 mm spheres.
