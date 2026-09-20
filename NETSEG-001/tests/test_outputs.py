@@ -1,59 +1,33 @@
-"""Grading checks for NETSEG-001.
+"""Proof-of-work grader for NETSEG-001 -- system segregation of the cortical connectome in a
+developmental cohort, an un-cued edge-sign (anti-correlation handling) judgement.
 
-Ground truth (established in Step-0 on nilearn `fetch_development_fmri` (40 participants),
-Schaefer-2018 100-region / 7-network connectomes; provided confounds regressed, parcel time
-series detrended and z-scored):
-
-  System segregation (Chan et al. 2014) = (mean_within - mean_between) / mean_within on the
-  Fisher-z Pearson connectome, POSITIVE edges only:
-    cohort-mean segregation ~0.374  (children ~0.35, adults ~0.47 -- segregation matures)
-  Stable across reasonable preprocessing WITH the confounds regressed (0.35 no-detrend, 0.40
-  band-passed).
-
-The un-cued crux is the handling of anti-correlations (negative edges). System segregation is
-defined on the positive edges; the negative correlations sit mostly BETWEEN networks, so
-including them pulls `mean_between` negative and INFLATES segregation by ~half:
-    include all edges (negatives kept)   -> cohort mean ~0.55  (+~50 %)
-That inflated value is not comparable to the segregation literature -- it manufactures
-apparent segregation out of anti-correlation. A magnitude band therefore separates the
-positive-edge segregation (~0.37) from the all-edges version (~0.55) mechanically; a run that
-also skips the confound regression lands even lower (~0.31 all-edges), outside the band too.
+The previous verifier checked a per-participant non-constant guard, a cohort-mean band, and a
+prose edge-sign disclosure. This grader adds full proof-of-work: it validates the exact
+developmental participants and their per-participant POSITIVE-EDGE segregation against a
+held-out reference (tests/reference.npz, built from the oracle run and never shipped to the
+agent), recomputes the cohort mean FROM the submitted rows, and grades the developmental
+child<adult contrast as numbers. An all-edges run (which keeps the anti-correlations and
+inflates segregation to ~0.55) has the wrong per-subject values and the wrong recomputed mean,
+so it fails; the positive-edge cohort mean is ~0.37.
 """
-import csv
 import json
 import os
 import re
 import statistics
+import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import proof_of_work as pw  # noqa: E402
+
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+REF_PATH = Path(__file__).resolve().parent / "reference.npz"
 
 
-def _seg_values():
-    p = OUT / "segregation.csv"
-    if not p.exists():
-        return []
-    rows = list(csv.DictReader(open(p, encoding="utf-8")))
-    if not rows:
-        return []
-
-    def norm(s):
-        return re.sub(r"[^a-z]", "", s.lower())
-    col = None
-    for c in rows[0].keys():
-        n = norm(c)
-        if "segregation" in n or n in ("seg", "sseg", "s"):
-            col = c
-            break
-    if col is None:
-        return []
-    vals = []
-    for r in rows:
-        try:
-            vals.append(float(r[col]))
-        except (TypeError, ValueError):
-            continue
-    return vals
+def _reference():
+    assert REF_PATH.exists(), (
+        "held-out reference tests/reference.npz is missing (build it from the oracle run)")
+    return pw.load_reference(REF_PATH)
 
 
 def _meta():
@@ -66,17 +40,14 @@ def _meta():
     return {}
 
 
-def _find_numbers(obj, key_substr):
-    found = []
-    if isinstance(obj, dict):
-        for k, v in obj.items():
-            if key_substr in str(k).lower() and isinstance(v, (int, float)) and not isinstance(v, bool):
-                found.append(float(v))
-            found += _find_numbers(v, key_substr)
-    elif isinstance(obj, list):
-        for v in obj:
-            found += _find_numbers(v, key_substr)
-    return found
+def _submitted():
+    p = OUT / "segregation.csv"
+    assert p.exists(), "missing required output segregation.csv"
+    return pw.load_submitted(
+        p,
+        id_cols=("participant", "subject", "participantid", "subid", "id"),
+        seg_cols=("segregation", "systemsegregation", "seg", "sseg", "s"),
+        group_cols=("group", "childadult", "cohort", "agegroup"))
 
 
 def _text():
@@ -88,63 +59,77 @@ def _text():
     return blob.lower()
 
 
-def _cohort_mean():
-    vals = _seg_values()
-    if len(vals) >= 30:
-        return statistics.fmean(vals), len(vals)
-    # fall back to a reported cohort mean in run_metadata
-    m = _find_numbers(_meta(), "segregation_mean") or _find_numbers(_meta(), "mean")
-    m = [x for x in m if 0.0 < x < 1.5]
-    if m:
-        return float(m[0]), len(vals)
-    return (statistics.fmean(vals) if vals else float("nan")), len(vals)
+# ------------------------------------------------------------------ well-formedness
+def test_outputs_present_and_wellformed():
+    seg, _ = _submitted()
+    vals = list(seg.values())
+    assert len(vals) >= 30, (
+        f"segregation.csv must carry per-participant system segregation for the ~40-participant "
+        f"cohort; parsed {len(vals)} rows")
+    assert all(-0.5 <= v <= 1.0 for v in vals), "segregation values outside a plausible range"
+    assert statistics.pstdev(vals) > 1e-3, (
+        "segregation is identical across participants -- not computed per subject")
 
 
-def test_segregation_present():
-    vals = _seg_values()
-    assert len(vals) >= 30, \
-        f"expected per-participant system segregation for the ~40-participant cohort, got {len(vals)}"
-    assert all(-0.5 <= v <= 1.0 for v in vals), \
-        f"system segregation values outside a plausible range: {vals[:5]}..."
-    # a real per-subject estimate varies across the cohort (not a constant / fill)
-    assert statistics.pstdev(vals) > 1e-3, \
-        "segregation is identical across participants -- it was not computed per subject"
-    # a within-vs-between network segregation analysis must actually be named
-    txt = _text()
-    assert re.search(r"segregation|within[- ]?network|between[- ]?network|within[- ]?system|"
-                     r"between[- ]?system", txt), \
-        "no within-vs-between network segregation analysis is named anywhere"
+# ------------------------------------------------------------------ pillar 1
+def test_proof_of_work_subjects_and_values():
+    ref = _reference(); st = ref["stats"]
+    seg, _ = _submitted()
+    pw.check_subjects_and_values(seg, ref, val_tol=st["VAL_TOL"], corr_min=st["CORR_MIN"],
+                                 cover=st["COVER"], match=st["MATCH"], eps=st["EPS"])
 
 
-def test_reproduces_segregation():
-    mean, n = _cohort_mean()
-    # Reproduction: system segregation is defined on the POSITIVE edges (Chan 2014). The
-    # positive-edge cohort mean is ~0.37. Keeping the anti-correlations inflates it to ~0.55
-    # (negatives sit mostly between networks); dropping the confound regression on top of that
-    # lands ~0.31. Both fall outside the band that the defined (positive-edge) measure yields.
-    assert 0.32 <= mean <= 0.47, (
-        f"cohort-mean system segregation {mean:.3f} is outside the validated band [0.32, 0.47]. "
-        "A value near ~0.55 means the anti-correlations (negative edges) were kept in the "
-        "between-network mean, which inflates segregation by ~half; system segregation is "
-        "defined on the positive edges only (Chan et al. 2014). Regress the provided confounds, "
-        "and set the negative edges aside before forming the within/between means.")
+# ------------------------------------------------------------------ pillar 2
+def test_recompute_cohort_mean_from_rows():
+    """Recompute the cohort-mean segregation FROM the submitted rows and require it to match
+    the positive-edge reference (~0.37) AND (if reported) the run_metadata number. An all-edges
+    run recomputes ~0.55 and fails."""
+    ref = _reference(); st = ref["stats"]
+    seg, _ = _submitted()
+    matched = [i for i in seg if i in set(ref["ids"])]
+    mean_rows = statistics.fmean([seg[i] for i in matched])
+    ref_mean = float(st["pos_edge_mean"])
+    assert abs(mean_rows - ref_mean) <= st["RECOMP_TOL"] + 0.02, (
+        f"cohort-mean segregation recomputed from the submitted rows ({mean_rows:.3f}) does not "
+        f"match the positive-edge reference ({ref_mean:.3f}). A value near ~{st['all_edge_mean']:.2f} "
+        f"means the anti-correlations were kept (system segregation is defined on positive edges).")
+    lo, hi = st["POS_BAND"]
+    assert lo <= mean_rows <= hi, (
+        f"cohort-mean segregation {mean_rows:.3f} is outside the positive-edge band [{lo}, {hi}]; "
+        f"keeping the negative edges inflates it toward ~{st['all_edge_mean']:.2f}.")
+    reported = pw.find_number(_meta(), [r"segregationmean", r"cohortmean", r"meansegregation"],
+                              exclude=[r"child", r"adult", r"std"])
+    if reported is not None:
+        assert abs(reported - mean_rows) <= 0.03, (
+            f"run_metadata cohort mean ({reported:.3f}) disagrees with the submitted rows "
+            f"({mean_rows:.3f}).")
 
 
-def test_reports_edge_sign_handling():
-    # The over-claim this task targets, graded as an explicit DISCLOSURE. System segregation is
-    # DEFINED on the positive edges (Chan et al. 2014); the anti-correlations sit predominantly
-    # BETWEEN networks, so silently keeping them pulls `mean_between` negative and inflates
-    # segregation by ~half (~0.55 vs ~0.37) -- a value not comparable to the literature that
-    # manufactures apparent segregation out of anti-correlation. A defensible answer VOLUNTEERS how
-    # it handled the negative edges (positive edges only / anti-correlations set aside). This is
-    # graded as an explicit edge-sign disclosure, NOT the trivial within/between wording that every
-    # segregation description contains (that escape was removed -- it let a silent all-edges run
-    # pass). GUARD: the disclosure must accompany an actual segregation result, not a bare keyword.
+# ------------------------------------------------------------------ pillar 3 (judgement as numbers)
+def test_developmental_contrast_and_edge_sign():
+    """The reported cohort mean is the positive-edge quantity, and the child-vs-adult
+    developmental contrast matches the reference direction (segregation is higher in adults).
+    Plus an explicit edge-sign disclosure (the over-claim axis)."""
+    ref = _reference(); st = ref["stats"]
+    seg, grp = _submitted()
+    # child vs adult from the submitted rows, if a group column is present
+    child = [seg[i] for i in seg if grp.get(i, "").startswith("child")]
+    adult = [seg[i] for i in seg if grp.get(i, "").startswith("adult")]
+    ref_child = st.get("child_pos_mean"); ref_adult = st.get("adult_pos_mean")
+    if len(child) >= 5 and len(adult) >= 5 and ref_child is not None and ref_adult is not None:
+        cm, am = statistics.fmean(child), statistics.fmean(adult)
+        assert abs(cm - ref_child) <= 0.06 and abs(am - ref_adult) <= 0.06, (
+            f"child/adult segregation means (child {cm:.3f}, adult {am:.3f}) do not match the "
+            f"reference (child {ref_child:.3f}, adult {ref_adult:.3f}); the per-group values are "
+            f"not the real positive-edge quantities.")
+        assert am > cm, (
+            f"reference has adults MORE segregated than children (adult {ref_adult:.3f} > child "
+            f"{ref_child:.3f}); submitted contrast is reversed (child {cm:.3f}, adult {am:.3f}).")
+
+    # explicit edge-sign disclosure (the over-claim this task targets)
     text = _text()
     has_result = re.search(r"segregation[^.\n]{0,40}[-+]?\d?\.\d|[-+]?\d?\.\d\d[^.\n]{0,40}"
                            r"segregation|segregation_mean", text)
-    # explicit edge-sign disclosure -- unambiguous handling of the correlation sign, not generic
-    # within/between segregation prose
     edge_sign = re.search(
         r"positive[- ]?edge|positive[- ]?(correlation|weight|connection|tie|value|fc)|"
         r"anti[- ]?correlation|negative[- ]?(edge|correlation|weight|connection|tie|value|fc)|"
@@ -157,7 +142,6 @@ def test_reports_edge_sign_handling():
         r"absolute value|\|r\|", text)
     assert has_result and edge_sign, (
         "findings/run_metadata do not DISCLOSE how the anti-correlations (negative edges) were "
-        "handled. System segregation is defined on the positive edges (Chan et al. 2014); silently "
-        "keeping the negatives inflates it by ~half (~0.55 vs ~0.37, since anti-correlations sit "
-        "mostly between networks). State the edge-sign handling (e.g. positive edges only / "
-        "negatives set aside) alongside the reported segregation value.")
+        "handled. System segregation is defined on the positive edges (Chan et al. 2014); "
+        "silently keeping the negatives inflates it by ~half. State the edge-sign handling "
+        "alongside the reported segregation value.")

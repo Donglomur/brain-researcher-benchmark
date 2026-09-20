@@ -62,3 +62,48 @@ Oracle passes (reward 1.0; re-run on the real nilearn data this pass, cohort-mea
 ### Cost
 
 `hard` bracket; light in practice (40 BOLD runs, one labels-masker extraction each; segregation is closed-form). cpus 2, mem 8 GB, internet on, timeouts 1800–3600 s. Deps: numpy 2.1.3 / scipy 1.14.1 / pandas 2.2.3 / nibabel 5.3.2 / scikit-learn 1.5.2 / nilearn 0.12.1.
+
+---
+
+## Proof-of-work rebuild (verifier hardening, 2026-09)
+
+The prior grader was **PARTIAL**: a per-participant non-constant guard, a cohort-mean band
+[0.32, 0.47], and a prose edge-sign disclosure. It never checked that the submitted per-subject
+segregation values are the *real* positive-edge ones, and never recomputed the cohort mean from
+the rows. This pass applies the suite-wide **proof-of-work** contract
+(`scratchpad/PROOF_OF_WORK_SPEC.md`).
+
+**Held-out reference (`tests/reference.npz`, built from `solution/compute.py`, never shipped to
+the agent).** Per-participant positive-edge system segregation for the 40 developmental-cohort
+participants (`fetch_development_fmri`, Schaefer-2018 100/7), plus the all-edges (negatives-kept)
+segregation for the fabrication teeth, and per-participant group/age. Discriminating statistics:
+positive-edge cohort mean **0.374** vs all-edges **0.554** (**+48 %** inflation); children
+**0.347** < adults **0.468** (segregation matures).
+
+**Four grading pillars** (`tests/test_outputs.py` + `tests/proof_of_work.py`):
+1. **Exact participants + per-item values** — `segregation.csv` must cover ≥90 % of the real IDs,
+   be non-constant, and its per-participant segregation must match the positive-edge reference
+   (per-subject |Δ| ≤ 0.09 for ≥80 %, cross-subject r ≥ 0.85). An all-edges run (~0.55 per
+   subject) fails the absolute match.
+2. **Recompute** — the cohort mean recomputed from the submitted rows must equal the positive-edge
+   reference (0.374) and lie in the positive-edge band; an all-edges run recomputes ~0.55.
+3. **Discriminating number(s)** — the child<adult developmental contrast must match the reference
+   direction and magnitude, plus an explicit edge-sign disclosure (the over-claim axis).
+4. **Secondary prose** — not the sole gate.
+
+**Validation (subprocess pytest per case, `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`):**
+
+| case | result |
+|---|---|
+| honest (oracle reference values) | PASS |
+| defensible variant (no-detrend, positive-edge, mean 0.34) | PASS |
+| no `segregation.csv` | FAIL |
+| constant segregation table | FAIL |
+| non-constant fabricated (real IDs, shuffled, right mean) | FAIL |
+| naive (all-edges segregation ~0.55, no edge-sign disclosure) | FAIL |
+
+**Packaging.** Real participant IDs pinned via `tests/reference.npz`. The raw developmental-cohort
+rs-fMRI inputs exceed GitHub's 100 MB/file limit, so `allow_internet=true` + runtime fetch are
+retained; baking the derived per-participant connectomes is flagged as a maintainer follow-up.
+Reference built on `fetch_development_fmri(n_subjects=40)` + Schaefer-2018 100/7, confounds
+regressed, parcel series detrended and z-scored.
