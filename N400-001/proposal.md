@@ -26,9 +26,27 @@ Gap ~4.5 uV, correctly signed. The mechanism is a dilution of equal magnitude, s
 
 Note on levers that do NOT discriminate here (tested, negative): because the graded quantity is a **difference wave**, linear common-mode distortions largely cancel. High-pass cutoff (none…1.0 Hz) moves the target N400 by <0.3 uV; low-pass cutoff (10…40 Hz) is negligible; baseline choice (-200..0 vs none) moves it <0.4 uV on 12 subjects. The trial-selection lever is the one that survives, because it changes the two conditions differentially.
 
-### Verifier (3 plain checks)
+### Verifier — proof-of-work (3 pillars, NUMBERS not keywords)
 
-`tests/test_outputs.py`: (1) an N400 amplitude aggregated over the 12 subjects is reported; (2) the reported amplitude is the **target-only** value (`|reported| within 2.0 of 8.70 uV`, magnitude-compared so robust to the difference-wave sign) — the pooled value (~4.20) is ~4.5 away and fails; (3) `findings.md` reports a CPz amplitude consistent with `n400.json`. The grader skips explicitly-labelled pooled/reference fields and per-subject arrays.
+The grade is carried against a held-out reference (`tests/reference.npz`) built by running
+the oracle on the pinned 12-subject sample (content pinned by the OSF file ids in
+`solution/compute.py`). `tests/proof_of_work.py` + `tests/test_outputs.py`:
+
+1. **Per-subject SIGNED proof of work** — `per_subject.csv` must cover the exact 12 subjects
+   (real ids), be non-constant, and match the held-out per-subject target-only `n400_uv`
+   (SIGNED negative; tol max(2.5 uV, 20%), ≥80% of subjects). An abs()-ed, sign-flipped, or
+   prime+target-pooled table fails.
+2. **Recompute** — the mean of the submitted `n400_uv` column must equal both the reference
+   grand-average (−8.70 uV) and the reported `n400_difference_amplitude_uv`.
+3. **Discriminating number (target-only-vs-pooled)** — the reported N400 must be signed
+   negative, within 1.2 of −8.70 uV, and at least 2.0 uV MORE NEGATIVE than the reported
+   naive prime+target pooled amplitude (reference −4.20 uV). A relatedness-pooled pipeline
+   (~−4.2 uV) fails.
+
+Validation matrix (subprocess pytest per case): honest oracle → PASS; no-table → FAIL;
+constant → FAIL; non-constant fabricated (right mean, wrong per-item) → FAIL; naive pooled
+→ FAIL. Reference-build: pinned OSF ids in `solution/compute.py`; per-subject `n400_uv`
+range −2.18…−15.79 uV, 12/12 negative, grand-average −8.70 uV.
 
 ### Validation (MEASURED locally)
 

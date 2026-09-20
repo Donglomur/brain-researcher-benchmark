@@ -22,7 +22,13 @@ over the 12 subjects):
     PRIME + TARGET pooled by relatedness (naive): -4.20 uV
     PRIME words only (sanity, ~0)               : +0.18 uV
 12/12 subjects show a negative unrelated-minus-related N400 with the target-only contrast.
+
+Proof-of-work deliverable: a PER-SUBJECT table (per_subject.csv) with each subject's signed
+target-only unrelated-minus-related amplitude and the naive prime+target pooled amplitude.
+The headline is the mean of the per-subject target-only column; the pooled column (~-4.2)
+is the discriminating quantity a relatedness-pooled pipeline reports instead.
 """
+import csv
 import json
 import os
 import sys
@@ -44,6 +50,8 @@ REF = ["P9", "P10"]                    # ERP CORE N400 reference (mastoid-adjace
 # target words: XY -> hundreds digit 2 (target), tens digit 1 (related) / 2 (unrelated)
 RELATED = {"211", "212"}               # target, related pair
 UNRELATED = {"221", "222"}             # target, unrelated pair
+POOL_RELATED = {"111", "112", "211", "212"}    # prime+target related (naive pooling)
+POOL_UNRELATED = {"121", "122", "221", "222"}  # prime+target unrelated (naive pooling)
 CHAN = "CPz"
 WIN = (0.300, 0.500)                   # N400 measurement window, s
 # OSF file ids for <subj>_N400_shifted_ds.{set,fdt} (ERP CORE N400 node 29xpq)
@@ -125,13 +133,21 @@ def cpz_difference(subj, related, unrelated):
 try:
     target = np.array([cpz_difference(s, RELATED, UNRELATED) for s in SUBJECTS])
     # naive pooled-by-relatedness value (primes + targets), for contrast only
-    pooled = np.array([cpz_difference(s, {"111", "112", "211", "212"},
-                                      {"121", "122", "221", "222"}) for s in SUBJECTS])
+    pooled = np.array([cpz_difference(s, POOL_RELATED, POOL_UNRELATED) for s in SUBJECTS])
 except Exception as e:
     fail(f"could not build the N400 difference wave: {e}")
 
 n400_amp = float(target.mean())        # CORRECT target-only measure
 pooled_amp = float(pooled.mean())      # naive, for contrast
+n_neg = int((target < 0).sum())
+
+# PER-SUBJECT proof-of-work table
+with open(OUT / "per_subject.csv", "w", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=["subject", "n400_uv", "pooled_prime_plus_target_uv"])
+    w.writeheader()
+    for s, t, p in zip(SUBJECTS, target, pooled):
+        w.writerow(dict(subject=s, n400_uv=round(float(t), 6),
+                        pooled_prime_plus_target_uv=round(float(p), 6)))
 
 (OUT / "n400.json").write_text(json.dumps({
     "n400_difference_amplitude_uv": n400_amp,
@@ -140,8 +156,10 @@ pooled_amp = float(pooled.mean())      # naive, for contrast
     "window_ms": [300, 500],
     "contrast": "unrelated minus related (target words)",
     "n_subjects": len(SUBJECTS),
+    "n_subjects_negative": n_neg,
     "per_subject_uv": [round(float(v), 3) for v in target],
     "pooled_prime_plus_target_uv_for_reference": pooled_amp,
+    "per_subject_csv": "per_subject.csv",
 }, indent=2))
 
 (OUT / "run_metadata.json").write_text(json.dumps({
@@ -163,7 +181,8 @@ Reproducing the ERP CORE N400 word-pair paradigm on subjects 1-12 (P9/P10 mastoi
 reference, 0.1-30 Hz, -200..0 ms baseline), the **unrelated-minus-related** difference
 wave at **CPz** is a clear centro-parietal negativity in the N400 window. Measured as the
 **mean amplitude** over **300-500 ms** per subject and averaged over the 12 subjects, the
-N400 difference amplitude is **{n400_amp:.2f} uV** (12/12 subjects negative).
+N400 difference amplitude is **{n400_amp:.2f} uV** ({n_neg}/{len(SUBJECTS)} subjects
+negative). Per-subject amplitudes are in `per_subject.csv`.
 
 The relatedness effect is carried by the **target** word (the second word of each pair),
 so the contrast is built from target words only (unrelated targets minus related targets).
@@ -172,4 +191,4 @@ Pooling primes and targets by the relatedness label instead dilutes the effect w
 the prime-only difference is essentially zero, confirming the effect is target-locked.
 """)
 print(f"OK: N400 CPz unrelated-minus-related MEAN={n400_amp:.3f} uV | "
-      f"pooled(primes+targets)={pooled_amp:.3f} uV | n_subjects={len(SUBJECTS)}")
+      f"pooled(primes+targets)={pooled_amp:.3f} uV | neg {n_neg}/{len(SUBJECTS)}")

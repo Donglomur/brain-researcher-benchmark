@@ -77,7 +77,12 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `n400.json` — at minimum `{"n400_difference_amplitude_uv": <float>, "channel": "CPz",
-  "window_ms": [300, 500], "n_subjects": <int>}`.
+  "window_ms": [300, 500], "n_subjects": <int>}`. Also report, for contrast, the naive
+  prime+target relatedness-pooled amplitude `pooled_prime_plus_target_uv_for_reference`.
+- `per_subject.csv` — one row per subject (the exact 12-subject sample, real subject ids):
+  `subject, n400_uv, pooled_prime_plus_target_uv`. The per-subject `n400_uv` is the signed
+  target-only unrelated-minus-related amplitude (a negativity); its mean is the reported
+  headline `n400_difference_amplitude_uv`.
 - `run_metadata.json` — dataset id, n subjects, the reference and filter you used, the
   baseline and measurement window, and the event codes entering each condition.
 - `findings.md` — a few sentences reporting the unrelated-minus-related N400 amplitude at
