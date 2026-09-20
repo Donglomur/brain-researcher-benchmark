@@ -49,3 +49,26 @@ Both defensible correct answers now pass; a wrong quantity fails on both ends of
 ### Cost
 
 `hard` resource envelope inherited (cpus 2, mem 8 GB, internet on to fetch ds000228 + MSDL; timeouts 3600 s), but scientifically an easy control — the masker extraction over 40 subjects dominates runtime (~a few minutes); the ISC itself is trivial.
+
+## Proof-of-work verifier (v-pow, 2026-09)
+
+Clean REPRODUCTION -> QSMDIPOLE model: the single ISC headline is validated through a required
+per-subject intermediate. Held-out reference `tests/reference.npz` (from `solution/compute.py`,
+never shipped): per-subject pairwise ISC + per-subject leave-one-out ISC for the 40 pinned
+development_fmri participants + `ref_stats` (pairwise mean 0.152, leave-one-out mean 0.365,
+per-region pairwise, chance 0). reference.npz sha256 41850b42b2b5f802. New required output
+`isc_per_subject.csv`; the mean of the pairwise column equals the headline pairwise ISC exactly.
+
+Pillars (subprocess-validated): (1) per-subject pairwise AND leave-one-out ISC track the held-out
+reference across participants (cross-subject r>=0.85, non-constant, per-subject tol); (2) the
+headline recomputes as the mean of the per-subject column == reference == reported; (3) the
+reported headline matches the reference for the DECLARED estimator (pairwise 0.152 OR
+leave-one-out 0.365; both accepted) and is one of the two legitimate values, above chance -- a
+fabricated number, or a value inconsistent with the declared estimator, fails.
+
+Validation matrix: honest (pairwise) PASS | no-table FAIL | constant FAIL | fabricated per-subject
+FAIL | fabricated-headline FAIL | wrong-estimator-label FAIL | defensible (leave-one-out) PASS.
+
+Packaging: pinned nilearn fetch_development_fmri(n=40) + MSDL; nilearn 0.13.1 stack. Data
+runtime-fetched, `allow_internet=true` retained. Baking the per-subject ISC inputs is a maintainer
+follow-up.

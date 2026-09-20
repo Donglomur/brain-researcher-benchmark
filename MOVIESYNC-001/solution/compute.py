@@ -70,9 +70,18 @@ def main() -> None:
     from nilearn.datasets import fetch_development_fmri, fetch_atlas_msdl
     from nilearn.maskers import NiftiMapsMasker
 
+    import os
+    import re
+
     dev = fetch_development_fmri(n_subjects=N_SUBJECTS, verbose=0)
     msdl = fetch_atlas_msdl(verbose=0)
     labels = list(msdl.labels)
+
+    def _sid(path):
+        m = re.search(r"(sub-[A-Za-z0-9]+)", os.path.basename(path))
+        return m.group(1) if m else os.path.basename(path)
+
+    sids = [_sid(f) for f in dev.func]
 
     masker = NiftiMapsMasker(maps_img=msdl.maps, standardize="zscore_sample",
                              low_pass=0.1, high_pass=0.01, t_r=2.0, verbose=0)
@@ -85,18 +94,36 @@ def main() -> None:
 
     pairwise_per_region = []
     loo_per_region = []
+    persub_pairwise = np.zeros(n_sub)   # subject i's mean correlation with every OTHER subject
+    persub_loo = np.zeros(n_sub)        # subject i vs the mean of the others
     for r in vis_idx:
         x = _zscore_rows(M[:, :, r])                   # subjects x time (z-scored per subject)
         # PAIRWISE: mean off-diagonal correlation between subjects (CORRECT)
         C = np.corrcoef(x)
         iu = np.triu_indices(n_sub, 1)
         pairwise_per_region.append(float(C[iu].mean()))
-        # LEAVE-ONE-OUT: each subject vs mean of the others (recorded for the write-up only)
-        loo = [np.corrcoef(x[i], np.delete(x, i, axis=0).mean(0))[0, 1] for i in range(n_sub)]
-        loo_per_region.append(float(np.mean(loo)))
+        persub_pairwise += (C.sum(1) - np.diag(C)) / (n_sub - 1)   # per-subject row mean off-diag
+        # LEAVE-ONE-OUT: each subject vs mean of the others
+        loo = np.array([np.corrcoef(x[i], np.delete(x, i, axis=0).mean(0))[0, 1]
+                        for i in range(n_sub)])
+        loo_per_region.append(float(loo.mean()))
+        persub_loo += loo
+    persub_pairwise /= len(vis_idx)
+    persub_loo /= len(vis_idx)
 
     isc_pairwise = float(np.mean(pairwise_per_region))
     isc_loo = float(np.mean(loo_per_region))
+
+    # required intermediate: the per-subject inter-subject correlation (both estimators), the
+    # finest grain the analysis produces. The mean of the per-subject pairwise column equals the
+    # headline pairwise ISC exactly.
+    import csv as _csv
+    with open(OUTPUT_DIR / "isc_per_subject.csv", "w", newline="") as _f:
+        _w = _csv.writer(_f)
+        _w.writerow(["subject", "isc_pairwise", "isc_loo"])
+        for i in range(n_sub):
+            _w.writerow([sids[i], round(float(persub_pairwise[i]), 6),
+                         round(float(persub_loo[i]), 6)])
 
     wj("isc_results.json", {
         "visual_isc": round(isc_pairwise, 4),

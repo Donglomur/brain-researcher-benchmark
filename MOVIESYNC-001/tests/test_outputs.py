@@ -1,110 +1,174 @@
-"""Grading checks for MOVIESYNC-001 (inter-subject correlation of the movie-evoked
+"""Proof-of-work grader for MOVIESYNC-001 (inter-subject correlation of the movie-evoked
 visual-cortex response in the development_fmri cohort).
 
-This is a clean REPRODUCTION / easy-control task: measure the inter-subject correlation
-(ISC) of the movie-driven BOLD response in visual cortex on the pinned dataset/atlas/
-preprocessing, and report it.
+A clean REPRODUCTION task: measure the ISC of the movie-driven BOLD response in visual cortex
+on the pinned dataset/atlas/preprocessing and report it. Either standard estimator is accepted
+(pairwise ~0.152, leave-one-out ~0.365; Nastase et al. 2019). Because a single headline scalar
+is guessable, the grader validates the finest intermediate the analysis produces -- the
+per-subject ISC (both estimators) -- against a held-out reference (tests/reference.npz, built
+from the oracle run, never shipped to the agent), recomputes the headline as the mean of the
+per-subject column, and requires the reported value to match the reference for the DECLARED
+estimator.
 
-Ground truth (validated before release; nilearn 0.13.1, fetch_development_fmri n_subjects=40,
-MSDL atlas, confound-cleaned, band-pass 0.01-0.1 Hz, mean over the three visual-cortex
-regions ["Vis","Striate","Occ post"]):
+Ground truth (nilearn 0.13.1, fetch_development_fmri n=40, MSDL visual regions
+["Vis","Striate","Occ post"], confound-cleaned, band-pass 0.01-0.1 Hz):
+  per-subject pairwise ISC (mean r with the other 39)  -> isc_pairwise; mean = 0.152
+  per-subject leave-one-out ISC (vs mean of others)    -> isc_loo;      mean = 0.365
 
-  pairwise ISC        : 0.152     (mean Pearson r between every pair of participants)
-  leave-one-out ISC   : 0.365     (each participant vs the mean of the others)
-  chance              : ~0.0
-
-BOTH are standard, defensible ISC estimators (Nastase et al. 2019, SCAN). Pairwise ISC is
-the average correlation between pairs of participants; leave-one-out ISC correlates each
-participant with the average of the rest (a higher-SNR template, so it is systematically
-larger). The instruction now states explicitly that EITHER estimator is acceptable, so this
-grader accepts any legitimate above-chance visual-cortex ISC in the plausible band and only
-fails a wrong quantity (chance / a degenerate near-unity value / an implausible number).
+Three pillars:
+  1. per-subject ISC (pairwise + leave-one-out) ARE the real values (track the held-out ref)
+  2. recompute the headline as the mean of the per-subject column == reference == reported
+  3. the reported headline matches the reference for the declared estimator (and is one of the
+     two legitimate estimator values, not a fabricated number)
 """
 import json
 import math
 import os
-import re
+import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import proof_of_work as pw  # noqa: E402
+
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-
-CHANCE = 0.0
-# Both standard estimators must land inside this band: pairwise ~0.152, leave-one-out ~0.365.
-# The band is wide enough to admit reasonable variants of either estimator, and tight enough
-# to exclude a wrong quantity: a chance-level value (~0, region/pipeline error) below it, and
-# a degenerate near-unity value (~1, e.g. a self-correlation / undropped-diagonal bug) above.
-ISC_MIN = 0.05
-ISC_MAX = 0.60
-
-# keys that look like a reported inter-subject correlation ...
-_ISC_KEY = re.compile(r"isc|inter[_-]?subject|synchron|corr", re.I)
-# ... but NOT a chance level, a spread, a bound, or a count (per-region and leave-one-out
-# values are legitimate ISC estimates here and are intentionally NOT excluded).
-_EXCL_KEY = re.compile(
-    r"chance|std|sem|var|err|\bci\b|lower|upper|\bmin\b|\bmax\b|conf|"
-    r"n_|count|subject|timepoint|region", re.I)
+REF_PATH = Path(__file__).resolve().parent / "reference.npz"
 
 
-def _iter_scalars(obj, key=""):
-    if isinstance(obj, dict):
-        for k, v in obj.items():
-            yield from _iter_scalars(v, str(k))
-    elif isinstance(obj, (list, tuple)):
-        for v in obj:
-            yield from _iter_scalars(v, key)
-    else:
-        yield key, obj
+def _reference():
+    assert REF_PATH.exists(), (
+        "held-out reference tests/reference.npz is missing (build it from the oracle run)")
+    return pw.load_reference(REF_PATH)
 
 
-def _isc_candidates():
-    """Every plausible reported inter-subject correlation, at any depth, in any JSON file,
-    plus correlations stated in prose."""
-    cands = []
-    for p in sorted(OUT.glob("*.json")):
+def _submitted():
+    p = OUT / "isc_per_subject.csv"
+    assert p.exists(), (
+        "missing required output isc_per_subject.csv -- the per-subject inter-subject correlation "
+        "(the finest intermediate the ISC is built from). The single headline value cannot be "
+        "validated without it.")
+    return pw.load_submitted(p)
+
+
+def _results():
+    p = OUT / "isc_results.json"
+    assert p.exists(), "missing required output isc_results.json"
+    return json.loads(p.read_text(encoding="utf-8"))
+
+
+def _metadata():
+    p = OUT / "run_metadata.json"
+    if p.exists():
         try:
-            obj = json.loads(p.read_text(encoding="utf-8"))
+            return json.loads(p.read_text(encoding="utf-8"))
         except Exception:
+            return {}
+    return {}
+
+
+def _reported_headline(res):
+    return pw.find_number(res, [r"visualisc", r"^isc$", r"iscvisual", r"intersubjectcorrel",
+                                r"headlineisc", r"iscmean", r"meanisc"],
+                          exclude=[r"chance", r"perregion", r"nsub", r"ntime", r"std", r"sem",
+                                   r"ci", r"lower", r"upper", r"loo", r"leaveoneout", r"inflated"])
+
+
+# ------------------------------------------------------------------ well-formedness
+def test_outputs_present_and_wellformed():
+    ref = _reference()
+    sub, has_pw, has_loo = _submitted()
+    assert len(sub) >= 35, f"isc_per_subject.csv covers only {len(sub)} subjects (expected ~40)"
+    assert has_pw or has_loo, (
+        "isc_per_subject.csv has no per-subject ISC column (isc_pairwise / isc_loo)")
+    res = _results()
+    h = _reported_headline(res)
+    assert h is not None, f"isc_results.json has no visual_isc headline value: {res}"
+    assert -1.0 <= h <= 1.0, f"reported visual_isc {h} is not a valid correlation"
+
+
+# ------------------------------------------------------------------ pillar 1
+def test_proof_of_work_per_subject_isc():
+    ref = _reference()
+    st = ref["stats"]
+    sub, has_pw, has_loo = _submitted()
+    cov = pw.coverage(sub, ref["ids"])
+    assert cov >= st["COVER"], (
+        f"isc_per_subject.csv covers only {cov:.0%} of the {len(ref['ids'])} pinned participants "
+        f"(need >= {st['COVER']:.0%})")
+    checked = 0
+    for idx, has, name, ref_map in ((0, has_pw, "pairwise", ref["pairwise"]),
+                                    (1, has_loo, "leave-one-out", ref["loo"])):
+        if not has:
             continue
-        for key, val in _iter_scalars(obj):
-            if not isinstance(val, (int, float)) or isinstance(val, bool):
-                continue
-            if not math.isfinite(val):
-                continue
-            if not _ISC_KEY.search(key) or _EXCL_KEY.search(key):
-                continue
-            if -1.0 <= val <= 1.0:
-                cands.append(float(val))
-    prose = ""
-    for name in ("findings.md", "run_metadata.json"):
-        fp = OUT / name
-        if fp.exists():
-            prose += "\n" + fp.read_text(encoding="utf-8")
-    for m in re.finditer(r"(?:inter[- ]?subject correlation|isc)[^0-9\n]{0,40}?(-?0?\.\d+)", prose, re.I):
-        cands.append(float(m.group(1)))
-    for m in re.finditer(r"(-?0?\.\d+)[^0-9\n]{0,25}(?:inter[- ]?subject correlation|isc)", prose, re.I):
-        cands.append(float(m.group(1)))
-    return [c for c in cands if -1.0 <= c <= 1.0]
+        assert pw.nonconstant(sub, idx, st["EPS"]), (
+            f"per-subject {name} ISC is constant across participants -- fabricated")
+        rc, n = pw.cross_corr(sub, ref_map, ref["ids"], idx)
+        assert math.isfinite(rc) and rc >= st["CORR_MIN"], (
+            f"per-subject {name} ISC does not track the held-out reference (cross-subject "
+            f"r={rc:.3f} < {st['CORR_MIN']}); it was not computed from the real time series")
+        frac, n = pw.per_subject_match(sub, ref_map, ref["ids"], idx, st["VAL_TOL"])
+        assert frac >= st["MATCH"], (
+            f"only {frac:.0%} of {n} matched participants have {name} ISC within {st['VAL_TOL']} "
+            f"of the reference (need >= {st['MATCH']:.0%})")
+        checked += 1
+    assert checked >= 1, "no per-subject ISC column could be validated against the reference"
 
 
-def test_isc_reported():
-    # A parseable, above-chance inter-subject correlation was produced at all.
-    cands = _isc_candidates()
-    assert cands, "no inter-subject correlation could be parsed from the submission"
-    assert max(cands) > CHANCE + 0.03, (
-        f"reported ISC values {sorted(set(round(c,3) for c in cands))} are at/below chance "
-        f"({CHANCE}) -- the analysis did not recover a movie-driven response")
+# ------------------------------------------------------------------ pillar 2
+def test_headline_recomputes_from_rows():
+    ref = _reference()
+    st = ref["stats"]
+    sub, has_pw, has_loo = _submitted()
+    res = _results()
+    reported = _reported_headline(res)
+
+    means = {}
+    if has_pw:
+        means["pairwise"] = pw.mean_of(sub, ref["ids"], 0)
+    if has_loo:
+        means["loo"] = pw.mean_of(sub, ref["ids"], 1)
+    # the mean of the per-subject pairwise column IS the pairwise headline; check vs reference.
+    if "pairwise" in means:
+        assert abs(means["pairwise"] - st["pairwise"]) <= 0.03, (
+            f"mean of the per-subject pairwise ISC ({means['pairwise']:.3f}) != reference "
+            f"({st['pairwise']:.3f})")
+    if "loo" in means:
+        assert abs(means["loo"] - st["loo"]) <= 0.04, (
+            f"mean of the per-subject leave-one-out ISC ({means['loo']:.3f}) != reference "
+            f"({st['loo']:.3f})")
+    # the reported headline must equal the mean of ONE of the per-subject columns (CSV<->JSON).
+    assert any(abs(reported - m) <= 0.03 for m in means.values()), (
+        f"reported visual_isc ({reported:.3f}) is not the mean of any submitted per-subject ISC "
+        f"column ({', '.join(f'{k}={v:.3f}' for k, v in means.items())}); the headline is not "
+        f"consistent with the per-subject rows")
 
 
-def test_isc_is_a_valid_visual_estimate():
-    # Accept ANY legitimate visual-cortex ISC estimate. Pairwise (~0.152) and leave-one-out
-    # (~0.365) are both standard and both PASS; the task no longer discriminates between them.
-    # A wrong quantity fails: a chance-level value (below the band, e.g. a region/pipeline
-    # error) or a degenerate near-unity value (above the band, e.g. a self-correlation bug).
-    cands = _isc_candidates()
-    in_band = [c for c in cands if ISC_MIN <= c <= ISC_MAX]
-    assert in_band, (
-        f"no reported inter-subject correlation falls in the valid visual-cortex band "
-        f"[{ISC_MIN}, {ISC_MAX}] (chance {CHANCE}). Parsed values: "
-        f"{sorted(set(round(c,3) for c in cands))}. A value near 0 means the movie-driven "
-        f"response was not recovered; a value near 1 is a degenerate self-correlation "
-        f"artifact, not an inter-subject correlation.")
+# ------------------------------------------------------------------ pillar 3 (headline vs declared estimator)
+def test_headline_matches_declared_estimator():
+    ref = _reference()
+    st = ref["stats"]
+    res = _results()
+    meta = _metadata()
+    reported = _reported_headline(res)
+    tol = st["ISC_TOL"]
+
+    matches_pw = abs(reported - st["pairwise"]) <= tol
+    matches_loo = abs(reported - st["loo"]) <= tol
+    assert matches_pw or matches_loo, (
+        f"reported visual_isc ({reported:.3f}) matches neither legitimate estimator on these data "
+        f"(pairwise {st['pairwise']:.3f} / leave-one-out {st['loo']:.3f}); it is not a real ISC "
+        f"of the pinned analysis")
+
+    est = pw.declared_estimator({**meta, **{k: v for k, v in res.items() if isinstance(v, str)}})
+    if est == "pairwise":
+        assert matches_pw, (
+            f"run_metadata declares the PAIRWISE estimator but the reported visual_isc "
+            f"({reported:.3f}) is not the pairwise value ({st['pairwise']:.3f}); it looks like the "
+            f"leave-one-out value reported under the wrong estimator")
+    elif est == "loo":
+        assert matches_loo, (
+            f"run_metadata declares the LEAVE-ONE-OUT estimator but the reported visual_isc "
+            f"({reported:.3f}) is not the leave-one-out value ({st['loo']:.3f})")
+
+    # above chance (a movie-driven response was actually recovered)
+    assert reported > float(st.get("chance", 0.0)) + 0.03, (
+        f"reported ISC ({reported:.3f}) is at/below chance -- the movie response was not recovered")

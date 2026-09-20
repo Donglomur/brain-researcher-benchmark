@@ -51,6 +51,11 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
+- `isc_per_subject.csv` — one row per participant: `subject` and that participant's
+  inter-subject correlation (its mean correlation with the other participants, averaged over the
+  three visual regions). If you compute both estimators, give one column each (e.g.
+  `isc_pairwise`, `isc_loo`). This is the per-subject intermediate the headline ISC is built
+  from; the mean of the pairwise column equals the headline pairwise ISC.
 - `isc_results.json` — at least a field `visual_isc` (float), the inter-subject correlation
   you obtained for visual cortex, plus `n_subjects`, `n_timepoints` and `chance`.
 - `run_metadata.json` — dataset id, atlas, regions, preprocessing and how you estimated the
