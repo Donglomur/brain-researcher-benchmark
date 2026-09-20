@@ -38,7 +38,13 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 - `staging_results.json` — the headline result as
   `{"cv_scheme": <str>, "accuracy": <float>, "n_stages": 5, "stages": [<str>...],
-  "n_epochs_total": <int>}`.
+  "n_epochs_total": <int>}`, where `accuracy` is the stage-fair figure. Also report
+  `cohen_kappa` and, for contrast, the inflated `overall_accuracy_for_reference` (fraction of
+  all epochs correct).
+- `per_subject.csv` — one row per held-out subject (real subject ids):
+  `subject, n_epochs, overall_accuracy, balanced_accuracy, kappa`. The epoch-weighted mean of
+  `overall_accuracy` is the overall accuracy; the reported headline `accuracy` is the
+  stage-fair figure.
 - `run_metadata.json` — dataset id, subjects, recording, channels, features, classifier,
   and the cross-validation scheme you used.
 - `findings.md` — a short written summary (a few sentences) reporting the cross-validated

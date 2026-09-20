@@ -17,6 +17,12 @@ Everything else is pinned (subjects, channels, 30-s epochs, relative band-power 
 RandomForest(200), leave-one-subject-out CV), so the reported number reveals which summary
 was used: the stage-fair (balanced) accuracy is the honest one; the overall accuracy is
 inflated by the dominant stages.
+
+Proof-of-work deliverable: a PER-SUBJECT table (per_subject.csv) with, for each held-out
+subject, the number of epochs and the subject's OVERALL accuracy, stage-fair BALANCED
+accuracy and Cohen kappa. The group overall accuracy is the epoch-weighted mean of the
+per-subject overall accuracies; the honest headline is the stage-fair balanced accuracy,
+which is materially lower.
 """
 import csv
 import json
@@ -101,7 +107,7 @@ try:
     Xs, ys, gs = [], [], []
     for i, sf in enumerate(files):
         X, y = load_subject(sf)
-        Xs.append(X); ys.append(y); gs.append(np.full(len(y), i))
+        Xs.append(X); ys.append(y); gs.append(np.full(len(y), SUBJECTS[i]))
     X = np.concatenate(Xs); y = np.concatenate(ys); groups = np.concatenate(gs)
 except Exception as e:
     fail(f"could not build sleep-staging features from Sleep-EDF: {e}")
@@ -113,10 +119,18 @@ if len(np.unique(y)) < 5 or len(np.unique(groups)) < 3:
 clf = make_pipeline(RandomForestClassifier(n_estimators=N_TREES, random_state=RANDOM_STATE))
 logo = LeaveOneGroupOut()
 yt, yp = [], []
+per_subject = []  # (subject_id, n_epochs, overall_acc, balanced_acc, kappa)
 for tr, te in logo.split(X, y, groups):
     clf.fit(X[tr], y[tr])
-    yt.append(y[te]); yp.append(clf.predict(X[te]))
+    pred = clf.predict(X[te])
+    subj = int(groups[te][0])
+    yt.append(y[te]); yp.append(pred)
+    s_overall = float(accuracy_score(y[te], pred))
+    s_balanced = float(balanced_accuracy_score(y[te], pred))
+    s_kappa = float(cohen_kappa_score(y[te], pred))
+    per_subject.append((subj, int(len(te)), s_overall, s_balanced, s_kappa))
 yt = np.concatenate(yt); yp = np.concatenate(yp)
+per_subject.sort(key=lambda r: r[0])
 
 overall = float(accuracy_score(yt, yp))                 # inflated by the common stages
 balanced = float(balanced_accuracy_score(yt, yp))       # stage-fair; chance = 0.20
@@ -124,6 +138,16 @@ kappa = float(cohen_kappa_score(yt, yp))
 present = sorted(np.unique(yt))
 recalls = recall_score(yt, yp, labels=present, average=None)
 
+# PER-SUBJECT proof-of-work table
+with open(OUT / "per_subject.csv", "w", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=["subject", "n_epochs", "overall_accuracy",
+                                      "balanced_accuracy", "kappa"])
+    w.writeheader()
+    for subj, ne, ov, ba, kp in per_subject:
+        w.writerow(dict(subject=subj, n_epochs=ne, overall_accuracy=round(ov, 6),
+                        balanced_accuracy=round(ba, 6), kappa=round(kp, 6)))
+
+# per-stage recall table (retained)
 with open(OUT / "per_stage.csv", "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=["stage", "n", "recall"])
     w.writeheader()
@@ -133,12 +157,14 @@ with open(OUT / "per_stage.csv", "w", newline="") as f:
 (OUT / "staging_results.json").write_text(json.dumps({
     "cv_scheme": "leave-one-subject-out",
     "accuracy": balanced,                # stage-fair (balanced) accuracy, chance 0.20
+    "balanced_accuracy": balanced,
     "cohen_kappa": kappa,
     "n_stages": 5,
     "stages": [STAGE[s] for s in present],
     "chance_level": CHANCE,
     "n_epochs_total": int(len(yt)),
     "overall_accuracy_for_reference": overall,
+    "per_subject_csv": "per_subject.csv",
 }, indent=2))
 
 (OUT / "run_metadata.json").write_text(json.dumps({
@@ -167,7 +193,8 @@ is inflated by the dominant stages (N2 alone is ~46% of epochs); its majority ba
 ~0.46, not 0.20, and it hides that the rarest stage (N1) is barely recovered
 (recall {dict(zip([STAGE[s] for s in present], [round(float(r),2) for r in recalls])).get('N1')}).
 The stage-fair balanced accuracy above is the honest summary of how well each of the five
-stages is identified.
+stages is identified. Per-subject overall/balanced accuracy and kappa are in
+`per_subject.csv`.
 """)
 
 print(f"OK: balanced acc={balanced:.4f} kappa={kappa:.4f} | overall acc={overall:.4f} | "
