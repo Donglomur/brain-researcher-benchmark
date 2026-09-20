@@ -71,3 +71,27 @@ The construction bar (un-cued · off-critical-path · naive-default-wrong · big
 ### Cost
 
 `hard`. cpus 2, mem 8 GB, internet on (`allow_internet=true`); the language-localizer demo is small (10 subjects, 4.5 mm resampled) and compute is light (two spheres per subject + a GLM design), timeouts 3600 s. Deps: nilearn 0.12.1 + scipy/sklearn/pandas/nibabel (pinned; identical set to the merged DEVCONN-001). Dev/agent runs may mount the host `nilearn_data` cache to skip the OSF download (local flag only, never committed); external runners fetch at runtime.
+
+## Proof-of-work verifier (v-pow, 2026-09)
+
+Held-out reference `tests/reference.npz` (from `solution/compute.py`, never shipped): per-subject
+RAW and BACKGROUND task-state FC for the 10 pinned language-localizer subjects (sub-01..sub-10) +
+`ref_stats` (raw_g=0.630, bg_g=0.461, inflation=0.169, paired t=4.02, p=3.0e-3, raw>bg 10/10).
+reference.npz sha256 2a5ffb4fabe7140f. The task stays **un-cued** (background FC is volunteered,
+never named in the instruction); `connectivity.csv` now invites "any additional per-subject
+connectivity you computed" (no cue).
+
+Pillars (subprocess-validated): (1) per-subject RAW FC covers the pinned subjects, non-constant,
+cross-subject r>=0.95 to the reference (kills fabricated/dup rows); if a per-subject background
+column is present it must likewise match (validate-if-present, not required); (2) group RAW mean
+recomputes from the rows == reference == reported; (3) the volunteered discriminating number ->
+reported group background/intrinsic FC is materially LOWER than raw, matches the reference
+(~0.46), gap>=0.08 (a naive raw-only run cannot produce it); (secondary) the task-evoked
+inflation prose.
+
+Validation matrix: honest PASS | no-table FAIL | constant FAIL | fabricated per-subject raw FAIL |
+naive (raw only, no background) FAIL | defensible (group-only background) PASS.
+
+Packaging: pinned nilearn language-localizer demo (all 10 subjects), nilearn 0.12.1 stack; data
+runtime-fetched, `allow_internet=true` retained. Baking the per-subject inputs is a maintainer
+follow-up.

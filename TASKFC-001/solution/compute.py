@@ -117,7 +117,7 @@ for s in subs:
     raws.append(raw)
     bgs.append(bg)
     rows.append(dict(subject=s, region_a="L_lateral_occipital", region_b="R_lateral_occipital",
-                     connectivity=raw))
+                     connectivity=raw, background_connectivity=bg))
 
 if len(rows) < 8:
     fail(f"only {len(rows)} subjects processed")

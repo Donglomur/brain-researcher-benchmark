@@ -41,7 +41,8 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `connectivity.csv` — one row per subject: `subject, region_a, region_b, connectivity`
-  (the per-subject functional connectivity between the two regions).
+  (the per-subject functional connectivity between the two regions), plus any additional
+  per-subject connectivity estimate(s) you computed, one column each.
 - `connectivity_summary.json` — the group-level connectivity (Fisher-*z* averaged Pearson
   correlation) between the two regions as `{"group_connectivity": ..., "n_subjects": ...}`,
   plus any additional connectivity summaries you computed.
