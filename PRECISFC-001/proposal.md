@@ -51,3 +51,22 @@ On `ds000224` volume_pipeline (Power-264 5 mm spheres; sub-MSC01/02/05/06/08/09,
 ### Cost
 
 Data volume ~3.6 GB (the MSC volume BOLD is large — a real CI/timeout hazard flagged for the maintainer). The graded quantity (reliability of the individual connectome, a correlation) is convention-invariant, and the un-cued judgement is whether to volunteer excluding the documented low-quality subjects (MSC08/MSC09) that contaminate the naive group estimate.
+
+### Proof-of-work rework (held-out reference) + R2 hedge
+
+The verifier was upgraded to the proof-of-work contract (PROOF_OF_WORK_SPEC.md). A held-out
+reference (`tests/reference.npz`, never shipped to the agent) was built by running
+`solution/compute.py` on the real ds000224 volume_pipeline derivatives (Power-264 5 mm spheres,
+MSC01/02/05/06/08/09, func01-03). It stores each subject's cross-session reliability **both
+censored and all-frames** (so either valid method matches) and the discriminating statistics
+(naive all-6 0.53 → exclude-low-quality 0.66; MSC08 0.085 → 0.30). The grader now (1) matches the
+submitted per-subject reliabilities to the reference, (2) recomputes the excluded-group mean from
+the submitted rows and cross-checks the reported figure, and (3) grades the recovery + the MSC08
+outlier as numbers. **R2 hedge folded in:** MSC09's own cross-session reliability is normal-range
+(0.51–0.53), so the reliability recovery is scoped to the MSC08 outlier (+ frame censoring); the
+grader checks MSC09 is normal-range and rejects a write-up that calls MSC09 a reliability outlier /
+aberrant / unstable-network subject (its exclusion is a standard high-motion QC choice). The
+solution `findings.md` was rewritten to state this. Validated by subprocess pytest: honest PASS;
+no-table / constant / fabricated / naive / **MSC09-over-claim** / right-headline-fake-rows all FAIL.
+Volumetric BOLD > 100 MB/file so raw inputs stay runtime-fetch with the cohort pinned; baking the
+derived per-subject inputs is a maintainer follow-up.

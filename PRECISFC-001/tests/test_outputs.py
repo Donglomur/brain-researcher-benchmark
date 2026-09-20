@@ -1,104 +1,197 @@
-"""Grading checks for PRECISFC-001 (test-retest reliability of the individual connectome, MSC).
+"""Proof-of-work grader for PRECISFC-001 — test-retest reliability of the individual connectome
+(MSC / ds000224), and how the documented low-quality subjects affect the group estimate.
 
-Ground truth (validated before release on ds000224 volume_pipeline, Power-264 5mm spheres,
-sub-MSC01/02/05/06/08/09, ses-func01/02/03; reliability = mean pairwise correlation of the
-per-session connectome edge-vectors):
+The previous verifier checked value ranges + a keyword sentence, so it passed on fabricated
+tables. This grader validates the EXACT MSC subjects and their per-subject cross-session
+reliability against a held-out reference (tests/reference.npz), recomputes the excluded-group
+reliability FROM the submitted rows, and grades the scientific judgement AS NUMBERS: the naive
+all-subjects figure is dragged down and recovers once the reliability-outlier subject (MSC08) is
+set aside (and/or high-motion frames censored), matching the held-out reference. Frame-censoring
+is an accepted refinement (not required), so per-subject values may be censored OR all-frames.
 
-  per subject  cross-session reliability, frame retention
-    MSC01  0.63  (80%)     MSC02  0.54  (86%)
-    MSC05  0.68  (84%)     MSC06  0.75  (93%)
-    MSC08  0.09  (24%)     MSC09  0.51  (60%)   # documented low-quality
-  GROUP mean reliability
-    naive   (all 6 subjects)                   0.53
-    exclude MSC08 & MSC09                       0.65   (~ 0.66 if frames are also censored)
+R2 hedge (folded in): the reliability recovery is scoped to the MSC08 outlier (+ frame
+censoring). MSC09's OWN cross-session reliability is normal-range (~0.51-0.53); excluding it is a
+standard high-motion QC choice, NOT the removal of a reliability outlier. The grader therefore
+checks MSC09's reliability is normal-range and rejects a write-up that calls MSC09 a reliability
+outlier / aberrant / unstable-network subject.
 
-The individual connectome is highly reliable, but the naive group figure (all six subjects) is
-dragged down and CONTAMINATED by two subjects that MSC precision mapping documents as low quality
-and sets aside: MSC08 (pervasive self-reported drowsiness -> unstable, aberrant networks; only 24%
-of frames survive motion censoring; cross-session reliability collapses to ~0.09) and MSC09
-(excessive in-scanner motion) -- Gordon 2017; Laumann 2015; Seitzman 2019. The task lists all six
-subjects and never says any should be set aside.
-
-The failure mode this task targets (un-cued, data-quality / sample-selection axis): the agent
-computes one reliability figure over all six subjects and reports it (~0.53), never volunteering
-that MSC08 is a degenerate outlier (0.09) it can see in its own per-subject table and that the two
-documented low-quality subjects should be excluded/flagged from the estimate. A flat "the connectome
-is reliable, r = 0.53" fails; recognising the low-quality-subject exclusion passes. (Frame-censoring
-with the supplied temporal mask is an accepted refinement, but is NOT required -- excluding the two
-low-quality subjects already recovers the honest ~0.65, so an answer that excludes them without
-censoring is fully correct.)
+Reference (ds000224 volume_pipeline, Power-264 5mm, MSC01/02/05/06/08/09, func01-03):
+  MSC08 reliability 0.085 (all frames) -> 0.300 (censored)   <- the low-reliability outlier
+  MSC09 reliability 0.514 -> 0.531                           <- normal-range (not an outlier)
+  group naive (all 6, all frames) 0.533 -> exclude low-quality (+censor) 0.66
 """
-import csv
+import json
 import os
 import re
+import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import proof_of_work as pw  # noqa: E402
+
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+REF_PATH = Path(__file__).resolve().parent / "reference.npz"
+_GEXC = ["persub", "persubject", "msc", "retention", "frame", "nsession", "nsub", "count"]
+
+
+def _reference():
+    assert REF_PATH.exists(), "held-out reference tests/reference.npz is missing"
+    return pw.load_reference(REF_PATH)
+
+
+def _submitted():
+    p = OUT / "reliability.csv"
+    assert p.exists(), "missing required output reliability.csv"
+    return pw.load_submitted(p)
+
+
+def _stats():
+    p = OUT / "reliability_stats.json"
+    assert p.exists(), "missing required output reliability_stats.json"
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception as e:
+        raise AssertionError(f"reliability_stats.json is not valid JSON: {e}")
 
 
 def _findings():
-    # collapse whitespace (incl. hard line-wraps) so co-occurrence checks read flowing sentences.
     return re.sub(r"\s+", " ", (OUT / "findings.md").read_text(encoding="utf-8").lower())
 
 
-def test_reliability_computed_per_subject():
-    # per-subject cross-session reliability is actually computed. A correct analysis may either
-    # report all six subjects (and flag/exclude the low-quality ones in the aggregate) or drop
-    # the two low-quality subjects from the table, so we require only that the reliability of
-    # several subjects was computed with plausible correlation values. The un-cued judgement about
-    # excluding the documented low-quality subjects is graded by the next test.
-    rows = list(csv.DictReader(open(OUT / "reliability.csv", encoding="utf-8")))
-    assert len(rows) >= 4, f"expected reliability for the analysed subjects, got {len(rows)}"
-    rel_col = next((c for c in rows[0] if "reli" in c.lower() or c.lower() in ("r", "similarity")), None)
-    assert rel_col, f"no reliability column in {list(rows[0])}"
-    vals = [float(r[rel_col]) for r in rows if r.get(rel_col) not in (None, "")]
-    assert len(vals) >= 4 and all(-1.01 <= v <= 1.01 for v in vals), "reliability values invalid"
+def _naive_group(j):
+    v = pw.find_path_number(j, path_include=["all", "subject"],
+                            path_exclude=_GEXC + ["exclud", "without", "drop", "usable", "included", "clean"],
+                            prefer=["naive", "allframesallsubject", "allsix", "overall"])
+    if v is None:
+        v = pw.find_path_number(j, path_include=["naive"], path_exclude=_GEXC)
+    return v
 
 
-def test_recognises_low_quality_subject_exclusion():
-    # The un-cued judgement: the two documented low-quality subjects (MSC08 pervasively drowsy ->
-    # unstable networks; MSC09 excessive motion) contaminate the naive group reliability and should
-    # be excluded / flagged from the estimate. A flat reliability figure over all six subjects, with
-    # no recognition that the low-quality subjects should be set aside, fails.
+def _correct_group(j):
+    for inc in (["exclud"], ["without"], ["drop"], ["usable"], ["included"], ["clean"], ["highquality"]):
+        v = pw.find_path_number(j, path_include=inc, path_exclude=_GEXC, prefer=["censored", "cens"])
+        if v is not None:
+            return v
+    return None
+
+
+# ------------------------------------------------------------------ well-formedness
+def test_outputs_present_and_wellformed():
+    sub = _submitted()
+    assert len(sub) >= 4, f"reliability.csv must carry per-subject reliability; parsed {len(sub)} rows"
+    assert all(-1.01 <= v <= 1.01 for v in sub.values()), "reliability values out of range"
+    j = _stats()
+    assert isinstance(j, dict) and j, "reliability_stats.json empty"
+
+
+# ------------------------------------------------------------------ pillar 1
+def test_proof_of_work_subjects_and_values():
+    ref = _reference(); sub = _submitted(); st = ref["stats"]
+    pw.check_subjects_and_values(sub, ref, val_tol=st["VAL_TOL"], cover=st["COVER"],
+                                 match=st["MATCH"], eps=st["EPS"])
+
+
+# ------------------------------------------------------------------ pillar 2
+def test_recompute_excluded_group_from_rows():
+    """The reported excluded/high-quality group reliability must equal the mean over the usable
+    subjects (excluding the documented low-quality subjects) of the SUBMITTED per-subject rows."""
+    ref = _reference(); sub = _submitted(); st = ref["stats"]
+    usable = [i for i in st["usable"] if i in sub]
+    assert len(usable) >= 3, "cannot recompute excluded-group reliability: usable subjects missing"
+    recompute = pw.group_mean(sub, usable)
+    j = _stats()
+    reported = _correct_group(j)
+    assert reported is not None, (
+        "reliability_stats.json does not report the group reliability EXCLUDING the documented "
+        "low-quality subjects (MSC08/MSC09).")
+    assert abs(recompute - reported) <= st["RECOMP_TOL"] + 0.02, (
+        f"excluded-group reliability recomputed from the submitted rows ({recompute:.3f}) does not "
+        f"match the reported value ({reported:.3f}); the rows and the summary disagree.")
+
+
+# ------------------------------------------------------------------ pillar 3 (judgement as numbers)
+def test_conclusion_recovery_and_outlier_numeric():
+    ref = _reference(); sub = _submitted(); st = ref["stats"]; j = _stats()
+    naive = _naive_group(j)
+    correct = _correct_group(j)
+    assert naive is not None, (
+        "reliability_stats.json does not report the group reliability INCLUDING all subjects "
+        "(the naive figure).")
+    assert correct is not None, "no excluded-low-quality group reliability reported."
+
+    # (a) the naive all-subjects figure is dragged down; the excluded figure recovers.
+    assert naive <= st["NAIVE_MAX"], (
+        f"reported all-subjects group reliability {naive:.3f} is not the dragged-down naive figure "
+        f"(reference ~{st['naive_all6_allframes']:.3f}).")
+    assert correct >= st["CORRECT_MIN"], (
+        f"reported excluded-group reliability {correct:.3f} is below the honest recovered value "
+        f"(reference ~{st['correct_censored_excl']:.3f}).")
+    assert correct - naive >= st["RECOVERY_MIN"], (
+        f"the group reliability does not recover once the low-quality subject(s) are set aside "
+        f"(naive {naive:.3f} -> excluded {correct:.3f}); the recovery is the graded result.")
+    # excluded figure matches one of the valid reference recoveries (censored or all-frames).
+    assert min(abs(correct - st["correct_censored_excl"]), abs(correct - st["correct_allframes_excl"])) <= 0.05, (
+        f"reported excluded-group reliability {correct:.3f} matches neither reference recovery "
+        f"({st['correct_allframes_excl']:.3f} all-frames / {st['correct_censored_excl']:.3f} censored).")
+
+    # (b) MSC08 is the low-reliability outlier (its real, far-below-band value).
+    assert "MSC08" in sub, "MSC08 (the reliability outlier) is missing from the per-subject table."
+    assert sub["MSC08"] <= st["MSC08_OUTLIER_MAX"], (
+        f"submitted MSC08 reliability {sub['MSC08']:.3f} is not the real low-reliability outlier "
+        f"value (censored ~{st['msc08_censored']:.2f} / all-frames ~{st['msc08_allframes']:.2f}).")
+    usable_present = [sub[i] for i in st["usable"] if i in sub]
+    assert usable_present and sub["MSC08"] < min(usable_present) - 0.1, (
+        "MSC08's reliability is not far below the usable subjects; it must be the clear outlier.")
+
+    # (c) R2 HEDGE: MSC09's OWN reliability is normal-range (not a reliability outlier).
+    assert "MSC09" in sub, "MSC09 is missing from the per-subject table."
+    assert sub["MSC09"] >= st["MSC09_NORMAL_MIN"], (
+        f"submitted MSC09 reliability {sub['MSC09']:.3f} is not the real normal-range value "
+        f"(~{st['msc09_censored']:.2f}); MSC09 is documented low-quality for MOTION, and its own "
+        f"cross-session reliability is normal-range -- it is not a reliability outlier.")
+
+
+# ------------------------------------------------------------------ secondary prose (with R2 hedge)
+def test_findings_scope_recovery_and_hedge_msc09():
+    """SECONDARY (numbers carry the grade). findings.md must (a) state that the individual
+    connectome is reliable and the naive all-subjects figure is dragged down / recovers when the
+    low-quality subject(s) are set aside (and/or frames censored), naming MSC08 as the
+    low-reliability outlier; and (b) NOT over-attribute the recovery to MSC09 or call MSC09 a
+    reliability outlier (R2 hedge)."""
     text = _findings()
 
-    # explicit low-quality subject ids
-    SUBJID = r"msc-?0?[89]"
-    # subject-level data-quality descriptors. NB: bare "high motion" / "motion" is ALSO
-    # frame-censoring vocabulary ("removed high-motion frames"), so it is handled separately and
-    # only counts when tied to a subject id -- it is NOT in this set.
-    QUAL = (r"(?:drows\w*|sleep\w*|low[- ]?quality|poor[- ]?quality|unreliab\w*|aberrant|unstable|"
-            r"outlier\w*|degenerate|low[- ]?data|documented (?:low|poor)|too noisy|noisy scan|"
-            r"little (?:usable|data)|not usable)")
-    # an action that sets a subject aside from the aggregate
-    ACT = (r"(?:exclud\w*|drop\w*|discard\w*|remov\w*|omit\w*|set aside|left out|leav\w* out|"
-           r"disregard\w*|down[- ]?weight\w*|flag\w*)")
-    # a generic subject noun so a non-id-naming answer can still qualify
-    SUBJGEN = r"(?:subject|participant|scan)"
-    # forbid frame/censoring vocabulary between an action verb and a subject id, so
-    # "removed high-motion FRAMES for MSC08" (censoring) does not read as excluding the subject.
-    NOFRAME = r"(?:(?!frame|volume|time[- ]?point|censor|scrub|\bmask|motion param)[^.])"
+    recovers = re.search(
+        r"(?:exclud\w*|set\s+aside|drop\w*|remov\w*|censor\w*|scrub\w*|low[- ]?quality|"
+        r"data[- ]?quality)[^.\n]{0,90}"
+        r"(?:reliab\w*|recover\w*|rises?|increase\w*|higher|improv\w*|0\.6|0\.5)"
+        r"|(?:reliab\w*|group figure|estimate)[^.\n]{0,90}"
+        r"(?:dragged|deflat\w*|lower\w*|understate\w*|drag\w*|contaminat\w*)[^.\n]{0,40}"
+        r"(?:low[- ]?quality|msc08|outlier|subject)", text)
+    assert recovers, (
+        "findings.md does not report that the naive all-subjects group reliability is dragged down "
+        "and recovers once the low-quality subject(s) are set aside (and/or high-motion frames "
+        "censored).")
 
-    recognises = bool(
-        # (A) an explicit low-quality subject id set aside / flagged (no frame-censoring word between)
-        re.search(rf"{ACT}{NOFRAME}{{0,50}}{SUBJID}", text)
-        or re.search(rf"{SUBJID}{NOFRAME}{{0,50}}{ACT}", text)
-        # (B) an explicit low-quality subject id characterised as low-quality / drowsy / an outlier
-        or re.search(rf"{SUBJID}[^.]{{0,80}}{QUAL}", text)
-        or re.search(rf"{QUAL}[^.]{{0,80}}{SUBJID}", text)
-        # (C) an explicit id characterised as high-motion (id present -> not frame vocabulary)
-        or re.search(rf"{SUBJID}[^.]{{0,60}}(?:high[- ]?motion|excessive motion|too much motion)", text)
-        or re.search(rf"(?:high[- ]?motion|excessive motion|too much motion)[^.]{{0,40}}{SUBJID}", text)
-        # (D) generic "exclude/flag the (two) low-quality/drowsy/high-motion SUBJECT(s)" (subject
-        # noun required, so frame-censoring phrasing cannot satisfy it)
-        or re.search(rf"{ACT}\s+(?:the\s+)?(?:two|both|2|these)?\s*(?:documented\s+)?"
-                     rf"(?:{QUAL}|high[- ]?motion|drowsy)\s+(?:\w+\s+){{0,1}}?{SUBJGEN}s?", text)
-    )
+    msc08_outlier = re.search(
+        r"msc0?8[^.\n]{0,80}(?:outlier|low\w*\s+reliab|barely\s+reliab|unreliab\w*|collaps\w*|"
+        r"aberrant|unstable|0\.0|0\.1|0\.2|0\.3|drowsy|degenerate|far\s+below)"
+        r"|(?:outlier|low\w*\s+reliab|unreliab\w*|barely\s+reliab|degenerate)[^.\n]{0,40}msc0?8", text)
+    assert msc08_outlier, (
+        "findings.md does not identify MSC08 as the low-reliability outlier (its cross-session "
+        "reliability collapses; it is what drags down and, once set aside, recovers the group figure).")
 
-    assert recognises, (
-        "findings.md does not recognise that the documented low-quality subjects (MSC08 pervasively "
-        "drowsy -> unstable networks / only ~24% of frames usable; MSC09 excessive motion) are "
-        "outliers that contaminate the naive group reliability and should be excluded / flagged from "
-        "the estimate. A single reliability figure over all six subjects (~0.53), with no recognition "
-        "that the low-quality subjects should be set aside, misses what this estimate needs -- the "
-        "individual connectome is highly reliable (~0.65) once they are excluded.")
+    # R2 HEDGE guard: do not call MSC09 a reliability outlier / aberrant / unstable-networks.
+    msc09_outlier_claim = re.search(
+        r"msc0?9[^.\n]{0,70}(?:reliab\w*\s+outlier|is\s+an?\s+outlier|aberrant|unstable\s+network|"
+        r"barely\s+reliab|unreliab\w*|degenerate|reliab\w*\s+collaps\w*|low\s+reliab\w*)"
+        r"|(?:reliab\w*\s+outlier|aberrant|unstable\s+network|degenerate|barely\s+reliab)[^.\n]{0,40}msc0?9",
+        text)
+    hedge_ok = re.search(
+        r"msc0?9[^.\n]{0,90}(?:normal|typical|comparable|usual|in\s+the\s+(?:usable|normal)\s+range|"
+        r"motion|high[- ]?motion|excessive\s+motion|standard\s+qc|quality[- ]?control|acceptable|"
+        r"not\s+(?:an?\s+)?(?:reliab\w*\s+)?outlier)", text)
+    assert not (msc09_outlier_claim and not hedge_ok), (
+        "findings.md over-attributes the reliability story to MSC09 (calls it a reliability outlier "
+        "/ aberrant / unstable). MSC09's OWN cross-session reliability is normal-range (~0.51-0.53); "
+        "it is excluded on a standard high-motion QC basis, not as a reliability outlier -- scope the "
+        "reliability recovery to MSC08 (+ frame censoring).")

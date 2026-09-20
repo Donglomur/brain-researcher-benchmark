@@ -212,25 +212,38 @@ and an analysis that skips them under-states it:
   MSC08 goes from {per['MSC08']['reliability_all_frames']:.2f} (all frames) to
   {per['MSC08']['reliability_censored']:.2f} (censored); across all six subjects the group
   mean rises from {naive:.2f} to {censored_all:.2f}.
-* **Documented low-quality subjects.** MSC08 (pervasive drowsiness -> unstable networks; only
-  {100*per['MSC08']['retention']:.0f}% of frames survive censoring) and MSC09 (excessive
-  motion; {100*per['MSC09']['retention']:.0f}% retained) are documented as low quality
-  (Gordon et al. 2017; Laumann et al. 2015) and are excluded from analyses that need clean
-  data. MSC08's connectome is barely reliable even after censoring
-  ({per['MSC08']['reliability_censored']:.2f}), far below the usable subjects.
+* **The MSC08 reliability outlier.** MSC08 (pervasive self-reported drowsiness -> unstable,
+  aberrant networks; only {100*per['MSC08']['retention']:.0f}% of frames survive censoring) is
+  the one subject whose cross-session reliability is genuinely degenerate:
+  {per['MSC08']['reliability_all_frames']:.2f} (all frames) rising only to
+  {per['MSC08']['reliability_censored']:.2f} after censoring — far below the usable subjects.
+  MSC08 is what drags the naive all-subjects figure down, and setting it aside (with censoring)
+  is what recovers the honest estimate.
+* **MSC09 — a standard high-motion QC exclusion, NOT a reliability outlier.** MSC09 is documented
+  low-quality for **excessive in-scanner motion** ({100*per['MSC09']['retention']:.0f}% of frames
+  retained), and is conventionally excluded from precision analyses on that QC basis (Gordon et
+  al. 2017; Laumann et al. 2015; Seitzman et al. 2019). But its OWN cross-session reliability is
+  **normal-range** ({per['MSC09']['reliability_all_frames']:.2f} all frames ->
+  {per['MSC09']['reliability_censored']:.2f} censored), comparable to the usable subjects — so the
+  reliability recovery should not be attributed to excluding MSC09. Excluding MSC09 changes the
+  group mean only marginally; the recovery is driven by censoring and by the MSC08 outlier.
 
 ## Group-level reliability
 Reporting a single naive figure (all frames, all subjects) gives **{naive:.2f}**, which is
-deflated by uncensored head-motion and by the two low-quality subjects. With frame-censoring
-applied **and** MSC08/MSC09 excluded, the group-mean cross-session reliability is
-**{correct:.2f}** — the honest estimate of how reproducible the individual connectome is.
+deflated by uncensored head-motion and, above all, by the MSC08 reliability outlier. With
+frame-censoring applied **and** the documented low-quality subjects set aside, the group-mean
+cross-session reliability is **{correct:.2f}** — the honest estimate of how reproducible the
+individual connectome is. (Excluding MSC08 alone, with censoring, already recovers most of this;
+MSC09's normal-range reliability contributes little.)
 
 ## Conclusion
-The individual functional connectome is highly reliable across sessions, but only once
-high-motion frames are censored (the supplied temporal mask / FD scrubbing) and the
-documented low-quality subjects (MSC08 drowsy, MSC09 high-motion) are excluded. The naive
-all-frames/all-subjects figure ({naive:.2f}) substantially understates reliability for those
-reasons.
+The individual functional connectome is highly reliable across sessions. The naive
+all-frames/all-subjects figure ({naive:.2f}) substantially understates it — driven down by the
+MSC08 reliability outlier (drowsy, aberrant networks) and by uncensored head-motion. Censoring
+high-motion frames (the supplied temporal mask / FD scrubbing) and setting aside the documented
+low-quality subjects recovers **{correct:.2f}**. MSC09 is excluded on a standard high-motion QC
+basis; its own reliability is normal-range, so it is not a reliability outlier and the recovery
+is not attributable to it.
 """)
 print(f"OK: naive={naive:.3f} -> censored+excluded={correct:.3f}; "
       f"MSC08 {per['MSC08']['reliability_all_frames']:.3f}->{per['MSC08']['reliability_censored']:.3f}")
