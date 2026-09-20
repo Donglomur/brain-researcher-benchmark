@@ -52,16 +52,28 @@ per user — 4/10 at/near chance, 2 below, group only marginally significant". T
 mean (0.673) is robust; the numeric check accepts `|reported − 0.673| < 0.12` (a reproduction
 sanity gate that also excludes a leaky near-ceiling value ≥ 0.92).
 
-### Verifier (3 plain checks, recognition-style)
+### Verifier — proof-of-work (3 pillars, NUMBERS not keywords)
 
-`tests/test_outputs.py`: (1) a two-class decoding with a valid above-chance group accuracy that
-reproduces the pinned value (`|acc − 0.673| < 0.12`); (2) findings.md reports that accuracy; (3)
-**guarded recognition** — findings.md must link a reliability-NEGATIVE judgement (at/near/below
-chance, not significant, unreliable, illiteracy, cannot drive) to the **individual/per-subject/
-per-user** level, OR recognise that a permutation/finite-sample null is needed and above-0.5
-over-states significance. Co-occurrence guarded so a flat "above chance / decodable" conclusion
-(the naive read) fails; "above chance" is deliberately excluded from the NEG set; the numeric IND
-token is `N/10`, not "10 subjects", so the naive "averaged across the 10 subjects" cannot trip it.
+The grade is carried against a held-out reference (`tests/reference.npz`) built by running the
+oracle on the pinned EEGBCI set (subjects 1-10, runs 6/10/14; permutation seed fixed).
+`tests/proof_of_work.py` + `tests/test_outputs.py`:
+
+1. **Per-subject proof of work** — `per_subject.csv` must cover the 10 subjects, be
+   non-constant, and match the held-out per-subject cross-validated accuracies (tol 0.08,
+   ≥80% of subjects).
+2. **Recompute** — the mean of the submitted per-subject `accuracy` must equal both the
+   reference group accuracy (0.673) and the reported headline accuracy.
+3. **Discriminating numbers (individual-reliability)** — the reported reliability summary must
+   match the reference: `group_p_vs_chance` = 0.022 (±0.03), `finite_sample_null_sd` = 0.083
+   (±0.03), `n_subjects_significant_perm_p05` = 6 (±1) and `n_subjects_below_chance` = 2 (±1);
+   and the permutation-significant count cannot exceed the number above the nominal 0.5 (8/10).
+   A naive analysis that only reports the group accuracy, assumes nominal chance
+   (null_sd → 0), or counts subjects above 0.5 (8/10) as "significant" fails.
+
+Validation matrix (subprocess pytest per case): honest oracle → PASS; no-table → FAIL;
+constant → FAIL; non-constant fabricated → FAIL; naive (nominal-chance / above-0.5 count)
+→ FAIL. Reference-build: per-subject accuracy [0.93,0.69,0.42,0.64,0.53,0.56,0.91,0.93,0.42,
+0.69]; 6/10 permutation-significant, 2 below chance; group p 0.022.
 
 ### Validation (MEASURED locally)
 

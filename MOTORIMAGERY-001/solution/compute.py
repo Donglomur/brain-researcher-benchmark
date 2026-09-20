@@ -21,6 +21,12 @@ overstates how many "work" -- the "exceeding chance by chance" pitfall (Combriss
 J Neurosci Methods 2015). For a BCI, which must work per user, the honest conclusion is that
 a substantial fraction of users cannot drive this decoder ("BCI illiteracy"; Blankertz et
 al. 2010; Vidaurre & Blankertz 2010) -- not the flat "motor imagery is decodable at 67%".
+
+Proof-of-work deliverable: a PER-SUBJECT table (per_subject.csv) with each subject's epoch
+count, cross-validated accuracy, Cohen kappa and per-subject permutation p-value. The group
+accuracy is the mean of the per-subject accuracies; the honest reliability summary
+(n significant by permutation, n below chance, group p, finite-sample null SD) is the
+discriminating quantity a naive "count acc > 0.5" analysis cannot produce.
 """
 import csv
 import json
@@ -123,8 +129,8 @@ for s in SUBJECTS:
         scoring="accuracy", n_permutations=N_PERM, random_state=0, n_jobs=1)
 
     acc_sub.append(a); kappa_sub.append(k); p_sub.append(float(pval)); nulls.append(perm)
-    rows.append(dict(subject=s, n_epochs=int(len(y)), accuracy=round(a, 4),
-                     kappa=round(k, 4), perm_p=round(float(pval), 4)))
+    rows.append(dict(subject=s, n_epochs=int(len(y)), accuracy=round(a, 6),
+                     kappa=round(k, 6), perm_p=round(float(pval), 6)))
 
 acc = float(np.mean(acc_sub))
 kappa = float(np.mean(kappa_sub))
@@ -132,10 +138,18 @@ n_epochs_total = int(sum(len(y) for _, y in data.values()))
 p_sub = np.array(p_sub); acc_sub_a = np.array(acc_sub)
 n_sig = int((p_sub < 0.05).sum())
 n_below = int((acc_sub_a < CHANCE).sum())
+n_above_half = int((acc_sub_a > CHANCE).sum())   # the NAIVE count (vs nominal 0.5)
 null_sd = float(np.mean([n.std() for n in nulls]))
 # empirical upper chance ceiling ~ 0.5 + 2*SD of the finite-sample null
 chance_ceiling = float(CHANCE + 2 * null_sd)
 t_stat, p_group = stats.ttest_1samp(acc_sub_a, CHANCE)
+
+# PER-SUBJECT proof-of-work table
+with open(OUT / "per_subject.csv", "w", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=["subject", "n_epochs", "accuracy", "kappa", "perm_p"])
+    w.writeheader()
+    for r in rows:
+        w.writerow(r)
 
 (OUT / "decoding_results.json").write_text(json.dumps({
     "accuracy": acc,
@@ -149,10 +163,12 @@ t_stat, p_group = stats.ttest_1samp(acc_sub_a, CHANCE)
     "group_p_vs_chance": float(p_group),
     "n_subjects_significant_perm_p05": n_sig,
     "n_subjects_below_chance": n_below,
+    "n_subjects_above_half_nominal": n_above_half,
     "finite_sample_null_sd": round(null_sd, 4),
     "empirical_chance_ceiling_2sd": round(chance_ceiling, 4),
     "per_subject_accuracy": [round(x, 4) for x in acc_sub],
     "per_subject_perm_p": [round(x, 4) for x in p_sub.tolist()],
+    "per_subject_csv": "per_subject.csv",
 }, indent=2))
 
 (OUT / "run_metadata.json").write_text(json.dumps({
@@ -178,6 +194,8 @@ decoding accuracy averaged over the {len(SUBJECTS)} subjects is:
 * **accuracy = {acc:.3f}** (Cohen kappa = {kappa:.3f}), chance = {CHANCE:.2f}
   ({n_epochs_total} epochs total).
 
+Per-subject accuracy, kappa and permutation p-value are in `per_subject.csv`.
+
 ## What this actually supports
 
 Taken at face value 0.67 looks "above chance", but that number should not be read as a
@@ -191,7 +209,8 @@ working BCI:
   SD ~ {null_sd:.3f}, so accuracies up to ~{chance_ceiling:.2f} are **not** significantly
   above chance. Comparing each subject to the nominal 0.5 rather than to this null
   overstates how many "decode" (the *exceeding-chance-by-chance* pitfall, Combrisson &
-  Jerbi 2015).
+  Jerbi 2015): {n_above_half}/{len(SUBJECTS)} subjects are above 0.5 nominally, but only
+  {n_sig}/{len(SUBJECTS)} are significant by permutation.
 * **Decoding is unreliable at the individual level.** A per-subject permutation test
   (200 permutations) finds only **{n_sig}/{len(SUBJECTS)}** subjects significantly above
   chance (p < 0.05), and **{n_below}** subject(s) actually **below** chance. Per-subject
@@ -205,5 +224,5 @@ data support.
 """)
 
 print(f"OK: group acc={acc:.4f} kappa={kappa:.4f} | group p={p_group:.4f} | "
-      f"n_sig={n_sig}/{len(SUBJECTS)} | n_below_chance={n_below} | "
+      f"n_sig={n_sig}/{len(SUBJECTS)} | n_above_half={n_above_half} | n_below_chance={n_below} | "
       f"null_sd={null_sd:.4f} | n_epochs={n_epochs_total}")

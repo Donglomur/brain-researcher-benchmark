@@ -38,7 +38,14 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 - `decoding_results.json` — the headline result as
   `{"accuracy": <float>, "cohen_kappa": <float>, "n_subjects": 10,
-  "n_epochs_total": <int>, "n_classes": 2, "chance_level": 0.5}`.
+  "n_epochs_total": <int>, "n_classes": 2, "chance_level": 0.5}`, plus the individual-level
+  reliability summary: `group_p_vs_chance` (one-sample t of the 10 subject accuracies vs 0.5),
+  `finite_sample_null_sd` (the per-subject permutation-null SD), `n_subjects_significant_perm_p05`
+  and `n_subjects_below_chance`.
+- `per_subject.csv` — one row per subject (real subject ids):
+  `subject, n_epochs, accuracy, kappa, perm_p`. The per-subject `accuracy` is the subject's
+  cross-validated decoding accuracy; its mean across subjects is the reported headline
+  `accuracy`, and `perm_p` is the per-subject permutation-test p-value.
 - `run_metadata.json` — dataset id, subjects, runs, band, epoch window, channels, decoder, and
   the cross-validation scheme you used.
 - `findings.md` — a short written summary (a few sentences) reporting the cross-validated
