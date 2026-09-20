@@ -27,18 +27,47 @@ Gap (random − grouped) = **0.126** accuracy, correctly signed (pooling+random 
 
 **Band re-validated on the real data across every defensible choice (this revision):** trial-grouped — StratifiedGroupKFold(5)=0.666, (10)=0.683; GroupKFold(5)=0.689, (10)=0.689; LeaveOneGroupOut=0.688; StratifiedGroupKFold(5)+LDA=0.667 → **0.665–0.689**. Pooled random k-fold — StratifiedKFold(5)=0.791, (10)=0.792; KFold(5)=0.789, (10)=0.790; StratifiedKFold(5)+LDA=0.794 → **≥0.789**. The verifier accepts `|reported − 0.67| < 0.055` (accept **[0.615, 0.725]**): it passes every trial-grouped estimate (≥0.036 margin to the upper edge) and fails every random-k-fold value (≥0.064 above it). Clean, fair separation.
 
-### Verifier (2 plain checks)
+### Verifier — PROOF OF WORK (`tests/test_outputs.py` + `tests/proof_of_work.py`)
 
-`tests/test_outputs.py`: (1) a two-class decoding computed with a per-fold CV breakdown and a valid above-chance accuracy; (2) the reported headline accuracy is the leakage-free (trial-grouped) value (`|reported − 0.67| < 0.055`) — the inflated random-k-fold value (~0.79) fails. Numeric grader per the repo's numeric-grader discipline (grades the declared `accuracy` field, ignoring an explicitly-labelled random-k-fold/reference field).
+Rebuilt to the proof-of-work contract (`PROOF_OF_WORK_SPEC.md`). A **held-out reference**
+(`tests/reference.npz`, kept out of the container) stores the trial-grouped per-fold accuracies,
+the accept window, and the discriminating trial-grouped vs random-k-fold numbers, all re-measured
+across every defensible grouped variant (SGKF/GKF/LOGO = 0.666–0.689) and every random-k-fold
+variant (SKF/KF = 0.789–0.792). Pillars, all required:
 
-### Validation (MEASURED locally, re-validated this revision)
+1. **per-fold table in the leakage-free band** — `per_fold.csv` present, non-constant, and ≥ 80% of
+   the per-fold accuracies are in the trial-grouped band (≤ 0.739, the midpoint between the grouped
+   max 0.689 and the leaky min 0.789). A leaky per-fold table (folds ~0.79) fails here, not just on
+   the mean. When trial counts are reported, they must match whole-trial hold-out
+   (`n_test_samples ≈ n_test_trials × 30`).
+2. **pipeline actually run** — the reported `n_trials` (288 epochs surviving the pinned
+   grad=4000e-13 rejection) and `n_samples_total` (8640 pooled trial×time samples), and the per-fold
+   test-sample total, must match the reference; a fabricator who did not build the epochs cannot
+   know these. The reported headline recomputes from the per-fold rows and lands in the accept
+   window [0.616, 0.724].
+3. **trial-grouped, not leaky** — the reported accuracy is materially below the random-k-fold value
+   (~0.791) by ≥ 0.05; any random-k-fold contrast reported must itself be the real ~0.791.
 
-- **Oracle** (`solution/compute.py`): trial-grouped accuracy = **0.666**; verifier **PASS (2/2)**.
-- **Naive** plain-KFold fixture (0.791): verifier **FAIL** (`test_accuracy_is_leakage_free`).
-- **Over-claim/hedge** fixture (reports 0.791 with a "may be optimistic" caveat — still the wrong headline number): verifier **FAIL**.
-- **Defensible** trial-grouped variants — GroupKFold (0.689, the upper edge) and LeaveOneGroupOut (0.688): verifier **PASS**.
+### Validation — via SUBPROCESS pytest (uvx, container-matched)
+
+- **Oracle** (`solution/compute.py`): trial-grouped 0.666, 5 per-fold rows in band, counts 288/8640 → **PASS (5/5)**.
+- **no per_fold.csv** → **FAIL**. **constant table** (all 0.666) → **FAIL** (non-constant guard).
+- **fabricated, wrong counts** (honest-band folds but n_trials/n_samples guessed wrong) → **FAIL** (pillar 2 counts).
+- **naive random-k-fold** (folds ~0.79, headline 0.79) → **FAIL** (pillars 1, 2, 3).
+- **Defensible** trial-grouped variants GroupKFold (0.689) / LeaveOneGroupOut (0.688) sit inside the accept window → **PASS**.
 - Data fetches at runtime via `mne.datasets.sample.data_path()` (no credentials); `allow_internet=true`.
-- **Step-5 frontier calibration PENDING** (maintainer step).
+- **Note (residual):** the honest headline (~0.67) is a single scalar, so its accept window is wider
+  than a QSMDIPOLE-tight one; fabrication is closed by additionally pinning the epoch/sample counts
+  (288/8640, hard to know without running) and the trial-grouped per-fold band. **Step-5 frontier
+  calibration PENDING** (maintainer step).
+
+### Reference provenance / packaging
+
+- `tests/reference.npz`: `ref_fold_acc` (SGKF5 per-fold), `ref_stats.honest_accuracy` 0.666,
+  `ref_stats.leaky_accuracy` 0.791, accept window [0.616, 0.724], `n_trials` 288,
+  `n_samples_total` 8640. Built from `solution/compute.py` on the MNE `sample` data (mne 1.12.1).
+- **Packaging follow-up (maintainer):** the MNE sample download is ~1.5 GB (>> 90 MB bake
+  threshold), so runtime fetch + `allow_internet=true` are kept.
 
 ### Cost
 

@@ -1,93 +1,149 @@
-"""Grading checks for TIMEDECODE-001 (single-trial MEG modality decoding, MNE sample).
+"""Proof-of-work grading for TIMEDECODE-001 (single-trial MEG modality decoding, MNE sample).
 
-Ground truth (validated before release on the pinned pipeline -- MNE `sample`
-gradiometers; -0.2..0.5 s epochs, baseline (None, 0), grad reject 4000e-13, decim=2;
-each 0.05-0.45 s post-stimulus time sample of every trial is one example; StandardScaler
-+ logistic regression; 5-fold cross-validation; auditory (ids 1,2) vs visual (ids 3,4)):
+Templates: QSMDIPOLE-001 (held-out reference + tight tolerance) + FCSTAB-001 (per-item table +
+recompute + discriminating numbers). See PROOF_OF_WORK_SPEC.md.
 
-  folds grouped BY TRIAL (leakage-free)        accuracy = 0.666   <- correct
-  ordinary random k-fold over pooled samples   accuracy = 0.791   <- inflated
+Held-out reference (tests/reference.npz), built by running solution/compute.py on the real MNE
+`sample` data (gradiometers; -0.2..0.5 s epochs, baseline (None,0), grad reject 4000e-13,
+decim=2; each 0.05-0.45 s post-stimulus time sample of every trial is one example; StandardScaler
++ logistic regression; 5 folds; auditory {1,2} vs visual {3,4}). Re-validated across every
+defensible choice:
 
-  Each trial contributes many autocorrelated time samples that all share one modality
-  label. Splitting the pooled (trial x time) samples with a random k-fold puts samples
-  from the same trial in both train and test, so the model is scored on near-duplicates
-  of trials it has seen and the accuracy is inflated. The honest estimate keeps every
-  trial wholly on one side of the split (StratifiedGroupKFold / GroupKFold by trial).
+  folds grouped BY TRIAL (leakage-free)   SGKF5=0.666 SGKF10=0.683 GKF5=0.689 GKF10=0.689 LOGO=0.688
+  ordinary random k-fold over pooled samples   SKF5=0.791 SKF10=0.792 KF5=0.789   <- inflated
 
-  Note (hardening): the instruction pins only the FOLD COUNT (5) for reproducibility;
-  the fold-construction scheme is explicitly left to the analyst's judgement, so a plain
-  random k-fold is a *choice the agent makes*, not a scheme the brief endorses. The
-  un-cued judgement is recognising that the pooled (trial x time) samples are not
-  independent and grouping the folds by trial; nothing in the brief mentions trials,
-  grouping, independence, or leakage.
+Each trial contributes many autocorrelated time samples sharing one modality label. Splitting the
+pooled (trial x time) samples with a random k-fold puts samples from the same trial in both train
+and test, inflating the accuracy to ~0.79; keeping every trial wholly on one side of the split
+(StratifiedGroupKFold / GroupKFold / LeaveOneGroupOut by trial) gives the honest ~0.67. The
+instruction pins only the fold COUNT (5); the fold-construction scheme is left to judgement.
 
-  Accept band re-validated on the real MNE sample data across every defensible choice:
-    trial-grouped (leakage-free)   StratifiedGroupKFold(5)=0.666  (10)=0.683
-                                   GroupKFold(5)=0.689  (10)=0.689  LeaveOneGroupOut=0.688
-                                   StratifiedGroupKFold(5)+LDA=0.667      -> 0.665..0.689
-    pooled random k-fold (leaky)   StratifiedKFold(5)=0.791 (10)=0.792  KFold(5)=0.789
-                                   KFold(10)=0.790  StratifiedKFold(5)+LDA=0.794 -> >=0.789
-  The accept window (0.615-0.725) passes every genuine trial-grouped estimate (margin
-  >= 0.036 to the upper edge) and fails every random-k-fold value (>= 0.064 above it).
+The single headline is made non-guessable by the per-fold breakdown: the honest trial-grouped
+folds all sit in the ~0.65-0.69 band, far below the ~0.79 random-k-fold folds. A submission whose
+per-fold accuracies sit in the inflated band, or whose headline is not the recomputed trial-grouped
+value, fails.
+
+Three pillars (all required):
+  1. per-fold table present, non-constant, folds in the trial-grouped (leakage-free) band
+  2. the reported headline recomputes from the per-fold rows AND lands in the accept window
+  3. the reported headline is the trial-grouped value, materially below the random-k-fold value
 """
-import csv
-import json
-import os
-from pathlib import Path
+from proof_of_work import (
+    OUT, load_reference, load_results, headline_accuracy, reported_leaky, load_per_fold,
+    nonconstant, findings_text,
+)
 
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-
-# Correct trial-grouped (leakage-free) accuracy on the pinned pipeline.
-EXPECTED = 0.67
-TOL = 0.055           # accept [0.615, 0.725]; excludes the random-k-fold value (>= 0.77)
-NAIVE = 0.791        # random k-fold over pooled samples -- must NOT pass
-CHANCE = 0.5
-
-
-def _results():
-    return json.loads((OUT / "decoding_results.json").read_text(encoding="utf-8"))
-
-
-def _headline_accuracy(res):
-    """The single cross-validated accuracy the submission reports."""
-    if isinstance(res, dict):
-        for k, v in res.items():
-            if k.lower() == "accuracy" and isinstance(v, (int, float)) and not isinstance(v, bool):
-                return float(v)
-        # fallback: any top-level float named like an accuracy that is not the
-        # explicitly-labelled reference / random-k-fold / leaky one
-        for k, v in res.items():
-            kl = k.lower()
-            if isinstance(v, (int, float)) and not isinstance(v, bool) and "acc" in kl \
-                    and "random" not in kl and "kfold" not in kl and "k_fold" not in kl \
-                    and "leak" not in kl and "reference" not in kl and "chance" not in kl \
-                    and "naive" not in kl:
-                return float(v)
-    return None
+REF = load_reference()
+ST = REF["stats"]
+ACCEPT_LO = ST["ACCEPT_LO"]
+ACCEPT_HI = ST["ACCEPT_HI"]
+HONEST = ST["honest_accuracy"]
+GROUPED_MAX = ST["grouped_max"]
+LEAKY_MIN = ST["leaky_min"]
+LEAKY = ST["leaky_accuracy"]
+RECOMPUTE_TOL = ST["MEAN_RECOMPUTE_TOL"]
+GAP_MIN = ST["GAP_MIN"]
+MIN_FOLDS = int(ST["MIN_FOLDS"])
+CHANCE = ST["chance"]
+EPS = ST["EPS"]
+N_T = int(ST["n_t"])
+N_TRIALS = int(ST["n_trials"])
+N_SAMPLES_TOTAL = int(ST["n_samples_total"])
+# per-fold discriminator between the grouped band (<=0.689) and the leaky band (>=0.789)
+PERFOLD_MAX = round(0.5 * (GROUPED_MAX + LEAKY_MIN), 4)
 
 
-def test_decoding_computed():
-    res = _results()
+# =============================================================================================
+# Pillar 1 -- the per-fold breakdown is a real trial-grouped one (leakage-free band)
+# =============================================================================================
+def test_per_fold_table_is_trial_grouped_band():
+    accs, nss, nts = load_per_fold()
+    assert len(accs) >= MIN_FOLDS, (
+        f"per-fold table has only {len(accs)} folds; the instruction fixes the fold count at "
+        f"{MIN_FOLDS}. A shorter table is not the real per-fold breakdown.")
+    assert nonconstant(accs, EPS), "per-fold accuracies are constant across folds -- looks fabricated"
+    assert (accs > CHANCE).mean() >= 0.8, "most folds are at/below chance (0.5) -- not a real decoder"
+    below = float((accs <= PERFOLD_MAX).mean())
+    assert below >= 0.8, (
+        f"only {below:.0%} of the per-fold accuracies are in the trial-grouped (leakage-free) band "
+        f"(<= {PERFOLD_MAX}); the rest sit in the inflated random-k-fold band (~{LEAKY:.2f}). The "
+        f"pooled (trial x time) samples must be split with the folds grouped by trial, so that "
+        f"held-out samples come only from unseen trials.")
+    # structural signature of trial grouping when trial counts are reported
+    if nts is not None and nss is not None:
+        import math as _m
+        ok = [i for i in range(min(len(nts), len(nss)))
+              if _m.isfinite(nts[i]) and _m.isfinite(nss[i]) and nts[i] > 0
+              and abs(nss[i] - nts[i] * N_T) <= max(2 * N_T, 0.15 * nss[i])]
+        assert len(ok) >= 0.6 * len(nts), (
+            "the reported per-fold test-sample counts are not consistent with whole trials held out "
+            f"(n_test_samples ~= n_test_trials x {N_T}); the folds do not appear to be trial-grouped")
+
+
+# =============================================================================================
+# Pillar 2 -- the headline recomputes from the per-fold rows and lands in the accept window
+# =============================================================================================
+def test_headline_recomputes_and_in_band():
+    res = load_results()
+    acc = headline_accuracy(res)
+    assert acc is not None, "no cross-validated accuracy reported in decoding_results.json"
     assert int(res.get("n_classes", 0)) == 2 or len(res.get("classes", [])) == 2, \
         "must be a two-class (auditory vs visual) decoding problem"
-    acc = _headline_accuracy(res)
-    assert acc is not None and CHANCE < acc <= 1.0, \
-        "accuracy missing, at/below chance, or out of range"
-    # a per-fold breakdown consistent with a cross-validated decoding
-    rows = list(csv.DictReader(open(OUT / "per_fold.csv", encoding="utf-8")))
-    assert len(rows) >= 3, f"expected a per-fold CV breakdown (>=3 folds), got {len(rows)}"
+    accs, _, _ = load_per_fold()
+    recomputed = float(accs.mean())
+    assert abs(recomputed - acc) <= RECOMPUTE_TOL, (
+        f"the reported accuracy {acc:.3f} is not the mean of the submitted per-fold rows "
+        f"({recomputed:.3f}); the headline must be recomputable from the per-fold breakdown")
+    assert ACCEPT_LO <= acc <= ACCEPT_HI, (
+        f"reported cross-validated accuracy {acc:.3f} is outside the trial-grouped accept window "
+        f"[{ACCEPT_LO}, {ACCEPT_HI}]. A value near {LEAKY:.3f} is the random-k-fold artifact (same-"
+        f"trial samples leak across the split); a value near chance is not a real decoder.")
 
 
-def test_accuracy_is_leakage_free():
-    # The honest (trial-grouped) accuracy is ~EXPECTED. Splitting the pooled (trial x
-    # time) samples with an ordinary random k-fold leaks same-trial samples across the
-    # split and inflates the accuracy to ~NAIVE, which fails.
-    res = _results()
-    acc = _headline_accuracy(res)
-    assert acc is not None, "no accuracy reported in decoding_results.json"
-    assert abs(acc - EXPECTED) < TOL, (
-        f"reported cross-validated accuracy {acc:.3f} is not the leakage-free "
-        f"(trial-grouped) value (~{EXPECTED:.3f} +/- {TOL:.3f}). Splitting the pooled "
-        f"(trial x time) samples with an ordinary random k-fold puts samples from the "
-        f"same trial in both train and test and inflates the accuracy to ~{NAIVE:.3f}; "
-        f"that is not an honest estimate of decoding performance.")
+# =============================================================================================
+# Pillar 2b -- the pipeline was actually run: epoch / pooled-sample counts match the reference
+# =============================================================================================
+def test_sample_counts_match_reference():
+    """The number of trials surviving the pinned artifact rejection (288), the pooled
+    (trial x time) sample count (8640), and the per-fold test-sample total must be the REAL
+    ones -- a fabricator who did not build the epochs cannot know them."""
+    res = load_results()
+    n_trials = res.get("n_trials")
+    n_total = res.get("n_samples_total")
+    assert isinstance(n_trials, (int, float)) and abs(int(n_trials) - N_TRIALS) <= 5, (
+        f"reported n_trials={n_trials} is not the number of epochs surviving the pinned "
+        f"grad=4000e-13 rejection (~{N_TRIALS}); the epochs were not built as specified")
+    assert isinstance(n_total, (int, float)) and abs(int(n_total) - N_SAMPLES_TOTAL) <= 0.05 * N_SAMPLES_TOTAL, (
+        f"reported n_samples_total={n_total} is not the real pooled (trial x time) sample count "
+        f"(~{N_SAMPLES_TOTAL}); the pooled samples were not built as specified")
+    accs, nss, _ = load_per_fold()
+    if nss is not None:
+        tot = sum(v for v in nss if v == v)
+        assert abs(tot - N_SAMPLES_TOTAL) <= 0.06 * N_SAMPLES_TOTAL, (
+            f"the per-fold n_test_samples sum to {tot:.0f}, not the ~{N_SAMPLES_TOTAL} pooled samples "
+            f"(each sample should be tested exactly once across the folds)")
+
+
+# =============================================================================================
+# Pillar 3 -- the reported number is the trial-grouped value, not the leaky one
+# =============================================================================================
+def test_reported_accuracy_is_trial_grouped():
+    res = load_results()
+    acc = headline_accuracy(res)
+    assert acc is not None, "no accuracy reported"
+    assert acc <= LEAKY - GAP_MIN, (
+        f"reported accuracy {acc:.3f} is not materially below the random-k-fold value "
+        f"(~{LEAKY:.3f}); a trial-grouped (leakage-free) estimate must be under it by >= {GAP_MIN}")
+    for lk in reported_leaky(res):
+        if lk > CHANCE + 0.1:
+            assert abs(lk - LEAKY) <= 0.06, (
+                f"the submission reports a random-k-fold accuracy {lk:.3f} that does not match the "
+                f"real leaky value (~{LEAKY:.3f}); the contrast appears fabricated")
+
+
+# --- secondary prose guard (numbers above carry the grade) -----------------------------------
+def test_findings_report_decoding():
+    text = findings_text()
+    assert text, "findings.md is missing or empty"
+    import re
+    assert re.search(r"accuracy|decod", text), "findings.md does not state a decoding accuracy"
