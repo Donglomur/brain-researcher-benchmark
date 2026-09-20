@@ -94,3 +94,28 @@ Two reviewer-style pytest checks (no rubric/weights):
   - a local flag only; the shipped task still fetches at runtime.
 - Reference compute: 30 subjects x 3 windows x 50 surrogates ~ 3-5 min on 2 CPUs after the
   download; `timeout_sec = 5400`.
+
+## Proof-of-work verifier (v-pow, 2026-09)
+
+Held-out reference `tests/reference.npz` (from `solution/compute.py`, never shipped): per-subject
+observed mean edge-SD at 20/30/44 TR for the 30 pinned ADHD-200 subjects + `ref_stats` (group
+edge-SD 0.443/0.318/0.223; observed/stationary-null ratio ~1.02 at every window; fraction of
+subjects with surrogate p<0.05 = 0.20/0.13/0.10). reference.npz sha256 7c41c20ade4de46b. Task
+stays **un-cued** (the stationary-null comparison is volunteered).
+
+Pillars (subprocess-validated): (1) per-subject observed edge-SD tracks the held-out reference
+across subjects at the primary window and >=2 of 3 windows (cross-subject r>=0.80, robust to the
+preprocessing the task leaves to the analyst; kills random- and n_timepoints-only fabrications);
+(2) group edge-SD means recompute from the rows == reference == reported; (3) the volunteered
+discriminating number -> a reported observed/stationary-null ratio near 1 (band [0.75,1.45]:
+barely exceeds a proper spectrum-matched surrogate; a ratio >> 1 flags an invalid white-noise/
+static-covariance null) and a low significant-subject fraction; (secondary) the
+downgrade-driven stationarity prose.
+
+Validation matrix: honest PASS | no-table FAIL | constant FAIL | fabricated (random per-subject
+SD) FAIL | fabricated (from n_timepoints) FAIL | naive (no ratio, overclaim) FAIL | over-claim
+(invalid null, ratio>>1) FAIL.
+
+Packaging: pinned nilearn ADHD-200 (30 subjects) + Harvard-Oxford cort-maxprob-thr25-2mm; nilearn
+0.12.1 stack. Data runtime-fetched, `allow_internet=true` retained. Baking the per-subject ROI
+series is a maintainer follow-up.
