@@ -1,32 +1,32 @@
 """Reference solution for N170PROFILE-001.
 
-Map the ERP CORE N170 face-minus-car difference across the 30 scalp electrodes and the
-whole epoch (subjects 1-12), and report where/when faces and cars reliably differ. The
-whole preprocessing pipeline is pinned by the task (average reference, 0.1-30 Hz,
--200..400 epoch, -200..0 baseline, 150 uV rejection).
+Characterise the ERP CORE N170 face effect exactly as Kappenman et al. (2021) do in their
+Figure 2 / Tables 1-3: over the FULL N=37 analysis sample, at the a priori PO8 electrode,
+from the face-minus-car difference wave. The two headline measurements are
 
-The open, un-cued judgement is HOW to decide "reliably differ" across ~4600
-electrode x time comparisons. A naive point-by-point one-sample t-test (p < .05) at every
-electrode and every sample is the natural default AND it is wrong: with 30 electrodes x
-154 samples uncorrected, it flags significance in the pre-stimulus BASELINE (physically
-impossible) and as early as ~35 ms, across all 30 electrodes -- these are false positives.
+  * the SIGNED face-minus-car MEAN amplitude at PO8 in the 110-150 ms window
+    (the ERP CORE N170 amplitude score; group ~ -3 to -4 uV), and
+  * the 50% FRACTIONAL-PEAK ONSET latency of the PO8 difference wave (ERPLAB `fpeaklat`,
+    negative polarity, peak searched in 10-150 ms, onset = the pre-peak time at which the
+    wave reaches 50% of its peak) -- the paper's onset-latency measure.
 
-Correcting for multiple comparisons (here a spatio-temporal cluster-based permutation test
-with electrode adjacency) removes the baseline/early false positives and confines the
-reliable face-minus-car effect to a posterior-dominant window ~82-145 ms.
+Both are measured PER SUBJECT (signed) and written to per_subject.csv, then aggregated to a
+group mean + 95% CI. The whole-scalp spatio-temporal cluster-based permutation test is
+reported ONLY as a DESCRIPTIVE summary of the temporal/scalp support of the effect
+(corrected cluster p-values + cluster mass, membership labelled `cluster_level_only`); it is
+cluster-level inference, NOT pointwise electrode-by-time significance. The naive uncorrected
+point-wise map is reported only to note that its baseline / whole-scalp "significance" is
+spurious.
 
-Validated on the ERP CORE N170 files, subjects 1-12:
-    PO8 peak (110-150 ms, per-subject then mean)        : -6.15 uV
-    naive uncorrected point-wise (p<.05)                : 754 sig ch-time pts, 125 of them
-                                                          in the pre-stimulus baseline,
-                                                          all 30/30 electrodes, onset 35 ms
-    cluster-corrected (multiple-comparisons corrected)  : 82-145 ms, 28 electrodes, onset 82 ms
+Inputs: the per-subject face-minus-car difference waves produced by the pinned pipeline
+(average reference, 0.1-30 Hz, epochs -200..400 ms, -200..0 baseline, 150 uV rejection;
+faces = codes 1-40, cars = 41-80), baked into the image at /app/data/n170_diff_waves.npz
+(subjects [37], diff_uv [37 x 30 x n_times] in microvolts, ch_names [30], times_ms, sfreq).
 """
+import csv
 import json
 import os
 import sys
-import tempfile
-import urllib.request
 import warnings
 from pathlib import Path
 
@@ -36,25 +36,9 @@ warnings.filterwarnings("ignore")
 
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 OUT.mkdir(parents=True, exist_ok=True)
-
-SUBJECTS = list(range(1, 13))
-FACE, CAR = range(1, 41), range(41, 81)
-EOG = ["HEOG_left", "HEOG_right", "VEOG_lower"]
-# OSF file ids for <subj>_N170_shifted_ds.{set,fdt} (ERP CORE N170 node pfde9)
-OSF = {
-    1: ("5f161eb00596f601227a0103", "5f161ead0870f201320984de"),
-    2: ("5f16272b0870f20133098a1a", "5f1627280596f6012179e75a"),
-    3: ("5f1630c20596f6012179f5cb", "5f1630bc0596f6012179f5bc"),
-    4: ("5f163c3a0596f6011d7a0609", "5f163c350870f2011709d6d2"),
-    5: ("5f163e7d0870f2013309b91b", "5f163e790596f601217a11d3"),
-    6: ("5f163fa16ef4400137bcf3da", "5f163f9d6ef4400137bcf3cc"),
-    7: ("5f1640c50870f2013209dd22", "5f1640c00596f6011d7a0ef1"),
-    8: ("5f1641f80870f2012709f785", "5f1641f20596f6011d7a1160"),
-    9: ("5f16432d0596f6012c7997cd", "5f1643290870f2013309c548"),
-    10: ("5f161f840596f601227a026b", "5f161f820596f6011d79dd0f"),
-    11: ("5f1620590596f6011979d25b", "5f1620546ef4400130bd131b"),
-    12: ("5f16211b6ef440012fbce9c8", "5f1621180596f6012179e0a0"),
-}
+DATA = Path(os.environ.get("N170_DATA_DIR", "/app/data"))
+AMP_WIN = (110.0, 150.0)
+ONSET_WIN = (10.0, 150.0)
 
 
 def fail(reason):
@@ -66,133 +50,209 @@ def fail(reason):
     sys.exit(1)
 
 
-def data_dir():
-    env = os.environ.get("ERPCORE_N170_DIR")
-    if env and all((Path(env) / f"{s}_N170_shifted_ds.set").exists() for s in SUBJECTS):
-        return Path(env)
-    d = Path(tempfile.mkdtemp(prefix="erpcore_n170_"))
-    for s in SUBJECTS:
-        set_id, fdt_id = OSF[s]
-        for fid, ext in ((set_id, "set"), (fdt_id, "fdt")):
-            try:
-                urllib.request.urlretrieve(f"https://osf.io/download/{fid}/", d / f"{s}_N170_shifted_ds.{ext}")
-            except Exception as e:
-                fail(f"OSF download failed for subject {s} .{ext}: {e}")
-    return d
+def frac_peak_onset(wave, ms, win=ONSET_WIN, frac=0.5):
+    """50% fractional-peak ONSET latency (ERPLAB fpeaklat, negative polarity, PeakOnset).
+
+    Peak = most-negative sample in `win`; onset = earliest pre-peak time at which the wave
+    crosses frac*peak (linear interpolation between samples). Returns ms, or NaN if there is
+    no negative peak / no crossing.
+    """
+    m = (ms >= win[0]) & (ms <= win[1])
+    idx = np.where(m)[0]
+    if idx.size < 2:
+        return np.nan
+    seg = wave[idx]
+    ipk = idx[int(np.argmin(seg))]
+    peak = wave[ipk]
+    if peak >= 0:
+        return np.nan
+    target = frac * peak  # negative
+    j = ipk
+    while j > idx[0] and wave[j] <= target:
+        j -= 1
+    if wave[j] <= target:  # never rose above 50% within the window
+        return float(round(ms[idx[0]], 3))
+    a, b = wave[j], wave[j + 1]
+    if b == a:
+        return float(round(ms[j + 1], 3))
+    fr = (target - a) / (b - a)
+    return float(round(ms[j] + fr * (ms[j + 1] - ms[j]), 3))
 
 
+def ci95(x):
+    x = np.asarray(x, float)
+    x = x[np.isfinite(x)]
+    n = len(x)
+    m = float(x.mean())
+    if n < 2:
+        return m, m, m
+    # t-based 95% CI without SciPy dependency (use a small lookup / normal approx fallback)
+    se = float(x.std(ddof=1) / np.sqrt(n))
+    try:
+        from scipy import stats
+        h = float(stats.t.ppf(0.975, n - 1)) * se
+    except Exception:
+        h = 1.96 * se
+    return m, m - h, m + h
+
+
+npz = DATA / "n170_diff_waves.npz"
+if not npz.exists():
+    fail(f"baked difference-wave file not found at {npz}")
+Z = np.load(npz, allow_pickle=False)
+subjects = [str(s) for s in Z["subjects"]]
+ch_names = [str(c) for c in Z["ch_names"]]
+ms = np.asarray(Z["times_ms"], float)
+D = np.asarray(Z["diff_uv"], float)  # nsub x nch x nt, microvolts
+sfreq = float(Z["sfreq"])
+if "PO8" not in ch_names:
+    fail("PO8 not present in the baked difference waves")
+po8 = ch_names.index("PO8")
+nsub = len(subjects)
+
+# ---- per-subject SIGNED measures at PO8 -------------------------------------------------
+amp = np.array([float(np.mean(D[i, po8, (ms >= AMP_WIN[0]) & (ms <= AMP_WIN[1])]))
+                for i in range(nsub)])
+onset = np.array([frac_peak_onset(D[i, po8, :], ms) for i in range(nsub)])
+
+with open(OUT / "per_subject.csv", "w", newline="") as f:
+    w = csv.writer(f)
+    w.writerow(["subject_id", "amp_po8_uv", "onset_ms"])
+    for i, s in enumerate(subjects):
+        on = onset[i]
+        w.writerow([s, f"{amp[i]:.4f}", ("" if not np.isfinite(on) else f"{on:.3f}")])
+
+amp_m, amp_lo, amp_hi = ci95(amp)
+on_m, on_lo, on_hi = ci95(onset)
+
+# ---- DESCRIPTIVE whole-scalp cluster test (cluster-level inference only) -----------------
+cluster = {"method": "not_run"}
 try:
     import mne
-    from scipy import stats
+    from scipy import stats  # noqa: F401
     mne.set_log_level("ERROR")
-except Exception as e:  # pragma: no cover
-    fail(f"import failed: {e}")
+    ren = {"FP1": "Fp1", "FP2": "Fp2"}
+    info2 = mne.create_info([ren.get(c, c) for c in ch_names], sfreq, "eeg")
+    info2.set_montage(mne.channels.make_standard_montage("standard_1020"), on_missing="ignore")
+    adjacency, _ = mne.channels.find_ch_adjacency(info2, "eeg")
+    X = np.transpose(D, (0, 2, 1))  # nsub x nt x nch
+    tobs, clusters, cpv, _ = mne.stats.spatio_temporal_cluster_1samp_test(
+        X, adjacency=adjacency, n_permutations=1000, seed=11, n_jobs=1, verbose=False)
+    sig = [i for i, p in enumerate(cpv) if p < 0.05]
+    cluster_pvals = sorted(float(cpv[i]) for i in sig)
+    mass = 0.0
+    tmin = tmax = None
+    nelec = 0
+    if sig:
+        best = min(sig, key=lambda i: cpv[i])
+        mask = np.zeros(tobs.shape, bool)
+        mask[clusters[best]] = True
+        mass = float(np.abs(tobs[mask]).sum())
+        tt = np.where(mask.any(axis=1))[0]
+        tmin = float(round(ms[tt.min()], 1))
+        tmax = float(round(ms[tt.max()], 1))
+        nelec = int(mask.any(axis=0).sum())
+    cluster = {
+        "method": "spatio-temporal cluster-based permutation (electrode adjacency, 1-sample)",
+        "n_permutations": 1000,
+        "cluster_pvals": [round(p, 4) for p in cluster_pvals],
+        "min_cluster_pval": (round(min(cluster_pvals), 4) if cluster_pvals else None),
+        "cluster_mass": round(mass, 2),
+        "time_range_ms": ([tmin, tmax] if tmin is not None else None),
+        "n_electrodes": nelec,
+        "note": ("descriptive temporal/scalp support of the whole-scalp face-minus-car effect; "
+                 "cluster-level inference ONLY -- the time range and electrode set are the "
+                 "cluster's membership, NOT pointwise electrode-by-time significance"),
+    }
+except Exception as e:  # cluster is descriptive; never fail the task on it
+    cluster = {"method": "cluster_failed", "error": str(e)}
 
-DDIR = data_dir()
+# ---- naive uncorrected map (reported only to flag it as spurious) ------------------------
+try:
+    from scipy import stats
+    _, pv = stats.ttest_1samp(D, 0, axis=0)  # nch x nt
+    sigmap = pv < 0.05
+    after = ms >= 0
+    first = float(ms[after][sigmap.any(axis=0)[after]][0]) if sigmap.any(axis=0)[after].any() else None
+    naive = {
+        "n_sig_chan_time": int(sigmap.sum()),
+        "n_sig_in_baseline": int(sigmap[:, ms < 0].sum()),
+        "n_electrodes_any_sig": int(sigmap.any(axis=1).sum()),
+        "first_sig_after_0_ms": first,
+        "note": ("uncorrected point-wise significance is SPURIOUS -- it manufactures "
+                 "'significant' differences in the pre-stimulus baseline and across the whole "
+                 "scalp (multiple-comparisons false positives) and must not be interpreted"),
+    }
+except Exception:
+    naive = {"note": "uncorrected map not computed"}
 
-
-def subj_diff(subj):
-    raw = mne.io.read_raw_eeglab(f"{DDIR}/{subj}_N170_shifted_ds.set", preload=True)
-    raw.set_channel_types({c: "eog" for c in EOG})
-    raw.filter(0.1, 30.0, picks="eeg", verbose=False)
-    ev, eid = mne.events_from_annotations(raw, verbose=False)
-    id2d = {v: int(k) for k, v in eid.items()}
-    ne = [[o, 0, 1] if id2d[c] in FACE else [o, 0, 2]
-          for o, _, c in ev if id2d[c] in FACE or id2d[c] in CAR]
-    ep = mne.Epochs(raw, np.array(ne), {"face": 1, "car": 2}, tmin=-0.2, tmax=0.4,
-                    baseline=None, reject=None, preload=True, verbose=False)
-    ep.set_eeg_reference("average", projection=False, verbose=False)
-    ep.apply_baseline((-0.2, 0.0), verbose=False)
-    ep.drop_bad(reject=dict(eeg=150e-6), verbose=False)
-    return mne.combine_evoked([ep["face"].average(), ep["car"].average()], weights=[1, -1])
-
-
-diffs = [subj_diff(s) for s in SUBJECTS]
-info = diffs[0].info
-chn = list(diffs[0].ch_names)
-ms = diffs[0].times * 1000.0
-D = np.array([d.data for d in diffs]) * 1e6          # nsub x nch x nt
-po8 = chn.index("PO8")
-
-# PO8 peak amplitude (110-150 ms), per subject then mean -- sanity that the ERP is right.
-seg = D[:, po8, :][:, (ms >= 110) & (ms <= 150)]
-po8_peak = float(seg[np.arange(len(SUBJECTS)), np.argmin(seg, axis=1)].mean())
-
-# NAIVE point-wise map (reported only to expose the multiple-comparisons problem).
-_, pv = stats.ttest_1samp(D, 0, axis=0)
-sig = pv < 0.05
-naive = {
-    "n_sig_chan_time": int(sig.sum()),
-    "n_sig_in_baseline": int(sig[:, ms < 0].sum()),
-    "n_electrodes_any_sig": int(sig.any(axis=1).sum()),
-    "onset_first_sig_after_0_ms": float(ms[ms >= 0][sig.any(axis=0)[ms >= 0]][0]),
-}
-
-# HONEST: spatio-temporal cluster-based permutation test (correct for multiple comparisons).
-ren = {"FP1": "Fp1", "FP2": "Fp2"}
-info2 = mne.create_info([ren.get(c, c) for c in chn], info["sfreq"], "eeg")
-info2.set_montage(mne.channels.make_standard_montage("standard_1020"), on_missing="ignore")
-adjacency, _ = mne.channels.find_ch_adjacency(info2, "eeg")
-X = np.transpose(D, (0, 2, 1))                       # nsub x nt x nch
-_, clusters, cpv, _ = mne.stats.spatio_temporal_cluster_1samp_test(
-    X, adjacency=adjacency, n_permutations=1000, seed=11, n_jobs=1, verbose=False)
-mask = np.zeros((len(ms), len(chn)), bool)
-for cl, p in zip(clusters, cpv):
-    if p < 0.05:
-        mask[cl] = True
-tt = np.where(mask.any(axis=1))[0]
-if not len(tt):
-    fail("no significant cluster found after correction (unexpected)")
-onset = float(round(ms[tt.min()], 1))
-tmax = float(round(ms[tt.max()], 1))
-sig_electrodes = [chn[i] for i in range(len(chn)) if mask[:, i].any()]
-
+# ---- outputs ----------------------------------------------------------------------------
 (OUT / "n170.json").write_text(json.dumps({
-    "onset_latency_ms": onset,
-    "sig_time_range_ms": [onset, tmax],
-    "sig_electrodes": sig_electrodes,
-    "peak_amplitude_po8_uv": round(po8_peak, 3),
-    "n_subjects": len(SUBJECTS),
-    "n_sig_electrodes": len(sig_electrodes),
-    "correction": "spatio-temporal cluster-based permutation (electrode adjacency)",
+    "electrode": "PO8",
+    "n_subjects": nsub,
+    "amp_window_ms": list(AMP_WIN),
+    "onset_window_ms": list(ONSET_WIN),
+    "amp_po8_uv": round(amp_m, 4),
+    "amp_po8_ci95": [round(amp_lo, 4), round(amp_hi, 4)],
+    "onset_latency_ms": round(on_m, 3),
+    "onset_ci95": [round(on_lo, 3), round(on_hi, 3)],
+    "onset_method": ("50% fractional-peak latency of the PO8 face-minus-car difference wave "
+                     "(negative peak in 10-150 ms; pre-peak crossing of 50% of the peak)"),
+    "per_subject_csv": "per_subject.csv",
+    "cluster_level_only": cluster,
     "uncorrected_pointwise": naive,
 }, indent=2))
 
 (OUT / "run_metadata.json").write_text(json.dumps({
     "status": "ok",
     "dataset_id": "erpcore_n170",
-    "n_subjects": len(SUBJECTS),
+    "source": "ERP CORE N170 (Kappenman et al. 2021), baked per-subject difference waves",
+    "analysis_sample": "N=37 (subjects 1-40 excluding 1, 5, 16 -- the ERP CORE N170 analysis sample)",
+    "n_subjects": nsub,
+    "electrode": "PO8 (a priori)",
     "reference": "average of the 30 scalp electrodes",
     "filter_hz": [0.1, 30.0],
     "baseline_ms": [-200, 0],
     "epoch_ms": [-200, 400],
-    "reliability": ("group-level face-minus-car difference assessed across all 30 electrodes "
-                    "and all samples; reliability decided with a spatio-temporal cluster-based "
-                    "permutation test (5000/1000 permutations) that corrects for the ~4600 "
-                    "electrode-by-time comparisons"),
+    "amp_measure": "signed mean amplitude of face-minus-car at PO8 in 110-150 ms",
+    "onset_measure": "50% fractional-peak latency (10-150 ms window, negative polarity), per subject",
+    "cluster": ("whole-scalp spatio-temporal cluster-based permutation test reported as a "
+                "DESCRIPTIVE summary (cluster-level inference only)"),
 }, indent=2))
 
-(OUT / "findings.md").write_text(f"""# N170PROFILE-001 - spatiotemporal profile of the face effect
+cl_txt = ""
+if cluster.get("time_range_ms"):
+    cl_txt = (f"A whole-scalp spatio-temporal cluster-based permutation test gives a single "
+              f"corrected cluster (p={cluster['min_cluster_pval']}, cluster mass "
+              f"{cluster['cluster_mass']}) whose membership spans "
+              f"{cluster['time_range_ms'][0]:.0f}-{cluster['time_range_ms'][1]:.0f} ms over "
+              f"{cluster['n_electrodes']} posterior-dominant electrodes. This is reported as a "
+              f"**descriptive** summary of the effect's temporal and scalp support "
+              f"(*cluster-level inference only* -- it does not license pointwise electrode- or "
+              f"time-specific significance claims). ")
 
-Reproducing the ERP CORE N170 paradigm on subjects 1-12 (average reference, 0.1-30 Hz),
-the face-minus-car difference wave at PO8 is a clear negativity; its peak (most negative)
-amplitude in 110-150 ms, per subject then averaged, is **{po8_peak:.2f} uV**.
+(OUT / "findings.md").write_text(f"""# N170PROFILE-001 - the ERP CORE N170 face effect
 
-To map *where and when* faces and cars reliably differ, one compares the two conditions at
-every electrode and every time sample. Doing this with an **uncorrected** point-by-point
-one-sample t-test (p < .05) is misleading: across 30 electrodes x 154 samples (~4600 tests)
-it flags "significant" differences in the **pre-stimulus baseline** ({naive['n_sig_in_baseline']}
-samples, where no effect can exist) and as early as {naive['onset_first_sig_after_0_ms']:.0f} ms,
-spread across all {naive['n_electrodes_any_sig']}/30 electrodes. Those are **false positives
-from multiple comparisons**, not real effects.
+Over the full **N={nsub}** ERP CORE N170 analysis sample (subjects 1-40 excluding 1, 5 and
+16), the face-minus-car difference wave was measured at the a priori **PO8** electrode.
 
-Correcting for multiple comparisons with a **spatio-temporal cluster-based permutation
-test** (electrode adjacency) removes the baseline and early false positives: the reliable
-face-minus-car difference is confined to **{onset:.0f}-{tmax:.0f} ms** over
-**{len(sig_electrodes)} posterior-dominant electrodes** (including PO8/PO7/P8/P10/O1/O2).
-The onset latency of the reliable effect is **{onset:.0f} ms**. The uncorrected map
-substantially over-states both the temporal extent (it reaches into the baseline) and the
-spatial spread of the effect; only the cluster-corrected result should be interpreted.
+The N170 face effect at PO8 is a clear posterior negativity. Its **signed mean amplitude in
+110-150 ms**, measured per subject then averaged, is **{amp_m:.2f} uV**
+(95% CI [{amp_lo:.2f}, {amp_hi:.2f}]). The **50% fractional-peak onset latency** of the PO8
+difference wave (negative peak in 10-150 ms; the pre-peak time at which the wave reaches 50%
+of its peak), measured per subject then averaged, is **{on_m:.1f} ms**
+(95% CI [{on_lo:.1f}, {on_hi:.1f}]). Both measures were computed per subject and are listed
+in `per_subject.csv`.
+
+{cl_txt}Mapping the effect with an **uncorrected** point-by-point t-test across the 30
+electrodes and every sample is misleading: it flags "significant" differences in the
+pre-stimulus **baseline** ({naive.get('n_sig_in_baseline', 'NA')} electrode-time points, where
+no effect can exist) and across the whole scalp -- these are **spurious** multiple-comparisons
+false positives, not a real early/whole-scalp face effect, and are not interpreted here. The
+warranted characterisation is the PO8 amplitude and 50%-fractional-peak onset above, with the
+cluster result used only as a descriptive, cluster-level summary of the effect's support.
 """)
-print(f"OK: PO8 peak={po8_peak:.2f} uV; corrected effect {onset:.0f}-{tmax:.0f} ms over "
-      f"{len(sig_electrodes)} electrodes (naive: {naive['n_sig_in_baseline']} baseline false positives)")
+
+print(f"OK: N={nsub}  PO8 mean amp {amp_m:.2f} uV (CI {amp_lo:.2f},{amp_hi:.2f})  "
+      f"50% frac-peak onset {on_m:.1f} ms (CI {on_lo:.1f},{on_hi:.1f})  "
+      f"cluster {cluster.get('min_cluster_pval')}/{cluster.get('cluster_mass')}")
