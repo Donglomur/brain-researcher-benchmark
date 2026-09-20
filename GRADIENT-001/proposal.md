@@ -29,22 +29,44 @@ Across all runs to date the apex landed on **SomMot, Limbic, SalVentAttn, and De
 
 The instruction asks plainly to "characterise the organisation of the principal gradient" and carries only the generic rigor line that **every claim must be warranted by the evidence produced**. It never mentions robustness, fragility, the apex, or the textbook. Whether the agent *volunteers* a robustness/multiverse check and reports the identity is undetermined is the test.
 
-### Verifier (4 plain checks; all must pass)
+### Verifier — PROOF OF WORK (`tests/test_outputs.py` + `tests/proof_of_work.py`)
 
-A short reviewer-style script (`tests/test_outputs.py`) — not a weighted rubric. It checks:
-1. **gradients computed** — a valid `n×400×k` per-subject gradient array, finite;
-2. **networks separate** — the 7 networks are differentiable in the leading gradient plane (between/within > 1.2; robust to label spelling);
-3. **robustness was checked** — the submission reports more than one analysis configuration (a structured list of ≥2 configs, or a prose write-up comparing band-pass/subsample/… choices);
-4. **identity not overclaimed** — the written conclusion (`findings.md`/`run_metadata.json`) reports that the principal-gradient identity is *not stable* across choices, rather than asserting one fixed identity.
+Rebuilt to the proof-of-work contract (`PROOF_OF_WORK_SPEC.md`) while honouring the **R2 hedge**
+(grade a RIGOR verdict scoped to this cohort + the specific analytic choices; never force a universal
+"identity unstable" claim or a particular apex). A **held-out reference** (`tests/reference.npz`, kept
+out of the container) stores the group-gradient leading-3 per-parcel loadings and the discriminating
+robustness numbers. Six checks:
 
-Checks 3–4 are the ones a confident single-pipeline solution fails. (This is still a *judgement* check — it reads the conclusion rather than matching a number — so it is not as clean as a paper-reproduction verifier; that limit is intrinsic to grading open-ended skepticism.)
+0. **gradients computed** — a valid `n×400×k` (k≥3), finite per-subject array.
+1. **group gradient is REAL (proof of work)** — the submitted per-parcel `g1,g2,g3` span the held-out
+   reference gradient subspace: a **rotation/sign-invariant** subspace overlap ≥ **0.80**. This is the
+   key addition — it is stable (≥ 0.94) across the exact band-pass / subsample choices that flip the
+   apex, so a defensible pipeline passes, but a fabricated / random-loading gradient (overlap ~0.1–0.3)
+   fails. It closes the prior gap where a fabricated `gradients_aligned.npy` + a "not robust" sentence
+   passed without any real embedding.
+2. **networks differentiable + recompute** — between/within (g1-g2) ≥ 1.2, and `network_gradient.csv`
+   per-network means recompute from the per-parcel rows.
+3. **discriminating robustness number** — cross-subject reproducibility is reported and is a real
+   aligned estimate (≥ 0.35; reference 0.68) and, when the unaligned value is given, alignment improves
+   it by ≥ 0.15 (reference: 0.68 vs −0.02).
+4. **robustness check was run** — ≥ 2 analysis configurations (structured) or prose comparing
+   band-pass / subsample / … choices.
+5. **identity not overclaimed (scoped)** — accepts a scoped rigor verdict (≥ 2 distinct apex networks
+   reported across the tested configs, OR prose that the identity is not robust/uniquely determined on
+   this cohort). It does **not** require a universal-instability claim or any specific apex.
 
-### Discrimination (validated locally)
+### Discrimination — validated locally via SUBPROCESS pytest (uvx, numpy 2.1.3, container-matched)
 
-| solution | checks 1–2 | check 3 (robustness) | check 4 (no overclaim) | verdict |
-|---|---|---|---|---|
-| reference (re-runs configs, reports the identity is unstable, claims only what's stable) | pass | pass | pass | **PASS** |
-| confident single-pipeline (asserts one identity, no robustness check) | pass | **fail** | **fail** | **FAIL** |
+| submission | verdict | why |
+|---|---|---|
+| reference oracle (real gradients; multiverse; scoped verdict) | **PASS** | all checks |
+| fabricated random group gradient (+ "not robust" prose) | **FAIL** | check 1 subspace (proof of work) |
+| constant group gradient | **FAIL** | check 1 non-constant guard |
+| confident single-pipeline (real gradients, one asserted identity, no robustness check) | **FAIL** | checks 4, 5 |
+| defensible band-pass pipeline (different apex, subspace overlap 0.95) | **PASS** | measured cross-config overlap ≥ 0.94 |
+
+Checks 4–5 still fail the confident single-pipeline solution (the target failure); check 1 now also
+fails a fabricated gradient that never did the embedding.
 
 ### Harbor validation log — the experiment
 
