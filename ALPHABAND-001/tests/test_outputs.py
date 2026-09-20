@@ -1,93 +1,109 @@
-"""Grading checks for ALPHABAND-001 (reproduce the Berger effect).
+"""Proof-of-work grader for ALPHABAND-001 (reproduce the Berger effect on EEGBCI).
 
-Ground truth (validated before release on the PhysioNet EEGBCI dataset, subjects 1-5,
-run 1 eyes open / run 2 eyes closed, band 8-13 Hz, common-average reference, Welch PSD
-with 2-s segments, mean of per-subject eyes-closed/eyes-open ratios):
+The grade is carried by NUMBERS against a held-out reference (`reference.npz`) built by
+running the oracle on the pinned EEGBCI recordings (subjects 1-5, run 1 eyes-open / run 2
+eyes-closed; band 8-13 Hz; common-average reference; Welch 2-s segments):
 
-  OCCIPITAL (O1/O2/Oz)     ratio mean = 19.6   (per-subject 16.5, 8.0, 24.3, 48.0, 1.3)
-  whole-head 64-ch average ratio mean =  4.4   <-- the un-cued trap
-
-The Berger effect is strongly OCCIPITAL. The raw EDF channel labels in this dataset are
-non-standard (trailing dots: "O1..", "Oz.."), so a direct pick of the occipital
-electrodes silently misses them and a careless pipeline averages over the whole head,
-which dilutes the effect to ~4.4. The correct pipeline standardizes the channel names /
-sets the 10-05 montage and measures alpha over the occipital electrodes -> ~19.6.
-
-Across reasonable occipital pipeline choices (occipital electrode set, common-average vs
-no re-reference, Welch segment length) the correct ratio stays in ~11-23; every
-whole-head / global answer within the pinned 8-13 Hz band is <= ~5. The accept window
-below (9.6-29.6) therefore passes any genuine occipital measurement and fails the
-whole-head trap.
+  PILLAR 1  the submitted per-subject table (per_subject.csv) must cover the 5 subjects, be
+            non-constant, and match the held-out per-subject OCCIPITAL eyes-closed/eyes-open
+            alpha ratios. These real occipital per-subject ratios span ~1.3-48; a whole-head
+            pipeline (the un-cued trap) compresses them to ~4 and cannot match.
+  PILLAR 2  the mean of the submitted per-subject ratios must match BOTH the reference
+            occipital mean AND the reported headline ratio.
+  PILLAR 3  the DISCRIMINATING number is occipital-vs-whole-head: the reported ratio must be
+            the occipital ratio (~19.6), far above the whole-head dilution (~4.4).
 """
-import csv
 import json
 import os
 import re
 from pathlib import Path
 
+import numpy as np
+
+import proof_of_work as pw
+
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+REF = np.load(Path(__file__).resolve().parent / "reference.npz", allow_pickle=False)
 
-EXPECTED = 19.6   # correct occipital ratio (mean across subjects)
-TOL = 10.0        # accept [9.6, 29.6]: covers occipital pipeline variation, excludes whole-head (~4.4)
-NAIVE = 4.4       # whole-head average -- must NOT pass
+RATIO_VAL_TOL = 2.5     # per-subject occipital ratio absolute floor
+RATIO_REL_TOL = 0.30    # ... or within 30% of the reference (wide dynamic range)
+GROUP_TOL = 3.0         # group ratio vs reference / reported
 
 
-def _load_json(name):
+def _load(name):
+    p = OUT / name
+    assert p.exists(), f"missing required output {p}"
+    return json.loads(p.read_text(encoding="utf-8"))
+
+
+def _num(x):
     try:
-        return json.loads((OUT / name).read_text(encoding="utf-8"))
-    except Exception:
+        return float(x)
+    except (TypeError, ValueError):
         return None
 
 
-def _headline_ratio():
-    """The single occipital EC/EO ratio the submission reports."""
-    obj = _load_json("alpha_ratio.json")
-    if isinstance(obj, dict):
-        # preferred: the named field, searched at any depth
-        stack = [obj]
-        while stack:
-            cur = stack.pop()
-            if isinstance(cur, dict):
-                for k, v in cur.items():
-                    if isinstance(v, (int, float)) and re.search(
-                            r"ratio.*(ec|closed).*(eo|open)|occipital.*ratio|alpha.*ratio|"
-                            r"ec.*eo.*ratio|berger", k, re.I):
-                        return float(v)
-                    stack.append(v)
-            elif isinstance(cur, list):
-                stack.extend(cur)
-        # otherwise: a plain top-level scalar ratio field
-        for k, v in obj.items():
-            if isinstance(v, (int, float)) and "ratio" in k.lower():
-                return float(v)
-    # fallback: scan findings.md for a ratio-like number
-    p = OUT / "findings.md"
-    if p.exists():
-        txt = p.read_text(encoding="utf-8")
-        cands = [float(x) for x in re.findall(r"\d+\.\d+", txt)]
-        near = [c for c in cands if abs(c - EXPECTED) < TOL]
-        if near:
-            return near[0]
+def _headline(data):
+    if isinstance(data, dict):
+        v = data.get("occipital_alpha_ratio_ec_over_eo")
+        if v is not None:
+            return _num(v)
+        for k, val in data.items():
+            if isinstance(val, (int, float)) and "ratio" in k.lower() and "wholehead" not in k.lower():
+                return float(val)
     return None
 
 
-def test_per_subject_computed():
-    rows = list(csv.DictReader(open(OUT / "per_subject.csv", encoding="utf-8")))
-    assert len(rows) >= 5, f"expected 5 subjects, got {len(rows)}"
-    ratios = [float(r["ratio"]) for r in rows if r.get("ratio") not in (None, "")]
-    assert len(ratios) >= 5, "per-subject ratios missing"
-    assert all(r > 0 for r in ratios), "ratios must be positive powers"
+def _submitted():
+    csvp = OUT / "per_subject.csv"
+    assert csvp.exists(), (
+        "missing per_subject.csv -- the task requires a per-subject table with each subject's "
+        "eyes-closed and eyes-open occipital alpha power and their ratio")
+    return pw.load_submitted(str(csvp), {
+        "ratio": ["ratio"],
+        "ec": ["ec_occipital", "ec_alpha", "ec"],
+        "eo": ["eo_occipital", "eo_alpha", "eo"],
+    })[0]
+
+
+# ---- PILLAR 3: occipital-vs-whole-head -------------------------------------------------
+def test_headline_is_occipital_ratio():
+    data = _load("alpha_ratio.json")
+    r = _headline(data)
+    occ = float(REF["occ_mean"]); wh = float(REF["wholehead_mean"])
+    assert r is not None, "alpha_ratio.json missing the occipital EC/EO ratio"
+    assert abs(r - occ) <= GROUP_TOL, (
+        f"reported occipital alpha ratio {r:.2f} is not the occipital Berger ratio "
+        f"({occ:.2f} +/- {GROUP_TOL}). A whole-head average (~{wh:.1f}) dilutes the effect.")
+    assert r >= wh + 5.0, (
+        f"reported ratio {r:.2f} is not clearly above the whole-head dilution ({wh:.1f}); "
+        f"the effect must be measured over the occipital electrodes")
+
+
+# ---- PILLAR 1: per-subject occipital ratio proof of work -------------------------------
+def test_per_subject_ratio_proof_of_work():
+    sub = _submitted()
+    present = pw.check_subjects_and_values(
+        sub, REF["ref_ids"], REF["ref_ratio"], "ratio", RATIO_VAL_TOL,
+        cover=0.90, match=0.80, eps=1e-2, signed=True, rel_tol=RATIO_REL_TOL)
     # Berger direction: eyes-closed occipital alpha exceeds eyes-open for most subjects
-    assert sum(r > 1.0 for r in ratios) >= 4, \
+    ratios = [sub[i]["ratio"] for i in present]
+    assert sum(r > 1.0 for r in ratios) >= 0.8 * len(ratios), \
         f"eyes-closed should exceed eyes-open occipitally for most subjects, got {ratios}"
 
 
-def test_berger_ratio_reproduced():
-    # The occipital eyes-closed/eyes-open alpha ratio is ~19.6. A whole-head average
-    # (~4.4) fails. Grade the reported headline ratio.
-    r = _headline_ratio()
-    assert r is not None, "no occipital alpha ratio reported in alpha_ratio.json / findings.md"
-    assert abs(r - EXPECTED) < TOL, (
-        f"reported occipital alpha ratio {r:.2f} is not the Berger occipital ratio "
-        f"(expected ~{EXPECTED} +/- {TOL}). A whole-head / global average (~{NAIVE}) "
-        f"dilutes the occipital effect and is not the requested occipital ratio.")
+# ---- PILLAR 2: recompute the group ratio from the rows ---------------------------------
+def test_recompute_ratio_from_rows():
+    sub = _submitted()
+    present = [i for i in (pw.canon_id(x) for x in REF["ref_ids"])
+               if i in sub and sub[i].get("ratio") is not None]
+    reported = _headline(_load("alpha_ratio.json"))
+    pw.check_recompute(sub, present, "ratio", float(REF["occ_mean"]), reported,
+                       tol_ref=GROUP_TOL, tol_report=GROUP_TOL)
+
+
+# ---- SECONDARY: the write-up reports the occipital effect ------------------------------
+def test_findings_reports_occipital():
+    text = (OUT / "findings.md").read_text(encoding="utf-8").lower()
+    assert "occipital" in text and ("closed" in text or "berger" in text), \
+        "findings.md does not report the occipital eyes-closed alpha enhancement"

@@ -31,9 +31,12 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 - `alpha_ratio.json` — the headline result as
   `{"occipital_alpha_ratio_ec_over_eo": <float>, "band_hz": [8, 13],
-  "n_subjects": 5, "channels": [<occipital channel names used>]}`.
-- `per_subject.csv` — one row per subject:
-  `subject, ec_occipital_alpha, eo_occipital_alpha, ratio`.
+  "n_subjects": 5, "channels": [<occipital channel names used>]}`. Also report, for
+  contrast, the whole-head (all-EEG-channel) ratio `wholehead_alpha_ratio_for_reference`.
+- `per_subject.csv` — one row per subject (real subject ids):
+  `subject, ec_occipital_alpha, eo_occipital_alpha, ratio`. The per-subject `ratio` is the
+  eyes-closed/eyes-open OCCIPITAL alpha power ratio; its mean across subjects is the reported
+  headline `occipital_alpha_ratio_ec_over_eo`.
 - `run_metadata.json` — dataset id, subjects, runs, band, PSD method, reference, and
   the occipital channels used.
 - `findings.md` — a short written summary (a few sentences) stating the occipital

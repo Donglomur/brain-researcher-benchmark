@@ -21,9 +21,26 @@ Subjects 1–5, band 8–13 Hz, common-average reference, Welch (2-s segments), 
 
 `correct > naive` for all 5 subjects. **Robustness of the correct number** (sensitivity sweep, band pinned to 8–13 Hz): occipital electrode set {O1,O2,Oz}→19.6, {O1,O2}→21.1, {O1,O2,Oz,Iz}→17.8, {O1,O2,Oz,POz,PO3/4/7/8}→19.3; no re-reference→11.4; Welch 4-s→20.7; pooled-means aggregation→16.1. Every genuine occipital measurement lands in ~11–23; every whole-head/global answer within the pinned band is ≤ ~5. The verifier accepts `|reported − 19.6| < 10` (window 9.6–29.6), which passes all occipital variants and fails the whole-head trap.
 
-### Verifier (2 plain checks)
+### Verifier — proof-of-work (3 pillars, NUMBERS not keywords)
 
-`tests/test_outputs.py`: (1) `per_subject.csv` has all 5 subjects with positive ratios and the eyes-closed>eyes-open Berger direction for ≥4/5; (2) the reported headline occipital ratio reproduces (`|reported − 19.6| < 10`). Numeric grader per the repo's numeric-grader discipline — grades the declared JSON headline (`occipital_alpha_ratio_ec_over_eo`), searched at any depth, with a findings.md fallback; the whole-head/global answer (~4.4) fails.
+The grade is carried against a held-out reference (`tests/reference.npz`) built by running
+the oracle on the pinned EEGBCI recordings (subjects 1-5, runs 1/2). `tests/proof_of_work.py`
++ `tests/test_outputs.py`:
+
+1. **Per-subject proof of work** — `per_subject.csv` must cover the 5 subjects, be
+   non-constant, and match the held-out per-subject OCCIPITAL eyes-closed/eyes-open ratios
+   (tol max(2.5, 30%), ≥80% of subjects; Berger direction ratio>1 for most). The real
+   occipital per-subject ratios span ~1.3-48; a whole-head pipeline compresses them to ~4
+   and cannot match.
+2. **Recompute** — the mean of the submitted per-subject `ratio` must equal both the
+   reference occipital mean (19.64) and the reported headline ratio.
+3. **Discriminating number (occipital-vs-whole-head)** — the reported ratio must be the
+   occipital ratio (within 3.0 of 19.64) and clearly above the whole-head dilution
+   (reference 4.37); a whole-head/global average fails.
+
+Validation matrix (subprocess pytest per case): honest oracle → PASS; no-table → FAIL;
+constant → FAIL; non-constant fabricated (right mean, wrong per-item) → FAIL; naive
+whole-head → FAIL.
 
 ### Validation (MEASURED locally)
 
