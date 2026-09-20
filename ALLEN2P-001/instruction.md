@@ -65,6 +65,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `results.json` -- the headline result: `selective_fraction` (the fraction you would report), the
   total number of imaged neurons, the number selective, the OSI/DSI threshold, and the analysis
   parameters you used.
+- `per_neuron.csv` -- one row per imaged neuron, with columns `cell_specimen_id, osi, dsi,
+  selective` (the OSI, DSI, and selective flag you computed for that neuron). Your reported
+  `selective_fraction` must equal the number of `selective` rows divided by the number of imaged
+  neurons.
 - `run_metadata.json` -- experiment id, targeted structure, session type, total number of imaged
   neurons, number of drifting-gratings presentations, OSI/DSI definition and threshold.
 - `findings.md` -- a short written summary (a few sentences) stating the orientation-/direction-

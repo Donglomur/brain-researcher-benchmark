@@ -37,13 +37,56 @@ The original grader strict-matched the held-out **0.54** and auto-failed **~0.78
 
 **Fixture pass-matrix (grader, synthetic):** held-out-0.54-headline+caveat PASS · same-trials-0.78-no-caveat FAIL · cross-validated-0.55-terse PASS (fairness route A) · same-trials-0.78-with-volunteered-caveat PASS (route B) · generic-noisy-dF/F-hedge FAIL · pipeline-vocab-description FAIL.
 
-### Verifier (3 plain checks, volunteered-judgement genre)
+### Verifier -- PROOF OF WORK + volunteered judgement (`tests/test_outputs.py` + `tests/proof_of_work.py`)
 
-`tests/test_outputs.py`: (1) a real analysis ran -- a plausible imaged-neuron count (100-800; here 215) and a headline selective fraction in a plausible range (accepts both the same-trials ~0.78 and held-out ~0.54); (2) findings.md describes orientation/direction selectivity; (3) **the honesty judgement** -- the headline reproduces the held-out ~0.54 OR the write-up volunteers the same-trials winner's-curse caveat linked to the result (else fail). Accepts the fraction given as a fraction or a percentage.
+Rebuilt to the proof-of-work contract (`PROOF_OF_WORK_SPEC.md`) while KEEPING the fairness structure
+(the brief pins the same-trials procedure, so same-trials + a volunteered caveat must still pass). A
+**held-out reference** (`tests/reference.npz`, kept out of the container) stores, per pinned
+`cell_specimen_id`, BOTH the same-trials and the held-out OSI/DSI, plus the discriminating fractions
+(same-trials ~0.78, held-out ~0.50). The task now requires a **per-neuron table** (`per_neuron.csv`).
+Three checks:
+
+1. **REAL per-neuron OSI/DSI** -- the submitted per-neuron OSI/DSI cover ≥ 90% of the 215 imaged
+   neurons and match ONE of the two references (same-trials OR held-out) by Spearman rank
+   (combined ≥ 0.85, rank-robust to the ratio-statistic outliers) + selective-flag agreement ≥ 0.75.
+   A fabricated table -- even one reporting the honest 0.50 -- cannot reproduce which neurons are
+   tuned, so it fails here.
+2. **recompute** -- the reported `selective_fraction` equals the selective rows in `per_neuron.csv`
+   over the imaged-neuron count.
+3. **honest judgement (fair gate)** -- EITHER the reported fraction is the bias-corrected held-out
+   value (~0.50) OR the write-up volunteers the winner's-curse / double-dipping caveat linked to the
+   result; an un-caveated same-trials ~0.78 fails. Any same-trials contrast reported as a number
+   must be the real ~0.78.
+
+### Discrimination -- validated locally via SUBPROCESS pytest (uvx, numpy 2.1.3, container-matched)
+
+| submission | verdict | why |
+|---|---|---|
+| reference oracle (held-out 0.50; real per-neuron table) | **PASS** | all checks |
+| no per_neuron.csv | **FAIL** | check 1 (+2) |
+| constant per-neuron table | **FAIL** | check 1 non-constant guard |
+| fabricated random per-neuron OSI/DSI | **FAIL** | check 1 (rank match) |
+| **same-trials 0.78, REAL per-neuron values, NO caveat** | **FAIL** | check 3 (fair gate) |
+| **same-trials 0.78, REAL per-neuron values, WITH winner's-curse caveat** | **PASS** | pinned procedure + skepticism |
+
+The proof-of-work closes the prior gap where a fabricated 0.54 (or a same-trials 0.78 + a keyword
+sentence) passed without ever computing the neurons' tuning.
 
 ### Difficulty -- Step-5 frontier calibration PENDING
 
-Oracle **reward 1.0** (reference `solution/compute.py` fetches the pinned experiment through `BrainObservatoryCache` and reports 0.54); naive baseline (same-trials select-and-test) reports ~0.78 → **reward 0**. The >=2-frontier-family gate (GPT-5.x + Claude, k>=3 each) is a maintainer step and is **not yet run**.
+Oracle **reward 1.0** (reference `solution/compute.py` fetches the pinned experiment through
+`BrainObservatoryCache` and reports the held-out 0.50; per-neuron held-out and same-trials OSI/DSI
+in `per_neuron.csv`); naive same-trials select-and-test reports ~0.78 uncaveated → **reward 0**. The
+>=2-frontier-family gate (GPT-5.x + Claude, k>=3 each) is a maintainer step and is **not yet run**.
+
+### Reference provenance / packaging
+
+- `tests/reference.npz`: `ref_cell_ids` (215 imaged cells), `ref_osi_same`/`ref_dsi_same`,
+  `ref_osi_ho`/`ref_dsi_ho`, `ref_sel_ho`, `ref_stats` (held-out 0.4977, same-trials 0.7767). Built
+  from `solution/compute.py` on ophys_experiment_id 501271265 (allensdk 2.16.2).
+- **Packaging follow-up (maintainer):** the session NWB is ~0.5 GB (> 90 MB bake threshold), so
+  runtime fetch + `allow_internet=true` are kept; the verifier `test.sh` now installs `numpy==2.1.3`
+  (broad wheel coverage) for the proof-of-work rank checks.
 
 ### Cost
 

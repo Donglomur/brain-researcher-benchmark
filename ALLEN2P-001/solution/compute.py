@@ -164,8 +164,11 @@ osi_same, dsi_same = osi_dsi(R_all, R_all)
 frac_naive = selective_fraction(osi_same, dsi_same)
 
 # ---- CORRECT: preferred condition chosen on one half, OSI/DSI measured on the held-out half ----
+# Accumulate PER-NEURON held-out OSI/DSI over repeated random halves (symmetric), then threshold
+# once on the per-neuron mean. This gives a stable per-neuron held-out selectivity table whose
+# selective fraction is the reported, bias-free headline.
 rng = np.random.default_rng(SEED)
-frac_splits = []
+osi_ho_stack, dsi_ho_stack, frac_splits = [], [], []
 for _ in range(N_SPLITS):
     half = rng.random(ntr) < 0.5
     R_a = response_matrix(half)
@@ -173,10 +176,32 @@ for _ in range(N_SPLITS):
     # symmetric: select on A measure on B, and select on B measure on A
     o1, d1 = osi_dsi(R_a, R_b)
     o2, d2 = osi_dsi(R_b, R_a)
+    osi_ho_stack += [o1, o2]
+    dsi_ho_stack += [d1, d2]
     frac_splits.append(0.5 * (selective_fraction(o1, d1) + selective_fraction(o2, d2)))
-frac_correct = float(np.mean(frac_splits))
+osi_ho = np.nanmean(np.vstack(osi_ho_stack), axis=0)          # per-neuron held-out OSI
+dsi_ho = np.nanmean(np.vstack(dsi_ho_stack), axis=0)          # per-neuron held-out DSI
+sel_ho = (np.nan_to_num(osi_ho, nan=-9) > SI_THRESHOLD) | (np.nan_to_num(dsi_ho, nan=-9) > SI_THRESHOLD)
+frac_correct = float(sel_ho.sum() / nU)                       # recomputes from the per-neuron table
+frac_correct_persplit = float(np.mean(frac_splits))           # legacy per-split mean, for reference
 frac_correct_sd = float(np.std(frac_splits))
-n_selective = int(round(frac_correct * nU))
+n_selective = int(sel_ho.sum())
+sel_same = (np.nan_to_num(osi_same, nan=-9) > SI_THRESHOLD) | (np.nan_to_num(dsi_same, nan=-9) > SI_THRESHOLD)
+
+# ---- required intermediate: per-neuron OSI/DSI table (the reported, bias-free held-out values;
+#      the same-trials values are kept as extra columns for transparency) ----
+import csv as _csv
+with open(OUT / "per_neuron.csv", "w", newline="", encoding="utf-8") as fh:
+    w = _csv.writer(fh)
+    w.writerow(["cell_specimen_id", "osi", "dsi", "selective",
+                "osi_same_trials", "dsi_same_trials"])
+    for i, cid in enumerate(cell_ids):
+        w.writerow([int(cid),
+                    "" if np.isnan(osi_ho[i]) else round(float(osi_ho[i]), 6),
+                    "" if np.isnan(dsi_ho[i]) else round(float(dsi_ho[i]), 6),
+                    int(bool(sel_ho[i])),
+                    "" if np.isnan(osi_same[i]) else round(float(osi_same[i]), 6),
+                    "" if np.isnan(dsi_same[i]) else round(float(dsi_same[i]), 6)])
 
 results = {
     # the value that should be REPORTED: unbiased, held-out selective fraction
@@ -186,6 +211,7 @@ results = {
     "n_selective": n_selective,
     "osi_dsi_threshold": SI_THRESHOLD,
     "selective_fraction_sd_across_splits": round(frac_correct_sd, 4),
+    "selective_fraction_persplit": round(frac_correct_persplit, 4),
     "same_trials_no_holdout_fraction": round(frac_naive, 4),   # inflated contrast, for reference
     "params": {
         "region": REGION,
