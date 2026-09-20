@@ -18,19 +18,24 @@ schizophrenia group and the healthy-control group and report whether — and how
 differs between the two groups.**
 
 Work from the fMRIPrep resting-run outputs of every subject that has a rest run in the two
-groups (diagnosis `SCHZ` and `CONTROL` in `participants.tsv`). For each subject, build a
-region×region connectivity matrix from a standard cortical parcellation (for example the
-surface `space-fsaverage5` outputs with a Destrieux/Schaefer atlas, or the volumetric
-`space-MNI152NLin2009cAsym` outputs with a volumetric atlas), applying common resting-state
-preprocessing to the parcel time series (nuisance regression using the supplied confounds,
-temporal filtering, normalisation). Summarise each subject's connectivity (e.g. mean edge
-strength, and short- vs long-range edges by inter-node distance), then compare the
-schizophrenia group with the control group — both a subject-level summary and an edge-wise
-comparison.
+groups (diagnosis `SCHZ` and `CONTROL` in `participants.tsv`). Summarise each subject's
+connectivity (mean edge strength, and short- vs long-range edges by inter-node distance), then
+compare the schizophrenia group with the control group — both a subject-level summary and an
+edge-wise comparison.
+
+**Pin the pipeline as follows so the per-subject connectivity is reproducible.** Use the surface
+`space-fsaverage5` outputs (`*.L.func.gii` / `*.R.func.gii`) with the **Destrieux (a2009s)
+surface parcellation** (~148 cortical regions; `nilearn` `fetch_atlas_surf_destrieux`),
+region-mean time series. Clean each parcel time series with the supplied confounds — the 6
+motion parameters, aCompCor(6) and WhiteMatter — detrending, band-pass 0.009–0.08 Hz and z-scoring
+(e.g. `nilearn.signal.clean`, `t_r = 2.0`). Form the ROI×ROI Pearson correlation matrix and take
+its Fisher-z upper triangle; drop edges touching a zero-variance (medial-wall) parcel. Bin edges
+by inter-node (parcel-centroid) distance into terciles: `short_range` = shortest third,
+`long_range` = longest third; `mean_fc` = mean over all edges.
 
 Report, in plain terms, **whether resting-state functional connectivity differs between the
-schizophrenia group and controls on these data** — stating only what your analysis actually
-supports.
+schizophrenia group and controls on these data — and whether that difference survives control for
+in-scanner head motion** — stating only what your analysis actually supports.
 
 ## Data access
 
@@ -53,10 +58,17 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `connectivity.csv` — one row per subject:
-  `subject_id, group, mean_fc, short_range_fc, long_range_fc`.
+  `subject_id, group, mean_fc, short_range_fc, long_range_fc` (the per-subject intermediate the
+  group comparison is computed from).
 - `group_stats.json` — the schizophrenia-vs-control comparison: `group_means` per measure,
-  the group test per measure, an edge-wise summary of how many connections differ between
-  groups, and the group sizes.
+  the group test per measure (the naive between-group test), an edge-wise summary of how many
+  connections differ between groups, and the group sizes. **Also report the robustness of the
+  group difference to in-scanner head motion**: for each measure, the between-group test after
+  controlling for head motion (a mean-framewise-displacement covariate and/or a motion-matched
+  subsample), the edge-wise fraction after the same motion control, and the **per-group mean
+  framewise displacement** (SCHZ and CONTROL). Name the motion-controlled statistics clearly
+  (e.g. `fd_covariate_group_ttest`, `motion_check.mean_fd`) so they are distinguishable from the
+  naive test.
 - `run_metadata.json` — dataset id, derivatives used, n subjects per group, atlas,
   distance bins, and the preprocessing choices you made.
 - `findings.md` — a short written summary stating whether resting-state FC differs between

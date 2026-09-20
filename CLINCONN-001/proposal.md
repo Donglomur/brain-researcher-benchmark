@@ -43,3 +43,21 @@ The apparent schizophrenia connectivity difference is present at face value and 
 ### Cost
 
 Data volume ~2.2 GB (surface derivatives, far lighter than the volumetric BOLD). Reproduces the published cohort structure; the graded quantity (recognition of the motion confound) is convention-invariant and un-cued.
+
+### Proof-of-work rework (held-out reference)
+
+The verifier was upgraded to the proof-of-work contract (PROOF_OF_WORK_SPEC.md). A held-out
+reference (`tests/reference.npz`, never shipped to the agent) was built by running
+`solution/compute.py` on the real ds000030 R1.0.5 fMRIPrep rest derivatives (fsaverage5 Destrieux;
+**50 SCHZ + 122 CONTROL = 172 subjects** with a usable rest run, pinned by `subject_id`). It stores
+each subject's `mean_fc / short_range_fc / long_range_fc` + group label and the discriminating
+statistics (naive short-range group t = +2.11; FD-controlled t = −0.08; edgewise 14.4%→7.4%; mean
+FD SCHZ 0.253 vs CONTROL 0.161). The grader now (1) matches the submitted per-subject connectivity
+to the reference (cross-subject r ≥ 0.95 + per-subject tolerance + real group labels), (2) recomputes
+the naive short-range group t from the submitted rows and cross-checks it against the reported JSON,
+and (3) grades the discriminating post-control statistics (the motion-controlled group t collapses
+toward null; patients' mean FD is higher) as numbers. Validated by subprocess pytest:
+honest PASS; no-table / constant / fabricated (right group mean, shuffled per-subject) / naive
+(no motion control, over-claim) / right-headline-fake-rows all FAIL. Data > 100 MB/file so raw
+inputs stay runtime-fetch with the cohort pinned; baking the derived per-subject inputs is a
+maintainer follow-up.
