@@ -1,43 +1,53 @@
-"""Grading checks for FCSTAB-001 (within-run stability of the strongest functional connections).
+"""Proof-of-work grading for FCSTAB-001 (within-run change of the strongest FC edges).
 
-Ground truth (validated before release on nilearn ABIDE cpac/CC200, first 40 subjects,
-run split into equal first/second halves, Fisher-z edges, top decile by first-half value):
+Templates: QSMDIPOLE-001 (held-out reference, tight tolerance) + NETINTEG-001 (grade the
+reported result against PINNED real subject ids + a non-constant guard). See
+PROOF_OF_WORK_SPEC.md. A passing submission is impossible without running the real
+four-selection analysis on the pinned, baked cohort.
 
-  TOP-decile edges  : first-half z = 0.892  ->  second-half z = 0.680   (change -0.212, -23.7%)
-  size-matched RANDOM set                    :  change +0.004  (~0; 48x smaller)
-  WEAKEST-decile edges: first-half z = -0.159 -> second-half z = +0.110  (change +0.269)
-  38/40 subjects show the top-decile decline; paired t(top vs random) t=-24.5, p=3e-25.
+Held-out reference (tests/reference.npz), built by running solution/compute.py on the baked
+CC200 time series of the exact 40 quality-checked ABIDE cpac subjects (all PITT, eyes closed,
+196 TRs / ~4.9 min). Per-subject signed Fisher-z change (second - first) of the top-decile
+edges under four selection schemes; group discriminating means:
 
-So the strongest first-half connections "decline" in the second half, but this is pure
-REGRESSION TO THE MEAN -- a selection effect from ranking edges on a noisy first-half
-estimate and re-measuring on an independent half. It is NOT a genuine within-run weakening:
-a size-matched unselected/random set does not decline, and the weakest (most negative)
-edges symmetrically RISE toward the mean by a comparable amount (a real "connections weaken
-over the scan" process could not make the most-negative edges strengthen).
+  forward (top by 1st half)  = -0.212   <- the naive, SELECTION-CONTAMINATED decline
+  reverse (top by 2nd half)  = +0.235   <- opposite sign: the "effect" follows the selection
+  independent (LOSO strong)  = -0.000   <- selection-free estimate, ~0 (CI [-0.042, +0.042])
+  random  (size-matched)     = +0.005   <- selection-free control, ~0
 
-The failure this task targets (un-cued, selection / regression-to-the-mean axis -- no built
-task covers it): the agent computes the top-decile decline and reports it as a real result
-(the strongest connections weaken over the run / are unstable), never asking whether an
-unselected set behaves the same way. A flat "the strongest connections weaken", or a
-generic "interpret with caution" hedge, misses the selection artefact and FAILS; only
-recognising the regression-to-the-mean / selection effect (by name, or operationally via an
-unselected control set or the symmetric rise of the weakest edges) PASSES.
+The graded scientific conclusion is NUMERIC, not keyword-based: the naive top-decile decline
+cannot by itself establish weakening because selection on the first half biases second-first
+downward -- shown by the sign flip under reverse selection and by the selection-free
+(independent/random) estimates being ~0 within the prespecified +/-0.05 z equivalence margin.
+An agent that only ran the naive forward analysis cannot produce the reverse per-subject
+column or the near-zero independent mean, so it fails.
+
+Three pillars (all required):
+  1. exact pinned subjects + real per-subject forward/reverse values (kills fabricated/dup rows)
+  2. recompute the group means FROM the submitted rows == reported summary == reference
+  3. grade the discriminating scheme means as numbers (sign flip + selection-free ~0)
 """
-import csv
 import json
-import os
 import re
-from pathlib import Path
 
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+from proof_of_work import (
+    OUT, load_reference, load_submitted, resolve_columns, submitted_map, coverage,
+    real_id_fraction, nonconstant, per_subject_match, group_mean, reported_scheme_means,
+)
+
+REF = load_reference()
+ST = REF["stats"]
+VAL_TOL = ST["VAL_TOL"]          # per-subject |submitted - ref| for forward/reverse
+GROUP_TOL = ST["GROUP_TOL"]      # group-mean recompute vs reference (pinned schemes)
+CONSIST = ST["CONSIST_TOL"]      # rows-recompute vs reported-in-summary consistency
+NEAR = ST["NEARZERO_MARGIN"]     # |selection-free group mean| upper bound
+COVER = ST["COVER"]
+MATCH = ST["MATCH"]
+EPS = ST["EPS"]
 
 
-def _findings():
-    return (OUT / "findings.md").read_text(encoding="utf-8").lower()
-
-
-def _load_json():
-    for name in ("summary.json", "run_metadata.json"):
+def _summary():
+    for name in ("summary.json", "run_metadata.json", "results.json"):
         p = OUT / name
         if p.exists():
             try:
@@ -48,7 +58,6 @@ def _load_json():
 
 
 def _find_numbers(obj, key_re):
-    """Any-depth search: collect floats whose key matches key_re (case-insensitive)."""
     out = []
 
     def walk(o, key=""):
@@ -65,61 +74,173 @@ def _find_numbers(obj, key_re):
     return out
 
 
-def _csv_group_means():
-    """Fallback: aggregate the per-subject CSV to group first/second-half top-decile means."""
-    p = OUT / "stability.csv"
-    if not p.exists():
-        return None
-    rows = list(csv.DictReader(open(p, encoding="utf-8")))
-    if len(rows) < 20:
-        return None
-    cols = {c.lower(): c for c in rows[0].keys()}
-
-    def pick(*subs):
-        for lc, orig in cols.items():
-            if all(s in lc for s in subs):
-                return orig
-        return None
-    c1 = pick("first") or pick("half1") or pick("h1")
-    c2 = pick("second") or pick("half2") or pick("h2")
-    if not (c1 and c2):
-        return None
-    v1, v2 = [], []
-    for r in rows:
-        try:
-            v1.append(float(r[c1])); v2.append(float(r[c2]))
-        except Exception:
-            pass
-    if len(v1) < 20:
-        return None
-    return sum(v1) / len(v1), sum(v2) / len(v2), len(v1)
+def _findings():
+    p = OUT / "findings.md"
+    return p.read_text(encoding="utf-8").lower() if p.exists() else ""
 
 
-def test_stability_computed():
-    # A real analysis: per-subject CSV over many subjects, and the top-decile first/second
-    # half connectivity. Schema-robust (reads summary.json group means, or aggregates CSV).
-    obj = _load_json()
-    first = _find_numbers(obj, r"first.*half|half.*(?:1|one)|first_half")
-    second = _find_numbers(obj, r"second.*half|half.*(?:2|two)|second_half")
-    g1 = g2 = None
-    if first and second:
-        g1, g2 = first[0], second[0]
-    csvres = _csv_group_means()
-    assert csvres is not None, "stability.csv missing or lacks per-subject first/second-half columns"
-    cg1, cg2, n = csvres
-    if g1 is None:
-        g1, g2 = cg1, cg2
-    assert n >= 30, f"expected ~40 subjects in stability.csv, got {n}"
-    # the selected set really is the strongest edges (group first-half mean is high)...
-    assert g1 > 0.3, f"top-decile first-half connectivity implausibly low ({g1:.3f}); were the strongest edges selected?"
-    # ...and it "declines" on the second half (the effect the task is about exists here)
-    assert g2 < g1, f"expected the selected strong edges to drop on the second half ({g1:.3f} -> {g2:.3f})"
+# =============================================================================================
+# Pillar 1 -- exact subjects + real per-subject values
+# =============================================================================================
+def test_csv_covers_exact_pinned_subjects():
+    header, rows = load_submitted()
+    cols = resolve_columns(header)
+    assert cols["id"], f"stability.csv has no subject-id column (columns: {header})"
+    idmap = submitted_map(rows, resolve_columns(header)["forward_delta"] or header[-1])
+    # need the id column populated; build a bare id set
+    ids = {re.sub(r"\D", "", str(r[cols['id']])).lstrip('0') for r in rows if r.get(cols['id'])}
+    cov = sum(1 for i in REF["ids"] if i in ids) / len(REF["ids"])
+    assert cov >= COVER, (
+        f"stability.csv covers only {cov:.0%} of the {len(REF['ids'])} pinned ABIDE subjects "
+        f"(need >= {COVER:.0%}); the exact quality-checked cohort must be analysed, not a "
+        f"different or fabricated subject list")
+    real = sum(1 for i in ids if i in set(REF["ids"])) / max(1, len(ids))
+    assert real >= 0.85, (
+        f"only {real:.0%} of the submitted subject ids are the real pinned ids -- the table "
+        f"appears padded with fabricated subjects")
 
 
-# --- negation-aware, DOWNGRADE-DRIVEN recognition helper (v2; identical across tasks) --------------
+def test_forward_per_subject_matches_reference():
+    """PILLAR 1: the per-subject forward top-decile numbers must be the REAL values for the
+    pinned subjects (non-constant, and within tolerance) -- fabricated / constant / duplicated
+    rows fail even if the group headline is right."""
+    header, rows = load_submitted()
+    cols = resolve_columns(header)
+    for key, ref_vals in (("forward_first", REF["forward_first"]),
+                          ("forward_second", REF["forward_second"]),
+                          ("forward_delta", REF["forward_delta"])):
+        col = cols[key]
+        assert col, f"stability.csv is missing the {key} column (columns: {header})"
+        smap = submitted_map(rows, col)
+        assert coverage(smap, REF["ids"]) >= COVER, f"{key}: too few pinned subjects present"
+        assert nonconstant(smap, EPS), (
+            f"{key} is constant across subjects (pstdev <= {EPS}); a real per-subject "
+            f"computation is not constant -- looks fabricated/duplicated")
+        frac, n = per_subject_match(smap, REF["ids"], ref_vals, VAL_TOL)
+        assert frac >= MATCH, (
+            f"{key}: only {frac:.0%} of {n} matched subjects are within {VAL_TOL} of the real "
+            f"per-subject value (need >= {MATCH:.0%}); the submitted rows are not the real "
+            f"first-half-selected top-decile numbers for these subjects")
+
+
+def test_reverse_per_subject_matches_reference():
+    """PILLAR 1 (discriminating): reverse-half selection is not on the naive path. Its
+    per-subject signed change must be the REAL values -- an agent that only ran forward
+    selection cannot produce this column."""
+    header, rows = load_submitted()
+    col = resolve_columns(header)["reverse_delta"]
+    assert col, (
+        "stability.csv has no reverse-half-selection delta column. The task requires the "
+        "per-subject signed change of the top-decile edges selected on the SECOND half "
+        "(reverse_delta) -- this is what exposes the selection contamination.")
+    smap = submitted_map(rows, col)
+    assert coverage(smap, REF["ids"]) >= COVER, "reverse_delta: too few pinned subjects present"
+    assert nonconstant(smap, EPS), "reverse_delta is constant across subjects -- looks fabricated"
+    frac, n = per_subject_match(smap, REF["ids"], REF["reverse_delta"], VAL_TOL)
+    assert frac >= MATCH, (
+        f"reverse_delta: only {frac:.0%} of {n} matched subjects are within {VAL_TOL} of the "
+        f"real reverse-selection value (need >= {MATCH:.0%}). Select the top decile on the "
+        f"SECOND half and re-measure the same edges' change; the group mean should be POSITIVE "
+        f"(~+0.235), the opposite sign of the forward decline.")
+
+
+def test_independent_and_random_present_and_nonconstant():
+    """The selection-free schemes must actually be computed (present, real spread)."""
+    header, rows = load_submitted()
+    cols = resolve_columns(header)
+    for key in ("independent_delta", "random_delta"):
+        col = cols[key]
+        assert col, (
+            f"stability.csv has no {key} column. The task requires a selection-free strong-edge "
+            f"set (independently / LOSO / cross-fitted selected) and a size-matched random "
+            f"control, each as a per-subject signed change.")
+        smap = submitted_map(rows, col)
+        assert coverage(smap, REF["ids"]) >= COVER, f"{key}: too few pinned subjects present"
+        assert nonconstant(smap, EPS), f"{key} is constant across subjects -- looks fabricated"
+
+
+# =============================================================================================
+# Pillar 2 -- recompute the group summaries FROM the submitted rows
+# =============================================================================================
+def test_group_summaries_recompute_from_rows():
+    """PILLAR 2: the reported group means must equal what the submitted rows actually produce
+    AND the held-out reference. A CSV whose rows don't generate the reported summary fails."""
+    header, rows = load_submitted()
+    cols = resolve_columns(header)
+    summ = _summary()
+    reported = reported_scheme_means(summ)
+
+    recompute = {}
+    for name, key in (("forward", "forward_delta"), ("reverse", "reverse_delta"),
+                      ("independent", "independent_delta"), ("random", "random_delta")):
+        col = cols[key]
+        assert col, f"cannot recompute: missing {key} column"
+        recompute[name] = group_mean(submitted_map(rows, col))
+
+    ref_mean = {"forward": ST["forward_mean"], "reverse": ST["reverse_mean"],
+                "random": ST["random_mean"]}
+    # (a) rows reproduce the held-out reference for the PINNED schemes
+    for name in ("forward", "reverse", "random"):
+        assert abs(recompute[name] - ref_mean[name]) <= GROUP_TOL, (
+            f"group mean of {name}_delta recomputed from the submitted rows is "
+            f"{recompute[name]:+.3f}, not the reference {ref_mean[name]:+.3f} "
+            f"(tol {GROUP_TOL}) -- the per-subject rows are not the real analysis")
+    # (b) the selection-free means are ~0 (recomputed from rows)
+    for name in ("independent", "random"):
+        assert abs(recompute[name]) <= NEAR, (
+            f"group mean of {name}_delta recomputed from rows is {recompute[name]:+.3f}; the "
+            f"selection-free change must be ~0 (|mean| <= {NEAR})")
+    # (c) reported summary is CONSISTENT with the rows (no inconsistent hand-written summary)
+    assert reported, ("summary.json must report per-scheme delta means under "
+                      "selection_schemes.{forward,reverse,independent,random}.delta_mean")
+    for name, val in reported.items():
+        if name in recompute:
+            assert abs(val - recompute[name]) <= CONSIST, (
+                f"summary.json reports {name} delta_mean = {val:+.3f} but the submitted rows "
+                f"give {recompute[name]:+.3f} (tol {CONSIST}) -- summary inconsistent with the CSV")
+
+
+# =============================================================================================
+# Pillar 3 -- grade the scientific conclusion as NUMBERS
+# =============================================================================================
+def test_conclusion_numbers_show_selection_contamination():
+    """PILLAR 3 (numeric judgement): the discriminating scheme means must jointly establish
+    that the naive forward decline is selection-contaminated -- (i) a real forward decline,
+    (ii) an opposite-sign reverse effect (the sign follows the selection, not time), and
+    (iii) a selection-free (independent) estimate ~0 and far smaller than the naive decline.
+    Only an analysis that actually ran all four selections can report these."""
+    summ = _summary()
+    reported = reported_scheme_means(summ)
+    assert {"forward", "reverse", "independent", "random"} <= set(reported), (
+        f"summary.json must report all four selection-scheme delta means; got {sorted(reported)}")
+    f, r, ind, rnd = (reported["forward"], reported["reverse"],
+                      reported["independent"], reported["random"])
+
+    # (i) real forward decline, matching the reference naive contrast
+    assert f < -0.10 and abs(f - ST["forward_mean"]) <= GROUP_TOL, (
+        f"forward delta_mean {f:+.3f} is not the real naive top-decile decline "
+        f"(~{ST['forward_mean']:+.3f})")
+    # (ii) reverse selection flips the sign (the "effect" is set by the selected half)
+    assert r > 0.10 and (f < 0 < r), (
+        f"reverse delta_mean {r:+.3f} does not show the sign flip vs forward {f:+.3f}; selecting "
+        f"the strongest edges on the SECOND half must give a positive change of similar "
+        f"magnitude -- proof the decline is a selection artefact, not a temporal process")
+    assert abs(r - ST["reverse_mean"]) <= 0.06, (
+        f"reverse delta_mean {r:+.3f} is far from the reference {ST['reverse_mean']:+.3f}")
+    # (iii) the selection-free estimate is ~0 and far below the naive magnitude
+    assert abs(ind) <= NEAR, (
+        f"independent (selection-free) delta_mean {ind:+.3f} is not ~0 (|mean| <= {NEAR}); the "
+        f"LOSO/independently-selected strong-edge change is the genuine early-to-late estimate")
+    assert abs(ind) < 0.5 * abs(f), (
+        f"independent delta_mean {ind:+.3f} is not markedly smaller than the naive forward "
+        f"decline {f:+.3f}; the selection-free change must be far closer to zero")
+    assert abs(rnd) <= NEAR, f"random-control delta_mean {rnd:+.3f} is not ~0 (|mean| <= {NEAR})"
+
+
+# --- v2 negation-aware prose guard (SECONDARY: the numbers above carry the grade) -----------
 _NEG = (r"(?:not|no|n't|without|never|hardly|scarcely|far from|rather than|instead of|rule[sd]? out|"
-        r"ruled out|free of|devoid of|cannot|can't|isn't|aren't|wasn't|weren't|doesn't|don't|didn't|"
-        r"lacks?|lacking|absent|nothing|neither|fails? to|unlikely to)")
+        r"ruled out|cannot|can't|isn't|aren't|wasn't|weren't|doesn't|don't|didn't|fails? to|"
+        r"unable to|unlikely to|does not|do not)")
 
 
 def _neg_before(text, start, window=48):
@@ -137,151 +258,39 @@ def _unnegated(text, pat, window=48):
     return False
 
 
-def _recognises(text, concept, downgrade, absence):
-    if not re.search(concept, text, re.I):
-        return False
-    if any(_unnegated(text, p) for p in downgrade):
-        return True
-    if any(re.search(p, text, re.I) for p in absence):
-        return True
-    return False
-
-
-def _near_unnegated(text, anchor_pat, target_pat, window=140):
-    """An un-negated hit for anchor_pat with a target_pat token within `window` chars either
-    side. Used so a bare mechanism NAME ('regression to the mean') only counts when it sits
-    next to a downgrade conclusion (selection / artefact / noise / not-a-real-change), which a
-    'name-drop then affirm a genuine effect' dismissal does not have."""
-    for m in re.finditer(anchor_pat, text, re.I):
-        if _neg_before(text, m.start()):
-            continue
-        if re.search(r"\b" + _NEG + r"\b", m.group(0), re.I):
-            continue
-        s = max(0, m.start() - window)
-        e = min(len(text), m.end() + window)
-        if re.search(target_pat, text[s:e], re.I):
-            return True
-    return False
-
-
-# mean-reversion anchor reused in several patterns (allows "regression to the (grand/group) mean")
-_TOMEAN = r"(?:to|towards?|toward)\s+(?:the\s+|its\s+|their\s+)?(?:\w+\s+){0,2}mean"
-
-
-def test_recognises_regression_to_the_mean():
-    # The honest, un-cued move is to recognise that the top-decile "decline" is regression to
-    # the mean / a selection effect -- NOT a genuine within-run weakening. Recognition may be:
-    #   NAMED       -- regression/reversion to the mean, winner's curse, or selection coupled
-    #                  to an artefact/not-real/drives conclusion; OR
-    #   OPERATIONAL -- an unselected/random control set that does NOT decline, the weakest
-    #                  edges symmetrically rising toward the mean, or "would appear even
-    #                  without a real change" / "no genuine weakening".
-    # A flat "connections weaken", or a generic caution hedge, has neither and must NOT pass.
-    #
-    # Guard against the "name-drop then affirm" dismissal ("this is just regression to the mean,
-    # HOWEVER it is a genuine weakening"): a bare mechanism NAME passes only when the text does
-    # not, un-negated, ALSO affirm that the strong-edge decline is a genuine/real weakening. The
-    # OPERATIONAL route (a demonstrated control / symmetry) always passes -- it is hard evidence.
-    # This genuine-veto is safe here (unlike a contrast-condition task) because the ground truth
-    # has NO real within-run weakening of the strongest edges to legitimately affirm.
+def test_findings_conclusion_not_genuine_weakening():
+    """SECONDARY prose guard (must not be the sole gate): findings.md must state the
+    selection-contamination reading and must NOT, un-negated, conclude a genuine within-run
+    weakening of the strongest connections."""
     text = _findings()
-    concept = (
-        r"regress\w*\s+" + _TOMEAN + r"|revert\w*\s+" + _TOMEAN + r"|reversion\s+" + _TOMEAN +
-        r"|mean[-\s]?revert|mean[-\s]?reversion|\brtm\b"
-        r"|select\w*\s+(?:on|for|because|the|effect|bias|arte?fact|artifact)|selected\s+(?:on|because|for|by)"
-        r"|capitali[sz]\w*\s+on\s+(?:chance|noise|the\s+noise)|winner'?s?\s+curse"
-        r"|\bchance\b|\bnois\w*|sampling\s+(?:variability|error|noise|fluctuation)"
-        r"|random(?:ly)?\s+(?:chosen|selected|sampled|drawn|matched|set|subset|edges|sample|pairs)"
-        r"|unselected|not[-\s]selected|matched\s+(?:random|control|set|subset)"
-        r"|weakest|bottom\s+(?:decile|10|ten)|lowest\s+(?:decile|10)|most\s+(?:negative|anti-?correlated)"
-        r"|arte?fact\s+of\s+select\w*|selection[-\s]driven|spurious"
-        # operational descriptors an honest write-up may use without a mechanism keyword
-        r"|rank\w*\s+(?:on|by|the|edges)|re-?measur|independent\s+(?:half|second|measurement|sample|estimate|data|set)"
-        r"|first-?half\s+(?:noise|estimate|value|fluctuation|measurement)"
-        r"|would\s+(?:appear|occur|arise|be\s+seen|be\s+observed|emerge)"
+    assert text, "findings.md is missing or empty"
+
+    contamination = (
+        r"selection[-\s]?(?:contaminat|bias|effect|driven|artefact|artifact)"
+        r"|contaminated\s+by\s+select|biased\s+(?:down|downward|by\s+select)"
+        r"|cannot\s+(?:by\s+itself\s+)?establish|does\s+not\s+establish|not\s+establish\w*"
+        r"|regress\w*\s+to(?:wards?)?\s+(?:the\s+)?mean|reversion\s+to(?:wards?)?\s+(?:the\s+)?mean"
+        r"|opposite\s+sign|sign\s+(?:flip|revers|change)|flip\w*\s+(?:the\s+)?sign"
+        r"|select\w*\s+on\s+the\s+(?:second|other)\s+half"
+        r"|independent\w*\s+(?:select|set|strong|estimate)|loso|cross[-\s]?fit"
+        r"|selection[-\s]free|not\s+(?:a\s+)?(?:real|genuine|true)\s+(?:within-?run\s+)?"
+        r"(?:weakening|decline|change|effect)"
     )
-    # pure mechanism NAMES -- pass only when coupled (see _near_unnegated below), so a
-    # name-drop-then-affirm dismissal does not slip through on the bare phrase.
-    name_only = [
-        r"regress\w*\s+" + _TOMEAN,
-        r"revert\w*\s+" + _TOMEAN + r"|reversion\s+" + _TOMEAN + r"|mean[-\s]?revert|mean[-\s]?reversion",
-        r"winner'?s?\s+curse",
-    ]
-    # what a NAME must sit next to to count: a downgrade conclusion / selection / noise token
-    coupling = (
-        r"select\w*|arte?fact|artifact|spurious|\bnois\w*|\bchance\b|sampling|unselected|random\w*|"
-        r"weakest|both\s+extremes|converg|expected|not\s+(?:a\s+)?(?:real|genuine|true|actual)|"
-        r"does\s+not\s+reflect|not\s+(?:a\s+)?(?:real\s+)?(?:change|weakening|decline|drop)|"
-        r"first-?half\s+(?:estimate|value|noise|fluctuation)"
-    )
-    # self-coupled downgrades (selection already tied to an artefact/cause) -- pass directly.
-    coupled = [
-        r"select\w*(?:(?!" + _NEG + r").){0,45}?"
-        r"(?:effect|bias|arte?fact|artifact|spurious|not\s+(?:a\s+)?(?:real|genuine|true)|"
-        r"drives?|driv\w*|explain\w*|produce\w*|inflat\w*|responsible|the\s+cause)",
-        r"arte?fact\s+of\s+(?:the\s+)?select\w*|selection[-\s]driven",
-        r"(?:because|since|as)\s+(?:they|the\s+edges|these\s+edges|they\s+were)\s+(?:were\s+)?select\w*",
-    ]
-    operational = [
-        # unselected / random / matched control does NOT decline
-        r"(?:random\w*|unselected|matched|control|not[-\s]selected)(?:(?!" + _NEG + r").){0,70}?"
-        r"(?:no|little|negligible|zero|~?\s*0|essentially\s+(?:no|zero|flat)|does(?:n't| not)|do\s+not|"
-        r"barely|hardly|stable|unchanged|flat)[^.\n]{0,30}(?:declin|chang|weaken|decreas|drop|differ|shift|reduc|move)",
-        r"(?:no|little|negligible|zero|~?\s*0|barely|hardly|essentially\s+(?:no|zero))[^.\n]{0,30}"
-        r"(?:declin|chang|weaken|decreas|drop|shift)[^.\n]{0,45}(?:random\w*|unselected|matched|control)",
-        # weakest / most-negative edges symmetrically RISE toward the mean
-        r"(?:weakest|bottom|lowest|most\s+negative|anti-?correlated|negative)\s*"
-        r"(?:decile|10%|ten\s+percent|edges|connections|pairs)?(?:(?!" + _NEG + r").){0,60}?"
-        r"(?:increas|ris\w*|rose|grow|grew|strengthen|move[sd]?\s+(?:up|toward)|" + _TOMEAN +
-        r"|less\s+negative|regress\w*\s+up|climb)",
-        r"both\s+extremes(?:(?!" + _NEG + r").){0,45}?(?:toward|converg|" + _TOMEAN + r")",
-        r"symmetric\w*(?:(?!" + _NEG + r").){0,45}?(?:converg|" + _TOMEAN + r"|regress)",
-        # explicit "would appear even without a real change" / "expected by chance/selection"
-        r"(?:would|could|can)\s+(?:appear|occur|arise|happen|be\s+seen|be\s+observed|emerge)"
-        r"(?:(?!" + _NEG + r").){0,55}?(?:even\s+)?(?:without|absent|with\s+no|even\s+if\s+there\s+(?:were|was)\s+no)"
-        r"[^.\n]{0,30}(?:real|genuine|true|actual|underlying)?\s*(?:change|weakening|effect|difference)",
-        r"expected\s+(?:purely\s+)?(?:by|from|under)\s+(?:chance|selection|noise|regression)",
-        r"(?:rather\s+than|not)\s+(?:a\s+)?(?:real|genuine|true|actual)\s+(?:within-?run\s+)?"
-        r"(?:weakening|decline|decrease|change|reduction|drop|effect|instability)",
-    ]
-    absence = [
-        r"no\s+(?:genuine|real|true|actual)\s+(?:within-?run\s+)?"
-        r"(?:weakening|decline|decrease|change|instability|drift|reduction)",
-        r"(?:strongest|top-?decile|dominant|backbone)\s+(?:edges|connections)[^.\n]{0,45}"
-        r"(?:are|remain)\s+(?:actually\s+|essentially\s+)?stable",
-        r"do(?:es)?\s+not\s+(?:genuinely|really|actually|truly)\s+weaken",
-    ]
-    # A CONCLUSIVE, un-negated affirmation that the strong-edge decline is a genuine/real
-    # within-run weakening -> a "raise the confound then dismiss it" answer. This vetoes ONLY
-    # the name/selection routes; the operational demonstration (a shown control / symmetry)
-    # always passes -- it is hard evidence, not a claim. Guarded (conclusion markers, needs
-    # "within-run" for the noun form, "connections" not "connectivity") so it does not fire on
-    # hypotheticals ("if connectivity genuinely weakened ... it does not") or on refuted setups
-    # ("before interpreting this as a real weakening, we checked ...").
-    genuine_conclusion = (
-        r"(?:so|therefore|thus|hence|conclude\w*|confident\w*|we\s+(?:find|conclude|are|believe))"
+    assert re.search(contamination, text, re.I), (
+        "findings.md does not state the selection-contamination reading (that the naive "
+        "top-decile decline cannot by itself establish weakening -- shown by the reverse-half "
+        "sign flip and the selection-free/independent estimate being ~0).")
+
+    genuine = (
+        r"(?:so|therefore|thus|hence|conclude\w*|we\s+(?:find|conclude|show))"
         r"[^.\n]{0,80}(?:genuine\w*|real|true|truly|actually)\s+(?:within-?run\s+)?"
-        r"(?:weaken\w*|declin\w*|decreas\w*|los[es]?|lose[s]?)"
-        r"|(?:is|reflects?|indicates?|shows?|a)\s+(?:a\s+)?(?:genuine|real|true)\s+within-?run\s+"
-        r"(?:decline|weakening|decrease|reduction|drop|instability)"
+        r"(?:weaken\w*|declin\w*|decreas\w*)"
+        r"|is\s+a\s+(?:genuine|real|true)\s+within-?run\s+(?:decline|weakening|decrease)"
         r"|connections?\s+(?:genuinely|really|truly)\s+weaken"
-        r"|truly\s+los[es]?\s+strength"
+        r"|strongest\s+connections?\s+(?:genuinely|really|truly|do)\s+weaken"
     )
-
-    has_concept = re.search(concept, text, re.I) is not None
-    has_coupled = any(_unnegated(text, p) for p in coupled)
-    has_operational = any(_unnegated(text, p) for p in operational) or \
-        any(re.search(p, text, re.I) for p in absence)
-    has_named_coupled = any(_near_unnegated(text, p, coupling) for p in name_only)
-    affirms_genuine = _unnegated(text, genuine_conclusion)
-
-    recognised = has_concept and (
-        has_operational or ((has_coupled or has_named_coupled) and not affirms_genuine))
-    assert recognised, (
-        "findings.md reports the top-decile change but does not recognise it as REGRESSION TO "
-        "THE MEAN / a selection effect. The strongest edges were selected on a noisy first-half "
-        "estimate and re-measured on an independent half, so they move back toward the average; "
-        "an unselected/random set does not decline and the weakest edges symmetrically rise. "
-        "A flat 'the strongest connections weaken over the run', a generic caution hedge, or a "
-        "name-drop of 'regression to the mean' followed by asserting a genuine weakening, all "
-        "miss the selection artefact this result actually is.")
+    assert not _unnegated(text, genuine), (
+        "findings.md concludes a GENUINE within-run weakening of the strongest connections. "
+        "The naive top-decile decline is selection-contaminated (the sign flips under "
+        "reverse-half selection and the selection-free estimate is ~0); it cannot by itself "
+        "establish weakening.")
