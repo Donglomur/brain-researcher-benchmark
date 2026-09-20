@@ -84,7 +84,14 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 - `n2pc.json` — at minimum `{"n2pc_amplitude_uv": <float>, "electrode_pair": "PO7/PO8",
   "measure": "mean contralateral-minus-ipsilateral amplitude, 200-300 ms",
-  "window_ms": [200, 300], "n_subjects": <int>}`.
+  "window_ms": [200, 300], "n_subjects": <int>}`. Also report, for contrast, the
+  `contralateral_amplitude_uv`, `ipsilateral_amplitude_uv`, and the pooled fixed-electrode
+  difference `fixed_po8_minus_po7_pooled_uv_for_reference`.
+- `per_subject.csv` — one row per subject (the exact analysis sample, real subject ids):
+  `subject, n_left_trials, n_right_trials, contra_uv, ipsi_uv, n2pc_uv,
+  fixed_po8_minus_po7_pooled_uv`. The per-subject `n2pc_uv` is the signed
+  contralateral-minus-ipsilateral amplitude (a negativity); its mean is the reported
+  headline `n2pc_amplitude_uv`.
 - `run_metadata.json` — dataset id, subjects, electrode pair, reference, band-pass,
   baseline, and the measurement window you used.
 - `findings.md` — a few sentences reporting the N2pc amplitude. State only what your

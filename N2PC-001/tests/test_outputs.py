@@ -1,94 +1,106 @@
-"""Grading checks for N2PC-001 (N2pc component amplitude, ERP CORE N2pc task).
+"""Proof-of-work grader for N2PC-001 (ERP CORE N2pc component amplitude at PO7/PO8).
 
-Ground truth (validated before release on the ERP CORE N2pc task, subjects
-1/3/4/5/6/7/8/9/10/11/12/13; electrode pair PO7/PO8; average reference over the 30 scalp
-electrodes; 0.1-30 Hz band-pass; -200..0 baseline; mean contralateral-minus-ipsilateral
-amplitude in the 200-300 ms window; per subject then mean over the 12):
+The grade is carried by NUMBERS against a held-out reference (`reference.npz`) built by
+running the oracle on the ERP CORE N2pc recordings (subjects 1/3-13; PO7/PO8; 0.1-30 Hz;
+average reference; -200..0 baseline; 200-300 ms mean amplitude):
 
-    N2pc, contralateral-minus-ipsilateral (correct)        : -1.38 uV   <-- EXPECTED
-    fixed PO8-PO7 across all trials, pooled (naive)         : +0.34 uV
-    fixed PO7-PO8 across all trials, pooled (naive)         : -0.34 uV
-
-The N2pc is a *lateralized* component: a target in the left visual field draws a posterior
-negativity over the right scalp (PO8) and a right-field target over the left scalp (PO7).
-The contralateral and ipsilateral waveforms must therefore be built by re-mapping the two
-electrodes per target side (target side = tens digit of the 3-digit stimulus code). Done
-that way the contralateral-minus-ipsilateral difference is a robust ~-1.4 uV negativity
-(12/12 subjects negative; -1.374 to -1.378 uV across 0.1-20/30/40 Hz low-pass, average vs no
-re-reference, and -150/-200 ms baselines). Taking a *fixed* electrode difference across all
-trials pools the two visual fields, on which the negativity sits on opposite electrodes, so
-it cancels to |.| ~ 0.3 uV. The verifier matches the reported amplitude magnitude against
-1.38 uV; the pooled fixed-electrode values (~0.3 uV) are far outside.
+  PILLAR 1  the submitted per-subject table (per_subject.csv) must cover the exact 12-subject
+            sample, be non-constant, and match the held-out per-subject SIGNED
+            contralateral-minus-ipsilateral N2pc amplitudes (a negativity). An abs()-ed,
+            sign-flipped, or field-pooled table fails.
+  PILLAR 2  the mean of the submitted per-subject N2pc column must match BOTH the reference
+            grand-average AND the reported headline amplitude.
+  PILLAR 3  the DISCRIMINATING number is lateralized-vs-pooled: the reported N2pc must be the
+            per-side contralateral-minus-ipsilateral difference (~-1.4 uV), whereas the
+            fixed-electrode difference pooled across the balanced visual fields cancels to ~0.
+            A pooled fixed-electrode pipeline (~+/-0.3 uV) cannot match the signed N2pc.
 """
 import json
 import os
 import re
 from pathlib import Path
 
+import numpy as np
+
+import proof_of_work as pw
+
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+REF = np.load(Path(__file__).resolve().parent / "reference.npz", allow_pickle=False)
 
-EXPECTED = 1.375   # |contra-minus-ipsi N2pc| at PO7/PO8, uV
-TOL = 0.75         # accept |amp| in [0.625, 2.125]; pooled fixed-electrode (~0.34 uV) is outside
-
-# keys that do NOT denote the reported (contralateral-minus-ipsilateral) N2pc amplitude
-_EXCLUDE = ("fixed", "pooled", "for_reference", "reference", "naive", "contralateral",
-            "ipsilateral", "contra", "ipsi", "po7", "po8", "window", "_ms", "bandpass",
-            "n_subject", "nsubject", "n_left", "n_right", "n_trial", "ntrial", "count",
-            "status", "baseline", "sfreq", "latency", "negative")
+N2PC_VAL_TOL = 0.85    # per-subject signed N2pc amplitude (uV)
+GROUP_TOL = 0.40       # grand-average N2pc vs reference / reported (uV)
+FIXED_TOL = 0.45       # reported pooled fixed-electrode difference vs reference (~0)
+NEG_MAX = -0.70        # the N2pc must be clearly negative (below the pooled cancellation)
 
 
 def _load(name):
-    return json.loads((OUT / name).read_text(encoding="utf-8"))
+    p = OUT / name
+    assert p.exists(), f"missing required output {p}"
+    return json.loads(p.read_text(encoding="utf-8"))
 
 
-def _headline_amp(obj):
-    """Reported N2pc amplitude: a numeric leaf under an N2pc/amplitude/negativity-ish key
-    with a plausible microvolt magnitude, skipping explicitly-labelled per-condition
-    (contralateral/ipsilateral), fixed/pooled reference, and non-value metadata fields."""
-    stack = [("", obj)]
-    while stack:
-        key, cur = stack.pop()
-        k = key.lower()
-        if isinstance(cur, dict):
-            stack.extend(cur.items())
-        elif isinstance(cur, (list, tuple)):
-            continue
-        elif isinstance(cur, (int, float)) and not isinstance(cur, bool):
-            if any(x in k for x in _EXCLUDE):
-                continue
-            if re.search(r"n2pc|amplitude|ampl|negativ|uv|microvolt", k) and 0.2 <= abs(float(cur)) <= 30.0:
-                return float(cur)
-    return None
+def _num(x):
+    try:
+        return float(x)
+    except (TypeError, ValueError):
+        return None
 
 
-def test_n2pc_reported():
+def _submitted():
+    csvp = OUT / "per_subject.csv"
+    assert csvp.exists(), (
+        "missing per_subject.csv -- the task requires a per-subject table with each subject's "
+        "contralateral, ipsilateral and contralateral-minus-ipsilateral (N2pc) amplitudes")
+    return pw.load_submitted(str(csvp), {
+        "n2pc": ["n2pc", "contra_minus_ipsi", "contra-ipsi", "diff"],
+        "contra": ["contra_uv", "contralateral"],
+        "ipsi": ["ipsi_uv", "ipsilateral"],
+    })[0]
+
+
+# ---- PILLAR 3: lateralized-vs-pooled ---------------------------------------------------
+def test_headline_is_signed_lateralized_n2pc():
     data = _load("n2pc.json")
-    amp = _headline_amp(data)
-    assert amp is not None, f"no N2pc amplitude found in n2pc.json: {data}"
-    n_sub = int(data.get("n_subjects", data.get("nsubjects", 0)))
-    assert n_sub >= 8, "expected the N2pc to be grand-averaged over a plausible number of subjects"
+    amp = _num(data.get("n2pc_amplitude_uv"))
+    fixed = _num(data.get("fixed_po8_minus_po7_pooled_uv_for_reference"))
+    m = float(REF["n2pc_mean"]); fx = float(REF["fixed_mean"])
+    assert amp is not None, "n2pc.json missing n2pc_amplitude_uv"
+    assert amp < 0, f"n2pc_amplitude_uv must be the SIGNED contralateral-minus-ipsilateral N2pc " \
+                    f"(a negative value); got {amp}"
+    assert amp <= NEG_MAX, (
+        f"reported N2pc {amp:.2f} uV is not a clear negativity; a field-pooled fixed-electrode "
+        f"difference cancels to ~{fx:.2f} uV and must not be reported as the N2pc")
+    assert abs(amp - m) <= GROUP_TOL, (
+        f"reported N2pc {amp:.2f} uV is not within {GROUP_TOL} of the reference grand-average "
+        f"{m:.2f} uV")
+    assert fixed is not None and abs(fixed - fx) <= FIXED_TOL and abs(fixed) < 0.9, (
+        f"the pooled fixed-electrode difference must be reported and near zero "
+        f"(reference {fx:.2f} uV); got {fixed} -- this is the discriminating contrast")
 
 
-def test_n2pc_contra_minus_ipsi():
-    # The contralateral-minus-ipsilateral N2pc at PO7/PO8 is ~-1.4 uV. Taking a fixed
-    # electrode difference across all trials (pooling the two visual fields, on which the
-    # negativity lies over opposite electrodes) cancels it to |.| ~ 0.3 uV.
-    data = _load("n2pc.json")
-    amp = _headline_amp(data)
-    assert amp is not None, f"no N2pc amplitude found in n2pc.json: {data}"
-    assert abs(abs(amp) - EXPECTED) < TOL, (
-        f"N2pc amplitude {amp:.2f} uV does not match the contralateral-minus-ipsilateral "
-        f"value ~-1.4 uV (|amp| within {TOL} of {EXPECTED}). Taking a fixed electrode "
-        f"difference across all trials pools the left- and right-field targets, on which the "
-        f"lateralized negativity sits over opposite electrodes, and cancels it to ~0.3 uV.")
+# ---- PILLAR 1: per-subject signed N2pc proof of work -----------------------------------
+def test_per_subject_n2pc_proof_of_work():
+    sub = _submitted()
+    present = pw.check_subjects_and_values(
+        sub, REF["ref_ids"], REF["ref_n2pc"], "n2pc", N2PC_VAL_TOL,
+        cover=0.90, match=0.80, eps=1e-2, signed=True)
+    n_neg = sum(sub[i]["n2pc"] < 0 for i in present)
+    assert n_neg >= 0.75 * len(present), \
+        f"most subjects should show a negative N2pc; only {n_neg}/{len(present)} are negative"
 
 
-def test_findings_report():
+# ---- PILLAR 2: recompute the grand-average from the rows -------------------------------
+def test_recompute_grandaverage_from_rows():
+    sub = _submitted()
+    present = [i for i in (pw.canon_id(x) for x in REF["ref_ids"])
+               if i in sub and sub[i].get("n2pc") is not None]
+    reported = _num(_load("n2pc.json").get("n2pc_amplitude_uv"))
+    pw.check_recompute(sub, present, "n2pc", float(REF["n2pc_mean"]), reported,
+                       tol_ref=GROUP_TOL, tol_report=GROUP_TOL)
+
+
+# ---- SECONDARY: the write-up reports the lateralized profile ---------------------------
+def test_findings_reports_n2pc():
     text = (OUT / "findings.md").read_text(encoding="utf-8").lower()
-    assert ("n2pc" in text or "contralateral" in text or "negativ" in text) and \
-        ("uv" in text or "microvolt" in text or "amplitud" in text), \
-        "findings.md does not report an N2pc amplitude"
-    amp = _headline_amp(_load("n2pc.json"))
-    nums = [abs(float(x)) for x in re.findall(r"-?\d+\.?\d*", text)]
-    assert any(abs(n - abs(amp)) < 1.0 for n in nums), \
-        "findings.md does not report an amplitude consistent with n2pc.json"
+    assert ("contralateral" in text or "n2pc" in text) and ("po7" in text or "po8" in text), \
+        "findings.md does not report the contralateral N2pc at PO7/PO8"

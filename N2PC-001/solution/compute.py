@@ -32,10 +32,15 @@ Validated (MNE 1.12.1, ERP CORE N2pc, subjects 1/3/4/5/6/7/8/9/10/11/12/13; PO7/
     contralateral-minus-ipsilateral (correct N2pc)      : -1.38 uV   <-- reported here
     fixed PO8-PO7 across all trials (pooled, naive)      : +0.34 uV
     fixed PO7-PO8 across all trials (pooled, naive)      : -0.34 uV
-12/12 subjects show a negative contralateral-minus-ipsilateral N2pc. The correct value is
-robust (-1.374 to -1.378 uV across 0.1-20/30/40 Hz low-pass, average vs no re-reference, and
--150/-200 ms baselines); the pooled fixed-electrode difference stays near 0 (|.| ~ 0.3 uV).
+12/12 subjects show a negative contralateral-minus-ipsilateral N2pc.
+
+Proof-of-work deliverable: a PER-SUBJECT table (per_subject.csv) with each subject's signed
+contralateral, ipsilateral, contralateral-minus-ipsilateral (N2pc) and pooled fixed-electrode
+amplitudes. The grand-average N2pc is the mean of the per-subject N2pc column; the pooled
+fixed-electrode difference (~0) is the discriminating quantity a field-pooled pipeline
+reports instead.
 """
+import csv
 import json
 import os
 import sys
@@ -137,31 +142,39 @@ def win_mean(evk, ch):
 
 
 try:
-    n2pc_list, contra_list, ipsi_list, fixed_list = [], [], [], []
-    n_left_tot = n_right_tot = 0
+    per_subject = []  # subject, n_left, n_right, contra, ipsi, n2pc, fixed
     for s in SUBJECTS:
         L, R, nl, nr = subject_evokeds(s)
-        n_left_tot += nl
-        n_right_tot += nr
         # contralateral: PO8 for left-field target, PO7 for right-field target
         contra = 0.5 * (win_mean(L, "PO8") + win_mean(R, "PO7"))
         ipsi = 0.5 * (win_mean(L, "PO7") + win_mean(R, "PO8"))
-        n2pc_list.append(contra - ipsi)
-        contra_list.append(contra)
-        ipsi_list.append(ipsi)
         # naive fixed-electrode difference, pooled across visual fields (for reference)
         po8 = 0.5 * (win_mean(L, "PO8") + win_mean(R, "PO8"))
         po7 = 0.5 * (win_mean(L, "PO7") + win_mean(R, "PO7"))
-        fixed_list.append(po8 - po7)
+        per_subject.append((s, nl, nr, contra, ipsi, contra - ipsi, po8 - po7))
+    n2pc_list = [r[5] for r in per_subject]
+    contra = float(np.mean([r[3] for r in per_subject]))
+    ipsi = float(np.mean([r[4] for r in per_subject]))
     n2pc = float(np.mean(n2pc_list))
-    contra = float(np.mean(contra_list))
-    ipsi = float(np.mean(ipsi_list))
-    fixed = float(np.mean(fixed_list))
+    fixed = float(np.mean([r[6] for r in per_subject]))
     n_neg = int(sum(x < 0 for x in n2pc_list))
+    n_left_tot = int(sum(r[1] for r in per_subject))
+    n_right_tot = int(sum(r[2] for r in per_subject))
 except SystemExit:
     raise
 except Exception as e:  # pragma: no cover
     fail(f"could not compute the N2pc amplitude: {e}")
+
+# PER-SUBJECT proof-of-work table
+with open(OUT / "per_subject.csv", "w", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=["subject", "n_left_trials", "n_right_trials",
+                                      "contra_uv", "ipsi_uv", "n2pc_uv",
+                                      "fixed_po8_minus_po7_pooled_uv"])
+    w.writeheader()
+    for s, nl, nr, c, i, d, fx in per_subject:
+        w.writerow(dict(subject=s, n_left_trials=nl, n_right_trials=nr,
+                        contra_uv=round(c, 6), ipsi_uv=round(i, 6), n2pc_uv=round(d, 6),
+                        fixed_po8_minus_po7_pooled_uv=round(fx, 6)))
 
 (OUT / "n2pc.json").write_text(json.dumps({
     "n2pc_amplitude_uv": n2pc,
@@ -176,6 +189,7 @@ except Exception as e:  # pragma: no cover
     "fixed_po8_minus_po7_pooled_uv_for_reference": fixed,
     "n_left_target_trials_total": int(n_left_tot),
     "n_right_target_trials_total": int(n_right_tot),
+    "per_subject_csv": "per_subject.csv",
 }, indent=2))
 
 (OUT / "run_metadata.json").write_text(json.dumps({
@@ -199,13 +213,15 @@ at the **PO7/PO8** pair. Measured as the **mean contralateral-minus-ipsilateral 
 the 200-300 ms window** (0.1-30 Hz band-pass, average reference, -200..0 baseline) and
 grand-averaged over the {len(SUBJECTS)} subjects, the N2pc is **{n2pc:.2f} uV**
 (contralateral {contra:.2f} uV, ipsilateral {ipsi:.2f} uV; {n_neg}/{len(SUBJECTS)} subjects
-negative).
+negative). Per-subject contralateral/ipsilateral and N2pc amplitudes are in `per_subject.csv`.
 
 The component is lateralized relative to the target: for a left-field target it appears over
 the right posterior scalp (PO8) and for a right-field target over the left (PO7), so the
 contralateral and ipsilateral waveforms are formed by re-mapping the two electrodes per
-target side. The reported value ({n2pc:.2f} uV) is that contralateral-minus-ipsilateral
-difference.
+target side. A fixed-electrode difference (e.g. PO8-PO7) pooled across the two balanced
+visual fields cancels to ~{fixed:.2f} uV; only the per-side contralateral/ipsilateral
+assignment recovers the component. The reported value ({n2pc:.2f} uV) is that
+contralateral-minus-ipsilateral difference.
 """)
 print(f"OK: N2pc (contra-ipsi) = {n2pc:.3f} uV | fixed PO8-PO7 pooled = {fixed:.3f} uV | "
       f"neg {n_neg}/{len(SUBJECTS)} | trials L={n_left_tot} R={n_right_tot}")
