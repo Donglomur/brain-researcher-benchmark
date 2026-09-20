@@ -28,22 +28,54 @@ Subject 1, `mask_vt` (577 voxels), 864 object volumes across 12 runs, chance = 0
 
 Gap **≈ +0.23** for the leaky choice. The correct value is stable: identical (0.722) across `standardize` in {`zscore_sample`, `zscore`, `True`} with detrend on, and across `C` ∈ {0.1 … 5.0}; drops only to 0.68 with detrend off. The leaky value is always ≈ 0.95–0.97. The subject-by-subject gap (subjects 1–4) is +0.24 to +0.36 (mean +0.25), so the lever is robust; subject 1 is pinned for a single reproducible number.
 
-### Verifier (2 plain checks; `tests/test_outputs.py`)
+### Verifier — PROOF OF WORK (`tests/test_outputs.py` + `tests/proof_of_work.py`)
 
-Short reviewer-style pytest, schema-robust, no rubric:
-1. **accuracy reported** — a parseable, above-chance decoding accuracy exists.
-2. **run-blocked accuracy reproduced** — the reported cross-validated accuracy is within **0.06** of the leave-one-run-out value **0.722**. Accuracies are gathered at any depth from any JSON (accuracy/score-keyed scalars, with per-fold / chance / std / train / and explicitly-leaky|random|kfold|naive keys excluded) and from prose (numbers next to "accuracy", percentages normalised). A random-fold ~0.96 is 0.23 away → fails; the honest ~0.72 → passes.
+Rebuilt to the proof-of-work contract (`PROOF_OF_WORK_SPEC.md`): a passing submission must be
+impossible to produce without running the real leave-one-run-out decoding on the real subject.
+A **held-out reference** (`tests/reference.npz`, built by running `solution/compute.py` and kept
+out of the agent's container) stores the per-run held-out accuracies keyed by acquisition run,
+plus the discriminating LORO vs random-fold numbers. The single headline accuracy is made
+non-guessable by requiring the **per-fold breakdown** (`per_fold.csv`, now a required output) —
+one held-out accuracy per fold. Three pillars, all required:
 
-### Discrimination (validated locally)
+1. **per-fold table matches the held-out reference** — the submitted per-fold accuracies are the
+   REAL per-run held-out values (keyed by held-out run when present, else matched by sorted value;
+   within-tol fraction ≥ 0.7 OR correlation ≥ 0.8), non-constant. A random-fold or fabricated
+   breakdown cannot reproduce them.
+2. **headline recomputes** — the reported `cv_accuracy` equals the mean of the submitted per-fold
+   rows AND the run-blocked reference **0.722** (± 0.06).
+3. **run-blocked, not leaky** — the reported accuracy is materially below the random-fold value
+   (~0.958) by ≥ 0.10; any leaky/random contrast the submission reports must itself be the real
+   ~0.958 (guards a fabricated contrast). A secondary negation-aware prose guard requires the
+   write-up to describe the cross-validation and not headline the ~0.96 as the accuracy.
 
-| submission | reported cv_accuracy | verdict |
+The `per_fold.csv` requirement is phrased neutrally (fold, n_test_samples, accuracy) so it does
+NOT reveal that run-blocking is the fix — a random-fold submission still produces a per-fold table,
+but it will not match the held-out per-run reference and its headline (~0.96) fails pillars 2–3.
+
+### Discrimination — validated locally via SUBPROCESS pytest (uvx, container-matched)
+
+| submission | verdict | why |
 |---|---|---|
-| reference oracle (leave-one-run-out; also records the leaky value under a descriptive key) | 0.722 | **PASS** |
-| naive random 5-fold (leaky, everything else identical) | 0.951 | **FAIL** |
-| prose-only "72.2%" / "0.72" / "72% accuracy" | 0.72 | **PASS** |
-| prose-only "95.8%" | 0.958 | **FAIL** |
+| reference oracle (leave-one-run-out; per_fold.csv + cv_accuracy 0.722) | **PASS** | all 4 checks |
+| no per_fold.csv | **FAIL** | pillar 1 (+2) |
+| constant per-fold table (all = 0.722) | **FAIL** | pillar 1 non-constant guard |
+| non-constant fabricated table (right mean 0.722, wrong per-fold) | **FAIL** | pillar 1 (match 0.42, corr 0.31) |
+| naive random 8-fold (cv_accuracy 0.958, 8-fold table) | **FAIL** | pillars 1, 2, 3, prose |
 
-Verifier robustness checked: a sophisticated submission that reports BOTH the honest 0.722 and a leaky comparison (0.958 under a `random_kfold`/`leaky` key) still passes, because the leaky value is excluded from the headline candidates; the honest value is what is graded.
+### Reference provenance / packaging
+
+- **Held-out reference** `tests/reference.npz` built from `solution/compute.py` on the pinned
+  `haxby2001` subject-1 data (nilearn 0.13.1 / scikit-learn 1.8.0): `ref_run_ids` = runs 0–11,
+  `ref_fold_acc` = per-run held-out accuracies, `ref_stats.loro_accuracy` = 0.7222,
+  `ref_stats.random_kfold_accuracy` = 0.9583. Never ships to the container.
+- **Pinned inputs:** Haxby **subject 1**, `mask_vt`, drop `rest`, the pinned masker/classifier.
+  `fetch_haxby` returns a fixed, deterministic dataset, so the per-run numbers reproduce exactly
+  on the pinned stack.
+- **Packaging follow-up (maintainer):** the raw subject fetch is ~300 MB (> the 90 MB bake
+  threshold), so the task keeps runtime fetch + `allow_internet=true`. Baking the derived VT
+  masked time series (`X`, ~2 MB) into `environment/` to set `allow_internet=false` is a cheap
+  maintainer follow-up.
 
 ### Step 5 — frontier calibration: PENDING (maintainer)
 

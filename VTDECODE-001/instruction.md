@@ -43,6 +43,11 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `decoding_results.json` — at least a field `cv_accuracy` (float in 0–1), the
   cross-validated decoding accuracy you obtained, plus `n_samples`, `n_voxels`,
   `n_categories`, and `chance`.
+- `per_fold.csv` — one row per cross-validation fold, with columns
+  `fold, n_test_samples, accuracy` (the held-out accuracy of each fold in the
+  cross-validation you ran). Your reported `cv_accuracy` must be the mean of these
+  per-fold accuracies. If your cross-validation groups the samples, also include the
+  held-out group/run identifier as a column.
 - `run_metadata.json` — dataset id, subject, mask, and the preprocessing /
   classifier choices you made.
 - `findings.md` — a short written summary stating the cross-validated decoding

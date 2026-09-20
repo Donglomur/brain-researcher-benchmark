@@ -61,6 +61,7 @@ def main() -> None:
     from nilearn.datasets import fetch_haxby
     from nilearn.maskers import NiftiMasker
     from sklearn.svm import SVC
+    from sklearn.base import clone
     from sklearn.model_selection import LeaveOneGroupOut, KFold, cross_val_score
 
     hx = fetch_haxby(subjects=[SUBJECT])
@@ -77,8 +78,17 @@ def main() -> None:
 
     clf = SVC(kernel="linear", C=1.0)
 
-    # CORRECT: leave-one-run-out (blocked by acquisition run -> no within-run leakage)
-    loro_scores = cross_val_score(clf, X, y, cv=LeaveOneGroupOut(), groups=runs)
+    # CORRECT: leave-one-run-out (blocked by acquisition run -> no within-run leakage).
+    # Iterate the folds by hand so the per-fold held-out accuracy is keyed to the run held out.
+    logo = LeaveOneGroupOut()
+    per_run = {}
+    for tr, te in logo.split(X, y, groups=runs):
+        held = int(np.unique(runs[te])[0])
+        m = clone(clf)
+        m.fit(X[tr], y[tr])
+        per_run[held] = (float(m.score(X[te], y[te])), int(len(te)))
+    held_runs = sorted(per_run)
+    loro_scores = np.array([per_run[r][0] for r in held_runs])
     cv_accuracy = float(loro_scores.mean())
 
     # For the write-up only: what the naive random-fold scheme would have reported.
@@ -87,6 +97,16 @@ def main() -> None:
 
     n_samples, n_voxels = int(X.shape[0]), int(X.shape[1])
     n_runs = int(len(np.unique(runs)))
+
+    # required intermediate: one row per cross-validation fold (held-out run + its accuracy),
+    # so the single headline accuracy is backed by a validated per-fold breakdown.
+    import csv as _csv
+    with open(OUTPUT_DIR / "per_fold.csv", "w", newline="", encoding="utf-8") as fh:
+        w = _csv.writer(fh)
+        w.writerow(["fold", "held_out_run", "n_test_samples", "accuracy"])
+        for i, r in enumerate(held_runs, start=1):
+            acc, nte = per_run[r]
+            w.writerow([i, r, nte, round(acc, 6)])
 
     wj("decoding_results.json", {
         "cv_accuracy": round(cv_accuracy, 4),

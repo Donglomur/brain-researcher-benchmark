@@ -1,109 +1,127 @@
-"""Grading checks for VTDECODE-001 (reproduce the Haxby VT decoding accuracy).
+"""Proof-of-work grading for VTDECODE-001 (Haxby ventral-temporal object decoding).
 
-Ground truth (validated before release; nilearn 0.13.1 / scikit-learn 1.8.0, Haxby
-subject 1, mask_vt, drop rest, NiftiMasker zscore_sample+detrend, SVC linear C=1):
+Templates: QSMDIPOLE-001 (held-out reference + tight tolerance -> the number is only
+hittable by real compute) and FCSTAB-001 (per-item table matched to pinned reference +
+recompute + discriminating numbers). See PROOF_OF_WORK_SPEC.md.
 
-  leave-one-run-out (CORRECT, run-blocked) : cv_accuracy = 0.722
+Held-out reference (tests/reference.npz), built by running solution/compute.py on the real
+Haxby subject-1 ventral-temporal data (nilearn 0.13.1 / scikit-learn 1.8.0; mask_vt, drop
+rest, NiftiMasker zscore_sample + detrend t_r=2.5, SVC linear C=1):
+
+  leave-one-run-out (CORRECT, run-blocked) : cv_accuracy = 0.722   <- reported
   random 8-fold      (LEAKY)               : cv_accuracy = 0.958   (chance = 0.125)
 
-Each object category is presented as a sustained block within a run, so volumes from
-the same run are strongly temporally autocorrelated. A random k-fold split lets
-near-adjacent volumes from one block appear in both train and test -> the accuracy is
-inflated to ~0.96. Blocking the cross-validation by acquisition run (leave-one-run-out)
-removes that leakage and gives the honest ~0.72.
+Each object category is a sustained within-run block, so volumes from one run are strongly
+autocorrelated. A random k-fold split lets near-adjacent volumes appear in both train and
+test and inflates the accuracy to ~0.96; blocking the cross-validation by acquisition run
+(leave-one-run-out) removes that leakage and gives the honest ~0.72. The task pins the
+masker and classifier but never names the fold scheme.
 
-The task pins the masker and classifier and asks only for "the cross-validated decoding
-accuracy" -- it never names the fold scheme. A submission that reports the leaky
-random-fold ~0.96 fails; the run-blocked ~0.72 passes.
+The single headline is made non-guessable by the per-fold breakdown: a run-blocked pipeline
+produces one held-out accuracy per acquisition run, and those per-run numbers are the REAL
+reference values (kept out of the container). A leaky random-fold pipeline produces a
+different fold structure and different per-fold numbers, so it cannot reproduce them.
+
+Three pillars (all required):
+  1. per-fold table present, non-constant, agrees with the held-out per-run reference
+  2. the reported headline recomputes from the per-fold rows AND equals the run-blocked reference
+  3. the reported headline is the run-blocked estimate, materially below the leaky value
 """
-import json
-import math
-import os
 import re
-from pathlib import Path
 
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+from proof_of_work import (
+    OUT, load_reference, honest_naive, load_per_fold, per_fold_agreement, nonconstant,
+    reported_headline, reported_leaky,
+)
 
-EXPECTED = 0.722   # correct, leave-one-run-out
-TOL = 0.06         # admits legitimate run-blocked variants; excludes the leaky ~0.96 (0.236 away)
-CHANCE = 0.125
-
-# keys that look like a reported accuracy / decoding score ...
-_ACC_KEY = re.compile(r"acc|score", re.I)
-# ... but NOT a per-fold value, a chance level, a spread, a train score, or an explicitly
-# leaky / naive / random comparison the submission may also have recorded.
-_EXCL_KEY = re.compile(
-    r"chance|std|sem|var|err|train|fold|per[_-]?|class|categ|base|null|shuffl|permut|"
-    r"rand|kfold|k_fold|leak|naive|\bci\b|lower|upper|\bmin\b|\bmax\b|conf", re.I)
-
-
-def _iter_scalars(obj, key=""):
-    """Yield (nearest-dict-key, scalar) over a nested JSON object; list items inherit
-    their parent key so per-fold arrays stay tagged with their (excluded) key name."""
-    if isinstance(obj, dict):
-        for k, v in obj.items():
-            yield from _iter_scalars(v, str(k))
-    elif isinstance(obj, (list, tuple)):
-        for v in obj:
-            yield from _iter_scalars(v, key)
-    else:
-        yield key, obj
+REF = load_reference()
+ST = REF["stats"]
+HONEST, NAIVE = honest_naive(ST)
+VAL_TOL = ST["VAL_TOL"]
+MATCH = ST["MATCH"]
+PERFOLD_CORR = ST["PERFOLD_CORR"]
+HEADLINE_TOL = ST["HEADLINE_TOL"]
+RECOMPUTE_TOL = ST["MEAN_RECOMPUTE_TOL"]
+NAIVE_MARGIN = ST["NAIVE_MARGIN"]
+EPS = ST["EPS"]
+CHANCE = ST["chance"]
+N_RUNS = int(ST["n_runs"])
+MIN_FOLDS = max(5, N_RUNS - 3)
 
 
-def _accuracy_candidates():
-    """Every plausible *headline* accuracy the submission reports, at any depth, in any
-    JSON file, plus accuracies stated in prose. Percentages are normalised to 0-1."""
-    cands = []
-    for p in sorted(OUT.glob("*.json")):
-        try:
-            obj = json.loads(p.read_text(encoding="utf-8"))
-        except Exception:
-            continue
-        for key, val in _iter_scalars(obj):
-            if not isinstance(val, (int, float)) or isinstance(val, bool):
-                continue
-            if not math.isfinite(val):
-                continue
-            if not _ACC_KEY.search(key) or _EXCL_KEY.search(key):
-                continue
-            if 0.0 <= val <= 1.0:
-                cands.append(float(val))
-            elif 1.0 < val <= 100.0:
-                cands.append(float(val) / 100.0)
-    # prose fallback: numbers stated next to the word "accuracy" or as a percentage
-    prose = ""
-    for name in ("findings.md", "run_metadata.json", "decoding_results.json"):
-        fp = OUT / name
-        if fp.exists():
-            prose += "\n" + fp.read_text(encoding="utf-8")
-    for m in re.finditer(r"accuracy[^0-9%\n]{0,40}?(\d{1,3}(?:\.\d+)?)\s*%", prose, re.I):
-        cands.append(float(m.group(1)) / 100.0)
-    for m in re.finditer(r"accuracy[^0-9\n]{0,40}?(0?\.\d+)", prose, re.I):
-        cands.append(float(m.group(1)))
-    for m in re.finditer(r"(\d{1,3}(?:\.\d+)?)\s*%[^.\n]{0,25}accuracy", prose, re.I):
-        cands.append(float(m.group(1)) / 100.0)
-    for m in re.finditer(r"(0?\.\d+)[^0-9\n]{0,25}accuracy", prose, re.I):
-        cands.append(float(m.group(1)))
-    return [c for c in cands if 0.0 <= c <= 1.0]
+def _findings():
+    p = OUT / "findings.md"
+    return p.read_text(encoding="utf-8").lower() if p.exists() else ""
 
 
-def test_accuracy_reported():
-    # A parseable, above-chance decoding accuracy was produced at all.
-    cands = _accuracy_candidates()
-    assert cands, "no cross-validated decoding accuracy could be parsed from the submission"
-    assert max(cands) > CHANCE + 0.05, (
-        f"reported accuracies {sorted(set(round(c,3) for c in cands))} are at/below chance "
-        f"({CHANCE}) -- the decoder was not evaluated properly")
+# =============================================================================================
+# Pillar 1 -- the per-fold breakdown is the real run-blocked one
+# =============================================================================================
+def test_per_fold_table_matches_reference():
+    sub_ids, sub_accs = load_per_fold()
+    assert len(sub_accs) >= MIN_FOLDS, (
+        f"per-fold table has only {len(sub_accs)} folds; a proper run-blocked cross-validation of "
+        f"this subject yields one held-out accuracy per acquisition run ({N_RUNS} runs). A table "
+        f"this short is not the real per-fold breakdown.")
+    assert nonconstant(sub_accs, EPS), (
+        "per-fold accuracies are constant across folds; a real cross-validation is not constant "
+        "-- the table looks fabricated/duplicated")
+    assert (sub_accs > CHANCE - 0.02).mean() >= 0.8, "most folds are at/below chance -- not a real decoder"
+    frac, corr = per_fold_agreement(sub_ids, sub_accs, REF["run_ids"], REF["fold_acc"], VAL_TOL)
+    assert frac >= MATCH or corr >= PERFOLD_CORR, (
+        f"the submitted per-fold accuracies do not match the held-out per-run reference "
+        f"(within-tol fraction {frac:.2f} < {MATCH}, correlation {corr:.2f} < {PERFOLD_CORR}). "
+        f"These must be the REAL leave-one-run-out held-out accuracies for this subject; a "
+        f"random-fold or fabricated breakdown cannot reproduce them.")
 
 
-def test_cross_validated_accuracy_matches_run_blocked():
-    # The honest, leakage-free cross-validated accuracy is ~0.722 (leave-one-run-out).
-    # A random-fold pipeline reports ~0.958; that must NOT pass. So we require the
-    # submission to have reported an accuracy consistent with the run-blocked estimate.
-    cands = _accuracy_candidates()
-    best = min(cands, key=lambda c: abs(c - EXPECTED)) if cands else None
-    assert best is not None and abs(best - EXPECTED) < TOL, (
-        f"reported cross-validated accuracy is not consistent with the run-blocked estimate "
-        f"{EXPECTED:.3f} +/- {TOL} (chance {CHANCE}). Parsed accuracies: "
-        f"{sorted(set(round(c,3) for c in cands))}. A value near 0.96 is the temporally-leaky "
+# =============================================================================================
+# Pillar 2 -- the headline recomputes from the per-fold rows and equals the run-blocked reference
+# =============================================================================================
+def test_headline_recomputes_and_matches_reference():
+    sub_ids, sub_accs = load_per_fold()
+    headline = reported_headline()
+    assert headline is not None, "no cross-validated decoding accuracy (cv_accuracy) reported in JSON"
+    recomputed = float(sub_accs.mean())
+    assert abs(recomputed - headline) <= RECOMPUTE_TOL, (
+        f"the reported cv_accuracy {headline:.3f} is not the mean of the submitted per-fold "
+        f"accuracies ({recomputed:.3f}); the headline must be recomputable from the per-fold rows")
+    assert abs(headline - HONEST) <= HEADLINE_TOL, (
+        f"reported cv_accuracy {headline:.3f} is not the run-blocked leave-one-run-out estimate "
+        f"({HONEST:.3f} +/- {HEADLINE_TOL}). A value near {NAIVE:.3f} is the temporally-leaky "
         f"random-fold artifact, not the honest out-of-sample decoding accuracy.")
+
+
+# =============================================================================================
+# Pillar 3 -- the reported number is the honest run-blocked one, not the leaky value
+# =============================================================================================
+def test_reported_accuracy_is_run_blocked_not_leaky():
+    headline = reported_headline()
+    assert headline is not None, "no cv_accuracy reported"
+    assert headline > CHANCE + 0.05, f"reported accuracy {headline:.3f} is at/near chance ({CHANCE})"
+    assert headline <= NAIVE - NAIVE_MARGIN, (
+        f"reported cv_accuracy {headline:.3f} is not materially below the leaky random-fold value "
+        f"(~{NAIVE:.3f}); a run-blocked estimate must be well under it (by >= {NAIVE_MARGIN}). "
+        f"Report the leave-one-run-out accuracy, not the within-run-leaky random-fold one.")
+    # if the submission reports a leaky/random contrast number, it must be the real one
+    # (guards against a fabricated 'random-fold' value used to look rigorous)
+    for lk in reported_leaky():
+        if lk > CHANCE + 0.1:   # ignore any reported chance level
+            assert abs(lk - NAIVE) <= 0.08, (
+                f"the submission reports a random-fold/leaky accuracy {lk:.3f} that does not match "
+                f"the real leaky value (~{NAIVE:.3f}); the contrast appears fabricated")
+
+
+# --- secondary prose guard (numbers above carry the grade) -----------------------------------
+def test_findings_report_cross_validation():
+    text = _findings()
+    assert text, "findings.md is missing or empty"
+    assert re.search(r"cross[-\s]?validat|leave[-\s]?one[-\s]?run|run[-\s]?block|fold", text), (
+        "findings.md does not describe how the decoder was cross-validated")
+    # must not headline the leaky ~0.96 as the decoding accuracy without flagging it
+    m = re.search(r"(?:accuracy|decoding)[^.\n]{0,40}?(0?\.9[5-9]\d*)", text)
+    if m:
+        near = text[max(0, m.start() - 80):m.start() + 80]
+        assert re.search(r"leak|inflat|random|not|artifact|overstat|biased", near), (
+            "findings.md presents the ~0.96 random-fold value as the decoding accuracy without "
+            "flagging it as the leaky/inflated estimate")
