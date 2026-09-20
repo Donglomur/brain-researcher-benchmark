@@ -36,6 +36,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
+- `timeseries.csv` — the two extracted region mean BOLD time series, one row per volume:
+  a time/index column plus one column for the `R DMN` series and one for the `Cereb` series
+  (the cleaned series you correlate). This is the intermediate the correlation is computed from.
 - `connectivity.json` — the result of the analysis, with at least:
   `{"subject", "region_a", "region_b", "n_timepoints", "r", "p_value", "significant"}`
   (`significant` is your boolean verdict at `alpha = 0.05`).

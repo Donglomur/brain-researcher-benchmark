@@ -169,6 +169,11 @@ ci_naive = [float(np.tanh(z - 1.96 * se_naive)), float(np.tanh(z + 1.96 * se_nai
 corrected_p = max(p_ar1, p_bart, p_circ)  # report the more conservative correction
 significant = bool(corrected_p < 0.05)
 
+# ---- the requested intermediate: the two extracted ROI mean time series ----
+# one row per volume; this is the fine-grained evidence the correlation is built from.
+pd.DataFrame({"t": np.arange(n), REGION_A: x, REGION_B: y}).to_csv(
+    OUT / "timeseries.csv", index=False)
+
 (OUT / "connectivity.json").write_text(json.dumps({
     "subject": SUBJECT,
     "region_a": REGION_A,
@@ -176,6 +181,11 @@ significant = bool(corrected_p < 0.05)
     "n_timepoints": n,
     "r": r,
     "p_value": corrected_p,
+    "p_value_naive": naive_p,
+    "effective_df": ne_bart,
+    "effective_df_ar1": ne_ar1,
+    "lag1_autocorr_a": rx,
+    "lag1_autocorr_b": ry,
     "significant": significant,
 }, indent=2))
 

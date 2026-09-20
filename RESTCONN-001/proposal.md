@@ -113,3 +113,26 @@ resting-state FC (shared), but the failure axis is the primary differentiator an
 - Live frontier gate (≥2 families, k≥3) is the maintainer's Step-5; this proposal hits the
   construction bar (un-cued, off-path, naive-default-wrong, big robust gap, fair guarded
   grader, oracle 1.0).
+
+## Proof-of-work verifier (v-pow, 2026-09)
+
+SINGLE-SUBJECT single-value task -> QSMDIPOLE model: the lone `r`/verdict is validated through a
+required intermediate. Held-out reference `tests/reference.npz` (built from `solution/compute.py`,
+never shipped): the two extracted ROI mean BOLD time series (`R DMN`, `Cereb`; 176 volumes) +
+`ref_stats` (r=+0.316, naive_p=1.9e-5, corrected_p=0.153, eff_df AR1/Bartlett=24.3/30.1, lag-1
+acf 0.870/0.871). New required output `timeseries.csv` (un-cued: the series the agent already
+extracts). reference.npz sha256 2190103f157de754.
+
+Pillars (subprocess-validated): (1) the submitted ROI series track the held-out reference across
+time (|r|>=0.90, non-constant, correct pairing); (2) recompute r AND the AR1/Bartlett effective df
+FROM the submitted rows -> r matches reference & reported, eff df << n (real lag-1 acf ~0.87);
+(3) verdict graded as numbers: `significant`=False and the corrected p from the submitted series
+> 0.05 while the naive df=n-2 p is < 0.01 (the discriminating gap); (secondary) the
+autocorrelation-recognition prose. `tests/test.sh` adds scipy for the t-distribution.
+
+Validation matrix: honest PASS | no-table FAIL | constant FAIL | fabricated (right r, fake series)
+FAIL | naive (real series, significant=True) FAIL.
+
+Packaging: pinned subject **0010064** (ADHD-200 nilearn.fetch_adhd, MSDL); nilearn 0.13.1 stack.
+Data runtime-fetched; `allow_internet=true` retained. Baking the two derived ROI series into
+`environment/` is a maintainer follow-up.
