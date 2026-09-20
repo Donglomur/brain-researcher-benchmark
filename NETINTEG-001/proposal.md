@@ -71,3 +71,54 @@ Oracle passes (**reward 1.0**, re-verified this build by running the reference `
 ### Cost
 
 `hard` bracket. Fetches ~40 preprocessed rs-fMRI runs + the Schaefer atlas, extracts 100-region time series, builds connectomes, computes efficiency under several thresholds — a few minutes. cpus 2, mem 8 GB, internet on, timeouts 1800–3600 s. Deps: numpy 2.1.3 / scipy 1.14.1 / pandas 2.2.3 / nibabel 5.3.2 / nilearn 0.12.1.
+
+---
+
+## Proof-of-work rebuild (verifier hardening, 2026-09)
+
+The prior grader was **PARTIAL**: a non-constant guard on `efficiency.csv` plus a pinned top-k
+set contrast (DM_TOP vs ABS_TOP). It never checked that the submitted per-participant efficiency
+values are the *real* density-matched ones, never recomputed anything from the rows, and graded
+the confound only as an optional fallback. This pass applies the suite-wide **proof-of-work**
+contract (`scratchpad/PROOF_OF_WORK_SPEC.md`): a passing submission is now impossible without the
+real density-matched analysis on the real ADHD-200 participants.
+
+**Held-out reference (`tests/reference.npz`, built from `solution/compute.py`, never shipped to
+the agent).** Per-participant density-matched global efficiency and overall connectivity strength
+for the 40 pinned ADHD-200 participants (`fetch_adhd`, Schaefer-2018 100/17), plus the absolute-
+threshold efficiency (for the fabrication teeth) and the two pinned top-8 sets. Discriminating
+statistics: efficiency↔overall-strength correlation **+0.86** under a fixed absolute cutoff vs
+**−0.57** density-matched; between-convention rank correlation Spearman **−0.28**; top-8 overlap
+**0/8**; per-participant efficiency mean 0.399 (sd 0.019).
+
+**Four grading pillars** (`tests/test_outputs.py` + `tests/proof_of_work.py`):
+1. **Exact participants + per-item values** — `efficiency.csv` must cover ≥90 % of the real IDs,
+   be non-constant, and its per-participant efficiency must track the held-out *density-matched*
+   reference (cross-subject Pearson ≥ 0.75; per-subject |Δ| ≤ 0.05 for ≥60 %). Submitting the
+   confounded *absolute-threshold* efficiency (near-disjoint ranking) fails here.
+2. **Recompute** — the reported most-integrated ranking must be what the efficiency column
+   actually produces; and, when overall connectivity strength is reported per participant, the
+   efficiency↔strength correlation recomputed from the rows must equal the density-matched
+   reference (−0.57 ± 0.12).
+3. **Discriminating number(s)** — the density-matched judgement graded as numbers: the reported
+   most-integrated set must be closer to the density-matched ground truth than to the
+   absolute/strength-confounded one, **or** the efficiency↔strength correlation must be reported
+   under both conventions with the correct split (~+0.86 vs ~−0.57); any reported confound
+   correlations must carry the correct signs.
+4. **Secondary prose** — engages the thresholding-convention confound; not the sole gate.
+
+**Validation (subprocess pytest per case, `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`):**
+
+| case | result |
+|---|---|
+| honest (oracle reference values) | PASS |
+| no `efficiency.csv` | FAIL |
+| constant efficiency table | FAIL |
+| non-constant fabricated (real IDs, shuffled efficiency, right mean) | FAIL |
+| naive (absolute-threshold efficiency + ABS top set + only the +0.86 correlation) | FAIL |
+
+**Packaging.** Real participant IDs pinned via `tests/reference.npz`. The raw ADHD-200 rs-fMRI
+inputs exceed GitHub's 100 MB/file limit, so `allow_internet=true` + runtime fetch are retained;
+baking the derived per-participant connectomes is flagged as a maintainer follow-up. Reference
+built on the nilearn-pinned `fetch_adhd(n_subjects=40)` + Schaefer-2018 100/17 (resolution 2 mm),
+the 40 quality-checked ADHD-200 subjects.
