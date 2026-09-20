@@ -40,7 +40,12 @@ Pin the analysis as follows so the number is comparable:
   `sklearn.pipeline.make_pipeline(StandardScaler(), LinearSVC(C=1.0))`.
 - **Metric:** **balanced accuracy** (the classes are imbalanced).
 
-Report the cross-validated balanced accuracy of this classifier (chance = 0.5).
+Evaluate the classifier under **two cross-validation schemes** and report both: a **site-blocked
+(leave-one-site-out)** scheme, in which every test fold is an acquisition site absent from the
+training set (grouped by `SITE_ID`), and a **random k-fold** scheme (e.g. stratified 10-fold) that
+mixes each site across train and test. Report the balanced accuracy under each scheme, decide which
+is the appropriate estimate for this design, and report that one as your headline
+`cv_balanced_accuracy` (chance = 0.5).
 
 ## Output Location
 
@@ -48,9 +53,14 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
-- `eye_decoding_results.json` — at least a field `cv_balanced_accuracy` (float in 0–1),
-  the cross-validated balanced accuracy you obtained, plus `n_subjects`, `n_features`,
-  `n_sites`, and `chance`.
+- `per_fold.csv` — one row per cross-validation fold of the **site-blocked (leave-one-site-out)**
+  evaluation: `fold_site` (the held-out acquisition site), `n_test`, `n_eyes_open_test`,
+  `n_eyes_closed_test`, `balanced_accuracy` (the per-fold intermediate whose mean is the
+  site-blocked headline).
+- `eye_decoding_results.json` — at least `cv_balanced_accuracy` (float in 0–1, the headline you
+  report), `site_blocked_balanced_accuracy` (the leave-one-site-out balanced accuracy) and
+  `random_kfold_balanced_accuracy` (the random-fold balanced accuracy), plus `n_subjects`,
+  `n_features`, `n_sites`, and `chance`.
 - `run_metadata.json` — dataset id, atlas, connectivity, classifier and evaluation choices
   you made.
 - `findings.md` — a short written summary stating the cross-validated balanced accuracy for

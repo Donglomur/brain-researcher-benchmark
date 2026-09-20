@@ -88,21 +88,43 @@ def main() -> None:
             accs.append(balanced_accuracy_score(y[te], c.predict(X[te])))
         return float(np.mean(accs))
 
-    # CORRECT: leave-one-site-out (blocked by acquisition site -> no site-fingerprint leakage)
-    loso_bacc = cv_bacc(list(LeaveOneGroupOut().split(X, y, groups)))
+    # CORRECT: leave-one-site-out (blocked by acquisition site -> no site-fingerprint leakage).
+    # Capture the per-fold (per-held-out-site) balanced accuracy: the required intermediate table.
+    per_fold = []
+    for tr, te in LeaveOneGroupOut().split(X, y, groups):
+        site = str(groups[te][0])
+        c = clf().fit(X[tr], y[tr])
+        ba = float(balanced_accuracy_score(y[te], c.predict(X[te])))
+        per_fold.append({"fold_site": site, "n_test": int(len(te)),
+                         "n_eyes_open_test": int((y[te] == 1).sum()),
+                         "n_eyes_closed_test": int((y[te] == 0).sum()),
+                         "balanced_accuracy": ba})
+    loso_bacc = float(np.mean([f["balanced_accuracy"] for f in per_fold]))
 
-    # For the write-up only: what the naive random-fold scheme would have reported.
+    # NAIVE (leaky) random-fold scheme: what mixing each site across train/test would report.
     rand_bacc = cv_bacc(list(StratifiedKFold(10, shuffle=True, random_state=0).split(X, y)))
 
     n_sub, n_feat = int(X.shape[0]), int(X.shape[1])
     n_sites = int(len(np.unique(groups)))
 
+    # ---- required intermediate output: per-fold balanced accuracy (one row per CV fold) ----
+    import csv as _csv
+    with open(OUTPUT_DIR / "per_fold.csv", "w", newline="", encoding="utf-8") as _f:
+        w = _csv.writer(_f)
+        w.writerow(["fold_site", "n_test", "n_eyes_open_test", "n_eyes_closed_test",
+                    "balanced_accuracy"])
+        for f in sorted(per_fold, key=lambda d: d["fold_site"]):
+            w.writerow([f["fold_site"], f["n_test"], f["n_eyes_open_test"],
+                        f["n_eyes_closed_test"], f"{f['balanced_accuracy']:.6f}"])
+
     wj("eye_decoding_results.json", {
         "cv_balanced_accuracy": round(loso_bacc, 4),
+        "site_blocked_balanced_accuracy": round(loso_bacc, 4),
+        "random_kfold_balanced_accuracy": round(rand_bacc, 4),
         "n_subjects": n_sub, "n_features": n_feat, "n_sites": n_sites,
         "n_eyes_open": int(y.sum()), "n_eyes_closed": int((y == 0).sum()),
         "chance": round(CHANCE, 4),
-        # named descriptively so it is clearly NOT the reported estimate
+        # descriptive alias kept for back-compat (clearly NOT the reported estimate)
         "random_kfold_balanced_accuracy_leaky": round(rand_bacc, 4),
     })
     wj("run_metadata.json", {

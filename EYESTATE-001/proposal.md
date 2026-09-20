@@ -58,3 +58,22 @@ Oracle-passes and naive-fails are validated locally. The ≥2-frontier-family (k
 ### Cost / data caveat
 
 `hard`. cpus 2, mem 8 GB, internet on (fetches ABIDE `cpac/filt_noglobal/rois_cc200`, ~0.2 GB of region time series, at runtime; timeouts 3600 s). Deps: nilearn 0.13.1 + scikit-learn 1.8.0 + scipy/pandas/nibabel/numpy (pinned in the Dockerfile to the versions the 0.737 ground truth was measured with). Runtime is dominated by the leave-one-site-out SVM fits over ~20 site folds on ~20 000 features (a few minutes). Data caveat: `fetch_abide_pcp` pulls from a public S3 mirror; on rare mirror hiccups the fetch can time out and should be retried (an infra artifact, not a task FAIL).
+
+### Proof-of-work rework (held-out reference)
+
+The verifier was upgraded to the proof-of-work contract (PROOF_OF_WORK_SPEC.md). EYESTATE reports a
+single headline number, so `solution/compute.py` now also emits the finest validated intermediate —
+`per_fold.csv`, the per-held-out-site balanced accuracy of the leave-one-site-out evaluation — and
+reports the site-blocked and random-fold accuracies explicitly. A held-out reference
+(`tests/reference.npz`, never shipped to the agent) was built by running the oracle on the real
+ABIDE cpac filt_noglobal rois_cc200 data (N=1035, 20 sites) with the **image stack
+(scikit-learn 1.8.0)**; it stores the per-site balanced accuracies and the discriminating numbers
+(site-blocked LOSO 0.737 vs leaky random-fold 0.876, chance 0.5). The grader now (1) matches the
+submitted per-site accuracies to the reference (coverage of the real sites + cross-fold r +
+per-fold tolerance) — a random-fold table with numbered folds fails coverage; (2) recomputes the
+headline as the mean of the submitted per-fold rows and cross-checks the reported JSON; and
+(3) grades the within-vs-across judgement as numbers (site-blocked ≈ 0.74 well below random ≈ 0.88;
+the reported headline is the site-blocked one). Validated by subprocess pytest: honest PASS;
+no-table / constant / fabricated / **random-kfold leaky** / right-headline-fake-rows all FAIL.
+ABIDE is fetched at runtime with the pinned pipeline; baking the CC200 timeseries is a maintainer
+follow-up.
