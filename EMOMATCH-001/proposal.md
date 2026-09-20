@@ -89,3 +89,21 @@ false-positive, now closed); a second pipeline-vocab write-up with a strong coll
 PENDING. Oracle-pass and the offline verifier discrimination above are validated locally; the
 **live frontier-agent gate (≥2 families, k≥3, hand-rescored) is the maintainer's Step-5** and
 has not been run here.
+
+### Proof-of-work rework (held-out reference)
+
+The verifier was upgraded to the proof-of-work contract (PROOF_OF_WORK_SPEC.md). A held-out
+reference (`tests/reference.npz`, never shipped to the agent) was built by running
+`solution/compute.py` on the real ds002790 (AOMIC PIOP2) fMRIPrep emomatching derivatives
+(Schaefer-100/7 + amygdala/fusiform/control 6 mm spheres, first **20** subjects with an
+emomatching run, pinned by `subject_id`). It stores each subject's naive-model amygdala / fusiform
+/ control-ROI `emotion > control` estimate and the discriminating statistics (amygdala group t
+7.89 → 8.25 survives RT control; cognitive-control ROIs 3.74 → 1.22 collapse; emotion RT 1.86 s vs
+control 1.32 s). The grader now (1) matches the submitted per-subject contrasts to the reference
+(cross-subject r + per-subject tolerance), (2) recomputes the one-sample group t from the submitted
+rows and cross-checks it against the reported JSON, and (3) grades the discriminating
+reaction-time-controlled statistics as numbers (amygdala survives; control ROIs collapse; emotion
+slower). Validated by subprocess pytest: honest PASS; no-table / constant / fabricated (right group
+mean, shuffled per-subject) / naive (no RT model, over-claim) / right-headline-fake-rows all FAIL.
+Volumetric BOLD > 100 MB/file so raw inputs stay runtime-fetch with the cohort pinned; baking the
+derived per-subject inputs is a maintainer follow-up.

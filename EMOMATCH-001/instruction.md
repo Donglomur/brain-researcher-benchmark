@@ -19,18 +19,25 @@ first-level GLM of the emotion-matching task for each subject, compute the group
 `emotion > control` contrast (emotion-matching faces vs orientation-matching shapes), and report
 which brain regions make up the emotion-processing response.**
 
-Work from the fMRIPrep emomatching outputs of the subjects that have an emomatching run. For
-each subject, build the task design from the events file (trial types `emotion` and `control`),
-convolve with a haemodynamic response function, include the supplied fMRIPrep confounds as
-nuisance regressors and an appropriate high-pass filter, and estimate the `emotion > control`
-contrast. Summarise the response using a standard cortical parcellation (for example the
-Schaefer-2018 atlas with its Yeo-network labels) together with a priori regions of the emotion /
-face circuitry (e.g. amygdala and fusiform), then take the per-subject contrast estimates to a
-group-level one-sample test.
+Work from the fMRIPrep emomatching outputs of the subjects that have an emomatching run, then
+take the per-subject `emotion > control` contrast estimates to a group-level one-sample test.
 
-Report, in plain terms, **which regions/networks show the emotion-matching response and how you
-would characterise the emotion-processing network on these data** — stating only what your
-analysis actually supports.
+**Pin the pipeline as follows so the per-subject contrast estimates are reproducible.** Use the
+**first 20 subjects (in `participants.tsv` order) that have an `emomatching` run**. Build the
+first-level design from the events file (trial types `emotion` and `control`), SPM HRF, cosine
+high-pass 0.008 Hz, `TR = 2.0`; nuisance regressors = 6 motion parameters, aCompCor(5),
+`white_matter`, `csf`. Extract signals with the **Schaefer-2018 100-parcel / 7-network** cortical
+atlas plus 6 mm spheres at the a priori face/emotion ROIs — **amygdala** (±23, −5, −19) and
+**fusiform** (±40/42, −52, −18) — and at domain-general cognitive-control / salience /
+dorsal-attention ROIs — dACC (0, 20, 38), anterior insula (∓34/36, 20/22, 4/2), dlPFC (∓44/46,
+20/22, 30/28) and IPS (∓28/30, −58/−56, 46). Standardise each region's signal, estimate the
+`emotion > control` contrast per subject, and average left/right for the amygdala and fusiform.
+Fit the contrast under **two duration models**: a **naive constant-duration epoch** model and a
+**reaction-time model** whose per-trial epoch duration equals the trial's reaction time.
+
+Report, in plain terms, **which regions/networks show the emotion-matching response, and which of
+that response is emotion-specific versus explained by the reaction-time (time-on-task) difference
+between the conditions** — stating only what your analysis actually supports.
 
 ## Data access
 
@@ -54,11 +61,16 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
-- `activation.csv` — one row per subject with the subject id and its `emotion > control`
-  contrast estimate in the a priori face/emotion regions and in the summarised
-  cognitive-control regions.
-- `group_stats.json` — the group-level `emotion > control` result: the group test per region /
-  network (mean effect, t, p) and the number of subjects.
+- `activation.csv` — one row per subject with the subject id and its **naive-model**
+  `emotion > control` contrast estimate in the a priori face/emotion regions (`amygdala`,
+  `fusiform`) and in the summarised cognitive-control regions (the per-subject intermediate the
+  group tests are computed from).
+- `group_stats.json` — the group-level `emotion > control` result: for the amygdala, the
+  fusiform, and the aggregate cognitive-control ROIs, the group test (mean effect, t, p) under
+  **both** the naive constant-duration model **and** the reaction-time (variable-epoch =
+  reaction time) model; the per-network group test; the **per-condition mean reaction time**
+  (emotion vs control) and its paired test; and the number of subjects. Name the two models
+  clearly (e.g. `naive` / `rt_controlled`) so they are distinguishable.
 - `run_metadata.json` — dataset id, derivatives used, n subjects, atlas, first-level modelling
   choices, and the contrast.
 - `findings.md` — a short written summary characterising the emotion-processing response on

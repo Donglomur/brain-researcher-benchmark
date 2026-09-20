@@ -1,163 +1,222 @@
-"""Grading checks for EMOMATCH-001 (reproduce the emotion-matching faces>shapes activation on
-AOMIC PIOP2 / ds002790 and characterise the emotion-processing network).
+"""Proof-of-work grader for EMOMATCH-001 — reproduce the emotion-matching (faces>shapes)
+activation on AOMIC PIOP2 (ds002790) and report which of it is emotion-specific vs a
+reaction-time (time-on-task) artifact.
 
-Ground truth (validated before release on the ds002790 fMRIPrep emomatching derivatives, n=20,
-Schaefer-100/7-network cortex + amygdala, fusiform and cognitive-control 6mm spheres, group
-one-sample t across subjects; NAIVE = constant-duration epochs, RT = variable-duration epochs
-where each trial's duration equals its reaction time):
+The previous verifier checked shapes/ranges + a keyword sentence, so it passed on fabricated
+tables. This grader validates the EXACT ds002790 emomatching subjects and their per-subject
+emotion>control contrast estimates against a held-out reference (tests/reference.npz, built from
+the oracle run), recomputes the group one-sample t FROM the submitted rows, and grades the
+scientific judgement AS NUMBERS: under a reaction-time-controlled (variable-epoch) model the
+amygdala/fusiform response SURVIVES while the domain-general cognitive-control "emotion" effect
+COLLAPSES, matching the held-out reference. Keyword prose is only secondary.
 
-  PREMISE  emotion (face) trials are much slower than control (shape) trials:
-           RT 1.86 s vs 1.32 s   (difference 0.54 s; emotion slower in 95% of subjects;
-                                   paired t 6.7, Cohen d 1.67, p 7e-7)
-  NAIVE    emotion > control activates the amygdala (t +7.9) and fusiform (t +7.7) AND the
-           domain-general cognitive-control ROIs (anterior insula, dlPFC, IPS; aggregate mean
-           t +3.74, p 0.0014 -- significantly positive)
-  RT       modelling the reaction-time difference (variable-epoch GLM) makes the cognitive-control
-           activation COLLAPSE (aggregate mean t +3.74 -> +1.22, n.s.; anterior insula reverses to
-           t -3.01, IPS collapses), while the AMYGDALA (t 7.9 -> 8.3, -5%) and FUSIFORM
-           (t 7.7 -> 6.3) effects SURVIVE.
-
-So the amygdala/fusiform response is a genuine emotion/face-selective effect, but the broad
-fronto-parietal / insular "emotion network" is largely a TIME-ON-TASK (reaction-time / task
-difficulty) confound: emotion trials simply take longer, and that activation does not survive
-modelling the reaction-time difference (Grinband et al. 2008; Yarkoni et al. 2009).
-
-The failure mode this task targets (un-cued, wrong-cause axis): the agent fits the GLM, finds
-emotion > control activation across amygdala, fusiform AND fronto-parietal / insular cortex, and
-reports a distributed "emotion network", never asking whether the two conditions differ in
-reaction time (they differ enormously) and whether the broad activation is a time-on-task
-confound. A flat "emotion activates a distributed network including PFC/insula/parietal"
-over-claims; only recognising the reaction-time / time-on-task confound (that the broad
-activation is driven by the longer emotion trials and collapses when trial duration / RT is
-modelled, while amygdala/fusiform survive) passes. Merely naming reaction_time as one nuisance
-regressor in the pipeline does NOT pass -- the insight must be linked to the emotion RESULT.
+Reference (ds002790 fMRIPrep, Schaefer-100/7 + amygdala/fusiform/control spheres, n=20):
+  RT  emotion 1.86 s vs control 1.32 s (paired t 7.3, d 1.67; emotion slower 95%)
+  amygdala emotion>control  t  7.89 -> 8.25  (survives RT control)
+  control-ROI emotion>control t 3.74 -> 1.22 (collapses, n.s.)
 """
-import csv
 import json
 import os
 import re
+import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import proof_of_work as pw  # noqa: E402
+
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+REF_PATH = Path(__file__).resolve().parent / "reference.npz"
+_T = r"^t$|^tstat|^tstatistic$|^statistic$|^tval|^tvalue$"
+
+
+def _reference():
+    assert REF_PATH.exists(), "held-out reference tests/reference.npz is missing"
+    return pw.load_reference(REF_PATH)
+
+
+def _submitted():
+    p = OUT / "activation.csv"
+    assert p.exists(), "missing required output activation.csv"
+    return pw.load_submitted(p)
+
+
+def _stats():
+    p = OUT / "group_stats.json"
+    assert p.exists(), "missing required output group_stats.json"
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception as e:
+        raise AssertionError(f"group_stats.json is not valid JSON: {e}")
 
 
 def _findings():
-    # collapse whitespace (incl. hard line-wraps) so the co-occurrence checks read findings.md
-    # the way a person does -- flowing sentences -- not one hard-wrapped line at a time.
     return re.sub(r"\s+", " ", (OUT / "findings.md").read_text(encoding="utf-8").lower())
 
 
-def _blobs():
-    b = {}
-    for p in OUT.glob("*.json"):
-        try:
-            b[p.name] = json.loads(p.read_text(encoding="utf-8"))
-        except Exception:
-            pass
-    return b
+# ---- schema-tolerant extractors ---------------------------------------------------------
+_HEMI = ["amygdalal", "amygdalar", "left", "right", "lhemi", "rhemi", "hemisphere", "_lh", "_rh"]
 
 
-def _walk_numbers(obj):
-    """yield every (key, value) leaf where value is numeric, at any depth."""
-    if isinstance(obj, dict):
-        for k, v in obj.items():
-            if isinstance(v, (int, float)) and not isinstance(v, bool):
-                yield str(k).lower(), float(v)
-            else:
-                yield from _walk_numbers(v)
-    elif isinstance(obj, list):
-        for v in obj:
-            yield from _walk_numbers(v)
+def _amy_t(j, model):
+    if model == "naive":
+        return pw.find_path_number(j, path_include=["amygdala"], leaf_re=_T,
+                                   path_exclude=["rt", "variable", "duration", "controll", "matched"] + _HEMI,
+                                   prefer=["naive", "raw", "constant", "fixed"])
+    return pw.find_path_number(j, path_include=["amygdala"], leaf_re=_T,
+                               path_exclude=["naive", "constant", "fixedepoch"] + _HEMI,
+                               prefer=["rtcontrolled", "rt", "variable", "duration", "reactiontime"])
 
 
-def test_activation_computed():
-    rows = list(csv.DictReader(open(OUT / "activation.csv", encoding="utf-8")))
-    assert len(rows) >= 12, f"expected >=12 subjects with an emomatching run, got {len(rows)}"
-    # locate the amygdala emotion>control column (a priori face/emotion region)
-    amy_cols = [c for c in rows[0] if "amyg" in c.lower()]
-    assert amy_cols, f"no amygdala emotion>control column in {list(rows[0])}"
-    ac = amy_cols[0]
-    vals = [float(r[ac]) for r in rows if r.get(ac) not in (None, "", "n/a")]
-    assert len(vals) >= 12, "too few amygdala effect values"
-    mean_amy = sum(vals) / len(vals)
-    # the amygdala emotion>control effect is a real, positive activation (faces>shapes)
-    assert mean_amy > 0, f"amygdala emotion>control should be positive on average, got {mean_amy:.3f}"
+def _ctrl_t(j, model):
+    """The AGGREGATE cognitive-control ROI emotion>control t (not an individual control ROI)."""
+    base_exc = ["amyg", "fusiform", "face", "reaction"]
+    exc = base_exc + (["rtcontrolled", "variable", "duration", "matched"] if model == "naive"
+                      else ["naive", "constant"])
+    pref = (["naive", "raw", "constant"] if model == "naive"
+            else ["rtcontrolled", "rt", "variable", "duration", "reactiontime"])
+    for agg in (["control", "mean"], ["control", "average"], ["control", "aggregate"],
+                ["control", "overall"], ["control", "network"], ["control", "combined"],
+                ["cognitivecontrol"]):
+        v = pw.find_path_number(j, path_include=agg, leaf_re=_T, path_exclude=exc, prefer=pref)
+        if v is not None:
+            return v
+    return None
 
 
-def test_group_result_present():
-    blobs = _blobs()
-    assert "group_stats.json" in blobs, "group_stats.json missing or unparseable"
-    gs = blobs["group_stats.json"]
-    if isinstance(gs, dict) and gs.get("status") == "failed_precondition":
-        assert False, "group_stats.json reports failed_precondition"
-    # there is a group-level emotion>control test somewhere with a real t-statistic
-    tvals = [v for k, v in _walk_numbers(gs) if k in ("t", "tstat", "t_stat", "tval", "t_value")]
-    assert any(abs(v) > 2.0 for v in tvals), (
-        "no group-level t-statistic > 2 found in group_stats.json -- the emotion>control group "
-        "effect does not appear to have been computed")
+def _rt_mean(j, cond):
+    return pw.find_path_number(j, path_include=["reaction"], leaf_re=cond,
+                               path_exclude=["diff", "paired", "cohen", "frac"]) or \
+        pw.find_path_number(j, path_include=[cond], leaf_re=r"rt|reaction|means|seconds|meanrt",
+                            path_exclude=["diff", "paired"])
 
 
-def test_recognises_time_on_task_confound():
-    # The broad fronto-parietal / insular "emotion" activation is a reaction-time / time-on-task
-    # confound (emotion trials take much longer than control trials) that collapses when trial
-    # duration / RT is modelled, while amygdala/fusiform survive. A correct answer must LINK the
-    # reaction-time / time-on-task / difficulty difference to the emotion RESULT -- NOT a flat
-    # "emotion activates a distributed network", and NOT merely naming reaction_time as one
-    # nuisance regressor ("we regressed motion and response_time"). Same style as the motion
-    # check in CLINCONN-001 / DEVCONN-001 and the GSR check in SOCIALBRAIN-001.
+# ------------------------------------------------------------------ well-formedness
+def test_outputs_present_and_wellformed():
+    sub = _submitted()
+    assert len(sub) >= 12, f"activation.csv must carry per-subject contrasts; parsed {len(sub)} rows"
+    j = _stats()
+    assert isinstance(j, dict) and j, "group_stats.json empty"
+    meta = OUT / "run_metadata.json"
+    assert meta.exists() and json.loads(meta.read_text()), "run_metadata.json missing/empty"
+
+
+# ------------------------------------------------------------------ pillar 1
+def test_proof_of_work_subjects_and_values():
+    ref = _reference(); sub = _submitted(); st = ref["stats"]
+    pw.check_subjects_and_values(sub, ref, val_tol=st["VAL_TOL"], corr_min=st["CORR_MIN"],
+                                 cover=st["COVER"], match=st["MATCH"], eps=st["EPS"])
+
+
+# ------------------------------------------------------------------ pillar 2
+def test_recompute_and_crosscheck():
+    ref = _reference(); sub = _submitted(); st = ref["stats"]
+    j = _stats()
+    matched = [i for i in sub if i in set(ref["ids"])]
+    import math
+
+    t_amy = pw.one_sample_t([sub[i]["amygdala"] for i in matched])
+    assert math.isfinite(t_amy), "cannot recompute the amygdala group t from the rows"
+    assert abs(t_amy - st["amygdala_naive_t"]) <= st["RECOMP_TOL"], (
+        f"amygdala group t recomputed from the submitted rows ({t_amy:.2f}) does not match the "
+        f"reference naive t ({st['amygdala_naive_t']:.2f}, tol {st['RECOMP_TOL']}).")
+    rep_amy = _amy_t(j, "naive")
+    assert rep_amy is not None and abs(t_amy - rep_amy) <= st["RECOMP_TOL"], (
+        f"reported amygdala naive t ({rep_amy}) is not the one-sample t of the submitted amygdala "
+        f"rows ({t_amy:.2f}); CSV and JSON disagree.")
+
+    # control-ROI column recomputes to the reported control naive t
+    if all(sub[i]["control"] is not None for i in matched):
+        t_ctrl = pw.one_sample_t([sub[i]["control"] for i in matched])
+        rep_ctrl = _ctrl_t(j, "naive")
+        if rep_ctrl is not None:
+            assert abs(t_ctrl - rep_ctrl) <= st["RECOMP_TOL"] + 0.5, (
+                f"reported control-ROI naive t ({rep_ctrl}) is not the one-sample t of the submitted "
+                f"control-ROI rows ({t_ctrl:.2f}); CSV and JSON disagree.")
+
+
+# ------------------------------------------------------------------ pillar 3 (judgement as numbers)
+def test_conclusion_is_reaction_time_confound_numeric():
+    ref = _reference(); st = ref["stats"]; j = _stats()
+    amy_n, amy_r = _amy_t(j, "naive"), _amy_t(j, "rt")
+    ctrl_n, ctrl_r = _ctrl_t(j, "naive"), _ctrl_t(j, "rt")
+    assert amy_n is not None, "no amygdala naive emotion>control t reported"
+    assert amy_r is not None, (
+        "no REACTION-TIME-CONTROLLED (variable-epoch) amygdala t reported. The judgement graded "
+        "here is which of the emotion activation survives modelling the reaction-time difference; "
+        "report the emotion>control contrast under a variable-epoch (duration = reaction time) model.")
+    assert ctrl_n is not None and ctrl_r is not None, (
+        "no cognitive-control-ROI naive and reaction-time-controlled emotion>control t reported.")
+
+    # (a) amygdala SURVIVES reaction-time control (stays strongly positive, matches reference).
+    assert amy_r >= st["AMY_SURVIVE_MIN"], (
+        f"reported reaction-time-controlled amygdala t = {amy_r:.2f} does not survive; on the real "
+        f"data the amygdala emotion effect is robust to RT control (reference {st['amygdala_rt_t']:.2f}).")
+    assert abs(amy_r - st["amygdala_rt_t"]) <= st["AMY_T_TOL"], (
+        f"reported RT-controlled amygdala t = {amy_r:.2f} does not match the reference "
+        f"({st['amygdala_rt_t']:.2f}, tol {st['AMY_T_TOL']}).")
+
+    # (b) cognitive-control ROIs COLLAPSE under reaction-time control (a real drop to ~n.s.).
+    assert ctrl_r <= st["CTRL_RT_MAX"], (
+        f"reported reaction-time-controlled control-ROI t = {ctrl_r:.2f} did not collapse; the "
+        f"domain-general 'emotion' effect is a time-on-task artifact and should fall to ~n.s. "
+        f"(reference {st['control_rt_t']:.2f}).")
+    assert ctrl_n - ctrl_r >= st["CTRL_COLLAPSE_MARGIN"], (
+        f"the cognitive-control 'emotion' effect (naive t={ctrl_n:.2f}) does not collapse under "
+        f"reaction-time control (t={ctrl_r:.2f}); a time-on-task artifact requires a real drop.")
+
+    # (c) the amygdala is far more RT-robust than the control ROIs (dissociation).
+    assert amy_r > ctrl_r, (
+        f"under RT control the amygdala ({amy_r:.2f}) must remain above the collapsed control ROIs "
+        f"({ctrl_r:.2f}); the dissociation is the emotion-specificity result.")
+
+
+def test_reaction_time_premise_numeric():
+    """The premise (a real number a naive run still produces, but which anchors the confound):
+    emotion trials take markedly longer than control trials."""
+    ref = _reference(); st = ref["stats"]; j = _stats()
+    emo = _rt_mean(j, "emotion")
+    con = _rt_mean(j, "control")
+    assert emo is not None and con is not None, (
+        "group_stats.json does not report the per-condition mean reaction time (emotion vs control) "
+        "-- the premise of the time-on-task confound.")
+    assert emo > con, (
+        f"reported reaction times do not show emotion slower than control (emotion {emo:.2f}s vs "
+        f"control {con:.2f}s).")
+    assert abs(emo - st["rt_emotion"]) <= st["RT_TOL"] and abs(con - st["rt_control"]) <= st["RT_TOL"], (
+        f"reported mean reaction times (emotion {emo:.2f}s, control {con:.2f}s) do not match the "
+        f"reference (emotion {st['rt_emotion']:.2f}s, control {st['rt_control']:.2f}s).")
+
+
+# ------------------------------------------------------------------ secondary prose signal
+def test_findings_engage_rt_confound_and_avoid_overclaim():
+    """SECONDARY (numbers carry the grade). findings.md must state that the broad
+    cognitive-control 'emotion network' is a reaction-time / time-on-task confound while the
+    amygdala/fusiform response is emotion-specific, and must not report the whole broad network
+    as a genuine emotion network."""
     text = _findings()
-    # time-on-task marker
-    TOT = (r"(?:time[- ]on[- ]task|reaction[- ]?time|response[- ]?time|\brt\b|"
-           r"trial (?:duration|length)|(?:stimulus |trial )?duration difference|"
-           r"difficult\w*|task difficulty|effort\w*|longer (?:to respond|reaction|response|on)|"
-           r"respond\w* (?:more )?slow\w*|slower (?:on |for )?(?:the )?emotion|took longer)")
-    mentions_tot = re.search(TOT, text)
-    # a token referring to the emotion RESULT / the broad activation
-    RES = (r"(?:emotion\w*|affect\w*|face\w*|activation|activ\w*|contrast|effect|response|network|"
-           r"fronto-?pariet\w*|prefront\w*|\bpfc\b|insula\w*|cingulate|salien\w*|"
-           r"cognitive[- ]control|control network|dorsal[- ]?atten\w*|attention|widespread|"
-           r"distributed|broad\w*|parietal|cluster\w*|region\w*)")
-    # a NARROW result token for the collapse branches: identical to RES but WITHOUT the bare
-    # "response" alternative, which collides with the pipeline term "response time" / "reaction
-    # time" (TOT) and would let a nuisance-regressor sentence self-satisfy the result linkage.
-    RESN = (r"(?:emotion\w*|affect\w*|face\w*|activation|activ\w*|contrast|effect|network|"
-            r"fronto-?pariet\w*|prefront\w*|\bpfc\b|insula\w*|cingulate|salien\w*|"
-            r"cognitive[- ]control|control network|dorsal[- ]?atten\w*|attention|widespread|"
-            r"distributed|broad\w*|parietal|cluster\w*|region\w*)")
-    # confound / attribution
-    CONF = (r"(?:confound\w*|artif\w*|spurious|driv\w*|explain\w*|attribut\w*|account\w*|due to|"
-            r"reflect\w*|not (?:truly |really |necessarily )?emotion[- ]specific|not specific|"
-            r"rather than emotion|mislead\w*|inflat\w*|contaminat\w*)")
-    # collapse under control of duration / RT.
-    # NB: no bare "reduc\w*" -- it false-positives on pipeline vocabulary ("modelled response
-    # time as a parametric regressor, which reduced residual variance"), exactly the collision
-    # dropped in DEVCONN-001 / CLINCONN-001. The remaining tokens are strong collapse words that
-    # a nuisance-regressor description does not use.
-    COLL = (r"(?:no longer|not signif\w*|not statistically|n\.?s\.|vanish\w*|disappear\w*|"
-            r"attenuat\w*|abolish\w*|collaps\w*|null|gone|absent|weaken\w*|shrink\w*|"
-            r"revers\w*|does not survive|doesn't survive|did not survive|not robust|"
-            r"drop\w* (?:to|out)|falls? to)")
-    CTRL = (r"(?:control\w*|adjust\w*|regress\w*|model\w*|includ\w*|account\w*|covar\w*|"
-            r"variable[- ]epoch|duration[- ]?modulat\w*|matched?|partial\w*)")
-    recognises = re.search(
-        # A) time-on-task / RT <-> confound <-> the emotion result (both orders)
-        rf"{TOT}[^.\n]{{0,90}}{CONF}[^.\n]{{0,90}}{RES}"
-        rf"|{RES}[^.\n]{{0,90}}{CONF}[^.\n]{{0,90}}{TOT}"
-        rf"|{RES}[^.\n]{{0,70}}{TOT}[^.\n]{{0,40}}(?:confound|artif|driv|attribut|not (?:emotion[- ]specific|specific))"
-        # B) controlling duration/RT collapses the broad effect  (control -> TOT -> RESULT -> collapse).
-        #    The RESULT token (RESN) is required so a bare nuisance-pipeline sentence
-        #    ("modelled response time ... which reduced variance") cannot self-satisfy the branch:
-        #    the collapse must be OF the emotion / broad activation, not of residual variance.
-        rf"|{CTRL}[^.\n]{{0,40}}(?:for |the )?{TOT}[^.\n]{{0,110}}{RESN}[^.\n]{{0,60}}{COLL}"
-        # C) TOT -> control/model -> RESULT -> collapse
-        rf"|{TOT}[^.\n]{{0,80}}(?:{CTRL})[^.\n]{{0,80}}{RESN}[^.\n]{{0,50}}{COLL}"
-        # D) the broad activation collapses when duration/RT is modelled
-        rf"|{RESN}[^.\n]{{0,90}}{COLL}[^.\n]{{0,90}}(?:{CTRL}[^.\n]{{0,30}})?{TOT}"
-        # E) emotion trials take longer, explicitly tied to driving/explaining the activation
-        rf"|emotion[^.\n]{{0,40}}(?:longer|slower|more time)[^.\n]{{0,120}}(?:{CONF}|{COLL})", text)
-    assert mentions_tot and recognises, (
-        "findings.md does not report that the broad emotion>control activation is a reaction-time "
-        "/ time-on-task confound (emotion trials take much longer than control trials; the "
-        "fronto-parietal / insular activation collapses when trial duration / reaction time is "
-        "modelled, while amygdala/fusiform survive). A flat 'emotion activates a distributed "
-        "network', or merely naming reaction_time as a nuisance regressor, misses the confound.")
+    RT = r"(?:reaction[- ]?time|response[- ]?time|\brt\b|time[- ]?on[- ]?task|time on task|difficulty|slower|took longer|duration)"
+    COLL = (r"(?:collaps\w*|disappear\w*|vanish\w*|attenuat\w*|no longer|not signif\w*|n\.?s\.|"
+            r"reverse\w*|driven by|artif\w*|confound\w*|explain\w*|not emotion|non-?specific|"
+            r"time[- ]?on[- ]?task|does not survive|drops?|reduc\w* to)")
+    SURV = r"(?:amygdal\w*|fusiform|face)"
+    engages_rt = re.search(rf"{RT}[^.\n]{{0,80}}{COLL}|{COLL}[^.\n]{{0,80}}{RT}", text)
+    engages_survive = re.search(rf"{SURV}[^.\n]{{0,90}}(?:surviv\w*|robust|unchanged|remain\w*|"
+                                rf"still signif\w*|emotion-?specific|genuine|specific)", text)
+    assert engages_rt, (
+        "findings.md does not report that the broad cognitive-control 'emotion' activation is a "
+        "reaction-time / time-on-task confound (it collapses when trial duration/RT is modelled).")
+    assert engages_survive, (
+        "findings.md does not report that the amygdala/fusiform face response survives reaction-time "
+        "control (the emotion-specific result).")
+
+    # over-claim guard: must not conclude the whole broad fronto-parietal network is emotion-specific
+    overclaim = re.search(
+        r"(?:distributed|broad|widespread|whole|entire|fronto-?parietal|cognitive-?control|salience)"
+        r"[^.\n]{0,40}emotion[- ]?(?:processing )?network[^.\n]{0,40}(?:genuine|specific|robust|real|reflect)",
+        text)
+    disclaim = re.search(r"(?:not|isn.t|is not|rather than|artif\w*|confound\w*|time[- ]?on[- ]?task)"
+                         r"[^.\n]{0,60}(?:emotion[- ]?(?:processing )?network|distributed|broad)", text)
+    assert not (overclaim and not disclaim), (
+        "findings.md over-claims the broad fronto-parietal/cognitive-control network as a genuine "
+        "emotion-processing network; on these data it is largely a reaction-time (time-on-task) "
+        "artifact.")
