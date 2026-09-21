@@ -144,6 +144,9 @@ for i, (func, cf) in enumerate(zip(adhd.func, adhd.confounds)):
         null = np.array([sliding_window_edge_sd(phase_randomize(ts, rng), W, STEP)
                          for _ in range(N_SURR)])
         rec[f"mean_edge_sd_w{W}"] = round(obs, 6)
+        # the per-subject sampling-variability baseline: the mean windowed edge-SD of this
+        # subject's spectrum-matched stationary surrogate (what the observed value is compared to).
+        rec[f"mean_edge_sd_null_w{W}"] = round(float(null.mean()), 6)
         ratios[W].append(obs / float(null.mean()))
         pvals[W].append((np.sum(null >= obs) + 1) / (N_SURR + 1))
     rows.append(rec)
@@ -154,8 +157,9 @@ if len(df) < 25:
 
 # ---- required output: per-subject connectivity variability (the deliverable) ----
 cols = ["subject_index", "site", "n_timepoints",
-        "mean_edge_sd_w20", "mean_edge_sd_w30", "mean_edge_sd_w44"]
-df[cols].to_csv(OUT / "variability.csv", index=False)
+        "mean_edge_sd_w20", "mean_edge_sd_w30", "mean_edge_sd_w44",
+        "mean_edge_sd_null_w20", "mean_edge_sd_null_w30", "mean_edge_sd_null_w44"]
+df[[c for c in cols if c in df.columns]].to_csv(OUT / "variability.csv", index=False)
 
 
 def col_mean(W):

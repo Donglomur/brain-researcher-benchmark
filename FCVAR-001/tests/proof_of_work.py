@@ -76,6 +76,58 @@ def load_submitted(path):
     return out
 
 
+def load_null(path):
+    """Return {canon_id: {'20':v,'30':v,'44':v}} for the SURROGATE/NULL edge-SD columns of
+    variability.csv -- the sampling-variability baseline the observed edge-SD was compared against.
+    A null column is identified by a null/surrogate/stationary/baseline token AND a window token, so
+    it is not confused with the observed edge-SD columns."""
+    rows = list(csv.DictReader(open(path, encoding="utf-8")))
+    if not rows:
+        return {}
+    headers = list(rows[0].keys())
+    id_c = _pick(headers, ("subjectindex", "subject", "subid", "index", "id"))
+    norm_to_raw = {h: _norm(h) for h in headers}
+    nulltok = re.compile(r"null|surrogate|surr|stationary|baseline|expected|chance|phaseran|"
+                         r"phaserandom|iaaft|resample|samplingvar")
+
+    def pick_null(w):
+        for h, n in norm_to_raw.items():
+            if nulltok.search(n) and (f"w{w}" in n or f"{w}tr" in n or f"sd{w}" in n
+                                      or n.endswith(w) or f"_{w}" in n):
+                return h
+        return None
+
+    cols = {w: pick_null(w) for w in ("20", "30", "44")}
+    out = {}
+    for r in rows:
+        cid = canon_id(r.get(id_c, "")) if id_c else ""
+        if cid == "":
+            continue
+        rec = {}
+        for w, c in cols.items():
+            if c is None:
+                continue
+            try:
+                rec[w] = float(r.get(c))
+            except (TypeError, ValueError):
+                pass
+        out[cid] = rec
+    return out
+
+
+def paired_corr(sub_a, sub_b, w):
+    """Cross-subject Pearson correlation between two per-subject dicts at window w."""
+    ids = [i for i in sub_a if i in sub_b and w in sub_a[i] and w in sub_b[i]
+           and math.isfinite(sub_a[i][w]) and math.isfinite(sub_b[i][w])]
+    if len(ids) < 3:
+        return float("nan"), 0
+    a = [sub_a[i][w] for i in ids]
+    b = [sub_b[i][w] for i in ids]
+    if np.std(a) == 0 or np.std(b) == 0:
+        return float("nan"), len(ids)
+    return float(np.corrcoef(a, b)[0, 1]), len(ids)
+
+
 def coverage(sub, ref_ids):
     return sum(1 for i in ref_ids if i in sub) / max(1, len(ref_ids))
 

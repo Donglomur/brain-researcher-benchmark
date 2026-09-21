@@ -35,8 +35,15 @@ The standard preprocessing choices the analysis leaves to the analyst (nuisance 
 temporal filtering, signal normalisation) should follow common practice. Regions with no
 usable signal for a given subject may be dropped.
 
+To judge whether the window-to-window fluctuation reflects genuinely time-varying connectivity,
+**compare each subject's observed edge variability against the sampling-variability baseline you
+would expect for that subject's data under the appropriate null, and report that per-subject
+baseline** alongside the observed value, so the reader can see how far the observed fluctuation
+exceeds it.
+
 Report, in plain terms, **whether resting-state connectivity is time-varying on these data and
-how strong that variability is** — stating only what your analysis actually supports.
+how strong that variability is relative to the baseline** — stating only what your analysis
+actually supports.
 
 ## Data
 
@@ -61,10 +68,14 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `variability.csv` — one row per subject:
   `subject_index, site, n_timepoints, mean_edge_sd_w20, mean_edge_sd_w30, mean_edge_sd_w44`,
   where each `mean_edge_sd_wX` is the mean over edges of the across-window standard deviation
-  of the windowed connectivity at window length X TR.
+  of the windowed connectivity at window length X TR; **plus, at least at the primary window
+  length, the per-subject sampling-variability baseline you compared the observed value against**
+  (e.g. `mean_edge_sd_null_w30` — the expected mean edge-SD for that subject's data under your
+  null).
 - `dynamics.json` — the group-level summary: the window lengths used, the primary window
-  length, the group-mean of `mean_edge_sd` at each window length, the sliding-window step, and
-  `n_subjects`.
+  length, the group-mean of `mean_edge_sd` at each window length, the sliding-window step,
+  `n_subjects`, and the observed-to-baseline ratio (how far the observed variability exceeds the
+  sampling-variability baseline).
 - `run_metadata.json` — dataset id, n subjects, atlas, window length(s), step, and the
   preprocessing choices you made.
 - `findings.md` — a short written summary stating whether resting-state connectivity is

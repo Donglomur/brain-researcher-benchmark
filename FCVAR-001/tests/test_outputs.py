@@ -129,32 +129,69 @@ def test_group_means_recompute_from_rows():
             f"inconsistent with the submitted rows (30 TR mean {rec30:.3f})")
 
 
-# ------------------------------------------------------------------ pillar 3 (judgement as numbers)
-def test_conclusion_stationarity_is_numeric():
-    """PILLAR 3: the honest, volunteered discriminating quantity graded as NUMBERS. The task is
-    un-cued -- it never mentions a stationary null -- so an agent that only computes the
-    sliding-window SD (and reports 'strong dynamics') has no observed/stationary-null ratio to
-    report. The reported ratio must be ~1 (the observed fluctuation barely exceeds a proper
-    spectrum-matched stationary surrogate), and the fraction of surrogate-significant subjects
-    low. A ratio >> 1 indicates an invalid (e.g. white-noise / static-covariance-only) null."""
+# ------------------------------------------------------------------ pillar 3 (judgement RECOMPUTED from the submitted null column)
+def test_conclusion_stationarity_recomputed_from_null_column():
+    """PILLAR 3: the discriminating quantity -- the observed/stationary-null ratio -- is RECOMPUTED
+    from a submitted per-subject NULL column, not read off a reported scalar. The task is un-cued
+    (it never names a stationary null); an agent that only computes the sliding-window SD has no
+    per-subject surrogate baseline to submit. The grader requires the per-subject surrogate/null
+    edge-SD at the primary window, checks it is a PROPER stationary null (non-constant, and tracking
+    the observed edge-SD across subjects -- a white-noise / n_timepoints-only null does not), and
+    recomputes ratio = group_mean(observed) / group_mean(null), requiring it near 1.
+
+    HONEST-LIMITATION (see proposal.md): the honest finding is precisely that the stationary null
+    ~= the observed data (ratio ~1.02), so the null and the already-validated observed edge-SD very
+    nearly coincide. A submission that manufactures null ~= observed from the validated observed
+    column therefore still passes; this axis is guessable-from-priors and, for the fully un-fakeable
+    guarantee, relies on the frontier gate, not the verifier. This pillar kills the lazier attacks
+    (a bare guessed ratio scalar, a flat null, or a white-noise null) but is honestly 5(b)."""
     ref = _reference()
     st = ref["stats"]
+    sub = _submitted()
+    null = pw.load_null(OUT / "variability.csv")
     dyn = _dynamics()
+    W = st.get("primary", "30")
 
-    ratios = [v for v in pw.find_ratio_values(dyn) if v == v]
-    assert ratios, (
-        "no observed/stationary-null ratio is reported. The sliding-window edge-SD looks like "
-        "substantial dynamics, but the honest analysis compares it to a stationary "
-        "(spectrum-matched / phase-randomised) surrogate; without that comparison the 'dynamics' "
-        "cannot be distinguished from sampling variability of a stationary process. Report the "
-        "observed-to-null ratio (or excess).")
-    in_band = [v for v in ratios if st["RATIO_LO"] <= v <= st["RATIO_HI"]]
-    assert in_band, (
-        f"the reported observed/stationary-null ratio(s) {sorted(set(round(v,3) for v in ratios))} "
-        f"are not near 1 (band [{st['RATIO_LO']}, {st['RATIO_HI']}]). On these data the observed "
-        f"sliding-window variability is only ~2% above a proper stationary surrogate; a ratio "
-        f">> 1 means an invalid null (white-noise / static-covariance-only) that ignores the "
-        f"autocorrelation- and window-length-dependence of windowed fluctuation.")
+    have_null = [i for i in null if W in null[i] and null[i][W] == null[i][W]]
+    assert len(have_null) >= st["NULL_MIN_SUBJECTS"], (
+        "no per-subject stationary-null / surrogate edge-SD is provided. The sliding-window edge-SD "
+        "looks like substantial dynamics, but the honest analysis compares each subject's observed "
+        "value to a surrogate (spectrum-matched / phase-randomised, sampling-variability) baseline; "
+        "report that per-subject baseline (e.g. mean_edge_sd_null_w30) so the observed-to-null ratio "
+        "can be recomputed. A single reported ratio is not sufficient.")
+
+    # the null must be a PROPER stationary null: non-constant and tracking the observed edge-SD
+    # across subjects (a white-noise / n_timepoints-only null is unrelated to each subject's real
+    # windowed fluctuation and does NOT track it).
+    assert pw.nonconstant(null, W, st["EPS"]), (
+        f"the per-subject stationary-null edge-SD at {W} TR is constant across subjects -- not a "
+        f"real per-subject surrogate.")
+    tc, ntc = pw.paired_corr(sub, null, W)
+    assert ntc >= st["NULL_MIN_SUBJECTS"] and tc == tc and tc >= st["NULL_TRACK_MIN"], (
+        f"the submitted per-subject null edge-SD does not track the observed edge-SD across subjects "
+        f"(cross-subject r={tc:.3f} < {st['NULL_TRACK_MIN']}); a proper spectrum-matched stationary "
+        f"surrogate reproduces each subject's static covariance and spectrum, so its windowed edge-SD "
+        f"tracks the observed one. A white-noise / n-timepoints-only null does not.")
+
+    obs_mean = pw.group_mean(sub, W)
+    null_mean = pw.group_mean(null, W)
+    assert null_mean == null_mean and null_mean > 0, "cannot recompute the null group mean edge-SD"
+    ratio = obs_mean / null_mean
+    assert st["RATIO_LO"] <= ratio <= st["RATIO_HI"], (
+        f"the observed/stationary-null ratio recomputed from the submitted rows "
+        f"(observed {obs_mean:.3f} / null {null_mean:.3f} = {ratio:.3f}) is not near 1 "
+        f"(band [{st['RATIO_LO']}, {st['RATIO_HI']}]). On these data the observed sliding-window "
+        f"variability is only ~2% above a proper stationary surrogate; a ratio >> 1 means an invalid "
+        f"null (white-noise / static-covariance-only) that ignores the autocorrelation- and "
+        f"window-length-dependence of windowed fluctuation.")
+
+    # any reported ratio must be consistent with the recomputed one (CSV and JSON agree)
+    reported = [v for v in pw.find_ratio_values(dyn) if v == v]
+    if reported:
+        assert any(abs(v - ratio) <= st["RATIO_REPORT_TOL"] for v in reported), (
+            f"reported observed/null ratio {sorted(set(round(v,3) for v in reported))} is "
+            f"inconsistent with the ratio recomputed from the submitted observed and null columns "
+            f"({ratio:.3f}).")
 
     frac_sig = [v for v in pw.find_frac_sig_values(dyn) if v == v]
     if frac_sig:

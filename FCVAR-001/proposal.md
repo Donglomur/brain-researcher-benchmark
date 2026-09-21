@@ -100,7 +100,9 @@ Two reviewer-style pytest checks (no rubric/weights):
 Held-out reference `tests/reference.npz` (from `solution/compute.py`, never shipped): per-subject
 observed mean edge-SD at 20/30/44 TR for the 30 pinned ADHD-200 subjects + `ref_stats` (group
 edge-SD 0.443/0.318/0.223; observed/stationary-null ratio ~1.02 at every window; fraction of
-subjects with surrogate p<0.05 = 0.20/0.13/0.10). reference.npz sha256 7c41c20ade4de46b. Task
+subjects with surrogate p<0.05 = 0.20/0.13/0.10). reference.npz sha256(16) efad113113a4b09d
+(re-saved in the 2026-09 second pass with tightened ratio band + null-column locks; per-subject
+data unchanged). Task
 stays **un-cued** (the stationary-null comparison is volunteered).
 
 Pillars (subprocess-validated): (1) per-subject observed edge-SD tracks the held-out reference
@@ -119,3 +121,52 @@ SD) FAIL | fabricated (from n_timepoints) FAIL | naive (no ratio, overclaim) FAI
 Packaging: pinned nilearn ADHD-200 (30 subjects) + Harvard-Oxford cort-maxprob-thr25-2mm; nilearn
 0.12.1 stack. Data runtime-fetched, `allow_internet=true` retained. Baking the per-subject ROI
 series is a maintainer follow-up.
+
+## Second-pass fix (2026-09): recompute the ratio from a submitted null column — HONEST-LIMITATION 5(b)
+
+The proof-of-work grader graded the discriminating quantity (the observed/stationary-null ratio)
+as a **reported scalar** in a wide band [0.75, 1.45]. Because "dynamic FC is largely stationary
+sampling variability" (Laumann 2015; Liegeois 2017) is a famous result, "ratio ~1" is
+**guessable from priors**: an agent that ran only the sliding-window SD could report ratio=1.02
+without running any surrogate (red-team attack C).
+
+**This axis is irreducibly guessable-from-priors, so this task is documented as option 5(b).**
+The reason is structural, and worth stating plainly: the honest finding is that the stationary
+null **numerically coincides** with the observed data (ratio ~1.02) — that coincidence *is* the
+result. The per-subject observed edge-SD is already validated (pillar 1), and the honest per-subject
+null is ~0.98x the observed. So *no verifier signature can separate "ran the surrogate" from
+"constructed null ≈ observed"* without also rejecting the honest answer. (This is unlike MAPREL,
+where the spin null is wide and centred at 0 — well away from the observed r — giving a real,
+un-fakeable spread signature. FCVAR has no such separation.)
+
+We nonetheless raised the floor well above the old scalar guess, and tightened, per the brief:
+- **Removed the wide silent scalar; recompute instead.** The grader now requires a **per-subject
+  null column** (`mean_edge_sd_null_w30` — the sampling-variability baseline each observed value
+  was compared against; instruction reframed neutrally to ask for it) and **recomputes**
+  ratio = group_mean(observed) / group_mean(null). The ratio band was tightened to [0.80, 1.25].
+- **Rejects the lazier attacks.** A bare guessed ratio scalar (no null column), a **flat**
+  null, a **white-noise** null (does not track the observed edge-SD across subjects; corr < 0.5),
+  and a **wrong-magnitude** null (ratio >> 1, e.g. a static-covariance-only / white-noise null) all
+  now FAIL. The per-subject null must be a proper spectrum-matched stationary surrogate that tracks
+  the observed edge-SD. `compute.py` now emits the per-subject null columns.
+- **HONEST-LIMITATION (flagged).** A submission that manufactures `null ≈ observed` (ratio ~1) from
+  the validated observed column **still passes** (validated: `RESIDUAL_null_eq_obs` PASSES). This
+  residual is unavoidable given null≈observed; the fully un-fakeable guarantee for this task
+  **relies on the frontier gate, not the verifier**. No number is quoted in `instruction.md`.
+
+**Adversarial self-validation (subprocess pytest per case, numpy-only; honest null synthesized as
+observed/ratio + small per-subject noise, faithful to the grader's tracking/non-flat/recompute
+checks):**
+
+| case | result | teeth |
+|---|---|---|
+| honest oracle (observed + per-subject null) | **PASS** | — |
+| defensible (primary-window null only, IAAFT-style ratio 1.05, renamed) | **PASS** | — |
+| attack C — guessed ratio scalar, **no null column** | **FAIL** | no per-subject null provided |
+| attack A — **flat** null column | **FAIL** | constant across subjects |
+| attack A — **white-noise** null (doesn't track observed) | **FAIL** | cross-subject r 0.25 < 0.5 |
+| attack — **wrong-magnitude** null (ratio ~2) | **FAIL** | recomputed ratio 2.0 out of band |
+| (residual) **null ≈ observed** manufactured from the observed column | PASS | HONEST-LIMITATION — 5(b), relies on the frontier gate |
+
+The lazier attacks now FAIL, but the discriminator remains guessable-from-priors; this task is
+honestly 5(b), not a clean 5(a).
