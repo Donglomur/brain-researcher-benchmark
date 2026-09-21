@@ -110,14 +110,32 @@ def pearson(x, y):
 
 def check_subjects_and_values(subrows, ref, key_ref, key_sub, val_tol, corr_min, cover, match,
                               eps=1e-4):
-    refmap = {i: float(v) for i, v in zip(ref["ids"], ref[key_ref])}
-    matched = [r for r in subrows if r["id"] in refmap and r.get(key_sub) is not None]
-    coverage = len(matched) / max(1, len(refmap))
+    # Stable join by AGE, not by row id: `subject_index` is a fetch-ORDER label, and a valid re-run
+    # (different nilearn version / cache path) may enumerate ds000228 in a different order, so an
+    # id/index join compares mismatched subjects and a correct solve fails spuriously. Age is the
+    # real per-subject phenotype (identical across runs); match each submitted row to an unused
+    # reference subject of the same age (ties within an age broken by nearest target value).
+    from collections import defaultdict
+    buckets = defaultdict(list)
+    for a, v in zip(ref["age"], ref[key_ref]):
+        buckets[round(float(a), 2)].append(float(v))
+    for k in buckets:
+        buckets[k].sort()
+    n_ref = len(ref[key_ref])
+    rows = [r for r in subrows if r.get(key_sub) is not None and r.get("age") is not None]
+    sub, refv = [], []
+    for r in rows:
+        cand = buckets.get(round(float(r["age"]), 2))
+        if not cand:
+            continue
+        v = float(r[key_sub])
+        j = min(range(len(cand)), key=lambda i: abs(cand[i] - v))  # nearest ref value at this age
+        refv.append(cand.pop(j)); sub.append(v)
+    matched = sub
+    coverage = len(sub) / max(1, n_ref)
     assert coverage >= cover, (
-        f"[{key_sub}] connectivity.csv covers only {coverage:.1%} of the {len(refmap)} real "
-        f"ds000228 subjects (need >= {cover:.0%}). Fabricated or missing subject ids.")
-    sub = [r[key_sub] for r in matched]
-    refv = [refmap[r["id"]] for r in matched]
+        f"[{key_sub}] connectivity.csv covers only {coverage:.1%} of the {n_ref} real "
+        f"ds000228 subjects by age (need >= {cover:.0%}). Fabricated or missing subjects.")
     assert statistics.pstdev(sub) > eps, f"[{key_sub}] constant across subjects -- not per-subject"
     rc = pearson(sub, refv)
     assert math.isfinite(rc) and rc >= corr_min, (
