@@ -42,6 +42,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   `{"md_mean": <float>, "fa_mean": <float>, "md_units": "1e-3 mm^2/s", "n_wm_voxels": <int>}`.
   **Report `md_mean` in units of 1e-3 mm^2/s (i.e. um^2/ms)** — a white-matter MD is of
   order 0.8 in these units. `fa_mean` is dimensionless in [0, 1].
+- `md_voxelwise.csv` — the per-voxel table underlying your reported ROI-mean MD: one row per
+  white-matter ROI voxel, with columns `i,j,k` (its voxel index in the acquisition array) and
+  `md` (its mean diffusivity, in the same 1e-3 mm^2/s units as `md_mean`). Its mean over the
+  rows must equal your reported `md_mean`.
 - `run_metadata.json` — dataset id, the diffusion model / estimation method you used, and
   the ROI voxel count.
 - `findings.md` — a few sentences reporting the ROI-mean MD and FA and how you estimated

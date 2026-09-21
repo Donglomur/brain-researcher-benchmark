@@ -35,6 +35,33 @@ The naive DTI-over-all-shells value is inflated-error LOW by ~0.30e-3 (~34%). Th
 | DTI all shells (naive) | 0.586 | **FAIL** |
 | DTI all shells, OLS | 0.502 | **FAIL** |
 
+### PROOF-OF-WORK REWORK (this revision — reproduction genre, held-out per-voxel reference)
+
+The value-only point-match (fabrication-vulnerable per the suite audit: a plausible in-band
+number over fabricated data passes) is replaced by a held-out per-voxel reference + three
+pillars. WMMD stays a REPRODUCTION task (QSMDIPOLE model): the un-cued modelling judgement is
+graded by the VALUE reproducing the unbiased MD, and the instruction stays un-cued (it names
+only "the ROI-mean MD and FA").
+
+- **Held-out reference** (`tests/reference.npz`, sha256 `fbb98ba1…2819f`, ~110 KB, committed,
+  never shipped): the per-voxel MD map (1e-3 mm^2/s) over the fixed 10 105-voxel WM ROI for
+  three model configs — DKI all-shell 0.883, DTI b≤1000 0.801, DTI all-shell 0.585 — built by
+  running the pinned pipeline on the real dipy CFIN subject (numpy 2.2.6 / scipy 1.14.1 / dipy
+  1.12.1).
+- **Neutral intermediate output** (new, un-cued): `md_voxelwise.csv` — the per-voxel MD the
+  standard pipeline already produces (columns `i,j,k,md`, unit-robust).
+- **Pillar 1** — the per-voxel table covers the real ROI (≥50 %), is non-constant, and
+  correlates ≥0.75 with some real config (a fabricated/constant/guessed table matches none).
+- **Pillar 2** — the ROI mean recomputes to the reported `md_mean` and lands in the UNBIASED
+  band [0.72, 1.03]: DKI 0.883 and low-b DTI 0.801 pass; the DTI-over-all-shells value 0.585 is
+  out of band (its per-voxel map is real, so it passes pillar 1, but the biased value fails).
+- **Pillar 3** — secondary: `findings.md` reports an MD consistent with the headline.
+
+**Validation matrix (subprocess pytest per case):** honest (DKI) PASS · honest-numeric (DKI +
+reports the DTI-all bias) PASS · no-table / constant / fabricated-non-constant / fabricated-
+coords FAIL (pillar 1) · naive DTI-all-shells (real map, value 0.585) FAIL (pillar 2 value,
+pillar 1 passes — confirming fabrication and the biased answer are caught by different pillars).
+
 ### Cost
 `hard`. cpus 2, mem 8 GB, internet on (dipy fetches `cfin_multib`, ~170 MB, at runtime). The DKI fit over 496 volumes on the masked ROI is the runtime cost (~1 min). Deps: dipy 1.12.1 + numpy/scipy/nibabel/h5py.
 

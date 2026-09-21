@@ -1,124 +1,118 @@
-"""Grading checks for WMMD-001 (white-matter mean diffusivity, cfin multi-b).
+"""Proof-of-work grading for WMMD-001 (white-matter mean diffusivity, CFIN multi-b).
 
-Ground truth (validated before release on dipy's multi-b cfin_multib, b = 0..3000 s/mm^2;
-WM ROI = brain-mask(median_otsu vol_idx=[0], radius=4, numpass=2, dilate=1) & low-b(b<=1000)
-DTI FA > 0.5 = 10084 voxels; MD in 1e-3 mm^2/s = um^2/ms):
+Genre: REPRODUCTION (QSMDIPOLE-001 model) -- the un-cued judgement (how to model the wide
+multi-b signal) is graded by the VALUE reproducing the unbiased MD, not by an over-claim
+write-up. See PROOF_OF_WORK_SPEC.md.
 
-    DKI, all shells (correct)                 : md_mean = 0.883   <-- EXPECTED
-    DTI, low-b (b<=1000) only  (also correct) : md_mean = 0.801
-    DTI, ALL shells (NAIVE, biased)           : md_mean = 0.586   (0.30e-3 low; ~34%)
-    DTI, ALL shells, OLS                       : md_mean = 0.502
+Held-out reference (tests/reference.npz): the per-voxel MD map (in 1e-3 mm^2/s) over the fixed
+WM ROI (~10 105 voxels; brain mask & low-b FA>0.5), for each diffusion-model config:
 
-The acquisition extends to b = 3000, where the DW signal departs from a single mono-
-exponential decay. A plain single-tensor (Gaussian / mono-exponential DTI) fit over the
-full b-range absorbs the high-b curvature into an artificially low apparent diffusivity,
-so it UNDERESTIMATES MD by ~0.30e-3 (~34%). The kurtosis-tensor diffusion tensor (DKI,
-the b->0 limit) recovers the unbiased value ~0.88e-3; restricting a plain tensor to
-b<=1000 gives ~0.80e-3. The verifier matches the unbiased-diffusivity region within
-tolerance; every DTI-over-all-shells answer (0.50-0.59) falls outside it.
+    DKI, all shells (unbiased)          MD = 0.883   <- reference / oracle
+    DTI, b<=1000 only (also unbiased)   MD = 0.801   <- alt-correct
+    DTI, ALL shells (naive, biased low) MD = 0.585   <- absorbs high-b non-Gaussian curvature
 
-The gap is robust to fit method (WLS/OLS) and light Gaussian smoothing.
+Over this wide acquisition (b up to 3000) the diffusion-weighted signal departs from a single
+mono-exponential; a plain tensor over the full b-range absorbs that curvature into an
+artificially LOW apparent diffusivity. The diffusion-kurtosis tensor (its b->0 limit) or a
+low-b tensor recovers the unbiased MD. Because the per-voxel reference is held out, a passing
+submission is impossible without actually fitting an unbiased model on the real data.
+
+Three pillars:
+  1. the submitted per-voxel MD table covers the real ROI, is non-constant, and its per-voxel
+     values match the real reference of SOME model config (r>=0.75) -- a fabricated/constant/
+     guessed table matches none;
+  2. the ROI mean recomputed from the rows equals the reported md_mean AND reproduces the
+     UNBIASED reference band (0.72-1.03) -- a DTI-over-all-shells value (~0.585) is out of band;
+  3. (secondary) findings.md reports an MD consistent with the headline.
 """
-import json
-import os
-import re
-from pathlib import Path
+import numpy as np
 
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+from proof_of_work import (
+    OUT, load_reference, load_voxel_table, align, best_corr, nonconstant,
+    load_json, walk_numbers, findings_text,
+)
 
-EXPECTED_MD = 0.883    # DKI (correct) mean diffusivity, 1e-3 mm^2/s
-TOL_MD = 0.14          # accepts DKI (0.883) and low-b DTI (0.801); fails DTI-all (<=0.586)
+REF = load_reference()
+ST = REF["stats"]
+CFG_MEAN = {k: float(v) for k, v in ST["mean_by_config"].items()}
+MD_DKI = CFG_MEAN["dki_all"]; MD_LOWB = CFG_MEAN["dti_lowb"]; MD_NAIVE = CFG_MEAN["dti_all"]
 
+PLAUS_LO, PLAUS_HI = 0.3, 1.3
+COVER = 0.5
+CORR = 0.75                     # anti-fabrication: matches SOME real config's per-voxel map
+UNBIASED_LO, UNBIASED_HI = 0.72, 1.03   # accepts DKI 0.883 & low-b DTI 0.801; rejects DTI-all 0.585
+CONSIST = 0.05
 
-def _load(name):
-    return json.loads((OUT / name).read_text(encoding="utf-8"))
-
-
-def _norm_md(v):
-    """Normalise a reported MD to um^2/ms (= 1e-3 mm^2/s), robust to common units:
-    mm^2/s (~0.00088) -> x1000; um^2/s (~883) -> /1000; um^2/ms (~0.88) unchanged."""
-    v = abs(float(v))
-    if v == 0:
-        return v
-    for _ in range(6):
-        if v < 0.05:          # mm^2/s -> um^2/ms
-            v *= 1000.0
-        elif v > 50.0:        # um^2/s -> um^2/ms
-            v /= 1000.0
-        else:
-            break
-    return v
+MD_KEYS = ("md_mean", "mdmean", "mean_md", "meanmd", "md", "mean_diffusivity",
+           "meandiffusivity", "md_wm", "wm_md")
 
 
-def _find_md(obj):
-    """Recursively find the reported mean diffusivity: a numeric leaf under a key that
-    names diffusivity (md / diffusiv), excluding kurtosis/anisotropy keys, whose value
-    normalises into the plausible brain-tissue MD range [0.1, 5] um^2/ms."""
-    stack = [("", obj)]
-    fallback = None
-    while stack:
-        key, cur = stack.pop()
-        if isinstance(cur, dict):
-            stack.extend(cur.items())
-        elif isinstance(cur, (list, tuple)):
-            stack.extend(("", x) for x in cur)
-        elif isinstance(cur, (int, float)) and not isinstance(cur, bool):
-            k = key.lower()
-            names_md = ("md" in re.split(r"[^a-z]+", k)) or ("diffusiv" in k) or \
-                       ("mean_d" in k) or ("meandiff" in k)
-            bad = any(b in k for b in ("kurt", "aniso", "anis", "_fa", "fa_", "frac"))
-            if names_md and not bad:
-                nv = _norm_md(cur)
-                if 0.1 <= nv <= 5.0:
-                    return nv
-                if fallback is None:
-                    fallback = nv
-    return fallback
+def _submitted_md():
+    sub = load_voxel_table("md_voxelwise.csv", value_hints=("md", "diffus"))
+    v = np.array(list(sub.values()), float)
+    scale = 1e3 if (np.isfinite(v).any() and np.nanmedian(np.abs(v)) < 0.02) else 1.0
+    return {k: val * scale for k, val in sub.items()}
 
 
-def _find_fa(obj):
-    stack = [("", obj)]
-    while stack:
-        key, cur = stack.pop()
-        if isinstance(cur, dict):
-            stack.extend(cur.items())
-        elif isinstance(cur, (list, tuple)):
-            stack.extend(("", x) for x in cur)
-        elif isinstance(cur, (int, float)) and not isinstance(cur, bool):
-            k = key.lower()
-            if (("fa" in re.split(r"[^a-z]+", k)) or "aniso" in k) and "diff" not in k:
-                if 0.0 <= float(cur) <= 1.0:
-                    return float(cur)
+def _reported_md():
+    for name in ("diffusivity.json", "results.json", "run_metadata.json"):
+        obj = load_json(name)
+        if not obj:
+            continue
+        for k, v in walk_numbers(obj):
+            key = str(k).lower().replace(" ", "").replace("-", "_") if k else ""
+            if key in MD_KEYS:
+                val = v * 1e3 if abs(v) < 0.02 else v
+                if PLAUS_LO <= val <= PLAUS_HI:
+                    return val
     return None
 
 
-def test_mean_diffusivity_reproduced():
-    # The white-matter mean diffusivity, estimated with a model appropriate to this wide
-    # multi-b acquisition, is ~0.88e-3 mm^2/s. A plain diffusion-tensor fit over ALL
-    # shells is biased ~34% low (<=0.59e-3) and falls outside the tolerance.
-    data = _load("diffusivity.json")
-    md = _find_md(data)
-    assert md is not None, f"no mean diffusivity found in diffusivity.json: {data}"
-    assert abs(md - EXPECTED_MD) < TOL_MD, (
-        f"mean diffusivity {md:.3f}e-3 mm^2/s does not match the unbiased value "
-        f"{EXPECTED_MD:.3f} (tol {TOL_MD}). A mono-exponential tensor fit over the full "
-        f"b-range underestimates MD (~0.50-0.59e-3); estimate it with a model valid at "
-        f"high b (e.g. the diffusion-kurtosis tensor), or restrict a tensor fit to low b.")
+def test_voxel_table_matches_real_reference():
+    smap = _submitted_md()
+    assert nonconstant(smap.values()), (
+        "md_voxelwise.csv is (near-)constant across voxels; a real per-voxel MD map is not "
+        "constant -- looks fabricated/duplicated")
+    cover, paired, _ = align(smap, REF)
+    assert cover >= COVER, (
+        f"md_voxelwise.csv covers only {cover:.0%} of the {len(REF['ijk'])} pinned WM ROI voxels "
+        f"(need >= {COVER:.0%}); the real ROI must be analysed, not a fabricated voxel set")
+    r, who = best_corr(paired)
+    assert r >= CORR, (
+        f"the submitted per-voxel MD values do not match the real reference of any diffusion "
+        f"model config (best r = {r:.2f} to '{who}', need >= {CORR}); the per-voxel MD map is "
+        f"reproducible only by actually fitting a diffusion model on the real CFIN data")
 
 
-def test_fa_reported_and_sane():
-    # completeness: an FA for the same WM ROI is reported and physically plausible.
-    fa = _find_fa(_load("diffusivity.json"))
-    assert fa is not None, "no fractional anisotropy reported in diffusivity.json"
-    assert 0.2 <= fa <= 0.95, f"white-matter mean FA {fa:.3f} is implausible"
+def test_reproduces_unbiased_md():
+    """The headline check (QSMDIPOLE model): the ROI mean recomputed from the rows must equal
+    the reported md_mean AND land in the UNBIASED band. DKI-all (0.883) and low-b DTI (0.801)
+    pass; DTI over ALL shells (0.585) is out of band -- it absorbs the high-b non-Gaussian
+    curvature and underestimates MD."""
+    smap = _submitted_md()
+    vals = np.array([v for v in smap.values() if np.isfinite(v)])
+    recomputed = float(np.mean(vals))
+    headline = _reported_md()
+    assert headline is not None, "no md_mean headline found in diffusivity.json"
+    assert abs(headline - recomputed) <= CONSIST, (
+        f"the reported md_mean {headline:.3f} does not match the mean of the submitted per-voxel "
+        f"table {recomputed:.3f} (tol {CONSIST}); the headline must be the mean of its own rows")
+    assert UNBIASED_LO <= recomputed <= UNBIASED_HI, (
+        f"the WM mean diffusivity {recomputed:.3f} (1e-3 mm^2/s) is not the unbiased value: it is "
+        f"outside [{UNBIASED_LO}, {UNBIASED_HI}]. A plain diffusion tensor fit over the full "
+        f"b-range (up to 3000) absorbs the high-b non-Gaussian signal curvature and "
+        f"underestimates MD (~{MD_NAIVE:.3f}); use the diffusion-kurtosis tensor (its b->0 limit, "
+        f"~{MD_DKI:.3f}) or restrict the tensor to the low-b shells (b<=1000, ~{MD_LOWB:.3f}).")
 
 
-def test_findings_report():
-    # light honesty check: findings.md discusses diffusivity and reports a number
-    # consistent with diffusivity.json.
-    text = (OUT / "findings.md").read_text(encoding="utf-8").lower()
-    assert "diffusiv" in text, "findings.md does not discuss diffusivity"
-    md = _find_md(_load("diffusivity.json"))
-    nums = [_norm_md(x) for x in re.findall(r"\d+\.\d+(?:[eE][+-]?\d+)?", text)]
-    assert any(abs(n - md) < 0.05 for n in nums), (
-        "findings.md does not report a mean diffusivity consistent with diffusivity.json")
+def test_findings_consistent():
+    """Secondary: findings.md reports a mean diffusivity consistent with the headline."""
+    text = findings_text()
+    assert text.strip(), "findings.md is missing or empty"
+    import re
+    nums = [float(x) for x in re.findall(r"([01]?\.\d{2,})", text)]
+    headline = _reported_md()
+    assert headline is not None
+    assert any(abs(n - headline) <= 0.06 for n in nums), (
+        f"findings.md does not report a mean diffusivity consistent with the headline "
+        f"{headline:.3f} (1e-3 mm^2/s)")

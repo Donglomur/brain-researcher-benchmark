@@ -92,6 +92,16 @@ fa_v = FA[roi]; fa_v = fa_v[np.isfinite(fa_v)]
 md_mean = float(np.mean(md_v)) * 1e3   # report in 1e-3 mm^2/s (= um^2/ms)
 fa_mean = float(np.mean(fa_v))
 
+# per-voxel table underlying the ROI mean (the neutral intermediate the pipeline emits)
+import csv as _csv
+with open(OUT / "md_voxelwise.csv", "w", newline="") as _fh:
+    _w = _csv.writer(_fh)
+    _w.writerow(["i", "j", "k", "md"])   # md in 1e-3 mm^2/s, same units as md_mean
+    for _i, _j, _k in np.argwhere(roi):
+        _m = MD[_i, _j, _k]
+        if np.isfinite(_m):
+            _w.writerow([int(_i), int(_j), int(_k), round(float(_m) * 1e3, 6)])
+
 (OUT / "diffusivity.json").write_text(json.dumps({
     "md_mean": md_mean,
     "fa_mean": fa_mean,
