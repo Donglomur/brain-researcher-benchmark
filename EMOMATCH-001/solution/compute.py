@@ -272,17 +272,35 @@ def group_t(mat, idx):
     return float(v.mean()), float(t), float(p)
 
 
-# ---- per-subject required output (naive-model emotion>control in the a priori face ROIs and in
-#      the cognitive-control ROIs) -- no reaction-time column, so the confound stays un-cued ----
+# ---- per-subject required output: emotion>control in the a priori face ROIs and in the
+#      cognitive-control ROIs, under EACH first-level modelling choice considered. The task asks
+#      for the per-subject contrast under each modelling choice; the reference honest analyst
+#      weighs the constant-epoch model AND the variable-epoch (duration = per-trial reaction time)
+#      model, so both blocks of columns are reported. The grader assigns std/alt by value, so the
+#      column NAMES do not cue which model is which. ----
+def _amy(mat, i):
+    return np.mean([mat[i, roi_idx["amygdala_L"]], mat[i, roi_idx["amygdala_R"]]])
+
+
+def _ffa(mat, i):
+    return np.mean([mat[i, roi_idx["fusiform_L"]], mat[i, roi_idx["fusiform_R"]]])
+
+
+def _ctl(mat, i):
+    return np.mean([mat[i, roi_idx[k]] for k in CONTROL_KEYS])
+
+
 with open(OUT / "activation.csv", "w", newline="") as f:
     w = csv.writer(f)
-    w.writerow(["subject_id", "amygdala_emotion_gt_control", "fusiform_emotion_gt_control",
-                "control_rois_emotion_gt_control"])
+    w.writerow(["subject_id",
+                "amygdala_emotion_gt_control__modelA", "fusiform_emotion_gt_control__modelA",
+                "control_rois_emotion_gt_control__modelA",
+                "amygdala_emotion_gt_control__modelB", "fusiform_emotion_gt_control__modelB",
+                "control_rois_emotion_gt_control__modelB"])
     for i, p in enumerate(pids):
-        amy = np.mean([naive[i, roi_idx["amygdala_L"]], naive[i, roi_idx["amygdala_R"]]])
-        ffa = np.mean([naive[i, roi_idx["fusiform_L"]], naive[i, roi_idx["fusiform_R"]]])
-        ctl = np.mean([naive[i, roi_idx[k]] for k in CONTROL_KEYS])
-        w.writerow([p, f"{amy:.5f}", f"{ffa:.5f}", f"{ctl:.5f}"])
+        w.writerow([p,
+                    f"{_amy(naive, i):.5f}", f"{_ffa(naive, i):.5f}", f"{_ctl(naive, i):.5f}",
+                    f"{_amy(rt, i):.5f}", f"{_ffa(rt, i):.5f}", f"{_ctl(rt, i):.5f}"])
 
 # ---- group statistics: naive vs RT-controlled, per a priori ROI and per network ----
 stats_out = {"n_subjects": n,

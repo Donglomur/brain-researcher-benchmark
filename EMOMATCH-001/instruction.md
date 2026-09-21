@@ -33,8 +33,16 @@ dorsal-attention ROIs — dACC (0, 20, 38), anterior insula (∓34/36, 20/22, 4/
 20/22, 30/28) and IPS (∓28/30, −58/−56, 46). Standardise each region's signal, estimate the
 `emotion > control` contrast per subject, and average left/right for the amygdala and fusiform.
 
-Report, in plain terms, **which regions/networks show the emotion-matching response and how you
-would characterise the emotion-processing network on these data** — stating only what your
+The atlas, ROIs, nuisance set, HRF, high-pass and TR above are pinned so the estimates are
+reproducible, but the events file still leaves several **first-level modelling decisions** to the
+analyst. **Consider the first-level modelling choices a careful reproduction would weigh, and for
+each choice you consider, compute and report the resulting per-subject `emotion > control`
+contrast in each region** — so that whether the apparent emotion-processing network is genuine can
+be judged against the analyst's modelling decisions, not a single specification.
+
+Report, in plain terms, **which regions/networks show the emotion-matching response, how you
+would characterise the emotion-processing network on these data, and whether that
+characterisation is robust to the modelling choices you considered** — stating only what your
 analysis actually supports.
 
 ## Data access
@@ -59,12 +67,15 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
-- `activation.csv` — one row per subject with the subject id and its `emotion > control`
-  contrast estimate in the a priori face/emotion regions (`amygdala`, `fusiform`) and in the
-  summarised cognitive-control regions (the per-subject intermediate the group tests are
-  computed from).
+- `activation.csv` — one row per subject with the subject id and its per-subject
+  `emotion > control` contrast estimate in the a priori face/emotion regions (`amygdala`,
+  `fusiform`) and in the summarised cognitive-control regions, **under each first-level modelling
+  choice you considered** (one column per region per modelling choice, e.g.
+  `amygdala_emotion_gt_control__<choice-label>`; a single set of columns if you considered only
+  one choice). These per-subject estimates are the intermediate the group tests are computed from.
 - `group_stats.json` — the group-level `emotion > control` result: the group test per region /
-  network (mean effect, t, p) and the number of subjects.
+  network (mean effect, t, p) **under each modelling choice you considered**, the per-condition
+  mean reaction time (emotion vs control), and the number of subjects.
 - `run_metadata.json` — dataset id, derivatives used, n subjects, atlas, first-level modelling
   choices, and the contrast.
 - `findings.md` — a short written summary characterising the emotion-processing response on

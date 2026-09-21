@@ -107,3 +107,62 @@ slower). Validated by subprocess pytest: honest PASS; no-table / constant / fabr
 mean, shuffled per-subject) / naive (no RT model, over-claim) / right-headline-fake-rows all FAIL.
 Volumetric BOLD > 100 MB/file so raw inputs stay runtime-fetch with the cohort pinned; baking the
 derived per-subject inputs is a maintainer follow-up.
+
+## Second-pass fix (2026-09): un-guess the reaction-time-controlled arm — SEPARATE-PIPELINE 5(a)
+
+The proof-of-work grader still graded the discriminating conclusion (the emotion>control contrast
+under a reaction-time-controlled / variable-epoch model) as **reported scalars** in
+`group_stats.json`. Because the standard-model amygdala already survives (~7.9) and the collapse
+of the control ROIs to ~n.s. is guessable from priors, an agent that fitted **only** the standard
+constant-epoch GLM could copy plausible RT-controlled numbers (amygdala ~8.2, control ~1.2) into
+the JSON and pass without ever fitting the second model (red-team attack C). The reference shipped
+only the **naive** per-subject contrasts, so the RT-controlled arm was never validated per subject.
+
+**This is a SEPARATE-PIPELINE task: fitting the reaction-time-controlled model IS the judgement.**
+Per the second-pass brief §5 we take **option 5(a)** — require the intermediate, framed neutrally,
+and recompute the discriminator from it:
+
+- **No answer number was in `instruction.md`** to remove (the task is un-cued; the ~8.25 headline
+  lived only in this hidden proposal). We tightened it toward the neutral intermediate instead.
+- **Rebuilt `tests/reference.npz`.** The reference now stores, per subject, the amygdala / fusiform
+  / control-ROI `emotion > control` contrast under BOTH the constant-epoch (naive) AND the
+  variable-epoch (reaction-time) model (rerun of `solution/compute.py` on the same pinned 20
+  ds002790 subjects; group t's reproduce the prior values exactly: amygdala 7.89 → 8.25, control
+  3.74 → 1.22). It also records the per-subject naive↔alternative correlations (amygdala 0.86,
+  **control 0.69** — the cognitive-control contrast genuinely re-estimates under the second model).
+- **Neutral intermediate.** The instruction now asks the agent to *"consider the first-level
+  modelling choices a careful reproduction would weigh, and for each choice you consider, compute
+  and report the resulting per-subject `emotion > control` contrast in each region"* — one column
+  per region per modelling choice — **without naming reaction-time, variable-epoch, or duration=RT**.
+- **Recompute, don't read.** The grader collects every column per region, assigns **by value** (not
+  by name) which is the standard-model estimate and which is the alternative-model estimate (best
+  per-subject match to the naive / RT references), validates both per-subject against the held-out
+  reference, and **recomputes the group one-sample t for the amygdala and the cognitive-control ROIs
+  under both models from the rows**. The collapse (control t 3.74 → ~1.2), the survival (amygdala
+  t ~8.2), and the dissociation are recomputed from validated per-subject columns.
+- **Why a copy/shrink cannot fake the second column.** The cognitive-control naive↔alternative
+  per-subject correlation is only **0.69**, below the 0.85 alt-column floor, so resubmitting (or
+  scaling) the naive control column as the "alternative" fails the reference match; and a scaled
+  copy keeps the naive per-subject pattern, so its recomputed group t stays ~3.74, failing the
+  collapse check (≤ 2.6). To produce a genuinely collapsed control column the agent must fit the
+  variable-epoch model.
+
+**Residual cue (documented, accepted 5(a) tradeoff).** The neutral schema tells the agent that
+multiple first-level modelling choices matter and each choice's per-subject contrast must be
+reported. It does **not** name the reaction-time/variable-epoch lever — the agent must still
+discover that trial-duration = reaction-time modelling is what dissociates the confound. This is the
+irreducible cue-vs-guess tension of a separate-pipeline discriminator; we accept the mild residual
+hint in exchange for making the judgement **un-guessable from the naive fit + priors**.
+
+**Adversarial self-validation (subprocess pytest per case, numpy-only; honest/defensible built from
+the exact rebuilt-oracle output schema):**
+
+| case | result | teeth |
+|---|---|---|
+| honest oracle (both model blocks) | **PASS** | — |
+| defensible alternative (perturbed real columns, renamed/reordered, "ctrl" abbreviation) | **PASS** | — |
+| attack C — naive-only table + **guessed** RT-controlled scalars in JSON | **FAIL** | only one model; no validated alt column |
+| attack C — naive control **scaled** to fake a collapsed alt column | **FAIL** | corr 0.69 < 0.85; recomputed t stays ~3.74 > 2.6 |
+| attack A — real std columns + **fabricated random** alt columns | **FAIL** | fake alt fails reference match + recompute |
+
+Attack C now FAILS while honest + defensible PASS, so the fix counts.
