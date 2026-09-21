@@ -48,6 +48,33 @@ Symmetric un-cued-judgement gap: reporting a single number (even the correct MSM
 - Data fetches at runtime via `read_sherbrooke_3shell` (dipy); `allow_internet=true`. Dev validation used the cached copy under `~/.dipy/sherbrooke_3shell`.
 - **Live gate (Step-5 frontier calibration, ≥2 families, k≥3, hand re-scored) = maintainer.**
 
+### PROOF-OF-WORK REWORK (this revision — un-cued judgment preserved)
+
+The keyword-only honesty check (fabrication-vulnerable per the suite audit) is replaced by a
+held-out per-voxel reference + three numeric pillars, WITHOUT cueing the estimator judgment
+(the instruction still names only "estimate the fODF and report the crossing fraction").
+
+- **Held-out reference** (`tests/reference.npz`, sha256 `ae2f2e50…3be`, ~8 KB, committed,
+  never shipped): the per-voxel fODF PEAK COUNT over the fixed 5060-voxel ROI for four
+  estimators — MSMT-CSD 0.349, single-shell CSD (mixed) 0.484, b=1000 0.457, b=3500 0.696 —
+  built by running the pinned pipeline on the real dipy Sherbrooke subject (numpy 2.2.6 /
+  cvxpy 1.8.1 / dipy 1.12.1).
+- **Neutral intermediate output** (new, un-cued): `peaks_voxelwise.csv` — the per-voxel fODF
+  peak count the standard pipeline already produces (columns `i,j,k,n_peaks`).
+- **Pillar 1** — the per-voxel peak-count table covers the real ROI (≥50 %), is non-constant,
+  and matches some real estimator (≥70 % voxel agreement; a fabricated/constant/guessed table
+  matches none).
+- **Pillar 2** — the crossing fraction recomputes from the rows (fraction with ≥2 peaks) to the
+  reported `crossing_fraction` and lands on a real estimator value.
+- **Pillar 3** — the estimator dependence graded as NUMBERS (≥2 real crossing fractions showing
+  the single-shell over-detection), with a negation-guarded partial-volume / over-detection
+  prose fallback (the honest MSMT-with-mechanism path).
+
+**Validation matrix (subprocess pytest per case):** honest (MSMT + mechanism prose) PASS ·
+honest-numeric (MSMT + single-shell values) PASS · no-table / constant / fabricated (random
+peak counts) / fabricated-coords FAIL (pillar 1) · naive over-claim (real single-shell map +
+bare 0.484) FAIL (pillar 3 only; pillars 1–2 pass).
+
 ### Cost
 
 `hard`. cpus 2, mem 8 GB, internet on (dipy fetches `sherbrooke_3shell`, ~a few hundred MB, at runtime). MSMT deconvolution + `peaks_from_model` over 5060 voxels via cvxpy is the runtime cost (~10–15 min single-thread). Deps: dipy 1.12.1 + cvxpy + numpy/scipy/nibabel/h5py.

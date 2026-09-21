@@ -103,6 +103,14 @@ npeaks_vox = (pk.peak_values > 0).sum(-1)[roi]
 n_cross = int(np.sum(npeaks_vox >= 2))
 crossing_fraction = float(np.mean(npeaks_vox >= 2))
 
+# per-voxel table underlying the crossing fraction (the neutral intermediate the pipeline emits)
+import csv as _csv
+with open(OUT / "peaks_voxelwise.csv", "w", newline="") as _fh:
+    _w = _csv.writer(_fh)
+    _w.writerow(["i", "j", "k", "n_peaks"])
+    for (_i, _j, _k), _n in zip(np.argwhere(roi), npeaks_vox):
+        _w.writerow([int(_i), int(_j), int(_k), int(_n)])
+
 (OUT / "crossing.json").write_text(json.dumps({
     "crossing_fraction": crossing_fraction,
     "n_roi_voxels": n_roi,

@@ -49,6 +49,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 - `crossing.json` — at minimum `{"crossing_fraction": <float>, "n_roi_voxels": <int>,
   "n_crossing_voxels": <int>}`.
+- `peaks_voxelwise.csv` — the per-voxel table underlying your crossing fraction: one row per
+  ROI voxel, with columns `i,j,k` (its voxel index in the acquisition array) and `n_peaks`
+  (the number of positive fODF peaks you found in that voxel). The fraction of rows with
+  `n_peaks >= 2` must equal your reported `crossing_fraction`.
 - `run_metadata.json` — dataset id, the fODF estimation method you used, `sh_order_max`,
   and the peak parameters.
 - `findings.md` — a few sentences reporting the crossing fraction in the centrum-semiovale
