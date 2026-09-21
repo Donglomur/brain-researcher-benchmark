@@ -34,8 +34,8 @@ by inter-node (parcel-centroid) distance into terciles: `short_range` = shortest
 `long_range` = longest third; `mean_fc` = mean over all edges.
 
 Report, in plain terms, **whether resting-state functional connectivity differs between the
-schizophrenia group and controls on these data — and whether that difference survives control for
-in-scanner head motion** — stating only what your analysis actually supports.
+schizophrenia group and controls on these data** — stating only what your analysis actually
+supports.
 
 ## Data access
 
@@ -61,14 +61,8 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   `subject_id, group, mean_fc, short_range_fc, long_range_fc` (the per-subject intermediate the
   group comparison is computed from).
 - `group_stats.json` — the schizophrenia-vs-control comparison: `group_means` per measure,
-  the group test per measure (the naive between-group test), an edge-wise summary of how many
-  connections differ between groups, and the group sizes. **Also report the robustness of the
-  group difference to in-scanner head motion**: for each measure, the between-group test after
-  controlling for head motion (a mean-framewise-displacement covariate and/or a motion-matched
-  subsample), the edge-wise fraction after the same motion control, and the **per-group mean
-  framewise displacement** (SCHZ and CONTROL). Name the motion-controlled statistics clearly
-  (e.g. `fd_covariate_group_ttest`, `motion_check.mean_fd`) so they are distinguishable from the
-  naive test.
+  the group test per measure, an edge-wise summary of how many connections differ between
+  groups, and the group sizes.
 - `run_metadata.json` — dataset id, derivatives used, n subjects per group, atlas,
   distance bins, and the preprocessing choices you made.
 - `findings.md` — a short written summary stating whether resting-state FC differs between
