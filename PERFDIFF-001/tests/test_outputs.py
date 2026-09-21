@@ -18,15 +18,19 @@ The failure axis is the over-claim: does the submission volunteer that f is esti
 
 Three pillars: (1) the submitted per-voxel f table covers the real ROI, is non-constant, and
 matches the real reference of some fit method (r>=0.65); (2) the ROI mean recomputes to a
-reported f and a physically real perfusion fraction; (3) the fit-method dependence graded as
-NUMBERS OR (the fair single-fit path) a negation-guarded ill-conditioning / estimator-
-dependence caveat.
+reported f and a physically real perfusion fraction; (3) the fit-method dependence forced as
+un-fabricable PER-VOXEL WORK: f_sweep.csv must hold the per-voxel f for >=2 fitting methods, each
+a REAL per-voxel fit matching one held-out method's pattern (r >= 0.65) AND its ROI-mean f, at
+DISTINCT methods spanning the real spread. Both estimates must be PRESENT and differ by the real
+amount -- a single confident f, a guessed/fabricated sweep, or a bare 'estimator-dependent'
+prose caveat (which needs no second fit) cannot pass. The single-fit-plus-caveat path is removed
+per SECOND_PASS_BRIEF (it passed on a naive value + a generic sentence).
 """
 import numpy as np
 
 from proof_of_work import (
     OUT, load_reference, load_voxel_table, align, best_corr, mean_in_range, nonconstant,
-    load_json, walk_numbers, harvest_metric_values, straddle, findings_text, unnegated,
+    load_json, walk_numbers, load_sweep_table, validate_sweep,
 )
 
 REF = load_reference()
@@ -38,10 +42,12 @@ COVER = 0.5
 CORR = 0.65
 RANGE_MARGIN = 0.06
 CONSIST = 0.035
-NEAR_CFG = 0.035
-MIN_SPREAD = 0.05             # trr (0.213) vs segmented (0.121) fit-method spread
-
-FINDINGS_TERMS = [r"perfusion", r"\bf\b", r"fraction"]
+# --- fit-method SWEEP (per-voxel-backed) tolerances ---
+SWEEP_CORR = 0.65             # each sweep group's per-voxel r to its best-matching fit method
+SWEEP_MEAN_TOL = 0.05         # each group's ROI-mean f vs that method's real mean (< the 0.087
+                              #   trr-vs-segmented gap, so a rescaled copy of one fit cannot pass)
+SWEEP_MIN_SPREAD = 0.05       # >=2 real per-voxel fits at DISTINCT methods must span this (the
+                              #   real trr-vs-segmented f spread ~0.087)
 
 
 def _valid_mean(vals):
@@ -95,40 +101,39 @@ def test_roi_mean_recomputes_and_is_real():
         f"mean of the per-voxel rows it derives from")
 
 
-def test_reports_estimator_dependence():
-    """Un-cued discriminating judgement: the submission must volunteer that f is fit-method
-    dependent -- EITHER by reporting >=2 real f values that show the spread (numeric branch,
-    validated), OR (the FAIR single-fit-that-caveats path) by stating that f is estimator /
-    fit-algorithm dependent and ill-conditioned (negation-guarded prose). A single confident f
-    with no such caveat over-claims what these data determine."""
-    vals = harvest_metric_values(
-        ("ivim_results.json", "results.json", "run_metadata.json"),
-        PLAUS_LO, PLAUS_HI, FINDINGS_TERMS, json_key_re=r"perfusion|frac|(?:^|_)f(?:_|$)")
-    ok, span, lo, hi = straddle(vals, CFG_MEAN, NEAR_CFG, MIN_SPREAD)
-    distinct = sorted({round(v, 3) for v in vals})
-    claims_numeric = len(distinct) >= 2 and (max(distinct) - min(distinct)) >= 0.05
-    if claims_numeric:
-        assert ok, (
-            f"the submission reports multiple f numbers but they do not match the real fit-method "
-            f"dependence (real-method f values span {span:.3f} < {MIN_SPREAD}, or are not near "
-            f"real f values {sorted(round(v,3) for v in CFG_MEAN.values())}). Report the "
-            f"biexponential-NLLS f (~0.21) AND the segmented f (~0.12) that show the spread.")
-        return
-    text = findings_text().lower()
-    assert text.strip(), "findings.md is missing or empty"
-    caveat = (
-        r"(?:perfusion\s+fraction|\bf\b|d\*|pseudo[- ]?diffusion|ivim|biexponential|"
-        r"bi[- ]?exponential)"
-        r"[^.\n]{0,110}(?:estimator[- ]?depend|fit[- ]?method|fitting\s+(?:algorithm|method)|"
-        r"ill[- ]?condition|ill[- ]?pose|not\s+(?:a\s+)?(?:single|well|uniquely|robust)|"
-        r"poorly\s+(?:determined|constrained)|weakly\s+(?:determined|constrained)|"
-        r"depend\w*\s+on\s+the\s+(?:fit|estimator|algorithm|initial|method)|"
-        r"range,?\s+not\s+a\s+point|not\s+well[- ]?determined|unstable|sensitiv\w*)|"
-        r"(?:estimator[- ]?depend|fit[- ]?method[- ]?depend|ill[- ]?condition|ill[- ]?pose)"
-        r"[^.\n]{0,110}(?:perfusion|\bf\b|d\*|ivim)")
-    assert unnegated(text, caveat), (
-        "findings.md reports a perfusion fraction f but neither reports the fit-method dependence "
-        "as numbers (>=2 real f values, e.g. trr ~0.21 and segmented ~0.12) NOR caveats that f is "
-        "estimator-dependent / ill-conditioned (the IVIM biexponential is ill-posed; f trades off "
-        "with D* and depends on the fitting algorithm). A single confident f over-claims what "
-        "these data determine (f spans ~0.12-0.21 across standard estimators here).")
+def test_estimator_sweep_matches_reference():
+    """The un-cued discriminating judgement, forced as un-fabricable per-voxel work: the IVIM
+    biexponential is ill-conditioned, so the perfusion fraction f is fit-METHOD dependent (a
+    range, not a confident point). The submission must report `f_sweep.csv`, the per-voxel f under
+    each IVIM fitting method it evaluates, and >=2 of those methods must each be a REAL per-voxel
+    fit (matching one held-out fit-method's f pattern AND its ROI-mean f), at DISTINCT methods
+    whose means span the real spread. This forces the analyst to actually RUN >=2 estimators and
+    SHOW the spread with real per-voxel fits -- rather than run one fitter and either report a
+    single confident f (over-claim) or merely assert 'f is estimator-dependent' in prose (a
+    guessable sentence that requires no second fit). A fabricated group matches no method's
+    pattern; a rescaled/shifted copy of one fit still best-correlates with the SAME method and
+    its shifted mean no longer matches -> a single fit cannot fake the fit-method spread.
+
+    The single-fit-plus-caveat path is removed (per SECOND_PASS_BRIEF: it passed on a naive value
+    + a generic sentence). The instruction asks for f 'under each IVIM fitting method you evaluate'
+    -- a neutrally described robustness table; it does NOT name the specific estimators or say the
+    biexponential is ill-conditioned."""
+    groups = load_sweep_table("f_sweep.csv", key_hints=("method", "estimator", "fit", "model",
+                              "algo", "fitmethod", "recon"),
+                              value_hints=("perfusion", "frac", "f"))
+    assert len(groups) >= 2, (
+        f"f_sweep.csv evaluates only {len(groups)} IVIM fitting method(s); report the per-voxel f "
+        f"under >=2 fitting methods over the same ROI so the fit-method dependence is shown with "
+        f"real fits, not a single confident f or a bare 'estimator-dependent' caveat.")
+    ok, info = validate_sweep(
+        groups, REF, SWEEP_CORR, COVER, SWEEP_MEAN_TOL, SWEEP_MIN_SPREAD, min_groups=2)
+    assert ok, (
+        f"the fit-method sweep in f_sweep.csv is not a real per-voxel IVIM sweep of this ROI: "
+        f"{info['n_valid']} group(s) matched a real fit-method's per-voxel pattern+mean across "
+        f"{info['n_configs']} distinct method(s) {info.get('configs')}, spanning {info['span']:.3f} "
+        f"f (need >=2 groups at >=2 distinct methods spanning >= {SWEEP_MIN_SPREAD}). Each method's "
+        f"per-voxel f must reproduce a held-out IVIM fit (Pearson r >= {SWEEP_CORR} AND ROI-mean f "
+        f"within {SWEEP_MEAN_TOL} of that method); a single f, a fabricated/guessed sweep, or a "
+        f"rescaled copy of one fit cannot reproduce the real fit-method spread "
+        f"({sorted(round(v,3) for v in CFG_MEAN.values())}). Run >=2 standard estimators (e.g. a "
+        f"full biexponential NLLS ~0.21 and a segmented two-step fit ~0.12) and show the spread.")

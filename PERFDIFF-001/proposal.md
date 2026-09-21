@@ -75,3 +75,62 @@ bare confident 0.213, no caveat) FAIL (pillar 3 only; pillars 1–2 pass).
 ### Cost
 
 `hard`. cpus 2, mem 8 GB, internet on (dipy fetches the IVIM subject, ~1 download). trr fit + a pure-numpy segmented fit over the ROI ≈ tens of seconds; timeouts agent 3600 s / verifier 900 s. Deps: dipy 1.12.1 + numpy/scipy/nibabel (no cvxpy — the second estimator is a pure numpy/scipy segmented fit, so the environment stays dependency-light and build-robust).
+
+### Second-pass fix (2026-09): the fit-method sweep is now PER-VOXEL-BACKED (single-fit+caveat removed)
+
+The red-team confirmed the pre-existing **fair single-fit-that-caveats path was the hole**: a
+naive single IVIM fit (one estimator) + a generic "f is estimator-dependent / ill-conditioned"
+sentence passed pillar 3 without ever running a second estimator — a guessable sentence, no
+proof of the spread. Per SECOND_PASS_BRIEF §5 ("keep PERFDIFF's fair single-fit-caveat path only
+if it still cannot pass on a naive value + a textbook sentence" — it could), that path is
+**removed** and the sweep is now a **required per-voxel table matched to the held-out reference**.
+
+**What changed**
+- New Required Output `f_sweep.csv`: the per-voxel f under each IVIM fitting method evaluated
+  (columns `i,j,k,method,f`, ≥2 methods). Instruction describes it neutrally as "the per-voxel
+  perfusion fraction under each IVIM fitting method you evaluate" — it does **not** name the
+  estimators or say the biexponential is ill-conditioned.
+- Pillar 3 rewritten (`test_estimator_sweep_matches_reference`): each sweep group must be a REAL
+  per-voxel fit — cover the ROI, non-constant, match ONE held-out fit-method's f pattern
+  (r ≥ 0.65) AND its ROI-mean f (≤ 0.05) — with ≥2 groups at DISTINCT methods spanning ≥ 0.05.
+  The prose caveat path and reported-scalar `straddle` branch are removed. IVIM has no single
+  "correct" estimator, so no `require_config`: the honest answer is the spread demonstrated with
+  ≥2 real fits (trr ~0.21 and segmented ~0.12).
+- `solution/compute.py` now writes `f_sweep.csv` from the trr and segmented fits it already
+  computes.
+
+**Why un-fabricable** (measured on the reference maps): trr and segmented f maps are
+distinguishable (cross-r 0.762 < self 1.0). A fabricated group matches no method's pattern; a
+rescaled/shifted copy of one fit is scale/shift-invariant in r → best-correlates with the SAME
+method → not a distinct method, and its shifted mean no longer matches → a single fit cannot be
+duplicated into a fake spread. Only running ≥2 real estimators passes.
+
+**Adversarial self-validation** (subprocess pytest, fixtures from the held-out per-method
+reference maps):
+
+| case | verdict | mechanism |
+|---|---|---|
+| honest (trr headline + trr/segmented per-voxel sweep) | **PASS** | all pillars |
+| defensible: version-drift f noise on both methods (r ≈ 0.80) | **PASS** | r ≥ 0.65 |
+| attack C: single trr fit + "ill-conditioned / estimator-dependent" caveat, 1 sweep group | **FAIL** | < 2 methods |
+| attack A: fabricated sweep (random f, right means) | **FAIL** | 0 methods matched |
+| attack C: real trr + rescaled copy relabeled `segmented` (mean→0.12) | **FAIL** | best-corr → trr → 1 method |
+| attack C: real trr duplicated & relabeled `segmented` | **FAIL** | 1 distinct method |
+| attack C: real trr + fabricated `segmented` (wrong pattern, right mean) | **FAIL** | fabricated group dropped → 1 method |
+
+The naive single-fit-plus-caveat (the removed path) and every fabricate/rescale/duplicate
+variant now FAIL while honest + defensible PASS.
+
+**Honest-limitations (blunt):**
+- *Live-dipy not run.* dipy is not installed here and the sample download stalls, so the fixtures
+  were synthesised from the committed held-out per-method reference maps. `compute.py` writes the
+  sweep from the trr (dipy, deterministic) and segmented (pure numpy lstsq, deterministic) fits
+  it already computes; a maintainer must confirm on a live dipy run (no committed reference-build
+  script exists).
+- *Accepted set = {trr, segmented}.* The reference holds only these two methods, so an agent
+  whose second estimator is neither (e.g. varpro) may not match a second config and would fail;
+  segmented is the canonical second IVIM estimator, and the instruction points to "≥2 fitting
+  methods". A maintainer could add more reference configs to widen the accepted set.
+- *Mild cue (accepted 5(a)).* Requiring a per-method f table cues that f depends on the fit
+  method. The retained teeth: the spread must be COMPUTED with ≥2 real per-voxel fits, which a
+  single-fit-plus-caveat, a guessed scalar, or a rescaled copy cannot fake.

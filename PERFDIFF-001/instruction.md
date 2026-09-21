@@ -38,6 +38,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   the acquisition array) and `f` (its perfusion fraction). The mean of the rows
   (over voxels with a valid `0 <= f <= 1`) must equal a perfusion fraction you
   report in `ivim_results.json`.
+- `f_sweep.csv` — the per-voxel perfusion fraction under each IVIM fitting method you
+  evaluate. Fit the IVIM model with at least two fitting methods over the same ROI and
+  give the per-voxel `f` for each: columns `i,j,k` (voxel index), `method` (a short
+  label for that fitting method), and `f`. One row per (voxel, method).
 - `run_metadata.json` — dataset id, number of b-values, the ROI, and the fitting
   choices you made.
 - `findings.md` — a short written summary reporting the ROI perfusion fraction f

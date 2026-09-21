@@ -130,6 +130,17 @@ for idx in np.argwhere(tissue):
     fS[t], DS[t], DsS[t] = segmented(roi[t])
 res_seg = summarise(fS, DS, DsS, "segmented")
 
+# per-voxel f under EACH fit method (f_sweep.csv) so the fit-method dependence is proof-of-work:
+# each method's per-voxel f map must reproduce a held-out IVIM fit, not a reported/guessed scalar.
+with open(OUT / "f_sweep.csv", "w", newline="") as _fh:
+    _w = _csv.writer(_fh)
+    _w.writerow(["i", "j", "k", "method", "f"])
+    for _a, _b in np.argwhere(tissue):
+        _w.writerow([int(X0 + _a), int(Y0 + _b), int(Z), "trr", round(float(_f_trr[_a, _b]), 6)])
+    for _a, _b in np.argwhere(tissue):
+        _w.writerow([int(X0 + _a), int(Y0 + _b), int(Z), "segmented",
+                     round(float(fS[_a, _b]), 6)])
+
 results = [res_trr, res_seg]
 f_means = [r["f_mean"] for r in results]
 f_lo = min(r["f_p10"] for r in results)
