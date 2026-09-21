@@ -62,3 +62,46 @@ Oracle passes (reward 1.0 offline; `harbor -a oracle` to confirm in-container). 
 ### Cost
 
 `hard` bracket by convention; actually light (fetches four ~50 KB TSVs; Logan/MA1 fits run in seconds). cpus 2, mem 4 GB, internet on, timeouts 1800–3000 s. Deps: numpy 2.1.3 / scipy 1.14.1 / pandas 2.2.3.
+
+---
+
+## Proof-of-work verifier (2026-09)
+
+The prior grader checked only that the reported high-binding DVR mean fell in a band
+[2.60, 3.40] plus prose fit-window keywords — a fabricated per-scan table with a right-ish
+mean passed. This revision applies the suite-wide proof-of-work contract (per-scan held-out
+reference, QSMDIPOLE reproduction model).
+
+**Held-out reference** (`tests/reference.npz`, built from `solution/compute.py` on the real
+ds001420 PETPrep TACs, never shipped to the agent): the 16 per-scan x per-region equilibrium-
+aware Logan DVRs keyed by real id, plus the naive all-frames (t*=0) DVRs and `ref_stats`.
+sha256 `ee897f7610db583b927b4b8ffa4cd72c9479c3083e2458a91c1a20c4577b40c2`. Discriminating
+numbers: high-binding mean honest 2.953 vs naive all-frames 2.354; thalamus 2.37/1.81;
+caudate 1.97/1.30.
+
+**Neutral per-item table** (already required): `dvr_estimates.csv` (per scan x region). BOTH
+the equilibrium-aware and the naive all-frames analysis produce this table; matched to the
+held-out equilibrium-aware reference it closes fabrication AND the all-frames shortcut without
+naming the equilibrium window in the instruction (which stays un-cued).
+
+**Pillars**: (1) per-item DVR within 12% of the held-out reference (>=80% of items, >=3/4
+high-binding scans) with real cross-scan spread; (2) high-binding mean recomputed FROM the
+rows == reference == reported JSON; (3) the mean graded as a number — closer to the
+equilibrium-aware value than the all-frames value, above their midpoint, with the thalamus/
+caudate profile at the equilibrium level if reported; (4) secondary fit-window prose.
+
+**Validation** (subprocess pytest per case, `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`, numpy 2.1.3):
+
+| case | result |
+|---|---|
+| honest (oracle) | PASS |
+| defensible (MA1 cross-estimator) | PASS |
+| no table | FAIL |
+| constant table | FAIL |
+| fabricated (right high-binding mean, permuted per-scan) | FAIL (pillar 1) |
+| naive all-frames (t*=0) | FAIL |
+
+`test.sh` now provisions numpy 2.1.3 for the grader. Data still fetches at runtime
+(`allow_internet=true`, four pinned ~50 KB TSVs, snapshot 1.2.0); the grader itself is
+offline (reference.npz). Baking the four TSVs into `environment/` is a low-risk maintainer
+follow-up.
