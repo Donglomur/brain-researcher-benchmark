@@ -92,6 +92,14 @@ if n_wm < 500:
 
 mk_wm = float(np.mean(mk_map[wm]))
 
+# per-voxel table underlying the ROI mean (the neutral intermediate the pipeline emits)
+import csv as _csv
+with open(OUT / "mk_voxelwise.csv", "w", newline="") as _fh:
+    _w = _csv.writer(_fh)
+    _w.writerow(["i", "j", "k", "mk"])
+    for _i, _j, _k in np.argwhere(wm):
+        _w.writerow([int(_i), int(_j), int(_k), round(float(mk_map[_i, _j, _k]), 6)])
+
 # The discovery: MK is b-shell-cap-dependent. Sweep the cap over the SAME fixed WM
 # ROI to expose the multiverse (this is what an un-cued single-fit pipeline never does).
 mk_by_cap = {}

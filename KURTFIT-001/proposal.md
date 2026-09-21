@@ -41,6 +41,38 @@ MK falls **monotonically**; full spread **0.164 (~15%)** — a dramatic, real, d
 
 So *either* the moderate-b or the all-shell number can head a **passing** answer as long as the write-up volunteers the shell-cap dependence; the failure is the un-cued over-claim of a single fixed MK, never the estimator choice or an output-format bug. Note the capped-but-unexplained answer fails: capping for a remembered rule without articulating the dependence is not the discovery.
 
+### PROOF-OF-WORK REWORK (this revision — un-cued judgment preserved)
+
+The keyword-only discovery check (fabrication-vulnerable per the suite audit: it passes on a
+plausible number + a keyword sentence over fabricated data) is replaced by a held-out
+per-voxel reference and three numeric pillars, WITHOUT cueing the shell-cap judgment (the
+instruction still names only "the white-matter mean kurtosis").
+
+- **Held-out reference** (`tests/reference.npz`, sha256 `7bb7be9d…d7537`, ~206 KB, committed,
+  never shipped to the agent): the per-voxel MK map over the fixed 11 695-voxel WM ROI for a
+  DKI b-cap sweep, built by running the pinned pipeline on the real dipy CFIN multi-shell
+  subject (`dipy.data.read_cfin_dwi`; numpy 2.1.3 / scipy 1.14.1 / dipy 1.12.1). Per-cap
+  ROI-mean MK: b≤1000 1.121, b≤1400 1.062, b≤2000 1.021, b≤2500 0.995, b≤3000 0.957.
+- **Neutral intermediate table** (new Required Output, un-cued): `mk_voxelwise.csv` — the
+  per-voxel MK the standard pipeline already produces (columns `i,j,k,mk`). Naming the
+  per-voxel table hints nothing about the shell cap.
+- **Pillar 1** — the submitted per-voxel table covers the real ROI (≥50 %), is non-constant,
+  and its per-voxel values correlate ≥0.80 with some real b-cap config (probe: adjacent caps
+  0.92–0.96, caps 2000–3000 ≥0.84; a fabricated/constant/guessed table matches none).
+- **Pillar 2** — the ROI mean recomputed from the rows equals the reported `mean_kurtosis_wm`
+  (tol 0.04) and lands within 0.07 of a real b-cap value.
+- **Pillar 3** — the shell-cap dependence graded as NUMBERS: ≥2 reported MK values that are
+  each near a real b-cap mean and span ≥0.05 (the capped-vs-all-shell decline), with a
+  negation-guarded cumulant-validity prose fallback for the honest single-moderate-b-fit-
+  that-caveats path. A bare single MK with no recognition fails.
+
+**Validation matrix (subprocess pytest per case):** honest (oracle) PASS · defensible
+(capped 1.021 + cumulant mechanism, one number) PASS · no-table FAIL (pillar 1) · constant
+FAIL (pillar 1) · fabricated non-constant / right-group-mean FAIL (pillar 1 corr) ·
+fabricated-coords FAIL (coverage) · naive over-claim (real all-shell map + single MK 0.957,
+no recognition) FAIL (pillar 3 only; pillars 1–2 pass, confirming the fabrication and the
+over-claim are caught by different pillars).
+
 ### Difficulty — Step-5 frontier calibration PENDING
 
 Oracle **reward 1.0** (locked locally). The ≥2-frontier-family gate (does GPT-5.x / Claude spontaneously sweep the b-cap or flag the cumulant-validity dependence, or report the canonical dipy-tutorial all-shell MK as "the" WM mean kurtosis?) is a maintainer step. Prior: the dipy DKI tutorial loads all shells and reports one MK map, so the single-number over-claim is the natural un-cued default — the trap has teeth.

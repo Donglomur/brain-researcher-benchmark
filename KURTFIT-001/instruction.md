@@ -37,6 +37,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 - `dki_results.json` — must include `mean_kurtosis_wm` (the white-matter mean of
   your MK map), `n_wm_voxels`, and the b-values / shells your fit used.
+- `mk_voxelwise.csv` — the per-voxel table underlying your reported ROI mean: one
+  row per white-matter ROI voxel, with columns `i,j,k` (its voxel index in the
+  acquisition array) and `mk` (its mean-kurtosis value). Its mean over the rows
+  must equal your reported `mean_kurtosis_wm`.
 - `run_metadata.json` — dataset id, shells available vs used, WM definition, and
   the preprocessing you applied.
 - `findings.md` — a short written summary reporting the white-matter mean kurtosis,
