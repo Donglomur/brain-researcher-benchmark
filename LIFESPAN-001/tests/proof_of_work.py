@@ -155,9 +155,20 @@ def check_subjects_and_values(sub, ref, st):
         "recomputed system segregation is constant across subjects -- not computed per subject"
     ref_s = [ref["by_id"][i]["seg"] for i in matched]
     rs = pearson(seg_rec, ref_s)
-    assert math.isfinite(rs) and rs >= st["SEG_CORR_MIN"], (
+    # System segregation is PARTITION-dependent and the ratio (within - between)/within amplifies
+    # small per-subject differences: a live agent using a defensible data-driven community partition
+    # (Louvain on each subject's own connectome, vs the reference's fixed-atlas network assignment)
+    # tracks the reference segregation at only r~0.75 across subjects even though its within- and
+    # between-network columns track at ~0.97/0.96. The original 0.80 floor false-negatived that
+    # correct solve. Widen to 0.70: the honest Louvain solve (r=0.75) passes, while shuffled
+    # within/between (seg r <= ~0.03, and they also fail WB_CORR_MIN first) and a constant column
+    # (caught by the EPS guard) still fail by a wide margin. The un-guessable teeth are the
+    # per-subject within/between correlations (WB_CORR_MIN) and the recomputed age relationships,
+    # not this partition-sensitive magnitude floor.
+    seg_corr_min = min(st["SEG_CORR_MIN"], 0.70)
+    assert math.isfinite(rs) and rs >= seg_corr_min, (
         f"system segregation recomputed from the submitted within/between columns does not track "
-        f"the reference (cross-subject r={rs:.3f} < {st['SEG_CORR_MIN']}).")
+        f"the reference (cross-subject r={rs:.3f} < {seg_corr_min}).")
 
     # if a segregation column is also submitted, it must be internally consistent with within/between
     if all(sub[i]["seg"] is not None for i in matched):
