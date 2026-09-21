@@ -47,6 +47,11 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   "n_samples_total": <int>, "n_classes": 2, "chance_level": 0.5}`.
 - `per_fold.csv` — one row per cross-validation fold:
   `fold, n_test_samples, accuracy`.
+- `decoding_timecourse.csv` — the decoding accuracy as a function of post-stimulus time:
+  one row per post-stimulus time sample in the 0.05-0.45 s analysis window,
+  `time_s, accuracy`, where `accuracy` is the cross-validated accuracy of the same decoder
+  trained and tested on the gradiometer pattern at that single time sample (each trial
+  contributes one example at each time sample).
 - `run_metadata.json` — dataset id, contrast, sensors, epoch window, analysis window,
   decoder, and the cross-validation scheme you used.
 - `findings.md` — a short written summary (a few sentences) stating the cross-validated

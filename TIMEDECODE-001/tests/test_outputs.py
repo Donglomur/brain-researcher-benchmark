@@ -23,14 +23,21 @@ folds all sit in the ~0.65-0.69 band, far below the ~0.79 random-k-fold folds. A
 per-fold accuracies sit in the inflated band, or whose headline is not the recomputed trial-grouped
 value, fails.
 
-Three pillars (all required):
+Four pillars (all required):
   1. per-fold table present, non-constant, folds in the trial-grouped (leakage-free) band
   2. the reported headline recomputes from the per-fold rows AND lands in the accept window
   3. the reported headline is the trial-grouped value, materially below the random-k-fold value
+  4. the per-time-sample decoding time course matches the held-out reference in SHAPE (Pearson
+     corr >= 0.8). This is the finer NEUTRAL intermediate the fabrication cannot reproduce:
+     guessing in-band per-fold rows plus the public n_trials=288 / n_samples=8640 counts no
+     longer passes, because a flat/synthetic time course does not track the real evoked-response
+     decoding profile. Correlation is magnitude-invariant, so it proves a real decoder ran
+     without discriminating the (un-cued) fold-scheme judgement (at a single time sample every
+     trial contributes one example, so the profile is identical leak-free or leaky).
 """
 from proof_of_work import (
     OUT, load_reference, load_results, headline_accuracy, reported_leaky, load_per_fold,
-    nonconstant, findings_text,
+    nonconstant, findings_text, load_timecourse, timecourse_shape_corr,
 )
 
 REF = load_reference()
@@ -51,6 +58,10 @@ N_TRIALS = int(ST["n_trials"])
 N_SAMPLES_TOTAL = int(ST["n_samples_total"])
 # per-fold discriminator between the grouped band (<=0.689) and the leaky band (>=0.789)
 PERFOLD_MAX = round(0.5 * (GROUPED_MAX + LEAKY_MIN), 4)
+TIMECOURSE_CORR_MIN = ST.get("TIMECOURSE_CORR_MIN", 0.8)
+TIMECOURSE_MIN_POINTS = int(ST.get("TIMECOURSE_MIN_POINTS", 12))
+REF_TIMECOURSE = REF.get("timecourse")
+REF_TIME_S = REF.get("time_s")
 
 
 # =============================================================================================
@@ -139,6 +150,48 @@ def test_reported_accuracy_is_trial_grouped():
             assert abs(lk - LEAKY) <= 0.06, (
                 f"the submission reports a random-k-fold accuracy {lk:.3f} that does not match the "
                 f"real leaky value (~{LEAKY:.3f}); the contrast appears fabricated")
+
+
+# =============================================================================================
+# Pillar 4 -- the decoder was actually run: the per-time-sample decoding profile matches the
+# held-out reference in SHAPE. This is the finer neutral intermediate the fabrication cannot
+# reproduce: guessing in-band per-fold rows + the public trial/sample counts no longer suffices,
+# because a fabricated (flat / synthetic) time course does not track the real evoked-response
+# decoding profile. Correlation is magnitude-invariant, so it proves a real decoder ran WITHOUT
+# revealing the (un-cued) fold-scheme judgement -- at a single time sample the profile is the
+# same whether the pooled samples would later be split leak-free or leakily.
+# =============================================================================================
+def test_decoding_timecourse_matches_reference_shape():
+    if REF_TIMECOURSE is None:
+        import pytest
+        pytest.skip("reference has no time-course profile")
+    sub_t, sub_a = load_timecourse()
+    assert len(sub_a) >= TIMECOURSE_MIN_POINTS, (
+        f"decoding_timecourse.csv has only {len(sub_a)} post-stimulus time samples; the "
+        f"0.05-0.45 s analysis window (decim 2) yields ~{int(ST.get('n_timecourse', 30))}. A "
+        f"coarse table is not the real per-time decoding profile.")
+    assert nonconstant(sub_a, EPS), (
+        "the per-time decoding accuracies are constant -- a real decoder's accuracy varies across "
+        "post-stimulus time (near chance early, peaking after stimulus onset); looks fabricated")
+    assert (sub_a > CHANCE).mean() >= 0.6, (
+        "most per-time decoding accuracies are at/below chance (0.5) -- not a real evoked decoder")
+    # the submitted profile must cover essentially the whole analysis window
+    span = sub_t.max() - sub_t.min()
+    ref_span = REF_TIME_S.max() - REF_TIME_S.min()
+    assert span >= 0.6 * ref_span, (
+        f"the time course spans only {span:.3f} s of the {ref_span:.3f} s analysis window; it must "
+        f"cover the 0.05-0.45 s post-stimulus window")
+    corr, npts = timecourse_shape_corr(sub_t, sub_a, REF_TIME_S, REF_TIMECOURSE)
+    assert npts >= TIMECOURSE_MIN_POINTS and corr == corr, (
+        "could not compare the submitted time course to the reference (too few overlapping, "
+        "non-constant points)")
+    assert corr >= TIMECOURSE_CORR_MIN, (
+        f"the submitted decoding time course does not match the real per-time decoding profile "
+        f"(shape correlation {corr:.3f} < {TIMECOURSE_CORR_MIN}). The cross-validated accuracy at "
+        f"each post-stimulus time sample must be computed from the real single-trial gradiometer "
+        f"responses; a flat or synthetic curve that merely reports plausible numbers does not "
+        f"track the evoked-response decoding profile (rapid post-onset rise, early peak, then "
+        f"structured decline).")
 
 
 # --- secondary prose guard (numbers above carry the grade) -----------------------------------

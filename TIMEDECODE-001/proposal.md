@@ -8,6 +8,30 @@
 
 > **HARDENING NOTE (de-cue, this revision).** The first cut's CV bullet read "Evaluate with **5-fold cross-validation**", which an agent can read as *endorsing* a plain `StratifiedKFold(5)` — i.e. the instruction telling it to do the leaky thing, which would make the fail unfair. Reworded so only the **fold count (5)** is pinned (for reproducibility) and the **fold-construction scheme is explicitly left to the analyst's judgement** ("should follow sound cross-validation practice"). A plain random k-fold is now a *choice the agent makes*, not one the brief dictates — the fail is a genuine un-cued judgement miss. Kept off-path: the brief still never mentions trials, grouping, independence, or leakage.
 
+> **HARDENING NOTE (second pass — finer neutral intermediate).** The prior verifier graded the
+> per-fold table by BAND only (folds must sit ≤ 0.739) plus the public counts (n_trials=288,
+> n_samples=8640). Those alone are fabricable: an agent that never runs a decoder can hand-write five
+> in-band per-fold rows and echo the public counts. Added a **required `decoding_timecourse.csv`** —
+> cross-validated decoding accuracy at each post-stimulus time sample (0.05–0.45 s). At a single time
+> sample every trial contributes exactly one example, so this temporal-decoding curve is **identical
+> whether the pooled folds would later be split leak-free or leakily** — it is a NEUTRAL intermediate
+> that does NOT reveal the un-cued fold-scheme judgement, yet its **shape** (rapid post-onset rise,
+> early ~0.09 s peak ≈0.96, structured decline to ≈0.72) cannot be produced without running a real
+> decoder on the real evoked responses. The grader validates it by **magnitude-invariant Pearson
+> correlation ≥ 0.8** against a held-out reference profile (stored in `reference.npz` as
+> `ref_timecourse`/`ref_time_s`, built from `solution/compute.py`). Honest/defensible LR variants
+> score corr ≥ 0.97; flat, monotone, random, reversed and gaussian-bump fabrications all score ≤ 0.57.
+> The leakage-band discriminator on the per-fold table + headline is kept unchanged (the fold scheme
+> is un-cued, so per-fold rows are band-checked, NOT element-matched — that would unfairly reject the
+> reference's own GroupKFold/LOGO variants).
+>
+> **Residual (HONEST-LIMITATION).** The time course forces a real decoder run, closing the
+> "passes with no decoder" hole. It does not, by itself, bind the pooled trial-grouped scalar (~0.67):
+> an agent who has already run the real per-time decoder could in principle hand-fabricate an in-band
+> per-fold table with guessed ~0.67 values. That residual attack requires doing the substantive real
+> work (load → epoch → decode); the specific leak-free fold-scheme judgement then still relies partly
+> on the frontier gate, as the brief accepts for this band-graded axis.
+
 ### The un-cued lever (PRIVATE — reviewers only)
 
 The deliverable ("report the **cross-validated** decoding accuracy") names the metric but never says **how the cross-validation folds must be formed** (and now explicitly leaves the scheme to the analyst). The pipeline pools **each post-stimulus time sample of every trial** as a separate example, so every trial contributes many highly autocorrelated samples that all share one modality label. An ordinary random k-fold over the pooled (trial × time) samples puts samples from the **same trial** in both the training and the test fold → the classifier is scored on near-duplicates of trials it has already seen → the accuracy is **inflated**. The honest estimate keeps every trial wholly on one side of the split (**StratifiedGroupKFold / GroupKFold by trial**). Everything else is pinned — gradiometers, -0.2..0.5 s epochs, baseline (None, 0), grad reject 4000e-13, decim 2, the 0.05-0.45 s analysis window, StandardScaler + LogisticRegression, 5 folds — so only the fold grouping moves the number.

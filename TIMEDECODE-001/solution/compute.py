@@ -87,15 +87,16 @@ def load_pooled_samples():
     modality = np.where(np.isin(ids, AUDITORY), 0, 1)          # 0=auditory 1=visual
     tmask = (epochs.times >= WIN_LO) & (epochs.times <= WIN_HI)
     data = epochs.get_data(copy=False)[:, :, tmask]            # (n_trials, n_grad, n_t)
+    win_times = np.asarray(epochs.times[tmask], float)         # analysis-window time axis (s)
     n_trials, n_grad, n_t = data.shape
     X = data.transpose(0, 2, 1).reshape(n_trials * n_t, n_grad)
     y = np.repeat(modality, n_t)
     groups = np.repeat(np.arange(n_trials), n_t)               # trial index per sample
-    return X, y, groups, n_trials, n_t
+    return X, y, groups, n_trials, n_t, data, modality, win_times
 
 
 try:
-    X, y, groups, n_trials, n_t = load_pooled_samples()
+    X, y, groups, n_trials, n_t, data3d, modality, win_times = load_pooled_samples()
 except Exception as e:
     fail(f"could not build pooled MEG samples from the sample dataset: {e}")
 
@@ -121,6 +122,23 @@ accuracy = float(np.mean(grouped_scores))
 random_kfold_acc = float(cross_val_score(
     clf, X, y, cv=StratifiedKFold(n_splits=N_SPLITS, shuffle=True,
                                   random_state=RANDOM_STATE)).mean())
+
+# ---- decoding time course: cross-validated accuracy at each post-stimulus time sample ----
+# At a single time sample every trial contributes exactly one example, so this temporal
+# decoding profile is the same whatever the pooled-sample fold scheme is; it is a neutral
+# record that a real decoder was run on the real evoked responses (its SHAPE -- the rapid
+# post-stimulus rise, the peak, the later structure -- cannot be produced without the data).
+skf_time = StratifiedKFold(n_splits=N_SPLITS, shuffle=True, random_state=RANDOM_STATE)
+timecourse = []
+for ti in range(n_t):
+    acc_t = float(cross_val_score(clf, data3d[:, :, ti], modality, cv=skf_time,
+                                  scoring="accuracy").mean())
+    timecourse.append((float(win_times[ti]), acc_t))
+with open(OUT / "decoding_timecourse.csv", "w", newline="") as f:
+    w = csv.writer(f)
+    w.writerow(["time_s", "accuracy"])
+    for t_s, a in timecourse:
+        w.writerow([round(t_s, 5), round(a, 5)])
 
 n_samples_total = int(len(y))
 

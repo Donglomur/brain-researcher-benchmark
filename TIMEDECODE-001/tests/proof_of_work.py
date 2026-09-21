@@ -23,8 +23,12 @@ REF_PATH = Path(os.environ.get("TIMEDECODE_REFERENCE",
 
 def load_reference():
     d = np.load(REF_PATH, allow_pickle=False)
-    return {"fold_acc": np.asarray(d["ref_fold_acc"], float),
-            "stats": json.loads(str(d["ref_stats"]))}
+    out = {"fold_acc": np.asarray(d["ref_fold_acc"], float),
+           "stats": json.loads(str(d["ref_stats"]))}
+    if "ref_timecourse" in d.files:
+        out["timecourse"] = np.asarray(d["ref_timecourse"], float)
+        out["time_s"] = np.asarray(d["ref_time_s"], float)
+    return out
 
 
 def _norm(s):
@@ -102,6 +106,52 @@ def load_per_fold():
             except (TypeError, ValueError):
                 nts.append(float("nan"))
     return np.asarray(accs, float), (nss if ns_col else None), (nts if nt_col else None)
+
+
+def load_timecourse():
+    """Return (time_s, accuracy) arrays from the required decoding_timecourse.csv.
+
+    The per-time-sample decoding accuracy in the 0.05-0.45 s window: at a single time
+    sample every trial contributes one example, so this profile is the same whatever the
+    pooled-sample fold scheme is -- a neutral record that a real decoder was actually run.
+    """
+    p = OUT / "decoding_timecourse.csv"
+    assert p.exists(), "missing required output decoding_timecourse.csv"
+    rows = list(csv.DictReader(open(p, encoding="utf-8")))
+    assert rows, "decoding_timecourse.csv has no data rows"
+    hdr = list(rows[0].keys())
+    t_col = next((h for h in hdr if "time" in _norm(h) or _norm(h) in ("t", "ts", "sample")), None)
+    a_col = next((h for h in hdr if ("acc" in _norm(h) or "score" in _norm(h))
+                  and "time" not in _norm(h)), None)
+    assert t_col and a_col, f"decoding_timecourse.csv needs time and accuracy columns (columns: {hdr})"
+    ts, accs = [], []
+    for r in rows:
+        try:
+            t = float(r[t_col])
+            a = float(r[a_col])
+        except (TypeError, ValueError):
+            continue
+        if not (math.isfinite(t) and math.isfinite(a)):
+            continue
+        ts.append(t)
+        accs.append(a / 100.0 if a > 1.5 else a)
+    order = np.argsort(ts)
+    return np.asarray(ts, float)[order], np.asarray(accs, float)[order]
+
+
+def timecourse_shape_corr(sub_t, sub_a, ref_t, ref_a):
+    """Pearson corr of the submitted profile against the reference on the reference time grid
+    (magnitude-invariant, so it proves a real decoder ran without discriminating the fold scheme)."""
+    lo = max(sub_t.min(), ref_t.min())
+    hi = min(sub_t.max(), ref_t.max())
+    grid = ref_t[(ref_t >= lo - 1e-9) & (ref_t <= hi + 1e-9)]
+    if len(grid) < 3:
+        return float("nan"), 0
+    sub_on = np.interp(grid, sub_t, sub_a)
+    ref_on = np.interp(grid, ref_t, ref_a)
+    if np.std(sub_on) < 1e-9 or np.std(ref_on) < 1e-9:
+        return float("nan"), len(grid)
+    return float(np.corrcoef(sub_on, ref_on)[0, 1]), len(grid)
 
 
 def nonconstant(accs, eps):
