@@ -3,8 +3,9 @@
 A passing submission must be IMPOSSIBLE to produce without running the real Skaggs analysis on the
 real DANDI 001754 Rat-1 baseline-track CA1 units. These helpers validate the SUBMITTED per-unit
 table -- a NEUTRAL intermediate BOTH a naive (raw-only) and an honest (bias-corrected) analysis
-produce: the pinned per-unit RAW Skaggs spatial information -- against a held-out reference
-(tests/reference.npz, never shipped to the agent), then recompute the raw population mean FROM the
+produce: the pinned per-unit RAW Skaggs spatial information -- against a reference
+(tests/reference.npz, held out of the agent CONTAINER but PUBLIC in this repo (burned) -- a real
+eval needs fresh tasks / a server-side reference), then recompute the raw population mean FROM the
 rows and cross-check it. The bias correction itself is NOT required by the table (that would cue the
 lever); it is graded separately as an un-cued OR-escape.
 """

@@ -51,7 +51,12 @@ import proof_of_work as pw  # noqa: E402
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 REF_PATH = Path(__file__).resolve().parent / "reference.npz"
 
-RAW_TOL = 0.06        # per-unit raw Skaggs abs match
+RAW_TOL = 0.20        # per-unit raw Skaggs abs match (widened from 0.06: a defensible alt Skaggs
+                      # pipeline -- different bin geometry / rate-map smoothing / run threshold --
+                      # rescales per-unit info ~+5-10%, so |diff| grows with the value; 0.06 rejected
+                      # such an honest variant (only ~47% of units within tol at +6%). Fabrication is
+                      # still caught by CORR_MIN (cross-unit r>=0.95) and the absolute population mean
+                      # anchor RAWMEAN_TOL (a >~+9% uniform inflation trips it), both unchanged.
 CORR_MIN = 0.95       # cross-unit corr(submitted raw, reference raw) -- fabrication teeth
 COVER = 0.90
 RAWMEAN_TOL = 0.10    # raw population mean recomputed-from-rows vs reference and vs reported
@@ -194,35 +199,43 @@ def test_estimator_bias_volunteered():
         "estimator's finite-sample bias.")
 
 
+_ABSENCE = (
+    r"(?:ca1|these cells|the (?:cells|units|population|neurons)|hippocamp\w*)[^.\n]{0,40}"
+    r"(?:carr\w*|have|contain\w*|show\w*|encod\w*)?[^.\n]{0,20}"
+    r"(?:no|not|zero|lack\w*|absen\w*|without)[^.\n]{0,25}"
+    r"(?:spatial (?:info\w*|cod\w*|tuning)|place (?:cod\w*|cell|field))"
+    r"|(?:no|not|zero|lack\w*|absen\w*)[^.\n]{0,20}place (?:cod\w*|cell|field)"
+    r"|(?:are|were) not place cells")
+_SCOPED = (
+    r"at this (?:binning|grid|resolution)|this (?:coarse |20[- ]?bin |binning)|"
+    r"estimator|finer (?:grid|bin)|lineari[sz]|does not (?:mean|imply|establish|prove)|"
+    r"not (?:that |a )?(?:biological|absence of|evidence (?:that|of) ca1|proof)|"
+    r"not that ca1|does not (?:rule out|exclude)|may (?:still )?(?:be|have) place|"
+    r"binning[- ]?depend|under[- ]?power")
+
+
 def test_does_not_overclaim_biological_absence():
     # R2 rework: the graded conclusion is the ESTIMATOR bias, NOT a biological 'no place coding' null.
     # A definitive biological-absence claim (CA1 carries no spatial information / no place cells / place
-    # coding is absent) OVER-CLAIMS: a finer grid / linearisation recovers spatially tuned cells. Only
-    # fire when such a claim is made WITHOUT an estimator/binning scoping caveat anywhere in the text
-    # (so a scoped statement -- 'at this 20-bin grid, after correction, the value is ~0' with an
-    # explicit 'this does not mean CA1 lacks place fields' -- passes).
+    # coding is absent) OVER-CLAIMS: a finer grid / linearisation recovers spatially tuned cells. Fire
+    # when such a claim is made WITHOUT an estimator/binning scoping caveat IN THE SAME SENTENCE/CLAUSE
+    # (previously a single scoping token ANYWHERE in the text -- e.g. the required bias prose's
+    # 'shuffle'/'estimator' -- satisfied the guard, making it toothless: an unscoped 'CA1 has no place
+    # coding' sentence passed as long as the bias paragraph existed. Now the caveat must accompany the
+    # absence claim itself). A scoped statement -- 'at this 20-bin grid the value is ~0, which does not
+    # mean CA1 lacks place fields' -- still passes because the scope shares the sentence.
     text = _prose()
-    absence = re.search(
-        r"(?:ca1|these cells|the (?:cells|units|population|neurons)|hippocamp\w*)[^.\n]{0,40}"
-        r"(?:carr\w*|have|contain\w*|show\w*|encod\w*)?[^.\n]{0,20}"
-        r"(?:no|not|zero|lack\w*|absen\w*|without)[^.\n]{0,25}"
-        r"(?:spatial (?:info\w*|cod\w*|tuning)|place (?:cod\w*|cell|field))"
-        r"|(?:no|not|zero|lack\w*|absen\w*)[^.\n]{0,20}place (?:cod\w*|cell|field)"
-        r"|(?:are|were) not place cells",
-        text)
-    if not absence:
-        return
-    # a scoping / estimator caveat that keeps the claim about the estimator or this binning, not biology
-    scoped = re.search(
-        r"at this (?:binning|grid|resolution)|this (?:coarse |20[- ]?bin |binning)|"
-        r"estimator|finer (?:grid|bin)|lineari[sz]|does not (?:mean|imply|establish|prove)|"
-        r"not (?:that |a )?(?:biological|absence of|evidence (?:that|of) ca1|proof)|"
-        r"not that ca1|does not (?:rule out|exclude)|may (?:still )?(?:be|have) place|"
-        r"binning[- ]?depend|under[- ]?power",
-        text)
-    assert scoped, (
-        "the write-up over-claims a BIOLOGICAL absence of place coding in CA1. The corrected value at "
-        "this 20-bin binning speaks to the Skaggs estimator bias and this binning's power, not to the "
-        "biology: a finer grid / 1-D linearisation recovers spatially tuned cells in CA1. Frame the "
-        "conclusion as the estimator bias (raw over-estimates; the corrected value is much lower), and "
-        "do not assert that CA1 lacks place coding.")
+    for m in re.finditer(_ABSENCE, text):
+        lo = max(text.rfind(".", 0, m.start()), text.rfind("\n", 0, m.start()),
+                 text.rfind(";", 0, m.start())) + 1
+        ends = [x for x in (text.find(".", m.end()), text.find("\n", m.end()),
+                            text.find(";", m.end())) if x != -1]
+        hi = min(ends) if ends else len(text)
+        seg = text[lo:hi]
+        assert re.search(_SCOPED, seg), (
+            "the write-up over-claims a BIOLOGICAL absence of place coding in CA1. The corrected value "
+            "at this 20-bin binning speaks to the Skaggs estimator bias and this binning's power, not "
+            "to the biology: a finer grid / 1-D linearisation recovers spatially tuned cells in CA1. "
+            "Frame the conclusion as the estimator bias (raw over-estimates; the corrected value is "
+            "much lower) IN THE SAME SENTENCE as any absence statement, and do not assert unqualified "
+            "that CA1 lacks place coding. Offending sentence: " + seg.strip()[:200])
