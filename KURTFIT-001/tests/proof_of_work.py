@@ -129,6 +129,19 @@ def best_corr(paired):
     return best, who
 
 
+def best_agreement(paired):
+    """For integer-valued per-voxel tables (e.g. fODF peak counts): the max fraction of shared
+    voxels whose rounded value equals the reference, over configs. Kills a random/fabricated
+    integer table (chance agreement) while a real estimator self-matches ~1.0."""
+    best, who = -1.0, None
+    for cfg, (s, r) in paired.items():
+        if len(s) >= 50:
+            a = float(np.mean(np.rint(s) == np.rint(r)))
+            if a > best:
+                best, who = a, cfg
+    return best, who
+
+
 def best_mean_match(recomputed_mean, config_means, tol):
     """Return (cfg, err) for the config whose ROI mean is closest to `recomputed_mean`."""
     best, who = 1e9, None
@@ -137,6 +150,15 @@ def best_mean_match(recomputed_mean, config_means, tol):
         if e < best:
             best, who = e, cfg
     return who, best
+
+
+def mean_in_range(mean, config_means, margin):
+    """Scale anchor robust to intermediate-but-valid configs: the recomputed ROI mean must lie
+    within [min_config - margin, max_config + margin]. Catches a globally rescaled/fabricated
+    map (correlation is scale-invariant, so pillar 1 alone cannot), while accepting any real
+    model/estimator/cap whose mean sits between the stored configs."""
+    mus = [float(v) for v in config_means.values()]
+    return (min(mus) - margin) <= mean <= (max(mus) + margin)
 
 
 def nonconstant(values, eps=1e-6):
@@ -178,16 +200,20 @@ def findings_text():
     return p.read_text(encoding="utf-8") if p.exists() else ""
 
 
-def harvest_metric_values(json_names, lo, hi, findings_terms):
-    """All plausible metric values [lo,hi] the submission reports anywhere: JSON leaves in
-    range (any key) + numbers in findings.md near a metric term. De-duplicated (rounded)."""
+def harvest_metric_values(json_names, lo, hi, findings_terms, json_key_re=None):
+    """All plausible metric values [lo,hi] the submission reports anywhere: JSON leaves in range
+    (optionally only under keys matching `json_key_re`, to avoid harvesting a co-reported
+    different metric such as FA next to MD) + numbers in findings.md near a metric term."""
     vals = []
     for name in json_names:
         obj = load_json(name)
         if obj:
-            for _, v in walk_numbers(obj):
-                if lo <= v <= hi:
-                    vals.append(v)
+            for k, v in walk_numbers(obj):
+                if not (lo <= v <= hi):
+                    continue
+                if json_key_re is not None and not (k and re.search(json_key_re, str(k), re.I)):
+                    continue
+                vals.append(v)
     text = findings_text()
     if text:
         term = "(?:" + "|".join(findings_terms) + ")"
