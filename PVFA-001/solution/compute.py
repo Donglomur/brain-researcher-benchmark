@@ -115,6 +115,14 @@ fa_unc = float(np.mean(FA_dti2[v]))
 f_mean = float(np.mean(f_map[v]))
 n = int(v.sum())
 
+# per-voxel table underlying the region-mean FA (the neutral intermediate the pipeline emits)
+import csv as _csv
+with open(OUT / "fa_voxelwise.csv", "w", newline="") as _fh:
+    _w = _csv.writer(_fh)
+    _w.writerow(["i", "j", "k", "fa"])
+    for _i, _j, _k in np.argwhere(v):
+        _w.writerow([int(_i), int(_j), int(_k), round(float(FA_fw[_i, _j, _k]), 6)])
+
 (OUT / "results.json").write_text(json.dumps({
     "status": "ok",
     "fa_periventricular_wm": fa_corr,

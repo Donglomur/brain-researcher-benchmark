@@ -48,6 +48,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 - `results.json` — must include `fa_periventricular_wm` (your mean FA over the
   region above), `n_roi_voxels`, and the shells your estimate used.
+- `fa_voxelwise.csv` — the per-voxel table underlying your reported region-mean FA:
+  one row per periventricular ROI voxel, with columns `i,j,k` (its voxel index in
+  the acquisition array) and `fa` (its fractional anisotropy). Its mean over the
+  rows must equal your reported `fa_periventricular_wm`.
 - `run_metadata.json` — dataset id, shells available vs used, the region
   definition, and the preprocessing you applied.
 - `findings.md` — a short written summary reporting the periventricular

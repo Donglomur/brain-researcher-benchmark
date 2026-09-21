@@ -46,6 +46,33 @@ So an honest single-tensor answer that recognises the confound **passes**, and t
 
 Oracle **reward 1.0** (locked locally). The ≥2-frontier-family gate (does GPT-5.x / Claude spontaneously recognise the CSF partial-volume confound in periventricular tissue, or report a bare periventricular FA as a clean tissue measurement?) is a maintainer step. Prior: computing FA in a named ROI is the overwhelming default of every DTI tutorial, and none flag the periventricular partial-volume confound unprompted — so the un-cued omission is the natural default and the trap has teeth.
 
+### PROOF-OF-WORK REWORK (this revision — un-cued judgment preserved)
+
+The keyword-only recognition check (fabrication-vulnerable per the suite audit) is replaced by
+a held-out per-voxel reference + three numeric pillars, WITHOUT cueing the free-water judgment
+(the instruction still names only "the periventricular white-matter FA").
+
+- **Held-out reference** (`tests/reference.npz`, sha256 `e6537380…fc07`, ~22 KB, committed,
+  never shipped): the per-voxel FA map over the fixed 1740-voxel periventricular ROI for three
+  model configs — free-water fwDTI 0.617, single-tensor DTI(b≤2000) 0.527, DTI(b≤1000) 0.427 —
+  built by running the pinned pipeline on the real dipy Sherbrooke subject (numpy 2.1.3 /
+  scipy 1.14.1 / dipy 1.12.1).
+- **Neutral intermediate output** (new, un-cued): `fa_voxelwise.csv` — the per-voxel FA the
+  standard pipeline already produces (columns `i,j,k,fa`).
+- **Pillar 1** — the per-voxel FA table covers the real ROI (≥50 %), is non-constant, and
+  correlates ≥0.80 with some real model config (a fabricated/constant/guessed table matches
+  none).
+- **Pillar 2** — the ROI mean recomputes to the reported FA and a physically real FA (range
+  [0.43, 0.62] ±margin); a globally rescaled/fabricated map is caught.
+- **Pillar 3** — the free-water / CSF partial-volume dependence graded as NUMBERS, with a
+  negation-guarded CSF-deflation prose fallback (the honest single-tensor-that-flags-the-
+  confound, or fwDTI-with-mechanism, path).
+
+**Validation matrix (subprocess pytest per case):** honest (fwDTI + single-tensor context)
+PASS · honest-prose (fwDTI + CSF-deflation mechanism, one number) PASS · no-table / constant /
+fabricated-non-constant / fabricated-coords FAIL (pillar 1) · naive over-claim (real
+single-tensor map + bare 0.527) FAIL (pillar 3 only; pillars 1–2 pass).
+
 ### Cost
 
 `hard`. cpus 2, mem 8 GB, internet on (dipy fetches the Sherbrooke 3-shell subject, ~1 download). A DTI fit plus a region-restricted fwDTI fit ≈ 60 s locally; timeouts agent 3600 s / verifier 900 s. Deps: dipy 1.12.1 + numpy/scipy/nibabel/h5py.
