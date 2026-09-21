@@ -34,6 +34,14 @@ the container, so **internet access is required** on the first run (cached local
 Participants are identified by the numeric subject id in each functional filename (e.g.
 `0010042_rest_tshift_RPI_voreg_mni.nii.gz` → `10042`).
 
+**Use exactly these 40 participants** (the set `fetch_adhd(n_subjects=40)` returns; pin them so
+the cohort and ranking are reproducible), reported under their numeric ids: `10042`, `10064`,
+`10128`, `21019`, `23008`, `23012`, `27011`, `27018`, `27034`, `27037`, `1019436`, `1206380`,
+`1418396`, `1517058`, `1552181`, `1562298`, `1679142`, `2014113`, `2497695`, `2950754`,
+`3007585`, `3154996`, `3205761`, `3520880`, `3624598`, `3699991`, `3884955`, `3902469`,
+`3994098`, `4016887`, `4046678`, `4134561`, `4164316`, `4275075`, `6115230`, `7774305`,
+`8409791`, `8697774`, `9744150`, `9750701`.
+
 ## Output Location
 
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).

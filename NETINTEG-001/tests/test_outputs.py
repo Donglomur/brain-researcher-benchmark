@@ -48,12 +48,17 @@ def _load(name):
 def _submitted():
     p = OUT / "efficiency.csv"
     assert p.exists(), "missing required output efficiency.csv"
+    # Prefer a POSITIVE/absolute connectivity-strength proxy (mean positive FC, clipped mean
+    # connectivity). Signed mean FC is centred to ~0 under global-signal regression and cannot
+    # express the density confound, so it is intentionally NOT among the candidates.
     return pw.load_submitted(
         p,
         id_cols=("participant", "subject", "subjectid", "participantid", "subid", "id"),
         eff_cols=("globalefficiency", "efficiency", "geff", "eglob", "ge"),
-        conn_cols=("meanconnectivity", "meanconn", "connectivitystrength", "overallstrength",
-                   "strength", "meanfc", "meanedge"))
+        conn_cols=("meanpositivefc", "positivefc", "meanposfc", "posfc",
+                   "meanpositiveconnectivity", "positivestrength", "positiveconnectivity",
+                   "meanconnectivity", "meanconn", "connectivitystrength", "overallstrength",
+                   "strength", "meanedge"))
 
 
 # ------------------------------------------------------------------ well-formedness
@@ -95,19 +100,26 @@ def test_recompute_confound_and_ranking_from_rows():
             f"efficiency column produces (overlap {overlap}/{len(top)}); CSV and reported "
             f"ranking are inconsistent.")
 
-    # (b) if overall-strength is reported per participant, recompute the density confound
+    # (b) if a per-participant connectivity-STRENGTH proxy is reported, recompute the density
+    # confound. Grade the density-matched SIGNATURE -- a strongly NEGATIVE efficiency<->strength
+    # correlation -- rather than a pinned magnitude, so a defensible strength proxy (mean
+    # positive FC vs clipped mean connectivity) or density range is not penalised. The real
+    # value is ~-0.57 to -0.69 against a positive-strength proxy; an absolute-threshold
+    # submission instead recomputes a strongly POSITIVE value (~+0.89), because under a fixed
+    # cutoff a participant's graph density is set by its overall connectivity strength.
     conns = [sub[i][1] for i in matched]
     if sum(1 for c in conns if c == c) >= 0.9 * len(matched) and len(matched) >= 10:
         eff_ok = [sub[i][0] for i in matched if sub[i][1] == sub[i][1]]
         conn_ok = [sub[i][1] for i in matched if sub[i][1] == sub[i][1]]
         r_rows = pw.pearson(eff_ok, conn_ok)
-        ref_dm = float(st["dm_strength_corr"])
-        assert abs(r_rows - ref_dm) <= st["RECOMP_TOL"], (
+        thr = float(st["POS_CONFOUND_MAX"])
+        assert r_rows <= thr, (
             f"efficiency<->overall-strength correlation recomputed from the submitted rows "
-            f"({r_rows:+.3f}) does not match the density-matched reference ({ref_dm:+.3f}, tol "
-            f"{st['RECOMP_TOL']}). The per-participant efficiency reported is not the "
-            f"density-matched quantity (an absolute-threshold submission recomputes a strongly "
-            f"POSITIVE value).")
+            f"({r_rows:+.3f}) is not the strongly-negative density-matched signature "
+            f"(<= {thr:+.2f}; on this data it is ~{st['dm_strength_corr_pos']:+.2f} against a "
+            f"positive-strength proxy). A fixed-absolute-threshold efficiency recomputes a "
+            f"strongly POSITIVE correlation (~{st['abs_strength_corr_pos']:+.2f}); match graph "
+            f"density across participants to remove the overall-connectivity-strength confound.")
 
 
 # ------------------------------------------------------------------ pillar 3 (judgement as numbers)

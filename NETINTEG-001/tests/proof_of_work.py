@@ -28,10 +28,15 @@ def _norm(s):
 
 def load_reference(path):
     z = np.load(path, allow_pickle=True)
+    # conn_pos = a GSR-robust positive/absolute strength proxy (mean over positive edges).
+    # Signed mean FC is centred to ~0 under global-signal regression, so the density confound
+    # must be measured against a positive-strength proxy to be pipeline-robust.
+    conn_pos = z["ref_conn_pos"] if "ref_conn_pos" in z.files else z["ref_conn"]
     ref = {
         "ids": [canon_id(x) for x in z["ref_ids"]],
         "eff": np.asarray(z["ref_eff"], dtype=float),
         "conn": np.asarray(z["ref_conn"], dtype=float),
+        "conn_pos": np.asarray(conn_pos, dtype=float),
         "eff_abs": np.asarray(z["ref_eff_abs"], dtype=float),
         "stats": json.loads(str(z["ref_stats"])),
     }
@@ -93,10 +98,12 @@ def pearson(x, y):
 
 def check_subjects_and_values(submitted, ref, eff_tol, corr_min, cover, match, eps=1e-4):
     """Pillar 1. Raise AssertionError unless the submitted per-participant efficiency is the
-    real DENSITY-MATCHED per-subject work: coverage of the real ids, non-constant, cross-subject
-    corr(submitted, reference density-matched efficiency) >= corr_min (submitting the confounded
-    ABSOLUTE-threshold efficiency instead fails here -- the two rankings are near-disjoint), and
-    a per-subject absolute match for >= `match` of subjects."""
+    real DENSITY-MATCHED per-subject work: coverage of the real ids, non-constant, and -- the
+    PRIMARY teeth -- cross-subject corr(submitted, reference density-matched efficiency) >=
+    corr_min (submitting the confounded ABSOLUTE-threshold efficiency instead fails here, the
+    two rankings are near-disjoint at r~-0.28; a fabrication gives ~0). The absolute band
+    (`eff_tol`) is a secondary sanity check, set wide enough to admit a defensible density-range
+    choice (a wider proportional-density sweep shifts efficiency by ~0.05-0.06)."""
     ref_ids = set(ref["ids"])
     matched = [i for i in submitted if i in ref_ids]
     coverage = len(matched) / max(1, len(ref_ids))
