@@ -33,9 +33,10 @@ Gap (random − subject-wise) = **0.0575** accuracy, correctly signed (random in
 
 ### Verifier — proof-of-work (3 pillars, NUMBERS not keywords)
 
-The grade is carried against a held-out reference (`tests/reference.npz`) built by running the
-oracle on the pinned Sleep-EDF set (subjects [0..5], night 1). `tests/proof_of_work.py` +
-`tests/test_outputs.py`:
+The grade is carried against a reference (`tests/reference.npz`) built by running the oracle on
+the pinned Sleep-EDF set (subjects [0..5], night 1); it is held out of the agent CONTAINER but
+PUBLIC in this repo — burned, so a real eval needs fresh tasks / a server-side reference.
+`tests/proof_of_work.py` + `tests/test_outputs.py`:
 
 1. **Per-subject proof of work** — `per_subject.csv` must cover the 6-subject LOSO sample
    (real ids), be non-constant, and match the held-out per-subject leave-one-subject-out
@@ -43,10 +44,22 @@ oracle on the pinned Sleep-EDF set (subjects [0..5], night 1). `tests/proof_of_w
 2. **Recompute** — the epoch-weighted mean of the submitted `accuracy` must equal both the
    reference subject-wise accuracy (0.775) and the reported headline accuracy.
 3. **Discriminating number (LOSO-vs-random)** — the reported headline must be the subject-wise
-   accuracy (0.775 ± 0.035) and kappa (0.682), the reported random-k-fold accuracy must match
+   accuracy (0.775 ± **0.045**) and kappa (0.682), the reported random-k-fold accuracy must match
    the reference (0.832 ± 0.05), and the subject-wise value must be at least 0.04 BELOW the
    random-k-fold value. A run that reports the leaky random-k-fold accuracy (0.832) as the
    headline fails (also on the recompute pillar).
+
+**Fairness widening (GROUP_TOL 0.035 → 0.045).** ±0.035 on the group accuracy/kappa was thinner
+than plausible pipeline / library-version drift (~5%). Validated by perturbing the committed
+reference per-item values (`ref_acc`/`ref_kappa`/`subj_*`/`rand_*`) by a +0.04 shift: at ±0.035
+that honest alternative FAILED the headline (pillar 3) and the recompute (pillar 2); at ±0.045 it
+PASSES. **HONEST-LIMITATION:** the widening is CAPPED at 0.045 because it must stay below the
+LOSO-vs-random-kfold gap (0.058) — otherwise reporting the leaky random-kfold accuracy (0.832) as
+the headline would slip through. So this task can only absorb ~5% drift, at the low end of the
+plausible range; a larger honest drift cannot be admitted without weakening the leakage
+discriminator (`GAP_MIN` = 0.04 still independently blocks headline = random-kfold). Not widened:
+`RAND_TOL`, `GAP_MIN`, per-subject tolerances. A constant/fabricated table and the leaky-headline
+over-claim still fail.
 
 Validation matrix (subprocess pytest per case): honest oracle → PASS; no-table → FAIL;
 constant → FAIL; non-constant fabricated (right mean, wrong per-item) → FAIL; naive

@@ -1,8 +1,10 @@
 """Proof-of-work grader for SLEEPSTAGE-001 (5-class AASM sleep staging on Sleep-EDF).
 
-The grade is carried by NUMBERS against a held-out reference (`reference.npz`) built by
-running the oracle on the pinned Sleep-EDF set (subjects [0..5], night 1; EEG Fpz-Cz +
-Pz-Oz; 30-s epochs; relative band-power features; RandomForest(200, random_state=0)):
+The grade is carried by NUMBERS against a reference (`reference.npz`) built by running the
+oracle on the pinned Sleep-EDF set (subjects [0..5], night 1; EEG Fpz-Cz + Pz-Oz; 30-s epochs;
+relative band-power features; RandomForest(200, random_state=0)). The reference is held out of
+the agent CONTAINER but PUBLIC in this repo (burned) -- a real eval needs fresh tasks / a
+server-side reference:
 
   PILLAR 1  the submitted per-subject table (per_subject.csv) must cover the exact 6-subject
             leave-one-subject-out sample, be non-constant, and match the held-out per-subject
@@ -34,7 +36,13 @@ REF = np.load(Path(__file__).resolve().parent / "reference.npz", allow_pickle=Fa
 
 ACC_VAL_TOL = 0.06     # per-subject LOSO accuracy
 KAPPA_VAL_TOL = 0.08   # per-subject LOSO kappa
-GROUP_TOL = 0.035      # group accuracy/kappa vs reference / reported
+GROUP_TOL = 0.045      # group accuracy/kappa vs reference / reported
+                       # (widened from 0.035: a defensible pipeline / lib-version drift shifts the
+                       # subject-wise group accuracy/kappa by ~5%, which 0.035 rejected. CAPPED at
+                       # 0.045 -- it must stay below the LOSO-vs-random gap (0.058), so reporting
+                       # the leaky random-kfold accuracy (~0.832) as the headline still fails; the
+                       # gap also caps how much drift can be admitted (HONEST-LIMITATION). GAP_MIN
+                       # (0.04) and RAND_TOL/per-subject pillars are unchanged.)
 RAND_TOL = 0.05        # reported random-kfold accuracy vs reference
 GAP_MIN = 0.04         # subject-wise must be at least this far BELOW random-kfold
 
