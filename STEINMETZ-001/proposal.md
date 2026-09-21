@@ -47,3 +47,29 @@ Oracle **reward 1.0**; naive baseline **reward 0** (validated locally with the p
 ### Cost
 
 `hard`. cpus 2, mem 12 GB, internet on (fetches one ~311 MB NWB asset at runtime — the single pinned session's S3 blob, not the whole dandiset; note DANDI/S3 can throttle). Agent timeout 7200 s, verifier 1800 s. Deps: dandi 0.78 / pynwb 4.1 / numpy / scipy / pandas / h5py / scikit-learn (pinned in the Dockerfile).
+
+### Proof-of-work verifier (added)
+
+The grader is now proof-of-work (see `PROOF_OF_WORK_SPEC.md`): a submission cannot pass without
+running the real decoding on the real session.
+
+- **Held-out reference** `tests/reference.npz` (built from `solution/compute.py`, never shipped to
+  the agent): the honest per-fold blocked-CV accuracies `[0.704, 0.741, 0.778, 0.667, 0.731]`
+  (mean 0.724) + `ref_stats` (naive peri+random 0.955, pre+random 0.762, peri+blocked 0.941,
+  chance 0.515, n_trials 134, n_units 1085).
+- **Neutral per-item table** `folds.csv` (per-fold CV accuracies) — produced by any 5-fold CV,
+  naive or honest, so requiring it does not cue the window / CV-scheme levers.
+- **Pillars:** (1) `folds.csv` well-formed + non-constant + its sorted per-fold values track the
+  held-out reference; (2) `mean(folds) == reported cross_validated_accuracy == honest reference`
+  and lands in the held-out band `[0.64, 0.80]` that only a strictly pre-movement, non-leaky
+  decoder reaches (the naive peri+random ~0.95 fails by a wide margin); (3) a volunteered
+  peri-movement / random-CV accuracy, if present, must be the inflated ~0.95.
+- **Validation matrix (subprocess pytest):** honest PASS; no-table FAIL; constant-table FAIL;
+  non-constant-fabricated (wrong per-fold spread) FAIL; naive peri+random over-claim FAIL.
+
+**Data pin (reference build):** DANDI `000017` (draft), asset
+`sub-Cori/sub-Cori_ses-20161214T120000.nwb`, asset-id `92694e6e-84fd-4198-a7e3-64e764f8e086`,
+size 311814662 B, `dandi:sha2-256 = d8433a826049f82cd832f41f98a9f9fafad0ac66998d4dbfd89b15b594fc4236`.
+The dandiset uses the mutable **draft** version; the asset path + this content hash pin the exact
+blob the reference was built from. Data is fetched at runtime (`allow_internet=true`); baking is a
+maintainer follow-up (>100 MB/file GitHub limit).

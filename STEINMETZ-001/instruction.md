@@ -43,6 +43,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `results.json` — the headline result: `cross_validated_accuracy` (the population choice-decoding
   accuracy you would report), `chance_level`, `n_trials`, `n_units`, and the analysis parameters
   you used (window, cross-validation, classifier).
+- `folds.csv` — the per-fold cross-validated accuracies your headline accuracy is the mean of: one
+  row per cross-validation fold, with the fold index and that fold's accuracy (columns e.g.
+  `fold,accuracy`).
 - `run_metadata.json` — dandiset id, session, n trials, n units, choice definition, window, CV.
 - `findings.md` — a short written summary (a few sentences) stating how accurately the upcoming
   choice can be decoded relative to chance, and how reliable that estimate is. State only what

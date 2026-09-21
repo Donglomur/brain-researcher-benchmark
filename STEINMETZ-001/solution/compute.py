@@ -18,14 +18,13 @@ The correct analysis avoids two off-critical-path errors that both inflate the e
 Validated ground truth (DANDI 000017, sub-Cori ses-20161214, dataset-'included' left/right
 trials, all recorded units, 250 ms spike-count window, standardized logistic regression,
 5-fold CV):
-  n_trials = 134, chance (majority) = 0.515
+  n_trials = 134, chance (majority) = 0.515, n_units = 1085
   CORRECT  pre-movement (stim..+0.25 s) + blocked CV : accuracy = 0.72   <-- reported
+           per-fold = [0.70, 0.74, 0.78, 0.67, 0.73]
   NAIVE    peri-movement (resp +/-0.1 s) + random CV : accuracy = 0.95   (motor + leakage)
-  (trap) pre + random = 0.76 ; (trap) peri + blocked = 0.94
-The correct value is stable across regularization (C in 0.1..5 -> 0.72 +/- 0.01). So the
-honest upcoming-choice decoder reaches ~0.72 (well above chance) -- not the ~0.95 that a
-peri-movement window with random CV reports.
+The correct value is stable across regularization (C in 0.1..5 -> 0.72 +/- 0.01).
 """
+import csv
 import json
 import os
 import sys
@@ -112,25 +111,33 @@ from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import cross_val_score, StratifiedKFold, KFold
 
 
-def cv_accuracy(X, scheme):
+def cv_scores(X, scheme):
     clf = make_pipeline(StandardScaler(), LogisticRegression(C=C_REG, max_iter=2000))
     cv = (StratifiedKFold(N_FOLDS, shuffle=True, random_state=SEED) if scheme == "random"
           else KFold(N_FOLDS, shuffle=False))
-    s = cross_val_score(clf, X, y, cv=cv, scoring="accuracy")
-    return float(s.mean()), float(s.std())
+    return cross_val_score(clf, X, y, cv=cv, scoring="accuracy")
 
 # CORRECT: strictly pre-movement window (stimulus-aligned) + blocked CV
 X_pre = spike_counts("visual_stimulus_time", 0.0, WIN)
-acc_correct, std_correct = cv_accuracy(X_pre, "blocked")
+folds_correct = cv_scores(X_pre, "blocked")
+acc_correct, std_correct = float(folds_correct.mean()), float(folds_correct.std())
 
 # For the record / positive contrast: the peri-movement + random-CV estimate.
 X_peri = spike_counts("response_time", -0.1, 0.1)
-acc_naive, _ = cv_accuracy(X_peri, "random")
+acc_naive = float(cv_scores(X_peri, "random").mean())
+
+# ---- per-fold table (the finest intermediate the decoding naturally produces) ----
+with open(OUT / "folds.csv", "w", newline="") as f:
+    w = csv.writer(f)
+    w.writerow(["fold", "accuracy"])
+    for i, a in enumerate(folds_correct):
+        w.writerow([i, float(a)])
 
 results = {
     # the value that should be REPORTED: the honest, pre-movement, held-out (blocked) accuracy
     "cross_validated_accuracy": round(acc_correct, 4),
     "accuracy_std_across_folds": round(std_correct, 4),
+    "per_fold_accuracies": [round(float(a), 4) for a in folds_correct],
     "chance_level": round(chance, 4),
     "n_trials": int(len(sel)),
     "n_units": int(n_units),
@@ -165,4 +172,5 @@ results = {
 )
 
 print(f"n_trials={len(sel)} n_units={n_units} chance={chance:.3f} "
-      f"CORRECT(pre+blocked)={acc_correct:.4f} NAIVE(peri+random)={acc_naive:.4f}")
+      f"CORRECT(pre+blocked)={acc_correct:.4f} NAIVE(peri+random)={acc_naive:.4f} "
+      f"folds={[round(float(a),3) for a in folds_correct]}")
