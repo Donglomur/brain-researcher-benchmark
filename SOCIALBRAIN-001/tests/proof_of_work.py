@@ -65,7 +65,13 @@ def load_reference(path):
 
 
 def load_submitted(path):
-    """Return a list of dict rows with canon id + resolved columns."""
+    """Return a list of dict rows with canon id + resolved columns.
+
+    The across-network correlation may be reported under SEVERAL preprocessing choices, as
+    several columns. We collect EVERY across-network candidate column (`across_by_col`) and let
+    the grader assign, by value, which submitted column is the standard-clean quantity and which
+    is the alternative-preprocessing quantity -- the grader never keys off a column NAME (so the
+    specific preprocessing lever is not cued by the required schema)."""
     rows = list(csv.DictReader(open(path, encoding="utf-8")))
     if not rows:
         return []
@@ -82,8 +88,10 @@ def load_submitted(path):
     age_c = pick(("age",), exclude=("group", "range"))
     grp_c = pick(("group", "childadult", "cohort"))
     wt_c = pick(("withintom", "tomwithin", "within_tom"))
-    across_c = pick(("acrossnetwork", "across", "tompain", "betweennetwork"),
-                    exclude=("gsr", "globalsignal"))
+    # every across-network column (any preprocessing choice), regardless of its name
+    across_cols = [h for h, n in norm.items()
+                   if any(c in n for c in ("acrossnetwork", "across", "tompain", "betweennetwork"))
+                   and not any(e in n for e in ("within",))]
     out = []
     for r in rows:
         cid = canon_id(r.get(id_c, "")) if id_c else ""
@@ -98,8 +106,56 @@ def load_submitted(path):
                 return None
         out.append({"id": cid, "age": g(age_c), "group": (str(r.get(grp_c, "")).strip().lower()
                                                           if grp_c else ""),
-                    "within_tom": g(wt_c), "across": g(across_c)})
-    return out
+                    "within_tom": g(wt_c),
+                    "across_by_col": {c: g(c) for c in across_cols}})
+    return out, across_cols
+
+
+def assign_across_columns(subrows, ref, cover):
+    """Assign, BY VALUE, which submitted across-network column is the standard-clean quantity and
+    which is the alternative-preprocessing quantity. For each candidate column, compute the
+    cross-subject Pearson correlation against both held-out references (ref['across'] = standard
+    clean, ref['across_gsr'] = alternative preprocessing) over the matched subjects. The
+    standard column is the one that best tracks ref['across']; the alternative column is the one
+    that best tracks ref['across_gsr']. Returns (std_col, alt_col, diag) with either name possibly
+    None if no candidate covers enough subjects.
+
+    Nothing keys off the column NAME, so the grader does not tell the agent which preprocessing
+    lever separates the two -- only that the across-network value under each choice they consider
+    must be reported per subject."""
+    refmap_std = {i: float(v) for i, v in zip(ref["ids"], ref["across"])}
+    refmap_alt = {i: float(v) for i, v in zip(ref["ids"], ref["across_gsr"])}
+    cols = set()
+    for r in subrows:
+        cols |= set(r.get("across_by_col", {}).keys())
+    cols = sorted(cols)  # deterministic iteration (stable column assignment)
+    best_std = (None, -2.0)
+    best_alt = (None, -2.0)
+    diag = {}
+    for c in cols:
+        xs, ys_std, ys_alt = [], [], []
+        for r in subrows:
+            v = r.get("across_by_col", {}).get(c)
+            if v is None or r["id"] not in refmap_std:
+                continue
+            xs.append(v); ys_std.append(refmap_std[r["id"]]); ys_alt.append(refmap_alt[r["id"]])
+        coverage = len(xs) / max(1, len(refmap_std))
+        r_std = pearson(xs, ys_std) if len(xs) >= 20 else float("nan")
+        r_alt = pearson(xs, ys_alt) if len(xs) >= 20 else float("nan")
+        diag[c] = {"coverage": coverage, "r_std": r_std, "r_alt": r_alt}
+        if coverage < cover:
+            continue
+        if math.isfinite(r_std) and r_std > best_std[1]:
+            best_std = (c, r_std)
+        if math.isfinite(r_alt) and r_alt > best_alt[1]:
+            best_alt = (c, r_alt)
+    return best_std[0], best_alt[0], diag
+
+
+def bind_column(subrows, col, key):
+    """Copy the chosen across-network column's per-subject value onto each row under `key`."""
+    for r in subrows:
+        r[key] = r.get("across_by_col", {}).get(col) if col is not None else None
 
 
 def pearson(x, y):

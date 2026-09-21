@@ -100,3 +100,56 @@ and fails **precisely** at the discriminating GSR number — the intended teeth.
 GitHub's 100 MB/file limit, so `allow_internet=true` + runtime fetch are retained; baking the
 derived per-subject ROI series is a maintainer follow-up. Reference built on
 `fetch_development_fmri(n_subjects=155)` with the pinned ToM/pain ROIs, both pipelines.
+
+---
+
+## Second-pass fix (2026-09): un-guess the alternative-preprocessing arm — SEPARATE-PIPELINE 5(a)
+
+The powfix grader still graded the discriminating conclusion (across-network vs age under the
+alternative preprocessing) as a **reported scalar** in `age_effects.json`, and `instruction.md`
+**quoted the paper's headline** (`r_s ≈ −0.35`, adult `−0.17`). An agent could run only the
+standard pipeline, copy `−0.35` into the JSON, and pass the GSR-dependence check without ever
+running the second pipeline (red-team attack C).
+
+**This is a SEPARATE-PIPELINE task: running the alternative preprocessing IS the judgement, so the
+intermediate cannot be fully neutral.** Per the second-pass brief §5 we take **option 5(a)** — require
+the intermediate, framed as neutrally as possible, and recompute the discriminator from it:
+
+- **Removed the answer from `instruction.md`.** The `−0.35` / `−0.17` headline numbers are gone.
+- **Neutral intermediate.** The instruction now asks the agent to *"consider the preprocessing
+  choices a careful reproduction would weigh, and for each choice you consider, compute and report
+  the resulting per-subject across-network correlation"* as a separate column — **without naming
+  GSR, global signal, robustness, or sensitivity**. The lever is not named.
+- **Recompute, don't read.** The grader collects every across-network column, assigns **by value**
+  (not by name) which submitted column is the standard-clean quantity and which is the
+  alternative-preprocessing quantity (best per-subject match to `ref_across` / `ref_across_gsr`),
+  validates **both** per-subject against the held-out reference (cross-subject r ≥ 0.80, |Δ| ≤ 0.08),
+  and **recomputes the children's Spearman(age, across-network) for both columns from the rows**.
+  The GSR-dependence is now `r_std ≈ −0.07` vs `r_alt ≈ −0.34` recomputed from validated columns.
+- **Why a copy cannot fake the second column.** The standard↔alternative per-subject correlation is
+  only **0.71**, below the 0.80 floor, so a monotone copy/offset of the standard column fails the
+  reference match; and because a monotone transform preserves ranks, its recomputed Spearman stays
+  at the ~null `−0.069`, failing the discrimination pillar. To get `−0.34` the agent must genuinely
+  re-rank subjects the way GSR does — i.e. run the second pipeline.
+
+**Residual cue (documented, accepted 5(a) tradeoff).** The neutral schema still tells the agent that
+*multiple preprocessing choices matter and each choice's across-network value must be reported per
+subject.* This nudges the agent to run more than one pipeline, though it does **not** identify GSR as
+the discriminating lever — the agent must still discover that the anti-correlation's reproducibility
+hinges specifically on global-signal regression. This is the irreducible cue-vs-guess tension of a
+separate-pipeline discriminator; we accept the mild residual hint in exchange for making the
+judgement **un-guessable from the paper's published number**.
+
+**Adversarial self-validation (subprocess pytest per case, `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`,
+numpy-only; honest/defensible built from the exact oracle output schema):**
+
+| case | result | teeth |
+|---|---|---|
+| honest oracle (both real columns) | **PASS** | — |
+| defensible alternative (perturbed real columns, renamed/reordered) | **PASS** | — |
+| attack A — real std column + fabricated **random** alternative column | **FAIL** | fake alt fails reference match + recompute |
+| attack A — real std column + **flat constant** alternative column | **FAIL** | same |
+| attack C — real no-GSR table + **guessed −0.35** scalar in JSON (one column) | **FAIL** | only one pipeline; no validated alt column |
+| attack C — real no-GSR column **offset-copied** as a fake GSR column | **FAIL** | corr 0.71 < 0.80; recomputed Spearman stays ~null |
+
+Attack C now FAILS while honest + defensible PASS, so the fix counts.
