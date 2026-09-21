@@ -121,6 +121,21 @@ def cross_corr(sub_map, ref_by_id, ref_ids, idx):
     return float(np.corrcoef(a, b)[0, 1])
 
 
+def col_corr(sub_map, ref_ids, i, j):
+    """Across-subject Pearson correlation between two submitted columns (e.g. raw vs background),
+    over the pinned subjects that have finite values in both columns."""
+    matched = [k for k in ref_ids if k in sub_map
+               and sub_map[k][i] is not None and math.isfinite(sub_map[k][i])
+               and sub_map[k][j] is not None and math.isfinite(sub_map[k][j])]
+    if len(matched) < 3:
+        return float("nan")
+    a = [sub_map[k][i] for k in matched]
+    b = [sub_map[k][j] for k in matched]
+    if np.std(a) == 0 or np.std(b) == 0:
+        return float("nan")
+    return float(np.corrcoef(a, b)[0, 1])
+
+
 def nonconstant(sub_map, idx, eps=1e-6):
     vals = [sub_map[i][idx] for i in sub_map
             if sub_map[i][idx] is not None and math.isfinite(sub_map[i][idx])]

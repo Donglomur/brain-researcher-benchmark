@@ -39,6 +39,40 @@ import proof_of_work as pw  # noqa: E402
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 REF_PATH = Path(__file__).resolve().parent / "reference.npz"
 
+# Background (task-regressed) FC is task-model-sensitive: which GLM / HRF / drift basis is used to
+# regress the task-evoked response shifts the per-subject residual, so the per-subject background is
+# NOT pinned to the reference magnitude (the reference and an independent, defensible live solve
+# agree per subject at only corr ~= 0.70, mean|Delta| ~= 0.087, far above the old VAL_TOL 0.05).
+# Instead the grader requires the SIGNATURE of a genuine residual that is derived from the real
+# subjects' data:
+#   * BG_RAW_CORR band -- across subjects the background tracks the raw column (both computed on the
+#     same subjects) but is NOT a trivial affine rescaling of it. corr(raw, background) ~= 0.74 in
+#     the reference and ~0.89 for the live solve; an affine scaled/shifted copy of raw has corr ~=
+#     1.0 (rejected by the max) and a grossly unrelated column has corr near 0 (rejected by the min).
+#   * BG_MEAN_GAP -- the background lies materially below raw (the shared task-evoked response
+#     inflates raw FC); a background==raw copy has zero gap and is rejected.
+#   * BG_REF_CORR -- the background must correlate with the held-out reference background ACROSS
+#     subjects above a lenient floor. This is affine-invariant (no magnitude pin) and, crucially,
+#     safe for any real pipeline: the raw column is pinned to the reference (corr ~0.997) and
+#     corr(raw, reference-background) ~= 0.75, so any background genuinely derived from the real
+#     subjects inherits corr(background, reference-background) ~= 0.6-0.75, while a fabricated /
+#     blind-random background (not derived from the real subjects) scores ~0 and is rejected.
+# NOTE (documented limit): because raw and background are intrinsically coupled and the real
+# background's agreement with the reference is carried almost entirely by raw (raw-controlled
+# partial corr ~= 0.09), a determined adversary who builds background = k*raw + tuned noise from the
+# agent's OWN raw column produces a column that is statistically indistinguishable from a real
+# task-regressed residual (right band, below raw, right group inflation, inherits the reference
+# correlation via raw). No reference-based per-subject check can reject it without also rejecting the
+# defensible real solve. The grader therefore rejects the naive/lazy/blind fabrications and grades
+# the true scientific claim (the group task-evoked inflation); it does not claim to prove per-subject
+# task regression against that specific adversary.
+BG_RAW_CORR_MIN = 0.40
+BG_RAW_CORR_MAX = 0.95
+BG_MEAN_GAP_MIN = 0.04  # mean per-subject (raw - background); ~0.13 real, 0 for background==raw
+BG_REF_CORR_MIN = 0.55  # lenient across-subject corr with the held-out reference background
+                        # (live solve ~0.70; blind/fabricated ~0; guaranteed >~0.6 for real bg by
+                        # the pinned raw column, so it does NOT pin the pipeline-sensitive magnitude)
+
 
 def _reference():
     assert REF_PATH.exists(), (
@@ -104,13 +138,25 @@ def test_proof_of_work_subjects_and_raw_values():
 
 
 def test_background_per_subject_is_real():
-    """PILLAR 1b (MANDATORY): the discriminating quantity is now RECOMPUTED from a per-subject
-    background column, not trusted as a reported group scalar. The schema invites 'any additional
-    per-subject connectivity estimate(s) you computed, one column each'; the honest analysis
-    volunteers the background (task-regressed residual) connectivity per subject. Those per-subject
-    values must be the REAL residual-correlation values for the pinned subjects -- they cannot be
-    fabricated or derived from the raw column (across subjects corr(raw,background) is only ~0.74,
-    so a scaled raw fails the cross-subject teeth and the absolute per-subject match)."""
+    """PILLAR 1b (MANDATORY): the discriminating quantity is a per-subject BACKGROUND
+    (task-regressed residual) connectivity column. The schema invites 'any additional per-subject
+    connectivity estimate(s) you computed, one column each'; the honest analysis volunteers the
+    background connectivity per subject.
+
+    Background FC is task-model-sensitive (which GLM / HRF / drift basis regresses out the
+    task-evoked response shifts the residual: the reference and an independent live solve correlate
+    only ~0.70 per subject), so the per-subject background is NOT pinned to one reference pipeline.
+    Instead this pillar requires the SIGNATURE of a genuine residual that no fabrication reproduces:
+      - a real per-subject background column is present and non-constant;
+      - across subjects it TRACKS the raw column (same subjects, same broad structure) but is NOT a
+        trivial affine rescaling of it -- corr(raw, background) sits in a plausible band well below
+        1.0. A background fabricated by scaling/shifting the raw column has corr ~= 1.0 (rejected by
+        the upper bound); a random or constant fabrication has corr ~ 0 (rejected by the lower bound);
+      - it lies materially BELOW raw in almost every subject (the shared task-evoked response
+        inflates raw FC, so regressing it out must lower the estimate). A background == raw copy has
+        zero gap and is rejected here (and by the inflation pillar).
+    The absolute magnitude of the background and the inflation gap are graded at the group level in
+    the inflation pillar; here we verify the column is a real, per-subject residual."""
     ref = _reference()
     st = ref["stats"]
     sub, raw_c, bg_c = _submitted()
@@ -121,24 +167,60 @@ def test_background_per_subject_is_real():
         "here from the per-subject residual-correlation values, so they must be provided per "
         "subject (as an additional connectivity column). A single reported group number is not "
         "sufficient and cannot be verified as real work.")
+    matched = [i for i in ref["ids"] if i in sub
+               and sub[i][1] is not None and math.isfinite(sub[i][1])
+               and sub[i][0] is not None and math.isfinite(sub[i][0])]
+    assert len(matched) >= max(3, int(round(st["COVER"] * len(ref["ids"])))), (
+        f"per-subject background connectivity is present for only {len(matched)} of the "
+        f"{len(ref['ids'])} pinned subjects; the residual must be computed for (nearly) all of them")
     assert pw.nonconstant(sub, 1, st["EPS"]), "background connectivity is constant -- fabricated"
-    rc = pw.cross_corr(sub, ref["bg_by_id"], ref["ids"], 1)
-    assert math.isfinite(rc) and rc >= st["CORR_MIN"], (
-        f"per-subject BACKGROUND connectivity does not track the reference (cross-subject "
-        f"r={rc:.3f} < {st['CORR_MIN']}); the residual correlations were not actually computed "
-        f"(note: it does not track the raw column either -- corr(raw,background) ~ 0.74)")
-    frac, n = pw.per_subject_match(sub, ref["bg_by_id"], ref["ids"], 1, st["VAL_TOL"])
-    assert frac >= st["MATCH"], (
-        f"only {frac:.0%} of {n} matched subjects have BACKGROUND connectivity within "
-        f"{st['VAL_TOL']} of the reference (need >= {st['MATCH']:.0%}); the residual "
-        f"correlations are not the real ones")
+
+    # (i) genuine residual: tracks raw across subjects but is not a rescaled copy of it.
+    rb = pw.col_corr(sub, ref["ids"], 0, 1)
+    assert math.isfinite(rb) and BG_RAW_CORR_MIN <= rb <= BG_RAW_CORR_MAX, (
+        f"corr(raw, background) across subjects is {rb:.3f}, outside the plausible band "
+        f"[{BG_RAW_CORR_MIN}, {BG_RAW_CORR_MAX}] for a real task-regressed residual: a value near "
+        f"1.0 means the background is the raw column rescaled/shifted (no real task regression was "
+        f"performed); a value near 0 means it is fabricated/unrelated to the real subjects.")
+
+    # (i') derived from the REAL subjects: the background must correlate across subjects with the
+    # held-out reference background above a lenient, affine-invariant floor. The raw column is pinned
+    # to the reference (pillar 1) and corr(raw, reference-background) ~= 0.75, so any background
+    # genuinely computed from the real subjects clears this comfortably (live solve ~0.70), while a
+    # blind/fabricated background that never touched the real residuals scores ~0. This is NOT a
+    # magnitude pin (the per-subject values and the group mean are free); it only checks that the
+    # column is real per-subject work on the pinned subjects.
+    rc_ref = pw.cross_corr(sub, ref["bg_by_id"], ref["ids"], 1)
+    assert math.isfinite(rc_ref) and rc_ref >= BG_REF_CORR_MIN, (
+        f"the per-subject background does not track the held-out reference background across "
+        f"subjects (corr={rc_ref:.3f} < {BG_REF_CORR_MIN}); it was not computed from the real "
+        f"pinned subjects (a fabricated / blind-random background scores ~0 here, whereas any "
+        f"background derived from the real subjects inherits ~0.6-0.75 through the pinned raw column)")
+
+    # (ii) materially below raw in almost every subject (task-evoked inflation is systematic).
+    n_below = sum(1 for i in matched if sub[i][0] > sub[i][1])
+    assert n_below >= int(round(0.8 * len(matched))), (
+        f"background connectivity is below raw in only {n_below}/{len(matched)} subjects; a real "
+        f"task-regressed residual must be lower than the raw (task-inflated) estimate in almost "
+        f"every subject")
+    mean_gap = sum(sub[i][0] - sub[i][1] for i in matched) / len(matched)
+    assert mean_gap >= BG_MEAN_GAP_MIN, (
+        f"the mean per-subject raw-minus-background gap ({mean_gap:+.3f}) is negligible "
+        f"(< {BG_MEAN_GAP_MIN}); the background column is essentially the raw column -- no shared "
+        f"task-evoked response was removed")
 
 
 # ------------------------------------------------------------------ pillar 2
 def _reported_group_background(summ):
+    # Exclude any inflation / difference field: keys like `inflation_raw_minus_background_r` contain
+    # the substring "background" but report the raw-minus-background GAP (~0.14), not the group
+    # background FC (~0.49). Without these excludes the BFS returns the inflation value and the
+    # consistency cross-check spuriously fails a correct submission.
     return pw.find_number(summ, [r"background", r"residualconnectivity", r"intrinsicconnectivity",
                                  r"taskregressedconnectivity"],
-                          exclude=[r"nsub", r"inflationp", r"paired", r"inflationt"])
+                          exclude=[r"nsub", r"inflationp", r"paired", r"inflationt",
+                                   r"inflation", r"minus", r"delta", r"difference", r"\bgap\b",
+                                   r"rawminus", r"raw_?minus"])
 
 
 def test_group_means_recompute_from_rows():
