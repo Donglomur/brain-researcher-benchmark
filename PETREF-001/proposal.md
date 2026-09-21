@@ -67,3 +67,47 @@ Retained as an **easy control** with calibration value (a real PET kinetic-model
 ### Cost
 
 `hard` bracket by convention; actually light (fetches four ~50 KB TSVs; SRTM/Logan/MRTM fits run in seconds). cpus 2, mem 4 GB, internet on, timeouts 1800–3000 s. Deps: numpy 2.1.3 / scipy 1.14.1 / pandas 2.2.3.
+
+---
+
+## Proof-of-work verifier (2026-09)
+
+The prior grader checked only a mean BP_ND band [1.65, 2.20] + a cross-scan CV<8% clustering
+heuristic + prose — a constant/duplicated table clustered at ~1.9 passed. This revision
+applies the proof-of-work contract (per-scan held-out reference, QSMDIPOLE reproduction model).
+
+**Held-out reference** (`tests/reference.npz`, built from `solution/compute.py` on the real
+ds001420 PETPrep TACs, never shipped to the agent): the four per-scan SRTM putamen BP_ND
+(cerebellar-GM reference) keyed by real id, the per-scan R1/k2 kinetic parameters, and
+`ref_stats` (SRTM/Logan/MRTM/whole-cerebellum + the naive late-window SUVR-1 per scan). sha256
+`f58e3007c3d564032d2d3413919f0f82590e78e1873c10d3de3ca6fa252673db`.
+
+The discriminating shortcut is a non-kinetic SUV-ratio: on this ~54-min non-equilibrium scan
+SUVR-1 gets the COHORT MEAN roughly right (1.98 vs kinetic 1.92) but its PER-SCAN values
+scatter wildly (1.12/2.51/2.11/2.20 vs kinetic 1.91/1.96/1.89/1.92) — so the held-out per-scan
+table is the teeth, not the mean.
+
+**Neutral per-item table** (already required): `bp_estimates.csv`. Pillars: (1) per-scan
+BP_ND within 0.17 of the held-out kinetic reference (accepts SRTM/Logan/MRTM ~2% and
+whole-cerebellum ~3%; rejects SUVR 15-50% off); (2) mean recomputed from rows == reference ==
+reported JSON; (2b) test-retest variability recomputed FROM the rows in [0.4, 9]% — a
+constant/duplicated table (0%) or a SUV-ratio (tens of %) fails; (3) per-scan closer to the
+kinetic reference than the SUVR value, and per-scan R1 matches the held-out kinetic R1 IF the
+column is volunteered (a SUVR cannot produce R1); (4) secondary model-named prose.
+
+**Validation** (subprocess pytest per case, `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`, numpy 2.1.3):
+
+| case | result |
+|---|---|
+| honest (oracle SRTM) | PASS |
+| defensible (MRTM cross-estimator) | PASS |
+| no table | FAIL |
+| constant table (right mean) | FAIL (2b test-retest = 0%) |
+| fabricated (right mean, scattered per-scan) | FAIL |
+| naive SUVR-1 | FAIL |
+
+Residual (documented, blunt): the honest per-scan BP_ND is near-degenerate (test-retest ~2%),
+so a knowledgeable table clustered at the literature value (~1.9) with ~2% synthetic spread
+and no volunteered R1 is the irreducible guessable residual; the per-scan reference,
+test-retest band and R1-if-present close fabrication, constant, SUVR and scattered attacks.
+`test.sh` now provisions numpy 2.1.3. Data still fetches at runtime; the grader is offline.
