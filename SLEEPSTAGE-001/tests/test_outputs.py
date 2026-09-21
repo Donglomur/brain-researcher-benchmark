@@ -9,10 +9,13 @@ Pz-Oz; 30-s epochs; relative band-power features; RandomForest(200, random_state
             LOSO accuracy and Cohen kappa.
   PILLAR 2  the epoch-weighted accuracy recomputed FROM the submitted rows must match BOTH the
             reference subject-wise accuracy AND the reported headline accuracy.
-  PILLAR 3  the DISCRIMINATING number is LOSO-vs-random: the reported headline accuracy must be
-            the subject-wise (leave-one-subject-out) accuracy, which is materially BELOW the
-            leaky random epoch-wise k-fold accuracy. A run that reports the inflated random-kfold
-            accuracy as the headline fails.
+  PILLAR 3  the DISCRIMINATING number is LOSO-vs-random and is graded IF the agent volunteers it
+            (SOCIALBRAIN model): the instruction names only the cross-validated accuracy, so a
+            naive run reports one number and never volunteers the leaky random epoch-wise k-fold
+            accuracy. The reported headline accuracy must be the subject-wise accuracy (which
+            pillars 1-2 already pin), and the volunteered random-kfold accuracy (found wherever it
+            is reported) must be materially ABOVE it. A run that does not volunteer the leaky
+            random-kfold number fails.
 
 Consecutive 30-s epochs from one night are autocorrelated and share subject identity, so a
 random epoch-wise k-fold leaks and inflates the estimate; the subject-wise figure is honest.
@@ -49,6 +52,55 @@ def _num(x):
         return None
 
 
+def _norm(s):
+    return re.sub(r"[^a-z0-9]", "", str(s).lower())
+
+
+def _find_number(obj, leaf_re, exclude_re=None):
+    """Find a numeric leaf whose (normalised) key matches leaf_re, walking nested dicts/lists.
+    Grades a number 'wherever the agent reports it' (SOCIALBRAIN model)."""
+    lre = re.compile(leaf_re)
+    xre = re.compile(exclude_re) if exclude_re else None
+    hits = []
+
+    def walk(cur):
+        if isinstance(cur, dict):
+            for k, v in cur.items():
+                nk = _norm(k)
+                if isinstance(v, (int, float)) and not isinstance(v, bool):
+                    if lre.search(nk) and not (xre and xre.search(nk)):
+                        fv = float(v)
+                        if np.isfinite(fv):
+                            hits.append(fv)
+                walk(v)
+        elif isinstance(cur, list):
+            for v in cur:
+                walk(v)
+
+    walk(obj)
+    return hits[0] if hits else None
+
+
+def _random_kfold(metric):
+    """The volunteered leaky random epoch-wise k-fold accuracy/kappa, from wherever it is
+    reported across the JSON outputs (not a field the instruction names). metric in {acc, kappa}."""
+    leaf = (r"random|kfold|epochwise|leaky") if metric == "acc" else r"random|kfold|epochwise|leaky"
+    need = r"acc" if metric == "acc" else r"kappa|cohen"
+    for name in ("staging_results.json", "run_metadata.json"):
+        p = OUT / name
+        if not p.exists():
+            continue
+        try:
+            blob = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        v = _find_number(blob, rf"(?=.*(?:{leaf}))(?=.*(?:{need}))",
+                         exclude_re=r"nsub|count|nepoch|nfold|fold$|scheme")
+        if v is not None:
+            return v
+    return None
+
+
 def _submitted():
     csvp = OUT / "per_subject.csv"
     assert csvp.exists(), (
@@ -61,23 +113,29 @@ def _submitted():
     })[0]
 
 
-# ---- PILLAR 3: the discriminating number is LOSO-vs-random ------------------------------
-def test_headline_is_subject_wise_accuracy():
+# ---- PILLAR 3: LOSO-vs-random discriminating number (graded if volunteered) ------------
+def test_random_kfold_leakage_is_volunteered_and_numeric():
     data = _load("staging_results.json")
     assert int(data.get("n_classes", len(data.get("classes", [])))) == 5, \
         "must be a five-class staging problem"
     headline = _num(data.get("accuracy"))
     kappa = _num(data.get("cohen_kappa"))
-    rand = _num(data.get("random_kfold_accuracy_for_reference"))
+    rand = _random_kfold("acc")
     s_acc = float(REF["subj_acc"]); s_k = float(REF["subj_kappa"]); r_acc = float(REF["rand_acc"])
     assert headline is not None and abs(headline - s_acc) <= GROUP_TOL, (
-        f"reported headline accuracy {headline} is not the subject-wise (LOSO) accuracy "
+        f"reported headline accuracy {headline} is not the subject-wise accuracy "
         f"({s_acc:.3f} +/- {GROUP_TOL}). Reporting the leaky random-kfold accuracy "
         f"(~{r_acc:.3f}) as the headline over-claims generalisation.")
     assert kappa is not None and abs(kappa - s_k) <= GROUP_TOL, \
-        f"reported cohen_kappa {kappa} is not the LOSO kappa {s_k:.3f} +/- {GROUP_TOL}"
-    assert rand is not None and abs(rand - r_acc) <= RAND_TOL, (
-        f"random_kfold_accuracy_for_reference {rand} is not the reference random-kfold accuracy "
+        f"reported cohen_kappa {kappa} is not the subject-wise kappa {s_k:.3f} +/- {GROUP_TOL}"
+    assert rand is not None, (
+        "no leaky random epoch-wise k-fold accuracy is reported. The discriminating judgement "
+        "graded here is that consecutive 30-s epochs from one night are autocorrelated and share "
+        "subject identity, so a random epoch-wise k-fold leaks and inflates the estimate; the "
+        "honest figure holds out whole subjects. Report the random-kfold accuracy as a number "
+        "(e.g. a `random_kfold_accuracy` field) so the leakage is quantified.")
+    assert abs(rand - r_acc) <= RAND_TOL, (
+        f"volunteered random-kfold accuracy {rand} is not the reference random-kfold accuracy "
         f"{r_acc:.3f} +/- {RAND_TOL}")
     assert headline <= rand - GAP_MIN, (
         f"the subject-wise accuracy ({headline:.3f}) must be materially below the random-kfold "

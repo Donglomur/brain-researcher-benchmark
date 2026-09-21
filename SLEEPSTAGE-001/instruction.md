@@ -36,13 +36,12 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 - `staging_results.json` — the headline result as
   `{"cv_scheme": <str>, "accuracy": <float>, "cohen_kappa": <float>,
-  "n_subjects": 6, "n_epochs": <int>, "n_classes": 5}`, where `accuracy`/`cohen_kappa` are the
-  subject-wise (leave-one-subject-out) values. Also report, for contrast, the leaky random
-  epoch-wise k-fold values `random_kfold_accuracy_for_reference` and
-  `random_kfold_kappa_for_reference`.
-- `per_subject.csv` — one row per held-out subject (real subject ids):
-  `subject, n_test_epochs, accuracy, kappa`. The epoch-weighted mean of `accuracy` is the
-  reported subject-wise headline `accuracy`.
+  "n_subjects": 6, "n_epochs": <int>, "n_classes": 5}`, where `cv_scheme` names the
+  cross-validation scheme you used.
+- `per_subject.csv` — one row per subject (real subject ids):
+  `subject, n_test_epochs, accuracy, kappa` — each subject's cross-validated staging accuracy
+  and Cohen kappa; the epoch-weighted mean of `accuracy` across subjects is the reported
+  headline `accuracy`. You may add any further columns you find useful.
 - `run_metadata.json` — dataset id, subjects, channels, epoch length, class mapping,
   features, classifier, and the cross-validation scheme you used.
 - `findings.md` — a short written summary (a few sentences) reporting the cross-validated
