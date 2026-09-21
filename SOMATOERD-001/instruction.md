@@ -48,6 +48,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `erd.json` — at minimum `{"beta_erd_percent": <float>, "band_hz": [15, 30],
   "channels": ["MEG 1342", "MEG 1343", "MEG 1332", "MEG 1333"], "window_ms": [100, 350],
   "n_trials": <int>}`.
+- `beta_power_timecourse.csv` — the time course the reported ERD is read from: the beta-band
+  (15-30 Hz) power over the contralateral sensorimotor gradiometers, expressed as percent
+  change from the pre-stimulus baseline and averaged over the four channels and the 15-30 Hz
+  band, at each epoch time sample. Columns `time_s, beta_power_pct` (one row per time point).
 - `run_metadata.json` — dataset id, number of trials, the channels, time-frequency method,
   baseline, band, and measurement window you used.
 - `findings.md` — a few sentences reporting the contralateral sensorimotor beta ERD

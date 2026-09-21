@@ -37,3 +37,44 @@ Gap: opposite sign, ~25x in magnitude. The correct value is robust to reasonable
 ### Cost
 
 `hard`. cpus 2, mem 8 GB, internet on (downloads the ~600 MB somato dataset once). Deps: mne 1.12.1 + numpy/scipy/pooch.
+
+---
+
+## Proof-of-work verifier (2026-09)
+
+The prior grader accepted any `erd.json` whose single `beta_erd_percent` had magnitude
+~17.7 (|.| in [9.7, 25.7]) — a fabricated scalar + a keyword `findings.md` passed. This
+revision applies the suite-wide proof-of-work contract (single-value / RESTCONN model).
+
+**Held-out reference** (`tests/reference.npz`, built from `solution/compute.py` on the real
+MNE somato sub-01 recording, never shipped to the agent): the induced beta-band power time
+course (percent baseline, 901 samples over -1.5..1.5 s) + `ref_stats`
+(induced window ERD -17.73%, naive evoked window +443.60%). sha256
+`ca00e1377bfc6d1dd9406998fa3e4251fb74c59e3665dfb87e175e5cdc2e1f0a`.
+
+**Neutral intermediate** (added to Required Outputs, un-cued): `beta_power_timecourse.csv`
+— the 15-30 Hz power over the four gradiometers vs epoch time. BOTH a correct
+(per-trial-then-average) and a naive (average-then-TFR) pipeline produce such a curve, so
+requiring it does not cue the un-cued induced-vs-evoked judgement; matched to the held-out
+induced reference it closes fabrication AND the naive shortcut (the evoked curve is a large
+positive excursion, r ~ -0.07 with the reference).
+
+**Four pillars** (`tests/test_outputs.py` + `tests/proof_of_work.py`): (1) the submitted
+curve tracks the held-out reference (cross-time r >= 0.85); (2) the window ERD recomputed
+FROM the submitted curve == reference == reported `erd.json`; (3) the ERD graded as a number
+— a decrease (<= -5%), closer to the induced value than the evoked artefact; (4) secondary
+prose (magnitude consistent with `erd.json`).
+
+**Validation** (subprocess pytest per case, `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`, numpy 2.1.3):
+
+| case | result |
+|---|---|
+| honest (oracle) | PASS |
+| defensible (curve + numerical noise) | PASS |
+| no time course | FAIL |
+| constant curve | FAIL |
+| fabricated (right window ERD, scrambled curve) | FAIL (pillar 1 only — the intended teeth) |
+| naive evoked-power curve | FAIL |
+
+Data still fetches at runtime (`allow_internet=true`); the somato recording exceeds a
+convenient bake size, so baking the derived TFR is a maintainer follow-up.

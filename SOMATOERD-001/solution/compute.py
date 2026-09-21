@@ -86,6 +86,14 @@ def beta_percent(tfr):
     return 100.0 * float(t.data[:, fmask, :][:, :, tmask].mean())
 
 
+def beta_timecourse(tfr):
+    """Percent-baseline beta power averaged over the pinned channels and 15-30 Hz band,
+    as a function of epoch time (the time course the single-window ERD is measured from)."""
+    t = tfr.copy().pick(CHANS).apply_baseline(BASELINE, mode="percent")
+    fmask = (t.freqs >= BETA[0]) & (t.freqs <= BETA[1])
+    return t.times, 100.0 * t.data[:, fmask, :].mean(axis=(0, 1))
+
+
 try:
     raw = mne.io.read_raw_fif(somato_raw_path(), preload=True, verbose=False)
     events = mne.find_events(raw, stim_channel="STI 014", verbose=False)
@@ -101,8 +109,18 @@ try:
                                               use_fft=True)
     erd_induced = beta_percent(tfr_induced)
     erd_evoked = beta_percent(tfr_evoked)
+    tc_times, tc_vals = beta_timecourse(tfr_induced)
 except Exception as e:
     fail(f"could not compute the beta ERD: {e}")
+
+# neutral per-timepoint intermediate: the contralateral sensorimotor beta-band power
+# (percent baseline) at each epoch time -- the fine-grained curve the window ERD is read from
+import csv as _csv
+with open(OUT / "beta_power_timecourse.csv", "w", newline="") as _f:
+    _w = _csv.writer(_f)
+    _w.writerow(["time_s", "beta_power_pct"])
+    for _t, _v in zip(tc_times, tc_vals):
+        _w.writerow([f"{float(_t):.6f}", f"{float(_v):.6f}"])
 
 (OUT / "erd.json").write_text(json.dumps({
     "beta_erd_percent": erd_induced,
