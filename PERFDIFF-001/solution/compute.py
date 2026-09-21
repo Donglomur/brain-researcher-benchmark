@@ -91,6 +91,15 @@ def summarise(f, D, Dstar, label):
 trr_fit = IvimModel(gtab, fit_method="trr").fit(roi)
 res_trr = summarise(trr_fit.perfusion_fraction, trr_fit.D, trr_fit.D_star, "trr")
 
+# per-voxel table underlying the reported perfusion fraction (the neutral intermediate)
+import csv as _csv
+_f_trr = np.asarray(trr_fit.perfusion_fraction, float)
+with open(OUT / "f_voxelwise.csv", "w", newline="") as _fh:
+    _w = _csv.writer(_fh)
+    _w.writerow(["i", "j", "k", "f"])   # absolute voxel index (x, y, z=slice)
+    for _a, _b in np.argwhere(tissue):
+        _w.writerow([int(X0 + _a), int(Y0 + _b), int(Z), round(float(_f_trr[_a, _b]), 6)])
+
 
 # --- estimator 2: segmented two-step fit (classic IVIM) ---
 def segmented(sig):

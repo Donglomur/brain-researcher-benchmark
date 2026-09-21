@@ -33,6 +33,11 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 - `ivim_results.json` — the estimated **perfusion fraction f**, **D**, and **D\***
   for the ROI, and the ROI definition you used.
+- `f_voxelwise.csv` — the per-voxel table underlying your reported perfusion
+  fraction: one row per ROI tissue voxel, with columns `i,j,k` (its voxel index in
+  the acquisition array) and `f` (its perfusion fraction). The mean of the rows
+  (over voxels with a valid `0 <= f <= 1`) must equal a perfusion fraction you
+  report in `ivim_results.json`.
 - `run_metadata.json` — dataset id, number of b-values, the ROI, and the fitting
   choices you made.
 - `findings.md` — a short written summary reporting the ROI perfusion fraction f

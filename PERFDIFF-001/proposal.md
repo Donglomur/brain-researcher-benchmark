@@ -46,6 +46,32 @@ oracle-pass / naive-fail / overclaim-fail / fair-alt-pass = Y/Y/Y/Y.
 
 Oracle **reward 1.0** (locked locally). The ≥2-frontier-family gate (does GPT-5.x / Claude volunteer the estimator-sensitivity check and report f as a range, or fit once and assert a single perfusion fraction?) is a maintainer step. Prior: IVIM fit-method dependence is a specialist caveat an un-cued agent is unlikely to volunteer — the dipy IVIM tutorial fits a single estimator — so the over-claim trap has teeth.
 
+### PROOF-OF-WORK REWORK (this revision — un-cued judgment, fair caveat path preserved)
+
+The keyword-only estimator-dependence check (fabrication-vulnerable per the suite audit) is
+replaced by a held-out per-voxel reference + three numeric pillars, WITHOUT cueing the
+fit-method judgment (the instruction still names only "estimate the IVIM perfusion fraction f
+with dipy's IvimModel").
+
+- **Held-out reference** (`tests/reference.npz`, sha256 `5f1d2736…7e7f`, ~8 KB, committed,
+  never shipped): the per-voxel perfusion fraction f over the fixed 900-voxel ROI for two fit
+  methods — trr biexponential NLLS 0.213, segmented two-step 0.121 — built by running the pinned
+  pipeline on the real dipy IVIM subject (numpy 2.1.3 / scipy 1.14.1 / dipy 1.12.1).
+- **Neutral intermediate output** (new, un-cued): `f_voxelwise.csv` — the per-voxel f the
+  standard pipeline already produces (columns `i,j,k,f`).
+- **Pillar 1** — the per-voxel f table covers the real ROI (≥50 %), is non-constant, and
+  correlates ≥0.65 with some real fit method (a fabricated/constant/guessed table matches none).
+- **Pillar 2** — the ROI-mean f recomputes to a reported f and a physically real perfusion
+  fraction.
+- **Pillar 3** — the fit-method dependence graded as NUMBERS OR (the FAIR single-fit-that-
+  caveats path the coordinator required kept) a negation-guarded ill-conditioning /
+  estimator-dependence caveat. A single confident f with no caveat over-claims.
+
+**Validation matrix (subprocess pytest per case):** honest (reports trr + segmented f) PASS ·
+honest-caveat (single trr fit + ill-conditioning caveat, one number) PASS · no-table / constant
+/ fabricated-non-constant / fabricated-coords FAIL (pillar 1) · naive over-claim (real trr map +
+bare confident 0.213, no caveat) FAIL (pillar 3 only; pillars 1–2 pass).
+
 ### Cost
 
 `hard`. cpus 2, mem 8 GB, internet on (dipy fetches the IVIM subject, ~1 download). trr fit + a pure-numpy segmented fit over the ROI ≈ tens of seconds; timeouts agent 3600 s / verifier 900 s. Deps: dipy 1.12.1 + numpy/scipy/nibabel (no cvxpy — the second estimator is a pure numpy/scipy segmented fit, so the environment stays dependency-light and build-robust).
