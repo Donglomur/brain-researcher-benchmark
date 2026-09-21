@@ -41,6 +41,12 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   row per white-matter ROI voxel, with columns `i,j,k` (its voxel index in the
   acquisition array) and `mk` (its mean-kurtosis value). Its mean over the rows
   must equal your reported `mean_kurtosis_wm`.
+- `mk_sweep.csv` — the white-matter mean-kurtosis map computed as a function of
+  which b-shells are included in the fit. Evaluate at least two shell subsets (e.g.
+  different maximum b-values over the same white-matter ROI) and give the per-voxel
+  MK for each: columns `i,j,k` (voxel index), `max_b` (the highest b-value included
+  in that subset's fit), and `mk` (its mean-kurtosis value for that subset). One row
+  per (voxel, shell-subset).
 - `run_metadata.json` — dataset id, shells available vs used, WM definition, and
   the preprocessing you applied.
 - `findings.md` — a short written summary reporting the white-matter mean kurtosis,

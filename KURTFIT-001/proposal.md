@@ -73,6 +73,63 @@ fabricated-coords FAIL (coverage) · naive over-claim (real all-shell map + sing
 no recognition) FAIL (pillar 3 only; pillars 1–2 pass, confirming the fabrication and the
 over-claim are caught by different pillars).
 
+### Second-pass fix (2026-09): the shell-cap sweep is now PER-VOXEL-BACKED (kills naive-fit + caveat)
+
+The red-team confirmed pillar 3 was gameable: its two branches let a **naive single fit + a
+textbook cumulant-validity sentence** pass (prose fallback), and even the numeric branch matched
+*reported scalars* (~1.02 and ~0.96) that are guessable from priors — the CORRECTED (moderate-b)
+estimate was never enforced to be PRESENT and computed. Per SECOND_PASS_BRIEF §5 (diffusion
+over-claim), the sweep is now a **required per-voxel table matched to the held-out reference**.
+
+**What changed**
+- New Required Output `mk_sweep.csv`: the per-voxel WM MK for each shell subset evaluated
+  (columns `i,j,k,max_b,mk`, ≥2 subsets). Instruction describes it neutrally as "MK as a
+  function of which b-shells are included" — it does **not** name cumulant validity or which cap
+  is correct.
+- Pillar 3 rewritten (`test_shell_cap_sweep_matches_reference`): each sweep group must be a REAL
+  per-voxel fit — cover the ROI, be non-constant, match ONE held-out b-cap config's spatial
+  pattern (Pearson r ≥ 0.80) AND that config's ROI mean (≤ 0.06) — and **≥2 groups must match
+  DISTINCT caps** whose means span ≥ 0.05 (the real decline). The prose fallback and the
+  reported-scalar `straddle` branch are removed. Reference and ROI unchanged (the reference
+  already stores per-voxel maps for all 5 caps).
+- `solution/compute.py` now writes `mk_sweep.csv` from the per-cap fits it already computes.
+
+**Why un-fabricable** (measured on the reference maps): the five per-cap maps are spatially
+distinguishable (self r = 1.0; max cross-cap r = 0.927; caps that span ≥ 0.05 in mean have
+cross-r ≤ 0.84). A fabricated/guessed group matches no config's pattern. A **globally rescaled**
+copy of one real fit is scale-invariant in r → best-correlates with the SAME config → not a
+distinct cap, and its shifted mean no longer matches that config's mean. So a single fit cannot
+be duplicated into a fake decline; only running the real analysis at ≥2 distinct caps passes.
+
+**Adversarial self-validation** (subprocess pytest, fixtures built from the held-out per-cap
+reference maps — see honest-limitation on live-dipy below):
+
+| case | verdict | mechanism |
+|---|---|---|
+| honest oracle (headline b≤2000 + 5-cap per-voxel sweep) | **PASS** | all pillars |
+| defensible: minimal 2-cap sweep (corrected 2000 vs naive 3000, span 0.064) | **PASS** | span ≥ 0.05 |
+| defensible: version-drift noise on every map (per-voxel r ≈ 0.90) | **PASS** | r ≥ 0.80 with margin |
+| attack A: fabricated sweep (right means, random per-voxel pattern) | **FAIL** | no config-pattern match |
+| attack C: real naive all-shell fit, sweep has 1 group | **FAIL** | < 2 groups |
+| attack C: all-shell fit + rescaled copy relabeled b≤2000 (mean→1.021) | **FAIL** | same config; mean≠1.021 vs its config |
+| attack C: all-shell fit + additively-shifted copy (mean 1.01) relabeled b≤2000 | **FAIL** | both map to config 3000 → 1 distinct cap |
+| attack C: all-shell fit duplicated under two labels | **FAIL** | 1 distinct cap, span 0 |
+
+Attack A and every attack-C variant (guessed/scaled/duplicated corrected value) now FAIL while
+honest + defensible PASS — the corrected estimate must be a real per-voxel fit, not a scalar.
+
+**Honest-limitations (blunt):**
+- *Live-dipy not run.* dipy is not installed here and the CFIN sample download stalls, so the
+  honest/defensible fixtures were synthesised from the committed held-out per-cap reference maps
+  (which were themselves built by the pinned dipy pipeline). `compute.py` only *adds* the
+  per-voxel write of the `mkc` it already computes, so a live run reproduces the reference maps
+  (modulo dipy version); the r ≥ 0.80 threshold has ~0.10 margin against the measured version-
+  drift proxy. A maintainer should confirm on a live dipy run.
+- *Mild cue (accepted 5(a)).* Requiring a per-shell-subset MK table cues that MK depends on
+  shells — the metacognitive "did they volunteer it un-prompted" axis is partially surrendered
+  to make the judgment un-fabricable. The retained teeth: the decline must be COMPUTED per-voxel
+  at ≥2 real caps, which a naive single-fit-plus-sentence cannot fake.
+
 ### Difficulty — Step-5 frontier calibration PENDING
 
 Oracle **reward 1.0** (locked locally). The ≥2-frontier-family gate (does GPT-5.x / Claude spontaneously sweep the b-cap or flag the cumulant-validity dependence, or report the canonical dipy-tutorial all-shell MK as "the" WM mean kurtosis?) is a maintainer step. Prior: the dipy DKI tutorial loads all shells and reports one MK map, so the single-number over-claim is the natural un-cued default — the trap has teeth.

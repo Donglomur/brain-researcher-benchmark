@@ -25,9 +25,12 @@ Three pillars (proof of work, un-fabricable):
      fabricated / constant / guessed table matches no config;
   2. the ROI-mean recomputed from the submitted rows equals the reported headline AND lands on
      a real b-cap value;
-  3. the discriminating shell-cap dependence, graded as NUMBERS (a decline across >=2 real
-     b-cap MK values), with a negation-guarded cumulant-validity prose fallback for the honest
-     single-moderate-b-fit-that-caveats path.
+  3. the shell-cap dependence, forced as un-fabricable PER-VOXEL WORK: mk_sweep.csv must hold
+     the per-voxel WM MK for >=2 shell subsets, each a REAL per-voxel fit matching one held-out
+     b-cap config's pattern (r >= 0.80) AND its ROI mean, at DISTINCT caps spanning the real
+     decline. The corrected (moderate-b) and naive (higher-b) estimates must both be PRESENT and
+     differ by the real amount -- a single MK, a guessed/fabricated sweep, or a rescaled copy of
+     one fit cannot pass. The lever (cumulant validity / which cap) is never named.
 """
 import re
 
@@ -35,7 +38,7 @@ import numpy as np
 
 from proof_of_work import (
     OUT, load_reference, load_voxel_table, align, best_corr, best_mean_match, nonconstant,
-    load_json, walk_numbers, harvest_metric_values, straddle, findings_text, unnegated,
+    load_json, walk_numbers, load_sweep_table, validate_sweep,
 )
 
 REF = load_reference()
@@ -48,12 +51,15 @@ COVER = 0.5           # fraction of the pinned ROI voxels the table must cover
 CORR = 0.80           # max per-voxel r to some real b-cap config (probe: >=0.84 across 2000-3000)
 VAL_TOL = 0.07        # recomputed ROI mean vs the nearest real b-cap mean
 CONSIST = 0.04        # recomputed ROI mean vs the reported headline
-NEAR_CFG = 0.06       # a reported MK counts as a real b-cap value if within this of some config
-MIN_SPREAD = 0.05     # >=2 real MK values must span this (the capped~1.02 vs all-shell~0.96 gap)
+# --- shell-cap SWEEP (per-voxel-backed) tolerances ---
+SWEEP_CORR = 0.80     # each sweep group's per-voxel r to its best-matching real b-cap config
+SWEEP_MEAN_TOL = 0.06 # each sweep group's ROI mean vs that config's real mean (< the 0.064
+                      #   corrected-vs-naive gap, so a rescaled copy of one fit cannot pass)
+SWEEP_MIN_SPREAD = 0.05  # >=2 real per-voxel fits at DISTINCT b-caps must span this (the real
+                      #   decline; the moderate-b 1.021 vs all-shell 0.957 gap is 0.064)
 
 MK_KEYS = ("mean_kurtosis_wm", "meankurtosiswm", "mk_wm", "mkwm", "wm_mk", "wmmk",
            "mean_kurtosis", "meankurtosis", "mk")
-FINDINGS_TERMS = [r"mean[- ]?kurtosis", r"\bmk\b", r"kurtosis"]
 
 
 def _reported_headline():
@@ -112,49 +118,37 @@ def test_roi_mean_recomputes_and_is_real():
 
 
 # =============================================================================================
-# Pillar 3 -- grade the shell-cap dependence as NUMBERS (un-cued over-claim axis)
+# Pillar 3 -- the shell-cap sweep is a PER-VOXEL-BACKED table matched to the reference
 # =============================================================================================
-def test_reports_shell_cap_dependence_as_numbers():
-    """The un-cued discriminating judgement, graded numerically: the submission must volunteer
-    that the WM mean kurtosis is b-shell-cap-dependent -- EITHER by reporting >=2 real b-cap MK
-    values that show the decline (numeric branch, validated against the reference), OR (the
-    honest single-moderate-b-fit-that-caveats path) by capping at moderate b and stating the
-    cumulant-validity mechanism (negation-guarded prose fallback). A bare single MK with no
-    recognition over-claims a fixed 'the' white-matter mean kurtosis and fails."""
-    vals = harvest_metric_values(
-        ("dki_results.json", "results.json", "run_metadata.json"),
-        PLAUS_LO, PLAUS_HI, FINDINGS_TERMS)
-    ok, span, lo, hi = straddle(vals, CFG_MEAN, NEAR_CFG, MIN_SPREAD)
-    if _claims_numeric_dependence(vals):
-        assert ok, (
-            f"the submission reports multiple mean-kurtosis numbers but they do not match the "
-            f"real b-cap decline (reported real-config values span {span:.3f} < required "
-            f"{MIN_SPREAD}, or the values are not near real b-cap MK values "
-            f"{sorted(round(v,3) for v in CFG_MEAN.values())}). Report the honest moderate-b MK "
-            f"(~1.02) AND the all-shell MK (~0.96) -- the real monotone decline.")
-        return
-    # no numeric dependence claimed -> require the cumulant-validity mechanism prose (fallback)
-    text = findings_text()
-    assert text.strip(), "findings.md is missing or empty"
-    mechanism = (
-        r"(?:cumulant|taylor)\b|"
-        r"(?:high[- ]?b|higher[- ]?b|large[- ]?b|beyond\s+b|above\s+b|b\s*>\s*2|b\s*>=\s*2)"
-        r"[^.\n]{0,80}(?:bias|down|downward|decreas|declin|lower|underestimat|overestimat|"
-        r"invalid|no longer|break|not\s+valid|fails?)|"
-        r"(?:only\s+valid|valid\s+(?:up\s+to|at|below|for|only)|moderate[- ]?b)")
-    assert unnegated(text, mechanism), (
-        "findings.md reports a white-matter mean kurtosis but neither reports the shell-cap "
-        "dependence as numbers (>=2 real b-cap MK values showing the decline) NOR states the "
-        "cumulant-validity mechanism (DKI's cumulant expansion is only valid at moderate b; "
-        "including high-b shells biases MK downward). A single MK reported as 'the' white-matter "
-        "mean kurtosis over-claims a fixed number the data -- which vary from ~1.12 (b<=1000) to "
-        "~0.96 (b<=3000) -- do not support.")
+def test_shell_cap_sweep_matches_reference():
+    """The un-cued discriminating judgement, forced as un-fabricable per-voxel work: the WM mean
+    kurtosis is NOT a single number -- it depends on which b-shells enter the DKI fit. The
+    submission must report `mk_sweep.csv`, the per-voxel white-matter MK for each shell subset it
+    evaluates, and >=2 of those subsets must each be a REAL per-voxel fit (matching one held-out
+    b-cap config's spatial pattern AND its ROI mean), at DISTINCT caps whose ROI means span the
+    real decline. This forces the analyst to actually compute the moderate-b (corrected) AND the
+    higher-b (naive) fit -- both PRESENT and differing by the real amount -- rather than report a
+    single MK as 'the' white-matter mean kurtosis (over-claim) or guess the decline. A fabricated
+    sweep matches no config's pattern; a rescaled copy of one fit best-correlates with the same
+    config and its shifted mean no longer matches -> a single fit cannot fake the decline.
 
-
-def _claims_numeric_dependence(vals):
-    """True if the submission volunteers >=2 distinct plausible MK values (a dependence claim),
-    as opposed to a single headline number."""
-    distinct = sorted({round(v, 3) for v in vals})
-    if len(distinct) < 2:
-        return False
-    return (max(distinct) - min(distinct)) >= 0.03
+    The instruction asks for MK 'as a function of which b-shells are included' -- a neutrally
+    described robustness table; it does NOT name the cumulant-validity lever or which cap is
+    correct."""
+    groups = load_sweep_table("mk_sweep.csv", key_hints=("maxb", "bmax", "bcap", "cap",
+                              "shell", "bval", "b"), value_hints=("mk", "kurtosis"))
+    assert len(groups) >= 2, (
+        f"mk_sweep.csv evaluates only {len(groups)} shell subset(s); report the per-voxel WM MK "
+        f"for >=2 shell subsets (e.g. different maximum b-values) so the shell-cap dependence is "
+        f"shown, not a single 'the' white-matter mean kurtosis.")
+    ok, info = validate_sweep(groups, REF, SWEEP_CORR, COVER, SWEEP_MEAN_TOL, SWEEP_MIN_SPREAD,
+                              min_groups=2)
+    assert ok, (
+        f"the shell-cap sweep in mk_sweep.csv is not a real per-voxel DKI sweep of this ROI: "
+        f"{info['n_valid']} group(s) matched a real b-cap config's per-voxel pattern+mean across "
+        f"{info['n_configs']} distinct cap(s), spanning {info['span']:.3f} MK (need >=2 groups at "
+        f">=2 distinct caps spanning >= {SWEEP_MIN_SPREAD}). Each shell subset's per-voxel MK must "
+        f"reproduce a held-out DKI fit (Pearson r >= {SWEEP_CORR} AND ROI mean within "
+        f"{SWEEP_MEAN_TOL} of that config); a single MK, a fabricated/guessed sweep, or a rescaled "
+        f"copy of one fit cannot reproduce the real per-cap decline "
+        f"({sorted(round(v,3) for v in CFG_MEAN.values())}).")

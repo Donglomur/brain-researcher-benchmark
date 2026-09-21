@@ -102,7 +102,11 @@ with open(OUT / "mk_voxelwise.csv", "w", newline="") as _fh:
 
 # The discovery: MK is b-shell-cap-dependent. Sweep the cap over the SAME fixed WM
 # ROI to expose the multiverse (this is what an un-cued single-fit pipeline never does).
+# Emit the PER-VOXEL MK map for each cap (mk_sweep.csv) so the sweep is proof-of-work, not a
+# reported scalar: each subset's per-voxel map must reproduce a held-out per-cap DKI fit.
+wm_ijk = np.argwhere(wm)
 mk_by_cap = {}
+sweep_rows = []
 for cap in (1000, 1400, 2000, 2500, 3000):
     s = bvals <= (cap + 50)
     if len({int(round(b)) for b in bvals[s] if b > 50}) < 2:
@@ -110,6 +114,16 @@ for cap in (1000, 1400, 2000, 2500, 3000):
     g = gradient_table(bvals[s], bvecs[s])
     mkc = dki.DiffusionKurtosisModel(g).fit(data_s[..., s], mask=wm).mk(MK_MIN, MK_MAX)
     mk_by_cap[cap] = float(np.mean(mkc[wm & np.isfinite(mkc)]))
+    bmax_cap = float(bvals[s].max())
+    for _i, _j, _k in wm_ijk:
+        v = float(mkc[_i, _j, _k])
+        if np.isfinite(v):
+            sweep_rows.append((int(_i), int(_j), int(_k), int(round(bmax_cap)), round(v, 6)))
+
+with open(OUT / "mk_sweep.csv", "w", newline="") as _fh:
+    _w = _csv.writer(_fh)
+    _w.writerow(["i", "j", "k", "max_b", "mk"])
+    _w.writerows(sweep_rows)
 
 # the all-shell fit is what a naive pipeline reports as "the" WM MK
 mk_wm_allshell = mk_by_cap.get(3000)
