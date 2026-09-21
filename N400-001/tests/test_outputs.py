@@ -10,9 +10,13 @@ reference; 0.1-30 Hz; -200..0 baseline; 300-500 ms mean amplitude):
             prime+target-pooled table fails.
   PILLAR 2  the mean of the submitted per-subject N400 column must match BOTH the reference
             grand-average AND the reported headline amplitude.
-  PILLAR 3  the DISCRIMINATING number is target-only-vs-pooled: the reported N400 must be the
-            target-word contrast (~-8.7 uV), materially more negative than the naive
-            prime+target relatedness pooling (~-4.2 uV, which halves the effect).
+  PILLAR 3  the DISCRIMINATING number is target-only-vs-pooled and is graded IF the agent
+            volunteers it (SOCIALBRAIN model): the instruction names only the unrelated-minus-
+            related N400 amplitude, so a naive run reports a single number and never volunteers
+            the naive prime+target relatedness-pooled amplitude. A submission that reports the
+            pooled contrast (found wherever it is reported) must show it ~-4.2 uV, materially
+            LESS negative than the target-word contrast (~-8.7 uV, which the pooling halves);
+            a run that does not volunteer the pooled number fails.
 """
 import json
 import os
@@ -46,6 +50,53 @@ def _num(x):
         return None
 
 
+def _norm(s):
+    return re.sub(r"[^a-z0-9]", "", str(s).lower())
+
+
+def _find_number(obj, leaf_re, exclude_re=None):
+    """Find a numeric leaf whose (normalised) key matches leaf_re, walking nested dicts/lists.
+    Used to grade a volunteered number 'wherever the agent reports it' (SOCIALBRAIN model)."""
+    lre = re.compile(leaf_re)
+    xre = re.compile(exclude_re) if exclude_re else None
+    best = []
+
+    def walk(cur):
+        if isinstance(cur, dict):
+            for k, v in cur.items():
+                nk = _norm(k)
+                if isinstance(v, (int, float)) and not isinstance(v, bool):
+                    if lre.search(nk) and not (xre and xre.search(nk)):
+                        fv = float(v)
+                        if np.isfinite(fv):
+                            best.append(fv)
+                walk(v)
+        elif isinstance(cur, list):
+            for v in cur:
+                walk(v)
+
+    walk(obj)
+    return best[0] if best else None
+
+
+def _pooled_amplitude():
+    """The volunteered naive prime+target relatedness-pooled amplitude, from wherever it is
+    reported across the JSON outputs (not a field the instruction names)."""
+    for name in ("n400.json", "run_metadata.json"):
+        p = OUT / name
+        if not p.exists():
+            continue
+        try:
+            blob = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        v = _find_number(blob, r"pool|primeplustarget|primetarget|relatednesspool|allepoch|primeandtarget",
+                         exclude_re=r"nsub|count|window|channel|npool")
+        if v is not None:
+            return v
+    return None
+
+
 def _submitted():
     csvp = OUT / "per_subject.csv"
     assert csvp.exists(), (
@@ -57,23 +108,29 @@ def _submitted():
     })[0]
 
 
-# ---- PILLAR 3: target-only-vs-pooled ---------------------------------------------------
-def test_headline_is_signed_target_only_n400():
+# ---- PILLAR 3: target-only-vs-pooled (discriminating number, graded if volunteered) ----
+def test_pooled_contrast_is_volunteered_and_numeric():
     data = _load("n400.json")
     amp = _num(data.get("n400_difference_amplitude_uv"))
-    pooled = _num(data.get("pooled_prime_plus_target_uv_for_reference"))
+    pooled = _pooled_amplitude()
     m = float(REF["target_mean"]); pm = float(REF["pooled_mean"])
     assert amp is not None, "n400.json missing n400_difference_amplitude_uv"
     assert amp < 0, f"the N400 difference amplitude must be SIGNED negative; got {amp}"
     assert abs(amp - m) <= GROUP_TOL, (
-        f"reported N400 {amp:.2f} uV is not within {GROUP_TOL} of the reference target-only "
+        f"reported N400 {amp:.2f} uV is not within {GROUP_TOL} of the reference target-word "
         f"grand-average {m:.2f} uV. The prime+target pooled value (~{pm:.2f} uV) halves the "
-        f"effect and must not be reported.")
-    assert pooled is not None and abs(pooled - pm) <= POOL_TOL, (
-        f"the naive prime+target pooled amplitude must be reported for contrast "
-        f"(reference {pm:.2f} uV); got {pooled}")
+        f"effect and must not be reported as the headline.")
+    assert pooled is not None, (
+        "no naive prime+target relatedness-pooled amplitude is reported. The discriminating "
+        "judgement graded here is that the unrelated-minus-related N400 must be measured on the "
+        "TARGET words; a run that pools prime+target epochs halves the effect. Report the pooled "
+        "prime+target amplitude as a number (e.g. a `pooled_prime_plus_target_uv` field) so the "
+        "target-locking is quantified.")
+    assert abs(pooled - pm) <= POOL_TOL, (
+        f"the volunteered prime+target pooled amplitude {pooled:.2f} uV is not the reference "
+        f"pooled value (~{pm:.2f} uV).")
     assert amp <= pooled - GAP_MIN, (
-        f"the target-only N400 ({amp:.2f} uV) must be materially more negative than the pooled "
+        f"the target-word N400 ({amp:.2f} uV) must be materially more negative than the pooled "
         f"value ({pooled:.2f} uV); the gap encodes the prime-dilution")
 
 
