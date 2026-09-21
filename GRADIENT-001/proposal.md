@@ -34,39 +34,51 @@ The instruction asks plainly to "characterise the organisation of the principal 
 Rebuilt to the proof-of-work contract (`PROOF_OF_WORK_SPEC.md`) while honouring the **R2 hedge**
 (grade a RIGOR verdict scoped to this cohort + the specific analytic choices; never force a universal
 "identity unstable" claim or a particular apex). A **held-out reference** (`tests/reference.npz`, kept
-out of the container) stores the group-gradient leading-3 per-parcel loadings and the discriminating
-robustness numbers. Six checks:
+out of the container) stores the group-gradient leading-3 per-parcel loadings, the **per-subject**
+leading-3 gradient loadings (20×400×3), and the discriminating robustness numbers. Eight checks —
+the artifact `gradients_aligned.npy` is now graded per-subject and the headline quantities are
+recomputed FROM it, not read from a report:
 
 0. **gradients computed** — a valid `n×400×k` (k≥3), finite per-subject array.
-1. **group gradient is REAL (proof of work)** — the submitted per-parcel `g1,g2,g3` span the held-out
-   reference gradient subspace: a **rotation/sign-invariant** subspace overlap ≥ **0.80**. This is the
-   key addition — it is stable (≥ 0.94) across the exact band-pass / subsample choices that flip the
-   apex, so a defensible pipeline passes, but a fabricated / random-loading gradient (overlap ~0.1–0.3)
-   fails. It closes the prior gap where a fabricated `gradients_aligned.npy` + a "not robust" sentence
-   passed without any real embedding.
+0b. **per-subject gradients are REAL** — each submitted subject's leading-3 gradient matches the
+   held-out per-subject reference by a rotation/sign-invariant subspace overlap (best match over
+   reference subjects, robust to reordering / a dropped subject): median ≥ **0.55** and ≥ 60 % of
+   subjects clear it. Honest / band-pass / no-sparsity / Laplacian-eigenmap / gaussian-kernel variants
+   all sit at median 0.77–1.00; a random-loading array of the right shape sits at ~0.10 and fails.
+   This closes the prior shape-only gap where a fabricated `gradients_aligned.npy` passed.
+1. **group gradient is REAL** — the submitted per-parcel `g1,g2,g3` span the reference gradient
+   subspace: rotation/sign-invariant overlap ≥ **0.80** (stable ≥ 0.94 across the choices that flip the
+   apex; fabrication ~0.1–0.3 fails).
+1b. **group gradient recomputed from the per-subject array is REAL** — the across-subject mean of the
+   SUBMITTED per-subject array also spans the reference subspace (overlap ≥ 0.80). A real
+   `group_gradient.csv` paired with a fabricated `gradients_aligned.npy` now fails here (defensible
+   variants ≥ 0.835).
 2. **networks differentiable + recompute** — between/within (g1-g2) ≥ 1.2, and `network_gradient.csv`
    per-network means recompute from the per-parcel rows.
-3. **discriminating robustness number** — cross-subject reproducibility is reported and is a real
-   aligned estimate (≥ 0.35; reference 0.68) and, when the unaligned value is given, alignment improves
-   it by ≥ 0.15 (reference: 0.68 vs −0.02).
+3. **discriminating robustness number, RECOMPUTED** — cross-subject reproducibility (`aligned_signed`)
+   is recomputed straight from the SUBMITTED per-subject array (not read from `consistency.json`) and
+   must be a real aligned estimate ≥ **0.30** (reference 0.68; defensible variants ≥ 0.435; unaligned
+   / fabricated ~0). When an unaligned value is reported, alignment must improve it by ≥ 0.15.
 4. **robustness check was run** — ≥ 2 analysis configurations (structured) or prose comparing
    band-pass / subsample / … choices.
 5. **identity not overclaimed (scoped)** — accepts a scoped rigor verdict (≥ 2 distinct apex networks
    reported across the tested configs, OR prose that the identity is not robust/uniquely determined on
    this cohort). It does **not** require a universal-instability claim or any specific apex.
 
-### Discrimination — validated locally via SUBPROCESS pytest (uvx, numpy 2.1.3, container-matched)
+### Discrimination — validated locally via SUBPROCESS pytest (numpy 2.1.3, container-matched)
 
 | submission | verdict | why |
 |---|---|---|
-| reference oracle (real gradients; multiverse; scoped verdict) | **PASS** | all checks |
-| fabricated random group gradient (+ "not robust" prose) | **FAIL** | check 1 subspace (proof of work) |
-| constant group gradient | **FAIL** | check 1 non-constant guard |
-| confident single-pipeline (real gradients, one asserted identity, no robustness check) | **FAIL** | checks 4, 5 |
-| defensible band-pass pipeline (different apex, subspace overlap 0.95) | **PASS** | measured cross-config overlap ≥ 0.94 |
+| reference oracle (real gradients; multiverse; scoped verdict) | **PASS** | all 8 checks |
+| defensible band-pass-primary pipeline (different apex) | **PASS** | per-subject 0.88 / group 0.97 / aligned 0.67 all clear |
+| random per-subject array + REAL group_gradient.csv + copied `aligned_signed`=0.68 + copied robustness | **FAIL** | checks 0b, 1b, 3 (recomputed from the fake array) |
+| real single-pipeline analysis, one confident DMN-apex identity asserted, no robustness check | **FAIL** | checks 4, 5 |
+| constant group gradient | **FAIL** | non-constant guards |
 
-Checks 4–5 still fail the confident single-pipeline solution (the target failure); check 1 now also
-fails a fabricated gradient that never did the embedding.
+The two attacks are orthogonal: a fabricated per-subject artifact fails the recomputed proof-of-work
+gates (0b/1b/3) even when every reported table and scalar is copied from the real oracle; a genuinely
+computed single-pipeline that overclaims one identity fails the scoped rigor gates (4/5). Honest and
+defensible-alternative pipelines pass all eight.
 
 ### Harbor validation log — the experiment
 

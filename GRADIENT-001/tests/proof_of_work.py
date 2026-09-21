@@ -29,9 +29,56 @@ NETWORKS = ["Vis", "SomMot", "DorsAttn", "SalVentAttn", "Limbic", "Cont", "Defau
 
 def load_reference():
     d = np.load(REF_PATH, allow_pickle=False)
-    return {"group_g": np.asarray(d["ref_group_g"], float),
-            "nets": [str(x) for x in d["ref_nets"]],
-            "stats": json.loads(str(d["ref_stats"]))}
+    out = {"group_g": np.asarray(d["ref_group_g"], float),
+           "nets": [str(x) for x in d["ref_nets"]],
+           "stats": json.loads(str(d["ref_stats"]))}
+    if "ref_persubj" in d.files:
+        out["persubj"] = np.asarray(d["ref_persubj"], float)   # (n_ref, 400, 3) held-out per-subject
+    return out
+
+
+def load_persubject():
+    """Load the submitted per-subject gradients_aligned.npy as (n, 400, K>=3), float."""
+    p = OUT / "gradients_aligned.npy"
+    assert p.exists(), "missing required output gradients_aligned.npy"
+    g = np.load(p)
+    g = np.asarray(g, float)
+    assert g.ndim == 3 and g.shape[1] == 400 and g.shape[2] >= 3, \
+        f"expected per-subject 400-region gradients (n x 400 x k>=3), got shape {g.shape}"
+    return g
+
+
+def signed_consistency(grad_arr, comp=0):
+    """Mean pairwise correlation of one gradient component across subjects (recomputes
+    aligned_signed straight from a per-subject array)."""
+    C = np.array([grad_arr[i, :, comp] for i in range(grad_arr.shape[0])], float)
+    if C.shape[0] < 2:
+        return 0.0
+    cc = np.corrcoef(C)
+    iu = np.triu_indices(C.shape[0], 1)
+    v = cc[iu]
+    v = v[np.isfinite(v)]
+    return float(np.mean(v)) if v.size else 0.0
+
+
+def recompute_group_from_persubject(grad_arr):
+    """Group principal-gradient loadings recomputed as the across-subject mean of the submitted
+    per-subject array (leading 3 components)."""
+    return np.nanmean(grad_arr, axis=0)[:, :3]
+
+
+def per_subject_best_overlap(grad_arr, ref_persubj):
+    """For each submitted subject, the best leading-3 subspace overlap against any reference
+    subject (robust to subject reordering / dropped subjects). Returns an array of length n."""
+    outs = []
+    for i in range(grad_arr.shape[0]):
+        Gi = grad_arr[i, :, :3]
+        if not np.isfinite(Gi).all() or float(np.std(Gi[:, 0])) <= 1e-9:
+            outs.append(0.0)   # non-finite or constant subject cannot be a real embedding
+            continue
+        best = max(subspace_overlap(Gi, ref_persubj[j]) for j in range(ref_persubj.shape[0]))
+        outs.append(best)
+    return np.asarray(outs, float)
 
 
 def canon_net(label):
