@@ -83,8 +83,9 @@ the confound only as an optional fallback. This pass applies the suite-wide **pr
 contract (`scratchpad/PROOF_OF_WORK_SPEC.md`): a passing submission is now impossible without the
 real density-matched analysis on the real ADHD-200 participants.
 
-**Held-out reference (`tests/reference.npz`, built from `solution/compute.py`, never shipped to
-the agent).** Per-participant density-matched global efficiency and overall connectivity strength
+**Reference (`tests/reference.npz`, built from `solution/compute.py`; held out of the agent
+CONTAINER but PUBLIC in this repo — burned, so a real eval needs fresh tasks / a server-side
+reference).** Per-participant density-matched global efficiency and overall connectivity strength
 for the 40 pinned ADHD-200 participants (`fetch_adhd`, Schaefer-2018 100/17), plus the absolute-
 threshold efficiency (for the fabrication teeth) and the two pinned top-8 sets. Discriminating
 statistics: efficiency↔overall-strength correlation **+0.86** under a fixed absolute cutoff vs
@@ -93,9 +94,30 @@ statistics: efficiency↔overall-strength correlation **+0.86** under a fixed ab
 
 **Four grading pillars** (`tests/test_outputs.py` + `tests/proof_of_work.py`):
 1. **Exact participants + per-item values** — `efficiency.csv` must cover ≥90 % of the real IDs,
-   be non-constant, and its per-participant efficiency must track the held-out *density-matched*
-   reference (cross-subject Pearson ≥ 0.75; per-subject |Δ| ≤ 0.05 for ≥60 %). Submitting the
+   be non-constant, and its per-participant efficiency must track the *density-matched*
+   reference (cross-subject Pearson ≥ **0.60**; per-subject |Δ| ≤ 0.05 for ≥60 %). Submitting the
    confounded *absolute-threshold* efficiency (near-disjoint ranking) fails here.
+   - **Fairness widening (CORR_MIN 0.75 → 0.60), set empirically.** The density-matched efficiency
+     is a *tight* cluster (mean 0.399, sd 0.019), so the cross-subject Pearson is fragile to the
+     small per-subject differences a defensible alternative pipeline produces. I reconstructed the
+     ADHD-200 Schaefer-100 connectomes from the cached data (validated: my integrated efficiency
+     correlates r = 1.000 with `ref_eff`) and measured the cross-subject Pearson of documented
+     defensible variants against `ref_eff`: single-density slices 0.84–0.95, GSR 0.91, abs-value
+     edges 0.84, but **abs-value edges + global-signal regression 0.70** — both standard choices,
+     yet **rejected by the old 0.75 lock**. The fabrication floor is a shuffled table: for n = 40
+     the |Pearson| null has p99.9 = 0.50 (max 0.56 over 20 000 draws). CORR_MIN = 0.60 sits 0.10
+     above that floor and ≥0.10 below every structure-preserving defensible variant, so it admits
+     the honest alternatives while a fabricated/shuffled table and the absolute-threshold (r ≈ −0.29)
+     and pure-strength (r ≈ −0.57) submissions still fail. **Honest limitation:** a variant that also
+     *drops confound/motion regression* correlates only ≈ 0.36 with the clean reference — inside the
+     shuffle null — so it cannot be admitted without admitting fabrication; that per-subject axis is
+     irreducibly noise-limited at this cohort size (n = 40) and is not rescued. A second, related
+     tightness (out of this pass's scope): pillar 2's recomputed efficiency↔strength lock is pinned
+     to the confound-regressed −0.57 ± 0.12, but a GSR pipeline legitimately yields ≈ −0.12 (GSR
+     removes global strength); a defensible GSR submission therefore passes only by omitting the
+     *optional* `mean_connectivity` column (the instruction requires just `participant,
+     global_efficiency`) and reporting the sign-split correlations in `robustness.json`. Flagged for
+     the maintainer; not widened here.
 2. **Recompute** — the reported most-integrated ranking must be what the efficiency column
    actually produces; and, when overall connectivity strength is reported per participant, the
    efficiency↔strength correlation recomputed from the rows must equal the density-matched
@@ -112,6 +134,7 @@ statistics: efficiency↔overall-strength correlation **+0.86** under a fixed ab
 | case | result |
 |---|---|
 | honest (oracle reference values) | PASS |
+| **defensible alt — abs-value edges + GSR, density-matched (reconstructed, cross-subject r = 0.697)** | **FAIL at old 0.75 → PASS at 0.60** |
 | no `efficiency.csv` | FAIL |
 | constant efficiency table | FAIL |
 | non-constant fabricated (real IDs, shuffled efficiency, right mean) | FAIL |

@@ -2,8 +2,10 @@
 
 A passing submission must be IMPOSSIBLE to produce without running the real density-matched
 global-efficiency analysis on the real ADHD-200 participants. These helpers validate the
-submitted per-participant efficiency.csv against a held-out reference built from the oracle
-(tests/reference.npz), recompute the efficiency<->overall-strength confound correlation FROM
+submitted per-participant efficiency.csv against a reference built from the oracle
+(tests/reference.npz; held out of the agent CONTAINER but PUBLIC in this repo (burned) -- a real
+eval needs fresh tasks / a server-side reference), recompute the efficiency<->overall-strength
+confound correlation FROM
 the submitted rows, and expose the discriminating absolute-vs-density-matched contrast.
 """
 import csv

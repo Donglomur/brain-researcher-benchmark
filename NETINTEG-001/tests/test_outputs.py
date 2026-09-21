@@ -6,8 +6,9 @@ The previous verifier used a non-constant guard + a pinned top-k set contrast, b
 checked that the submitted per-participant efficiency values are the REAL ones, never
 recomputed the confound statistic from the rows, and graded the discriminating numbers only
 as an optional fallback. This grader closes that: it validates the exact ADHD-200
-participants and their per-participant density-matched efficiency against a held-out reference
-(tests/reference.npz, built from the oracle run and never shipped to the agent), recomputes
+participants and their per-participant density-matched efficiency against a reference
+(tests/reference.npz, built from the oracle run; held out of the agent CONTAINER but PUBLIC in
+this repo (burned) -- a real eval needs fresh tasks / a server-side reference), recomputes
 the efficiency<->overall-connectivity-strength confound correlation FROM the submitted rows,
 cross-checks it against the reported value and the reference, and grades the scientific
 judgement AS NUMBERS: the confound is strongly POSITIVE under an absolute cutoff (~+0.86) and
