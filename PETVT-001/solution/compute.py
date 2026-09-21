@@ -9,7 +9,9 @@ recording are fetched at runtime from OpenNeuro (open, CC0, no credentials). For
 participant we build the metabolite-corrected arterial PLASMA input and estimate cortical
 V_T with the Logan graphical method (Ichise MA1 is computed as a cross-check; the two agree
 to ~1%). The headline reproduces Yan et al. (the ds005619 source study): the cohort-average
-cortical V_T is low (< 1 mL.cm-3) and spans an ~2x range across the TSPO rs6971 genotypes.
+cortical V_T is low (< 1 mL.cm-3) and varies ~2x across the seven participants. The graded
+conclusion is the V_T magnitude and the metabolite-corrected-plasma input construction only;
+the rs6971 genotype attribution is dropped (no genotype column, n = 7).
 
 Key input-construction facts, taken from the BIDS sidecars:
   * TAC values and blood radioactivity are in Bq/mL.
@@ -196,10 +198,11 @@ estimated per participant with the Logan graphical method (Ichise MA1 as cross-c
 {per}
 
 Cohort-average cortical **V_T = {mean_vt:.3f} mL.cm-3** (n = {len(rows)}), spanning an
-~{ratio:.1f}x range across participants. This reproduces the source study: the tracer's
-brain V_T is **notably low (< 1)**, and V_T differs about two-fold across the TSPO rs6971
-affinity genotypes -- i.e. [18F]SF51 binds poorly in the human brain while remaining
-sensitive to the polymorphism.
+~{ratio:.1f}x range across participants. This reproduces the source study's headline that
+the tracer's brain V_T is **notably low (< 1)** -- [18F]SF51 binds poorly in the human
+brain. The ~{ratio:.1f}x spread in cortical V_T across the seven participants is reported
+descriptively; with n = 7 and no genotype information in the provided data, this analysis
+does not attribute that between-participant spread to the TSPO rs6971 polymorphism.
 
 ## Model input
 V_T is defined relative to the concentration in **arterial plasma of the intact parent

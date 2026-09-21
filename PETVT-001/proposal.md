@@ -79,3 +79,44 @@ Delivered in the PATLAKKI-001 slot (graphical kinetic quantification with an off
 ### Cost
 
 `hard` bracket by convention; actually light (fetches 7 × ~60 KB TAC TSVs + 7 × ~1.5 KB blood TSVs; Logan/MA1 fits run in seconds). cpus 2, mem 4 GB, internet on, timeouts 1800–3000 s. Deps: numpy 2.1.3 / scipy 1.14.1 / pandas 2.2.3.
+
+---
+
+## Proof-of-work verifier (2026-09)
+
+The prior grader checked only a cohort-mean V_T band [0.68, 0.92] + a max/min>=1.6 spread +
+prose — a fabricated per-participant table with a right-ish mean and spread passed. This
+revision applies the proof-of-work contract (per-subject held-out reference, QSMDIPOLE
+reproduction model).
+
+**Held-out reference** (`tests/reference.npz`, built from `solution/compute.py` on the real
+ds005619 TACs + arterial blood, never shipped to the agent): the seven per-participant
+cortical V_T (metabolite-corrected, decay-referenced arterial-plasma input) keyed by real id,
+plus `ref_stats` (naive whole-blood mean 0.448, uncorrected-plasma 0.514, non-decay 1.011 vs
+honest 0.797). sha256 `b701496c67b70b48dbe1c05d4bbe23fa4fd25fad1775b906b7cc92afa2cbb018`.
+
+**Neutral per-item table** (already required): `vt_estimates.csv`. Pillars: (1) per-subject
+V_T within 15% of the held-out reference (>=6/7) — the naive input constructions are 17-50%
+off per subject; (2) cohort mean recomputed from the rows == reference == reported JSON;
+(3) the cohort V_T graded as a number — closer to the honest metabolite-corrected value than
+to any naive-input mean, with a real (descriptive) per-subject spread; (4) secondary
+input-construction prose. Instruction stays un-cued (no "metabolite-corrected input" hint).
+
+**R2 hedge applied**: the graded conclusion is ONLY the V_T magnitude + the input
+construction. The rs6971 genotype attribution is dropped everywhere (no genotype column,
+n = 7): the grader never checks genotype, and `solution/compute.py`'s `findings.md` no longer
+attributes the between-participant V_T spread to the polymorphism — it reports the spread
+descriptively and states it cannot be attributed to rs6971 from the provided data.
+
+**Validation** (subprocess pytest per case, `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`, numpy 2.1.3):
+
+| case | result |
+|---|---|
+| honest (oracle, descoped findings) | PASS |
+| defensible (MA1 cross-estimator) | PASS |
+| no table | FAIL |
+| constant table | FAIL |
+| fabricated (right cohort mean, reversed per-subject) | FAIL (pillar 1) |
+| naive whole-blood input | FAIL |
+
+`test.sh` now provisions numpy 2.1.3. Data still fetches at runtime; the grader is offline.
