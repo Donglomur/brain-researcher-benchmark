@@ -99,10 +99,14 @@ def test_proof_of_work_subjects_and_values():
     # standard-clean across-network per subject must be the real ones
     pw.check_subjects_and_values(rows, ref, "across", "across_std", val_tol=st["VAL_TOL"],
                                  corr_min=st["CORR_MIN"], cover=st["COVER"], match=st["MATCH"])
-    # within-ToM is pipeline-robust; require it too (a real ROI extraction, not a fake table)
+    # within-ToM is a secondary "real ROI extraction, not a fake table" guard. It is temporal-
+    # filter-SENSITIVE (a defensible band-pass column shifts magnitudes vs the reference's detrend
+    # pipeline), so grade it robustly -- clear cross-subject tracking of the reference structure --
+    # rather than pinning per-subject magnitudes to one filter (which would fail a correct solve
+    # that band-passed). The across-network pillars keep the strict per-subject teeth.
     if any(r.get("within_tom") is not None for r in rows):
-        pw.check_subjects_and_values(rows, ref, "within_tom", "within_tom", val_tol=st["VAL_TOL"],
-                                     corr_min=st["CORR_MIN"], cover=st["COVER"], match=st["MATCH"])
+        pw.check_real_extraction(rows, ref, "within_tom", "within_tom", cover=st["COVER"],
+                                 corr_min=st.get("WITHIN_CORR_MIN", 0.5))
     # a genuine SECOND across-network column under the alternative preprocessing must be present
     assert alt_col is not None and alt_col != std_col, (
         "network_connectivity.csv reports the across-network correlation under only ONE "

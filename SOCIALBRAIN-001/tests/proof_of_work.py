@@ -111,20 +111,63 @@ def load_submitted(path):
     return out, across_cols
 
 
+def _age_key(a):
+    """Round an age to a stable bucket key (or None if unparseable)."""
+    try:
+        return round(float(a), 2)
+    except (TypeError, ValueError):
+        return None
+
+
+def align_by_age(subrows, ref_age, ref_vals, get_val):
+    """Align submitted rows to reference subjects BY AGE -- a stable per-subject phenotype that is
+    identical across fetch orders -- NOT by row id/index.
+
+    `subject_index` is a fetch-ORDER label: a valid re-run (a different nilearn version / cache
+    path) may enumerate ds000228 in a different order, so an id/index join compares mismatched
+    subjects and a correct solve fails spuriously (its per-subject values look uncorrelated with the
+    reference even though the sorted multisets are identical). Age is the real phenotype (identical
+    across runs). Bucket the reference values by age; assign each submitted row to an unused
+    reference subject of the same age. ~4/5 of ds000228 ages are unique, so those joins are forced
+    and value-independent; age ties (a handful of buckets of 2-5) are broken by nearest
+    submitted-vs-reference value, which only recovers the within-bucket pairing for a genuine solve
+    and cannot rescue a fabricated column (the >120 forced singleton joins dominate every
+    cross-subject correlation guard). Returns aligned (sub, refv) lists."""
+    from collections import defaultdict
+    buckets = defaultdict(list)
+    for a, v in zip(ref_age, ref_vals):
+        k = _age_key(a)
+        if k is not None:
+            buckets[k].append(float(v))
+    for k in buckets:
+        buckets[k].sort()
+    sub, refv = [], []
+    for r in subrows:
+        v = get_val(r)
+        k = _age_key(r.get("age"))
+        if v is None or k is None:
+            continue
+        cand = buckets.get(k)
+        if not cand:
+            continue
+        j = min(range(len(cand)), key=lambda i: abs(cand[i] - float(v)))  # nearest ref value at age
+        refv.append(cand.pop(j)); sub.append(float(v))
+    return sub, refv
+
+
 def assign_across_columns(subrows, ref, cover):
     """Assign, BY VALUE, which submitted across-network column is the standard-clean quantity and
     which is the alternative-preprocessing quantity. For each candidate column, compute the
     cross-subject Pearson correlation against both held-out references (ref['across'] = standard
-    clean, ref['across_gsr'] = alternative preprocessing) over the matched subjects. The
-    standard column is the one that best tracks ref['across']; the alternative column is the one
-    that best tracks ref['across_gsr']. Returns (std_col, alt_col, diag) with either name possibly
-    None if no candidate covers enough subjects.
+    clean, ref['across_gsr'] = alternative preprocessing) over the subjects joined BY AGE (see
+    `align_by_age`; not by fetch-order id). The standard column is the one that best tracks
+    ref['across']; the alternative column is the one that best tracks ref['across_gsr']. Returns
+    (std_col, alt_col, diag) with either name possibly None if no candidate covers enough subjects.
 
     Nothing keys off the column NAME, so the grader does not tell the agent which preprocessing
     lever separates the two -- only that the across-network value under each choice they consider
     must be reported per subject."""
-    refmap_std = {i: float(v) for i, v in zip(ref["ids"], ref["across"])}
-    refmap_alt = {i: float(v) for i, v in zip(ref["ids"], ref["across_gsr"])}
+    n_ref = len(ref["across"])
     cols = set()
     for r in subrows:
         cols |= set(r.get("across_by_col", {}).keys())
@@ -133,15 +176,12 @@ def assign_across_columns(subrows, ref, cover):
     best_alt = (None, -2.0)
     diag = {}
     for c in cols:
-        xs, ys_std, ys_alt = [], [], []
-        for r in subrows:
-            v = r.get("across_by_col", {}).get(c)
-            if v is None or r["id"] not in refmap_std:
-                continue
-            xs.append(v); ys_std.append(refmap_std[r["id"]]); ys_alt.append(refmap_alt[r["id"]])
-        coverage = len(xs) / max(1, len(refmap_std))
-        r_std = pearson(xs, ys_std) if len(xs) >= 20 else float("nan")
-        r_alt = pearson(xs, ys_alt) if len(xs) >= 20 else float("nan")
+        getv = (lambda r, c=c: r.get("across_by_col", {}).get(c))
+        xs_std, ys_std = align_by_age(subrows, ref["age"], ref["across"], getv)
+        xs_alt, ys_alt = align_by_age(subrows, ref["age"], ref["across_gsr"], getv)
+        coverage = len(xs_std) / max(1, n_ref)
+        r_std = pearson(xs_std, ys_std) if len(xs_std) >= 20 else float("nan")
+        r_alt = pearson(xs_alt, ys_alt) if len(xs_alt) >= 20 else float("nan")
         diag[c] = {"coverage": coverage, "r_std": r_std, "r_alt": r_alt}
         if coverage < cover:
             continue
@@ -167,37 +207,67 @@ def pearson(x, y):
 
 def check_subjects_and_values(subrows, ref, key_ref, key_sub, val_tol, corr_min, cover, match,
                               eps=1e-4):
-    """Pillar 1 for one column: coverage, non-constant, per-subject match to reference."""
-    refmap = {i: float(v) for i, v in zip(ref["ids"], ref[key_ref])}
-    matched = [r for r in subrows if r["id"] in refmap and r.get(key_sub) is not None]
-    coverage = len(matched) / max(1, len(refmap))
+    """Pillar 1 for one column: coverage, non-constant, per-subject match to reference. Subjects
+    are joined BY AGE (stable phenotype), not by fetch-order id -- see `align_by_age`."""
+    sub, refv = align_by_age(subrows, ref["age"], ref[key_ref], lambda r: r.get(key_sub))
+    n_ref = len(ref[key_ref])
+    coverage = len(sub) / max(1, n_ref)
     assert coverage >= cover, (
-        f"[{key_sub}] network_connectivity.csv covers only {coverage:.1%} of the {len(refmap)} "
-        f"real ds000228 subjects (need >= {cover:.0%}). Fabricated or missing subject ids.")
-    sub = [r[key_sub] for r in matched]
-    refv = [refmap[r["id"]] for r in matched]
+        f"[{key_sub}] network_connectivity.csv covers only {coverage:.1%} of the {n_ref} "
+        f"real ds000228 subjects by age (need >= {cover:.0%}). Fabricated or missing subjects.")
     assert statistics.pstdev(sub) > eps, f"[{key_sub}] constant across subjects -- not per-subject"
     rc = pearson(sub, refv)
     assert math.isfinite(rc) and rc >= corr_min, (
         f"[{key_sub}] submitted per-subject values do not track the reference (cross-subject "
         f"r={rc:.3f} < {corr_min}); not computed from the real ROI time series.")
     close = sum(1 for a, b in zip(sub, refv) if abs(a - b) <= val_tol)
-    frac = close / max(1, len(matched))
+    frac = close / max(1, len(sub))
     assert frac >= match, (
         f"[{key_sub}] only {frac:.1%} of matched subjects within {val_tol} of the reference "
         f"(need >= {match:.0%}); per-subject values are not the real ones.")
-    return matched
+    return sub
+
+
+def check_real_extraction(subrows, ref, key_ref, key_sub, cover, corr_min, eps=1e-4):
+    """Robust anti-fabrication guard for a pipeline-SENSITIVE per-subject quantity (the within-
+    network connectivity). Require it to be a real, non-constant per-subject column that clearly
+    tracks the reference's cross-subject structure (age-joined r >= corr_min), WITHOUT pinning
+    per-subject magnitudes to one temporal-filter choice. A defensible band-pass within-network
+    column shifts magnitudes relative to the reference's detrend pipeline (so it fails a tight
+    VAL_TOL/MATCH per-subject pin: only ~0.63 within 0.08, r~0.74) yet is unmistakably a real
+    extraction; a shuffled / constant / mislabelled (within-pain-in-the-tom-slot) column correlates
+    <= ~0.3. The across-network pillars carry the discriminating teeth at the strict CORR_MIN/MATCH;
+    this guard only certifies that a real within-network ROI extraction was performed."""
+    sub, refv = align_by_age(subrows, ref["age"], ref[key_ref], lambda r: r.get(key_sub))
+    n_ref = len(ref[key_ref])
+    coverage = len(sub) / max(1, n_ref)
+    assert coverage >= cover, (
+        f"[{key_sub}] covers only {coverage:.1%} of the {n_ref} real ds000228 subjects by age "
+        f"(need >= {cover:.0%}). Fabricated or missing subjects.")
+    assert statistics.pstdev(sub) > eps, f"[{key_sub}] constant across subjects -- not per-subject"
+    rc = pearson(sub, refv)
+    assert math.isfinite(rc) and rc >= corr_min, (
+        f"[{key_sub}] does not track the real per-subject within-network structure (cross-subject "
+        f"r={rc:.3f} < {corr_min}); not a real ROI extraction (shuffled/constant/mislabelled).")
+    return sub
 
 
 def children_spearman(subrows, ref, key_sub):
-    """Recompute Spearman(age, key) over the CHILDREN from the submitted rows. Group is taken
-    from the reference (ground-truth phenotype) to avoid a mislabelled group column."""
-    grp = {i: g for i, g in zip(ref["ids"], ref["group"])}
-    age = {i: float(a) for i, a in zip(ref["ids"], ref["age"])}
+    """Recompute Spearman(age, key) over the CHILDREN from the submitted rows. Group is derived
+    from the reference BY AGE (ds000228 is a clean age->group phenotype: children <=~12.3y, adults
+    >=~18y, no overlap), so a mislabelled/absent group column and the fetch-order id are both
+    irrelevant. The age axis is the submitted row's own age (identical to the reference age)."""
+    grp_by_age = {}
+    for a, g in zip(ref["age"], ref["group"]):
+        k = _age_key(a)
+        if k is not None:
+            grp_by_age[k] = g
     xs, ys = [], []
     for r in subrows:
-        if grp.get(r["id"]) == "child" and r.get(key_sub) is not None and r["id"] in age:
-            xs.append(age[r["id"]]); ys.append(r[key_sub])
+        k = _age_key(r.get("age"))
+        v = r.get(key_sub)
+        if k is not None and grp_by_age.get(k) == "child" and v is not None:
+            xs.append(float(r["age"])); ys.append(float(v))
     if len(xs) < 20:
         return float("nan"), 0
     return spearmanr_np(xs, ys), len(xs)
