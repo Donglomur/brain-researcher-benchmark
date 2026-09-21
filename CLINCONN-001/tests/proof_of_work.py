@@ -266,13 +266,18 @@ def find_number(obj, key_patterns, exclude=None):
     return None
 
 
-def find_path_number(obj, path_include=(), leaf_re=None, path_exclude=(), prefer=None):
+def find_path_number(obj, path_include=(), leaf_re=None, path_exclude=(), prefer=None,
+                     path_require_any=None):
     """Return a finite float leaf value chosen by path + leaf-key matching. Robust to nesting.
 
     - `path_include`: every token must appear in the joined normalised ancestor path.
     - `leaf_re`: if given, the LEAF key (normalised) must match this regex (identifies the
       quantity, e.g. the t-statistic vs its p-value).
     - `path_exclude`: none of these tokens may appear in the joined path (branch exclusion).
+    - `path_require_any`: if given, at least one of these tokens must appear in the joined path
+      (a HARD requirement, unlike `prefer`). Use it to demand an EXPLICIT label -- e.g. a
+      motion / FD-controlled marker -- so that an unlabelled (naive) leaf is NOT returned. When no
+      leaf carries such a label the function returns None, and the caller skips its cross-check.
     - `prefer`: among matches, prefer one whose path contains a prefer token; else shallowest.
     """
     lre = re.compile(leaf_re) if leaf_re else None
@@ -291,9 +296,14 @@ def find_path_number(obj, path_include=(), leaf_re=None, path_exclude=(), prefer
                 return
             leaf = path[-1] if path else ""
             p = ".".join(path)
-            if all(t in p for t in path_include) and not any(e in p for e in path_exclude):
-                if lre is None or lre.search(leaf):
-                    hits.append((len(path), p, fv))
+            if not all(t in p for t in path_include):
+                return
+            if any(e in p for e in path_exclude):
+                return
+            if path_require_any and not any(t in p for t in path_require_any):
+                return
+            if lre is None or lre.search(leaf):
+                hits.append((len(path), p, fv))
 
     walk(obj, [])
     if not hits:

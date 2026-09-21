@@ -66,10 +66,28 @@ def _naive_short_t(j):
         prefer=["naive", "raw", "grouptest", "ttest", "welch", "uncontroll", "uncorrect"])
 
 
+# A reported short-range t is treated as the MOTION-CONTROLLED estimate only when its path is
+# EXPLICITLY labelled as motion / FD-controlled / adjusted / covaried / matched. This is a hard
+# requirement (path_require_any), not a soft preference: otherwise the picker falls back to the
+# only short-range t present -- the NAIVE (raw, uncontrolled) group t -- and the reported-vs-recompute
+# cross-check wrongly compares the raw t (~+2.11) against the FD-controlled recompute (~-0.08) and
+# fails a correct submission. Raw / uncontrolled / crude labels are excluded outright. When no
+# explicitly-controlled short t is reported, this returns None and pillar 3(d) SKIPS the cross-check
+# and grades off the FD-covariate recompute from the rows (which is authoritative).
+_FD_CONTROL_MARKERS = ["motioncontroll", "motioncontrol", "fdcontroll", "fdcontrol", "fdcovariate",
+                       "fdcovar", "covariate", "covary", "motionmatched", "motionadjust",
+                       "fdadjust", "adjustedforfd", "adjustedformotion", "controlledforfd",
+                       "controlledformotion", "controllingforfd", "controllingformotion",
+                       "framewise", "headmotion", "motion", "fd"]
+_RAW_MARKERS = ["raw", "naive", "uncontroll", "uncorrect", "uncontrol", "crude", "facevalue",
+                "unadjust", "atfacevalue"]
+
+
 def _fd_short_t(j):
     return pw.find_path_number(
         j, path_include=["short"], leaf_re=_T_LEAF,
-        path_exclude=["qcfc", "displacement", "residual", "long"],
+        path_exclude=["qcfc", "residual", "long"] + _RAW_MARKERS,
+        path_require_any=_FD_CONTROL_MARKERS,
         prefer=["motioncontroll", "fdcovariate", "fdcontroll", "motionmatched", "covariate",
                 "framewise", "adjust", "controll", "motion", "matched"])
 
