@@ -1,9 +1,10 @@
 """Proof-of-work grader for MOTORIMAGERY-001 (CSP+LDA hands-vs-feet decoding on EEGBCI).
 
-The grade is carried by NUMBERS against a held-out reference (`reference.npz`) built by
-running the oracle on the pinned EEGBCI motor-imagery set (subjects 1-10, runs 6/10/14;
-7-30 Hz; 1-2 s epochs; all EEG channels; CSP(4)+LDA; per-subject 5-fold CV; 200-permutation
-per-subject null):
+The grade is carried by NUMBERS against a reference (`reference.npz`) built by running the
+oracle on the pinned EEGBCI motor-imagery set (subjects 1-10, runs 6/10/14; 7-30 Hz; 1-2 s
+epochs; all EEG channels; CSP(4)+LDA; per-subject 5-fold CV; 200-permutation per-subject null).
+The reference is held out of the agent CONTAINER but PUBLIC in this repo (burned) -- a real eval
+needs fresh tasks / a server-side reference:
 
   PILLAR 1  the submitted per-subject table (per_subject.csv) must cover the 10 subjects, be
             non-constant, and match the held-out per-subject cross-validated accuracies.
@@ -29,7 +30,13 @@ OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 REF = np.load(Path(__file__).resolve().parent / "reference.npz", allow_pickle=False)
 
 ACC_VAL_TOL = 0.08     # per-subject CV accuracy
-GROUP_TOL = 0.03       # group accuracy vs reference / reported
+GROUP_TOL = 0.05       # group accuracy vs reference / reported
+                       # (widened from 0.03: a defensible pipeline / lib-version drift shifts the
+                       # group-mean accuracy by ~5-7% (~0.045), which 0.03 rejected. The group
+                       # accuracy is NOT the discriminating judgement here -- the reliability
+                       # summary (P_TOL p-value, SD_TOL null SD, COUNT_TOL significant/below counts)
+                       # is, and those are unchanged, so widening the accuracy tol does not weaken
+                       # the over-claim defence. Per-subject ACC_VAL_TOL is unchanged.)
 P_TOL = 0.03           # group p-value vs reference (absolute)
 SD_TOL = 0.03          # finite-sample null SD vs reference
 COUNT_TOL = 1          # significant / below-chance counts within +/- this many subjects

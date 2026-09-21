@@ -54,15 +54,26 @@ sanity gate that also excludes a leaky near-ceiling value ≥ 0.92).
 
 ### Verifier — proof-of-work (3 pillars, NUMBERS not keywords)
 
-The grade is carried against a held-out reference (`tests/reference.npz`) built by running the
-oracle on the pinned EEGBCI set (subjects 1-10, runs 6/10/14; permutation seed fixed).
-`tests/proof_of_work.py` + `tests/test_outputs.py`:
+The grade is carried against a reference (`tests/reference.npz`) built by running the oracle on
+the pinned EEGBCI set (subjects 1-10, runs 6/10/14; permutation seed fixed); it is held out of the
+agent CONTAINER but PUBLIC in this repo — burned, so a real eval needs fresh tasks / a server-side
+reference. `tests/proof_of_work.py` + `tests/test_outputs.py`:
 
 1. **Per-subject proof of work** — `per_subject.csv` must cover the 10 subjects, be
    non-constant, and match the held-out per-subject cross-validated accuracies (tol 0.08,
    ≥80% of subjects).
 2. **Recompute** — the mean of the submitted per-subject `accuracy` must equal both the
-   reference group accuracy (0.673) and the reported headline accuracy.
+   reference group accuracy (0.673, ±**0.05**) and the reported headline accuracy.
+
+**Fairness widening (GROUP_TOL 0.03 → 0.05).** ±0.03 on the group accuracy was thinner than
+plausible pipeline / library-version drift (~5-7%, i.e. ~0.04). Validated by perturbing the
+committed reference per-item values (`ref_acc`) by a +0.04 shift: at ±0.03 that honest alternative
+FAILED the accuracy check (pillar 3) and the recompute (pillar 2); at ±0.05 it PASSES. The group
+accuracy is NOT the discriminating judgement — the individual-reliability summary is (`P_TOL`
+p-value, `SD_TOL` null SD, `COUNT_TOL` significant/below counts), and those are UNCHANGED — so
+widening the accuracy tolerance does not weaken the over-claim defence: a constant/fabricated table
+still fails pillar 1, and the naive "count subjects above 0.5 (8/10) as significant" over-claim
+still fails the count discriminator. Not widened: `ACC_VAL_TOL`, `P_TOL`, `SD_TOL`, `COUNT_TOL`.
 3. **Discriminating numbers (individual-reliability)** — the reported reliability summary must
    match the reference: `group_p_vs_chance` = 0.022 (±0.03), `finite_sample_null_sd` = 0.083
    (±0.03), `n_subjects_significant_perm_p05` = 6 (±1) and `n_subjects_below_chance` = 2 (±1);
