@@ -3,8 +3,9 @@
 A passing submission must be IMPOSSIBLE to produce without running the real single-neuron analysis
 on the real DANDI 000004 MTL units. These helpers validate the SUBMITTED per-neuron table -- a
 NEUTRAL intermediate that BOTH a naive and an honest analysis produce (the pinned per-neuron
-preferred-category-vs-rest ROC AUC + the category-selective flag) -- against a held-out
-reference built from the oracle run (tests/reference.npz, never shipped to the agent), then
+preferred-category-vs-rest ROC AUC + the category-selective flag) -- against a
+reference built from the oracle run (tests/reference.npz; held out of the agent CONTAINER but
+PUBLIC in this repo (burned) -- a real eval needs fresh tasks / a server-side reference), then
 recomputes the proportion category-selective and the same-trials (naive) mean AUC FROM the submitted
 rows and cross-checks them. It does NOT force the held-out judgement (that is graded separately, as
 an OR-escape) -- it only proves the per-neuron work is real.

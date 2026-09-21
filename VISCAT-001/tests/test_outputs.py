@@ -21,8 +21,10 @@ but materially smaller than the same-trials estimate.
 PROOF OF WORK (fabrication-proof, judgement kept un-cued):
   * Pillar 1 -- the submitted per-neuron table (NEUTRAL: the pinned per-neuron preferred-vs-rest AUC +
     category-selective flag, an intermediate BOTH a naive and an honest analysis produce) must match
-    the held-out reference (tests/reference.npz): cover the real neuron ids, be non-constant, track
-    the reference per-neuron AUC (cross-neuron r >= 0.90, per-neuron tol), selective flag agreeing.
+    the reference (tests/reference.npz; held out of the agent CONTAINER but PUBLIC in this repo
+    (burned) -- a real eval needs fresh tasks / a server-side reference): cover the real neuron ids,
+    be non-constant, track the reference per-neuron AUC (cross-neuron r >= 0.90, per-neuron tol),
+    selective flag agreeing.
   * Pillar 2 -- recompute the proportion category-selective and the same-trials (naive) mean AUC FROM
     the submitted rows and cross-check (proportion == reference == reported; selective-neuron mean ==
     the reference naive 0.695 -- proving the rows are the real analysis).
@@ -44,7 +46,15 @@ OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 REF_PATH = Path(__file__).resolve().parent / "reference.npz"
 
 # ---- proof-of-work tolerances ----
-AUC_TOL = 0.03
+AUC_TOL = 0.06        # per-neuron pref-vs-rest AUC abs match (widened from 0.03). The reference AUC
+                      # spread is wide (std 0.064), so a defensible mean-preserving decoder variant
+                      # (a different single-neuron AUC estimator) at the CORR_MIN corr floor (~0.90)
+                      # has ~0.031 per-neuron residual -- only ~67-76% within 0.03, so 0.03 rejected
+                      # an honest variant even though it preserved the selective-neuron mean. Widening
+                      # AUC_TOL alone rescues it; fabrication stays caught by CORR_MIN (r>=0.90 -- a
+                      # shuffled table fails), coverage, the non-constant guard, selective-flag
+                      # agreement, and the UNCHANGED NAIVE_TOL (a mean-preserving variant passes it,
+                      # a constant/shifted table does not).
 CORR_MIN = 0.90
 COVER = 0.90
 PROP_TOL = 0.04       # proportion category-selective (ref ~0.167)

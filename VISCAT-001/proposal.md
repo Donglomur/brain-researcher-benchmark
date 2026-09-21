@@ -83,8 +83,9 @@ runtime streams all 87 sessions' MTL spike_times + trials tables (light per-file
 The reviewed verifier graded a single reported number + prose and (per the suite audit) could be
 passed on fabricated data. It is now fabrication-proof WITHOUT cueing the double-dipping judgement:
 
-- **Held-out reference** `tests/reference.npz` (built by streaming all 87 DANDI 000004 sessions with
-  the oracle; never shipped to the agent): per-neuron real values keyed by the real neuron id
+- **Reference** `tests/reference.npz` (built by streaming all 87 DANDI 000004 sessions with
+  the oracle; held out of the agent CONTAINER but PUBLIC in this repo — burned, so a real eval needs
+  fresh tasks / a server-side reference): per-neuron real values keyed by the real neuron id
   (`<asset-stem>__u<unit id>`) -- the pinned all-trials preferred-vs-rest AUC + the category-selective
   flag -- plus `ref_stats` (n=1864, proportion 0.167, naive same-trials mean 0.695, honest held-out
   mean 0.570).
@@ -93,14 +94,27 @@ passed on fabricated data. It is now fabrication-proof WITHOUT cueing the double
   produce, so requiring it does not cue the held-out/double-dipping insight. The instruction still
   names only the deliverable.
 - **Three grader pillars.** (1) the submitted per-neuron AUC must track the reference (cross-neuron
-  r >= 0.90, per-neuron tol, coverage >= 90%, non-constant, selective-flag agreement); (2) the
+  r >= 0.90, per-neuron tol **0.06**, coverage >= 90%, non-constant, selective-flag agreement); (2) the
   proportion category-selective and the same-trials mean AUC recomputed FROM the rows must match the
-  reference (== 0.695) and the reported JSON; (3) the scientific judgement is now the un-cued
+  reference (== 0.695 ± 0.03) and the reported JSON; (3) the scientific judgement is now the un-cued
   **OR-escape** (aligned with the MTLMEMORY sibling, superseding the earlier strict numeric-AND gate):
   PASS if the headline reproduces the honest ~0.57 OR the write-up volunteers the non-independence
   (double-dipping tied to the AUC, or the held-out split used); a claimed held-out cannot rescue a
   headline >= 0.63; an un-caveated ~0.70 fails. Fabrication is closed independently by pillars 1+2, so
   the judgement gate can be the fair OR-escape without reopening the fabrication hole.
+
+**Fairness widening (AUC_TOL 0.03 → 0.06; NAIVE_TOL unchanged).** The reference pref-vs-rest AUC has
+a wide spread (std 0.064), so a defensible mean-preserving decoder variant (a different single-neuron
+AUC estimator) that correlates with the reference at the `CORR_MIN` floor (~0.90) carries ~0.031 of
+per-neuron residual — only ~67-76% of neurons within 0.03, so the 0.03 lock rejected an honest variant
+even though it preserved the selective-neuron mean (and thus the whole scientific result). Validated by
+perturbing the committed `ref_auc` with a mean-preserving per-neuron scatter (σ = 0.025, cross-neuron
+r = 0.93): at 0.03 it FAILED pillar 1 only; at 0.06 it PASSES, and pillars 2-3 pass throughout. Because
+the variant preserves the mean, **only `AUC_TOL` had to move** — `NAIVE_TOL` stays 0.03. Fabrication is
+still caught by `CORR_MIN` (a shuffled-per-neuron table fails), coverage, the non-constant guard,
+selective-flag agreement, `PROP_TOL`, and the unchanged `NAIVE_TOL` (a constant or mean-shifted table
+fails it); the pillar-3 double-dipping judgement is untouched, so an un-caveated ~0.70 headline still
+fails.
 
 **Subprocess-pytest validation matrix** (each `OUTPUT_DIR` graded by a fresh `pytest` process):
 honest **PASS** / no-table **FAIL** (pillars 1+2) / constant-table **FAIL** (pillar 1) /
