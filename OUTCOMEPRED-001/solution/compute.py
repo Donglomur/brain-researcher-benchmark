@@ -14,21 +14,20 @@ extends across / after the feedback time reads out the reward delivery itself --
 the reward, the consummatory licking, the error tone -- rather than any decision
 or outcome-predictive signal. That window decodes the *already-revealed* outcome
 almost perfectly (~0.99). Reporting ~0.99 as "the population predicts/encodes the
-trial outcome" is the over-claim: it is decoding feedback that has already
-happened, not predicting the outcome.
+trial outcome" is the over-claim.
 
 Validated ground truth (DANDI 000409, sub-NYU-37 ses-21d21fc3, balanced
 rewarded/error trials, all recorded units, standardized logistic regression,
 stratified 5-fold CV):
   n_units = 867, n_trials(balanced) = 212, chance = 0.50
   CORRECT  pre-outcome window (feedback -0.20..-0.05 s) : accuracy = 0.43  <-- reported
-  NAIVE    post-outcome window (feedback  0.00..+0.40 s): accuracy = 0.99  (reads feedback)
-The pre-outcome estimate is at chance for any strictly-pre-feedback window
-(0.43-0.57 across windows and sessions) and is stable across regularization
-(C 0.1..5). So the honest answer is that the trial outcome CANNOT be predicted
-above chance from pre-outcome population activity on this session -- not the
-~0.99 that a feedback-spanning window reports.
+  POSITIVE CONTROL  post-outcome window (feedback 0.00..+0.40 s): accuracy = 0.99  (reads feedback)
+The pre-outcome estimate is at chance for any strictly-pre-feedback window and is
+stable across regularization. The honest answer is that the trial outcome CANNOT be
+predicted above chance from pre-outcome population activity on this session (scoped to
+the pre-feedback window; choice/stimulus precede feedback and are not the claim here).
 """
+import csv
 import json
 import os
 import sys
@@ -136,24 +135,30 @@ from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import cross_val_score, StratifiedKFold
 
 
-def cv_accuracy(X):
+def cv_scores(X):
     clf = make_pipeline(StandardScaler(), LogisticRegression(C=C_REG, max_iter=2000))
     cv = StratifiedKFold(N_FOLDS, shuffle=True, random_state=SEED)
-    s = cross_val_score(clf, X, y, cv=cv, scoring="accuracy")
-    return float(s.mean()), float(s.std())
+    return cross_val_score(clf, X, y, cv=cv, scoring="accuracy")
 
 # CORRECT: predict the outcome from activity strictly BEFORE it is revealed.
-acc_pre, std_pre = cv_accuracy(spike_counts(fb, *PRE))
-# POSITIVE CONTROL / contrast: the same decoder on activity AFTER the outcome is
-# revealed. This confirms the pipeline can decode the outcome -- and shows that the
-# near-perfect number comes from reading the delivered feedback, not from prediction.
-acc_post, _ = cv_accuracy(spike_counts(fb, *POST))
+folds_pre = cv_scores(spike_counts(fb, *PRE))
+acc_pre, std_pre = float(folds_pre.mean()), float(folds_pre.std())
+# POSITIVE CONTROL / contrast: the same decoder on activity AFTER the outcome is revealed.
+acc_post = float(cv_scores(spike_counts(fb, *POST)).mean())
+
+# ---- per-fold table (the finest intermediate the decoding naturally produces) ----
+with open(OUT / "folds.csv", "w", newline="") as f:
+    w = csv.writer(f)
+    w.writerow(["fold", "accuracy"])
+    for i, a in enumerate(folds_pre):
+        w.writerow([i, float(a)])
 
 results = {
     # the value that should be REPORTED: how well the outcome can be PREDICTED
     # from pre-outcome population activity (leakage-free).
     "cross_validated_accuracy": round(acc_pre, 4),
     "accuracy_std_across_folds": round(std_pre, 4),
+    "per_fold_accuracies": [round(float(a), 4) for a in folds_pre],
     "chance_level": round(chance, 4),
     "n_trials": int(len(sel)),
     "n_units": int(n_units),
@@ -184,15 +189,17 @@ results = {
     f"**Cross-validated accuracy = {acc_pre:.2f}** (chance = {chance:.2f}) when the spike-count "
     f"window ends before the outcome is delivered (a 200 ms window immediately preceding "
     f"feedback). This is at chance: the trial outcome **cannot be predicted above chance** from "
-    f"the population's pre-outcome activity on this session, and the estimate is stable across "
-    f"regularization.\n\n"
+    f"the population's pre-outcome activity on this session in this pre-feedback window, and the "
+    f"estimate is stable across regularization.\n\n"
     f"As a positive control, the identical decoder applied to a window *after* the outcome is "
-    f"revealed (0-400 ms after feedback) reaches {acc_post:.2f}. That near-perfect value does not "
-    f"reflect prediction: it decodes the feedback that has already been delivered (reward, "
-    f"licking, the error tone). Reporting it as evidence that the population encodes/predicts the "
-    f"trial outcome would overstate the result -- the honest, above-nothing answer is that "
-    f"pre-outcome decoding is at chance (~{acc_pre:.2f} vs {chance:.2f}).\n"
+    f"revealed (0-400 ms after feedback) reaches {acc_post:.2f}. That near-perfect value confirms "
+    f"the pipeline can decode the outcome once it is revealed, and shows the number reflects the "
+    f"feedback that has already been delivered (reward, licking, the error tone), not prediction. "
+    f"Reporting it as evidence that the population predicts the trial outcome would overstate the "
+    f"result -- the honest, scoped answer is that pre-feedback decoding is at chance "
+    f"(~{acc_pre:.2f} vs {chance:.2f}).\n"
 )
 
 print(f"n_units={n_units} n_trials={len(sel)} chance={chance:.3f} "
-      f"CORRECT(pre-outcome)={acc_pre:.4f} CONTROL(post-outcome)={acc_post:.4f}")
+      f"CORRECT(pre-outcome)={acc_pre:.4f} CONTROL(post-outcome)={acc_post:.4f} "
+      f"folds={[round(float(a),3) for a in folds_pre]}")

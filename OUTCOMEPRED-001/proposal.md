@@ -48,3 +48,35 @@ Oracle **reward 1.0**; naive feedback-window baseline **reward 0** (re-validated
 ### Cost
 
 `hard`. cpus 2, mem 12 GB, internet on (fetches one ~385 MB processed NWB asset at runtime — the single pinned session's S3 blob; DANDI/S3 can throttle). Agent timeout 7200 s, verifier 1800 s. Deps: dandi 0.78 / pynwb 4.2 / numpy / scipy / pandas / h5py / scikit-learn / requests (pinned in the Dockerfile).
+
+### Proof-of-work verifier (added)
+
+The grader is now proof-of-work (see `PROOF_OF_WORK_SPEC.md`) and the pre-feedback null is scoped.
+
+- **Held-out reference** `tests/reference.npz` (from `solution/compute.py`, never shipped): the
+  honest pre-feedback per-fold accuracies (mean 0.434, at chance) + the positive-control
+  post-feedback per-fold (mean 0.995) + `ref_stats` (chance 0.5, n_trials 212, n_units 867).
+- **Neutral per-item table** `folds.csv` (per-fold CV accuracies) — produced by any 5-fold CV,
+  naive or honest, so requiring it does not cue the window-placement lever.
+- **Pillars:** (1) `folds.csv` well-formed + non-constant + `mean(folds) == reported headline`;
+  (2) the headline lies in the at-chance band `[0.35, 0.62]` (a feedback-spanning window's ~0.99
+  fails); (3) **required positive control** — a volunteered decodable-window accuracy ~0.99 (or
+  prose describing a post-feedback window decoding the delivered outcome near-perfectly), which
+  scopes the null and shows the near-perfect number is read-out of feedback, not prediction.
+- **R2 scope hedge:** the claim graded is *"not decodable above chance in the pre-feedback window"*
+  (with the positive control), NOT a general "the population does not encode upcoming outcome" —
+  choice and stimulus precede feedback and are outside this claim.
+- **Validation matrix (subprocess pytest):** honest PASS; no-table FAIL; constant-table FAIL;
+  post-feedback over-claim (0.99 headline) FAIL; at-chance-but-no-positive-control FAIL.
+  **PARTIAL:** the headline is a scoped null with an analyst-free pre-feedback window, so a
+  right-numbers submission with plausible fabricated near-chance folds and a guessed ~0.99 control
+  cannot be fully excluded (tight per-fold matching would reject defensible alternative pre-feedback
+  windows, e.g. 0.5–0.57). The operative proof-of-work is the required positive control + the
+  held-out band + the fact that the solving agent lacks the reference and must run both windows.
+
+**Data pin (reference build):** DANDI `000409` (draft), asset
+`sub-NYU-37/sub-NYU-37_ses-21d21fc3-4201-4edc-802a-c67b61952548_desc-processed_behavior+ecephys.nwb`,
+asset-id `73c3cf70-88a0-43ae-b7fd-03a0ac156222`, size 385181169 B,
+`dandi:sha2-256 = f46fa114f07a00080cdc1860913df245326a17bf249d3749ee659cabd157784a`. Mutable
+**draft** version; path + hash pin the exact blob. Runtime fetch (`allow_internet=true`); baking a
+maintainer follow-up.
