@@ -73,3 +73,49 @@ size 311814662 B, `dandi:sha2-256 = d8433a826049f82cd832f41f98a9f9fafad0ac66998d
 The dandiset uses the mutable **draft** version; the asset path + this content hash pin the exact
 blob the reference was built from. Data is fetched at runtime (`allow_internet=true`); baking is a
 maintainer follow-up (>100 MB/file GitHub limit).
+
+## Second-pass fix (2026-09): stop the failure-message leak, add a spread check, tighten tol
+
+The red-team found three issues with the proof-of-work grader: (1) the per-fold match tolerance was
+loose (0.06 over 5 folds, 80% match), (2) the honest headline ~0.72 is guessable/published, and
+(3) **the failure message LEAKED the reference folds** — it printed
+`sorted reference folds = [...]` (and the inflated ~0.95 reference value), handing the answer to
+any agent that could see the verifier output.
+
+Fixes (single-value reproduction task; the un-cued judgement is the window (pre- vs peri-movement)
+and CV scheme (blocked vs random), and the instruction pins 5-fold, so the fold count was kept):
+- **Stop the leak.** No held-out reference value — the reference fold accuracies, the honest mean,
+  or the inflated ~0.95 — is printed in ANY assertion message any more. Verified: the per-fold-match
+  failure now reads "…match the held-out reference cross-validation within tolerance…" with no
+  numbers; the band-failure and naive-value messages print no reference value. (Considered adding
+  folds to 10-fold for a stronger fingerprint and rebuilt/measured it, but the instruction pins
+  5-fold and 10-fold on 134 trials gives noisy per-fold values (SD ~0.10) that make per-fold
+  matching fragile to defensible window/C variation — so tol-tightening + a spread check was the
+  cleaner choice.)
+- **Tightened tol + added a per-fold spread-realism check.** `PER_FOLD_TOL` 0.06 → 0.05; a new
+  `FOLD_STD` band [0.015, 0.10] rejects a table **clustered at the guessable headline** (SD ~0) —
+  the laziest fabrication — while admitting a real 5-fold CV (reference SD ~0.037). The headline is
+  still recomputed as the mean of the submitted folds and must land in the honest band and match
+  the held-out reference mean.
+
+**HONEST-LIMITATION (flagged).** This is a single-value reproduction task and the headline (~0.72)
+is guessable/published. The per-fold table raises the floor — a bare guessed scalar, a real naive
+(~0.95) fold table, a clustered fake, and a headline/fold-mean mismatch all FAIL — but a
+sufficiently knowledgeable agent who **fabricates a realistically-spread per-fold table around
+0.72** still passes (validated: `RESIDUAL_realistic_fake` PASSES). Fully blocking that would need a
+finer per-trial fingerprint; it relies on the frontier gate.
+
+**Adversarial self-validation (subprocess pytest per case; honest = the exact 5-fold reference):**
+
+| case | result | teeth |
+|---|---|---|
+| honest oracle (reference folds + mean headline) | **PASS** | — |
+| defensible (folds perturbed ±0.02, headline = their mean) | **PASS** | — |
+| attack C — **real naive folds (~0.95)** + guessed 0.72 headline | **FAIL** | fold mean out of band; headline ≠ mean |
+| attack — naive run reported truthfully (headline 0.95) | **FAIL** | fold mean out of band |
+| attack A — **clustered** fold table at 0.72 (SD ~0) | **FAIL** | fold SD below the realism floor |
+| attack — per-fold table not matching the reference distribution | **FAIL** | < 80% of folds match (no leak in message) |
+| (residual) realistically-spread **fabricated** 0.72 table | PASS | HONEST-LIMITATION — relies on the frontier gate |
+
+The brief's attack C (real naive per-item table + guessed number) now FAILS, and the failure-message
+leak is closed, while honest + defensible PASS.

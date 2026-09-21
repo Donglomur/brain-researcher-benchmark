@@ -79,34 +79,46 @@ def load_submitted_folds(path):
     return [a for _, a in out]
 
 
-def check_folds_match_reference(folds, ref, mean_band, per_fold_tol=0.12, min_frac=0.6, eps=1e-6):
+def check_folds_match_reference(folds, ref, mean_band, per_fold_tol=0.12, min_frac=0.6,
+                                fold_std_min=0.015, fold_std_max=0.16, eps=1e-6):
     """Pillar 1+2. The submitted per-fold accuracies must be a real cross-validation result whose
-    mean lands in the held-out honest band, whose values are non-constant, and whose sorted per-fold
-    accuracies track the honest reference (a fabricated 5-number table that merely averages to the
-    headline, or a constant table, fails)."""
+    mean lands in the held-out honest band, whose per-fold spread is realistic (a table clustered at
+    the guessable headline is rejected), and whose sorted per-fold accuracies track the honest
+    reference. A fabricated table that merely averages to the headline, a constant table, or a
+    clustered near-constant table all fail.
+
+    No held-out reference value (the honest mean, the naive inflated value, or the reference fold
+    accuracies) is ever printed in an assertion message -- the grader must not leak the answer it
+    checks against."""
     assert folds is not None and len(folds) >= 3, (
         "folds.csv could not be parsed into a per-fold accuracy table (one accuracy per CV fold)")
     ref_folds = ref["fold_acc"]
     assert abs(len(folds) - len(ref_folds)) <= 1, (
-        f"submitted {len(folds)} folds; the analysis uses {len(ref_folds)}-fold CV")
+        f"submitted {len(folds)} folds; this analysis uses {len(ref_folds)}-fold cross-validation")
     m = float(np.mean(folds))
     lo, hi = mean_band
     assert lo <= m <= hi, (
         f"mean of the submitted per-fold accuracies ({m:.3f}) is outside the honest band "
         f"[{lo:.2f}, {hi:.2f}] that only a strictly pre-movement, non-leaky decoder reaches. A "
-        f"peri-movement window scored with random k-fold reports ~{ref['stats']['acc_naive_peri_random']:.2f}.")
-    assert statistics.pstdev([float(x) for x in folds]) > eps, (
+        f"peri-movement window scored with random k-fold decodes movement execution with "
+        f"cross-validation leakage and lands well above this band.")
+    sd = statistics.pstdev([float(x) for x in folds])
+    assert sd > eps, (
         "submitted per-fold accuracies are constant across folds -- not a real cross-validation")
+    assert fold_std_min <= sd <= fold_std_max, (
+        f"the spread of the submitted per-fold accuracies (SD {sd:.3f}) is not that of a real "
+        f"cross-validation on this many trials (expected roughly [{fold_std_min:.3f}, "
+        f"{fold_std_max:.3f}]). A table clustered at the headline value, or one with implausible "
+        f"scatter, is not the real per-fold cross-validation this task reproduces.")
     a = np.sort(np.asarray(folds, float))
     b = np.sort(ref_folds.astype(float))
     k = min(len(a), len(b))
     close = int(np.sum(np.abs(a[:k] - b[:k]) <= per_fold_tol))
     frac = close / k
     assert frac >= min_frac, (
-        f"only {frac:.0%} of the submitted per-fold accuracies match the held-out reference folds "
-        f"within {per_fold_tol} (need >= {min_frac:.0%}); the per-fold table is not the real "
-        f"cross-validation this task reproduces (sorted reference folds = "
-        f"{np.round(b, 3).tolist()})")
+        f"only {frac:.0%} of the submitted per-fold accuracies match the held-out reference "
+        f"cross-validation within tolerance (need >= {min_frac:.0%}); the per-fold table is not the "
+        f"real cross-validation this task reproduces.")
     return m
 
 

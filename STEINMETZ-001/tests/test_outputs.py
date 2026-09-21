@@ -40,9 +40,13 @@ OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 REF_PATH = Path(__file__).resolve().parent / "reference.npz"
 
 MEAN_BAND = (0.64, 0.80)      # honest pre-movement decoder ~0.72; fails naive peri+random ~0.95
-PER_FOLD_TOL = 0.06
+PER_FOLD_TOL = 0.05           # tightened (was 0.06); per-fold table must track the held-out CV
 PER_FOLD_MIN_FRAC = 0.8
 CSV_JSON_TOL = 0.03
+# realistic per-fold spread band: a table CLUSTERED at the guessable headline (SD ~0) is rejected,
+# an implausibly scattered one too. The honest 5-fold reference has SD ~0.037.
+FOLD_STD_MIN = 0.015
+FOLD_STD_MAX = 0.10
 
 
 def _load_json(name):
@@ -98,17 +102,18 @@ def test_proof_of_work_folds_match_reference_and_recompute_headline():
     res = _load_json("results.json")
     # pillar 1+2: real per-fold CV tracking the held-out reference, mean in the honest band
     m = pw.check_folds_match_reference(folds, ref, MEAN_BAND, per_fold_tol=PER_FOLD_TOL,
-                                       min_frac=PER_FOLD_MIN_FRAC)
+                                       min_frac=PER_FOLD_MIN_FRAC, fold_std_min=FOLD_STD_MIN,
+                                       fold_std_max=FOLD_STD_MAX)
     # CSV <-> JSON: the reported headline must equal the mean of the submitted folds
     hl = _headline(res)
     assert hl is not None and abs(hl - m) <= CSV_JSON_TOL, (
         f"reported headline accuracy ({hl}) does not equal the mean of the submitted per-fold "
         f"accuracies ({m:.3f}, tol {CSV_JSON_TOL}); results.json and folds.csv disagree")
-    # and the mean must match the held-out honest reference mean
+    # and the mean must reproduce the held-out honest reference mean (value not printed -- no leak)
     ref_mean = float(ref["stats"]["acc_correct"])
     assert abs(m - ref_mean) <= 0.06, (
-        f"mean per-fold accuracy ({m:.3f}) does not reproduce the honest reference "
-        f"({ref_mean:.3f}); the pre-movement, non-leaky decoding was not performed")
+        f"mean per-fold accuracy ({m:.3f}) does not reproduce the held-out honest reference; the "
+        f"strictly pre-movement, non-leaky decoding was not performed")
 
 
 def test_discriminating_number_if_volunteered():
@@ -122,9 +127,11 @@ def test_discriminating_number_if_volunteered():
                                 r"naive", r"inflat", r"contaminat"],
                           exclude=[r"chance", r"std", r"window", r"seed"])
     if peri is not None:
+        # value of the inflated reference is NOT printed -- no leak.
         assert 0.85 <= peri <= 1.0 and abs(peri - naive_ref) <= 0.08, (
-            f"a volunteered peri-movement / random-CV accuracy ({peri:.3f}) does not match the "
-            f"inflated reference (~{naive_ref:.2f}); it decodes motor execution with CV leakage")
+            f"a volunteered peri-movement / random-CV accuracy ({peri:.3f}) is not the strongly "
+            f"inflated value a movement-window, leaky-CV decoder produces; it decodes motor "
+            f"execution with cross-validation leakage, not the upcoming choice")
 
 
 def test_findings_report_above_chance_secondary():
