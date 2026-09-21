@@ -61,3 +61,35 @@ honest PASS; no-table / constant / fabricated (right group mean, shuffled per-su
 (no motion control, over-claim) / right-headline-fake-rows all FAIL. Data > 100 MB/file so raw
 inputs stay runtime-fetch with the cohort pinned; baking the derived per-subject inputs is a
 maintainer follow-up.
+
+### Second-pass hardening (2026-09, RECOMPUTE-from-rows + fairness widening)
+
+The first-pass pillar 3 trusted the **reported** FD-controlled group t (only requiring |t| ≤ 1.2 and
+a loose match to the reference −0.08). That is the red-team hole: the FD-covariate stat is bounded
+near-null, so an agent could compute the real naive group t (validated in pillar 2) and simply
+**guess** "collapses, t ≈ 0" without ever running the FD-covariate analysis.
+
+Fix (RECOMPUTE-from-neutral-table, §1): a per-subject **mean framewise displacement (`mean_fd`)**
+column — plain motion QC every fMRIPrep run emits — is now a required output, and the FD-covariate
+group t (OLS of short-range FC on `[1, SCHZ, mean_fd]`, t of the diagnosis coefficient) plus the
+naive→controlled collapse are **recomputed from the submitted `{short, group, mean_fd}` rows** and
+matched to the held-out reference. The submitted `mean_fd` is validated per subject against a new
+held-out `ref_fd` (cross-subject r ≥ 0.85 + absolute match); a shuffled/fabricated FD column does
+not absorb the diagnosis effect (recomputed FD-covariate t ≈ +2.3 instead of ≈ 0) and fails. The
+reported t is now only a consistency cross-check. `instruction.md` names `mean_fd` neutrally as a QC
+column (never "control for motion"); `tests/` is held out of the container, so the recognition of
+the confound stays a volunteered judgement in a real eval.
+
+Fairness widening (red-team: `CORR_MIN` 0.95 rejected defensible variants): the per-subject
+short-range cross-subject lock is widened **0.95 → 0.85** (matching DEVCONN). This is a pure
+fairness gain with no security cost — the binding fabrication teeth is the absolute per-subject
+match (e.g. substituting `mean_fc` for `short_range_fc` correlates 0.96 across subjects but matches
+absolutely for only 14% of subjects, so it still fails), plus the real group labels and the
+recomputed FD-covariate collapse.
+
+Second-pass validation matrix (subprocess pytest): honest PASS; defensible (+/−7% per-subject
+connectivity & FD, corr ~0.99) PASS; fabricated/constant no-FD table FAIL; attack C real
+connectivity + NO mean_fd column + guessed t=−0.08 FAIL; attack C real connectivity + shuffled
+mean_fd + guessed collapse FAIL (recomputed FD-covariate t = +2.27, no collapse). `ref_fd` added to
+`tests/reference.npz` (0.008 MB; per-subject FD reproduces the reference naive t = 2.112 and
+FD-covariate t = −0.077 exactly).

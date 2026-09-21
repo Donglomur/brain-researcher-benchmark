@@ -93,6 +93,13 @@ def test_outputs_present_and_wellformed():
     groups = {v["group"] for v in sub.values()}
     assert "schz" in groups and "control" in groups, (
         f"both diagnostic groups must be present for a group comparison; saw {groups}")
+    # mean framewise displacement is a required per-subject QC column; the motion-conditioned group
+    # comparison is recomputed from it below, so it must be present and non-constant.
+    fds = [v["fd"] for v in sub.values() if v.get("fd") is not None]
+    assert len(fds) >= 100, (
+        "connectivity.csv is missing the per-subject mean_fd (mean framewise displacement) column. "
+        "It is a standard motion QC summary from the fMRIPrep confounds and is required per subject.")
+    assert all(0 <= v < 5 for v in fds), "mean_fd values out of plausible range (mm)"
 
     j = _load_json("group_stats.json")
     assert isinstance(j, dict) and j, "group_stats.json is empty"
@@ -107,6 +114,12 @@ def test_proof_of_work_subjects_and_values():
     st = ref["stats"]
     pw.check_subjects_and_values(sub, ref, val_tol=st["VAL_TOL"], corr_min=st["CORR_MIN"],
                                  cover=st["COVER"], match=st["MATCH"], eps=st["EPS"])
+    # the per-subject mean_fd column must be the REAL framewise-displacement summary (fabrication
+    # teeth for the motion-conditioned collapse recomputed in pillar 3).
+    import numpy as _np
+    assert not _np.isnan(ref["fd"]).all(), "reference is missing per-subject FD (rebuild reference.npz)"
+    pw.check_fd_column(sub, ref, val_tol=st["FD_VAL_TOL"], corr_min=st["FD_CORR_MIN"],
+                       cover=st["COVER"], match=st["FD_MATCH"])
 
 
 # ------------------------------------------------------------------ pillar 2
@@ -140,46 +153,74 @@ def test_recompute_and_crosscheck():
 
 # ------------------------------------------------------------------ pillar 3 (judgement as numbers)
 def test_conclusion_is_motion_confounded_numeric():
+    """Grade the discriminating conclusion AS NUMBERS, RECOMPUTED FROM THE ROWS: the face-value
+    group difference in short-range FC COLLAPSES toward null under a mean-FD covariate, and patients
+    move far more than controls. The FD-covariate group t is recomputed from the submitted
+    {short, group, mean_fd} rows -- a guessed collapse cannot pass, and a fabricated FD column fails
+    pillar 1. Reported numbers are only a consistency cross-check."""
     ref = _reference()
     st = ref["stats"]
-    j = _load_json("group_stats.json")
+    sub = _submitted()
+    matched = [i for i in sub if i in set(ref["ids"])]
+    import math
 
-    naive_t = _naive_short_t(j)
-    fd_t = _fd_short_t(j)
-    assert naive_t is not None, "no naive short-range group t reported"
-    assert fd_t is not None, (
-        "no HEAD-MOTION-CONTROLLED short-range group t reported. The judgement graded here is "
-        "whether the group difference survives controlling for head motion; report the group "
-        "test after a mean-FD covariate (or a motion-matched subsample).")
+    # RECOMPUTE the naive and FD-covariate group t + collapse FROM the rows.
+    naive_t, _, _ = pw.recompute_naive_short_t(sub, matched, ref)
+    fd_t = pw.fd_covariate_short_t(sub, matched)
+    assert math.isfinite(naive_t), "cannot recompute the naive short-range group t from the rows"
+    assert math.isfinite(fd_t), (
+        "cannot recompute the head-motion-controlled (short-range | mean_fd) group t from the "
+        "rows -- the per-subject mean_fd column is missing or degenerate. The judgement graded "
+        "here is whether the group difference survives controlling for head motion.")
 
-    # (a) the motion-controlled group difference collapses toward null and matches the reference.
+    ref_collapse = abs(st["naive_short_t"]) - abs(st["fd_short_t"])
+
+    # (a) the motion-controlled group difference collapses toward null AND matches the reference.
+    #     A shuffled/fabricated FD column does not reproduce this attenuation.
     assert abs(fd_t) <= st["FD_T_MAX"], (
-        f"reported motion-controlled short-range t = {fd_t:+.3f} is not near zero; on the real "
-        f"data the group difference collapses when head motion is controlled "
+        f"the motion-controlled short-range t recomputed from the rows = {fd_t:+.3f} is not near "
+        f"zero; on the real data the group difference collapses when head motion is controlled "
         f"(reference {st['fd_short_t']:+.3f}).")
     assert abs(fd_t - st["fd_short_t"]) <= st["FD_T_TOL"], (
-        f"reported motion-controlled short-range t = {fd_t:+.3f} does not match the reference "
-        f"({st['fd_short_t']:+.3f}, tol {st['FD_T_TOL']}).")
+        f"the motion-controlled short-range t recomputed from the rows = {fd_t:+.3f} does not match "
+        f"the reference ({st['fd_short_t']:+.3f}, tol {st['FD_T_TOL']}); the submitted short-range "
+        f"and/or mean_fd columns are not the real per-subject values.")
 
-    # (b) collapse: the motion-controlled statistic is markedly smaller than the naive one.
-    assert abs(naive_t) - abs(fd_t) >= st["COLLAPSE_MIN"], (
+    # (b) collapse: the motion-controlled statistic is markedly smaller than the naive one, and the
+    #     magnitude of the collapse matches the reference.
+    collapse = abs(naive_t) - abs(fd_t)
+    assert collapse >= st["COLLAPSE_MIN"], (
         f"the face-value group difference (naive t={naive_t:+.3f}) does not collapse when motion "
         f"is controlled (motion-controlled t={fd_t:+.3f}). A motion-confounded result requires "
         f"the controlled estimate to be markedly attenuated.")
+    assert abs(collapse - ref_collapse) <= st["FD_T_TOL"] + st["RECOMP_TOL"], (
+        f"the recomputed collapse ({collapse:+.3f}) does not match the reference "
+        f"({ref_collapse:+.3f}).")
 
-    # (c) the premise: patients move far more than controls (real per-group mean FD).
-    fd_schz = _mean_fd(j, "schz") or _mean_fd(j, "patient")
-    fd_ctrl = _mean_fd(j, "control")
-    assert fd_schz is not None and fd_ctrl is not None, (
-        "group_stats.json does not report the per-group mean head motion (mean framewise "
-        "displacement for the schizophrenia and control groups) -- the premise of the confound.")
-    assert fd_schz > fd_ctrl, (
-        f"reported mean FD does not show patients moving more (SCHZ {fd_schz:.3f} vs CONTROL "
-        f"{fd_ctrl:.3f}); the motion confound rests on the patient group moving more.")
-    assert abs(fd_schz - st["mean_fd_schz"]) <= st["FD_DIFF_TOL"] and \
-           abs(fd_ctrl - st["mean_fd_control"]) <= st["FD_DIFF_TOL"], (
-        f"reported per-group mean FD (SCHZ {fd_schz:.3f}, CONTROL {fd_ctrl:.3f}) does not match "
-        f"the reference (SCHZ {st['mean_fd_schz']:.3f}, CONTROL {st['mean_fd_control']:.3f}).")
+    # (c) the premise: patients move far more than controls, recomputed from the submitted FD.
+    fd_schz = [sub[i]["fd"] for i in matched if sub[i]["group"] == "schz"
+               and sub[i].get("fd") is not None and math.isfinite(sub[i]["fd"])]
+    fd_ctrl = [sub[i]["fd"] for i in matched if sub[i]["group"] == "control"
+               and sub[i].get("fd") is not None and math.isfinite(sub[i]["fd"])]
+    assert len(fd_schz) >= 10 and len(fd_ctrl) >= 10, (
+        "too few per-subject mean_fd values by group to check the motion premise")
+    import statistics as _s
+    m_schz, m_ctrl = _s.mean(fd_schz), _s.mean(fd_ctrl)
+    assert m_schz > m_ctrl, (
+        f"per-subject mean FD does not show patients moving more (SCHZ {m_schz:.3f} vs CONTROL "
+        f"{m_ctrl:.3f}); the motion confound rests on the patient group moving more.")
+    assert abs(m_schz - st["mean_fd_schz"]) <= st["FD_DIFF_TOL"] and \
+           abs(m_ctrl - st["mean_fd_control"]) <= st["FD_DIFF_TOL"], (
+        f"per-group mean FD recomputed from the rows (SCHZ {m_schz:.3f}, CONTROL {m_ctrl:.3f}) does "
+        f"not match the reference (SCHZ {st['mean_fd_schz']:.3f}, CONTROL {st['mean_fd_control']:.3f}).")
+
+    # (d) consistency: any REPORTED motion-controlled group t must agree with the recompute.
+    j = _load_json("group_stats.json")
+    rep_fd_t = _fd_short_t(j)
+    if rep_fd_t is not None:
+        assert abs(rep_fd_t - fd_t) <= st["FD_T_TOL"] + st["RECOMP_TOL"], (
+            f"reported motion-controlled short-range t ({rep_fd_t:+.3f}) is inconsistent with the "
+            f"value recomputed from the submitted rows ({fd_t:+.3f}).")
 
 
 def test_edgewise_collapse_numeric():

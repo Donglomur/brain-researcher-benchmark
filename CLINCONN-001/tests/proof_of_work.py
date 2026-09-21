@@ -38,9 +38,11 @@ def load_reference(path):
         "long": np.asarray(z["ref_long"], float),
         "stats": json.loads(str(z["ref_stats"])),
     }
-    ref["by_id"] = {i: {"group": g, "mean": m, "short": s, "long": l}
-                    for i, g, m, s, l in zip(ref["ids"], ref["group"], ref["mean"],
-                                             ref["short"], ref["long"])}
+    fd = np.asarray(z["ref_fd"], float) if "ref_fd" in z.files else np.full(len(ref["ids"]), np.nan)
+    ref["fd"] = fd
+    ref["by_id"] = {i: {"group": g, "mean": m, "short": s, "long": l, "fd": f}
+                    for i, g, m, s, l, f in zip(ref["ids"], ref["group"], ref["mean"],
+                                                ref["short"], ref["long"], fd)}
     return ref
 
 
@@ -76,9 +78,11 @@ def load_submitted(path):
 
     id_c = pick(("subjectid", "subject", "participantid", "participant", "subid", "id"))
     grp_c = pick(("group", "diagnosis", "dx"))
-    mean_c = pick(("meanfc", "meanconn", "meanconnectivity"), exclude=("short", "long"))
+    mean_c = pick(("meanfc", "meanconn", "meanconnectivity"), exclude=("short", "long", "fd"))
     short_c = pick(("shortrangefc", "shortrange", "shortfc", "short"))
     long_c = pick(("longrangefc", "longrange", "longfc", "long"))
+    fd_c = pick(("meanfd", "meanframewise", "framewisedisplacement", "fdmean", "meanmotion"),
+                exclude=("gt", "diff", "vs")) or pick(("fd",), exclude=("fc", "gt", "diff", "vs"))
     out = {}
     if id_c is None or short_c is None:
         return out
@@ -103,7 +107,7 @@ def load_submitted(path):
                 return None
         out[cid] = {
             "group": _canon_group(r.get(grp_c, "")) if grp_c else "",
-            "mean": gf(mean_c), "short": short, "long": gf(long_c)}
+            "mean": gf(mean_c), "short": short, "long": gf(long_c), "fd": gf(fd_c)}
     return out
 
 
@@ -183,6 +187,61 @@ def recompute_naive_short_t(sub, matched, ref):
     schz = [sub[i]["short"] for i in matched if sub[i]["group"] == "schz"]
     ctrl = [sub[i]["short"] for i in matched if sub[i]["group"] == "control"]
     return welch_t(schz, ctrl), len(schz), len(ctrl)
+
+
+def check_fd_column(sub, ref, val_tol, corr_min, cover, match):
+    """Validate the submitted per-subject mean_fd column against the held-out reference FD (real
+    framewise displacement). A fabricated or constant FD cannot reproduce the FD-covariate collapse
+    recomputed in pillar 3."""
+    ref_ids = set(ref["ids"])
+    matched = [i for i in sub if i in ref_ids and sub[i].get("fd") is not None
+               and math.isfinite(sub[i]["fd"]) and not math.isnan(ref["by_id"][i]["fd"])]
+    coverage = len(matched) / max(1, len(ref_ids))
+    assert coverage >= cover, (
+        f"connectivity.csv provides a usable per-subject mean_fd for only {coverage:.1%} of the "
+        f"{len(ref_ids)} real ds000030 subjects (need >= {cover:.0%}). mean framewise displacement "
+        f"is a standard motion QC summary and is required per subject.")
+    sub_fd = [sub[i]["fd"] for i in matched]
+    ref_fd = [ref["by_id"][i]["fd"] for i in matched]
+    assert statistics.pstdev(sub_fd) > 1e-6, "submitted mean_fd is constant across subjects -- fabricated"
+    rc = pearson(sub_fd, ref_fd)
+    assert math.isfinite(rc) and rc >= corr_min, (
+        f"submitted per-subject mean_fd does not track the reference (cross-subject r={rc:.3f} < "
+        f"{corr_min}); the framewise-displacement values were not read from the real confounds.")
+    close = sum(1 for a, b in zip(sub_fd, ref_fd) if abs(a - b) <= val_tol)
+    frac = close / max(1, len(matched))
+    assert frac >= match, (
+        f"only {frac:.1%} of matched subjects have mean_fd within {val_tol} of the reference "
+        f"(need >= {match:.0%}); the per-subject FD values are not the real ones.")
+    return matched
+
+
+def fd_covariate_short_t(sub, matched):
+    """Recompute the FD-covariate group t (SCHZ vs CONTROL on short-range FC, controlling mean_fd)
+    FROM the submitted rows. Mirrors solution/compute.py's fd_partial: OLS of short on
+    [1, schz_indicator, mean_fd]; t of the schz coefficient. numpy-only. Returns NaN if the FD
+    column is missing/degenerate or a group is empty."""
+    rows = [i for i in matched if sub[i].get("fd") is not None and math.isfinite(sub[i]["fd"])
+            and sub[i]["group"] in ("schz", "control")]
+    if len(rows) < 20:
+        return float("nan")
+    y = np.array([sub[i]["short"] for i in rows], float)
+    schz = np.array([1.0 if sub[i]["group"] == "schz" else 0.0 for i in rows], float)
+    fd = np.array([sub[i]["fd"] for i in rows], float)
+    if schz.sum() < 2 or (len(rows) - schz.sum()) < 2 or np.std(fd) == 0:
+        return float("nan")
+    X = np.c_[np.ones(len(rows)), schz, fd]
+    n = len(rows)
+    try:
+        b, *_ = np.linalg.lstsq(X, y, rcond=None)
+        res = y - X @ b
+        dof = n - 3
+        se = np.sqrt((res @ res) / dof * np.linalg.inv(X.T @ X)[1, 1])
+    except np.linalg.LinAlgError:
+        return float("nan")
+    if not math.isfinite(se) or se == 0:
+        return float("nan")
+    return float(b[1] / se)
 
 
 def find_number(obj, key_patterns, exclude=None):

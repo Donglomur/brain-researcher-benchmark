@@ -181,12 +181,13 @@ mean_fc = V.mean(1)
 sr = V[:, short].mean(1)
 lr = V[:, long].mean(1)
 
-# ---- required output: per-subject connectivity (no motion column — un-cued) ----
+# ---- required output: per-subject connectivity + mean framewise displacement (standard QC) ----
 with open(OUT / "connectivity.csv", "w", newline="") as f:
     w = csv.writer(f)
-    w.writerow(["subject_id", "group", "mean_fc", "short_range_fc", "long_range_fc"])
+    w.writerow(["subject_id", "group", "mean_fc", "short_range_fc", "long_range_fc", "mean_fd"])
     for i, p in enumerate(pids):
-        w.writerow([p, G[i].lower(), f"{mean_fc[i]:.6f}", f"{sr[i]:.6f}", f"{lr[i]:.6f}"])
+        w.writerow([p, G[i].lower(), f"{mean_fc[i]:.6f}", f"{sr[i]:.6f}", f"{lr[i]:.6f}",
+                    f"{FD[i]:.6f}"])
 
 
 def welch(y):

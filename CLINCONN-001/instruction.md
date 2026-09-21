@@ -58,8 +58,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `connectivity.csv` — one row per subject:
-  `subject_id, group, mean_fc, short_range_fc, long_range_fc` (the per-subject intermediate the
-  group comparison is computed from).
+  `subject_id, group, mean_fc, short_range_fc, long_range_fc, mean_fd` (the per-subject
+  intermediate the group comparison is computed from; `mean_fd` = the subject's mean framewise
+  displacement, a standard motion QC summary from the confounds — report it alongside the
+  connectivity values).
 - `group_stats.json` — the schizophrenia-vs-control comparison: `group_means` per measure,
   the group test per measure, an edge-wise summary of how many connections differ between
   groups, and the group sizes.
