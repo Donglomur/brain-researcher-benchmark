@@ -43,7 +43,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `connectivity.csv` — one row per subject:
-  `subject_index, age, group, short_range, long_range, segregation`.
+  `subject_index, age, group, short_range, long_range, segregation, mean_fd`
+  (`mean_fd` = the subject's mean framewise displacement, a standard motion QC summary from
+  the confounds — report it alongside the connectivity values).
 - `age_effects.json` — for the **children**, the Spearman correlation of age with
   `short_range`, `long_range`, and `segregation` as
   `{"children_age_spearman": {"<name>": {"r": ..., "p": ...}}}`; plus `group_means`

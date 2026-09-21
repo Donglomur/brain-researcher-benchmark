@@ -101,8 +101,8 @@ df = pd.DataFrame(rows)
 if len(df) < 120:
     fail(f"only {len(df)} subjects processed")
 
-# ---- required output: per-subject connectivity (no motion column — un-cued) ----
-df[["subject_index", "age", "group", "short_range", "long_range", "segregation"]].to_csv(
+# ---- required output: per-subject connectivity + mean framewise displacement (standard QC) ----
+df[["subject_index", "age", "group", "short_range", "long_range", "segregation", "mean_fd"]].to_csv(
     OUT / "connectivity.csv", index=False)
 
 kids = df[df.group == "child"]

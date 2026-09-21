@@ -61,6 +61,13 @@ def test_connectivity_computed():
     groups = {r.get("group", "") for r in rows}
     assert any(g.startswith("child") for g in groups) and any(g.startswith("adult") for g in groups), \
         f"need both child and adult groups, saw {groups}"
+    # mean framewise displacement is a required per-subject QC column; the motion-conditioned
+    # developmental estimate is recomputed from it below, so it must be present and non-constant.
+    fds = [r["fd"] for r in rows if r.get("fd") is not None]
+    assert len(fds) >= 120, (
+        "connectivity.csv is missing the per-subject mean_fd (mean framewise displacement) column. "
+        "It is a standard motion QC summary from the confounds and is required per subject.")
+    assert all(0 <= v < 5 for v in fds), "mean_fd values out of plausible range (mm)"
 
 
 # ------------------------------------------------------------------ pillar 1
@@ -72,6 +79,11 @@ def test_proof_of_work_subjects_and_values():
     if any(r.get("long") is not None for r in rows):
         pw.check_subjects_and_values(rows, ref, "long", "long", val_tol=st["VAL_TOL"],
                                      corr_min=st["CORR_MIN"], cover=st["COVER"], match=st["MATCH"])
+    # the per-subject mean_fd column must be the REAL framewise-displacement summary (a fabricated
+    # or constant FD cannot reproduce the motion-conditioned collapse recomputed in pillar 3).
+    assert "fd" in ref, "reference is missing per-subject mean_fd (rebuild tests/reference.npz)"
+    pw.check_subjects_and_values(rows, ref, "fd", "fd", val_tol=st["FD_VAL_TOL"],
+                                 corr_min=st["FD_CORR_MIN"], cover=st["COVER"], match=st["FD_MATCH"])
 
 
 # ------------------------------------------------------------------ pillar 2
@@ -98,51 +110,68 @@ def test_recompute_age_short_from_rows():
 
 # ------------------------------------------------------------------ pillar 3 (judgement as numbers)
 def test_motion_collapse_is_numeric():
-    """Grade the discriminating conclusion AS NUMBERS: the raw age~short effect is negative and
-    collapses under a mean-FD partial correlation, and children move far more than adults. An
-    agent that never ran the motion control cannot report the partial correlation."""
+    """Grade the discriminating conclusion AS NUMBERS, RECOMPUTED FROM THE ROWS: the raw age~short
+    effect is a real negative developmental trend that COLLAPSES under a mean-FD partial
+    correlation, and children move far more than adults. The partial is recomputed from the
+    submitted per-subject {short, mean_fd} + the reference age -- a guessed partial cannot pass,
+    and a fabricated FD column fails pillar 1. Reported numbers are only a consistency cross-check."""
     ref = _reference(); st = ref["stats"]
-    blobs = [b for b in (_load("age_effects.json"), _load("run_metadata.json", required=False))
-             if b is not None]
+    rows = _submitted()
 
-    def find(want, exclude=()):
-        for b in blobs:
-            v = pw.find_by_path(b, want, exclude=exclude)
-            if v is not None:
-                return v
-        return None
+    # RECOMPUTE the raw effect, the mean-FD partial, and the collapse FROM the rows.
+    rec = pw.recompute_motion_collapse(rows, ref, key_sub="short")
+    import math as _m
+    assert rec["n"] >= 100, f"too few usable rows to recompute the motion-conditioned effect ({rec['n']})"
+    raw, partial, collapse = rec["raw"], rec["partial"], rec["collapse"]
+    assert _m.isfinite(raw), "cannot recompute the raw age~short correlation from the rows"
+    assert _m.isfinite(partial), (
+        "cannot recompute the motion-conditioned (age~short | mean_fd) partial correlation from the "
+        "rows -- the mean_fd column is missing or degenerate.")
 
-    raw = find(["matur", "short"], exclude=["partial", "fd", "motion"]) \
-        or find(["all", "short"], exclude=["partial", "fd", "motion"])
-    partial = find(["partial"], exclude=["p/"]) \
-        or find(["short", "fd"], exclude=["mwu", "mean"]) \
-        or find(["short", "given"], exclude=[])
-    child_fd = find(["child", "fd"], exclude=["mwu", "gt", "partial"])
-    adult_fd = find(["adult", "fd"], exclude=["mwu", "gt", "partial"])
+    ref_raw = float(st["matur_age_short_all_rs"])
+    ref_partial = float(st["partial_age_short_given_fd_r"])
+    ref_collapse = abs(ref_raw) - abs(ref_partial)
 
-    assert raw is not None, (
-        "no raw maturational age~short-range correlation reported in age_effects.json.")
-    assert partial is not None, (
-        "no motion-controlled (partial age~short-range | mean FD) correlation reported. The "
-        "judgement graded here is that the developmental effect collapses when head motion is "
-        "controlled; report the partial correlation (or a motion-matched estimate) as a number.")
-    # raw effect is a real negative developmental trend (matches the reference)
-    assert raw <= st["RAW_NEG_MAX"] and abs(raw - st["matur_age_short_all_rs"]) <= st["RS_TOL"] + 0.03, (
-        f"reported raw age~short r = {raw:+.3f} is not the real negative developmental effect "
-        f"(reference {st['matur_age_short_all_rs']:+.3f}).")
-    # controlling motion collapses it to ~null
+    # (a) raw effect is the real negative developmental trend (matches the reference).
+    assert raw <= st["RAW_NEG_MAX"] and abs(raw - ref_raw) <= st["RS_TOL"], (
+        f"age~short recomputed from the rows ({raw:+.3f}) is not the real negative developmental "
+        f"effect (reference {ref_raw:+.3f}).")
+    # (b) controlling mean FD collapses it toward null AND matches the reference partial. A shuffled
+    #     or fabricated FD column does not reproduce this attenuation.
     assert abs(partial) <= st["PARTIAL_ABS_MAX"], (
-        f"reported motion-controlled age~short partial r = {partial:+.3f} is not ~null "
-        f"(|r| <= {st['PARTIAL_ABS_MAX']}); on the real data it collapses to "
-        f"~{st['partial_age_short_given_fd_r']:+.3f} once mean FD is controlled.")
-    assert (abs(raw) - abs(partial)) >= st["COLLAPSE_MIN"], (
-        f"the effect does not collapse under motion control (raw {raw:+.3f} vs partial "
-        f"{partial:+.3f}); the motion-controlled estimate must be markedly closer to zero.")
-    # children move far more than adults (the premise of the confound)
-    if child_fd is not None and adult_fd is not None:
-        assert child_fd > adult_fd, (
-            f"reported child mean FD ({child_fd:.3f}) is not greater than adult ({adult_fd:.3f}); "
-            f"the motion confound premise (children move ~2x more) is not reproduced.")
+        f"the motion-conditioned partial recomputed from the rows ({partial:+.3f}) is not ~null "
+        f"(|r| <= {st['PARTIAL_ABS_MAX']}); on the real data it collapses to ~{ref_partial:+.3f} "
+        f"once mean FD is controlled.")
+    assert abs(partial - ref_partial) <= st["PARTIAL_MATCH_TOL"], (
+        f"the motion-conditioned partial recomputed from the rows ({partial:+.3f}) does not match "
+        f"the held-out reference ({ref_partial:+.3f}, tol {st['PARTIAL_MATCH_TOL']}); the submitted "
+        f"short-range and/or mean_fd columns are not the real per-subject values.")
+    # (c) the collapse (|raw| - |partial|) is material and matches the reference.
+    assert collapse >= st["COLLAPSE_MIN"], (
+        f"the effect does not collapse under motion control (|raw|-|partial| = {collapse:+.3f}); "
+        f"the motion-conditioned estimate must be markedly closer to zero.")
+    assert abs(collapse - ref_collapse) <= st["COLLAPSE_TOL"], (
+        f"the recomputed collapse ({collapse:+.3f}) does not match the reference ({ref_collapse:+.3f}, "
+        f"tol {st['COLLAPSE_TOL']}).")
+
+    # (d) children move far more than adults, recomputed from the submitted FD + group labels.
+    child_fd = [r["fd"] for r in rows if r.get("fd") is not None and r.get("group", "").startswith("child")]
+    adult_fd = [r["fd"] for r in rows if r.get("fd") is not None and r.get("group", "").startswith("adult")]
+    if len(child_fd) >= 10 and len(adult_fd) >= 10:
+        import statistics as _s
+        assert _s.mean(child_fd) > _s.mean(adult_fd), (
+            f"child mean FD ({_s.mean(child_fd):.3f}) is not greater than adult "
+            f"({_s.mean(adult_fd):.3f}); the motion confound premise (children move ~2x more) is "
+            f"not reproduced from the submitted per-subject FD.")
+
+    # (e) consistency: any REPORTED motion-controlled partial must agree with the recompute.
+    eff = _load("age_effects.json")
+    rep_partial = pw.find_by_path(eff, ["partial"], exclude=["p/"]) \
+        or pw.find_by_path(eff, ["short", "given"], exclude=[])
+    if rep_partial is not None:
+        assert abs(rep_partial - partial) <= st["PARTIAL_MATCH_TOL"] + 0.05, (
+            f"reported motion-controlled partial ({rep_partial:+.3f}) is inconsistent with the value "
+            f"recomputed from the submitted rows ({partial:+.3f}).")
 
 
 # ------------------------------------------------------------------ secondary prose signal

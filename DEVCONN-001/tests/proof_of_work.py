@@ -58,6 +58,8 @@ def load_reference(path):
         "group": [str(x) for x in z["ref_group"]],
         "stats": json.loads(str(z["ref_stats"])),
     }
+    if "ref_fd" in z.files:
+        ref["fd"] = np.asarray(z["ref_fd"], float)
     return ref
 
 
@@ -79,6 +81,8 @@ def load_submitted(path):
     grp_c = pick(("group", "childadult", "cohort"))
     short_c = pick(("shortrange", "short"), exclude=("long",))
     long_c = pick(("longrange", "long"), exclude=("short",))
+    fd_c = pick(("meanfd", "meanframewise", "framewisedisplacement", "fdmean", "meanmotion"),
+                exclude=("mwu", "gt")) or pick(("fd",), exclude=("mwu", "gt"))
     out = []
     for r in rows:
         cid = canon_id(r.get(id_c, "")) if id_c else ""
@@ -93,7 +97,7 @@ def load_submitted(path):
                 return None
         out.append({"id": cid, "age": g(age_c),
                     "group": (str(r.get(grp_c, "")).strip().lower() if grp_c else ""),
-                    "short": g(short_c), "long": g(long_c)})
+                    "short": g(short_c), "long": g(long_c), "fd": g(fd_c)})
     return out
 
 
@@ -138,6 +142,53 @@ def all_subjects_spearman(subrows, ref, key_sub):
     if len(xs) < 40:
         return float("nan"), 0
     return spearmanr_np(xs, ys), len(xs)
+
+
+def partial_spearman_np(y, x, cov):
+    """Spearman partial correlation of y and x controlling `cov` (rank-residual method; numpy-only).
+    Mirrors solution/compute.py's partial_spearman: rank y, x, cov; regress rank(y) and rank(x) on
+    [1, rank(cov)]; Pearson-correlate the residuals."""
+    x = np.asarray(x, float); y = np.asarray(y, float); cov = np.asarray(cov, float)
+    if len(x) < 5:
+        return float("nan")
+    rx, ry, rc = _rankdata(x), _rankdata(y), _rankdata(cov)
+    B = np.c_[np.ones(len(rc)), rc]
+
+    def resid(rv):
+        coef = np.linalg.lstsq(B, rv, rcond=None)[0]
+        return rv - B @ coef
+    ex, ey = resid(rx), resid(ry)
+    if np.std(ex) == 0 or np.std(ey) == 0:
+        return float("nan")
+    return float(np.corrcoef(ex, ey)[0, 1])
+
+
+def recompute_motion_collapse(subrows, ref, key_sub="short"):
+    """Recompute, FROM the submitted rows, the raw all-subjects Spearman(age, short) and the
+    mean-FD-partial Spearman(age, short | mean_fd), using the reference age (ground-truth
+    phenotype) keyed by id and the SUBMITTED per-subject mean_fd. Returns
+    {"raw", "partial", "collapse", "n"} where collapse = |raw| - |partial|. NaNs when the mean_fd
+    column is absent/degenerate. This is the un-guessable gate: a guessed partial cannot help
+    because the grader recomputes it from the real per-subject FD, and a fabricated FD column
+    fails the pillar-1 match."""
+    age = {i: float(a) for i, a in zip(ref["ids"], ref["age"])}
+    ids, ys, fds = [], [], []
+    for r in subrows:
+        v = r.get(key_sub)
+        fd = r.get("fd")
+        if v is not None and fd is not None and r["id"] in age \
+                and math.isfinite(v) and math.isfinite(fd):
+            ids.append(age[r["id"]]); ys.append(v); fds.append(fd)
+    out = {"raw": float("nan"), "partial": float("nan"), "collapse": float("nan"), "n": len(ys)}
+    if len(ys) < 40:
+        return out
+    if float(np.std(fds)) == 0:
+        return out
+    out["raw"] = spearmanr_np(ids, ys)
+    out["partial"] = partial_spearman_np(ys, ids, fds)
+    if math.isfinite(out["raw"]) and math.isfinite(out["partial"]):
+        out["collapse"] = abs(out["raw"]) - abs(out["partial"])
+    return out
 
 
 def find_by_path(obj, want, exclude=()):

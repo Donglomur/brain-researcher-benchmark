@@ -95,3 +95,27 @@ at the discriminating motion-controlled number — the intended teeth.
 GitHub's 100 MB/file limit, so `allow_internet=true` + runtime fetch are retained; baking the
 derived per-subject ROI series is a maintainer follow-up. Reference built on
 `fetch_development_fmri()` (all 155 subjects) + Power-2011 264-ROI 5 mm spheres.
+
+### Second-pass hardening (2026-09, RECOMPUTE-from-rows)
+
+The first-pass pillar 3 still **trusted the reported** motion-controlled partial (it only required
+the reported `age_short_partial_given_fd.r` to satisfy |r| ≤ 0.12). That is the red-team hole: the
+motion-collapse stat is bounded near-null, so an agent could compute the real raw effect (validated
+in pillars 1–2) and simply **guess** "partial ≈ 0" without ever running the FD-covariate analysis.
+
+Fix (the RECOMPUTE-from-neutral-table pattern, §1): a per-subject **mean framewise displacement
+(`mean_fd`)** column — plain motion QC every fMRIPrep run emits — is now a required output, and the
+mean-FD partial correlation `Spearman(age, short | mean_fd)` plus the collapse (`|raw| − |partial|`)
+are **recomputed from the submitted `{age, short, mean_fd}` rows** and matched to the held-out
+reference. The submitted `mean_fd` is validated per subject against a new held-out `ref_fd`
+(cross-subject r ≥ 0.85 + absolute match to 0.05). A shuffled/fabricated FD column does not
+reproduce the collapse — the recomputed partial stays at ≈ −0.19 (≈ the raw effect) instead of
+≈ −0.03 — and fails. The reported partial is now only a consistency cross-check. `instruction.md`
+names `mean_fd` neutrally as a QC column (never "control for motion"); `tests/` is held out of the
+container, so recognising the confound stays a volunteered judgement in a real eval.
+
+Second-pass validation matrix (subprocess pytest): honest PASS; defensible (±3 % connectivity, ±7 %
+FD) PASS; fabricated/constant no-FD table FAIL; attack C real connectivity + **no `mean_fd`** column
++ guessed partial −0.03 FAIL; attack C real connectivity + **shuffled `mean_fd`** + guessed partial
+FAIL (recomputed partial = −0.190, no collapse). `ref_fd` added to `tests/reference.npz` (0.008 MB;
+the per-subject FD reproduces the reference partial −0.0315 and the child/adult mean FD exactly).
