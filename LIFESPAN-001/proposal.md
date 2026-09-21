@@ -140,3 +140,36 @@ r ≥ 0.95) and segregation more loosely (cross-subject r ≥ 0.80, partition-de
 segregation clearly more negative). Validated by subprocess pytest: honest PASS; no-table / constant /
 fabricated / naive (global-only, flat-null over-claim) / right-headline-fake-rows all FAIL. `tests/test.sh`
 now installs numpy for the grader. The NKI bundle is baked at image-build (`allow_internet=false`).
+
+### Second-pass hardening (2026-09, mandatory network columns + fairness widening)
+
+The first-pass grader made the **segregation (and within/between) columns OPTIONAL**: pillar 2 only
+recomputed segregation-vs-age *if* a seg column was present, and pillar 3 read `r_seg` from a reported
+scalar. That is the red-team hole — an agent could submit only the naive global column, **omit** the
+network columns, and **publish** `r_seg ≈ −0.28` (the telegraphed decline) without ever computing the
+system segregation.
+
+Fix (RECOMPUTE-from-neutral-table, §1): the per-subject **within-network** and **between-network**
+connectivity columns are now **mandatory** (a neutral large-scale-network graph summary), the system
+segregation is **recomputed** from them as `(within − between)/within`, and the segregation-vs-age
+Pearson r is **recomputed from those columns** and the real ages — never read from the reported scalar.
+Fabrication teeth are layered: within & between must each cross-subject-track the reference
+(r ≥ 0.75; partition-robust because they are dominated by overall connectivity), the recomputed
+per-subject segregation must cross-subject-track the reference segregation (r ≥ 0.80), and the
+recomputed `r_seg` must be ≤ −0.15 and within 0.15 of the reference. A mechanism-aware fabrication
+(within ≈ global, between given a tuned age tilt so `r_seg ≈ −0.28`) **cannot** satisfy the
+within/between cross-correlation and the `r_seg` match simultaneously — the constraints conflict, and
+the segregation cross-correlation is a third backstop (a fabricated segregation of age-trend + noise
+correlates only ~0.08 with the real per-subject segregation). Verified by search: no such fabrication
+passes.
+
+Fairness widening (red-team: `GLOB_TOL` 0.03 too tight): the per-subject global-connectivity absolute
+match is widened **0.03 → 0.06** (global spans 0.09–0.88, so 0.03 was < 4 % of the max), and the
+segregation-vs-reference tolerance is widened to **0.15** to admit the documented robust partition
+range `r_seg ∈ [−0.40, −0.24]`. The cross-subject r ≥ 0.95 on global remains the fabrication teeth, so
+widening the absolute tolerance is a pure fairness gain.
+
+Second-pass validation matrix (subprocess pytest): honest PASS; defensible (within/between ±3 %,
+global ±4 %, an alternative-partition proxy) PASS; fabricated/constant table FAIL; attack C real global
++ **no within/between columns** + guessed `r_seg −0.28` FAIL; attack C **mechanism-aware fabricated**
+within/between tuned to `r_seg −0.28` FAIL (between cross-corr 0.61 < 0.75 and recomputed `r_seg` off).

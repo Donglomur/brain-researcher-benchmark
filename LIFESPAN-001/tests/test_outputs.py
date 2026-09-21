@@ -76,6 +76,12 @@ def _r_named(j, name):
 def test_outputs_present_and_wellformed():
     sub = _submitted()
     assert len(sub) >= 40, f"connectome_summary.csv must carry per-subject rows; parsed {len(sub)}"
+    n_wb = sum(1 for i in sub if sub[i].get("within") is not None and sub[i].get("between") is not None)
+    assert n_wb >= 40, (
+        "connectome_summary.csv must carry per-subject within_network_connectivity AND "
+        "between_network_connectivity columns (the mean within-network and between-network edge "
+        "connectivity of each subject's connectome). The system segregation is recomputed from "
+        f"them; only {n_wb} rows provide both.")
     j = _results()
     assert isinstance(j, dict) and j, "results.json empty"
 
@@ -103,39 +109,58 @@ def test_recompute_both_age_relationships_from_rows():
         f"reported global-vs-age r ({rep_glob}) is not what the submitted rows produce "
         f"({r_glob_rows:+.3f}); CSV and JSON disagree.")
 
-    if all(sub[i]["seg"] is not None for i in matched):
-        r_seg_rows = pw.pearson([sub[i]["seg"] for i in matched], ages)
-        assert abs(r_seg_rows - st["r_seg"]) <= st["RECOMP_SEG_TOL"], (
-            f"segregation-vs-age r recomputed from the rows ({r_seg_rows:+.3f}) does not match the "
-            f"reference ({st['r_seg']:+.3f}, tol {st['RECOMP_SEG_TOL']}).")
-        rep_seg = _r_seg(j)
-        assert rep_seg is not None and abs(r_seg_rows - rep_seg) <= st["RECOMP_SEG_TOL"] + 0.02, (
-            f"reported segregation-vs-age r ({rep_seg}) is not what the submitted rows produce "
-            f"({r_seg_rows:+.3f}); CSV and JSON disagree.")
+    # RECOMPUTE segregation-vs-age FROM the mandatory within/between columns (not the seg column,
+    # not the reported scalar). seg_i = (within_i - between_i)/within_i.
+    r_seg_rows, n_seg = pw.recompute_segregation_age_r(sub, matched, ref)
+    assert math.isfinite(r_seg_rows) and n_seg >= 20, (
+        "cannot recompute the segregation-vs-age relationship from the submitted per-subject "
+        "within/between-network connectivity columns (they are required).")
+    assert abs(r_seg_rows - st["r_seg"]) <= st["RECOMP_SEG_TOL"], (
+        f"segregation-vs-age r recomputed from the within/between columns ({r_seg_rows:+.3f}) does "
+        f"not match the reference ({st['r_seg']:+.3f}, tol {st['RECOMP_SEG_TOL']}).")
+    rep_seg = _r_seg(j)
+    if rep_seg is not None:
+        assert abs(r_seg_rows - rep_seg) <= st["RECOMP_SEG_TOL"] + 0.03, (
+            f"reported segregation-vs-age r ({rep_seg}) is not what the submitted within/between "
+            f"rows produce ({r_seg_rows:+.3f}); CSV and JSON disagree.")
 
 
 # ------------------------------------------------------------------ pillar 3 (judgement as numbers)
 def test_conclusion_segregation_declines_global_flat_numeric():
+    """Grade the judgement AS NUMBERS, with the segregation-vs-age relationship RECOMPUTED from the
+    mandatory per-subject within/between columns -- not read from a reported scalar. An agent that
+    omits the network columns, or fabricates them without the real per-subject network structure,
+    cannot reach this gate by publishing r_seg ~ -0.28."""
     ref = _reference(); st = ref["stats"]; j = _results()
-    r_glob = _r_glob(j)
-    r_seg = _r_seg(j)
-    assert r_glob is not None, "results.json does not report the global mean FC vs age correlation"
-    assert r_seg is not None, (
-        "results.json does not report the SYSTEM SEGREGATION vs age correlation. The judgement graded "
-        "here is that the connectome's organization (network segregation) changes with age even though "
-        "the global mean is ~flat; report the segregation-vs-age relationship.")
+    sub = _submitted()
+    matched = [i for i in ref["ids"] if i in sub and sub[i]["age"] is not None]
+    import math
+    ages = [ref["by_id"][i]["age"] for i in matched]
+
+    # RECOMPUTE both summaries from the rows.
+    r_glob = pw.pearson([sub[i]["global"] for i in matched], ages)
+    r_seg, n_seg = pw.recompute_segregation_age_r(sub, matched, ref)
+    assert math.isfinite(r_glob), "cannot recompute the global-vs-age r from the rows"
+    assert math.isfinite(r_seg) and n_seg >= 20, (
+        "cannot recompute the SYSTEM SEGREGATION vs age relationship from the submitted per-subject "
+        "within/between-network connectivity columns. The judgement graded here is that the "
+        "connectome's organization (network segregation) changes with age even though the global "
+        "mean is ~flat; the within/between-network connectivity columns are required so it can be "
+        "recomputed.")
 
     # (a) global mean FC is ~flat with age (the naive summary shows little/no change).
     assert abs(r_glob) <= st["GLOB_MAX_ABS"], (
-        f"reported global-vs-age r = {r_glob:+.3f} is not the ~flat naive summary "
+        f"global-vs-age r recomputed from the rows = {r_glob:+.3f} is not the ~flat naive summary "
         f"(reference {st['r_glob']:+.3f}); overall mean connectivity is roughly unchanged with age.")
 
-    # (b) system segregation DECLINES with age (clearly negative), matching the reference.
+    # (b) system segregation (recomputed from within/between) DECLINES with age, matching reference.
     assert r_seg <= st["SEG_MAX"], (
-        f"reported segregation-vs-age r = {r_seg:+.3f} is not the negative decline the organization "
-        f"shows (reference {st['r_seg']:+.3f}); the networks de-differentiate with age.")
-    assert abs(r_seg - st["r_seg"]) <= 0.12, (
-        f"reported segregation-vs-age r = {r_seg:+.3f} is far from the reference ({st['r_seg']:+.3f}).")
+        f"segregation-vs-age r recomputed from the within/between columns = {r_seg:+.3f} is not the "
+        f"negative decline the organization shows (reference {st['r_seg']:+.3f}); the networks "
+        f"de-differentiate with age.")
+    assert abs(r_seg - st["r_seg"]) <= st["SEG_MATCH_TOL"], (
+        f"segregation-vs-age r recomputed from the within/between columns = {r_seg:+.3f} is far from "
+        f"the reference ({st['r_seg']:+.3f}, tol {st['SEG_MATCH_TOL']}).")
 
     # (c) segregation is clearly MORE negative than the global summary (the dissociation).
     assert r_glob - r_seg >= st["SEG_GLOB_GAP"], (
@@ -143,13 +168,21 @@ def test_conclusion_segregation_declines_global_flat_numeric():
         f"summary ({r_glob:+.3f}); the point is that organization changes where the global average "
         f"does not.")
 
-    # (d) de-differentiation mechanism, when reported: between-network rises above within-network.
-    r_w = _r_named(j, "within")
-    r_b = _r_named(j, "between")
-    if r_w is not None and r_b is not None:
+    # (d) de-differentiation mechanism, recomputed from the rows: between-network rises with age
+    #     more than within-network (the driver of the segregation decline).
+    r_w = pw.pearson([sub[i]["within"] for i in matched], ages)
+    r_b = pw.pearson([sub[i]["between"] for i in matched], ages)
+    if math.isfinite(r_w) and math.isfinite(r_b):
         assert r_b > r_w, (
-            f"reported between-network vs age r ({r_b:+.3f}) does not exceed within-network "
-            f"({r_w:+.3f}); the segregation decline is driven by between-network connectivity rising.")
+            f"between-network vs age r ({r_b:+.3f}) does not exceed within-network ({r_w:+.3f}); the "
+            f"segregation decline is driven by between-network connectivity rising with age.")
+
+    # (e) consistency: any REPORTED segregation-vs-age r must agree with the recompute.
+    rep_seg = _r_seg(j)
+    if rep_seg is not None:
+        assert abs(rep_seg - r_seg) <= st["SEG_MATCH_TOL"] + 0.03, (
+            f"reported segregation-vs-age r ({rep_seg:+.3f}) is inconsistent with the value "
+            f"recomputed from the submitted within/between columns ({r_seg:+.3f}).")
 
 
 # ------------------------------------------------------------------ secondary prose signal

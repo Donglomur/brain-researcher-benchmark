@@ -35,8 +35,9 @@ def load_reference(path):
         "segregation": np.asarray(z["ref_segregation"], float),
         "stats": json.loads(str(z["ref_stats"])),
     }
-    ref["by_id"] = {i: {"age": a, "global": g, "seg": s}
-                    for i, a, g, s in zip(ref["ids"], ref["age"], ref["global"], ref["segregation"])}
+    ref["by_id"] = {i: {"age": a, "global": g, "seg": s, "within": w, "between": b}
+                    for i, a, g, s, w, b in zip(ref["ids"], ref["age"], ref["global"],
+                                                ref["segregation"], ref["within"], ref["between"])}
     return ref
 
 
@@ -60,6 +61,10 @@ def load_submitted(path):
     age_c = pick(("age",), exclude=("range",))
     glob_c = pick(("globalconnectivity", "globalfc", "overallconnectivity", "meanconnectivity",
                    "meanfc", "overallfc", "globalconn"), exclude=("within", "between", "segreg"))
+    within_c = pick(("withinnetworkconnectivity", "withinnetwork", "withinnetworkfc", "within"),
+                    exclude=("between", "segreg", "global"))
+    between_c = pick(("betweennetworkconnectivity", "betweennetwork", "betweennetworkfc", "between"),
+                     exclude=("within", "segreg", "global"))
     seg_c = pick(("systemsegregation", "segregation", "networksegregation", "segreg"))
     out = {}
     if id_c is None or glob_c is None:
@@ -80,7 +85,8 @@ def load_submitted(path):
         g = gf(glob_c)
         if g is None:
             continue
-        out[cid] = {"age": gf(age_c), "global": g, "seg": gf(seg_c)}
+        out[cid] = {"age": gf(age_c), "global": g, "seg": gf(seg_c),
+                    "within": gf(within_c), "between": gf(between_c)}
     return out
 
 
@@ -120,17 +126,76 @@ def check_subjects_and_values(sub, ref, st):
         assert age_close / len(matched) >= st["COVER"], (
             "submitted per-subject ages do not match the real NKI phenotype ages.")
 
-    # segregation: looser (partition-dependent) cross-subject correlation
+    # per-network within/between connectivity are MANDATORY (the neutral graph summary the
+    # segregation is recomputed from). Partition-dependent, so graded by cross-subject correlation
+    # (they track global at ~0.94/0.97, so a valid alternative partition stays well above the floor
+    # while a mechanism-guess fabrication -- e.g. within=const, between rising with age -- fails).
+    for name in ("within", "between"):
+        assert all(sub[i].get(name) is not None for i in matched), (
+            f"connectome_summary.csv is missing the per-subject {name}_network_connectivity column "
+            f"for some subjects. Both within- and between-network connectivity are required: the "
+            f"system segregation is recomputed from them, not read from a reported scalar.")
+        sub_v = [sub[i][name] for i in matched]
+        ref_v = [ref["by_id"][i][name] for i in matched]
+        assert statistics.pstdev(sub_v) > st["EPS"], (
+            f"submitted {name}-network connectivity is constant across subjects -- not per subject")
+        rv = pearson(sub_v, ref_v)
+        assert math.isfinite(rv) and rv >= st["WB_CORR_MIN"], (
+            f"submitted per-subject {name}-network connectivity does not track the reference "
+            f"(cross-subject r={rv:.3f} < {st['WB_CORR_MIN']}); the per-network mean connectivity "
+            f"was not computed from the real connectomes.")
+
+    # segregation: recomputed from within/between must track the reference (partition-dependent,
+    # looser cross-subject correlation).
+    seg_rec = [recompute_segregation(sub[i]["within"], sub[i]["between"]) for i in matched]
+    assert all(s is not None and math.isfinite(s) for s in seg_rec), (
+        "cannot recompute system segregation (within - between)/within from the submitted "
+        "within/between-network connectivity columns.")
+    assert statistics.pstdev(seg_rec) > st["EPS"], \
+        "recomputed system segregation is constant across subjects -- not computed per subject"
+    ref_s = [ref["by_id"][i]["seg"] for i in matched]
+    rs = pearson(seg_rec, ref_s)
+    assert math.isfinite(rs) and rs >= st["SEG_CORR_MIN"], (
+        f"system segregation recomputed from the submitted within/between columns does not track "
+        f"the reference (cross-subject r={rs:.3f} < {st['SEG_CORR_MIN']}).")
+
+    # if a segregation column is also submitted, it must be internally consistent with within/between
     if all(sub[i]["seg"] is not None for i in matched):
-        sub_s = [sub[i]["seg"] for i in matched]
-        ref_s = [ref["by_id"][i]["seg"] for i in matched]
-        assert statistics.pstdev(sub_s) > st["EPS"], \
-            "submitted system segregation is constant across subjects -- not computed per subject"
-        rs = pearson(sub_s, ref_s)
-        assert math.isfinite(rs) and rs >= st["SEG_CORR_MIN"], (
-            f"submitted per-subject system segregation does not track the reference (cross-subject "
-            f"r={rs:.3f} < {st['SEG_CORR_MIN']}).")
+        bad = sum(1 for i, s in zip(matched, seg_rec) if abs(sub[i]["seg"] - s) > 0.05)
+        assert bad <= 0.1 * len(matched), (
+            f"the submitted system_segregation column is inconsistent with (within - between)/within "
+            f"for {bad}/{len(matched)} subjects; it must be the segregation of the reported networks.")
     return matched
+
+
+def recompute_segregation(within, between):
+    """System segregation (Chan et al. 2014) = (within - between) / within, from a subject's mean
+    within-network and between-network positive-edge connectivity."""
+    if within is None or between is None:
+        return None
+    try:
+        w = float(within); b = float(between)
+    except (TypeError, ValueError):
+        return None
+    if not (math.isfinite(w) and math.isfinite(b)) or w == 0:
+        return None
+    return (w - b) / w
+
+
+def recompute_segregation_age_r(sub, matched, ref):
+    """Recompute the segregation-vs-age Pearson r FROM the submitted per-subject within/between
+    columns and the real per-subject age (reference phenotype keyed by id). This is the un-guessable
+    gate: an agent that omits the network columns (or fabricates them without the real per-subject
+    network structure) cannot reproduce the declining segregation-with-age relationship."""
+    ages, segs = [], []
+    for i in matched:
+        seg = recompute_segregation(sub[i].get("within"), sub[i].get("between"))
+        a = ref["by_id"][i]["age"]
+        if seg is not None and math.isfinite(seg) and a is not None and math.isfinite(a):
+            ages.append(a); segs.append(seg)
+    if len(segs) < 20:
+        return float("nan"), 0
+    return pearson(segs, ages), len(segs)
 
 
 def find_path_number(obj, path_include=(), leaf_re=None, path_exclude=(), prefer=None):
