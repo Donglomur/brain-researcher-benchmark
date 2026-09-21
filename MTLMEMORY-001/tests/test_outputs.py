@@ -23,7 +23,8 @@ PROOF OF WORK. The previous verifier graded a single reported number + prose and
 fabricated data. This grader closes that WITHOUT cueing the double-dipping judgement:
   * Pillar 1 -- the submitted per-neuron table (a NEUTRAL intermediate BOTH a naive and an honest
     analysis produce: the pinned per-neuron new/old AUC + memory-selective flag) must match the
-    held-out reference (tests/reference.npz): cover the real neuron ids, be non-constant, and track
+    reference (tests/reference.npz; held out of the agent CONTAINER but PUBLIC in this repo (burned)
+    -- a real eval needs fresh tasks / a server-side reference): cover the real neuron ids, be non-constant, and track
     the reference per-neuron AUC (cross-neuron r >= 0.90, per-neuron tol), with the selective flag
     agreeing. Impossible without the real firing rates.
   * Pillar 2 -- recompute the proportion memory-selective and the same-trials (naive) mean AUC FROM
@@ -47,11 +48,19 @@ OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 REF_PATH = Path(__file__).resolve().parent / "reference.npz"
 
 # ---- proof-of-work tolerances ----
-AUC_TOL = 0.03        # per-neuron new/old AUC abs match to reference
+AUC_TOL = 0.06        # per-neuron new/old AUC abs match to reference (widened from 0.03)
 CORR_MIN = 0.90       # cross-neuron corr(submitted AUC, reference AUC) -- fabrication teeth
 COVER = 0.90          # coverage of the real neuron ids
 PROP_TOL = 0.03       # proportion memory-selective recomputed-from-rows vs reference and vs reported
-NAIVE_TOL = 0.03      # same-trials (naive) mean AUC over selective rows vs reference (table realness)
+NAIVE_TOL = 0.06      # same-trials (naive) mean AUC over selective rows vs reference (table realness)
+# AUC_TOL / NAIVE_TOL widened 0.03 -> 0.06 together: a defensible single-neuron AUC estimator (e.g. a
+# stronger decoder or a different ROC/tie convention) rescales the per-neuron new/old AUC by ~+5-10%,
+# which shifts BOTH the per-neuron values (AUC_TOL) AND the selective-neuron same-trials mean
+# (NAIVE_TOL); at 0.03 that honest variant was rejected. A pure mean-preserving scatter never needed
+# this (it is bounded first by CORR_MIN). Fabrication remains caught by CORR_MIN (cross-neuron
+# r>=0.90), coverage, the non-constant guard, the selective-flag agreement, and PROP_TOL (unchanged);
+# and NAIVE_TOL 0.06 still rejects the honest held-out ~0.51 submitted as the same-trials table
+# (|0.51-0.63|=0.12) and any constant/fabricated table.
 
 # ---- OR-escape (judgement) tolerances ----
 EXPECTED = 0.51       # honest held-out single-neuron new/old AUC of memory-selective MTL neurons

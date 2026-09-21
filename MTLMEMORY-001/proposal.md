@@ -69,8 +69,9 @@ selection giving 0.503) = **Y/Y/Y/Y**.
 The reviewed verifier graded a single reported number + prose and (per the suite audit) could be
 passed on fabricated data. It is now fabrication-proof WITHOUT cueing the double-dipping judgement:
 
-- **Held-out reference** `tests/reference.npz` (built by streaming all 87 DANDI 000004 sessions with
-  the oracle; never shipped to the agent): per-neuron real values keyed by the real neuron id
+- **Reference** `tests/reference.npz` (built by streaming all 87 DANDI 000004 sessions with
+  the oracle; held out of the agent CONTAINER but PUBLIC in this repo — burned, so a real eval needs
+  fresh tasks / a server-side reference): per-neuron real values keyed by the real neuron id
   (`<asset-stem>__u<unit id>`) -- the pinned all-trials preferred-direction new/old AUC + the
   memory-selective flag -- plus `ref_stats` (n=1864, proportion 0.0574, naive same-trials mean 0.629,
   honest held-out mean 0.516).
@@ -80,12 +81,31 @@ passed on fabricated data. It is now fabrication-proof WITHOUT cueing the double
   deliverable; it never mentions held-out, cross-validation, circular, double-dipping or selection
   bias.
 - **Three grader pillars.** (1) the submitted per-neuron AUC must track the reference (cross-neuron
-  r ≥ 0.90, per-neuron tol, coverage ≥ 90%, non-constant, selective-flag agreement) -- impossible
+  r ≥ 0.90, per-neuron tol **0.06**, coverage ≥ 90%, non-constant, selective-flag agreement) -- impossible
   without the real firing rates; (2) the proportion memory-selective and the same-trials mean AUC
-  recomputed FROM the rows must match the reference (== 0.629) and the reported JSON -- proving the
+  recomputed FROM the rows must match the reference (== 0.629 **± 0.06**) and the reported JSON -- proving the
   rows are the real analysis; (3) the scientific judgement stays the **un-cued OR-escape**: PASS if
   the headline reproduces the honest ~0.51 OR the write-up volunteers the non-independence, FAIL on
   an un-caveated ~0.63.
+
+**Fairness widening (AUC_TOL 0.03 → 0.06 and NAIVE_TOL 0.03 → 0.06, together).** A defensible
+single-neuron AUC estimator (a stronger decoder, or a different ROC/tie-handling convention) rescales
+the per-neuron new/old AUC by ~5-10%; validated by perturbing the committed reference per-item values
+(`ref_auc × 1.07`): at 0.03 that honest variant FAILED both the per-neuron match (pillar 1) and the
+same-trials mean check (pillar 2), because a scale shifts BOTH quantities together. The two 0.03 locks
+had to move together — widening only the per-neuron `AUC_TOL` would leave the coupled `NAIVE_TOL`
+rejecting the same variant. Empirically, a pure *mean-preserving* decoder scatter never needed this
+(it is bounded first by `CORR_MIN`: any scatter large enough to fail 0.03 already drops the
+cross-neuron r below 0.90), so `AUC_TOL` = 0.03 was effectively redundant with `CORR_MIN` for that
+class. Fabrication is still caught by `CORR_MIN` (cross-neuron r ≥ 0.90 — a shuffled table fails),
+coverage, the non-constant guard, selective-flag agreement, and `PROP_TOL` (all unchanged); and
+`NAIVE_TOL` = 0.06 still rejects the honest held-out ~0.51 submitted as the same-trials table
+(|0.51 − 0.63| = 0.12) and any constant table. The pillar-3 double-dipping judgement is untouched, so
+an un-caveated ~0.63 headline still fails.
+
+**Validation (subprocess pytest per case):** honest oracle → PASS; defensible-alt (decoder ×1.07)
+→ FAIL at 0.03 → PASS at 0.06; constant table → FAIL; shuffled-per-neuron table → FAIL (`CORR_MIN`);
+naive-shortcut (un-caveated 0.63 headline) → FAIL (pillar 3).
 
 **Subprocess-pytest validation matrix** (each `OUTPUT_DIR` graded by a fresh `pytest` process):
 honest (real reference table + honest headline) **PASS** / no-table **FAIL** (pillars 1+2) /
