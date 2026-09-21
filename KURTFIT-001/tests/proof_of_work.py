@@ -154,22 +154,29 @@ def load_sweep_table(filename, key_hints, value_hints):
     return groups
 
 
-def validate_sweep(groups, ref, corr, cover, val_tol, min_spread, min_groups=2, min_vox=50):
+def validate_sweep(groups, ref, corr, cover, val_tol, min_spread, min_groups=2, min_vox=50,
+                   agg=None, matcher=None, require_config=None):
     """Validate a per-voxel SWEEP against the held-out per-config reference maps.
 
     Each submitted group must be a REAL per-voxel fit: cover the ROI, be non-constant, match
-    ONE config's spatial pattern (best Pearson r >= corr) AND that same config's real ROI mean
-    (|group_mean - config_mean| <= val_tol). At least `min_groups` such groups must match
-    DISTINCT configs and their ROI means must span >= min_spread.
+    ONE config's spatial pattern (best score >= corr under `matcher`) AND that same config's real
+    aggregate (|group_agg - config_agg| <= val_tol under `agg`). At least `min_groups` such groups
+    must match DISTINCT configs and their aggregates must span >= min_spread; if `require_config`
+    is given, that config (e.g. the corrected estimator) must be among the matched ones.
 
-    Un-fabricable: a fabricated/guessed group matches no config's pattern (fails r); a globally
-    rescaled copy of one real fit still best-correlates with the SAME config (correlation is
-    scale-invariant) -> not a distinct config, and its shifted mean no longer matches that
-    config's mean -> so a single fit cannot be duplicated into a fake decline. Only running the
-    real analysis at >=2 distinct configs (the sweep) passes.
+      agg      : per-voxel-values -> scalar summary (default np.mean; e.g. crossing-fraction).
+      matcher  : paired -> (score, who) (default best_corr; e.g. best_agreement for integer maps).
+
+    Un-fabricable: a fabricated/guessed group matches no config's pattern (fails matcher); a
+    globally rescaled/shifted copy of ONE real fit still best-matches the SAME config (Pearson
+    r is scale- and shift-invariant) -> not a distinct config, and its shifted aggregate no
+    longer matches that config -> a single fit cannot be duplicated into a fake dependence. Only
+    running the real analysis at >=2 distinct configs (the sweep) passes.
 
     Returns (ok, info)."""
-    cfg_means = {c: float(np.nanmean(m)) for c, m in ref["maps"].items()}
+    agg = agg or (lambda v: float(np.mean(np.asarray(v, float))))
+    matcher = matcher or best_corr
+    cfg_agg = {c: float(agg(m[np.isfinite(m)])) for c, m in ref["maps"].items()}
     valid = []
     for key, sub in groups.items():
         if len(sub) < min_vox or not nonconstant(sub.values()):
@@ -177,19 +184,22 @@ def validate_sweep(groups, ref, corr, cover, val_tol, min_spread, min_groups=2, 
         cov, paired, _ = align(sub, ref)
         if cov < cover:
             continue
-        r, who = best_corr(paired)
-        if who is None or r < corr:
+        score, who = matcher(paired)
+        if who is None or score < corr:
             continue
         vals = np.array([v for v in sub.values() if np.isfinite(v)])
-        mean = float(np.mean(vals))
-        if abs(mean - cfg_means[who]) > val_tol:
+        a = float(agg(vals))
+        if abs(a - cfg_agg[who]) > val_tol:
             continue
-        valid.append((key, who, mean, float(r)))
+        valid.append((key, who, a, float(score)))
     configs = {v[1] for v in valid}
-    means = sorted(v[2] for v in valid)
-    span = (means[-1] - means[0]) if len(means) >= 2 else 0.0
+    aggs = sorted(v[2] for v in valid)
+    span = (aggs[-1] - aggs[0]) if len(aggs) >= 2 else 0.0
     ok = (len(valid) >= min_groups) and (len(configs) >= min_groups) and (span >= min_spread)
-    return ok, {"valid": valid, "n_valid": len(valid), "n_configs": len(configs), "span": span}
+    if require_config is not None:
+        ok = ok and (require_config in configs)
+    return ok, {"valid": valid, "n_valid": len(valid), "n_configs": len(configs),
+                "span": span, "configs": sorted(configs)}
 
 
 def align(submitted, ref):
