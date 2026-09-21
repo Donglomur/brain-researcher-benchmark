@@ -81,16 +81,42 @@ reference.npz sha256 2a5ffb4fabe7140f. The task stays **un-cued** (background FC
 never named in the instruction); `connectivity.csv` now invites "any additional per-subject
 connectivity you computed" (no cue).
 
-Pillars (subprocess-validated): (1) per-subject RAW FC covers the pinned subjects, non-constant,
-cross-subject r>=0.95 to the reference (kills fabricated/dup rows); if a per-subject background
-column is present it must likewise match (validate-if-present, not required); (2) group RAW mean
-recomputes from the rows == reference == reported; (3) the volunteered discriminating number ->
-reported group background/intrinsic FC is materially LOWER than raw, matches the reference
-(~0.46), gap>=0.08 (a naive raw-only run cannot produce it); (secondary) the task-evoked
-inflation prose.
+### Second-pass hardening (2026-09, RECOMPUTE-from-rows)
 
-Validation matrix: honest PASS | no-table FAIL | constant FAIL | fabricated per-subject raw FAIL |
-naive (raw only, no background) FAIL | defensible (group-only background) PASS.
+The first-pass verifier trusted a **reported group background scalar** in pillar 3 and only
+validated the per-subject background column *if present*. That is the red-team hole (TASKFC Tier 2,
+"background FC reported not recomputed"): an agent could compute the real per-subject RAW FC (the
+naive path), never run the residual analysis, and simply **publish/guess** a ~0.46 group background
+to clear pillar 3.
+
+Fix (the RECOMPUTE-from-neutral-table pattern, §5(a) mild-hint variant for a separate-pipeline
+discriminator): the per-subject **background connectivity column is now MANDATORY** and the group
+background + the raw>background inflation are **recomputed from the per-subject rows**, not read
+from the summary. The per-subject background values are validated against the held-out reference
+(cross-subject r>=0.95, absolute per-subject match within 0.05). This has real teeth because across
+the 10 subjects **corr(raw, background) is only ~0.74** — a fabricated background scaled from the
+raw column fails both the cross-subject correlation and the absolute match. The reported group
+background is kept only as a consistency cross-check.
+
+Note (§5 tradeoff, documented): making the background column mandatory in the **grader** is the
+least-bad option for this separate-pipeline discriminator. It does **not** cue the in-container
+agent — `tests/` is held out of the container, and `instruction.md` is unchanged (it still names
+neither the task-evoked response nor background connectivity), so recognising the inflation remains
+a volunteered judgement in a real (fresh, server-side-graded) eval. Only a submission that both
+computed the real per-subject residual correlations and reported them can pass.
+
+Pillars (subprocess-validated): (1) per-subject RAW FC covers the pinned subjects, non-constant,
+cross-subject r>=0.95 to the reference (kills fabricated/dup rows); (1b, MANDATORY) a per-subject
+background column matches the reference (cross-subject r>=0.95, per-subject within 0.05); (2) group
+RAW + background means recompute from the rows == reference == reported; (3) group background +
+raw>background inflation **recomputed from the rows** is materially lower than raw (gap>=0.08),
+matches the reference inflation (~0.169) and background (~0.46), and is systematic (raw>bg in >=8/10
+subjects, recomputed); (secondary) the task-evoked inflation prose.
+
+Validation matrix (subprocess pytest): honest PASS | defensible (+/-7% per-subject raw & background,
+corr ~0.99) PASS | fabricated/constant no-background table FAIL | attack C: real raw + NO background
+column + guessed group background 0.46 FAIL | attack C: real raw + background fabricated as scaled
+raw (~0.46 mean) FAIL (cross-subject r=0.737 < 0.95).
 
 Packaging: pinned nilearn language-localizer demo (all 10 subjects), nilearn 0.12.1 stack; data
 runtime-fetched, `allow_internet=true` retained. Baking the per-subject inputs is a maintainer
