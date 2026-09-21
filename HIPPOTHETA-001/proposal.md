@@ -69,6 +69,36 @@ without the real movement-conditioned spectral analysis.
 - **Validation matrix (subprocess pytest):** honest PASS; no-table FAIL; constant-spectrum FAIL;
   fabricated gaussian bump at 9 Hz FAIL; naive whole-recording (7.9 Hz + whole spectrum) FAIL.
 
+### Second-pass hardening (broadband 1/f structure, not just the peak band)
+
+Red-team finding: the pillar-1 spectrum match ran over the **narrow 5–11 Hz** window only (plus a
+median/peak "broadband" guard computed inside that same narrow window), so a **synthetic 9 Hz
+Gaussian bump** — whose 5–11 Hz shape peaks at 9 Hz — passed the correlation, and ~9 Hz is guessable
+from priors. Fix: `spectrum.csv` must now be reported **broadband (2–45 Hz)** and match the real CA1
+LFP spectral STRUCTURE, not just the theta band:
+
+- **broadband log-shape correlation ≥ 0.9** against a held-out broadband reference (`ref_freq_full`/
+  `ref_pow_full`, rebuilt from `solution/compute.py`);
+- **1/f-background landmarks**: `P(3 Hz)/P(peak) ≥ 0.9` (a real spectrum has substantial low-frequency
+  power comparable to the theta peak — a lone bump has ~none: ratio ~0.001) and
+  `10 ≤ P(peak)/P(35 Hz) ≤ 150` (a real, bounded high-frequency falloff to a noise floor — a bump or a
+  pure power law without a noise floor gives a runaway ratio, 170–2800+);
+- **theta half-width** above the 1/f background in the real range (≈2.9–5.3 Hz across channels/nperseg).
+
+The movement-band peak discriminator (narrow 5–11 Hz shape + peak in `[8.4, 9.6]`), CSV↔JSON
+self-consistency, and state-dependence recognition are kept unchanged.
+
+**Validation matrix (subprocess pytest, this pass):** honest PASS; defensible alt-channel PASS;
+**lone 9 Hz Gaussian bump FAIL** (broadband corr 0.59 + P3/Ppk 0.001); **weak-1/f + bump FAIL**
+(P3/Ppk 0.56); **naive whole-recording spectrum FAIL** whether the peak is reported as the honest-
+looking 9 Hz (spectrum peaks at 7.9 → CSV↔JSON fails) or as the naive 7.9 Hz (headline-band fails).
+**RESIDUAL (HONEST-LIMITATION, blunt):** a fully hand-reconstructed synthetic spectrum — correct 1/f
+amplitude at 3 Hz, correct log-log slope, a realistic high-frequency noise floor, AND a theta bump of
+the right height and width — still passes. That is intrinsic to any shape-based check, but it now
+requires reproducing essentially this recording's entire broadband spectrum (five session-specific
+quantities, none in the container), not the single guessable "~9 Hz" scalar; the peak-vs-state
+judgement then relies partly on the frontier gate.
+
 **Data pin (reference build):** DANDI `000552` (draft). LFP asset
 `sub-e15-13f1/sub-e15-13f1_ses-e15-13f1-220117-raw_ecephys.nwb` (asset-id
 `9f3b0bd1-8228-4942-8a26-f69d74bae64f`,

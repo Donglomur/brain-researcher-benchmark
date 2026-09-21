@@ -52,8 +52,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   would report), the theta band used, the channel used, the spectral parameters, and any selection
   of the LFP the estimate is based on.
 - `spectrum.csv` — the power spectrum your reported peak is read from: one row per frequency bin,
-  with the frequency (Hz) and its power, covering at least the theta band (columns e.g.
-  `frequency_hz,power`).
+  with the frequency (Hz) and its power (columns e.g. `frequency_hz,power`). Report the **broadband**
+  spectrum spanning at least **2-45 Hz** (so the full spectral background around the theta peak is
+  included), not only the narrow theta window.
 - `run_metadata.json` — dandiset id, session, the two assets used, LFP rate, channel used, and how
   you arrived at the reported estimate.
 - `findings.md` — a short written summary (a few sentences) stating the hippocampal theta peak

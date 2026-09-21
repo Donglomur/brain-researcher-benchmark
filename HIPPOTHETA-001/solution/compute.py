@@ -37,6 +37,7 @@ LFP_ASSET = "sub-e15-13f1/sub-e15-13f1_ses-e15-13f1-220117-raw_ecephys.nwb"
 BEH_ASSET = "sub-e15-13f1/sub-e15-13f1_ses-e15-13f1-220117_behavior+ecephys.nwb"
 THETA = (6.0, 10.0)          # theta band (Hz)
 SEARCH = (5.0, 11.0)         # slightly wider search so a peak at the band edge is captured
+BROADBAND = (2.0, 45.0)      # broadband range written to spectrum.csv (1/f background + theta)
 RUN_THRESH = 5.0             # locomotion: running speed above this (position units / s)
 SMOOTH_S = 0.25             # position smoothing before differencing (s)
 
@@ -188,11 +189,13 @@ except Exception:
     whole_peak = float("nan")
 
 # ---- spectrum table (the finest intermediate the estimate is read from) ----
+# Written broadband (2-45 Hz) so it carries the real 1/f background and the theta peak's shape
+# (bandwidth) on top of it -- a real CA1 LFP spectrum, not just the narrow theta window.
 with open(OUT / "spectrum.csv", "w", newline="") as f:
     w = csv.writer(f)
     w.writerow(["frequency_hz", "power"])
     for fr, pwv in zip(f_run, P_run):
-        if SEARCH[0] - 1.0 <= fr <= SEARCH[1] + 1.0:
+        if BROADBAND[0] <= fr <= BROADBAND[1]:
             w.writerow([float(fr), float(pwv)])
 
 results = {

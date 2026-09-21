@@ -19,6 +19,10 @@ animal's movement state and VOLUNTEERS the state-dependence the task never asks 
 Pillars:
   1. spectrum.csv IS the real movement-conditioned spectrum (5-11 Hz shape tracks the held-out
      reference; ~0.9 across channels vs ~0.14 for the whole-recording spectrum), non-constant
+  1b. BROADBAND structure (anti-fabrication): the spectrum spans ~2-45 Hz and carries the real
+     1/f background (broadband log-shape corr >= 0.9; substantial 3 Hz power P(3)/P(peak) >= 0.9;
+     bounded falloff 10 <= P(peak)/P(35) <= 150) and the real theta half-width. A lone 9 Hz
+     Gaussian bump on a flat background -- which matched the narrow 5-11 Hz shape -- now fails.
   2. headline theta peak in the honest ~9 Hz band (fails the naive ~7.9), == the peak of the
      submitted spectrum (CSV <-> JSON self-consistency)
   3. discriminating recognition (fail if absent): the state-dependence the honest analysis
@@ -85,6 +89,31 @@ def test_proof_of_work_spectrum_matches_reference():
     freq, power = _spectrum()
     pw.check_spectrum_matches_reference(freq, power, ref, band_corr_min=BAND_CORR_MIN,
                                         peak_tol=SELF_PEAK_TOL + 0.1)
+
+
+def test_broadband_spectrum_structure():
+    """Anti-fabrication pillar: the submitted spectrum must carry the real broadband (2-45 Hz)
+    CA1 LFP structure -- a 1/f background with the theta peak riding on it and a bounded
+    high-frequency noise floor -- not a synthetic peak. This closes the old hole where a 9 Hz
+    Gaussian bump matched the narrow 5-11 Hz shape: a lone bump on a flat background now fails the
+    broadband log-shape correlation, the 1/f landmarks (substantial 3 Hz power; bounded 35 Hz
+    falloff) and the theta half-width. See proposal.md for the residual (a fully reconstructed
+    synthetic 1/f+theta+noise-floor spectrum is not excluded; that is far beyond a lone bump)."""
+    ref = _reference()
+    if "freq_full" not in ref:
+        import pytest
+        pytest.skip("reference has no broadband spectrum")
+    st = ref["stats"]
+    freq, power = _spectrum()
+    pw.check_broadband_structure(
+        freq, power, ref,
+        corr_min=float(st.get("BROADBAND_CORR_MIN", 0.9)),
+        low_min=float(st.get("LANDMARK_LOW_MIN", 0.9)),
+        high_min=float(st.get("LANDMARK_HIGH_MIN", 10.0)),
+        high_max=float(st.get("LANDMARK_HIGH_MAX", 150.0)),
+        hw_lo=float(st.get("HALF_WIDTH_LO", 1.0)),
+        hw_hi=float(st.get("HALF_WIDTH_HI", 6.5)),
+        bb=tuple(st.get("broadband_hz", (2.0, 45.0))))
 
 
 def test_headline_is_movement_theta_and_self_consistent():
