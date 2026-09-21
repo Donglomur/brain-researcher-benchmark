@@ -41,3 +41,44 @@ Pinned pipeline; mean error-minus-correct amplitude at FCz, 0-100 ms post-respon
 ### Cost
 
 `easy` (control). cpus 2, mem 8 GB, storage 20 GB, internet on (downloads the ~92 MB ERP CORE Flankers bundle once). Deps: mne 1.12.1 + numpy/scipy/pooch. Sensor-space EEG only.
+
+---
+
+## Proof-of-work verifier (2026-09)
+
+The prior grader accepted any `ern.json` whose single `ern_amplitude_uv` magnitude was
+~5.9 (|.| in [3.4, 8.4]) — a fabricated scalar + a keyword `findings.md` passed. This
+revision applies the suite-wide proof-of-work contract (single-value / RESTCONN model). The
+pinned response-locking makes this a clean reproduction control (QSMDIPOLE model): the
+held-out reference makes the number hittable only by the real response-locked analysis.
+
+**Held-out reference** (`tests/reference.npz`, built from `solution/compute.py` on the real
+ERP CORE Flankers subject-001 recording, never shipped to the agent): the FCz error-average
+and correct-average response-locked waveforms (820 samples over -0.25..0.55 s) + `ref_stats`
+(response-locked window ERN -5.91 uV, stimulus-locked -0.58 uV). sha256
+`c13453fca50176b773ab10bc52eedef027b61c8162d030073bca0ade93fb9d96`.
+
+**Neutral intermediate** (added to Required Outputs): `fcz_waveforms.csv` — the FCz
+error/correct averages vs time. Any ERP analysis produces these; matched to the held-out
+response-locked reference they close fabrication AND a stimulus-locked analysis (the
+response- and stimulus-locked FCz difference waveforms are ~uncorrelated, r ~ -0.13).
+
+**Four pillars**: (1) the submitted error waveform tracks the reference (r>=0.80) and the
+error-minus-correct difference waveform tracks the reference (r>=0.75); (2) the window ERN
+recomputed FROM the waveforms == reference == reported `ern.json`; (3) the ERN graded as a
+negativity (<= -2.5 uV), closer to the response-locked value than the stimulus-locked one;
+(4) secondary prose.
+
+**Validation** (subprocess pytest per case, `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`, numpy 2.1.3):
+
+| case | result |
+|---|---|
+| honest (oracle) | PASS |
+| defensible (waveforms + numerical noise) | PASS |
+| no waveforms | FAIL |
+| constant waveforms | FAIL |
+| fabricated (right window ERN, scrambled waveforms) | FAIL (pillar 1 only — the intended teeth) |
+| naive stimulus-locked waveforms | FAIL |
+
+Data still fetches at runtime (`allow_internet=true`); baking the derived FCz epochs is a
+maintainer follow-up.

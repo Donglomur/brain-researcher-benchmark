@@ -112,6 +112,17 @@ def mean_amp_diff(raw, rows, anchor, win=WIN, base=BASELINE):
         len(ep["error"]), len(ep["correct"])
 
 
+def fcz_waveforms(raw, rows, base=BASELINE):
+    """FCz error-average and correct-average waveforms over the epoch (the fine-grained
+    curves the single 0-100 ms amplitude is read from)."""
+    ev = np.array([[rs, 0, (2 if err else 1)] for ss, rs, err in rows], dtype=int)
+    ep = mne.Epochs(raw, ev, event_id={"correct": 1, "error": 2}, tmin=-0.25, tmax=0.55,
+                    baseline=base, picks=["FCz"], preload=True, verbose=False)
+    err_ev = ep["error"].average()
+    cor_ev = ep["correct"].average()
+    return err_ev.times, 1e6 * err_ev.data[0], 1e6 * cor_ev.data[0]
+
+
 try:
     raw = mne.io.read_raw_fif(str(raw_path()), preload=True, verbose=False)
     # tag the peripheral channels as EOG so they are excluded from the average reference
@@ -128,10 +139,20 @@ try:
     raw.set_eeg_reference("average", projection=False, verbose=False)
     ern, err_amp, cor_amp, n_err, n_cor = mean_amp_diff(raw, rows, "response")
     stim_diff, _, _, _, _ = mean_amp_diff(raw, rows, "stimulus")
+    wav_t, wav_err, wav_cor = fcz_waveforms(raw, rows)
 except SystemExit:
     raise
 except Exception as e:
     fail(f"could not compute the error-related frontocentral negativity: {e}")
+
+# neutral per-timepoint intermediate: the FCz error-average and correct-average waveforms
+# (one row per epoch time) -- the fine-grained curves the single 0-100 ms amplitude is read from
+import csv as _csv
+with open(OUT / "fcz_waveforms.csv", "w", newline="") as _f:
+    _w = _csv.writer(_f)
+    _w.writerow(["time_s", "error_uv", "correct_uv"])
+    for _t, _e, _c in zip(wav_t, wav_err, wav_cor):
+        _w.writerow([f"{float(_t):.6f}", f"{float(_e):.6f}", f"{float(_c):.6f}"])
 
 (OUT / "ern.json").write_text(json.dumps({
     "ern_amplitude_uv": ern,

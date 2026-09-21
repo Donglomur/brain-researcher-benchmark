@@ -52,6 +52,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `ern.json` — at minimum `{"ern_amplitude_uv": <float>, "electrode": "FCz",
   "measure": "mean error-minus-correct amplitude, 0-100 ms", "window_ms": [0, 100],
   "n_error_trials": <int>, "n_correct_trials": <int>}`.
+- `fcz_waveforms.csv` — the FCz waveforms the reported amplitude is read from: the
+  error-trial average and the correct-trial average at electrode FCz, in microvolts, at each
+  epoch time sample. Columns `time_s, error_uv, correct_uv` (one row per time point).
 - `run_metadata.json` — dataset id, file, trial definition, number of error/correct trials,
   electrode, reference, band-pass, baseline, and the measurement window you used.
 - `findings.md` — a few sentences reporting the error-related frontocentral negativity
