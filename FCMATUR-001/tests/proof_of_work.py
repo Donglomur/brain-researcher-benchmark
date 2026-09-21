@@ -44,21 +44,25 @@ def load_reference(path):
     return ref
 
 
-def load_submitted(path, id_cols, conn_cols, age_cols):
-    """Return {canon_id: (connectivity, age)} plus the raw column-parsed lists.
+def load_submitted(path, id_cols, conn_cols, age_cols, site_cols=None):
+    """Return {canon_id: (connectivity, age, site)} plus the raw column-parsed lists.
 
-    Tolerant column matching: `id_cols`, `conn_cols`, `age_cols` are tuples of normalised names
-    (lowercase, alnum-only) that are accepted for each field.
+    Tolerant column matching: `id_cols`, `conn_cols`, `age_cols`, `site_cols` are tuples of
+    normalised names (lowercase, alnum-only) that are accepted for each field. `site` is the raw
+    (string) acquisition-site label, or None when no site column is present. The returned tuple is
+    ``(submitted, conn_list, age_list, site_list)``.
     """
     rows = list(csv.DictReader(open(path, encoding="utf-8")))
     if not rows:
-        return {}, [], []
+        return {}, [], [], []
     headers = list(rows[0].keys())
     norm_to_raw = {}
     for h in headers:
         norm_to_raw.setdefault(_norm(h), h)
 
     def pick(cands):
+        if not cands:
+            return None
         for c in cands:
             if c in norm_to_raw:
                 return norm_to_raw[c]
@@ -71,9 +75,10 @@ def load_submitted(path, id_cols, conn_cols, age_cols):
     id_c = pick(id_cols)
     conn_c = pick(conn_cols)
     age_c = pick(age_cols)
-    submitted, conn_list, age_list = {}, [], []
+    site_c = pick(site_cols)
+    submitted, conn_list, age_list, site_list = {}, [], [], []
     if id_c is None or conn_c is None or age_c is None:
-        return submitted, conn_list, age_list
+        return submitted, conn_list, age_list, site_list
     for r in rows:
         cid = canon_id(r.get(id_c, ""))
         if not cid:
@@ -85,10 +90,15 @@ def load_submitted(path, id_cols, conn_cols, age_cols):
             continue
         if not (math.isfinite(c) and math.isfinite(a)):
             continue
-        submitted[cid] = (c, a)          # last wins on duplicate id
+        s = None
+        if site_c is not None:
+            raw_s = r.get(site_c, "")
+            s = str(raw_s).strip() if raw_s is not None and str(raw_s).strip() != "" else None
+        submitted[cid] = (c, a, s)       # last wins on duplicate id
         conn_list.append(c)
         age_list.append(a)
-    return submitted, conn_list, age_list
+        site_list.append(s)
+    return submitted, conn_list, age_list, site_list
 
 
 def check_subjects_and_values(submitted, ref, conn_tol=0.05, age_tol=0.5,
@@ -165,6 +175,66 @@ def check_recompute(submitted, matched, ref, reported_pooled, stat_tol=0.03):
         f"pooled r recomputed from the submitted rows ({r_recompute:+.3f}) does not match the "
         f"reported value ({float(reported_pooled):+.3f}, tol {stat_tol}). CSV and JSON disagree.")
     return r_recompute
+
+
+def _partial_corr_resid(y, x, D):
+    """Partial correlation of y and x after regressing both on the design matrix D (which must
+    include an intercept column). numpy-only (the verifier ships no scipy)."""
+    y = np.asarray(y, float); x = np.asarray(x, float); D = np.asarray(D, float)
+
+    def resid(v):
+        beta, *_ = np.linalg.lstsq(D, v, rcond=None)
+        return v - D @ beta
+    ry, rx = resid(y), resid(x)
+    if np.std(ry) == 0 or np.std(rx) == 0:
+        return float("nan")
+    return float(np.corrcoef(ry, rx)[0, 1])
+
+
+def recompute_site_levels(submitted, matched, min_per_site=5):
+    """Recompute the WITHIN-site (site fixed effects) and BETWEEN-site (site-mean) connectivity–age
+    correlations FROM the submitted rows {connectivity, age, site}. Mirrors the oracle exactly
+    (drop sites with < `min_per_site` participants; site fixed effects via drop-first dummies).
+
+    Returns ``{"within_site_r", "between_site_r", "pooled_r", "n_within", "n_sites"}`` with NaNs
+    when the site column is absent/degenerate. This is the un-guessable teeth: a fabricated or
+    shuffled site partition cannot reproduce the reference within-site attenuation.
+    """
+    conn = np.array([submitted[i][0] for i in matched], dtype=float)
+    age = np.array([submitted[i][1] for i in matched], dtype=float)
+    site = np.array([submitted[i][2] if submitted[i][2] is not None else "" for i in matched],
+                    dtype=object)
+
+    out = {"within_site_r": float("nan"), "between_site_r": float("nan"),
+           "pooled_r": pearson(conn, age), "n_within": 0, "n_sites": 0}
+
+    have_site = np.array([str(s) != "" for s in site])
+    if have_site.sum() < 3:
+        return out                       # no usable site column -> cannot recompute
+    c, a, s = conn[have_site], age[have_site], site[have_site].astype(str)
+
+    labels, counts = np.unique(s, return_counts=True)
+    keep = set(labels[counts >= min_per_site])
+    m = np.array([x in keep for x in s])
+    if m.sum() < 10 or len(keep) < 2:
+        return out
+    cw, aw, sw = c[m], a[m], s[m]
+
+    # within-site: site fixed effects (drop-first dummies + intercept)
+    cats = sorted(set(sw))
+    dummies = np.zeros((len(sw), len(cats) - 1), dtype=float)
+    for j, cat in enumerate(cats[1:]):
+        dummies[:, j] = (sw == cat).astype(float)
+    D = np.column_stack([np.ones(len(sw)), dummies])
+    out["within_site_r"] = _partial_corr_resid(aw, cw, D)
+    out["n_within"] = int(len(sw))
+    out["n_sites"] = int(len(cats))
+
+    # between-site: correlation of per-site mean connectivity with per-site mean age
+    mc = np.array([cw[sw == k].mean() for k in cats], dtype=float)
+    ma = np.array([aw[sw == k].mean() for k in cats], dtype=float)
+    out["between_site_r"] = pearson(mc, ma)
+    return out
 
 
 def find_number(obj, key_patterns, exclude=None):

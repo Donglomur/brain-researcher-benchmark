@@ -33,9 +33,13 @@ CORR_MIN = 0.95       # cross-subject corr(submitted, reference) fabrication tee
 COVER = 0.90          # coverage of the real subject ids
 RECOMP_TOL = 0.03     # pooled r recomputed-from-rows vs reference and vs reported
 WITHIN_MAX = 0.08     # within-site r must be near zero (attenuated toward null)
-WITHIN_TOL = 0.08     # within-site r must match the reference
+RECOMP_WITHIN_TOL = 0.05   # within-site r RECOMPUTED-from-rows must match the reference (fabrication
+                           # teeth: a shuffled/fabricated site partition yields within ~ pooled and
+                           # misses this by ~0.10, while honest+defensible pipelines land within ~0.01)
+RECOMP_BETWEEN_TOL = 0.12  # between-site r recomputed-from-rows vs reference (loose: only 20 site means)
 ATTEN_MIN = 0.02      # within must be attenuated vs pooled by at least this in magnitude
 BETWEEN_MIN = 0.15    # between-site r must be clearly positive
+REPORT_CONSIST_TOL = 0.08  # reported within/between must be consistent with the recompute-from-rows
 
 
 def _load_json(name):
@@ -60,17 +64,32 @@ def _submitted():
         p,
         id_cols=("subject", "fileid", "subjectid", "participant", "participantid", "subid", "id"),
         conn_cols=("connectivity", "connectivitystrength", "meanfc", "conn", "fc", "strength"),
-        age_cols=("age", "ageatscan"))
+        age_cols=("age", "ageatscan"),
+        site_cols=("siteid", "site", "scanningsite", "acquisitionsite", "scanner", "scannerid",
+                   "sitename", "center", "centre"))
 
 
 # ------------------------------------------------------------------ well-formedness
 def test_outputs_present_and_wellformed():
-    sub, conn, age = _submitted()
+    sub, conn, age, site = _submitted()
     assert len(conn) >= 800, (
         f"connectivity.csv must carry per-participant connectivity+age for the ABIDE cohort; "
         f"parsed {len(conn)} usable rows")
     assert all(-2.0 <= v <= 2.0 for v in conn), "connectivity values out of plausible range [-2,2]"
     assert all(0 < v < 120 for v in age), "age values out of plausible range"
+
+    # site is a required per-participant column (plain acquisition metadata); the site-conditioned
+    # estimate is recomputed from it below, so it must be present and carry the multi-site structure.
+    n_with_site = sum(1 for s in site if s is not None and str(s).strip() != "")
+    assert n_with_site >= 0.9 * len(conn), (
+        f"connectivity.csv must carry a per-participant acquisition-site column (site_id); only "
+        f"{n_with_site}/{len(conn)} rows have one. It is standard ABIDE metadata aligned row-for-row "
+        f"with the phenotype and is required to characterise the connectivity–age association at the "
+        f"within-site and between-site levels.")
+    distinct_sites = {str(s).strip() for s in site if s is not None and str(s).strip() != ""}
+    assert len(distinct_sites) >= 2, (
+        f"connectivity.csv reports only {len(distinct_sites)} distinct acquisition site(s); ABIDE is "
+        f"a multi-site sample and the within/between-site levels require >= 2 sites.")
 
     j = _load_json("connectivity_age.json")
     assert pw.find_number(j, [r"pooledr", r"marginalr", r"connectivityager", r"pearsonr", r"^r$"],
@@ -92,7 +111,7 @@ def test_outputs_present_and_wellformed():
 # ------------------------------------------------------------------ pillar 1
 def test_proof_of_work_subjects_and_values():
     ref = _reference()
-    sub, _, _ = _submitted()
+    sub, _, _, _ = _submitted()
     pw.check_subjects_and_values(sub, ref, conn_tol=CONN_TOL, age_tol=AGE_TOL,
                                  cover=COVER, corr_min=CORR_MIN)
 
@@ -106,7 +125,7 @@ def _reported_pooled(j):
 
 def test_recompute_and_crosscheck():
     ref = _reference()
-    sub, _, _ = _submitted()
+    sub, _, _, _ = _submitted()
     matched = [i for i in sub if i in set(ref["ids"])]
     j = _load_json("connectivity_age.json")
     reported = _reported_pooled(j)
@@ -128,7 +147,13 @@ def test_recompute_and_crosscheck():
 
 # ------------------------------------------------------------------ pillar 3 (judgement as numbers)
 def test_conclusion_is_site_conditioned_numeric():
+    """The scientific judgement (is the marginal association site-conditioned?) is graded AS NUMBERS
+    and — critically — RECOMPUTED from the submitted per-participant {connectivity, age, site} rows,
+    not trusted from a reported scalar. A shuffled/fabricated site partition cannot reproduce the
+    reference within-site attenuation, so guessing within ~ 0 without a real site column fails."""
     ref = _reference()
+    sub, _, _, _ = _submitted()
+    matched = [i for i in sub if i in set(ref["ids"])]
     j = _load_json("connectivity_age.json")
     meta = _load_json("run_metadata.json")
 
@@ -137,44 +162,74 @@ def test_conclusion_is_site_conditioned_numeric():
             if pw.find_number(j, patterns, exclude=exclude) is not None \
             else pw.find_number(meta, patterns, exclude=exclude)
 
-    pooled = look([r"pooledr", r"marginalr", r"connectivityager", r"pearsonr", r"^r$"],
-                  [r"spearman", r"rho", r"ci", r"pval", r"within", r"between", r"low", r"high",
-                   r"nsites"])
-    within = look([r"withinsiter", r"withinr", r"siteconditionedr", r"siteadjustedr",
-                   r"fixedeffectr", r"sitewithinr"],
-                  [r"pval", r"ci", r"low", r"high", r"nsites", r"withinsiten", r"spearman", r"rho"])
-    between = look([r"betweensiter", r"betweenr", r"ecologicalr", r"sitemeanr", r"sitelevelr"],
-                   [r"pval", r"ci", r"low", r"high", r"nsites", r"spearman", r"rho"])
+    reported_pooled = look([r"pooledr", r"marginalr", r"connectivityager", r"pearsonr", r"^r$"],
+                           [r"spearman", r"rho", r"ci", r"pval", r"within", r"between", r"low",
+                            r"high", r"nsites"])
+    reported_within = look([r"withinsiter", r"withinr", r"siteconditionedr", r"siteadjustedr",
+                            r"fixedeffectr", r"sitewithinr"],
+                           [r"pval", r"ci", r"low", r"high", r"nsites", r"withinsiten", r"spearman",
+                            r"rho"])
+    reported_between = look([r"betweensiter", r"betweenr", r"ecologicalr", r"sitemeanr", r"sitelevelr"],
+                            [r"pval", r"ci", r"low", r"high", r"nsites", r"spearman", r"rho"])
 
-    assert pooled is not None, "no pooled/marginal connectivity-age correlation reported"
-    assert within is not None, (
+    assert reported_pooled is not None, "no pooled/marginal connectivity-age correlation reported"
+    assert reported_within is not None, (
         "no WITHIN-SITE (site-conditioned) connectivity-age correlation reported. The judgement "
         "graded here is whether the marginal association survives conditioning on site; report a "
         "within-site r (e.g. site fixed effects).")
-    assert between is not None, (
+    assert reported_between is not None, (
         "no BETWEEN-SITE (site-mean/ecological) connectivity-age correlation reported.")
 
     ref_within = float(ref["stats"]["within_site_r"])
     ref_between = float(ref["stats"]["between_site_r"])
 
-    # (a) within-site is near zero (attenuated toward null) and matches the reference.
+    # ---- RECOMPUTE the three levels FROM the submitted rows (the un-guessable gate) ----
+    rec = pw.recompute_site_levels(sub, matched, min_per_site=5)
+    within = rec["within_site_r"]
+    between = rec["between_site_r"]
+    pooled = rec["pooled_r"]
+    import math as _m
+    assert _m.isfinite(within), (
+        "cannot recompute the within-site (site fixed effects) connectivity-age correlation from the "
+        "submitted rows -- the acquisition-site column is missing, degenerate, or has < 2 usable "
+        "sites. The site-conditioned estimate must be derivable from the per-participant table.")
+    assert _m.isfinite(between), "cannot recompute the between-site correlation from the submitted rows"
+
+    # (a) within-site RECOMPUTED-from-rows is near zero (attenuated) AND matches the reference. This
+    #     is what a shuffled/fabricated site partition fails: it yields within ~ pooled (~ +0.08).
     assert abs(within) <= WITHIN_MAX, (
-        f"reported within-site r = {within:+.3f} is not near zero; on the real data the marginal "
-        f"association attenuates toward null within sites (reference {ref_within:+.3f}).")
-    assert abs(within - ref_within) <= WITHIN_TOL, (
-        f"reported within-site r = {within:+.3f} does not match the reference within-site estimate "
-        f"({ref_within:+.3f}, tol {WITHIN_TOL}).")
+        f"within-site r recomputed from the submitted rows = {within:+.3f} is not near zero; on the "
+        f"real data the marginal association attenuates toward null within sites "
+        f"(reference {ref_within:+.3f}). A site partition that does not reproduce this is not the "
+        f"real per-participant site assignment.")
+    assert abs(within - ref_within) <= RECOMP_WITHIN_TOL, (
+        f"within-site r recomputed from the submitted rows = {within:+.3f} does not match the "
+        f"reference within-site estimate ({ref_within:+.3f}, tol {RECOMP_WITHIN_TOL}). The submitted "
+        f"connectivity/age/site rows do not reproduce the site-conditioned association.")
 
     # (b) attenuation: within is meaningfully smaller in magnitude than the marginal, and below it.
     assert within < pooled and (abs(pooled) - abs(within)) >= ATTEN_MIN, (
         f"the marginal association (r={pooled:+.3f}) does not attenuate toward null within sites "
         f"(within r={within:+.3f}). A site-conditioned result requires the within-site estimate to "
-        f"be attenuated; reporting within ~ pooled misses the site conditioning.")
+        f"be attenuated; within ~ pooled misses the site conditioning.")
 
     # (c) site-conditioning ordering: between-site carries a clearly positive relationship > marginal.
+    assert abs(between - ref_between) <= RECOMP_BETWEEN_TOL, (
+        f"between-site r recomputed from the submitted rows = {between:+.3f} does not match the "
+        f"reference ({ref_between:+.3f}, tol {RECOMP_BETWEEN_TOL}).")
     assert between > pooled and between >= BETWEEN_MIN, (
         f"between-site r = {between:+.3f} does not exceed the marginal (r={pooled:+.3f}); the "
         f"between-site level should carry the positive relationship (reference {ref_between:+.2f}).")
+
+    # (d) consistency: the agent's REPORTED within/between must agree with the recompute-from-rows
+    #     (a guessed scalar that disagrees with the submitted table's own site structure fails here).
+    assert abs(reported_within - within) <= REPORT_CONSIST_TOL, (
+        f"reported within-site r ({reported_within:+.3f}) is inconsistent with the value recomputed "
+        f"from the submitted rows ({within:+.3f}, tol {REPORT_CONSIST_TOL}). Report the estimate your "
+        f"own per-participant table produces.")
+    assert abs(reported_between - between) <= max(RECOMP_BETWEEN_TOL, REPORT_CONSIST_TOL), (
+        f"reported between-site r ({reported_between:+.3f}) is inconsistent with the value recomputed "
+        f"from the submitted rows ({between:+.3f}).")
 
 
 # ------------------------------------------------------------------ secondary prose signal
