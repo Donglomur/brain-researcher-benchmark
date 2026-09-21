@@ -33,11 +33,27 @@ So the raw ~1.1 bits/spike — a perfectly plausible place-cell value — is **a
 
 ### The failure mode (un-cued, over-claim)
 
-A careless-but-competent agent computes the raw Skaggs info, gets ~1.1 bits/spike, and reports it as significant place coding — never establishing the shuffle null that shows the value is bias. A flat "these CA1 cells carry ~1.1 bits/spike of spatial information" over-claims; only recognising and correcting the estimator bias (reporting ~0 / not significant) passes.
+A careless-but-competent agent computes the raw Skaggs info, gets ~1.1 bits/spike, and reports it as significant place coding — never establishing the shuffle null that shows the value is dominated by estimator bias. A flat "these CA1 cells carry ~1.1 bits/spike of spatial information" over-claims; the honest analysis recognises the estimator bias (raw over-estimates; the bias-corrected value is far below raw). **The graded conclusion is that ESTIMATOR-BIAS lesson — NOT a biological claim that CA1 lacks place coding (see the R2 rework below).**
 
-### Verifier (4 plain checks, over-claim genre)
+### R2 conclusion rework (supersedes the earlier "no place coding" framing)
 
-`tests/test_outputs.py`: (1) per-unit Skaggs information computed for ~36 CA1 units (plausible band); (2) a **shuffle / circular-shift null (or equivalent bias correction) was established** — the correction word must co-occur with a result token, so a bare pipeline mention cannot false-pass; (3) `findings.md` **does not over-claim** — it reports that after correction the population's spatial information is ~0 / not significant (bias), linking the near-zero/bias verdict to the spatial-information claim; (4) numeric teeth — the headline value in `results.json` is the **bias-corrected** one (< 0.5), not the raw ~1.1. Offline discrimination (locked): reference oracle **4/4 PASS**; naive raw-only baseline (reports 1.12 as real coding) **FAILS 3/4** (bias-correction, over-claim, and reported-value checks).
+The earlier cut graded the conclusion as a biological null — "after shuffle correction these CA1 units carry **no significant spatial information** … 0/36 cells". That over-reached and was contradicted by this proposal's own robustness note: a finer grid (≥100 bins) or a 1-D angular linearisation of the track perimeter **recovers** spatially tuned cells, exactly as expected for a place-coding region. A corrected value that is ~0 **at a coarse 20-bin grid** is a statement about the Skaggs *estimator* and this binning's detection power, not about the biology.
+
+The conclusion is recut to the **Skaggs estimator-bias lesson**, which is fully defensible on both roots: the raw ~1.1 bits/spike **over-estimates** (it is dominated by the finite-sample / occupancy bias, ≈ the shuffle null ~1.03), a shuffle/analytic bias correction is **required**, and the corrected value (~0.09 at this binning) is **much lower than raw**. The oracle `findings.md` now states this and **explicitly scopes it** ("this does not mean CA1 lacks place coding; a finer grid / linearisation recovers tuned cells"). The graded discriminating number is **raw vs corrected**, not a significance count. The instruction is unchanged and stays **un-cued** (it never mentions shuffling, bias, correction or significance).
+
+### Verifier — proof-of-work hardening (fabrication-proof, lever un-cued)
+
+The reviewed verifier graded a single reported number + prose and (per the suite audit) could be passed on fabricated data. It is now fabrication-proof, and the conclusion is the recut estimator-bias lesson:
+
+- **Held-out reference** `tests/reference.npz` (built from the oracle run on the pinned DANDI 001754 asset; never shipped to the agent): per-unit real RAW Skaggs keyed by `unit_index`, plus `ref_stats` (n=36, raw_mean 1.119, null_mean 1.026, corrected_mean 0.093).
+- **Neutral per-unit table** `spatial_information.csv` (already a Required Output) — the pinned per-unit RAW Skaggs, an intermediate BOTH a raw-only and a bias-corrected analysis produce, so it does not cue the shuffle-correction lever.
+- **Four grader pillars.** (1) well-formedness (~36 units, plausible band); (2) the submitted per-unit raw Skaggs must track the reference (cross-unit r ≥ 0.95, per-unit tol, coverage ≥ 90%, non-constant) and the raw population mean recomputed from the rows must match the reference (1.12) and the reported JSON — impossible without the real occupancy + spikes; (3) the estimator-bias JUDGEMENT as an un-cued **OR-escape** — PASS if the write-up volunteers the bias (a reported bias-corrected value far below raw, OR prose that ties the over-estimation / finite-sample bias / shuffle correction to the spatial-information result), FAIL on a bare raw ~1.1 reported as real coding; (4) an **over-claim guard** that fails a definitive **biological-absence** claim ("CA1 carries no place coding / not place cells") made without an estimator/binning scoping caveat — enforcing that the graded lesson is the estimator bias, not a biological null.
+
+**Subprocess-pytest validation matrix** (each `OUTPUT_DIR` graded by a fresh `pytest` process): oracle/honest **PASS 5/5** (raw table + corrected value + scoped estimator-bias prose) / no-table **FAIL** / constant-table **FAIL** (pillar 2 teeth) / non-constant-fabricated (real raw values permuted across units) **FAIL** (pillar 2 teeth) / naive raw-only ("1.12 = strong place coding") **FAIL** (pillar 3) / biological-absence over-claim ("CA1 has no place coding", unscoped) **FAIL** (over-claim guard) / defensible-alternative (analytic Panzeri-Treves debias 0.05 + scoped prose) **PASS**.
+
+### Packaging
+
+`tests/reference.npz` (small) is committed; the one ~9 MB NWB asset is fetched at runtime, so `allow_internet` stays `true` and the asset + `ref_stats` are pinned (baking the ~9 MB derived input is a straightforward maintainer follow-up).
 
 ### Hardening pass (tb-science bar)
 

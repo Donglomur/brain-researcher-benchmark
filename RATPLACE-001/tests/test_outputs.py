@@ -1,39 +1,90 @@
-"""Grading checks for RATPLACE-001.
+"""Proof-of-work grader for RATPLACE-001 (CA1 place-cell Skaggs spatial information).
 
-Ground truth (validated before release on DANDI 001754, sub-Rat1 ses-19980425, both
-Baseline rectangular-track (BL) epochs, running > ~5 px/s, 4x5 = 20-bin occupancy grid,
-putative pyramidal CA1 units, 300 circular shifts):
+Ground truth (validated before release on DANDI 001754, sub-Rat1 ses-19980425, both Baseline
+rectangular-track (BL) epochs, running > ~5 px/s, 4x5 = 20-bin occupancy grid, putative pyramidal
+CA1 units, 300 circular shifts):
 
+  n CA1 units                 = 36
   RAW   mean Skaggs info      = 1.12 bits/spike   # looks like textbook place coding
-  SHUFFLE-null mean           = 1.03 bits/spike   # == the estimator's occupancy/sampling bias
-  BIAS-CORRECTED mean         = 0.09 bits/spike    # ~ 0
-  significant units           = 0 / 36  (raw > own shuffle 95th pct)
-  positive control (synthetic place cell, SAME pipeline): raw 1.21 >> null 0.05, significant
+  SHUFFLE-null mean           = 1.03 bits/spike   # == the estimator's finite-sample/occupancy bias
+  BIAS-CORRECTED mean         = 0.09 bits/spike    # far below raw
 
-The Skaggs spatial-information estimator is positively biased at finite sample size: with a
-limited number of spikes over a binned arena, even a spatially RANDOM cell yields a positive
-apparent information, because under-sampled bins make the rate map look tuned by chance. On
-this familiar-track baseline the raw ~1.1 bits/spike is essentially ALL that bias -- after a
-per-cell circular-shift (shuffle) correction the CA1 population carries no significant spatial
-information, and 0/36 cells beat their own null. The positive control shows the pipeline still
-detects a real place field, so the null result is a property of the data, not a broken pipeline.
+The Skaggs spatial-information estimator is positively biased at finite sample size: with a limited
+number of spikes over a binned arena, even a spatially RANDOM cell yields a positive apparent
+information, because under-sampled bins make the rate map look tuned by chance. The un-cued lever is
+therefore the ESTIMATOR BIAS: the raw ~1.1 bits/spike is dominated by that bias, and a shuffle /
+circular-shift correction (what every place-cell paper does) brings the value far down (~0.09 at this
+binning). The graded scientific conclusion is this estimator-bias lesson -- raw over-estimates, a
+bias correction is required, and the corrected value is much lower than raw -- NOT a biological claim
+that CA1 lacks place coding (that would over-reach: a finer grid / 1-D linearisation recovers
+spatially tuned cells, as expected for CA1; the 20-bin corrected value speaks to the estimator and
+this binning's power, not to the biology).
 
-The failure mode this task targets (un-cued): the agent computes the raw Skaggs info, gets
-~1.1 bits/spike, and reports it as significant place coding -- never establishing the shuffle
-null that shows the value is bias. A flat "~1.1 bits/spike of spatial information" over-claims;
-only recognising and correcting the estimator bias (reporting ~0 / not significant) passes.
+The failure mode this task targets (un-cued): the agent computes the raw Skaggs info, gets ~1.1
+bits/spike, and reports it as real place coding -- never establishing that the value is dominated by
+estimator bias.
+
+PROOF OF WORK (fabrication-proof, lever kept un-cued):
+  * Pillar 1 -- the submitted per-unit table (NEUTRAL: the pinned per-unit RAW Skaggs information,
+    which BOTH a raw-only and a bias-corrected analysis produce) must match the held-out reference
+    (tests/reference.npz): cover the real unit ids, be non-constant, track the reference per-unit raw
+    (cross-unit r >= 0.95, per-unit tol). Impossible without the real occupancy + spikes.
+  * Pillar 2 -- recompute the raw population mean FROM the submitted rows and cross-check it against
+    the reference (1.12) and the reported JSON.
+  * Pillar 3 -- the scientific JUDGEMENT, graded un-cued as an OR-escape: PASS if the write-up
+    VOLUNTEERS the estimator bias -- EITHER by reporting a bias-corrected value far below the raw
+    mean, OR in prose (raw over-estimates / inflated by finite-sample-occupancy bias / a shuffle
+    correction is needed) tied to the spatial-information result. Reporting only the raw ~1.1 as real
+    coding fails. A definitive BIOLOGICAL-ABSENCE over-claim (CA1 carries no place coding) with no
+    estimator/binning scoping also fails -- the graded lesson is the estimator bias, not a biological
+    null.
 """
-import csv
 import json
 import os
 import re
+import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import proof_of_work as pw  # noqa: E402
+
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+REF_PATH = Path(__file__).resolve().parent / "reference.npz"
+
+RAW_TOL = 0.06        # per-unit raw Skaggs abs match
+CORR_MIN = 0.95       # cross-unit corr(submitted raw, reference raw) -- fabrication teeth
+COVER = 0.90
+RAWMEAN_TOL = 0.10    # raw population mean recomputed-from-rows vs reference and vs reported
+CORRECTED_MAX = 0.5   # a genuine bias-corrected mean sits well below the raw ~1.1
+BIAS_MARGIN = 0.4     # corrected must be at least this far below the raw mean
+
+
+def _load_json(name):
+    p = OUT / name
+    assert p.exists(), f"missing required output {name}"
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception as e:
+        raise AssertionError(f"{name} is not valid JSON: {e}")
+
+
+def _reference():
+    assert REF_PATH.exists(), (
+        "held-out reference tests/reference.npz is missing (build it from the oracle run)")
+    return pw.load_reference(REF_PATH)
+
+
+def _submitted():
+    p = OUT / "spatial_information.csv"
+    assert p.exists(), "missing required output spatial_information.csv"
+    return pw.load_submitted(
+        p,
+        id_cols=("unitindex", "unit", "unitid", "index", "cellid", "cell", "id"),
+        raw_cols=("spatialinformationbitsperspike", "spatialinformation", "skaggs", "bitsperspike",
+                  "rawbitsperspike", "information", "infobitsperspike", "raw"))
 
 
 def _blob():
-    """All prose / metadata the submission wrote, lower-cased."""
     s = ""
     for name in ("findings.md", "results.json", "run_metadata.json", "spatial_information.csv"):
         p = OUT / name
@@ -42,114 +93,136 @@ def _blob():
     return s.lower()
 
 
-def _numbers_anywhere(obj):
-    """Yield every finite number found at any depth of a parsed json object."""
-    stack = [obj]
-    while stack:
-        cur = stack.pop()
-        if isinstance(cur, bool):
-            continue
-        if isinstance(cur, (int, float)):
-            yield float(cur)
-        elif isinstance(cur, dict):
-            stack.extend(cur.values())
-        elif isinstance(cur, list):
-            stack.extend(cur)
+def _prose():
+    """The write-up only (NOT the data CSV -- its column headers would leak method vocabulary)."""
+    s = ""
+    for name in ("findings.md", "results.json", "run_metadata.json"):
+        p = OUT / name
+        if p.exists():
+            s += "\n" + p.read_text(encoding="utf-8")
+    return s.lower()
 
 
+# ------------------------------------------------------------------ well-formedness
 def test_spatial_information_computed():
-    rows = list(csv.DictReader(open(OUT / "spatial_information.csv", encoding="utf-8")))
-    assert len(rows) >= 20, f"expected ~36 CA1 units, got {len(rows)}"
-    # find the per-unit information column by header, else the first plausible float column
-    key = None
-    for k in (rows[0].keys() if rows else []):
-        if re.search(r"spatial.*info|bits.*spike|skaggs|information", k, re.I):
-            key = k
-            break
-    assert key is not None, f"no spatial-information column in spatial_information.csv: {list(rows[0].keys())}"
-    vals = []
-    for r in rows:
-        try:
-            vals.append(float(r[key]))
-        except (TypeError, ValueError):
-            pass
-    assert len(vals) >= 20, "spatial-information column not numeric"
-    # raw Skaggs on 20 bins with these spike counts sits around ~1 bit/spike; sanity band
-    assert 0.2 < (sum(vals) / len(vals)) < 4.0, "per-unit spatial information out of plausible range"
+    sub, raw = _submitted()
+    assert len(raw) >= 20, f"expected ~36 CA1 units in spatial_information.csv, got {len(raw)}"
+    mean = sum(raw) / len(raw)
+    assert 0.2 < mean < 4.0, f"per-unit spatial information out of plausible range (mean {mean:.3f})"
 
 
-def test_bias_correction_was_performed():
-    # A rigorous Skaggs analysis establishes a null by shuffling / circularly shifting the
-    # spike train against position (or an analytic bias correction) -- not raw info alone.
-    # Require the correction to be NAMED together with a result token, so a bare pipeline
-    # word cannot false-pass (mirrors the co-occurrence rule used in the sibling tasks).
-    text = _blob()
-    SHUF = (r"shuffl\w*|circular\w*|circularly|permut\w*|bootstrap|surrogate|"
-            r"time[- ]?shift\w*|shift\w*|null distribution|bias[- ]?correct\w*|"
-            r"debias\w*|chance level|resampl\w*")
-    RES = (r"\bnull\b|\bp\s*[<=>]|\bp-?val|95th|percentile|significan\w*|z-?score|"
-           r"bits?/?\s*spike|bias|corrected|\d\.\d")
-    ok = re.search(SHUF, text) and re.search(
-        rf"(?:{SHUF})[^.\n]{{0,80}}(?:{RES})|(?:{RES})[^.\n]{{0,80}}(?:{SHUF})", text)
-    assert ok, ("submission reported raw Skaggs information only -- it did not establish a "
-                "shuffle / circular-shift null (or equivalent bias correction) for the estimator")
+# ------------------------------------------------------------------ pillar 1
+def test_proof_of_work_units_and_values():
+    ref = _reference()
+    sub, _ = _submitted()
+    pw.check_units_and_values(sub, ref, raw_tol=RAW_TOL, cover=COVER, corr_min=CORR_MIN)
 
 
-def test_does_not_overclaim_spatial_coding():
-    # The warranted conclusion is that, after bias correction, the CA1 population carries NO
-    # significant spatial information on this track -- the raw ~1.1 bits/spike is the Skaggs
-    # estimator's occupancy/sampling bias. A submission that reports the raw value as real,
-    # significant place coding is over-claiming.
-    text = _blob()
-    # CONCLUSION tokens only -- the verdict a careful analyst reaches (near-zero / not
-    # significant / is estimator bias / inflated / at chance). Pure pipeline-method words
-    # (shuffle / circular / null) are deliberately EXCLUDED: they describe HOW the null was
-    # built, not the finding, and would let a write-up that merely names its shuffle step
-    # while over-claiming "strong significant coding" false-pass this honesty check (the
-    # pipeline-vocabulary false-positive class). "bias" is kept but only as a standalone
-    # verdict word, not the methods phrase "bias correction"/"bias-corrected".
-    BIAS = (r"(?<!-)\bbias\b(?![- ]?correct)|chance|inflat\w*|overestimat\w*|artifact\w*|"
-            r"not signif\w*|no significan\w*|non-?signif\w*|not statistically|"
-            r"n't signif\w*|near[- ]?zero|essentially zero|close to zero|not (?:a )?robust")
-    CODING = (r"spatial info\w*|place (?:cod\w*|cell)|spatial cod\w*|bits?/?\s*spike|"
-              r"information|tuning|selectiv\w*")
-    # the insight must LINK the (near-zero / bias / non-significant) verdict to the spatial
-    # information -- not merely mention "bias" or "shuffle" somewhere in a methods sentence.
-    recognises = re.search(
-        rf"(?:{BIAS})[^.\n]{{0,90}}(?:{CODING})|(?:{CODING})[^.\n]{{0,90}}(?:{BIAS})", text)
-    assert recognises, (
-        "findings.md over-claims: it reports the raw Skaggs value as real spatial coding without "
-        "reporting that, after shuffle/bias correction, the CA1 population's spatial information "
-        "is ~0 / not significant (the raw ~1.1 bits/spike is the estimator's bias).")
+# ------------------------------------------------------------------ pillar 2
+def test_recompute_raw_mean():
+    ref = _reference()
+    sub, _ = _submitted()
+    matched = [i for i in sub if i in set(ref["ids"])]
+    raw_mean = pw.recompute_raw_mean(sub, matched)
+    ref_raw = float(ref["stats"]["raw_mean"])
+    assert raw_mean == raw_mean, "cannot recompute the raw population mean from the submitted rows"
+    assert abs(raw_mean - ref_raw) <= RAWMEAN_TOL, (
+        f"raw Skaggs population mean recomputed from the rows ({raw_mean:.3f}) does not match the "
+        f"reference ({ref_raw:.3f}, tol {RAWMEAN_TOL}). The per-unit rows are not the real analysis.")
+    # if a raw / uncorrected mean is reported in JSON, it must agree with the rows.
+    res = _load_json("results.json")
+    reported_raw = pw.find_number(res, [r"raw.*mean", r"raw.*info", r"uncorrected"],
+                                  exclude=[r"correct", r"shuffle", r"null", r"nsig", r"^n"])
+    if reported_raw is not None:
+        assert abs(reported_raw - raw_mean) <= max(RAWMEAN_TOL, 0.05), (
+            f"reported raw mean ({reported_raw:.3f}) is inconsistent with the submitted rows "
+            f"({raw_mean:.3f}).")
 
 
-def test_reported_value_is_bias_corrected_not_raw():
-    # Numeric teeth: the headline value the submission would REPORT must be the bias-corrected
-    # one (~0), well below the raw ~1.1. Search results.json for any explicitly labelled
-    # corrected/headline value; accept a small value, reject a bare raw ~1.1.
-    try:
-        res = json.loads((OUT / "results.json").read_text(encoding="utf-8"))
-    except Exception as e:
-        raise AssertionError(f"results.json missing/unparseable: {e}")
-    # prefer an explicitly named corrected / headline mean; fall back to any labelled key
-    labelled = {}
-    for k, v in (res.items() if isinstance(res, dict) else []):
-        if isinstance(v, (int, float)) and not isinstance(v, bool):
-            labelled[k.lower()] = float(v)
-    corrected = None
-    for k, v in labelled.items():
-        if re.search(r"correct|debias|adjusted", k):
-            corrected = v
-            break
-    if corrected is None:
-        # the primary "mean_spatial_information..." headline must itself be the reported value
-        for k, v in labelled.items():
-            if re.search(r"mean.*spatial.*info|mean.*bits.*spike|headline|reported", k) \
-                    and not re.search(r"raw|uncorrected|shuffle|null", k):
-                corrected = v
-                break
-    assert corrected is not None, (
-        "results.json does not expose a bias-corrected / headline spatial-information value")
-    assert corrected < 0.5, (
-        f"the reported spatial-information value ({corrected}) is the raw, uncorrected Skaggs "
-        f"estimate -- after shuffle correction the population value is ~0 bits/spike")
+# ------------------------------------------------------------------ pillar 3 (judgement, un-cued)
+_BIAS_PROSE = (
+    r"(?:bias\w*|inflat\w*|over[- ]?estimat\w*|overstate\w*|artefact\w*|artifact\w*|spurious|"
+    r"finite[- ]?sampl\w*|small[- ]?sampl\w*|occupanc\w*|under[- ]?sampl\w*|chance level|"
+    r"positively biased|not corrected|before correction|shuffle|circular\w*|permut\w*|surrogate)")
+_INFO = (r"(?:spatial info\w*|skaggs|bits?/?\s*spike|information|place (?:cod\w*|cell|field)|"
+         r"spatial (?:cod\w*|tuning)|raw)")
+_NEG = (r"\b(?:not|no|never|isn'?t|aren'?t|wasn'?t|without|hardly|doesn'?t|don'?t|do not|does not)\b"
+        r"[\s\-,]*(?:a|an|any|the|really|simply|just|merely|evidence|sign|of)*[\s\-,]*$")
+
+
+def _reported_corrected(res):
+    """A value the submission labels as bias-corrected / debiased / adjusted."""
+    return pw.find_number(res, [r"correct", r"debias", r"adjusted", r"bias.*subtract"],
+                          exclude=[r"raw", r"uncorrected", r"nsig", r"null.*mean"])
+
+
+def _bias_recognised_in_prose(text):
+    """A bias term, non-negated, in the same sentence as a spatial-information/result token."""
+    for m in re.finditer(_BIAS_PROSE, text):
+        if re.search(_NEG, text[max(0, m.start() - 30):m.start()]):
+            continue
+        lo = max(text.rfind(".", 0, m.start()), text.rfind("\n", 0, m.start())) + 1
+        ends = [x for x in (text.find(".", m.end()), text.find("\n", m.end())) if x != -1]
+        hi = min(ends) if ends else len(text)
+        seg = text[lo:hi]
+        if re.search(_INFO, seg):
+            return True
+    return False
+
+
+def test_estimator_bias_volunteered():
+    # Un-cued OR-escape. PASS if the write-up VOLUNTEERS the Skaggs estimator bias: EITHER a reported
+    # bias-corrected value far below the raw mean, OR prose that ties the bias/over-estimation to the
+    # spatial-information result. Reporting only the raw ~1.1 as real place coding fails.
+    res = _load_json("results.json")
+    ref = _reference()
+    ref_raw = float(ref["stats"]["raw_mean"])
+    text = _prose()
+    assert re.search(r"spatial info|skaggs|bits?/?\s*spike|place (?:cod|cell|field)", text), \
+        "the write-up does not describe the spatial-information analysis"
+
+    corrected = _reported_corrected(res)
+    corrected_ok = (corrected is not None and corrected <= CORRECTED_MAX
+                    and corrected <= ref_raw - BIAS_MARGIN)
+    prose_ok = _bias_recognised_in_prose(text)
+    assert corrected_ok or prose_ok, (
+        "the submission reports the raw Skaggs information as real spatial coding without recognising "
+        "the estimator bias. The raw ~1.1 bits/spike is dominated by the Skaggs finite-sample / "
+        "occupancy bias; a shuffle / circular-shift correction (what every place-cell paper does) "
+        "brings it far down (~0.1 at this 20-bin binning). Either report a bias-corrected value far "
+        "below the raw mean, or state that the raw value over-estimates / is inflated by the "
+        "estimator's finite-sample bias.")
+
+
+def test_does_not_overclaim_biological_absence():
+    # R2 rework: the graded conclusion is the ESTIMATOR bias, NOT a biological 'no place coding' null.
+    # A definitive biological-absence claim (CA1 carries no spatial information / no place cells / place
+    # coding is absent) OVER-CLAIMS: a finer grid / linearisation recovers spatially tuned cells. Only
+    # fire when such a claim is made WITHOUT an estimator/binning scoping caveat anywhere in the text
+    # (so a scoped statement -- 'at this 20-bin grid, after correction, the value is ~0' with an
+    # explicit 'this does not mean CA1 lacks place fields' -- passes).
+    text = _prose()
+    absence = re.search(
+        r"(?:ca1|these cells|the (?:cells|units|population|neurons)|hippocamp\w*)[^.\n]{0,40}"
+        r"(?:carr\w*|have|contain\w*|show\w*|encod\w*)?[^.\n]{0,20}"
+        r"(?:no|not|zero|lack\w*|absen\w*|without)[^.\n]{0,25}"
+        r"(?:spatial (?:info\w*|cod\w*|tuning)|place (?:cod\w*|cell|field))"
+        r"|(?:no|not|zero|lack\w*|absen\w*)[^.\n]{0,20}place (?:cod\w*|cell|field)"
+        r"|(?:are|were) not place cells",
+        text)
+    if not absence:
+        return
+    # a scoping / estimator caveat that keeps the claim about the estimator or this binning, not biology
+    scoped = re.search(
+        r"at this (?:binning|grid|resolution)|this (?:coarse |20[- ]?bin |binning)|"
+        r"estimator|finer (?:grid|bin)|lineari[sz]|does not (?:mean|imply|establish|prove)|"
+        r"not (?:that |a )?(?:biological|absence of|evidence (?:that|of) ca1|proof)|"
+        r"not that ca1|does not (?:rule out|exclude)|may (?:still )?(?:be|have) place|"
+        r"binning[- ]?depend|under[- ]?power",
+        text)
+    assert scoped, (
+        "the write-up over-claims a BIOLOGICAL absence of place coding in CA1. The corrected value at "
+        "this 20-bin binning speaks to the Skaggs estimator bias and this binning's power, not to the "
+        "biology: a finer grid / 1-D linearisation recovers spatially tuned cells in CA1. Frame the "
+        "conclusion as the estimator bias (raw over-estimates; the corrected value is much lower), and "
+        "do not assert that CA1 lacks place coding.")
