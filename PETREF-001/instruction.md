@@ -54,7 +54,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `bp_estimates.csv` — one row per scan, with columns `subject, session, target,
-  reference_region, model, BP_ND` (extra columns such as `R1`, `k2` are welcome).
+  reference_region, model, BP_ND, R1`, where `R1` is the per-scan **relative tracer
+  delivery** of the target region relative to the reference region (extra columns such as
+  `k2` are welcome).
 - `run_metadata.json` — dataset id, snapshot, target region, reference region, model, and
   the per-scan and mean putamen BP_ND.
 - `findings.md` — a short written summary: the per-scan and mean putamen BP_ND, the

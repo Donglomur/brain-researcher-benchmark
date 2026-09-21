@@ -111,3 +111,63 @@ so a knowledgeable table clustered at the literature value (~1.9) with ~2% synth
 and no volunteered R1 is the irreducible guessable residual; the per-scan reference,
 test-retest band and R1-if-present close fabrication, constant, SUVR and scattered attacks.
 `test.sh` now provisions numpy 2.1.3. Data still fetches at runtime; the grader is offline.
+
+---
+
+## Second-pass fix (2026-09): per-scan R1 is now MANDATORY — closes the "clustered guess" residual
+
+The red-team confirmed the residual above was live: because the four real BP_ND are
+1.91/1.96/1.89/1.92 (~2% spread) against a ±9%/±0.17 tolerance, a **flat guess at the
+published ~1.92 mean passes the per-scan BP_ND check on all four scans** — the per-scan BP_ND
+gate was toothless. The fix moves the teeth to the **per-scan R1 (relative tracer delivery)**,
+which the earlier grader only checked *if volunteered*.
+
+**What changed**
+- `bp_estimates.csv` now REQUIRES an `R1` column (per-scan relative delivery). Instruction.md
+  lists it as a required output, described neutrally as "the relative tracer delivery of the
+  target region relative to the reference region" — it does **not** name SRTM, "kinetic", or
+  "not SUVR".
+- `tests/reference.npz` rebuilt to add `ref_R1_whole` (whole-cerebellum-reference SRTM R1) as a
+  second accepted delivery set; the committed GM-reference `ref_values`/`ref_R1` reproduce the
+  real ds001420 fit to 1e-6 (verified).
+- New pillar `test_r1_relative_delivery_matches_reference` (mandatory): R1 must cover all four
+  scans, be dispersed (std ≥ 0.03), and match the held-out kinetic R1 on **all four** scans
+  within **±0.07** against **one consistent** accepted set — GM-cortex R1 (~1.24/1.16/1.12/1.28)
+  **or** whole-cerebellum R1 (~1.09/1.02/1.01/1.16). The real R1 spans ~0.15–0.16 across scans,
+  so no single flat value can cover all four within ±0.07 → a flat/guessed R1 fails, and a
+  non-kinetic SUV-ratio produces no R1 at all.
+- `test_kinetic_params_if_volunteered` (grade-if-present) is **replaced** by the mandatory test.
+- Per-scan BP_ND tolerance tightened 0.17→**0.15** (rel 0.09→0.07): still admits SRTM/Logan/
+  MRTM/MRTM2/whole-cerebellum/frame-weighted (max real off-set 0.073) but now rejects the naive
+  SUVR per-scan directly (0.2–0.8 off), as defense-in-depth.
+
+**Why ±0.07 / all-four / two accepted sets** (measured on the real TACs): SRTM R1 is
+init/bounds-invariant; dt-grid and frame-duration weighting move R1 ≤0.035; the whole-cerebellum
+reference shifts R1 ~0.13 lower but is itself dispersed. A flat guess needs tol ≥ range/2
+(≥0.080 GM, ≥0.0735 whole-ceb) to cover all four — ±0.07 sits below both, so every flat guess
+fails 4/4 on both sets while honest kinetic variants (≤0.035 off) pass with margin.
+
+**Adversarial self-validation** (subprocess pytest per case, exact oracle output schema,
+`PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`):
+
+| case | BP pillar | test-retest | R1 pillar | verdict |
+|---|---|---|---|---|
+| honest oracle (SRTM, cerebellar GM) | PASS | PASS | PASS | **PASS** |
+| defensible: whole-cerebellum reference | PASS | PASS | PASS (whole-ceb set) | **PASS** |
+| defensible: frame-duration-weighted SRTM | PASS | PASS | PASS (GM set) | **PASS** |
+| attack A: fabricated table right shape + guessed flat R1≈1.2 | PASS | PASS | **FAIL** | **FAIL** |
+| attack C: real naive SUVR BP + over-claim caveat + guessed mean 1.92 + flat R1 | **FAIL** | — | **FAIL** | **FAIL** |
+| attack C′: same, R1 column omitted entirely | **FAIL** | — | **FAIL (absent)** | **FAIL** |
+| flat guess: BP≡1.92, R1≡1.20 | PASS | **FAIL (0%)** | **FAIL** | **FAIL** |
+
+Attack A (the exact residual) now fails **solely** on the mandatory dispersed-R1 gate — a
+right-shape table with a guessed corrected value can no longer pass.
+
+**Honest-limitation (accepted 5(a) mild hint, per SECOND_PASS_BRIEF §5):** requiring a per-scan
+`R1` column is at most a *mild kinetic hint* on a reproduction task — it tells the analyst to
+report relative delivery (a standard reference-tissue parameter) but not which model or that a
+SUVR is wrong. A graphical-only / Logan-only submission that reports no R1 is now out of the
+accepted set by contract; this is the deliberate, documented tradeoff that makes the judgment
+un-guessable without re-cuing the lever. The SRTM2-with-a-crude-global-k2′ variant can scatter
+BP up to ~0.19 (fails the tightened BP band on 2/4) — a poorly-parameterized estimator, not fair
+practice; a properly two-stepped MRTM2 (proposal Step-0: 1.936/1.987/1.905/1.937) passes.

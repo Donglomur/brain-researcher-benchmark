@@ -28,7 +28,7 @@ def load_reference(path):
         "values": np.asarray(z["ref_values"], float),
         "stats": json.loads(str(z["ref_stats"])),
     }
-    for k in ("ref_naive", "ref_R1", "ref_k2"):
+    for k in ("ref_naive", "ref_R1", "ref_R1_whole", "ref_k2"):
         if k in z.files:
             d[k.replace("ref_", "")] = np.asarray(z[k], float)
     return d

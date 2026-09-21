@@ -15,6 +15,15 @@ Held-out ground truth (SRTM, cerebellar gray-matter reference):
   mean 1.920, test-retest ~2%.  SRTM / Logan-ref / MRTM agree ~2%; whole-cerebellum
   reference ~3% lower (~1.86) -- both accepted as valid reference-tissue kinetics.
   A late-window SUVR-1 scatters 15-50% off per scan -> rejected per-item.
+
+Because the honest per-scan BP_ND is near-degenerate (~1.9 +/- 2%), a table clustered at the
+literature value passes the BP_ND checks alone. The TEETH is the now-MANDATORY per-scan R1
+(relative delivery): the real R1 is DISPERSED across scans (GM reference ~1.24/1.16/1.12/1.28,
+whole-cerebellum reference ~1.09/1.02/1.01/1.16 -- range ~0.15-0.16), so a flat/guessed R1
+cannot span it within tolerance on all four scans, and a non-kinetic SUV-ratio produces no R1
+at all. Only a real per-scan kinetic fit on the real TACs reproduces it.
+  Held-out R1 (GM ref):        1.242 1.163 1.120 1.279
+  Held-out R1 (whole-ceb ref): 1.092 1.020 1.010 1.157
 """
 import json
 import os
@@ -28,12 +37,17 @@ import proof_of_work as pw  # noqa: E402
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 REF_PATH = Path(__file__).resolve().parent / "reference.npz"
 
-VAL_TOL_ABS = 0.17     # per-scan BP_ND vs held-out reference: accepts SRTM/Logan/MRTM/whole-ceb
-VAL_TOL_REL = 0.09     # (within ~3%); rejects SUVR (>=0.18 off)
+VAL_TOL_ABS = 0.15     # per-scan BP_ND vs held-out reference: accepts SRTM/Logan/MRTM/MRTM2 (~2%),
+VAL_TOL_REL = 0.07     # whole-cerebellum reference (~3-4%) and 2-step estimators; rejects SUVR (0.2-0.8 off)
 COVER = 0.9
 MATCH = 0.75           # >=3/4 scans within tol (accepts a defensible variant on one scan)
 MEAN_TOL_REF = 0.12
 MEAN_TOL_JSON = 0.08
+# per-scan R1 (relative delivery) is now MANDATORY and matched to the held-out kinetic
+# reference (SRTM/SRTM2/whole-cerebellum all land <=0.06 off; a SUVR/flat-BP guess produces
+# no R1 and a flat guess cannot span the dispersed real R1 within tol at 4/4).
+R1_TOL_ABS = 0.07      # absolute only: dispersed real R1 range (~0.16 GM / ~0.15 whole-ceb)
+R1_STD_FLOOR = 0.03    # reject a near-constant (fabricated/flat) R1 column outright
 
 
 def _reference():
@@ -174,29 +188,50 @@ def test_bp_is_kinetic_not_suvr():
         f"[1.70, 2.10].")
 
 
-def test_kinetic_params_if_volunteered():
-    """If the submission volunteers the kinetic delivery parameter R1 (as SRTM/MRTM do -- a
-    non-kinetic SUV-ratio fundamentally cannot), it must be the real per-scan R1 from the
-    held-out reference. Graded only when an R1 column is present (a defensible graphical-only
-    submission may omit it)."""
+# ---------------------------------------------------------------- pillar 4 (mandatory R1 delivery)
+def test_r1_relative_delivery_matches_reference():
+    """MANDATORY per-scan R1 (relative tracer delivery, target vs reference). Any reference-
+    tissue kinetic model (SRTM / SRTM2 / MRTM full) yields R1; a non-kinetic SUV-ratio and a
+    flat/near-constant BP guess fundamentally cannot. The submitted per-scan R1 must reproduce
+    the DISPERSED real per-scan delivery pattern of the held-out kinetic reference (GM-cortex
+    reference R1 ~1.12-1.28, or the whole-cerebellum reference R1 ~1.01-1.16) to within
+    R1_TOL_ABS on ALL four scans against ONE consistent reference set. The real R1 spans ~0.16
+    (GM) / ~0.15 (whole-ceb) across scans, so no single flat value can cover all four within
+    tolerance -- the sub-analysis (a real kinetic fit on the real TACs), not a guess, is forced."""
+    import statistics
     ref = _reference()
-    if "R1" not in ref:
-        return
+    assert "R1" in ref, "held-out reference is missing per-scan R1 (rebuild reference.npz)"
     p = OUT / "bp_estimates.csv"
     rows, headers = pw.read_rows(p)
-    r1col = pw.pick_col(headers, ("r1", "rone", "relativedelivery", "r1delivery"),
-                        exclude=("k2", "bp", "logan", "mrtm"))
-    if r1col is None:
-        return  # not volunteered -> not graded (grade-if-present)
+    r1col = pw.pick_col(headers, ("r1", "rone", "relativedelivery", "r1delivery", "deliveryr1"),
+                        exclude=("k2", "bp", "logan", "mrtm", "se", "std"))
+    assert r1col is not None, (
+        f"bp_estimates.csv has no per-scan R1 (relative delivery) column {headers}. R1 is a "
+        f"required output: report the relative tracer delivery (target-to-reference) per scan.")
     smap = pw.build_submitted_map(rows, headers, ID_GROUPS, r1col)
-    matched = pw.match_items(smap, ref["ids"], ref["R1"])
-    if len(matched) < 3:
-        return
-    close = sum(1 for _, s, r in matched if pw.within(s, r, 0.15, 0.15))
-    assert close >= 0.75 * len(matched), (
-        f"the volunteered per-scan R1 (relative delivery) does not match the held-out kinetic "
-        f"reference on {len(matched) - close}/{len(matched)} scans -- a fabricated or non-"
-        f"kinetic table cannot reproduce the real per-scan R1 (~1.12-1.28).")
+    # coverage: R1 for all four real scans, keyed by real id
+    cover_gm = pw.match_items(smap, ref["ids"], ref["R1"])
+    assert len(cover_gm) >= len(ref["ids"]), (
+        f"per-scan R1 covers only {len(cover_gm)}/{len(ref['ids'])} of the four real ds001420 "
+        f"scans by id; R1 is required for every scan (fabricated or missing ids).")
+    submitted_R1 = [s for _, s, _ in cover_gm]
+    assert statistics.pstdev(submitted_R1) >= R1_STD_FLOOR, (
+        f"the submitted per-scan R1 is near-constant (std {statistics.pstdev(submitted_R1):.3f} "
+        f"< {R1_STD_FLOOR}); the real relative delivery is dispersed across scans (~0.06 std). "
+        f"A flat/fabricated R1 does not reflect a per-scan kinetic fit.")
+    # 4/4 within tol against ONE consistent accepted delivery set (GM-cortex OR whole-cerebellum)
+    n = len(cover_gm)
+    close_gm = sum(1 for _, s, r in cover_gm if pw.within(s, r, 0.0, R1_TOL_ABS))
+    close_whole = 0
+    if "R1_whole" in ref:
+        cover_w = pw.match_items(smap, ref["ids"], ref["R1_whole"])
+        close_whole = sum(1 for _, s, r in cover_w if pw.within(s, r, 0.0, R1_TOL_ABS))
+    best = max(close_gm, close_whole)
+    assert best >= n, (
+        f"per-scan R1 (relative delivery) matches the held-out kinetic reference on only "
+        f"{best}/{n} scans against either accepted reference set (need all {n} within "
+        f"{R1_TOL_ABS}). A non-kinetic SUV-ratio has no R1; a flat/guessed R1 cannot reproduce "
+        f"the dispersed real per-scan delivery (GM ~1.12-1.28 / whole-ceb ~1.01-1.16).")
 
 
 # ---------------------------------------------------------------- secondary prose signal
