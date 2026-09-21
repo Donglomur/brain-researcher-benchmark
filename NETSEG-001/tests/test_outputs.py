@@ -44,10 +44,15 @@ def _meta():
 def _submitted():
     p = OUT / "segregation.csv"
     assert p.exists(), "missing required output segregation.csv"
+    # Positive-edge is the intended quantity (Chan et al.): prefer an explicitly positive-edge
+    # column when the submission provides one alongside a signed primary, then fall back to a
+    # single segregation column (the reference solution's own column IS the positive-edge one).
     return pw.load_submitted(
         p,
         id_cols=("participant", "subject", "participantid", "subid", "id"),
-        seg_cols=("segregation", "systemsegregation", "seg", "sseg", "s"),
+        seg_cols=("systemsegregationposonly", "segregationposonly", "posonly", "segpos",
+                  "spos", "positiveedgesegregation", "segregationpositive",
+                  "segregation", "systemsegregation", "seg", "sseg", "s"),
         group_cols=("group", "childadult", "cohort", "agegroup"))
 
 
@@ -82,28 +87,30 @@ def test_proof_of_work_subjects_and_values():
 
 # ------------------------------------------------------------------ pillar 2
 def test_recompute_cohort_mean_from_rows():
-    """Recompute the cohort-mean segregation FROM the submitted rows and require it to match
-    the positive-edge reference (~0.37) AND (if reported) the run_metadata number. An all-edges
-    run recomputes ~0.55 and fails."""
+    """Recompute the cohort-mean segregation FROM the submitted rows and require it to sit in
+    the positive-edge band (admits both the negatives-excluded ~0.37 and negatives-clipped-to-0
+    ~0.47 conventions). An all-edges run recomputes ~0.55 and fails the band. If a cohort mean
+    is reported, the one consistent with the positive-edge rows must exist (a submission may
+    also report a signed primary; we grade the positive-edge one)."""
     ref = _reference(); st = ref["stats"]
     seg, _ = _submitted()
     matched = [i for i in seg if i in set(ref["ids"])]
     mean_rows = statistics.fmean([seg[i] for i in matched])
-    ref_mean = float(st["pos_edge_mean"])
-    assert abs(mean_rows - ref_mean) <= st["RECOMP_TOL"] + 0.02, (
-        f"cohort-mean segregation recomputed from the submitted rows ({mean_rows:.3f}) does not "
-        f"match the positive-edge reference ({ref_mean:.3f}). A value near ~{st['all_edge_mean']:.2f} "
-        f"means the anti-correlations were kept (system segregation is defined on positive edges).")
     lo, hi = st["POS_BAND"]
     assert lo <= mean_rows <= hi, (
-        f"cohort-mean segregation {mean_rows:.3f} is outside the positive-edge band [{lo}, {hi}]; "
-        f"keeping the negative edges inflates it toward ~{st['all_edge_mean']:.2f}.")
-    reported = pw.find_number(_meta(), [r"segregationmean", r"cohortmean", r"meansegregation"],
-                              exclude=[r"child", r"adult", r"std"])
-    if reported is not None:
-        assert abs(reported - mean_rows) <= 0.03, (
-            f"run_metadata cohort mean ({reported:.3f}) disagrees with the submitted rows "
-            f"({mean_rows:.3f}).")
+        f"cohort-mean segregation recomputed from the submitted rows ({mean_rows:.3f}) is "
+        f"outside the positive-edge band [{lo}, {hi}]. System segregation is defined on the "
+        f"positive edges (Chan et al. 2014); keeping the anti-correlations inflates the cohort "
+        f"mean toward ~{st['all_edge_mean']:.2f}.")
+    cands = pw.collect_numbers(_meta(),
+                               [r"segregationmean", r"cohortmean", r"meansegregation",
+                                r"segregationcohort"],
+                               exclude=[r"child", r"adult", r"std", r"\bsd\b", r"group"])
+    if cands:
+        best = min(cands, key=lambda v: abs(v - mean_rows))
+        assert abs(best - mean_rows) <= st["REPORT_TOL"], (
+            f"no reported cohort-mean segregation is consistent with the submitted rows "
+            f"(closest reported {best:.3f} vs rows {mean_rows:.3f}).")
 
 
 # ------------------------------------------------------------------ pillar 3 (judgement as numbers)
@@ -113,19 +120,18 @@ def test_developmental_contrast_and_edge_sign():
     Plus an explicit edge-sign disclosure (the over-claim axis)."""
     ref = _reference(); st = ref["stats"]
     seg, grp = _submitted()
-    # child vs adult from the submitted rows, if a group column is present
+    # child vs adult from the submitted rows, if a group column is present. Grade the DIRECTION
+    # (adults more segregated than children) robustly -- the per-group magnitude is convention
+    # dependent (negatives-excluded vs negatives-clipped-to-0 shift it by ~0.10), so it is not
+    # pinned.
     child = [seg[i] for i in seg if grp.get(i, "").startswith("child")]
     adult = [seg[i] for i in seg if grp.get(i, "").startswith("adult")]
-    ref_child = st.get("child_pos_mean"); ref_adult = st.get("adult_pos_mean")
-    if len(child) >= 5 and len(adult) >= 5 and ref_child is not None and ref_adult is not None:
+    if len(child) >= 5 and len(adult) >= 5:
         cm, am = statistics.fmean(child), statistics.fmean(adult)
-        assert abs(cm - ref_child) <= 0.06 and abs(am - ref_adult) <= 0.06, (
-            f"child/adult segregation means (child {cm:.3f}, adult {am:.3f}) do not match the "
-            f"reference (child {ref_child:.3f}, adult {ref_adult:.3f}); the per-group values are "
-            f"not the real positive-edge quantities.")
         assert am > cm, (
-            f"reference has adults MORE segregated than children (adult {ref_adult:.3f} > child "
-            f"{ref_child:.3f}); submitted contrast is reversed (child {cm:.3f}, adult {am:.3f}).")
+            f"the reference has adults MORE segregated than children (a developmental increase "
+            f"in system segregation); the submitted contrast is reversed (child {cm:.3f}, "
+            f"adult {am:.3f}).")
 
     # explicit edge-sign disclosure (the over-claim this task targets)
     text = _text()

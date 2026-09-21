@@ -36,6 +36,12 @@ Extract each participant's 100 parcel time series with a labels masker (regressi
 provided confounds, detrending, and z-scoring the series), and form the parcel×parcel Pearson
 connectome. Do not substitute a different or manually-prepared dataset or atlas.
 
+**Use exactly these 40 participants** (the set `fetch_development_fmri(n_subjects=40)` returns;
+pin them so the cohort is reproducible): the 31 children `sub-pixar001` … `sub-pixar031`, and
+the 9 adults `sub-pixar123`, `sub-pixar124`, `sub-pixar125`, `sub-pixar126`, `sub-pixar127`,
+`sub-pixar128`, `sub-pixar129`, `sub-pixar130`, `sub-pixar131`. Report each participant under
+its `sub-pixarNNN` identifier.
+
 ## Task
 
 For **each of the 40 participants**, compute the **system segregation** of the cortical
