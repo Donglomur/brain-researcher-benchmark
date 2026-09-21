@@ -1,173 +1,136 @@
-"""Grading checks for HIPPOTHETA-001 (the hippocampal theta peak frequency).
+"""Proof-of-work grader for HIPPOTHETA-001 (hippocampal theta peak frequency).
 
-Ground truth (validated before release on DANDI 000552, sub-e15-13f1 ses-e15-13f1-220117; LFP
-processing/ecephys/LFP/ElectricalSeriesLFP at 1250 Hz; running speed from
-processing/behavior/SubjectPosition; best theta-power channel; Welch 4 s windows; 6-10 Hz band):
+Single-value task: the deliverable is one theta peak frequency (Hz). A lone scalar is guessable,
+so the grader validates the finest NEUTRAL intermediate the analysis produces -- the power
+spectrum the peak is read from -- against a held-out reference (tests/reference.npz, built from
+the oracle run, never shipped to the agent), and requires the headline to lie in the honest band
+that only a movement-conditioned spectrum reaches.
 
-  MOVEMENT (running, speed > ~5 units/s) : ~9.0 Hz  (>3 -> 8.86; stable across channel)  <-- honest
-  WHOLE RECORDING, no state conditioning : ~7.9 Hz  (naive)
-  (context) REM theta ~7.4 Hz ; awake immobility theta ~7.5 Hz
+Ground truth (DANDI 000552, sub-e15-13f1 ses-220117, CA1 LFP 1250 Hz, best-theta-power channel,
+Welch 4 s windows, 6-10 Hz band):
+  CORRECT  during locomotion            : 9.0 Hz   <-- reported (stable 8.98-9.01 across channels)
+  NAIVE    whole recording, no gating    : 7.9 Hz  (REM/immobility slow theta pulls it down)
 
-Theta frequency is STATE-DEPENDENT: running (movement) theta is fast (~9 Hz), whereas theta during
-REM sleep and awake immobility is ~1.5 Hz slower (~7.4-7.5 Hz). This session is a ~7 h recording
-that is mostly home-cage rest/sleep with a single ~31 min maze epoch, so a theta-band spectral peak
-taken over the WHOLE recording (or otherwise not conditioned on the animal's behavioural state) is
-dragged down to ~7.9 Hz by the dominant slow-theta (REM / immobility) periods. Only conditioning on
-movement recovers the ~9 Hz movement-related theta.
+Theta peak frequency is state-dependent: this ~7 h session is mostly rest/sleep with one ~31 min
+maze epoch, so a whole-recording spectrum is dragged toward the slow (REM/immobility) theta at
+~7.9 Hz and understates the movement-related theta (~9 Hz). The honest analysis conditions on the
+animal's movement state and VOLUNTEERS the state-dependence the task never asks for.
 
-The failure mode this task targets (un-cued, over-claim of a single identity -- cf. GRADIENT-001):
-the agent estimates one theta peak over the whole LFP, asserts a single flat frequency (~7.9 Hz),
-and never asks whether it depends on the animal's behavioural state -- when it does. A mature
-analyst VOLUNTEERS the state-conditioning (the task never mentions movement, speed, state, or REM),
-recovers the ~9 Hz movement theta, and reports the frequency as state-dependent. A flat
-whole-recording ~7.9 Hz, with no conditioning on state, over-claims and fails the checks below.
+Pillars:
+  1. spectrum.csv IS the real movement-conditioned spectrum (5-11 Hz shape tracks the held-out
+     reference; ~0.9 across channels vs ~0.14 for the whole-recording spectrum), non-constant
+  2. headline theta peak in the honest ~9 Hz band (fails the naive ~7.9), == the peak of the
+     submitted spectrum (CSV <-> JSON self-consistency)
+  3. discriminating recognition (fail if absent): the state-dependence the honest analysis
+     volunteers -- a reported slower non-movement / whole-recording peak (~7.9 Hz) OR prose that
+     the theta frequency is state-dependent (running vs rest/REM/immobility)
 """
 import json
 import os
 import re
+import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import proof_of_work as pw  # noqa: E402
+
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+REF_PATH = Path(__file__).resolve().parent / "reference.npz"
 
-EXPECTED_MOVE = 8.9      # movement (running) theta peak frequency (Hz)
-TOL = 0.55               # [8.35, 9.45]: passes the ~8.86-9.0 movement peak; fails the ~7.9 whole-recording value
-THETA_LO, THETA_HI = 6.0, 10.0
-
-# keys/labels that denote a NON-headline contrast quantity (never grade these as the reported value)
-EXCLUDE = re.compile(r"whole|recording|session|rem|immobil|rest|sleep|slow|naive|"
-                     r"contaminat|contrast|context|delta|non.?theta|quiescen|still|stationary", re.I)
-PEAK_KEY = re.compile(r"(theta.*(peak|freq))|((peak|dominant).*(theta|freq))|theta_peak|peak_freq", re.I)
-
-# --- prose tokens ---
-THETA = r"(?:theta|\b6[\-– ]?10\s*hz|\btheta[- ]?band)"
-# behavioural-state / movement conditioning terms
-MOVE = (r"(?:locomot\w*|running|\brun\b|\bruns\b|\brunning\b|\bmoving\b|movement|ambulat\w*|"
-        r"active behav\w*|active[- ]?state|\bspeed\b|velocit\w*)")
-RESTLIKE = (r"(?:rest\w*|immobil\w*|quiescen\w*|\bstill\b|stationary|\brem\b|sleep|awake immobil\w*|"
-            r"non[- ]?theta|slow[- ]?theta)")
-# a term that signals genuine CONDITIONING / COMPARISON of the theta estimate -- deliberately
-# NOT bare "during"/"while" (those collide with context prose like "freely moving during the
-# session"); it must be an action on the estimate or a cross-state comparison.
-COND = (r"(?:when the (?:mouse|animal) (?:was |is )?(?:running|moving|locomot|immobil|still|at rest)|"
-        r"restrict\w*|condition\w*|gate[d]?|gating|segment\w*|only (?:the )?(?:running|movement|locomot)|"
-        r"period[s]? (?:of|when)|during (?:running|locomot|movement|immobil|rest|rem)|"
-        r"while (?:running|locomot|moving|immobil|the (?:mouse|animal))|speed\s*[>≥]|speed threshold|"
-        r"compar\w*|versus|\bvs\.?\b|faster|slower|higher|lower|increase\w*|differ\w*|depend\w*|"
-        r"state[- ]?dependent|state[- ]?depend\w*)")
+PEAK_BAND = (8.4, 9.6)     # honest movement-related theta ~9 Hz; fails naive whole-recording ~7.9
+BAND_CORR_MIN = 0.80
+SELF_PEAK_TOL = 0.6
 
 
-def _load(name):
-    p = OUT / name
-    return p.read_text(encoding="utf-8") if p.exists() else ""
+def _reference():
+    assert REF_PATH.exists(), (
+        "held-out reference tests/reference.npz is missing (build it from the oracle run)")
+    return pw.load_reference(REF_PATH)
 
 
 def _results():
-    return json.loads(_load("results.json"))
+    p = OUT / "results.json"
+    assert p.exists(), "missing required output results.json"
+    return json.loads(p.read_text(encoding="utf-8"))
 
 
-def _num(v):
-    return isinstance(v, (int, float)) and not isinstance(v, bool)
+def _spectrum():
+    p = OUT / "spectrum.csv"
+    assert p.exists(), (
+        "missing required output spectrum.csv -- the power spectrum (frequency, power) the theta "
+        "peak is read from. The single peak frequency cannot be validated without the spectrum it "
+        "is the argmax of.")
+    return pw.load_submitted_spectrum(p)
 
 
-def _walk(obj, prefix=""):
-    if isinstance(obj, dict):
-        for k, v in obj.items():
-            yield from _walk(v, f"{prefix}.{k}" if prefix else str(k))
-    elif isinstance(obj, list):
-        for i, v in enumerate(obj):
-            yield from _walk(v, f"{prefix}[{i}]")
-    else:
-        yield prefix, obj
+def _headline(res):
+    return pw.find_number(
+        res, [r"thetapeak", r"peakfrequency", r"peakfreq", r"thetafrequency", r"peakhz", r"peak"],
+        exclude=[r"whole", r"rest", r"rem", r"immobil", r"sleep", r"band", r"channel", r"nperseg",
+                 r"window", r"power", r"quiet"])
 
 
-def _headline_peak(res):
-    """The reported theta peak: a theta-peak-frequency value NOT tagged as a contrast quantity
-    (whole-recording / REM / immobility / rest / ...)."""
-    for k, v in _walk(res):
-        leaf = k.split(".")[-1].split("[")[0]
-        if _num(v) and PEAK_KEY.search(leaf) and not EXCLUDE.search(k):
-            if THETA_LO - 2.0 <= float(v) <= THETA_HI + 2.0:
-                return float(v)
-    for k, v in _walk(res):
-        if _num(v) and re.search(r"freq|hz|peak", k, re.I) and not EXCLUDE.search(k):
-            if THETA_LO <= float(v) <= THETA_HI:
-                return float(v)
-    return None
-
-
-def _prose():
-    """All submitted prose/metadata, lower-cased (findings + run_metadata + results)."""
-    return "\n".join(_load(n) for n in ("findings.md", "run_metadata.json", "results.json")).lower()
-
-
-def _conditioned_on_state():
-    """True if the submission resolved theta by movement / behavioural state, rather than
-    reporting a single whole-recording spectrum. Accepts a structured multi-condition report or
-    prose that conditions/compares theta across movement/rest states (co-occurrence guarded so a
-    bare 'running an eight-maze' context mention does not count)."""
-    # 1) structured: >=2 theta-peak-like values on movement/rest-labelled keys
+def test_outputs_present_and_wellformed():
+    _reference()
     res = _results()
-    labelled = 0
-    for k, v in _walk(res):
-        if _num(v) and re.search(r"freq|hz|peak|theta", k, re.I) and \
-           re.search(r"run|locomot|move|moving|speed|rest|immobil|rem|awake|state|still|quiescen|whole|session", k, re.I):
-            if THETA_LO - 2.0 <= float(v) <= THETA_HI + 2.0:
-                labelled += 1
-    if labelled >= 2:
-        return True
-    # 2) prose: theta co-occurring with a movement/rest term AND a conditioning/comparison term
-    text = _prose()
-    for m in re.finditer(THETA, text):
-        w = text[max(0, m.start() - 160): m.end() + 160]
-        if (re.search(MOVE, w) or re.search(RESTLIKE, w)) and re.search(COND, w):
-            # guard: the maze-running *context* ("running an eight-maze") alone is not conditioning
-            if re.search(r"run\w*\s+(?:an?\s+)?(?:eight|8)[- ]?maze", w) and not re.search(
-                    r"speed|locomot|immobil|rest|rem|during running|while running|running period|"
-                    r"movement period|state[- ]?depend|faster|slower|conditioned|restrict|gated", w):
-                continue
-            return True
-    return False
+    hl = _headline(res)
+    assert hl is not None, f"results.json exposes no headline theta peak frequency: {res}"
+    assert 5.5 <= hl <= 10.5, f"reported theta peak {hl} Hz is outside a plausible theta range"
+    freq, power = _spectrum()
+    assert freq is not None and len(freq) >= 5, "spectrum.csv lacks a (frequency, power) spectrum"
 
 
-def test_theta_computed():
+def test_proof_of_work_spectrum_matches_reference():
+    ref = _reference()
+    freq, power = _spectrum()
+    pw.check_spectrum_matches_reference(freq, power, ref, band_corr_min=BAND_CORR_MIN,
+                                        peak_tol=SELF_PEAK_TOL + 0.1)
+
+
+def test_headline_is_movement_theta_and_self_consistent():
+    ref = _reference()
     res = _results()
-    peak = _headline_peak(res)
-    assert peak is not None, "results.json exposes no theta peak frequency (Hz) headline value"
-    assert THETA_LO - 1.0 <= peak <= THETA_HI + 1.0, f"peak {peak} is not a plausible theta frequency"
-    assert "theta" in _load("findings.md").lower(), "findings.md does not mention theta"
+    freq, power = _spectrum()
+    hl = _headline(res)
+    lo, hi = PEAK_BAND
+    assert hl is not None and lo <= hl <= hi, (
+        f"reported theta peak frequency {hl} Hz is not the honest movement-related value "
+        f"(~{ref['stats']['loco_peak']:.1f} Hz, band [{lo},{hi}]). A whole-recording spectrum that "
+        f"does not condition on the animal's movement state peaks at ~7.9 Hz (slow REM/immobility "
+        f"theta) and understates the theta frequency.")
+    sub_peak = pw.band_peak(freq, power)
+    assert abs(hl - sub_peak) <= SELF_PEAK_TOL, (
+        f"the reported theta peak ({hl} Hz) does not equal the peak of the submitted spectrum "
+        f"({sub_peak:.2f} Hz); results.json and spectrum.csv disagree")
 
 
-def test_theta_frequency_conditioned_on_behavioural_state():
-    # The volunteered judgement (un-cued): theta frequency is state-dependent, so a single
-    # whole-recording spectrum over a mostly-sleep session mis-states it. A mature analysis
-    # conditions on the animal's movement / behavioural state. (cf. GRADIENT-001's robustness check.)
-    # A movement-value headline (~8.4-9.5 Hz) is itself evidence of conditioning: the whole
-    # recording, REM and immobility all peak <= 7.9 Hz, so only conditioning recovers a ~9 Hz peak.
-    peak = _headline_peak(_results())
-    numeric_evidence = peak is not None and 8.4 <= peak <= 9.5
-    assert _conditioned_on_state() or numeric_evidence, (
-        "the submission reported a single theta peak without conditioning on the animal's movement "
-        "or behavioural state. Theta frequency is state-dependent (running ~9 Hz vs REM/immobility "
-        "~7.5 Hz), and this session is mostly rest/sleep, so an un-conditioned whole-recording "
-        "spectrum understates the movement-related theta frequency.")
-
-
-def test_reports_movement_theta_not_flat_contaminated():
-    # Having conditioned on state, the honest reported theta peak is the movement value (~9 Hz).
-    # A flat whole-recording ~7.9 Hz (dragged down by the dominant REM/immobility slow theta) fails.
+def test_state_dependence_recognised():
+    """Discriminating judgement, fail if absent (DEVCONN way): the honest analysis recognises that
+    the theta peak frequency is state-dependent -- either by reporting the slower non-movement /
+    whole-recording peak (~7.9 Hz) as a contrast, or by stating it in the write-up. A flat single
+    number presented as the state-independent theta frequency misses what this result has."""
+    ref = _reference()
     res = _results()
-    peak = _headline_peak(res)
-    text = _prose()
-    # numeric route: the headline peak reproduces the movement value
-    numeric_ok = peak is not None and abs(peak - EXPECTED_MOVE) <= TOL
-    # recognition route: prose states the running/movement theta is fast (~8.5-9.5) AND slower at rest
-    fast_vals = [float(x) for x in re.findall(r"(\d\.?\d*)\s*hz", text)]
-    says_fast_move = bool(re.search(MOVE, text)) and any(8.4 <= v <= 9.6 for v in fast_vals) and \
-        bool(re.search(r"faster|fast\b|higher|~?\s*9\s*hz|state[- ]?depend|slower (?:at|during|in)|"
-                       r"(?:rem|immobil|rest)\w*[^.\n]{0,40}(?:slow|7\.[0-9])", text))
-    assert numeric_ok or says_fast_move, (
-        f"reported theta peak {peak} Hz does not reproduce the movement-related value "
-        f"{EXPECTED_MOVE:.1f} +/- {TOL:.1f} Hz, and the write-up does not report the faster "
-        f"(~9 Hz) running theta distinct from the slower (~7.5 Hz) rest/REM theta. A ~7.9 Hz "
-        f"whole-recording estimate understates the movement theta and over-claims a single "
-        f"state-independent frequency.")
+    whole_ref = float(ref["stats"]["whole_peak"])
+    hl = _headline(res) or 9.0
+    # (a) a volunteered slower peak (whole-recording / rest / REM / immobility), ~1 Hz below headline
+    slow_vals = pw.find_all_numbers(
+        res, [r"whole", r"rest", r"rem", r"immobil", r"sleep", r"quiet", r"nonmov", r"stationary",
+              r"allrecord", r"overallpeak", r"contrast"],
+        exclude=[r"band", r"channel", r"nperseg", r"window", r"rate", r"time", r"threshold"])
+    has_slow_number = any(6.8 <= v <= 8.4 and (hl - v) >= 0.6 for v in slow_vals)
+    # (b) prose recognising state-dependence
+    text = (OUT / "findings.md").read_text(encoding="utf-8").lower() if (OUT / "findings.md").exists() else ""
+    STATE = (r"state[- ]?depend|movement|locomot|running|run\b|awake|immobil|rest\b|sleep|rem\b|"
+             r"quiescen|behavioural state|behavioral state|speed")
+    SLOW = (r"slow\w*|lower|~?7\.\d|7\.\d ?hz|whole[- ]?record|entire record|overall|drag\w*|"
+            r"pull\w*|understate|reduc\w*|decreas\w*|down\b")
+    prose = bool(re.search(STATE + r"[^\n]{0,120}(?:" + SLOW + ")", text) or
+                 re.search("(?:" + SLOW + r")[^\n]{0,120}(?:" + STATE + ")", text) or
+                 re.search(r"theta[^\n]{0,60}(?:faster|slower|higher|lower)[^\n]{0,60}(?:" + STATE + ")", text))
+    assert has_slow_number or prose, (
+        "the submission does not recognise that the hippocampal theta peak frequency is "
+        "state-dependent. Theta during locomotion (~9 Hz) is ~1.5 Hz faster than during REM / "
+        "awake immobility (~7.5 Hz); a whole-recording spectrum on this mostly-rest session is "
+        f"dragged down to ~{whole_ref:.1f} Hz. Reporting a single number as the state-independent "
+        "theta frequency, with no recognition of the movement/rest dependence, misses the issue.")

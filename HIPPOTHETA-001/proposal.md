@@ -47,3 +47,34 @@ Oracle **reward 1.0** (re-validated on the pinned DANDI assets; single-channel s
 ### Cost
 
 `hard`. cpus 2, mem 12 GB, internet on. Streams a channel-selection window (all channels, one ~120 s block ≈ 100 MB) plus one full channel of the ~6.8 GB LFP (~130 MB over S3 range requests) and a ~270 MB behaviour file — not the whole dandiset (~1.5 TB); DANDI/S3 can throttle. Agent timeout 7200 s, verifier 1800 s. Deps: dandi 0.78 / pynwb 4.2 / numpy / scipy / pandas / h5py / scikit-learn / remfile / fsspec (pinned in the Dockerfile).
+
+### Proof-of-work verifier (added)
+
+The grader is now proof-of-work (see `PROOF_OF_WORK_SPEC.md`): the reported peak cannot be produced
+without the real movement-conditioned spectral analysis.
+
+- **Held-out reference** `tests/reference.npz` (from `solution/compute.py`, never shipped): the
+  honest locomotion-conditioned power spectrum over 5–11 Hz + `ref_stats` (locomotion peak 9.01 Hz,
+  whole-recording peak 7.93 Hz, best channel 64). The locomotion spectrum's 5–11 Hz shape
+  correlates 0.90–1.0 across hippocampal channels but only ~0.14 with the whole-recording spectrum.
+- **Neutral per-item table** `spectrum.csv` (frequency, power) — any spectral analysis produces one,
+  so requiring it does not cue the state-conditioning lever.
+- **Pillars:** (1) `spectrum.csv` is a real broadband LFP spectrum (non-constant, median/peak power
+  guard rejects a synthetic bump) whose 5–11 Hz shape tracks the held-out movement-conditioned
+  reference (band r ≥ 0.88) and whose 6–10 Hz peak sits at ~9 Hz; (2) the headline peak lies in the
+  honest band `[8.4, 9.6]` (the naive whole-recording ~7.9 fails) and equals the submitted
+  spectrum's peak (CSV↔JSON); (3) **state-dependence recognised** (fail if absent): a volunteered
+  slower non-movement / whole-recording peak (~7.9 Hz) or prose that theta frequency is
+  state-dependent (running vs rest/REM/immobility).
+- **Validation matrix (subprocess pytest):** honest PASS; no-table FAIL; constant-spectrum FAIL;
+  fabricated gaussian bump at 9 Hz FAIL; naive whole-recording (7.9 Hz + whole spectrum) FAIL.
+
+**Data pin (reference build):** DANDI `000552` (draft). LFP asset
+`sub-e15-13f1/sub-e15-13f1_ses-e15-13f1-220117-raw_ecephys.nwb` (asset-id
+`9f3b0bd1-8228-4942-8a26-f69d74bae64f`,
+`dandi:sha2-256 = 53cababa409c23aab40253388bddab4b6e96124277c80051ec64a57096962d68`); behaviour asset
+`sub-e15-13f1/sub-e15-13f1_ses-e15-13f1-220117_behavior+ecephys.nwb` (asset-id
+`3af386b1-0db7-460f-b394-7dca8f9b1e24`,
+`dandi:sha2-256 = ea31f668a3a333c4253e7ae7fcfa50cb15a5f953fb3bd9dae022babfc7bbb16f`). Mutable
+**draft** version; paths + hashes pin the exact blobs. Streamed at runtime with `remfile`
+(`allow_internet=true`); baking (6.8 GB LFP) is impractical — maintainer keeps runtime fetch.

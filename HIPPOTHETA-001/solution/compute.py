@@ -17,13 +17,11 @@ recovers the movement-related theta peak of ~9 Hz, and reports the frequency as 
 
 Validated ground truth (DANDI 000552, sub-e15-13f1 ses-220117, LFP 1250 Hz, best theta-power
 channel, Welch 4 s windows, parabolic peak interpolation, 6-10 Hz band):
-  CORRECT  during locomotion (speed > 5 units/s) : 8.99 Hz  (>3 -> 8.86; >8 -> ~8.9)  <-- reported
-  NAIVE    whole recording, no movement gating    : 7.92 Hz
-  (context) REM theta 7.42 Hz ; awake immobility theta 7.50 Hz
-The locomotion peak is stable across the chosen channel (48/63/78 all 8.99 Hz) and across the
-running threshold (~8.9 +/- 0.1 Hz). So the honest movement-related theta peak is ~9 Hz -- not
-the ~7.9 Hz that a whole-recording spectrum reports.
+  CORRECT  during locomotion (speed > 5 units/s) : 9.0 Hz  (stable 8.98-9.01 across channels) <- reported
+  NAIVE    whole recording, no movement gating    : 7.9 Hz
+The locomotion peak is stable across the chosen channel and the running threshold.
 """
+import csv
 import json
 import os
 import sys
@@ -130,12 +128,16 @@ if run_time < 60:
 # ---- pick a clear-theta hippocampal channel from a window inside the maze epoch ----
 from scipy import signal
 
-def welch_peak(x, band=THETA, search=SEARCH, nperseg=None):
+
+def welch_spectrum(x, nperseg=None):
     if nperseg is None:
         nperseg = int(4 * fs)
     if len(x) < nperseg:
         nperseg = max(256, len(x) // 2)
-    f, P = signal.welch(x, fs=fs, nperseg=nperseg, noverlap=nperseg // 2)
+    return signal.welch(x, fs=fs, nperseg=nperseg, noverlap=nperseg // 2)
+
+
+def peak_from(f, P, search=SEARCH):
     m = (f >= search[0]) & (f <= search[1])
     fb, Pb = f[m], P[m]
     k = int(np.argmax(Pb))
@@ -145,6 +147,7 @@ def welch_peak(x, band=THETA, search=SEARCH, nperseg=None):
         delta = 0.5 * (y0 - y2) / den if den != 0 else 0.0
         return float(fb[k] + delta * (fb[1] - fb[0]))
     return float(fb[k])
+
 
 # a ~150 s window near the middle of the maze epoch, all channels (one chunk per channel)
 wmid = 0.5 * (t0 + t1)
@@ -174,14 +177,23 @@ lfp_run = np.concatenate(chunks) if chunks else np.array([])
 if len(lfp_run) < int(4 * fs):
     fail("insufficient locomotion LFP after gating")
 
-theta_peak = welch_peak(lfp_run)
+f_run, P_run = welch_spectrum(lfp_run)
+theta_peak = peak_from(f_run, P_run)
 
 # whole-recording peak (for the write-up's contrast only; NOT the reported value)
 try:
     lfp_full = data[:, best_ch].astype(np.float32)
-    whole_peak = welch_peak(lfp_full)
+    whole_peak = peak_from(*welch_spectrum(lfp_full))
 except Exception:
     whole_peak = float("nan")
+
+# ---- spectrum table (the finest intermediate the estimate is read from) ----
+with open(OUT / "spectrum.csv", "w", newline="") as f:
+    w = csv.writer(f)
+    w.writerow(["frequency_hz", "power"])
+    for fr, pwv in zip(f_run, P_run):
+        if SEARCH[0] - 1.0 <= fr <= SEARCH[1] + 1.0:
+            w.writerow([float(fr), float(pwv)])
 
 results = {
     "theta_peak_frequency_hz": round(theta_peak, 3),   # REPORTED: locomotion theta peak
@@ -212,8 +224,8 @@ results = {
     f"recording is {whole_peak:.2f} Hz: that session is mostly rest/sleep, and theta during REM "
     f"and awake immobility is ~1.5 Hz slower, so a spectrum that does not condition on locomotion "
     f"is pulled down toward ~7.9 Hz and understates the movement-related theta frequency. The "
-    f"locomotion estimate (~{theta_peak:.1f} Hz) is stable across the theta channel used and the "
-    f"exact running-speed cutoff.\n"
+    f"theta peak frequency is state-dependent; the locomotion estimate (~{theta_peak:.1f} Hz) is "
+    f"stable across the theta channel used and the exact running-speed cutoff.\n"
 )
 
 print(f"best_ch={best_ch} run_time={run_time:.0f}s LOCOMOTION_peak={theta_peak:.3f}Hz "
