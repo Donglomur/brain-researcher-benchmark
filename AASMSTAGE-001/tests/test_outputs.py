@@ -1,8 +1,10 @@
 """Proof-of-work grader for AASMSTAGE-001 (5-class AASM sleep staging on Sleep-EDF).
 
-The grade is carried by NUMBERS against a held-out reference (`reference.npz`) built by
-running the oracle on the pinned Sleep-EDF cohort (subjects [0..5], recording 1; two-EEG
-relative band-power features; RandomForest(200, random_state=42); leave-one-subject-out CV):
+The grade is carried by NUMBERS against a reference (`reference.npz`) built by running the
+oracle on the pinned Sleep-EDF cohort (subjects [0..5], recording 1; two-EEG relative
+band-power features; RandomForest(200, random_state=42); leave-one-subject-out CV). The
+reference is held out of the agent CONTAINER but PUBLIC in this repo (burned) -- a real eval
+needs fresh tasks / a server-side reference:
 
   PILLAR 1  the submitted per-subject table (per_subject.csv) must cover the exact 6-subject
             LOSO sample, be non-constant, and match the held-out per-subject OVERALL and
@@ -32,7 +34,12 @@ REF = np.load(Path(__file__).resolve().parent / "reference.npz", allow_pickle=Fa
 
 OVERALL_VAL_TOL = 0.06     # per-subject overall accuracy (uV-free); LOSO accuracies are specific
 BALANCED_VAL_TOL = 0.10    # per-subject balanced accuracy (noisier: rare stages)
-GROUP_TOL = 0.035          # group overall/balanced/kappa vs reference / reported
+GROUP_TOL = 0.06           # group overall/balanced/kappa vs reference / reported
+                           # (widened from 0.035: a defensible pipeline / lib-version drift shifts
+                           # the group balanced/overall/kappa by ~5-7% (~0.045 absolute), which the
+                           # old 0.035 rejected. 0.06 stays well below the overall-vs-balanced gap
+                           # (0.105), so reporting the inflated overall (~0.765) as the headline
+                           # still fails; GAP_MIN and the per-subject pillars are unchanged.)
 GAP_MIN = 0.05             # balanced must be at least this far BELOW overall (the discriminator)
 
 
