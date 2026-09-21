@@ -74,6 +74,40 @@ The grader is now proof-of-work (see `PROOF_OF_WORK_SPEC.md`) and the pre-feedba
   windows, e.g. 0.5–0.57). The operative proof-of-work is the required positive control + the
   held-out band + the fact that the solving agent lacks the reference and must run both windows.
 
+### Second-pass hardening (finer neutral intermediate + session-specific bind)
+
+The "PARTIAL" above was the live hole: both the pre-feedback null (~0.43 ≈ 0.5) and the ~0.99 control
+are guessable from causal priors, and the old `n_units >= 400` check let a *zero-data-work* agent
+guess every number. Two changes:
+
+1. **`n_units` bound to this session's recorded-unit count (867 ± 10).** The brief pins the feature to
+   *all recorded units*; the actual count is session-specific, is **not stated in the instruction**, and
+   cannot be guessed a priori — reporting it requires opening the NWB units table. This is the primary
+   block on a zero-data-work fabrication (a guess of ~500 no longer passes). It is independent of the
+   balancing choice, so it is fair to every defensible pipeline.
+2. **Required `decoding_vs_window.csv`** — a NEUTRAL time-resolved profile: cross-validated accuracy for
+   a fixed 0.20 s spike-count window slid across successive latencies (start −0.50→+0.40 s) relative to
+   the outcome (feedback) time. The grader (a) requires its **shape** to match a held-out reference
+   (magnitude-invariant Pearson corr ≥ 0.8 — kills flat/noise/crude fakes), and (b) **RECOMPUTES** the
+   null (pre-outcome windows must average at chance) and the positive control (post-outcome windows must
+   average near-perfect) *from the one submitted curve*, tying headline + control to a single artifact.
+   Framed neutrally (no mention of leakage / "reads the delivered outcome"); the mild "look across the
+   outcome time" cue is the accepted 5(a) tradeoff.
+
+**HONEST LIMITATION (blunt, 5(b)).** The judgment axis here — *upcoming* outcome is at chance before it
+is delivered and trivially decodable after — is a **textbook causal consequence**, so the profile SHAPE
+is causally predictable: a synthetic step curve of the right shape correlates ~0.98 with the real one
+(≈ a genuine seed variant), and element-wise matching cannot separate them either (a step matches ~95 %
+of points within 0.10). Validation matrix (subprocess pytest, this pass):
+honest PASS; defensible (C=0.5 / pre −0.15 s window) PASS; **pure zero-work fabricator (guessed
+n_units + flat curve) FAIL** (n_units + shape); **flat curve + real n_units FAIL** (shape/non-constant);
+**naive post-feedback run reported as prediction (~0.99) FAIL** (band + recompute + curve); **post-folds
+with a guessed 0.43 headline FAIL** (folds ≠ headline). **RESIDUAL that still PASSES:** an adversary who
+opens the file (real n_units) *and* hand-builds a causally-correct synthetic step curve with consistent
+null/control guesses. That residual is intrinsic to this task's causally-obvious judgment; the verifier
+now forces real data access (n_units) and a full consistent time-resolved artifact, but the final
+pre-vs-post judgement relies partly on the frontier gate, not the verifier alone.
+
 **Data pin (reference build):** DANDI `000409` (draft), asset
 `sub-NYU-37/sub-NYU-37_ses-21d21fc3-4201-4edc-802a-c67b61952548_desc-processed_behavior+ecephys.nwb`,
 asset-id `73c3cf70-88a0-43ae-b7fd-03a0ac156222`, size 385181169 B,

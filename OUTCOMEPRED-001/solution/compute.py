@@ -46,6 +46,10 @@ POST = (0.00, 0.40)    # post-outcome window (positive control): reads the deliv
 C_REG = 1.0
 N_FOLDS = 5
 SEED = 0
+# time-resolved decoding profile: a fixed-width spike-count window placed at successive
+# latencies relative to the outcome (feedback) time, from before it to after it.
+WIN_W = 0.20                                              # sliding-window width (s)
+WIN_STARTS = [round(-0.50 + 0.05 * i, 3) for i in range(19)]  # window start latency rel feedback
 
 
 def fail(reason):
@@ -145,6 +149,22 @@ folds_pre = cv_scores(spike_counts(fb, *PRE))
 acc_pre, std_pre = float(folds_pre.mean()), float(folds_pre.std())
 # POSITIVE CONTROL / contrast: the same decoder on activity AFTER the outcome is revealed.
 acc_post = float(cv_scores(spike_counts(fb, *POST)).mean())
+
+# ---- time-resolved decoding profile (NEUTRAL intermediate) ----
+# Cross-validated accuracy for a fixed-width spike-count window placed at successive latencies
+# relative to the outcome (feedback) time, from before it to after it. This is a neutral record
+# that a real decoder was run across the trial: its SHAPE (at chance while the window ends before
+# the outcome, rising to near-perfect once the window includes it) cannot be produced without the
+# real spiking, and it ties the reported pre-outcome value and the positive control to one artifact.
+window_curve = []
+for s in WIN_STARTS:
+    acc_w = float(cv_scores(spike_counts(fb, s, s + WIN_W)).mean())
+    window_curve.append((s, acc_w))
+with open(OUT / "decoding_vs_window.csv", "w", newline="") as f:
+    w = csv.writer(f)
+    w.writerow(["window_start_s", "window_end_s", "accuracy"])
+    for s, a in window_curve:
+        w.writerow([s, round(s + WIN_W, 3), round(a, 5)])
 
 # ---- per-fold table (the finest intermediate the decoding naturally produces) ----
 with open(OUT / "folds.csv", "w", newline="") as f:

@@ -51,6 +51,13 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `folds.csv` — the per-fold cross-validated accuracies your headline accuracy is the mean of: one
   row per cross-validation fold, with the fold index and that fold's accuracy (columns e.g.
   `fold,accuracy`).
+- `decoding_vs_window.csv` — the decoding accuracy as a function of window latency: slide a
+  fixed **0.20 s** spike-count window across successive latencies relative to each trial's outcome
+  (feedback) time — window start from **-0.50 s to +0.40 s in 0.05 s steps** (window =
+  `[feedback + start, feedback + start + 0.20]`) — and, for each window position, report the
+  cross-validated decoding accuracy using the same balanced trials, feature construction, decoder
+  and cross-validation as your headline analysis. Columns: `window_start_s, window_end_s, accuracy`
+  (one row per window position).
 - `run_metadata.json` — dandiset id, session, n trials, n units, outcome definition, window, CV.
 - `findings.md` — a short written summary (a few sentences) stating how accurately the upcoming
   trial outcome can be decoded relative to chance, and how reliable that estimate is. State only

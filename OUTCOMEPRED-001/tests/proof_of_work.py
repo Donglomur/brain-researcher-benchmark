@@ -16,11 +16,68 @@ import numpy as np
 
 def load_reference(path):
     z = np.load(path, allow_pickle=True)
-    return {
+    out = {
         "fold_acc": np.asarray(z["ref_fold_acc"], dtype=float),
         "fold_acc_post": np.asarray(z["ref_fold_acc_post"], dtype=float),
         "stats": json.loads(str(z["ref_stats"])),
     }
+    if "ref_window_acc" in z.files:
+        out["window_acc"] = np.asarray(z["ref_window_acc"], dtype=float)
+        out["window_starts"] = np.asarray(z["ref_window_starts"], dtype=float)
+    return out
+
+
+def load_window_curve(path):
+    """Return (starts, accuracy) from decoding_vs_window.csv (the time-resolved decoding profile:
+    accuracy for a fixed-width spike-count window at successive latencies relative to feedback)."""
+    rows = list(csv.DictReader(open(path, encoding="utf-8")))
+    if not rows:
+        return None
+    headers = list(rows[0].keys())
+    norm = {}
+    for h in headers:
+        norm.setdefault(_norm(h), h)
+
+    def pick(cands, avoid=()):
+        for c in cands:
+            if c in norm:
+                return norm[c]
+        for nrm, raw in norm.items():
+            if any(c in nrm for c in cands) and not any(x in nrm for x in avoid):
+                return raw
+        return None
+
+    s_col = pick(("windowstarts", "windowstart", "start", "latency", "windowcenter", "center",
+                  "time", "windowonset", "onset"), avoid=("end", "acc"))
+    a_col = pick(("accuracy", "acc", "score"), avoid=("std", "chance", "start", "end", "time"))
+    if s_col is None or a_col is None:
+        return None
+    ss, aa = [], []
+    for r in rows:
+        try:
+            s = float(r[s_col]); a = float(r[a_col])
+        except (TypeError, ValueError):
+            continue
+        if not (math.isfinite(s) and math.isfinite(a)):
+            continue
+        ss.append(s); aa.append(a / 100.0 if a > 1.5 else a)
+    if len(ss) < 3:
+        return None
+    order = np.argsort(ss)
+    return np.asarray(ss, float)[order], np.asarray(aa, float)[order]
+
+
+def window_shape_corr(sub_s, sub_a, ref_s, ref_a):
+    """Pearson corr of the submitted profile vs the reference on the reference latency grid
+    (magnitude-invariant, so it proves a real decoder ran without matching absolute levels)."""
+    lo = max(sub_s.min(), ref_s.min()); hi = min(sub_s.max(), ref_s.max())
+    grid = ref_s[(ref_s >= lo - 1e-9) & (ref_s <= hi + 1e-9)]
+    if len(grid) < 3:
+        return float("nan"), 0
+    so = np.interp(grid, sub_s, sub_a); ro = np.interp(grid, ref_s, ref_a)
+    if np.std(so) < 1e-9 or np.std(ro) < 1e-9:
+        return float("nan"), len(grid)
+    return float(np.corrcoef(so, ro)[0, 1]), len(grid)
 
 
 def _norm(s):
