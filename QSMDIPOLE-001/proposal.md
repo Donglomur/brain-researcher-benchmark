@@ -25,20 +25,21 @@ Pinned closed-form L₂ (Tikhonov, gradient-regularized) dipole inversion, `reg=
 
 Both statistics reproduce the graded nuclei within tolerance (`±12 ppb`) at the pinned `reg`, so a correct **mean- or median-based** report passes — the grader does not unfairly prefer one. (SN/caudate/thalamus reproduce poorly from a single orientation — a known susceptibility-anisotropy limitation only STI/COSMOS recover — so they are reported but not graded.)
 
-### Verifier (4 plain checks; `tests/test_outputs.py`)
+### Verifier (5 checks; `tests/test_outputs.py`; grades the **submitted map**, not the reported CSV)
 
-Grades the reported deep-gray susceptibilities against the **held-out STI χ₃₃ reference** (targets hardcoded from measurement): (1) report present/well-formed and physiological; (2) globus pallidus is the iron-rich extreme (GP ≫ putamen — any valid reconstruction has the right contrast); (3) a real susceptibility map was written (finite, 160³, non-trivial range); (4) **globus pallidus and putamen within ±12 ppb of χ₃₃** (158.8 / 72.2). Because χ₃₃ is **not shipped** to the agent, the targets cannot be guessed — only a faithful reconstruction of the pinned recipe on the correct scale lands near them.
+A shape-only map check plus a hardcoded-target CSV grade would let a noise/painted map + the published GP/PUT numbers pass. The verifier therefore holds out `tests/reference.npz` = the in-brain-mask voxel vector of the **deterministic pinned-recipe susceptibility map** (built by running the pinned inversion on the shipped data; 4.9 MB, in-mask voxels only) plus the ROI voxel indices for the two graded nuclei. Checks: (1) report present/well-formed and physiological; (2) globus pallidus is the iron-rich extreme (GP ≫ putamen); (3) a real 160³ map with dynamic range was written; (4) **the submitted map matches the pinned-recipe reference in-brain-mask at Pearson r ≥ 0.95** — a noise/painted map (r≈0) or a differently-regularized inversion (plain Tikhonov, r≈0.81) fails, while an offset/scale variant still passes here (r is offset- and scale-invariant); (5) **the GP/PUT susceptibility is RECOMPUTED from the submitted map** (mean or median, whichever is closer) at the shipped ROI voxels and graded within **±12 ppb of χ₃₃** (158.8 / 72.2). Because r is offset-invariant, check (5) is what enforces the native-scale referencing and kills a copied-published-numbers CSV — the CSV report is no longer the graded quantity.
 
-### Discrimination (re-validated end-to-end via pytest on real data)
+### Discrimination (re-validated end-to-end via subprocess pytest on real data)
 
-| submission | GP / PUT (ppb) | verdict |
-|---|---|---|
-| reference (pinned CF-L2, native scale, **median**) | 153 / 78 | **PASS** |
-| reference (pinned CF-L2, native scale, **mean**) | 151 / 75 | **PASS** |
-| CSF/ventricle-referenced (−14 ppb) | 139 / 64 | **FAIL** (ignored the cued native-scale referencing) |
-| plain Tikhonov (wrong regularizer) | 98 / 50 | **FAIL** (wrong recipe) |
+| submission | recomputed-from-map GP / PUT (ppb) | in-mask r | verdict |
+|---|---|---|---|
+| reference (pinned CF-L2, native scale, **median** CSV) | 153 / 78 | 1.00 | **PASS** |
+| reference (pinned CF-L2, native scale, **mean** CSV) | 151 / 75 | 1.00 | **PASS** |
+| pure-noise 160³ map + **published** GP=153/PUT=78 CSV | 7 / 7 | ≈0 | **FAIL** (r + recompute) |
+| **real** CF-L2 map CSF-referenced (−14 ppb) + CSV copied from paper (158.8/72.2) | 137 / 61 | 1.00 | **FAIL** (recompute: off native scale) |
+| plain Tikhonov (wrong regularizer) | 75 / 40 | 0.81 | **FAIL** (r + recompute) |
 
-Any correct-referenced reconstruction of the pinned recipe passes; a wrong recipe or a report re-referenced off the cued native scale fails.
+Any correct-referenced reconstruction of the pinned recipe passes (mean or median); a fabricated/painted map, a wrong recipe, or a real map re-referenced off the native scale (even with the published numbers copied into the CSV) fails — the discriminator is recomputed from the submitted map, not read from the report.
 
 ### Data handling (why staged, not runtime-fetched)
 

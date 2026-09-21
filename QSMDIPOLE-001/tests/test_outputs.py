@@ -14,31 +14,47 @@ labelled ROI mask, and FULLY PINS the reconstruction recipe (closed-form L2 / gr
 regularized Tikhonov dipole inversion, reg=0.09) AND the referencing (report on the native
 scale — the instruction states this explicitly). This is an honest easy control: an agent that
 follows the pinned recipe reproduces the STI reference's deep-gray susceptibility to within
-~6 ppb (globus pallidus 153, putamen 78). Validated on real data (mean OR median, pinned reg):
+~6 ppb (globus pallidus 153, putamen 78).
 
-  reference, native scale, median   GP 153 / PUT 78   -> PASS
-  reference, native scale, mean     GP 151 / PUT 75   -> PASS
-  CSF/ventricle-referenced (offset ~14 ppb) GP 139 / PUT 64  -> FAIL (did not follow the pinned
-                                                                  native-scale referencing)
-  white-matter re-reference (+19 ppb)       GP 173 / PUT 97  -> FAIL
-  differently-regularized inversion (plain Tikhonov) GP 98 / PUT 50  -> FAIL (wrong recipe)
+WHY THE MAP IS GRADED, NOT JUST THE REPORTED CSV
+------------------------------------------------
+The STI targets are published, so a reported CSV alone is guessable and a shape-only map check
+lets a fabricated/painted map pass. This grader therefore holds out
+`tests/reference.npz` = the in-brain-mask voxel vector of the DETERMINISTIC pinned-recipe
+susceptibility map (built by running the pinned inversion on the shipped data), plus the ROI
+voxel indices for the two graded nuclei. It then:
 
-Because the STI reference itself is held out, the reported values can only land near the targets
-by actually reconstructing with the pinned recipe on the correct scale (they cannot be guessed).
-The grader therefore passes any correct-referenced reconstruction of the pinned recipe (mean or
-median) and fails a wrong recipe or a report re-referenced off the pinned native scale.
+  (1) requires the submitted susceptibility_ppm.npy to match the reference in-brain-mask at
+      Pearson r >= 0.95 — a noise/painted map (r~0) or a wrong-recipe inversion (plain Tikhonov
+      r~0.81) fails; an offset/scale variant of the correct map still passes here because r is
+      offset- and scale-invariant; and
+  (2) RECOMPUTES the globus-pallidus/putamen susceptibility (both mean and median) FROM the
+      SUBMITTED map at the shipped ROI voxels and grades THOSE against the STI targets. Because
+      r is offset-invariant, this absolute check is what enforces the pinned native-scale
+      referencing: a CSF/ventricle re-reference (~-14 ppb) or white-matter re-reference
+      (~+19 ppb) shifts the recomputed nuclei off the STI scale and fails, and copying the
+      published numbers into the CSV does nothing because the CSV is not what is graded.
+
+Validated on real data (native scale): pinned recipe GP mean 150.8 / median 153.3, PUT 74.9 /
+78.0 -> PASS; CSF re-ref GP 136.8 / PUT 60.9 -> FAIL; WM re-ref PUT 93.9 -> FAIL; plain Tikhonov
+GP 75 / PUT 40, r=0.81 -> FAIL; pure noise r~0 -> FAIL.
 """
 import csv
 import json
 import os
 from pathlib import Path
 
+import numpy as np
+
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+REF = Path(__file__).with_name("reference.npz")
 
 # STI chi_33 reference (ppb), by nucleus label.
 TARGET_PPB = {3: ("globus_pallidus", 158.8), 2: ("putamen", 72.2)}
-TOL_PPB = 12.0   # passes any faithful recipe implementation (native ~5-8 ppb off the STI ref);
-#                  fails a CSF (~14 ppb) or WM (~20-40 ppb) re-reference and any other inversion.
+TOL_PPB = 12.0   # passes any faithful recipe implementation (native ~3-8 ppb off the STI ref);
+#                  fails a CSF (~14 ppb) or WM (~19-25 ppb) re-reference and any other inversion.
+R_FLOOR = 0.95   # in-brain-mask Pearson r of the submitted map vs the pinned-recipe reference
+#                  (honest / offset / scale variants ~1.0; plain-Tikhonov ~0.81; noise ~0).
 
 
 def _rows():
@@ -57,6 +73,25 @@ def _by_label(rows):
         except (KeyError, ValueError, TypeError):
             continue
     return out
+
+
+def _load_ref():
+    assert REF.exists(), f"missing held-out reference {REF}"
+    return np.load(REF)
+
+
+def _load_submitted_map():
+    p = OUT / "susceptibility_ppm.npy"
+    assert p.exists(), f"missing reconstructed susceptibility map {p}"
+    chi = np.load(p)
+    assert chi.shape == (160, 160, 160), f"expected a 160^3 susceptibility map, got {chi.shape}"
+    return np.asarray(chi, dtype=np.float64)
+
+
+def _roi_stats_ppb(chi_flat, idx):
+    """Mean and median susceptibility (ppb) over the given ROI voxels of the submitted map."""
+    v = chi_flat[idx]
+    return float(np.mean(v) * 1000.0), float(np.median(v) * 1000.0)
 
 
 def test_report_present_and_wellformed():
@@ -81,7 +116,6 @@ def test_globus_pallidus_is_the_iron_rich_extreme():
 
 
 def test_susceptibility_map_written():
-    import numpy as np
     p = OUT / "susceptibility_ppm.npy"
     assert p.exists(), f"missing reconstructed susceptibility map {p}"
     chi = np.load(p)
@@ -91,22 +125,51 @@ def test_susceptibility_map_written():
         "susceptibility map has no dynamic range — no real reconstruction was produced")
 
 
+def test_susceptibility_map_matches_reference_inmask():
+    # The submitted map must be the ACTUAL pinned-recipe reconstruction, not a fabricated/painted
+    # array of the right shape and not a differently-regularized inversion. We correlate it, over
+    # the brain-mask voxels only, with the held-out deterministic pinned-recipe reference map.
+    # Pearson r is offset- and scale-invariant, so a correct map re-referenced or rescaled still
+    # passes here (the absolute native-scale check below is what catches those); a noise/painted
+    # map (r~0) or a wrong inversion (plain Tikhonov r~0.81) fails.
+    ref = _load_ref()
+    mask_idx = ref["mask_idx"]
+    chi_ref = np.asarray(ref["chi_ref_inmask"], dtype=np.float64)
+    chi = _load_submitted_map()
+    sub_inmask = chi.ravel(order="C")[mask_idx]
+    assert np.isfinite(sub_inmask).all(), (
+        "submitted susceptibility map has non-finite values inside the brain mask")
+    assert np.ptp(sub_inmask) > 0, (
+        "submitted susceptibility map is constant inside the brain mask — no reconstruction produced")
+    r = float(np.corrcoef(sub_inmask, chi_ref)[0, 1])
+    assert r >= R_FLOOR, (
+        f"submitted susceptibility map does not match the pinned-recipe reconstruction inside the "
+        f"brain mask (in-mask Pearson r = {r:.3f} < {R_FLOOR}). Reconstruct the provided tissue "
+        f"field with the pinned closed-form L2 inversion (reg=0.09) — a fabricated, painted, or "
+        f"differently-regularized map does not reproduce the reference spatial pattern.")
+
+
 def test_reproduces_sti_reference_deep_gray():
-    # The headline check: the reported deep-gray susceptibilities must reproduce the held-out STI
-    # chi_33 reference. The instruction pins the recipe AND the native-scale referencing, so any
-    # faithful reconstruction (mean or median, reg=0.09, native scale) passes; a report re-
-    # referenced to CSF/ventricles or white matter, or produced by a different inversion, does not
-    # — its globus-pallidus value in particular lands well outside tolerance.
-    vals = _by_label(_rows())
+    # Headline check: RECOMPUTE the globus-pallidus/putamen susceptibility FROM the submitted map
+    # (not the reported CSV, which is guessable from the published targets) and require it to
+    # reproduce the held-out STI chi_33 reference. Either the per-nucleus mean or median may be
+    # used (the instruction allows both), so we accept the closer of the two. Because r is
+    # offset-invariant, this absolute native-scale check is what fails a CSF/ventricle or
+    # white-matter re-reference and a copy of the published numbers, while a faithful native-scale
+    # reconstruction (mean or median) passes.
+    ref = _load_ref()
+    roi_idx = {3: ref["roi3_idx"], 2: ref["roi2_idx"]}
+    chi_flat = _load_submitted_map().ravel(order="C")
     misses = []
     for lab, (name, target) in TARGET_PPB.items():
-        err = abs(vals[lab] - target)
+        mean_ppb, median_ppb = _roi_stats_ppb(chi_flat, roi_idx[lab])
+        err = min(abs(mean_ppb - target), abs(median_ppb - target))
         if err > TOL_PPB:
-            misses.append(f"{name}: reported {vals[lab]:.1f} ppb vs STI reference {target:.1f} ppb "
-                          f"(off by {err:.1f} > {TOL_PPB:.0f} ppb)")
+            misses.append(f"{name}: recomputed {mean_ppb:.1f} (mean) / {median_ppb:.1f} (median) ppb "
+                          f"vs STI reference {target:.1f} ppb (closest off by {err:.1f} > {TOL_PPB:.0f} ppb)")
     assert not misses, (
-        "reported deep-gray susceptibility does not reproduce the STI chi_33 reference: "
-        + "; ".join(misses)
+        "deep-gray susceptibility recomputed from the submitted map does not reproduce the STI "
+        "chi_33 reference: " + "; ".join(misses)
         + ". Follow the pinned recipe (closed-form L2 with reg=0.09) and report on the native "
         "scale as instructed — the same scale as the STI reference — without subtracting a "
         "CSF/ventricle or white-matter reference offset.")
