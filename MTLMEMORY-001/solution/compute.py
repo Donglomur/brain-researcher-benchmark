@@ -16,19 +16,22 @@ separates the labels. The honest estimate selects the memory-selective neurons (
 novelty/familiarity direction) on one split of the recognition trials and measures the new/old AUC
 on a held-out split.
 
-Validated ground truth (DANDI 000004, ALL sessions pooled, MTL = hippocampus + amygdala units by
+Validated ground truth (DANDI 000004, ALL 87 sessions pooled, MTL = hippocampus + amygdala units by
 electrode location; recognition phase; per-trial firing rate over the [0.2, 1.7] s window after
 stimulus onset; memory-selective = two-sided rank-sum novel-vs-familiar p < 0.05; new/old AUC taken
 in the neuron's preferred direction):
-  n MTL neurons pooled              = ~1864
-  proportion memory-selective       = ~0.057   (barely above the 0.05 chance false-positive rate)
-  NAIVE  mean new/old AUC of MS cells, selected AND measured on the SAME trials  = ~0.63
-  CORRECT mean new/old AUC of MS cells, selection/direction on train, AUC on held-out = ~0.51
-The apparent 0.63 single-neuron memory signal is almost entirely a selection artifact: the
+  n MTL neurons pooled              = 1864
+  proportion memory-selective       = 0.057   (barely above the 0.05 chance false-positive rate)
+  NAIVE  mean new/old AUC of MS cells, selected AND measured on the SAME trials  = 0.629
+  CORRECT mean new/old AUC of MS cells, selection/direction on train, AUC on held-out = 0.516
+The apparent ~0.63 single-neuron memory signal is almost entirely a selection artifact: the
 memory-selective fraction is at the chance false-positive rate, and out-of-sample the discrimination
-is ~0.51 (chance). Selecting the cells on independent trials (any reasonable held-out / nested
-scheme) removes the inflation and the honest new/old AUC is ~0.51. A reported ~0.63 fails the match.
+is ~0.51 (chance).
+
+Also writes the NEUTRAL per-neuron table neurons.csv (the pinned per-neuron new/old AUC + the
+memory-selective flag) -- the intermediate both a naive and an honest analysis produce.
 """
+import csv
 import json
 import os
 import sys
@@ -77,10 +80,11 @@ def auc(scores, labels):
 
 
 def collect_neurons():
-    """Stream every session's recognition-phase MTL spiking; return list of (fr, lab) per neuron.
+    """Stream every session's recognition-phase MTL spiking; return list of per-neuron records.
 
-    fr = per-recognition-trial firing rate in the [0.2, 1.7] s window; lab = 1 for familiar (old),
-    0 for novel (new). Only the MTL units' spike_times are read, so the streaming stays light.
+    Each record: id ('<asset stem>__u<unit id>'), region, fr (per-recognition-trial firing rate in
+    the [0.2, 1.7] s window), lab (1 for familiar/old, 0 for novel/new). Only the MTL units'
+    spike_times are read, so the streaming stays light.
     """
     neurons = []
     n_sessions = 0
@@ -91,6 +95,7 @@ def collect_neurons():
             fail(f"no NWB assets in dandiset {DANDISET}")
         for p in paths:
             try:
+                stem = p.split("/")[-1][:-4] if p.endswith(".nwb") else p.split("/")[-1]
                 url = ds.get_asset_by_path(p).get_content_url(follow_redirects=1, strip_query=False)
                 io = NWBHDF5IO(file=h5py.File(remfile.File(url), "r"), load_namespaces=True)
                 nwb = io.read()
@@ -102,6 +107,7 @@ def collect_neurons():
                     continue
                 u = nwb.units
                 el = nwb.electrodes.to_dataframe()
+                uid = np.asarray(u.id[:])
                 for i in range(len(u.id)):
                     eidx = u["electrodes"][i].index.values
                     locs = el.loc[eidx, "location"].values
@@ -111,7 +117,10 @@ def collect_neurons():
                     st = np.asarray(u["spike_times"][i]).astype(float)
                     fr = (np.searchsorted(st, on + WIN[1]) - np.searchsorted(st, on + WIN[0])) \
                         / (WIN[1] - WIN[0])
-                    neurons.append((fr.astype(float), lab.astype(int)))
+                    neurons.append(dict(
+                        id=f"{stem}__u{int(uid[i])}",
+                        region=("Hippocampus" if "Hippocampus" in loc else "Amygdala"),
+                        fr=fr.astype(float), lab=lab.astype(int)))
                 n_sessions += 1
             except Exception:
                 continue
@@ -124,42 +133,52 @@ if len(neurons) < 200:
 
 rng = np.random.default_rng(SEED)
 
-# ---- memory-selective test on all recognition trials (for the proportion + the naive contrast) ----
+# ---- pinned per-neuron quantities on all recognition trials (NEUTRAL table + naive contrast) ----
 ms_flags = np.zeros(len(neurons), dtype=bool)
-naive_fold = []
-for j, (fr, lab) in enumerate(neurons):
+all_auc = np.zeros(len(neurons))          # pinned per-neuron new/old AUC, preferred direction, all trials
+for j, rec in enumerate(neurons):
+    fr, lab = rec["fr"], rec["lab"]
     try:
         _, p = mannwhitneyu(fr[lab == 0], fr[lab == 1], alternative="two-sided")
     except Exception:
         p = 1.0
+    a = auc(fr, lab)
+    all_auc[j] = max(a, 1.0 - a)
     if p < MS_ALPHA:
         ms_flags[j] = True
-        a = auc(fr, lab)
-        naive_fold.append(max(a, 1.0 - a))     # AUC in the preferred direction, SAME trials
 prop_ms = float(ms_flags.mean())
-naive_auc = float(np.mean(naive_fold)) if naive_fold else float("nan")
+naive_auc = float(np.mean(all_auc[ms_flags])) if ms_flags.any() else float("nan")
 
 # ---- honest estimate: select memory-selective neurons and their preferred novelty/familiarity ----
 # ---- direction on a TRAIN split, measure the new/old AUC on the HELD-OUT split, repeat & average --
 held = [[] for _ in neurons]
 for rep in range(N_SPLITS):
-    for j, (fr, lab) in enumerate(neurons):
+    for j, rec in enumerate(neurons):
+        fr, lab = rec["fr"], rec["lab"]
         idx = np.arange(len(lab))
         i0, i1 = idx[lab == 0], idx[lab == 1]
         if len(i0) < 4 or len(i1) < 4:
             continue
-        tr = np.concatenate([rng.choice(i0, len(i0) // 2, replace=False),
-                             rng.choice(i1, len(i1) // 2, replace=False)])
-        te = np.setdiff1d(idx, tr)
+        trn = np.concatenate([rng.choice(i0, len(i0) // 2, replace=False),
+                              rng.choice(i1, len(i1) // 2, replace=False)])
+        te = np.setdiff1d(idx, trn)
         try:
-            _, p = mannwhitneyu(fr[tr][lab[tr] == 0], fr[tr][lab[tr] == 1], alternative="two-sided")
+            _, p = mannwhitneyu(fr[trn][lab[trn] == 0], fr[trn][lab[trn] == 1], alternative="two-sided")
         except Exception:
             p = 1.0
         if p < MS_ALPHA:                         # selected as memory-selective on TRAIN only
-            sign = 1.0 if auc(fr[tr], lab[tr]) >= 0.5 else -1.0   # preferred direction on TRAIN
-            held[j].append(auc(fr[te] * sign, lab[te]))          # new/old AUC on HELD-OUT trials
+            sign = 1.0 if auc(fr[trn], lab[trn]) >= 0.5 else -1.0   # preferred direction on TRAIN
+            held[j].append(auc(fr[te] * sign, lab[te]))            # new/old AUC on HELD-OUT trials
 per_cell_heldout = [np.mean(h) for h in held if len(h) >= 5]
 honest_auc = float(np.mean(per_cell_heldout)) if per_cell_heldout else float("nan")
+
+# ---- write the NEUTRAL per-neuron table ----
+with open(OUT / "neurons.csv", "w", newline="") as f:
+    w = csv.writer(f)
+    w.writerow(["neuron_id", "region", "n_trials", "memory_selective", "new_old_auc"])
+    for j, rec in enumerate(neurons):
+        w.writerow([rec["id"], rec["region"], len(rec["lab"]),
+                    int(ms_flags[j]), round(float(all_auc[j]), 4)])
 
 results = {
     # headline: honest single-neuron new/old discriminability of memory-selective MTL neurons

@@ -58,6 +58,15 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
+- `neurons.csv` -- one row per analysed MTL neuron, with columns
+  `neuron_id, region, n_trials, memory_selective, new_old_auc`:
+  - `neuron_id` -- identify each neuron as `<session>__u<unit_id>`, where `<session>` is the NWB
+    asset's file name without the `.nwb` extension and `<unit_id>` is the unit's integer id in that
+    file's units table (e.g. `sub-P10HMH_ses-20060901_ecephys+image__u3`).
+  - `region` -- the unit's MTL region (`Hippocampus` or `Amygdala`).
+  - `n_trials` -- the number of recognition trials used for that neuron.
+  - `memory_selective` -- `1` if the neuron is memory-selective (rank-sum p < 0.05), else `0`.
+  - `new_old_auc` -- the neuron's single-neuron new/old ROC AUC in its preferred direction.
 - `results.json` -- the headline result: the mean single-neuron new/old ROC AUC of the
   memory-selective neurons, the proportion of MTL neurons that are memory-selective, the number of
   MTL neurons and the number memory-selective, the number of sessions, and the analysis parameters

@@ -64,6 +64,42 @@ caveat -- the numeric teeth reject it, and the leak-is-in-selection subtlety is 
 the *value* is 0.63 regardless of the label) / defensible-alternative-pass (nested independent
 selection giving 0.503) = **Y/Y/Y/Y**.
 
+### Proof-of-work hardening (fabrication-proof, judgement kept un-cued)
+
+The reviewed verifier graded a single reported number + prose and (per the suite audit) could be
+passed on fabricated data. It is now fabrication-proof WITHOUT cueing the double-dipping judgement:
+
+- **Held-out reference** `tests/reference.npz` (built by streaming all 87 DANDI 000004 sessions with
+  the oracle; never shipped to the agent): per-neuron real values keyed by the real neuron id
+  (`<asset-stem>__u<unit id>`) -- the pinned all-trials preferred-direction new/old AUC + the
+  memory-selective flag -- plus `ref_stats` (n=1864, proportion 0.0574, naive same-trials mean 0.629,
+  honest held-out mean 0.516).
+- **Neutral per-neuron table** `neurons.csv` added to Required Outputs: the pinned per-neuron new/old
+  AUC + selective flag -- the intermediate BOTH a naive and an honest analysis produce, so requiring
+  it does not cue the held-out/double-dipping insight. The instruction still names only the
+  deliverable; it never mentions held-out, cross-validation, circular, double-dipping or selection
+  bias.
+- **Three grader pillars.** (1) the submitted per-neuron AUC must track the reference (cross-neuron
+  r ≥ 0.90, per-neuron tol, coverage ≥ 90%, non-constant, selective-flag agreement) -- impossible
+  without the real firing rates; (2) the proportion memory-selective and the same-trials mean AUC
+  recomputed FROM the rows must match the reference (== 0.629) and the reported JSON -- proving the
+  rows are the real analysis; (3) the scientific judgement stays the **un-cued OR-escape**: PASS if
+  the headline reproduces the honest ~0.51 OR the write-up volunteers the non-independence, FAIL on
+  an un-caveated ~0.63.
+
+**Subprocess-pytest validation matrix** (each `OUTPUT_DIR` graded by a fresh `pytest` process):
+honest (real reference table + honest headline) **PASS** / no-table **FAIL** (pillars 1+2) /
+constant-table **FAIL** (pillar 1 non-constant) / non-constant-fabricated (right group mean, wrong
+per-neuron values) **FAIL** (pillar 1 teeth) / naive (real table, un-caveated 0.629 headline)
+**FAIL** (pillar 3 only) / defensible-alternative (nested-CV 0.503, volunteers held-out) **PASS**.
+
+### Packaging
+
+`tests/reference.npz` (~0.5 MB) is committed. The raw data is streamed at runtime (all 87 NWB assets;
+too large to bake under GitHub's 100 MB/file limit), so `allow_internet` stays `true` and the neuron
+ids + `ref_stats` are pinned here; baking the derived per-neuron inputs is flagged as a maintainer
+follow-up.
+
 ### Difficulty -- Step-5 frontier calibration PENDING (maintainer gate)
 
 Oracle **reward 1.0** (reference `solution/compute.py` streams all DANDI 000004 assets and reports ~0.51 via held-out selection); naive baseline (select + score memory-selective neurons on the same trials) reports ~0.63 → **reward 0**. The numeric ground truth (naive 0.629 / held-out 0.511) is Step-0-locked and unchanged by this hardening (instruction-only). The ≥2-frontier-family gate (GPT-5.x + Claude, k≥3 each) -- does a frontier agent, now un-cued, recognise the selection circularity and report the honest ~0.51, or execute the pinned method literally and report the inflated ~0.63? -- is the maintainer's Step-5 gate and **cannot be run here**.
