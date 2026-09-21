@@ -4,8 +4,9 @@ developmental cohort, an un-cued edge-sign (anti-correlation handling) judgement
 The previous verifier checked a per-participant non-constant guard, a cohort-mean band, and a
 prose edge-sign disclosure. This grader adds full proof-of-work: it validates the exact
 developmental participants and their per-participant POSITIVE-EDGE segregation against a
-held-out reference (tests/reference.npz, built from the oracle run and never shipped to the
-agent), recomputes the cohort mean FROM the submitted rows, and grades the developmental
+reference (tests/reference.npz, built from the oracle run; held out of the agent CONTAINER but
+PUBLIC in this repo (burned) -- a real eval needs fresh tasks / a server-side reference),
+recomputes the cohort mean FROM the submitted rows, and grades the developmental
 child<adult contrast as numbers. An all-edges run (which keeps the anti-correlations and
 inflates segregation to ~0.55) has the wrong per-subject values and the wrong recomputed mean,
 so it fails; the positive-edge cohort mean is ~0.37.

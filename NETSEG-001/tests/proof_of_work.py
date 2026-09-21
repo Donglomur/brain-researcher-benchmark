@@ -2,8 +2,9 @@
 
 A passing submission must be IMPOSSIBLE to produce without running the real POSITIVE-EDGE
 system-segregation analysis on the real developmental cohort. These helpers validate the
-submitted per-participant segregation.csv against a held-out reference (tests/reference.npz),
-and recompute the cohort mean FROM the submitted rows. An all-edges run (which keeps the
+submitted per-participant segregation.csv against a reference (tests/reference.npz; held out of
+the agent CONTAINER but PUBLIC in this repo (burned) -- a real eval needs fresh tasks / a
+server-side reference), and recompute the cohort mean FROM the submitted rows. An all-edges run (which keeps the
 anti-correlations and inflates segregation to ~0.55) has the WRONG per-subject values and the
 WRONG recomputed mean, so it fails.
 """
