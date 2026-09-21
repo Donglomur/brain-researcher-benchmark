@@ -16,9 +16,15 @@ axis is the over-claim: does the submission volunteer that the FA is CSF partial
 dependent (a single tensor deflates it), or report a single FA as "the" periventricular FA?
 
 Three pillars: (1) per-voxel FA table covers the real ROI, non-constant, matches some model
-config (r>=0.80); (2) ROI mean recomputes to the reported FA and a physically real FA;
-(3) the free-water / CSF partial-volume dependence graded as NUMBERS, with a negation-guarded
-mechanism prose fallback.
+config (r>=0.80); (2) ROI mean recomputes to the reported FA and a physically real FA (with a
+generous UPPER margin so an honest free-water-corrected FA at the top of the band passes);
+(3) the free-water dependence forced as un-fabricable PER-VOXEL WORK: fa_sweep.csv must hold the
+per-voxel FA for >=2 models, each a REAL per-voxel fit matching one held-out config's pattern
+(r >= 0.80) AND its ROI-mean FA, at DISTINCT configs INCLUDING the free-water-corrected model,
+spanning the real deflation. The corrected (higher tissue FA) and naive (single-tensor,
+CSF-deflated) estimates must both be PRESENT and differ by the real amount -- a single FA, a
+guessed/fabricated sweep, or a rescaled copy of one fit cannot pass. The lever (free water / CSF
+partial volume) is never named.
 """
 import re
 
@@ -26,7 +32,7 @@ import numpy as np
 
 from proof_of_work import (
     OUT, load_reference, load_voxel_table, align, best_corr, mean_in_range, nonconstant,
-    load_json, walk_numbers, harvest_metric_values, straddle, findings_text, unnegated,
+    load_json, walk_numbers, load_sweep_table, validate_sweep,
 )
 
 REF = load_reference()
@@ -36,14 +42,21 @@ CFG_MEAN = {k: float(v) for k, v in ST["mean_by_config"].items()}
 PLAUS_LO, PLAUS_HI = 0.1, 0.9
 COVER = 0.5
 CORR = 0.80
-RANGE_MARGIN = 0.06
+# Upper-band-ceiling fairness (SECOND_PASS_BRIEF): the corrected free-water FA sits at the top of
+# the config band (0.617) and an honest fwDTI can run ~+10% high; the sanity range must admit an
+# honest value at the upper edge, so the margin is generous (pillar 1's per-voxel pattern match,
+# not this coarse range, is the fabrication gate).
+RANGE_MARGIN = 0.10
 CONSIST = 0.03
-NEAR_CFG = 0.035
-MIN_SPREAD = 0.06                 # fwDTI (0.617) vs single-tensor (0.527/0.427) CSF deflation
+# --- free-water SWEEP (per-voxel-backed) tolerances ---
+SWEEP_MEAN_TOL = 0.08          # each sweep group's ROI-mean FA vs its matched config's mean;
+                               #   admits an honest fwDTI ~+10% high (< the 0.09 fwdti-vs-DTI gap,
+                               #   so a rescaled/shifted single-tensor map cannot pass as fwdti)
+SWEEP_MIN_SPREAD = 0.06        # fwDTI (0.617) vs single-tensor (0.527/0.427); closest gap 0.09
+CORRECTED_CONFIG = "fwdti"     # the free-water-corrected config label in the held-out reference
 
 FA_KEYS = ("fa_periventricular_wm", "faperiventricularwm", "fa_mean", "famean", "mean_fa",
            "meanfa", "fa", "fractional_anisotropy", "fa_pv", "fa_wm")
-FINDINGS_TERMS = [r"\bfa\b", r"fractional[- ]?anisotrop", r"anisotrop"]
 
 
 def _reported_fa():
@@ -89,38 +102,41 @@ def test_roi_mean_recomputes_and_is_real():
         f"{recomputed:.3f} (tol {CONSIST}); the headline must be the mean of its own rows")
 
 
-def test_reports_freewater_dependence_as_numbers():
-    """Un-cued discriminating judgement, graded numerically: the submission must volunteer that
-    the periventricular FA is CSF free-water partial-volume dependent -- EITHER by reporting >=2
-    real FA values that show the single-tensor deflation (numeric branch, validated), OR by
-    modelling free water (fwDTI) and stating the CSF partial-volume deflation mechanism
-    (negation-guarded prose fallback). A bare single FA with no recognition over-claims."""
-    vals = harvest_metric_values(
-        ("results.json", "run_metadata.json"), PLAUS_LO, PLAUS_HI, FINDINGS_TERMS,
-        json_key_re=r"fa|anisotrop")
-    ok, span, lo, hi = straddle(vals, CFG_MEAN, NEAR_CFG, MIN_SPREAD)
-    distinct = sorted({round(v, 3) for v in vals})
-    claims_numeric = len(distinct) >= 2 and (max(distinct) - min(distinct)) >= 0.05
-    if claims_numeric:
-        assert ok, (
-            f"the submission reports multiple FA numbers but they do not match the real "
-            f"free-water dependence (real-config values span {span:.3f} < {MIN_SPREAD}, or are "
-            f"not near real FA values {sorted(round(v,3) for v in CFG_MEAN.values())}). Report the "
-            f"free-water-corrected tissue FA (~0.62) AND the single-tensor FA (~0.53) that shows "
-            f"the CSF deflation.")
-        return
-    text = findings_text()
-    assert text.strip(), "findings.md is missing or empty"
-    mechanism = (
-        r"(?:free[- ]?water|fwdti|fw[- ]?dti|csf|cerebrospinal|isotropic|partial[- ]?volume|"
-        r"ventric)"
-        r"[^.\n]{0,90}(?:deflat|reduc|lower|underestimat|bias|contaminat|conflat|inflat|"
-        r"partial[- ]?volume|recover\w*\s+(?:the\s+)?tissue|account|eliminat|correct)")
-    assert unnegated(text, mechanism), (
-        "findings.md reports a periventricular FA but neither reports the free-water dependence "
-        "as numbers (>=2 real FA values showing the single-tensor CSF deflation) NOR states the "
-        "mechanism (these periventricular voxels are CSF partial-volume contaminated; a single "
-        "tensor conflates the fast isotropic CSF signal and deflates FA, so modelling the "
-        "free-water compartment recovers the higher tissue FA). A single FA reported as 'the' "
-        "periventricular FA over-claims a fixed number the data -- which range ~0.43 (standard "
-        "DTI) to ~0.62 (free-water-corrected) -- do not support.")
+def test_freewater_sweep_matches_reference():
+    """The un-cued discriminating judgement, forced as un-fabricable per-voxel work: these
+    periventricular voxels are CSF partial-volume contaminated, so the FA depends on whether the
+    free-water compartment is modelled (a single tensor conflates the fast isotropic CSF signal
+    and DEFLATES FA). The submission must report `fa_sweep.csv`, the per-voxel FA under each model
+    it evaluates, and among those groups the free-water-corrected model AND >=1 single-tensor
+    model must each be a REAL per-voxel fit -- matching one held-out config's FA pattern
+    (r >= 0.80) AND its ROI-mean FA -- at DISTINCT configs whose means span the real deflation.
+    This forces the analyst to actually run the free-water-corrected model (higher tissue FA)
+    alongside the naive single tensor -- both PRESENT and differing by the real amount -- rather
+    than report a single FA as 'the' periventricular FA, or guess the corrected value. A
+    fabricated group matches no config; a rescaled/shifted copy of one single-tensor fit still
+    best-correlates with the SAME config (r is scale/shift-invariant) and its shifted mean no
+    longer matches -> a single fit cannot fake the free-water dependence, and cannot fake the
+    corrected model (which requires actually estimating the free-water compartment per voxel).
+
+    The instruction asks for FA 'under each diffusion model you evaluate' -- a neutrally described
+    robustness table; it does NOT name free water, fwDTI, CSF partial volume, or which model is
+    correct."""
+    groups = load_sweep_table("fa_sweep.csv", key_hints=("model", "method", "estimator", "recon",
+                              "config", "fit", "algo"), value_hints=("fa", "anisotrop"))
+    assert len(groups) >= 2, (
+        f"fa_sweep.csv evaluates only {len(groups)} diffusion model(s); report the per-voxel FA "
+        f"under >=2 models over the same ROI so the model dependence is shown, not a single FA "
+        f"as 'the' periventricular FA.")
+    ok, info = validate_sweep(
+        groups, REF, CORR, COVER, SWEEP_MEAN_TOL, SWEEP_MIN_SPREAD, min_groups=2,
+        require_config=CORRECTED_CONFIG)
+    assert ok, (
+        f"the model sweep in fa_sweep.csv is not a real per-voxel diffusion sweep of this ROI: "
+        f"{info['n_valid']} group(s) matched a real model config's per-voxel pattern+mean across "
+        f"{info['n_configs']} distinct config(s) {info.get('configs')}, spanning {info['span']:.3f} "
+        f"FA (need >=2 groups at >=2 distinct configs incl. the free-water-corrected model, "
+        f"spanning >= {SWEEP_MIN_SPREAD}). Each model's per-voxel FA must reproduce a held-out fit "
+        f"(Pearson r >= {CORR} AND ROI-mean FA within {SWEEP_MEAN_TOL} of that config); a single FA, "
+        f"a fabricated/guessed sweep, or a rescaled copy of one fit cannot reproduce the real "
+        f"free-water dependence ({sorted(round(v,3) for v in CFG_MEAN.values())}). The corrected "
+        f"model recovers a materially HIGHER tissue FA than the single tensor.")

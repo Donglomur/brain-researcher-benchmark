@@ -117,11 +117,24 @@ n = int(v.sum())
 
 # per-voxel table underlying the region-mean FA (the neutral intermediate the pipeline emits)
 import csv as _csv
+v_ijk = np.argwhere(v)
 with open(OUT / "fa_voxelwise.csv", "w", newline="") as _fh:
     _w = _csv.writer(_fh)
     _w.writerow(["i", "j", "k", "fa"])
-    for _i, _j, _k in np.argwhere(v):
+    for _i, _j, _k in v_ijk:
         _w.writerow([int(_i), int(_j), int(_k), round(float(FA_fw[_i, _j, _k]), 6)])
+
+# The free-water dependence: the SAME ROI, fitted with a single tensor, gives a CSF-deflated FA.
+# Emit the per-voxel FA under each model (fa_sweep.csv) so the sweep is proof-of-work: each
+# model's per-voxel FA must reproduce a held-out fit, not a reported/guessed scalar.
+with open(OUT / "fa_sweep.csv", "w", newline="") as _fh:
+    _w = _csv.writer(_fh)
+    _w.writerow(["i", "j", "k", "model", "fa"])
+    for _i, _j, _k in v_ijk:
+        _w.writerow([int(_i), int(_j), int(_k), "fwdti", round(float(FA_fw[_i, _j, _k]), 6)])
+    for _i, _j, _k in v_ijk:
+        _w.writerow([int(_i), int(_j), int(_k), "dti_singletensor",
+                     round(float(FA_dti2[_i, _j, _k]), 6)])
 
 (OUT / "results.json").write_text(json.dumps({
     "status": "ok",

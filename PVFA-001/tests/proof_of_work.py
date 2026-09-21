@@ -98,6 +98,110 @@ def load_voxel_table(filename, value_hints):
     return out
 
 
+def load_sweep_table(filename, key_hints, value_hints):
+    """Load a long-format per-voxel SWEEP CSV: i,j,k, <sweep-key>, <metric-value>.
+    Groups rows by the sweep-key column (e.g. model / estimator). Returns
+    {key_str: {(i,j,k): float}}. Tolerant to column naming/order."""
+    p = OUT / filename
+    assert p.exists(), f"missing required per-voxel sweep table {p}"
+    rows = list(csv.DictReader(open(p, encoding="utf-8")))
+    assert rows, f"{filename} has no data rows"
+    header = list(rows[0].keys())
+    norm = {c: _norm(c) for c in header}
+
+    def find(cands, exclude=()):
+        for c in header:
+            if norm[c] in cands and not any(e in norm[c] for e in exclude):
+                return c
+        for c in header:
+            if any(cd in norm[c] for cd in cands) and not any(e in norm[c] for e in exclude):
+                return c
+        return None
+
+    ci = find({"i", "x", "vi", "voxeli", "ix"})
+    cj = find({"j", "y", "vj", "voxelj", "iy"})
+    ck = find({"k", "z", "vk", "voxelk", "iz", "slice", "slicez"})
+    coordset = {ci, cj, ck}
+    ckey = None
+    for c in header:
+        if c in coordset:
+            continue
+        if any(h in norm[c] for h in key_hints):
+            ckey = c
+            break
+    cv = None
+    for c in header:
+        if c in coordset or c == ckey:
+            continue
+        if any(h in norm[c] for h in value_hints):
+            cv = c
+            break
+    assert ci and cj and ck, f"{filename} needs i,j,k voxel-coordinate columns (got {header})"
+    assert ckey, (f"{filename} needs a sweep-key column (the model / estimator each row belongs "
+                  f"to), got {header}")
+    assert cv, f"{filename} needs a numeric <metric> value column (got {header})"
+    groups = {}
+    for r in rows:
+        try:
+            key = str(r[ckey]).strip()
+            ijk = (int(round(float(r[ci]))), int(round(float(r[cj]))), int(round(float(r[ck]))))
+            v = float(r[cv])
+        except (TypeError, ValueError, KeyError):
+            continue
+        if key == "":
+            continue
+        groups.setdefault(key, {})[ijk] = v
+    return groups
+
+
+def validate_sweep(groups, ref, corr, cover, val_tol, min_spread, min_groups=2, min_vox=50,
+                   agg=None, matcher=None, require_config=None):
+    """Validate a per-voxel SWEEP against the held-out per-config reference maps.
+
+    Each submitted group must be a REAL per-voxel fit: cover the ROI, be non-constant, match
+    ONE config's spatial pattern (best score >= corr under `matcher`) AND that same config's real
+    aggregate (|group_agg - config_agg| <= val_tol under `agg`). At least `min_groups` such groups
+    must match DISTINCT configs and their aggregates must span >= min_spread; if `require_config`
+    is given, that config (e.g. the corrected estimator) must be among the matched ones.
+
+      agg      : per-voxel-values -> scalar summary (default np.mean; e.g. crossing-fraction).
+      matcher  : paired -> (score, who) (default best_corr; e.g. best_agreement for integer maps).
+
+    Un-fabricable: a fabricated/guessed group matches no config's pattern (fails matcher); a
+    globally rescaled/shifted copy of ONE real fit still best-matches the SAME config (Pearson
+    r is scale- and shift-invariant) -> not a distinct config, and its shifted aggregate no
+    longer matches that config -> a single fit cannot be duplicated into a fake dependence. Only
+    running the real analysis at >=2 distinct configs (the sweep) passes.
+
+    Returns (ok, info)."""
+    agg = agg or (lambda v: float(np.mean(np.asarray(v, float))))
+    matcher = matcher or best_corr
+    cfg_agg = {c: float(agg(m[np.isfinite(m)])) for c, m in ref["maps"].items()}
+    valid = []
+    for key, sub in groups.items():
+        if len(sub) < min_vox or not nonconstant(sub.values()):
+            continue
+        cov, paired, _ = align(sub, ref)
+        if cov < cover:
+            continue
+        score, who = matcher(paired)
+        if who is None or score < corr:
+            continue
+        vals = np.array([v for v in sub.values() if np.isfinite(v)])
+        a = float(agg(vals))
+        if abs(a - cfg_agg[who]) > val_tol:
+            continue
+        valid.append((key, who, a, float(score)))
+    configs = {v[1] for v in valid}
+    aggs = sorted(v[2] for v in valid)
+    span = (aggs[-1] - aggs[0]) if len(aggs) >= 2 else 0.0
+    ok = (len(valid) >= min_groups) and (len(configs) >= min_groups) and (span >= min_spread)
+    if require_config is not None:
+        ok = ok and (require_config in configs)
+    return ok, {"valid": valid, "n_valid": len(valid), "n_configs": len(configs),
+                "span": span, "configs": sorted(configs)}
+
+
 def align(submitted, ref):
     """Return per-config paired (sub_vec, ref_vec) on the shared, finite voxels.
     Also returns coverage = shared/len(ref_ijk)."""

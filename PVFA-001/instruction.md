@@ -52,6 +52,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   one row per periventricular ROI voxel, with columns `i,j,k` (its voxel index in
   the acquisition array) and `fa` (its fractional anisotropy). Its mean over the
   rows must equal your reported `fa_periventricular_wm`.
+- `fa_sweep.csv` — the per-voxel FA under each diffusion model you evaluate. Estimate
+  the FA with at least two diffusion models over the same ROI and give the per-voxel
+  FA for each: columns `i,j,k` (voxel index), `model` (a short label for that model /
+  estimator), and `fa`. One row per (voxel, model).
 - `run_metadata.json` — dataset id, shells available vs used, the region
   definition, and the preprocessing you applied.
 - `findings.md` — a short written summary reporting the periventricular

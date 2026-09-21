@@ -76,3 +76,67 @@ single-tensor map + bare 0.527) FAIL (pillar 3 only; pillars 1–2 pass).
 ### Cost
 
 `hard`. cpus 2, mem 8 GB, internet on (dipy fetches the Sherbrooke 3-shell subject, ~1 download). A DTI fit plus a region-restricted fwDTI fit ≈ 60 s locally; timeouts agent 3600 s / verifier 900 s. Deps: dipy 1.12.1 + numpy/scipy/nibabel/h5py.
+
+### Second-pass fix (2026-09): the free-water sweep is now PER-VOXEL-BACKED + upper-ceiling fairness
+
+The red-team confirmed pillar 3 was gameable: its prose fallback let a **naive single-tensor DTI
+fit + a textbook CSF-deflation sentence** pass, and the numeric branch matched *guessable
+reported scalars* (~0.62 / ~0.53) — the CORRECTED (free-water) model was never enforced to be
+run. It also flagged an upper-band-ceiling **fairness false-negative** (an honest fwDTI, which
+can run ~+10% high, could exceed the sanity range). Per SECOND_PASS_BRIEF §5 + the PVFA-specific
+fairness note.
+
+**What changed**
+- New Required Output `fa_sweep.csv`: the per-voxel FA under each diffusion model evaluated
+  (columns `i,j,k,model,fa`, ≥2 models). Instruction describes it neutrally as "the per-voxel FA
+  under each diffusion model you evaluate" — it does **not** name free water, fwDTI, CSF partial
+  volume, or which model is correct.
+- Pillar 3 rewritten (`test_freewater_sweep_matches_reference`): each sweep group must be a REAL
+  per-voxel fit — cover the ROI, non-constant, match ONE held-out config's FA pattern
+  (r ≥ 0.80) AND its ROI-mean FA (≤ 0.08) — and the matched configs must include the
+  **free-water-corrected model (`fwdti`)** plus ≥1 single-tensor, at distinct configs spanning
+  ≥ 0.06. The prose fallback and reported-scalar `straddle` branch are removed.
+- **Upper-ceiling fairness fix:** pillar 2's `RANGE_MARGIN` widened 0.06 → **0.10** (upper bound
+  0.717) so an honest free-water FA at the top of the band passes; the sweep's `fwdti` mean-match
+  tol is **0.08** (admits fwDTI ~+10% high, and stays below the 0.09 fwDTI-vs-single-tensor gap).
+- `solution/compute.py` now writes `fa_sweep.csv` from the fwDTI and single-tensor fits it
+  already computes.
+
+**Why un-fabricable** (measured on the reference maps): a fabricated group matches no config's
+pattern. A **rescaled/shifted** copy of one single-tensor fit is scale- and shift-invariant in r
+→ best-correlates with the SAME single-tensor config → not a distinct config, and its shifted
+ROI mean (0.617) no longer matches that config's mean (0.527, gap 0.09 > 0.08 tol) → a single fit
+cannot be inflated into a fake `fwdti`. Faking `fwdti` requires actually estimating the
+free-water compartment per voxel (a genuinely different spatial pattern; fwDTI self-corr 1.0 vs
+single-tensor cross 0.898).
+
+**Adversarial self-validation** (subprocess pytest, fixtures from the held-out per-model
+reference maps):
+
+| case | verdict | mechanism |
+|---|---|---|
+| honest (fwDTI headline + fwDTI/single-tensor per-voxel sweep) | **PASS** | all pillars |
+| defensible: fwDTI + a different single-tensor (b=1000) | **PASS** | 2 distinct configs incl. fwdti |
+| **fairness: honest fwDTI at the upper band edge (+9.7%, mean 0.677)** | **PASS** | wide upper margin; mean-match 0.06 < 0.08 |
+| defensible: version-drift FA noise (r ≈ 0.90) | **PASS** | r ≥ 0.80 |
+| attack A: fabricated sweep (random FA, right means) | **FAIL** | 0 configs matched |
+| attack C: single-tensor only, two real single-tensor groups, no fwDTI | **FAIL** | corrected `fwdti` absent |
+| attack C: sweep has 1 group | **FAIL** | < 2 groups |
+| attack C: single-tensor + rescaled copy (mean→0.617) relabeled `fwdti` | **FAIL** | best-corr → single-tensor; mean 0.617≠0.527 |
+| attack C: single-tensor + additively-shifted copy relabeled `fwdti` | **FAIL** | same (r shift-invariant) → single config |
+
+The upper-band-edge honest case PASSES and every attack-C variant (guessed/rescaled/shifted
+corrected value, and the naive single-tensor sweep omitting the correction) FAILS.
+
+**Honest-limitations (blunt):**
+- *Live-dipy not run.* dipy is not installed here and the sample download stalls, so the fixtures
+  were synthesised from the committed held-out per-model reference maps. `compute.py` writes the
+  sweep from the fwDTI and single-tensor fits it already computes; a maintainer must confirm on a
+  live dipy run (no committed reference-build script exists — the maintainer should add one).
+- *Mild cue (accepted 5(a)).* Requiring a per-model FA table cues that FA depends on the diffusion
+  model. The retained teeth: the free-water-corrected model must be COMPUTED per-voxel, which a
+  naive single-fit-plus-sentence, a guessed scalar, or a rescaled single-tensor copy cannot fake.
+- *Tight attack margin.* The fwDTI-vs-single-tensor mean gap (0.09) barely exceeds the mean-match
+  tol (0.08); this is the intended balance between admitting a high honest fwDTI and rejecting an
+  inflated single-tensor. The per-voxel pattern match (r) is the primary gate, so the 0.01 mean
+  margin is a secondary guard, not the sole defense.
