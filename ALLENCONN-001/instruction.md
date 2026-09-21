@@ -61,6 +61,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `self_projection.json` — at least
   `{"self_strongest_fraction": <float>, "n_source_regions": <int>,
   "n_self_strongest": <int>, "n_experiments": <int>, "n_target_structures": <int>}`.
+- `source_strongest.csv` — the per-source-region row behind the fraction: one row per source
+  region, with the source, its strongest target structure, and whether that strongest target is
+  the source's own structure (columns e.g. `source,strongest_target,is_self_strongest`).
 - `run_metadata.json` — cache/atlas version, dataset id, number of experiments used,
   the structure set, the connection metric, and the bookkeeping choices you made.
 - `findings.md` — a short written summary (a few sentences): the self-strongest fraction

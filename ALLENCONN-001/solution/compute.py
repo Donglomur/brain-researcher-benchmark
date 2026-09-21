@@ -16,6 +16,7 @@ Reading projection signal only (is_injection=False) removes the saturated self c
 source's own structure then still carries genuine local arborization but is the strongest target
 for only ~0.36 of sources. So the honest self-strongest fraction is ~0.36, not ~0.62.
 """
+import csv
 import json
 import os
 import sys
@@ -45,10 +46,11 @@ def fail(reason):
     sys.exit(1)
 
 
-def self_strongest_fraction(mat):
-    """fraction of source rows whose largest entry is the source's own structure (the diagonal)."""
-    n = 0
-    n_self = 0
+def per_source_strongest(mat, acr):
+    """For each source row return (acronym, strongest_target_acronym, is_self_strongest). A source
+    is 'self-strongest' if its own structure is the largest entry of its row."""
+    records = []
+    n = n_self = 0
     for s in mat.index:
         if s not in mat.columns:
             continue
@@ -56,10 +58,15 @@ def self_strongest_fraction(mat):
         if row.notna().sum() < 2:
             continue
         n += 1
+        mx = row.max()
+        strongest = row.idxmax()
         selfv = row[s]
-        if pd.notna(selfv) and selfv >= row.max() - 1e-12:
+        is_self = bool(pd.notna(selfv) and selfv >= mx - 1e-12)
+        if is_self:
             n_self += 1
-    return (n_self / n if n else float("nan")), n, n_self
+        records.append((acr.get(s, str(s)), acr.get(strongest, str(strongest)), int(is_self)))
+    frac = (n_self / n) if n else float("nan")
+    return records, frac, n, n_self
 
 
 def build_matrix(mcc, eids, summary_ids, eid2src, is_injection):
@@ -97,14 +104,21 @@ def main():
 
     # projection signal only (exclude saturated injection-site compartments)
     mat = build_matrix(mcc, eids, summary_ids, eid2src, is_injection=False)
-    frac_correct, n_src, n_self = self_strongest_fraction(mat)
+    records, frac_correct, n_src, n_self = per_source_strongest(mat, acr)
 
     # naive contrast: leave the injection-site compartments in
     mat_naive = build_matrix(mcc, eids, summary_ids, eid2src, is_injection=None)
-    frac_naive, _, _ = self_strongest_fraction(mat_naive)
+    _, frac_naive, _, _ = per_source_strongest(mat_naive, acr)
 
     labeled = mat.rename(index=acr, columns=acr)
     labeled.to_csv(os.path.join(OUT, "connectivity_matrix.csv"))
+
+    # per-source table (the finest intermediate the fraction is computed from)
+    with open(os.path.join(OUT, "source_strongest.csv"), "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["source", "strongest_target", "is_self_strongest"])
+        for r in sorted(records):
+            w.writerow(r)
 
     with open(os.path.join(OUT, "self_projection.json"), "w") as f:
         json.dump({

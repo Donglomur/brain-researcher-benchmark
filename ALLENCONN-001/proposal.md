@@ -70,3 +70,34 @@ The Allen atlas is fetched at runtime (`allow_internet=true`): the cache manifes
 ### Cost
 
 `hard`. cpus 2, mem 8 GB, internet on. Deps: `allensdk==2.16.2` on `python:3.10` (numpy 1.23.5 / pandas 1.5.3 / scipy 1.10.1 / h5py 3.16.0 — allensdk pins an old numpy that will not build on 3.12, hence 3.10). Compute after download is trivial (a pivot + a per-row argmax); the wall-clock is dominated by the per-experiment fetch.
+
+### Proof-of-work verifier (added)
+
+The grader is now proof-of-work (see `PROOF_OF_WORK_SPEC.md`): the fraction cannot pass without the
+real projection-only matrix.
+
+- **Held-out reference** `tests/reference.npz` (from `solution/compute.py`, never shipped): the
+  honest (projection-signal-only, `is_injection=False`) per-source self-strongest indicators + the
+  injection-included per-source indicators + `ref_stats` (projection-only fraction 0.357,
+  injection-included 0.624, 157 source regions, 498 experiments).
+- **Neutral per-item table** `source_strongest.csv` (source, strongest_target, is_self_strongest) —
+  both the injection-included and projection-only analyses produce a matrix and this per-source
+  argmax indicator, so requiring the table does not cue the injection-compartment lever.
+- **Pillars:** (1) `source_strongest.csv` covers the real source regions, non-constant, and its
+  per-source self-strongest indicators match the held-out projection-only reference for ≥ 85% of
+  sources (a matrix that leaves the saturated injection compartments in flips ~26% of sources);
+  (2) recompute the fraction from the submitted rows == reference (0.357) == reported JSON; the
+  required `connectivity_matrix.csv` (316-column matrix) must be present; (3) headline in the honest
+  band `[0.27, 0.46]` (the injection-included ~0.62 fails); (4) injection-site artifact recognised
+  (fail if absent): a volunteered ~0.62 or prose.
+- **Validation matrix (subprocess pytest):** honest PASS; no connectivity_matrix.csv FAIL; no
+  source_strongest.csv FAIL; constant (all-self) indicators FAIL; naive injection-included 0.62
+  over-claim FAIL.
+
+**Data pin (reference build):** Allen Mouse Brain Connectivity Atlas via
+`allensdk.core.mouse_connectivity_cache.MouseConnectivityCache` (allensdk 2.16.2, resolution 100);
+498 wild-type anterograde experiments (`get_experiments(cre=False)`), structure set 167587189 (316
+summary structures), whole-structure (`hemisphere_id=3`) `projection_density`. Reference fractions:
+projection-only 0.35668789808917195 (56/157), injection-included 0.6242038216560509. The Allen cache
+is fetched at runtime (`allow_internet=true`); the atlas is versioned by allensdk/manifest, pinned by
+the SDK version + experiment cohort + structure set above.
