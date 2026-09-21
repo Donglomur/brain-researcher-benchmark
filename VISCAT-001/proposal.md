@@ -78,6 +78,41 @@ runtime streams all 87 sessions' MTL spike_times + trials tables (light per-file
 `verifier.timeout_sec=1800`, `agent.timeout_sec=7200`. Deps pinned
 (dandi/pynwb/remfile/numpy/scipy/h5py/scikit-learn).
 
+### Proof-of-work hardening (fabrication-proof, judgement kept un-cued)
+
+The reviewed verifier graded a single reported number + prose and (per the suite audit) could be
+passed on fabricated data. It is now fabrication-proof WITHOUT cueing the double-dipping judgement:
+
+- **Held-out reference** `tests/reference.npz` (built by streaming all 87 DANDI 000004 sessions with
+  the oracle; never shipped to the agent): per-neuron real values keyed by the real neuron id
+  (`<asset-stem>__u<unit id>`) -- the pinned all-trials preferred-vs-rest AUC + the category-selective
+  flag -- plus `ref_stats` (n=1864, proportion 0.167, naive same-trials mean 0.695, honest held-out
+  mean 0.570).
+- **Neutral per-neuron table** `neurons.csv` added to Required Outputs: the pinned per-neuron
+  preferred-vs-rest AUC + selective flag -- the intermediate BOTH a naive and an honest analysis
+  produce, so requiring it does not cue the held-out/double-dipping insight. The instruction still
+  names only the deliverable.
+- **Three grader pillars.** (1) the submitted per-neuron AUC must track the reference (cross-neuron
+  r >= 0.90, per-neuron tol, coverage >= 90%, non-constant, selective-flag agreement); (2) the
+  proportion category-selective and the same-trials mean AUC recomputed FROM the rows must match the
+  reference (== 0.695) and the reported JSON; (3) the scientific judgement is now the un-cued
+  **OR-escape** (aligned with the MTLMEMORY sibling, superseding the earlier strict numeric-AND gate):
+  PASS if the headline reproduces the honest ~0.57 OR the write-up volunteers the non-independence
+  (double-dipping tied to the AUC, or the held-out split used); a claimed held-out cannot rescue a
+  headline >= 0.63; an un-caveated ~0.70 fails. Fabrication is closed independently by pillars 1+2, so
+  the judgement gate can be the fair OR-escape without reopening the fabrication hole.
+
+**Subprocess-pytest validation matrix** (each `OUTPUT_DIR` graded by a fresh `pytest` process):
+honest **PASS** / no-table **FAIL** (pillars 1+2) / constant-table **FAIL** (pillar 1) /
+non-constant-fabricated (right group mean, wrong per-neuron values) **FAIL** (pillar 1 teeth) /
+naive (real table, un-caveated 0.695 headline) **FAIL** (pillar 3) / defensible-alternative
+(nested-CV 0.56, volunteers held-out) **PASS**.
+
+### Packaging
+`tests/reference.npz` (~0.5 MB) is committed; the raw data is streamed at runtime (all 87 NWB assets,
+too large to bake under GitHub's 100 MB/file limit), so `allow_internet` stays `true`, the neuron ids
++ `ref_stats` are pinned, and baking the derived per-neuron inputs is a maintainer follow-up.
+
 ### Notes / caveats
 - **Runtime fetch caveat:** DANDI/S3 streaming is generally reliable but external; a CI runner
   must allow internet. No data is committed to the repo.

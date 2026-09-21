@@ -100,10 +100,11 @@ def selective_and_preferred(fr, cat):
 
 
 def collect_neurons():
-    """Stream every session's recognition-phase MTL spiking; return list of (fr, cat) per neuron.
+    """Stream every session's recognition-phase MTL spiking; return list of per-neuron records.
 
-    fr = per-recognition-trial firing rate in the [0.2, 1.7] s window; cat = the trial's visual
-    category (stimCategory, 1..5). Only the MTL units' spike_times are read, so streaming stays light.
+    Each record: id ('<asset stem>__u<unit id>'), region, fr (per-recognition-trial firing rate in
+    the [0.2, 1.7] s window), cat (the trial's visual category, stimCategory 1..5). Only the MTL
+    units' spike_times are read, so streaming stays light.
     """
     neurons = []
     n_sessions = 0
@@ -114,6 +115,7 @@ def collect_neurons():
             fail(f"no NWB assets in dandiset {DANDISET}")
         for p in paths:
             try:
+                stem = p.split("/")[-1][:-4] if p.endswith(".nwb") else p.split("/")[-1]
                 url = ds.get_asset_by_path(p).get_content_url(follow_redirects=1, strip_query=False)
                 io = NWBHDF5IO(file=h5py.File(remfile.File(url), "r"), load_namespaces=True)
                 nwb = io.read()
@@ -125,6 +127,7 @@ def collect_neurons():
                     continue
                 u = nwb.units
                 el = nwb.electrodes.to_dataframe()
+                uid = np.asarray(u.id[:])
                 for i in range(len(u.id)):
                     eidx = u["electrodes"][i].index.values
                     locs = el.loc[eidx, "location"].values
@@ -134,7 +137,10 @@ def collect_neurons():
                     st = np.asarray(u["spike_times"][i]).astype(float)
                     fr = (np.searchsorted(st, on + WIN[1]) - np.searchsorted(st, on + WIN[0])) \
                         / (WIN[1] - WIN[0])
-                    neurons.append((fr.astype(float), cat.astype(int)))
+                    neurons.append(dict(
+                        id=f"{stem}__u{int(uid[i])}",
+                        region=("Hippocampus" if "Hippocampus" in loc else "Amygdala"),
+                        fr=fr.astype(float), cat=cat.astype(int)))
                 n_sessions += 1
             except Exception:
                 continue
@@ -147,22 +153,24 @@ if len(neurons) < 200:
 
 rng = np.random.default_rng(SEED)
 
-# ---- category-selective test on all recognition trials (for the proportion + the naive contrast) ----
+# ---- pinned per-neuron quantities on all recognition trials (NEUTRAL table + naive contrast) ----
 sel_flags = np.zeros(len(neurons), dtype=bool)
-naive_auc_list = []
-for j, (fr, cat) in enumerate(neurons):
+all_auc = np.zeros(len(neurons))          # pinned per-neuron preferred-vs-rest AUC (all trials)
+for j, rec in enumerate(neurons):
+    fr, cat = rec["fr"], rec["cat"]
     p, pref = selective_and_preferred(fr, cat)
+    all_auc[j] = auc_pref_vs_rest(fr, cat == pref)   # SAME trials -> inflated for selected cells
     if p < SEL_ALPHA:
         sel_flags[j] = True
-        naive_auc_list.append(auc_pref_vs_rest(fr, cat == pref))   # SAME trials -> inflated
 prop_sel = float(sel_flags.mean())
-naive_auc = float(np.mean(naive_auc_list)) if naive_auc_list else float("nan")
+naive_auc = float(np.mean(all_auc[sel_flags])) if sel_flags.any() else float("nan")
 
 # ---- honest estimate: select the category-selective neurons and fix their preferred category on a ----
 # ---- TRAIN split, measure the preferred-vs-rest AUC on the HELD-OUT split, repeat and average --------
 held = [[] for _ in neurons]
 for rep in range(N_SPLITS):
-    for j, (fr, cat) in enumerate(neurons):
+    for j, rec in enumerate(neurons):
+        fr, cat = rec["fr"], rec["cat"]
         n = len(fr)
         idx = np.arange(n)
         tr = []
@@ -182,6 +190,15 @@ for rep in range(N_SPLITS):
             held[j].append(auc_pref_vs_rest(fr[te], cat[te] == pref))   # AUC on HELD-OUT trials
 per_cell_heldout = [np.mean(h) for h in held if len(h) >= 5]
 honest_auc = float(np.mean(per_cell_heldout)) if per_cell_heldout else float("nan")
+
+# ---- write the NEUTRAL per-neuron table ----
+import csv
+with open(OUT / "neurons.csv", "w", newline="") as f:
+    w = csv.writer(f)
+    w.writerow(["neuron_id", "region", "n_trials", "category_selective", "pref_vs_rest_auc"])
+    for j, rec in enumerate(neurons):
+        w.writerow([rec["id"], rec["region"], len(rec["cat"]),
+                    int(sel_flags[j]), round(float(all_auc[j]), 4)])
 
 results = {
     # headline: honest single-neuron preferred-category-vs-rest discriminability of category cells

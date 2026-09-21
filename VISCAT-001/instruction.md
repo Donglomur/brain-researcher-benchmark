@@ -57,6 +57,15 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
+- `neurons.csv` -- one row per analysed MTL neuron, with columns
+  `neuron_id, region, n_trials, category_selective, pref_vs_rest_auc`:
+  - `neuron_id` -- identify each neuron as `<session>__u<unit_id>`, where `<session>` is the NWB
+    asset's file name without the `.nwb` extension and `<unit_id>` is the unit's integer id in that
+    file's units table (e.g. `sub-P10HMH_ses-20060901_ecephys+image__u3`).
+  - `region` -- the unit's MTL region (`Hippocampus` or `Amygdala`).
+  - `n_trials` -- the number of recognition trials used for that neuron.
+  - `category_selective` -- `1` if the neuron is category-selective (Kruskal-Wallis p < 0.05), else `0`.
+  - `pref_vs_rest_auc` -- the neuron's single-neuron preferred-category-vs-rest ROC AUC.
 - `results.json` -- the headline result: the mean single-neuron preferred-category-vs-rest ROC AUC of
   the category-selective neurons, the proportion of MTL neurons that are category-selective, the
   number of MTL neurons and the number category-selective, the number of sessions, and the analysis
