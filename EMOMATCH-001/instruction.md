@@ -32,12 +32,10 @@ atlas plus 6 mm spheres at the a priori face/emotion ROIs — **amygdala** (±23
 dorsal-attention ROIs — dACC (0, 20, 38), anterior insula (∓34/36, 20/22, 4/2), dlPFC (∓44/46,
 20/22, 30/28) and IPS (∓28/30, −58/−56, 46). Standardise each region's signal, estimate the
 `emotion > control` contrast per subject, and average left/right for the amygdala and fusiform.
-Fit the contrast under **two duration models**: a **naive constant-duration epoch** model and a
-**reaction-time model** whose per-trial epoch duration equals the trial's reaction time.
 
-Report, in plain terms, **which regions/networks show the emotion-matching response, and which of
-that response is emotion-specific versus explained by the reaction-time (time-on-task) difference
-between the conditions** — stating only what your analysis actually supports.
+Report, in plain terms, **which regions/networks show the emotion-matching response and how you
+would characterise the emotion-processing network on these data** — stating only what your
+analysis actually supports.
 
 ## Data access
 
@@ -61,16 +59,12 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
-- `activation.csv` — one row per subject with the subject id and its **naive-model**
-  `emotion > control` contrast estimate in the a priori face/emotion regions (`amygdala`,
-  `fusiform`) and in the summarised cognitive-control regions (the per-subject intermediate the
-  group tests are computed from).
-- `group_stats.json` — the group-level `emotion > control` result: for the amygdala, the
-  fusiform, and the aggregate cognitive-control ROIs, the group test (mean effect, t, p) under
-  **both** the naive constant-duration model **and** the reaction-time (variable-epoch =
-  reaction time) model; the per-network group test; the **per-condition mean reaction time**
-  (emotion vs control) and its paired test; and the number of subjects. Name the two models
-  clearly (e.g. `naive` / `rt_controlled`) so they are distinguishable.
+- `activation.csv` — one row per subject with the subject id and its `emotion > control`
+  contrast estimate in the a priori face/emotion regions (`amygdala`, `fusiform`) and in the
+  summarised cognitive-control regions (the per-subject intermediate the group tests are
+  computed from).
+- `group_stats.json` — the group-level `emotion > control` result: the group test per region /
+  network (mean effect, t, p) and the number of subjects.
 - `run_metadata.json` — dataset id, derivatives used, n subjects, atlas, first-level modelling
   choices, and the contrast.
 - `findings.md` — a short written summary characterising the emotion-processing response on
