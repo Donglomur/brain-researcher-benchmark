@@ -28,6 +28,8 @@ import re
 import sys
 from pathlib import Path
 
+import numpy as np
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import proof_of_work as pw  # noqa: E402
 
@@ -121,44 +123,65 @@ def test_recompute_correlation_from_rows():
         f"|r| recomputed from the submitted parcels ({r_rows:.3f})")
 
 
-# ------------------------------------------------------------------ pillar 3 (judgement as numbers)
-def test_conclusion_spatial_null_is_numeric():
-    """PILLAR 3: the honest, volunteered discriminating quantity graded as NUMBERS. The task is
-    un-cued -- it never mentions a spatial null -- so an agent that only ran the parametric test
-    has no spin/surrogate p to report. A spatial-autocorrelation-preserving null p must be
-    reported and be non-significant, the parametric p must be the tiny anti-conservative value,
-    and the spin-null distribution must be wide (a label shuffle is not)."""
+# ------------------------------------------------------------------ pillar 3 (judgement RECOMPUTED from the submitted null distribution)
+def test_conclusion_spatial_null_recomputed_from_distribution():
+    """PILLAR 3: the discriminating judgement is RECOMPUTED from the submitted null DISTRIBUTION,
+    not read off a reported scalar. The task never states the answer, and "not significant under a
+    spatial null" is guessable from priors -- so an agent must submit the actual sampling
+    distribution of the correlation it compared the observed value against, and the grader:
+      (a) validates that distribution is a genuine spatial-autocorrelation-preserving null -- it is
+          centred near 0 and WIDE (a naive label-shuffle / parametric null of ~400 iid parcels has
+          a narrow ~1/sqrt(n) ~= 0.05 spread; the real spin null of two smooth maps is ~0.26), and
+      (b) RECOMPUTES the two-tailed p = fraction of the null with |r| >= the observed |r| (recomputed
+          from the parcel rows) and requires it to be non-significant.
+    A reported spin-p scalar with no distribution fails; a fabricated flat/narrow null fails the
+    spread check AND recomputes to a SIGNIFICANT p; only a genuinely wide spatial null passes."""
     ref = _reference()
     st = ref["stats"]
     blobs = _blobs()
+    sub = _submitted()
 
-    spin_ps = pw.spatial_null_p(blobs)
-    assert spin_ps, (
-        "no spatial-autocorrelation-preserving (spin / surrogate) null p-value is reported. Both "
-        "maps are strongly spatially autocorrelated, so the parametric p treats ~400 non-"
-        "independent parcels as independent and is anti-conservative. Compare r against a spin / "
-        "variogram / autocorrelation-preserving null and report that p.")
-    assert max(spin_ps) > st["SPIN_P_MIN"], (
-        f"the reported spatial-null p-value(s) {sorted(set(round(v,3) for v in spin_ps))} are all "
-        f"<= {st['SPIN_P_MIN']}; on these data r=-0.22 sits well inside a spin null (reference "
-        f"spin p ~ 0.45) -- the correlation is NOT significant once spatial autocorrelation is "
-        f"accounted for.")
+    null = pw.find_null_distribution(blobs, out_dir=OUT, min_len=int(st.get("MIN_NULL", 100)))
+    assert null is not None, (
+        "no spatial-null / surrogate correlation DISTRIBUTION is provided. Both maps are strongly "
+        "spatially autocorrelated, so a parametric p that treats ~400 parcels as independent is "
+        "anti-conservative. Compare the observed correlation against the sampling distribution of "
+        "the correlation under a spatial-autocorrelation-preserving null (spin / variogram / "
+        "surrogate), and provide that distribution (the array of null correlations) so the "
+        "significance can be assessed against it.")
+    assert len(null) >= int(st.get("MIN_NULL", 100)), (
+        f"the submitted null distribution has only {len(null)} samples "
+        f"(need >= {int(st.get('MIN_NULL', 100))}) to estimate the null reliably.")
 
+    null_mean = float(np.mean(null))
+    null_sd = float(np.std(null))
+    assert abs(null_mean) <= st["NULL_MEAN_ABS_MAX"], (
+        f"the submitted null distribution is not centred near zero (mean {null_mean:+.3f}); a "
+        f"correlation null under random spatial rotations/surrogates is centred at ~0.")
+    assert null_sd >= st["SPIN_SD_MIN"], (
+        f"the submitted null distribution is too narrow (SD {null_sd:.3f} < {st['SPIN_SD_MIN']}); a "
+        f"spatial-autocorrelation-preserving null of two smooth maps is WIDE (reference "
+        f"~{st['spin_null_sd']:.2f}). A narrow null is a label shuffle / parametric null that "
+        f"ignores the spatial structure and is anti-conservative.")
+    assert abs(null_sd - st["spin_null_sd"]) <= st["SPIN_SD_TOL"], (
+        f"the submitted null distribution SD ({null_sd:.3f}) is not consistent with a genuine "
+        f"spatial null of these maps (reference {st['spin_null_sd']:.3f}, tol {st['SPIN_SD_TOL']}).")
+
+    r_rows = pw.recompute_abs_r(sub, ref["pid"])
+    p_spin = pw.recompute_spin_p(r_rows, null)
+    assert p_spin > st["SPIN_P_MIN"], (
+        f"the observed |r|={r_rows:.3f} recomputed against the submitted null distribution is "
+        f"SIGNIFICANT (spin p={p_spin:.3f} <= {st['SPIN_P_MIN']}); either the null is too narrow "
+        f"(anti-conservative) or the correlation would survive. On these data r sits well inside a "
+        f"proper spatial null (reference spin p ~ {st['p_spin']:.2f}) -- it is NOT significant once "
+        f"spatial autocorrelation is accounted for.")
+
+    # the dissociation that makes this a real trap: the naive parametric p is tiny.
     param_ps = pw.parametric_p(blobs)
     assert param_ps and min(param_ps) < st["PARAM_P_MAX"], (
         f"no anti-conservative parametric / label-shuffle p-value (< {st['PARAM_P_MAX']}) is "
         f"reported; the discriminating contrast is that the naive p is tiny (~1e-5) while the "
-        f"spatial-null p is not")
-
-    # the spatial null must be a real autocorrelation-preserving one (wide distribution), not a
-    # label shuffle (which has a narrow ~1/sqrt(n) spread).
-    sds = pw.spin_null_sd(blobs)
-    if sds:
-        assert max(sds) >= st["SPIN_SD_MIN"], (
-            f"the reported spin/surrogate null SD ({sorted(set(round(v,3) for v in sds))}) is too "
-            f"narrow (< {st['SPIN_SD_MIN']}); a spatial-autocorrelation-preserving null of two "
-            f"smooth maps is wide (reference ~0.26). A narrow null is a label shuffle, which does "
-            f"not preserve the spatial structure.")
+        f"spatial-null p (recomputed from your null distribution, {p_spin:.2f}) is not.")
 
     # if an explicit spatial-null significance verdict is reported, it must be non-significant.
     verdicts = pw.find_bool_by_key(

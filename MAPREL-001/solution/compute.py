@@ -139,6 +139,10 @@ def main():
         "spin_null_sd": float(spin_null.std()),
         "n_permutations": int(N_PERM),
         "significant_after_spatial_null": bool(p_spin < 0.05),
+        # the full sampling distribution of the correlation under the spatial null: the array the
+        # p-value is derived from (the grader recomputes the p-value from this and validates its
+        # spread, so the significance judgement cannot be a guessed scalar).
+        "null_distribution": [float(x) for x in spin_null],
     }
     (OUT / "results.json").write_text(json.dumps(results, indent=2))
 

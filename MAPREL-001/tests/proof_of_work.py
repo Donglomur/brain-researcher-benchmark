@@ -203,6 +203,76 @@ def spin_null_sd(blobs):
     return vals
 
 
+def find_null_distribution(blobs, out_dir=None, min_len=100):
+    """Find the submitted spatial-null / surrogate correlation DISTRIBUTION: the array of
+    correlation values from the sampling procedure the agent used to assess significance. Search
+    JSON numeric lists under a null/spin/surrogate/sampling-tagged key path (values in [-1,1]), and
+    a few sidecar file names. Returns a numpy array or None.
+
+    The grader recomputes the p-value from this distribution and validates its spread, so it cannot
+    be replaced by a reported scalar and a fabricated flat/narrow (parametric-sized) null fails."""
+    concept = re.compile(r"spin|spun|surrogate|surr|null|rotat|variogram|brainsmash|smash|permut|"
+                         r"resampl|sampling|spatial|bootstrap|montecarlo")
+    candidates = []
+
+    def consider(nums, path):
+        if len(nums) < min_len:
+            return
+        arr = np.asarray(nums, float)
+        if not np.all(np.isfinite(arr)):
+            arr = arr[np.isfinite(arr)]
+            if len(arr) < min_len:
+                return
+        inrange = float(np.mean((arr >= -1.01) & (arr <= 1.01)))
+        if concept.search(path) and inrange >= 0.9:
+            candidates.append(arr)
+
+    def walk(o, path=""):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                walk(v, path + "/" + _norm(k))
+        elif isinstance(o, list):
+            nums = [x for x in o if isinstance(x, (int, float)) and not isinstance(x, bool)]
+            if len(nums) == len(o) and nums:
+                consider(nums, path)
+            else:
+                for v in o:
+                    walk(v, path)
+
+    for blob in blobs.values():
+        walk(blob)
+    if candidates:
+        # If several null arrays are provided (e.g. a spin null AND a naive label-shuffle null),
+        # take the WIDEST -- the grader assesses the spatial-autocorrelation-preserving null, which
+        # is wide; a submission that provides only a narrow shuffle null is then correctly judged
+        # against that narrow null (and fails, as it should).
+        return max(candidates, key=lambda a: float(np.std(a)))
+    if out_dir is not None:
+        for name in ("spin_null.csv", "null_distribution.csv", "spin_null.txt", "null.csv",
+                     "surrogate_correlations.csv", "spin_null_distribution.csv", "spin_nulls.csv",
+                     "null_correlations.csv"):
+            p = Path(out_dir) / name
+            if p.exists():
+                try:
+                    vals = [float(x) for x in re.split(r"[\s,]+", p.read_text().strip()) if x]
+                    vals = [v for v in vals if math.isfinite(v)]
+                    if len(vals) >= min_len:
+                        return np.asarray(vals, float)
+                except Exception:
+                    pass
+    return None
+
+
+def recompute_spin_p(r_obs, null):
+    """Two-tailed spatial-null p = fraction of the null correlations whose magnitude is at least the
+    observed |r|. Sign-robust (the gradient sign convention is arbitrary; the null is ~symmetric)."""
+    null = np.asarray(null, float)
+    null = null[np.isfinite(null)]
+    if len(null) < 1:
+        return float("nan")
+    return float(np.sum(np.abs(null) >= abs(r_obs)) / len(null))
+
+
 def find_bool_by_key(obj, key_re):
     out = []
     pat = re.compile(key_re)

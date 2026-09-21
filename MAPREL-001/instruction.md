@@ -30,6 +30,11 @@ Then quantify the spatial correspondence between the two parcellated maps: compu
 **Pearson correlation across the 400 parcels**, and determine **whether the two maps
 are significantly spatially correlated across the cortex**.
 
+To judge significance, compare the observed correlation against the **sampling distribution
+of the correlation under the null model you consider appropriate for these maps**, and
+**provide that sampling distribution** (the array of null correlation values) alongside the
+p-value you derive from it.
+
 Report the correlation and its statistical significance, stating only what your analysis
 actually supports.
 
@@ -41,8 +46,11 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 - `parcels.csv` — one row per parcel:
   `parcel_id, network, gradient2, thickness` (the parcel-mean value of each map).
-- `results.json` — at least `n_parcels`, the Pearson `r`, and the p-value(s) /
-  significance you determined for the association.
+- `results.json` — at least `n_parcels`, the Pearson `r`, the p-value(s) / significance you
+  determined for the association, and the **sampling distribution of the correlation under
+  your null model** (the array of null correlation values, e.g. `null_distribution`) that the
+  significance was assessed against. (The distribution may instead be provided as a sidecar
+  file such as `null_distribution.csv`, one value per line.)
 - `run_metadata.json` — the map sources, space, parcellation, and the analysis choices
   you made.
 - `findings.md` — a short written summary stating whether the second functional

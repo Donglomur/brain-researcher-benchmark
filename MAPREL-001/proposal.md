@@ -55,8 +55,9 @@ This axis was attempted twice before and **both attempts are closed, unmerged** 
 
 Held-out reference `tests/reference.npz` (from `solution/compute.py`, never shipped): per-parcel
 `gradient2` + `thickness` for the 400 Schaefer parcels + `ref_stats` (r=-0.222, parametric
-p=7.1e-6, spin p=0.453, spin-null mean/sd 0.016/0.257, not significant). reference.npz sha256
-6a5cbda8ff9f364a. Task stays **un-cued** (the spin/spatial null is volunteered).
+p=7.1e-6, spin p=0.453, spin-null mean/sd 0.016/0.257, not significant). reference.npz sha256(16)
+9aa7263ce16aca9a (re-saved in the 2026-09 second pass with the added null-lock thresholds; the
+per-parcel data is unchanged). Task stays **un-cued** (the spin/spatial null is volunteered).
 
 Pillars (subprocess-validated): (1) per-parcel gradient2 (matched by |corr|, sign convention is
 free) and thickness track the held-out reference across parcels (cross-parcel r>=0.95, non-
@@ -73,3 +74,59 @@ defensible (variogram/BrainSMASH surrogate) PASS.
 Packaging: pinned neuromaps annotations (margulies2016 fcgradient02, hcps1200 thickness, fsLR32k)
 + Schaefer-2018 400x7 dlabel from CBIG; nilearn 0.13.1 + neuromaps 0.0.7. Data runtime-fetched,
 `allow_internet=true` retained. Baking the parcellated maps is a maintainer follow-up.
+
+## Second-pass fix (2026-09): recompute the spin-null judgement from the submitted null DISTRIBUTION — 5(a)
+
+The proof-of-work grader still graded the discriminating conclusion as **reported scalars**: it
+read the spin p, the parametric p and the spin-null SD off `results.json`. Because "not significant
+under a spatial null" is guessable from priors (spin tests routinely kill smooth-map correlations),
+an agent that ran only the parametric test could copy a plausible spin p (~0.45) and null SD (~0.26)
+into the JSON and pass without ever running the spin test (red-team attack C).
+
+**This is a SEPARATE-PIPELINE task: running the spatial-null test IS the judgement.** Per the
+second-pass brief §5 we take **option 5(a)** — require the intermediate, framed neutrally, and
+recompute the discriminator from it:
+
+- **Require the submitted null DISTRIBUTION.** `results.json` must now carry the *array* of null
+  correlation values (`null_distribution`, or a `null_distribution.csv` sidecar) — framed neutrally
+  in the instruction as *"the sampling distribution of the correlation under the null model you
+  consider appropriate for these maps."* The oracle now emits its full `spin_null` array.
+- **Recompute, don't read.** The grader (a) validates the distribution is a genuine
+  spatial-autocorrelation-preserving null — centred near 0 (|mean| <= 0.15) and **WIDE**
+  (SD >= 0.10 kills a degenerate/flat null; SD within 0.12 of the reference 0.257 kills both a
+  narrow label-shuffle/parametric null and an absurdly-wide fake), and (b) **recomputes the
+  two-tailed p** = fraction of the null with |r| >= the observed |r| (itself recomputed from the
+  parcel rows) and requires it non-significant. The reference (`spin_null_mean` 0.016, `spin_null_sd`
+  0.257) already held the needed summary, so **no data rebuild** was required — only the null-lock
+  thresholds (`MIN_NULL`, `NULL_MEAN_ABS_MAX`, `SPIN_SD_TOL`) were added to `ref_stats`.
+- **Why the naive wrong null fails.** A label-shuffle / parametric null of ~400 parcels has a narrow
+  ~1/sqrt(n) ≈ 0.05 spread; against it the observed |r|=0.22 is "significant". Requiring the null
+  to be wide (and recomputing p from it) makes the label-shuffle attack fail — the agent must run a
+  spatial-autocorrelation-preserving null (spin / variogram / BrainSMASH), which is the core insight.
+
+**Residual cue and HONEST-LIMITATION (documented).** Two residuals, stated plainly:
+1. The neutral schema asks for "the sampling distribution of the correlation under your null model,"
+   which nudges the agent toward a resampling null rather than a parametric formula. It does **not**
+   name spin/variogram or say the null must preserve spatial autocorrelation — the agent must still
+   supply a null wide enough to be a genuine spatial null, which the SD + recomputed-p checks enforce.
+2. A sufficiently sophisticated agent could **fabricate** a wide Gaussian(0, ~0.26) null without
+   running the spin test and pass (validated: `RESIDUAL_wide_fake` PASSES). But constructing that
+   fake requires knowing the spatial null is wide (~0.26) — which *is* the spatial-autocorrelation
+   insight the task tests. The verifier reliably kills the naive/guessed/flat/narrow attacks; the
+   remaining wide-fake path relies on the frontier gate. This is the accepted 5(a) tradeoff.
+
+**Adversarial self-validation (subprocess pytest per case, numpy-only; honest null synthesized from
+the reference's exact spin-null moments since neuromaps spin cannot run offline — the grader uses
+only the null's mean/SD + recomputed p, all matching the real oracle summary):**
+
+| case | result | teeth |
+|---|---|---|
+| honest oracle (real-moment spin null) | **PASS** | — |
+| defensible (variogram-style null sd 0.23, sidecar file, perturbed parcels) | **PASS** | — |
+| attack C — guessed spin-p scalar, **no distribution** | **FAIL** | no null distribution provided |
+| attack C — naive **label-shuffle** narrow null (sd 0.05) | **FAIL** | SD too narrow; recomputes to significant |
+| attack A — **flat** null (all zeros) | **FAIL** | SD 0.0 < 0.10 |
+| attack A — absurdly **wide** fake (sd 0.8) | **FAIL** | out-of-range / SD band |
+| (residual) well-crafted **wide Gaussian(0,0.26)** fake | PASS | HONEST-LIMITATION — relies on the frontier gate |
+
+Attack C (guessed scalar / label-shuffle) now FAILS while honest + defensible PASS, so the fix counts.
