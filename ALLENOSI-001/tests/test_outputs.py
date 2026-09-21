@@ -1,104 +1,150 @@
-"""Grading checks for ALLENOSI-001 (reproduce the orientation-selective fraction in VISp).
+"""Proof-of-work grader for ALLENOSI-001 (orientation-selective fraction of VISp).
 
-Ground truth (validated before release on DANDI 000021, sub-707296975 ses-721123822; VISp units
-mapped by peak-channel electrode location; drifting-gratings responses = per-unit spike rate over
-each 2 s presentation; OSI = (R_pref - R_orth)/(R_pref + R_orth) at the preferred temporal
-frequency; threshold 0.5):
+The deliverable is one fraction, but the analysis naturally produces a per-unit OSI. The grader
+validates that NEUTRAL per-unit table (units.csv: unit_id, osi -- produced by both a naive and an
+honest run) against a held-out reference (tests/reference.npz, built from the oracle run, never
+shipped to the agent), then RECOMPUTES the honest quality-controlled selective fraction from the
+submitted OSI using the held-out QC/responsiveness flags.
 
-  n VISp units (all)                 = 133
-  n VISp units passing QC            = 42       (isi_violations<0.5, amplitude_cutoff<0.1,
-                                                 presence_ratio>0.9 -- the Allen SDK defaults)
-  n QC-pass & visually responsive    = ~37
-  CORRECT  fraction OSI>0.5 among analysis-grade units = ~0.24   <-- reported
-  NAIVE    fraction OSI>0.5 among ALL VISp clusters     = ~0.39   (noise-inflated by junk units)
+Ground truth (DANDI 000021, sub-707296975 ses-721123822, VISp, drifting gratings, OSI at the
+preferred temporal frequency, threshold 0.5):
+  n VISp units = 133 ; QC-pass & responsive = 37
+  CORRECT  (QC + responsive)             fraction OSI>0.5 = 0.24   <-- reported
+  NAIVE    (all VISp clusters, no gate)  fraction OSI>0.5 = 0.39   (noise-inflated by junk units)
 
-The off-critical-path error this task targets (un-cued): the agent takes every cluster labelled
-VISp and reports the fraction with OSI>0.5, ~0.39. But most of the excluded clusters are poorly
-isolated, low-firing units (91 of 133 VISp units fail QC; most fire < 1 Hz), and OSI is a
-positively biased contrast statistic, so their sparse spike counts make them spuriously
-orientation-selective. Applying the standard unit quality-control gate and a visual-responsiveness
-criterion -- as any careful tuning analysis does -- roughly halves the apparent fraction to ~0.24.
-The correct value is stable across the responsiveness threshold and whether or not the preferred
-orientation is chosen on held-out trials (0.21-0.26). A reported ~0.39 fails the numeric match.
+Off-critical-path error (un-cued): Neuropixels recordings contain many poorly isolated, low-firing
+clusters; OSI is a positively biased contrast statistic, so sparse-spike clusters get spuriously
+high OSI. Counting every VISp cluster roughly doubles the apparent selective fraction. The honest
+fraction (quality-controlled, visually responsive) is ~0.24, not ~0.39.
+
+Pillars:
+  1. per-unit OSI table covers the real VISp units, non-constant, matches the held-out reference
+     (cross-unit r>=0.95 and per-unit agreement) -- proof the OSI were really computed
+  2. recompute the honest QC-gated fraction FROM the submitted OSI with the held-out QC flags ==
+     reference == reported headline; the naive all-units recompute reproduces ~0.39
+  3. discriminating recognition (fail if absent): the honest analysis recognises that unfiltered
+     low-quality clusters inflate the fraction (a volunteered all-units ~0.39 OR prose)
 """
 import json
 import os
 import re
+import sys
 from pathlib import Path
 
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import proof_of_work as pw  # noqa: E402
 
-EXPECTED = 0.24     # honest, quality-controlled orientation-selective fraction
-TOL = 0.08          # [0.16, 0.32]: passes any reasonable QC/responsiveness gating, fails naive ~0.39
+OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+REF_PATH = Path(__file__).resolve().parent / "reference.npz"
+
+FRAC_BAND = (0.12, 0.33)      # honest QC-gated fraction ~0.24; fails the naive all-units ~0.39
+REF_TOL = 0.05               # recompute-from-submitted-OSI vs held-out reference
+JSON_TOL = 0.05              # honest recompute vs reported headline
+
+
+def _reference():
+    assert REF_PATH.exists(), (
+        "held-out reference tests/reference.npz is missing (build it from the oracle run)")
+    return pw.load_reference(REF_PATH)
 
 
 def _results():
-    return json.loads((OUT / "results.json").read_text(encoding="utf-8"))
+    p = OUT / "results.json"
+    assert p.exists(), "missing required output results.json"
+    return json.loads(p.read_text(encoding="utf-8"))
 
 
-def _as_fraction(v):
-    """Accept a fraction (0..1) or a percentage (0..100)."""
-    v = float(v)
-    return v / 100.0 if v > 1.5 else v
+def _submitted_units():
+    p = OUT / "units.csv"
+    assert p.exists(), (
+        "missing required output units.csv -- the per-unit orientation selectivity index (unit_id, "
+        "osi) for the VISp units. The single fraction cannot be validated without the per-unit "
+        "table it is computed from.")
+    return pw.load_submitted_units(p)
 
 
-def test_analysis_ran():
+def _headline(res):
+    return pw.find_number(
+        res, [r"orientationselectivefraction", r"selectivefraction", r"fractionselective",
+              r"osifraction", r"fraction", r"selective"],
+        exclude=[r"allunits", r"noqc", r"nogate", r"naive", r"inflat", r"threshold", r"osidef",
+                 r"total", r"nvisp", r"count"])
+
+
+def test_outputs_present_and_wellformed():
+    _reference()
     res = _results()
-    assert isinstance(res, dict)
-
-    def find(keypat, obj=res):
-        for k, v in (obj.items() if isinstance(obj, dict) else []):
-            if re.search(keypat, k, re.I) and isinstance(v, (int, float)) and not isinstance(v, bool):
-                return float(v)
-        return None
-
-    n_total = find(r"n_?visp.*total|n_?visp_?units\b|total.*visp|num.*visp")
-    assert n_total is not None and 90 <= n_total <= 170, f"n VISp units implausible: {n_total}"
-    n_analyzed = find(r"analy[sz]ed|n_?kept|qc.*pass|n_?good|n_?selective_denom")
-    # analysed (quality/responsiveness-gated) count should be a sensible subset
-    if n_analyzed is not None:
-        assert 15 <= n_analyzed <= 90, f"n analysed units implausible: {n_analyzed}"
+    hl = _headline(res)
+    assert hl is not None, f"results.json exposes no orientation_selective_fraction: {res}"
+    assert 0.0 <= hl <= 1.0, f"selective fraction {hl} out of range"
+    units = _submitted_units()
+    assert len(units) >= 20, f"units.csv covers too few VISp units ({len(units)})"
 
 
-def _headline_fraction(res):
-    """The reported orientation-selective fraction. Never take a value the submission itself
-    labelled as the no-QC / all-units / naive comparison."""
-    # 1) explicit primary key
-    for k, v in res.items():
-        if not (isinstance(v, (int, float)) and not isinstance(v, bool)):
-            continue
-        if re.search(r"no_?qc|all_?units|naive|unfilter|inflat|every|raw|contaminat", k, re.I):
-            continue
-        if re.search(r"(orientation|osi).*(select|frac)|select.*frac|frac.*select", k, re.I):
-            return _as_fraction(v)
-    # 2) any non-comparison fraction-like key naming selectivity
-    for k, v in res.items():
-        if (isinstance(v, (int, float)) and not isinstance(v, bool)
-                and re.search(r"frac|proportion|percent|ratio", k, re.I)
-                and re.search(r"select|osi|orient", k, re.I)
-                and not re.search(r"no_?qc|all_?units|naive|unfilter|inflat|every|raw", k, re.I)):
-            return _as_fraction(v)
-    return None
+def test_proof_of_work_per_unit_osi_matches_reference():
+    ref = _reference()
+    units = _submitted_units()
+    pw.check_units_and_osi(units, ref)
 
 
-def test_reported_fraction_reproduces_quality_controlled_value():
+def test_recompute_qc_gated_fraction_from_submitted_osi():
+    ref = _reference()
+    units = _submitted_units()
     res = _results()
-    primary = _headline_fraction(res)
-    assert primary is not None, "results.json exposes no headline orientation-selective fraction"
-    assert abs(primary - EXPECTED) <= TOL, (
-        f"reported orientation-selective fraction {primary:.3f} does not reproduce the honest, "
-        f"quality-controlled value {EXPECTED:.2f} +/- {TOL:.2f}. A ~0.39 fraction comes from counting "
-        f"every VISp cluster, including poorly isolated low-firing units whose sparse spike counts "
-        f"make OSI spuriously high; after standard unit quality control and a responsiveness gate the "
-        f"orientation-selective fraction is ~0.24.")
+    honest, naive = pw.recompute_fractions(units, ref, thr=float(ref["stats"]["osi_threshold"]))
+    ref_correct = float(ref["stats"]["frac_correct"])
+    ref_naive = float(ref["stats"]["frac_naive"])
+    # recompute from the submitted OSI + held-out QC flags reproduces the honest reference fraction
+    assert abs(honest - ref_correct) <= REF_TOL, (
+        f"the quality-controlled selective fraction recomputed from the submitted per-unit OSI "
+        f"({honest:.3f}) does not match the held-out reference ({ref_correct:.3f}); the OSI values "
+        f"are not the real per-unit results.")
+    # sanity: the all-units recompute reproduces the (inflated) naive fraction
+    assert abs(naive - ref_naive) <= REF_TOL + 0.03, (
+        f"the all-units selective fraction recomputed from the submitted OSI ({naive:.3f}) does "
+        f"not match the reference all-units value ({ref_naive:.3f})")
+    # the reported headline must be the honest QC-gated fraction (recomputed), not the inflated one
+    hl = _headline(res)
+    assert hl is not None and abs(hl - honest) <= JSON_TOL, (
+        f"reported orientation_selective_fraction ({hl}) does not equal the quality-controlled "
+        f"fraction recomputed from the submitted OSI ({honest:.3f}); results.json disagrees with "
+        f"the per-unit table (or reports the inflated all-clusters value ~{ref_naive:.2f}).")
 
 
-def test_findings_report_is_not_the_inflated_value():
-    text = (OUT / "findings.md").read_text(encoding="utf-8").lower()
-    # write-up mentions orientation selectivity / OSI
-    assert re.search(r"orientation|osi|select", text), "findings.md does not describe orientation selectivity"
-    # the headline value must be reproduced in the prose too (as fraction or percent)
+def test_headline_in_honest_band():
+    ref = _reference()
     res = _results()
-    primary = _headline_fraction(res)
-    assert primary is not None and abs(primary - EXPECTED) <= TOL, \
-        "headline fraction in results.json is not the honest quality-controlled value"
+    hl = _headline(res)
+    lo, hi = FRAC_BAND
+    assert hl is not None and lo <= hl <= hi, (
+        f"reported orientation-selective fraction {hl} is not the honest quality-controlled value "
+        f"(~{ref['stats']['frac_correct']:.2f}, band [{lo},{hi}]). Counting every VISp cluster with "
+        f"no quality-control / responsiveness gate roughly doubles it to ~{ref['stats']['frac_naive']:.2f}.")
+
+
+def test_quality_control_recognised():
+    """Discriminating recognition, fail if absent (DEVCONN way): the honest analysis recognises
+    that unfiltered, poorly isolated / low-firing clusters spuriously inflate the OSI fraction --
+    by reporting the inflated all-units value as a contrast, or by stating it in the write-up."""
+    ref = _reference()
+    res = _results()
+    ref_naive = float(ref["stats"]["frac_naive"])
+    naive_num = pw.find_number(
+        res, [r"allunits", r"noqc", r"nogate", r"naive", r"inflat", r"unfiltered", r"allcluster",
+              r"beforeqc", r"withoutqc"],
+        exclude=[r"threshold", r"total", r"count", r"nvisp"])
+    has_number = naive_num is not None and abs(naive_num - ref_naive) <= 0.08
+    text = (OUT / "findings.md").read_text(encoding="utf-8").lower() if (OUT / "findings.md").exists() else ""
+    QC = (r"quality[- ]?control|\bqc\b|isi[_ ]?violation|amplitude[_ ]?cutoff|presence[_ ]?ratio|"
+          r"well[- ]?isolated|poorly[- ]?isolated|spike[- ]?sort|unit quality|low[- ]?firing|"
+          r"low firing|few spikes|sparse spik|responsiv|analysis-?grade|junk|noise")
+    EFFECT = (r"inflat|overestimat|over-?estimat|spurious|bias|doubl\w*|too high|higher|"
+              r"artifact|artefact|exclud\w*|filter\w*|gate|remov\w*|drop\w*|reduc\w*")
+    prose = bool(re.search(QC + r"[^\n]{0,120}(?:" + EFFECT + ")", text) or
+                 re.search("(?:" + EFFECT + r")[^\n]{0,120}(?:" + QC + ")", text))
+    assert has_number or prose, (
+        "the submission does not recognise that unfiltered, poorly isolated / low-firing clusters "
+        "inflate the orientation-selective fraction (OSI is positively biased for sparse-spike "
+        f"units). Counting every VISp cluster gives ~{ref_naive:.2f} vs the quality-controlled "
+        f"~{ref['stats']['frac_correct']:.2f}. A flat fraction with no quality-control recognition "
+        "misses the issue this result has.")

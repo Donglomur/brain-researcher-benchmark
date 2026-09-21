@@ -58,3 +58,32 @@ Oracle **reward 1.0** (reference `solution/compute.py` streams the pinned DANDI 
 ### Cost
 
 `hard`. cpus 2, mem 8 GB, internet on (streams one ~1.7 GB NWB asset's needed chunks at runtime via `remfile` -- not the whole file, and not the whole dandiset; note DANDI/S3 can throttle). Agent timeout 7200 s, verifier 1800 s. Deps: dandi 0.78 / pynwb 4.1 / remfile / numpy / scipy / pandas / h5py / scikit-learn (pinned in the Dockerfile).
+
+### Proof-of-work verifier (added)
+
+The grader is now proof-of-work (see `PROOF_OF_WORK_SPEC.md`): the fraction cannot pass without the
+real per-unit OSI computed on the real drifting-grating responses.
+
+- **Held-out reference** `tests/reference.npz` (from `solution/compute.py`, never shipped): every
+  VISp unit's OSI keyed by real unit id, plus each unit's quality-control flags and
+  visual-responsiveness flag, plus `ref_stats` (QC-gated fraction 0.243, all-units fraction 0.391,
+  n_visp 133, n_kept 37).
+- **Neutral per-item table** `units.csv` (unit_id, osi) — both a naive (count every cluster) and an
+  honest (quality-controlled) run compute an OSI for every VISp unit, so requiring the table does
+  not cue the quality-control lever.
+- **Pillars:** (1) `units.csv` covers the real VISp unit ids, non-constant, and the per-unit OSI
+  matches the held-out reference (cross-unit r ≥ 0.95 + per-unit agreement); (2) the grader
+  **recomputes** the honest QC-gated fraction FROM the submitted OSI using the held-out QC /
+  responsiveness flags == reference (0.243) == reported headline, and the all-units recompute
+  reproduces the inflated 0.391; (3) headline in the honest band `[0.12, 0.33]` (the naive
+  all-clusters ~0.39 fails); (4) quality-control recognised (fail if absent): a volunteered
+  all-units ~0.39 or prose.
+- **Validation matrix (subprocess pytest):** honest PASS; no-table FAIL; constant-OSI FAIL;
+  fabricated (scrambled) OSI FAIL; naive all-units 0.39 over-claim FAIL.
+
+**Data pin (reference build):** DANDI `000021` (draft), asset
+`sub-707296975/sub-707296975_ses-721123822.nwb`, asset-id
+`224b57e5-c9a3-46ef-85db-966713f3ccbe`, size 1736516600 B,
+`dandi:sha2-256 = 4e284295a1be5c6cca49df84fab52ad38b4749d2361b2edebeb676051cf09921`. Mutable
+**draft** version; path + hash pin the exact blob. Streamed at runtime with `remfile`
+(`allow_internet=true`); baking (1.7 GB) is a maintainer follow-up.

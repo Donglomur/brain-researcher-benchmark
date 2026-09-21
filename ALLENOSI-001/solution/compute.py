@@ -13,22 +13,14 @@ estimates are dominated by noise and the OSI is pushed toward high values, so su
 spuriously "orientation selective". Counting every VISp cluster therefore roughly doubles the
 apparent selective fraction.
 
-The honest estimate applies the standard unit quality-control gate (isi_violations < 0.5,
-amplitude_cutoff < 0.1, presence_ratio > 0.9 -- the Allen SDK defaults) and a visual-responsiveness
-criterion before computing selectivity, and (as a further guard against the "double-dipping"
-selection bias) the correct value is stable whether or not the preferred orientation is chosen on
-held-out trials.
-
 Validated ground truth (DANDI 000021, sub-707296975 ses-721123822, VISp, drifting gratings,
 per-unit spike rate over each 2 s presentation, preferred temporal frequency, OSI at the preferred
 temporal frequency = (R_pref - R_orth)/(R_pref + R_orth), threshold 0.5):
-  n VISp units (all) = 133 ; QC-pass = 42 ; QC-pass & responsive = ~37
-  CORRECT  (QC + responsive)              fraction OSI>0.5 = ~0.24   <-- reported
-  NAIVE    (all VISp units, no QC/resp)   fraction OSI>0.5 = ~0.39   (noise-inflated by junk units)
-The correct fraction is stable across the responsiveness threshold and across cross-validated vs
-same-data preferred-orientation selection (0.21-0.26). So the honest orientation-selective fraction
-is ~0.24 -- not the ~0.39 that counting every unlabelled cluster reports.
+  n VISp units (all) = 133 ; QC-pass & responsive = 37
+  CORRECT  (QC + responsive)              fraction OSI>0.5 = 0.24   <-- reported
+  NAIVE    (all VISp units, no QC/resp)   fraction OSI>0.5 = 0.39   (noise-inflated by junk units)
 """
+import csv
 import json
 import os
 import sys
@@ -84,6 +76,7 @@ try:
     elec = nwb.electrodes.to_dataframe()
     id2loc = dict(zip(elec.index.values, elec["location"].values))
     u = nwb.units
+    unit_ids = np.asarray(u.id[:])
     peak_ch = np.asarray(u["peak_channel_id"][:])
     unit_region = np.array([id2loc.get(pc, "") for pc in peak_ch])
     isi = np.asarray(u["isi_violations"][:])
@@ -122,12 +115,8 @@ if len(start) < 100:
 
 DIRS = np.array(sorted(set(direction.tolist())))          # 8 directions
 TFS = np.array(sorted(set(tempfreq.tolist())))            # temporal frequencies
-ori_of_dir = {float(d): int((d % 180) // 45) for d in DIRS}   # 0,45,90,135 -> 0..3
 
 # ---- per-unit response (Hz) to each presentation, and a pre-stimulus baseline ----
-# Only the VISp units are needed; reading spike_times for those (not all ~1600 clusters)
-# keeps the runtime streaming light. Non-VISp rows stay zero and are never used (every
-# downstream fraction masks to `visp`).
 nU = len(u.id)
 resp = np.zeros((nU, len(start)))
 base = np.zeros((nU, len(start)))
@@ -159,11 +148,9 @@ M_all = cond_matrix(allidx)
 pref_tf = np.nanargmax(np.nanmax(M_all, axis=1), axis=1)     # preferred temporal frequency per unit
 
 osi = np.zeros(nU)
-pref_ori = np.zeros(nU, dtype=int)
 for j in range(nU):
     tuning = ori_tuning_at(M_all, j, pref_tf[j])
     p = int(np.argmax(tuning))
-    pref_ori[j] = p
     r_pref = tuning[p]
     r_orth = tuning[(p + 2) % 4]
     osi[j] = (r_pref - r_orth) / max(r_pref + r_orth, 1e-9) if (r_pref + r_orth) > 0 else 0.0
@@ -185,6 +172,13 @@ frac_correct = float(selective.sum()) / max(n_kept, 1)
 visp_mask = np.zeros(nU, dtype=bool)
 visp_mask[visp] = True
 frac_naive = float((visp_mask & (osi > OSI_THRESHOLD)).sum()) / max(int(visp_mask.sum()), 1)
+
+# ---- per-unit table (the finest intermediate the fraction is computed from) ----
+with open(OUT / "units.csv", "w", newline="") as f:
+    w = csv.writer(f)
+    w.writerow(["unit_id", "osi", "peak_rate_hz"])
+    for j in visp:
+        w.writerow([int(unit_ids[j]), float(osi[j]), float(peak_rate[j])])
 
 results = {
     # the value that should be REPORTED: honest, quality-controlled selective fraction

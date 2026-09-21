@@ -54,6 +54,9 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 - `results.json` -- the headline result: `orientation_selective_fraction` (the fraction you would
   report), the total number of VISp units, the number selective, the OSI threshold, and the
   analysis parameters you used.
+- `units.csv` -- the per-unit orientation selectivity index behind the fraction: one row per VISp
+  unit, with the unit id and its OSI (columns e.g. `unit_id,osi`; you may include other per-unit
+  quantities you computed).
 - `run_metadata.json` -- dandiset id, session, region, total number of VISp units, number of
   gratings presentations, OSI definition and threshold.
 - `findings.md` -- a short written summary (a few sentences) stating the orientation-selective
