@@ -27,9 +27,7 @@ reliability** as the mean pairwise similarity (correlation) between that subject
 connectome edge-vectors, and summarise a **group-level reliability** across subjects.
 
 Report, in plain terms, **how reliable the individual functional connectome is across
-sessions on these data, and how the group-level estimate is affected by the two subjects the MSC
-papers document as low quality** (MSC08 — pervasive self-reported drowsiness; MSC09 — excessive
-in-scanner motion) — stating only what your analysis actually supports.
+sessions on these data** — stating only what your analysis actually supports.
 
 ## Data access
 
@@ -50,13 +48,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
 
-- `reliability.csv` — one row per subject: `subject_id, n_sessions, reliability` (the
-  per-subject intermediate the group summary is computed from; you may add further columns).
+- `reliability.csv` — one row per subject: `subject_id, n_sessions, reliability` (you may add
+  any further columns you find useful).
 - `reliability_stats.json` — the per-subject reliability values and a group-level reliability
-  summary, plus the number of subjects. Report the group-level reliability **both including all
-  subjects and excluding the documented low-quality subjects (MSC08, MSC09)**, and identify which
-  subjects were set aside. (Frame-censoring with the supplied temporal mask is an accepted
-  refinement but not required.)
+  summary, plus the number of subjects.
 - `run_metadata.json` — dataset id, subjects, sessions, atlas, the reliability metric, and the
   preprocessing choices you made.
 - `findings.md` — a short written summary stating how reliable the individual functional
