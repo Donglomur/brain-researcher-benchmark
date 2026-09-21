@@ -23,14 +23,21 @@ over-detects), or report a single crossing fraction as "the" answer?
 Three pillars: (1) the submitted per-voxel peak-count table covers the real ROI, is
 non-constant, and matches the real reference of some estimator config (>=70% voxel agreement);
 (2) the reported crossing fraction recomputes from the table and lands on a real estimator
-value; (3) the estimator dependence graded as NUMBERS, with a negation-guarded partial-volume /
-over-detection prose fallback.
+value; (3) the estimator dependence forced as un-fabricable PER-VOXEL WORK: peaks_sweep.csv must
+hold the per-voxel peak count for >=2 estimators, each a REAL per-voxel fit matching one held-out
+config's pattern (voxel agreement >= 0.70) AND its crossing fraction, at DISTINCT configs
+INCLUDING the corrected multi-tissue estimator, spanning the real estimator gap. The corrected
+(materially fewer crossings) and naive (single-shell over-detected) estimates must both be
+PRESENT and differ by the real amount -- a single fraction, a guessed/fabricated sweep, or a
+relabelled copy of one fit cannot pass. The lever (MSMT / partial-volume) is never named.
 """
 import numpy as np
 
+import numpy as _np
+
 from proof_of_work import (
     OUT, load_reference, load_voxel_table, align, best_agreement, best_corr, nonconstant,
-    load_json, walk_numbers, harvest_metric_values, straddle, findings_text, unnegated,
+    load_json, walk_numbers, load_sweep_table, validate_sweep,
 )
 
 REF = load_reference()
@@ -42,10 +49,15 @@ COVER = 0.5
 AGREE = 0.70                    # per-voxel peak-count agreement to some real estimator config
 FRAC_TOL = 0.05                # reported crossing fraction vs the nearest real estimator value
 CONSIST = 0.03                 # reported fraction vs fraction recomputed from the table
-NEAR_CFG = 0.03
-MIN_SPREAD = 0.07              # MSMT (0.349) vs single-shell (0.46-0.70) estimator gap
+# --- estimator SWEEP (per-voxel-backed) tolerances ---
+SWEEP_FRAC_TOL = 0.06          # each sweep group's crossing fraction vs its matched config's
+SWEEP_MIN_SPREAD = 0.07        # >=2 real fits at DISTINCT estimators must span this (MSMT 0.349
+                               #   vs single-shell 0.46-0.70; closest gap MSMT-vs-b1000 = 0.108)
+CORRECTED_CONFIG = "msmt"      # the corrected estimator's config label in the held-out reference
 
-FINDINGS_TERMS = [r"crossing", r"fraction", r"\bfrac\b", r"peaks?"]
+
+def _crossing_frac(vals):
+    return float(_np.mean(_np.rint(_np.asarray(vals, float)) >= 2))
 
 
 def _reported_fractions():
@@ -98,41 +110,42 @@ def test_crossing_fraction_recomputes_and_is_real():
         f"the headline crossing fraction must be that of its own per-voxel rows")
 
 
-def test_reports_estimator_dependence_as_numbers():
-    """Un-cued discriminating judgement, graded numerically: the submission must volunteer that
-    the crossing fraction is fODF-estimator dependent -- EITHER by reporting >=2 real crossing
-    fractions that show the single-shell over-detection (numeric branch, validated), OR by using
-    the multi-tissue (MSMT) estimator and stating the single-shell partial-volume over-detection
-    mechanism (negation-guarded prose fallback). A bare single crossing fraction over-claims."""
-    vals = harvest_metric_values(
-        ("crossing.json", "results.json", "run_metadata.json"),
-        PLAUS_LO, PLAUS_HI, FINDINGS_TERMS, json_key_re=r"cross|frac")
-    ok, span, lo, hi = straddle(vals, CFG_FRAC, NEAR_CFG, MIN_SPREAD)
-    distinct = sorted({round(v, 3) for v in vals})
-    claims_numeric = len(distinct) >= 2 and (max(distinct) - min(distinct)) >= 0.05
-    if claims_numeric:
-        assert ok, (
-            f"the submission reports multiple crossing fractions but they do not match the real "
-            f"estimator dependence (real-config values span {span:.3f} < {MIN_SPREAD}, or are not "
-            f"near real fractions {sorted(round(v,3) for v in CFG_FRAC.values())}). Report the "
-            f"MSMT fraction (~0.35) AND a single-shell CSD fraction (~0.46-0.48) that shows the "
-            f"partial-volume over-detection.")
-        return
-    text = findings_text()
-    assert text.strip(), "findings.md is missing or empty"
-    mechanism = (
-        r"(?:msmt|multi[- ]?shell\s+multi[- ]?tissue|multi[- ]?tissue)"
-        r"[^.\n]{0,110}(?:spurious|partial[- ]?volume|over[- ]?detect|suppress|remove|"
-        r"grey[- ]?matter|gray[- ]?matter|\bcsf\b|fewer|single[- ]?shell)|"
-        r"(?:single[- ]?shell|single[- ]?tissue|one\s+shell)"
-        r"[^.\n]{0,110}(?:over[- ]?detect|spurious|inflat|partial[- ]?volume|too\s+many|"
-        r"more\s+crossing|extra\s+(?:peaks?|lobes?)|false)|"
-        r"(?:partial[- ]?volume|grey[- ]?matter|gray[- ]?matter|\bcsf\b)"
-        r"[^.\n]{0,90}(?:spurious|over[- ]?detect|inflat|extra\s+(?:peaks?|lobes?)|contaminat)")
-    assert unnegated(text, mechanism), (
-        "findings.md reports a crossing fraction but neither reports the estimator dependence as "
-        "numbers (>=2 real crossing fractions showing the single-shell over-detection) NOR states "
-        "the mechanism (single-shell single-tissue CSD over-detects crossings from grey-matter / "
-        "CSF partial volume; multi-shell multi-tissue CSD suppresses the spurious lobes and gives "
-        "materially fewer crossings). A single crossing fraction reported as 'the' answer "
-        "over-claims a number that ranges ~0.35 (MSMT) to ~0.70 (single-shell b=3500).")
+def test_estimator_sweep_matches_reference():
+    """The un-cued discriminating judgement, forced as un-fabricable per-voxel work: the crossing
+    fraction is fODF-ESTIMATOR dependent (single-shell single-tissue CSD over-detects the
+    partial-volume crossings that multi-shell multi-tissue CSD resolves away). The submission must
+    report `peaks_sweep.csv`, the per-voxel fODF peak count under each estimator it evaluates, and
+    among those groups the CORRECTED (multi-tissue) estimator AND >=1 other (single-shell) must
+    each be a REAL per-voxel fit -- matching one held-out estimator config's peak-count pattern
+    (voxel agreement >= AGREE) AND that config's crossing fraction -- at DISTINCT configs whose
+    fractions span the real estimator gap. This forces the analyst to actually run the corrected
+    estimator (materially fewer crossings) alongside the naive one -- both PRESENT and differing
+    by the real amount -- rather than report a single crossing fraction as 'the' answer, or guess
+    the corrected value. A fabricated group matches no config; a relabelled/flipped copy of one
+    fit best-agrees the SAME config and its shifted fraction no longer matches -> a single fit
+    cannot fake the estimator dependence.
+
+    The instruction asks for peak counts 'under each fODF estimator you evaluate' -- a neutrally
+    described robustness table; it does NOT name MSMT, single-shell over-detection, or partial
+    volume."""
+    groups = load_sweep_table("peaks_sweep.csv", key_hints=("estimator", "method", "model",
+                              "fodf", "recon", "config", "algo"),
+                              value_hints=("npeak", "n_peak", "peak", "cross"))
+    assert len(groups) >= 2, (
+        f"peaks_sweep.csv evaluates only {len(groups)} fODF estimator(s); report the per-voxel "
+        f"peak count under >=2 estimators so the estimator dependence is shown, not a single "
+        f"crossing fraction as 'the' answer.")
+    ok, info = validate_sweep(
+        groups, REF, AGREE, COVER, SWEEP_FRAC_TOL, SWEEP_MIN_SPREAD, min_groups=2,
+        agg=_crossing_frac, matcher=best_agreement, require_config=CORRECTED_CONFIG)
+    assert ok, (
+        f"the estimator sweep in peaks_sweep.csv is not a real per-voxel fODF sweep of this ROI: "
+        f"{info['n_valid']} group(s) matched a real estimator config's per-voxel pattern+fraction "
+        f"across {info['n_configs']} distinct config(s) {info.get('configs')}, spanning "
+        f"{info['span']:.3f} crossing-fraction (need >=2 groups at >=2 distinct configs incl. the "
+        f"corrected multi-tissue estimator, spanning >= {SWEEP_MIN_SPREAD}). Each estimator's "
+        f"per-voxel peak counts must reproduce a held-out fODF fit (voxel agreement >= {AGREE} AND "
+        f"crossing fraction within {SWEEP_FRAC_TOL} of that config); a single crossing fraction, a "
+        f"fabricated/guessed sweep, or a relabelled copy of one fit cannot reproduce the real "
+        f"estimator dependence ({sorted(round(v,3) for v in CFG_FRAC.values())}). The corrected "
+        f"(multi-tissue) estimator gives materially FEWER crossings than single-shell CSD.")

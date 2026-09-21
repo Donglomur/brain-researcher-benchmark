@@ -60,6 +60,8 @@ try:
     from dipy.reconst.mcsd import (auto_response_msmt,
                                    multi_shell_fiber_response,
                                    MultiShellDeconvModel)
+    from dipy.reconst.csdeconv import (ConstrainedSphericalDeconvModel,
+                                       auto_response_ssst)
     from dipy.direction import peaks_from_model
 except Exception as e:  # pragma: no cover
     fail(f"dipy import failed: {e}")
@@ -105,17 +107,44 @@ crossing_fraction = float(np.mean(npeaks_vox >= 2))
 
 # per-voxel table underlying the crossing fraction (the neutral intermediate the pipeline emits)
 import csv as _csv
+roi_ijk = np.argwhere(roi)
 with open(OUT / "peaks_voxelwise.csv", "w", newline="") as _fh:
     _w = _csv.writer(_fh)
     _w.writerow(["i", "j", "k", "n_peaks"])
-    for (_i, _j, _k), _n in zip(np.argwhere(roi), npeaks_vox):
+    for (_i, _j, _k), _n in zip(roi_ijk, npeaks_vox):
         _w.writerow([int(_i), int(_j), int(_k), int(_n)])
+
+# The estimator dependence: the SAME ROI, fitted with single-shell single-tissue CSD, over-
+# detects partial-volume crossings. Emit the per-voxel peak count under each estimator
+# (peaks_sweep.csv) so the sweep is proof-of-work: each estimator's per-voxel map must
+# reproduce a held-out fODF fit, not a reported/guessed scalar.
+gtab_ss = gradient_table(bvals, bvecs=bvecs)
+resp_ss, _ratio = auto_response_ssst(gtab_ss, data, roi_radii=10, fa_thr=0.7)
+csd_model = ConstrainedSphericalDeconvModel(gtab_ss, resp_ss, sh_order_max=SH)
+pk_ss = peaks_from_model(csd_model, data, default_sphere,
+                         relative_peak_threshold=REL_THR,
+                         min_separation_angle=SEP_ANGLE,
+                         mask=roi, npeaks=NPEAKS, return_odf=False, parallel=False)
+npeaks_ss = (pk_ss.peak_values > 0).sum(-1)[roi]
+crossing_fraction_ss = float(np.mean(npeaks_ss >= 2))
+
+with open(OUT / "peaks_sweep.csv", "w", newline="") as _fh:
+    _w = _csv.writer(_fh)
+    _w.writerow(["i", "j", "k", "estimator", "n_peaks"])
+    for (_i, _j, _k), _n in zip(roi_ijk, npeaks_vox):
+        _w.writerow([int(_i), int(_j), int(_k), "msmt", int(_n)])
+    for (_i, _j, _k), _n in zip(roi_ijk, npeaks_ss):
+        _w.writerow([int(_i), int(_j), int(_k), "csd_singleshell", int(_n)])
 
 (OUT / "crossing.json").write_text(json.dumps({
     "crossing_fraction": crossing_fraction,
     "n_roi_voxels": n_roi,
     "n_crossing_voxels": n_cross,
     "mean_peaks_per_voxel": float(npeaks_vox.mean()),
+    "crossing_fraction_by_estimator": {
+        "msmt": crossing_fraction,
+        "csd_singleshell": crossing_fraction_ss,
+    },
 }, indent=2))
 
 (OUT / "run_metadata.json").write_text(json.dumps({
@@ -144,6 +173,12 @@ fraction of voxels whose fODF contains a crossing (>= 2 peaks; peaks_from_model 
 relative_peak_threshold=0.5, min_separation_angle=25 deg, npeaks=3) is
 **{crossing_fraction:.3f}** ({n_cross} / {n_roi} voxels; mean {npeaks_vox.mean():.3f}
 peaks per voxel).
+
+The crossing fraction is estimator-dependent. Refitting the SAME ROI with single-shell
+single-tissue CSD gives a crossing fraction of **{crossing_fraction_ss:.3f}** -- materially
+MORE crossings than MSMT ({crossing_fraction:.3f}), because single-shell CSD fits spurious
+fODF lobes to grey-matter / CSF partial volume that the multi-tissue model suppresses. The
+per-voxel peak counts for both estimators are in `peaks_sweep.csv`.
 """)
 print(f"OK: crossing_fraction={crossing_fraction:.3f} n_roi={n_roi} n_cross={n_cross} "
       f"mean_peaks={npeaks_vox.mean():.3f}")

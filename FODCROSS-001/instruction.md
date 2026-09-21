@@ -53,6 +53,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   ROI voxel, with columns `i,j,k` (its voxel index in the acquisition array) and `n_peaks`
   (the number of positive fODF peaks you found in that voxel). The fraction of rows with
   `n_peaks >= 2` must equal your reported `crossing_fraction`.
+- `peaks_sweep.csv` — the per-voxel fODF peak count under each fODF estimator you evaluate.
+  Estimate the fODF with at least two spherical-deconvolution estimators over the same ROI and
+  give the per-voxel peak count for each: columns `i,j,k` (voxel index), `estimator` (a short
+  label for that estimator/reconstruction), and `n_peaks`. One row per (voxel, estimator).
 - `run_metadata.json` — dataset id, the fODF estimation method you used, `sh_order_max`,
   and the peak parameters.
 - `findings.md` — a few sentences reporting the crossing fraction in the centrum-semiovale
