@@ -41,6 +41,12 @@ CFG_MEAN = {k: float(v) for k, v in ST["mean_by_config"].items()}
 
 PLAUS_LO, PLAUS_HI = 0.1, 0.9
 COVER = 0.5
+# The periventricular ROI recipe (CSF-seed dilation + MD/FA threshold-gating at the tissue/CSF
+# boundary) is not deterministic across faithful implementations: measured 45% voxel overlap
+# between two independent runs of the pinned recipe. Coverage-of-the-reference-ROI is therefore the
+# wrong gate; a large ABSOLUTE overlap that anchors the per-config FA correlation is what proves the
+# real periventricular region was fit. Passing needs EITHER >=COVER coverage OR >=MIN_OVERLAP voxels.
+MIN_OVERLAP = 300
 CORR = 0.80
 # Upper-band-ceiling fairness (SECOND_PASS_BRIEF): the corrected free-water FA sits at the top of
 # the config band (0.617) and an honest fwDTI can run ~+10% high; the sanity range must admit an
@@ -76,10 +82,13 @@ def test_voxel_table_matches_real_reference():
     assert nonconstant(sub.values()), (
         "fa_voxelwise.csv is (near-)constant across voxels; a real per-voxel FA map is not "
         "constant -- looks fabricated/duplicated")
-    cover, paired, _ = align(sub, REF)
-    assert cover >= COVER, (
-        f"fa_voxelwise.csv covers only {cover:.0%} of the {len(REF['ijk'])} pinned periventricular "
-        f"ROI voxels (need >= {COVER:.0%}); the real ROI must be analysed, not a fabricated set")
+    cover, paired, shared = align(sub, REF)
+    assert cover >= COVER or len(shared) >= MIN_OVERLAP, (
+        f"fa_voxelwise.csv overlaps only {len(shared)} of the {len(REF['ijk'])} pinned periventricular "
+        f"ROI voxels ({cover:.0%}); need >= {COVER:.0%} coverage OR >= {MIN_OVERLAP} overlapping voxels. "
+        f"The ROI recipe is threshold-sensitive at the CSF boundary, so a faithful implementation may "
+        f"cover only part of the reference set -- but the periventricular region (not a fabricated one) "
+        f"must be analysed, and the per-voxel FA correlation below is the authenticity check.")
     r, who = best_corr(paired)
     assert r >= CORR, (
         f"the submitted per-voxel FA values do not match the real reference of any model config "
@@ -129,7 +138,7 @@ def test_freewater_sweep_matches_reference():
         f"as 'the' periventricular FA.")
     ok, info = validate_sweep(
         groups, REF, CORR, COVER, SWEEP_MEAN_TOL, SWEEP_MIN_SPREAD, min_groups=2,
-        require_config=CORRECTED_CONFIG)
+        min_overlap=MIN_OVERLAP, require_config=CORRECTED_CONFIG)
     assert ok, (
         f"the model sweep in fa_sweep.csv is not a real per-voxel diffusion sweep of this ROI: "
         f"{info['n_valid']} group(s) matched a real model config's per-voxel pattern+mean across "

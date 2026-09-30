@@ -155,7 +155,7 @@ def load_sweep_table(filename, key_hints, value_hints):
 
 
 def validate_sweep(groups, ref, corr, cover, val_tol, min_spread, min_groups=2, min_vox=50,
-                   agg=None, matcher=None, require_config=None):
+                   min_overlap=300, agg=None, matcher=None, require_config=None):
     """Validate a per-voxel SWEEP against the held-out per-config reference maps.
 
     Each submitted group must be a REAL per-voxel fit: cover the ROI, be non-constant, match
@@ -181,8 +181,11 @@ def validate_sweep(groups, ref, corr, cover, val_tol, min_spread, min_groups=2, 
     for key, sub in groups.items():
         if len(sub) < min_vox or not nonconstant(sub.values()):
             continue
-        cov, paired, _ = align(sub, ref)
-        if cov < cover:
+        cov, paired, shared = align(sub, ref)
+        # The periventricular ROI recipe is threshold-sensitive at the CSF boundary, so faithful
+        # implementations cover only 40-100% of the reference voxels; a large ABSOLUTE overlap is
+        # enough to anchor the per-config correlation, which is the real authenticity check.
+        if cov < cover and len(shared) < min_overlap:
             continue
         score, who = matcher(paired)
         if who is None or score < corr:
