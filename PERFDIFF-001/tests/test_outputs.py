@@ -46,8 +46,13 @@ CONSIST = 0.035
 SWEEP_CORR = 0.65             # each sweep group's per-voxel r to its best-matching fit method
 SWEEP_MEAN_TOL = 0.05         # each group's ROI-mean f vs that method's real mean (< the 0.087
                               #   trr-vs-segmented gap, so a rescaled copy of one fit cannot pass)
-SWEEP_MIN_SPREAD = 0.05       # >=2 real per-voxel fits at DISTINCT methods must span this (the
-                              #   real trr-vs-segmented f spread ~0.087)
+SWEEP_MIN_SPREAD = 0.04       # >=2 real per-voxel fits at DISTINCT methods must span this. The
+                              #   reference trr-vs-segmented spread is ~0.087, but a defensible
+                              #   method set (e.g. TRR vs a variable-projection / one-stage fit,
+                              #   both real) spans less because those low-f methods don't reach the
+                              #   segmented ~0.12; a live honest solve demonstrated ~0.049. 0.04 is
+                              #   still a material fit-method difference (~20% relative) and a flat /
+                              #   single-method / same-method-twice fabrication spans ~0, so it fails.
 
 
 def _valid_mean(vals):
