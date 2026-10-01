@@ -44,6 +44,15 @@ its `sub-pixarNNN` identifier.
 
 ## Task
 
+Use Chan's zero-clipped full-pair convention: replace negative Fisher-z edges by zero,
+then mean over ALL off-diagonal within-network and between-network pairs. Dropping
+negative pairs with NaN means changes the denominator and is a different conditional
+metric. Signed and positive-only-excluded variants may be named sensitivity estimates,
+not substituted for this primary. This movie/Schaefer7 cohort is a new method adaptation,
+not the original paper finding. Require the group column for all 31 children and 9 adults;
+report adult_minus_child and its normal-Wald ci95 using independent-subject group
+variance/N. No required significance/direction narrative or within-person development claim.
+
 For **each of the 40 participants**, compute the **system segregation** of the cortical
 connectome — the degree to which within-network connectivity exceeds between-network
 connectivity, S = (mean_within − mean_between) / mean_within — from the Fisher-z transformed
@@ -60,7 +69,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `segregation.csv` — one row per participant with at least a participant identifier and the
-  system-segregation value; a `group` (child/adult) column may be included.
+  system-segregation value and required manifest-derived `group` (child/adult).
 - `run_metadata.json` — dataset, atlas, number of participants, the preprocessing you
   applied, and the cohort-average system segregation.
 - `findings.md` — a short written summary reporting the cohort-average system segregation and

@@ -74,6 +74,7 @@ def load_submitted(path, id_cols, seg_cols, group_cols):
         return seg, grp
     for r in rows:
         cid = canon_id(r.get(id_c, ""))
+        assert cid not in seg, f"duplicate participant {cid}"
         if not cid:
             continue
         try:

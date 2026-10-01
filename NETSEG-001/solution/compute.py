@@ -58,16 +58,8 @@ def networks_from_labels(labels):
 
 
 def segregation(fz, nets, positive_only=True):
-    """System segregation on a Fisher-z connectome; anti-correlations set aside."""
-    n = len(nets)
-    iu = np.triu_indices(n, 1)
-    same = nets[iu[0]] == nets[iu[1]]
-    e = fz[iu].astype(float).copy()
-    if positive_only:
-        e = np.where(e > 0, e, np.nan)
-    w = np.nanmean(e[same])
-    b = np.nanmean(e[~same])
-    return float((w - b) / w)
+    from segregation_contract import system_segregation
+    return system_segregation(fz, nets, zero_clip=positive_only)
 
 
 def main():
@@ -92,10 +84,8 @@ def main():
         groups = list(pheno["Child_Adult"])
         ages = list(pheno["Age"])
         pids = list(pheno["participant_id"])
-    except Exception:  # noqa: BLE001
-        groups = ["na"] * len(dev.func)
-        ages = [float("nan")] * len(dev.func)
-        pids = [f"sub-{i:03d}" for i in range(len(dev.func))]
+    except Exception as exc:  # noqa: BLE001
+        fail(f"required cohort phenotypic manifest missing: {exc}")
 
     rows = []
     try:
@@ -113,7 +103,7 @@ def main():
     except Exception as e:  # noqa: BLE001
         fail(f"time-series extraction / connectome failed: {e!r}")
 
-    if len(rows) < 30:
+    if len(rows) != 40:
         fail(f"only {len(rows)} participants usable; expected the {N_SUBJECTS}-participant cohort")
 
     hdr = ["participant", "group", "age", "segregation"]
@@ -127,6 +117,8 @@ def main():
     mean_seg = float(seg.mean())
     child = np.array([r["segregation"] for r in rows if r["group"] == "child"])
     adult = np.array([r["segregation"] for r in rows if r["group"] == "adult"])
+    difference = float(adult.mean()-child.mean())
+    difference_se = float(np.sqrt(adult.var(ddof=1)/len(adult)+child.var(ddof=1)/len(child)))
 
     (OUT / "run_metadata.json").write_text(json.dumps({
         "dataset": "development_fmri (nilearn fetch_development_fmri)",
@@ -134,12 +126,14 @@ def main():
         "atlas": "Schaefer-2018 100 parcels / 7 networks",
         "n_participants": len(rows),
         "metric": "system segregation (Chan et al. 2014), positive-edge",
-        "edge_handling": "anti-correlations (negative edges) set aside",
+        "edge_handling": "negative edges zero-clipped; complete within/between pair denominators",
         "preprocessing": "provided confounds regressed; detrended; parcel time series z-scored",
         "segregation_mean": round(mean_seg, 4),
         "segregation_std": round(float(seg.std()), 4),
         "segregation_child_mean": round(float(child.mean()), 4) if child.size else None,
         "segregation_adult_mean": round(float(adult.mean()), 4) if adult.size else None,
+        "adult_minus_child": difference,
+        "adult_minus_child_ci95": [difference-1.96*difference_se, difference+1.96*difference_se],
     }, indent=2))
 
     (OUT / "findings.md").write_text(f"""# Functional network segregation in a developmental cohort
@@ -156,12 +150,13 @@ connectivity, S = (mean_within − mean_between) / mean_within, on Fisher-z Pear
 connectomes.
 
 ## Edge-sign handling (the choice that sets the value)
-System segregation (Chan et al., 2014) is defined on the **positive** edges. Anti-correlations
-sit predominantly *between* networks; if they are included in `mean_between`, that mean is
-pulled negative and segregation is **inflated by roughly half** (here it rises to ~0.55, versus
-~{mean_seg:.2f} on positive edges). That inflated number is not comparable to the segregation
-literature — it manufactures apparent segregation out of anti-correlation. The value reported
-here therefore sets the negative edges aside, as the measure is defined.
+The primary Chan convention sets negative edges to zero and averages over every
+within/between pair. Excluding negative pairs (NaN-conditional means) is a different
+estimand. Signed/unthresholded variants are legitimate labeled sensitivities, not
+fabricated signal. This 40-person movie/Schaefer7 analysis adapts the method; it is
+not Chan's adult-lifespan result or Richardson's exact published developmental finding.
+The adult-minus-child association is {difference:.3f}; its normal-Wald interval is
+reported in metadata. This cross-sectional contrast does not establish within-person change.
 
 ## Preprocessing
 The provided confound regressors were removed and each parcel time series was detrended and
