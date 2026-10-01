@@ -31,3 +31,29 @@ def test_actual_subject_ids_do_not_depend_on_file_order(tmp_path, monkeypatch):
     oracle=importlib.util.module_from_spec(spec);spec.loader.exec_module(oracle)
     assert oracle.participant_id("sub-pixar155_task-pixar_desc-preproc_bold.nii.gz")=="sub-pixar155"
     with pytest.raises(ValueError):oracle.participant_id("ambiguous.nii.gz")
+
+def test_values_bind_to_ids_not_same_age():
+    spec=importlib.util.spec_from_file_location("social_pw",ROOT/"tests/proof_of_work.py")
+    pw=importlib.util.module_from_spec(spec);spec.loader.exec_module(pw)
+    reference={"ids":["1","2","3","4"],"age":[6.,6.,8.,9.],"value":[.1,.8,.3,.4]}
+    rows=[{"id":sid,"age":age,"value":value} for sid,age,value in zip(reference["ids"],reference["age"],reference["value"])]
+    pw.check_subjects_and_values(list(reversed(rows)),reference,"value","value",1e-8,.99,1.,1.)
+    rows[0]["value"],rows[1]["value"]=rows[1]["value"],rows[0]["value"]
+    with pytest.raises(AssertionError):
+        pw.check_subjects_and_values(rows,reference,"value","value",1e-8,.99,1.,1.)
+
+def test_public_pipeline_names_cannot_be_swapped_by_best_match():
+    spec=importlib.util.spec_from_file_location("social_labels",ROOT/"tests/proof_of_work.py")
+    pw=importlib.util.module_from_spec(spec);spec.loader.exec_module(pw)
+    rows=[{"id":"1","across_by_col":{"across_network":.8,"across_network_gsr":.1}}]
+    assert pw.assign_across_columns(rows,{},1.)[:2]==("across_network","across_network_gsr")
+
+def test_mislabeled_gsr_pipeline_rejected():
+    spec=importlib.util.spec_from_file_location("social_swapped",ROOT/"tests/proof_of_work.py")
+    pw=importlib.util.module_from_spec(spec);spec.loader.exec_module(pw)
+    reference={"ids":["1","2","3","4"],"across":[.1,.2,.3,.4],"across_gsr":[.8,.6,.4,.2]}
+    rows=[{"id":sid,"across_by_col":{"across_network":gsr,"across_network_gsr":raw}} for sid,raw,gsr in zip(reference["ids"],reference["across"],reference["across_gsr"])]
+    std,alt,_=pw.assign_across_columns(rows,reference,1.)
+    pw.bind_column(rows,std,"across_std")
+    with pytest.raises(AssertionError):
+        pw.check_subjects_and_values(rows,reference,"across","across_std",1e-8,.99,1.,1.)

@@ -47,8 +47,7 @@ def _findings():
 
 
 def _bound():
-    """Load the rows, assign std/alt across-network columns by value, and bind them onto the rows
-    as `across_std` / `across_alt`. Shared by the recompute pillars."""
+    """Bind the two public pipeline names to their declared estimands."""
     ref = _reference(); st = ref["stats"]
     rows, across_cols = _submitted()
     std_col, alt_col, diag = pw.assign_across_columns(rows, ref, cover=st["COVER"])
@@ -85,15 +84,10 @@ def test_proof_of_work_subjects_and_values():
         f"connectivity of the ds000228 subjects (candidate diagnostics: {diag}).")
     # standard-clean across-network per subject must be the real ones
     pw.check_subjects_and_values(rows, ref, "across", "across_std", val_tol=st["VAL_TOL"],
-                                 corr_min=st["CORR_MIN"], cover=st["COVER"], match=st["MATCH"])
-    # within-ToM is a secondary "real ROI extraction, not a fake table" guard. It is temporal-
-    # filter-SENSITIVE (a defensible band-pass column shifts magnitudes vs the reference's detrend
-    # pipeline), so grade it robustly -- clear cross-subject tracking of the reference structure --
-    # rather than pinning per-subject magnitudes to one filter (which would fail a correct solve
-    # that band-passed). The across-network pillars keep the strict per-subject teeth.
-    if any(r.get("within_tom") is not None for r in rows):
-        pw.check_real_extraction(rows, ref, "within_tom", "within_tom", cover=st["COVER"],
-                                 corr_min=st.get("WITHIN_CORR_MIN", 0.5))
+                                 corr_min=st["CORR_MIN"], cover=1., match=st["MATCH"])
+    for column in ("within_tom","within_pain"):
+        pw.check_subjects_and_values(rows,ref,column,column,val_tol=st["VAL_TOL"],
+                                     corr_min=st["CORR_MIN"],cover=1.,match=st["MATCH"])
     # a genuine SECOND across-network column under the alternative preprocessing must be present
     assert alt_col is not None and alt_col != std_col, (
         "network_connectivity.csv reports the across-network correlation under only ONE "
@@ -101,7 +95,7 @@ def test_proof_of_work_subjects_and_values():
         "choice you consider; a single pipeline cannot establish whether the anti-correlation is "
         "robust to the analyst's preprocessing decisions.")
     pw.check_subjects_and_values(rows, ref, "across_gsr", "across_alt", val_tol=st["VAL_TOL"],
-                                 corr_min=st["CORR_MIN"], cover=st["COVER"], match=st["MATCH"])
+                                 corr_min=st["CORR_MIN"], cover=1., match=st["MATCH"])
 
 
 # ------------------------------------------------------------------ pillar 2 (recompute both correlations from rows)
@@ -138,6 +132,11 @@ def test_measured_preprocessing_and_motion_sensitivity():
     assert canonical.is_unique and set(canonical)==set(ref["ids"])
     z=np.load(REF_PATH,allow_pickle=False)
     mapping={str(i):float(fd) for i,fd in zip(ref["ids"],z["ref_mean_fd"])}
+    identity={sid:i for i,sid in enumerate(ref["ids"])}
+    for (_,row),sid in zip(data.iterrows(),canonical):
+        index=identity[sid]
+        assert abs(float(row.age)-float(ref["age"][index]))<1e-8
+        assert str(row.group)==ref["group"][index]
     assert np.allclose(data.mean_fd,[mapping[i] for i in canonical],atol=1e-6)
     child=data[data.group=="child"]
     assert len(child)==122 and len(data[data.group=="adult"])==33
@@ -148,6 +147,10 @@ def test_measured_preprocessing_and_motion_sensitivity():
         r,p=partial_rank_corr(child.age,child[column],child.mean_fd)
         assert abs(eff[column]["motion_adjusted_rank_r"]-r)<1e-6
         assert abs(eff[column]["motion_adjusted_rank_p"]-p)<1e-6
+    adults=data[data.group=="adult"]
+    for column in ("across_network","across_network_gsr","within_tom","within_pain"):
+        assert abs(eff["adult_means"][column]-adults[column].mean())<1e-6
+    assert eff["n_children"]==122 and eff["n_adults"]==33
     assert _load("run_metadata.json")["analysis_scope"]=="paper-derived GSR/motion sensitivity adaptation"
 
 def test_findings_present():
