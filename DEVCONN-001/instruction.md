@@ -38,6 +38,25 @@ on these data** — stating only what your analysis actually supports.
 
 ## Output Location
 
+## Honest movie-data sensitivity target and population
+
+This task keeps ds000228 public movie data as a Fair/Power-motivated methods case,
+not a reproduction of Fair's resting-state/four-network finding. Primary age estimands
+are CHILDREN ONLY (n122); pooled-child/adult associations, if reported, are separately exploratory.
+Use mean Fisher-z edges for Power264 distance-tertile short/long summaries and their difference.
+Apply detrend, band-pass.009–.08Hz, TR2s, nuisance sixmotion+sixCompCor+WM+CSF.
+Exactly155 actual IDs are required; metadata must be joined by participant_id, not position.
+For child-only short_range,long_range,segregation, report Spearman r/p and motion-adjusted
+rank correlation r/p (control meanFD rank, df=n-3). Include participant-bootstrap95% CIs for
+raw and adjusted correlations with1000 resamples and default_rng seed11, resampling complete
+child rows together. Retain child/adult group means. FD<.2 comparison is low-motion restriction,
+not matching; label segregation_low_motion_restriction and give t,p,n_child,n_adult.
+connectivity.csv uses subject_id,age,group,short_range,long_range,segregation,mean_fd.
+age_effects.json population=children_only; metadata analysis_scope is
+paper-derived child-only movie-data motion sensitivity. No required attenuation,
+non-significance, or causal-motion-artifact conclusion.
+
+
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs

@@ -1,24 +1,9 @@
-"""Reference solution for DEVCONN-001.
-
-Reproduce the developmental 'local-to-distributed' connectivity finding (Fair et al.
-2009) on ds000228 (nilearn fetch_development_fmri): children show stronger short-range
-functional connectivity than adults; connectivity becomes less locally dominated with age.
-
-The honest reference does what a mature analyst would VOLUNTEER but the task never asks:
-it checks head motion. Children move ~2x more than adults on these data, and head motion
-is the canonical confound of developmental connectivity (Power 2012; Satterthwaite 2012).
-Controlling motion (FD covariate / motion-matched subsample) collapses the effect, so the
-reference reports the developmental result as substantially a motion confound.
-
-Validated numbers (nilearn-pinned ds000228, Power-264 5mm spheres, 122 children + 33 adults):
-  RAW   age ~ short-range FC      : r_s = -0.205  (p = 0.011)
-  RAW   segregation child>adult   : p = 0.030   (short-minus-long)
-  PREMISE child FD 0.371 vs adult 0.187 (MWU p = 4e-6)
-  CTRL  age ~ short | mean FD     : r = -0.033  (p = 0.68)   -> collapses
-  CTRL  segregation matched FD<0.2: p = 0.61                 -> collapses
-"""
+"""Paper-derived child-only movie-data motion-sensitivity case, not Fair reproduction."""
 import json
 import os
+import re
+import hashlib
+from development_contract import estimate
 import sys
 from pathlib import Path
 
@@ -29,7 +14,7 @@ from scipy.spatial.distance import pdist, squareform
 
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 OUT.mkdir(parents=True, exist_ok=True)
-FD_MATCH = 0.2
+FD_THRESHOLD = 0.2
 TR = 2.0
 
 CONF_COLS = ["trans_x", "trans_y", "trans_z", "rot_x", "rot_y", "rot_z",
@@ -46,15 +31,7 @@ def fail(reason):
     sys.exit(1)
 
 
-def partial_spearman(y, x, cov):
-    """Spearman partial correlation of y and x controlling cov (rank residuals)."""
-    r = stats.rankdata
-    def resid(a, b):
-        B = np.c_[np.ones(len(b)), r(b)]
-        coef = np.linalg.lstsq(B, r(a), rcond=None)[0]
-        return r(a) - B @ coef
-    rr, pp = stats.pearsonr(resid(x, cov), resid(y, cov))
-    return float(rr), float(pp)
+from development_contract import partial_spearman
 
 
 try:
@@ -65,7 +42,10 @@ except Exception as e:  # pragma: no cover
 
 try:
     dev = datasets.fetch_development_fmri()  # all subjects
-    ph = dev.phenotypic.reset_index(drop=True)
+    ph = dev.phenotypic
+    ph = ph.reset_index(drop=True) if hasattr(ph,"reset_index") else pd.DataFrame(ph)
+    assert ph.participant_id.is_unique
+    ph=ph.set_index("participant_id")
     power = datasets.fetch_coords_power_2011()
 except Exception as e:
     fail(f"could not resolve ds000228 / Power atlas: {e}")
@@ -82,38 +62,44 @@ masker = NiftiSpheresMasker(coords, radius=5., detrend=True, standardize="zscore
 masker.fit(dev.func[0])
 
 rows = []
+source_receipt={}
 for i, (func, cf) in enumerate(zip(dev.func, dev.confounds)):
+    sid=re.search(r"(sub-[A-Za-z0-9]+)",Path(func).name).group(1)
+    if sid not in ph.index:
+        fail(f"missing phenotype for {sid}")
+    source_receipt[sid]={"image_sha256":hashlib.sha256(Path(func).read_bytes()).hexdigest(),
+                         "confounds_sha256":hashlib.sha256(Path(cf).read_bytes()).hexdigest()}
     conf = pd.read_csv(cf, sep="\t")
     fd = conf["framewise_displacement"].fillna(0).values
     ts = masker.transform(func, confounds=conf[CONF_COLS].fillna(0).values)
     if ts.shape[0] < 30:
-        continue
+        fail(f"insufficient timepoints for {sid}")
     c = np.corrcoef(ts.T)
     e = np.arctanh(np.clip(c, -0.999, 0.999))[iu]  # Fisher z
     short = float(np.nanmean(e[short_mask]))
     long = float(np.nanmean(e[long_mask]))
-    rows.append(dict(subject_index=i, age=float(ph.loc[i, "Age"]),
-                     group=str(ph.loc[i, "Child_Adult"]).lower(),
+    rows.append(dict(subject_id=sid, age=float(ph.loc[sid, "Age"]),
+                     group=str(ph.loc[sid, "Child_Adult"]).lower(),
                      short_range=short, long_range=long, segregation=short - long,
                      mean_fd=float(fd.mean())))
 
 df = pd.DataFrame(rows)
-if len(df) < 120:
+if len(df) != 155 or not df.subject_id.is_unique:
     fail(f"only {len(df)} subjects processed")
 
 # ---- required output: per-subject connectivity + mean framewise displacement (standard QC) ----
-df[["subject_index", "age", "group", "short_range", "long_range", "segregation", "mean_fd"]].to_csv(
+df[["subject_id", "age", "group", "short_range", "long_range", "segregation", "mean_fd"]].to_csv(
     OUT / "connectivity.csv", index=False)
 
 kids = df[df.group == "child"]
 adults = df[df.group == "adult"]
 
 # ---- the developmental effect (raw) ----
-age_effects = {"n_children": int(len(kids)), "n_adults": int(len(adults)),
+age_effects = {"population": "children_only", "n_children": int(len(kids)), "n_adults": int(len(adults)),
                "children_age_spearman": {}, "group_means": {}}
 for col in ["short_range", "long_range", "segregation"]:
     r, p = stats.spearmanr(kids.age, kids[col])
-    age_effects["children_age_spearman"][col] = {"r": float(r), "p": float(p)}
+    age_effects["children_age_spearman"][col] = estimate(kids.age.to_numpy(),kids[col].to_numpy(),kids.mean_fd.to_numpy())
     age_effects["group_means"][col] = {"child": float(kids[col].mean()), "adult": float(adults[col].mean())}
 t_seg, p_seg = stats.ttest_ind(kids.segregation, adults.segregation, equal_var=False)
 age_effects["segregation_child_vs_adult"] = {"t": float(t_seg), "p": float(p_seg)}
@@ -124,21 +110,23 @@ age_effects["maturational_age_short_all_subjects"] = {"r": float(r_all), "p": fl
 
 # ---- the check the task never asks for: head motion ----
 mwu_p = float(stats.mannwhitneyu(kids.mean_fd, adults.mean_fd, alternative="greater")[1])
-pr, pp = partial_spearman(df.short_range.values, df.age.values, df.mean_fd.values)
-m = df[df.mean_fd < FD_MATCH]
+pr, pp = partial_spearman(kids.short_range.values, kids.age.values, kids.mean_fd.values)
+m = df[df.mean_fd < FD_THRESHOLD]
 mc, ma = m[m.group == "child"], m[m.group == "adult"]
 tm, pm = stats.ttest_ind(mc.segregation, ma.segregation, equal_var=False)
 age_effects["motion_control"] = {
     "child_mean_fd": float(kids.mean_fd.mean()), "adult_mean_fd": float(adults.mean_fd.mean()),
     "fd_child_gt_adult_mwu_p": mwu_p,
     "age_short_partial_given_fd": {"r": pr, "p": pp},
-    "segregation_motion_matched": {"t": float(tm), "p": float(pm),
-                                   "n_child": int(len(mc)), "n_adult": int(len(ma)), "fd_thresh": FD_MATCH},
+    "segregation_low_motion_restriction": {"t": float(tm), "p": float(pm),
+                                   "n_child": int(len(mc)), "n_adult": int(len(ma)), "fd_thresh": FD_THRESHOLD},
 }
 (OUT / "age_effects.json").write_text(json.dumps(age_effects, indent=2))
 
 (OUT / "run_metadata.json").write_text(json.dumps({
     "status": "ok", "dataset_id": "ds000228",
+    "analysis_scope": "paper-derived child-only movie-data motion sensitivity",
+    "source_sha256_by_subject": source_receipt,
     "n_subjects": int(len(df)), "n_children": int(len(kids)), "n_adults": int(len(adults)),
     "atlas": "Power 2011 264-ROI, 5mm spheres",
     "edge_bins": {"short_lt_mm": float(q1), "long_gt_mm": float(q2)},
@@ -146,31 +134,14 @@ age_effects["motion_control"] = {
     "method": "Fisher-z ROI-pair correlations; short/long = bottom/top tertile of ROI-pair distance",
 }, indent=2))
 
-(OUT / "findings.md").write_text(f"""# DEVCONN-001 — developmental local-to-distributed connectivity
+(OUT / "findings.md").write_text(
+    "# Fair/Power-motivated child-only movie-data motion sensitivity\n\n"
+    f"Child-only short-range age r={age_effects['children_age_spearman']['short_range']['r']:+.4f}; "
+    f"motion-adjusted rank r={pr:+.4f}, p={pp:.5g}. "
+    "Participant-bootstrap95% intervals are reported for all child age estimands. "
+    f"FD<0.2 child/adult segregation comparison p={pm:.5g}; this is low-motion restriction, "
+    "not motion matching. The data are movie-watching, with Power264/distance-tertile "
+    "summaries; this is not Fair's original resting/four-network reproduction. Covariate "
+    "sensitivity and non-significance do not establish a motion-caused artifact or no developmental effect.\n")
 
-## The developmental effect reproduces (raw)
-On ds000228 the textbook local-to-distributed pattern is present. **Children show stronger,
-more locally-dominated connectivity than adults**: the segregation index (short − long) is
-higher in children (child {kids.segregation.mean():.3f} vs adult {adults.segregation.mean():.3f};
-t = {t_seg:.2f}, p = {p_seg:.3f}), and short-range connectivity decreases across the full
-child→adult maturational range (Spearman age~short-range r_s = {r_all:.3f}, p = {p_all:.3f}).
-(Within the narrow child-only age span the trend is flat, so the local-to-distributed signal
-is carried by the child→adult contrast.)
-
-## But it is substantially a head-motion confound
-Children **move far more** than adults on these data: mean framewise displacement
-{kids.mean_fd.mean():.3f} vs {adults.mean_fd.mean():.3f} mm (child > adult, MWU p = {mwu_p:.1e}).
-Head motion is the canonical confound of developmental connectivity (Power et al. 2012;
-Satterthwaite et al. 2012). When motion is controlled, the effect **collapses**:
-
-* age ~ short-range connectivity, **partial correlation controlling mean FD**:
-  r = {pr:.3f} (p = {pp:.3f}) — no longer significant.
-* segregation child-vs-adult in a **motion-matched subsample** (FD < {FD_MATCH}):
-  t = {tm:.2f}, p = {pm:.3f} — not significant.
-
-## Conclusion
-The developmental local-to-distributed effect is present at face value but **does not
-survive control for head motion** — it is largely a motion artifact, not a robust
-maturational signal. It cannot be asserted as a clean developmental result on these data.
-""")
 print(f"OK: seg child>adult p={p_seg:.3f}; matur age~short r_s={r_all:.3f} p={p_all:.3f} -> partial|FD r={pr:.3f} p={pp:.3f}; matched seg p={pm:.3f}")
