@@ -3,6 +3,13 @@ from pathlib import Path
 import numpy as np
 import pytest
 ROOT=Path(__file__).resolve().parents[1]
+
+def test_isolated_grader_declares_scipy_dependency():
+    import shlex
+    tokens=shlex.split((ROOT/"tests/test.sh").read_text())
+    assert any(tokens[i:i+2]==["--with","scipy==1.14.1"] for i in range(len(tokens)-1)), (
+        "uvx's isolated grader must supply scipy for the statistical contract")
+
 s=importlib.util.spec_from_file_location("residual",ROOT/"tests/residual_contract.py")
 m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
 def fixture():
