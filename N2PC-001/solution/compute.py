@@ -41,6 +41,7 @@ fixed-electrode difference (~0) is the discriminating quantity a field-pooled pi
 reports instead.
 """
 import csv
+import hashlib
 import json
 import os
 import sys
@@ -50,6 +51,7 @@ import warnings
 from pathlib import Path
 
 import numpy as np
+from cache_contract import require_pairs
 
 warnings.filterwarnings("ignore")
 
@@ -93,7 +95,11 @@ def fail(reason):
 def data_dir():
     """Use a local cache if N2PC_DIR holds the files; else fetch the BIDS files from OSF."""
     env = os.environ.get("N2PC_DIR")
-    if env and all((Path(env) / f"sub-{s:03d}_task-N2pc_eeg.set").exists() for s in SUBJECTS):
+    if env:
+        try:
+            require_pairs(env, SUBJECTS)
+        except FileNotFoundError as error:
+            fail(str(error))
         return Path(env)
     d = Path(tempfile.mkdtemp(prefix="erpcore_n2pc_"))
     for s in SUBJECTS:
@@ -107,6 +113,10 @@ def data_dir():
                 except Exception as e:  # pragma: no cover
                     if attempt == 3:
                         fail(f"OSF download failed for sub-{s:03d} .{ext}: {e}")
+    try:
+        require_pairs(d, SUBJECTS)
+    except FileNotFoundError as error:
+        fail(str(error))
     return d
 
 
@@ -117,6 +127,13 @@ except Exception as e:  # pragma: no cover
     fail(f"mne import failed: {e}")
 
 DDIR = data_dir()
+RAW_SHA256 = {}
+for path in require_pairs(DDIR, SUBJECTS):
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    RAW_SHA256[path.name] = digest.hexdigest()
 
 
 def subject_evokeds(subj):
@@ -203,6 +220,10 @@ with open(OUT / "per_subject.csv", "w", newline="") as f:
     "measurement_window_ms": [200, 300],
     "measure": "mean contralateral-minus-ipsilateral amplitude at PO7/PO8, grand-averaged",
     "target_side_from": "tens digit of the 3-digit stimulus code (1=left, 2=right)",
+    "raw_file_sha256_observed": RAW_SHA256,
+    "raw_file_expected_digest_status": "not_independently_pinned",
+    "scope": "N12 raw-data simplified lateralization methods adaptation",
+    "qc_omitted": ["ICA", "HEOG artifact rejection", "behavioral trial exclusions"],
 }, indent=2))
 
 (OUT / "findings.md").write_text(f"""# N2PC-001 - N2pc component amplitude (ERP CORE N2pc, subjects 1/3-13)
@@ -222,6 +243,12 @@ target side. A fixed-electrode difference (e.g. PO8-PO7) pooled across the two b
 visual fields cancels to ~{fixed:.2f} uV; only the per-side contralateral/ipsilateral
 assignment recovers the component. The reported value ({n2pc:.2f} uV) is that
 contralateral-minus-ipsilateral difference.
+
+This is an N=12 raw-data methods adaptation, not the paper's full N=35 characterization
+or 200–275 ms endpoint. No ICA, HEOG rejection, or behavioral exclusions were applied;
+ocular/response contamination may remain. The signed lateralized difference alone does
+not establish artifact-free covert attention or reproduce the paper's quality-controlled
+finding.
 """)
 print(f"OK: N2pc (contra-ipsi) = {n2pc:.3f} uV | fixed PO8-PO7 pooled = {fixed:.3f} uV | "
       f"neg {n_neg}/{len(SUBJECTS)} | trials L={n_left_tot} R={n_right_tot}")

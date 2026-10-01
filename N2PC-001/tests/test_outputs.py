@@ -16,6 +16,7 @@ average reference; -200..0 baseline; 200-300 ms mean amplitude):
             A pooled fixed-electrode pipeline (~+/-0.3 uV) cannot match the signed N2pc.
 """
 import json
+import csv
 import os
 import re
 from pathlib import Path
@@ -23,6 +24,7 @@ from pathlib import Path
 import numpy as np
 
 import proof_of_work as pw
+from measurement_contract import summarize
 
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 REF = np.load(Path(__file__).resolve().parent / "reference.npz", allow_pickle=False)
@@ -51,6 +53,8 @@ def _submitted():
     assert csvp.exists(), (
         "missing per_subject.csv -- the task requires a per-subject table with each subject's "
         "contralateral, ipsilateral and contralateral-minus-ipsilateral (N2pc) amplitudes")
+    with csvp.open() as stream:
+        summarize(list(csv.DictReader(stream)))
     return pw.load_submitted(str(csvp), {
         "n2pc": ["n2pc", "contra_minus_ipsi", "contra-ipsi", "diff"],
         "contra": ["contra_uv", "contralateral"],
@@ -83,7 +87,11 @@ def test_per_subject_n2pc_proof_of_work():
     sub = _submitted()
     present = pw.check_subjects_and_values(
         sub, REF["ref_ids"], REF["ref_n2pc"], "n2pc", N2PC_VAL_TOL,
-        cover=0.90, match=0.80, eps=1e-2, signed=True)
+        cover=1.0, match=1.0, eps=1e-2, signed=True)
+    for key, reference in (("contra", "ref_contra"), ("ipsi", "ref_ipsi")):
+        for subject, value in zip(REF["ref_ids"], REF[reference]):
+            observed = sub[pw.canon_id(subject)][key]
+            assert observed is not None and abs(observed - float(value)) <= N2PC_VAL_TOL
     n_neg = sum(sub[i]["n2pc"] < 0 for i in present)
     assert n_neg >= 0.75 * len(present), \
         f"most subjects should show a negative N2pc; only {n_neg}/{len(present)} are negative"
@@ -97,6 +105,19 @@ def test_recompute_grandaverage_from_rows():
     reported = _num(_load("n2pc.json").get("n2pc_amplitude_uv"))
     pw.check_recompute(sub, present, "n2pc", float(REF["n2pc_mean"]), reported,
                        tol_ref=GROUP_TOL, tol_report=GROUP_TOL)
+
+
+def test_complete_group_and_trial_count_recomputation():
+    with (OUT / "per_subject.csv").open() as stream:
+        computed = summarize(list(csv.DictReader(stream)))
+    reported = _load("n2pc.json")
+    for key, value in computed.items():
+        assert key in reported and abs(float(reported[key]) - value) <= 3e-6, key
+    assert reported["electrode_pair"] == "PO7/PO8"
+    assert reported["window_ms"] == [200, 300]
+    metadata = _load("run_metadata.json")
+    assert set(metadata["subjects"]) == {int(i) for i in REF["ref_ids"]}
+    assert len(metadata["subjects"]) == 12
 
 
 # ---- SECONDARY: the write-up reports the lateralized profile ---------------------------

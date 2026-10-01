@@ -14,6 +14,12 @@ or **right** of fixation among distractors.
 
 ## Task
 
+This is an **N=12 raw-data lateralization methods adaptation**, not a reproduction of
+the paper's full N=35 N2pc characterization or its 200–275 ms endpoint. The deliberately
+simplified pipeline below does not perform ICA, HEOG artifact rejection, or behavioral
+trial exclusions. State these limitations; a raw lateralized difference alone does not
+establish artifact-free covert visual attention.
+
 Using the ERP CORE **N2pc** continuous EEG recordings for **subjects 1, 3, 4, 5, 6, 7, 8,
 9, 10, 11, 12, 13** (subject 2 is not part of the released N2pc set), **compute the N2pc
 component amplitude at the PO7/PO8 pair** and report it as the **mean
@@ -87,6 +93,8 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   "window_ms": [200, 300], "n_subjects": <int>}`. Also report, for contrast, the
   `contralateral_amplitude_uv`, `ipsilateral_amplitude_uv`, and the pooled fixed-electrode
   difference `fixed_po8_minus_po7_pooled_uv_for_reference`.
+  Include `n_subjects_negative`, `n_left_target_trials_total`, and
+  `n_right_target_trials_total`, recomputed from the complete per-subject table.
 - `per_subject.csv` — one row per subject (the exact analysis sample, real subject ids):
   `subject, n_left_trials, n_right_trials, contra_uv, ipsi_uv, n2pc_uv,
   fixed_po8_minus_po7_pooled_uv`. The per-subject `n2pc_uv` is the signed
@@ -94,6 +102,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   headline `n2pc_amplitude_uv`.
 - `run_metadata.json` — dataset id, subjects, electrode pair, reference, band-pass,
   baseline, and the measurement window you used.
+  Record observed SHA256 for both files of each subject, distinguishing observed
+  digests from independently pinned expected digests. An explicit `N2PC_DIR` must contain
+  every non-empty paired `.set`/`.fdt`; missing pairs are a failed precondition, not a
+  reason to silently fetch a different cache.
 - `findings.md` — a few sentences reporting the N2pc amplitude. State only what your
   analysis supports.
 
