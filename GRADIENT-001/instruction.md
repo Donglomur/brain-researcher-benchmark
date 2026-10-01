@@ -26,6 +26,22 @@ brief does not spell them out.
 
 ## Output Location
 
+## Public sensitivity contract
+
+This is a paper-derived method application on movie data, not the original Margulies
+cohort finding. Use diffusion maps, normalized-angle kernel, sparsity0.9, 10 components,
+random_state=0 and Procrustes alignment. Preserve component ordering, not arbitrary
+subspace rotations; orient group g1 so mean(Default)>=mean(Vis).
+Compare no-band-pass/all20, band-pass0.01–0.1Hz/all20, no-band-pass/first10 and
+no-band-pass/last10. Missing subjects fail. Save subject_ids.json in aligned-array
+order, gradients_unaligned.npy, and configuration_CONFIG.npy for each group gradient.
+robustness.json configs require config, subject_ids, bandpass, method, sign_convention,
+gradient_path, gradient_sha256, apex_network. method contains approach=dm,
+kernel=normalized_angle, sparsity=0.9, n_components=10, random_state=0.
+principal_gradient_identity_robust is whether all computed configurations share an apex.
+Report the actual measured stable or sensitive outcome with scope limitations.
+
+
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs

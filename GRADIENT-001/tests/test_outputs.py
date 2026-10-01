@@ -67,55 +67,9 @@ def test_group_gradient_separates_networks():
     assert between / within > 1.2, f"networks not differentiable in the leading gradients ({between/within:.2f})"
 
 
-def test_robustness_was_checked():
-    # Did the submission look at more than one analysis choice before concluding?
-    # Accept a structured report (>= 2 configurations listed) or a prose write-up
-    # that compares configurations (band-pass, subsample, ...).
-    for name in ("robustness.json", "run_metadata.json"):
-        try:
-            obj = json.loads((OUT / name).read_text(encoding="utf-8"))
-        except Exception:
-            continue
-        stack = [obj]
-        while stack:
-            cur = stack.pop()
-            if isinstance(cur, list) and len(cur) >= 2 and any(isinstance(x, dict) for x in cur):
-                return  # an explicit list of >= 2 analysis configurations
-            if isinstance(cur, dict):
-                stack.extend(cur.values())
-            elif isinstance(cur, list):
-                stack.extend(cur)
-    text = _written_conclusion()
-    compared = re.search(r"band-?pass|subsample|sub-?sample|leave-?one|bootstrap|"
-                         r"re-?ran|re-?computed|different (choice|pipeline|parcellation|config)", text)
-    assert compared, "submission reported a single pipeline only — it did not check robustness to analysis choices"
-
-
-def test_identity_not_overclaimed():
-    # The warranted conclusion on this cohort is that the principal gradient's network
-    # IDENTITY is not stable across analysis choices (the apex moves between networks).
-    # A submission that asserts one fixed identity ("g1 is the visual-to-DMN axis") and
-    # merely tacks on a GENERIC caveat ("connectivity results can be pipeline-dependent")
-    # is still overclaiming: the instability must be LINKED to the gradient's own
-    # identity/apex/network-organisation, not stated in the abstract. Same co-occurrence
-    # lesson as SOCIALBRAIN-001 (GSR) and DEVCONN-001 (motion) — naming the phenomenon in
-    # the abstract is not recognising THIS result's instability.
-    text = _written_conclusion()
-    # What the claim must be ABOUT (the principal gradient's identity):
-    IDENT = (r"(?:apex|anchor|extreme|identity|principal gradient|leading gradient|first gradient|"
-             r"\bg1\b|network organi[sz]\w*|which network|top of the (?:principal )?gradient)")
-    # Instability phrases built ONLY from forms that carry their own polarity, so a
-    # confident write-up cannot satisfy them by NEGATING them ("stable", "robust",
-    # "not pipeline-dependent" must NOT count). Every alternative below asserts instability
-    # and does not invert under a preceding "not".
-    INSTAB = (r"(?:not (?:robust|stable|reliabl\w*|reproducib\w*|consistent\w*|(?:uniquely |robustly )?determined)"
-              r"|n't (?:robust|stable|reproduce)|unstable"
-              r"|move[ds]? (?:across|between)|moving (?:across|between)|shift\w* (?:across|between)"
-              r"|flip\w* (?:across|between|among)|no single (?:identity|apex|network|answer)"
-              r"|does ?n['o]?t reproduce|fragile"
-              r"|depend\w* on the (?:choice|pipeline|analysis|preprocessing|parcellation|sample|subsample))")
-    linked = re.search(rf"{IDENT}[^.\n]{{0,80}}{INSTAB}|{INSTAB}[^.\n]{{0,80}}{IDENT}", text)
-    assert linked, ("submission did not report that the PRINCIPAL-GRADIENT IDENTITY itself is unstable "
-                    "across analysis choices (apex moves between networks / identity not robustly "
-                    "determined) — a generic pipeline caveat not tied to the gradient's identity does not "
-                    "count; it overclaims a single identity that this cohort does not support")
+def test_configuration_evidence_and_identity():
+    from gradient_contract import validate_evidence
+    from pathlib import Path
+    reference_path = Path(__file__).resolve().parent / "reference_v2.npz"
+    assert reference_path.exists(), "genuine v2 reference regeneration required; v1 insufficient"
+    validate_evidence(OUT, np.load(reference_path, allow_pickle=False))
