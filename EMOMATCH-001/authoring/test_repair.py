@@ -4,6 +4,13 @@ import pytest
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
+
+def test_isolated_grader_declares_scipy_dependency():
+    import shlex
+    tokens=shlex.split((ROOT/"tests/test.sh").read_text())
+    assert any(tokens[i:i+2]==["--with","scipy==1.14.1"] for i in range(len(tokens)-1)), (
+        "uvx's isolated grader must supply scipy for the statistical contract")
+
 spec = importlib.util.spec_from_file_location("emo_sensitivity", ROOT / "tests/sensitivity.py")
 m = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(m)
