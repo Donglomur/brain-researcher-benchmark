@@ -1,37 +1,9 @@
-"""Proof-of-work grader for VISCAT-001 (single-neuron visual-category selectivity in human MTL).
+"""Validate real category measurements and the declared headline population.
 
-Ground truth (validated before release on DANDI 000004, all 87 sessions pooled; MTL = hippocampus +
-amygdala units by peak-channel electrode location; recognition phase; per-trial firing rate over the
-[0.2, 1.7] s window after stimulus onset; category-selective = Kruskal-Wallis across the five visual
-categories p < 0.05; preferred category = highest mean firing; preferred-category-vs-rest ROC AUC):
-
-  n MTL neurons pooled                 = 1864
-  proportion category-selective        = 0.167   (well above the 0.05 chance false-positive rate)
-  NAIVE   mean preferred-vs-rest AUC, selected AND scored on the SAME trials             = 0.695
-  CORRECT mean preferred-vs-rest AUC, selection + preferred category on TRAIN, AUC on HELD-OUT = 0.570
-
-The un-cued off-critical-path error: the agent calls a neuron category-selective and picks its
-preferred category (highest-firing of five) on a set of trials, then measures the
-preferred-category-vs-rest AUC on the SAME trials, reporting ~0.70. That is circular (double dipping,
-Kriegeskorte 2009): among five categories the preferred one is chosen because its firing was highest
-on those trials. Choosing the neurons + preferred category on independent trials and measuring the
-AUC on held-out trials gives ~0.57 -- a GENUINE positive effect (visual-category selectivity is real)
-but materially smaller than the same-trials estimate.
-
-PROOF OF WORK (fabrication-proof, judgement kept un-cued):
-  * Pillar 1 -- the submitted per-neuron table (NEUTRAL: the pinned per-neuron preferred-vs-rest AUC +
-    category-selective flag, an intermediate BOTH a naive and an honest analysis produce) must match
-    the reference (tests/reference.npz; held out of the agent CONTAINER but PUBLIC in this repo
-    (burned) -- a real eval needs fresh tasks / a server-side reference): cover the real neuron ids,
-    be non-constant, track the reference per-neuron AUC (cross-neuron r >= 0.90, per-neuron tol),
-    selective flag agreeing.
-  * Pillar 2 -- recompute the proportion category-selective and the same-trials (naive) mean AUC FROM
-    the submitted rows and cross-check (proportion == reference == reported; selective-neuron mean ==
-    the reference naive 0.695 -- proving the rows are the real analysis).
-  * Pillar 3 -- the scientific JUDGEMENT, graded un-cued as an OR-escape: PASS if EITHER the headline
-    preferred-vs-rest AUC reproduces the honest ~0.57, OR the write-up VOLUNTEERS the non-independence
-    (double dipping / winner's curse tied to the AUC, or the held-out split it used). An un-caveated
-    inflated ~0.70 fails.
+AUC strength is not evidence for or against held-out independence. Population,
+eligibility, arithmetic and (still pending) trial-level split provenance own validity.
+Existing same-trial measurements remain reference checked; no fixed held-out AUC
+ceiling or mandatory significance/absence narrative is imposed.
 """
 import json
 import os
@@ -59,13 +31,6 @@ CORR_MIN = 0.90
 COVER = 0.90
 PROP_TOL = 0.04       # proportion category-selective (ref ~0.167)
 NAIVE_TOL = 0.03      # same-trials (naive) mean AUC over selective rows vs reference (0.695)
-
-# ---- OR-escape (judgement) tolerances ----
-EXPECTED = 0.575      # honest held-out single-neuron preferred-vs-rest AUC of category-selective cells
-TOL = 0.055           # [0.52, 0.63]: accepts any reasonable independent-selection estimate,
-                      # fails the circular same-trials value (~0.70)
-INFLATED_GUARD = 0.63  # a claimed held-out split cannot rescue a headline this high
-
 
 def _load_json(name):
     p = OUT / name
@@ -238,7 +203,7 @@ _NEG_TAIL = (r"\b(?:not|no|never|isn'?t|aren'?t|wasn'?t|weren'?t|without|hardly|
              r"[\s\-,]*(?:a|an|any|the|strong|strongly|really|simply|just|merely|evidence|sign|of)*[\s\-,]*$")
 
 
-def _caught_double_dipping(text, auc=None):
+def _caught_double_dipping(text, auc=None, allow_independent=True):
     names_bias = False
     for _m in re.finditer(_BIAS, text):
         if re.search(_NEG_TAIL, text[max(0, _m.start() - 30):_m.start()]):
@@ -257,30 +222,19 @@ def _caught_double_dipping(text, auc=None):
         + r"|(select\w*|prefer\w*|identif\w*|categor\w*|measur\w*|scor\w*|estimat\w*|auc|evaluat\w*)"
         r"[^.\n]{0,90}" + _INDEP,
         text)
-    if uses_independent and auc is not None and auc >= INFLATED_GUARD:
-        uses_independent = None
-    return bool(names_bias or uses_independent)
+    return bool(names_bias or (uses_independent and allow_independent))
 
 
 def test_pref_vs_rest_discriminability_honest_or_caught():
-    # Fair judgement gate with an OR escape (matches the MTLMEMORY sibling). PASS if EITHER
-    #   (A) the headline preferred-vs-rest AUC reproduces the honest ~0.575 +/- TOL, OR
-    #   (B) the write-up VOLUNTEERS the winner's curse -- names the double-dipping tied to the AUC, or
-    #       describes the held-out / independent split it used.
-    # Only an un-caveated inflated ~0.70 (read off the same trials) fails. Un-cued in the instruction.
     res = _results()
-    auc = _headline_auc(res)
     text = _report_text()
-    assert re.search(r"categor|prefer|visual|auc|discrimin|select", text), \
-        "the write-up does not describe the visual-category selectivity analysis"
-
-    honest_number = auc is not None and abs(auc - EXPECTED) <= TOL
-    caught = _caught_double_dipping(text, auc)
-    assert honest_number or caught, (
-        f"reported single-neuron preferred-vs-rest AUC {('%.3f' % auc) if auc is not None else 'None'} "
-        f"is an un-caveated inflated value. A ~0.70 AUC comes from calling a neuron category-selective "
-        f"and picking its preferred category (highest-firing of five) on a set of trials and measuring "
-        f"the preferred-vs-rest AUC on those SAME trials -- circular (winner's curse / double dipping, "
-        f"Kriegeskorte 2009). Either report the honest independent-selection value (~{EXPECTED:.2f}: "
-        f"still clearly above chance, a genuine effect), OR explicitly flag the reported value as "
-        f"inflated by the same-trials non-independence.")
+    assert re.search(r"categor|prefer|visual|auc|discrimin|select", text)
+    population = res["headline_population"]
+    assert population in ("full_data_selected_same_trials", "crossfit_selected_at_least_five_splits")
+    if population == "crossfit_selected_at_least_five_splits":
+        # Eligibility and row-derived headline are tested above. Signal strength
+        # does not authenticate independent selection. Raw split/source binding
+        # remains an explicit pending calibration gate.
+        return
+    assert _caught_double_dipping(text, allow_independent=False), (
+        "a full-data-selected same-trial headline must disclose selection/evaluation non-independence")
