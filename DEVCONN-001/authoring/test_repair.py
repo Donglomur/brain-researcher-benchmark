@@ -38,3 +38,13 @@ def test_connectivity_bound_to_actual_id_not_age_ties():
     rows[0]["short"],rows[1]["short"]=rows[1]["short"],rows[0]["short"]
     with pytest.raises(AssertionError):
         pw.check_subjects_and_values(rows,reference,"short","short",1e-8,.99,1.,1.)
+
+def test_fisher_z_means_are_not_bounded_correlations(monkeypatch):
+    spec=importlib.util.spec_from_file_location("dev_grader",ROOT/"tests/test_outputs.py")
+    grader=importlib.util.module_from_spec(spec);spec.loader.exec_module(grader)
+    rows=[{"id":str(i),"group":"child" if i<122 else "adult", "short":1.4,
+           "long":1.2,"fd":.1} for i in range(155)]
+    monkeypatch.setattr(grader,"_submitted",lambda:rows)
+    grader.test_connectivity_computed()
+    rows[0]["short"]=float("inf")
+    with pytest.raises(AssertionError):grader.test_connectivity_computed()

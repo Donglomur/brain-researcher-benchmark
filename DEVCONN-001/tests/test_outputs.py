@@ -4,6 +4,7 @@ Subject measurements are bound to actual IDs. Reported associations, participant
 intervals and low-motion restriction are recomputed without a forced confounding verdict.
 """
 import json
+import math
 import os
 import re
 import sys
@@ -51,7 +52,8 @@ def test_connectivity_computed():
     assert len(rows) >= 120, f"expected ~155 subjects, got {len(rows)}"
     for key in ("short", "long"):
         vals = [r[key] for r in rows if r.get(key) is not None]
-        assert len(vals) >= 120 and all(-1.01 <= v <= 1.01 for v in vals), f"{key}_range invalid"
+        # Mean Fisher-z is unbounded; authentication occurs against actual-ID references below.
+        assert len(vals) >= 120 and all(math.isfinite(v) for v in vals), f"{key}_range invalid"
     groups = {r.get("group", "") for r in rows}
     assert any(g.startswith("child") for g in groups) and any(g.startswith("adult") for g in groups), \
         f"need both child and adult groups, saw {groups}"
