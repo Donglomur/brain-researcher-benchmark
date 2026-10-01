@@ -88,6 +88,7 @@ def load_submitted(path, id_cols, auc_cols, sel_cols):
         return submitted, auc_list, sel_list
     for r in rows:
         cid = canon_id(r.get(id_c, ""))
+        assert cid not in submitted, f"duplicate neuron {cid}"
         if not cid:
             continue
         try:

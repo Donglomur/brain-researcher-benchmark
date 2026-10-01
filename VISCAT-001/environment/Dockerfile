@@ -9,3 +9,4 @@ RUN pip install --no-cache-dir \
       h5py==3.16.0 \
       scikit-learn==1.9.0
 WORKDIR /app
+COPY data_manifest.json /app/data_manifest.json

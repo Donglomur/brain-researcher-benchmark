@@ -49,6 +49,11 @@ OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 OUT.mkdir(parents=True, exist_ok=True)
 
 DANDISET = "000004"
+manifest_path = Path("/app/data_manifest.json")
+if not manifest_path.exists():
+    manifest_path = Path(__file__).parents[1] / "environment/data_manifest.json"
+DATA_MANIFEST = json.loads(manifest_path.read_text())
+EXPECTED_ASSETS = {r["path"]: r for r in DATA_MANIFEST["assets"]}
 REGION_KEYS = ("Hippocampus", "Amygdala")   # medial temporal lobe
 WIN = (0.2, 1.7)          # s after stimulus onset
 CATS = (1, 2, 3, 4, 5)    # the five visual categories (stimCategory)
@@ -109,14 +114,19 @@ def collect_neurons():
     neurons = []
     n_sessions = 0
     with DandiAPIClient() as client:
-        ds = client.get_dandiset(DANDISET, "draft")
+        ds = client.get_dandiset(DANDISET, DATA_MANIFEST["version"])
         paths = sorted(a.path for a in ds.get_assets() if a.path.endswith(".nwb"))
+        if len(paths) != 87 or set(paths) != set(EXPECTED_ASSETS):
+            fail("published asset list differs from the exact 87-session manifest")
         if not paths:
             fail(f"no NWB assets in dandiset {DANDISET}")
         for p in paths:
             try:
                 stem = p.split("/")[-1][:-4] if p.endswith(".nwb") else p.split("/")[-1]
-                url = ds.get_asset_by_path(p).get_content_url(follow_redirects=1, strip_query=False)
+                asset = ds.get_asset_by_path(p)
+                if str(asset.identifier) != EXPECTED_ASSETS[p]["asset_id"]:
+                    fail(f"published asset identity mismatch: {p}")
+                url = asset.get_content_url(follow_redirects=1, strip_query=False)
                 io = NWBHDF5IO(file=h5py.File(remfile.File(url), "r"), load_namespaces=True)
                 nwb = io.read()
                 tr = nwb.trials.to_dataframe()
@@ -124,7 +134,7 @@ def collect_neurons():
                 on = rec["stim_on_time"].values.astype(float)
                 cat = rec["stimCategory"].values.astype(int)
                 if len(on) < 20 or len(np.unique(cat)) < len(CATS):
-                    continue
+                    fail(f"required session {p} lacks usable category trials")
                 u = nwb.units
                 el = nwb.electrodes.to_dataframe()
                 uid = np.asarray(u.id[:])
@@ -142,8 +152,8 @@ def collect_neurons():
                         region=("Hippocampus" if "Hippocampus" in loc else "Amygdala"),
                         fr=fr.astype(float), cat=cat.astype(int)))
                 n_sessions += 1
-            except Exception:
-                continue
+            except Exception as exc:
+                fail(f"required session {p} failed: {exc}")
     return neurons, n_sessions
 
 
@@ -168,6 +178,7 @@ naive_auc = float(np.mean(all_auc[sel_flags])) if sel_flags.any() else float("na
 # ---- honest estimate: select the category-selective neurons and fix their preferred category on a ----
 # ---- TRAIN split, measure the preferred-vs-rest AUC on the HELD-OUT split, repeat and average --------
 held = [[] for _ in neurons]
+split_rows = []
 for rep in range(N_SPLITS):
     for j, rec in enumerate(neurons):
         fr, cat = rec["fr"], rec["cat"]
@@ -188,17 +199,27 @@ for rep in range(N_SPLITS):
         p, pref = selective_and_preferred(fr[tr], cat[tr])   # selection + preferred on TRAIN only
         if p < SEL_ALPHA:
             held[j].append(auc_pref_vs_rest(fr[te], cat[te] == pref))   # AUC on HELD-OUT trials
+            split_rows.append({"neuron_id": rec["id"], "split": rep,
+                "train_trial_ids": "|".join(map(str, tr)), "test_trial_ids": "|".join(map(str, te)),
+                "preferred_category": pref, "heldout_auc": held[j][-1]})
 per_cell_heldout = [np.mean(h) for h in held if len(h) >= 5]
 honest_auc = float(np.mean(per_cell_heldout)) if per_cell_heldout else float("nan")
+import csv
+with open(OUT / "selected_splits.csv", "w", newline="") as f:
+    writer = csv.DictWriter(f, fieldnames=["neuron_id", "split", "train_trial_ids", "test_trial_ids", "preferred_category", "heldout_auc"])
+    writer.writeheader()
+    writer.writerows(split_rows)
 
 # ---- write the NEUTRAL per-neuron table ----
 import csv
 with open(OUT / "neurons.csv", "w", newline="") as f:
     w = csv.writer(f)
-    w.writerow(["neuron_id", "region", "n_trials", "category_selective", "pref_vs_rest_auc"])
+    w.writerow(["neuron_id", "region", "n_trials", "category_selective", "pref_vs_rest_auc",
+                "heldout_splits", "heldout_eligible", "heldout_auc"])
     for j, rec in enumerate(neurons):
         w.writerow([rec["id"], rec["region"], len(rec["cat"]),
-                    int(sel_flags[j]), round(float(all_auc[j]), 4)])
+                    int(sel_flags[j]), round(float(all_auc[j]), 4), len(held[j]),
+                    int(len(held[j]) >= 5), float(np.mean(held[j])) if len(held[j]) >= 5 else ""])
 
 results = {
     # headline: honest single-neuron preferred-category-vs-rest discriminability of category cells
@@ -206,6 +227,8 @@ results = {
     "proportion_category_selective": round(prop_sel, 4),
     "n_mtl_neurons": len(neurons),
     "n_category_selective": int(sel_flags.sum()),
+    "headline_population": "crossfit_selected_at_least_five_splits",
+    "n_crossfit_eligible": len(per_cell_heldout),
     "n_sessions": n_sessions,
     # contrast value: the SAME-TRIALS (non-independent) estimate -- inflated, reported for transparency
     "same_trials_pref_vs_rest_auc_inflated": round(naive_auc, 4),
@@ -225,6 +248,8 @@ results = {
 
 (OUT / "run_metadata.json").write_text(json.dumps({
     "status": "ok", "dandiset": DANDISET, "n_sessions": n_sessions,
+    "published_version": DATA_MANIFEST["version"], "asset_manifest": DATA_MANIFEST,
+    "byte_hash_verification": "expected published hashes; selected fields streamed, full bytes not hashed",
     "n_mtl_neurons": len(neurons), "n_category_selective": int(sel_flags.sum()),
     "region": "hippocampus + amygdala (MTL)", "phase": "recognition",
     "response_window_s": list(WIN),
@@ -241,13 +266,17 @@ results = {
     f"Kruskal-Wallis p<0.05).\n\n"
     f"Estimating each category-selective neuron's preferred category on one split of the recognition "
     f"trials and measuring its preferred-category-vs-rest ROC AUC on a held-out split gives a mean "
-    f"single-neuron AUC of **{honest_auc:.3f}**. This stays clearly above chance (0.5), so visual-"
-    f"category selectivity is a genuine single-neuron signal in the human MTL -- but it is more modest "
+    f"single-neuron AUC of **{honest_auc:.3f}** for a DISTINCT population of {len(per_cell_heldout)} "
+    f"units selected in at least five training splits. This is a descriptive pooled-unit endpoint, "
+    f"not patient-level inference or a confidence-tested above-chance finding. It differs "
     f"than the {naive_auc:.3f} obtained when the same trials are used to pick the preferred category "
     f"and to score the AUC, which is inflated by selection (a winner's curse over the five "
     f"categories).\n\n"
     f"Reported headline: mean held-out preferred-category-vs-rest AUC = **{honest_auc:.3f}** "
-    f"(proportion category-selective = {prop_sel:.3f}).\n")
+    f"(full-data proportion category-selective = {prop_sel:.3f}). Populations/denominators "
+    f"are separate. This is the expanded release with KW selection and a1.5-second window, "
+    f"not the published ANOVA/one-second result. Patient/session-clustered uncertainty "
+    f"and null/equivalence evidence are not computed.\n")
 
 print(f"n_mtl_neurons={len(neurons)} n_sessions={n_sessions} prop_sel={prop_sel:.4f} "
       f"honest_auc={honest_auc:.4f} naive_auc={naive_auc:.4f}")

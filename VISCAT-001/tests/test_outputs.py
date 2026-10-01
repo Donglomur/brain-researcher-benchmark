@@ -127,7 +127,21 @@ def test_outputs_present_and_wellformed():
 def test_proof_of_work_neurons_and_values():
     ref = _reference()
     sub, _, _ = _submitted()
+    assert set(sub) == set(ref["ids"]), "exact complete unit cohort required"
     pw.check_neurons_and_values(sub, ref, auc_tol=AUC_TOL, cover=COVER, corr_min=CORR_MIN)
+
+
+def test_declared_population_headline_recomputes():
+    import csv
+    from population_contract import recompute_population
+    rows = list(csv.DictReader((OUT / "neurons.csv").open()))
+    res = _results()
+    actual, count = recompute_population(rows, res["headline_population"])
+    assert res["n_mtl_neurons"] == len(rows)
+    assert res["n_category_selective"] == sum(int(r["category_selective"]) for r in rows)
+    assert abs(res["category_selective_pref_vs_rest_auc"]-actual) <= .001
+    if res["headline_population"] == "crossfit_selected_at_least_five_splits":
+        assert res["n_crossfit_eligible"] == count
 
 
 # ------------------------------------------------------------------ pillar 2
