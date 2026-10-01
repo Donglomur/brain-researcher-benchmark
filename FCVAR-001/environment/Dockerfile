@@ -8,6 +8,6 @@ RUN apt-get update && \
       scikit-learn==1.5.2 \
       pandas==2.2.3 \
       nibabel==5.3.2 \
-      nilearn==0.12.1 && \
+      nilearn==0.13.1 && \
     rm -rf /var/lib/apt/lists/*
 WORKDIR /app

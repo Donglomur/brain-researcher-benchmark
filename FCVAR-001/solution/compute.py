@@ -35,6 +35,8 @@ stationarity / sampling-variability issue is warranted on these data.
 """
 import json
 import os
+import re
+import nibabel as nib
 import sys
 from pathlib import Path
 
@@ -44,7 +46,10 @@ import pandas as pd
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 OUT.mkdir(parents=True, exist_ok=True)
 
-TR = 2.0
+PINNED_IDS = {'2014113','3902469','4275075','7774305','1019436','3699991','3154996',
+              '3884955','27034','4134561','27018','6115230','27037','8409791','27011','3007585',
+              '8697774','9750701','10064','21019','10042','10128','2497695','4164316','1552181',
+              '4046678','23012','1679142','1206380','23008'}
 STEP = 3
 WINDOWS = [20, 30, 44]
 PRIMARY = 30
@@ -105,14 +110,13 @@ try:
 except Exception as e:
     fail(f"could not resolve ADHD-200 / Harvard-Oxford atlas: {e}")
 
-try:
-    ph = adhd.phenotypic
-    ph = ph.reset_index(drop=True) if hasattr(ph, "reset_index") else pd.DataFrame(ph)
-except Exception:
-    ph = None
-
-masker = NiftiLabelsMasker(labels_img=ho.maps, detrend=True, standardize="zscore_sample",
-                           low_pass=0.08, high_pass=0.009, t_r=TR, verbose=0)
+ph = adhd.phenotypic
+ph = ph.reset_index(drop=True) if hasattr(ph, "reset_index") else pd.DataFrame(ph)
+assert "Subject" in ph and "site" in ph, "full keyed phenotypes required"
+ph["canonical_id"] = ph["Subject"].map(lambda x: str(int(x)))
+assert ph["canonical_id"].is_unique
+ph = ph.set_index("canonical_id")
+acquisitions = []
 
 rng = np.random.default_rng(SEED)
 rows = []
@@ -121,42 +125,67 @@ ratios = {W: [] for W in WINDOWS}
 pvals = {W: [] for W in WINDOWS}
 
 for i, (func, cf) in enumerate(zip(adhd.func, adhd.confounds)):
+    match = re.search(r"(\d{7})", Path(func).name)
+    if not match:
+        fail(f"cannot identify participant from filename {func}")
+    sid = str(int(match.group(1)))
+    if sid not in PINNED_IDS or sid not in ph.index:
+        fail(f"missing exact phenotype join for {sid}")
+    site = str(ph.loc[sid, "site"])
+    if site in ("NA", "nan", ""):
+        fail(f"unknown site for {sid}")
+    image = nib.load(func)
+    TR = float(image.header.get_zooms()[3])
+    time_unit = image.header.get_xyzt_units()[1]
+    if time_unit not in {"sec","msec","usec"}:
+        fail(f"unknown TR units for {sid}")
+    TR *= {"sec":1.0,"msec":1e-3,"usec":1e-6}[time_unit]
+    if not np.isfinite(TR) or not 0.1 < TR < 10:
+        fail(f"invalid TR for {sid}: {TR}")
+    masker = NiftiLabelsMasker(labels_img=ho.maps, detrend=True, standardize="zscore_sample",
+                               low_pass=0.08, high_pass=0.009, t_r=TR, verbose=0)
     try:
         conf = pd.read_csv(cf, sep="\t")
         conf = conf[[c for c in CONF_COLS if c in conf.columns]].fillna(0).values
-    except Exception:
-        conf = None
+    except Exception as exc:
+        fail(f"missing required nuisance columns for {sid}: {exc}")
     ts = masker.fit_transform(func, confounds=conf)
     keep = ts.std(axis=0) > 1e-8            # drop regions with no usable signal
     ts = ts[:, keep]
     T = ts.shape[0]
-    try:
-        site = str(ph.loc[i, "site"]) if ph is not None and "site" in ph.columns else "NA"
-    except Exception:
-        site = "NA"
-
-    rec = {"subject_index": i, "site": site, "n_timepoints": int(T)}
+    rec = {"subject": sid, "site": site, "n_timepoints": int(T), "tr_sec": TR}
+    evidence = {"schema_version": "fcvar-subject-tr-phase-v2", "subject_id": sid,
+                "site": site, "tr_sec": TR, "roi_signals": ts, "seed": SEED}
+    acquisitions.append({"subject": sid, "site": site, "tr_sec": TR})
     for W in WINDOWS:
         if T < W + 3 * STEP:
             rec[f"mean_edge_sd_w{W}"] = ""
             continue
         obs = sliding_window_edge_sd(ts, W, STEP)
-        null = np.array([sliding_window_edge_sd(phase_randomize(ts, rng), W, STEP)
-                         for _ in range(N_SURR)])
+        subject_rng = np.random.default_rng(SEED + int(sid) + W)
+        phases = subject_rng.uniform(0, 2*np.pi, size=(N_SURR, T//2+1))
+        phases[:, 0] = 0
+        if T % 2 == 0:
+            phases[:, -1] = 0
+        evidence[f"phase_w{W}"] = phases
+        spectrum = np.fft.rfft(ts, axis=0)
+        null = np.array([sliding_window_edge_sd(
+            np.fft.irfft(spectrum*np.exp(1j*p)[:,None],n=T,axis=0),W,STEP) for p in phases])
         rec[f"mean_edge_sd_w{W}"] = round(obs, 6)
         # the per-subject sampling-variability baseline: the mean windowed edge-SD of this
         # subject's spectrum-matched stationary surrogate (what the observed value is compared to).
         rec[f"mean_edge_sd_null_w{W}"] = round(float(null.mean()), 6)
         ratios[W].append(obs / float(null.mean()))
         pvals[W].append((np.sum(null >= obs) + 1) / (N_SURR + 1))
+    np.savez_compressed(OUT / f"surrogate_evidence_{sid}.npz", **evidence)
     rows.append(rec)
 
 df = pd.DataFrame(rows)
-if len(df) < 25:
+if len(df) != 30 or set(df["subject"]) != PINNED_IDS:
     fail(f"only {len(df)} subjects processed")
 
 # ---- required output: per-subject connectivity variability (the deliverable) ----
-cols = ["subject_index", "site", "n_timepoints",
+cols = ["subject", "site", "n_timepoints", "tr_sec",
         "mean_edge_sd_w20", "mean_edge_sd_w30", "mean_edge_sd_w44",
         "mean_edge_sd_null_w20", "mean_edge_sd_null_w30", "mean_edge_sd_null_w44"]
 df[[c for c in cols if c in df.columns]].to_csv(OUT / "variability.csv", index=False)
@@ -195,7 +224,7 @@ dynamics = {
     "atlas": "Harvard-Oxford cortical, cort-maxprob-thr25-2mm (48 regions)",
     "window_lengths_tr": WINDOWS,
     "step_tr": STEP,
-    "tr_sec": TR,
+    "acquisitions": acquisitions,
     "preprocessing": "detrend, bandpass 0.009-0.08 Hz, zscore; nuisance = 6 motion + "
                      "5 CompCor + WM + CSF; regions with no usable signal dropped per subject",
     "method": "sliding-window Fisher-z region-pair correlations; variability = mean over edges "
@@ -208,38 +237,13 @@ p = dynamics["stationarity_check"]["per_subject_p_median"]
 f = dynamics["stationarity_check"]["fraction_subjects_p_lt_0p05"]
 gm = dynamics["group_mean_edge_sd"]
 
-(OUT / "findings.md").write_text(f"""# FCVAR-001 - temporal variability of resting-state connectivity
+(OUT / "findings.md").write_text(
+    "# Stationary-surrogate sensitivity application\n\n"
+    f"Observed/null variability ratios at20/30/44TR: {r['20']}/{r['30']}/{r['44']}. "
+    f"Median surrogate p: {p['20']}/{p['30']}/{p['44']}. "
+    "These results are conditional on each participant's acquisition TR and shared-phase "
+    "surrogate assumptions. Non-rejection does not establish stationarity, negligible dynamics, "
+    "or absence of connectivity states. This is a paper-derived method application.\n")
 
-## What the sliding-window analysis shows at face value
-On the ADHD-200 data (30 subjects, Harvard-Oxford 48 regions) sliding-window functional
-connectivity does fluctuate over the scan. The mean edge standard deviation across windows is
-sizeable at every window length (Fisher-z: {gm['20']:.3f} at 20 TR, {gm['30']:.3f} at 30 TR,
-{gm['44']:.3f} at 44 TR). Taken alone, this looks like substantial time-varying connectivity,
-and it is the quantity the "dynamic connectivity" literature reports.
-
-## But the fluctuation barely exceeds what a stationary process produces
-Sliding-window correlations fluctuate even when the underlying connectivity is *fixed*, simply
-because each short window estimates the correlation from few samples. The right question is
-whether the observed fluctuation is any larger than that sampling variability. Comparing each
-subject's observed variability to a **stationary phase-randomised surrogate** (a null that
-keeps the static covariance and the full power/cross-spectrum but removes any genuine
-non-stationarity):
-
-* observed / stationary-null mean edge SD (averaged over subjects):
-  **{r['20']:.2f}x** at 20 TR, **{r['30']:.2f}x** at 30 TR, **{r['44']:.2f}x** at 44 TR
-  - only a few percent above the null.
-* per-subject significance is weak (median surrogate p = {p['20']:.2f} / {p['30']:.2f} /
-  {p['44']:.2f}; only {100*f['20']:.0f}% / {100*f['30']:.0f}% / {100*f['44']:.0f}% of subjects
-  reach p < 0.05), and this holds across all three window lengths.
-
-## Conclusion
-The window-to-window fluctuations are **largely sampling variability of a stationary process**:
-the observed variability barely exceeds a spectrum-matched stationary null (~2% excess) and is
-robust to window length. There is at most a small, negligible excess over stationarity - **not**
-the substantial time-varying connectivity or discrete "connectivity states" that a raw reading
-of the sliding-window standard deviation would suggest. On these data resting-state connectivity
-cannot be asserted to be genuinely dynamic; the apparent dynamics are consistent with a single,
-stationary covariance sampled in short windows.
-""")
 print(f"OK: group edge-SD(30TR)={gm['30']:.3f}; observed/null ratio 20/30/44="
       f"{r['20']:.2f}/{r['30']:.2f}/{r['44']:.2f}; median p={p['30']:.2f}; n={len(df)}")

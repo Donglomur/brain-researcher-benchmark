@@ -61,6 +61,21 @@ Do not substitute a different or manually-prepared dataset.
 
 ## Output Location
 
+## Acquisition and surrogate contract
+
+Use nilearn0.13.1 or a separately tested ID-preserving fetcher. Exactly30 participants are
+required; join full phenotypes by Subject ID, never row position. Read each image TR with
+its temporal units and use subject-specific filtering; report subject, site and tr_sec.
+This is a paper-derived surrogate-sensitivity application, not proof of stationarity.
+For each subject/window, generate50 shared phase screens with RNG seed=declared seed +
+integer subjectID + windowTR. DC and (for even-length scans) Nyquist phases are0.
+The same frequency phase multiplies every region, preserving power and cross spectra.
+Save surrogate_evidence_SUBJECT.npz with subject_id, site, tr_sec, roi_signals, seed
+and phase_w20/phase_w30/phase_w44 arrays. Report actual observed/null ratios and
+plus-one per-subject p values, with group mean ratios and median p by window.
+Non-rejection does not establish no dynamics; no predetermined ratio or conclusion is required.
+
+
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs

@@ -34,12 +34,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import proof_of_work as pw  # noqa: E402
 
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-REF_PATH = Path(__file__).resolve().parent / "reference.npz"
+REF_PATH = Path(__file__).resolve().parent / "reference_v2.npz"
 
 
 def _reference():
     assert REF_PATH.exists(), (
         "held-out reference tests/reference.npz is missing (build it from the oracle run)")
+    import numpy as np
+    from phase_contract import VERSION
+    z = np.load(REF_PATH, allow_pickle=False)
+    assert str(z["schema_version"]) == VERSION, "TR/ID-correct genuine v2 reference required"
     return pw.load_reference(REF_PATH)
 
 
@@ -130,135 +134,26 @@ def test_group_means_recompute_from_rows():
 
 
 # ------------------------------------------------------------------ pillar 3 (judgement RECOMPUTED from the submitted null column)
-def test_conclusion_stationarity_recomputed_from_null_column():
-    """PILLAR 3: the discriminating quantity -- the observed/stationary-null ratio -- is RECOMPUTED
-    from a submitted per-subject NULL column, not read off a reported scalar. The task is un-cued
-    (it never names a stationary null); an agent that only computes the sliding-window SD has no
-    per-subject surrogate baseline to submit. The grader requires the per-subject surrogate/null
-    edge-SD at the primary window, checks it is a PROPER stationary null (non-constant, and tracking
-    the observed edge-SD across subjects -- a white-noise / n_timepoints-only null does not), and
-    recomputes ratio = group_mean(observed) / group_mean(null), requiring it near 1.
+def test_authenticated_common_phase_null():
+    import numpy as np
+    from phase_contract import check_subject
+    z = np.load(REF_PATH, allow_pickle=False)
+    rows = list(csv.DictReader((OUT / "variability.csv").open()))
+    assert len(rows)==30 and len({r["subject"] for r in rows})==30
+    assert set(r["subject"] for r in rows)==set(str(x) for x in z["ref_ids"])
+    results=[]
+    for row in rows:
+        sid=row["subject"]
+        data=np.load(OUT / f"surrogate_evidence_{sid}.npz",allow_pickle=False)
+        reference={"schema_version":z["schema_version"],"subject_id":sid,
+                   "site":str(z[f"site_{sid}"]),"tr_sec":z[f"tr_{sid}"],
+                   "roi_signals":z[f"ts_{sid}"]}
+        assert row["site"]==reference["site"] and abs(float(row["tr_sec"])-float(reference["tr_sec"]))<1e-6
+        results.append(check_subject(data,reference,row))
+    report=_dynamics()["stationarity_check"]
+    for w in ("20","30","44"):
+        assert abs(report["observed_over_null_ratio_mean"][w]-np.mean([r[w]["ratio"] for r in results]))<1e-4
+        assert abs(report["per_subject_p_median"][w]-np.median([r[w]["p"] for r in results]))<1e-4
 
-    HONEST-LIMITATION (see proposal.md): the honest finding is precisely that the stationary null
-    ~= the observed data (ratio ~1.02), so the null and the already-validated observed edge-SD very
-    nearly coincide. A submission that manufactures null ~= observed from the validated observed
-    column therefore still passes; this axis is guessable-from-priors and, for the fully un-fakeable
-    guarantee, relies on the frontier gate, not the verifier. This pillar kills the lazier attacks
-    (a bare guessed ratio scalar, a flat null, or a white-noise null) but is honestly 5(b)."""
-    ref = _reference()
-    st = ref["stats"]
-    sub = _submitted()
-    null = pw.load_null(OUT / "variability.csv")
-    dyn = _dynamics()
-    W = st.get("primary", "30")
-
-    have_null = [i for i in null if W in null[i] and null[i][W] == null[i][W]]
-    assert len(have_null) >= st["NULL_MIN_SUBJECTS"], (
-        "no per-subject stationary-null / surrogate edge-SD is provided. The sliding-window edge-SD "
-        "looks like substantial dynamics, but the honest analysis compares each subject's observed "
-        "value to a surrogate (spectrum-matched / phase-randomised, sampling-variability) baseline; "
-        "report that per-subject baseline (e.g. mean_edge_sd_null_w30) so the observed-to-null ratio "
-        "can be recomputed. A single reported ratio is not sufficient.")
-
-    # the null must be a PROPER stationary null: non-constant and tracking the observed edge-SD
-    # across subjects (a white-noise / n_timepoints-only null is unrelated to each subject's real
-    # windowed fluctuation and does NOT track it).
-    assert pw.nonconstant(null, W, st["EPS"]), (
-        f"the per-subject stationary-null edge-SD at {W} TR is constant across subjects -- not a "
-        f"real per-subject surrogate.")
-    tc, ntc = pw.paired_corr(sub, null, W)
-    assert ntc >= st["NULL_MIN_SUBJECTS"] and tc == tc and tc >= st["NULL_TRACK_MIN"], (
-        f"the submitted per-subject null edge-SD does not track the observed edge-SD across subjects "
-        f"(cross-subject r={tc:.3f} < {st['NULL_TRACK_MIN']}); a proper spectrum-matched stationary "
-        f"surrogate reproduces each subject's static covariance and spectrum, so its windowed edge-SD "
-        f"tracks the observed one. A white-noise / n-timepoints-only null does not.")
-
-    obs_mean = pw.group_mean(sub, W)
-    null_mean = pw.group_mean(null, W)
-    assert null_mean == null_mean and null_mean > 0, "cannot recompute the null group mean edge-SD"
-    ratio = obs_mean / null_mean
-    assert st["RATIO_LO"] <= ratio <= st["RATIO_HI"], (
-        f"the observed/stationary-null ratio recomputed from the submitted rows "
-        f"(observed {obs_mean:.3f} / null {null_mean:.3f} = {ratio:.3f}) is not near 1 "
-        f"(band [{st['RATIO_LO']}, {st['RATIO_HI']}]). On these data the observed sliding-window "
-        f"variability is only ~2% above a proper stationary surrogate; a ratio >> 1 means an invalid "
-        f"null (white-noise / static-covariance-only) that ignores the autocorrelation- and "
-        f"window-length-dependence of windowed fluctuation.")
-
-    # any reported ratio must be consistent with the recomputed one (CSV and JSON agree)
-    reported = [v for v in pw.find_ratio_values(dyn) if v == v]
-    if reported:
-        assert any(abs(v - ratio) <= st["RATIO_REPORT_TOL"] for v in reported), (
-            f"reported observed/null ratio {sorted(set(round(v,3) for v in reported))} is "
-            f"inconsistent with the ratio recomputed from the submitted observed and null columns "
-            f"({ratio:.3f}).")
-
-    frac_sig = [v for v in pw.find_frac_sig_values(dyn) if v == v]
-    if frac_sig:
-        assert min(frac_sig) <= st["FRAC_SIG_MAX"], (
-            f"the reported fraction of subjects with surrogate p<0.05 ({sorted(set(frac_sig))}) is "
-            f"not low; on these data few subjects exceed the stationary null (reference "
-            f"~0.10-0.20)")
-
-
-# ------------------------------------------------------------------ secondary prose signal
-_NEG = (r"(?:not|no|n't|without|never|hardly|scarcely|far from|rather than|instead of|rule[sd]? out|"
-        r"ruled out|free of|devoid of|cannot|can't|isn't|aren't|wasn't|weren't|doesn't|don't|didn't|"
-        r"lacks?|lacking|absent|nothing|neither|fails? to|unlikely to)")
-
-
-def _neg_before(text, start, window=48):
-    pre = text[max(0, start - window):start]
-    return re.search(r"(?<![a-z])" + _NEG + r"(?![a-z])[\s\w,'\"()-]{0,20}$", pre, re.I) is not None
-
-
-def _unnegated(text, pat, window=48):
-    for m in re.finditer(pat, text, re.I):
-        if _neg_before(text, m.start(), window):
-            continue
-        if re.search(r"\b" + _NEG + r"\b", m.group(0), re.I):
-            continue
-        return True
-    return False
-
-
-def _recognises(text, concept, downgrade, absence):
-    if not re.search(concept, text, re.I):
-        return False
-    if any(_unnegated(text, p) for p in downgrade):
-        return True
-    if any(re.search(p, text, re.I) for p in absence):
-        return True
-    return False
-
-
-def test_findings_recognise_stationarity_secondary():
-    """SECONDARY (the numeric pillars carry the grade): findings.md must recognise the observed
-    fluctuations barely exceed a stationary null (largely sampling variability of a stationary
-    process)."""
-    text = _findings()
-    assert text, "findings.md missing or empty"
-    concept = (r"dynamic\w*|time-?varying|time-?resolved|sliding-?window|fluctuat\w*|"
-               r"non-?stationar\w*|stationar\w*|\bdfc\b|connectivity states?|window-?to-?window|"
-               r"temporal variab\w*|surrogate\w*|phase-?randomi\w*|changing connectivity|window\w*")
-    downgrade = [
-        r"(?:mostly|largely|mainly|chiefly|essentially|primarily|simply|nothing but)\s+"
-        r"(?:the\s+|just\s+)?(?:noise|sampling\s+(?:noise|variab\w*|error|fluctuat\w*))"
-        r"[^.\n]{0,55}(?:stationary|constant|unchanging|fixed|spectrum-?matched|process|surrogate|null)",
-        r"(?:largely|mostly|mainly|chiefly|essentially|overwhelmingly|primarily|simply)\s+"
-        r"(?:a\s+|an\s+|the\s+)?sampling\s+(?:artifact|artefact|variab\w*|noise|fluctuat\w*)",
-        r"barely\s+(?:exceed\w*|above|beyond|greater|larger|higher|differ\w*|surpass\w*|distinguish\w*)",
-        r"(?:consistent with|explained by|accounted for by|attributable to|indistinguishable from|"
-        r"within|no different from|no larger than)\s+(?:a\s+|the\s+|that of a\s+)?"
-        r"(?:stationary|spectrum-?matched|constant[\s-]?covar\w*|fixed[\s-]?covar\w*)"
-        r"[^.\n]{0,25}(?:process|null|surrogate|connectivity|covar\w*|model)?",
-    ]
-    absence = [
-        r"(?:no more than|little more than|nothing more than|no greater than|hardly more than)"
-        r"[^.\n]{0,70}(?:stationary|constant[\s-]?covar\w*|unchanging|fixed|spectrum-?matched|"
-        r"process|surrogate|null|chance)",
-    ]
-    assert _recognises(text, concept, downgrade, absence), (
-        "findings.md reports dynamic/time-varying connectivity but does not recognise that the "
-        "observed fluctuations barely exceed a stationary null (largely sampling variability of a "
-        "stationary process).")
+def test_findings_present():
+    assert _findings().strip()
