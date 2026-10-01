@@ -87,7 +87,8 @@ def load_submitted(path):
     for r in rows:
         cid = canon_id(r.get(id_c, ""))
         if not cid:
-            continue
+            raise AssertionError("missing participant ID")
+        assert cid not in out, f"duplicate participant ID {cid}"
 
         def gf(col):
             try:

@@ -33,17 +33,22 @@ dorsal-attention ROIs — dACC (0, 20, 38), anterior insula (∓34/36, 20/22, 4/
 20/22, 30/28) and IPS (∓28/30, −58/−56, 46). Standardise each region's signal, estimate the
 `emotion > control` contrast per subject, and average left/right for the amygdala and fusiform.
 
-The atlas, ROIs, nuisance set, HRF, high-pass and TR above are pinned so the estimates are
-reproducible, but the events file still leaves several **first-level modelling decisions** to the
-analyst. **Consider the first-level modelling choices a careful reproduction would weigh, and for
-each choice you consider, compute and report the resulting per-subject `emotion > control`
-contrast in each region** — so that whether the apparent emotion-processing network is genuine can
-be judged against the analyst's modelling decisions, not a single specification.
+This is a **paper-motivated duration-model sensitivity case**, not an exact reproduction of
+AOMIC Figure 7. Compare two publicly specified models: modelA uses a common duration equal
+to each participant's median valid RT; modelB uses each trial's RT, replacing missing RT
+with that same median. Both retain identical HRF and nuisance regressors. These duration
+choices are adaptations rather than claims about actual stimulus presentation duration.
+Their coefficient scales differ; comparison is numerical sensitivity, not a causal effect.
 
-Report, in plain terms, **which regions/networks show the emotion-matching response, how you
-would characterise the emotion-processing network on these data, and whether that
-characterisation is robust to the modelling choices you considered** — stating only what your
-analysis actually supports.
+Require exactly the pinned participant numbers 2–9 and 11–22 (20 participants). Missing
+required images/events/confounds must fail, not select a replacement participant.
+
+In group_stats.json, add model_sensitivity with entries amygdala, fusiform, control, and
+amygdala_minus_control_change. For each, report n=20, mean_change (modelB minus modelA),
+and ci95 using the paired participant-level sample SD and t(19) 97.5% quantile.
+The last entry is the paired amygdala change minus control change. Report signed values,
+model units/scaling, and limitations. Regional t ordering and changed significance do not
+establish emotion specificity or an RT-caused artifact.
 
 ## Data access
 
@@ -72,7 +77,8 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   `fusiform`) and in the summarised cognitive-control regions, **under each first-level modelling
   choice you considered** (one column per region per modelling choice, e.g.
   `amygdala_emotion_gt_control__<choice-label>`; a single set of columns if you considered only
-  one choice). These per-subject estimates are the intermediate the group tests are computed from.
+  one choice is not sufficient here). Include both disclosed models. These signed values are
+  the intermediate from which group tests and paired sensitivity intervals are computed.
 - `group_stats.json` — the group-level `emotion > control` result: the group test per region /
   network (mean effect, t, p) **under each modelling choice you considered**, the per-condition
   mean reaction time (emotion vs control), and the number of subjects.

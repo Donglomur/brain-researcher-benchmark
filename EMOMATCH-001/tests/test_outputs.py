@@ -1,29 +1,5 @@
-"""Proof-of-work grader for EMOMATCH-001 -- reproduce the emotion-matching (faces>shapes)
-activation on AOMIC PIOP2 (ds002790) and report which of it is emotion-specific vs a
-reaction-time (time-on-task) artifact.
-
-Earlier verifiers graded the discriminating conclusion -- that under a reaction-time-controlled
-(variable-epoch) model the cognitive-control "emotion" effect COLLAPSES while the amygdala/
-fusiform response SURVIVES -- as REPORTED SCALARS in group_stats.json. An agent that fitted only
-the standard (constant-epoch) GLM could then GUESS those alternative-model numbers (the amygdala
-survives ~unchanged, the control ROIs fall to ~n.s.) without ever fitting the second model, and
-pass. This grader closes that. The emotion>control contrast must be submitted PER SUBJECT under
-each first-level modelling choice the agent considered; the grader validates each per-subject
-column against a held-out reference (tests/reference.npz, never shipped to the agent) and
-RECOMPUTES the collapse/survival discriminator from the validated per-subject columns. A run that
-fitted only one model has no genuine second column; a fabricated/shrunk second column fails the
-per-subject reference match (the cognitive-control collapse is a specific per-subject re-estimate
-that cannot be guessed from the naive column).
-
-The grader NEVER keys off a column name: it assigns, per region and BY VALUE, which submitted
-column is the standard-model estimate and which is the alternative-model estimate (best per-subject
-match to each reference). The required schema therefore does not name the modelling lever that
-separates them.
-
-Reference (ds002790 fMRIPrep, Schaefer-100/7 + amygdala/fusiform/control spheres, n=20):
-  RT  emotion ~1.86 s vs control ~1.32 s
-  amygdala emotion>control  t  ~7.9 -> ~8.2  (survives the alternative model)
-  control-ROI emotion>control t ~3.7 -> ~1.2 (collapses under the alternative model)
+"""Validate real signed coefficients under two disclosed duration models and paired uncertainty.
+No t-ordering or mandatory causal/emotion-specific narrative is a scientific answer.
 """
 import json
 import math
@@ -34,6 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import proof_of_work as pw  # noqa: E402
+from sensitivity import paired_summary, validate_summary
 
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 REF_PATH = Path(__file__).resolve().parent / "reference.npz"
@@ -85,7 +62,7 @@ def _assign():
 # ------------------------------------------------------------------ well-formedness
 def test_outputs_present_and_wellformed():
     sub, region_cols = _submitted()
-    assert len(sub) >= 12, f"activation.csv must carry per-subject contrasts; parsed {len(sub)} rows"
+    assert set(sub) == set(_reference()["ids"]), "exactly the pinned 20 unique IDs are required"
     j = _stats()
     assert isinstance(j, dict) and j, "group_stats.json empty"
     meta = OUT / "run_metadata.json"
@@ -150,7 +127,7 @@ def test_recompute_and_crosscheck():
 
 
 # ------------------------------------------------------------------ pillar 3 (judgement RECOMPUTED from the two model columns)
-def test_conclusion_is_reaction_time_confound_recomputed():
+def test_model_sensitivity_recomputed():
     """Grade the discriminating conclusion by RECOMPUTING it from the two validated per-subject
     columns -- never from a reported/guessable scalar. Recompute the group one-sample t for the
     cognitive-control ROIs and the amygdala under the standard and alternative models. The
@@ -177,27 +154,17 @@ def test_conclusion_is_reaction_time_confound_recomputed():
                     ("control std", ctl_n), ("control alt", ctl_r)):
         assert math.isfinite(v), f"cannot recompute the {name} group t from the submitted rows"
 
-    # (a) amygdala SURVIVES the alternative model (stays strongly positive, matches reference).
-    assert amy_r >= st["AMY_SURVIVE_MIN"], (
-        f"amygdala group t recomputed under the alternative model ({amy_r:.2f}) does not survive; on "
-        f"the real data the amygdala emotion effect is robust (reference {st['amygdala_rt_t']:.2f}).")
-    assert abs(amy_r - st["amygdala_rt_t"]) <= st["AMY_T_TOL"], (
-        f"amygdala alternative-model t ({amy_r:.2f}) does not match the reference "
-        f"({st['amygdala_rt_t']:.2f}, tol {st['AMY_T_TOL']}).")
-
-    # (b) cognitive-control ROIs COLLAPSE under the alternative model (a real drop to ~n.s.).
-    assert ctl_r <= st["CTRL_RT_MAX"], (
-        f"cognitive-control group t recomputed under the alternative model ({ctl_r:.2f}) did not "
-        f"collapse; the domain-general 'emotion' effect is a time-on-task artifact and should fall "
-        f"to ~n.s. (reference {st['control_rt_t']:.2f}).")
-    assert ctl_n - ctl_r >= st["CTRL_COLLAPSE_MARGIN"], (
-        f"the cognitive-control 'emotion' effect (standard t={ctl_n:.2f}) does not collapse under "
-        f"the alternative model (t={ctl_r:.2f}); a time-on-task artifact requires a real drop.")
-
-    # (c) dissociation: the amygdala remains far above the collapsed control ROIs.
-    assert amy_r > ctl_r, (
-        f"under the alternative model the amygdala ({amy_r:.2f}) must remain above the collapsed "
-        f"control ROIs ({ctl_r:.2f}); the dissociation is the emotion-specificity result.")
+    # Compare paired signed coefficients, not the ordering of incomparable regional t values.
+    changes = {}
+    for region, (std_col, alt_col, _) in cols.items():
+        assert std_col is not None and alt_col is not None
+        changes[region] = [sub[i][region][alt_col] - sub[i][region][std_col] for i in ref["ids"]]
+    expected = {region: paired_summary(v) for region, v in changes.items()}
+    expected["amygdala_minus_control_change"] = paired_summary(
+        [a - c for a, c in zip(changes["amygdala"], changes["control"])])
+    actual = _stats()["model_sensitivity"]
+    for name, summary in expected.items():
+        validate_summary(actual[name], summary)
 
 
 def test_reaction_time_premise_numeric():
@@ -218,33 +185,5 @@ def test_reaction_time_premise_numeric():
 
 
 # ------------------------------------------------------------------ secondary prose signal
-def test_findings_engage_confound_and_avoid_overclaim():
-    """SECONDARY (numbers carry the grade). findings.md must state that the broad cognitive-control
-    'emotion network' is a reaction-time / time-on-task confound while the amygdala/fusiform
-    response is emotion-specific, and must not report the whole broad network as a genuine emotion
-    network."""
-    text = _findings()
-    RT = r"(?:reaction[- ]?time|response[- ]?time|\brt\b|time[- ]?on[- ]?task|time on task|difficulty|slower|took longer|duration|modelling|model)"
-    COLL = (r"(?:collaps\w*|disappear\w*|vanish\w*|attenuat\w*|no longer|not signif\w*|n\.?s\.|"
-            r"reverse\w*|driven by|artif\w*|confound\w*|explain\w*|not emotion|non-?specific|"
-            r"time[- ]?on[- ]?task|does not survive|drops?|reduc\w* to)")
-    SURV = r"(?:amygdal\w*|fusiform|face)"
-    engages = re.search(rf"{RT}[^.\n]{{0,80}}{COLL}|{COLL}[^.\n]{{0,80}}{RT}", text)
-    engages_survive = re.search(rf"{SURV}[^.\n]{{0,90}}(?:surviv\w*|robust|unchanged|remain\w*|"
-                                rf"still signif\w*|emotion-?specific|genuine|specific)", text)
-    assert engages, (
-        "findings.md does not report that the broad cognitive-control 'emotion' activation is a "
-        "reaction-time / time-on-task confound (it collapses when trial duration/RT is modelled).")
-    assert engages_survive, (
-        "findings.md does not report that the amygdala/fusiform face response survives reaction-time "
-        "control (the emotion-specific result).")
-    overclaim = re.search(
-        r"(?:distributed|broad|widespread|whole|entire|fronto-?parietal|cognitive-?control|salience)"
-        r"[^.\n]{0,40}emotion[- ]?(?:processing )?network[^.\n]{0,40}(?:genuine|specific|robust|real|reflect)",
-        text)
-    disclaim = re.search(r"(?:not|isn.t|is not|rather than|artif\w*|confound\w*|time[- ]?on[- ]?task)"
-                         r"[^.\n]{0,60}(?:emotion[- ]?(?:processing )?network|distributed|broad)", text)
-    assert not (overclaim and not disclaim), (
-        "findings.md over-claims the broad fronto-parietal/cognitive-control network as a genuine "
-        "emotion-processing network; on these data it is largely a reaction-time (time-on-task) "
-        "artifact.")
+def test_findings_are_present():
+    assert _findings().strip(), "findings.md must state measured sensitivity and limits"

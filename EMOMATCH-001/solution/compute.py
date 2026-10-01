@@ -1,38 +1,12 @@
-"""Reference solution for EMOMATCH-001.
-
-Reproduce the group-level activation for the emotion-matching (Hariri-style faces>shapes)
-task in the AOMIC PIOP2 dataset (OpenNeuro ds002790, Snoek et al. 2021), using the released
-fMRIPrep derivatives (volumetric MNI152NLin2009cAsym preproc BOLD), and report the
-emotion-processing network.
-
-The honest reference does what a mature analyst VOLUNTEERS but the task never asks: it checks
-whether the "emotion" activation is confounded by TIME ON TASK / reaction time. In the
-emotion-matching task the emotion (face) trials take much longer to respond to than the
-orientation-control (shape) trials (mean RT ~1.76 s vs ~1.24 s; emotion slower in ~97% of
-subjects, paired Cohen d ~1.8). Because the two conditions differ so strongly in response
-time / difficulty, a first-level model that does not account for the reaction-time difference
-(constant-duration epochs) attributes the extra "time on task" of the slower emotion trials to
-the emotion regressor. The result is widespread apparent "emotion" activation in domain-general
-cognitive-control / salience regions (fronto-parietal cortex, anterior insula, dorsal
-attention). That activation is a difficulty / time-on-task confound (Grinband et al. 2008;
-Yarkoni et al. 2009): when trial duration (reaction time) is modelled with a variable-epoch
-GLM, the cognitive-control "emotion" effect collapses (and anterior insula reverses), whereas
-the genuinely face/emotion-selective response in the AMYGDALA and FUSIFORM survives essentially
-unchanged. So the broad "emotion network" is largely a reaction-time artifact; only the
-amygdala/fusiform effect is emotion-specific.
-
-Validated numbers (ds002790 fMRIPrep emomatching, Schaefer-100/7-network cortex + amygdala &
-fusiform spheres, one-sample group t across the processed subjects; NAIVE = constant-epoch,
-RT = variable-epoch [duration = reaction time]):
-  PREMISE  emotion RT ~1.76 s vs control ~1.24 s (paired t ~9, d ~1.8; emotion slower ~97%)
-  AMYGDALA emotion>control  survives  (naive t ~ +5..9  ->  RT t ~ +5..9, |change| < ~10%)
-  FUSIFORM emotion>control  survives  (attenuates modestly, still strongly significant)
-  CONTROL/SALIENCE/DORSATTN network emotion>control  collapses under RT control
-           (naive: significantly positive  ->  RT: n.s. / reverses)
+"""AOMIC PIOP2 duration-model sensitivity case on fixed real emomatching data.
+Compare constant epochs with variable response-duration epochs and report signed
+coefficients and paired uncertainty. This is not an exact AOMIC Figure 7 analysis;
+model sensitivity alone establishes neither causal RT artifacts nor emotion specificity.
 """
 import csv
 import io
 import json
+import hashlib
 import os
 import sys
 import tempfile
@@ -54,7 +28,9 @@ FP = S3 + "/derivatives/fmriprep"
 TASK = "emomatching"
 TR = 2.0
 MAX_SUBJECTS = int(os.environ.get("EMOMATCH_MAX_SUBJECTS", "20"))
-MIN_SUBJECTS = 14
+MIN_SUBJECTS = 20
+PINNED_IDS = {"2", "3", "4", "5", "6", "7", "8", "9", "11", "12", "13", "14",
+              "15", "16", "17", "18", "19", "20", "21", "22"}
 
 # a priori face/emotion-selective ROIs (MNI mm) -- hypothesised to be emotion-specific and to
 # SURVIVE reaction-time control
@@ -70,6 +46,7 @@ CONTROL_ROIS = {
     "IPS_L": (-28, -58, 46), "IPS_R": (30, -56, 46),
 }
 ROIS = {**FACE_ROIS, **CONTROL_ROIS}
+FETCH_RECEIPTS = {}
 # nuisance regressors from the fMRIPrep confounds table
 CONF_COLS = ["trans_x", "trans_y", "trans_z", "rot_x", "rot_y", "rot_z",
              "a_comp_cor_00", "a_comp_cor_01", "a_comp_cor_02", "a_comp_cor_03",
@@ -87,12 +64,15 @@ def fail(reason):
 
 def fetch(url, dest=None, timeout=300, retries=5):
     if dest and os.path.exists(dest) and os.path.getsize(dest) > 0:
+        with open(dest, "rb") as cached:
+            FETCH_RECEIPTS[url] = hashlib.file_digest(cached, "sha256").hexdigest()
         return dest
     for a in range(retries):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "curl/8"})
             with urllib.request.urlopen(req, timeout=timeout) as r:
                 data = r.read()
+            FETCH_RECEIPTS[url] = hashlib.sha256(data).hexdigest()
             if dest:
                 with open(dest, "wb") as f:
                     f.write(data)
@@ -130,15 +110,11 @@ def has_task(sub):
         return False
 
 
-# pick the first MAX_SUBJECTS subjects that actually have an emomatching run
-usable = []
-for s in subjects:
-    if has_task(s):
-        usable.append(s)
-    if len(usable) >= MAX_SUBJECTS:
-        break
-if len(usable) < MIN_SUBJECTS:
-    fail(f"too few subjects with an {TASK} run ({len(usable)})")
+# Freeze the cohort; network availability must never choose the scientific sample.
+import re
+usable = [s for s in subjects if re.sub(r"\D", "", s).lstrip("0") in PINNED_IDS]
+if len(usable) != 20 or len(set(usable)) != 20 or MAX_SUBJECTS != 20:
+    fail("the exact pinned 20-participant cohort is required")
 
 # ---- atlases ----
 sch = datasets.fetch_atlas_schaefer_2018(n_rois=100, yeo_networks=7, resolution_mm=2)
@@ -252,7 +228,7 @@ with ThreadPoolExecutor(max_workers=3) as ex:
             results.append(r)
             sys.stderr.write(f"processed {r[0]}\n")
 
-if len(results) < MIN_SUBJECTS:
+if len(results) != 20:
     fail(f"only {len(results)} subjects processed")
 
 pids = [r[0] for r in results]
@@ -341,6 +317,18 @@ for nw in sorted(set(networks)):
     stats_out["networks"][nw] = {"n_parcels": len(idx),
                                  "naive": {"mean": mn_n, "t": t_n, "p": p_n},
                                  "rt_controlled": {"mean": mn_r, "t": t_r, "p": p_r}}
+def paired_summary(values):
+    x = np.asarray(values, dtype=float)
+    mean = float(x.mean())
+    h = float(stats.t.ppf(0.975, len(x) - 1) * x.std(ddof=1) / np.sqrt(len(x)))
+    return {"n": len(x), "mean_change": mean, "ci95": [mean - h, mean + h]}
+
+changes = {"amygdala": np.array([_amy(rt, i) - _amy(naive, i) for i in range(n)]),
+           "fusiform": np.array([_ffa(rt, i) - _ffa(naive, i) for i in range(n)]),
+           "control": np.array([_ctl(rt, i) - _ctl(naive, i) for i in range(n)])}
+stats_out["model_sensitivity"] = {name: paired_summary(v) for name, v in changes.items()}
+stats_out["model_sensitivity"]["amygdala_minus_control_change"] = paired_summary(
+    changes["amygdala"] - changes["control"])
 (OUT / "group_stats.json").write_text(json.dumps(stats_out, indent=2))
 
 (OUT / "run_metadata.json").write_text(json.dumps({
@@ -352,6 +340,8 @@ for nw in sorted(set(networks)):
     "first_level": "SPM HRF; nuisance = 6 motion + aCompCor(5) + WM + CSF; cosine high-pass 0.008 Hz",
     "contrast": "emotion > control (emotion-matching > orientation-matching)",
     "models": {"naive": "constant-duration epochs", "rt": "variable-duration epochs (=reaction time)"},
+    "subject_ids": pids, "source_sha256_by_url": FETCH_RECEIPTS,
+    "analysis_scope": "paper-motivated duration-model coefficient sensitivity, not exact Figure 7",
 }, indent=2))
 
 amy = stats_out["face_rois"]["amygdala"]
@@ -361,44 +351,20 @@ ains = stats_out["control_rois"]["aInsula_R"]
 dlpfc = stats_out["control_rois"]["dlPFC_L"]
 ips = stats_out["control_rois"]["IPS_R"]
 rtd = stats_out["reaction_time"]
-(OUT / "findings.md").write_text(f"""# EMOMATCH-001 — emotion-matching activation in AOMIC PIOP2 (ds002790)
+(OUT / "findings.md").write_text(f"""# AOMIC duration-model sensitivity
+Using {n} pinned participants, the amygdala coefficient was {amy['naive']['mean']:+.4f}
+under the constant-epoch model and {amy['rt_controlled']['mean']:+.4f} under the
+response-duration model. The control-region coefficient was {ctl['naive']['mean']:+.4f}
+and {ctl['rt_controlled']['mean']:+.4f}, respectively. Signed paired coefficient
+changes and their 95% participant-level intervals are in group_stats.json.
 
-## An apparent broad "emotion network" is present (naive model)
-Fitting a standard first-level GLM (emotion-matching > orientation-control, i.e. faces>shapes)
-with constant-duration epochs on the ds002790 fMRIPrep emomatching data ({n} subjects),
-the emotion contrast activates not only the **amygdala** (group t = {amy['naive']['t']:.2f}) and
-**fusiform** face region (t = {ffa['naive']['t']:.2f}), but also **domain-general cognitive-control
-/ salience / dorsal-attention** regions — anterior insula (t = {ains['naive']['t']:.2f}), dorsolateral
-prefrontal cortex (t = {dlpfc['naive']['t']:.2f}) and intraparietal sulcus (t = {ips['naive']['t']:.2f});
-mean over the cognitive-control ROIs t = {ctl['naive']['t']:.2f} (effect {ctl['naive']['mean']:+.3f}).
-Taken at face value this looks like a distributed "emotion network".
-
-## But the broad activation is a time-on-task (reaction-time) confound
-The emotion (face) trials take **far longer** to respond to than the orientation-control (shape)
-trials: mean RT {rtd['emotion_mean_s']:.2f} s vs {rtd['control_mean_s']:.2f} s (difference
-{rtd['difference_s']:.2f} s; emotion slower in {100*rtd['frac_emotion_slower']:.0f}% of subjects;
-paired t = {rtd['paired_t']:.1f}, Cohen d = {rtd['cohen_d']:.2f}). A constant-duration model does
-not absorb this difference, so the extra time-on-task of the slower emotion trials is attributed
-to the emotion regressor and shows up as "emotion" activation in exactly the domain-general
-regions that track task difficulty/effort (Grinband et al. 2008; Yarkoni et al. 2009).
-
-Re-fitting with a **variable-epoch model (trial duration = reaction time)** dissociates the two:
-
-* the **cognitive-control** ROIs **collapse**: mean t {ctl['naive']['t']:.2f} ->
-  {ctl['rt_controlled']['t']:.2f} (effect {ctl['naive']['mean']:+.3f} -> {ctl['rt_controlled']['mean']:+.3f});
-  e.g. IPS t {ips['naive']['t']:.2f} -> {ips['rt_controlled']['t']:.2f}, dlPFC t {dlpfc['naive']['t']:.2f} ->
-  {dlpfc['rt_controlled']['t']:.2f}, and the anterior-insula effect **reverses**
-  (t {ains['naive']['t']:.2f} -> {ains['rt_controlled']['t']:.2f}).
-* the **amygdala** effect is essentially unchanged (t {amy['naive']['t']:.2f} ->
-  {amy['rt_controlled']['t']:.2f}; {amy['pct_change']:+.0f}% change) and the **fusiform**
-  face effect survives (t {ffa['naive']['t']:.2f} -> {ffa['rt_controlled']['t']:.2f}).
-
-## Conclusion
-The amygdala/fusiform response is a genuine, emotion/face-selective effect that is robust to
-reaction-time control. The broader fronto-parietal / insular "emotion network", however, is
-**largely a time-on-task (reaction-time) artifact** — emotion trials simply take longer — and it
-does not survive modelling the reaction-time difference. It should not be reported as an
-emotion-specific network on these data.
+Mean emotion/control reaction times were {rtd['emotion_mean_s']:.3f} and
+{rtd['control_mean_s']:.3f} seconds. These quantities describe sensitivity to
+the chosen duration parameterization. Different regional t values are not a
+region-by-condition interaction, and the models have different regressor scaling.
+They do not identify an RT-caused artifact, an emotion-specific mechanism, or
+a causal neural response. This is a paper-motivated adaptation, not a reproduction
+of the published Figure 7 activation or an established confound-removal method.
 """)
 print(f"OK n={n}: amygdala t {amy['naive']['t']:.2f}->{amy['rt_controlled']['t']:.2f} ; "
       f"control-ROIs t {ctl['naive']['t']:.2f}->{ctl['rt_controlled']['t']:.2f} ; "
