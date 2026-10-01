@@ -172,39 +172,15 @@ def main():
 
     per = "\n".join(f"- {r['subject']}: V_T = {r['VT']:.3f} (MA1 {r['VT_MA1']:.3f})"
                     for r in rows)
-    (OUT / "findings.md").write_text(f"""# Cortical V_T of [18F]SF51 (invasive arterial-input kinetics)
+    (OUT / "findings.md").write_text(f"""# SF51 cortical V_T method case
 
-## Result
-Total distribution volume V_T of the TSPO radioligand [18F]SF51 in cerebral cortex,
-estimated per participant with the Logan graphical method (Ichise MA1 as cross-check):
-
-{per}
-
-Cohort-average cortical **V_T = {mean_vt:.3f} mL.cm-3** (n = {len(rows)}), spanning an
-~{ratio:.1f}x range across participants. This reproduces the source study's headline that
-the tracer's brain V_T is **notably low (< 1)** -- [18F]SF51 binds poorly in the human
-brain. The ~{ratio:.1f}x spread in cortical V_T across the seven participants is reported
-descriptively; with n = 7 and no genotype information in the provided data, this analysis
-does not attribute that between-participant spread to the TSPO rs6971 polymorphism.
-
-## Model input
-V_T is defined relative to the concentration in **arterial plasma of the intact parent
-radioligand at equilibrium**. The blood recording provides total plasma radioactivity, the
-HPLC parent (metabolite) fraction, and whole-blood radioactivity. The model input is
-therefore the **metabolite-corrected arterial plasma**, `plasma x parent_fraction`, placed
-on the **same decay footing as the tissue TACs** (the images are decay-corrected to
-injection; the arterial samples, recorded at draw time, are decay-corrected to injection
-with the 18F half-life). Using whole-blood, or plasma without the parent-fraction
-correction, would define a different (biased) V_T -- with this tracer those choices shift
-the cohort mean by roughly -40% and -35% respectively, so the input choice, not the
-estimator, dominates.
-
-## Estimator
-Logan and Ichise MA1 agree to ~1% on these cortical TACs (V_T is convention-invariant
-across graphical estimators once the input is correct); an unconstrained 2-tissue
-compartment fit is poorly identified for such a low-binding tracer and is not the robust
-choice here. V_T is stable across the graphical linear-phase start (t* 20-60 min), i.e.
-the estimate is at equilibrium over the full ~120-min acquisition.
+Per-subject Logan/MA1 estimates are retained. Mean corticalV_T={mean_vt:.3f}mL/cm³
+across{len(rows)}participants. Input is arterial plasma×parent fraction with
+source-documented decay footing consistent with PET TACs. Sampling times alone
+do not justify a further activity correction. This secondary model/input method
+case does not establish genotype effects, original-paper exact findings, or
+poor binding from an unverified low V_T. Missing decay evidence is a precondition
+failure, not an invitation to choose a secret estimator.
 """)
     print("OK cortex VT mean =", round(mean_vt, 3), "ratio =", round(ratio, 2))
 
