@@ -136,6 +136,7 @@ def main():
     rng = np.random.default_rng(SEED)
 
     rows = []
+    selection_evidence = {}
     fwd, rev, ind, rnd = [], [], [], []
     ff, fs = [], []
     overlaps, spearmans, iccs = [], [], []
@@ -147,6 +148,10 @@ def main():
         others = np.delete(np.arange(S), i)
         si = np.argsort(zf[others].mean(0))[-k:]   # independent (LOSO) strong-edge set
         ridx = rng.choice(E, size=k, replace=False)
+        selection_evidence[str(sub_ids[i])] = {
+            "training_subject_ids": [str(sub_ids[j]) for j in others],
+            "forward_edge_indices": sf.tolist(), "reverse_edge_indices": sr.tolist(),
+            "independent_edge_indices": si.tolist(), "random_edge_indices": ridx.tolist()}
 
         f_first, f_second = float(a1[sf].mean()), float(a2[sf].mean())
         d_fwd = f_second - f_first
@@ -161,6 +166,7 @@ def main():
         spearmans.append(float(stats.spearmanr(a1, a2).statistic))
         iccs.append(float(np.corrcoef(a1, a2)[0, 1]))
 
+    (OUT / "selection_evidence.json").write_text(json.dumps(selection_evidence))
     # ---- required per-subject CSV --------------------------------------------------------
     with open(OUT / "stability.csv", "w", encoding="utf-8") as fh:
         fh.write("subject_id,n_edges,forward_first_half,forward_second_half,"
@@ -206,18 +212,12 @@ def main():
         "reliability": {
             "top_decile_set_overlap_first_vs_second": float(np.mean(overlaps)),
             "edge_rank_spearman_first_vs_second": float(np.mean(spearmans)),
-            "edge_icc_first_vs_second": float(np.mean(iccs)),
+            "edge_pearson_first_vs_second": float(np.mean(iccs)),
         },
-        "conclusion": (
-            "The naive top-decile (forward-selected) second-minus-first contrast is "
-            "SELECTION-CONTAMINATED: it is biased downward by a negative selection component "
-            "and cannot by itself establish that the strongest connections genuinely weaken "
-            "across the run. Selecting on the second half instead flips the sign of the "
-            "'effect', and a selection-free strong-edge set (LOSO-independent) and a random "
-            "set both change by ~0 (equivalent to zero within the prespecified +/-0.05 z "
-            "margin). The honest within-run reliability of the strong edges is moderate "
-            "(top-decile set overlap ~0.42, edge rank Spearman ~0.48)."
-        ),
+        "conclusion": ("Selection-dependent contrasts do not by themselves establish temporal weakening. "
+                       + ("The independent estimate meets the prespecified0.05z equivalence criterion."
+                          if equivalent else
+                          "Equivalence is not established at the prespecified0.05z margin.")),
         "preprocessing": {
             "pipeline": "cpac", "band_pass_filtering": True, "global_signal_regression": False,
             "quality_checked": True,
@@ -231,62 +231,15 @@ def main():
     fmean = schemes["forward"]["delta_mean"]; rmean = schemes["reverse"]["delta_mean"]
     imean = schemes["independent"]["delta_mean"]; nmean = schemes["random"]["delta_mean"]
     ilo, ihi = schemes["independent"]["ci95_lo"], schemes["independent"]["ci95_hi"]
-    findings = f"""# Within-run change of the strongest functional connections (FCSTAB-001)
-
-**Cohort.** The first {S} quality-checked ABIDE `cpac` subjects (Craddock-200 pre-extracted
-time series, band-pass, no GSR) are **all from a single site (PITT), eyes closed**, each a
-single **~{summary['cohort']['run_minutes_approx']:.1f}-minute** run ({T} TRs at TR=1.5 s) -- a
-short, single-site, eyes-closed acquisition, not a long or eyes-open one. Each run is split
-into equal contiguous first/second halves; edges are Fisher-z correlations; the "strongest
-connections" are the top decile of edges.
-
-## The naive (forward-selected) contrast
-
-Ranking edges by their **first-half** value and re-measuring on the second half, the
-top-decile mean falls from **z = {g_ff:.3f}** to **z = {g_fs:.3f}**, a change of
-**{fmean:+.3f}** ({pct:+.1f}%). Taken at face value this reads as the dominant connections
-weakening across the run.
-
-## Why that contrast cannot establish weakening: it is selection-contaminated
-
-The edges were **selected because they were extreme on the first-half measurement**, and one
-half of a resting run is a noisy estimate. The first-half mean of the selected set is
-therefore inflated by first-half noise, so `second - first` carries a **negative selection
-component** on top of any genuine early-to-late change. The observed decline is a *lower
-bound corrupted by selection*, not an estimate of the true effect. Three complementary
-selections make the contamination explicit (per-subject signed Fisher-z change, mean +/- 95% CI):
-
-- **Reverse-half selection** (top decile chosen on the **second** half): change
-  **{rmean:+.3f}** -- the *opposite sign*, similar magnitude. The sign of the "effect" is set
-  by which half you select on, which a genuine temporal process could not do.
-- **Independent (LOSO) strong-edge set** (the strong edges defined from the **other 39
-  subjects**, so selection is independent of this subject's two halves): change
-  **{imean:+.3f}** (95% CI [{ilo:+.3f}, {ihi:+.3f}]) -- essentially zero. This is the
-  selection-free estimate of the genuine early-to-late change for strong edges.
-- **Size-matched random edges**: change **{nmean:+.3f}** -- also essentially zero.
-
-The average of the forward and reverse changes (selection bias cancels) is
-**{avg_fr['delta_mean']:+.3f}**. A prespecified equivalence test (TOST, margin
-+/-{EQUIV_MARGIN} z) on the selection-free estimate is **{'significant' if equivalent else 'not significant'}**
-(p = {tost_p:.3f}), i.e. the genuine within-run change of the strong edges is statistically
-equivalent to zero within that margin.
-
-## Reliability (the actual within-run stability statement)
-
-If the question is reliability, the honest metrics are edge-set/rank agreement, not the
-selected-set decline: the top-decile edge **set overlap** between halves is
-**{np.mean(overlaps):.2f}**, edge **rank Spearman** {np.mean(spearmans):.2f}, edge
-**ICC {np.mean(iccs):.2f}** -- moderate within-run reliability.
-
-## Conclusion
-
-The naive top-decile decline of **{fmean:+.3f}** is **selection-contaminated and cannot by
-itself establish weakening** of the strongest connections. Selecting on the opposite half
-flips the sign, and the selection-free (independent/random) estimates are equivalent to zero
-within the prespecified +/-{EQUIV_MARGIN} z margin. Reporting the forward contrast as a real
-within-run weakening of "backbone" edges would be a selection artefact; the warranted reading
-is moderate edge-level reliability with no established genuine early-to-late weakening.
-"""
+    findings = (
+        f"# Within-run selected-edge sensitivity\n\n"
+        f"Forward/reverse/independent/random signed changes: {fmean:+.5f}/{rmean:+.5f}/"
+        f"{imean:+.5f}/{nmean:+.5f}. Independent95%CI=[{ilo:+.5f},{ihi:+.5f}]. "
+        f"TOST p={tost_p:.5g}, equivalent_within0.05z={equivalent}. "
+        f"Edge Pearson between halves={np.mean(iccs):.4f} (not ICC). "
+        "Selected-set contrasts are selection-dependent. Their reversal is not proof that "
+        "no temporal process exists; independent estimates and uncertainty carry that assessment. "
+        "Non-significance alone does not establish stability or equivalence.\n")
     (OUT / "findings.md").write_text(findings, encoding="utf-8")
     print(f"[FCSTAB-001] S={S} E={E} k={k} | forward {fmean:+.3f} reverse {rmean:+.3f} "
           f"independent {imean:+.3f} random {nmean:+.3f} | TOST p={tost_p:.3f} equiv={equivalent}")

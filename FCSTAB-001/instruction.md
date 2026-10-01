@@ -78,6 +78,20 @@ across the run** — reporting only what your analysis actually supports.
 
 ## Output Location
 
+## Required selection evidence
+
+Save selection_evidence.json keyed by subject_id. For every participant include
+training_subject_ids for the independent (LOSO or cross-fitted) edge selection and
+forward_edge_indices, reverse_edge_indices, independent_edge_indices, random_edge_indices
+into the common-ROI upper-triangle edge order. Training subjects must exclude the held-out
+participant and include at least10 distinct cohort subjects. Select the top10% of mean
+full-run Fisher-z edges in that training sample. Random controls use the declared NumPy
+default_rng seed, drawing size-matched edges without replacement in CSV row order.
+The verifier recomputes all signed changes, participant-level CIs/t/p,0.05z TOST and
+edge-set/Spearman/Pearson reliability from pinned source signals. Pearson is not ICC.
+Report equivalence conditionally from the test; no near-zero answer is a grading target.
+
+
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs

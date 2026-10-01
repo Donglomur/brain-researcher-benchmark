@@ -144,153 +144,28 @@ def test_reverse_per_subject_matches_reference():
         f"(~+0.235), the opposite sign of the forward decline.")
 
 
-def test_independent_and_random_present_and_nonconstant():
-    """The selection-free schemes must actually be computed (present, real spread)."""
-    header, rows = load_submitted()
-    cols = resolve_columns(header)
-    for key in ("independent_delta", "random_delta"):
-        col = cols[key]
-        assert col, (
-            f"stability.csv has no {key} column. The task requires a selection-free strong-edge "
-            f"set (independently / LOSO / cross-fitted selected) and a size-matched random "
-            f"control, each as a per-subject signed change.")
-        smap = submitted_map(rows, col)
-        assert coverage(smap, REF["ids"]) >= COVER, f"{key}: too few pinned subjects present"
-        assert nonconstant(smap, EPS), f"{key} is constant across subjects -- looks fabricated"
+def test_all_selection_evidence_and_uncertainty():
+    import csv
+    import numpy as np
+    from pathlib import Path
+    from selection_contract import check_source,check_selections
+    path=Path("/app/data/abide_cc200_pitt40.npz")
+    if not path.exists():
+        path=Path(__file__).resolve().parents[1]/"environment/data/abide_cc200_pitt40.npz"
+    z1,z2,zf,ids=check_source(path)
+    rows=list(csv.DictReader((OUT/"stability.csv").open()))
+    evidence=json.loads((OUT/"selection_evidence.json").read_text())
+    report=_summary()
+    expected,p,equivalent,reliability=check_selections(z1,z2,zf,ids,evidence,rows,
+                                                    seed=report["preprocessing"]["seed"])
+    for scheme,values in expected.items():
+        for key,value in values.items():
+            assert np.isclose(report["selection_schemes"][scheme][key],value,atol=1e-5,rtol=1e-5)
+    assert report["equivalence"]["margin_z"]==.05
+    assert np.isclose(report["equivalence"]["tost_p"],p,atol=1e-6)
+    assert report["equivalence"]["equivalent_within_margin"] is equivalent
+    for key,value in reliability.items():
+        assert np.isclose(report["reliability"][key],value,atol=1e-6)
 
-
-# =============================================================================================
-# Pillar 2 -- recompute the group summaries FROM the submitted rows
-# =============================================================================================
-def test_group_summaries_recompute_from_rows():
-    """PILLAR 2: the reported group means must equal what the submitted rows actually produce
-    AND the held-out reference. A CSV whose rows don't generate the reported summary fails."""
-    header, rows = load_submitted()
-    cols = resolve_columns(header)
-    summ = _summary()
-    reported = reported_scheme_means(summ)
-
-    recompute = {}
-    for name, key in (("forward", "forward_delta"), ("reverse", "reverse_delta"),
-                      ("independent", "independent_delta"), ("random", "random_delta")):
-        col = cols[key]
-        assert col, f"cannot recompute: missing {key} column"
-        recompute[name] = group_mean(submitted_map(rows, col))
-
-    ref_mean = {"forward": ST["forward_mean"], "reverse": ST["reverse_mean"],
-                "random": ST["random_mean"]}
-    # (a) rows reproduce the held-out reference for the PINNED schemes
-    for name in ("forward", "reverse", "random"):
-        assert abs(recompute[name] - ref_mean[name]) <= GROUP_TOL, (
-            f"group mean of {name}_delta recomputed from the submitted rows is "
-            f"{recompute[name]:+.3f}, not the reference {ref_mean[name]:+.3f} "
-            f"(tol {GROUP_TOL}) -- the per-subject rows are not the real analysis")
-    # (b) the selection-free means are ~0 (recomputed from rows)
-    for name in ("independent", "random"):
-        assert abs(recompute[name]) <= NEAR, (
-            f"group mean of {name}_delta recomputed from rows is {recompute[name]:+.3f}; the "
-            f"selection-free change must be ~0 (|mean| <= {NEAR})")
-    # (c) reported summary is CONSISTENT with the rows (no inconsistent hand-written summary)
-    assert reported, ("summary.json must report per-scheme delta means under "
-                      "selection_schemes.{forward,reverse,independent,random}.delta_mean")
-    for name, val in reported.items():
-        if name in recompute:
-            assert abs(val - recompute[name]) <= CONSIST, (
-                f"summary.json reports {name} delta_mean = {val:+.3f} but the submitted rows "
-                f"give {recompute[name]:+.3f} (tol {CONSIST}) -- summary inconsistent with the CSV")
-
-
-# =============================================================================================
-# Pillar 3 -- grade the scientific conclusion as NUMBERS
-# =============================================================================================
-def test_conclusion_numbers_show_selection_contamination():
-    """PILLAR 3 (numeric judgement): the discriminating scheme means must jointly establish
-    that the naive forward decline is selection-contaminated -- (i) a real forward decline,
-    (ii) an opposite-sign reverse effect (the sign follows the selection, not time), and
-    (iii) a selection-free (independent) estimate ~0 and far smaller than the naive decline.
-    Only an analysis that actually ran all four selections can report these."""
-    summ = _summary()
-    reported = reported_scheme_means(summ)
-    assert {"forward", "reverse", "independent", "random"} <= set(reported), (
-        f"summary.json must report all four selection-scheme delta means; got {sorted(reported)}")
-    f, r, ind, rnd = (reported["forward"], reported["reverse"],
-                      reported["independent"], reported["random"])
-
-    # (i) real forward decline, matching the reference naive contrast
-    assert f < -0.10 and abs(f - ST["forward_mean"]) <= GROUP_TOL, (
-        f"forward delta_mean {f:+.3f} is not the real naive top-decile decline "
-        f"(~{ST['forward_mean']:+.3f})")
-    # (ii) reverse selection flips the sign (the "effect" is set by the selected half)
-    assert r > 0.10 and (f < 0 < r), (
-        f"reverse delta_mean {r:+.3f} does not show the sign flip vs forward {f:+.3f}; selecting "
-        f"the strongest edges on the SECOND half must give a positive change of similar "
-        f"magnitude -- proof the decline is a selection artefact, not a temporal process")
-    assert abs(r - ST["reverse_mean"]) <= 0.06, (
-        f"reverse delta_mean {r:+.3f} is far from the reference {ST['reverse_mean']:+.3f}")
-    # (iii) the selection-free estimate is ~0 and far below the naive magnitude
-    assert abs(ind) <= NEAR, (
-        f"independent (selection-free) delta_mean {ind:+.3f} is not ~0 (|mean| <= {NEAR}); the "
-        f"LOSO/independently-selected strong-edge change is the genuine early-to-late estimate")
-    assert abs(ind) < 0.5 * abs(f), (
-        f"independent delta_mean {ind:+.3f} is not markedly smaller than the naive forward "
-        f"decline {f:+.3f}; the selection-free change must be far closer to zero")
-    assert abs(rnd) <= NEAR, f"random-control delta_mean {rnd:+.3f} is not ~0 (|mean| <= {NEAR})"
-
-
-# --- v2 negation-aware prose guard (SECONDARY: the numbers above carry the grade) -----------
-_NEG = (r"(?:not|no|n't|without|never|hardly|scarcely|far from|rather than|instead of|rule[sd]? out|"
-        r"ruled out|cannot|can't|isn't|aren't|wasn't|weren't|doesn't|don't|didn't|fails? to|"
-        r"unable to|unlikely to|does not|do not)")
-
-
-def _neg_before(text, start, window=48):
-    pre = text[max(0, start - window):start]
-    return re.search(r"(?<![a-z])" + _NEG + r"(?![a-z])[\s\w,'\"()-]{0,20}$", pre, re.I) is not None
-
-
-def _unnegated(text, pat, window=48):
-    for m in re.finditer(pat, text, re.I):
-        if _neg_before(text, m.start(), window):
-            continue
-        if re.search(r"\b" + _NEG + r"\b", m.group(0), re.I):
-            continue
-        return True
-    return False
-
-
-def test_findings_conclusion_not_genuine_weakening():
-    """SECONDARY prose guard (must not be the sole gate): findings.md must state the
-    selection-contamination reading and must NOT, un-negated, conclude a genuine within-run
-    weakening of the strongest connections."""
-    text = _findings()
-    assert text, "findings.md is missing or empty"
-
-    contamination = (
-        r"selection[-\s]?(?:contaminat|bias|effect|driven|artefact|artifact)"
-        r"|contaminated\s+by\s+select|biased\s+(?:down|downward|by\s+select)"
-        r"|cannot\s+(?:by\s+itself\s+)?establish|does\s+not\s+establish|not\s+establish\w*"
-        r"|regress\w*\s+to(?:wards?)?\s+(?:the\s+)?mean|reversion\s+to(?:wards?)?\s+(?:the\s+)?mean"
-        r"|opposite\s+sign|sign\s+(?:flip|revers|change)|flip\w*\s+(?:the\s+)?sign"
-        r"|select\w*\s+on\s+the\s+(?:second|other)\s+half"
-        r"|independent\w*\s+(?:select|set|strong|estimate)|loso|cross[-\s]?fit"
-        r"|selection[-\s]free|not\s+(?:a\s+)?(?:real|genuine|true)\s+(?:within-?run\s+)?"
-        r"(?:weakening|decline|change|effect)"
-    )
-    assert re.search(contamination, text, re.I), (
-        "findings.md does not state the selection-contamination reading (that the naive "
-        "top-decile decline cannot by itself establish weakening -- shown by the reverse-half "
-        "sign flip and the selection-free/independent estimate being ~0).")
-
-    genuine = (
-        r"(?:so|therefore|thus|hence|conclude\w*|we\s+(?:find|conclude|show))"
-        r"[^.\n]{0,80}(?:genuine\w*|real|true|truly|actually)\s+(?:within-?run\s+)?"
-        r"(?:weaken\w*|declin\w*|decreas\w*)"
-        r"|is\s+a\s+(?:genuine|real|true)\s+within-?run\s+(?:decline|weakening|decrease)"
-        r"|connections?\s+(?:genuinely|really|truly)\s+weaken"
-        r"|strongest\s+connections?\s+(?:genuinely|really|truly|do)\s+weaken"
-    )
-    assert not _unnegated(text, genuine), (
-        "findings.md concludes a GENUINE within-run weakening of the strongest connections. "
-        "The naive top-decile decline is selection-contaminated (the sign flips under "
-        "reverse-half selection and the selection-free estimate is ~0); it cannot by itself "
-        "establish weakening.")
+def test_findings_present():
+    assert _findings().strip()
