@@ -18,3 +18,13 @@ def test_motion_adjustment_not_forced_to_attenuate():
     assert abs(adjusted)>abs(raw)
 def test_public_version_and_method_case():
     assert m.VERSION=="devconn-child-motion-id-v2"
+
+def test_actual_input_membership_and_pairing():
+    ids=[f"sub-pixar{i:03d}" for i in range(1,156)]
+    funcs=[i+"_bold.nii.gz" for i in ids]
+    confounds=[i+"_confounds.tsv" for i in ids]
+    assert m.validate_input_identity(funcs,confounds,list(reversed(ids)))==ids
+    with pytest.raises(AssertionError,match="BOLD/confounds"):
+        m.validate_input_identity(funcs,list(reversed(confounds)),ids)
+    with pytest.raises(AssertionError):
+        m.validate_input_identity(funcs[:-1],confounds[:-1],ids[:-1])

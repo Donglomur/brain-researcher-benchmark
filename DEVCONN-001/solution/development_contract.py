@@ -1,8 +1,22 @@
 """Child-only movie-data association, motion sensitivity and participant-bootstrap CI."""
 import numpy as np
 from scipy import stats
+import re
+from pathlib import Path
 
 VERSION="devconn-child-motion-id-v2"
+
+def validate_input_identity(funcs,confounds,phenotype_ids):
+    def sid(path):
+        match=re.search(r"(sub-pixar\d+)",Path(path).name)
+        assert match is not None,"unrecognized subject filename"
+        return match.group(1)
+    ids=[sid(p) for p in funcs]
+    ph=list(phenotype_ids)
+    assert len(ids)==len(set(ids))==len(confounds)==len(ph)==len(set(ph))==155
+    assert set(ids)==set(ph),"BOLD/phenotype membership mismatch"
+    assert ids==[sid(p) for p in confounds],"BOLD/confounds subject mismatch"
+    return ids
 def partial_spearman(y,x,cov):
     def resid(a,b):
         design=np.c_[np.ones(len(b)),stats.rankdata(b)]
@@ -27,7 +41,7 @@ def estimate(age,values,fd):
             "motion_adjusted_ci95":np.quantile(adjusted,[.025,.975]).tolist(),"n":len(age)}
 
 def validate_report(data,report):
-    child=data[data.group=="child"]
+    child=data[data.group=="child"].sort_values("subject_id")
     adult=data[data.group=="adult"]
     assert len(child)==122 and len(adult)==33
     assert report["population"]=="children_only" and report["n_children"]==122 and report["n_adults"]==33

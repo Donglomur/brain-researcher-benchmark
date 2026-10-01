@@ -3,7 +3,7 @@ import json
 import os
 import re
 import hashlib
-from development_contract import estimate
+from development_contract import estimate, validate_input_identity
 import sys
 from pathlib import Path
 
@@ -41,11 +41,12 @@ except Exception as e:  # pragma: no cover
     fail(f"nilearn import failed: {e}")
 
 try:
-    dev = datasets.fetch_development_fmri()  # all subjects
+    dev = datasets.fetch_development_fmri(n_subjects=155)
     ph = dev.phenotypic
     ph = ph.reset_index(drop=True) if hasattr(ph,"reset_index") else pd.DataFrame(ph)
     assert ph.participant_id.is_unique
     ph=ph.set_index("participant_id")
+    validate_input_identity(dev.func,dev.confounds,ph.index)
     power = datasets.fetch_coords_power_2011()
 except Exception as e:
     fail(f"could not resolve ds000228 / Power atlas: {e}")
@@ -91,7 +92,7 @@ if len(df) != 155 or not df.subject_id.is_unique:
 df[["subject_id", "age", "group", "short_range", "long_range", "segregation", "mean_fd"]].to_csv(
     OUT / "connectivity.csv", index=False)
 
-kids = df[df.group == "child"]
+kids = df[df.group == "child"].sort_values("subject_id")
 adults = df[df.group == "adult"]
 
 # ---- the developmental effect (raw) ----
@@ -103,12 +104,11 @@ for col in ["short_range", "long_range", "segregation"]:
     age_effects["group_means"][col] = {"child": float(kids[col].mean()), "adult": float(adults[col].mean())}
 t_seg, p_seg = stats.ttest_ind(kids.segregation, adults.segregation, equal_var=False)
 age_effects["segregation_child_vs_adult"] = {"t": float(t_seg), "p": float(p_seg)}
-# maturational age effect across the full child+adult range (within the narrow child-only
-# age span the trend is flat; the local-to-distributed signal lives in the child->adult contrast)
+# Optional pooled association: exploratory, not the primary developmental estimand.
 r_all, p_all = stats.spearmanr(df.age, df.short_range)
 age_effects["maturational_age_short_all_subjects"] = {"r": float(r_all), "p": float(p_all)}
 
-# ---- the check the task never asks for: head motion ----
+# ---- public motion sensitivity and low-motion restriction ----
 mwu_p = float(stats.mannwhitneyu(kids.mean_fd, adults.mean_fd, alternative="greater")[1])
 pr, pp = partial_spearman(kids.short_range.values, kids.age.values, kids.mean_fd.values)
 m = df[df.mean_fd < FD_THRESHOLD]
@@ -144,4 +144,4 @@ age_effects["motion_control"] = {
     "summaries; this is not Fair's original resting/four-network reproduction. Covariate "
     "sensitivity and non-significance do not establish a motion-caused artifact or no developmental effect.\n")
 
-print(f"OK: seg child>adult p={p_seg:.3f}; matur age~short r_s={r_all:.3f} p={p_all:.3f} -> partial|FD r={pr:.3f} p={pp:.3f}; matched seg p={pm:.3f}")
+print(f"OK: child-only age~short r_s={age_effects[\'children_age_spearman\'][\'short_range\'][\'r\']:.3f}; partial|FD r={pr:.3f} p={pp:.3f}; low-motion restricted segregation p={pm:.3f}")

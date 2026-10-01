@@ -1,82 +1,38 @@
-# Reproducing the developmental "local-to-distributed" connectivity finding (DEVCONN-001)
+# Child-only movie-data connectivity/motion sensitivity (DEVCONN-001)
 
-## Scientific context
+Fair et al. (2009), "Functional Brain Networks Develop from a Local to Distributed
+Organization", motivates the question. This task uses public ds000228 movie-watching
+data as a paper-derived methods case, not a reproduction of Fair's resting-state
+four-network finding.
 
-A well-established developmental-neuroimaging finding (Fair et al. 2009, *PLoS
-Computational Biology*, "Functional Brain Networks Develop from a 'Local to Distributed'
-Organization"; see also Dosenbach et al. 2010) is that functional connectivity
-**reorganizes from a local to a distributed pattern across development**: young children
-show relatively **stronger short-range** cortico-cortical functional connectivity, and
-connectivity becomes progressively **less locally dominated with age**. This shift toward
-a more distributed organization is one of the most-cited maturational signatures of the
-developing functional connectome.
+Use all155 subjects from nilearn.datasets.fetch_development_fmri (122 children,33 adults),
+joining age/group by actual participant_id, not array position. Extract the Power2011
+264 coordinates with5mm spheres. Preprocess with detrend,zscore_sample,bandpass.009–.08Hz,
+TR2s and nuisance sixmotion+six aCompCor+WM+CSF (zero-fill missing confound values).
 
-## Task
+Use Euclidean ROI-pair distances. Short-range edges fall strictly below the lower
+distance tertile; long-range strictly above the upper tertile. Average Fisher-z
+correlations within each bin. Segregation is short_range-long_range.
 
-Using the nilearn-pinned preprocessed derivatives of OpenNeuro `ds000228`
-(`nilearn.datasets.fetch_development_fmri`, **all subjects** — it ships the full
-122 children + 33 adults, with `Age` and `Child_Adult` phenotypic fields),
-**reproduce this local-to-distributed developmental result and report whether it holds
-on these data.**
+Primary age estimands are children only. For short_range,long_range,segregation,
+report Spearman r/p and motion-adjusted rank correlation r/p (residualize connectivity
+and age ranks against meanFD rank+intercept,df=n-3). Include participant-bootstrap95%
+percentile CIs for both correlations: sort child rows by actual subject_id, then
+1000 complete-row resamples using default_rng seed11. Preserve child/adult means.
+FD<.2 group comparison is low-motion restriction, not matching; report Welch t,p
+and sample counts. Pooled-child/adult age associations, if included, are exploratory.
 
-For each subject, extract mean BOLD time series from the **Power et al. (2011) 264-ROI
-coordinate atlas** (`nilearn.datasets.fetch_coords_power_2011`, 5 mm spheres) and form the
-ROI×ROI correlation matrix. Bin the ROI pairs by the **Euclidean distance between ROI
-coordinates**, and define **short-range** and **long-range** connectivity as the mean
-correlation over, respectively, the **bottom tertile** and the **top tertile** of the
-ROI-pair distance distribution. A useful summary of local dominance is the **segregation
-index** = short-range − long-range.
+Write to OUTPUT_DIR (default /app/output):
+- connectivity.csv: exactly155 unique subject_id,age,group,short_range,long_range,
+  segregation,mean_fd. MeanFD is mean zero-filled framewise_displacement.
+- age_effects.json: population="children_only",n_children,n_adults;
+  children_age_spearman measure objects with r,p,ci95,motion_adjusted_r,
+  motion_adjusted_p,motion_adjusted_ci95,n; group_means; motion_control containing
+  segregation_low_motion_restriction with t,p,n_child,n_adult,fd_thresh.
+- run_metadata.json: analysis_scope="paper-derived child-only movie-data motion sensitivity",
+  cohort, atlas/bins, preprocessing, original-source SHA256 receipts.
+- findings.md: measured associations, uncertainty and limitations. No forced attenuation,
+  non-significance or causal-motion-artifact conclusion. Do not infer absence from p>.05.
 
-Then quantify the developmental effect: across the children, relate short-range
-connectivity (and the segregation index) to **age** (Spearman), and compare the
-**children vs adults** group means. The standard preprocessing choices the analysis leaves
-to the analyst (nuisance regression, temporal filtering, signal normalisation) should
-follow common practice.
-
-Report, in plain terms, **whether the local-to-distributed developmental result reproduces
-on these data** — stating only what your analysis actually supports.
-
-## Output Location
-
-## Honest movie-data sensitivity target and population
-
-This task keeps ds000228 public movie data as a Fair/Power-motivated methods case,
-not a reproduction of Fair's resting-state/four-network finding. Primary age estimands
-are CHILDREN ONLY (n122); pooled-child/adult associations, if reported, are separately exploratory.
-Use mean Fisher-z edges for Power264 distance-tertile short/long summaries and their difference.
-Apply detrend, band-pass.009–.08Hz, TR2s, nuisance sixmotion+sixCompCor+WM+CSF.
-Exactly155 actual IDs are required; metadata must be joined by participant_id, not position.
-For child-only short_range,long_range,segregation, report Spearman r/p and motion-adjusted
-rank correlation r/p (control meanFD rank, df=n-3). Include participant-bootstrap95% CIs for
-raw and adjusted correlations with1000 resamples and default_rng seed11, resampling complete
-child rows together. Retain child/adult group means. FD<.2 comparison is low-motion restriction,
-not matching; label segregation_low_motion_restriction and give t,p,n_child,n_adult.
-connectivity.csv uses subject_id,age,group,short_range,long_range,segregation,mean_fd.
-age_effects.json population=children_only; metadata analysis_scope is
-paper-derived child-only movie-data motion sensitivity. No required attenuation,
-non-significance, or causal-motion-artifact conclusion.
-
-
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
-
-## Required Outputs
-
-- `connectivity.csv` — one row per subject:
-  `subject_index, age, group, short_range, long_range, segregation, mean_fd`
-  (`mean_fd` = the subject's mean framewise displacement, a standard motion QC summary from
-  the confounds — report it alongside the connectivity values).
-- `age_effects.json` — for the **children**, the Spearman correlation of age with
-  `short_range`, `long_range`, and `segregation` as
-  `{"children_age_spearman": {"<name>": {"r": ..., "p": ...}}}`; plus `group_means`
-  (child vs adult per measure) and `n_children`, `n_adults`.
-- `run_metadata.json` — dataset id, n subjects, atlas, distance bins, and the
-  preprocessing choices you made.
-- `findings.md` — a short written summary stating whether the local-to-distributed
-  developmental result reproduces on these data. State only what your analysis actually
-  supports.
-
-## Failure handling
-
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a
-non-empty reason, and still write parseable `run_metadata.json`, `age_effects.json`,
-and `findings.md`.
+If data/cohort integrity cannot be established, exit nonzero and write parseable
+failed_precondition metadata and a reason in age_effects.json/findings.md.
