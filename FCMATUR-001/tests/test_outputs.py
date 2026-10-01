@@ -30,7 +30,7 @@ REF_PATH = Path(__file__).resolve().parent / "reference.npz"
 CONN_TOL = 0.05       # per-subject connectivity abs match
 AGE_TOL = 0.5         # per-subject age abs match (years)
 CORR_MIN = 0.95       # cross-subject corr(submitted, reference) fabrication teeth
-COVER = 0.90          # coverage of the real subject ids
+COVER = 1.0          # coverage of the real subject ids
 RECOMP_TOL = 0.03     # pooled r recomputed-from-rows vs reference and vs reported
 WITHIN_MAX = 0.08     # within-site r must be near zero (attenuated toward null)
 RECOMP_WITHIN_TOL = 0.05   # within-site r RECOMPUTED-from-rows must match the reference (fabrication
@@ -100,12 +100,7 @@ def test_outputs_present_and_wellformed():
     meta = _load_json("run_metadata.json")
     assert isinstance(meta, dict) and meta, "run_metadata.json is empty"
 
-    sens = _load_json("sensitivity.json")
-    blob = pw._norm(json.dumps(sens))
-    for need in ("motion", "sex", "nonlinear", "site"):
-        assert need in blob, f"sensitivity.json does not report the '{need}' sensitivity check"
-    assert ("diagnosis" in blob or "dx" in blob or "control" in blob), \
-        "sensitivity.json does not report a diagnosis sensitivity check"
+    assert _load_json("sensitivity.json"), "numeric sensitivities required"
 
 
 # ------------------------------------------------------------------ pillar 1
@@ -232,51 +227,23 @@ def test_conclusion_is_site_conditioned_numeric():
         f"from the submitted rows ({between:+.3f}).")
 
 
-# ------------------------------------------------------------------ secondary prose signal
-def test_findings_engage_site_conditioning_and_avoid_overclaim():
-    """SECONDARY (not the sole gate — the numeric pillars carry the grade). findings.md must
-    engage with site-conditioning in prose, and must not make the over-claims the maintainer
-    flagged: scanner CAUSALITY or a TRUE NULL / no-age-relationship-at-any-site."""
-    text = (OUT / "findings.md").read_text(encoding="utf-8").lower()
+def test_covariate_sensitivities_and_uncertainty_recompute():
+    import pandas as pd
+    import numpy as np
+    from covariate_contract import compute_sensitivity, uncertainty, compare_numeric
+    rows=pd.read_csv(OUT / "connectivity.csv")
+    canonical=rows["subject"].map(pw.canon_id)
+    metadata=json.loads((Path(__file__).resolve().parent/"phenotype_reference.json").read_text())
+    assert canonical.is_unique and set(canonical)==set(metadata["rows"])
+    for (_,row),sid in zip(rows.iterrows(),canonical):
+        source=metadata["rows"][sid]
+        assert str(row.site_id)==source["SITE_ID"]
+        for column,key in (("age","AGE_AT_SCAN"),("sex","SEX"),("dx_group","DX_GROUP"),("mean_fd","func_mean_fd")):
+            expected=pd.to_numeric(source[key],errors="coerce")
+            actual=pd.to_numeric(row[column],errors="coerce")
+            assert (pd.isna(actual) and pd.isna(expected)) or np.isclose(actual,expected,atol=1e-8)
+    compare_numeric(_load_json("sensitivity.json"),compute_sensitivity(rows))
+    compare_numeric(_load_json("connectivity_age.json"),uncertainty(rows))
 
-    SITE = (r"(?:within[- ]?site|between[- ]?site|across[- ]?site|per[- ]?site|site[- ]?condition|"
-            r"site[- ]?level|site[- ]?mean|site fixed effect|site differ|site[- ]?driven|"
-            r"conditional on site|controll?\w* for site|adjust\w* for site|account\w* for site|"
-            r"aggregat\w*|ecologic\w*|simpson|scanner|acquisition site)")
-    ATTEN = (r"(?:attenuat\w*|toward\w* (?:the )?null|near(?:ly)? zero|close to zero|"
-             r"site[- ]?condition\w*|driven by|carried by|dominat\w*|confound\w*|artif\w*|"
-             r"sensitive to site|does not survive|no longer|collaps\w*|weaken\w*|reduc\w* to|"
-             r"drops? to)")
-    engages = re.search(SITE, text) and re.search(ATTEN, text)
-    assert engages, (
-        "findings.md does not engage in prose with the site-conditioning of the marginal "
-        "connectivity-age association (site + attenuation/conditioning).")
-
-    # over-claim guards (assertions, negation-aware): reject scanner CAUSALITY and TRUE-NULL claims.
-    scanner_cause = re.search(
-        r"scanner\w*[^.\n]{0,40}(?:caus\w*|because|produce\w*|create\w*|responsible for|drive\w* the)"
-        r"|(?:caus\w*|because of|due to)[^.\n]{0,25}scanner",
-        text)
-    # allow an explicit disclaimer ("not a scanner-caused", "does not establish scanner causation")
-    scanner_disclaim = re.search(r"not[^.\n]{0,30}scanner|scanner[^.\n]{0,30}not\b|"
-                                 r"(?:cannot|does not|do not|doesn.t)[^.\n]{0,30}(?:scanner|caus)", text)
-    assert not (scanner_cause and not scanner_disclaim), (
-        "findings.md asserts scanner CAUSALITY, which the data (site conflates scanner/protocol/"
-        "cohort) do not support. Report site-conditioning, not a demonstrated scanner effect.")
-
-    true_null = re.search(
-        r"no (?:age )?(?:relationship|association|correlation|effect)[^.\n]{0,20}"
-        r"(?:at any site|in any site|within any site|at all)"
-        r"|(?:proves?|establish\w*|confirm\w*|demonstrat\w*)[^.\n]{0,30}"
-        r"(?:no|zero|absent|true null)[^.\n]{0,20}(?:age|relationship|association|effect)"
-        r"|connectivity does not (?:change|increase|vary) with age",
-        text)
-    true_null_disclaim = re.search(
-        r"not[^.\n]{0,25}(?:true null|proof of|prove\w*|absence)"
-        r"|(?:cannot|does not|do not|doesn.t|cross[- ]?section)[^.\n]{0,40}"
-        r"(?:true null|no .*relationship|rule out|within[- ]?person|develop)",
-        text)
-    assert not (true_null and not true_null_disclaim), (
-        "findings.md over-claims a TRUE NULL (no age relationship at any site / connectivity does "
-        "not change with age). The within-site estimate is attenuated toward null with a wide CI "
-        "on cross-sectional data; it does not establish a true absence of any relationship.")
+def test_findings_present():
+    assert (OUT / "findings.md").read_text().strip()

@@ -94,7 +94,8 @@ def load_submitted(path, id_cols, conn_cols, age_cols, site_cols=None):
         if site_c is not None:
             raw_s = r.get(site_c, "")
             s = str(raw_s).strip() if raw_s is not None and str(raw_s).strip() != "" else None
-        submitted[cid] = (c, a, s)       # last wins on duplicate id
+        assert cid not in submitted, f"duplicate participant ID {cid}"
+        submitted[cid] = (c, a, s)
         conn_list.append(c)
         age_list.append(a)
         site_list.append(s)

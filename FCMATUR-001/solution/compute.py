@@ -314,6 +314,11 @@ df[["subject", "connectivity", "age", "site_id", "sex", "dx_group", "mean_fd"]].
     "p_value": p_pool,
 }, indent=2))
 
+samples = {"motion": w[np.isfinite(w.mean_fd)], "diagnosis": w[w.dx_group == 2],
+           "sex": w[np.isfinite(w.sex)], "nonlinear_age": df, "site_specific_slopes": w}
+for name, subset in samples.items():
+    if name in sens:
+        sens[name]["subject_ids"] = sorted(subset.subject.astype(str).tolist())
 (OUT / "sensitivity.json").write_text(json.dumps(sens, indent=2))
 
 (OUT / "run_metadata.json").write_text(json.dumps({

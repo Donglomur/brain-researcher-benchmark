@@ -82,6 +82,19 @@ any site or no within-person developmental change).
 
 ## Output Location
 
+## Numeric sensitivity and uncertainty contract
+
+connectivity.csv includes the exact unique pinned FILE_ID cohort, age, site_id, sex,
+dx_group, mean_fd and measured connectivity. Each sensitivity has numeric estimates,
+p/counts and subject_ids of its actual sample. Use motion/sex partial correlations with
+and without site fixed effects; typical-control restriction; pooled standardized-age
+quadratic added-term F test; per-site Pearson correlations/age slopes with minimum5subjects.
+All primary levels require analytic Fisher-z95% intervals and p values using actual
+units: participants for pooled/within-site, sites for between-site. Within-site
+partial-correlation df=n-number_nonintercept_site_dummies-2. Missing covariates use
+reported complete-case samples, never guessed values.
+
+
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
