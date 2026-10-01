@@ -52,6 +52,7 @@ from pathlib import Path
 
 import numpy as np
 from cache_contract import require_pairs
+from lateralization_contract import equal_field_amplitudes
 
 warnings.filterwarnings("ignore")
 
@@ -163,12 +164,10 @@ try:
     for s in SUBJECTS:
         L, R, nl, nr = subject_evokeds(s)
         # contralateral: PO8 for left-field target, PO7 for right-field target
-        contra = 0.5 * (win_mean(L, "PO8") + win_mean(R, "PO7"))
-        ipsi = 0.5 * (win_mean(L, "PO7") + win_mean(R, "PO8"))
-        # naive fixed-electrode difference, pooled across visual fields (for reference)
-        po8 = 0.5 * (win_mean(L, "PO8") + win_mean(R, "PO8"))
-        po7 = 0.5 * (win_mean(L, "PO7") + win_mean(R, "PO7"))
-        per_subject.append((s, nl, nr, contra, ipsi, contra - ipsi, po8 - po7))
+        contra, ipsi, fixed_difference = equal_field_amplitudes(
+            win_mean(L, "PO7"), win_mean(L, "PO8"),
+            win_mean(R, "PO7"), win_mean(R, "PO8"))
+        per_subject.append((s, nl, nr, contra, ipsi, contra - ipsi, fixed_difference))
     n2pc_list = [r[5] for r in per_subject]
     contra = float(np.mean([r[3] for r in per_subject]))
     ipsi = float(np.mean([r[4] for r in per_subject]))
@@ -217,6 +216,8 @@ with open(OUT / "per_subject.csv", "w", newline="") as f:
     "reference": "average (30 scalp electrodes; EOG excluded)",
     "bandpass_hz": [L_FREQ, H_FREQ],
     "baseline_ms": [int(BASELINE[0] * 1000), int(BASELINE[1] * 1000)],
+    "epoch_bounds_ms": [-200, 450],
+    "target_field_weights": {"left": 0.5, "right": 0.5},
     "measurement_window_ms": [200, 300],
     "measure": "mean contralateral-minus-ipsilateral amplitude at PO7/PO8, grand-averaged",
     "target_side_from": "tens digit of the 3-digit stimulus code (1=left, 2=right)",

@@ -75,12 +75,19 @@ codes with `mne.events_from_annotations`.
   **average reference** across those 30 electrodes.
 - Apply a **0.1-30 Hz band-pass** filter.
 - Epoch around each stimulus event, apply a **pre-event baseline** (the 200 ms before the
-  event), and average.
+  event), and average. The exact epoch is **-0.200 through +0.450 seconds**, inclusive
+  of those MNE epoch endpoints; baseline is `(-0.200, 0)`.
 - Form the **contralateral** and **ipsilateral** waveforms at the **PO7/PO8** pair, take
   their difference, and measure the **mean amplitude in the 200-300 ms post-stimulus
   window**, for each subject.
 - Report the **grand average** of that contralateral-minus-ipsilateral amplitude over the
   subjects, in **microvolts**.
+  First average trials separately for target-left and target-right. Within each subject,
+  give the two visual fields **equal weight (0.5 each)**, irrespective of retained trial
+  counts: contra = 0.5*(left-target PO8 + right-target PO7), ipsi =
+  0.5*(left-target PO7 + right-target PO8). The pooled fixed-electrode comparison also
+  uses equal field weights. Then give all 12 subjects equal weight. Do not replace
+  this endpoint with trial-count-weighted field or subject pooling.
 
 ## Output Location
 

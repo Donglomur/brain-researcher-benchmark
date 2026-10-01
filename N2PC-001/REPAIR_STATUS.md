@@ -13,3 +13,5 @@ Still pending: independently pinned expected raw-file digests; trial-count refer
 event/QC receipts; independent raw-data reference regeneration and in-container oracle.
 Existing amplitude reference was not modified. Authoring fixtures test the contract, not
 scientific validity or model difficulty. Harbor/Sol calibration has not been run.
+Equal target-left/right weighting and exact -0.200..+0.450-second epochs are now
+public; a tested production helper preserves that original numerical endpoint.

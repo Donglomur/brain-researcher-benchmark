@@ -31,3 +31,15 @@ def test_explicit_cache_requires_fdt(tmp_path):
         module.require_pairs(tmp_path, [1])
     (tmp_path / "sub-001_task-N2pc_eeg.fdt").write_bytes(b"data")
     assert len(module.require_pairs(tmp_path, [1])) == 2
+
+
+def test_equal_field_weights_do_not_follow_trial_counts():
+    path = Path(__file__).parents[1] / "solution" / "lateralization_contract.py"
+    spec = importlib.util.spec_from_file_location("lateralization_contract", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    # Left contra=-4, right contra=-1, ipsi=0; counts 2 versus 8 would give -1.6.
+    contra, ipsi, fixed = module.equal_field_amplitudes(0., -4., -1., 0.)
+    assert contra - ipsi == -2.5
+    assert contra - ipsi != (2 * -4. + 8 * -1.) / 10
+    assert fixed == -1.5
