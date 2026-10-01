@@ -75,9 +75,19 @@ def test_gradients_computed():
 # Pillar 0b -- ... and they are the REAL per-subject embeddings (not a shape-only fabrication)
 # =============================================================================================
 def test_persubject_gradients_match_reference():
-    ref_ps = REF.get("persubj")
-    assert ref_ps is not None, "reference.npz is missing the per-subject reference (ref_persubj)"
+    from pathlib import Path
+    import json
+    from gradient_contract import VERSION, validate_distinct_subject_embeddings
+    path = Path(__file__).resolve().parent / "reference_v2.npz"
+    assert path.exists(), "genuine ID-bound v2 subject reference required"
+    with np.load(path, allow_pickle=False) as reference:
+        assert str(reference["schema_version"]) == VERSION
+        expected_ids = [str(x) for x in reference["ref_ids"]]
+        ids = json.loads((OUT / "subject_ids.json").read_text())
+        assert len(ids) == len(set(ids)) == 20 and set(ids) == set(expected_ids)
+        ref_ps = reference["ref_aligned"][[expected_ids.index(sid) for sid in ids]]
     g = load_persubject()
+    validate_distinct_subject_embeddings(g)
     ov = per_subject_best_overlap(g, ref_ps)
     med = float(np.median(ov))
     frac = float(np.mean(ov >= PERSUBJ_MIN))

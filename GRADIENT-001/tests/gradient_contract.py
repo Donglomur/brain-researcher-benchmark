@@ -8,6 +8,15 @@ import numpy as np
 
 VERSION = "gradient-config-v2"
 
+def validate_distinct_subject_embeddings(aligned):
+    """A subject-ID list cannot authenticate one template repeated for many subjects."""
+    aligned = np.asarray(aligned, float)
+    assert aligned.ndim == 3 and np.isfinite(aligned).all()
+    for i in range(len(aligned)):
+        for j in range(i):
+            assert not np.allclose(aligned[i], aligned[j], rtol=1e-12, atol=1e-12), (
+                f"numerically identical subject embeddings: rows {j}/{i}")
+
 def validate_evidence(out, reference):
     assert str(reference["schema_version"]) == VERSION, "regenerate a v2 reference from genuine oracle outputs"
     ids = json.loads((out / "subject_ids.json").read_text())
@@ -15,6 +24,7 @@ def validate_evidence(out, reference):
     assert len(ids) == len(set(ids)) == 20 and set(ids) == set(expected), "exact20 unique participant IDs required"
     aligned = np.load(out / "gradients_aligned.npy", allow_pickle=False)
     assert aligned.shape[0] == 20 and np.isfinite(aligned).all()
+    validate_distinct_subject_embeddings(aligned)
     ref_aligned = reference["ref_aligned"]
     for sid, row in zip(ids, aligned):
         target = ref_aligned[expected.index(sid)]
