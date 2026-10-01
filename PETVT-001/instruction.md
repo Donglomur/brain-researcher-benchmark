@@ -37,10 +37,16 @@ sub-XX:ses-baseline:pet:sub-XX_ses-baseline_trc-sf51_recording-manual_blood.tsv
   (seconds) and one column per FreeSurfer/gtmseg region, among them the cortical
   gray-matter regions `ctx-lh-*` / `ctx-rh-*`, plus subcortical and cerebellar regions, all
   in **Bq/mL**. The TAC values are **decay-corrected to injection time**.
-* The **blood** TSV has one row per sample, recorded **at draw time**. It carries the sample
+* The **blood** TSV has one row per sample. It carries the sample
   `time` (seconds, relative to injection) and the measured blood/plasma radioactivity in
   **Bq/mL**; inspect the file header for the full set of measured quantities it provides.
   Rows with `time == 0` after the first sample are padding and should be ignored.
+Sampling time is not evidence of the activity decay footing. Do not automatically
+multiply byexp(lambda×time): activity already referenced to PET time-zero must not
+be decay-corrected a second time. A source-documented per-subject
+`blood_decay_receipt.json` must specify `blood_activity_reference` as
+`pet_time_zero` or `draw_time`, with a source citation; if unavailable, report
+failed_precondition rather than silently impose an unsupported assumption.
 
 ## Task
 

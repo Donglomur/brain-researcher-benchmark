@@ -1,25 +1,5 @@
-"""Proof-of-work grader for PETVT-001 (cortical V_T of [18F]SF51, invasive arterial input).
-
-Reproduction task: the deliverable is a per-participant cortical V_T table and the cohort
-summary. The un-cued judgement is how the arterial input is built from the blood recording
-(the metabolite-corrected, decay-referenced arterial PLASMA of the intact parent). That
-choice changes the per-subject V_T itself, so the grader validates the submitted per-subject
-V_T against a held-out reference (tests/reference.npz, built from the oracle on the real
-ds005619 TACs + arterial blood, never shipped to the agent), recomputes the cohort mean from
-the submitted rows, and grades the cohort V_T magnitude against the honest value versus the
-naive input constructions -- WITHOUT naming the metabolite correction in the instruction.
-
-Held-out ground truth (Logan, metabolite-corrected decay-referenced arterial plasma):
-  sf02 1.067  sf05 0.628  sf06 0.999  sf07 0.781  sf08 0.456  sf09 0.523  sf10 1.127
-  cohort mean 0.797 mL.cm-3 (MA1 agrees ~1%).
-Naive inputs give the wrong cohort V_T AND wrong per-subject values:
-  whole-blood            mean 0.448 (~-44%)
-  plasma, no parent frac mean 0.514 (~-36%)
-  plasma, not decay-ref  mean 1.011 (~+27%)
-
-R2 hedge: the graded conclusion is ONLY the V_T magnitude + the (implicit) input
-construction. The rs6971 genotype attribution is NOT graded (no genotype column, n=7); the
-per-subject spread is checked only as a non-constant, real-variation guard.
+"""Real-data arterial-input kinetic method case with documented decay footing.
+Activity sampling times do not establish activity decay correction status.
 """
 import json
 import os
@@ -35,7 +15,7 @@ REF_PATH = Path(__file__).resolve().parent / "reference.npz"
 
 VAL_TOL_REL = 0.15     # per-subject V_T vs held-out reference (honest/MA1 ~1%; naive >=17%)
 VAL_TOL_ABS = 0.08
-COVER = 6.0 / 7.0
+COVER = 1.0
 MATCH = 6.0 / 7.0
 MEAN_TOL_REF = 0.07    # recomputed cohort mean vs reference honest mean (0.797)
 MEAN_TOL_JSON = 0.06   # recomputed cohort mean vs reported JSON mean
@@ -44,7 +24,9 @@ MEAN_TOL_JSON = 0.06   # recomputed cohort mean vs reported JSON mean
 def _reference():
     assert REF_PATH.exists(), (
         "held-out reference tests/reference.npz is missing (build it from the oracle run)")
-    return pw.load_reference(REF_PATH)
+    ref=pw.load_reference(REF_PATH)
+    assert ref["stats"].get("pipeline_id")=="source-documented-decay-footing-v1", "failed_precondition: resolve arterial activity footing and regenerate corresponding V_T reference"
+    return ref
 
 
 def _load_json(name):
@@ -78,7 +60,8 @@ def test_outputs_present_and_wellformed():
     ref = _reference()
     m = _load_json("run_metadata.json")
     smap = _submitted_map()
-    assert len(smap) >= 6, f"expected cortical V_T for the ~7-participant cohort, got {len(smap)}"
+    assert len(smap) == 7, f"expected all seven participants, got {len(smap)}"
+    assert {pw.norm(k) for k in smap}=={pw.norm(k) for k in ref["ids"]}, "exact pinned participant/session IDs required"
     vals = list(smap.values())
     assert all(0.2 <= v <= 1.6 for v in vals), \
         f"cortical [18F]SF51 V_T outside a physiological range: {vals}"

@@ -1,27 +1,5 @@
-"""Reference solution for PETVT-001.
-
-Estimate the total distribution volume V_T of the TSPO radioligand [18F]SF51 in the
-cerebral cortex from a 7-participant human brain dataset (OpenNeuro ds005619) using an
-invasive (arterial-input) kinetic model.
-
-The PETPrep-extracted regional time-activity curves (TACs) and the arterial blood
-recording are fetched at runtime from OpenNeuro (open, CC0, no credentials). For each
-participant we build the metabolite-corrected arterial PLASMA input and estimate cortical
-V_T with the Logan graphical method (Ichise MA1 is computed as a cross-check; the two agree
-to ~1%). The headline reproduces Yan et al. (the ds005619 source study): the cohort-average
-cortical V_T is low (< 1 mL.cm-3) and varies ~2x across the seven participants. The graded
-conclusion is the V_T magnitude and the metabolite-corrected-plasma input construction only;
-the rs6971 genotype attribution is dropped (no genotype column, n = 7).
-
-Key input-construction facts, taken from the BIDS sidecars:
-  * TAC values and blood radioactivity are in Bq/mL.
-  * The images (hence TACs) are decay-corrected to injection time (ImageDecayCorrected).
-  * The arterial samples are recorded at draw time (not decay-corrected), so they are
-    decay-corrected to injection with the 18F half-life before modelling -- otherwise
-    tissue and blood are on inconsistent decay footings.
-  * The model input is the metabolite-corrected arterial plasma:
-        Cp(t) = plasma_radioactivity(t) * metabolite_parent_fraction(t) * exp(+lambda t)
-    (whole-blood, or plasma without the parent-fraction correction, is NOT the input.)
+"""Real-data arterial-input kinetic method case with documented decay footing.
+Activity sampling times do not establish activity decay correction status.
 """
 import json
 import os
@@ -30,6 +8,7 @@ import urllib.request
 from pathlib import Path
 
 import numpy as np
+from input_contract import parent_input
 
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 OUT.mkdir(parents=True, exist_ok=True)
@@ -133,8 +112,12 @@ def load_subject(sub):
     order = np.argsort(tb)
     tb, plasma, parent = tb[order], plasma[order], parent[order]
     tb_min = tb / 60.0
-    # metabolite-corrected, decay-referenced arterial plasma input
-    Cp = plasma * parent * np.exp(LAMBDA * tb_min)
+    receipt_path=Path(os.environ.get("BLOOD_DECAY_RECEIPT","/app/data/blood_decay_receipt.json"))
+    receipt=json.loads(receipt_path.read_text())
+    evidence=receipt[sub]
+    if not evidence.get("source"):
+        raise ValueError("failed_precondition: source evidence for blood decay footing missing")
+    Cp=parent_input(plasma,parent,tb_min,evidence["blood_activity_reference"],LAMBDA)
 
     fi = {c: i for i, c in enumerate(th)}
     if "frame_start" not in fi or "frame_end" not in fi:
@@ -161,7 +144,7 @@ def main():
     except Exception as e:  # noqa: BLE001
         fail(f"could not fetch/parse ds005619 SF51 TACs + arterial blood: {e!r}")
 
-    if len(rows) < 6:
+    if len(rows) != 7:
         fail(f"only {len(rows)} subjects usable; expected the 7-participant cohort")
 
     hdr = ["subject", "session", "target", "input", "model", "VT", "VT_MA1"]
