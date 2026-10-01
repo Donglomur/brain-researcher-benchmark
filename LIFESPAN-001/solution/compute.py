@@ -58,7 +58,8 @@ except Exception as e:
     fail(f"could not load bundle {BUNDLE}: {e}")
 
 N, T, R = TS.shape
-if N < 40:
+manifest = json.loads(BUNDLE.with_name("cohort_manifest.json").read_text())
+if N != manifest["n_subjects"] or set(subj) != set(manifest["subject_ids"]) or len(set(subj)) != N:
     fail(f"too few subjects in bundle ({N})")
 iu = np.triu_indices(R, 1)
 
@@ -79,11 +80,12 @@ r_glob, p_glob = stats.pearsonr(global_fc, age)
 # ---- CORRECT summary: segregation of large-scale networks (Chan et al. 2014) ----
 # age-blind data-driven 7-network partition from the group-mean connectome
 from sklearn.cluster import KMeans
-part = KMeans(n_clusters=7, n_init=10, random_state=0).fit(G).labels_
+from partition_contract import age_blind_partition
+part = age_blind_partition(G)
 within = part[iu[0]] == part[iu[1]]
-Zpos = np.where(FZ > 0, FZ, np.nan)          # positive edges only (standard)
-w = np.nanmean(Zpos[:, within], 1)
-b = np.nanmean(Zpos[:, ~within], 1)
+Zpos = np.maximum(FZ, 0)  # Chan complete-pair zero-clipped convention.
+w = Zpos[:, within].mean(1)
+b = Zpos[:, ~within].mean(1)
 segregation = (w - b) / w
 r_seg, p_seg = stats.pearsonr(segregation, age)
 rho_seg, prho_seg = stats.spearmanr(segregation, age)
@@ -93,6 +95,10 @@ r_between, _ = stats.pearsonr(b, age)
 # ---- required output: per-subject connectome summaries (the intermediate table that the two
 #      age relationships are computed from) ----
 import csv
+with open(OUT / "roi_partition.csv","w",newline="") as f:
+    writer=csv.writer(f)
+    writer.writerow(["roi_index","network"])
+    writer.writerows(enumerate(part))
 with open(OUT / "connectome_summary.csv", "w", newline="") as f:
     wr = csv.writer(f)
     wr.writerow(["subject_id", "age", "global_connectivity", "within_network_connectivity",
@@ -111,40 +117,34 @@ results = {
     "system_segregation_vs_age": {"pearson_r": float(r_seg), "p": float(p_seg),
                                   "spearman_rho": float(rho_seg),
                                   "note": "(within - between)/within over positive edges, 7 networks"},
-    "conclusion": "network segregation declines with age (de-differentiation); "
-                  "overall mean connectivity is roughly unchanged",
+    "conclusion": "cross-sectional descriptive age associations; neither longitudinal change nor proven null",
+    "estimator_contract": "diagonal-zero-clip-v1",
 }
+for key in ("overall_connectivity_vs_age","system_segregation_vs_age"):
+    r=results[key]["pearson_r"]
+    results[key]["ci95"]=np.tanh(np.arctanh(np.clip(r,-.999999,.999999))+np.array([-1,1])*1.96/np.sqrt(N-3)).tolist()
 (OUT / "results.json").write_text(json.dumps(results, indent=2))
 
 (OUT / "run_metadata.json").write_text(json.dumps({
     "status": "ok",
     "dataset_id": "nki_enhanced_surface",
     "n_subjects": int(N),
+    "subject_ids": subj, "cohort_manifest": manifest,
+    "partition": "KMeans(7,n_init=10,random_state=0) on group-mean Fisher-z rows with diagonal zero",
     "parcellation": "Destrieux-148 (fsaverage5)",
     "method": "per-subject Fisher-z connectome; overall mean FC vs age (naive summary) and "
               "large-scale network system segregation (within-minus-between, positive edges, "
               "7-network data-driven partition) vs age",
 }, indent=2))
 
-(OUT / "findings.md").write_text(f"""# LIFESPAN-001 — resting connectome organization across the adult lifespan
-
-Using the packaged NKI resting-state region time series (n = {N}, ages
-{age.min():.0f}-{age.max():.0f}), I formed each subject's 148-region Fisher-z connectome and
-summarised its organization in two ways before relating it to age.
-
-**Overall (mean) connectivity is essentially unchanged with age** (Pearson r = {r_glob:+.3f},
-p = {p_glob:.2f}). Read on its own, this would suggest resting connectivity does not change across
-the adult lifespan — but that summary is misleading.
-
-**The organization of the connectome does change: its large-scale networks de-differentiate.**
-Summarising organization as **system segregation** — mean within-network minus between-network
-connectivity, normalised — segregation **declines with age** (Pearson r = {r_seg:+.3f},
-p = {p_seg:.3f}; Spearman rho = {rho_seg:+.3f}). This is driven by between-network connectivity
-rising with age (r = {r_between:+.3f}) while within-network connectivity stays flat
-(r = {r_within:+.3f}), so the two effects cancel in the global average and it misses the change.
-
-**Conclusion:** across the adult lifespan the resting functional connectome becomes **less
-segregated** (network de-differentiation) — a decline in organization with age — even though
-overall mean connectivity is roughly constant.
+(OUT / "findings.md").write_text(f"""# Cross-sectional connectome summary sensitivity
+The fixed NKI convenience cohort contains {N} subjects. Global FC-age Pearson r is
+{r_glob:+.3f} (p={p_glob:.3f}); zero-clipped full-pair segregation-age r is
+{r_seg:+.3f} (p={p_seg:.3f}; Spearman rho={rho_seg:+.3f}). Fisher-z confidence intervals
+are reported in results.json. The partition is age-blind KMeans7 with zero diagonal.
+These are cross-sectional associations, not within-person aging, causal mechanisms
+or evidence of absence from a nonsignificant p-value. Sex, motion and nonlinear-age
+confounding, partition stability and alternate network conventions remain unassessed.
+This is a method adaptation, not the paper's exact sample or published finding.
 """)
 print(f"OK: global r={r_glob:+.3f} (p={p_glob:.2f}); segregation r={r_seg:+.3f} (p={p_seg:.3f}) N={N}")

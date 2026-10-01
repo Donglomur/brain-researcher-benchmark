@@ -71,6 +71,7 @@ def load_submitted(path):
         return out
     for r in rows:
         cid = canon_id(r.get(id_c, ""))
+        assert cid not in out, f"duplicate subject {cid}"
         if not cid:
             continue
 

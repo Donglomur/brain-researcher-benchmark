@@ -13,6 +13,16 @@ https://doi.org/10.3389/fnins.2012.00152).
 
 ## Task
 
+This is a cross-sectional paper-derived estimator-sensitivity adaptation, not a
+within-person lifespan change or exact Chan paper result. Use the fixed59subjects in
+/opt/bundle/cohort_manifest.json. Primary age-blind partition:KMeans(n_clusters=7,
+n_init=10,random_state=0) on rows of the group-mean Fisher-z matrix AFTER setting its
+diagonal to zero. Negative edges are zero-clipped and averaged over all within/between
+pairs, not excluded with NaN. State partition/seed/grid sensitivity limitations;
+sex/motion/nonlinear-age adjustment is not part of the primary and remains confounding
+uncertainty. Report signed associations and uncertainty; neither significance nor
+absence nor a prescribed negative direction is a scientific scoring contract.
+
 Using the packaged NKI resting-state region time series (see **Data**), **characterise how resting
 functional connectivity changes across the adult lifespan**, and report the relationship you find
 between functional connectivity and age.
