@@ -42,7 +42,7 @@ def compute_sensitivity(df):
     vc = df.site_id.value_counts()
     w = df[df.site_id.isin(vc[vc >= MIN_PER_SITE].index)].reset_index(drop=True)
     sens = {}
-    
+
     # (1) Motion / QC — pooled and within-site associations adjusting for mean framewise displacement.
     mo = w[np.isfinite(w.mean_fd)].reset_index(drop=True)
     if len(mo) > 50:
@@ -54,7 +54,7 @@ def compute_sensitivity(df):
         sens["motion"] = {"n": int(len(mo)), "pooled_r_adj_motion": rp_m, "pooled_p_adj_motion": pp_m,
                           "within_site_r_adj_motion": rw_m, "within_site_p_adj_motion": pw_m,
                           "note": "connectivity–age association adjusting for mean framewise displacement"}
-    
+
     # (2) Diagnosis — restrict to typical controls (DX_GROUP == 2 in ABIDE) and recompute both levels.
     ctrl = w[w.dx_group == 2].reset_index(drop=True)
     if len(ctrl) > 50 and ctrl.site_id.nunique() >= 2:
@@ -66,7 +66,7 @@ def compute_sensitivity(df):
                              "pooled_p_controls": float(pp_c), "within_site_r_controls": rw_c,
                              "within_site_p_controls": pw_c,
                              "note": "restricted to typical controls (DX_GROUP==2)"}
-    
+
     # (3) Sex — pooled and within-site adjusting for sex.
     sx = w[np.isfinite(w.sex)].reset_index(drop=True)
     if len(sx) > 50:
@@ -78,7 +78,7 @@ def compute_sensitivity(df):
         sens["sex"] = {"n": int(len(sx)), "pooled_r_adj_sex": rp_s, "pooled_p_adj_sex": pp_s,
                        "within_site_r_adj_sex": rw_s, "within_site_p_adj_sex": pw_s,
                        "note": "connectivity–age association adjusting for sex"}
-    
+
     # (4) Nonlinear age — does a quadratic age term add anything (pooled)?
     a = df.age.to_numpy(); c = df.connectivity.to_numpy()
     az = (a - a.mean()) / a.std()
@@ -94,7 +94,7 @@ def compute_sensitivity(df):
     sens["nonlinear_age"] = {"quadratic_beta": float(bq[2]), "F_added_quadratic": float(F),
                              "p_added_quadratic": p_nl,
                              "note": "pooled test that an age^2 term improves the connectivity model"}
-    
+
     # (5) Site-specific slopes — the per-site connectivity~age relationship is heterogeneous.
     per_site = []
     for s, g in w.groupby("site_id"):
