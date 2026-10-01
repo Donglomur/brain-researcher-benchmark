@@ -83,6 +83,15 @@ def test_headline_is_occipital_ratio():
 # ---- PILLAR 1: per-subject occipital ratio proof of work -------------------------------
 def test_per_subject_ratio_proof_of_work():
     sub = _submitted()
+    expected = [pw.canon_id(x) for x in REF["ref_ids"]]
+    assert set(sub) == set(expected), "report exactly the five source subjects"
+    for j, sid in enumerate(expected):
+        row = sub[sid]
+        assert all(row[k] is not None and np.isfinite(row[k]) for k in ("ec", "eo", "ratio"))
+        assert row["ec"] >= 0 and row["eo"] > 0, "powers must be nonnegative, with positive EO"
+        assert np.isclose(row["ratio"], row["ec"] / row["eo"], rtol=1e-5, atol=1e-7), "ratio is not EC/EO"
+        for key in ("ec", "eo"):
+            assert np.isclose(row[key], REF["ref_" + key][j], rtol=0.30, atol=1e-14), "powers do not match the declared PSD units and recipe"
     present = pw.check_subjects_and_values(
         sub, REF["ref_ids"], REF["ref_ratio"], "ratio", RATIO_VAL_TOL,
         cover=0.90, match=0.80, eps=1e-2, signed=True, rel_tol=RATIO_REL_TOL)
@@ -107,3 +116,20 @@ def test_findings_reports_occipital():
     text = (OUT / "findings.md").read_text(encoding="utf-8").lower()
     assert "occipital" in text and ("closed" in text or "berger" in text), \
         "findings.md does not report the occipital eyes-closed alpha enhancement"
+
+
+def test_public_analysis_metadata():
+    result = _load("alpha_ratio.json")
+    metadata = _load("run_metadata.json")
+    for document in (result, metadata):
+        assert document["band_hz"] == [8, 13]
+        assert set(document["channels"]) == {"O1", "Oz", "O2"}
+        assert len(document["channels"]) == 3
+    assert result["n_subjects"] == 5
+    assert metadata["subjects"] == [1, 2, 3, 4, 5]
+    assert metadata["runs"] == {"eyes_open": 1, "eyes_closed": 2}
+    assert "eegbci" in metadata["dataset_id"].lower()
+    assert "welch" in metadata["psd_method"].lower()
+    assert "average" in metadata["reference"].lower()
+    assert np.isfinite(result["wholehead_alpha_ratio_for_reference"])
+    assert np.isclose(result["wholehead_alpha_ratio_for_reference"], REF["wholehead_mean"], rtol=0.3)

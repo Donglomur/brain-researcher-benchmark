@@ -20,8 +20,10 @@ across the five subjects** as the headline occipital alpha power ratio.
 
 Pin the analysis so the number reproduces: band **8–13 Hz**, Welch power spectral
 density, common-average reference, and the mean-of-per-subject-ratios aggregation above.
-Standard implementation choices the method leaves to the analyst (Welch segment length,
-exact occipital electrode set) should follow common practice.
+For an auditable numerical comparison, standardize EDF channel names and use O1, Oz,
+O2 with 2-second Welch segments. Report the mean PSD density within 8–13 Hz in
+V²/Hz (not its integral), averaged over those channels. This is a modern five-subject
+qualitative replication, not a numerical reproduction of Berger's original cohort.
 
 ## Output Location
 

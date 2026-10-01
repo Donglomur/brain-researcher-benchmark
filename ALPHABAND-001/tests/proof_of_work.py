@@ -56,6 +56,7 @@ def load_submitted(path, colmap, id_cands=None):
     out, order = {}, []
     for r in rows:
         cid = canon_id(r.get(idcol, ""))
+        assert cid not in out, f"duplicate subject id: {cid}"
         if not cid:
             continue
         d = {}
