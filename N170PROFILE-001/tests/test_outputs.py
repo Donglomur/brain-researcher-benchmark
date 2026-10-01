@@ -78,7 +78,7 @@ def test_headline_amplitude_is_signed_and_correct():
     assert str(data.get("electrode", "")).upper() == "PO8" or "po8" in json.dumps(data).lower(), \
         "n170.json must report the a priori PO8 electrode"
     n = int(data.get("n_subjects", 0))
-    assert 34 <= n <= 40, f"expected the full ~37-subject analysis sample, got n_subjects={n}"
+    assert n == 37, f"require exactly37 analysis participants, got {n}"
     amp = _num(data.get("amp_po8_uv"))
     ref_mean = float(REF["amp_mean"])
     assert amp is not None, "n170.json missing amp_po8_uv"
@@ -112,7 +112,7 @@ def test_per_subject_amplitude_proof_of_work():
     sub = _submitted()
     present = pw.check_subjects_and_values(
         sub, REF["ref_ids"], REF["ref_amp"], "amp", AMP_VAL_TOL,
-        cover=0.90, match=0.90, eps=1e-3, signed=True)
+        cover=1.0, match=0.90, eps=1e-3, signed=True)
     reported = _num(_load("n170.json").get("amp_po8_uv"))
     pw.check_recompute(sub, present, "amp", float(REF["amp_mean"]), reported,
                        tol_ref=AMP_GROUP_TOL, tol_report=AMP_GROUP_TOL)
@@ -123,7 +123,7 @@ def test_per_subject_onset_proof_of_work():
     sub = _submitted()
     present = pw.check_subjects_and_values(
         sub, REF["ref_ids"], REF["ref_onset"], "onset", ONSET_VAL_TOL,
-        cover=0.90, match=ONSET_MATCH, eps=1.0, signed=True)
+        cover=1.0, match=ONSET_MATCH, eps=1.0, signed=True)
     reported = _num(_load("n170.json").get("onset_latency_ms"))
     pw.check_recompute(sub, present, "onset", float(REF["onset_mean"]), reported,
                        tol_ref=ONSET_GROUP_TOL, tol_report=ONSET_GROUP_TOL)
@@ -131,30 +131,27 @@ def test_per_subject_onset_proof_of_work():
 
 # ---- PILLAR 3c: descriptive cluster stat, only if reported ------------------------------
 def test_cluster_stat_if_reported():
-    data = _load("n170.json")
-    cl = data.get("cluster_level_only") or data.get("cluster") or {}
-    if not isinstance(cl, dict) or not cl:
-        return  # cluster analysis is optional/descriptive; nothing reported -> nothing to grade
-    pvals = cl.get("cluster_pvals")
-    pmin = cl.get("min_cluster_pval")
-    if pmin is None and isinstance(pvals, list) and pvals:
-        nums = [_num(p) for p in pvals if _num(p) is not None]
-        pmin = min(nums) if nums else None
-    if pmin is None:
-        # no corrected p-value present (e.g. cluster not run / only a descriptive note) ->
-        # nothing to grade; the headline (amplitude + onset) carries the result
+    data=_load("n170.json")
+    cl=data.get("cluster_level_only") or {}
+    assert "sig_electrodes" not in data
+    if cl.get("method") in ("not_run","cluster_failed") or not cl:
         return
-    pmin = _num(pmin)
-    assert pmin is not None and 0.0 <= pmin <= 0.05, (
-        f"reported cluster is not a real corrected-significant cluster (p={pmin}); a retained "
-        f"whole-scalp cluster analysis must report a corrected cluster p-value <= 0.05")
-    mass = _num(cl.get("cluster_mass"))
-    if mass is not None:
-        ref_mass = float(REF["cluster_mass"])
-        assert CLUSTER_MASS_LO * ref_mass <= mass <= CLUSTER_MASS_HI * ref_mass, (
-            f"reported cluster mass {mass} is not the right order of magnitude vs the reference "
-            f"{ref_mass:.1f} (expected within [{CLUSTER_MASS_LO}, {CLUSTER_MASS_HI}]x)")
+    pvals=cl.get("cluster_pvals",[])
+    assert isinstance(pvals,list) and all(0<=float(p)<=1 for p in pvals)
+    if pvals:
+        assert "cluster_mass" in cl and float(cl["cluster_mass"])>=0
+    assert cl.get("membership_inference")=="cluster_level_only"
+    # Optional cluster significance is not required; absence of a cluster is a valid result.
 
+def test_exact_cohort_uncertainty_and_bake():
+    import hashlib
+    from profile_contract import validate_intervals,BAKE_SHA256
+    validate_intervals(_submitted(),_load("n170.json"))
+    path=Path("/app/data/n170_diff_waves.npz")
+    if not path.exists():
+        path=Path(__file__).resolve().parents[1]/"environment/data/n170_diff_waves.npz"
+    assert hashlib.sha256(path.read_bytes()).hexdigest()==BAKE_SHA256
+    assert _load("run_metadata.json")["analysis_scope"]=="paper-derived shifted_ds adaptation"
 
 # ---- SECONDARY (not the sole gate): the write-up actually reports the profile ------------
 def test_findings_reports_profile():

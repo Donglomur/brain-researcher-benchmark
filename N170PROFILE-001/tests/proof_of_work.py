@@ -69,6 +69,7 @@ def load_submitted(path, colmap):
                     except (TypeError, ValueError):
                         v = None
             d[k] = v
+        assert cid not in out, f"duplicate participant ID {cid}"
         out[cid] = d
         order.append(cid)
     return out, order

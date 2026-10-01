@@ -12,7 +12,7 @@ characterised (their Figure 2 and Tables 1-3) over the **full N=37 analysis samp
 
 ## Task
 
-Reproduce the ERP CORE N170 characterisation on the **full N=37 analysis sample** at **PO8**,
+Measure a **paper-derived ERP CORE adaptation** on the **full N=37 analysis sample** at **PO8**,
 from the **face-minus-car difference wave**. For **each subject** measure, at PO8:
 
 1. the **signed mean amplitude** of the face-minus-car difference wave in the **110-150 ms**
@@ -53,6 +53,19 @@ pipeline: EOG channels `HEOG_left`/`HEOG_right`/`VEOG_lower` excluded; EEG band-
 exceeding **150 uV** peak-to-peak rejected; **face minus car** per subject.
 
 ## Output Location
+
+## Adaptation and missingness limits
+
+The baked waves originate from the shifted_ds stage, not the paper's complete ICA/artifact
+and additional onset-filter pipeline. This task targets the declared .1–30Hz average-reference
+adaptation and must not claim to reproduce the published95.76ms onset exactly. Executable
+source regeneration is in authoring/regenerate_from_sources.py; its agreement with the old
+bake is pending independent regeneration, not assumed from source hashes.
+All37 unique IDs and finite signed amplitude/onset measures are required for this fixed bake.
+Compute participant-unit t(36)95% intervals without dropping subjects. run_metadata.json
+must label analysis_scope as paper-derived shifted_ds adaptation.
+Optional cluster membership must carry membership_inference=cluster_level_only.
+
 
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 

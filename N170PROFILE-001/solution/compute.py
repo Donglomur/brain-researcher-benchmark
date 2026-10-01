@@ -1,27 +1,5 @@
-"""Reference solution for N170PROFILE-001.
-
-Characterise the ERP CORE N170 face effect exactly as Kappenman et al. (2021) do in their
-Figure 2 / Tables 1-3: over the FULL N=37 analysis sample, at the a priori PO8 electrode,
-from the face-minus-car difference wave. The two headline measurements are
-
-  * the SIGNED face-minus-car MEAN amplitude at PO8 in the 110-150 ms window
-    (the ERP CORE N170 amplitude score; group ~ -3 to -4 uV), and
-  * the 50% FRACTIONAL-PEAK ONSET latency of the PO8 difference wave (ERPLAB `fpeaklat`,
-    negative polarity, peak searched in 10-150 ms, onset = the pre-peak time at which the
-    wave reaches 50% of its peak) -- the paper's onset-latency measure.
-
-Both are measured PER SUBJECT (signed) and written to per_subject.csv, then aggregated to a
-group mean + 95% CI. The whole-scalp spatio-temporal cluster-based permutation test is
-reported ONLY as a DESCRIPTIVE summary of the temporal/scalp support of the effect
-(corrected cluster p-values + cluster mass, membership labelled `cluster_level_only`); it is
-cluster-level inference, NOT pointwise electrode-by-time significance. The naive uncorrected
-point-wise map is reported only to note that its baseline / whole-scalp "significance" is
-spurious.
-
-Inputs: the per-subject face-minus-car difference waves produced by the pinned pipeline
-(average reference, 0.1-30 Hz, epochs -200..400 ms, -200..0 baseline, 150 uV rejection;
-faces = codes 1-40, cars = 41-80), baked into the image at /app/data/n170_diff_waves.npz
-(subjects [37], diff_uv [37 x 30 x n_times] in microvolts, ch_names [30], times_ms, sfreq).
+"""ERP CORE-derived PO8 measurement adaptation on fixed shifted_ds difference waves.
+Not exact paper ICA/reference/onset-filter reproduction; see authoring source regeneration.
 """
 import csv
 import json
@@ -109,11 +87,15 @@ if "PO8" not in ch_names:
     fail("PO8 not present in the baked difference waves")
 po8 = ch_names.index("PO8")
 nsub = len(subjects)
+if nsub != 37 or len(set(subjects)) != 37 or set(subjects) != {str(i) for i in range(1,41)} - {"1","5","16"}:
+    fail("exact37 unique ERP CORE analysis IDs required")
 
 # ---- per-subject SIGNED measures at PO8 -------------------------------------------------
 amp = np.array([float(np.mean(D[i, po8, (ms >= AMP_WIN[0]) & (ms <= AMP_WIN[1])]))
                 for i in range(nsub)])
 onset = np.array([frac_peak_onset(D[i, po8, :], ms) for i in range(nsub)])
+if not np.isfinite(amp).all() or not np.isfinite(onset).all():
+    fail("all37 measurements must be finite under this baked-adaptation missingness policy")
 
 with open(OUT / "per_subject.csv", "w", newline="") as f:
     w = csv.writer(f)
@@ -128,6 +110,8 @@ on_m, on_lo, on_hi = ci95(onset)
 # ---- DESCRIPTIVE whole-scalp cluster test (cluster-level inference only) -----------------
 cluster = {"method": "not_run"}
 try:
+    if os.environ.get("N170_RUN_CLUSTER", "0") != "1":
+        raise RuntimeError("optional cluster disabled")
     import mne
     from scipy import stats  # noqa: F401
     mne.set_log_level("ERROR")
@@ -160,12 +144,13 @@ try:
         "cluster_mass": round(mass, 2),
         "time_range_ms": ([tmin, tmax] if tmin is not None else None),
         "n_electrodes": nelec,
+        "membership_inference": "cluster_level_only",
         "note": ("descriptive temporal/scalp support of the whole-scalp face-minus-car effect; "
                  "cluster-level inference ONLY -- the time range and electrode set are the "
                  "cluster's membership, NOT pointwise electrode-by-time significance"),
     }
 except Exception as e:  # cluster is descriptive; never fail the task on it
-    cluster = {"method": "cluster_failed", "error": str(e)}
+    cluster = {"method": "not_run" if os.environ.get("N170_RUN_CLUSTER","0") != "1" else "cluster_failed", "error": str(e)}
 
 # ---- naive uncorrected map (reported only to flag it as spurious) ------------------------
 try:
@@ -205,6 +190,8 @@ except Exception:
 
 (OUT / "run_metadata.json").write_text(json.dumps({
     "status": "ok",
+    "analysis_scope": "paper-derived shifted_ds adaptation",
+    "source_reconstruction_status": "not independently validated; regenerate_from_sources.py supplied",
     "dataset_id": "erpcore_n170",
     "source": "ERP CORE N170 (Kappenman et al. 2021), baked per-subject difference waves",
     "analysis_sample": "N=37 (subjects 1-40 excluding 1, 5, 16 -- the ERP CORE N170 analysis sample)",
@@ -233,7 +220,8 @@ if cluster.get("time_range_ms"):
 
 (OUT / "findings.md").write_text(f"""# N170PROFILE-001 - the ERP CORE N170 face effect
 
-Over the full **N={nsub}** ERP CORE N170 analysis sample (subjects 1-40 excluding 1, 5 and
+This is a **paper-derived shifted_ds adaptation**, not an exact published ICA/onset-filter
+pipeline reproduction. Over the full **N={nsub}** ERP CORE N170 analysis sample (subjects 1-40 excluding 1, 5 and
 16), the face-minus-car difference wave was measured at the a priori **PO8** electrode.
 
 The N170 face effect at PO8 is a clear posterior negativity. Its **signed mean amplitude in
@@ -247,7 +235,7 @@ in `per_subject.csv`.
 {cl_txt}Mapping the effect with an **uncorrected** point-by-point t-test across the 30
 electrodes and every sample is misleading: it flags "significant" differences in the
 pre-stimulus **baseline** ({naive.get('n_sig_in_baseline', 'NA')} electrode-time points, where
-no effect can exist) and across the whole scalp -- these are **spurious** multiple-comparisons
+condition-independent activity need not imply an effect) and across the whole scalp -- these are **spurious** multiple-comparisons
 false positives, not a real early/whole-scalp face effect, and are not interpreted here. The
 warranted characterisation is the PO8 amplitude and 50%-fractional-peak onset above, with the
 cluster result used only as a descriptive, cluster-level summary of the effect's support.
