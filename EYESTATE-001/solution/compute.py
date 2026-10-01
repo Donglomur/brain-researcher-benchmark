@@ -7,7 +7,6 @@ are correlations derived from LedoitWolf-shrunk covariance, not ordinary Pearson
 The public estimator/classifier/split contract must be used when independently
 regenerating the mandatory keyed prediction reference; old fold means are insufficient.
 """
-"""
 from __future__ import annotations
 
 import json
