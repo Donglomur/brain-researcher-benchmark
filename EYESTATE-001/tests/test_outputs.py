@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 import numpy as np
 import proof_of_work as pw
-from metric_contract import validate_subject_predictions
+from metric_contract import validate_subject_predictions, bind_keyed_predictions
 
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 
@@ -13,11 +13,10 @@ OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 def test_exact_subject_site_label_reference_required():
     path = Path(__file__).with_name("reference.npz")
     with np.load(path, allow_pickle=False) as archive:
-        assert all(k in archive for k in ("ref_subject_ids", "ref_labels", "ref_sites")), "regenerate keyed subject reference before calibration"
-        expected = {str(i): (str(site), int(label)) for i,site,label in zip(archive["ref_subject_ids"], archive["ref_sites"], archive["ref_labels"])}
-    rows = list(csv.DictReader((OUT / "oof_predictions.csv").open()))
-    assert len(rows) == len(expected) and {r["subject_id"] for r in rows} == set(expected)
-    assert all((r["site"], int(r["label"])) == expected[r["subject_id"]] for r in rows)
+        rows = list(csv.DictReader((OUT / "oof_predictions.csv").open()))
+        bind_keyed_predictions(rows, archive)
+    metadata = json.loads((OUT / "run_metadata.json").read_text())
+    assert metadata["estimator_contract"] == "ledoitwolf-correlation-losocv-v1"
 
 
 def test_pooled_headlines_and_baselines_recompute():

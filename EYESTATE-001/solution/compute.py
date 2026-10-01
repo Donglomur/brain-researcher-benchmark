@@ -1,27 +1,12 @@
-"""Reference solution for EYESTATE-001 — the correct, site-blocked cross-validated accuracy.
+"""Reference for an explicitly confounded ABIDE protocol-prediction methods case.
 
-The task (un-cued) asks for the cross-validated balanced accuracy of an eyes-open vs
-eyes-closed decoder trained on ABIDE resting-state functional connectivity, subject set,
-atlas (CC200), connectivity (Pearson correlation), and classifier (linear SVM) pinned.
-The one choice left free is the CROSS-VALIDATION SCHEME -- and it is decisive.
-
-In ABIDE each acquisition SITE used a single eyes-open/closed protocol, so eye status is
-almost perfectly aligned with the scanning site. Every site also leaves a strong,
-site-specific fingerprint on functional connectivity. If the folds are drawn at RANDOM,
-subjects from a given site appear in both train and test, and the classifier can read the
-held-out subjects' eye status off their site fingerprint -- accuracy is inflated well above
-what the eyes-open/closed effect itself supports. Blocking the cross-validation by SITE
-(leave-one-site-out) forces the model to generalise to sites it never saw, so it can only
-use the genuine, transferable eyes-open/closed connectivity effect.
-
-Validated ground truth (nilearn 0.13.1 / scikit-learn 1.8.0, ABIDE cpac filt_noglobal
-rois_cc200, N=1035, correlation connectivity, LinearSVC C=1, balanced accuracy):
-
-    leave-one-site-out (CORRECT) : balanced_accuracy = 0.737
-    random 10-fold     (LEAKY)   : balanced_accuracy = 0.867   (chance = 0.5)
-
-So the honest cross-site number is ~0.74; the ~0.87 a random-fold pipeline reports is
-inflated by site-fingerprint leakage.
+LOSO tests prediction on unseen acquisition sites; it does not identify a biological
+eye-state effect or remove cross-site protocol/acquisition confounding. The primary
+metric is pooled OOF balanced accuracy, not mean one-class per-site recall. Features
+are correlations derived from LedoitWolf-shrunk covariance, not ordinary Pearson.
+The public estimator/classifier/split contract must be used when independently
+regenerating the mandatory keyed prediction reference; old fold means are insufficient.
+"""
 """
 from __future__ import annotations
 
@@ -57,6 +42,7 @@ def main() -> None:
     from nilearn.datasets import fetch_abide_pcp
     from nilearn.connectome import ConnectivityMeasure
     from sklearn.svm import LinearSVC
+    from sklearn.covariance import LedoitWolf
     from sklearn.preprocessing import StandardScaler
     from sklearn.pipeline import make_pipeline
     from sklearn.model_selection import StratifiedKFold, LeaveOneGroupOut
@@ -76,11 +62,17 @@ def main() -> None:
             subject_ids.append(str(subject))
     y = np.asarray(y); groups = np.asarray(groups)
 
-    conn = ConnectivityMeasure(kind="correlation", vectorize=True, discard_diagonal=True)
+    conn = ConnectivityMeasure(cov_estimator=LedoitWolf(store_precision=False),
+                               kind="correlation", vectorize=True,
+                               discard_diagonal=True, standardize=True)
     X = conn.fit_transform(ts)
 
     def clf():
-        return make_pipeline(StandardScaler(), LinearSVC(C=1.0, dual="auto", max_iter=3000))
+        return make_pipeline(StandardScaler(with_mean=True, with_std=True),
+                             LinearSVC(C=1.0, dual="auto", max_iter=3000, random_state=0,
+                                       penalty="l2", loss="squared_hinge", tol=1e-4,
+                                       fit_intercept=True, intercept_scaling=1,
+                                       class_weight=None))
 
     def cv_bacc(splits):
         predictions = np.zeros(len(y), int)
@@ -91,7 +83,7 @@ def main() -> None:
             fold_ids[te] = fold
         return float(balanced_accuracy_score(y, predictions)), predictions, fold_ids
 
-    # CORRECT: leave-one-site-out (blocked by acquisition site -> no site-fingerprint leakage).
+    # Primary: unseen-site protocol prediction, with residual cross-site confounding.
     # Capture the per-fold (per-held-out-site) balanced accuracy: the required intermediate table.
     per_fold = []
     loso_predictions = np.zeros(len(y), int)
@@ -109,7 +101,7 @@ def main() -> None:
     loso_bacc = float(balanced_accuracy_score(y, loso_predictions))
     legacy_mean_fold_bacc = float(np.mean([f["balanced_accuracy"] for f in per_fold]))
 
-    # NAIVE (leaky) random-fold scheme: what mixing each site across train/test would report.
+    # Sensitivity: random subject folds; train/test share acquisition sites.
     rand_bacc, random_predictions, random_folds = cv_bacc(list(StratifiedKFold(10, shuffle=True, random_state=0).split(X, y)))
 
     n_sub, n_feat = int(X.shape[0]), int(X.shape[1])
@@ -143,12 +135,15 @@ def main() -> None:
         "always_closed_pooled_balanced_accuracy": float(balanced_accuracy_score(y, np.zeros(len(y), int))),
         "single_class_sites": sum(f["n_eyes_open_test"] == 0 or f["n_eyes_closed_test"] == 0 for f in per_fold),
         # descriptive alias kept for back-compat (clearly NOT the reported estimate)
-        "random_kfold_balanced_accuracy_leaky": round(rand_bacc, 4),
+        "random_kfold_balanced_accuracy_site_shared": round(rand_bacc, 4),
     })
     wj("run_metadata.json", {
         "task_id": TASK_ID, "status": "ok", "dataset_id": DATASET_ID,
-        "atlas": "rois_cc200", "connectivity": "Pearson correlation (vectorized)",
-        "classifier": "StandardScaler + LinearSVC(C=1.0)",
+        "atlas": "rois_cc200", "connectivity": "LedoitWolf-shrunk covariance correlation, lower triangle without diagonal",
+        "covariance_estimator": "LedoitWolf(store_precision=False, assume_centered=False)",
+        "timeseries_standardize": True,
+        "estimator_contract": "ledoitwolf-correlation-losocv-v1",
+        "classifier": "StandardScaler(with_mean=True, with_std=True) + LinearSVC(C=1, dual=auto, max_iter=3000, random_state=0, penalty=l2, loss=squared_hinge, tol=1e-4, fit_intercept=True, intercept_scaling=1, class_weight=None)",
         "cross_validation": "leave-one-site-out over acquisition sites (SITE_ID)",
         "metric": "pooled out-of-fold balanced accuracy", "target": "EYE_STATUS_AT_SCAN (open=1 vs closed=2)",
         "scientific_target": "confounded protocol prediction on unseen sites, not biological eye-state effect",
@@ -168,7 +163,7 @@ def main() -> None:
         "method sensitivities, not a causal transferable-eye claim. No label-permutation "
         "or clustered uncertainty analysis was performed, so no null inference is made.\n",
         encoding="utf-8")
-    print(f"n={n_sub} feat={n_feat} sites={n_sites} | LOSO bAcc={loso_bacc:.4f} | random-kfold(leaky)={rand_bacc:.4f}")
+    print(f"n={n_sub} feat={n_feat} sites={n_sites} | LOSO bAcc={loso_bacc:.4f} | random-kfold(site-shared)={rand_bacc:.4f}")
 
 
 if __name__ == "__main__":

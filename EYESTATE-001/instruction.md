@@ -46,11 +46,18 @@ Pin the analysis as follows so the number is comparable:
 - **Samples:** every participant whose `rois_cc200` time series is valid (a 2-D array with
   200 regions and more than 50 time points) and whose `EYE_STATUS_AT_SCAN` is 1 or 2.
 - **Label:** eyes open (`EYE_STATUS_AT_SCAN == 1`) vs eyes closed (`== 2`).
-- **Features:** the **Pearson-correlation functional connectivity** between the 200 regions,
-  vectorised (the off-diagonal upper triangle) — e.g. `nilearn`'s
-  `ConnectivityMeasure(kind="correlation", vectorize=True, discard_diagonal=True)`.
-- **Classifier:** a standardised linear SVM,
-  `sklearn.pipeline.make_pipeline(StandardScaler(), LinearSVC(C=1.0))`.
+- **Features:** correlations derived from **LedoitWolf-shrunk covariance**, not ordinary
+  Pearson correlations. Use `ConnectivityMeasure(cov_estimator=LedoitWolf(store_precision=False,
+  assume_centered=False), kind="correlation", vectorize=True, discard_diagonal=True,
+  standardize=True)`: per-subject time-series z-scoring and the off-diagonal lower triangle
+  (19,900 features). These are the actual pinned nilearn 0.13.1 estimator defaults,
+  now disclosed explicitly ([documentation](https://nilearn.github.io/stable/modules/generated/nilearn.connectome.ConnectivityMeasure.html)).
+- **Classifier:** fit `StandardScaler(with_mean=True, with_std=True)` on training subjects
+  within each fold, followed by `LinearSVC(C=1.0, dual="auto", max_iter=3000,
+  random_state=0, penalty="l2", loss="squared_hinge", tol=1e-4, fit_intercept=True,
+  intercept_scaling=1, class_weight=None)` (scikit-learn 1.8.0). Do not learn scaling from
+  held-out subjects. Random-CV sensitivity uses `StratifiedKFold(10, shuffle=True,
+  random_state=0)` in the dataset order.
 - **Metric:** **balanced accuracy** (the classes are imbalanced).
 
 Report the cross-validated balanced accuracy of this classifier as your headline
@@ -70,6 +77,10 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   `n_sites`, and `chance`.
 - `run_metadata.json` — dataset id, atlas, connectivity, classifier and evaluation choices
   you made.
+  Record `estimator_contract="ledoitwolf-correlation-losocv-v1"`. The complete keyed
+  subject predictions, not only aggregate site scores, are numerical proof of the
+  specified held-out analysis. Scientifically valid alternatives can be reported as
+  separate sensitivity analyses; they are not silently scored against this estimator.
 - `findings.md` — a short written summary stating the cross-validated balanced accuracy for
   eyes-open vs eyes-closed decoding on these data. State only what your analysis actually
   supports.
