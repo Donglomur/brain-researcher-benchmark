@@ -8,12 +8,15 @@ import sys
 from pathlib import Path
 
 import numpy as np
-from alignment import sample_indices, shifted_spikes
+from alignment import sample_indices, shifted_spikes, running_samples
 
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 OUT.mkdir(parents=True, exist_ok=True)
 
 DANDISET = "001754"
+VERSION = "0.260728.1352"
+ASSET_ID = "b8dbee0b-e84e-45f9-998d-39bee1803fc9"
+ASSET_SHA256 = "f35c398d7e266ed81a960e00e8fb623bc5992deaed6f70c85cee340f431b5950"
 ASSET = "sub-Rat1/sub-Rat1_ses-19980425T124500_behavior+ecephys.nwb"
 FS = 50.0
 DT = 1.0 / FS
@@ -53,9 +56,14 @@ local = OUT / "rat1_0425.nwb"
 try:
     from dandi.dandiapi import DandiAPIClient
     with DandiAPIClient() as client:
-        asset = client.get_dandiset(DANDISET, "draft").get_asset_by_path(ASSET)
+        asset = client.get_dandiset(DANDISET, VERSION).get_asset_by_path(ASSET)
         if not (local.exists() and local.stat().st_size > 5_000_000):
             asset.download(str(local))
+    import hashlib
+    with local.open("rb") as stream:
+        digest=hashlib.file_digest(stream,"sha256").hexdigest()
+    if digest != ASSET_SHA256:
+        fail("raw NWB hash does not match the published pinned asset; refusing cache")
 except Exception as e:
     fail(f"could not fetch DANDI {DANDISET}:{ASSET}: {e}")
 
@@ -83,14 +91,8 @@ if len(BL) == 0:
 m = np.zeros(len(t), bool)
 for s, e in BL:
     m |= (t >= s) & (t <= e)
-tb, xb, yb = t[m], xy[m, 0], xy[m, 1]
-valid = np.isfinite(xb) & np.isfinite(yb) & (xb > 0) & (yb > 0)
-sp = np.sqrt(np.gradient(xb) ** 2 + np.gradient(yb) ** 2) / np.clip(np.gradient(tb), 1e-3, None)
-spf = np.convolve(np.nan_to_num(sp), np.ones(5) / 5, mode="same")
-run = valid & (spf > RUN_THRESH)
-included = np.zeros(len(t), bool)
-included[np.flatnonzero(m)[run]] = True
-xr, yr, tr = xb[run], yb[run], tb[run]
+included = running_samples(t, xy, BL, RUN_THRESH, DT)
+xr, yr, tr = xy[included, 0], xy[included, 1], t[included]
 if len(tr) < 1000:
     fail("too few running samples on the Baseline track")
 
@@ -211,6 +213,7 @@ results = {
 
 (OUT / "run_metadata.json").write_text(json.dumps({
     "status": "ok", "dandiset": DANDISET, "asset": ASSET,
+    "version": VERSION, "asset_id": ASSET_ID, "source_sha256": ASSET_SHA256,
     "session": "ses-19980425T124500", "subject": "Rat1",
     "epochs_used": "Baseline rectangular-track (session_type == 'BL')",
     "n_units": len(rows), "grid": [NX, NY], "n_bins": NB,

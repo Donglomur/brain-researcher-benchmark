@@ -16,3 +16,13 @@ def test_elapsed_shift_stays_in_own_epoch():
     result=a.shifted_spikes([1.,101.],[(0.,60.),(100.,160.)],np.random.default_rng(0),20.)
     assert 0<=result[0]<60 and 100<=result[1]<160
     assert 20<=result[0]-1<=40
+
+def test_large_gap_jump_does_not_turn_stationary_samples_into_running():
+    times=np.array([0.,.02,.04,10.,10.02,10.04])
+    xy=np.array([[1.,1.]]*3+[[100.,100.]]*3)
+    assert not a.running_samples(times,xy,[(0.,11.)],5.,.02).any()
+
+def test_invalid_position_splits_speed_smoothing():
+    times=np.arange(7)*.02
+    xy=np.array([[1.,1.]]*3+[[np.nan,np.nan]]+[[100.,100.]]*3)
+    assert not a.running_samples(times,xy,[(0.,1.)],5.,.02).any()

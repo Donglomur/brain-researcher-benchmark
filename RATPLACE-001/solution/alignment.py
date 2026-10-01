@@ -1,6 +1,23 @@
 """Elapsed-time alignment: never snap spikes across removed running samples."""
 import numpy as np
 
+def running_samples(timestamps, xy, epochs, threshold, dt):
+    t=np.asarray(timestamps,float);xy=np.asarray(xy,float)
+    valid=np.isfinite(xy).all(axis=1)&(xy>0).all(axis=1)
+    included=np.zeros(len(t),bool)
+    for start,stop in epochs:
+        indices=np.flatnonzero((t>=start)&(t<stop)&valid)
+        if not len(indices):continue
+        split=np.flatnonzero((np.diff(indices)>1)|(np.diff(t[indices])>1.5*dt))+1
+        for segment in np.split(indices,split):
+            if len(segment)<2:continue
+            velocity=np.gradient(xy[segment],t[segment],axis=0)
+            speed=np.sqrt((velocity**2).sum(axis=1))
+            width=min(5,len(segment));kernel=np.ones(width)/width
+            smoothed=np.convolve(speed,kernel,mode="same")
+            included[segment]=smoothed>threshold
+    return included
+
 def sample_indices(timestamps, spikes, included, dt):
     t = np.asarray(timestamps, float)
     st = np.asarray(spikes, float)
