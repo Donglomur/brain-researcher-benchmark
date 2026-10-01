@@ -8,11 +8,11 @@ decisive.
 
 Inter-subject correlation can be estimated two ways that give materially different numbers:
 
-  * PAIRWISE ISC (CORRECT): the average Pearson correlation between the time courses of every
+  * PAIRWISE ISC: the average Pearson correlation between the time courses of every
     PAIR of participants. This is literally "the correlation between participants" and is the
     convention-invariant measure of between-subject similarity.
 
-  * LEAVE-ONE-OUT ISC (INFLATED): correlate each participant's time course with the MEAN of
+  * LEAVE-ONE-OUT ISC: correlate each participant's time course with the MEAN of
     all the OTHER participants, then average. Averaging N-1 subjects suppresses idiosyncratic
     noise and builds a high-SNR template, so each subject correlates much more strongly with
     that average than with any single other subject. LOO-ISC is therefore systematically
@@ -26,9 +26,8 @@ confound-cleaned, band-pass 0.01-0.1 Hz, mean over the three visual-cortex regio
     pairwise ISC (CORRECT) : 0.152
     leave-one-out ISC      : 0.365   (chance ~ 0.0)
 
-So the honest between-subject synchrony in visual cortex is ~0.15; the ~0.37 a
-leave-one-out pipeline reports is the high-SNR-template artifact, not the correlation
-between two participants.
+Both estimators are legitimate, but target different quantities. The higher-SNR group
+template explains the larger leave-one-out value; this does not make it an artifact.
 """
 from __future__ import annotations
 
@@ -132,13 +131,13 @@ def main() -> None:
         "n_timepoints": int(T),
         "chance": CHANCE,
         # named so it is unambiguously NOT the reported estimate
-        "leave_one_out_isc_inflated": round(isc_loo, 4),
+        "leave_one_out_isc": round(isc_loo, 4),
     })
     wj("run_metadata.json", {
         "task_id": TASK_ID, "status": "ok", "dataset_id": DATASET_ID,
         "atlas": "MSDL", "regions": VISUAL_REGIONS,
         "preprocessing": "NiftiMapsMasker, confound-cleaned, band-pass 0.01-0.1 Hz, zscore_sample",
-        "isc_estimator": "pairwise (mean Pearson correlation between every pair of participants)",
+        "isc_estimator": "pairwise",
         "n_subjects": int(n_sub), "n_timepoints": int(T),
     })
     (OUTPUT_DIR / "findings.md").write_text(
@@ -149,9 +148,10 @@ def main() -> None:
         "This is the *pairwise* ISC: the mean Pearson correlation between the movie time courses of "
         "every pair of participants, i.e. the correlation between two participants. For reference, "
         f"correlating each participant with the mean of all the others (leave-one-out) gives "
-        f"{isc_loo:.3f}; that value is inflated because averaging N-1 participants builds a high-SNR "
-        "template that suppresses idiosyncratic noise, so it overstates the genuine between-subject "
-        f"similarity. The pairwise {isc_pairwise:.3f} is the value I report.\n", encoding="utf-8")
+        f"{isc_loo:.3f}. Averaging participants yields a higher-SNR comparison template and a "
+        "different estimand, not an invalid estimate. Both are legitimate; they should not be "
+        f"compared without their estimator labels. The pairwise {isc_pairwise:.3f} is reported here.\n",
+        encoding="utf-8")
 
     print(f"n={n_sub} T={T} | pairwise ISC={isc_pairwise:.4f} | leave-one-out ISC={isc_loo:.4f}")
 

@@ -56,7 +56,7 @@ def load_submitted(path):
     """Return {canon_id: (pairwise_or_None, loo_or_None)} from isc_per_subject.csv."""
     rows = list(csv.DictReader(open(path, encoding="utf-8")))
     if not rows:
-        return {}
+        return {}, False, False
     headers = list(rows[0].keys())
     id_c = _pick(headers, ("subject", "subjectid", "participant", "participantid", "subid", "id"))
     pw_c = _pick(headers, ("iscpairwise", "pairwiseisc", "pairwise", "iscpw", "pw"))
@@ -66,7 +66,8 @@ def load_submitted(path):
     for r in rows:
         cid = canon_id(r.get(id_c, "")) if id_c else ""
         if not cid:
-            continue
+            raise AssertionError("Every ISC row must have a participant ID")
+        assert cid not in out, f"duplicate participant ID: {cid}"
 
         def num(c):
             if c is None:
@@ -136,14 +137,7 @@ def find_number(obj, key_patterns, exclude=None):
 
 
 def declared_estimator(meta):
-    """Return 'pairwise', 'loo', or None from the reported estimator string(s)."""
-    blob = _norm(json.dumps(meta))
-    is_loo = bool(re.search(r"leaveoneout|leave1out|loo|oneout|meanofthe?others|"
-                            r"vsthemean|againstthemean|templatebased", blob))
-    is_pw = "pairwise" in blob or "everypair" in blob or "betweeneverypair" in blob or \
-            "meanpearson" in blob and "pair" in blob
-    if is_loo and not is_pw:
-        return "loo"
-    if is_pw and not is_loo:
-        return "pairwise"
-    return None
+    """Read the public enum, never infer the estimator from unrelated prose."""
+    value = meta.get("isc_estimator")
+    aliases = {"pairwise": "pairwise", "loo": "loo", "leave-one-out": "loo"}
+    return aliases.get(value) if isinstance(value, str) else None

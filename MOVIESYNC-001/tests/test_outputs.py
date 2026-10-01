@@ -76,7 +76,7 @@ def _reported_headline(res):
 def test_outputs_present_and_wellformed():
     ref = _reference()
     sub, has_pw, has_loo = _submitted()
-    assert len(sub) >= 35, f"isc_per_subject.csv covers only {len(sub)} subjects (expected ~40)"
+    assert set(sub) == set(ref["ids"]), "require exactly the pinned 40 unique participants"
     assert has_pw or has_loo, (
         "isc_per_subject.csv has no per-subject ISC column (isc_pairwise / isc_loo)")
     res = _results()
@@ -135,11 +135,10 @@ def test_headline_recomputes_from_rows():
         assert abs(means["loo"] - st["loo"]) <= 0.04, (
             f"mean of the per-subject leave-one-out ISC ({means['loo']:.3f}) != reference "
             f"({st['loo']:.3f})")
-    # the reported headline must equal the mean of ONE of the per-subject columns (CSV<->JSON).
-    assert any(abs(reported - m) <= 0.03 for m in means.values()), (
-        f"reported visual_isc ({reported:.3f}) is not the mean of any submitted per-subject ISC "
-        f"column ({', '.join(f'{k}={v:.3f}' for k, v in means.items())}); the headline is not "
-        f"consistent with the per-subject rows")
+    estimator = pw.declared_estimator(_metadata())
+    assert estimator in means, "require isc_estimator enum and its per-subject column"
+    assert abs(reported - means[estimator]) <= 0.0001, (
+        "visual_isc must equal the mean of the declared estimator's participant column")
 
 
 # ------------------------------------------------------------------ pillar 3 (headline vs declared estimator)
@@ -158,7 +157,8 @@ def test_headline_matches_declared_estimator():
         f"(pairwise {st['pairwise']:.3f} / leave-one-out {st['loo']:.3f}); it is not a real ISC "
         f"of the pinned analysis")
 
-    est = pw.declared_estimator({**meta, **{k: v for k, v in res.items() if isinstance(v, str)}})
+    est = pw.declared_estimator(meta)
+    assert est in {"pairwise", "loo"}, "isc_estimator must be pairwise, loo, or leave-one-out"
     if est == "pairwise":
         assert matches_pw, (
             f"run_metadata declares the PAIRWISE estimator but the reported visual_isc "

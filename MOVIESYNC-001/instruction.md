@@ -39,7 +39,9 @@ Pin the analysis as follows so the number is comparable:
 - **ISC estimator:** either standard estimator is acceptable — **pairwise** ISC (the mean
   Pearson correlation between every pair of participants) or **leave-one-out** ISC (each
   participant correlated with the mean of the others). Both are conventional (Nastase et al.
-  2019); state in `run_metadata.json` which one you used. The leave-one-out estimate is
+  2019); set `isc_estimator` in `run_metadata.json` to `pairwise`, `loo`, or `leave-one-out`.
+  Include the corresponding `isc_pairwise` or `isc_loo` per-subject column for all 40 unique IDs.
+  The leave-one-out estimate is
   systematically higher than the pairwise one because it correlates against a higher-SNR
   template, so report the estimator alongside the value.
 
