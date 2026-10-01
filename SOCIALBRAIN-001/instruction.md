@@ -5,8 +5,8 @@ ToM–pain network segregation with age during *Partly Cloudy*. This task is a
 paper-derived sensitivity application on public ds000228 derivatives, not an exact
 reproduction of the paper's primary-motor/artifact-adjusted preprocessing.
 
-Use all155 subjects from nilearn.datasets.fetch_development_fmri (122 children,33 adults).
-Join Age/Child_Adult using actual participant_id, not array position. Extract9mm spheres
+Use all 155 subjects from nilearn.datasets.fetch_development_fmri (122 children, 33 adults).
+Join Age/Child_Adult using actual participant_id, not array position. Extract 9 mm spheres
 at the MNI coordinates below. Use the reduced confounds: six motion parameters,
 framewise_displacement, six a_comp_cor components, white_matter and csf, filling their
 missing first-volume values with zero; detrend and zscore_sample the ROI signals.
@@ -22,10 +22,10 @@ Aggregate correlations as tanh(mean(Fisher-z)) across off-diagonal within-networ
 edges and all across-network edges. Report within-ToM/within-pain under the no-GSR
 pipeline and across-network under both. For children only, calculate Spearman r/p
 and motion-adjusted rank r/p by residualizing age/connectivity ranks on meanFD rank
-plus intercept (df=n-3). Report adult network means separately.
+plus intercept (df = n - 3). Report adult network means separately.
 
 Write to OUTPUT_DIR (default /app/output):
-- network_connectivity.csv: exactly155 unique actual subject_id,age,group,mean_fd,
+- network_connectivity.csv: exactly 155 unique actual subject_id,age,group,mean_fd,
   within_tom,within_pain,across_network,across_network_gsr.
 - age_effects.json: each connectivity column's child r,p,motion_adjusted_rank_r/p;
   adult_means,n_children,n_adults.
