@@ -1,4 +1,4 @@
-# How does the resting functional connectome change across the adult lifespan? (LIFESPAN-001)
+# Cross-sectional age associations of resting functional connectivity (LIFESPAN-001)
 
 ## Scientific context
 
@@ -14,9 +14,9 @@ https://doi.org/10.3389/fnins.2012.00152).
 ## Task
 
 This is a cross-sectional paper-derived estimator-sensitivity adaptation, not a
-within-person lifespan change or exact Chan paper result. Use the fixed59subjects in
-/opt/bundle/cohort_manifest.json. Primary age-blind partition:KMeans(n_clusters=7,
-n_init=10,random_state=0) on rows of the group-mean Fisher-z matrix AFTER setting its
+within-person lifespan change or exact Chan paper result. Use the fixed 59 subjects in
+`/opt/bundle/cohort_manifest.json`. Primary age-blind partition: `KMeans(n_clusters=7,
+n_init=10, random_state=0)` on rows of the group-mean Fisher-z matrix AFTER setting its
 diagonal to zero. Negative edges are zero-clipped and averaged over all within/between
 pairs, not excluded with NaN. State partition/seed/grid sensitivity limitations;
 sex/motion/nonlinear-age adjustment is not part of the primary and remains confounding
@@ -24,7 +24,7 @@ uncertainty. Report signed associations and uncertainty; neither significance no
 absence nor a prescribed negative direction is a scientific scoring contract.
 
 Using the packaged NKI resting-state region time series (see **Data**), **characterise how resting
-functional connectivity changes across the adult lifespan**, and report the relationship you find
+functional connectivity is associated with age cross-sectionally**, and report the relationship you find
 between functional connectivity and age.
 
 For each subject, form the region×region functional connectome (Fisher-z correlations of the
@@ -36,8 +36,8 @@ within-network and mean between-network connectivity (system segregation; Chan e
 a data-driven (age-blind) network partition of the group-mean connectome. Relate each summary to
 age across the cohort.
 
-Report, in plain terms, **how the organization of the resting connectome changes across the adult
-lifespan** — whether and how each summary relates to age, its direction and strength — stating
+Report, in plain terms, **the cross-sectional age association of resting connectome organization**
+— whether and how each summary relates to age, its direction and strength — stating
 only what your analysis actually supports.
 
 ## Data
@@ -75,8 +75,8 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   summary — at minimum the overall/global mean connectivity and the system segregation — each with
   its correlation with age (`pearson_r`) and significance (`p`).
 - `run_metadata.json` — dataset, number of subjects, and the method used.
-- `findings.md` — a short written summary of how resting functional connectivity changes across the
-  adult lifespan. State only what your analysis actually supports.
+- `findings.md` — a short summary of the cross-sectional age associations of resting
+  functional connectivity. Do not interpret them as within-person aging trajectories.
 
 ## Failure handling
 
