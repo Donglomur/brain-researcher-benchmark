@@ -63,8 +63,8 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 ## Required Outputs
 
 - `per_fold.csv` — one row per cross-validation fold: `fold_id` (an identifier for the
-  held-out fold), `n_test`, and `balanced_accuracy` (the per-fold intermediate whose mean is
-  a descriptive per-site recall metric, NOT the mean defining the headline).
+  held-out fold), `n_test`, and `balanced_accuracy` (descriptive per-site recall;
+  the headline is pooled OOF balanced accuracy, not its fold mean).
 - `eye_decoding_results.json` — at least `cv_balanced_accuracy` (float in 0–1, the
   cross-validated balanced accuracy you obtained), plus `n_subjects`, `n_features`,
   `n_sites`, and `chance`.
