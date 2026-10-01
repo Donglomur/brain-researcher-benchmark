@@ -1,24 +1,23 @@
-"""Real-data arterial-input kinetic method case with documented decay footing.
-Activity sampling times do not establish activity decay correction status.
+"""Quarantined arterial-input prototype: released blood decay footing is unbound.
+
+The standard-library gate stops before numerical imports or network access.
+The historical analysis is retained below for inspection, not as a validated
+estimator. Activity sample times do not establish activity decay reference.
 """
 import json
 import os
 import sys
-import urllib.request
 from pathlib import Path
-
-import numpy as np
-from input_contract import parent_input
 
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 OUT.mkdir(parents=True, exist_ok=True)
 
 DATASET = "ds005619"
 SNAPSHOT = "1.1.0"
+SNAPSHOT_COMMIT = "358a370c010a792484585b80d28adb699ec28927"
 SUBJECTS = ["sf02", "sf05", "sf06", "sf07", "sf08", "sf09", "sf10"]
 SESSION = "ses-baseline"
 HALFLIFE_MIN = 109.771            # 18F
-LAMBDA = np.log(2.0) / HALFLIFE_MIN
 TSTAR_MIN = 30.0                  # Logan/MA1 linear-phase start
 API = "https://openneuro.org/crn/datasets/{ds}/snapshots/{tag}/files/{colon}"
 
@@ -27,13 +26,39 @@ def fail(reason):
     (OUT / "run_metadata.json").write_text(json.dumps(
         {"dataset": DATASET, "snapshot": SNAPSHOT, "status": "failed_precondition",
          "reason": reason, "target_region": "cerebral_cortex",
-         "quantity": "VT", "model": "Logan (arterial input)"}, indent=2))
+         "quantity": "VT", "model": "Logan (arterial input)",
+         "source_snapshot_commit": SNAPSHOT_COMMIT,
+         "scientific_precondition": "released_blood_activity_decay_reference_unverified"}, indent=2))
     (OUT / "findings.md").write_text(
         "# PETVT-001 -- failed precondition\n\n" + reason + "\n")
     (OUT / "vt_estimates.csv").write_text(
         "subject,session,target,input,model,VT\n")
     print("failed_precondition:", reason, file=sys.stderr)
     sys.exit(1)
+
+
+# No authoritative receipt binds the seven frozen blood TSVs to a decay
+# reference. The cited Zoghbi 2006 measurement protocol favors injection-time
+# correction, but does not establish whether the subsequent TSV exporter
+# preserved or transformed those activities. A source URL, claimed convention,
+# fitted V_T, or syntactically plausible receipt is not that missing lineage.
+# Do not bypass this gate through BLOOD_DECAY_RECEIPT. Resume only after a
+# reviewed authoritative source receipt or an explicitly approved sensitivity
+# task with a new public contract and genuinely generated reference bank.
+fail(
+    "The released ds005619 1.1.0 blood TSV activity decay reference is not "
+    "authoritatively bound to its export. The cited measurement protocol "
+    "supports correction to injection time, but does not establish the TSV "
+    "export convention. No supplied decay receipt is currently approved. "
+    "Authoritative exporter evidence or an explicitly approved two-assumption "
+    "sensitivity contract is required before numerical analysis."
+)
+
+import urllib.request
+import numpy as np
+from input_contract import parent_input
+
+LAMBDA = np.log(2.0) / HALFLIFE_MIN
 
 
 def fetch(colon_path):
