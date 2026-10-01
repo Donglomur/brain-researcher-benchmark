@@ -144,4 +144,4 @@ age_effects["motion_control"] = {
     "summaries; this is not Fair's original resting/four-network reproduction. Covariate "
     "sensitivity and non-significance do not establish a motion-caused artifact or no developmental effect.\n")
 
-print(f"OK: child-only age~short r_s={age_effects[\'children_age_spearman\'][\'short_range\'][\'r\']:.3f}; partial|FD r={pr:.3f} p={pp:.3f}; low-motion restricted segregation p={pm:.3f}")
+print(f"OK: child-only age~short r_s={age_effects['children_age_spearman']['short_range']['r']:.3f}; partial|FD r={pr:.3f} p={pp:.3f}; low-motion restricted segregation p={pm:.3f}")
