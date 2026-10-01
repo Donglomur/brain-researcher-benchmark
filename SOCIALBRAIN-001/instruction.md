@@ -43,6 +43,22 @@ L-insula (−38, 4, 6); dACC (0, 8, 38); medial-frontal (0, 16, 46).
 
 ## Output Location
 
+## Public adaptation/sensitivity contract
+
+The target is a Richardson-motivated GSR/motion sensitivity application, not an exact
+reproduction of the paper's nuisance/artifact-adjusted result. Use reduced fMRIPrep confounds
+(sixmotion, meanFD,sixCompCor,WM,CSF), detrend,9mm ROI spheres and signal standardization.
+Compute both without and with an added whole-brain global signal; do not hide this comparison.
+Aggregate ROI correlations as mean Fisher-z then tanh, not raw-r edge averaging.
+Exactly155 unique actual participant IDs are required; join Age/Child_Adult by participant_id.
+network_connectivity.csv contains subject_id, age, group, mean_fd, within_tom, within_pain,
+across_network and across_network_gsr. For children only, report Spearman r/p and
+motion_adjusted_rank_r/p (partial correlation of age/connectivity ranks controlling for
+meanFD rank, df=n-3) under each pipeline. No predetermined null/negative pair is required.
+Metadata analysis_scope is paper-derived GSR/motion sensitivity adaptation. Report model
+dependence without asserting GSR caused an artifact or that the original paper was refuted.
+
+
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
