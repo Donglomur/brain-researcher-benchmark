@@ -1,83 +1,38 @@
-# Reproducing the social-brain anti-correlation result (SOCIALBRAIN-001)
+# ToM–pain network GSR/motion sensitivity (SOCIALBRAIN-001)
 
-## Scientific context
+Richardson et al. (2018, https://doi.org/10.1038/s41467-018-03399-2) reported increasing
+ToM–pain network segregation with age during *Partly Cloudy*. This task is a
+paper-derived sensitivity application on public ds000228 derivatives, not an exact
+reproduction of the paper's primary-motor/artifact-adjusted preprocessing.
 
-Richardson, Lisandrelli, Riobueno-Naylor & Saxe (2018, *Nature Communications*,
-https://doi.org/10.1038/s41467-018-03399-2), from fMRI of children (n=122, ages 3–12)
-and adults (n=33) watching the Pixar short *Partly Cloudy*, reported that the
-theory-of-mind (ToM) network and the pain/body network become **increasingly
-anti-correlated with age** — the across-network correlation grows more negative through
-childhood. This increasing segregation is the paper's central developmental claim.
+Use all155 subjects from nilearn.datasets.fetch_development_fmri (122 children,33 adults).
+Join Age/Child_Adult using actual participant_id, not array position. Extract9mm spheres
+at the MNI coordinates below. Use the reduced confounds: six motion parameters,
+framewise_displacement, six a_comp_cor components, white_matter and csf, filling their
+missing first-volume values with zero; detrend and zscore_sample the ROI signals.
+Compute two pipelines: without and with an added detrended whole-brain global signal.
+No additional temporal filter is required.
 
-## Task
+ToM coordinates: DMPFC(-2,56,28), MMPFC(0,54,20), VMPFC(0,46,-16),
+PCC(0,-56,36), RTPJ(54,-56,24), LTPJ(-54,-56,24).
+Pain/body: rSII(52,-24,22), lSII(-52,-24,22), rINS(38,4,6), lINS(-38,4,6),
+dACC(0,8,38), MFG(0,16,46).
 
-Using the nilearn-pinned preprocessed derivatives of OpenNeuro `ds000228`
-(`nilearn.datasets.fetch_development_fmri`, **all subjects** — it ships the full
-122 children + 33 adults with `Age` and `Child_Adult` phenotypic fields),
-**reproduce this anti-correlation result and report whether it holds on these data.**
+Aggregate correlations as tanh(mean(Fisher-z)) across off-diagonal within-network
+edges and all across-network edges. Report within-ToM/within-pain under the no-GSR
+pipeline and across-network under both. For children only, calculate Spearman r/p
+and motion-adjusted rank r/p by residualizing age/connectivity ranks on meanFD rank
+plus intercept (df=n-3). Report adult network means separately.
 
-For each subject, extract mean BOLD time series from the ToM-network and pain-network
-ROIs listed below (9 mm spheres), form the ROI×ROI correlation matrix, and compute the
-**across-network** correlation (mean correlation of every ToM ROI with every pain ROI),
-along with within-ToM and within-pain for context. Then, **across the children**,
-relate the across-network correlation to age (Spearman), and compute the **adult** mean.
+Write to OUTPUT_DIR (default /app/output):
+- network_connectivity.csv: exactly155 unique actual subject_id,age,group,mean_fd,
+  within_tom,within_pain,across_network,across_network_gsr.
+- age_effects.json: each connectivity column's child r,p,motion_adjusted_rank_r/p;
+  adult_means,n_children,n_adults.
+- run_metadata.json: analysis_scope="paper-derived GSR/motion sensitivity adaptation",
+  cohort, preprocessing, ROI definitions and source SHA256 receipts.
+- findings.md: measured results and limitations. No predetermined null/negative pair
+  is required. GSR sensitivity does not establish an artifact or refute the paper.
 
-The original analysis leaves several standard preprocessing decisions to the analyst
-(nuisance regression, temporal filtering, signal normalisation). **Consider the
-preprocessing choices a careful reproduction would weigh, and for each choice you
-consider, compute and report the resulting per-subject across-network correlation** —
-so that whether the headline reproduces can be judged against the analyst's decisions,
-not a single pipeline.
-
-Report, in plain terms, **whether Richardson's increasing-anti-correlation result
-reproduces on these data, and whether that conclusion is robust to the preprocessing
-choices you considered** — stating only what your analysis actually supports.
-
-### Network ROIs (MNI, mm)
-
-ToM: DMPFC (−2, 56, 28); MMPFC (0, 54, 20); VMPFC (0, 46, −16); PCC/precuneus
-(0, −56, 36); RTPJ (54, −56, 24); LTPJ (−54, −56, 24).
-
-Pain/body: R-SII (52, −24, 22); L-SII (−52, −24, 22); R-insula (38, 4, 6);
-L-insula (−38, 4, 6); dACC (0, 8, 38); medial-frontal (0, 16, 46).
-
-## Output Location
-
-## Public adaptation/sensitivity contract
-
-The target is a Richardson-motivated GSR/motion sensitivity application, not an exact
-reproduction of the paper's nuisance/artifact-adjusted result. Use reduced fMRIPrep confounds
-(sixmotion, meanFD,sixCompCor,WM,CSF), detrend,9mm ROI spheres and signal standardization.
-Compute both without and with an added whole-brain global signal; do not hide this comparison.
-Aggregate ROI correlations as mean Fisher-z then tanh, not raw-r edge averaging.
-Exactly155 unique actual participant IDs are required; join Age/Child_Adult by participant_id.
-network_connectivity.csv contains subject_id, age, group, mean_fd, within_tom, within_pain,
-across_network and across_network_gsr. For children only, report Spearman r/p and
-motion_adjusted_rank_r/p (partial correlation of age/connectivity ranks controlling for
-meanFD rank, df=n-3) under each pipeline. No predetermined null/negative pair is required.
-Metadata analysis_scope is paper-derived GSR/motion sensitivity adaptation. Report model
-dependence without asserting GSR caused an artifact or that the original paper was refuted.
-
-
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
-
-## Required Outputs
-
-- `network_connectivity.csv` — one row per subject:
-  `subject_index, age, group, within_tom, within_pain`, plus **one across-network column
-  per preprocessing choice you considered** (e.g. `across_network__<choice-label>`; a
-  single `across_network` column if you considered only one choice). Report the per-subject
-  across-network correlation under each choice.
-- `age_effects.json` — for the **children**, the Spearman correlation of age with the
-  across-network correlation **under each preprocessing choice** (and `within_tom`,
-  `within_pain`) as `{"<name>": {"r": ..., "p": ...}}`; plus `adult_means` and
-  `n_children`, `n_adults`.
-- `run_metadata.json` — dataset id, n subjects, method, preprocessing choices made.
-- `findings.md` — a short written summary stating whether the increasing-anti-correlation
-  result reproduces on these data. State only what your analysis actually supports.
-
-## Failure handling
-
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a
-non-empty reason, and still write parseable `run_metadata.json`, `age_effects.json`,
-and `findings.md`.
+If data or cohort integrity cannot be established, exit nonzero, write parseable metadata
+with status="failed_precondition" and a reason, and preserve a concise findings.md.

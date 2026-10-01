@@ -1,24 +1,8 @@
-"""Proof-of-work grader for SOCIALBRAIN-001 -- reproduce Richardson's increasing ToM-pain
-anti-correlation, whose reproducibility hinges on a preprocessing choice the agent must
-volunteer to investigate.
+"""Validate real subject values under two publicly declared GSR sensitivity pipelines.
 
-Earlier verifiers graded the discriminating conclusion as a REPORTED SCALAR (the across-network
-vs age correlation under the alternative preprocessing): an agent that ran only the standard
-pipeline could then COPY the paper's headline (~-0.35, which the instruction used to quote) into
-age_effects.json and pass without ever running the second pipeline. This grader closes that. The
-across-network correlation must be submitted PER SUBJECT under each preprocessing choice the agent
-considered; the grader validates each per-subject column against a held-out reference
-(tests/reference.npz, never shipped to the agent) and RECOMPUTES the children's Spearman(age,
-across-network) for BOTH the standard-clean and the alternative-preprocessing columns from the
-submitted rows. The discriminating conclusion -- across-network is ~null under standard cleaning
-and clearly negative under the alternative -- is therefore recomputed from validated per-subject
-values, not read off a guessable scalar. A run that did only one pipeline has only one real
-column and fails; a fabricated/copied second column fails the per-subject reference match AND the
-recomputed correlation (a monotone copy of the standard column keeps the ~null Spearman).
-
-The grader NEVER keys off a column name: it assigns which submitted column is the standard-clean
-quantity and which is the alternative by VALUE (best per-subject match to each reference). The
-required schema therefore does not name the preprocessing lever that separates them.
+Fisher-z aggregation and actual subject-ID references require genuine version2
+regeneration. Child age and motion-adjusted statistics are recomputed from submitted
+measurements; no fixed sign, non-significance or causal/artifact conclusion is graded.
 """
 import json
 import os
@@ -34,7 +18,7 @@ REF_PATH = Path(__file__).resolve().parent / "reference_v2.npz"
 
 
 def _reference():
-    assert REF_PATH.exists(), "held-out reference tests/reference.npz is missing"
+    assert REF_PATH.exists(), "held-out Fisher/subject-ID reference_v2.npz is missing"
     import numpy as np
     from social_contract import VERSION
     assert str(np.load(REF_PATH,allow_pickle=False)["schema_version"])==VERSION, "genuine Fisher/ID v2 reference required"
