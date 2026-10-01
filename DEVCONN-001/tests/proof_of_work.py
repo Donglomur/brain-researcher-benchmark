@@ -1,10 +1,7 @@
-"""Reusable proof-of-work helpers for DEVCONN-001's grader.
+"""Validate actual-ID measurements for a child-only movie-data sensitivity case.
 
-A passing submission must be IMPOSSIBLE to produce without running the real Power-264
-short/long-range connectivity analysis on the real ds000228 subjects AND performing the
-head-motion control. These helpers validate the submitted per-subject connectivity.csv against
-a held-out reference (tests/reference.npz), recompute the age~short-range Spearman FROM the
-submitted rows, and locate the reported raw vs motion-controlled numbers for numeric grading.
+The held reference authenticates ROI measurements and covariates. Age and motion
+associations are recomputed without a forced motion-collapse or causal conclusion.
 """
 import csv
 import json
@@ -110,32 +107,21 @@ def pearson(x, y):
 
 def check_subjects_and_values(subrows, ref, key_ref, key_sub, val_tol, corr_min, cover, match,
                               eps=1e-4):
-    # Stable join by AGE, not by row id: `subject_index` is a fetch-ORDER label, and a valid re-run
-    # (different nilearn version / cache path) may enumerate ds000228 in a different order, so an
-    # id/index join compares mismatched subjects and a correct solve fails spuriously. Age is the
-    # real per-subject phenotype (identical across runs); match each submitted row to an unused
-    # reference subject of the same age (ties within an age broken by nearest target value).
-    from collections import defaultdict
-    buckets = defaultdict(list)
-    for a, v in zip(ref["age"], ref[key_ref]):
-        buckets[round(float(a), 2)].append(float(v))
-    for k in buckets:
-        buckets[k].sort()
-    n_ref = len(ref[key_ref])
-    rows = [r for r in subrows if r.get(key_sub) is not None and r.get("age") is not None]
-    sub, refv = [], []
-    for r in rows:
-        cand = buckets.get(round(float(r["age"]), 2))
-        if not cand:
-            continue
-        v = float(r[key_sub])
-        j = min(range(len(cand)), key=lambda i: abs(cand[i] - v))  # nearest ref value at this age
-        refv.append(cand.pop(j)); sub.append(v)
+    ids=[row["id"] for row in subrows]
+    assert len(ids)==len(set(ids)), "duplicate participant ID"
+    assert len(ref["ids"])==len(set(ref["ids"])), "duplicate reference participant ID"
+    lookup={sid:i for i,sid in enumerate(ref["ids"])}
+    n_ref=len(ref[key_ref])
+    sub=[];refv=[]
+    for row in subrows:
+        if row["id"] in lookup and row.get(key_sub) is not None:
+            sub.append(float(row[key_sub]))
+            refv.append(float(ref[key_ref][lookup[row["id"]]]))
     matched = sub
     coverage = len(sub) / max(1, n_ref)
     assert coverage >= cover, (
         f"[{key_sub}] connectivity.csv covers only {coverage:.1%} of the {n_ref} real "
-        f"ds000228 subjects by age (need >= {cover:.0%}). Fabricated or missing subjects.")
+        f"ds000228 subjects by participant ID (need >= {cover:.0%}). Fabricated or missing subjects.")
     assert statistics.pstdev(sub) > eps, f"[{key_sub}] constant across subjects -- not per-subject"
     rc = pearson(sub, refv)
     assert math.isfinite(rc) and rc >= corr_min, (

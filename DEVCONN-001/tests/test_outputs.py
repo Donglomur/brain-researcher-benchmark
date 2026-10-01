@@ -1,16 +1,7 @@
-"""Proof-of-work grader for DEVCONN-001 -- reproduce the developmental local-to-distributed
-connectivity result, an un-cued head-motion confound (wrong-cause axis).
+"""Validate an honest child-only movie-data connectivity/motion sensitivity case.
 
-The previous verifier NEVER opened age_effects.json (which holds the headline r/p): it checked
-only that connectivity.csv had in-range short/long columns for both groups, and that findings.md
-contained a motion-confound sentence -- so fabricated per-subject rows + a keyword sentence
-passed. This grader closes that. It validates the exact ds000228 subjects and their per-subject
-short-range connectivity against a held-out reference (tests/reference.npz, built from the oracle
-and never shipped to the agent), recomputes the age~short-range Spearman FROM the submitted rows,
-cross-checks it against the reported JSON and the reference, and grades the motion-collapse AS
-NUMBERS: the raw age~short-range effect (~-0.205) collapses under a mean-FD partial correlation
-(~-0.033), and children move ~2x more than adults. An agent that never ran the motion control
-cannot report the partial correlation.
+Subject measurements are bound to actual IDs. Reported associations, participant-bootstrap
+intervals and low-motion restriction are recomputed without a forced confounding verdict.
 """
 import json
 import os
@@ -26,7 +17,7 @@ REF_PATH = Path(__file__).resolve().parent / "reference_v2.npz"
 
 
 def _reference():
-    assert REF_PATH.exists(), "held-out reference tests/reference.npz is missing"
+    assert REF_PATH.exists(), "held-out actual-ID reference_v2.npz is missing"
     import numpy as np
     from development_contract import VERSION
     assert str(np.load(REF_PATH,allow_pickle=False)["schema_version"])==VERSION, "genuine actual-ID child-motion v2 reference required"
@@ -78,15 +69,15 @@ def test_proof_of_work_subjects_and_values():
     ref = _reference(); st = ref["stats"]
     rows = _submitted()
     pw.check_subjects_and_values(rows, ref, "short", "short", val_tol=st["VAL_TOL"],
-                                 corr_min=st["CORR_MIN"], cover=st["COVER"], match=st["MATCH"])
+                                 corr_min=st["CORR_MIN"], cover=1., match=st["MATCH"])
     if any(r.get("long") is not None for r in rows):
         pw.check_subjects_and_values(rows, ref, "long", "long", val_tol=st["VAL_TOL"],
-                                     corr_min=st["CORR_MIN"], cover=st["COVER"], match=st["MATCH"])
+                                     corr_min=st["CORR_MIN"], cover=1., match=st["MATCH"])
     # the per-subject mean_fd column must be the REAL framewise-displacement summary (a fabricated
     # or constant FD cannot reproduce the motion-conditioned collapse recomputed in pillar 3).
     assert "fd" in ref, "reference is missing per-subject mean_fd (rebuild tests/reference.npz)"
     pw.check_subjects_and_values(rows, ref, "fd", "fd", val_tol=st["FD_VAL_TOL"],
-                                 corr_min=st["FD_CORR_MIN"], cover=st["COVER"], match=st["FD_MATCH"])
+                                 corr_min=st["FD_CORR_MIN"], cover=1., match=st["FD_MATCH"])
 
 
 # ------------------------------------------------------------------ pillar 2

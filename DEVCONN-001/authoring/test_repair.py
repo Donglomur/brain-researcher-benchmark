@@ -28,3 +28,13 @@ def test_actual_input_membership_and_pairing():
         m.validate_input_identity(funcs,list(reversed(confounds)),ids)
     with pytest.raises(AssertionError):
         m.validate_input_identity(funcs[:-1],confounds[:-1],ids[:-1])
+
+def test_connectivity_bound_to_actual_id_not_age_ties():
+    spec=importlib.util.spec_from_file_location("dev_pw",ROOT/"tests/proof_of_work.py")
+    pw=importlib.util.module_from_spec(spec);spec.loader.exec_module(pw)
+    reference={"ids":["1","2","3","4"],"age":[6.,6.,8.,9.],"short":[.1,.8,.3,.4]}
+    rows=[{"id":sid,"age":age,"short":value} for sid,age,value in zip(reference["ids"],reference["age"],reference["short"])]
+    pw.check_subjects_and_values(list(reversed(rows)),reference,"short","short",1e-8,.99,1.,1.)
+    rows[0]["short"],rows[1]["short"]=rows[1]["short"],rows[0]["short"]
+    with pytest.raises(AssertionError):
+        pw.check_subjects_and_values(rows,reference,"short","short",1e-8,.99,1.,1.)
