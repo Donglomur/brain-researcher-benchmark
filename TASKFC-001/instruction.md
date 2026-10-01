@@ -36,6 +36,20 @@ analysis actually supports.
 
 ## Output Location
 
+## Public model-sensitivity contract
+
+Report both raw nuisance-cleaned FC and canonical Glover-HRF task-regressed FC. This is
+a paper-derived canonical-response sensitivity case, not the flexible-FIR correction in
+Cole's original analysis. Neither raw nor residual FC identifies true/intrinsic coupling.
+Save intermediates_SUBJECT.npz for each of exactly10 subjects with roi_signals,
+nuisance_design, task_design, raw_residuals and background_residuals. These support
+OLS residual recomputation; nuisance_design is intercept+cosine drift+motion, task_design
+is the language/string Glover response with the event timing and TR specified above.
+In connectivity_summary.json add paired_z_sensitivity: n, mean_raw_minus_background_z,
+and ci95, from participant-wise arctanh(raw)-arctanh(background), using t(n-1) intervals.
+Report the signed measured sensitivity and limitations; a decrease is not a grading requirement.
+
+
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs
