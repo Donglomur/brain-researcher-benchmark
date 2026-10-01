@@ -193,34 +193,9 @@ def test_alignment_improves_reproducibility():
 # =============================================================================================
 # Pillar 4 -- a robustness check was actually run (rigor; scoped, per the R2 hedge)
 # =============================================================================================
-def test_robustness_was_checked():
-    if count_configs() >= MIN_CONFIGS:
-        return
-    text = written_blob()
-    compared = re.search(r"band-?pass|subsample|sub-?sample|leave-?one|bootstrap|re-?ran|re-?computed|"
-                         r"different (choice|pipeline|parcellation|config)|multiverse|sensitivity", text)
-    assert compared, ("submission reported a single pipeline only -- it did not check the robustness of "
-                      "the principal-gradient identity to analysis choices (band-pass on/off, subject "
-                      "subsample, ...). Characterising the gradient without any robustness check is "
-                      "overconfident on this cohort.")
-
-
-# =============================================================================================
-# Pillar 5 -- identity not overclaimed (secondary, SCOPED -- never forces a universal claim)
-# =============================================================================================
-def test_identity_not_overclaimed():
-    # Accept a scoped rigor verdict: the submission reports the apex/identity varies across the
-    # specific choices it tested (>= 2 distinct apex networks), OR states it is not robust/uniquely
-    # determined on this cohort. Neither a universal-instability claim nor a specific apex is required.
-    if len(distinct_apex_networks()) >= 2:
-        return
-    text = written_blob()
-    acknowledges = re.search(
-        r"not robust|n't robust|not (uniquely |robustly )?determined|not stable|unstable|"
-        r"does not reproduce|doesn't reproduce|varies (across|with|by)|sample[- ]?dependent|"
-        r"pipeline[- ]?dependent|choice[- ]?dependent|fragile|sensitive to|depends on the "
-        r"(choice|pipeline|analysis)|not warranted|cannot (confidently|robustly)", text)
-    assert acknowledges, (
-        "the submission asserts a single confident principal-gradient identity without reporting that, "
-        "across the analytic choices tested on this cohort, that identity is not stable. Scope the "
-        "claim to what the robustness check supports rather than over-claiming one fixed identity.")
+def test_configuration_evidence_and_identity():
+    from gradient_contract import validate_evidence
+    from pathlib import Path
+    reference_path = Path(__file__).resolve().parent / "reference_v2.npz"
+    assert reference_path.exists(), "genuine v2 reference regeneration required; v1 insufficient"
+    validate_evidence(OUT, np.load(reference_path, allow_pickle=False))

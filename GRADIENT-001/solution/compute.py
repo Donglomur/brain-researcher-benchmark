@@ -24,6 +24,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import traceback
 from pathlib import Path
 
@@ -96,27 +97,12 @@ def group_g1_means(fcs, nets):
 
 
 def write_findings(meta: dict, configs: list) -> None:
-    """Write findings.md — the short, plain write-up a researcher would leave."""
-    if meta.get("status") != "ok":
-        (OUTPUT_DIR / "findings.md").write_text(
-            f"# Findings\n\nAnalysis did not complete: {meta.get('reason', 'unknown')}.\n", encoding="utf-8")
-        return
-    apexes = sorted({c["apex_network"] for c in configs})
-    rows = "\n".join(f"| {c['config']} | {c['apex_network']} | {c['between_within']} |" for c in configs)
+    stable = meta.get("principal_gradient_identity_robust")
+    conclusion = ("Same apex under tested configurations." if stable else
+                  "Apex differs across tested configurations.")
     (OUTPUT_DIR / "findings.md").write_text(
-        "# Findings: principal connectivity gradient (ds000228, Schaefer-400/7)\n\n"
-        f"Per-subject diffusion-map gradients were aligned to a group template (Procrustes); cross-subject "
-        f"reproducibility of the principal gradient was r={meta.get('aligned_signed')} (≈0 without alignment).\n\n"
-        "I did **not** find a stable identity for the principal gradient. Before committing to which networks it "
-        "separates, I re-ran the group analysis under a few defensible choices (temporal band-pass on/off, and two "
-        "disjoint subject subsamples). The network at the gradient's apex was not stable across them:\n\n"
-        "| configuration | apex network | between/within |\n|---|---|---|\n" + rows + "\n\n"
-        f"The apex moved across {', '.join(apexes)} depending on the choice, so on this cohort the principal "
-        "gradient's network identity is **not robustly determined** — in particular the textbook result that the "
-        "default-mode network sits at the apex against all unimodal cortex does not reproduce here, and no single "
-        "network uniquely anchors the gradient. What *is* stable, and all I would claim: a low-dimensional embedding "
-        "exists, the seven networks are differentiable in the leading gradients, and alignment is necessary for any "
-        "cross-subject comparison.\n", encoding="utf-8")
+        "# Principal-gradient sensitivity\n\n" + conclusion +
+        "\nThis is scoped to the tested cohort/sign convention/configurations, not universal.\n")
 
 
 def write_failfast(reason: str) -> None:
@@ -143,14 +129,16 @@ def main() -> None:
         return write_failfast(f"unexpected_atlas_label_count:{len(nets)}")
 
     dev = fetch_development_fmri(n_subjects=N_SUBJECTS)
+    subject_ids = [re.search(r"(sub-[A-Za-z0-9]+)", Path(f).name).group(1) for f in dev.func]
+    if len(subject_ids) != 20 or len(set(subject_ids)) != 20:
+        raise ValueError("exact20 unique subjects required")
     # extract once: confound-regressed + detrended ROI signals (no band-pass, no z-score)
     masker = NiftiLabelsMasker(labels_img=atlas.maps, standardize=False, detrend=True)
     raw = []
     for func, conf in zip(dev.func, dev.confounds):
         ts = masker.fit_transform(func, confounds=conf)
         raw.append(ts if (ts.shape[1] == 400 and ts.shape[0] >= 50) else None)
-    raw = [t for t in raw if t is not None]
-    if len(raw) < 10:
+    if any(t is None for t in raw) or len(raw) != 20:
         return write_failfast(f"too_few_usable_subjects:{len(raw)}")
 
     def fcs_for(idxs, bandpass):
@@ -175,10 +163,17 @@ def main() -> None:
     ]
     configs, bws = [], []
     for name, idxs, bp in configs_spec:
-        _, means, bw = group_g1_means(fcs_for(idxs, bp), nets)
+        config_gradient, means, bw = group_g1_means(fcs_for(idxs, bp), nets)
+        gradient_path = f"configuration_{name}.npy"
+        np.save(OUTPUT_DIR / gradient_path, config_gradient)
         apex = max(means, key=means.get)
         bottom = min(means, key=means.get)
         configs.append({"config": name, "n": len(idxs), "bandpass": bp, "apex_network": apex,
+                        "subject_ids": [subject_ids[i] for i in idxs],
+                        "gradient_path": gradient_path, "gradient_sha256": _sha(OUTPUT_DIR / gradient_path),
+                        "method": {"approach": "dm", "kernel": "normalized_angle", "sparsity": 0.9,
+                                   "n_components": N_COMPONENTS, "random_state": 0},
+                        "sign_convention": "Default>=Vis",
                         "bottom_network": bottom, "default_g1": round(means["Default"], 4),
                         "visual_g1": round(means["Vis"], 4), "between_within": round(bw, 3)})
         bws.append(bw)
@@ -203,6 +198,8 @@ def main() -> None:
             Gmean[:, k] *= -1.0
 
     np.save(OUTPUT_DIR / "gradients_aligned.npy", np.stack(aligned))
+    np.save(OUTPUT_DIR / "gradients_unaligned.npy", np.stack(unaligned))
+    wj("subject_ids.json", subject_ids)
     wj("consistency.json", {"aligned_signed": round(al_signed, 4), "unaligned_signed": round(ua_signed, 4),
                             "component": "g1", "n_subjects": len(fcs)})
     pd.DataFrame({"parcel_index": np.arange(400), "network": nets,
@@ -214,13 +211,8 @@ def main() -> None:
                    "n_parcels": int((nets == nn).sum())} for nn in NETWORKS]).to_csv(
         OUTPUT_DIR / "network_gradient.csv", index=False)
 
-    identity_summary = (
-        "NOT robustly determined: across band-pass on/off and subject subsamples the network at the "
-        f"principal-gradient apex varies ({', '.join(apexes)}); the textbook DMN-apex-vs-all-unimodal "
-        "organisation does not reproduce, and no single network uniquely anchors the gradient on this cohort. "
-        "Only robust conclusions are asserted (low-dimensional structure; 7-network differentiability; "
-        "alignment improves reproducibility)."
-    )
+    identity_summary = ("apex stable under tested configurations" if identity_robust
+                        else "apex varies across tested configurations")
     meta = {"task_id": TASK_ID, "status": "ok", "dataset_id": DATASET_ID, "parcellation": PARCELLATION,
             "n_subjects": len(fcs), "n_components": N_COMPONENTS, "alignment": "procrustes_to_group_template",
             "aligned_signed": round(al_signed, 4), "unaligned_signed": round(ua_signed, 4),

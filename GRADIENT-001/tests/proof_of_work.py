@@ -68,17 +68,10 @@ def recompute_group_from_persubject(grad_arr):
 
 
 def per_subject_best_overlap(grad_arr, ref_persubj):
-    """For each submitted subject, the best leading-3 subspace overlap against any reference
-    subject (robust to subject reordering / dropped subjects). Returns an array of length n."""
-    outs = []
-    for i in range(grad_arr.shape[0]):
-        Gi = grad_arr[i, :, :3]
-        if not np.isfinite(Gi).all() or float(np.std(Gi[:, 0])) <= 1e-9:
-            outs.append(0.0)   # non-finite or constant subject cannot be a real embedding
-            continue
-        best = max(subspace_overlap(Gi, ref_persubj[j]) for j in range(ref_persubj.shape[0]))
-        outs.append(best)
-    return np.asarray(outs, float)
+    """Same-order overlap; exact IDs/components are authenticated by the v2 contract."""
+    assert grad_arr.shape[0] == ref_persubj.shape[0] == 20
+    return np.asarray([subspace_overlap(g[:, :3], r[:, :3])
+                       for g, r in zip(grad_arr, ref_persubj)], float)
 
 
 def canon_net(label):
