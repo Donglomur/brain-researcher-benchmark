@@ -32,6 +32,19 @@ significance, and state a clear conclusion.
 
 ## Output Location
 
+## Public inference contract
+
+This is an approximate single-subject ROI-pair method application, not a population-level
+cerebellar network result or exact xDF paper reproduction. The primary method is
+circular_shift_all: correlate x with every unique nonzero circular shift of y (or equivalently
+shift x; report which convention), use two-sided absolute correlations and
+p=(1+count(abs(null)>=abs(observed)))/n. For verifier comparability, shift x by 1…n-1.
+Save inference in connectivity.json with method, shifts, null_r, p_value, alpha=0.05 and
+significant=(p<alpha). The headline p_value/significant must agree. Do not choose max p
+post hoc. AR1/Bartlett/prewhitening may be reported separately as sensitivity estimates.
+State stationary/circular-boundary assumptions; failure to reject is not absence of coupling.
+
+
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs

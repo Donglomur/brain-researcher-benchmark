@@ -1,38 +1,4 @@
-"""Reference solution for RESTCONN-001.
-
-Question posed to the agent (un-cued): for one ADHD-200 resting-state subject
-(nilearn.fetch_adhd, subject 0010064), using the MSDL atlas, is the right
-default-mode-network node ("R DMN") functionally connected to the cerebellar node
-("Cereb")? Report the Pearson correlation and whether it is statistically significant.
-
-The naive/library-default path is `scipy.stats.pearsonr(x, y)` (or an equivalent
-parametric test with df = n - 2): on the pinned pipeline it returns r = +0.316 with
-p = 1.9e-5, i.e. "highly significant". That p is drastically too small. Resting-state
-BOLD is strongly temporally autocorrelated (here lag-1 autocorrelation ~0.87 in each
-series after band-pass), so the two time series do NOT provide 176 independent samples.
-The effective sample size is a small fraction of the number of timepoints, and the
-parametric test that assumes n independent observations is anti-conservative
-(Afyouni, Smith & Nichols 2019, "Effective degrees of freedom of the Pearson
-correlation of autocorrelated fMRI time series", NeuroImage; Bright & Murphy 2015).
-
-The honest reference VOLUNTEERS the autocorrelation correction the task never mentions.
-Validated numbers (nilearn-pinned ds ADHD-200 subject 0010064, MSDL, n = 176 TRs,
-detrend + band-pass 0.01-0.1 Hz + motion/CompCor/CSF/WM nuisance regression):
-
-  r (R DMN ~ Cereb)                    = +0.316
-  naive parametric p (df = n - 2 = 174) = 1.9e-5          -> "significant"
-  lag-1 autocorrelation                 ~ 0.87, 0.87
-  effective df  (AR1 / Bartlett)        ~ 22 / 28
-  corrected p   (AR1 eff-df)            ~ 0.13
-  corrected p   (Bartlett eff-df)       ~ 0.09
-  prewhitened   (AR1) r=+0.07, p        ~ 0.37
-  circular-shift null p                 ~ 0.15
-  Fisher-z 95% CI on r with n_eff       includes 0
-
-Every autocorrelation-aware method agrees the correlation is NOT significant at
-alpha = 0.05; the naive p is ~3-4 orders of magnitude too small. The reference
-therefore reports the connection as NOT statistically significant on these data.
-"""
+"""A single-subject public autocorrelation-inference case, with predeclared circular null."""
 import json
 import os
 import sys
@@ -86,16 +52,13 @@ def p_from_neff(r, neff):
     return float(2 * stats.t.sf(abs(t), df))
 
 
-def circular_shift_p(x, y, nperm=20000, seed=0):
-    rng = np.random.default_rng(seed)
-    n = len(x)
-    xz = (x - x.mean()) / x.std()
-    yz = (y - y.mean()) / y.std()
-    robs = float(np.corrcoef(xz, yz)[0, 1])
-    null = np.empty(nperm)
-    for i in range(nperm):
-        null[i] = np.corrcoef(np.roll(xz, rng.integers(1, n)), yz)[0, 1]
-    return float((np.sum(np.abs(null) >= abs(robs)) + 1) / (nperm + 1))
+def circular_shift_evidence(x, y):
+    shifts = np.arange(1, len(x))
+    null = np.array([np.corrcoef(np.roll(x, int(k)), y)[0, 1] for k in shifts])
+    observed = float(np.corrcoef(x, y)[0, 1])
+    p = float((1 + np.count_nonzero(np.abs(null) >= abs(observed))) / len(x))
+    return {"method": "circular_shift_all", "shifts": shifts.tolist(), "null_r": null.tolist(),
+            "p_value": p, "alpha": 0.05, "significant": p < 0.05}
 
 
 def prewhiten_ar1(s):
@@ -157,7 +120,8 @@ xw, yw = prewhiten_ar1(x), prewhiten_ar1(y)
 m = min(len(xw), len(yw))
 r_pw = float(np.corrcoef(xw[:m], yw[:m])[0, 1])
 p_pw = p_from_neff(r_pw, m)
-p_circ = circular_shift_p(x, y)
+inference = circular_shift_evidence(x, y)
+p_circ = inference["p_value"]
 # Fisher-z CI using the (Bartlett) effective sample size
 z = np.arctanh(r)
 se_eff = 1.0 / np.sqrt(max(ne_bart - 3, 1))
@@ -166,7 +130,7 @@ se_naive = 1.0 / np.sqrt(n - 3)
 ci_naive = [float(np.tanh(z - 1.96 * se_naive)), float(np.tanh(z + 1.96 * se_naive))]
 
 # corrected verdict: not significant under any autocorrelation-aware method
-corrected_p = max(p_ar1, p_bart, p_circ)  # report the more conservative correction
+corrected_p = p_circ  # predeclared circular-shift method, not post-hoc max-p selection
 significant = bool(corrected_p < 0.05)
 
 # ---- the requested intermediate: the two extracted ROI mean time series ----
@@ -181,6 +145,7 @@ pd.DataFrame({"t": np.arange(n), REGION_A: x, REGION_B: y}).to_csv(
     "n_timepoints": n,
     "r": r,
     "p_value": corrected_p,
+    "inference": inference,
     "p_value_naive": naive_p,
     "effective_df": ne_bart,
     "effective_df_ar1": ne_ar1,
@@ -202,43 +167,15 @@ pd.DataFrame({"t": np.arange(n), REGION_A: x, REGION_B: y}).to_csv(
     "nuisance_columns": nuis_cols,
 }, indent=2))
 
-(OUT / "findings.md").write_text(f"""# RESTCONN-001 - is R DMN functionally connected to the cerebellum?
-
-Subject {SUBJECT} (ADHD-200, nilearn.fetch_adhd), MSDL atlas, {n} volumes (TR = {TR}s),
-detrend + band-pass 0.01-0.1 Hz + nuisance regression (6 motion, 5 CompCor, CSF, WM).
-
-## Correlation
-The MSDL "R DMN" node and the "Cereb" (cerebellar) node have a Pearson correlation of
-**r = {r:+.3f}** over the {n} time points.
-
-## Is it significant?
-The library-default parametric test (Pearson, df = n - 2 = {n-2}) gives **p = {naive_p:.1e}**,
-which would flag the connection as highly significant. **That p-value is not valid here.**
-It assumes {n} statistically independent observations, but resting-state BOLD is strongly
-**temporally autocorrelated**: the lag-1 autocorrelation is {rx:.2f} (R DMN) and {ry:.2f}
-(Cereb). Successive volumes are far from independent, so the parametric test is
-anti-conservative and its p-value is inflated by orders of magnitude (Afyouni, Smith &
-Nichols 2019; Bright & Murphy 2015).
-
-Accounting for the autocorrelation collapses the significance:
-
-* **Effective degrees of freedom.** The autocorrelation shrinks the effective sample size
-  from {n} to only ~{ne_ar1:.0f} (AR(1) / {ne_bart:.0f} (Bartlett) independent observations.
-  The effective-df p-value is p = {p_ar1:.2f} (AR1) / p = {p_bart:.2f} (Bartlett).
-* **Prewhitening.** After AR(1) prewhitening of both series the correlation drops to
-  r = {r_pw:+.2f} with p = {p_pw:.2f}.
-* **Circular-shift null** (preserves each series' autocorrelation, destroys the coupling):
-  p = {p_circ:.2f}.
-* **Confidence interval.** The naive 95% CI on r is [{ci_naive[0]:+.2f}, {ci_naive[1]:+.2f}]
-  (excludes 0), but with the effective sample size it widens to
-  [{ci_eff[0]:+.2f}, {ci_eff[1]:+.2f}] and **includes 0**.
-
-## Conclusion
-Every autocorrelation-aware method agrees: at alpha = 0.05 this R DMN-cerebellum
-correlation is **not statistically significant**. The apparent p < 0.001 is an artifact of
-treating {n} autocorrelated BOLD samples as independent. On these data the two regions
-**cannot be declared significantly functionally connected**.
-""")
+(OUT / "findings.md").write_text(
+    f"# Single-subject autocorrelation-aware method case\n\n"
+    f"R DMN/Cereb Pearson r={r:+.4f}; naive independent-sample p={naive_p:.5g}. "
+    f"The declared all-unique-circular-shift test gives p={p_circ:.5g} and "
+    f"significant={significant} at alpha0.05. "
+    "Temporal autocorrelation invalidates treating filtered volumes as independent. "
+    "Circular-shift inference assumes stationary signals and a circular boundary; this "
+    "is a bounded approximate method case, not population network organization or xDF validation. "
+    "Failure to reject this null does not establish no connectivity.\n")
 
 print(f"OK r={r:+.3f} naive_p={naive_p:.2e} eff_df~{ne_bart:.0f} "
       f"p_bart={p_bart:.3f} p_ar1={p_ar1:.3f} p_circ={p_circ:.3f} significant={significant}")

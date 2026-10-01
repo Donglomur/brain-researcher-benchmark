@@ -130,48 +130,14 @@ def test_recompute_correlation_and_effective_df():
 
 
 # ------------------------------------------------------------------ pillar 3 (verdict as numbers)
-def test_conclusion_not_overclaimed_numeric():
+def test_declared_inference_recomputed():
+    from inference_contract import validate_circular
     ref = _reference()
     a, b = _submitted_ts(ref)
-    cj = _load_json("connectivity.json")
-
-    # the significance verdict must be FALSE (autocorrelation-aware) ...
-    flags = pw.find_significant_flag(cj)
-    txt = ((OUT / "findings.md").read_text(encoding="utf-8").lower()
-           if (OUT / "findings.md").exists() else "")
-    verdict_not_sig = (flags and all(f is False for f in flags)) or bool(re.search(
-        r"not (?:statistically )?significant|n't (?:statistically )?significant|"
-        r"cannot be (?:declared|considered|called) (?:statistically )?signif|"
-        r"no longer significant|fails? to reach signif|significance (?:is )?"
-        r"(?:not established|collapses|disappears|vanishes)", txt))
-    assert verdict_not_sig, (
-        "the submission reports the connection as statistically significant. Once the temporal "
-        "autocorrelation is accounted for (effective df << n) this R DMN~cerebellum correlation "
-        "is NOT significant at alpha=0.05 -- reporting 'significant' is an overclaim.")
-
-    # ... and that verdict must be FORCED BY THE DATA, not guessed: with the effective df
-    # recomputed from the submitted series, the correlation is not significant, while the naive
-    # df=n-2 test is (the discriminating gap only real extraction produces).
-    r_rows = pw.pearson(a, b)
-    ne_ar1, _, _ = pw.eff_df_ar1(a, b)
-    ne_bart = pw.eff_df_bartlett(a, b)
-    p_corr = max(pw.p_from_neff(r_rows, ne_ar1), pw.p_from_neff(r_rows, ne_bart))
-    p_naive = pw.p_from_neff(r_rows, len(a))
-    assert p_corr > ALPHA, (
-        f"autocorrelation-corrected p recomputed from the submitted series is {p_corr:.3f} "
-        f"(<= {ALPHA}); the not-significant verdict is not supported by the submitted data")
-    assert p_naive < 0.01, (
-        f"the naive df=n-2 p recomputed from the submitted series is {p_naive:.3g}; the "
-        f"significance-inflation this task turns on is not present in the submitted series")
-
-    # a reported corrected p-value, if present, must not overclaim significance.
-    reported_p = pw.find_number(cj, [r"pvalue", r"^p$", r"pval"],
-                                exclude=[r"naive", r"parametric", r"uncorrected", r"df", r"eff",
-                                         r"lag", r"autocorr"])
-    if reported_p is not None:
-        assert reported_p > ALPHA, (
-            f"reported p_value = {reported_p:.3g} claims significance; the autocorrelation-"
-            f"corrected p is > {ALPHA}")
+    report = _load_json("connectivity.json")
+    validate_circular(a, b, report["inference"])
+    assert abs(report["p_value"] - report["inference"]["p_value"]) <= 1e-7
+    assert report["significant"] == report["inference"]["significant"]
 
 
 # ------------------------------------------------------------------ secondary prose signal
