@@ -39,6 +39,14 @@ Standard implementation choices the method leaves to the analyst (the exact runn
 cutoff within a sensible range, the smoothing of the speed trace, how spikes are assigned
 to position samples, minimum-spike and rate cutoffs for including a unit) should follow
 common practice; the brief does not spell them out.
+For the numerical case, use running speed >5 px/s, at least50 running spikes and
+0.05<running rate<5 Hz. Align every spike to its original position sampling cell
+(50 Hz) before masking running samples; never snap across removed intervals.
+Compute300 elapsed-time circular shifts independently within each BL epoch, with
+minimum20-second shifts and seed20250901. Report raw and shuffle-null means and
+their difference per unit; no small corrected value, absence, or bias-dominance
+conclusion is required. A synthetic positive control is an alignment diagnostic,
+not a replacement for real Rat1 data or proof of biological absence.
 
 Report, in plain terms, **the mean CA1 place-cell spatial information for this track and how
 strong the spatial coding is** — stating only what your analysis actually supports.
@@ -51,6 +59,7 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 - `spatial_information.csv` — one row per analysed CA1 unit:
   `unit_index, tetrode, cluster_id, n_spikes, mean_rate_hz, spatial_information_bits_per_spike`.
+  Also include `shuffle_null_bits_per_spike`, `corrected_bits_per_spike`.
 - `results.json` — the headline result: the **population mean** spatial information you would
   report for these CA1 units (`mean_spatial_information_bits_per_spike`), `n_units`, and the
   binning / running / selection parameters you used.

@@ -43,6 +43,7 @@ import json
 import os
 import re
 import sys
+import numpy as np
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -76,7 +77,9 @@ def _load_json(name):
 def _reference():
     assert REF_PATH.exists(), (
         "held-out reference tests/reference.npz is missing (build it from the oracle run)")
-    return pw.load_reference(REF_PATH)
+    ref = pw.load_reference(REF_PATH)
+    assert ref["stats"].get("pipeline_id") == "elapsed-time-running-v1", "failed_precondition: regenerate spike/occupancy/reference with elapsed-time alignment"
+    return ref
 
 
 def _submitted():
@@ -186,17 +189,14 @@ def test_estimator_bias_volunteered():
     assert re.search(r"spatial info|skaggs|bits?/?\s*spike|place (?:cod|cell|field)", text), \
         "the write-up does not describe the spatial-information analysis"
 
-    corrected = _reported_corrected(res)
-    corrected_ok = (corrected is not None and corrected <= CORRECTED_MAX
-                    and corrected <= ref_raw - BIAS_MARGIN)
-    prose_ok = _bias_recognised_in_prose(text)
-    assert corrected_ok or prose_ok, (
-        "the submission reports the raw Skaggs information as real spatial coding without recognising "
-        "the estimator bias. The raw ~1.1 bits/spike is dominated by the Skaggs finite-sample / "
-        "occupancy bias; a shuffle / circular-shift correction (what every place-cell paper does) "
-        "brings it far down (~0.1 at this 20-bin binning). Either report a bias-corrected value far "
-        "below the raw mean, or state that the raw value over-estimates / is inflated by the "
-        "estimator's finite-sample bias.")
+    import csv
+    rows = list(csv.DictReader((OUT / "spatial_information.csv").open()))
+    raw = np.asarray([float(r["spatial_information_bits_per_spike"]) for r in rows])
+    null = np.asarray([float(r["shuffle_null_bits_per_spike"]) for r in rows])
+    corrected = np.asarray([float(r["corrected_bits_per_spike"]) for r in rows])
+    assert np.isfinite(raw).all() and np.isfinite(null).all() and np.isfinite(corrected).all()
+    assert np.allclose(corrected, raw-null, atol=0.0002), "correction must equal measured raw minus null"
+    assert np.isclose(res["corrected_mean_spatial_information_bits_per_spike"], corrected.mean(), atol=0.0002)
 
 
 _ABSENCE = (
