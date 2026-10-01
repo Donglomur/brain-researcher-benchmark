@@ -73,7 +73,14 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   intermediate the age relationships are computed from).
 - `results.json` — the number of subjects, and the relationship with age of **each** connectome
   summary — at minimum the overall/global mean connectivity and the system segregation — each with
-  its correlation with age (`pearson_r`) and significance (`p`).
+  signed `pearson_r`, two-sided Pearson `p`, and `ci95=[lower, upper]`.
+  Use the Fisher-transform approximation for both required age associations:
+  `tanh(atanh(clip(r, -0.999999, 0.999999)) ± 1.96 / sqrt(N - 3))`, with `N=59`.
+  This is an independent-participant normal approximation, not bootstrap evidence or
+  longitudinal uncertainty.
+- `roi_partition.csv` — exactly 148 rows with `roi_index,network`: zero-based ROI indices
+  0–147 in the bundle's region ordering, each once, and integer KMeans network labels
+  0–6. Report the age-blind partition actually used to derive the within/between summaries.
 - `run_metadata.json` — dataset, number of subjects, and the method used.
 - `findings.md` — a short summary of the cross-sectional age associations of resting
   functional connectivity. Do not interpret them as within-person aging trajectories.

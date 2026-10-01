@@ -1,25 +1,11 @@
-"""Reference solution for LIFESPAN-001.
+"""Cross-sectional connectome-summary sensitivity on a fixed NKI cohort.
 
-Characterise how the organization of the resting functional connectome changes across the adult
-lifespan (NKI Enhanced surface rest, 148-region Destrieux ROI time series, ages 18-78).
-
-The one thing the task leaves open is HOW the connectome's "organization" is summarised before
-relating it to age. The naive summary — overall/mean functional connectivity (the average of all
-connectome edges) — is essentially FLAT across the adult lifespan on these data (r ~ +0.15,
-n.s.). Concluding from that alone that "resting connectivity does not change with age" is an
-over-claim: the organization does change. When the connectome is summarised as the **segregation
-of its large-scale networks** (mean within-network minus between-network connectivity, normalised;
-Chan et al. 2014), that summary DECLINES with age (r ~ -0.28, p ~ 0.03; Spearman ~ -0.36) — the
-networks de-differentiate. The decline is driven by between-network connectivity rising with age
-while within-network connectivity stays flat, so the global average cancels out and misses it.
-
-Validated on the packaged bundle (n = 59-60, ages 18-78):
-    global mean FC vs age            : r = +0.15  (p ~ 0.26)   <- naive summary, no change
-    system segregation vs age        : r = -0.28  (p ~ 0.03)   <- declines (de-differentiation)
-        (robust: r in [-0.40, -0.24] across 5-12 network partitions and seeds; >99% of
-         bootstrap resamples negative; Spearman -0.36)
-The correct characterisation is a DECLINE in network segregation / organization with age, not a
-"connectivity is stable with age" null read off the global average.
+Both global-connectivity and full-pair zero-clipped segregation age associations are
+measured with signed Pearson r/p and the public Fisher-transform confidence interval.
+There is no mandatory negative/significant segregation association or global null.
+KMeans partitioning is age blind with the self-connectivity diagonal removed. The
+changed estimator requires independent reference regeneration; old numerical stories
+are not current scientific evidence.
 """
 import json
 import os
@@ -73,11 +59,11 @@ for i in range(N):
     Gsum += Z
 G = Gsum / N
 
-# ---- NAIVE summary: overall (mean) functional connectivity ----
+# ---- Overall edge-mean Fisher-z summary ----
 global_fc = FZ.mean(1)
 r_glob, p_glob = stats.pearsonr(global_fc, age)
 
-# ---- CORRECT summary: segregation of large-scale networks (Chan et al. 2014) ----
+# ---- Full-pair zero-clipped network segregation summary ----
 # age-blind data-driven 7-network partition from the group-mean connectome
 from sklearn.cluster import KMeans
 from partition_contract import age_blind_partition
@@ -116,7 +102,7 @@ results = {
     "network_between_vs_age": {"pearson_r": float(r_between)},
     "system_segregation_vs_age": {"pearson_r": float(r_seg), "p": float(p_seg),
                                   "spearman_rho": float(rho_seg),
-                                  "note": "(within - between)/within over positive edges, 7 networks"},
+                                  "note": "(within - between)/within over all pairs after negative-zero clipping, 7 networks"},
     "conclusion": "cross-sectional descriptive age associations; neither longitudinal change nor proven null",
     "estimator_contract": "diagonal-zero-clip-v1",
 }
@@ -132,8 +118,8 @@ for key in ("overall_connectivity_vs_age","system_segregation_vs_age"):
     "subject_ids": subj, "cohort_manifest": manifest,
     "partition": "KMeans(7,n_init=10,random_state=0) on group-mean Fisher-z rows with diagonal zero",
     "parcellation": "Destrieux-148 (fsaverage5)",
-    "method": "per-subject Fisher-z connectome; overall mean FC vs age (naive summary) and "
-              "large-scale network system segregation (within-minus-between, positive edges, "
+    "method": "per-subject Fisher-z connectome; overall edge mean FC vs age and "
+              "large-scale network system segregation (within-minus-between, full-pair zero-clipped edges, "
               "7-network data-driven partition) vs age",
 }, indent=2))
 

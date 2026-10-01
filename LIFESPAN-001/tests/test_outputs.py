@@ -37,7 +37,7 @@ def test_signed_age_relationships_recompute():
 def test_network_partition_is_complete():
     rows=list(csv.DictReader((OUT/"roi_partition.csv").open()))
     assert len(rows)==148 and {int(r["roi_index"]) for r in rows}==set(range(148))
-    assert len({int(r["network"]) for r in rows})==7
+    assert {int(r["network"]) for r in rows}==set(range(7))
 
 
 def test_findings_present():
