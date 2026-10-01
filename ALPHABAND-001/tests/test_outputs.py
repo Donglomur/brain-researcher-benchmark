@@ -1,21 +1,12 @@
-"""Proof-of-work grader for ALPHABAND-001 (reproduce the Berger effect on EEGBCI).
+"""Numeric agreement checks for the public EEGMMIDB alpha-density recipe.
 
-The grade is carried by NUMBERS against a held-out reference (`reference.npz`) built by
-running the oracle on the pinned EEGBCI recordings (subjects 1-5, run 1 eyes-open / run 2
-eyes-closed; band 8-13 Hz; common-average reference; Welch 2-s segments):
-
-  PILLAR 1  the submitted per-subject table (per_subject.csv) must cover the 5 subjects, be
-            non-constant, and match the held-out per-subject OCCIPITAL eyes-closed/eyes-open
-            alpha ratios. These real occipital per-subject ratios span ~1.3-48; a whole-head
-            pipeline (the un-cued trap) compresses them to ~4 and cannot match.
-  PILLAR 2  the mean of the submitted per-subject ratios must match BOTH the reference
-            occipital mean AND the reported headline ratio.
-  PILLAR 3  the DISCRIMINATING number is occipital-vs-whole-head: the reported ratio must be
-            the occipital ratio (~19.6), far above the whole-head dilution (~4.4).
+Check every participant's EC/EO densities and ratios, then recompute the group
+summary. The reference is derived from the fixed original recordings, not the
+historical Berger cohort. Numeric agreement is not proof of solver execution or
+sound prose interpretation, and a public reference can be copied.
 """
 import json
 import os
-import re
 from pathlib import Path
 
 import numpy as np
@@ -25,9 +16,9 @@ import proof_of_work as pw
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 REF = np.load(Path(__file__).resolve().parent / "reference.npz", allow_pickle=False)
 
-RATIO_VAL_TOL = 2.5     # per-subject occipital ratio absolute floor
-RATIO_REL_TOL = 0.30    # ... or within 30% of the reference (wide dynamic range)
-GROUP_TOL = 3.0         # group ratio vs reference / reported
+RATIO_VAL_TOL = 0.01
+RATIO_REL_TOL = 0.01
+GROUP_TOL = 0.2  # Reference tolerance; not table/headline identity tolerance.
 
 
 def _load(name):
@@ -75,9 +66,6 @@ def test_headline_is_occipital_ratio():
     assert abs(r - occ) <= GROUP_TOL, (
         f"reported occipital alpha ratio {r:.2f} is not the occipital Berger ratio "
         f"({occ:.2f} +/- {GROUP_TOL}). A whole-head average (~{wh:.1f}) dilutes the effect.")
-    assert r >= wh + 5.0, (
-        f"reported ratio {r:.2f} is not clearly above the whole-head dilution ({wh:.1f}); "
-        f"the effect must be measured over the occipital electrodes")
 
 
 # ---- PILLAR 1: per-subject occipital ratio proof of work -------------------------------
@@ -88,13 +76,13 @@ def test_per_subject_ratio_proof_of_work():
     for j, sid in enumerate(expected):
         row = sub[sid]
         assert all(row[k] is not None and np.isfinite(row[k]) for k in ("ec", "eo", "ratio"))
-        assert row["ec"] >= 0 and row["eo"] > 0, "powers must be nonnegative, with positive EO"
-        assert np.isclose(row["ratio"], row["ec"] / row["eo"], rtol=1e-5, atol=1e-7), "ratio is not EC/EO"
+        assert row["ec"] > 0 and row["eo"] > 0, "powers must be positive"
+        assert np.isclose(row["ratio"], row["ec"] / row["eo"], rtol=1e-3, atol=1e-3), "ratio is not EC/EO"
         for key in ("ec", "eo"):
-            assert np.isclose(row[key], REF["ref_" + key][j], rtol=0.30, atol=1e-14), "powers do not match the declared PSD units and recipe"
+            assert np.isclose(row[key], REF["ref_" + key][j], rtol=0.01, atol=1e-16), "powers do not match the declared PSD units and recipe"
     present = pw.check_subjects_and_values(
         sub, REF["ref_ids"], REF["ref_ratio"], "ratio", RATIO_VAL_TOL,
-        cover=0.90, match=0.80, eps=1e-2, signed=True, rel_tol=RATIO_REL_TOL)
+        cover=1.0, match=1.0, eps=1e-2, signed=True, rel_tol=RATIO_REL_TOL)
     # Berger direction: eyes-closed occipital alpha exceeds eyes-open for most subjects
     ratios = [sub[i]["ratio"] for i in present]
     assert sum(r > 1.0 for r in ratios) >= 0.8 * len(ratios), \
@@ -107,15 +95,18 @@ def test_recompute_ratio_from_rows():
     present = [i for i in (pw.canon_id(x) for x in REF["ref_ids"])
                if i in sub and sub[i].get("ratio") is not None]
     reported = _headline(_load("alpha_ratio.json"))
-    pw.check_recompute(sub, present, "ratio", float(REF["occ_mean"]), reported,
-                       tol_ref=GROUP_TOL, tol_report=GROUP_TOL)
+    recomputed = pw.recompute_mean(sub, present, "ratio")
+    assert abs(recomputed - float(REF["occ_mean"])) <= GROUP_TOL
+    assert reported is not None and np.isclose(recomputed, reported, rtol=1e-3, atol=1e-3), \
+        "headline is not the arithmetic mean of the submitted ratios"
 
 
 # ---- SECONDARY: the write-up reports the occipital effect ------------------------------
-def test_findings_reports_occipital():
-    text = (OUT / "findings.md").read_text(encoding="utf-8").lower()
-    assert "occipital" in text and ("closed" in text or "berger" in text), \
-        "findings.md does not report the occipital eyes-closed alpha enhancement"
+def test_findings_present():
+    # Numbers carry the automated gate. Keyword presence does not establish sound
+    # scientific interpretation; prose must be reviewed separately.
+    text = (OUT / "findings.md").read_text(encoding="utf-8")
+    assert text.strip(), "findings.md must contain a written summary"
 
 
 def test_public_analysis_metadata():
@@ -123,13 +114,24 @@ def test_public_analysis_metadata():
     metadata = _load("run_metadata.json")
     for document in (result, metadata):
         assert document["band_hz"] == [8, 13]
-        assert set(document["channels"]) == {"O1", "Oz", "O2"}
+        assert {str(channel).lower() for channel in document["channels"]} == {"o1", "oz", "o2"}
         assert len(document["channels"]) == 3
     assert result["n_subjects"] == 5
-    assert metadata["subjects"] == [1, 2, 3, 4, 5]
+    subjects = [pw.canon_id(subject) for subject in metadata["subjects"]]
+    assert len(subjects) == 5 and set(subjects) == {"1", "2", "3", "4", "5"}
     assert metadata["runs"] == {"eyes_open": 1, "eyes_closed": 2}
-    assert "eegbci" in metadata["dataset_id"].lower()
+    assert any(name in metadata["dataset_id"].lower() for name in ("eegbci", "eegmmidb", "eeg motor movement/imagery"))
     assert "welch" in metadata["psd_method"].lower()
-    assert "average" in metadata["reference"].lower()
+    assert "average" in metadata["reference"].lower() or metadata["reference"].lower() == "car"
+    assert metadata["dataset_version"] == "1.0.0"
+    units = metadata["power_units"].replace("²", "2").replace("^", "").replace(" ", "").lower()
+    assert units == "v2/hz"
+    assert metadata["aggregation"] == "mean_of_subject_ratios"
+    settings = metadata["welch"]
+    for key, value in {"segment_sec": 2, "n_fft": 320, "n_overlap": 0,
+                       "remove_dc": True}.items():
+        assert settings[key] == value
+    assert settings["window"].lower() in {"hamming", "periodic_hamming", "periodic hamming"}
+    assert settings["average"].lower() == "mean"
     assert np.isfinite(result["wholehead_alpha_ratio_for_reference"])
-    assert np.isclose(result["wholehead_alpha_ratio_for_reference"], REF["wholehead_mean"], rtol=0.3)
+    assert np.isclose(result["wholehead_alpha_ratio_for_reference"], REF["wholehead_mean"], rtol=0.01)

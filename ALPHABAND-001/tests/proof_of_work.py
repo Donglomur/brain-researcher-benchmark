@@ -3,8 +3,8 @@
 The grade is carried by NUMBERS, not prose: the submitted per-subject table must contain the
 REAL per-subject measurements for the exact pinned analysis sample, they must recompute the
 reported group result, and the reported conclusion numbers must match the held-out reference.
-None of this is producible without actually computing the measures on the real per-subject
-data. This module is copied verbatim into each task's tests/ directory.
+Agreement checks constrain the submitted measurements; they do not prove that the
+solver executed an analysis or exclude copying an exposed numerical reference.
 """
 import csv
 import re

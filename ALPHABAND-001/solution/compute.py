@@ -1,27 +1,16 @@
 """Reference solution for ALPHABAND-001.
 
-Reproduce the Berger effect on the PhysioNet EEGBCI dataset (subjects 1-5, run 1 eyes
+Assess the Berger effect on the PhysioNet EEGBCI dataset (subjects 1-5, run 1 eyes
 open, run 2 eyes closed): occipital alpha (8-13 Hz) power is much larger with eyes
 closed than eyes open. The headline is the mean across subjects of the per-subject
 eyes-closed / eyes-open OCCIPITAL alpha power ratio.
 
-The one choice the brief leaves un-cued is channel handling. The raw EDF channel labels
-in this dataset are non-standard ("O1..", "Oz..", "O2.." with trailing dots and Fc/Cp
-style casing), so a direct pick of the occipital electrodes silently misses them and a
-careless pipeline falls back to a whole-head average, which dilutes the strongly
-occipital effect. The honest reference standardizes the channel names and sets the
-10-05 montage FIRST, then measures alpha over the occipital electrodes.
-
-Validated (mne 1.12.1, subjects 1-5, band 8-13 Hz, common-average reference, Welch
-n_fft = 2 s): occipital ratio mean = 19.64 (per-subject 16.5, 8.0, 24.3, 48.0, 1.3).
-A whole-head average gives ~4.4 -- the trap this task is built on.
-
-Proof-of-work deliverable: a PER-SUBJECT table (per_subject.csv) with each subject's
-eyes-closed and eyes-open OCCIPITAL alpha power and their ratio. The headline is the
-mean of the per-subject occipital ratios; the whole-head ratio (~4.4) is computed only
-for contrast (the discriminating quantity a whole-head pipeline would report instead).
+The public instruction specifies channel standardization and the full PSD recipe.
+Read checksum-verified EDFs staged in the image, never download at runtime.
+This is a modern descriptive replication, not the original Berger analysis sample.
 """
 import csv
+import hashlib
 import json
 import os
 import sys
@@ -35,6 +24,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 SUBJECTS = [1, 2, 3, 4, 5]
 OCCIPITAL = ["O1", "O2", "Oz"]
 BAND = (8.0, 13.0)
+DATA = Path(os.environ.get("EEGBCI_DATA_DIR", "/app/data/eegmmidb"))
 
 
 def fail(reason):
@@ -63,7 +53,9 @@ def band_alpha(raw, picks):
     r.set_montage(mne.channels.make_standard_montage("standard_1005"))
     r.set_eeg_reference("average", projection=False)
     n_fft = int(round(r.info["sfreq"] * 2.0))
-    psd = r.compute_psd(method="welch", fmin=1.0, fmax=45.0, picks=picks, n_fft=n_fft)
+    psd = r.compute_psd(method="welch", fmin=1.0, fmax=45.0, picks=picks,
+                        n_fft=n_fft, n_per_seg=n_fft, n_overlap=0, window="hamming",
+                        average="mean", remove_dc=True, reject_by_annotation=False)
     freqs = psd.freqs
     data = psd.get_data()  # (n_channels, n_freqs)
     band = (freqs >= BAND[0]) & (freqs <= BAND[1])
@@ -71,14 +63,21 @@ def band_alpha(raw, picks):
 
 
 try:
+    manifest = json.loads((DATA / "data_manifest.json").read_text())
+    expected_files = {f"S{s:03d}/S{s:03d}R{run:02d}.edf"
+                      for s in SUBJECTS for run in (1, 2)}
+    if manifest["version"] != "1.0.0" or set(manifest["files"]) != expected_files:
+        raise ValueError("wrong EEGMMIDB version or analysis sample")
+    for relative_path, expected_hash in manifest["files"].items():
+        if hashlib.sha256((DATA / relative_path).read_bytes()).hexdigest() != expected_hash:
+            raise ValueError(f"checksum mismatch: {relative_path}")
     rows = []
     for s in SUBJECTS:
-        fnames = eegbci.load_data(subjects=[s], runs=[1, 2], update_path=True)
-        raw_eo = mne.io.read_raw_edf(fnames[0], preload=True, verbose=False)  # run 1 eyes open
-        raw_ec = mne.io.read_raw_edf(fnames[1], preload=True, verbose=False)  # run 2 eyes closed
+        raw_eo = mne.io.read_raw_edf(DATA / f"S{s:03d}/S{s:03d}R01.edf", preload=True, verbose=False)
+        raw_ec = mne.io.read_raw_edf(DATA / f"S{s:03d}/S{s:03d}R02.edf", preload=True, verbose=False)
         eo = band_alpha(raw_eo, OCCIPITAL)
         ec = band_alpha(raw_ec, OCCIPITAL)
-        # whole-head (all EEG channels) alpha -- the un-cued dilution trap, for contrast
+        # All-EEG-channel ratio is a descriptive comparison, not the occipital estimand.
         eo_wh = band_alpha(raw_eo, "eeg")
         ec_wh = band_alpha(raw_ec, "eeg")
         rows.append(dict(subject=s, ec_occipital_alpha=ec, eo_occipital_alpha=eo,
@@ -113,13 +112,17 @@ with open(OUT / "per_subject.csv", "w", newline="") as f:
 (OUT / "run_metadata.json").write_text(json.dumps({
     "status": "ok",
     "dataset_id": "eegbci (PhysioNet EEG Motor Movement/Imagery)",
+    "dataset_version": manifest["version"],
     "subjects": SUBJECTS,
     "runs": {"eyes_open": 1, "eyes_closed": 2},
     "band_hz": [BAND[0], BAND[1]],
     "psd_method": "Welch, n_fft = 2 s",
+    "welch": {"segment_sec": 2, "n_fft": 320, "n_overlap": 0,
+              "window": "hamming", "remove_dc": True, "average": "mean"},
+    "power_units": "V^2/Hz",
     "reference": "common average",
     "channels": OCCIPITAL,
-    "aggregation": "mean across subjects of per-subject EC/EO occipital alpha power ratio",
+    "aggregation": "mean_of_subject_ratios",
 }, indent=2))
 
 (OUT / "findings.md").write_text(f"""# ALPHABAND-001 - the Berger effect
@@ -132,10 +135,11 @@ eyes-open occipital alpha power ratio is **{mean_ratio:.2f}** (per-subject:
 {", ".join(f"{r['ratio']:.1f}" for r in rows)}). Per-subject occipital alpha power and
 ratios are in `per_subject.csv`.
 
-This reproduces Berger's classic result: eyes closure produces a large increase in
-posterior alpha power. The effect is specifically occipital; averaging over the whole
-head dilutes it to a ratio of ~{wholehead_mean:.1f}, so the ratio must be measured over
-the occipital electrodes.
+This small modern sample shows the direction associated with the historical Berger
+effect; it is not a numerical reproduction of Berger's original cohort. The whole-head
+mean ratio is {wholehead_mean:.2f}, showing that the spatial averaging choice changes
+the summary. The runs have fixed order (EO then EC), so this descriptive contrast
+does not isolate eye closure from order effects or establish a population-wide effect.
 """)
 
 print(f"OK: occipital EC/EO alpha ratio mean = {mean_ratio:.3f} "
