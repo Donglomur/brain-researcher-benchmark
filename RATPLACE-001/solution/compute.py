@@ -1,14 +1,12 @@
-"""Paper-derived Skaggs sensitivity case on real Rat1 CA1 data.
-Original timestamp-cell alignment and elapsed-time within-epoch null shifts;
-scientific conclusions follow measurements, not a prescribed small null finding.
+"""Quarantined Skaggs prototype: the pinned source lacks independent tracking.
+
+The mandatory precondition below stops before network access or numerical work.
+The historical prototype is retained for inspection, not as a valid estimator.
 """
 import json
 import os
 import sys
 from pathlib import Path
-
-import numpy as np
-from alignment import sample_indices, shifted_spikes, running_samples
 
 OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
 OUT.mkdir(parents=True, exist_ok=True)
@@ -31,11 +29,30 @@ SEED = 20250901
 
 def fail(reason):
     (OUT / "run_metadata.json").write_text(json.dumps(
-        {"status": "failed_precondition", "reason": reason, "dandiset": DANDISET, "asset": ASSET}, indent=2))
+        {"status": "failed_precondition", "reason": reason, "dandiset": DANDISET, "asset": ASSET,
+         "version": VERSION, "asset_id": ASSET_ID, "source_sha256": ASSET_SHA256,
+         "scientific_precondition": "independently_sampled_position_not_established"}, indent=2))
     (OUT / "results.json").write_text(json.dumps({"status": "failed_precondition", "reason": reason}))
     (OUT / "findings.md").write_text(f"# Failed precondition\n\n{reason}\n")
     sys.stderr.write(reason + "\n")
     sys.exit(1)
+
+
+# Original-byte inspection on 2026-10-01 establishes that this exact asset's
+# SpatialSeries contains positions at spike occurrence times. Counting these
+# rows as 20-ms dwell intervals conditions occupancy on the ensemble spikes.
+# Interpolation or elapsed-time shuffles cannot restore unobserved behavior.
+# Do not remove this gate without a reviewed independent tracking source and
+# a genuinely rebuilt estimator/reference contract. See SOURCE_BLOCKER.md.
+fail(
+    "The pinned Rat1 NWB contains positions sampled at spike occurrence times, "
+    "not independent 50 Hz tracking. Dwell-time occupancy, running selection, "
+    "and Skaggs shuffle correction cannot be validated from this trace. "
+    "Recover independently sampled tracking or revise the data contract first."
+)
+
+import numpy as np
+from alignment import sample_indices, shifted_spikes, running_samples
 
 
 def skaggs(p, rate):
@@ -196,8 +213,7 @@ with open(OUT / "spatial_information.csv", "w", newline="") as f:
                     int(rr["significant"])])
 
 results = {
-    # the value that should be REPORTED for these CA1 units: the bias-corrected mean,
-    # which is ~0 -- the raw mean is essentially the estimator's occupancy/sampling bias.
+    # Historical unvalidated prototype: no numerical conclusion is established.
     "mean_spatial_information_bits_per_spike": round(corr_mean, 4),
     "raw_mean_spatial_information_bits_per_spike": round(raw_mean, 4),
     "shuffle_null_mean_bits_per_spike": round(null_mean, 4),

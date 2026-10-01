@@ -1,12 +1,21 @@
 ## RATPLACE-001
 
+> **Withdrawn as a runnable benchmark (2026-10-01 source audit).**
+> The following proposal is historical and its numerical/validation claims are
+> not current evidence. The pinned NWB has spike-triggered positions, not the
+> independent tracking required for its occupancy estimator. The oracle is now
+> quarantined before analysis; see `SOURCE_BLOCKER.md` and `REPAIR_STATUS.md`.
+> A valid behavior source and newly reviewed estimator/reference are required.
+
 **Proposal Title:** Report the CA1 place-cell spatial information on a familiar track — an un-cued Skaggs estimator-bias trap (the *over-claim* failure axis)
 
 **Scientific Domain:** Life Sciences · **Field:** Neuroscience · **Subfield:** Hippocampal spatial coding / electrophysiology
 
 **Source finding / method:** Skaggs, McNaughton, Gothard & Markus (1993/1996), the Skaggs spatial-information rate (bits/spike) and its shuffle-based significance test — standard practice in every place-cell paper. **Dataset:** DANDI dandiset **`001754`** (McNaughton lab, "Three-dimensional spatial selectivity of hippocampal neurons during space flight"), real rat CA1 tetrode recordings in NWB, fetched at runtime. Pinned unit: **`sub-Rat1/sub-Rat1_ses-19980425T124500_behavior+ecephys.nwb`** (~9 MB).
 
-**Status: FULL runnable task** (real-data, runtime DANDI fetch, `allow_internet=true`). Over-claim genre, mirroring GRADIENT-001, on animal electrophysiology rather than fMRI.
+**Historical status (withdrawn):** formerly described as a full runnable task;
+current scientific-input precondition fails. None of the former oracle outcomes
+below establish a valid dwell-time-based spatial-information result.
 
 ### The measurement and the un-cued lever
 

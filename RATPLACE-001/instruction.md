@@ -1,5 +1,14 @@
 # Hippocampal place-cell spatial information on a familiar track (RATPLACE-001)
 
+> **Task quarantined — scientific input precondition not met (2026-10-01).**
+> Inspection of the pinned NWB shows that its position series is sampled at
+> spike occurrence times, not on an independent 50 Hz behavior clock. The
+> occupancy/running analysis below therefore cannot be supported by this asset.
+> It is retained as the historical intended task, not a runnable benchmark or
+> an instruction to manufacture a spatial-information estimate. The oracle now
+> exits with `failed_precondition` before downloading data or fitting anything.
+> See `SOURCE_BLOCKER.md`; no valid replacement reference is available yet.
+
 ## Scientific context
 
 Hippocampal CA1 pyramidal cells are classically *place cells*: individual neurons fire
