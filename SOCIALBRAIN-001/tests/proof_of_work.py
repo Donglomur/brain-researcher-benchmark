@@ -63,13 +63,7 @@ def load_reference(path):
 
 
 def load_submitted(path):
-    """Return a list of dict rows with canon id + resolved columns.
-
-    The across-network correlation may be reported under SEVERAL preprocessing choices, as
-    several columns. We collect EVERY across-network candidate column (`across_by_col`) and let
-    the grader assign, by value, which submitted column is the standard-clean quantity and which
-    is the alternative-preprocessing quantity -- the grader never keys off a column NAME (so the
-    specific preprocessing lever is not cued by the required schema)."""
+    """Parse actual-ID measurements and the two publicly named across-network columns."""
     rows = list(csv.DictReader(open(path, encoding="utf-8")))
     if not rows:
         return []

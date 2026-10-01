@@ -72,12 +72,7 @@ def test_connectivity_computed():
 
 # ------------------------------------------------------------------ pillar 1 (real per-subject data, BOTH pipelines)
 def test_proof_of_work_subjects_and_values():
-    """The submitted across-network column under the STANDARD-clean preprocessing must be the real
-    per-subject values, and a SECOND column under the alternative preprocessing must be the real
-    per-subject values too. Both are validated against the held-out reference. A run that computed
-    only one pipeline has no genuine second column; a fabricated/copied second column (a monotone
-    transform of the first) fails the cross-subject correlation guard (the standard<->alternative
-    per-subject correlation is only ~0.71, below the CORR_MIN floor)."""
+    """Authenticate all public per-subject network measurements under their named pipelines."""
     ref, st, rows, std_col, alt_col, diag = _bound()
     assert std_col is not None, (
         "network_connectivity.csv has no across-network column that tracks the real per-subject "
@@ -120,7 +115,7 @@ def test_recompute_children_spearman_from_rows():
             f"submitted standard-clean rows produce ({r_std:+.3f}); CSV and JSON are inconsistent.")
 
 
-# ------------------------------------------------------------------ pillar 3 (judgement RECOMPUTED from the two columns)
+# ------------------------------------------------------------------ measured GSR/motion sensitivity, without a fixed verdict
 def test_measured_preprocessing_and_motion_sensitivity():
     import numpy as np
     import pandas as pd

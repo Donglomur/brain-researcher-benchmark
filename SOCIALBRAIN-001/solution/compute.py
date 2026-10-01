@@ -138,6 +138,10 @@ def main() -> None:
                              "preprocessing": {"roi_radius_mm": 9, "detrend": True,
                                                "standardize": "zscore_sample",
                                                "confounds": CONFOUND_COLUMNS,
+                                               "global_signal_mask_strategy": "whole-brain-template",
+                                               "global_signal_standardize": False,
+                                               "global_signal_detrend": True,
+                                               "mean_fd_missing_values": "excluded before regression zero-fill",
                                                "pipelines": ["without_GSR", "with_GSR"]},
                              "edge_aggregation": "tanh(mean(Fisher-z))",
                              "roi_set": {"ToM": list(TOM), "pain": list(PAIN)}})

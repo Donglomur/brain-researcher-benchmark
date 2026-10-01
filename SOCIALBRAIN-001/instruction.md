@@ -11,6 +11,10 @@ at the MNI coordinates below. Use the reduced confounds: six motion parameters,
 framewise_displacement, six a_comp_cor components, white_matter and csf, filling their
 missing first-volume values with zero; detrend and zscore_sample the ROI signals.
 Compute two pipelines: without and with an added detrended whole-brain global signal.
+For GSR, use NiftiMasker(mask_strategy="whole-brain-template", standardize=False,
+detrend=True) and average its voxel time series. The mask definition is part of this
+adaptation. The QC mean_fd averages observed framewise_displacement entries before
+regression zero-filling; exclude missing FD entries from that mean.
 No additional temporal filter is required.
 
 ToM coordinates: DMPFC(-2,56,28), MMPFC(0,54,20), VMPFC(0,46,-16),
