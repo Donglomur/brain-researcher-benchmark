@@ -22,13 +22,13 @@ This expanded-release Kruskal-Wallis/1.5-second analysis is an explicit method
 adaptation, not a named ANOVA/one-second paper reproduction. Full-data-selected and
 crossfit-selected populations differ. Declare headline_population as
 full_data_selected_same_trials (with selection caveat) or
-crossfit_selected_at_least_five_splits:50stratified halves/default_rng(0), selection
+crossfit_selected_at_least_five_splits: 50 stratified halves/default_rng(0), selection
 and preferred category from training, AUC only on held-out trials, mean AUC per unit,
 include units selected in >=5 splits. Add heldout_splits/heldout_eligible/heldout_auc
 to neurons.csv, n_crossfit_eligible to results and selected_splits.csv with unit,
 split, disjoint train/test trial IDs, preferred_category and heldout_auc. Report
 both denominator populations; no patient-level above-chance claim without clustered
-uncertainty. Use the exact87assets in /app/data_manifest.json, published0.220126.1852;
+uncertainty. Use the exact 87 assets in `/app/data_manifest.json`, published version 0.220126.1852;
 expected published SHA hashes are distinct from fully byte-verified local files.
 
 Using **all sessions** of DANDI dandiset **`000004`**, analyze the **recognition phase** and
