@@ -40,6 +40,19 @@ actually supports.
 
 ## Output Location
 
+## Public null-construction evidence
+
+This is an application of published spatial-null methods to released maps, not a named
+original-paper finding. Declare null_family=centroid_spin, spin_method (original, vasa or
+hungarian), seed and n_permutations (100–4096) in results.json. Save spin_evidence.npz with
+centroids (400×3), hemisphere (400 entries), spin_indices (400×n_permutations).
+Use neuromaps.gen_spinsamples on authenticated spherical parcel centroids with the declared
+method/seed. Store the corresponding null_distribution and p_spin=(1+count(abs(null)>=
+abs(observed)))/(n_permutations+1). Report the actual p/significance; neither a particular
+null spread nor a non-significant result is required. Alternative spatial null families
+require a separately validated family-specific contract and are not accepted as unverified arrays.
+
+
 Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
 
 ## Required Outputs

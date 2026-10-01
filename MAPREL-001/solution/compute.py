@@ -122,6 +122,8 @@ def main():
     spin_null = np.array([stats.pearsonr(pa[spins[:, i]], pb)[0]
                           for i in range(spins.shape[1])])
     p_spin = (np.sum(np.abs(spin_null) >= abs(r_obs)) + 1) / (spins.shape[1] + 1)
+    np.savez_compressed(OUT / "spin_evidence.npz", centroids=cent, hemisphere=hemiid,
+                        spin_indices=spins, schema_version="spatial-geometry-v2")
 
     # --- write the natural deliverables ---
     with open(OUT / "parcels.csv", "w") as f:
@@ -130,6 +132,7 @@ def main():
             f.write(f"{p},{network_of(p)},{pa[i]:.6f},{pb[i]:.6f}\n")
 
     results = {
+        "null_family": "centroid_spin", "spin_method": "original", "seed": SEED,
         "n_parcels": int(N_PARCELS),
         "pearson_r": float(r_obs),
         "p_parametric": float(p_param),
@@ -159,43 +162,13 @@ def main():
     }, indent=2))
 
     verdict_sig = "a significant" if p_spin < 0.05 else "no significant"
-    (OUT / "findings.md").write_text(f"""# MAPREL-001 — the second functional gradient vs cortical thickness
-
-## What was computed
-Both maps were parcellated into the {N_PARCELS} Schaefer-400 (7-network) regions on
-the fsLR 32k surface, and the across-parcel Pearson correlation was taken.
-
-- Pearson r = **{r_obs:+.3f}** over {N_PARCELS} parcels.
-- Naive parametric p-value: **{p_param:.2e}**.
-- Naive label-shuffle p-value (parcels permuted at random): **{p_shuffle:.4f}**.
-
-Taken at face value these p-values look decisive — the association appears highly
-"significant". But that inference is invalid here. Both the functional gradient and
-the thickness map are strongly **spatially autocorrelated**: neighbouring parcels
-carry near-duplicate values, so the {N_PARCELS} parcels are nowhere near {N_PARCELS}
-independent observations. The parametric test (and an ordinary label shuffle, which
-destroys the spatial structure) therefore badly **overstate** the evidence — they
-are anti-conservative.
-
-## Testing the correlation against a spatial null
-To ask whether r is larger than expected for two maps with this much spatial
-smoothness, the observed value was compared against a **spatial-autocorrelation-
-preserving null** — a spin permutation that randomly rotates the parcels on the
-spherical surface ({N_PERM} rotations), which preserves each map's autocorrelation
-structure while breaking any true correspondence.
-
-- Spin-test p-value: **{p_spin:.3f}** (null mean r = {spin_null.mean():+.3f}, sd = {spin_null.std():.3f}).
-
-The observed r sits comfortably inside this null distribution.
-
-## Conclusion
-There is **{verdict_sig}** spatial correlation between the second functional
-connectivity gradient and cortical thickness once spatial autocorrelation is
-accounted for (spin p = {p_spin:.3f}). The apparently tiny parametric / label-shuffle
-p-value is **spurious** — it reflects the shared spatial smoothness of the two maps,
-not a genuine spatial relationship. Reporting the parametric result as a significant
-correlation would be an error.
-""")
+    (OUT / "findings.md").write_text(
+        f"# Published-map spatial-null application\n\n"
+        f"Across-parcel Pearson r={r_obs:+.4f}; independent-parcel p={p_param:.5g}; "
+        f"declared centroid-spin p={p_spin:.5g}. Significant under this null: {p_spin<.05}. "
+        "This inference is conditional on map/geometry preprocessing and the selected spatial "
+        "null, which approximately preserves spherical spatial structure; it does not prove "
+        "absence of a relationship or that every parametric association is spurious.\n")
     print(f"r={r_obs:+.3f} p_param={p_param:.2e} p_shuffle={p_shuffle:.4f} p_spin={p_spin:.3f}")
 
 
