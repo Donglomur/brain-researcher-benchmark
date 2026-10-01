@@ -63,6 +63,7 @@ def load_submitted(path):
         return out
     for r in rows:
         sid = canon_site(r.get(id_c, ""))
+        assert sid not in out, f"duplicate site fold {sid}"
         if not sid:
             continue
         try:

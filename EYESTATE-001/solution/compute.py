@@ -69,10 +69,11 @@ def main() -> None:
     eye = np.asarray(ph["EYE_STATUS_AT_SCAN"])
     site = np.asarray(ph["SITE_ID"]).astype(str)
 
-    ts, y, groups = [], [], []
-    for t, e, s in zip(ts_all, eye, site):
+    ts, y, groups, subject_ids = [], [], [], []
+    for t, e, s, subject in zip(ts_all, eye, site, ph["SUB_ID"]):
         if isinstance(t, np.ndarray) and t.ndim == 2 and t.shape[1] == 200 and t.shape[0] > 50 and e in (1, 2):
             ts.append(t); y.append(1 if e == 1 else 0); groups.append(s)  # 1 = eyes open
+            subject_ids.append(str(subject))
     y = np.asarray(y); groups = np.asarray(groups)
 
     conn = ConnectivityMeasure(kind="correlation", vectorize=True, discard_diagonal=True)
@@ -82,33 +83,45 @@ def main() -> None:
         return make_pipeline(StandardScaler(), LinearSVC(C=1.0, dual="auto", max_iter=3000))
 
     def cv_bacc(splits):
-        accs = []
-        for tr, te in splits:
+        predictions = np.zeros(len(y), int)
+        fold_ids = np.zeros(len(y), int)
+        for fold, (tr, te) in enumerate(splits):
             c = clf().fit(X[tr], y[tr])
-            accs.append(balanced_accuracy_score(y[te], c.predict(X[te])))
-        return float(np.mean(accs))
+            predictions[te] = c.predict(X[te])
+            fold_ids[te] = fold
+        return float(balanced_accuracy_score(y, predictions)), predictions, fold_ids
 
     # CORRECT: leave-one-site-out (blocked by acquisition site -> no site-fingerprint leakage).
     # Capture the per-fold (per-held-out-site) balanced accuracy: the required intermediate table.
     per_fold = []
+    loso_predictions = np.zeros(len(y), int)
+    site_only_predictions = np.zeros(len(y), int)
     for tr, te in LeaveOneGroupOut().split(X, y, groups):
         site = str(groups[te][0])
         c = clf().fit(X[tr], y[tr])
-        ba = float(balanced_accuracy_score(y[te], c.predict(X[te])))
+        loso_predictions[te] = c.predict(X[te])
+        site_only_predictions[te] = int(y[tr].mean() >= .5)  # Unseen site: training-majority fallback.
+        ba = float(balanced_accuracy_score(y[te], loso_predictions[te]))
         per_fold.append({"fold_site": site, "n_test": int(len(te)),
                          "n_eyes_open_test": int((y[te] == 1).sum()),
                          "n_eyes_closed_test": int((y[te] == 0).sum()),
                          "balanced_accuracy": ba})
-    loso_bacc = float(np.mean([f["balanced_accuracy"] for f in per_fold]))
+    loso_bacc = float(balanced_accuracy_score(y, loso_predictions))
+    legacy_mean_fold_bacc = float(np.mean([f["balanced_accuracy"] for f in per_fold]))
 
     # NAIVE (leaky) random-fold scheme: what mixing each site across train/test would report.
-    rand_bacc = cv_bacc(list(StratifiedKFold(10, shuffle=True, random_state=0).split(X, y)))
+    rand_bacc, random_predictions, random_folds = cv_bacc(list(StratifiedKFold(10, shuffle=True, random_state=0).split(X, y)))
 
     n_sub, n_feat = int(X.shape[0]), int(X.shape[1])
     n_sites = int(len(np.unique(groups)))
 
     # ---- required intermediate output: per-fold balanced accuracy (one row per CV fold) ----
     import csv as _csv
+    with open(OUTPUT_DIR / "oof_predictions.csv", "w", newline="", encoding="utf-8") as f:
+        writer = _csv.writer(f)
+        writer.writerow(["subject_id", "site", "label", "fold_site", "prediction", "site_only_prediction", "random_fold", "random_prediction"])
+        for i in range(n_sub):
+            writer.writerow([subject_ids[i], groups[i], int(y[i]), groups[i], int(loso_predictions[i]), int(site_only_predictions[i]), int(random_folds[i]), int(random_predictions[i])])
     with open(OUTPUT_DIR / "per_fold.csv", "w", newline="", encoding="utf-8") as _f:
         w = _csv.writer(_f)
         w.writerow(["fold_site", "n_test", "n_eyes_open_test", "n_eyes_closed_test",
@@ -124,6 +137,11 @@ def main() -> None:
         "n_subjects": n_sub, "n_features": n_feat, "n_sites": n_sites,
         "n_eyes_open": int(y.sum()), "n_eyes_closed": int((y == 0).sum()),
         "chance": round(CHANCE, 4),
+        "legacy_equal_site_mean_recall": legacy_mean_fold_bacc,
+        "site_only_unseen_site_baseline": float(balanced_accuracy_score(y, site_only_predictions)),
+        "always_open_pooled_balanced_accuracy": float(balanced_accuracy_score(y, np.ones(len(y), int))),
+        "always_closed_pooled_balanced_accuracy": float(balanced_accuracy_score(y, np.zeros(len(y), int))),
+        "single_class_sites": sum(f["n_eyes_open_test"] == 0 or f["n_eyes_closed_test"] == 0 for f in per_fold),
         # descriptive alias kept for back-compat (clearly NOT the reported estimate)
         "random_kfold_balanced_accuracy_leaky": round(rand_bacc, 4),
     })
@@ -132,25 +150,24 @@ def main() -> None:
         "atlas": "rois_cc200", "connectivity": "Pearson correlation (vectorized)",
         "classifier": "StandardScaler + LinearSVC(C=1.0)",
         "cross_validation": "leave-one-site-out over acquisition sites (SITE_ID)",
-        "metric": "balanced accuracy", "target": "EYE_STATUS_AT_SCAN (open=1 vs closed=2)",
+        "metric": "pooled out-of-fold balanced accuracy", "target": "EYE_STATUS_AT_SCAN (open=1 vs closed=2)",
+        "scientific_target": "confounded protocol prediction on unseen sites, not biological eye-state effect",
+        "permutation_status": "not performed; no null or eye-state attribution claim",
         "n_subjects": n_sub, "n_features": n_feat, "n_sites": n_sites,
     })
     (OUTPUT_DIR / "findings.md").write_text(
-        "# Findings: decoding eyes-open vs eyes-closed from ABIDE resting-state connectivity\n\n"
-        f"A linear SVM was trained on vectorised CC200 correlation connectivity ({n_feat} edges) from "
-        f"{n_sub} ABIDE participants across {n_sites} acquisition sites to classify whether each participant "
-        "was scanned with eyes open or eyes closed.\n\n"
-        f"**Cross-validated balanced accuracy: {loso_bacc:.3f}** (chance = {CHANCE:.3f}).\n\n"
-        "Because each site used a single eyes-open/closed protocol, eye status is almost perfectly aligned "
-        "with the acquisition site, and connectivity carries a strong site-specific fingerprint. I therefore "
-        "evaluated the classifier with **leave-one-site-out** cross-validation, so the model is always tested "
-        "on sites absent from its training set and cannot exploit a site fingerprint. Evaluated this way the "
-        f"balanced accuracy is {loso_bacc:.3f}. For comparison, a random 10-fold split that mixes each site "
-        f"across train and test reports {rand_bacc:.3f}; that estimate is inflated because the classifier can "
-        "identify a held-out subject's site (and therefore its eye-status protocol) from connectivity, so it "
-        f"overstates the genuine, transferable eyes-open/closed effect. The site-blocked {loso_bacc:.3f} is the "
-        "accuracy I report.\n", encoding="utf-8")
-
+        f"# Confounded protocol prediction on unseen ABIDE sites\n\n"
+        f"Pooled LOSO balanced accuracy is {loso_bacc:.3f}; pooled random-10-fold BA is "
+        f"{rand_bacc:.3f}. The legacy equal-site mean recall is {legacy_mean_fold_bacc:.3f}, "
+        "a different estimand with one-class folds. Always-open and always-closed pooled "
+        "BA are both 0.5. Site-only prediction on an unseen site falls back to the training "
+        "majority; its score is included in the results.\n\n"
+        "Eye protocol and acquisition site are strongly associated. LOSO tests prediction "
+        "on unseen sites but cannot identify a biological eye-state effect: site-related "
+        "acquisition differences may align with protocol across sites. These are descriptive "
+        "method sensitivities, not a causal transferable-eye claim. No label-permutation "
+        "or clustered uncertainty analysis was performed, so no null inference is made.\n",
+        encoding="utf-8")
     print(f"n={n_sub} feat={n_feat} sites={n_sites} | LOSO bAcc={loso_bacc:.4f} | random-kfold(leaky)={rand_bacc:.4f}")
 
 
