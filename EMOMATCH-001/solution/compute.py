@@ -1,372 +1,275 @@
-"""AOMIC PIOP2 duration-model sensitivity case on fixed real emomatching data.
-Compare constant epochs with variable response-duration epochs and report signed
-coefficients and paired uncertainty. This is not an exact AOMIC Figure 7 analysis;
-model sensitivity alone establishes neither causal RT artifacts nor emotion specificity.
-"""
+"""Offline, source-bound duration-model sensitivity oracle. Import-safe."""
+from __future__ import annotations
+import argparse
 import csv
-import io
+import importlib.metadata
 import json
-import hashlib
+import math
 import os
-import sys
-import tempfile
-import time
-import urllib.request
-import warnings
-from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+import platform
+import sys
+import warnings
 
 import numpy as np
+import core
+import source_reader as sr
 
-warnings.filterwarnings("ignore")
-
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-OUT.mkdir(parents=True, exist_ok=True)
-
-S3 = "https://s3.amazonaws.com/openneuro.org/ds002790"
-FP = S3 + "/derivatives/fmriprep"
-TASK = "emomatching"
-TR = 2.0
-MAX_SUBJECTS = int(os.environ.get("EMOMATCH_MAX_SUBJECTS", "20"))
-MIN_SUBJECTS = 20
-PINNED_IDS = {"2", "3", "4", "5", "6", "7", "8", "9", "11", "12", "13", "14",
-              "15", "16", "17", "18", "19", "20", "21", "22"}
-
-# a priori face/emotion-selective ROIs (MNI mm) -- hypothesised to be emotion-specific and to
-# SURVIVE reaction-time control
-FACE_ROIS = {
-    "amygdala_L": (-23, -5, -19), "amygdala_R": (23, -5, -19),
-    "fusiform_L": (-40, -52, -18), "fusiform_R": (42, -52, -18),
-}
-# domain-general cognitive-control / salience / dorsal-attention ROIs (MNI mm) -- these are the
-# regions whose apparent "emotion" response is a time-on-task (reaction-time) confound
-CONTROL_ROIS = {
-    "dACC": (0, 20, 38), "aInsula_L": (-34, 20, 4), "aInsula_R": (36, 22, 2),
-    "dlPFC_L": (-44, 20, 30), "dlPFC_R": (46, 22, 28),
-    "IPS_L": (-28, -58, 46), "IPS_R": (30, -56, 46),
-}
-ROIS = {**FACE_ROIS, **CONTROL_ROIS}
-FETCH_RECEIPTS = {}
-# nuisance regressors from the fMRIPrep confounds table
-CONF_COLS = ["trans_x", "trans_y", "trans_z", "rot_x", "rot_y", "rot_z",
-             "a_comp_cor_00", "a_comp_cor_01", "a_comp_cor_02", "a_comp_cor_03",
-             "a_comp_cor_04", "white_matter", "csf"]
+METHOD_SHA='d86db9e607dfe1668b2aa6883c83a463895beb352712c8d6a53ebfe895e99234'
+SCHEMA_SHA='7beec618b63f86fbe66d6223be7e3702ca3bdb8bcc384ed2c651fbf02ccd8b8b'
+MODELS=('modelA','modelB')
+AGGREGATES={'amygdala':['amy_L','amy_R'],'fusiform':['ffa_L','ffa_R'],
+    'control':['dACC','aIns_L','aIns_R','dlPFC_L','dlPFC_R','IPS_L','IPS_R']}
+require=core.require
 
 
-def fail(reason):
-    (OUT / "run_metadata.json").write_text(json.dumps(
-        {"status": "failed_precondition", "reason": reason, "dataset_id": "ds002790"}, indent=2))
-    (OUT / "group_stats.json").write_text(json.dumps({"status": "failed_precondition", "reason": reason}))
-    (OUT / "findings.md").write_text(f"# Failed precondition\n\n{reason}\n")
-    sys.stderr.write(reason + "\n")
-    sys.exit(1)
+def protected_destinations(output,private,protected):
+    dests=[sr.safe_path(p) for p in (output,private) if p is not None]
+    protected=[sr.safe_path(p) for p in protected]
+    for index,a in enumerate(dests):
+        require(a!=Path('/') and a.parent.is_dir(),'output parent must exist')
+        if a.exists():require(a.is_dir() and not any(a.iterdir()),'fresh or empty output directory required')
+        for b in dests[index+1:]+protected:
+            require(a!=b and a not in b.parents and b not in a.parents,'overlapping source/output/private paths')
+    return dests
 
 
-def fetch(url, dest=None, timeout=300, retries=5):
-    if dest and os.path.exists(dest) and os.path.getsize(dest) > 0:
-        with open(dest, "rb") as cached:
-            FETCH_RECEIPTS[url] = hashlib.file_digest(cached, "sha256").hexdigest()
-        return dest
-    for a in range(retries):
-        try:
-            req = urllib.request.Request(url, headers={"User-Agent": "curl/8"})
-            with urllib.request.urlopen(req, timeout=timeout) as r:
-                data = r.read()
-            FETCH_RECEIPTS[url] = hashlib.sha256(data).hexdigest()
-            if dest:
-                with open(dest, "wb") as f:
-                    f.write(data)
-                return dest
-            return data
-        except Exception:
-            time.sleep(2 * (a + 1))
-    return None
+def write_bytes(path,raw):
+    with os.fdopen(os.open(path,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600),'wb') as f:f.write(raw)
 
 
-try:
-    import pandas as pd
-    from nilearn import datasets
-    from nilearn.glm.first_level import make_first_level_design_matrix
-    from nilearn.maskers import NiftiLabelsMasker, NiftiSpheresMasker
-    from scipy import stats
-except Exception as e:  # pragma: no cover
-    fail(f"import failed: {e}")
-
-# ---- cohort ----
-part = fetch(S3 + "/participants.tsv")
-if part is None:
-    fail("could not fetch ds002790 participants.tsv")
-rows = list(csv.DictReader(io.StringIO(part.decode()), delimiter="\t"))
-subjects = [r["participant_id"] for r in rows]
+def write_json(path,value):
+    write_bytes(path,(json.dumps(value,indent=2,allow_nan=False)+'\n').encode())
 
 
-def has_task(sub):
-    url = f"{FP}/{sub}/func/{sub}_task-{TASK}_acq-seq_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz"
+def write_csv(path,rows,columns):
+    with os.fdopen(os.open(path,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600),'w',newline='') as f:
+        writer=csv.DictWriter(f,fieldnames=columns,extrasaction='ignore',lineterminator='\n')
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({k:int(v) if isinstance(v,(bool,np.bool_)) else v for k,v in row.items()})
+
+
+def write_npz(path,arrays):
+    for key,value in arrays.items():
+        a=np.asarray(value);require(a.dtype.kind in 'biufUS','primitive evidence array '+key)
+        if a.dtype.kind in 'iuf':require(np.isfinite(a).all(),'finite evidence array '+key)
+    with os.fdopen(os.open(path,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600),'wb') as f:
+        np.savez_compressed(f,**arrays)
+
+
+def support_rows(pid,header,atlas_labels,atlas_affine,label_info):
+    supports,geometry=core.geometric_supports(tuple(header['bold_shape'][:3]),header['affine'],atlas_labels,atlas_affine)
+    rows=[]
+    for key,indices in supports.items():
+        require(len(indices)>0,'empty required support: '+pid+'/'+key)
+        sphere=key in core.SPHERES;center=core.SPHERES[key] if sphere else (None,None,None)
+        rows.append(dict(participant_id=pid,roi_id=key,family='sphere' if sphere else 'parcel',
+            label_name=key if sphere else label_info[int(key)]['label_name'],
+            network=None if sphere else label_info[int(key)]['network'],atlas_label=None if sphere else int(key),
+            center_x=center[0],center_y=center[1],center_z=center[2],radius=6. if sphere else None,
+            grid_id=geometry['grid_id'],n_voxels=len(indices),support_sha256=core.support_digest(indices),support_status='ok'))
+    return supports,rows
+
+
+def fit_person(pid,raw,person):
+    y,mean,sd,denominator,constant=core.normalize_roi(raw)
+    frames=np.arange(len(raw),dtype=np.float64)*person['header']['effective_TR_s']
+    included=[e for e in person['events'] if e['included']];fits=[]
+    for model in MODELS:
+        seen=[]
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter('always')
+            x,names,contrast,presence=core.construct_design([e['onset_s'] for e in included],
+                [e['trial_type_token'] for e in included],[e[model+'_duration_s'] for e in included],frames,person['confound_effective'])
+            fit=core.minimum_norm(x,y,contrast,conditions_present=all(presence.values()))
+        for w in caught:
+            seen.append(dict(category=w.category.__name__,message=str(w.message)))
+            print('warning: '+str(w.message),file=sys.stderr,flush=True)
+        diagnostic=dict(participant_id=pid,model=model,status=fit['status'],n_observations=len(raw),n_columns=len(names),
+            rank=fit['rank'],residual_df=fit['residual_df'],singular_values=fit['singular_values'].tolist(),
+            rank_cutoff=fit['rank_cutoff'],contrast_rowspace_residual=fit['contrast_rowspace_residual'],
+            estimability_bound=fit['estimability_bound'],n_exact_constant_rois=int(constant.sum()),
+            solver='NumPy float64 SVD minimum norm; pinned Nilearn SPM/cosine; public fsum normalization',warnings=seen)
+        fits.append(dict(model=model,design=x,names=names,contrast=contrast,fit=fit,diagnostic=diagnostic))
+    return dict(participant_id=pid,raw=raw,normalized=y,mean=mean,sd=sd,denominator=denominator,constant=constant,
+        frames=frames,confounds=person['confound_effective'],missing=person['confound_was_missing'],fits=fits)
+
+
+def compile_arrays(people,roi_ids):
+    columns=[]
+    for person in people:
+        for fit in person['fits']:
+            for key in fit['names']:
+                if key not in columns:columns.append(key)
+    per_frame={k:[] for k in ('frame_subject_index','source_frame_index','frame_time_s','roi_mean','roi_normalized','confound_effective','confound_was_missing')}
+    per_fit={k:[] for k in ('fit_subject_index','fit_model','column_present','beta','contrast_vector','contrast_estimate','contrast_defined','design_rank','residual_df','contrast_estimable','residual_sse')}
+    observations={k:[] for k in ('observation_fit_index','observation_frame_index','design_matrix')}
+    offset=0;fit_index=0
+    for subject_index,person in enumerate(people):
+        n=len(person['raw']);per_frame['frame_subject_index'].append(np.full(n,subject_index,dtype=np.int64))
+        per_frame['source_frame_index'].append(np.arange(n,dtype=np.int64))
+        for key,value in [('frame_time_s','frames'),('roi_mean','raw'),('roi_normalized','normalized'),('confound_effective','confounds'),('confound_was_missing','missing')]:per_frame[key].append(person[value])
+        for item in person['fits']:
+            index=[columns.index(k) for k in item['names']];fit=item['fit'];j=len(columns)
+            x=np.zeros((n,j));x[:,index]=item['design'];beta=np.zeros((j,len(roi_ids)));beta[index]=fit['beta']
+            contrast=np.zeros(j);contrast[index]=item['contrast'];present=np.zeros(j,dtype=bool);present[index]=True
+            values=dict(fit_subject_index=subject_index,fit_model=item['model'],column_present=present,beta=beta,
+                contrast_vector=contrast,contrast_estimate=fit['contrast_estimate'],contrast_defined=fit['contrast_defined'],
+                design_rank=fit['rank'],residual_df=fit['residual_df'],contrast_estimable=fit['contrast_estimable'],residual_sse=fit['residual_sse'])
+            for key,value in values.items():per_fit[key].append(value)
+            observations['observation_fit_index'].append(np.full(n,fit_index,dtype=np.int64))
+            observations['observation_frame_index'].append(np.arange(offset,offset+n,dtype=np.int64))
+            observations['design_matrix'].append(x);fit_index+=1
+        offset+=n
+    arrays=dict(participant_id=np.asarray([p['participant_id'] for p in people]),roi_id=np.asarray(roi_ids),
+        confound_name=np.asarray(core.CONFOUNDS),column_key=np.asarray(columns),
+        roi_raw_mean=np.asarray([p['mean'] for p in people]),roi_raw_sd=np.asarray([p['sd'] for p in people]),
+        normalization_denominator=np.asarray([p['denominator'] for p in people]))
+    arrays.update({key:np.concatenate(value,axis=0) for key,value in per_frame.items()})
+    arrays.update({key:np.asarray(value) for key,value in per_fit.items()})
+    arrays.update({key:np.concatenate(value,axis=0) for key,value in observations.items()})
+    return arrays
+
+
+def summaries(people,roi_ids,label_info,all_events,status,schema_id):
+    subjects={p['participant_id']:p for p in people};groups={key:[key] for key in core.SPHERES}
+    groups.update(AGGREGATES)
+    for network in core.NETWORKS:groups[network]=[str(i) for i in range(1,101) if label_info[i]['network']==network]
+    require(all(groups.values()),'nonempty endpoint supports')
+    person_values={};activation=[]
+    for pid in sr.IDS:
+        if pid not in subjects:continue
+        row=dict(participant_id=pid)
+        for item in subjects[pid]['fits']:
+            fit=item['fit'];model=item['model']
+            for endpoint,keys in groups.items():
+                index=[roi_ids.index(key) for key in keys]
+                value=math.fsum(float(fit['contrast_estimate'][i]) for i in index)/len(index) if all(fit['contrast_defined'][index]) else None
+                person_values[(pid,model,endpoint)]=value
+                if endpoint in AGGREGATES:row[endpoint+'_'+model]=value;row[endpoint+'_'+model+'_status']='ok' if value is not None else 'incomplete_support'
+        activation.append(row)
+    expected=len(sr.IDS);model_records=[]
+    for model in MODELS:
+        for endpoint,keys in groups.items():
+            model_records.append(dict(model=model,endpoint=endpoint,roi_ids=keys,weights=[1/len(keys)]*len(keys),
+                statistic=core.complete_statistic([person_values.get((pid,model,endpoint)) for pid in sr.IDS],expected)))
+    changes={};paired=[]
+    for endpoint in AGGREGATES:
+        values=[]
+        for pid in sr.IDS:
+            a=person_values.get((pid,'modelA',endpoint));b=person_values.get((pid,'modelB',endpoint))
+            values.append(b-a if a is not None and b is not None else None)
+        changes[endpoint]=values
+        paired.append(dict(endpoint=endpoint+'_B_minus_A',statistic=core.complete_statistic(values,expected)))
+    diff=[a-b if a is not None and b is not None else None for a,b in zip(changes['amygdala'],changes['control'])]
+    paired.append(dict(endpoint='amygdala_change_minus_control_change',statistic=core.complete_statistic(diff,expected)))
+    rt=[]
+    for pid in sr.IDS:
+        row=dict(participant_id=pid)
+        for condition in ('emotion','control'):
+            values=[e['response_time_s'] for e in all_events if e['participant_id']==pid and e['included'] and e['trial_type_token']==condition and e['rt_status']=='valid']
+            row['n_valid_'+condition]=len(values);row['mean_'+condition+'_s']=math.fsum(values)/len(values) if values else None
+        a,b=row['mean_emotion_s'],row['mean_control_s'];row['difference_s']=a-b if a is not None and b is not None else None;rt.append(row)
+    rt_summary=dict(per_subject=rt)
+    for key,field in [('emotion','mean_emotion_s'),('control','mean_control_s'),('emotion_minus_control','difference_s')]:
+        # The pilot does not turn 20 source-metadata records into full-cohort inference.
+        values=[r[field] if status=='complete' or r['participant_id'] in subjects else None for r in rt]
+        rt_summary[key]=core.complete_statistic(values,expected)
+    return activation,dict(schema_id=schema_id,status=status,n_expected=expected,models=model_records,paired_changes=paired,rt_summary=rt_summary)
+
+
+def failure_evidence(output,error):
+    reason=str(error) or type(error).__name__;receipt=dict(status='failed_precondition',error_type=type(error).__name__,reason=reason)
+    write_json(output/'failure_report.json',receipt)
+    for name in ('run_metadata.json','group_stats.json'):
+        if not os.path.lexists(output/name):write_json(output/name,receipt)
+    if not os.path.lexists(output/'findings.md'):write_bytes(output/'findings.md',('Source or analysis precondition failed: '+reason+'\n').encode())
+
+
+def run(args):
+    root=sr.safe_path(args.data_dir);output=sr.safe_path(args.output_dir)
+    private=sr.safe_path(args.private_dir) if args.private_dir else None
+    source_manifest=sr.safe_path(args.source_manifest);method_path=sr.safe_path(args.method_contract);schema_path=sr.safe_path(args.output_schema)
+    protected_destinations(output,private,[root,source_manifest,method_path,schema_path,Path(__file__).parent])
+    for path in (output,private):
+        if path is not None:path.mkdir(mode=0o755,exist_ok=True)
     try:
-        req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "curl/8"})
-        with urllib.request.urlopen(req, timeout=30) as r:
-            return r.status == 200
-    except Exception:
-        return False
+        method=sr.strict_json(sr.stable_bytes(method_path,1024**2,sha256=METHOD_SHA))[0]
+        schema=sr.strict_json(sr.stable_bytes(schema_path,1024**2,sha256=SCHEMA_SHA))[0]
+        require(method['participant_ids']==list(sr.IDS) and list(method['spatial']['spheres'])==list(core.SPHERES),'method implementation identities')
+        manifest,rows=sr.authenticate(root,source_manifest)
+        cohort,events,person,observed=sr.metadata(root,rows)
+        labels,atlas_affine,label_info,atlas_meta=sr.atlas(root,rows);observed['atlas']=atlas_meta
+        selected=[args.pilot_subject] if args.pilot_subject else list(sr.IDS)
+        require(not args.pilot_subject or args.pilot_subject=='sub-0002','only fixed first-person pilot supported')
+        status='resource_pilot' if args.pilot_subject else 'complete';roi_ids=method['spatial']['roi_ids']
+        supports_by_person={};support_table=[]
+        for pid in sr.IDS:
+            supports,records=support_rows(pid,person[pid]['header'],labels,atlas_affine,label_info)
+            supports_by_person[pid]=supports;support_table.extend(records)
+        people=[]
+        for pid in selected:
+            print(json.dumps(dict(participant_id=pid,phase='read_original_values')),flush=True)
+            data,header=sr.decode_nifti(sr.read_member(root,rows[(pid,'bold')]),full=True)
+            require(header['shape']==person[pid]['header']['bold_shape'] and header['affine']==person[pid]['header']['affine'],'source header changed')
+            raw=core.voxel_means(data,[supports_by_person[pid][key] for key in roi_ids]);del data
+            record=fit_person(pid,raw,person[pid]);people.append(record)
+            if private is not None:
+                arrays=dict(roi_id=np.asarray(roi_ids),raw_mean=raw,normalized=record['normalized'],raw_time_mean=record['mean'],
+                    raw_time_sd=record['sd'],denominator=record['denominator'],constant=record['constant'],
+                    confounds=record['confounds'],confound_missing=record['missing'])
+                for item in record['fits']:
+                    model=item['model'];fit=item['fit'];arrays[model+'_design']=item['design']
+                    for key in ('beta','singular_values','u','vt','retained_singular_mask','residual_sse'):arrays[model+'_'+key]=fit[key]
+                write_npz(private/(pid+'.npz'),arrays)
+            print(json.dumps(dict(participant_id=pid,phase='fits_complete',ranks=[x['fit']['rank'] for x in record['fits']])),flush=True)
+        arrays=compile_arrays(people,roi_ids)
+        activation,groups=summaries(people,roi_ids,label_info,events,status,schema['schema_id'])
+        fits=[item['diagnostic'] for p in people for item in p['fits']]
+        versions={name:importlib.metadata.version(name) for name in ('numpy','scipy','nibabel','nilearn')};versions['python']=platform.python_version()
+        metadata=dict(schema_id=schema['schema_id'],task_id='EMOMATCH-001',status=status,source_manifest_sha256=sr.SOURCE_SHA,
+            method_contract_sha256=METHOD_SHA,method=method,selected_participant_ids=list(sr.IDS),
+            source_files=[{key:r[key] for key in ('path','role','participant_id','size_bytes','sha256')} for r in manifest['files']],
+            source_observed=observed,fits=fits,software_versions=versions,warnings=[w for f in fits for w in f['warnings']])
+        if args.pilot_subject:
+            scope=dict(authenticated_participants=list(sr.IDS),header_and_event_metadata_participants=list(sr.IDS),
+                signal_and_fit_participants=selected,not_complete_production=True)
+            metadata['resource_pilot_scope']=scope;groups['resource_pilot_scope']=scope
+        if private is not None:write_json(private/'fit_diagnostics.json',fits)
+        tables={'cohort.csv':cohort,'events.csv':events,'roi_support.csv':support_table,'activation.csv':activation}
+        for name,records in tables.items():write_csv(output/name,records,list(schema['tables'][name]['required_columns']))
+        write_npz(output/'glm_arrays.npz',arrays)
+        lines=['# Fixed-cohort duration-model sensitivity','',
+            'Both models use identical source frames, spatial measurements and nuisance regressors. The signed emotion-minus-control contrast changes with regressor duration/scale; it is not a causal RT adjustment or proof of emotion specificity.','',
+            'Run status: '+status+'. Processed '+str(len(people))+' of '+str(len(sr.IDS))+' fixed participants.','',
+            '| Paired endpoint | Defined / expected | Mean B-minus-A |','|---|---:|---:|']
+        for row in groups['paired_changes']:
+            s=row['statistic'];mean='undefined' if s['mean'] is None else format(s['mean'],'.12g')
+            lines.append('| '+row['endpoint']+' | '+str(s['n_defined'])+'/'+str(s['n_expected'])+' | '+mean+' |')
+        lines+=['','Uncertainty is descriptive and uncorrected across the declared endpoint families. Missing response times use the pooled median, not an asserted observed display duration. Source frame origin zero is a computational convention.']
+        write_bytes(output/'findings.md',('\n'.join(lines)+'\n').encode())
+        # Complete JSON markers are last; any later error creates authoritative failure_report.json.
+        write_json(output/'group_stats.json',groups);write_json(output/'run_metadata.json',metadata)
+        if private is not None:write_json(private/'completion.json',dict(status=status,participants=selected,source_manifest_sha256=sr.SOURCE_SHA,method_contract_sha256=METHOD_SHA))
+        return dict(status=status,participants=len(people),fits=len(fits),arrays={key:list(value.shape) for key,value in arrays.items()},warnings=len(metadata['warnings']))
+    except BaseException as error:
+        failure_evidence(output,error);raise
 
 
-# Freeze the cohort; network availability must never choose the scientific sample.
-import re
-usable = [s for s in subjects if re.sub(r"\D", "", s).lstrip("0") in PINNED_IDS]
-if len(usable) != 20 or len(set(usable)) != 20 or MAX_SUBJECTS != 20:
-    fail("the exact pinned 20-participant cohort is required")
-
-# ---- atlases ----
-sch = datasets.fetch_atlas_schaefer_2018(n_rois=100, yeo_networks=7, resolution_mm=2)
-labels = [l.decode() if isinstance(l, bytes) else l for l in sch["labels"]]
-# some nilearn versions prepend a "Background" entry; drop it so labels align 1:1 with the
-# 100 parcels the masker extracts (map integers 1..100).
-if labels and str(labels[0]).lower() == "background":
-    labels = labels[1:]
-
-
-def net_of(label):
-    # labels look like '7Networks_LH_Cont_Par_1'
-    parts = label.split("_")
-    return parts[2] if len(parts) > 2 else "Other"
+def main(argv=None):
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--data-dir',default=os.environ.get('DATA_DIR','/app/data/emomatch'))
+    parser.add_argument('--source-manifest',default=os.environ.get('SOURCE_MANIFEST','/app/source_manifest.json'))
+    parser.add_argument('--method-contract',default=os.environ.get('METHOD_CONTRACT','/app/method_contract.json'))
+    parser.add_argument('--output-schema',default=os.environ.get('OUTPUT_SCHEMA','/app/output_schema.json'))
+    parser.add_argument('--output-dir',default=os.environ.get('OUTPUT_DIR','/app/output'))
+    parser.add_argument('--private-dir',default=os.environ.get('PRIVATE_DIR'))
+    parser.add_argument('--pilot-subject',choices=['sub-0002'])
+    args=parser.parse_args(argv)
+    try:print(json.dumps(run(args),allow_nan=False),flush=True);return 0
+    except BaseException as error:
+        print(json.dumps(dict(status='failed_precondition',error_type=type(error).__name__,reason=str(error) or type(error).__name__)),file=sys.stderr,flush=True);return 1
 
 
-networks = [net_of(l) for l in labels]
-cortex_masker = NiftiLabelsMasker(sch["maps"], standardize=False, detrend=False)
-roi_masker = NiftiSpheresMasker(list(ROIS.values()), radius=6, standardize=False, detrend=False)
-
-
-def load_events(sub):
-    b = fetch(f"{S3}/{sub}/func/{sub}_task-{TASK}_acq-seq_events.tsv")
-    if b is None:
-        return None
-    rd = list(csv.DictReader(io.StringIO(b.decode()), delimiter="\t"))
-    ev = []
-    for r in rd:
-        tt = r["trial_type"]
-        if tt not in ("emotion", "control"):
-            continue
-        rt = r.get("response_time", "n/a")
-        rt = float(rt) if rt not in ("n/a", "", "NaN", None) else np.nan
-        ev.append((float(r["onset"]), tt, rt))
-    return ev
-
-
-def design(ev, nvol, model, medrt):
-    frame_times = np.arange(nvol) * TR
-    onsets = [e[0] for e in ev]
-    ttypes = [e[1] for e in ev]
-    rts = [e[2] for e in ev]
-    if model == "naive":       # constant-duration epoch: ignores the RT difference
-        durs = [medrt] * len(ev)
-    else:                      # variable epoch: duration = per-trial reaction time
-        durs = [(r if not np.isnan(r) else medrt) for r in rts]
-    events = pd.DataFrame({"onset": onsets, "trial_type": ttypes, "duration": durs})
-    dm = make_first_level_design_matrix(frame_times, events, hrf_model="spm",
-                                        high_pass=0.008, drift_model="cosine")
-    return dm
-
-
-CACHE = os.environ.get("EMOMATCH_CACHE")  # dev only: keep BOLD files to allow fast re-runs
-
-
-def process(sub):
-    if CACHE:
-        os.makedirs(CACHE, exist_ok=True)
-        tmp = os.path.join(CACHE, f"{sub}_emo_bold.nii.gz")
-    else:
-        tmp = tempfile.NamedTemporaryFile(suffix=".nii.gz", delete=False).name
-    bold = fetch(f"{FP}/{sub}/func/{sub}_task-{TASK}_acq-seq_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz", dest=tmp)
-    cb = fetch(f"{FP}/{sub}/func/{sub}_task-{TASK}_acq-seq_desc-confounds_regressors.tsv")
-    ev = load_events(sub)
-    if bold is None or cb is None or ev is None:
-        if not CACHE and os.path.exists(tmp):
-            os.unlink(tmp)
-        return None
-    rd = list(csv.DictReader(io.StringIO(cb.decode()), delimiter="\t"))
-    nvol = len(rd)
-    conf = np.array([[float(r[c]) if r.get(c, "n/a") not in ("n/a", "", "NaN", None) else np.nan
-                      for c in CONF_COLS] for r in rd])
-    for j in range(conf.shape[1]):
-        m = np.nanmean(conf[:, j])
-        conf[np.isnan(conf[:, j]), j] = m if not np.isnan(m) else 0.0
-    try:
-        Yc = cortex_masker.fit_transform(tmp)          # nvol x 100
-        Yr = roi_masker.fit_transform(tmp)             # nvol x len(ROIS)
-    except Exception:
-        if not CACHE and os.path.exists(tmp):
-            os.unlink(tmp)
-        return None
-    if not CACHE and os.path.exists(tmp):
-        os.unlink(tmp)
-    Y = np.hstack([Yc, Yr])                              # nvol x (100+len(ROIS))
-    # standardise each column to make the emotion-control effect comparable across regions
-    Y = (Y - Y.mean(0)) / (Y.std(0) + 1e-8)
-    valid_rt = [e[2] for e in ev if not np.isnan(e[2])]
-    medrt = float(np.median(valid_rt)) if valid_rt else 1.5
-    emo_rt = np.mean([e[2] for e in ev if e[1] == "emotion" and not np.isnan(e[2])])
-    con_rt = np.mean([e[2] for e in ev if e[1] == "control" and not np.isnan(e[2])])
-    out = {"rt_emotion": float(emo_rt), "rt_control": float(con_rt)}
-    for model in ("naive", "rt"):
-        dm = design(ev, nvol, model, medrt)
-        C = pd.DataFrame(conf, columns=CONF_COLS, index=dm.index)
-        X = pd.concat([dm.drop(columns=[c for c in dm.columns if c == "constant"]), C], axis=1)
-        X["constant"] = 1.0
-        cols = list(X.columns)
-        cvec = np.zeros(len(cols))
-        cvec[cols.index("emotion")] = 1.0
-        cvec[cols.index("control")] = -1.0
-        beta, _, _, _ = np.linalg.lstsq(X.values, Y, rcond=None)
-        out[model] = cvec @ beta                        # (100+len(ROIS),) emotion-control effect
-    return sub, out
-
-
-results = []
-with ThreadPoolExecutor(max_workers=3) as ex:
-    for r in ex.map(process, usable):
-        if r is not None:
-            results.append(r)
-            sys.stderr.write(f"processed {r[0]}\n")
-
-if len(results) != 20:
-    fail(f"only {len(results)} subjects processed")
-
-pids = [r[0] for r in results]
-naive = np.array([r[1]["naive"] for r in results])      # nsub x 104
-rt = np.array([r[1]["rt"] for r in results])
-emo_rt = np.array([r[1]["rt_emotion"] for r in results])
-con_rt = np.array([r[1]["rt_control"] for r in results])
-n = len(pids)
-roi_idx = {k: len(labels) + j for j, k in enumerate(ROIS)}
-FACE_KEYS = list(FACE_ROIS.keys())
-CONTROL_KEYS = list(CONTROL_ROIS.keys())
-
-
-def group_t(mat, idx):
-    v = mat[:, idx].mean(1) if len(idx) > 1 else mat[:, idx[0]]
-    t, p = stats.ttest_1samp(v, 0.0)
-    return float(v.mean()), float(t), float(p)
-
-
-# ---- per-subject required output: emotion>control in the a priori face ROIs and in the
-#      cognitive-control ROIs, under EACH first-level modelling choice considered. The task asks
-#      for the per-subject contrast under each modelling choice; the reference honest analyst
-#      weighs the constant-epoch model AND the variable-epoch (duration = per-trial reaction time)
-#      model, so both blocks of columns are reported. The grader assigns std/alt by value, so the
-#      column NAMES do not cue which model is which. ----
-def _amy(mat, i):
-    return np.mean([mat[i, roi_idx["amygdala_L"]], mat[i, roi_idx["amygdala_R"]]])
-
-
-def _ffa(mat, i):
-    return np.mean([mat[i, roi_idx["fusiform_L"]], mat[i, roi_idx["fusiform_R"]]])
-
-
-def _ctl(mat, i):
-    return np.mean([mat[i, roi_idx[k]] for k in CONTROL_KEYS])
-
-
-with open(OUT / "activation.csv", "w", newline="") as f:
-    w = csv.writer(f)
-    w.writerow(["subject_id",
-                "amygdala_emotion_gt_control__modelA", "fusiform_emotion_gt_control__modelA",
-                "control_rois_emotion_gt_control__modelA",
-                "amygdala_emotion_gt_control__modelB", "fusiform_emotion_gt_control__modelB",
-                "control_rois_emotion_gt_control__modelB"])
-    for i, p in enumerate(pids):
-        w.writerow([p,
-                    f"{_amy(naive, i):.5f}", f"{_ffa(naive, i):.5f}", f"{_ctl(naive, i):.5f}",
-                    f"{_amy(rt, i):.5f}", f"{_ffa(rt, i):.5f}", f"{_ctl(rt, i):.5f}"])
-
-# ---- group statistics: naive vs RT-controlled, per a priori ROI and per network ----
-stats_out = {"n_subjects": n,
-             "model_naive": "constant-duration epoch (ignores reaction-time difference)",
-             "model_rt": "variable-duration epoch (duration = per-trial reaction time)",
-             "reaction_time": {}, "face_rois": {}, "control_rois": {}, "networks": {}}
-
-# premise: the reaction-time difference between the two conditions
-d = emo_rt - con_rt
-tt = stats.ttest_rel(emo_rt, con_rt)
-stats_out["reaction_time"] = {
-    "emotion_mean_s": float(emo_rt.mean()), "control_mean_s": float(con_rt.mean()),
-    "difference_s": float(d.mean()), "paired_t": float(tt.statistic), "paired_p": float(tt.pvalue),
-    "frac_emotion_slower": float(np.mean(emo_rt > con_rt)), "cohen_d": float(d.mean() / d.std())}
-
-
-def add_roi(dst, name, keys):
-    idx = [roi_idx[k] for k in keys]
-    mn_n, t_n, p_n = group_t(naive, idx)
-    mn_r, t_r, p_r = group_t(rt, idx)
-    pct = 100.0 * (mn_r - mn_n) / abs(mn_n) if mn_n != 0 else float("nan")
-    dst[name] = {"naive": {"mean": mn_n, "t": t_n, "p": p_n},
-                 "rt_controlled": {"mean": mn_r, "t": t_r, "p": p_r}, "pct_change": float(pct)}
-
-
-for k in FACE_KEYS:
-    add_roi(stats_out["face_rois"], k, [k])
-add_roi(stats_out["face_rois"], "amygdala", ["amygdala_L", "amygdala_R"])
-add_roi(stats_out["face_rois"], "fusiform", ["fusiform_L", "fusiform_R"])
-for k in CONTROL_KEYS:
-    add_roi(stats_out["control_rois"], k, [k])
-add_roi(stats_out["control_rois"], "control_rois_mean", CONTROL_KEYS)
-
-for nw in sorted(set(networks)):
-    idx = [i for i, x in enumerate(networks) if x == nw]
-    mn_n, t_n, p_n = group_t(naive, idx)
-    mn_r, t_r, p_r = group_t(rt, idx)
-    stats_out["networks"][nw] = {"n_parcels": len(idx),
-                                 "naive": {"mean": mn_n, "t": t_n, "p": p_n},
-                                 "rt_controlled": {"mean": mn_r, "t": t_r, "p": p_r}}
-def paired_summary(values):
-    x = np.asarray(values, dtype=float)
-    mean = float(x.mean())
-    h = float(stats.t.ppf(0.975, len(x) - 1) * x.std(ddof=1) / np.sqrt(len(x)))
-    return {"n": len(x), "mean_change": mean, "ci95": [mean - h, mean + h]}
-
-changes = {"amygdala": np.array([_amy(rt, i) - _amy(naive, i) for i in range(n)]),
-           "fusiform": np.array([_ffa(rt, i) - _ffa(naive, i) for i in range(n)]),
-           "control": np.array([_ctl(rt, i) - _ctl(naive, i) for i in range(n)])}
-stats_out["model_sensitivity"] = {name: paired_summary(v) for name, v in changes.items()}
-stats_out["model_sensitivity"]["amygdala_minus_control_change"] = paired_summary(
-    changes["amygdala"] - changes["control"])
-(OUT / "group_stats.json").write_text(json.dumps(stats_out, indent=2))
-
-(OUT / "run_metadata.json").write_text(json.dumps({
-    "status": "ok", "dataset_id": "ds002790",
-    "derivatives": "fMRIPrep (AOMIC PIOP2), task-emomatching, space-MNI152NLin2009cAsym preproc BOLD",
-    "n_subjects": n, "TR_s": TR,
-    "atlas": "Schaefer-2018 100-parcel / 7-network cortex + amygdala, fusiform and "
-             "cognitive-control (dACC, anterior insula, dlPFC, IPS) 6mm spheres",
-    "first_level": "SPM HRF; nuisance = 6 motion + aCompCor(5) + WM + CSF; cosine high-pass 0.008 Hz",
-    "contrast": "emotion > control (emotion-matching > orientation-matching)",
-    "models": {"naive": "constant-duration epochs", "rt": "variable-duration epochs (=reaction time)"},
-    "subject_ids": pids, "source_sha256_by_url": FETCH_RECEIPTS,
-    "analysis_scope": "paper-motivated duration-model coefficient sensitivity, not exact Figure 7",
-}, indent=2))
-
-amy = stats_out["face_rois"]["amygdala"]
-ffa = stats_out["face_rois"]["fusiform"]
-ctl = stats_out["control_rois"]["control_rois_mean"]
-ains = stats_out["control_rois"]["aInsula_R"]
-dlpfc = stats_out["control_rois"]["dlPFC_L"]
-ips = stats_out["control_rois"]["IPS_R"]
-rtd = stats_out["reaction_time"]
-(OUT / "findings.md").write_text(f"""# AOMIC duration-model sensitivity
-Using {n} pinned participants, the amygdala coefficient was {amy['naive']['mean']:+.4f}
-under the constant-epoch model and {amy['rt_controlled']['mean']:+.4f} under the
-response-duration model. The control-region coefficient was {ctl['naive']['mean']:+.4f}
-and {ctl['rt_controlled']['mean']:+.4f}, respectively. Signed paired coefficient
-changes and their 95% participant-level intervals are in group_stats.json.
-
-Mean emotion/control reaction times were {rtd['emotion_mean_s']:.3f} and
-{rtd['control_mean_s']:.3f} seconds. These quantities describe sensitivity to
-the chosen duration parameterization. Different regional t values are not a
-region-by-condition interaction, and the models have different regressor scaling.
-They do not identify an RT-caused artifact, an emotion-specific mechanism, or
-a causal neural response. This is a paper-motivated adaptation, not a reproduction
-of the published Figure 7 activation or an established confound-removal method.
-""")
-print(f"OK n={n}: amygdala t {amy['naive']['t']:.2f}->{amy['rt_controlled']['t']:.2f} ; "
-      f"control-ROIs t {ctl['naive']['t']:.2f}->{ctl['rt_controlled']['t']:.2f} ; "
-      f"aIns_R {ains['naive']['t']:.2f}->{ains['rt_controlled']['t']:.2f} ; "
-      f"RT emo {rtd['emotion_mean_s']:.2f} vs con {rtd['control_mean_s']:.2f}")
+if __name__=='__main__':raise SystemExit(main())

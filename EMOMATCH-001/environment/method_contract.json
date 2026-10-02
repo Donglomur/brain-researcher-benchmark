@@ -1,0 +1,388 @@
+{
+  "contract_id": "EMOMATCH-001-duration-sensitivity-v2",
+  "status": "frozen_before_original_BOLD_signal_analysis",
+  "interpretation": "Fixed20, within-person signed emotion-minus-control coefficient sensitivity to two event-duration models; not causal RT correction, emotion specificity or a paper-result reproduction.",
+  "participant_ids": [
+    "sub-0002",
+    "sub-0003",
+    "sub-0004",
+    "sub-0005",
+    "sub-0006",
+    "sub-0007",
+    "sub-0008",
+    "sub-0009",
+    "sub-0011",
+    "sub-0012",
+    "sub-0013",
+    "sub-0014",
+    "sub-0015",
+    "sub-0016",
+    "sub-0017",
+    "sub-0018",
+    "sub-0019",
+    "sub-0020",
+    "sub-0021",
+    "sub-0022"
+  ],
+  "models": {
+    "modelA": "Pooled participant median of all valid emotion/control RTs for every included trial",
+    "modelB": "Individual valid RT, with the same pooled median only for declared missing RT"
+  },
+  "events": {
+    "included_types": [
+      "control",
+      "emotion"
+    ],
+    "positive_finite_valid_RT": true,
+    "no_valid_RT": "failed_precondition",
+    "all_original_rows_retained": true,
+    "accuracy_filter": false,
+    "source_duration": "Retained separately; report valid duration-minus-RT and omitted-duration-minus-imputation diagnostics",
+    "source_duration_difference_count": "Count exact nonzero binary64 source_duration_s-response_time_s for included valid-RT rows; descriptive metadata diagnostic, not a scientific threshold.",
+    "missing_tokens": [
+      "",
+      "n/a"
+    ],
+    "source_row_preconditions": "Every original onset finite and >=-24s; every source duration finite and >=0. Preserve all rows. Included target RT must be finite positive or an exact declared missing token. No valid target RT => failed_precondition. Other nonmissing invalid tokens fail rather than coerce.",
+    "outside_frame_span": "Retain diagnostic source onset/end span; no outcome-driven trimming or silent discard. Pinned source events lie within0..270s."
+  },
+  "spatial": {
+    "atlas": "Released TemplateFlow Schaefer100/7 in MNI152NLin2009cAsym, res-02",
+    "cortical_label_ids": "1..100 with released LUT",
+    "sphere_radius_mm": 6,
+    "sphere_rule": "Squared world distance <=36, no additional epsilon/rescue/mask",
+    "spheres": {
+      "amy_L": [
+        -23,
+        -5,
+        -19
+      ],
+      "amy_R": [
+        23,
+        -5,
+        -19
+      ],
+      "ffa_L": [
+        -40,
+        -52,
+        -18
+      ],
+      "ffa_R": [
+        42,
+        -52,
+        -18
+      ],
+      "dACC": [
+        0,
+        20,
+        38
+      ],
+      "aIns_L": [
+        -34,
+        20,
+        4
+      ],
+      "aIns_R": [
+        36,
+        22,
+        2
+      ],
+      "dlPFC_L": [
+        -44,
+        20,
+        30
+      ],
+      "dlPFC_R": [
+        46,
+        22,
+        28
+      ],
+      "IPS_L": [
+        -28,
+        -58,
+        46
+      ],
+      "IPS_R": [
+        30,
+        -56,
+        46
+      ]
+    },
+    "atlas_resampling": {
+      "map": "inv(atlas_affine) @ bold_affine; voxel-center integer coordinates",
+      "tie_snap": "h=0.5*rint(2*u); u=h if abs(u-h)<=1e-7 voxel",
+      "domain": "After snapping, closed atlas voxel-center domain [0,shape-1]; outside becomes background0",
+      "nearest": "floor(u+0.5)",
+      "warning": "Documented deterministic nearest-label convention, not exact legacy SciPy equivalence"
+    },
+    "reduction": "For each frame and ROI, materialize selected ascending C-order flat voxel indices as a contiguous1D float64 vector; NumPy float64 mean. No stride-dependent2D axis reduction is prescribed.",
+    "support_digest": "SHA256(b'EMOMATCH_support_v1\\n' + sorted_unique_C_flat_indices_as_little_endian_int64_bytes)",
+    "roi_ids": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "27",
+      "28",
+      "29",
+      "30",
+      "31",
+      "32",
+      "33",
+      "34",
+      "35",
+      "36",
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "45",
+      "46",
+      "47",
+      "48",
+      "49",
+      "50",
+      "51",
+      "52",
+      "53",
+      "54",
+      "55",
+      "56",
+      "57",
+      "58",
+      "59",
+      "60",
+      "61",
+      "62",
+      "63",
+      "64",
+      "65",
+      "66",
+      "67",
+      "68",
+      "69",
+      "70",
+      "71",
+      "72",
+      "73",
+      "74",
+      "75",
+      "76",
+      "77",
+      "78",
+      "79",
+      "80",
+      "81",
+      "82",
+      "83",
+      "84",
+      "85",
+      "86",
+      "87",
+      "88",
+      "89",
+      "90",
+      "91",
+      "92",
+      "93",
+      "94",
+      "95",
+      "96",
+      "97",
+      "98",
+      "99",
+      "100",
+      "amy_L",
+      "amy_R",
+      "ffa_L",
+      "ffa_R",
+      "dACC",
+      "aIns_L",
+      "aIns_R",
+      "dlPFC_L",
+      "dlPFC_R",
+      "IPS_L",
+      "IPS_R"
+    ],
+    "grid_id": "grid_ + SHA256(b'EMOMATCH_grid_v1\\n' + spatial_shape3 as little-endian int64 + chosen effective4x4 affine C-order little-endian float64 with every signed zero normalized to +0 + b'mm\\n')",
+    "empty_support": "Any required ROI with no geometric voxels => failed_precondition; never invent values or drop a region. All111 supports are nonempty in every authenticated fixed participant."
+  },
+  "signal": {
+    "calibration": "Explicit source NIfTI scaling; no silent NaN-to-zero",
+    "normalization": "(raw_roi - population_mean)/(population_SD + 1e-8)",
+    "time_reductions": "For nonconstant ROI, mean=math.fsum(float(raw[t,r]) over original frame order)/T; d=float(raw[t,r]-mean); SD=sqrt(math.fsum(d*d over original frame order)/T). This accurate canonical reduction is explicit because arbitrary axis-wise sums can be amplified near constants by the fixed1e-8 floor.",
+    "exact_constants": "mean=first exact value, SD=0, normalized response=0",
+    "frames": "All source frames; no censoring/filtering/smoothing/whitening",
+    "nonfinite_source": "failed_precondition",
+    "raw_scaling": "Interpret NIfTI slope nonfinite or0 as effective slope1/intercept0; otherwise require finite intercept and apply float64 stored*slope+intercept. Record raw nullable sentinel values and flags separately."
+  },
+  "nuisance": {
+    "columns": [
+      "trans_x",
+      "trans_y",
+      "trans_z",
+      "rot_x",
+      "rot_y",
+      "rot_z",
+      "a_comp_cor_00",
+      "a_comp_cor_01",
+      "a_comp_cor_02",
+      "a_comp_cor_03",
+      "a_comp_cor_04",
+      "white_matter",
+      "csf"
+    ],
+    "imputation": "Finite within-column math.fsum mean in source-frame order; all-missing=>0; retain exact missing mask",
+    "scaling": "Original source scales; no normalization",
+    "missing_tokens": [
+      "",
+      "n/a"
+    ]
+  },
+  "design": {
+    "frame_times": "2*i seconds for every original frame i=0..134. Header and raw/preprocessed sidecars agree on TR2. Origin0 is a computational convention, not a verified exporter slice-time reference; do not discard additional frames.",
+    "origin_s": 0,
+    "hrf": "SPM from pinned Nilearn0.12.1 compute_regressor; unit-height boxes; discrete-sum normalized32s kernel",
+    "oversampling": 50,
+    "min_onset_s": -24,
+    "drift": "Unregularized cosine cutoff0.008Hz, pinned create_cosine_drift",
+    "columns": "control,emotion,drift_1..K in create_cosine_drift returned order excluding its last constant,13 named nuisances,one literal-ones constant; K=returned.shape[1]-1; absent condition has zero task column",
+    "initial_full_rank": false,
+    "derivatives": false,
+    "frame_count": 135
+  },
+  "fit": {
+    "precision": "float64",
+    "solution": "Canonical minimum-norm SVD OLS, not every coefficient statistically identifiable",
+    "retain_singular_values": "s > max(T,P)*eps64*smax",
+    "contrast": "emotion-control",
+    "estimable": "norm(c - V_r@(V_r.T@c)) <=100*eps64*max(T,P)*norm(c)",
+    "nonestimable": "Retain beta/rank/diagnostics, undefined contrast with false mask and finite zero placeholder",
+    "residual_sse": "sum((Y-X@beta)^2,frames)",
+    "status_precedence": "missing_condition if either included condition absent; otherwise contrast_nonestimable if row-space check fails; otherwise ok. Mathematical contrast_estimable remains separately recorded."
+  },
+  "groups": {
+    "person_weights": "equal; fixed20 required",
+    "amygdala": "equal amy_L/amy_R",
+    "fusiform": "equal ffa_L/ffa_R",
+    "control": "equal7 dACC/aInsL/R/dlPFCL/R/IPSL/R",
+    "networks": "equal-parcel within-person released seven networks",
+    "per_model_endpoints": "11 spheres+3 aggregates+7 networks",
+    "paired_endpoints": [
+      "amygdala_B_minus_A",
+      "fusiform_B_minus_A",
+      "control_B_minus_A",
+      "amygdala_change_minus_control_change"
+    ],
+    "uncertainty": "Sample SD ddof1, two-sided Student-t/95% CI with19df; descriptive uncorrected endpoint families",
+    "incomplete": "Any expected person undefined=>null complete-cohort statistics; preserve defined/expected counts",
+    "exact_zero_variance": "mean and pointCI defined; t/p null, zero_variance status",
+    "percent_change_required": false,
+    "cohens_d_required": false,
+    "significance_or_sign_requirement": false,
+    "network_keys": [
+      "Vis",
+      "SomMot",
+      "DorsAttn",
+      "SalVentAttn",
+      "Limbic",
+      "Cont",
+      "Default"
+    ]
+  },
+  "verification": {
+    "basis": "Canonical authenticated source inputs, never perturbed submitted receipts",
+    "group_authority": "Accepted activation.csv values for three aggregates and paired changes; accepted primitive NPZ contrasts for individual spheres and equal-parcel network person values; accepted source-bound RT per-person records for RT groups. No second canonical or historical group t/p gate.",
+    "contrast_coherence_bound": "For independently rounded beta and contrast, permit contrast-envelope(d_ref) + sum_j abs(c_j)*beta-envelope(beta_ref_j) + 8*eps64*P*sum_j abs(c_j*beta_sub_j); also bind each reported beta and contrast separately to canonical source targets.",
+    "aggregate_coherence_bound": "For independently rounded primitive and aggregate values, permit aggregate-envelope(aggregate_ref) + sum_r abs(weight_r)*contrast-envelope(primitive_ref_r) + 8*eps64*R*sum_r abs(weight_r*primitive_sub_r); bind aggregate separately to canonical target and use accepted aggregate values as group authority.",
+    "findings": "Nonempty free interpretation; no keyword/direction/model-signature gate",
+    "coherent_axis_row_reordering": true,
+    "rt_coherence": "Per-person condition means and emotion-minus-control differences each bind canonical source at event_timing tolerances. Difference-versus-accepted-means coherence permits difference-envelope + sum abs(weights)*mean-envelope +8*eps64*2*sum abs(weight*submitted_mean), with weights[1,-1]. Accepted per-person difference is the sole RT-difference group authority."
+  },
+  "tolerances_proposed_before_original_signals": {
+    "rule": "abs(actual-reference)<=atol+rtol*abs(reference); typed finite domain required",
+    "source_raw_normalization_and_design": {
+      "atol": 1e-8,
+      "rtol": 0.000001
+    },
+    "beta_contrast_residual_sse": {
+      "atol": 1e-7,
+      "rtol": 0.00001
+    },
+    "own_group_statistics": {
+      "atol": 1e-7,
+      "rtol": 0.00001
+    },
+    "singular_and_estimability_diagnostics": {
+      "atol": 1e-14,
+      "rtol": 0.000001
+    },
+    "event_timing": {
+      "atol": 1e-9,
+      "rtol": 1e-8
+    },
+    "header_geometry": {
+      "atol": 1e-7,
+      "rtol": 1e-8
+    },
+    "discrete": "IDs, membership, ranks, statuses, masks and source identities exact",
+    "warning": "Serialization/computational acceptance policy, not a universal guarantee for arbitrarily ill-conditioned alternate solvers; canonical source and public rank convention are required."
+  },
+  "original_signals_read": false,
+  "source_manifest_sha256": "70000c5c93c2c43f1e7968feb38aaebb4e7622a5f6d2ec1167191337614ef950",
+  "provenance_documentary_duplicates": "Original participants.json has two identical NEO_A objects. Authenticate untouched bytes and preserve documentary duplicates losslessly; never consume this field as an analysis input. Timing/manifest JSON remains strict duplicate-key reject.",
+  "source_preconditions": {
+    "inventory": "exact131 pinned source files; no replacement participants",
+    "bold_shape": [
+      65,
+      77,
+      60,
+      135
+    ],
+    "bold_dtype": "float32, source header byte order and calibration explicit",
+    "spatial_units": "mm",
+    "temporal_units": "sec",
+    "source_rows_per_person": 48,
+    "source_condition_counts": {
+      "control": 24,
+      "emotion": 24
+    },
+    "confound_rows_per_person": 135,
+    "retained_frames": 135,
+    "source_nonfinite": "fail before successful artifacts",
+    "documentary_metadata": "Preserve original bytes including duplicated identical participants.json NEO_A; not an analysis field"
+  },
+  "frozen_at_utc": "2026-10-02 14:09:13 UTC",
+  "freeze_basis": {
+    "source_manifest_sha256": "70000c5c93c2c43f1e7968feb38aaebb4e7622a5f6d2ec1167191337614ef950",
+    "structural_report_sha256": "95113427bcfa092f465e7dd61806df46b837658823f4053759538404006c2cef",
+    "scientific_outcome_read": false,
+    "manufactured_reduction_report_sha256": "c4b051972c34eafdf68a4487f0a0c81dd7725b951fb90de02b9581af13c74bdf"
+  }
+}

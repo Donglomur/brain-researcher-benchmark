@@ -1,93 +1,68 @@
-# Emotion-matching task activation in AOMIC PIOP2 (EMOMATCH-001)
+# Emotion-matching duration-model sensitivity
 
-## Scientific context
+How much do signed emotion-minus-control coefficients change when the same
+trials are modeled with a common duration versus their individual response
+times? Measure this on the twenty fixed AOMIC PIOP2 participants supplied here.
 
-The emotion-matching ("faces > shapes") paradigm (after Hariri et al. 2000, 2002) is one of
-the most widely used task-fMRI probes of affective processing: participants match the emotional
-expression of faces (the emotion condition) versus matching the orientation of simple shapes
-(the control condition), and the contrast is used to localise an "emotion" / face-processing
-network. The Amsterdam Open MRI Collection PIOP2 study (Snoek et al. 2021, *Scientific Data*)
-is a large, openly available dataset (OpenNeuro `ds002790`) that ran this emotion-matching task
-and ships preprocessed **fMRIPrep derivatives**, making it a standard testbed for reproducing
-the task activation.
+This is a paper-derived **method sensitivity case**, not a reproduction of a
+paper's group finding. In AOMIC's task, displays ended when participants
+responded (or timed out), so response time also relates to stimulus exposure.
+Changing the modeled duration changes the regressor's shape and scale; it does
+not by itself identify a causal RT confound or establish emotion specificity.
 
-## Task
+## Data and two models
 
-Using the released **fMRIPrep derivatives** of `ds002790` (volumetric
-`space-MNI152NLin2009cAsym` preprocessed BOLD under `.../derivatives/fmriprep/`), **fit a
-first-level GLM of the emotion-matching task for each subject, compute the group-level
-`emotion > control` contrast (emotion-matching faces vs orientation-matching shapes), and report
-which brain regions make up the emotion-processing response.**
+Use the supplied, version-pinned fMRIPrep BOLD, events and confounds for
+`sub-0002`–`sub-0009` and `sub-0011`–`sub-0022`. Keep the same people, frames,
+spatial measurements and nuisance regressors in both models. Do not replace
+participants, select trials by accuracy, or choose regions based on their effects.
 
-Work from the fMRIPrep emomatching outputs of the subjects that have an emomatching run, then
-take the per-subject `emotion > control` contrast estimates to a group-level one-sample test.
+- **Model A:** every included emotion/control trial has that participant's
+  median valid RT, pooled across both conditions.
+- **Model B:** each included trial has its own valid RT. Replace a declared
+  missing RT with the same participant median. This imputation is not the
+  observed display duration of an omitted response.
 
-**Pin the pipeline as follows so the per-subject contrast estimates are reproducible.** Use the
-**first 20 subjects (in `participants.tsv` order) that have an `emomatching` run**. Build the
-first-level design from the events file (trial types `emotion` and `control`), SPM HRF, cosine
-high-pass 0.008 Hz, `TR = 2.0`; nuisance regressors = 6 motion parameters, aCompCor(5),
-`white_matter`, `csf`. Extract signals with the **Schaefer-2018 100-parcel / 7-network** cortical
-atlas plus 6 mm spheres at the a priori face/emotion ROIs — **amygdala** (±23, −5, −19) and
-**fusiform** (±40/42, −52, −18) — and at domain-general cognitive-control / salience /
-dorsal-attention ROIs — dACC (0, 20, 38), anterior insula (∓34/36, 20/22, 4/2), dlPFC (∓44/46,
-20/22, 30/28) and IPS (∓28/30, −58/−56, 46). Standardise each region's signal, estimate the
-`emotion > control` contrast per subject, and average left/right for the amygdala and fusiform.
+For both models, estimate the signed emotion-minus-control OLS contrast for all
+100 released Schaefer parcels and eleven fixed coordinate spheres. Report each
+model's complete signed contrast vector, not just their difference. Use the public HRF, drift,
+normalization, nuisance, spatial-support and numerical-rank definitions in the
+method contract. Equivalent implementations are welcome; no particular solver
+code or software-version string is required.
 
-This is a **paper-motivated duration-model sensitivity case**, not an exact reproduction of
-AOMIC Figure 7. Compare two publicly specified models: modelA uses a common duration equal
-to each participant's median valid RT; modelB uses each trial's RT, replacing missing RT
-with that same median. Both retain identical HRF and nuisance regressors. These duration
-choices are adaptations rather than claims about actual stimulus presentation duration.
-Their coefficient scales differ; comparison is numerical sensitivity, not a causal effect.
+Within each person, form the specified bilateral amygdala, bilateral fusiform,
+seven-sphere control and seven network summaries. Then use equal-person group
+summaries and paired B-minus-A changes. Report complete support and undefined
+cases honestly. A zero, opposite-direction or non-significant result is valid;
+there is no required regional ordering or RT difference.
 
-Require exactly the pinned participant numbers 2–9 and 11–22 (20 participants). Missing
-required images/events/confounds must fail, not select a replacement participant.
+## Deliverables
 
-In group_stats.json, add model_sensitivity with entries amygdala, fusiform, control, and
-amygdala_minus_control_change. For each, report n=20, mean_change (modelB minus modelA),
-and ci95 using the paired participant-level sample SD and t(19) 97.5% quantile.
-The last entry is the paired amygdala change minus control change. Report signed values,
-model units/scaling, and limitations. Regional t ordering and changed significance do not
-establish emotion specificity or an RT-caused artifact.
+Inputs are under `/app/data/emomatch`. Read `/app/source_manifest.json`,
+`/app/method_contract.json`, `/app/output_schema.json` and `/app/SOURCE_NOTICE.md`
+for the complete public source, analysis and evidence contract. Source file
+hashes identify unchanged inputs; they are not fitted numerical answer targets.
 
-## Data access
+Write the eight files to `/app/output` as defined by the public output schema: `cohort.csv`,
+`events.csv`, `roi_support.csv`, `glm_arrays.npz`, `activation.csv`,
+`group_stats.json`, `run_metadata.json` and `findings.md`. They retain original
+row identities, both complete designs and signed fits, exact spatial support,
+source-duration/RT discrepancies, and the arithmetic behind the group results.
+The schema specifies keys, and the method contract specifies tolerances; coherent row and axis reordering is
+accepted. Your findings can be brief and should distinguish this fixed-subset
+computational comparison from population or causal conclusions.
 
-`ds002790` fMRIPrep derivatives are public (no credentials) on S3, e.g.
+All input data are available offline. If a declared source precondition fails,
+write `failure_report.json` explaining it; do not manufacture successful outputs
+or silently analyze a smaller cohort. A failure report is diagnostic evidence,
+not a passing submission. Scoring is binary: all required source, numerical and
+completeness checks must pass. There is no proportional partial-credit promise.
 
-```
-https://s3.amazonaws.com/openneuro.org/ds002790/participants.tsv
-https://s3.amazonaws.com/openneuro.org/ds002790/<sub>/func/<sub>_task-emomatching_acq-seq_events.tsv
-https://s3.amazonaws.com/openneuro.org/ds002790/derivatives/fmriprep/<sub>/func/<sub>_task-emomatching_acq-seq_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz
-.../<sub>_task-emomatching_acq-seq_desc-confounds_regressors.tsv
-```
+## Scientific sources
 
-The events `.tsv` columns include `onset`, `duration`, `trial_type` (`emotion` / `control`),
-and `response_time`; the `_confounds_regressors.tsv` columns include the 6 motion parameters,
-aCompCor/tCompCor components, `white_matter`, `csf`, `global_signal` and
-`framewise_displacement`. The repetition time is 2.0 s.
-
-## Output Location
-
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
-
-## Required Outputs
-
-- `activation.csv` — one row per subject with the subject id and its per-subject
-  `emotion > control` contrast estimate in the a priori face/emotion regions (`amygdala`,
-  `fusiform`) and in the summarised cognitive-control regions, **under each first-level modelling
-  choice you considered** (one column per region per modelling choice, e.g.
-  `amygdala_emotion_gt_control__<choice-label>`; a single set of columns if you considered only
-  one choice is not sufficient here). Include both disclosed models. These signed values are
-  the intermediate from which group tests and paired sensitivity intervals are computed.
-- `group_stats.json` — the group-level `emotion > control` result: the group test per region /
-  network (mean effect, t, p) **under each modelling choice you considered**, the per-condition
-  mean reaction time (emotion vs control), and the number of subjects.
-- `run_metadata.json` — dataset id, derivatives used, n subjects, atlas, first-level modelling
-  choices, and the contrast.
-- `findings.md` — a short written summary characterising the emotion-processing response on
-  these data. State only what your analysis actually supports.
-
-## Failure handling
-
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a non-empty
-reason, and still write parseable `run_metadata.json`, `group_stats.json`, and `findings.md`.
+- Snoek et al., *The Amsterdam Open MRI Collection, a set of multimodal MRI
+  datasets for individual difference analyses*, Scientific Data (2021),
+  [emotion-matching task description](https://www.nature.com/articles/s41597-021-00870-6).
+- [AOMIC PIOP2 release 2.0.0](https://doi.org/10.18112/openneuro.ds002790.v2.0.0).
+- Grinband et al., *Detection of time-varying signals in event-related fMRI
+  designs* (2008), [duration-model motivation](https://pmc.ncbi.nlm.nih.gov/articles/PMC2654219/).
