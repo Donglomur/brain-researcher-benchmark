@@ -1,29 +1,30 @@
 version = "1.1"
-instruction_version = "1.0"
-test_version = "1.0"
+instruction_version = "2.0"
+test_version = "2.0"
+artifacts = ["/app/output", "/app/source_manifest.json", "/app/method_contract.json", "/app/output_schema.json"]
 
 [metadata]
 task_id = "MAPREL-001"
-title = "Spatial correspondence between a functional connectivity gradient and cortical thickness"
-category = "Connectivity"
-difficulty = "hard"
-dataset_source = "neuromaps (public fetch at runtime) + Schaefer-2018 fsLR parcellation"
-dataset_id = "neuromaps:margulies2016-fcgradient02 + hcps1200-thickness (fsLR 32k)"
-source_paper = "Alexander-Bloch et al. 2018, NeuroImage (10.1016/j.neuroimage.2018.05.070); Markello & Misic 2021, NeuroImage (10.1016/j.neuroimage.2021.118052)"
+title = "Signed published-map correspondence under a centroid-spin null"
+category = "Cortical cartography / method control"
+difficulty = "easy"
+dataset_source = "Checksum-pinned neuromaps OSF version1 maps and spheres, plus immutable CBIG Schaefer400 atlas; build-time fetch, offline runtime"
+dataset_id = "margulies2016-fcgradient02 + hcps1200-thickness, fsLR32k, Schaefer400/7"
+source_paper = "Method motivation: Alexander-Bloch et al. 2018 (10.1016/j.neuroimage.2018.05.070); Markello et al. 2022 (10.1038/s41592-022-01625-w). Not a named-finding replication."
 
 [verifier]
 timeout_sec = 1800.0
 
 [agent]
-timeout_sec = 5400.0
+timeout_sec = 3600.0
 
 [environment]
-build_timeout_sec = 3000.0
+build_timeout_sec = 2400.0
 cpus = 2
 memory_mb = 8192
 storage_mb = 16384
 gpus = 0
-allow_internet = true
+allow_internet = false
 
 [verifier.env]
 

@@ -1,176 +1,157 @@
-#!/usr/bin/env python3
-"""Reference solution for MAPREL-001.
+"""Independent MAPREL oracle authoring entrypoint; import-safe, no fetches.
 
-Question: are the second macroscale functional-connectivity gradient (Margulies
-et al. 2016) and the group-average cortical-thickness map (HCP S1200) spatially
-correlated across the cortex?
-
-The reference does the honest thing an experienced analyst does when correlating
-two smooth cortical maps: it does not stop at the parcel-wise Pearson r and its
-parametric p-value (which treats the ~400 parcels as independent observations —
-they are not, both maps are strongly spatially autocorrelated). It compares the
-observed r against a spatial null that preserves each map's spatial
-autocorrelation (a spin / rotation-based permutation of the parcels on the
-spherical surface). Under that null the correlation is well within chance, so the
-maps are NOT significantly spatially correlated once autocorrelation is accounted
-for — the tiny parametric p is anti-conservative.
+Defaults retain original/seed0/1000; all three public methods and 100..4096
+counts are available. Parsing and manual assignment are separate from grading;
+the documented NumPy/SciPy numerical conventions remain shared dependencies.
 """
+import argparse
+import csv
+import importlib.metadata
 import json
 import os
-import sys
-import urllib.request
 from pathlib import Path
+import warnings
 
 import numpy as np
-import nibabel as nib
-from scipy import stats
 
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-OUT.mkdir(parents=True, exist_ok=True)
+import oracle_core as core
+import source_reader as source
 
-N_PARCELS = 400
-N_PERM = 1000
-SEED = 0
-
-SCHAEFER_URL = (
-    "https://raw.githubusercontent.com/ThomasYeoLab/CBIG/master/stable_projects/"
-    "brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/HCP/fslr32k/cifti/"
-    "Schaefer2018_400Parcels_7Networks_order.dlabel.nii"
-)
+FILES = ('parcels.csv','spin_evidence.npz','results.json','run_metadata.json','findings.md')
+ARRAYS = ('parcel_ids','rotation_ids','centroids','hemisphere','spin_parcel_ids')
+FIELDS = ('parcel_id','label','network','hemisphere','n_vertices','support_sha256','gradient2','thickness')
 
 
-def fail(reason):
-    meta = {"status": "failed_precondition", "reason": reason}
-    (OUT / "run_metadata.json").write_text(json.dumps(meta, indent=2))
-    (OUT / "results.json").write_text(json.dumps({"status": "failed_precondition",
-                                                  "reason": reason}, indent=2))
-    (OUT / "findings.md").write_text(f"# MAPREL-001 — failed precondition\n\n{reason}\n")
-    print("FAILED_PRECONDITION:", reason, file=sys.stderr)
-    sys.exit(1)
+def disjoint(left,right):
+    return left != right and left not in right.parents and right not in left.parents
+
+
+def destinations(args):
+    output=source.safe_path(args.output_dir);private=source.safe_path(args.private_dir)
+    core.need(disjoint(output,private),'separate output/private paths')
+    code=Path(__file__).absolute().parent
+    if (code.parent/'task.toml').is_file():code=code.parent
+    protected=[code,*[source.safe_path(getattr(args,key)) for key in
+                     ('data_dir','manifest_path','method_path','schema_path')]]
+    for path in (output,private):
+        core.need(path != Path('/') and all(disjoint(path,p) for p in protected),'output/input or code overlap')
+        core.need(not os.path.lexists(path),'fresh exclusive output/private path')
+        core.need(path.parent.is_dir(),'existing output parent required')
+    # All guards precede either creation. No overwrite, cleanup or retry.
+    output.mkdir(exist_ok=False);private.mkdir(exist_ok=False)
+    return output,private
+
+
+def write_json(path,document):
+    text=json.dumps(document,sort_keys=True,indent=2,allow_nan=False)+'\n'
+    with path.open('x',encoding='utf-8') as handle:handle.write(text)
+
+
+def write_npz(path,arrays):
+    with path.open('xb') as handle:np.savez_compressed(handle,**arrays)
+
+
+def software():
+    return {name:importlib.metadata.version(name) for name in ('numpy','scipy','nibabel','neuromaps')}
+
+
+def parcel_rows(basis):
+    for i,pid in enumerate(basis['parcel_ids']):
+        yield dict(parcel_id=int(pid),label=basis['labels'][i],network=basis['networks'][i],
+                   hemisphere='L' if basis['hemisphere'][i] == 0 else 'R',
+                   n_vertices=int(basis['support_n'][i]),support_sha256=basis['support_sha256'][i],
+                   gradient2=float(basis['maps'][i,0]),thickness=float(basis['maps'][i,1]))
+
+
+def findings(result):
+    observed='undefined' if result['pearson_r'] is None else format(result['pearson_r'],'.12g')
+    p='undefined' if result['p_spin'] is None else format(result['p_spin'],'.12g')
+    return (f"Signed parcel-map Pearson r: {observed}. Conditional centroid-spin p: {p}.\n\n"
+            f"Method {result['spin_method']}, seed {result['seed']}, {result['n_permutations']} retained slots; "
+            f"{result['n_null_defined']} defined null correlations. Inference status: {result['inference_status']}.\n\n"
+            "This is a fixed published group-map method application, not a participant-level replication. "
+            "The published gradient sign is retained. Centroid assignment approximates spatial structure; "
+            "the conditional result does not establish causation, absence of association, universal null "
+            "calibration, or benchmark difficulty. No parcel or rotation is removed according to its effect.\n")
+
+
+def run(args):
+    method,seed,count=core.configuration(args.spin_method,args.seed,args.n_permutations)
+    output,private=destinations(args)
+    try:
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter('always')
+            versions=software()
+            core.need(all(versions[name]==version for name,version in
+                          dict(numpy='2.2.6',scipy='1.17.0',neuromaps='0.0.7').items()),
+                      'public numerical versions required for oracle')
+            basis=source.load_sources(args.data_dir,args.manifest_path,args.method_path,args.schema_path)
+            ids=core.integers(basis['parcel_ids'])
+            core.need(np.array_equal(ids,np.arange(1,401)) and basis['maps'].shape==(400,2),
+                      'complete canonical 400-parcel basis')
+            # Preserve primitives before spin generation and any downstream failure.
+            write_npz(private/'source_primitives.npz',dict(parcel_ids=ids,maps=basis['maps'],
+                      centroids=basis['centroids'],hemisphere=basis['hemisphere'],support_n=basis['support_n']))
+            write_json(private/'source_identity.json',dict(pins=basis['pins'],source_files=basis['source_files'],
+                                                         source_observed=basis['source_observed']))
+            spins=core.generate_spins(basis['centroids'],basis['hemisphere'],ids,
+                                      method=method,seed=seed,count=count)
+            write_npz(private/'spin_diagnostics.npz',{key:spins[key] for key in
+                      ('attempts','retained_duplicate','assignment_cost')})
+            maps=basis['maps']
+            support=core.source_fidelity(maps[:,0],maps[:,1],maps[:,0],maps[:,1],ids,spins['spin_parcel_ids'])
+            derived=core.derive(maps[:,0],maps[:,1],ids,spins['spin_parcel_ids'],spins['rotation_ids'],support)
+            result=dict(schema_version='maprel-results-v2',status='complete',n_parcels=400,
+                        null_family='centroid_spin',spin_method=method,seed=seed,n_permutations=count,**derived)
+            with (output/'parcels.csv').open('x',encoding='utf-8',newline='') as handle:
+                writer=csv.DictWriter(handle,fieldnames=FIELDS);writer.writeheader();writer.writerows(parcel_rows(basis))
+            write_npz(output/'spin_evidence.npz',{key:spins[key] for key in ARRAYS})
+            write_json(output/'results.json',result)
+            with (output/'findings.md').open('x',encoding='utf-8') as handle:handle.write(findings(result))
+        warning_strings=[str(item.message) for item in caught]
+        metadata=dict(schema_version='maprel-metadata-v2',task_id='MAPREL-001',status='ok',**basis['pins'],
+                      source_files=basis['source_files'],source_observed=basis['source_observed'],
+                      analysis_observed=dict(map_support=[dict(map_id='gradient2',active=support['gradient']),
+                                                         dict(map_id='thickness',active=support['thickness'])],
+                                             remapped_gradient=dict(n_expected=count,n_active=int(support['null_gradient'].sum()))),
+                      software_versions=versions,warnings=warning_strings)
+        write_json(output/'run_metadata.json',metadata)
+        report=dict(status='complete',n_parcels=400,n_permutations=count,spin_method=method,seed=seed,
+                    inference_status=result['inference_status'],n_null_defined=result['n_null_defined'],
+                    warnings=warning_strings,artifacts=list(FILES))
+        write_json(private/'report.json',report)
+        return report
+    except Exception as exc:
+        # A late failure must invalidate even a previously written success marker.
+        failure=dict(status='failed',type=type(exc).__name__,reason=str(exc))
+        for root in (output,private):
+            if not os.path.lexists(root/'failure_report.json'):write_json(root/'failure_report.json',failure)
+        raise
+
+
+def parser():
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--data-dir',default=os.environ.get('DATA_DIR','/app/data/maprel'))
+    p.add_argument('--manifest-path',default=os.environ.get('SOURCE_MANIFEST','/app/source_manifest.json'))
+    p.add_argument('--method-path',default=os.environ.get('METHOD_CONTRACT','/app/method_contract.json'))
+    p.add_argument('--schema-path',default=os.environ.get('OUTPUT_SCHEMA','/app/output_schema.json'))
+    p.add_argument('--output-dir',default=os.environ.get('OUTPUT_DIR','/app/output'))
+    p.add_argument('--private-dir',default=os.environ.get('PRIVATE_DIR','/tmp/maprel-oracle-private'))
+    p.add_argument('--spin-method',choices=core.METHODS,default='original')
+    p.add_argument('--seed',type=int,default=0)
+    p.add_argument('--n-permutations',type=int,default=1000)
+    p.add_argument('--print-contract',action='store_true')
+    return p
 
 
 def main():
-    try:
-        from neuromaps import datasets, images
-        from neuromaps.nulls.spins import gen_spinsamples
-    except Exception as e:  # pragma: no cover
-        fail(f"neuromaps import failed: {e!r}")
-
-    # --- fetch the two cortical maps (fsLR 32k, native space, no resampling) ---
-    try:
-        map_a = datasets.fetch_annotation(source="margulies2016", desc="fcgradient02",
-                                          space="fsLR", den="32k")
-        map_b = datasets.fetch_annotation(source="hcps1200", desc="thickness",
-                                          space="fsLR", den="32k")
-        va = np.asarray(images.load_data(map_a), dtype=float)
-        vb = np.asarray(images.load_data(map_b), dtype=float)
-    except Exception as e:
-        fail(f"could not fetch neuromaps annotations: {e!r}")
-
-    # --- Schaefer-400 (7-network) parcellation, dense fsLR 32k (label 0 = medial wall) ---
-    dlabel = OUT / "Schaefer2018_400Parcels_7Networks_fsLR32k.dlabel.nii"
-    if not dlabel.exists():
-        try:
-            urllib.request.urlretrieve(SCHAEFER_URL, dlabel)
-        except Exception as e:
-            fail(f"could not download Schaefer parcellation: {e!r}")
-    try:
-        limg = nib.load(str(dlabel))
-        lab = limg.get_fdata().ravel().astype(int)
-        label_axis = limg.header.get_axis(0)
-        names = label_axis.label[0]  # {int_key: (name, (r,g,b,a))}
-    except Exception as e:
-        fail(f"could not read Schaefer parcellation: {e!r}")
-
-    if lab.shape[0] != va.shape[0]:
-        fail(f"parcellation ({lab.shape[0]}) and maps ({va.shape[0]}) are not aligned")
-
-    parcels = np.arange(1, N_PARCELS + 1)
-
-    def network_of(key):
-        nm = names.get(int(key), (str(key),))[0]
-        for net in ("Vis", "SomMot", "DorsAttn", "SalVentAttn", "Limbic", "Cont", "Default"):
-            if net.lower() in str(nm).lower():
-                return net
-        return "NA"
-
-    # --- parcellate (parcel means, medial wall excluded) ---
-    pa = np.array([va[lab == p].mean() for p in parcels])
-    pb = np.array([vb[lab == p].mean() for p in parcels])
-
-    # --- parcel centroids on the fsLR spherical surface (for the spatial null) ---
-    atlas = datasets.fetch_atlas("fsLR", "32k")
-    sph = np.vstack([nib.load(str(atlas["sphere"].L)).darrays[0].data,
-                     nib.load(str(atlas["sphere"].R)).darrays[0].data])
-    cent = np.zeros((N_PARCELS, 3))
-    hemiid = np.zeros(N_PARCELS, dtype=int)
-    nverts_per_hemi = va.shape[0] // 2
-    for i, p in enumerate(parcels):
-        idx = np.where(lab == p)[0]
-        c = sph[idx].mean(0)
-        cent[i] = c / np.linalg.norm(c) * 100.0
-        hemiid[i] = 0 if idx.mean() < nverts_per_hemi else 1
-
-    # --- observed correlation + the naive p-values (parametric & label-shuffle) ---
-    r_obs, p_param = stats.pearsonr(pa, pb)
-    rng = np.random.default_rng(SEED)
-    shuf = np.array([stats.pearsonr(rng.permutation(pa), pb)[0] for _ in range(N_PERM)])
-    p_shuffle = (np.sum(np.abs(shuf) >= abs(r_obs)) + 1) / (N_PERM + 1)
-
-    # --- the honest test: spatial-autocorrelation-preserving spin null ---
-    spins = gen_spinsamples(cent, hemiid, n_rotate=N_PERM, seed=SEED, method="original")
-    spin_null = np.array([stats.pearsonr(pa[spins[:, i]], pb)[0]
-                          for i in range(spins.shape[1])])
-    p_spin = (np.sum(np.abs(spin_null) >= abs(r_obs)) + 1) / (spins.shape[1] + 1)
-    np.savez_compressed(OUT / "spin_evidence.npz", centroids=cent, hemisphere=hemiid,
-                        spin_indices=spins, schema_version="spatial-geometry-v2")
-
-    # --- write the natural deliverables ---
-    with open(OUT / "parcels.csv", "w") as f:
-        f.write("parcel_id,network,gradient2,thickness\n")
-        for i, p in enumerate(parcels):
-            f.write(f"{p},{network_of(p)},{pa[i]:.6f},{pb[i]:.6f}\n")
-
-    results = {
-        "null_family": "centroid_spin", "spin_method": "original", "seed": SEED,
-        "n_parcels": int(N_PARCELS),
-        "pearson_r": float(r_obs),
-        "p_parametric": float(p_param),
-        "p_label_shuffle": float(p_shuffle),
-        "p_spin": float(p_spin),
-        "spin_null_mean": float(spin_null.mean()),
-        "spin_null_sd": float(spin_null.std()),
-        "n_permutations": int(N_PERM),
-        "significant_after_spatial_null": bool(p_spin < 0.05),
-        # the full sampling distribution of the correlation under the spatial null: the array the
-        # p-value is derived from (the grader recomputes the p-value from this and validates its
-        # spread, so the significance judgement cannot be a guessed scalar).
-        "null_distribution": [float(x) for x in spin_null],
-    }
-    (OUT / "results.json").write_text(json.dumps(results, indent=2))
-
-    (OUT / "run_metadata.json").write_text(json.dumps({
-        "status": "ok",
-        "map_a": "margulies2016 fcgradient02 (2nd functional connectivity gradient)",
-        "map_b": "hcps1200 thickness (group-average cortical thickness)",
-        "space": "fsLR 32k",
-        "parcellation": "Schaefer2018 400Parcels 7Networks (fsLR 32k)",
-        "n_parcels": int(N_PARCELS),
-        "correlation": "Pearson across parcels",
-        "spatial_null": "spin permutation (Alexander-Bloch/Vazquez-Rodriguez centroid variant)",
-        "n_permutations": int(N_PERM),
-    }, indent=2))
-
-    verdict_sig = "a significant" if p_spin < 0.05 else "no significant"
-    (OUT / "findings.md").write_text(
-        f"# Published-map spatial-null application\n\n"
-        f"Across-parcel Pearson r={r_obs:+.4f}; independent-parcel p={p_param:.5g}; "
-        f"declared centroid-spin p={p_spin:.5g}. Significant under this null: {p_spin<.05}. "
-        "This inference is conditional on map/geometry preprocessing and the selected spatial "
-        "null, which approximately preserves spherical spatial structure; it does not prove "
-        "absence of a relationship or that every parametric association is spurious.\n")
-    print(f"r={r_obs:+.3f} p_param={p_param:.2e} p_shuffle={p_shuffle:.4f} p_spin={p_spin:.3f}")
+    args=parser().parse_args()
+    if args.print_contract:
+        print(json.dumps(dict(task_id='MAPREL-001',source_manifest_sha256=source.SOURCE_SHA,
+                             method_contract_sha256=source.METHOD_SHA,output_schema_sha256=source.SCHEMA_SHA,
+                             methods=list(core.METHODS),default_method='original',default_seed=0,
+                             default_n=1000,min_n=100,max_n=4096,artifacts=list(FILES)),sort_keys=True))
+    else:print(json.dumps(run(args),sort_keys=True,allow_nan=False))
 
 
-if __name__ == "__main__":
-    main()
+if __name__=='__main__':main()

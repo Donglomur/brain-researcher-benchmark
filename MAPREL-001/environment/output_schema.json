@@ -1,0 +1,183 @@
+{
+  "schema_id": "MAPREL-001-signed-centroid-spin-outputs-v2",
+  "contract_status": "frozen_before_original_parcel_values",
+  "task_id": "MAPREL-001",
+  "source_manifest_sha256": "279658ffc93a8957287298471b539fc034fb7e11f0836325de322acc4b232f7f",
+  "method_contract_sha256": "54c6f851a5027b3e6b7cfe8e97e7b5af620d6f69b7235a681915affdcd23121e",
+  "artifacts": [
+    "parcels.csv",
+    "spin_evidence.npz",
+    "results.json",
+    "run_metadata.json",
+    "findings.md"
+  ],
+  "dimensions": {
+    "P": 400,
+    "parcel_ids": "exact integers 1..400",
+    "R": "declared exact integer 100..4096",
+    "rotation_ids": "exact integers 0..R-1"
+  },
+  "common_rules": {
+    "numerical_authority": "Canonical source geometry alone generates discrete assignments. Accepted source-bound signed maps alone drive observed and all null r, count, p and verdict. Geometry and null receipts never redefine the estimator.",
+    "keys": "Exact integral non-Boolean real numeric IDs, including exactly integral float NPZ axes, are accepted. CSV numeric keys accept scientific notation. No digit extraction or aliases. Literal labels and source paths remain exact strings.",
+    "reorder": "CSV rows/columns, NPZ parcel and rotation axes, keyed JSON null records, source_files records and map_support records may be coherently permuted.",
+    "finite": "Required measured arrays finite real non-Boolean. No pickle/object/structured/complex arrays. JSON numeric fields numeric, not Boolean or text. Null is only permitted where explicitly declared.",
+    "extras": "Bounded harmless additional files/columns/JSON fields/NPZ arrays allowed; required evidence and keys unchanged. NPZ extras must have supported finite numeric/Boolean/text dtypes. Extras do not change the estimator.",
+    "undefined": "Canonical exactconstant or zero stable-centered L2 is inactive. Preserve all parcels/rotations. Inactive observed or any inactive required null leaves exceedance/numerator/p/significance null; denominator remains R+1 and defined individual diagnostics remain.",
+    "failure": "Any lexists failure_report.json invalidates success, including empty/dangling marker.",
+    "safety": "Required artifacts regular non-symlink files, directory inventory excludes symlink/special entries; duplicate JSON keys, CSV keys/columns and NPZ members invalid.",
+    "scoring": "Production validates submitted evidence once. Equivalent-transformation and mutation QA are authoring only; valid outputs are not required to remain valid after perturbations or extra content."
+  },
+  "limits": {
+    "max_output_bytes": 67108864,
+    "max_csv_bytes": 16777216,
+    "max_json_bytes": 16777216,
+    "max_findings_bytes": 1048576,
+    "max_npz_bytes": 67108864,
+    "max_npz_expanded_bytes": 134217728,
+    "max_npz_members": 32,
+    "max_npz_array_ndim": 32,
+    "max_npy_header_bytes": 16384,
+    "max_csv_rows": 100000,
+    "max_csv_field_bytes": 1048576,
+    "max_json_depth": 64,
+    "max_inventory_entries": 1000
+  },
+  "tolerances": {
+    "source_maps": {
+      "atol": 0.000001,
+      "rtol": 0.000001
+    },
+    "centered_fidelity": {
+      "rtol": 0.000001,
+      "absolute_floor": 0,
+      "scope": "both observed maps and every canonically active remapped gradient; one common prescale for own/reference centering"
+    },
+    "geometry_receipts": {
+      "atol": 1e-7,
+      "rtol": 1e-7,
+      "scope": "receipt only; never generate assignments from accepted rounded geometry"
+    },
+    "scalar_receipts": {
+      "atol": 0.000001,
+      "rtol": 0,
+      "scope": "signed observed/null r and p; no rounding or tolerance in inclusive rank comparator"
+    },
+    "source_metadata_numbers": {
+      "atol": 1e-9,
+      "rtol": 1e-9
+    },
+    "exact": "IDs, seed, N, assignment IDs, labels, source identities, support counts/digests, activity/statuses, exceedance counts and Boolean decisions."
+  },
+  "parcels_csv": {
+    "key": [
+      "parcel_id"
+    ],
+    "row_count": 400,
+    "columns": {
+      "parcel_id": "integer 1..400",
+      "label": "literal source label",
+      "network": "literal source network",
+      "hemisphere": "L|R, source canonical",
+      "n_vertices": "positive source support count",
+      "support_sha256": "lowercase SHA256 of MAPREL_support_v2\\n + hemisphere ASCII + \\n + ascending original local vertex IDs little-endian int64",
+      "gradient2": "finite signed source parcel mean",
+      "thickness": "finite signed source parcel mean"
+    }
+  },
+  "spin_evidence_npz": {
+    "required_arrays": {
+      "parcel_ids": {
+        "shape": [
+          "P"
+        ],
+        "type": "exact integral non-Boolean real numeric"
+      },
+      "rotation_ids": {
+        "shape": [
+          "R"
+        ],
+        "type": "exact integral non-Boolean real numeric"
+      },
+      "centroids": {
+        "shape": [
+          "P",
+          3
+        ],
+        "type": "finite real",
+        "meaning": "canonical arithmetic mean sphere coordinates, radial normalized to radius 100, as receipt"
+      },
+      "hemisphere": {
+        "shape": [
+          "P"
+        ],
+        "type": "exact integral non-Boolean real numeric",
+        "meaning": "0 left,1 right"
+      },
+      "spin_parcel_ids": {
+        "shape": [
+          "P",
+          "R"
+        ],
+        "type": "exact integral non-Boolean real numeric",
+        "meaning": "mapped literal SOURCE parcel IDs, NOT output row positions"
+      }
+    },
+    "mapping_rules": "Original allows many-to-one within hemisphere; vasa/hungarian each preserve one-to-one membership. All assignments equal pinned canonical-geometry method/seed/N trace. Evidence axis permutations do not alter it."
+  },
+  "results_json": {
+    "required": {
+      "schema_version": "maprel-results-v2",
+      "status": "complete",
+      "n_parcels": 400,
+      "null_family": "centroid_spin",
+      "spin_method": "original|vasa|hungarian",
+      "seed": "integer 0..4294967295",
+      "n_permutations": "integer 100..4096",
+      "observed_status": "ok|inactive_gradient|inactive_thickness|inactive_both",
+      "pearson_r": "finite real in [-1,1] if observed_status ok, otherwise null",
+      "null_distribution": "R keyed records {rotation_id:int,status:ok|inactive_gradient|inactive_thickness|inactive_both,r:finite [-1,1] or null}; exact key coverage 0..R-1",
+      "n_null_expected": "exact integer R, including every undefined or repeated slot",
+      "n_null_defined": "exact integer number of status-ok null slots, 0..R",
+      "n_exceedances": "exact integer 0..R iff observed and all R nulls defined, otherwise null",
+      "p_spin_numerator": "exact integer 1+n_exceedances iff observed and all R nulls defined, otherwise null",
+      "p_spin_denominator": "exact integer R+1 always, including incomplete support",
+      "p_spin": "(1+n_exceedances)/(R+1) in [0,1] or null",
+      "significant_after_spatial_null": "Boolean exact 20*(1+n_exceedances)<R+1 or null",
+      "inference_status": "ok iff observed and all R nulls defined; incomplete_support otherwise"
+    },
+    "rank_rule": "abs(unrounded own null r)>=abs(unrounded own observed r), inclusive, no tie epsilon. Repeated retained mappings are separate slots. No source-canonical count/p target."
+  },
+  "run_metadata_json": {
+    "required": {
+      "schema_version": "maprel-metadata-v2",
+      "task_id": "MAPREL-001",
+      "status": "ok",
+      "source_manifest_sha256": "frozen public source manifest bytes",
+      "method_contract_sha256": "frozen public method bytes",
+      "output_schema_sha256": "frozen public schema bytes",
+      "source_files": "closed keyed list {path,role,size_bytes,sha256} for all authenticated scientific and provenance files; row order free",
+      "source_observed": "canonical source metadata record described below; extra descriptive fields allowed",
+      "analysis_observed": {
+        "map_support": "exact two keyed records {map_id:gradient2|thickness,active:Boolean}; source canonical",
+        "remapped_gradient": "{n_expected:R,n_active:exact integer 0..R} from canonical source maps and assignments"
+      },
+      "software_versions": "nonempty object with nonempty name/string version values describing actual software; versions not secret exact fingerprint",
+      "warnings": "list of strings; may be empty/nonempty, not an outcome gate"
+    },
+    "source_observed": {
+      "gradient_l": "GIFTI record",
+      "gradient_r": "GIFTI record",
+      "thickness_l": "GIFTI record",
+      "thickness_r": "GIFTI record",
+      "sphere_l": "GIFTI record",
+      "sphere_r": "GIFTI record",
+      "gifti_record": "{role,hemisphere,metadata,arrays,vertex_count,declared_hemispheres}; original metadata literal; arrays source ordered",
+      "gifti_array_record": "{intent,shape,dtype,metadata,coordinate_system:null|{dataspace,xformspace,matrix}}; dtype must be a string with semantic NumPy dtype equality, including kind, width and effective byteorder. Native and explicit-native-endian aliases accepted; object, structured/subarray, different width or nonmatching endian rejected. This equivalence applies only to arrays[].dtype in the six GIFTI roles, not arbitrary metadata strings named dtype.",
+      "atlas": "{shape,label_axis_index,brain_model_axis_index,label_map_name,structures,excluded_zero_entries,label_keys,cortical_join,sphere_coordinate_transform,map_support}",
+      "atlas_structure_record": "{brain_structure,entries,nonzero_entries} plus {hemisphere,full_surface_vertices,vertex_ids_sha256} for cortical structures; original structure order preserved",
+      "note": "The authenticated release has full 32492-vertex hemispheres and a [1,64984] cortical atlas. Keyed joins retain all 400 nonzero parcels and 58606 supported vertices. No values-derived support selection is authorized."
+    }
+  },
+  "findings_md": "Nonempty UTF-8 text. No required outcome, keywords, p direction, difficulty claim or paper-result match."
+}

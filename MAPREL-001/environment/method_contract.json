@@ -1,0 +1,72 @@
+{
+  "schema_version": "maprel-method-v2",
+  "task_id": "MAPREL-001",
+  "scope": "signed fixed-published-map conditional centroid-spin application",
+  "paper_replication": false,
+  "sources": {
+    "gradient2": "margulies2016 fcgradient02 fsLR32k, fixed published sign",
+    "thickness": "hcps1200 thickness fsLR32k, released group map",
+    "atlas": "Schaefer2018 400Parcels 7Networks fsLR32k",
+    "geometry": "fsLR32k stored sphere pointset coordinates; no coordinate transform or resampling",
+    "independent_people": "not inferred from parcels, rotations or release name"
+  },
+  "parcellation": {
+    "parcel_ids": "exact integers 1 through 400, ascending canonical order",
+    "join": "CIFTI BrainModelAxis brain_structure and zero-based local hemisphere vertex ID to full GIFTI rows",
+    "support": "nonzero cortical labels; preserve all 400 nonempty hemisphere-pure parcels; fail on noncortical nonzero labels",
+    "zero_label": "excluded; unrepresented cortical vertices excluded; finite zero map values retained",
+    "nonfinite": "fail on included vertices; no imputation or map-dependent parcel exclusion",
+    "reduction": "float64 arithmetic means in ascending original local vertex-ID order",
+    "centroid": "float64 coordinate mean, divided by its L2 norm, multiplied by 100; zero/nonfinite mean fails",
+    "support_digest": "SHA256(b'MAPREL_support_v2\\n' + hemisphere ASCII L/R + b'\\n' + ascending local vertex IDs as little-endian int64 bytes)",
+    "support_digest_prefix_hex": "4d415052454c5f737570706f72745f76320a",
+    "support_digest_join_bytes": "prefix bytes, one ASCII L or R byte, one 0a newline byte, then vertex int64 bytes",
+    "hemisphere": "0=left,1=right from BrainModelAxis, never inferred from parcel number or flattened position"
+  },
+  "spin": {
+    "methods": ["original", "vasa", "hungarian"],
+    "seed_min": 0,
+    "seed_max": 4294967295,
+    "n_min": 100,
+    "n_max": 4096,
+    "canonical_versions": {"numpy": "2.2.6", "scipy": "1.17.0", "neuromaps": "0.0.7"},
+    "reference_code_commit": "ffcc2e0f657943ce00a1b6a968396f32250e495c",
+    "reference_code_path": "neuromaps/nulls/spins.py:_gen_rotation,gen_spinsamples",
+    "coordinates": "canonical authenticated source centroids only, not serialized geometry receipts",
+    "rng": "private legacy NumPy RandomState seeded once; consecutive normal(3,3) matrices including rejected candidates",
+    "rotation": "Q,R=NumPy QR; Q=Q@diag(sign(diag(R))); flip first Q column if det(Q)<0",
+    "right_rotation": "D@Q@D where D=diag(-1,1,1), using the same left rotation",
+    "assignment": {
+      "original": "cKDTree(coordinates@rotation).query(coordinates,k=1); many-to-one allowed",
+      "vasa": "Euclidean distance_matrix(coordinates,coordinates@rotation); repeatedly first-index argmax(row minimum), first-index argmin in that row; remove row/column",
+      "hungarian": "SciPy linear_sum_assignment of the same Euclidean distance matrix"
+    },
+    "ties": "pinned library choices on canonical sorted parcel IDs; Vasa first-index ties; no claim of a unique scientific assignment",
+    "duplicate_policy": "check_duplicates=True: reject complete identity or a previous full assignment for at most500 candidates per column; retain candidate500 even if duplicate; RNG advances on every candidate; preserve upstream warning condition",
+    "orientation": "rotate/remap gradient2 against fixed thickness; spin entries are literal source parcel IDs at destination rows",
+    "null_support": "keep all declared rotations, including repeats and undefined correlations; no outcome-dependent regeneration"
+  },
+  "numerics": {
+    "source_pointwise_atol": 0.000001,
+    "source_pointwise_rtol": 0.000001,
+    "centered_relative_l2_max": 0.000001,
+    "relative_fidelity_scope": "both observed maps and every canonically active remapped gradient; no absolute floor",
+    "geometry_receipt_atol": 0.0000001,
+    "geometry_receipt_rtol": 0.0000001,
+    "scalar_receipt_atol": 0.000001,
+    "activity": "canonical exact constant is inactive; otherwise scale by max absolute value, subtract fsum(values)/N in scaled units, active iff stable L2>0; no map-unit cutoff",
+    "centered_fidelity": "center accepted and source at their common maximum absolute scale; stableL2(centered difference)/stableL2(centered source)",
+    "pearson": "scale-first fsum centering and fsum dot, stable scaled L2 norms; recenter each actual remapped gradient; clamp only roundoff within1e-12 of [-1,1]",
+    "replay_authority": "one replay of accepted signed source-bound parcel values, never a hidden source p or rounded null receipt",
+    "undefined": "inactive canonical observed map or remap produces null r with explicit status; any required undefined statistic makes exceedance/numerator/p/significance null, retaining denominator N+1 and all slots",
+    "exceedance": "E=sum(abs(replayed null r)>=abs(replayed observed r)); inclusive exact comparator, no tie epsilon",
+    "p": "(E+1)/(N+1)",
+    "significance": "20*(E+1)<N+1, strictly alpha0.05",
+    "exact_fields": "source identities, support hashes/counts, mapped IDs, rotation membership, statuses, inference counts and Boolean decisions"
+  },
+  "interpretation": {
+    "allowed_outcomes": "any correctly computed signed effect, p and significance decision",
+    "limits": "conditional on fixed group maps, support and chosen centroid assignment; spatial structure is approximated, not an unconditional null-calibration proof; non-rejection does not establish absence or causality",
+    "no_requirements": ["expected sign", "effect magnitude band", "null spread band", "p band", "prose keywords", "model failure"]
+  }
+}

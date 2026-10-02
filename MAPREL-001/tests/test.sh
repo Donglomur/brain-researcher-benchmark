@@ -1,9 +1,29 @@
 #!/bin/bash
 set -euo pipefail
-apt-get update && apt-get install -y curl
-curl -LsSf https://astral.sh/uv/0.9.7/install.sh | sh
-source $HOME/.local/bin/env
-if uvx --with pytest==8.4.1 --with pytest-json-ctrf==0.3.5 --with numpy==2.2.6 --with neuromaps==0.0.7 \
-   pytest --ctrf /logs/verifier/ctrf.json /tests/test_outputs.py -rA
-then echo 1 > /logs/verifier/reward.txt; exit 0
-else te=$?; echo 0 > /logs/verifier/reward.txt; exit $te; fi
+mkdir -p /logs/verifier
+export PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1
+export PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+unset PYTEST_ADDOPTS PYTEST_PLUGINS
+printf '0\n' > /logs/verifier/reward.txt
+if python3 -I -B -c '
+import sys, tempfile
+sys.pycache_prefix = tempfile.mkdtemp(prefix="maprel-trusted-pycache-")
+sys.path.insert(0, "/tests")
+import pytest
+from importlib.metadata import entry_points
+plugins = [p.load() for p in entry_points(group="pytest11")
+           if p.dist.metadata["Name"].lower() == "pytest-json-ctrf"]
+assert len(plugins) == 1, "fixed CTRF plugin unavailable"
+raise SystemExit(pytest.main(["-c", "/dev/null", "--confcutdir=/tests", "-p", "no:cacheprovider",
+    "-o", "junit_family=xunit1",
+    "--ctrf", "/logs/verifier/ctrf.json", "--junitxml=/logs/verifier/junit.xml",
+    "/tests/test_spin_math.py", "/tests/test_artifact_reader.py",
+    "/tests/test_source_reference.py", "/tests/test_proof_integration.py",
+    "/tests/test_outputs.py", "-rA"], plugins=plugins))
+'; then
+    printf '1\n' > /logs/verifier/reward.txt
+else
+    status=$?
+    printf '0\n' > /logs/verifier/reward.txt
+    exit "$status"
+fi
