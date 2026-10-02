@@ -1,91 +1,88 @@
-# Cross-sectional age associations of resting functional connectivity (LIFESPAN-001)
+# Cross-sectional connectome organization in a fixed NKI cohort
 
-## Scientific context
+Characterize how two resting-state connectivity summaries relate to age in the
+59-person cohort identified by `/app/cohort_manifest.json`.
 
-Resting-state functional MRI lets us describe the **functional connectome** — the pattern of
-correlated spontaneous activity among cortical regions — and how it differs across people. A long
-lifespan-neuroimaging literature asks how resting functional connectivity changes as the healthy
-adult brain ages (e.g. Damoiseaux 2017, *NeuroImage*,
-https://doi.org/10.1016/j.neuroimage.2017.01.077, for a review). The Enhanced Nathan Kline
-Institute–Rockland Sample (NKI) acquired resting-state fMRI across a wide adult age range and is a
-standard resource for such lifespan questions (Nooner et al. 2012, *Front. Neurosci.*,
-https://doi.org/10.3389/fnins.2012.00152).
-
-## Task
-
-This is a cross-sectional paper-derived estimator-sensitivity adaptation, not a
-within-person lifespan change or exact Chan paper result. Use the fixed 59 subjects in
-`/opt/bundle/cohort_manifest.json`. Primary age-blind partition: `KMeans(n_clusters=7,
-n_init=10, random_state=0)` on rows of the group-mean Fisher-z matrix AFTER setting its
-diagonal to zero. Negative edges are zero-clipped and averaged over all within/between
-pairs, not excluded with NaN. State partition/seed/grid sensitivity limitations;
-sex/motion/nonlinear-age adjustment is not part of the primary and remains confounding
-uncertainty. Report signed associations and uncertainty; neither significance nor
-absence nor a prescribed negative direction is a scientific scoring contract.
-
-Using the packaged NKI resting-state region time series (see **Data**), **characterise how resting
-functional connectivity is associated with age cross-sectionally**, and report the relationship you find
-between functional connectivity and age.
-
-For each subject, form the region×region functional connectome (Fisher-z correlations of the
-region time series), then summarise that connectome and relate your summary to the subject's age
-across the cohort. Summarise each subject's connectome in **at least two ways**: (i) its
-**overall/global mean connectivity** (the mean of all connectome edges), and (ii) the
-**segregation of its large-scale networks** — the normalised difference between mean
-within-network and mean between-network connectivity (system segregation; Chan et al. 2014), using
-a data-driven (age-blind) network partition of the group-mean connectome. Relate each summary to
-age across the cohort.
-
-Report, in plain terms, **the cross-sectional age association of resting connectome organization**
-— whether and how each summary relates to age, its direction and strength — stating
-only what your analysis actually supports.
+Chan et al. (2014), [Figure 2](https://doi.org/10.1073/pnas.1415122111), motivates
+the comparison of within- and between-system connectivity and system segregation.
+This is a paper-derived **method control**, not reproduction of that paper's
+sample or finding. We use a different historical convenience cohort, Destrieux
+surface parcels, a cohort-derived age-blind partition and a pooled-pair ratio.
+Report what these data support: no negative effect, significance or null result
+is required. Cross-sectional differences are not within-person aging.
 
 ## Data
 
-**Dataset:** NKI Enhanced resting-state fMRI (TR = 645 ms), preprocessed and projected to the
-`fsaverage5` cortical surface and parcellated into the **148-region Destrieux atlas**. It is
-provided **in the container** at `${BUNDLE_DIR}/nki_surface_roi_timeseries.npz` (default
-`/opt/bundle`) — no download, **no network access is available or needed** (the data is already
-present). Load it locally with
+Original released files are already present at `/app/data/lifespan`: 118 NKI
+hemisphere GIFTIs, the original phenotype CSV and two Destrieux fsaverage5
+annotations. `source_manifest.json` binds their exact identities and bytes.
+No internet is available or needed. Preserve all 59 declared IDs, all 895 source
+frames per person and all 148 cortical parcels. Do not replace the cohort with a cached
+subset, add an exclusion or treat the source order as interchangeable with an
+arbitrary filename sort. The historical cohort selection is documented, not
+retrospectively justified as quality control.
 
-```python
-import os, numpy as np
-d = np.load(os.path.join(os.environ.get("BUNDLE_DIR", "/opt/bundle"),
-                         "nki_surface_roi_timeseries.npz"), allow_pickle=True)
-ts     = d["timeseries"]    # (n_subjects, n_timepoints=895, n_regions=148) float32 region time series
-age    = d["age"]           # each subject's age in years (18-78)
-sex    = d["sex"]           # each subject's sex ('M'/'F')
-region = d["region_name"]   # the 148 region labels (hemisphere + Destrieux name)
-tr     = float(d["tr"])     # repetition time in seconds (0.645)
-```
+Use the original annotation table index together with hemisphere as a parcel
+identity; packed FreeSurfer color IDs are a separate source field. Exclude only
+the declared `Unknown` and `Medial_wall` labels. Preserve source vertex membership.
+Join phenotype rows by exact subject ID. Keep source age and the specified
+float32 computational age distinct. `/app/SOURCE_NOTICE.md` records provenance,
+preprocessing uncertainty, documented timing and unresolved redistribution terms.
 
-A subject's connectome is the 148×148 matrix of correlations between the region time series. Do not
-substitute a different or manually-prepared dataset.
+## Public numerical method
 
-## Output Location
+The complete recipe and tolerances are in `/app/method_contract.json` and
+`/app/output_contract.md`. They are public parts of the task, not hidden
+reference-estimator choices.
 
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
+1. For each hemisphere, let `X` be its frame-by-vertex matrix and `v` the
+   parcel's ascending original vertex indices. Compute
+   `np.asarray(X[:,v],dtype=np.float64,order='C').mean(axis=1,dtype=np.float64).astype(np.float32)`;
+   then promote to float64 for FC.
+   This explicitly amends the old task's float32 intermediate accumulation.
+   Do not add preprocessing, censoring, weights or imputation.
+2. Compute per-person Pearson correlations and all 10,878 unordered Fisher-z
+   edges, using `atanh(clip(r,-0.999,0.999))`. Exact constant parcels have
+   undefined correlations; retain their identities and report support.
+3. Average the upper-triangle Fisher edges equally across the complete 59-person
+   cohort, adding in manifest order. Mirror these means into a symmetric matrix
+   and set the diagonal to zero. Fit the public seven-cluster
+   KMeans recipe to these ROI rows: sklearn 1.5.2, `init='k-means++', n_init=10,
+   max_iter=300, tol=1e-4, random_state=0, copy_x=True, algorithm='lloyd'`, with
+   float64 C-order features, `sample_weight=None`, and one numerical thread.
+   Do not scale rows, select seeds against age or rerun until an outcome appears.
+4. For each person, report the signed mean of all Fisher edges. Separately,
+   zero-clip negative Fisher edges and calculate within- and between-network
+   means over their **complete pair counts**, including zero entries. System
+   segregation is `(within-between)/within`, not an average of network ratios.
+5. Relate each primary summary to computational age using signed Pearson r,
+   the two-sided Pearson p-value and the stated Fisher interval:
+   `tanh(atanh(clip(r,-0.999999,0.999999)) +/- 1.96/sqrt(59-3))`.
+   All 59 people are required for each endpoint; do not silently use a subset.
 
-## Required Outputs
+The interval is a plug-in approximation; it does not propagate uncertainty from
+learning a partition on the same cohort. Sex, motion, nonlinear age effects and
+partition sensitivity are not adjusted or newly searched here. The task does
+not support causal, clinical or representative-population conclusions.
 
-- `connectome_summary.csv` — one row per subject: `subject_id, age, global_connectivity,
-  within_network_connectivity, between_network_connectivity, system_segregation` (the per-subject
-  intermediate the age relationships are computed from).
-- `results.json` — the number of subjects, and the relationship with age of **each** connectome
-  summary — at minimum the overall/global mean connectivity and the system segregation — each with
-  signed `pearson_r`, two-sided Pearson `p`, and `ci95=[lower, upper]`.
-  Use the Fisher-transform approximation for both required age associations:
-  `tanh(atanh(clip(r, -0.999999, 0.999999)) ± 1.96 / sqrt(N - 3))`, with `N=59`.
-  This is an independent-participant normal approximation, not bootstrap evidence or
-  longitudinal uncertainty.
-- `roi_partition.csv` — exactly 148 rows with `roi_index,network`: zero-based ROI indices
-  0–147 in the bundle's region ordering, each once, and integer KMeans network labels
-  0–6. Report the age-blind partition actually used to derive the within/between summaries.
-- `run_metadata.json` — dataset, number of subjects, and the method used.
-- `findings.md` — a short summary of the cross-sectional age associations of resting
-  functional connectivity. Do not interpret them as within-person aging trajectories.
+## Evidence and scoring
 
-## Failure handling
+Write the nine files specified in `/app/output_contract.md` to `${OUTPUT_DIR}`
+(default `/app/output`): cohort and parcel ledgers, keyed parcel/FC primitives,
+the ROI partition and partition status, per-person summaries, group results,
+run metadata and a short `findings.md`.
 
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a non-empty reason,
-and still write parseable `run_metadata.json`, `results.json`, and `findings.md`.
+The verifier authenticates originals and recomputes the public method. It accepts
+coherent output-axis reorderings, cluster-name permutations and the declared
+numerical tolerances. It checks source-derived values and co-assignment, not
+historical effect sizes, prose keywords or preferred signs. Rounded evidence is
+not an alternative fitting input: canonical-source arithmetic determines support,
+FC, partition and endpoint results. Shared NumPy/sklearn reference operations are
+disclosed; this is not a claim of independent validation of those libraries.
+
+Completely accounted undefined estimands can be valid: retain all rows and use
+the documented statuses/nulls/masks. Missing source data, nonfinite originals or
+execution failure must exit nonzero and write `failure_report.json` with a reason
+when safe. Its presence overrides any stale successful outputs. A resource pilot
+is not a complete result. Scoring is binary: complete valid evidence earns 1;
+failed or incomplete submissions earn 0, not proportional partial credit.

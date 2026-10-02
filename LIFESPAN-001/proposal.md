@@ -1,175 +1,71 @@
-## LIFESPAN-001
+# LIFESPAN-001: fixed-cohort age-association method control
 
-**Proposal Title:** Resting connectome organization across the adult lifespan — an un-cued
-"global average hides the reorganization" trap (hard reproduction / over-claim)
+## Scientific target
 
-**Scientific Domain:** Life Sciences / Neuroscience / resting-state fMRI (lifespan functional
-connectomics, network segregation / de-differentiation)
+Measure two signed cross-sectional age associations in the declared NKI59
+surface cohort: global mean Fisher connectivity and pooled-pair zero-clipped
+system segregation. Chan et al. 2014 (doi:10.1073/pnas.1415122111, Figure 2) is the
+conceptual source for within/between-system comparisons; Nooner et al. 2012
+(doi:10.3389/fnins.2012.00152) describes the NKI resource.
 
-**Source finding (method):** Chan, Park, Savalia, Petersen & Wig (2014), *Decreased segregation of
-brain systems across the healthy adult lifespan*, PNAS, https://doi.org/10.1073/pnas.1415122111.
-**Dataset:** NKI Enhanced resting-state fMRI (TR = 645 ms), preprocessed and projected to the
-`fsaverage5` surface (Nooner et al. 2012, *Front. Neurosci.*), fetched with
-`nilearn.datasets.fetch_surf_nki_enhanced` (first 60 subjects, ages 18-78) and parcellated into the
-148-region Destrieux atlas at image-build time (see the un-cued-fetch note below).
+This does not reproduce Chan's cohort, functional-system definitions or original
+finding. Anatomical Destrieux parcels and an age-blind KMeans partition define
+a deliberately narrow method adaptation. Label it **easy/method control** until
+separate model calibration provides evidence otherwise. No Sol run is claimed.
 
-**Status: FULL runnable task, oracle + naive validated locally (Step-0 + oracle re-run + naive/alt
-discrimination). Step-5 frontier calibration PENDING (maintainer step).**
+## What is fixed and what is measured
 
-**De-cue pass (2026-09):** the instruction previously framed the task around the "**large-scale
-organization** of the functional connectome" and asked to report "the relationship between the
-connectome's **organization** and age" (a soft cue that nudged toward a network-level summary). All
-"organization" / "large-scale" wording has been removed: the instruction now asks neutrally to
-"characterise how resting functional connectivity changes across the adult lifespan" and to report
-"the relationship between functional connectivity and age". This makes the naive **global/mean-FC**
-summary the natural default and leaves the network-segregation choice a **genuinely un-cued
-volunteered judgement**. The grader was already keyed on the agent's own volunteered
-segregation/de-differentiation/modularity vocabulary (never on a cued word), so no grader change was
-needed. Gap and discrimination re-measured on the real bundle (below).
+Fix all 59 historical cohort IDs, original source bytes, source vertex membership,
+float64 parcel-mean accumulation with one float32 storage rounding, all-pair
+Fisher connectivity, the explicit seven-cluster estimator, denominator conventions
+and the two signed Pearson endpoints. Measure actual per-person and group values;
+neither significance, a negative sign nor a global null is a required answer.
 
-### Genre
-Reproduction / over-claim (mirrors GRADIENT-001). The graded quantity is the **relationship between
-the connectome's organization and age**. A convention-invariant summary — the SIGN and rough
-magnitude of the age relationship of a network-organization metric — is what is checked; the exact
-value is robust to the network partition (see Step-0).
+The precision rule is a prospective numerical amendment, not a claim of unchanged
+legacy bits or clustering. Cohort selection is inherited, not retroactively made
+confirmatory. No age-informed selection, covariate model, search grid, additional
+preprocessing or exclusions are added during repair.
 
-### The un-cued lever (PRIVATE — never named in instruction.md)
-How the connectome's "organization" is summarised before relating it to age. The naive summary —
-**overall / mean functional connectivity** (the average of all connectome edges) — is essentially
-FLAT across the adult lifespan on these data, so a naive analyst concludes "resting connectivity is
-stable with age." That is an over-claim: the organization does change. Summarised as the
-**segregation of the large-scale networks** (mean within-network minus between-network connectivity,
-normalised; Chan et al. 2014), the connectome **de-differentiates** — segregation DECLINES with age
-— driven by between-network connectivity rising while within-network stays flat, so the two cancel
-in the global average. The instruction never says "segregation", "de-differentiation", "within/
-between", "modularity", "network", "organization", or "integration"; after the de-cue pass it only
-asks to "characterise how resting functional connectivity changes across the adult lifespan" and to
-report "the relationship between functional connectivity and age." The task id is a neutral topic id.
+## Sources and verifier
 
-### Step-0 result (measured; packaged bundle, n = 59-60, ages 18-78, Destrieux-148 connectomes)
-| connectome summary vs age | Pearson r | p | Spearman |
-|---|---|---|---|
-| overall / mean FC (NAIVE) | **+0.15** | 0.26 | +0.23 |
-| within-network FC (pos edges) | +0.03 | 0.83 | +0.12 |
-| between-network FC (pos edges) | +0.12 | 0.36 | +0.25 |
-| **system segregation (CORRECT)** | **-0.28** | **0.031** | **-0.36** |
+The offline image retains 121 original files, not only a derived ROI bank. The
+measured fresh-capture digests bind 4,997,109,352 bytes; 43 known local-cache counterparts
+matched read-only. Fixed NITRC release IDs are not described as cryptographically
+immutable versions, and measured SHA256/MD5 are not publisher-issued checksums.
+Derivative/atlas redistribution terms remain unresolved; no data/image release
+is authorized by this repair.
 
-The naive global-average summary shows no age effect; the network-segregation summary declines
-robustly. **Robustness:** segregation-age r stays in **[-0.40, -0.24]** across 5-12-network
-data-driven partitions and 4 KMeans seeds; **>99% of bootstrap resamples are negative** (95% CI
-[-0.52, -0.05]); the sign/decline is invariant to the partition, the positive-vs-signed-edge
-definition, and Pearson-vs-Spearman. The direction (a DECLINE / de-differentiation) is the
-convention-invariant, reproducible quantity; the naive "no change" read fails it.
+The verifier must authenticate originals with its own pins, reconstruct source
+parcel/FC values, replay the public partition and recompute all scalar summaries
+and age endpoints. It must accept coherent serialization/axis and cluster-label
+permutations and the declared tolerances. Correlation-to-reference heuristics,
+historical outcome bands, missing-person allowances and prose-keyword gates are
+not acceptable. The old numerical archive is preserved externally and not used.
 
-### Verifier (3 plain checks, GRADIENT-001 style)
-`tests/test_outputs.py`: (1) a per-subject connectome analysis over a real lifespan slice
-(>=40 subjects) with at least one summary-vs-age correlation; (2) **insight linked to the result** —
-network SEGREGATION DECLINES with age: a segregation/de-differentiation/modularity-named negative
-age correlation (<= -0.12), OR a within-vs-between divergence (between rises relative to within by
->= 0.08), OR a clearly-labelled negative segregation/de-differentiation/modularity correlation in
-the prose; the global/mean summary is excluded; (3) honesty / no over-claim — `findings.md` reports
-the network segregation declines / de-differentiates with age, not "connectivity is unchanged across
-the lifespan." No weighted rubric, no score.json.
+## Interpretation limits
 
-**Hardening (this pass, per the tb-science audit — "tighten so a generic network metric alone can't
-pass without the global-mean-hides-de-differentiation insight; grade that specific over-claim").**
-Both judgement checks previously accepted a bare **"organization"/"integration"** label on any
-negative-with-age correlation, so a generic network metric could stand in for the insight. The
-accepted vocabulary is now restricted to genuine **segregation / within-vs-between / de-differentiation
-/ modularity** (a "network organization index declines with age" no longer passes); the graded
-over-claim is specifically the **"connectivity is stable with age"** null read off the flat global
-mean. Modularity — a genuine de-differentiation summary — still passes; a terse segregation-declines
-answer still passes (the global-mean contrast is not required, keeping a defensible-correct answer
-fair).
+The person is the independent unit for the stated Pearson approximation. The
+partition is learned from the same cohort; its uncertainty is not propagated by
+the plug-in Fisher interval. Fixed sampling, source preprocessing uncertainty,
+sex/motion/nonlinear-age confounding and partition sensitivity remain limitations.
+This is not within-person aging, causal/clinical evidence or population validation.
 
-### Discrimination (re-validated against the hardened grader)
-| solution | reported | verdict |
-|---|---|---|
-| reference / oracle (KMeans-7 segregation) | seg r = -0.28 | **PASS 3/3** |
-| alt-correct (within/between divergence, no "segregation" keyword) | between +0.14 vs within +0.03, "de-differentiate" | **PASS 3/3** |
-| modularity-correct (Newman Q declines, generic but genuine de-diff metric) | Q r = -0.19 | **PASS 3/3** |
-| segregation-terse (declines, no global-mean contrast) | seg r = -0.27 | **PASS 3/3** |
-| naive (global mean FC only, concludes "stable") | +0.15 global only | **FAIL** |
-| **generic metric labelled "organization" declines** (loophole) | "org index" r = -0.20 | **FAIL** (closed) |
-| wrong (claims segregation INCREASES) | seg r = +0.30 | **FAIL** |
+## Validation status
 
-**Re-validated on the real bundle after the de-cue (2026-09, n = 59, ages 18-78, the actual
-`tests/test_outputs.py`):** global mean-FC r = **+0.149** (flat), system-segregation r = **-0.281**
-(p 0.031), within-network r = +0.029, between-network r = +0.122, Newman modularity-Q r = **-0.318**
-(p 0.014). Grader verdicts: oracle **PASS 3/3**; modularity-declines **PASS 3/3**; within/between
-divergence (no "segregation" word) **PASS 3/3**; naive global-mean-"stable" **FAIL**; wrong
-"segregation increases" **FAIL**. Robustness re-confirmed: segregation-age r stays negative across
-k = 5-12 partitions × 4 KMeans seeds (range [-0.396, -0.244], all < 0) and signed-vs-positive edges;
-99.1% of 2000 bootstrap resamples negative (95% CI [-0.523, -0.046]). The naive-vs-honest contrast
-is a robust **sign flip** (+0.15 flat vs -0.28 decline), not a fragile numeric band.
+Local authoring validated source authentication, structure and the frozen public
+contract. Both bounded original-source routes completed; their parcel time series,
+connectivity primitives and group features agree exactly. Independent annotation
+decoding, summary reductions and endpoint calculations provide additional checks;
+shared numerical operations remain disclosed above.
 
-### Cost
-`hard`. cpus 2, mem 8 GB, runtime **offline** (`allow_internet=false`). The bundle (compact
-`nki_surface_roi_timeseries.npz`, ~29 MB: (60, 895, 148) region time series + age/sex) is built into
-the image at **build time** from the real NKI surface data via nilearn — nothing derived is committed
-to the repo (mirrors GROUPAGEFC-001). Runtime is ~1 min (60 connectomes + one KMeans partition).
-Deps: numpy/scipy/scikit-learn/pandas/nibabel/nilearn (pinned).
+All 435 native tests passed with no skips: 400 source-free checks, one production
+grade, eight equivalent-output cases and 26 changed-evidence rejections. Two
+separately recorded component controls—positive-only denominators and signed
+rather than zero-clipped within/between summaries—changed every person's result
+and failed numerical validation without changing source primitives or provenance.
+These controls are not additional fitted scientific analyses or extra pytest cases.
 
-### Notes / caveats
-- **Un-cued fetch / build cost:** the raw NKI surface data is ~5 GB from the NKI/NITRC mirror, which
-  is slow and intermittently times out. A runtime fetch would not fit the agent timeout, so — as with
-  GROUPAGEFC-001 / TASKGLM-001 — the data is fetched and parcellated **once at image-build time**
-  (retry loop; `build_timeout_sec = 7200`) and the agent runs offline against the compact bundle.
-  The data is 100% real NKI (the derivative is region-mean time series over the standard Destrieux
-  atlas); the analytic judgement (how to summarise organization) is fully in the agent's hands.
-- The effect is modest but robustly significant and robust to the partition; it reproduces the Chan
-  et al. (2014) lifespan de-differentiation finding on a new dataset/modality (NKI surface). The
-  naive "connectivity is stable with age" read is a real, documented pitfall (the global average
-  cancels the within/between dissociation) — the same reason system segregation was introduced.
-- Step-5 frontier calibration (>=2 frontier families, k>=3, hand re-scored) is the maintainer gate
-  and is PENDING; this proposal ships the oracle-pass + naive-fail evidence.
-
-### Proof-of-work rework (held-out reference)
-
-The verifier was upgraded to the proof-of-work contract (PROOF_OF_WORK_SPEC.md). `solution/compute.py`
-now also emits the per-subject intermediate table `connectome_summary.csv` (subject_id, age,
-global/within/between connectivity, system segregation). A held-out reference (`tests/reference.npz`,
-never shipped to the agent) was built by running the oracle on the packaged NKI Destrieux-148 region
-time series (n=59, ages 18–78, sklearn 1.5.2 = the image stack). It stores each subject's global
-connectivity, segregation and age and the discriminating statistics (global-vs-age r = +0.15, n.s.;
-segregation-vs-age r = −0.28, p 0.03; within +0.03 / between +0.12). The grader now (1) matches the
-submitted per-subject global connectivity to the reference tightly (partition-independent; cross-subject
-r ≥ 0.95) and segregation more loosely (cross-subject r ≥ 0.80, partition-dependent), plus real ages;
-(2) recomputes BOTH age correlations from the submitted rows and cross-checks the reported JSON; and
-(3) grades the segregation-vs-global dissociation as numbers (global ~flat, segregation declines,
-segregation clearly more negative). Validated by subprocess pytest: honest PASS; no-table / constant /
-fabricated / naive (global-only, flat-null over-claim) / right-headline-fake-rows all FAIL. `tests/test.sh`
-now installs numpy for the grader. The NKI bundle is baked at image-build (`allow_internet=false`).
-
-### Second-pass hardening (2026-09, mandatory network columns + fairness widening)
-
-The first-pass grader made the **segregation (and within/between) columns OPTIONAL**: pillar 2 only
-recomputed segregation-vs-age *if* a seg column was present, and pillar 3 read `r_seg` from a reported
-scalar. That is the red-team hole — an agent could submit only the naive global column, **omit** the
-network columns, and **publish** `r_seg ≈ −0.28` (the telegraphed decline) without ever computing the
-system segregation.
-
-Fix (RECOMPUTE-from-neutral-table, §1): the per-subject **within-network** and **between-network**
-connectivity columns are now **mandatory** (a neutral large-scale-network graph summary), the system
-segregation is **recomputed** from them as `(within − between)/within`, and the segregation-vs-age
-Pearson r is **recomputed from those columns** and the real ages — never read from the reported scalar.
-Fabrication teeth are layered: within & between must each cross-subject-track the reference
-(r ≥ 0.75; partition-robust because they are dominated by overall connectivity), the recomputed
-per-subject segregation must cross-subject-track the reference segregation (r ≥ 0.80), and the
-recomputed `r_seg` must be ≤ −0.15 and within 0.15 of the reference. A mechanism-aware fabrication
-(within ≈ global, between given a tuned age tilt so `r_seg ≈ −0.28`) **cannot** satisfy the
-within/between cross-correlation and the `r_seg` match simultaneously — the constraints conflict, and
-the segregation cross-correlation is a third backstop (a fabricated segregation of age-trend + noise
-correlates only ~0.08 with the real per-subject segregation). Verified by search: no such fabrication
-passes.
-
-Fairness widening (red-team: `GLOB_TOL` 0.03 too tight): the per-subject global-connectivity absolute
-match is widened **0.03 → 0.06** (global spans 0.09–0.88, so 0.03 was < 4 % of the max), and the
-segregation-vs-reference tolerance is widened to **0.15** to admit the documented robust partition
-range `r_seg ∈ [−0.40, −0.24]`. The cross-subject r ≥ 0.95 on global remains the fabrication teeth, so
-widening the absolute tolerance is a pure fairness gain.
-
-Second-pass validation matrix (subprocess pytest): honest PASS; defensible (within/between ±3 %,
-global ±4 %, an alternative-partition proxy) PASS; fabricated/constant table FAIL; attack C real global
-+ **no within/between columns** + guessed `r_seg −0.28` FAIL; attack C **mechanism-aware fabricated**
-within/between tuned to `r_seg −0.28` FAIL (between cross-corr 0.61 < 0.75 and recomputed `r_seg` off).
+Clean-commit Harbor execution and final-image delivery are recorded separately.
+These checks validate the stated method implementation, not a reproduced paper
+finding, causal or population claim, or model difficulty. No Sol calibration,
+push, merge or public data/image publication is implied by a local commit.
