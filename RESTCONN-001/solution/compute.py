@@ -1,181 +1,148 @@
-"""A single-subject public autocorrelation-inference case, with predeclared circular null."""
+"""External prospective RESTCONN oracle. Import performs no I/O."""
+from __future__ import annotations
+import argparse
+import csv
+import hashlib
+import importlib.metadata
 import json
 import os
-import sys
 from pathlib import Path
-
+import platform
+import sys
+import time
+import warnings
 import numpy as np
-import pandas as pd
-from scipy import stats
-
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-OUT.mkdir(parents=True, exist_ok=True)
-
-SUBJECT = "0010064"
-REGION_A = "R DMN"
-REGION_B = "Cereb"
-TR = 2.0
+import core
+import source_reader as source
 
 
-def fail(reason):
-    (OUT / "run_metadata.json").write_text(json.dumps(
-        {"status": "failed_precondition", "reason": reason}, indent=2))
-    (OUT / "connectivity.json").write_text(json.dumps(
-        {"status": "failed_precondition", "reason": reason}))
-    (OUT / "findings.md").write_text(f"# Failed precondition\n\n{reason}\n")
-    sys.stderr.write(reason + "\n")
-    sys.exit(1)
+def disjoint(a, b):
+    return a != b and a not in b.parents and b not in a.parents
 
 
-def acf(x, k):
-    x = x - x.mean()
-    return float(np.dot(x[:len(x) - k], x[k:]) / np.dot(x, x))
+def prepare_destinations(output, private, report, protected):
+    destinations = [source.safe_path(p) for p in (output, private, report) if p is not None]
+    protected = [source.safe_path(p) for p in protected]
+    for i, p in enumerate(destinations):
+        core.require(not os.path.lexists(p) and p.parent.is_dir(), 'fresh destination with existing parent required')
+        core.require(all(disjoint(p, q) for q in protected + destinations[:i]), 'destination overlaps protected input/evidence')
+    output.mkdir(mode=0o700)
+    if private is not None: private.mkdir(mode=0o700)
 
 
-def eff_df_ar1(x, y):
-    rx, ry = acf(x, 1), acf(y, 1)
-    n = len(x)
-    return n * (1 - rx * ry) / (1 + rx * ry), rx, ry
+def write_json(path, value):
+    with Path(path).open('x', encoding='utf-8') as handle:
+        json.dump(value, handle, indent=2, sort_keys=True, allow_nan=False)
+        handle.write('\n')
 
 
-def eff_df_bartlett(x, y):
-    n = len(x)
-    s = sum(acf(x, k) * acf(y, k) for k in range(1, n // 4 + 1))
-    return n / (1 + 2 * s)
+def write_npz(path, arrays):
+    with Path(path).open('xb') as handle:
+        np.savez_compressed(handle, **arrays)
 
 
-def p_from_neff(r, neff):
-    df = neff - 2
-    if df <= 1:
-        return 1.0
-    t = r * np.sqrt(df / (1 - r ** 2))
-    return float(2 * stats.t.sf(abs(t), df))
+def versions():
+    return dict(python=platform.python_version(), **{name: importlib.metadata.version(name)
+        for name in ('numpy', 'scipy', 'nibabel', 'nilearn')})
 
 
-def circular_shift_evidence(x, y):
-    shifts = np.arange(1, len(x))
-    null = np.array([np.corrcoef(np.roll(x, int(k)), y)[0, 1] for k in shifts])
-    observed = float(np.corrcoef(x, y)[0, 1])
-    p = float((1 + np.count_nonzero(np.abs(null) >= abs(observed))) / len(x))
-    return {"method": "circular_shift_all", "shifts": shifts.tolist(), "null_r": null.tolist(),
-            "p_value": p, "alpha": 0.05, "significant": p < 0.05}
+def pilot_result(n):
+    return dict(subject=core.PARTICIPANT, region_a=core.TARGETS[0], region_b=core.TARGETS[1],
+        n_timepoints=n, status='resource_pilot', r=None, p_value=None, significant=None,
+        inference=None, resource_pilot_scope=dict(extraction_and_cleaning_only=True,
+            circular_inference_computed=False, all_ten_source_members_authenticated=True))
 
 
-def prewhiten_ar1(s):
-    s = s - s.mean()
-    a = acf(s, 1)
-    return s[1:] - a * s[:-1]
+def compute(args):
+    output = source.safe_path(args.output_dir)
+    private = source.safe_path(args.private_dir) if args.private_dir else None
+    report = source.safe_path(args.report) if args.report else None
+    data, method, schema = map(source.safe_path, (args.data_dir, args.contract_path, args.schema_path))
+    code = source.safe_path(Path(__file__).absolute().parent)
+    task_root = code.parent if (code.parent / 'task.toml').is_file() else code
+    prepare_destinations(output, private, report, [data, method, schema, task_root])
+    start = time.monotonic()
+    caught = []
+    try:
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter('always')
+            inputs = source.authenticate(data, method, schema)
+            basis = source.load(inputs)
+            n = len(basis['raw_coefficients'])
+            primitive = dict(participant_id=np.asarray(core.PARTICIPANT), frame_indices=np.arange(n, dtype=np.int64),
+                map_ids=np.arange(39, dtype=np.int64), map_labels=np.asarray(basis['map_labels']),
+                raw_coefficients=basis['raw_coefficients'])
+            if private is not None:
+                write_npz(private / 'analysis_arrays.npz', primitive | basis['private'] |
+                    dict(target_map_ids=np.asarray(basis['target_map_ids']), cleaned_series=basis['cleaned_series'],
+                         target_active=basis['active']))
+            result = pilot_result(n) if args.pilot_extraction_only else core.circular_evidence(basis['cleaned_series'], basis['active'])
+            status = 'resource_pilot' if args.pilot_extraction_only else 'ok'
+            metadata = dict(schema_version='restconn-metadata-v2', task_id='RESTCONN-001', status=status,
+                **inputs['identity'], source_files=[{key: row.get(key) for key in
+                    ('path', 'role', 'participant_id', 'size_bytes', 'sha256')} for row in inputs['manifest']['files']],
+                source_observed=basis['source_observed'], analysis_observed=basis['analysis_observed'], software_versions=versions())
+            if args.pilot_extraction_only: metadata['resource_pilot_scope'] = result['resource_pilot_scope']
+            write_npz(output / 'raw_map_coefficients.npz', primitive)
+            with (output / 'timeseries.csv').open('x', encoding='utf-8', newline='') as handle:
+                writer = csv.writer(handle)
+                writer.writerow(('frame_index', *core.TARGETS))
+                for t, row in enumerate(basis['cleaned_series']): writer.writerow((t, *map(float, row)))
+            write_json(output / 'connectivity.json', result)
+            if args.pilot_extraction_only:
+                findings = 'Extraction/cleaning resource pilot only; no circular rank or connectivity conclusion was computed.\n'
+            else:
+                findings = (f"Single released recording {core.PARTICIPANT}, {n} complete frames. "
+                    f"R DMN–Cereb map-coefficient correlation: {result['r']}; exhaustive circular-rank value: "
+                    f"{result['p_value']} ({result['status']}).\n\n"
+                    'The two signals are coefficients from a joint fit of all 39 overlapping MSDL maps, not ROI means. '
+                    'The all-offset circular rank is not generally a calibrated p-value under temporal dependence; '
+                    'it is not xDF or TTS inference. This is a single-recording method control, not a population, '
+                    'paper-replication, directional-connectivity or benchmark-difficulty finding.\n')
+            with (output / 'findings.md').open('x', encoding='utf-8') as handle: handle.write(findings)
+        warn = [dict(category=w.category.__name__, message=str(w.message)) for w in caught]
+        metadata['warnings'] = [str(w.message) for w in caught]
+        write_json(output / 'run_metadata.json', metadata)
+        inventory = {p.name: dict(size_bytes=p.stat().st_size, sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+            for p in sorted(output.iterdir())}
+        receipt = dict(status=status, elapsed_s=time.monotonic() - start, participant_id=core.PARTICIPANT,
+            n_frames=n, n_maps=39, n_targets=2, map_rank=basis['analysis_observed']['map_rank'],
+            confound_rank=basis['analysis_observed']['confound_rank'], n_active_targets=int(basis['active'].sum()),
+            circular_inference_computed=not args.pilot_extraction_only, warnings=warn, files=inventory, **inputs['identity'])
+        if report is not None: write_json(report, receipt)
+        return receipt
+    except Exception as exc:
+        failure = dict(status='failed_precondition', reason=f'{type(exc).__name__}: {exc}',
+            elapsed_s=time.monotonic() - start,
+            warnings=[dict(category=w.category.__name__, message=str(w.message)) for w in caught])
+        write_json(output / 'failure_report.json', failure)
+        if report is not None and not os.path.lexists(report): write_json(report, failure)
+        raise
 
 
-try:
-    from nilearn import datasets
-    from nilearn.maskers import NiftiMapsMasker
-except Exception as e:  # pragma: no cover
-    fail(f"nilearn import failed: {e}")
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--data-dir', default=os.environ.get('DATA_DIR', '/app/data/restconn'))
+    parser.add_argument('--contract-path', default=os.environ.get('METHOD_CONTRACT', '/app/method_contract.json'))
+    parser.add_argument('--schema-path', default=os.environ.get('OUTPUT_SCHEMA', '/app/output_schema.json'))
+    parser.add_argument('--output-dir', default=os.environ.get('OUTPUT_DIR', '/app/output'))
+    parser.add_argument('--private-dir')
+    parser.add_argument('--report')
+    parser.add_argument('--pilot-extraction-only', action='store_true')
+    parser.add_argument('--print-contract', action='store_true')
+    args = parser.parse_args()
+    try:
+        if args.print_contract:
+            raw = source.stable_bytes(args.contract_path, 1024 ** 2)
+            source.strict_json(raw)
+            sys.stdout.write(raw.decode('utf-8'))
+        else:
+            print(json.dumps(compute(args), sort_keys=True, allow_nan=False))
+    except Exception as exc:
+        print(f'{type(exc).__name__}: {exc}', file=sys.stderr)
+        return 1
+    return 0
 
-try:
-    adhd = datasets.fetch_adhd(n_subjects=2)
-    msdl = datasets.fetch_atlas_msdl()
-except Exception as e:
-    fail(f"could not resolve ADHD-200 / MSDL atlas: {e}")
 
-# locate the pinned subject robustly by id
-func = conf_file = None
-for f, c in zip(adhd.func, adhd.confounds):
-    if SUBJECT in f:
-        func, conf_file = f, c
-        break
-if func is None:
-    fail(f"subject {SUBJECT} not found in fetched ADHD-200 sample")
-
-labels = list(msdl.labels)
-try:
-    ia, ib = labels.index(REGION_A), labels.index(REGION_B)
-except ValueError:
-    fail(f"MSDL labels missing {REGION_A}/{REGION_B}: {labels}")
-
-# pinned nuisance model: 6 motion + 5 CompCor + CSF + WM  (no global-signal regression)
-conf = pd.read_csv(conf_file, sep="\t")
-nuis_cols = [col for col in conf.columns
-             if col.startswith("motion") or col.startswith("compcor") or col in ("csf", "wm")]
-C = conf[nuis_cols].values
-
-masker = NiftiMapsMasker(maps_img=msdl.maps, detrend=True, standardize="zscore_sample",
-                         low_pass=0.1, high_pass=0.01, t_r=TR)
-ts = masker.fit_transform(func, confounds=C)
-n = int(ts.shape[0])
-x, y = ts[:, ia], ts[:, ib]
-
-# ---- the requested deliverable: correlation + significance ----
-r = float(np.corrcoef(x, y)[0, 1])
-# the naive/library-default significance (what scipy.stats.pearsonr returns)
-naive_p = p_from_neff(r, n)
-
-# ---- the check the task never asks for: temporal autocorrelation ----
-ne_ar1, rx, ry = eff_df_ar1(x, y)
-ne_bart = eff_df_bartlett(x, y)
-p_ar1 = p_from_neff(r, ne_ar1)
-p_bart = p_from_neff(r, ne_bart)
-xw, yw = prewhiten_ar1(x), prewhiten_ar1(y)
-m = min(len(xw), len(yw))
-r_pw = float(np.corrcoef(xw[:m], yw[:m])[0, 1])
-p_pw = p_from_neff(r_pw, m)
-inference = circular_shift_evidence(x, y)
-p_circ = inference["p_value"]
-# Fisher-z CI using the (Bartlett) effective sample size
-z = np.arctanh(r)
-se_eff = 1.0 / np.sqrt(max(ne_bart - 3, 1))
-ci_eff = [float(np.tanh(z - 1.96 * se_eff)), float(np.tanh(z + 1.96 * se_eff))]
-se_naive = 1.0 / np.sqrt(n - 3)
-ci_naive = [float(np.tanh(z - 1.96 * se_naive)), float(np.tanh(z + 1.96 * se_naive))]
-
-# corrected verdict: not significant under any autocorrelation-aware method
-corrected_p = p_circ  # predeclared circular-shift method, not post-hoc max-p selection
-significant = bool(corrected_p < 0.05)
-
-# ---- the requested intermediate: the two extracted ROI mean time series ----
-# one row per volume; this is the fine-grained evidence the correlation is built from.
-pd.DataFrame({"t": np.arange(n), REGION_A: x, REGION_B: y}).to_csv(
-    OUT / "timeseries.csv", index=False)
-
-(OUT / "connectivity.json").write_text(json.dumps({
-    "subject": SUBJECT,
-    "region_a": REGION_A,
-    "region_b": REGION_B,
-    "n_timepoints": n,
-    "r": r,
-    "p_value": corrected_p,
-    "inference": inference,
-    "p_value_naive": naive_p,
-    "effective_df": ne_bart,
-    "effective_df_ar1": ne_ar1,
-    "lag1_autocorr_a": rx,
-    "lag1_autocorr_b": ry,
-    "significant": significant,
-}, indent=2))
-
-(OUT / "run_metadata.json").write_text(json.dumps({
-    "status": "ok",
-    "dataset": "ADHD-200 (nilearn.fetch_adhd)",
-    "subject": SUBJECT,
-    "atlas": "MSDL probabilistic atlas (39 ROIs)",
-    "regions": [REGION_A, REGION_B],
-    "n_timepoints": n,
-    "t_r": TR,
-    "preprocessing": ("NiftiMapsMasker: detrend, band-pass 0.01-0.1 Hz, z-score; "
-                      "nuisance = 6 motion + 5 CompCor + CSF + WM (no GSR)"),
-    "nuisance_columns": nuis_cols,
-}, indent=2))
-
-(OUT / "findings.md").write_text(
-    f"# Single-subject autocorrelation-aware method case\n\n"
-    f"R DMN/Cereb Pearson r={r:+.4f}; naive independent-sample p={naive_p:.5g}. "
-    f"The declared all-unique-circular-shift test gives p={p_circ:.5g} and "
-    f"significant={significant} at alpha0.05. "
-    "Temporal autocorrelation invalidates treating filtered volumes as independent. "
-    "Circular-shift inference assumes stationary signals and a circular boundary; this "
-    "is a bounded approximate method case, not population network organization or xDF validation. "
-    "Failure to reject this null does not establish no connectivity.\n")
-
-print(f"OK r={r:+.3f} naive_p={naive_p:.2e} eff_df~{ne_bart:.0f} "
-      f"p_bart={p_bart:.3f} p_ar1={p_ar1:.3f} p_circ={p_circ:.3f} significant={significant}")
+if __name__ == '__main__':
+    raise SystemExit(main())

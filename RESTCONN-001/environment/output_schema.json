@@ -1,0 +1,149 @@
+{
+  "schema_version": "restconn-outputs-v2",
+  "contract_status": "frozen_after_parent_review_before_original_functional_values",
+  "task_id": "RESTCONN-001",
+  "method_contract_sha256": "a9d473e0192d723d023e16540040a6fde7dc9b3a0d878d5cef840e2c5f8cc40e",
+  "source_manifest_sha256": "465cfd8f113be362b39172782713c504432c51e529d82f222bda8ba9f1fb734e",
+  "authority": "The frozen method defines the scientific recipe. This document defines its five public receipts. Source reconstruction, not submitted provenance, supplies the raw coefficients, cleaned-series reference and canonical activity. Accepted final CSV series determine every circular result; no hidden source-canonical p-value, count, significance or sign target is used.",
+  "dimensions": {"N": 176, "M": 39, "K": 2, "S": 175},
+  "required_artifacts": ["raw_map_coefficients.npz", "timeseries.csv", "connectivity.json", "run_metadata.json", "findings.md"],
+  "common_rules": {
+    "completion": "All five artifacts are required. run_metadata.status is ok for completed analysis even when connectivity.status is inactive_target. A resource_pilot or failed_precondition is not a completed submission.",
+    "failure_marker": "Any lexists failure_report.json is authoritative failure, including an empty file, directory or dangling symlink; otherwise complete success receipts do not override it.",
+    "paths": "Required artifacts and all output inventory entries must be regular files/directories, without symbolic links, special files or symlink ancestors. Required files must be nonempty. Do not use pickle/object arrays.",
+    "json": "UTF-8 object documents, unique keys, finite numeric values recursively including optional fields. JSON numbers must be real numeric tokens, never Boolean or numeric strings. Counts are exactly integral signed-int64 values. Boolean fields must be actual JSON Boolean values. Only explicitly nullable fields permit null.",
+    "csv": "UTF-8, one unique nonempty header per column, consistent row widths and complete keyed rows. Required numeric cells are finite real numeric text; exactly integral frame tokens such as 1,1.0,1e0 are equivalent and collide as one key. No implicit index column is required.",
+    "npz": "Non-object NumPy arrays, finite real numeric primitives, literal Unicode or UTF-8 byte strings, and non-Boolean exactly integral numeric key axes. Integral floating axes are accepted when exact and within signed-int64. Required shapes remain exact. Harmless optional arrays may use Boolean, real numeric or text dtypes within bounds; no complex/object/structured dtypes.",
+    "extras": "Harmless finite extra JSON fields, CSV columns, NPZ arrays and files are permitted within the published limits; they do not replace any required evidence. No software-version equality or findings keyword gate.",
+    "ordering": "CSV row/column order and NPZ frame/map axis order may change coherently. The raw matrix and map labels must travel with their explicit frame/map keys. Metadata source/map/support lists may reorder by their explicit path/map_id keys. Shift IDs, null_r and exceeds may reorder only as coherent triples. Missing or duplicate keys fail.",
+    "numeric_comparison": "All inequalities use the frozen method tolerances. Shape, identities, source pins, integer counts, Boolean flags and statuses are exact; numeric receipt rounding never changes which primitive governs inference."
+  },
+  "artifacts": {
+    "raw_map_coefficients.npz": {
+      "purpose": "Source-bound full simultaneous39-map least-squares receipt; not a two-map fit and not ROI weighted means. Rounded raw receipts are not re-cleaned to define acceptance.",
+      "arrays": {
+        "participant_id": {"shape": [], "dtype": "literal Unicode/UTF8 byte string", "value": "0010064"},
+        "frame_indices": {"shape": [176], "dtype": "exactly integral real numeric non-Boolean", "keys": "0..175 each exactly once"},
+        "map_ids": {"shape": [39], "dtype": "exactly integral real numeric non-Boolean", "keys": "0..38 each exactly once, original fourth-axis map IDs"},
+        "map_labels": {"shape": [39], "dtype": "literal Unicode/UTF8 byte strings", "binding": "Original atlas labels in the map_ids axis order; surrounding source whitespace stripped by the frozen loader rule. Target original map6=R DMN and map32=Cereb."},
+        "raw_coefficients": {"shape": [176, 39], "dtype": "finite real numeric, computed float64; other serialization precision accepted only within source tolerance", "axes": ["frame_indices", "map_ids"], "tolerance": {"atol": 0.00001, "rtol": 0.000001}}
+      }
+    },
+    "timeseries.csv": {
+      "purpose": "Two complete final cleaned source-close series, the sole accepted downstream circular-inference primitive.",
+      "n_rows": 176,
+      "key": ["frame_index"],
+      "columns": {
+        "frame_index": "Exactly integral non-Boolean numeric text, original0..175 each once",
+        "R DMN": "Finite final cleaned coefficient of original map6",
+        "Cereb": "Finite final cleaned coefficient of original map32"
+      },
+      "nullable": [],
+      "source_tolerance": {"atol": 1e-7, "rtol": 1e-7},
+      "active_fidelity": "Each canonically active column additionally satisfies centered relativeL2 error<=1e-6, no absolute floor, using the frozen common-prescale accurate centering. Canonical inactive reference series is zero; within-tolerance serialization jitter does not reactivate inference.",
+      "no_inference_from_rounded_raw": true
+    },
+    "connectivity.json": {
+      "purpose": "Signed observed correlation plus every nonzero circular offset and exact own-series rank evidence.",
+      "required_fields": {
+        "subject": "Literal0010064",
+        "region_a": "LiteralR DMN",
+        "region_b": "LiteralCereb",
+        "n_timepoints": "Integer176",
+        "status": "ok if both canonical targets active; otherwise inactive_target",
+        "r": "Finite real[-1,1] for ok; null for inactive_target",
+        "p_value": "Finite real[0,1] for ok, equal own (1+n_exceedances)/176 within1e-6; null for inactive_target",
+        "significant": "Boolean for ok, exact20*(1+n_exceedances)<176; null for inactive_target",
+        "inference": {
+          "method": "Literalcircular_shift_all",
+          "shifted_region": "LiteralR DMN",
+          "shift_direction": "Literalpositive_np_roll",
+          "shifts": "List of175 exactly integral JSON numeric IDs1..175 each once; no deduplication of periodic surrogate vectors",
+          "null_r": "List of175 finite real[-1,1] values paired with shifts for ok;175 null entries for inactive_target",
+          "exceeds": "List of175 Boolean values paired with shifts for ok, each abs(ownunroundedDot_k)>=abs(ownunroundedDot_0);175 null entries for inactive_target",
+          "n_exceedances": "Integer0..175, exact sum(exceeds), or null for inactive_target",
+          "numerator": "Integer1..176, exact1+n_exceedances, or null for inactive_target",
+          "denominator": "Integer176 in both statuses",
+          "alpha": "Exact JSON numeric0.05",
+          "p_value": "Same own rank fraction as top-level alias within1e-6, or null",
+          "significant": "Same exact own integer-threshold verdict as top-level alias, or null",
+          "inactive_regions": "List of canonical inactive target labels in fixed R DMN,Cereb target order; empty for ok",
+          "status": "Same exact categorical status as top level"
+        }
+      },
+      "replay": "Scale-center accepted CSV vectors once; retain all positive roll(x,k) against unchanged y, k1..175, common norms, accurately summed dots, no tie epsilon. Rank is recomputed before correlation serialization. Coherent source-close near-tie perturbations may change count,p,significant; these changes are accepted only with complete own-series recomputation.",
+      "derived_tolerance": {"atol": 0.000001, "rtol": 0},
+      "domains": "Saved r/null_r remain within[-1,1] and p within[0,1] even when close by tolerance. No NaN/Inf sentinels. Six-decimal scalar/null_r rounding is permitted if within tolerance; rounded receipts never determine exceedances or significant."
+    },
+    "run_metadata.json": {
+      "purpose": "Source, public contract, header, nuisance and numerical-support receipts; actual implementation identifiers are descriptive, not reference-version targets.",
+      "required_fields": {
+        "schema_version": "Literalrestconn-metadata-v2",
+        "task_id": "LiteralRESTCONN-001",
+        "status": "Literalok for completed submissions",
+        "source_manifest_sha256": "465cfd8f113be362b39172782713c504432c51e529d82f222bda8ba9f1fb734e",
+        "method_sha256": "SHA256 of exact public method_contract.json bytes",
+        "output_schema_sha256": "SHA256 of exact public output_schema.json bytes, not a self-hash stored inside that schema",
+        "source_files": "Closed10-record list keyed path, with required path/role/participant_id(nullable)/size_bytes(integer)/sha256 exactly from the pinned manifest; reordered records allowed",
+        "source_observed": {
+          "bold_header": "Required header record defined below, source-bound",
+          "atlas_header": "Required header record defined below, source-bound",
+          "frame_count": "Integer176",
+          "confound_columns": "Original ordered17 source column names",
+          "selected_confound_columns": "Original source ordered13 names in method.temporal_cleaning.confound_columns",
+          "excluded_confound_columns": "Original ordered constant,linearTrend,global,gm",
+          "n_confound_rows": "Integer176",
+          "map_labels": "Closed39-record list keyed integer map_id0..38; each record has map_id and exact map_label",
+          "target_map_ids": "Ordered JSON numeric integer list[6,32] corresponding to R DMN,Cereb",
+          "operational_TR_s": "Numeric2 seconds; does not override the separately preserved original clock",
+          "frame_origin_s": "Numeric0, relative released-frame indexing"
+        },
+        "analysis_observed": {
+          "map_rank": "Exact source-derived integer0..39; no minimum-rank outcome gate",
+          "confound_rank": "Exact source-derived integer0..13 using frozen QR recipe",
+          "target_support": "Closed2-record list keyed map_id6 and32; map_label exact, raw_sample_sd/residual_centered_l2/activity_threshold finite nonnegative reals, active actual Boolean exact canonical source support"
+        },
+        "software_versions": "Nonempty object with required python,numpy,scipy,nibabel,nilearn keys and nonempty actual version strings; not_used allowed for genuinely unused library; no equality to reference versions",
+        "warnings": "List of strings, may be empty; no warning text or absence gate"
+      },
+      "header_record": {
+        "shape": "Ordered exact positive-integer dimensions: BOLD[61,73,61,176], atlas[40,48,35,39]",
+        "selected_affine": "Finite real4x4 selected source voxel-to-world affine",
+        "storage_dtype": "Semantic NumPy dtype equality, allowing equivalent aliases but preserving kind/itemsize/byte order",
+        "spatial_units": "Exact original header unit label, including unknown when original is unspecified",
+        "temporal_units": "Exact original header unit label; no invented atlas clock",
+        "zooms": "Original ordered four header zoom values",
+        "raw_toffset": "Original header temporal offset, separate from operational origin",
+        "raw_scl_slope": "Original header scalar, not replaced by effective scaling",
+        "raw_scl_inter": "Original header scalar, not replaced by effective scaling",
+        "effective_slope": "Finite effective NIfTI scale",
+        "effective_intercept": "Finite effective NIfTI intercept"
+      },
+      "header_nonfinite_representation": "Only original nonfinite raw header scalars/zooms use exact strings NaN,+Inf,-Inf as applicable. Numeric arrays and all other required numeric receipts remain finite. Raw header strings are not inferred from loaded effective calibration.",
+      "header_numeric_tolerance": {"atol": 1e-9, "rtol": 1e-9},
+      "support_numeric_tolerance": {"atol": 1e-10, "rtol": 0.000001},
+      "support_authority": "Tolerance on support diagnostics does not redefine eligibility. Rank and activity are source-canonical exact; inactive targets remain present with null paired inference."
+    },
+    "findings.md": {
+      "type": "Nonempty UTF-8 free prose",
+      "claim_boundary": "Describe the single-recording joint-map coefficient/circular-phase method control honestly. No mandatory numerical effect, p direction, significance reversal, paper claim or wording is graded. Exhaustive shifts remove Monte Carlo uncertainty, not guarantee calibrated type-I error or causal/neural coupling."
+    }
+  },
+  "limits": {
+    "max_total_output_bytes": 67108864,
+    "max_npz_disk_bytes": 67108864,
+    "max_npz_expanded_bytes": 67108864,
+    "max_npz_array_ndim": 32,
+    "max_npz_members": 64,
+    "max_npy_header_bytes": 16384,
+    "max_csv_bytes": 16777216,
+    "max_csv_rows": 100000,
+    "max_csv_field_bytes": 1048576,
+    "max_json_bytes": 8388608,
+    "max_json_depth": 64,
+    "max_findings_bytes": 1048576,
+    "max_output_entries": 1000
+  },
+  "authoring_only_pilot": "The supplied --pilot-extraction-only route still emits five files with full raw/final primitives and metadata.status=resource_pilot, connectivity.status=resource_pilot, r/p/significant=null,inference=null and explicit resource_pilot_scope. This is not a production positive and does not bypass completed-analysis rules.",
+  "no_new_algorithm": "All scientific arithmetic, support rules and tolerances are those of the frozen method; this schema introduces no alternate estimator, hidden numerical target or expected outcome."
+}

@@ -1,0 +1,239 @@
+{
+  "schema_version": "restconn-method-v2",
+  "contract_status": "frozen_after_structure_before_original_functional_values",
+  "task_id": "RESTCONN-001",
+  "scope": "Single-recording, source-bound circular-phase rank method control; neither xDF nor TTS nor original-paper or population replication. No forced effect, significance reversal, neural or causal claim.",
+  "source": {
+    "source_manifest_sha256": "465cfd8f113be362b39172782713c504432c51e529d82f222bda8ba9f1fb734e",
+    "runtime_data_root": "/app/data/restconn",
+    "participant_id": "0010064",
+    "n_frames": 176,
+    "frame_indices": "all original integer frames0..175, no censoring/trimming/imputation",
+    "bold_shape": [
+      61,
+      73,
+      61,
+      176
+    ],
+    "atlas_shape": [
+      40,
+      48,
+      35,
+      39
+    ],
+    "map_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38
+    ],
+    "target_labels": [
+      "R DMN",
+      "Cereb"
+    ],
+    "target_map_ids": [
+      6,
+      32
+    ],
+    "label_rule": "Use original atlas fourth-axis row; strip surrounding whitespace from released name/net name fields as the pinned Nilearn loader does. No fuzzy aliases.",
+    "original_confound_columns": [
+      "csf",
+      "constant",
+      "linearTrend",
+      "wm",
+      "global",
+      "motion-pitch",
+      "motion-roll",
+      "motion-yaw",
+      "motion-x",
+      "motion-y",
+      "motion-z",
+      "gm",
+      "compcor1",
+      "compcor2",
+      "compcor3",
+      "compcor4",
+      "compcor5"
+    ],
+    "operational_TR_s": 2,
+    "operational_origin_s": 0,
+    "clock_interpretation": "Header declares2seconds, toffset0; exact documentarySubject10064 maps to fixed released0010064 and NYU whose site table agreesTR2. Operational origin0 is relative original-frame indexing, not independently established scanner/slice-time origin.",
+    "source_preconditions": [
+      "Authenticate all10 original/provenance bytes before parsing.",
+      "BOLD and confounds retain176frames/rows; all original scientific arrays and selected13confounds finite.",
+      "Preserve full39 overlapping maps and source affine/scaling/units. The atlas units are unspecified; world-coordinate affine resampling does not establish nonlinear template correspondence.",
+      "Original BOLD has NIfTI extension data and vox_offset6464; do not assume352 or discard bytes. Effective scaling1/0 despite raw slope0; atlasoffset352/effective1/0."
+    ]
+  },
+  "spatial_extraction": {
+    "dtype": "float64 for scaled BOLD/maps, resampling, least squares and cleaning",
+    "grid": "original BOLD spatial grid; no resampling of BOLD",
+    "transform": "If source and target affines are exactly equal and spatial shapes match, copy atlas directly. Otherwise atlas-voxel coordinates = scipy.linalg.inv(atlas affine) @ BOLD affine; use identity transform when affines equal but shapes differ.",
+    "interpolation": "scipy.ndimage.affine_transform order1, mode=constant,cval=0,prefilter=False. Use three diagonal entries as a vector if spatial transform exactly diagonal; otherwise full3x3 matrix. Same disclosed SciPy primitive may be shared by oracle and grader.",
+    "clip": "clip all resampled maps to [min(0,global original atlas minimum), max(0,global original atlas maximum)]; retain negative weights",
+    "spatial_order": "C-flat voxel order; every BOLD voxel participates, including zero map rows",
+    "mask": null,
+    "smoothing": null,
+    "model": "M[V,39] @ B[39,176] = Y[V,176]; raw_coefficients=B.T, jointly estimated full39 components, not weighted means or a two-map-only fit",
+    "solver": {
+      "lapack_driver": "gelsd",
+      "cond": 2.220446049250313e-16,
+      "minimum_norm": true,
+      "independent_route": "Explicit gesvd pseudoinverse, retain singular values s>eps64*smax",
+      "rank_policy": "Report actual rank, retain all39 columns; no expected rank minimum, dropped maps or substitute targets"
+    }
+  },
+  "temporal_cleaning": {
+    "confound_columns": [
+      "csf",
+      "wm",
+      "motion-pitch",
+      "motion-roll",
+      "motion-yaw",
+      "motion-x",
+      "motion-y",
+      "motion-z",
+      "compcor1",
+      "compcor2",
+      "compcor3",
+      "compcor4",
+      "compcor5"
+    ],
+    "excluded_confound_columns": [
+      "constant",
+      "linearTrend",
+      "global",
+      "gm"
+    ],
+    "detrend": true,
+    "detrend_arithmetic": "Demean each coefficient and each selected confound; center frame-index linear trend and divide by its Euclidean norm; subtract projection onto that trend before filtering.",
+    "filter": {
+      "order": 5,
+      "high_pass_hz": 0.01,
+      "low_pass_hz": 0.1,
+      "sampling_frequency_hz": 0.5,
+      "representation": "SOS from scipy.signal.butter",
+      "application": "sosfiltfilt along time, to coefficients and all13confounds before nuisance regression",
+      "padtype": "odd",
+      "padlen": 33
+    },
+    "nuisance": "Center each filtered confound, divide by populationSD(ddof0), divisor1 ifSD<eps64. scipy.linalg.qr(mode=economic,pivoting=True); retain Q columns where abs(diag(R))>100*eps64. residual = filtered_coefficients - (Q@Q.T)@filtered_coefficients. Association explicitly follows pinned Nilearn0.13.1; no hidden alternate projection order.",
+    "final_standardization": "Recenter residuals; for each canonically active component divide by sampleSD(ddof1), divisor1 only ifSD<eps64. Canonically inactive components have zero final series. Then select original map6 and32, without sign changes.",
+    "additional_processing": "None: no GSR, censoring, interpolation, extra nuisance columns or final second population standardization.",
+    "amendment": "Explicit float64/full-map numerical recipe and pre-zscore guard replace implicit legacy dtype/support behavior; not claimed bitwise equivalent to the historical oracle."
+  },
+  "support_and_fidelity": {
+    "scaled_centering": "For finite vector v, exact constants center to literal zeros. Otherwise s=max(abs(v)), u=v/s, c=u-math.fsum(u)/N. Stable centered norm in original units is s*stable_L2(c); stable_L2 uses max-absolute scaling and accurately summed squared terms.",
+    "raw_sample_sd": "stable_centered_norm(raw_coefficient)/sqrt(N-1)",
+    "canonical_active_rule": "For each target before zscoring: stable_centered_norm(recentered unstandardized residual) > 1e-12*sqrt(N)*max(1,raw_sample_sd). Source reconstruction defines activity; no recomputation from rounded submitted series replaces it.",
+    "inactive": "Keep all176 frames and raw39 coefficients. Final inactive component is zero in canonical source reconstruction; accepted within-tolerance serialization cannot reactivate inference. If either target inactive, the complete paired inference is undefined with null fields.",
+    "pointwise_raw_coefficients": {
+      "atol": 0.00001,
+      "rtol": 0.000001
+    },
+    "pointwise_final": {
+      "atol": 1e-7,
+      "rtol": 1e-7
+    },
+    "active_centered_relative_L2": 0.000001,
+    "active_fidelity": "Using common positive prescale for submitted/canonical pair, centered difference norm<=1e-6*canonical centered norm, without absolute floor. Check each canonically active target.",
+    "raw_receipt_authority": "Raw39 receipts are source evidence, not re-cleaned after rounding to define acceptance."
+  },
+  "circular": {
+    "method": "circular_shift_all",
+    "shifted_region": "R DMN",
+    "shift_direction": "positive_np_roll",
+    "definition": "roll(x,k)[t]=x[(t-k)modN], against unchanged y; all k1..N-1 exactly once, retaining periodic duplicates and sign ties",
+    "arithmetic": "Apply scaled_centering once separately to each accepted final vector. Use a common positive product of stable centered L2 norms for r0 and every rk. Dot_k=math.fsum(centered_x[(t-k)%N]*centered_y[t]). Count abs(Dot_k)>=abs(Dot_0), without tieepsilon and before rounded correlation receipts.",
+    "p_value": "(1+n_exceedances)/N, numerator1+count, denominatorN",
+    "alpha": 0.05,
+    "significant": "strict20*(1+n_exceedances)<N; serialized rounded p does not determine verdict",
+    "roundoff_domain": "Clip computed r to[-1,1] only for excursions<=1e-12; reject larger numerical excursions. Clipping never changes dot-product rank comparison.",
+    "undefined": "statusinactive_target when either target inactive; r,p_value,significant,null_r entries,exceeds entries,n_exceedances,numerator allnull; retain N,denominatorN,allN-1shift IDs and inactive component labels.",
+    "interpretation": "Exhaustive circular-phase rank removes Monte Carlo uncertainty only. Stationarity alone does not ensure calibrated type-I-error control; wraparound can distort the null. Significant is the declared rank threshold, not proof of coupling; non-significant is not proof of absence.",
+    "optional_sensitivities": "Clearly labeled optional analyses only; no maximum-p selection or replacement of required circular evidence."
+  },
+  "verification": {
+    "derived_atol": 0.000001,
+    "derived_rtol": 0,
+    "exact": [
+      "literal participant/frame/map/shift identities",
+      "source/method/schema pins",
+      "integer counts/denominators",
+      "Boolean support/verdict",
+      "categorical status"
+    ],
+    "own_primitive_replay": "After sourcefidelity succeeds, replay all inference from accepted finalCSVseries with canonical activity. Do not compare ownrank/count/p/verdict to a second hidden sourcecanonical outcome.",
+    "header_numeric_tolerance": {
+      "atol": 1e-9,
+      "rtol": 1e-9
+    },
+    "support_numeric_tolerance": {
+      "atol": 1e-10,
+      "rtol": 0.000001
+    },
+    "ordering": "Keyed CSV rows, NPZ frame/map axes and shift records may reorder coherently; no duplicate or missing keys. Metadatamap/support/source lists may reorder by their explicit IDs.",
+    "extras": "Harmless finite extra fields/arrays within limits allowed; no object arrays/pickle or duplicate JSONkeys. Software/prose fingerprints are not acceptance gates.",
+    "limits": {
+      "max_total_output_bytes": 67108864,
+      "max_npz_disk_bytes": 67108864,
+      "max_npz_expanded_bytes": 67108864,
+      "max_npz_array_ndim": 32,
+      "max_npz_members": 64,
+      "max_npy_header_bytes": 16384,
+      "max_csv_bytes": 16777216,
+      "max_csv_rows": 100000,
+      "max_csv_field_bytes": 1048576,
+      "max_json_bytes": 8388608,
+      "max_json_depth": 64,
+      "max_findings_bytes": 1048576,
+      "max_output_entries": 1000
+    },
+    "failure": "failed_precondition is not completedanalysis; failure_report.json lexists invalidates output evenifempty/dangling. Keep partialevidence, exclusivefresh output/private destinations.",
+    "independence_limit": "Separate gelsd/gesvdcomposition and own-source replay share NumPy/SciPy/nibabel primitives; they do not establish completely independent interpolation/software or biological validity.",
+    "forbidden_outcome_targets": [
+      "r sign or band",
+      "p direction",
+      "verdict reversal",
+      "effective-N band",
+      "prose keywords",
+      "paper finding",
+      "difficulty"
+    ]
+  }
+}

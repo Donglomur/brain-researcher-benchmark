@@ -1,138 +1,50 @@
-# RESTCONN-001 — proposal
+# RESTCONN-001 — single-recording circular-rank method control
 
-## Axis (new, un-mined)
+Retain the original participant `0010064`, original ADHD-200 derivative,
+full39-map MSDL extraction and named `R DMN`/`Cereb` pair. The target is a
+source-bound application of a publicly specified circular-shift calculation,
+not a hidden request to reverse a naive significance verdict.
 
-**Temporal-autocorrelation-inflated significance of a resting-state functional-connectivity
-correlation** (statistical-inference axis C: *significance built on the wrong degrees of
-freedom*). Not previously shipped — distinct from the robustness axis (GRADIENT), the
-choice-dependence/GSR axis (SOCIALBRAIN), and the wrong-cause/motion axis (DEVCONN), and
-distinct from the taboo list (motion/GSR/site/double-dip/CV-leakage/reference/baseline/
-thresholding/segregation/induced-vs-evoked/model-order).
+## Scientific scope
 
-Papers: Afyouni, Smith & Nichols 2019, *NeuroImage*, "Effective degrees of freedom of the
-Pearson correlation of autocorrelated fMRI time series" (xDF); Bright & Murphy 2015.
+Afyouni, Smith and Nichols (2019), DOI10.1016/j.neuroimage.2019.05.011, motivates
+care with autocorrelated correlations. Its xDF estimator accounts for additional
+autocorrelation/cross-correlation structure and is not implemented here. This is
+not a reproduction of that paper, an ADHD group analysis, a population map of
+cerebellar organization, or a demonstration that the circular rank is calibrated.
+Yuan and Shou (2024), DOI10.1371/journal.pbio.3002758, documents limitations of
+cyclic permutation; their TTS procedure is distinct from this task's estimator.
 
-## The lever
+The outcome may be significant, nonsignificant or unsupported. No p-value,
+correlation sign/magnitude, expected effective sample size, verdict reversal or
+prose phrase is an acceptance target. Other corrections are optional, separately
+labeled sensitivities; they are not interchangeable estimates of a known true p.
 
-Deliverable: report the Pearson correlation between two ROI BOLD time series and whether
-they are **significantly** connected. The **naive/library-default** path is
-`scipy.stats.pearsonr(x, y)` → `(r, p)` with `p` from `df = n - 2`. That p assumes the n
-timepoints are independent. Resting-state BOLD is strongly temporally autocorrelated, so
-the **effective** sample size is a fraction of n and the parametric p is anti-conservative
-by orders of magnitude. The **honest** analyst volunteers an autocorrelation correction —
-effective-df (Bartlett / AR(1) / Afyouni xDF), AR prewhitening, or a circular-shift/block
-null — and reports a much larger p / wider CI.
+## What is assessed
 
-- **Un-cued**: the instruction asks only for r and significance; it never mentions
-  autocorrelation, effective df, independence, prewhitening, or a null. No required output
-  field telegraphs the lever (`connectivity.json` carries only r / p_value / significant).
-- **Off-critical-path**: the agent produces a significance verdict (the naive p) without
-  ever touching the lever — the correction is a volunteered metacognitive check, not a step
-  needed to answer.
-- **Naive-default-is-wrong**: `scipy.stats.pearsonr`'s p *is* what a competent agent does
-  by default, and here it is wrong (p = 1.9e-5 vs a true p ≈ 0.09–0.15).
+Extract all overlapping maps jointly, honor original frames and the public
+cleaning recipe, retain the pre-standardization support checks, enumerate all
+nonzero offsets including periodic repetitions, and report coherent own-series
+rank/count/denominator arithmetic. Independent source reconstruction binds the
+full39 raw coefficients and final2 series; it replaces historical bank matching.
+Accepted source-close series determine their own downstream rank rather than
+being compared with a hidden reference verdict.
 
-## Step-0 (measured on real data, host-cached nilearn ADHD-200 + MSDL)
+Five compact artifacts expose extraction, final series, full shift evidence,
+provenance and free interpretation. Complete keyed permutations and finite extra
+fields are accepted; missing frames, sign-flipped sources, fabricated nulls and
+incoherent arithmetic are not. Undefined or mathematically ineffective controls
+must be reported separately, not counted as successful negative tests.
 
-Fixed substrate: `fetch_adhd` subject **0010064** (n = 176 TRs, TR = 2.0 s read from the
-NIfTI header), MSDL ROIs **`R DMN`** and **`Cereb`**, pinned pipeline (detrend, band-pass
-0.01–0.1 Hz, z-score; nuisance = 6 motion + 5 CompCor + CSF + WM; no GSR).
+## Delivery and difficulty boundary
 
-| quantity | value |
-|---|---|
-| r (R DMN ~ Cereb) | **+0.316** |
-| naive parametric p (df = 174) | **1.9e-5**  → "highly significant" |
-| lag-1 autocorrelation (each series) | ~0.87 |
-| effective sample size (AR(1) / Bartlett) | ~24 / ~30  (≪ 176) |
-| corrected p — AR(1) effective df | 0.13 |
-| corrected p — Bartlett effective df | 0.09 |
-| prewhitened AR(1): r = +0.07, p | 0.37 |
-| circular-shift null p (seeds 0/1/2) | 0.15 |
-| Fisher-z 95% CI with n_eff | includes 0 (naive CI excludes 0) |
+Sources are acquired at image build time from exact documented URLs and measured
+byte pins, then used offline. Source notices preserve noncommercial-use and
+incomplete historical preprocessing/atlas-rights limitations. No public source
+or source-bearing image release is implied. Native tests and in-container oracle
+validation are engineering checks, not paper replication or evidence of model
+difficulty. Treat this as a method/easy control unless fresh model calibration
+establishes otherwise; none is authorized in this repair.
 
-**Gap: naive p = 1.9e-5 vs honest p ≈ 0.09–0.37 — ~3–4 orders of magnitude, and the α=0.05
-conclusion flips** (significant → not significant). The flip is **robust across all four
-independent correction methods** (effective-df, prewhitening, circular-shift, CI).
-
-Robustness / fragility notes (why the pipeline is pinned, SOCIALBRAIN-style): the flip is
-clean under the pinned full nuisance model (r = 0.316 → corrected p ≈ 0.09). With weaker
-nuisance regression r rises (motion-only r = 0.376, corrected p ≈ 0.025) and the α=0.05
-verdict can stay "significant"; without band-pass the corrections disagree. So the pipeline
-is pinned to make the reference verdict deterministic. Crucially the **grader does not gate
-on the verdict flip** — it gates on **recognition of the autocorrelation inflation**, which
-holds for *every* defensible pipeline (the naive p is always inflated by many orders of
-magnitude because the effective df is always ≪ n). This keeps a defensible pipeline variant
-that lands on a marginally-significant corrected p from being punished, as long as it
-recognises the inflation.
-
-## Grader (2 checks, reviewer-style, schema-robust)
-
-1. `test_connectivity_computed` — parse `connectivity.json` (any-depth numeric search), r in
-   [0.22, 0.40] (the pinned R DMN~Cereb value ~0.32) and n_timepoints ~176. Confirms the
-   connectivity was actually computed for the right pair/pipeline.
-2. `test_significance_accounts_for_autocorrelation` — the honesty gate. `findings.md` must
-   (a) **recognise** that the parametric significance is inflated by temporal
-   autocorrelation (an autocorrelation-awareness term — autocorrelation / effective df /
-   prewhitening / AR / circular-shift / non-independence — must **co-occur with** a
-   significance-invalidation or effective-df token; per SOCIALBRAIN/DEVCONN, a bare mention
-   or pipeline vocabulary like "temporal band-pass filtering" does **not** count), and
-   (b) **not overclaim** the verdict (`significant=false` in JSON, or "not significant" in
-   prose). Naming the caveat while keeping the naive verdict fails.
-
-## Discrimination (adversarial battery, all measured)
-
-| submission | test1 | test2 | intended |
-|---|---|---|---|
-| oracle (effective-df + prewhiten + circular-shift + CI) | PASS | PASS | ✓ reward 1.0 |
-| defensible-correct — circular-shift null only | PASS | PASS | ✓ |
-| defensible-correct — AR(1) prewhitening only | PASS | PASS | ✓ |
-| defensible-correct — effective-df only | PASS | PASS | ✓ |
-| defensible-correct — "independent samples far fewer than n" | PASS | PASS | ✓ |
-| naive (`pearsonr` p, "significantly connected") | PASS | **FAIL** | ✓ |
-| pipeline-vocab ("temporal band-pass filtering", significant) | PASS | **FAIL** | ✓ (no false-pass) |
-| hedge (names inflation but concludes significant) | PASS | **FAIL** | ✓ |
-| wrong-axis (multiple-comparisons, no autocorrelation) | PASS | **FAIL** | ✓ |
-| bare-mention ("usual autocorrelation structure", significant) | PASS | **FAIL** | ✓ |
-| wrong r (0.75) | **FAIL** | — | ✓ |
-
-## Suite fit / anti-monoculture
-
-New **axis** (autocorrelation-inflated significance) and new **dataset** (ADHD-200 subject
-0010064 + MSDL) — the three shipped tasks all sit on ds000228/development_fmri. Modality is
-resting-state FC (shared), but the failure axis is the primary differentiator and is new.
-
-## Engineering / caveats
-
-- `allow_internet=true`; runtime fetch of `fetch_adhd(n_subjects=2)` (gets 0010042 +
-  0010064) + MSDL. Deps pinned to versions the reference r = 0.316 was validated against
-  (nilearn 0.13.1, numpy 2.2.6, scipy 1.17.0, sklearn 1.8.0, pandas 2.3.3, nibabel 5.4.2).
-  Dev runs may bind-mount `$HOME/nilearn_data` to skip the osf download (local flag only;
-  the shipped task still fetches at runtime — flag the osf reliability caveat).
-- Reference oracle runs in well under a minute of compute once data is present; the download
-  dominates wall-clock.
-- Live frontier gate (≥2 families, k≥3) is the maintainer's Step-5; this proposal hits the
-  construction bar (un-cued, off-path, naive-default-wrong, big robust gap, fair guarded
-  grader, oracle 1.0).
-
-## Proof-of-work verifier (v-pow, 2026-09)
-
-SINGLE-SUBJECT single-value task -> QSMDIPOLE model: the lone `r`/verdict is validated through a
-required intermediate. Held-out reference `tests/reference.npz` (built from `solution/compute.py`,
-never shipped): the two extracted ROI mean BOLD time series (`R DMN`, `Cereb`; 176 volumes) +
-`ref_stats` (r=+0.316, naive_p=1.9e-5, corrected_p=0.153, eff_df AR1/Bartlett=24.3/30.1, lag-1
-acf 0.870/0.871). New required output `timeseries.csv` (un-cued: the series the agent already
-extracts). reference.npz sha256 2190103f157de754.
-
-Pillars (subprocess-validated): (1) the submitted ROI series track the held-out reference across
-time (|r|>=0.90, non-constant, correct pairing); (2) recompute r AND the AR1/Bartlett effective df
-FROM the submitted rows -> r matches reference & reported, eff df << n (real lag-1 acf ~0.87);
-(3) verdict graded as numbers: `significant`=False and the corrected p from the submitted series
-> 0.05 while the naive df=n-2 p is < 0.01 (the discriminating gap); (secondary) the
-autocorrelation-recognition prose. `tests/test.sh` adds scipy for the t-distribution.
-
-Validation matrix: honest PASS | no-table FAIL | constant FAIL | fabricated (right r, fake series)
-FAIL | naive (real series, significant=True) FAIL.
-
-Packaging: pinned subject **0010064** (ADHD-200 nilearn.fetch_adhd, MSDL); nilearn 0.13.1 stack.
-Data runtime-fetched; `allow_internet=true` retained. Baking the two derived ROI series into
-`environment/` is a maintainer follow-up.
+See `authoring/REPAIR_STATUS.md` for the current validation state. Earlier
+proposal values and claimed verdict reversals are historical, not current results.
