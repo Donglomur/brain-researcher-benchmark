@@ -1,154 +1,230 @@
-"""Public canonical-HRF task-FC sensitivity with retained source/design/residual evidence."""
-import glob
+"""External prospective TASKFC oracle writer. Import performs no source I/O.
+
+Complete mode processes the fixed ten-person source. The first-person resource
+pilot computes source/design/residual primitives only, never r/z/group endpoints.
+Runtime and absolute paths belong solely in external receipts, not public files.
+"""
+from __future__ import annotations
+import argparse
+import csv
+import hashlib
+import importlib.metadata
 import json
 import os
-import sys
 from pathlib import Path
+import platform
+import sys
+import time
+import warnings
 
 import numpy as np
-import pandas as pd
-from scipy import stats
-
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-OUT.mkdir(parents=True, exist_ok=True)
-TR = 1.5
-RADIUS = 8.0
-ROI = {"L_lateral_occipital": (-30, -90, -6), "R_lateral_occipital": (30, -90, -6)}
-MOTION_COLS = ["X", "Y", "Z", "RotX", "RotY", "RotZ"]
+import oracle_core as core
+import source_reader as source
 
 
-def fail(reason):
-    (OUT / "run_metadata.json").write_text(json.dumps(
-        {"status": "failed_precondition", "reason": reason, "dataset_id": "language_localizer_demo"}, indent=2))
-    (OUT / "connectivity_summary.json").write_text(json.dumps({"status": "failed_precondition", "reason": reason}))
-    (OUT / "findings.md").write_text(f"# Failed precondition\n\n{reason}\n")
-    sys.stderr.write(reason + "\n")
-    sys.exit(1)
+def disjoint(a, b):
+    return a != b and a not in b.parents and b not in a.parents
 
 
-def ols_resid(y, X):
-    y = np.ascontiguousarray(y, dtype=np.float64)
-    X = np.ascontiguousarray(X, dtype=np.float64)
-    beta, _, _, _ = np.linalg.lstsq(X, y, rcond=None)
-    # errstate guards a harmless, BLAS-specific matmul warning (macOS Accelerate) on some
-    # non-contiguous inputs; the residual itself is finite and correct.
-    with np.errstate(all="ignore"):
-        return y - X @ beta
+def prepare_destinations(output, private, report, protected):
+    paths = [source.safe_path(p) for p in (output, private, report) if p is not None]
+    protected = [source.safe_path(p) for p in protected]
+    for i, path in enumerate(paths):
+        core.need(not os.path.lexists(path) and path.parent.is_dir(), 'fresh_destination_existing_parent')
+        core.need(all(disjoint(path, p) for p in protected+paths[:i]), 'overlapping_input_output')
+    output.mkdir(mode=0o700)
+    if private is not None:
+        private.mkdir(mode=0o700)
 
 
-def fisher_mean(vals):
-    return float(np.tanh(np.mean(np.arctanh(np.clip(np.asarray(vals, float), -0.999, 0.999)))))
+def write_json(path, value):
+    with Path(path).open('x', encoding='utf-8') as handle:
+        json.dump(value, handle, sort_keys=True, indent=2, allow_nan=False)
+        handle.write('\n')
 
 
-try:
-    from nilearn import datasets
-    from nilearn.maskers import NiftiSpheresMasker
-    from nilearn.glm.first_level import make_first_level_design_matrix
-except Exception as e:  # pragma: no cover
-    fail(f"nilearn import failed: {e}")
+def write_npz(path, arrays):
+    with Path(path).open('xb') as handle:
+        np.savez_compressed(handle, **arrays)
 
-try:
-    d = datasets.fetch_language_localizer_demo_dataset()
-    data_dir = d["data_dir"] if isinstance(d, dict) or hasattr(d, "keys") else d[0]
-except Exception as e:
-    fail(f"could not resolve language_localizer_demo dataset: {e}")
 
-subs = sorted({os.path.basename(p) for p in glob.glob(os.path.join(data_dir, "sub-*")) if os.path.isdir(p)})
-if not subs:
-    # derivatives-only layout fallback
-    subs = sorted({os.path.basename(p) for p in glob.glob(os.path.join(data_dir, "derivatives", "sub-*"))})
-if len(subs) != 10:
-    fail(f"expected ~10 subjects, found {len(subs)}: {subs}")
+def write_csv(path, columns, rows):
+    with Path(path).open('x', encoding='utf-8', newline='') as handle:
+        writer = csv.DictWriter(handle, fieldnames=columns, extrasaction='raise')
+        writer.writeheader()
+        writer.writerows(rows)
 
-coords = list(ROI.values())
-rows = []
-raws, bgs = [], []
-for s in subs:
-    func = glob.glob(os.path.join(data_dir, "derivatives", s, "func", "*preproc_bold.nii.gz"))
-    ev = glob.glob(os.path.join(data_dir, s, "func", "*events.tsv"))
-    cf = glob.glob(os.path.join(data_dir, "derivatives", s, "func", "*confounds*regressors.tsv"))
-    if not (func and ev and cf):
-        fail(f"missing input for pinned participant {s}")
-    import nibabel as nib
-    n = nib.load(func[0]).shape[-1]
-    events = pd.read_csv(ev[0], sep="\t")
-    conf = pd.read_csv(cf[0], sep="\t")
-    ft = np.arange(n) * TR + TR / 2.0
-    dm = make_first_level_design_matrix(ft, events, hrf_model="glover", drift_model="cosine", high_pass=0.01)
-    task = dm[[c for c in dm.columns if c in ("language", "string")]].values
-    drift = dm[[c for c in dm.columns if c.startswith("drift")]].values
-    motion = conf[[c for c in MOTION_COLS if c in conf.columns]].fillna(0).values
-    N = np.column_stack([np.ones(n), drift, motion])           # common nuisance (drift + motion)
-    NT = np.column_stack([N, task])                            # + task-evoked response
 
-    masker = NiftiSpheresMasker(coords, radius=RADIUS, detrend=False, standardize=False,
-                                t_r=TR, allow_overlap=True)
-    ts = masker.fit_transform(func[0])
+def versions():
+    return dict(python=platform.python_version(), **{n: importlib.metadata.version(n)
+                for n in ('numpy', 'scipy', 'nibabel', 'nilearn')})
 
-    # task-state FC (the requested deliverable): correlation of the cleaned time series
-    raw = float(np.corrcoef(ols_resid(ts[:, 0], N), ols_resid(ts[:, 1], N))[0, 1])
-    # background connectivity: correlation of residuals after removing the task-evoked response
-    bg = float(np.corrcoef(ols_resid(ts[:, 0], NT), ols_resid(ts[:, 1], NT))[0, 1])
-    raw_residuals = ols_resid(ts, N)
-    background_residuals = ols_resid(ts, NT)
-    np.savez_compressed(OUT / f"intermediates_{s}.npz", roi_signals=ts,
-                        nuisance_design=N, task_design=task,
-                        raw_residuals=raw_residuals, background_residuals=background_residuals,
-                        schema_version="taskfc-residual-v2")
-    raws.append(raw)
-    bgs.append(bg)
-    rows.append(dict(subject=s, region_a="L_lateral_occipital", region_b="R_lateral_occipital",
-                     connectivity=raw, background_connectivity=bg))
 
-if len(rows) != 10:
-    fail(f"only {len(rows)} subjects processed")
+def pack_arrays(basis):
+    ids, persons = basis['participant_ids'], basis['participants']
+    max_drift = max(len(persons[s]['designs']['nuisance_names'])-7 for s in ids)
+    columns = ('intercept',)+tuple(f'drift_{i+1}' for i in range(max_drift))+core.MOTION_NAMES+core.TASK_NAMES
+    included = np.zeros((len(ids), 2, len(columns)), dtype=bool)
+    frames, frame_ids, times, raw, design, residuals = [], [], [], [], [], []
+    for i, sid in enumerate(ids):
+        person, d = persons[sid], persons[sid]['designs']
+        n = len(person['raw'])
+        matrix = np.zeros((n, len(columns)), dtype=np.float64)
+        for j, name in enumerate(d['full_names']):
+            matrix[:, columns.index(name)] = d['full_design'][:, j]
+        for arm, names in enumerate((d['nuisance_names'], d['full_names'])):
+            for name in names:
+                included[i, arm, columns.index(name)] = True
+        frames.append(d['frame_indices']); frame_ids.extend([sid]*n)
+        times.append(d['frame_times']); raw.append(person['raw']); design.append(matrix)
+        residuals.append(person['residuals'])
+    return dict(participant_ids=np.asarray(ids), roi_ids=np.asarray(core.ROI_NAMES),
+                model_ids=np.asarray(core.MODEL_NAMES), design_column_ids=np.asarray(columns),
+                frame_participant_id=np.asarray(frame_ids), source_frame_index=np.concatenate(frames),
+                frame_time_s=np.concatenate(times), roi_signals=np.concatenate(raw),
+                design_values=np.concatenate(design), design_included=included,
+                residuals=np.concatenate(residuals))
 
-df = pd.DataFrame(rows)
-# required deliverable: per-subject task-state FC (the raw correlation the instruction asks for)
-df.to_csv(OUT / "connectivity.csv", index=False)
 
-raw_g = fisher_mean(raws)
-bg_g = fisher_mean(bgs)
-t, p = stats.ttest_rel(np.arctanh(np.clip(raws, -0.999, 0.999)), np.arctanh(np.clip(bgs, -0.999, 0.999)))
-n_infl = int(np.sum(np.asarray(raws) > np.asarray(bgs)))
-delta_z = np.arctanh(np.clip(raws, -.999, .999)) - np.arctanh(np.clip(bgs, -.999, .999))
-delta_mean = float(delta_z.mean())
-delta_halfwidth = float(stats.t.ppf(.975, len(rows)-1) * delta_z.std(ddof=1)/np.sqrt(len(rows)))
+def analysis_records(basis):
+    result = []
+    for sid in basis['participant_ids']:
+        person = basis['participants'][sid]
+        models = []
+        names = (person['designs']['nuisance_names'], person['designs']['full_names'])
+        for arm, model in enumerate(core.MODEL_NAMES):
+            fit, support = person['fits'][arm], person['support'][arm]
+            models.append(dict(model_id=model, column_ids=list(names[arm]), rank=fit['rank'],
+                residual_df=fit['residual_df'], singular_values=fit['singular_values'].tolist(),
+                rank_cutoff=fit['rank_threshold'], roi_support=[dict(roi_id=roi,
+                    raw_sample_sd=float(support['raw_sample_sd'][j]),
+                    residual_centered_l2=float(support['residual_centered_l2'][j]),
+                    activity_threshold=float(support['activity_threshold'][j]),
+                    active=bool(support['active'][j])) for j, roi in enumerate(core.ROI_NAMES)]))
+        result.append(dict(subject=sid, models=models))
+    return result
 
-(OUT / "connectivity_summary.json").write_text(json.dumps({
-    "group_connectivity": raw_g,
-    "n_subjects": int(len(rows)),
-    "region_a": "L_lateral_occipital", "region_b": "R_lateral_occipital",
-    "raw_task_state_connectivity": raw_g,
-    "background_connectivity": bg_g,
-    "evoked_inflation": raw_g - bg_g,
-    "analysis_scope": "canonical-HRF model-dependent FC sensitivity; not intrinsic coupling",
-    "inflation_paired_t": float(t), "inflation_p": float(p),
-    "paired_z_sensitivity": {"n": len(rows), "mean_raw_minus_background_z": delta_mean,
-                             "ci95": [delta_mean-delta_halfwidth, delta_mean+delta_halfwidth]},
-    "n_subjects_raw_gt_background": n_infl,
-}, indent=2))
 
-(OUT / "run_metadata.json").write_text(json.dumps({
-    "status": "ok",
-    "dataset_id": "language_localizer_demo",
-    "n_subjects": int(len(rows)),
-    "roi": {"L_lateral_occipital": ROI["L_lateral_occipital"],
-            "R_lateral_occipital": ROI["R_lateral_occipital"], "radius_mm": RADIUS},
-    "preprocessing": "cosine high-pass drift (0.01 Hz) + 6 motion regressors; 8mm spheres; "
-                     "task-state FC = Pearson r of regional BOLD time series; background FC = "
-                     "Pearson r of residuals after also regressing the GLM task-evoked response "
-                     "(language + string, Glover HRF)",
-    "aggregation": "Fisher-z mean across subjects",
-}, indent=2))
+def pilot_summary():
+    return dict(schema_version='taskfc-results-v2', status='resource_pilot', n_subjects=1,
+                region_a=core.ROI_NAMES[0], region_b=core.ROI_NAMES[1],
+                raw=None, background=None, difference_of_group_fisher_mean_r=None,
+                paired_z_sensitivity=None, resource_pilot_scope=dict(
+                    participant_ids=[source.PARTICIPANTS[0]], n_authenticated_source_files=48,
+                    n_structural_participants=10, endpoints_computed=False))
 
-(OUT / "findings.md").write_text(
-    f"# Canonical-HRF task-regression sensitivity\n\n"
-    f"Raw Fisher-z averaged FC={raw_g:.4f}; canonical Glover task-regressed FC={bg_g:.4f}. "
-    f"The signed raw-minus-residual group contrast is {raw_g-bg_g:+.4f}. "
-    "The residual estimate depends on the response model and nuisance choices, and neither "
-    "estimate identifies genuine/intrinsic coupling. This is a paper-derived sensitivity "
-    "application, not a reproduction of Cole's flexible-response correction analysis.\n")
 
-print(f"OK: raw={raw_g:.3f} background={bg_g:.3f} inflation={raw_g-bg_g:+.3f} "
-      f"p={p:.2e} raw>bg in {n_infl}/{len(rows)}")
+def emit(output, private, inputs, basis, pilot):
+    arrays = pack_arrays(basis)
+    if private is not None:
+        write_npz(private / 'analysis_arrays.npz', arrays | dict(
+            canonical_active=np.stack([basis['participants'][s]['active'] for s in basis['participant_ids']])))
+        write_json(private / 'analysis_diagnostics.json', analysis_records(basis))
+    if pilot:
+        result, connectivity = pilot_summary(), []
+    else:
+        core.need(basis['participant_ids'] == list(source.PARTICIPANTS), 'complete_oracle_cohort')
+        replay = core.derive([basis['participants'][s]['residuals'] for s in source.PARTICIPANTS],
+                             [basis['participants'][s]['active'] for s in source.PARTICIPANTS],
+                             source.PARTICIPANTS, n_expected=10)
+        connectivity = replay.pop('rows')
+        result = dict(schema_version='taskfc-results-v2', status='complete', **replay)
+    write_npz(output / 'model_arrays.npz', arrays)
+    for filename, rows in (('cohort.csv', basis['cohort']), ('events.csv', basis['events']),
+                           ('connectivity.csv', connectivity)):
+        fields = list(inputs['schema']['artifacts'][filename]['required_columns'])
+        write_csv(output / filename, fields, rows)
+    write_json(output / 'connectivity_summary.json', result)
+    metadata = dict(schema_version='taskfc-metadata-v2', task_id='TASKFC-001',
+                    status='resource_pilot' if pilot else 'ok', **inputs['pins'],
+                    source_files=[{k: row.get(k) for k in ('path', 'role', 'participant_id', 'size_bytes', 'sha256')}
+                                  for row in inputs['manifest']['files']],
+                    source_observed=basis['source_observed'], analysis_observed=analysis_records(basis),
+                    software_versions=versions())
+    if pilot:
+        metadata['resource_pilot_scope'] = result['resource_pilot_scope']
+        text = ('First-person resource pilot: authenticated all original members and inspected all ten '
+                'structural records, but extracted/fitted only sub-01 primitives. No correlation, Fisher '
+                'transform, paired statistic or group endpoint was computed.\n')
+    else:
+        pair = result['paired_z_sensitivity']
+        text = (f"All ten released participants are reported. Complete-pair support: {pair['n_defined']}/10. "
+                f"Mean nuisance-only minus canonical-Glover residual Fisher z: "
+                f"{pair['mean_raw_minus_background_z']} ({pair['status']}); 95% plug-in paired CI: {pair['ci95']}.\n\n"
+                'This is whole-run sensitivity of two fixed occipital sphere measurements to a canonical '
+                'task-response model. Neither estimate identifies intrinsic or causal coupling; a change '
+                'does not establish successful artifact removal. This is not a reproduction of FIR, HCP, '
+                'simulation ground truth, a population claim or evidence of benchmark difficulty. '
+                'Undefined measurements retain their participants and complete-denominator null summaries.\n')
+    with (output / 'findings.md').open('x', encoding='utf-8') as handle:
+        handle.write(text)
+    return metadata
+
+
+def compute(args):
+    output = source.safe_path(args.output_dir)
+    private = source.safe_path(args.private_dir) if args.private_dir else None
+    report = source.safe_path(args.report) if args.report else None
+    data, manifest, method, schema = map(source.safe_path,
+        (args.data_dir, args.manifest_path, args.contract_path, args.schema_path))
+    code = source.safe_path(Path(__file__).absolute().parent)
+    code_root = code.parent if (code.parent / 'task.toml').is_file() else code
+    prepare_destinations(output, private, report, [data, manifest, method, schema, code_root])
+    start, caught = time.monotonic(), []
+    try:
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter('always')
+            inputs = source.authenticate(data, manifest, method, schema)
+            basis = source.load_primitives(inputs, [source.PARTICIPANTS[0]] if args.pilot_first_subject else None)
+            metadata = emit(output, private, inputs, basis, args.pilot_first_subject)
+        metadata['warnings'] = [str(w.message) for w in caught]
+        write_json(output / 'run_metadata.json', metadata)
+        inventory = {p.name: dict(size_bytes=p.stat().st_size, sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+                     for p in sorted(output.iterdir())}
+        receipt = dict(status=metadata['status'], elapsed_s=time.monotonic()-start,
+                       participant_ids=basis['participant_ids'], n_subjects=len(basis['participant_ids']),
+                       n_authenticated_source_files=48,
+                       n_frames={s: len(basis['participants'][s]['raw']) for s in basis['participant_ids']},
+                       endpoints_computed=not args.pilot_first_subject,
+                       warnings=[dict(category=w.category.__name__, message=str(w.message)) for w in caught],
+                       files=inventory, **inputs['pins'])
+        if report is not None:
+            write_json(report, receipt)
+        return receipt
+    except Exception as exc:
+        failure = dict(status='failed_precondition', reason=f'{type(exc).__name__}: {exc}',
+                       elapsed_s=time.monotonic()-start,
+                       warnings=[dict(category=w.category.__name__, message=str(w.message)) for w in caught])
+        write_json(output / 'failure_report.json', failure)
+        if report is not None and not os.path.lexists(report):
+            write_json(report, failure)
+        raise
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--data-dir', default=os.environ.get('DATA_DIR', '/app/data/taskfc'))
+    parser.add_argument('--manifest-path', default=os.environ.get('SOURCE_MANIFEST', '/app/source_manifest.json'))
+    parser.add_argument('--contract-path', default=os.environ.get('METHOD_CONTRACT', '/app/method_contract.json'))
+    parser.add_argument('--schema-path', default=os.environ.get('OUTPUT_SCHEMA', '/app/output_schema.json'))
+    parser.add_argument('--output-dir', default=os.environ.get('OUTPUT_DIR', '/app/output'))
+    parser.add_argument('--private-dir')
+    parser.add_argument('--report')
+    parser.add_argument('--pilot-first-subject', action='store_true')
+    parser.add_argument('--print-contract', action='store_true')
+    args = parser.parse_args()
+    try:
+        if args.print_contract:
+            raw = source.stable_bytes(args.contract_path, 16*1024**2)
+            source.strict_json(raw)
+            sys.stdout.write(raw.decode('utf-8'))
+        else:
+            print(json.dumps(compute(args), sort_keys=True, allow_nan=False))
+    except Exception as exc:
+        print(f'{type(exc).__name__}: {exc}', file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

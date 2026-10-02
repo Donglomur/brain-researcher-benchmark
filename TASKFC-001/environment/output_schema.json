@@ -1,0 +1,189 @@
+{
+  "schema_version": "taskfc-outputs-v2",
+  "status": "frozen_before_original_BOLD_values",
+  "task_id": "TASKFC-001",
+  "source_manifest_sha256": "6a463aec353017c1c1b514fe2073b43088b1a9e8da4febcb0acfbd759ae397c6",
+  "method_sha256": "fb6a014e793013f41c80d8dcb3cbacd5d6567143dc6f8f8c93f339acd5eb136a",
+  "cohort": {
+    "n_expected": 10,
+    "participant_ids": ["sub-01", "sub-02", "sub-03", "sub-04", "sub-05", "sub-06", "sub-07", "sub-08", "sub-09", "sub-10"],
+    "membership": "Exactly the ten literal participant/run identities in the frozen source manifest; never digit-normalize, merge aliases, drop undefined people or substitute another run."
+  },
+  "axes": {
+    "S": 10,
+    "T_per_participant": 229,
+    "F": 2290,
+    "J": 15,
+    "roi_ids": ["L_lateral_occipital", "R_lateral_occipital"],
+    "model_ids": ["nuisance_only", "glover_task_residual"],
+    "design_column_order": ["intercept", "drift_1", "drift_2", "drift_3", "drift_4", "drift_5", "drift_6", "X", "Y", "Z", "RotX", "RotY", "RotZ", "language", "string"],
+    "frame_key": ["frame_participant_id", "source_frame_index"],
+    "row_order": "Any coherent participant/frame/ROI/model/design-column permutation is accepted after keyed joins. Each participant's complete frame indices are exactly 0 through T-1."
+  },
+  "numerical_authority": {
+    "source": "Authenticate the complete private-pinned original inventory; derive geometry, ROI means, event/motion designs, rank, support and canonical residuals independently of output artifacts.",
+    "receipts_only": ["roi_signals", "design_values", "frame_time_s", "CSV r/z/paired-difference scalars"],
+    "downstream": "Direct source-bound accepted residuals are the sole downstream primitive for one replay of participant signed r, Fisher z, paired z differences and every group summary. Neither rounded designs nor CSV scalars are re-fed into an additional estimator.",
+    "support": "Canonical source activity and rank are exact authorities. Inactive residual columns remain finite receipts but cannot be made defined by submitted jitter. No expected correlation, sign, group ordering, significance, between-person variability or paper finding is a grading condition."
+  },
+  "artifacts": {
+    "cohort.csv": {
+      "key": ["subject"],
+      "rows": 10,
+      "required_columns": {
+        "subject": "literal source participant ID",
+        "bold_path": "exact source-manifest relative path",
+        "events_path": "exact source-manifest relative path",
+        "confounds_path": "exact source-manifest relative path",
+        "n_frames": "exact integer 229",
+        "operational_TR_s": "1.5 seconds",
+        "operational_frame_origin_s": "0.75 seconds, explicit operational convention, not a proven slice reference",
+        "left_n_voxels": "exact integer 22; empty geometry fails source precondition",
+        "right_n_voxels": "exact integer 25",
+        "left_support_sha256": "exact geometry support digest",
+        "right_support_sha256": "exact geometry support digest"
+      },
+      "support_digest": "SHA256 of b'TASKFC_support_v2\\n' followed by ascending C-flat support indices serialized little-endian signed int64; dimensions/affine are separately source-bound metadata."
+    },
+    "events.csv": {
+      "key": ["subject", "source_event_index"],
+      "rows": "240 rows: every original row for all ten people, 24 per participant, 12 language and 12 string; no deduplication of the ledger",
+      "required_columns": {
+        "subject": "literal source participant ID",
+        "source_event_index": "original zero-based event row, exact integer",
+        "trial_type": "literal source token, language or string",
+        "onset_token": "literal original onset text",
+        "duration_token": "literal original duration text",
+        "modulation_token": "blank because the authenticated original source has no modulation column",
+        "onset_s": "finite interpreted source onset",
+        "duration_s": "finite nonnegative interpreted source duration",
+        "modulation": "exactly one because the source modulation column is absent"
+      },
+      "duplicate_policy": "All original rows remain visible. Design construction sums exact (condition,onset,duration) duplicate amplitudes in first-occurrence order using the method's accurate sum."
+    },
+    "model_arrays.npz": {
+      "required_arrays": {
+        "participant_ids": {"shape": ["S"], "type": "literal UTF8 string"},
+        "roi_ids": {"shape": [2], "type": "literal UTF8 string"},
+        "model_ids": {"shape": [2], "type": "literal UTF8 string"},
+        "design_column_ids": {"shape": ["J"], "type": "literal UTF8 string"},
+        "frame_participant_id": {"shape": ["F"], "type": "literal UTF8 string"},
+        "source_frame_index": {"shape": ["F"], "type": "finite exactly integral non-Boolean numeric"},
+        "frame_time_s": {"shape": ["F"], "type": "finite real numeric"},
+        "roi_signals": {"shape": ["F", 2], "type": "finite real non-Boolean numeric"},
+        "design_values": {"shape": ["F", "J"], "type": "finite real non-Boolean numeric"},
+        "design_included": {"shape": ["S", 2, "J"], "type": "Boolean"},
+        "residuals": {"shape": ["F", 2, 2], "type": "finite real non-Boolean numeric; axes frame,model,ROI"}
+      },
+      "padding": "Union-design columns absent from a participant are zero in that person's frame rows and false in design_included. A column present but numerically zero is still included. The task columns are excluded only from nuisance_only. No padding frames.",
+      "serialization": "Standard NumPy .npz with no pickle/object/structured arrays; fixed required shapes. Exactly integral float keys and finite float32 measurements are allowed only when they satisfy the published numerical bounds. Equivalent arithmetic is accepted by bounds, not dtype or software fingerprint."
+    },
+    "connectivity.csv": {
+      "key": ["subject"],
+      "rows": 10,
+      "required_columns": {
+        "subject": "literal source participant ID",
+        "region_a": "L_lateral_occipital",
+        "region_b": "R_lateral_occipital",
+        "raw_status": "ok|inactive_left|inactive_right|inactive_both",
+        "background_status": "ok|inactive_left|inactive_right|inactive_both",
+        "connectivity": "signed nuisance-only Pearson r in [-1,1], blank iff raw_status is not ok",
+        "background_connectivity": "signed Glover residual Pearson r in [-1,1], blank iff background_status is not ok",
+        "raw_fisher_z": "atanh(clip(unrounded own nuisance-only r,-.999,.999)), blank iff undefined",
+        "background_fisher_z": "atanh(clip(unrounded own Glover r,-.999,.999)), blank iff undefined",
+        "paired_status": "ok|incomplete_support",
+        "raw_minus_background_z": "signed own nuisance Fisher z minus Glover Fisher z, blank iff either model is undefined"
+      },
+      "authority": "These scalars are receipts of the one accepted-residual replay, not separately rounded inputs to group inference."
+    },
+    "connectivity_summary.json": {
+      "required": {
+        "schema_version": "taskfc-results-v2",
+        "status": "complete",
+        "n_subjects": 10,
+        "region_a": "L_lateral_occipital",
+        "region_b": "R_lateral_occipital",
+        "raw": "model_group_record",
+        "background": "model_group_record",
+        "difference_of_group_fisher_mean_r": "raw.fisher_mean_r minus background.fisher_mean_r; null unless both group values are defined",
+        "paired_z_sensitivity": "paired_group_record"
+      },
+      "model_group_record": {
+        "status": "ok|incomplete_support",
+        "n_expected": 10,
+        "n_defined": "exact integer 0..10",
+        "mean_z": "fsum of all ten own person z values divided by ten, or null for incomplete support",
+        "fisher_mean_r": "tanh(mean_z), or null for incomplete support"
+      },
+      "paired_group_record": {
+        "status": "ok|zero_variance|incomplete_support",
+        "n_expected": 10,
+        "n_defined": "exact integer 0..10 paired people",
+        "mean_raw_minus_background_z": "signed own ten-person mean, null if incomplete",
+        "sample_sd": "nonnegative sample SD, null if incomplete",
+        "standard_error": "nonnegative SD/sqrt(10), null if incomplete",
+        "df": "9 when complete, null if incomplete",
+        "t": "finite mean/SE when SE>0, null for zero_variance or incomplete_support",
+        "p": "two-sided t(9) p in [0,1], null for zero_variance or incomplete_support",
+        "ci95": "two finite ordered endpoints when complete; point [mean,mean] for zero variance; null if incomplete"
+      },
+      "complete_status": "Complete describes successful processing and complete reporting, not that every correlation or group statistic is defined. No available-case group means."
+    },
+    "run_metadata.json": {
+      "required": {
+        "schema_version": "taskfc-metadata-v2",
+        "task_id": "TASKFC-001",
+        "status": "ok",
+        "source_manifest_sha256": "exact private-pinned public manifest byte SHA",
+        "method_sha256": "exact private-pinned public method byte SHA",
+        "output_schema_sha256": "exact private-pinned public schema byte SHA",
+        "source_files": "closed 48-record source identity list keyed path with path,role,participant_id nullable,size_bytes,sha256; all 47 archive members plus one pinned notice, including access_data.py only as inert provenance, never executed",
+        "source_observed": "canonical public record of ordered original event/motion headers, participant headers shape/selected affine/source dtype/units/effective scaling/raw clock and separate operational clock; no undocumented timing alignment claim",
+        "analysis_observed": "complete participant/model keyed list with design column names, rank,residual_df,singular_values,rank_cutoff and two ROI raw_sample_sd,residual_centered_l2,activity_threshold,active records",
+        "software_versions": "nonempty object of actual version strings; unneeded library may say not_used; no required version equality",
+        "warnings": "list of descriptive strings; no required absence or exact prose"
+      },
+      "source_observed_record": {
+        "headers": "object keyed by all ten literal participant IDs with header_record",
+        "event_column_names": "object keyed by all ten literal participant IDs with original ordered event header names",
+        "confound_column_names": "object keyed by all ten literal participant IDs with original ordered confound header names",
+        "selected_motion_columns": ["X", "Y", "Z", "RotX", "RotY", "RotZ"],
+        "operational_clock": "object keyed by all ten literal IDs: {TR_s:1.5,frame_origin_s:0.75}; origin is operational, not a verified acquisition slice reference"
+      },
+      "header_record": {
+        "shape": [45, 53, 43, 229],
+        "selected_affine": "finite selected 4x4 source affine",
+        "storage_dtype": "<f4 with semantic dtype aliases accepted, not a string fingerprint",
+        "spatial_units": "mm",
+        "temporal_units": "sec",
+        "zooms": "four source zoom values",
+        "raw_toffset": "raw source header value",
+        "raw_scl_slope": "raw source header value",
+        "raw_scl_inter": "raw source header value",
+        "effective_slope": "finite effective NIfTI scaling",
+        "effective_intercept": "finite effective NIfTI intercept"
+      },
+      "header_nonfinite": "Only raw documentary numeric header fields may use literal NaN/+Inf/-Inf strings when the authenticated header requires them. All analysis arrays remain finite. Additional documentary qform/sform/description fields are optional, not hidden required gates.",
+      "analysis_observed_record": "list keyed subject; each has models keyed model_id, with column_ids,rank,residual_df,singular_values,rank_cutoff and roi_support records keyed roi_id containing raw_sample_sd,residual_centered_l2,activity_threshold,active. column_ids is order-free exact unique membership; singular values retain descending spectrum order. All subject/model/ROI record lists are keyed and may be reordered.",
+      "model_columns": "nuisance_only has 13 columns, glover_task_residual has 15. Rank/activity are source-derived after numerical execution, not predetermined outcome targets.",
+      "source_header_names": {"events": ["onset", "duration", "trial_type"], "confounds": ["RotX", "RotY", "RotZ", "X", "Y", "Z"]},
+      "source_facts": "All ten sources have 229 frames and 24 events. Actual header zooms, selected affine and raw scaling/clock fields bind authenticated originals; effective scaling is1/0. Header/sidecar TR is1.5s; the0.75s design origin remains an explicitly separate convention."
+    },
+    "findings.md": {
+      "type": "nonempty UTF8 text",
+      "grading": "No keyword, effect-direction, significance, comparison-band or paper-replication prose gate."
+    }
+  },
+  "common_rules": {
+    "undefined": "Only declared undefined scalar measurements use CSV blank or JSON null. Never NaN/Infinity, omitted participants, omitted rows or nonfinite residual placeholders.",
+    "types": "JSON Boolean is not a number; required numbers cannot be numeric text. CSV integer notation may be numerically equivalent when exactly integral and int64-bounded; literal identities never undergo numeric normalization.",
+    "duplicates": "Reject duplicate JSON/CSV keys, duplicate joined rows, duplicate NPZ members, missing required columns/arrays and inconsistent axes before numeric comparisons.",
+    "extras": "Harmless finite extra numeric fields/arrays and descriptive text may be present within declared bounds. Unknown fields cannot replace required evidence. Findings remain free prose.",
+    "tolerances": "Use final method.tolerances by measurement layer; no additional hidden source-outcome comparison or repeated rounded-receipt estimator.",
+    "domains": "Correlation[-1,1], p[0,1], SD/SE/norm/threshold nonnegative. Fisher serialization may exceed atanh(.999) by at most derived receipt tolerance; direct own-value comparison remains mandatory.",
+    "failure_marker": "Any lstat-visible failure_report.json, including empty, directory or dangling symlink, invalidates an otherwise complete success output.",
+    "resource_limits": {"max_total_bytes": 67108864, "max_csv_bytes": 16777216, "max_json_bytes": 8388608, "max_findings_bytes": 1048576, "max_npz_bytes": 67108864, "max_npz_expanded_bytes": 134217728, "max_npz_members": 64, "max_npz_array_ndim": 32, "max_array_elements": 134217728, "max_npy_header_bytes": 16384, "max_csv_rows": 100000, "max_csv_field_characters": 1048576, "max_inventory_entries": 1000, "max_json_depth": 64},
+    "array_container": "NPZ ZIP stored/deflated, regular flat .npy members, no encryption; NPY format1.0 or2.0 with exact bounded declared shape/payload length. No object/pickle/structured or complex arrays.",
+    "production_boundary": "Production validates the submitted artifacts against this contract. Equivalence transformations and output mutations on known oracle artifacts are authoring QA only, never an extra closure requirement on arbitrary accepted submissions."
+  }
+}

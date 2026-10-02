@@ -1,73 +1,100 @@
-# Task-state functional connectivity of a co-engaged visual region pair (TASKFC-001)
+# Canonical-response sensitivity of task-state connectivity
 
-## Scientific context
+Quantify how adding canonical task-response regressors changes whole-run
+functional connectivity between two fixed occipital regions in the ten-person
+language-localizer demo. Report both estimates and their signed within-person
+Fisher-z difference. An increase, decrease or negligible change is a valid result.
 
-During a visual language-localizer task, occipital visual cortex is strongly engaged by
-the rapid serial visual presentation of the stimuli. A basic quantity of interest is the
-**functional connectivity between homologous left and right visual regions while the task
-is being performed** — i.e., how strongly the two regions' BOLD signals co-vary during the
-task run. Task-state functional connectivity of this kind is routinely reported alongside
-activation results and is used to compare coupling across regions, conditions, and groups.
+This is a paper-derived **method-sensitivity exercise**, not a reproduction of
+Cole et al. (2019), [Methods 2.7 and Figure 4](https://doi.org/10.1016/j.neuroimage.2018.12.054).
+That paper motivates checking task-response confounding; its simulated ground
+truth, flexible-response correction, condition-specific analysis and empirical
+cohort are not implemented here. Neither of our two estimates identifies true,
+intrinsic or causal coupling, and their difference does not prove that task
+confounding has been removed.
 
-## Task
+## Inputs and public contract
 
-Using the nilearn-pinned language-localizer demonstration dataset
-(`nilearn.datasets.fetch_language_localizer_demo_dataset`, **all 10 subjects**; each subject
-has one preprocessed BOLD run of the `languagelocalizer` task, a 6-parameter motion
-confounds file, and a BIDS `events.tsv` describing the block timing of the two stimulus
-conditions, `language` and `string`), **estimate the task-state functional connectivity
-between the left and right lateral occipital cortex during the task run, and report how
-strongly these two regions are coupled.**
+All inputs are already available offline at `/app/data/taskfc`. Use exactly
+`sub-01` through `sub-10`, one released preprocessed run per person, all 229
+frames. The checksum-pinned release contains their BOLD, original events,
+six-column motion tables, sidecars and provenance. Do not fetch replacements,
+impute missing source data or execute the archive's inert `access_data.py`.
 
-Define the two regions as **8 mm-radius spheres** centred on the MNI coordinates
+Read these public specifications before implementing the analysis:
 
-* left lateral occipital cortex  — **(-30, -90, -6)**
-* right lateral occipital cortex — **( 30, -90, -6)**
+- `/app/source_manifest.json`: exact original paths, identities and provenance.
+- `/app/method_contract.json`: spatial, temporal, numerical and inferential rules.
+- `/app/output_schema.json`: complete artifact keys, types, tolerances and limits.
+- `/app/SOURCE_NOTICE.md`: attribution, release lineage and source-notice caveats.
 
-For each subject, extract the mean BOLD time series from each sphere and quantify the
-functional connectivity between the two regions across the task run (Pearson correlation of
-the regional time series; aggregate across subjects with a Fisher *z* transform). The
-standard preprocessing choices the analysis leaves to the analyst (nuisance regression,
-detrending, temporal filtering, signal normalisation) should follow common practice.
+The computational contract is explicit, not a hidden estimator challenge:
 
-Report, in plain terms, **the task-state functional connectivity between the two regions**
-and what it says about how these regions are coupled during the task. State only what your
-analysis actually supports.
+1. Extract float64 means from native-grid voxel centers within 8 mm of
+   `(-30,-90,-6)` and `(30,-90,-6)`, named `L_lateral_occipital` and
+   `R_lateral_occipital`. Use the original selected affine in millimeters,
+   squared distance `<=64`, no mask, smoothing, resampling or nearest-voxel rescue.
+2. Use every frame with operational time `1.5*frame_index+0.75` seconds.
+   Headers and sidecars establish TR=1.5 s. The half-TR origin is a declared
+   computational convention, not verified acquisition/slice-time alignment.
+3. Fit two nested whole-run models. `nuisance_only` contains an intercept,
+   six cosine drift columns at the specified 0.01-Hz cutoff and all six motion
+   columns in order `X,Y,Z,RotX,RotY,RotZ`. `glover_task_residual` adds separate
+   `language` and `string` Glover-HRF columns from every original event. Use the
+   public HRF discretization (oversampling 50, minimum onset -24 s), not FIR,
+   derivatives, extra filtering, whitening or singular-value regularization.
+4. Use the public rank-aware SVD projection and numerical activity rule.
+   Rank deficiency and inactive residuals are legitimate outcomes. Preserve
+   all people and finite primitive arrays; use the prescribed null/status
+   representation when a correlation is undefined.
+5. For each model, compute signed Pearson correlations and equal-person
+   Fisher-z group means. Clip only the Fisher transform input to +/-0.999.
+   Report the signed paired change `z_nuisance-z_glover`, its sample SD,
+   standard error, two-sided paired-t summary and 95% t interval. With zero
+   standard error, report a point interval and null t/p. A group quantity
+   requires complete support from all ten people; do not silently average a
+   reduced cohort.
 
-## Output Location
+Equivalent implementations are welcome within the public numerical tolerances.
+The verifier reconstructs raw means, designs and residual support from the
+original sources. Submitted raw/design arrays are receipts, not inputs for
+refitting rounded designs. Accepted source-bound residuals are the single
+downstream basis for all correlations and group arithmetic; rounded CSV/JSON
+scalars are not fed into another estimator. No expected effect, sign, ordering,
+significance, cross-person variability or prose keyword is a grading condition.
 
-## Public model-sensitivity contract
+## Deliverables
 
-Report both raw nuisance-cleaned FC and canonical Glover-HRF task-regressed FC. This is
-a paper-derived canonical-response sensitivity case, not the flexible-FIR correction in
-Cole's original analysis. Neither raw nor residual FC identifies true/intrinsic coupling.
-Save intermediates_SUBJECT.npz for each of exactly10 subjects with roi_signals,
-nuisance_design, task_design, raw_residuals and background_residuals. These support
-OLS residual recomputation; nuisance_design is intercept+cosine drift+motion, task_design
-is the language/string Glover response with the event timing and TR specified above.
-In connectivity_summary.json add paired_z_sensitivity: n, mean_raw_minus_background_z,
-and ci95, from participant-wise arctanh(raw)-arctanh(background), using t(n-1) intervals.
-Report the signed measured sensitivity and limitations; a decrease is not a grading requirement.
+Write these seven files to `${OUTPUT_DIR}` (default `/app/output`):
 
+- `cohort.csv`: ten literal participant/run identities, frame counts, clocks
+  and source-derived sphere support counts/digests.
+- `events.csv`: all 240 original rows with source indices, original tokens
+  and interpreted onset/duration/modulation; do not deduplicate this ledger.
+- `model_arrays.npz`: complete keyed frame, participant, ROI, model and design
+  axes; raw ROI means, design receipts, model inclusion masks and both residuals.
+- `connectivity.csv`: both signed person-level estimates, Fisher transforms,
+  paired changes and explicit support statuses.
+- `connectivity_summary.json`: complete-cohort model means and paired inference.
+- `run_metadata.json`: source/contract hashes, original headers/columns,
+  operational clock, canonical rank/support diagnostics and actual software.
+- `findings.md`: a short interpretation of the measured sensitivity and its
+  limitations. Do not claim this establishes true coupling or replicates the
+  paper's result.
 
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
+The schema specifies the exact fields. Coherent row/axis permutations, declared
+rounding and harmless bounded extra fields are allowed. Literal identities must
+not be digit-normalized; all required counts/keys/statuses must be correct.
+No pickle/object arrays, NaN/Infinity placeholders or omitted undefined people.
 
-## Required Outputs
+## Completion and failures
 
-- `connectivity.csv` — one row per subject: `subject, region_a, region_b, connectivity`
-  (the per-subject functional connectivity between the two regions), plus any additional
-  per-subject connectivity estimate(s) you computed, one column each.
-- `connectivity_summary.json` — the group-level connectivity (Fisher-*z* averaged Pearson
-  correlation) between the two regions as `{"group_connectivity": ..., "n_subjects": ...}`,
-  plus any additional connectivity summaries you computed.
-- `run_metadata.json` — dataset id, n subjects, ROI definition (coordinates, radius), and
-  the preprocessing choices you made.
-- `findings.md` — a short written summary reporting the task-state functional connectivity
-  between the two regions and what it indicates about their coupling during the task. State
-  only what your analysis actually supports.
+Reward is binary: 1 only when the complete source-bound submission passes the
+declared checks, otherwise 0. There is no proportional/partial-result scoring.
 
-## Failure handling
-
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a non-empty
-reason, and still write parseable `run_metadata.json`, `connectivity_summary.json`, and
-`findings.md`.
+Use a fresh output directory or preserve existing outputs. If an input or
+computation precondition fails, exit nonzero and write a nonempty
+`failure_report.json` with status `failed_precondition` and a factual reason.
+Any such marker overrides otherwise complete or stale success files. Do not
+fabricate successful measurements, overwrite protected inputs or hide a failure
+by dropping a person. Authoring pilots are not completed benchmark submissions.

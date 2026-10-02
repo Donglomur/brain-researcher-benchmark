@@ -1,0 +1,83 @@
+{
+  "schema_version": "taskfc-method-v2",
+  "status": "frozen_after_structure_before_original_BOLD_values",
+  "task_id": "TASKFC-001",
+  "source": {
+    "source_manifest_sha256": "6a463aec353017c1c1b514fe2073b43088b1a9e8da4febcb0acfbd759ae397c6",
+    "data_dir": "/app/data/taskfc",
+    "archive_version": 1,
+    "n_original_and_provenance_members": 48,
+    "n_frames_by_participant": {"sub-01": 229, "sub-02": 229, "sub-03": 229, "sub-04": 229, "sub-05": 229, "sub-06": 229, "sub-07": 229, "sub-08": 229, "sub-09": 229, "sub-10": 229},
+    "shape": [45, 53, 43, 229],
+    "events_per_participant": 24,
+    "conditions_per_participant": {"language": 12, "string": 12},
+    "event_columns": ["onset", "duration", "trial_type"],
+    "confound_source_columns": ["RotX", "RotY", "RotZ", "X", "Y", "Z"],
+    "observed_geometry": {"left_n_voxels": 22, "right_n_voxels": 25},
+    "source_preconditions": "The frozen original headers, tables and provenance are pinned by source bytes. All ten runs and all released frames are required. Source corruption/nonfinite measured voxels fail, without imputation or alternate dataset/run fallback. access_data.py is inert provenance and must not be executed by staging/oracle/verifier."
+  },
+  "scope": "Ten-person whole-run canonical-response FC sensitivity method control. Not a reproduction of Cole et al.'s FIR, simulation ground truth, HCP empirical result or condition-specific FC; neither estimate identifies intrinsic or causal coupling.",
+  "paper": {"doi": "10.1016/j.neuroimage.2018.12.054", "anchors": ["Methods 2.7", "Figure 4"], "role": "Motivation for checking task-response model sensitivity, not an expected numerical finding."},
+  "cohort": {"n_expected": 10, "membership": "Closed literal participant/run membership in source_manifest.json; no fallback, selection by effect, available-case group averaging or duplicate alias normalization."},
+  "spatial": {
+    "roi_ids": ["L_lateral_occipital", "R_lateral_occipital"],
+    "centers_mm": [[-30, -90, -6], [30, -90, -6]],
+    "radius_mm": 8,
+    "support": "Use every in-FOV native voxel center whose squared physical distance from the center is <=64, no epsilon. Voxel world coordinates are ijk @ affine[:3,:3].T + affine[:3,3], using nibabel's selected original affine (sform code2 for this release) in original mm units. Distance association is (dx*dx+dy*dy)+dz*dz in float64. Sort C-flat support indices ascending. No nearest-voxel rescue, mask, smoothing, resampling or intensity-based selection. Empty support fails the source precondition.",
+    "mean": "Decode effective NIfTI scaling into float64, select voxels in fixed support order, contiguous float64 mean per frame and ROI. Finite selected voxels and means are required; unselected intensities do not create an extra QC gate.",
+    "coordinate_boundary": "MNI provenance is the released derivative description, not an independently verified nonlinear-registration or anatomical-localization result."
+  },
+  "clock": {"TR_s": 1.5, "frame_origin_s": 0.75, "frame_time_formula": "1.5*source_frame_index+0.75 seconds", "evidence": "All ten original NIfTI headers and BOLD sidecars agree on TR1.5 seconds. Header toffset is0. The retained half-TR origin0.75 is an explicit computational convention, not documented measured slice-time/stimulus alignment.", "frame_policy": "Every released BOLD frame0..228; no dummy-volume trimming, slice-time shift, censoring or task-only frame mask. Keep raw header clock separate from the operational design clock."},
+  "design": {
+    "conditions": ["language", "string"],
+    "motion_columns": ["X", "Y", "Z", "RotX", "RotY", "RotZ"],
+    "motion_policy": "Exactly one finite row per frame for all six literal columns; no missing-column omission, zero imputation, interpolation or nuisance selection. Preserve extra documentary columns but do not fit them.",
+    "events": "Preserve all original rows and tokens. Require finite onset/duration, nonnegative duration, both and only declared conditions. Finite modulation if present, otherwise one. Sum amplitudes of duplicate (condition,onset,duration) triples with math.fsum in first-occurrence order while preserving every row receipt. Reject any onset before first_frame_time-24. No task-timing replacement or condition selection.",
+    "hrf": {"model": "glover", "implementation": "nilearn.glm.first_level.hemodynamic_models.compute_regressor at 0.13.1", "source_commit": "8de9de0cabc4170d6c6c4be8c709818cffba7a62", "oversampling": 50, "min_onset_s": -24, "regressor_order": ["language", "string"], "note": "Use the public sampler including zero-duration-bin and finite-grid clipping behavior, one column per condition. No derivatives, FIR or cross-condition orthogonalization."},
+    "cosine": {"high_pass_hz": 0.01, "count": "K=min(T-1,floor(2*T*0.01*TR))", "formula": "sqrt(2/T)*cos((pi/T)*(frame_index+0.5)*k), k=1..K", "order": "ascending k"},
+    "models": ["nuisance_only", "glover_task_residual"],
+    "nuisance": "[ones, cosine columns, six motion columns]",
+    "glover": "[nuisance, language, string]",
+    "no_hidden_preprocessing": "No full_rank singular-value shifting, column normalization, band-pass, extra detrend, whitening, regularization or zscore. The cosine nuisance projection supplies the high-pass component."
+  },
+  "projection": {
+    "dtype": "C-contiguous float64 X and Y before SVD/projection; both ROI columns jointly",
+    "canonical_solver": "scipy.linalg.svd, lapack_driver=gesvd, full_matrices=False, check_finite=True",
+    "cutoff": "max(T,P)*float64_epsilon*s_max",
+    "retention": "Strict singular_value>cutoff; rank deficiency is valid.",
+    "residual": "Y-U_keep@(U_keep.T@Y), both ROI columns jointly, the parentheses specify association.",
+    "residual_df": "T-rank, descriptive; no additional minimum-df acceptance target",
+    "independence": "Oracle and grader share the declared solver, HRF sampler and NumPy/SciPy primitives. They independently authenticate/decode source and enumerate ROI supports and implement replay. This is not independent verification of the mathematical validity of those shared dependencies."
+  },
+  "activity": {
+    "constant": "If all entries are exactly equal, return exact zero centered vector/norm.",
+    "centering": "For a nonconstant finite vector x, scale=max(abs(x)); center the normalized vector using math.fsum(x/scale)/T, then return centered normalized vector times scale. Compute L2 by scale-first sum of squares. No epsilon denominator.",
+    "raw_sample_sd": "centered_L2(raw_ROI)/sqrt(T-1)",
+    "threshold": "1e-12*sqrt(T)*max(1,raw_sample_sd)",
+    "active": "T>=2 and centered_L2(canonical_residual)>threshold for each ROI/model; same raw scale for both models.",
+    "authority": "Canonical support/rank comes only from authenticated sources. Harmless within-tolerance jitter in an inactive submitted residual does not activate it. This numerical resolution convention is not a biological QC criterion or arbitrary-signal-unit invariance."
+  },
+  "inference": {
+    "authority": "Directly source-bound accepted residuals are the sole downstream numerical primitive. Compute person r,z,paired z contrast and all group values from one replay. CSV/JSON scalar receipts, raw Y and design receipts are never used to refit or define another endpoint.",
+    "pearson": "Accurately scale-center accepted residuals as specified under activity. Compute math.fsum(x_center_scaled*y_center_scaled)/(stable_L2(x_center_scaled)*stable_L2(y_center_scaled)). Both canonical ROI supports must be active. Clamp only an arithmetic excursion <=1e-12 outside [-1,1]; larger/nonfinite values fail.",
+    "fisher_clip": 0.999,
+    "fisher": "atanh(clip(r,-0.999,0.999)); report unclipped signed r separately",
+    "group": "For each model, tanh(math.fsum(all ten person z)/10), equal person weights; also report the signed difference between these two r-scale means, separately from mean paired z change.",
+    "paired": "d=z_nuisance-z_glover; mean=math.fsum(d)/10; sample SD via exactconstant guard and accurate centered norm/sqrt(9); SE=SD/sqrt(10); two-sided t with df9; CI=mean +/- scipy.stats.t.ppf(.975,9)*SE.",
+    "zero_variance": "If SE=0, status=zero_variance, CI=[mean,mean], t and p null; no infinite JSON or fabricated p-value.",
+    "incomplete": "Keep every participant, all finite residuals and explicit inactive-pair status with null r/z/d. Each model group needs all ten defined model results; paired inference needs all ten pairs. Otherwise report incomplete_support, expected/defined counts and null numerical summaries. Never available-case average.",
+    "boundary": "A signed descriptive change and conventional between-person CI in this convenience cohort is not proof of artifact removal, true coupling, a population effect or uncertainty over model choice. No required direction, significance, minimum change or nonconstant person pattern."
+  },
+  "tolerances": {
+    "raw_roi": {"atol": 1e-6, "rtol": 1e-6},
+    "design": {"atol": 1e-10, "rtol": 1e-8},
+    "residual": {"atol": 1e-6, "rtol": 1e-6},
+    "active_centered_relative_l2": 1e-6,
+    "active_centered_fidelity": "Use a common prescale to accurately center accepted and canonical residuals, compare centered difference L2 <=1e-6*canonical centered L2, with no absolute floor.",
+    "timing": {"atol": 1e-9, "rtol": 0},
+    "header": {"atol": 1e-9, "rtol": 1e-9},
+    "rank_support_diagnostics": {"atol": 1e-10, "rtol": 1e-6},
+    "derived": {"atol": 1e-6, "rtol": 0},
+    "exact": "Literal identities, shapes, counts, Boolean masks, canonical rank/activity and statuses; no broadcast matching or numeric aliases for literal subject/ROI/model/column names."
+  }
+}
