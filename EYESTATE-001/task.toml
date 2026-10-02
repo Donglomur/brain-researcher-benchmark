@@ -1,15 +1,16 @@
-version = "1.1"
-instruction_version = "1.0"
-test_version = "1.0"
+version = "2.0"
+instruction_version = "2.0"
+test_version = "2.0"
+artifacts = ["/app/output", "/app/data/eyestate/source_manifest.json", "/app/method_contract.json"]
 
 [metadata]
 task_id = "EYESTATE-001"
-title = "Reproduce ABIDE eyes-open-vs-closed cross-validated decoding accuracy"
-category = "Reproduction"
-difficulty = "hard"
-dataset_source = "ABIDE (nilearn fetch_abide_pcp, cpac, rois_cc200)"
+title = "ABIDE protocol-label prediction: held-site and random-fold sensitivity"
+category = "Method control"
+difficulty = "easy"
+dataset_source = "Authenticated ABIDE PCP original CC200 derivatives; offline source snapshot"
 dataset_id = "ABIDE_pcp/cpac/filt_noglobal/rois_cc200"
-source_paper = "Craddock et al. 2013 (ABIDE Preprocessed, PCP); Di Martino et al. 2014, Mol Psychiatry (ABIDE)"
+source_paper = "Di Martino et al. 2014 (ABIDE resource, doi:10.1038/mp.2013.78); PCP/Craddock et al. 2013 preprocessing resource. New method case, not a paper finding."
 
 [verifier]
 timeout_sec = 3600.0
@@ -23,7 +24,7 @@ cpus = 2
 memory_mb = 8192
 storage_mb = 16384
 gpus = 0
-allow_internet = true
+allow_internet = false
 
 [verifier.env]
 

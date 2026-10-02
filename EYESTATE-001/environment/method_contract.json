@@ -1,0 +1,422 @@
+{
+  "schema_version": 4,
+  "contract_status": "frozen_before_projected_BVLS_original_fits",
+  "method_id": "abide-lw-site-random-squared-hinge-certificate-v4",
+  "scope": "Descriptive prediction of the released eye-protocol phenotype using ABIDE preprocessed regional time series. Unseen-SITE_ID and site-shared random CV answer different prediction questions; neither identifies a biological, causal or null eye-state effect.",
+  "source": {
+    "runtime_directory": "/app/data/eyestate",
+    "manifest_filename": "source_manifest.json",
+    "manifest_sha256": "d4e930b84667e58831880100039cde688d56ccd0ff8c509f0f363fd1c4685aeb",
+    "manifest_status": "All1036 original files independently downloaded with conditional object identity and matched to cached measured SHA256; exact source byte total406540381. Null ROI versions are mutable, so this is a hash-pinned measured snapshot, not an immutable upstream release.",
+    "dataset_id": "ABIDE_pcp/cpac/filt_noglobal/rois_cc200",
+    "phenotype_filename": "Phenotypic_V1_0b_preprocessed1.csv",
+    "phenotype_rows": 1112,
+    "known_no_filename_rows": 77,
+    "known_named_derivatives": 1035,
+    "row_order": "Use the original preprocessed1 CSV row order, zero-based excluding header; do not substitute the full phenotype table, sort subjects/sites, or compact original row IDs before splitting.",
+    "identity": "Preserve exact SITE_ID and FILE_ID strings and original integral SUB_ID, plus source phenotype row. A feature row is keyed by phenotype_row and subject_id. No punctuation stripping, case folding, digit extraction or alias collapse.",
+    "eligibility_proposal": "Every1112 original phenotype rows remains ledgered. Exactly77 FILE_ID=no_filename records are unavailable_derivative, not QC exclusions. All1035 named original arrays are finite,200 columns,78..316 frames,eye code1/2, and are included in original phenotype order. No additional subject/frame/column QC exclusion. Unexpected malformed/nonfinite input, invalid label/shape/header, source drift or undefined covariance is failed_precondition, never a silent cohort change.",
+    "column_order_status": "Every original first line lists tab-separated #1 through #200. The numeric source columns retain that order; zero-based task column i corresponds to source header #(i+1). Header labels do not establish anatomical locations, atlas-export history, units or TR.",
+    "source_column_convention": "header_numbered_1_to_200_source_order",
+    "roi_header_sha256": "259f94bc6482d009b0bd85400faa1a4f93058735b6d9283988c494a0cb96a103",
+    "roi_header_rule": "SHA256 of the original first-line UTF8 text after removing only trailing CR/LF. Require exactly the tab-separated strings #1 through #200.",
+    "constant_roi_diagnostics": "n_constant_rois counts columns whose every original float64 value equals that column's first value exactly. n_low_sd_rois counts centered population SD strictly below float64 epsilon, as in feature standardization. Preserve all such columns and all1035 subjects; these are source diagnostics, not extra QC exclusions.",
+    "no_new_preprocessing": "No additional temporal filtering, nuisance regression, frame censoring, atlas extraction, feature selection or subject QC beyond the explicitly frozen source eligibility.",
+    "source_integrity": "Authenticate the entire exact manifest inventory, regular files only, no symlinks or extra files/directories, before computation. Preserve original bytes; input and output destinations must be disjoint. Source provenance and licensing are retained separately from derived numerical results.",
+    "observed_structure_before_features": {
+      "n_selected": 1035,
+      "n_sites": 20,
+      "n_open": 700,
+      "n_closed": 335,
+      "frame_min": 78,
+      "frame_max": 316,
+      "n_people_with_constant_rois": 46,
+      "max_constant_rois": 118,
+      "all_nonfinite_count": 0,
+      "constant_counts_equal_below_epsilon_counts": true
+    },
+    "constant_roi_policy": "Report n_constant_rois as columns whose original values are exactly constant and n_low_sd_rois as columns whose centered population SD is below float64 epsilon; blank when derivative unavailable. Keep these46 people, including one with118 constant columns, under the declared full released-derivative selection. Do not turn this unfiltered cohort into uniformly adequate brain coverage or a biological eye-state finding."
+  },
+  "features": {
+    "dtype": "float64",
+    "n_rois": 200,
+    "n_features": 19900,
+    "roi_axis": "Original source column indices0..199.",
+    "edge_axis": "Lower triangle in row-major order: (i,j) for i=1..199 and j=0..i-1. feature_index is0..19899 in that order; no diagonal or sqrt2 multiplier.",
+    "timeseries_standardization": "For each person's T-by200 source array independently, subtract each column mean; compute population SD(ddof0) of the centered values; replace each SD strictly below float64 epsilon with1; divide by that denominator. This is the explicit Nilearn0.13.1 standardize=True correlation behavior, not sample-SD standardization.",
+    "covariance": "LedoitWolf(store_precision=False,assume_centered=False,block_size=1000), independently per person; re-center the standardized array for empirical covariance. No cross-person covariance or tangent-space mean is used.",
+    "equations": {
+      "empirical": "For re-centered standardized rows q_t, S=(sum_t q_t q_t.T)/T; mu=trace(S)/200.",
+      "shrinkage": "delta=sum((S-mu*I)^2)/200; beta_raw=(sum_t (sum_j q_tj^2)^2/T-sum(S^2))/(200*T); beta=min(beta_raw,delta); lambda=0 if beta==0 else beta/delta, following pinned Ledoit-Wolf implementation. Require finite valid covariance; no outcome-based repair or alternative estimator.",
+      "shrunk_covariance": "V=(1-lambda)*S+lambda*mu*I.",
+      "correlation": "R_ij=V_ij/sqrt(V_ii*V_jj); require finite strictly positive covariance diagonal. Diagonal is not a feature. Preserve all source-defined columns; constant ROI columns are not silently dropped."
+    },
+    "invalid_case": "An undefined or nonfinite covariance/correlation for an otherwise selected original subject is failed_precondition, not a fabricated zero vector or discretionary subject exclusion.",
+    "domain_proposal": "Finite shrinkage in[0,1] and finite correlations with abs(r)<=1+1e-12; preserve permitted floating excursions without clipping. Fixed by mathematical/source-free review before original connectivity values."
+  },
+  "cross_validation": {
+    "schemes": [
+      "loso",
+      "random10"
+    ],
+    "labels": "Source eye code1 maps to y=1(open); code2 maps to y=0(closed). Signed fit labels t=2*y-1.",
+    "loso": "Leave one exact SITE_ID out; fold IDs0..G-1 follow lexicographically sorted unique SITE_ID. Every selected subject is tested once. Training indices retain canonical phenotype order.",
+    "random10": "StratifiedKFold(n_splits=10,shuffle=True,random_state=0) in canonical selected phenotype order, using sklearn1.8.0 allocation. Class encoding follows first appearance. Allocate sorted encoded labels by strides0..9; for each encoded class in order, repeat fold IDs by allocation counts then shuffle that class's fold vector with one shared NumPy RandomState(0). Training indices retain canonical phenotype order.",
+    "support": "All folds must have nonempty tests and both classes in training. Global selected support must include both classes and enough members for10-fold stratification. A structural impossibility fails before fitting; no silent alternative splitter.",
+    "test_membership": "OOF rows encode one exact fold per subject per scheme. Training membership is the exact complement, so no separate redundant train/test CSV is needed.",
+    "interpretation": "Random subject folds share sites. LOSO excludes the named test site but does not erase correlated acquisition/protocol structure or establish within-site biological identifiability. No required ordering or gap between the two scores."
+  },
+  "fold_scaling": {
+    "estimator": "StandardScaler(with_mean=True,with_std=True), training rows only, separately for every fold.",
+    "mean_variance": "float64 population mean and variance using the sklearn1.8.0 corrected two-pass algorithm; for a training column with n rows, mu=sum(x)/n and v=(sum((x-mu)^2)-sum(x-mu)^2/n)/n.",
+    "constant_rule": "constant iff v <= n*eps*v+(n*mu*eps)^2, eps=float64 machine epsilon. scale=1 for those columns; otherwise sqrt(v). Scaled values=(FC-mu)/scale for both train and test. Require finite nonnegative variance and finite positive scales.",
+    "canonical_basis": "The classifier numerical contract uses canonical source-derived float64 FC and freshly reconstructed training-only scalers. Serialized features and scaler arrays are source-bound evidence that may be rounded within their stated tolerances; they are not substituted back into the optimization or score replay. This prevents allowed serialization noise in constant or tiny-variance columns from becoming invented predictive signal."
+  },
+  "classifier": {
+    "dual_reference_recipe": "With signed training labels t and training-standardized Z, Q=diag(t)*(Z*Z.T+ones(n,n))*diag(t)+0.5*I. Factor Q=L*L.T, set B=L.T,d=solve(L,ones(n)), and minimize 0.5*||B*alpha-d||^2 subject to alpha>=0. Recover w=Z.T@(t*alpha), b=sum(t*alpha). This differs from the negative SVM dual only by a constant. Recompute h and G from recovered w,b; do not trust optimizer success or a reported dual certificate alone. Numerical feasibility step: retain the raw lsq_linear vector and diagnostics; reject nonfinite/wrong shape, then set alpha=max(raw_alpha,0) unconditionally. Recover w,b from this feasible alpha and apply the same primal-derived certificate. Projection alone is never acceptance.",
+    "solver_execution_amendment": "The v2 LinearSVC reference (tol1e-8,max_iter30000) failed the predeclared CALTECH pilot after528.074894s: iteration cap, ConvergenceWarning and failed public certificate. All failed artifacts and v2 code/contract remain preserved. The BVLS recipe/tolerance/cap were fixed after source-free algebra tests and before its first original-data fit. No accuracy, ordering, chance threshold, cohort, feature, split, C/loss/intercept objective, certificate or acceptance tolerance changed. The earlier independent NNLS pilot is partial feasibility evidence, not the outcome target. BVLS and NNLS share dual algebra/Cholesky/BLAS, but use different constrained least-squares implementations. The first original BVLS pilot subsequently reported success/status1 after71 iterations but its raw vector had six negative roundoff coefficients (minimum approximately -4.24e-22); the strict v3 raw feasibility check stopped before evaluating the certificate. V4 documents deterministic nonnegative projection before candidate recovery, preserves raw coefficients and v3 failure evidence, and was frozen before any original projected-BVLS fit. No scientific target or participant acceptance condition changed.",
+    "solver_documentation": "https://docs.scipy.org/doc/scipy-1.17.0/reference/generated/scipy.optimize.lsq_linear.html",
+    "reference_implementation": "The supplied oracle solves the unchanged C1 L2 squared-hinge penalized-intercept objective through its nonnegative dual, using scipy.optimize.lsq_linear(B,d,bounds=(0,inf),method='bvls',tol=1e-12,max_iter=30000,lsq_solver='exact') with float64 dense Cholesky and triangular solves. No silent fallback or outcome-selected solver. Preserve the finite raw optimizer vector, then project it componentwise by alpha=max(raw_alpha,0) before recovering the candidate; no fitted epsilon or outcome-selected threshold.",
+    "preoutcome_amendment": "The earlier tol1e-4/max_iter3000 recipe is prospectively replaced by tol1e-8/max_iter30000 before original fits. C, loss, regularization, feature definition and split designs are unchanged.",
+    "objective": "For source-standardized training rows z_i, A=[Z,ones], theta=[w,b], margin m_i=t_i*(A_i dot theta), h_i=max(0,1-m_i): P(theta)=0.5*dot(theta,theta)+sum_i h_i^2. The synthetic intercept is regularized; this is not an unpenalized logistic intercept or mean-loss objective.",
+    "certificate": "Derive alpha_i=2*h_i >=0 from the submitted theta and canonical training inputs. Define g=theta-A.T@(t*alpha). The stable primal-dual gap is G=0.5*dot(g,g), equal mathematically to P-D(alpha), where D=sum(alpha)-0.5*norm(A.T@(t*alpha))^2-0.25*sum(alpha^2). Require finite P,G and G<=1e-6*(1+P) for every fold. Recompute rather than trust reported diagnostics.",
+    "solver_equivalence": "Any truthful solver implementing this same objective and passing the public certificate is accepted. No secret exact reference coefficients, decision scores or predicted labels are required. This is an objective-proximity certificate, not proof of historical training chronology or numerical stability of every near-zero held-out margin.",
+    "reference_failure_policy": "The supplied BVLS oracle must return success with positive status and nit<30000, emit no warnings, have finite nonnegative dual coefficients, and independently pass the unchanged primal-derived certificate. Preserve actual status/message/nit/warnings and candidate on failure. These are authoring checks, not participant solver-name gates; submitted equivalent candidates report diagnostics and satisfy the public mathematical certificate.",
+    "decision": "Replay held-out score=z_test dot submitted_w+submitted_b using canonical source inputs/scaler; bind the reported finite signed score to that replay within tolerance. Reported prediction=1 iff its own reported score>0, otherwise0, including exact ties. Recompute all metrics from accepted own predictions; no hidden reference-label equality.",
+    "probabilities": "Not required or interpreted: LinearSVC decision values are not calibrated probabilities."
+  },
+  "metrics": {
+    "primary": "cv_balanced_accuracy is pooled LOSO balanced accuracy: one recall for each source-supported truth class, then their equal mean. For this binary full cohort both classes are required, so denominator2.",
+    "random_sensitivity": "random_kfold_balanced_accuracy is independently pooled from all random10 OOF rows.",
+    "fold_descriptive": "Per-fold balanced_accuracy is the arithmetic mean of recalls over truth classes actually present in that test fold. An absent-class recall is null/blank, not0. A one-class held-out site's score is that one recall.",
+    "legacy": "legacy_equal_site_mean_recall is the arithmetic mean of the G LOSO fold scores; it is not the primary pooled BA. Also report equal_fold_mean_recall for each scheme separately.",
+    "confusion": "tn=true0/pred0; fp=true0/pred1; fn=true1/pred0; tp=true1/pred1. Counts exact, no averaging confusion matrices before pooling.",
+    "baselines": "For each fold, predict1 for all its test subjects iff training positives>=training negatives, otherwise0; ties go open. This is a training-majority fallback for an unseen site's unknown protocol, not a fitted test-site lookup. Report pooled LOSO fallback BA and pooled always-open/always-closed BA from source labels. No site-label oracle baseline.",
+    "degenerate": "Manufactured unit fixtures may have unsupported global classes and then return explicit undefined status/null pooled BA; production source support must pass the frozen two-class precondition. No forced nonconstant prediction vector, chance band, positive effect, random>LOSO ordering, inferential p-value or prose keyword."
+  },
+  "artifacts": {
+    "cohort.csv": {
+      "key": [
+        "phenotype_row"
+      ],
+      "columns": [
+        "phenotype_row",
+        "subject_id",
+        "file_id",
+        "site",
+        "eye_code",
+        "label",
+        "source_path",
+        "source_sha256",
+        "n_timepoints",
+        "n_rois",
+        "n_constant_rois",
+        "n_low_sd_rois",
+        "included",
+        "exclusion_reason",
+        "selected_index"
+      ],
+      "types": {
+        "phenotype_row": "integer",
+        "subject_id": "integer",
+        "file_id": "string",
+        "site": "string",
+        "eye_code": "integer",
+        "label": "nullable_binary",
+        "source_path": "nullable_string",
+        "source_sha256": "nullable_sha256",
+        "n_timepoints": "nullable_nonnegative_integer",
+        "n_rois": "nullable_nonnegative_integer",
+        "n_constant_rois": "nullable_nonnegative_integer <= n_rois",
+        "n_low_sd_rois": "nullable_nonnegative_integer <= n_rois",
+        "included": "boolean",
+        "exclusion_reason": "string",
+        "selected_index": "nullable_nonnegative_integer"
+      },
+      "rules": "Every original phenotype row exactly once. The77 missing derivatives have blank source path/hash/shape/constant-counts/selected_index and reason unavailable_derivative. All1035 available rows have included=true, reason included, source-derived shape/constant counts and contiguous selected_index in original phenotype order. No undocumented exclusions."
+    },
+    "features.npz": {
+      "arrays": {
+        "phenotype_row": "N integer keys",
+        "subject_id": "N integer source IDs",
+        "feature_index": "F integer keys",
+        "roi_i": "F integer original column IDs",
+        "roi_j": "F integer original column IDs",
+        "correlation": "N by F finite real",
+        "shrinkage": "N finite real"
+      },
+      "rules": "N selected original people; F19900. Keyed row and coherent feature-column permutations allowed, joined by source identities. Correlation is the Ledoit-Wolf correlation lower triangle, not Fisher-z or Pearson. No object arrays/pickles."
+    },
+    "fold_models.npz": {
+      "arrays": {
+        "scheme": "M Unicode strings loso|random10",
+        "fold_id": "M integer keys",
+        "feature_index": "F integer keys",
+        "scaler_mean": "M by F finite real",
+        "scaler_variance": "M by F finite nonnegative real",
+        "scaler_scale": "M by F finite positive real",
+        "coefficient": "M by F finite real",
+        "intercept": "M finite real"
+      },
+      "rules": "M=G+10, expected30 if all20 source sites survive structural eligibility. Model key(scheme,fold_id) exact/exhaustive. Coherent model/feature-axis permutations allowed. Scaler evidence is source-bound; coefficients/intercepts are assessed by the public objective certificate and replay, never matched to a secret fitted vector."
+    },
+    "oof_predictions.csv": {
+      "key": [
+        "scheme",
+        "phenotype_row"
+      ],
+      "columns": [
+        "scheme",
+        "phenotype_row",
+        "subject_id",
+        "site",
+        "label",
+        "fold_id",
+        "held_out_site",
+        "decision_score",
+        "prediction",
+        "training_majority_prediction"
+      ],
+      "types": {
+        "scheme": "scheme",
+        "phenotype_row": "integer",
+        "subject_id": "integer",
+        "site": "string",
+        "label": "binary",
+        "fold_id": "integer",
+        "held_out_site": "nullable_string",
+        "decision_score": "finite_number",
+        "prediction": "binary",
+        "training_majority_prediction": "binary"
+      },
+      "rules": "Exactly2N rows; each selected original person once per scheme. held_out_site is the exact site for loso and blank for random10. Fold allocation and truth labels source-exact. Decisions/reported sign labels follow the declared replay rule."
+    },
+    "per_fold.csv": {
+      "key": [
+        "scheme",
+        "fold_id"
+      ],
+      "columns": [
+        "scheme",
+        "fold_id",
+        "held_out_site",
+        "n_train",
+        "n_test",
+        "n_train_open",
+        "n_train_closed",
+        "n_test_open",
+        "n_test_closed",
+        "tn",
+        "fp",
+        "fn",
+        "tp",
+        "open_recall",
+        "closed_recall",
+        "balanced_accuracy",
+        "training_majority_prediction",
+        "n_constant_features",
+        "primal_objective",
+        "certificate_gap",
+        "certificate_limit",
+        "solver",
+        "solver_status",
+        "n_iter"
+      ],
+      "types": {
+        "scheme": "scheme",
+        "fold_id": "integer",
+        "held_out_site": "nullable_string",
+        "n_train": "nonnegative_integer",
+        "n_test": "nonnegative_integer",
+        "n_train_open": "nonnegative_integer",
+        "n_train_closed": "nonnegative_integer",
+        "n_test_open": "nonnegative_integer",
+        "n_test_closed": "nonnegative_integer",
+        "tn": "nonnegative_integer",
+        "fp": "nonnegative_integer",
+        "fn": "nonnegative_integer",
+        "tp": "nonnegative_integer",
+        "open_recall": "nullable_fraction",
+        "closed_recall": "nullable_fraction",
+        "balanced_accuracy": "fraction",
+        "training_majority_prediction": "binary",
+        "n_constant_features": "nonnegative_integer",
+        "primal_objective": "nonnegative_finite",
+        "certificate_gap": "nonnegative_finite",
+        "certificate_limit": "positive_finite",
+        "solver": "nonempty_string",
+        "solver_status": "nonempty_string",
+        "n_iter": "nullable_nonnegative_integer"
+      },
+      "rules": "Exactly M rows. Counts, recalls and BA recomputed from original splits and accepted OOF predictions. n_iter is actual iterations if exposed; blank if genuinely unavailable, never invented. Exact iteration/status spelling is not an alternative-solver acceptance gate."
+    },
+    "eye_decoding_results.json": {
+      "required": [
+        "status",
+        "method_id",
+        "cv_balanced_accuracy",
+        "site_blocked_balanced_accuracy",
+        "random_kfold_balanced_accuracy",
+        "legacy_equal_site_mean_recall",
+        "site_only_unseen_site_baseline",
+        "always_open_pooled_balanced_accuracy",
+        "always_closed_pooled_balanced_accuracy",
+        "n_source_rows",
+        "n_unavailable_derivatives",
+        "n_subjects",
+        "n_features",
+        "n_sites",
+        "n_eyes_open",
+        "n_eyes_closed",
+        "single_class_sites",
+        "mixed_class_sites",
+        "chance",
+        "schemes"
+      ],
+      "types": {
+        "status": "ok for complete production; failed_precondition with reason on failure",
+        "method_id": "exact method_id",
+        "cv_balanced_accuracy": "fraction",
+        "site_blocked_balanced_accuracy": "fraction equal to primary",
+        "random_kfold_balanced_accuracy": "fraction",
+        "legacy_equal_site_mean_recall": "fraction",
+        "site_only_unseen_site_baseline": "fraction",
+        "always_open_pooled_balanced_accuracy": "fraction",
+        "always_closed_pooled_balanced_accuracy": "fraction",
+        "n_source_rows": "nonnegative_integer",
+        "n_unavailable_derivatives": "nonnegative_integer",
+        "n_subjects": "nonnegative_integer",
+        "n_features": "nonnegative_integer",
+        "n_sites": "nonnegative_integer",
+        "n_eyes_open": "nonnegative_integer",
+        "n_eyes_closed": "nonnegative_integer",
+        "single_class_sites": "nonnegative_integer",
+        "mixed_class_sites": "nonnegative_integer",
+        "chance": "number exactly0.5",
+        "schemes": "closed object with keys loso,random10"
+      },
+      "scheme_record": {
+        "required": [
+          "n_folds",
+          "tn",
+          "fp",
+          "fn",
+          "tp",
+          "open_recall",
+          "closed_recall",
+          "pooled_balanced_accuracy",
+          "equal_fold_mean_recall",
+          "training_majority_pooled_balanced_accuracy"
+        ],
+        "counts": "nonnegative integers",
+        "metrics": "finite fractions; source-supported class recalls"
+      },
+      "rules": "Every scalar recomputed from accepted source-keyed OOF outputs. The aliases are explicit, not searched by regex. No inferential conclusion is inferred from these values."
+    },
+    "run_metadata.json": {
+      "required": [
+        "status",
+        "task_id",
+        "method_id",
+        "method_contract_sha256",
+        "source_manifest_sha256",
+        "source_sha256",
+        "dataset_id",
+        "source_observed",
+        "software_versions",
+        "fit_warnings"
+      ],
+      "types": {
+        "status": "ok|resource_pilot|failed_precondition; onlyok complete",
+        "task_id": "EYESTATE-001",
+        "method_id": "exact method_id",
+        "method_contract_sha256": "sha256",
+        "source_manifest_sha256": "sha256",
+        "source_sha256": "closed object of every frozen manifest relative path to authenticated sha256",
+        "dataset_id": "exact source.dataset_id",
+        "source_observed": "object specified below",
+        "software_versions": "nonempty finite JSON object with nonempty library names; actual stack, no exact library/version gate",
+        "fit_warnings": "M keyed records described below"
+      },
+      "source_observed": {
+        "required": [
+          "n_phenotype_rows",
+          "n_no_filename",
+          "n_named_derivatives",
+          "n_selected",
+          "n_features",
+          "selected_site_ids",
+          "site_support",
+          "frame_count_histogram",
+          "roi_count_histogram",
+          "constant_roi_count_histogram",
+          "source_column_convention"
+        ],
+        "counts": "nonnegative integers",
+        "selected_site_ids": "lexically ordered exact strings",
+        "site_support": "G order-free records {site:string,n_open:integer,n_closed:integer}",
+        "frame_count_histogram": "order-free list {n_timepoints:integer,n_subjects:integer} for selected subjects",
+        "roi_count_histogram": "order-free list {n_rois:integer,n_subjects:integer} for named parsed derivatives",
+        "constant_roi_count_histogram": "order-free list {n_constant_rois:integer,n_subjects:integer} for selected subjects",
+        "source_column_convention": "Exact source.source_column_convention string, with no additional anatomical or physical interpretation"
+      },
+      "fit_warning_record": {
+        "required": [
+          "scheme",
+          "fold_id",
+          "warnings"
+        ],
+        "scheme": "scheme",
+        "fold_id": "integer",
+        "warnings": "finite JSON array preserving actual warning messages/categories, possibly empty"
+      },
+      "rules": "Exact method/source identity, typed counts and complete source/fold support. Harmless extra descriptive metadata allowed outside closed source_sha256 and scheme identity maps. No required literal estimator prose, hardware name, runtime, random temporary path or package version."
+    },
+    "findings.md": "Nonempty free prose. No keyword, fixed number, effect sign, score ordering or hidden interpretation rubric."
+  },
+  "shared_serialization": {
+    "integer": "Exact finite integer-valued JSON numbers, CSV numeric notation or real numeric NPZ values, safely range-checked. Boolean values, fractional IDs/counts, overflow and object arrays are not integers.",
+    "boolean": "CSV true/false or0/1; JSON Boolean; NPZ Boolean only for a declared flag, never a numeric count or feature.",
+    "nullable": "Blank CSV cells or explicit JSON null only where declared; never NaN/Inf strings, fallback zeros or omitted required fields.",
+    "finite_only": "Reject nonfinite required numerical values and nonfinite JSON anywhere, including exponent overflow and optional extras; duplicate JSON/CSV header/NPZ names and duplicate or missing scientific keys fail.",
+    "reordering": "CSV rows/columns and coherent NPZ row/feature/model-axis ordering may vary; canonical joins use source keys, never file order. Preserve original phenotype row and selected_index fields; changing actual SKF input order is not serialization reordering.",
+    "extras": "Harmless extra columns/keys/files accepted except inside explicitly closed source or scientific-identity objects. No unit guessing, fuzzy subject/site normalization, interpolation, arbitrary subset coverage or percentage-based completeness."
+  },
+  "tolerances_proposed_before_values": {
+    "feature": {
+      "atol": 1e-8,
+      "rtol": 0.000001
+    },
+    "shrinkage": {
+      "atol": 1e-8,
+      "rtol": 0.000001
+    },
+    "scaler": {
+      "atol": 1e-9,
+      "rtol": 1e-7
+    },
+    "replayed_decision": {
+      "atol": 1e-8,
+      "rtol": 1e-7
+    },
+    "metrics": {
+      "atol": 0.000001,
+      "rtol": 0
+    },
+    "reported_objective_and_certificate": {
+      "atol": 1e-10,
+      "rtol": 0.000001
+    },
+    "certificate_acceptance": "Recomputed G<=1e-6*(1+P), not a tolerance around a reported or historical reference gap.",
+    "numeric_rule": "abs(submitted-expected)<=atol+rtol*abs(expected); exact identities, counts, labels, folds and baseline categories. Coefficients have no independent reference tolerance: finite values must pass the public certificate. Decision-sign flips within replay tolerance are accepted only with coherent own predictions/confusions/metrics.",
+    "precision_limit": "The fit certificate bounds objective error, not universally every near-zero decision or biological interpretation. Serialized feature/scaler tolerances do not authorize using their rounding errors as different computational inputs."
+  },
+  "verification_and_evidence": {
+    "runtime_source_reconstruction": "Grader reauthenticates staged originals and computes canonical full float64 FC once in-process; no164MB derived numerical bank, historical prediction bank or licensed derivative is committed as a hidden answer. Code, immutable source/method manifests and synthetic mechanics belong in Git; original-derived authoring evidence stays in separately authorized run storage.",
+    "grade_sequence": "Exact source ledger/splits -> full source-bound feature evidence -> source-derived training scaler evidence -> submitted model objective certificate -> held-out signed score replay -> own score sign/predictions -> exact confusion/support -> recomputed fold/pooled/baseline summaries. No separate hidden fitted-vector or outcome-shape gate.",
+    "cache": "Canonical source features may be immutable in-process cached under authenticated source/method identity. Repeated model checks may reuse only an exact-content hash of canonicalized submitted model parameters plus fold/source/method identity. Never cache acceptance by path, claimed ID or prior summary, and never skip validation of changed inputs.",
+    "independent_authoring": "A separately implemented source reader/Ledoit-Wolf reduction and scaler/fit certificate check must compare complete original features and accept an honestly different solver. Shared library portions are disclosed. Authoring reference models are diagnostics, not the accepted coefficient/label target.",
+    "failure_handling": "Exit nonzero on a source or computational precondition failure, preserve status=failed_precondition and a nonempty reason in results/metadata/findings. Do not overwrite existing evidence; reject symlink/special input files and input/output overlap. No fallback dataset, solver objective, split, imputation, selective fold omission or hidden retry."
+  },
+  "freeze_boundary": "Source, cohort, features, splits, train scaling, classifier objective, certificate, metrics and all acceptance tolerances were frozen in v2 before original numerical analysis and are unchanged. V3 changes only the supplied solver implementation and its honest execution documentation after the failed528s LinearSVC pilot; frozen before any original BVLS fit. No observed prediction accuracy selected this change. Historical evidence/method identities remain preserved separately. V4 is a further explicitly recorded numerical-feasibility implementation correction following the v3 raw-bound failure, frozen before original projected-BVLS fits; the scientific fields and all acceptance tolerances remain unchanged."
+}

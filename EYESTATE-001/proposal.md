@@ -1,79 +1,91 @@
-## EYESTATE-001
+# EYESTATE-001: protocol-label prediction under site confounding
 
-**Proposal Title:** Reproduce the ABIDE eyes-open-vs-closed decoding accuracy — an un-cued acquisition-site leakage trap
+This is a paper-derived **method/sensitivity case**, not a reproduction of a
+published eye-state finding. It retains the public ABIDE PCP CC200 regional
+time series and compares prediction of the released eye-protocol label under
+leave-one-SITE_ID-out and shuffled subject-level cross-validation.
 
-**Scientific Domain:** Life Sciences · **Field:** Neuroscience · **Subfield:** Resting-state functional-connectivity decoding (multi-site)
+The [ABIDE resource paper](https://doi.org/10.1038/mp.2013.78) and
+[PCP preprocessing resource](https://preprocessed-connectomes-project.org/abide/)
+establish the source substrate. They do not establish this task's classifier,
+validation comparison, or any target accuracy. There is no named paper figure
+or table reproduced by this new analysis.
 
-**Source paper:** ABIDE Preprocessed / PCP (Craddock et al. 2013; Di Martino et al. 2014, *Mol Psychiatry*, 10.1038/mp.2013.78), dataset `nilearn.datasets.fetch_abide_pcp` (cached under `~/nilearn_data`; ships to fetch at runtime). Methodological basis: acquisition-site / scanner effects dominate multi-site connectivity and inflate naive cross-validation (e.g. site-harmonisation literature; Yan et al. 2013 on eyes-open/closed resting connectivity).
+## What it measures
 
-**Status: FULL runnable task, oracle + naive validated locally. Step-5 frontier calibration PENDING (maintainer).**
+The main estimand is pooled out-of-fold balanced accuracy for protocol-label
+prediction on held-out named SITE_ID groups in this fixed cohort. The random
+10-fold result is a separate, site-shared sensitivity. The full phenotype
+ledger, source-derived connectivity, training-only scalers, fold models and
+held-out predictions make the computation auditable.
 
-### What this task is
+Eighteen of the 20 available SITE_ID groups contain only one eye-status label;
+MAX_MUN and NYU contain both. Holding out a SITE_ID group does not remove
+protocol/acquisition confounding or identify the effect of opening one's eyes.
+These groups are the released metadata categories, not a claim of 20
+independent institutions or scanners. Overlapping CV fits are not independent
+replications. No causal, diagnostic, population-generalization, or permutation
+significance claim is made. Neither score is required to exceed chance or the
+other score.
 
-A faithful, mostly-numeric **reproduction**: decode eyes-open vs eyes-closed from ABIDE resting-state CC200 correlation connectivity with a linear SVM and report the **cross-validated balanced accuracy**. The fetch parameters (`cpac`, `band_pass_filtering=True`, `global_signal_regression=False`, `rois_cc200`), subject inclusion, label, connectivity (Pearson correlation, vectorised), classifier (`StandardScaler` + `LinearSVC(C=1)`) and metric (balanced accuracy) are all pinned. The **one thing left free is the cross-validation scheme**, and it is decisive.
+## Transparent computational target
 
-### The un-cued lever (PRIVATE — never named in `instruction.md`)
+The public method contract fixes the original phenotype order, inclusion
+ledger, population-SD within-subject standardization, Ledoit-Wolf covariance
+shrinkage, lower-triangle correlation features, exact splits, training-only
+feature scaling and binary squared-hinge objective. The intercept is
+regularized. The first tightened LinearSVC reference failed its fixed pilot
+at the iteration cap and failed the public certificate. Its evidence is
+preserved. The replacement BVLS implementation solves the same nonnegative
+dual objective; that recipe was frozen before any original BVLS fit. Source,
+features, splits, objective and acceptance tolerances did not change. This
+is an explicitly documented numerical implementation repair, not tuning to
+prediction accuracy.
+The first BVLS pilot was also rejected because its raw vector contained tiny
+negative roundoff values. The documented implementation now retains those raw
+values and projects onto the nonnegative constraint before model recovery;
+the original certificate still decides acceptance, with no correction-size
+threshold or changed scientific target.
 
-**Random k-fold vs site-blocked (leave-one-site-out) cross-validation.** In ABIDE each acquisition site used a single eyes-open/closed protocol, so eye status is almost perfectly aligned with `SITE_ID`, and connectivity carries a strong site-specific fingerprint. A **random** k-fold split puts subjects from a site in both train and test, so the classifier reads a held-out subject's eye status off its site fingerprint and the accuracy is inflated. Blocking the folds by acquisition **site** (leave-one-site-out) forces the model to generalise to sites it never saw, leaving only the genuine, transferable eyes-open/closed effect. The instruction never mentions folds, blocking, sites-as-a-nuisance, leakage, or the eye-status↔site confound; it only asks for "the cross-validated balanced accuracy". The task ID is neutral (EYESTATE, not SITELEAK).
+The grader reconstructs canonical float64 features from authenticated originals,
+checks all source identities and splits, and recomputes each model's convex
+optimization certificate and held-out scores. It accepts the disclosed
+objective-accuracy tolerance and each accepted model's own predictions; it
+does not demand hidden reference coefficients, exact reference labels, a
+particular score gap, nonconstant outputs, or prose keywords. Numerical
+serialization tolerances never turn submitted rounded features into a new
+training dataset. The certificate verifies a function against its declared
+training objective, not the author's historical execution chronology.
 
-### Step-0 result (validated on cached ABIDE `cpac/filt_noglobal/rois_cc200`, nilearn 0.13.1 / scikit-learn 1.8.0)
+## Data and release boundary
 
-N = 1035 participants (700 eyes-open, 335 eyes-closed), 20 sites, 19 900 connectivity edges, chance = 0.5:
+All 1,112 phenotype records are retained in the ledger; 77 have no released
+derivative filename. The selected cpac/filt_noglobal CC200 cache contains 1,035
+original files. Authentication, structural eligibility and execution results
+are recorded separately in `REPAIR_STATUS.md`, not inferred from this proposal.
+Structural inspection found all 1,035 arrays finite with 200 columns and
+78–316 frames, but 46 people have constant columns, up to 118 of 200. They
+remain included under the declared no-extra-QC rule, with these limitations
+reported explicitly. A good classifier fit would not establish good spatial
+coverage or biological validity.
 
-| cross-validation scheme | balanced accuracy |
-|---|---|
-| **leave-one-site-out (CORRECT)** | **0.737** |
-| stratified site-grouped 10-fold (site-blocked) | 0.751 |
-| random 10-fold (LEAKY) | 0.867 |
+The source snapshot preserves original bytes. Named phenotype versions and
+conditional ROI-object identities are distinguished: a null S3 version is not
+an immutable release, and an ETag is not assumed to be a checksum. Local
+SHA-256 pins measured source bytes. The task stages public objects at image
+build time and analyzes the baked bundle offline.
 
-Gap **≈ +0.13** for the leaky choice. The correct value is stable: site-blocked schemes give 0.737–0.774 across `LinearSVC`/`LogisticRegression` and across leave-one-site-out vs stratified-group-K-fold; the random-fold value is 0.867–0.878 across three seeds and both classifiers. Leave-one-site-out (0.737) is pinned as the single reproducible number; the verifier window admits the other site-blocked variants.
+The [ABIDE usage agreement](https://fcon_1000.projects.nitrc.org/indi/abide/abide_I.html)
+links [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/),
+requests dataset/funding acknowledgment and describes NITRC/INDI registration.
+Public S3 access does not establish unrestricted commercial use. Historical
+preprocessing software and atlas-export lineage remain qualified; this task
+does not regenerate the derivatives from raw BOLD or anatomically localize
+predictive edges. No data/image publication is authorized by local validation.
 
-### Verifier (2 plain checks; `tests/test_outputs.py`)
+## Difficulty and evidence
 
-Short reviewer-style pytest, schema-robust, no rubric:
-1. **accuracy reported** — a parseable, above-chance balanced accuracy exists.
-2. **site-blocked accuracy reproduced** — the reported balanced accuracy is within **0.09** of the leave-one-site-out value **0.737**. Accuracies are gathered at any depth from any JSON (balanced-accuracy/score-keyed scalars, with per-fold / chance / std / train / and explicitly-leaky|random|kfold|naive|unblocked keys excluded) and from prose. A random-fold ~0.87 is 0.13 away → fails; a site-blocked ~0.74–0.77 → passes.
-
-### Discrimination (validated locally)
-
-| submission | reported balanced accuracy | verdict |
-|---|---|---|
-| reference oracle (leave-one-site-out; also records the leaky value under a descriptive key) | 0.737 | **PASS** |
-| naive random 10-fold (leaky, everything else identical) | 0.867 | **FAIL** |
-| stratified site-grouped K-fold (site-blocked variant) | 0.751 | **PASS** |
-| prose-only "balanced accuracy … 0.74" | 0.74 | **PASS** |
-
-Verifier robustness: a submission that reports BOTH the honest 0.737 and a leaky comparison (0.867 under a `random_kfold`/`leaky` key) still passes, because the leaky value is excluded from the headline candidates.
-
-**Hardening pass — re-validated (offline).** The numeric discrimination was re-confirmed against four write-ups: honest leave-one-site-out (0.737) PASSES; naive random-fold (0.867) FAILS; a **GroupKFold-by-`SITE_ID`** site-blocked variant (0.755) PASSES; and a "discovered-both" write-up that reports the leaky 0.867 *and* the honest 0.737 PASSES (the grader locks onto the site-blocked headline). Because grading is numeric, there is no prose pipeline-vocabulary false-positive vector here; the equivalent guard is the exclusion of the leaky/random-fold headline, which bites. The only site reference in `instruction.md` is the factual `SITE_ID` column plus a descriptive `n_sites` output — an accepted mild cue that discloses that sites exist but never that eye status is confounded with site or that the folds must be site-blocked. **The live frontier-agent gate (Step-5, ≥2 families k≥3, hand-rescored) remains the maintainer's step (PENDING).**
-
-### Distinctness
-
-Different dataset (ABIDE multi-site resting-state FC) and different nuisance (acquisition **site/scanner** batch fingerprint) from the shipped Haxby within-subject temporal-autocorrelation CV task (VTDECODE/DECODE) and from OBJCAT's feature-selection circularity. Existing ABIDE tasks target group-difference multiple-comparisons (AUTCONN/AUTISMDMN) or significance-vs-effect-size (BWAS); none address cross-validation site leakage in a decoder. The mandate lists "scanner" as a valid TASK-1 confound.
-
-### Step 5 — frontier calibration: PENDING (maintainer)
-
-Oracle-passes and naive-fails are validated locally. The ≥2-frontier-family (k≥3, hand-rescored) gate — that un-cued frontier agents default to random k-fold and report the inflated ~0.87 — is a maintainer step. (Note: a submission aware of ABIDE site effects may reach for site-blocked CV and avoid the trap; the calibration measures how often un-cued agents default to random folds.)
-
-### Cost / data caveat
-
-`hard`. cpus 2, mem 8 GB, internet on (fetches ABIDE `cpac/filt_noglobal/rois_cc200`, ~0.2 GB of region time series, at runtime; timeouts 3600 s). Deps: nilearn 0.13.1 + scikit-learn 1.8.0 + scipy/pandas/nibabel/numpy (pinned in the Dockerfile to the versions the 0.737 ground truth was measured with). Runtime is dominated by the leave-one-site-out SVM fits over ~20 site folds on ~20 000 features (a few minutes). Data caveat: `fetch_abide_pcp` pulls from a public S3 mirror; on rare mirror hiccups the fetch can time out and should be retried (an infra artifact, not a task FAIL).
-
-### Proof-of-work rework (held-out reference)
-
-The verifier was upgraded to the proof-of-work contract (PROOF_OF_WORK_SPEC.md). EYESTATE reports a
-single headline number, so `solution/compute.py` now also emits the finest validated intermediate —
-`per_fold.csv`, the per-held-out-site balanced accuracy of the leave-one-site-out evaluation — and
-reports the site-blocked and random-fold accuracies explicitly. A held-out reference
-(`tests/reference.npz`, never shipped to the agent) was built by running the oracle on the real
-ABIDE cpac filt_noglobal rois_cc200 data (N=1035, 20 sites) with the **image stack
-(scikit-learn 1.8.0)**; it stores the per-site balanced accuracies and the discriminating numbers
-(site-blocked LOSO 0.737 vs leaky random-fold 0.876, chance 0.5). The grader now (1) matches the
-submitted per-site accuracies to the reference (coverage of the real sites + cross-fold r +
-per-fold tolerance) — a random-fold table with numbered folds fails coverage; (2) recomputes the
-headline as the mean of the submitted per-fold rows and cross-checks the reported JSON; and
-(3) grades the within-vs-across judgement as numbers (site-blocked ≈ 0.74 well below random ≈ 0.88;
-the reported headline is the site-blocked one). Validated by subprocess pytest: honest PASS;
-no-table / constant / fabricated / **random-kfold leaky** / right-headline-fake-rows all FAIL.
-ABIDE is fetched at runtime with the pinned pipeline; baking the CC200 timeseries is a maintainer
-follow-up.
+This is an easy/method-control candidate by design, not a claimed Sol failure
+or a hidden-estimator trap. Local tests, a reference run and a Harbor reward
+are engineering evidence only. Model-agent difficulty calibration is not part
+of this repair and remains unmeasured.
