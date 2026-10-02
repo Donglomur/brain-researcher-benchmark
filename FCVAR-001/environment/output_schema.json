@@ -1,0 +1,290 @@
+{
+  "schema_version": "fcvar-outputs-v3",
+  "status": "frozen_after_source_structure_before_original_BOLD_numerical_decoding",
+  "task_id": "FCVAR-001",
+  "authority": "Private source reconstruction fixes identities, extraction/cleaning reference, global/local support and seeded phase screens. Accepted source-close cleaned series plus canonical regenerated screens drive every observed/null/statistical result once. Raw/phase/scalar receipts never feed back into another estimator. No canonical endpoint or outcome-direction gate.",
+  "artifacts": [
+    "cohort.csv",
+    "roi_evidence.npz",
+    "variability.csv",
+    "surrogate_statistics.csv",
+    "dynamics.json",
+    "run_metadata.json",
+    "findings.md"
+  ],
+  "dimensions": {
+    "subjects": 30,
+    "rois": 48,
+    "windows_tr": [
+      20,
+      30,
+      44
+    ],
+    "step_tr": 3,
+    "draws_per_subject_window": 50,
+    "subject_window_rows": 90,
+    "null_rows": 4500,
+    "frames": 5063,
+    "phase_frequency_rows": 7671,
+    "dimension_authority": "F=sum method.source.n_frames_by_participant; Q=sum_subject 3*(floor(T_subject/2)+1). Exact per-person dimensions and header-derived operational TR are in the hash-bound method; no padding.",
+    "edges_per_subject": "P_subject*(P_subject-1)/2 from fixed canonical global-active ROI subset"
+  },
+  "shared_kernel_sha256": "a446d8b5b8cc8ea4bafe97fecc0a9dcf21f2b9df43cbf379feb63a3c1e5bdba5",
+  "common_rules": {
+    "completion": "All seven files required; completed metadata.status=ok even when legitimate scalar endpoints are undefined. Resource pilots never count as completed production.",
+    "failure": "Any lexists failure_report.json rejects, both before loading and after validation, including empty files/directories/dangling links.",
+    "types": "Literal zero-padded seven-character submitted subject IDs; no digit stripping. Numeric integral axes/counts are exact non-Boolean signed-int64 values; NPZ numeric integer axes may use finite exactly-integral floating storage in range, not Boolean arrays. CSV scientific numeric notation may represent exact integer keys; collisions reject. JSON required numbers must numeric, not text or Boolean. Explicit booleans only. NPZ must be finite real/text/Boolean arrays as declared; no object/complex/structured data.",
+    "nulls": "Only explicitly nullable scalar fields may be JSON null or blank CSV. Never NaN/Inf, literal null strings or silently missing rows. Finite primitives always retain all source frames and48 ROI identities.",
+    "permutations": "CSV row/column order and NPZ keyed axes may reorder coherently; frame keys=(subject,frame_index), frequency keys=(subject,window_tr,frequency_index), subject/ROI/draw axes are explicit. Align to original chronological frame order before cleaning/correlation/FFT; never use submitted row position.",
+    "extras": "Bounded harmless extra files/columns/arrays/JSON fields may be present. Required scientific fields retain complete typed schema. Numeric JSON/NPZ extras finite; text CSV extras need not be interpreted as numbers. No version fingerprint or prose keyword gate.",
+    "limits": {
+      "total_output_bytes": 67108864,
+      "npz_disk_bytes": 67108864,
+      "npz_expanded_bytes": 134217728,
+      "npz_members": 64,
+      "npz_ndim": 32,
+      "npy_header_bytes": 16384,
+      "csv_bytes_each": 16777216,
+      "csv_rows_each": 100000,
+      "json_bytes_each": 16777216,
+      "json_depth": 64,
+      "findings_bytes": 1048576,
+      "output_entries": 1000
+    }
+  },
+  "cohort_csv": {
+    "key": [
+      "subject"
+    ],
+    "rows": 30,
+    "columns": {
+      "subject": "literal source ID",
+      "source_order": "exact canonical zero-based source ordinal",
+      "site": "literal source phenotype site",
+      "n_timepoints": "source T integer",
+      "tr_sec": "source units-converted finite positive TR",
+      "bold_path": "literal manifest key",
+      "confounds_path": "literal manifest key",
+      "n_global_active_rois": "exact canonical0..48",
+      "n_edges": "exact binomial(active,2)",
+      "status": "ok (source failure is not a per-person exclusion)"
+    }
+  },
+  "roi_evidence_npz": {
+    "arrays": {
+      "participant_ids": "[30] literal subject strings; axis for all subject×ROI diagnostics",
+      "roi_ids": "[48] exact original atlas nonbackground label IDs1..48",
+      "roi_labels": "[48] source label strings aligned to roi_ids",
+      "frame_subject": "[F] literal subject key for each row",
+      "frame_index": "[F] exact original frame0..T_subject-1 per subject",
+      "raw_roi_mean": "[F,48] source-bound float64-calculated mean receipts; not re-cleaned",
+      "clean_roi_series": "[F,48] finite final-cleaned source-close accepted primitives",
+      "geometry_present": "[30,48] source Boolean support flag",
+      "n_voxels": "[30,48] exact nonnegative support count",
+      "support_sha256": "[30,48] SHA256(b'FCVAR_support_v3\\n'+BOLD shape3 <i8 bytes+selected4x4 affine <f8 C-order bytes+ascending C-flat support indices <i8 bytes), keyed source support; no rounded receipts enter the digest",
+      "roi_active": "[30,48] exact source-canonical global activity",
+      "raw_sample_sd": "[30,48] nonnegative source diagnostic; raw units, not rounded eligibility input",
+      "prestandardization_centered_l2": "[30,48] nonnegative source diagnostic",
+      "activity_threshold": "[30,48] nonnegative source global activity threshold",
+      "full_clean_centered_l2": "[30,48] canonical original full-cleaned norm, local-threshold reference",
+      "phase_subject": "[Q] literal subject key",
+      "phase_window": "[Q] integer20/30/44",
+      "frequency_index": "[Q] integer0..floor(T_subject/2)",
+      "surrogate_ids": "[50] exact integers0..49",
+      "phase_angles": "[Q,50] canonical seeded phase receipts, not surrogate-generation inputs"
+    },
+    "inactive": "Canonical geometry-empty raw and canonical inactive cleaned columns are zero sentinels, not imputed measurements. Submitted finite receipts may vary within pointwise tolerances, but source masks are fixed and never reactivate or enter any retained edge. Retain all48 keys.",
+    "phase_contract": "Declare exact non-Boolean integer seed0..2**32-1, default0. Regenerate PCG64/default_rng uniform[0,2pi) full[50,floor(T/2)+1] float64 screen with Python-integer seed+int(literal subject)+W, no modulo; overwrite DC and even-T Nyquist to0 after drawing allbins. One phase per frequency applied to all ROI spectra of entireT series. Phase receipts allow atol1e-6 only, including upper domain up to2pi+1e-6; DC/Nyquist exact0. Canonical regenerated phases, never submitted receipts, are estimator inputs."
+  },
+  "variability_csv": {
+    "key": [
+      "subject",
+      "window_tr"
+    ],
+    "rows": 90,
+    "columns": {
+      "subject": "literal source ID",
+      "window_tr": "20/30/44",
+      "n_windows": "exact length(range(0,T-W+1,3))",
+      "n_rois": "fixed global-active count",
+      "n_edges": "fixed retained-edge count",
+      "observed_status": "ok|insufficient_rois|insufficient_windows|undefined_window_correlation",
+      "mean_edge_sd": "nonnegative finite observed scalar or blank according to status",
+      "n_null_expected": "50 always",
+      "n_null_defined": "exact0..50",
+      "null_mean_status": "ok|incomplete_null_support",
+      "mean_edge_sd_null": "nonnegative finite equal50draw mean only if all50 defined; else blank",
+      "ratio_status": "ok|incomplete_support|zero_null_mean",
+      "observed_over_null_ratio": "observed/mean_null when both defined and mean_null>0; otherwise blank",
+      "inference_status": "ok|incomplete_support",
+      "n_exceedances": "exact0..50 if observed+all50 null defined; otherwise blank",
+      "p_numerator": "1+E or blank",
+      "p_denominator": "51 always",
+      "p_value": "(1+E)/51 or blank",
+      "significant": "typed CSV Boolean, exact20*(1+E)<51, or blank"
+    },
+    "replay": "Fisher clip±.999; edgewise across-window sampleSD(ddof1); equal fixed-edge mean. Exact numerical reduction and source support recipe belongs to method. Each required scalar uses all windows and all fixed retained edges, no per-window edge/window dropping.",
+    "minimum_windows": 2
+  },
+  "surrogate_statistics_csv": {
+    "key": [
+      "subject",
+      "window_tr",
+      "surrogate_id"
+    ],
+    "rows": 4500,
+    "columns": {
+      "subject": "literal source ID",
+      "window_tr": "20/30/44",
+      "surrogate_id": "0..49",
+      "status": "same scalar support enums as observed",
+      "mean_edge_sd": "finite nonnegative scalar or blank",
+      "exceeds_observed": "own unrounded null>=own unrounded observed Boolean when both scalar slots defined; otherwise blank"
+    },
+    "support": "Every draw row retained even when undefined or identical to another draw. n_exceedances/p require all50 null slots and observed defined; partial per-draw comparisons may still be reported but never form a smaller denominator.",
+    "local_fidelity": "For every canonically active window vector, accepted-window centered relativeL2 error<=1e-6 with no absolute floor; accepted surrogates use canonical phases. Canonically inactive windows remain inactive despite tolerated jitter. No second source-canonical statistic/p-value check.",
+    "canonical_local_guard": "For every retained ROI and every original/slid canonically phased window, strict canonical norm_window > 1e-12*sqrt(W/T)*canonical ORIGINAL full-cleaned norm. If any retained ROI fails in any required window, entire scalar slot is undefined. No windowwise edge-set change."
+  },
+  "dynamics_json": {
+    "schema_version": "fcvar-results-v3",
+    "status": "complete",
+    "n_subjects": 30,
+    "window_lengths_tr": [
+      20,
+      30,
+      44
+    ],
+    "primary_window_tr": 30,
+    "step_tr": 3,
+    "n_surrogates": 50,
+    "seed": "Exact non-Boolean integer in[0,2**32-1], default0",
+    "windows": "Closed keyed three-record list; window_tr exact. Each record has metrics below.",
+    "metric_record": "{n_expected:30,n_defined:integer0..30,status:ok|incomplete_support,value:finite real|null}; all30 required ornull for each metric independently.",
+    "metrics": [
+      "mean_observed_edge_sd",
+      "mean_null_edge_sd",
+      "mean_subject_observed_over_null_ratio",
+      "median_subject_p",
+      "fraction_subjects_significant"
+    ],
+    "authority": "Each metric uses only unrounded per-person values from the single accepted-series replay, never CSV receipt values. Mean subject ratio is not ratio of group means. Significance fraction uses exact integer decisions, not rounded p. No pooled edge/window/person weighting."
+  },
+  "run_metadata_json": {
+    "schema_version": "fcvar-metadata-v3",
+    "task_id": "FCVAR-001",
+    "status": "ok",
+    "pins": "Exact source_manifest_sha256,method_contract_sha256,output_schema_sha256",
+    "source_files": "Closed67-member list keyed manifest path: role,participant_id nullable,size_bytes,sha256; exact original/provenance membership bound by source_manifest_sha256",
+    "source_observed": {
+      "atlas_header": "Required source header keys below; harmless extras allowed",
+      "roi_labels": "Closed48 keyed records {roi_id:exact integer,roi_label:original XML label text.strip() only, no renaming}; order free",
+      "persons": "Exact30 literal ID keys. Every person has bold_header,confound_columns,selected_confound_columns,excluded_confound_columns,n_confound_rows,frame_count,site,source_participant_token,operational_TR_s,frame_origin_s. Original phenotype numeric integer tokens normalize to seven digits for the SOURCE join only; retain source_participant_token verbatim. Submitted keys remain literal. Ordered original/selected/excluded column lists are source-bound. Operational origin0 is not a measured recording/rest onset.",
+      "phenotype_columns": "Original ordered authenticated phenotype column names, including its one leading unnamed documentary index; Subject/site joins follow the hash-bound method. Empty confound headers remain forbidden.",
+      "slice_timing_columns": "Original ordered authenticated site timing table column names",
+      "header_keys": [
+        "shape",
+        "selected_affine",
+        "storage_dtype",
+        "spatial_units",
+        "temporal_units",
+        "zooms",
+        "raw_toffset",
+        "raw_scl_slope",
+        "raw_scl_inter",
+        "effective_slope",
+        "effective_intercept"
+      ],
+      "header_rule": "Source numeric tolerances1e-9+1e-9relative; shape counts exact. storage_dtype only accepts semantic NumPy real scalar kind/width/endian-equivalent aliases, not object/structured. Raw nonfinite header facts may only use literal NaN/+Inf/-Inf strings, never nonfinite JSON. Source authoritative finite calibrated arrays, finite selected confounds and contributing voxel union required; no requirement that ignored background BOLD be finite.",
+      "documentary_clock": "Operational TR remains the original units-converted NIfTI header value, including1.9600000381469727sec. Documentary seconds are converted to header units, cast to float32 pixdim precision and converted back to seconds only for the method-declared1e-9/1e-9 consistency check; documentary1.96 never replaces that operational clock."
+    },
+    "analysis_observed": {
+      "persons": "Exact30 literal ID keys; each record {cleaning_rank:exact integer,n_global_active_rois:exact integer0..48,n_edges:exact binomial}. Detailed nonnegative numeric support diagnostics are NPZ receipts with publicdiagnostic tolerance; canonical unrounded values alone define eligibility."
+    },
+    "software_versions": "Nonempty strings keyed python,numpy,scipy,nibabel,nilearn; not_used permitted when genuinely unused; versions descriptive, not matching a required implementation fingerprint.",
+    "warnings": "List of strings, no forced-empty or prose gate",
+    "seed": "Exact non-Boolean uint32 base seed equal to dynamics.seed and canonical phase generation"
+  },
+  "findings_md": "Nonempty free UTF8. No sign, effect-size, ratio band, significance direction, stationarity/state or keyword requirement. Interpret only conditional shared-phase surrogate sensitivity of these released recordings.",
+  "production_partition": "One source-bound completed-output validator plus qualified manufactured tests as explicitly gated; genuine output-equivalence/mutation QA remains authoring-only, never closure requirements on arbitrary participant outputs.",
+  "source_manifest_sha256": "a3d0f6aa1901361c55e29cf6e09a5ee31c8c084d52e4ba7e9a1f7ccddf00609f",
+  "method_contract_sha256": "6268f618e7945a9be5ce08bd4adcae38b76bd65f8c510a9cbec4885a5713e080",
+  "participant_ids": [
+    "0010042",
+    "0010064",
+    "0010128",
+    "0021019",
+    "0023008",
+    "0023012",
+    "0027011",
+    "0027018",
+    "0027034",
+    "0027037",
+    "1019436",
+    "1206380",
+    "1552181",
+    "1679142",
+    "2014113",
+    "2497695",
+    "3007585",
+    "3154996",
+    "3699991",
+    "3884955",
+    "3902469",
+    "4046678",
+    "4134561",
+    "4164316",
+    "4275075",
+    "6115230",
+    "7774305",
+    "8409791",
+    "8697774",
+    "9750701"
+  ],
+  "tolerances": {
+    "raw": {
+      "atol": 0.00001,
+      "rtol": 0.000001
+    },
+    "clean": {
+      "atol": 1e-7,
+      "rtol": 1e-7
+    },
+    "active_centered_relative_l2": 0.000001,
+    "phase": {
+      "atol": 0.000001,
+      "rtol": 0
+    },
+    "derived": {
+      "atol": 0.000001,
+      "rtol": 0.000001
+    },
+    "header": {
+      "atol": 1e-9,
+      "rtol": 1e-9
+    },
+    "support_diagnostic": {
+      "atol": 1e-10,
+      "rtol": 0.000001
+    }
+  },
+  "required_numeric_domains": {
+    "nonnegative": [
+      "raw_sample_sd",
+      "prestandardization_centered_l2",
+      "activity_threshold",
+      "full_clean_centered_l2",
+      "mean_edge_sd",
+      "mean_edge_sd_null",
+      "observed_over_null_ratio",
+      "mean_observed_edge_sd.value",
+      "mean_null_edge_sd.value",
+      "mean_subject_observed_over_null_ratio.value"
+    ],
+    "probability_closed_0_1": [
+      "p_value",
+      "median_subject_p.value",
+      "fraction_subjects_significant.value"
+    ],
+    "note": "Domains apply independently of closeness. Tiny negative receipts around canonical zero reject. Nullable fields remain null when their declared status is undefined."
+  }
+}

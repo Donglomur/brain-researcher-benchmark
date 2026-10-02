@@ -1,103 +1,103 @@
-# Characterizing the temporal variability of resting-state functional connectivity (FCVAR-001)
+# Windowed connectivity variability and a shared-phase comparison
 
-## Scientific context
+Using the supplied resting-state BOLD recordings, quantify how much windowed
+functional-connectivity estimates vary, and compare that statistic with a
+specified finite-record Fourier-surrogate ensemble. This is a paper-derived
+method/sensitivity exercise, not a reproduction of Allen et al.'s connectivity
+states or evidence for an ADHD group difference.
 
-Resting-state functional connectivity is widely described as **dynamic**: rather than being
-a single fixed pattern, inter-regional coupling is reported to **change over the course of a
-scan**. Using **sliding-window** analysis, Allen et al. (2014, *Cerebral Cortex*,
-https://doi.org/10.1093/cercor/bhs352; see also Hutchison et al. 2013, *NeuroImage*,
-https://doi.org/10.1016/j.neuroimage.2013.05.079) reported that functional connectivity
-**fluctuates substantially over time** and recurs into a small set of reproducible
-**"connectivity states."** Time-varying connectivity is now one of the most-cited features of
-resting-state brain organisation, routinely taken to mean that the connectome reconfigures on
-the timescale of seconds to minutes at rest.
+The source contains a preselected 30-person convenience cohort from Nilearn's
+public ADHD demo and the Harvard–Oxford cortical max-probability atlas
+(25% threshold, 2-mm release, 48 nonbackground labels). Membership is the
+explicit literal-ID list in the public contract; it is **not** the first 30
+participants returned by the current Nilearn loader. Do not fetch additional
+data. The container must run offline.
 
-## Task
+## Public inputs and numerical contract
 
-Using the nilearn-pinned ADHD-200 resting-state derivatives
-(`nilearn.datasets.fetch_adhd(n_subjects=30)` — CPAC-preprocessed, in MNI space, with
-per-subject nuisance regressors), **characterize how much resting-state functional
-connectivity varies over the course of the scan on these data, and report whether — and how
-strongly — inter-regional connectivity is time-varying.**
+Original files are under `/app/data/fcvar`. Read `/app/source_manifest.json`,
+`/app/method_contract.json`, `/app/output_schema.json`, and
+`/app/SOURCE_NOTICE.md`. The manifest identifies the original files and their
+checksums; the other two JSON documents specify the estimator and keyed output
+format, including numerical tolerances and undefined cases. The public
+`/app/signal_kernel.py` defines the deterministic float64 phase/window/rank
+arithmetic used for exact Monte Carlo counts. You may use it or implement the
+same public computation. It contains no original-data results.
 
-For each subject, extract mean BOLD time series from the **Harvard–Oxford cortical atlas**
-(`nilearn.datasets.fetch_atlas_harvard_oxford("cort-maxprob-thr25-2mm")`, 48 cortical
-regions) and z-score each region. Compute **sliding-window functional connectivity**: slide a
-window of length **W TR** in steps of a few TR along the scan, and in each window form the
-region×region correlation matrix. Quantify the **amount of time-varying connectivity** as the
-**standard deviation of each connection (edge) across windows**, summarised as the **mean edge
-standard deviation over windows** — the magnitude of window-to-window fluctuation that the
-"dynamic connectivity" literature reports. Report this at a **primary window length of 30 TR**,
-and also at a shorter (**20 TR**) and a longer (**44 TR**) window so the reader can see how the
-reported variability behaves with window length.
+Extract all 48 atlas ROI means on each participant's original BOLD grid using
+the declared nearest-label resampling. Use the source header's time units and
+TR. Preserve every original frame. Apply the task's public detrending, bandpass
+and ordered 13-confound regression recipe; do not silently fill missing
+confounds, censor frames, or substitute a different cohort. Retain all ROI
+identities in the evidence, including empty geometric support and inactive
+signals, with the specified flags rather than invented measurements.
 
-The standard preprocessing choices the analysis leaves to the analyst (nuisance regression,
-temporal filtering, signal normalisation) should follow common practice. Regions with no
-usable signal for a given subject may be dropped.
+For rectangular windows of 20, 30 and 44 frames, advanced by 3 frames, calculate
+Pearson correlations, clip to ±0.999 before Fisher transformation, take each
+edge's sample standard deviation across windows, and average over the fixed
+retained edges. Window lengths are in frames: their duration in seconds follows
+each participant's TR. At least two windows and two active ROIs are necessary.
+The public conditioning rule determines whether every required window has a
+well-defined correlation; do not drop individual windows or edges to repair an
+undefined statistic.
 
-To judge whether the window-to-window fluctuation reflects genuinely time-varying connectivity,
-**compare each subject's observed edge variability against the sampling-variability baseline you
-would expect for that subject's data under the appropriate null, and report that per-subject
-baseline** alongside the observed value, so the reader can see how far the observed fluctuation
-exceeds it.
+Generate 50 full-recording shared-phase surrogates for each participant/window
+configuration, with one declared uint32 base seed for the whole analysis
+(default 0). Follow the exact public PCG64 draw schedule, including its DC
+and even-length Nyquist handling. A frequency's phase is shared across all ROI
+signals; do not independently randomize regions, phase only a cropped window,
+or re-clean surrogates. Phase arrays are receipts; canonical regenerated phases
+define the calculation.
 
-Report, in plain terms, **whether resting-state connectivity is time-varying on these data and
-how strong that variability is relative to the baseline** — stating only what your analysis
-actually supports.
+Report every observed and surrogate statistic, their observed/mean-null ratio,
+and the inclusive plus-one rank fraction `(1 + count(null >= observed))/51`.
+Use the unrounded own-series computations, not rounded CSV values, for counts
+and subsequent summaries. Keep all 50 draw slots, including duplicates or
+undefined slots. A zero null mean makes the ratio undefined, not necessarily
+the rank fraction. Each group metric uses all 30 participants equally; if its
+required participant values are incomplete, report its actual count and a
+null group value rather than silently changing the cohort.
 
-## Data
+## Deliverables
 
-**Dataset:** ADHD-200 resting-state (CPAC derivatives), downloaded programmatically at
-runtime by the loader in the Task section — nothing is pre-placed in the container, so
-**internet access is required** on the first run (the download is cached locally afterwards).
-Fetch it with:
+Write these seven files under `${OUTPUT_DIR}` (default `/app/output`), following
+the public schema:
 
-```python
-nilearn.datasets.fetch_adhd(n_subjects=30)
-nilearn.datasets.fetch_atlas_harvard_oxford("cort-maxprob-thr25-2mm")
-```
+- `cohort.csv`: the complete ID-keyed cohort and source clock/support metadata.
+- `roi_evidence.npz`: full keyed raw/cleaned ROI series, ROI/support diagnostics
+  and phase receipts; use real/text/Boolean arrays, never pickled objects.
+- `variability.csv`: all 90 participant-by-window records.
+- `surrogate_statistics.csv`: all 4,500 participant-by-window-by-draw records.
+- `dynamics.json`: complete, separately counted group summaries for each window.
+- `run_metadata.json`: source/contract identities, declared seed and processing
+  metadata, with `status: "ok"` only after the complete computation.
+- `findings.md`: a short account of the observed result and its limitations.
 
-Do not substitute a different or manually-prepared dataset.
+Source failure is not an admissible participant exclusion. If the analysis
+cannot complete, leave a `failure_report.json` explaining why; its presence
+prevents a successful score. Legitimately undefined numerical endpoints are
+instead completed results with the schema's explicit statuses and nulls.
 
-## Output Location
+The verifier authenticates the original data, reconstructs extraction and
+cleaning, and checks all keyed receipts. Accepted source-close cleaned signals
+drive the downstream comparison; there is no required effect direction,
+significance rate, ratio range or preferred prose conclusion. Scoring is binary:
+all required checks must pass. Additional clearly labeled analyses are optional
+and cannot replace the required calculation.
 
-## Acquisition and surrogate contract
+## Interpretation and paper connection
 
-Use nilearn0.13.1 or a separately tested ID-preserving fetcher. Exactly30 participants are
-required; join full phenotypes by Subject ID, never row position. Read each image TR with
-its temporal units and use subject-specific filtering; report subject, site and tr_sec.
-This is a paper-derived surrogate-sensitivity application, not proof of stationarity.
-For each subject/window, generate50 shared phase screens with RNG seed=declared seed +
-integer subjectID + windowTR. DC and (for even-length scans) Nyquist phases are0.
-The same frequency phase multiplies every region, preserving power and cross spectra.
-Save surrogate_evidence_SUBJECT.npz with subject_id, site, tr_sec, roi_signals, seed
-and phase_w20/phase_w30/phase_w44 arrays. Report actual observed/null ratios and
-plus-one per-subject p values, with group mean ratios and median p by window.
-Non-rejection does not establish no dynamics; no predetermined ratio or conclusion is required.
+The shared-phase construction is adapted from Prichard and Theiler's
+[multivariate surrogate method, Eq. 5](https://arxiv.org/pdf/comp-gas/9405002).
+It preserves the finite-DFT power and cross-spectra, not every possible
+distributional or temporal property. The specified finite-ensemble rank is not
+a universal stationarity test. Rejection does not isolate a neural mechanism;
+nonrejection does not establish absence of meaningful dynamics.
 
-
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
-
-## Required Outputs
-
-- `variability.csv` — one row per subject:
-  `subject_index, site, n_timepoints, mean_edge_sd_w20, mean_edge_sd_w30, mean_edge_sd_w44`,
-  where each `mean_edge_sd_wX` is the mean over edges of the across-window standard deviation
-  of the windowed connectivity at window length X TR; **plus, at least at the primary window
-  length, the per-subject sampling-variability baseline you compared the observed value against**
-  (e.g. `mean_edge_sd_null_w30` — the expected mean edge-SD for that subject's data under your
-  null).
-- `dynamics.json` — the group-level summary: the window lengths used, the primary window
-  length, the group-mean of `mean_edge_sd` at each window length, the sliding-window step,
-  `n_subjects`, and the observed-to-baseline ratio (how far the observed variability exceeds the
-  sampling-variability baseline).
-- `run_metadata.json` — dataset id, n subjects, atlas, window length(s), step, and the
-  preprocessing choices you made.
-- `findings.md` — a short written summary stating whether resting-state connectivity is
-  time-varying on these data and how strong that variability is. State only what your analysis
-  actually supports.
-
-## Failure handling
-
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a non-empty
-reason, and still write parseable `run_metadata.json`, `dynamics.json`, and `findings.md`.
+[Allen et al.](https://pmc.ncbi.nlm.nih.gov/articles/PMC3920766/) used a different
+405-person ICA, tapered-window, regularized-connectivity and clustering
+analysis. This task does not reproduce its states, figures or population
+finding. [Hutchison et al.](https://pmc.ncbi.nlm.nih.gov/articles/PMC3807588/)
+provides the relevant caution that variability of windowed estimates alone
+does not establish changing underlying interactions. Overlapping windows,
+edges and surrogates are not additional independent participants.

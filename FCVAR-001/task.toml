@@ -1,21 +1,22 @@
 version = "1.1"
-instruction_version = "1.0"
-test_version = "1.0"
+instruction_version = "2.0"
+test_version = "2.0"
+artifacts = ["/app/output", "/app/source_manifest.json", "/app/method_contract.json", "/app/output_schema.json"]
 
 [metadata]
 task_id = "FCVAR-001"
-title = "Characterize the temporal variability of resting-state functional connectivity (ADHD-200, Harvard-Oxford)"
-category = "Reproduction"
-difficulty = "hard"
-dataset_source = "nilearn (ADHD-200 CPAC derivatives)"
-dataset_id = "adhd200-nilearn"
-source_paper = "Allen et al. 2014, Cereb Cortex (10.1093/cercor/bhs352); Hutchison et al. 2013, NeuroImage (10.1016/j.neuroimage.2013.05.079)"
+title = "Windowed connectivity variability under a shared-phase surrogate comparison"
+category = "Resting-state connectivity / method control"
+difficulty = "easy"
+dataset_source = "Explicit legacy30 public Nilearn ADHD-demo participants and Harvard-Oxford48 cortical atlas; checksum-pinned build-time fetch, offline runtime"
+dataset_id = "adhd-demo-explicit30-harvardoxford48"
+source_paper = "Method motivation: Prichard and Theiler 1994 (10.1103/PhysRevLett.73.951); Allen et al. 2014 (10.1093/cercor/bhs352); Hutchison et al. 2013 (10.1016/j.neuroimage.2013.05.079). Not an original-finding replication; difficulty uncalibrated."
 
 [verifier]
-timeout_sec = 5400.0
+timeout_sec = 1800.0
 
 [agent]
-timeout_sec = 5400.0
+timeout_sec = 3600.0
 
 [environment]
 build_timeout_sec = 2400.0
@@ -23,7 +24,7 @@ cpus = 2
 memory_mb = 8192
 storage_mb = 16384
 gpus = 0
-allow_internet = true
+allow_internet = false
 
 [verifier.env]
 
