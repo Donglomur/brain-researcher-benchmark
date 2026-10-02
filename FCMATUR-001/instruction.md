@@ -1,119 +1,126 @@
-# Functional connectivity and age across the ABIDE sample (CC200) — a case study
+# Connectivity and age in ABIDE: an aggregation case study
 
-## Scientific context
+Estimate how a signed connectivity summary relates to age at three levels:
+pooled participants, participants conditional on site, and equally weighted
+sites. Report uncertainty and the five specified sensitivities. This is a
+cross-sectional case study, not a paper replication, diagnostic classifier,
+age-prediction benchmark, or longitudinal maturation study.
 
-The **ABIDE** (Autism Brain Imaging Data Exchange) initiative aggregates resting-state fMRI from
-~20 acquisition sites spanning childhood to adulthood. Because ABIDE is a **multi-site** sample,
-an association measured by pooling every participant (a *marginal* association) and the same
-association measured *within* sites (a *site-conditioned* association) can differ. This case study
-asks you to characterise how a whole-brain summary of functional connectivity relates to age in
-ABIDE, and to **distinguish the marginal association from the site-conditioned one**.
+There is no required sign, ordering, attenuation, or significance. Your
+interpretation must follow your source-bound measurements.
 
-This is **not** a reproduction of any specific paper; it is a self-contained ABIDE case study on
-the pinned CC200 preprocessed derivatives.
+## Inputs and public contract
 
-## Task
+All inputs are baked into `/app/data/fcmatur`; runtime is offline. The exact
+1,035 literal FILE_IDs are in `/app/subject_ids.txt`. The directory contains the
+original CPAC `filt_noglobal/rois_cc200` tables, the original full phenotype CSV,
+the upstream dataset notice, and an internal source manifest. Each ROI file is
+**time × 200 columns**, with tab-delimited `#1` through `#200` headers. Do not
+replace these originals with a newly fetched cohort, converted snapshot, or
+previous task's derived results.
 
-Using the pinned ABIDE preprocessed resting-state sample, compute each participant's overall
-functional connectivity strength from the Craddock-200 (CC200) parcellation, then estimate and
-report the connectivity–age association **at three levels — pooled (marginal), within-site
-(site-conditioned), and between-site — each with a measure of uncertainty**, plus basic
-sensitivity checks.
+Read these public specifications before implementing:
 
-### Data
+- [Method and numerical tolerances](/app/method_contract.json)
+- [Exact output fields, types, null/status rules, and limits](/app/output_schema.json)
+- [Source membership and byte identities](/app/source_manifest.json)
+- [Source terms and attribution](/app/SOURCE_NOTICE.md)
 
-The pinned inputs are the ABIDE CC200 ROI timeseries for a fixed subject list (see
-`environment/`). If a baked snapshot is present the solution reads it directly (no network);
-otherwise the same selection is obtained with nilearn:
+The readable [statistics kernel](/app/statistics_kernel.py) implements the public
+arithmetic and may be reused, but its use is optional. It contains no source
+loader or answers. Equivalent implementations must satisfy the same declared
+source fidelity, rank, support, and arithmetic contract. Use the original
+normalized covariates for calculations, not rounded output receipts.
 
-```python
-from nilearn.datasets import fetch_abide_pcp
-abide = fetch_abide_pcp(pipeline="cpac", band_pass_filtering=True,
-                        global_signal_regression=False,
-                        derivatives=["rois_cc200"], quality_checked=False)
-```
+## Participant measurement
 
-`abide["rois_cc200"]` is a list of per-participant region×time arrays (200 CC200 regions);
-`abide["phenotypic"]` is a table aligned row-for-row and contains `FILE_ID`, `AGE_AT_SCAN`,
-`SITE_ID`, `SEX`, `DX_GROUP`, and `func_mean_fd` (mean framewise displacement). The pinned
-selection is the **cpac / band_pass_filtering=True / global_signal_regression=False / rois_cc200**
-derivatives with `quality_checked=False` (see `environment/subject_ids.txt` for the exact
-`FILE_ID` list and count).
+Authenticate the original inputs and retain every original frame and column
+identity. Reject nonfinite ROI values. An exactly constant or zero-centered-norm
+column is inactive; do not introduce a near-constant threshold or an additional
+coverage/QC cutoff. For each participant, calculate Pearson correlations among
+all active columns, clip each correlation to `[-0.999, 0.999]`, Fisher-transform,
+and average every strict-upper, off-diagonal edge once, retaining its sign.
+Fewer than two active columns gives an undefined measurement, not zero.
 
-### Fixed processing (pin exactly)
+This is an **available-edge summary**: inactive columns differ across people,
+so spatial support can differ. Preserve and report that support and discuss
+this comparability limitation. Do not add filtering, scrubbing, imputation,
+time-series nuisance regression, shrinkage, or resampling.
 
-- For each participant: drop any CC200 region with zero temporal variance, form the
-  region×region **Pearson correlation matrix** across the CC200 time series, and
-  **Fisher z-transform** the correlations.
-- Define the participant's **overall connectivity strength** as the **mean of the
-  upper-triangular (off-diagonal) Fisher-z values**.
-- Pair each participant's connectivity strength with `AGE_AT_SCAN`; drop participants with
-  missing age (keep `0 < age < 120`).
+Join the phenotype by exact FILE_ID, source SUB_ID identity, and original row
+index. Preserve raw tokens separately from normalized age, site, sex, diagnosis,
+and mean FD. Apply the public missing/invalid-token rules without inventing
+values or deriving site from FILE_ID. Keep all 1,035 participants in the
+participant table and all 1,112 original phenotype rows in the provenance
+ledger, including the 77 `no_filename` rows.
 
-### Estimate and report (three levels, with uncertainty)
+## Three primary estimates and five sensitivities
 
-1. **Marginal / pooled** — the connectivity–age correlation across all participants
-   (Pearson r, a 95% CI, p, n).
-2. **Site-conditioned / within-site** — the connectivity–age correlation **after conditioning on
-   site** (e.g. site fixed effects / site-demeaning / a partial correlation controlling for
-   `SITE_ID`), with a 95% CI and p. Use a minimum per-site sample where appropriate.
-3. **Between-site** — the correlation of each site's **mean connectivity** with its **mean age**
-   across sites, with a 95% CI.
+The base sample has defined source connectivity and valid age (`0 < age < 120`).
+Missing site alone does not exclude a person from the pooled estimate. Define
+the eligible site set once using at least five base-sample participants per
+valid site.
 
-### Sensitivity checks (report as outputs)
+1. Pooled: participant-level connectivity–age Pearson correlation on the base
+   sample.
+2. Within-site: participant-level partial correlation controlling for site
+   fixed effects on the eligible-site sample.
+3. Between-site: correlation of mean age and mean connectivity across those
+   eligible sites, weighting each site equally.
 
-Add basic robustness checks and report their results in `sensitivity.json`:
-- **motion / QC** — the association adjusting for `func_mean_fd`;
-- **diagnosis** — the association restricted to typical controls (`DX_GROUP == 2`);
-- **sex** — the association adjusting for `SEX`;
-- **nonlinear age** — whether an `age²` term materially changes the connectivity model;
-- **site-specific slopes** — the distribution of the per-site connectivity–age relationship
-  (heterogeneity across sites).
+Report signed estimates, analytic 95% intervals, p-values, actual units, sample
+identities, ranks, and degrees of freedom as specified. Retain a defined estimate
+when only its uncertainty is unavailable; use the prescribed null/status fields
+for degenerate support or insufficient degrees of freedom.
 
-### Interpretation (state a bounded conclusion)
+Also report:
 
-Report what the three levels imply. In particular, say whether the marginal association is
-**site-conditioned** (i.e. carried by between-site differences and attenuated within sites) or
-survives conditioning on site. **Do not over-claim**: these data are cross-sectional (one scan
-per participant), and `SITE_ID` conflates scanner, protocol and cohort composition — so do not
-assert that scanner hardware *caused* any association, and do not claim a *true null* (a
-near-zero within-site estimate with a wide CI is not proof that there is no age relationship at
-any site or no within-person developmental change).
+- Motion: pooled and within-site partial correlations adjusted for mean FD.
+- Diagnosis: pooled and within-site correlations restricted to typical controls
+  (`DX_GROUP == 2`).
+- Sex: pooled and within-site partial correlations adjusted for the released
+  numeric sex code.
+- Nonlinear age: the specified nested standardized-age quadratic added-term
+  test on the base sample.
+- Site-specific slopes: each eligible site's correlation and age slope,
+  including undefined rows, plus the specified complete-support summaries.
 
-## Output Location
+Motion, sex, and control sensitivities inherit the eligible-site sample, then
+apply their declared complete-case/restriction rule without reapplying the
+five-person threshold. Do not substitute a median of site correlations for the
+within-site fixed-effects estimand. Numerical details, including projection,
+stable reductions, active-direction fidelity, and quadratic underflow handling,
+are fully public in the linked contract.
 
-## Numeric sensitivity and uncertainty contract
+## Deliverables
 
-connectivity.csv includes the exact unique pinned FILE_ID cohort, age, site_id, sex,
-dx_group, mean_fd and measured connectivity. Each sensitivity has numeric estimates,
-p/counts and subject_ids of its actual sample. Use motion/sex partial correlations with
-and without site fixed effects; typical-control restriction; pooled standardized-age
-quadratic added-term F test; per-site Pearson correlations/age slopes with minimum5subjects.
-All primary levels require analytic Fisher-z95% intervals and p values using actual
-units: participants for pooled/within-site, sites for between-site. Within-site
-partial-correlation df=n-number_nonintercept_site_dummies-2. Missing covariates use
-reported complete-case samples, never guessed values.
+Write these five files to `${OUTPUT_DIR}` (default `/app/output`):
 
+- `connectivity.csv`: every fixed FILE_ID, measured connectivity, normalized
+  covariates/statuses, source support counts, and analysis eligibility.
+- `connectivity_age.json`: the three primary estimates and their samples.
+- `sensitivity.json`: all five complete sensitivity records.
+- `run_metadata.json`: source/document identities, complete source and phenotype
+  ledgers, observed source structure, and actual software versions.
+- `findings.md`: a concise interpretation of the estimates and uncertainty.
 
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
+The output schema defines the required nested fields; extra benign descriptions
+are allowed within its limits. Submitted participant connectivity must match
+the sources and preserve the declared active directions. Those accepted values
+then determine every downstream estimate; reported intermediate values are
+receipts, not alternative inputs. Grading is all-or-nothing, not proportional
+credit, and does not require a predetermined endpoint or phrase.
 
-## Required Outputs
+Describe the contrast between aggregation levels without attributing a cause
+to scanner hardware: SITE_ID mixes acquisition, protocol, and cohort factors.
+These cross-sectional estimates cannot establish within-person development.
+A small estimate or interval containing zero does not establish a true null.
+The analytic uncertainty is model-based, not cluster-robust or
+multiplicity-adjusted. Automated checks cover the machine-readable results;
+scientific quality of prose still requires human review.
 
-- `connectivity.csv` — one row per participant with at least the participant identifier
-  (`FILE_ID`), `connectivity` (overall connectivity strength), `age`, and `site_id`.
-- `connectivity_age.json` — at minimum
-  `{"pooled_r": <float>, "pooled_ci95": [<float>,<float>], "pooled_p": <float>,
-  "within_site_r": <float>, "within_site_ci95": [<float>,<float>], "within_site_p": <float>,
-  "between_site_r": <float>, "between_site_ci95": [<float>,<float>], "n": <int>,
-  "n_sites": <int>, "atlas": "cc200"}`.
-- `sensitivity.json` — the five sensitivity checks above (motion, diagnosis, sex, nonlinear age,
-  site-specific slopes), each with its numeric result.
-- `run_metadata.json` — dataset id, pipeline/derivative, atlas, number of participants and sites,
-  the connectivity metric, and the methods used at each level.
-- `findings.md` — a short write-up reporting the three-level result with uncertainty and stating
-  the bounded conclusion. State only what your analysis supports.
-
-## Failure handling
-
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a non-empty
-reason, and still write parseable `run_metadata.json`, `connectivity_age.json`, and `findings.md`.
+If original-source identity, shape, or finite-value prerequisites fail, stop
+with nonzero exit and write `failure_report.json` with
+`status: "failed_precondition"` and a nonempty reason. Do not pass off stale or
+partial outputs as complete. A legitimately undefined statistic instead stays
+in the completed output with its declared null/status and sample identities.

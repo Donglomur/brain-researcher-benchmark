@@ -1,0 +1,261 @@
+{
+  "schema_version": "fcmatur-output-v3",
+  "task_id": "FCMATUR-001",
+  "required_files": [
+    "connectivity.csv",
+    "connectivity_age.json",
+    "sensitivity.json",
+    "run_metadata.json",
+    "findings.md"
+  ],
+  "encoding": "UTF-8 CSV/JSON/text; no NaN or Infinity, duplicate JSON keys/CSV headers/identities, symlinks or special files. CSV must have consistent row width.",
+  "limits": {
+    "csv_bytes": 16777216,
+    "json_bytes": 16777216,
+    "text_bytes": 1048576,
+    "entire_output_tree_bytes": 67108864,
+    "csv_rows": 100000,
+    "csv_field_bytes": 1048576,
+    "json_depth": 64,
+    "inventory_entries": 1000
+  },
+  "csv": {
+    "file": "connectivity.csv",
+    "key": "FILE_ID",
+    "required_columns": [
+      "FILE_ID",
+      "connectivity",
+      "connectivity_status",
+      "age",
+      "site_id",
+      "sex",
+      "dx_group",
+      "mean_fd",
+      "age_status",
+      "site_id_status",
+      "sex_status",
+      "dx_group_status",
+      "mean_fd_status",
+      "n_frames",
+      "n_columns",
+      "n_active_columns",
+      "n_edges",
+      "base_eligible",
+      "within_eligible",
+      "motion_eligible",
+      "sex_eligible",
+      "control_eligible",
+      "base_reason"
+    ],
+    "rows": "Exactly the full literal1035 released FILE_ID cohort; order arbitrary. Extra descriptive columns allowed.",
+    "nullable_numeric": [
+      "connectivity",
+      "age",
+      "sex",
+      "dx_group",
+      "mean_fd"
+    ],
+    "integer_columns": [
+      "sex",
+      "dx_group",
+      "n_frames",
+      "n_columns",
+      "n_active_columns",
+      "n_edges"
+    ],
+    "boolean_columns": [
+      "base_eligible",
+      "within_eligible",
+      "motion_eligible",
+      "sex_eligible",
+      "control_eligible"
+    ],
+    "null": "Empty cell only for nullable values; site_id blank if unavailable. No string null/NaN sentinel.",
+    "booleans": "true/false or1/0, case-insensitive for true/false; not a numeric substitute in other fields.",
+    "metadata_binding": "Normalized covariates and statuses from original phenotype; counts/status from original ROI primitive. Eligibility/base_reason from the numerical kernel. Source structural and metadata receipts never determine downstream arithmetic."
+  },
+  "primary": {
+    "file": "connectivity_age.json",
+    "schema_version": "fcmatur-results-v3",
+    "status": "complete",
+    "required_keys": [
+      "schema_version",
+      "status",
+      "n_source",
+      "n_base",
+      "n_within",
+      "eligible_site_ids",
+      "all_base_site_counts",
+      "pooled",
+      "within_site",
+      "between_site",
+      "site_means"
+    ],
+    "mapping": "These scientific fields are the named public analyze() return values; pooled and within units participants, between unit sites.",
+    "association_required": [
+      "unit",
+      "ids",
+      "n",
+      "column_ids",
+      "rank",
+      "df",
+      "r",
+      "t",
+      "p",
+      "ci95",
+      "estimate_status",
+      "t_status",
+      "p_status",
+      "ci_status",
+      "age_support",
+      "connectivity_support"
+    ],
+    "support": "age_support and connectivity_support require only Boolean active. Numeric norm/threshold diagnostics may be included but are non-scoring.",
+    "site_mean_required": [
+      "site_id",
+      "ids",
+      "n",
+      "mean_age",
+      "mean_connectivity"
+    ]
+  },
+  "sensitivity": {
+    "file": "sensitivity.json",
+    "schema_version": "fcmatur-sensitivity-v3",
+    "status": "complete",
+    "required_keys": [
+      "schema_version",
+      "status",
+      "checks"
+    ],
+    "checks": [
+      "motion",
+      "diagnosis",
+      "sex",
+      "nonlinear_age",
+      "site_specific_slopes"
+    ],
+    "adjusted_required": [
+      "ids",
+      "n",
+      "site_counts",
+      "pooled",
+      "within_site"
+    ],
+    "quadratic_required": [
+      "ids",
+      "n",
+      "base_rank",
+      "full_rank",
+      "added_rank",
+      "df1",
+      "df2",
+      "quadratic_beta",
+      "beta_status",
+      "gain_ss",
+      "rss_linear",
+      "rss_quadratic",
+      "F_added_quadratic",
+      "p_added_quadratic",
+      "status"
+    ],
+    "quadratic_conditional": "linear_residual_support.active and full_residual_support.active required exactly when the public kernel emits those support records. added_norm/added_cutoff/added_basis_orthogonality are optional non-scoring diagnostics, not extra acceptance gates.",
+    "site_summary_required": [
+      "n_expected",
+      "n_defined",
+      "per_site",
+      "status",
+      "median_within_site_r",
+      "frac_sites_positive",
+      "n_sites_positive",
+      "min_r",
+      "max_r"
+    ],
+    "per_site": "Every eligible site row: association required fields plus site_id,slope,slope_status. Keep undefined rows. Summary requires complete support; exact sign counts use own unrounded replay, not rounded reported r."
+  },
+  "metadata": {
+    "file": "run_metadata.json",
+    "schema_version": "fcmatur-metadata-v3",
+    "status": "complete",
+    "required_keys": [
+      "schema_version",
+      "status",
+      "task_id",
+      "pins",
+      "source_files",
+      "phenotype_ledger",
+      "source_observed",
+      "software"
+    ],
+    "pins": [
+      "source_manifest_sha256",
+      "method_contract_sha256",
+      "output_schema_sha256"
+    ],
+    "source_files": "Every full source-manifest file row keyed by literal path; original values exact, benign added keys allowed. A source inventory is not a derived answer bank.",
+    "phenotype_ledger": {
+      "key": "phenotype_row_index",
+      "n": 1112,
+      "required_fields": [
+        "phenotype_row_index",
+        "subject_id",
+        "source_subject_id_token",
+        "file_id",
+        "source_availability",
+        "source_path",
+        "tokens",
+        "normalized",
+        "covariate_status"
+      ],
+      "tokens": [
+        "AGE_AT_SCAN",
+        "SITE_ID",
+        "SEX",
+        "DX_GROUP",
+        "func_mean_fd"
+      ],
+      "normalized": [
+        "age",
+        "site_id",
+        "sex",
+        "dx_group",
+        "mean_fd",
+        "typical_control"
+      ],
+      "covariate_status": [
+        "age",
+        "site_id",
+        "sex",
+        "dx_group",
+        "mean_fd"
+      ],
+      "values": "Use original source row index zero-based excluding header; source_availability released_filename/no_filename; source_path ROI path/null. Preserve source SUB_ID token as well as normalized decimal subject_id string."
+    },
+    "source_observed": {
+      "required": [
+        "n_source_files",
+        "source_bytes",
+        "n_phenotype_rows",
+        "n_no_filename",
+        "total_frames",
+        "phenotype_columns",
+        "source_column_ids",
+        "persons"
+      ],
+      "persons": "Dictionary keyed by exact FILE_ID. Each contains n_frames,n_columns,header_sha256,all_finite,active_columns,exact_constant_columns,n_active_columns,n_edges. active_columns is200 Booleans in original column order; exact_constant_columns is the set of one-based IDs. All 200 original source_column_ids and phenotype_columns preserve axis order."
+    },
+    "software": "Nonempty real version strings for python,numpy,scipy. No exact version or prose fingerprint is a correctness target."
+  },
+  "typing": {
+    "integer": "Finite integer-valued numeric JSON/CSV values required for count/rank/df/index/code fields, never Boolean-as-number. JSON3.0 is a valid integer receipt.",
+    "continuous": "Finite numeric JSON values, never strings or Boolean. Null only where canonical source support or declared inference says undefined.",
+    "strict_domains": "r, min_r, max_r, median_within_site_r and CI bounds within[-1,1]; probabilities and positive-site fraction within[0,1]; F and sums of squares>=0. CI lower<=upper. Source normalized physical domains hold independently of tolerance.",
+    "tolerances": "Participant and derived continuous atol1e-6,rtol1e-6; phenotype receipt atol1e-10,rtol1e-9; other discrete/identity/status fields exact. Participant values also obey every public centered/projected relative-fidelity check. Only serialized participant connectivity has the documented outward-cap allowance.",
+    "arrays": "ids and eligible_site_ids are unique exact memberships with arbitrary ordering. source_files keyed path; phenotype_ledger keyed row index; site_means and per_site keyed site_id. column_ids/source_column_ids/phenotype_columns/active_columns/CI preserve order. exact_constant_columns is an exact unique integer set.",
+    "extras": "Benign extra JSON keys, CSV columns and optional diagnostics allowed within caps. No unknown extra member in an identity/membership set or keyed record list."
+  },
+  "findings": "Nonempty bounded interpretation. No mandatory number, keyword, direction or phrase. Automated scoring checks source-bound machine-readable measurements; human review is required for the scientific quality of prose.",
+  "failure": "A failure_report.json entry (including empty or dangling symlink) before or after reading/validation is authoritative and forces reward0. Original input failures should create status failed_precondition with a nonempty reason and exit nonzero. Never score stale outputs after failure.",
+  "scoring": "All-or-nothing: reward1 only if all production source-bound and manufactured contract tests pass, otherwise0. No proportional/partial credit claim.",
+  "authority": "Source reconstruction determines samples, covariates, column support, activity, rank and df. The accepted connectivity.csv values are the sole downstream estimate authority after source-closeness and fidelity checks. No hidden canonical r/p/F/sign/ordering target; reported intermediate outputs are receipts."
+}
