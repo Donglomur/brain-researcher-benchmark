@@ -1,123 +1,85 @@
-# The N2pc component amplitude in the ERP CORE visual-search task (N2PC-001)
+# ERP CORE N2pc: signed lateralization in a fixed cohort
 
-## Scientific context
+Compute the signed PO7/PO8 contralateral-minus-ipsilateral response for subjects
+**1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13**, using their original ERP CORE
+visual-search recordings.
 
-The **N2pc** is a posterior ERP component that indexes the focusing of covert visual
-attention onto a lateralized target. It appears at lateral occipito-parietal sites — the
-**PO7 / PO8** electrode pair — as a negativity over the hemisphere **contralateral** to the
-visual field of the attended target, roughly **200-300 ms** after the search array. Its
-canonical readout is the **contralateral-minus-ipsilateral** difference in that window. In
-the ERP CORE visual-search paradigm (Kappenman, Farrens, Zhang, Stewart & Luck, 2021,
-*NeuroImage*, https://doi.org/10.1016/j.neuroimage.2020.117465), the participant reports the
-gap position (top vs bottom) of a colour-defined target square that appears to the **left**
-or **right** of fixation among distractors.
+This is a twelve-person methods adaptation, not a reproduction of the paper's
+cleaned N=35 N2pc characterization or recommended 200–275 ms measurement window.
+[Kappenman et al. (2021)](https://doi.org/10.1016/j.neuroimage.2020.117465),
+Tables 1–2, provides that characterization. Here the fixed endpoint is
+**200–300 ms**, with no ICA, ocular, behavioral, reaction-time or participant
+exclusions. A lateralized response in this simplified analysis does not by
+itself establish artifact-free covert attention.
 
-## Task
+## Inputs and public contract
 
-This is an **N=12 raw-data lateralization methods adaptation**, not a reproduction of
-the paper's full N=35 N2pc characterization or its 200–275 ms endpoint. The deliberately
-simplified pipeline below does not perform ICA, HEOG artifact rejection, or behavioral
-trial exclusions. State these limitations; a raw lateralized difference alone does not
-establish artifact-free covert visual attention.
+The offline originals are at `${N2PC_DIR:-/app/data/n2pc}`: 24 paired SET/FDT
+files plus `source_manifest.json` and `SOURCE_NOTICE.md`. The manifest gives
+the exact version, size and SHA256/MD5 of every original. Do not download,
+substitute a participant, use an answer cache or change source files.
 
-Using the ERP CORE **N2pc** continuous EEG recordings for **subjects 1, 3, 4, 5, 6, 7, 8,
-9, 10, 11, 12, 13** (subject 2 is not part of the released N2pc set), **compute the N2pc
-component amplitude at the PO7/PO8 pair** and report it as the **mean
-contralateral-minus-ipsilateral amplitude, in microvolts, over the 200-300 ms window**,
-grand-averaged over the subjects, following the fixed processing below.
+Read **`/app/method_contract.json`**. It specifies the complete numerical
+operator, event rules, output schemas, precision and resource bounds.
+Equivalent implementations are accepted; no particular library or secret
+estimator is required. The recordings have 33 channels at 1024 Hz. Use the
+listed 30 EEG channels for the average reference, excluding the three
+peripheral EOG channels. File units are not explicitly labeled: the declared
+EEGLAB/MNE reading convention interprets stored float32 values as microvolts,
+not an independently measured calibration.
 
-### Data (ERP CORE N2pc, BIDS-compatible continuous EEGLAB files)
+## Analysis
 
-Each subject has a `sub-<nnn>_task-N2pc_eeg.set` header and a matching `.fdt` data file that
-must sit in the same directory. Download both files for each subject from OSF at
-`https://osf.io/download/<id>/` (no credentials required):
+- Preserve every original event row and its source index. Target-left codes
+  are 111,112,211,212; target-right codes are 121,122,221,222. Responses do not
+  determine eligibility.
+- Convert one-based event latency to recording-relative time by
+  `(latency-1)/1024`, then to an integer sample with nearest, ties-to-even
+  rounding. Keep the original event identity even when an epoch is dropped.
+- Treat numeric `-99` as a discontinuity: a half-integer latency `k+0.5`
+  defines a cut at zero-based sample `k`. Filter the two sides independently.
+  Do not interpret the boundary's duration as a new span of missing samples.
+- Apply the contract's centered 0.1–30 Hz Hamming FIR with
+  `reflect_limited` padding and the 30-channel average reference.
+  Full epochs use offsets **-205..461**. Drop epochs outside the recording or
+  crossing a discontinuity; do not crop, bridge or interpolate them.
+- Baseline each trial/channel using offsets **-204..0** (not -205).
+  Measure its corrected mean over offsets **205..307**. These are the actual
+  1024 Hz samples in the nominal baseline and 200–300 ms intervals.
+- Average trials within each target field. If `L7,L8,R7,R8` are the four
+  field/channel means, compute
+  `contra=(L8+R7)/2`, `ipsi=(L7+R8)/2`, and `N2pc=contra-ipsi`.
+  The fixed-channel comparator is `((L8-L7)+(R8-R7))/2`.
+  Give fields equal weights, then give the twelve participants equal weights.
+  Counts are not aggregation weights.
 
-```
-subj   .set id                         .fdt id
-1      60078009e80d3708eca59ed0        60077ffeba010908978910b5
-3      6007806d86541a092614bc4e        60078065e80d3708eca5a074
-4      60078089e80d3708eca5a0f6        60078084e80d3708eaa592c8
-5      600780ace80d3708eaa59320        60078098e80d3708eaa59300
-6      600780c5ba010908a7893ce5        600780bfba010908978910d5
-7      600780e686541a092614bd07        600780dbe80d3708e7a586fc
-8      6007810be80d3708e2a57755        600780ff86541a092c1534dc
-9      6007812eba010908a7893eae        60078127ba010908a7893e7e
-10     6007816b86541a092614be07        6007815d86541a092c153ba7
-11     600781a0ba010908a7894081        6007818eba01090892890b1e
-12     600781ca86541a092c15443a        600781c5e80d3708eca5a5e9
-13     600781f186541a092614bf0b        600781e4ba0109089e8922f0
-```
+Use the same retained trials for scalars and full waveforms. Keep a participant
+with empty field support and report the contract's null/undefined state;
+never substitute an available-case group result. There is no required sign,
+magnitude, fraction of negative participants or near-zero comparator.
+The descriptive `n_subjects_negative` count follows the signed values in your
+numerically accepted `per_subject.csv`; permitted rounding near zero can change
+this count, but cannot exempt an amplitude from its tolerance check.
 
-Save each pair as `sub-<nnn>_task-N2pc_eeg.set` / `sub-<nnn>_task-N2pc_eeg.fdt` (the `.set`
-references the `.fdt` by name; use zero-padded subject numbers, e.g. `sub-001`). Read with
-`mne.io.read_raw_eeglab`. Each recording has 30 scalp EEG electrodes (including PO7 and PO8)
-plus 3 peripheral EOG channels (`HEOG_left`, `HEOG_right`, `VEOG_lower`), sampled at 1024 Hz.
+## Outputs and grading
 
-### Event codes (ERP CORE N2pc scheme)
+Write the eight artifacts below to a fresh `${OUTPUT_DIR:-/app/output}`.
+Their full typed schemas are in the public contract:
 
-Stimulus event codes are three digits **XYZ**:
+`annotations.csv`, `trials.csv`, `response_epochs.npz`,
+`per_subject.csv`, `waveforms.csv`, `n2pc.json`,
+`run_metadata.json`, and `findings.md`.
 
-| digit | meaning | values |
-|-------|---------|--------|
-| hundreds (X) | target colour | 1 = blue, 2 = pink |
-| tens (Y) | target visual field | 1 = left, 2 = right |
-| ones (Z) | gap position | 1 = top, 2 = bottom |
+The NPZ contains complete **prebaseline** PO7/PO8 epochs in microvolts, keyed by
+subject, original event index, channel label and sample offset. The verifier
+reconstructs these from authenticated originals and recomputes all reported
+measurements from the accepted submitted epochs. Primitive tolerance is
+`1e-6 + 1e-6*abs(reference)` µV; derived tolerance is
+`1e-8 + 1e-6*abs(recomputed)` µV. Identities and sample membership are exact.
+Coherent row/axis reordering and harmless finite extra fields are allowed.
 
-So the eight stimulus codes are 111, 112, 121, 122, 211, 212, 221, 222. Codes 201
-(response, correct) and 202 (response, error) are behavioural, not stimulus events. Read the
-codes with `mne.events_from_annotations`.
-
-### Fixed processing (pin exactly)
-
-- Use **all target-stimulus events** (all eight stimulus codes; both correct and error
-  trials).
-- Set the 3 EOG channels aside and analyse the **30 scalp EEG electrodes**. Apply an
-  **average reference** across those 30 electrodes.
-- Apply a **0.1-30 Hz band-pass** filter.
-- Epoch around each stimulus event, apply a **pre-event baseline** (the 200 ms before the
-  event), and average. The exact epoch is **-0.200 through +0.450 seconds**, inclusive
-  of those MNE epoch endpoints; baseline is `(-0.200, 0)`.
-- Form the **contralateral** and **ipsilateral** waveforms at the **PO7/PO8** pair, take
-  their difference, and measure the **mean amplitude in the 200-300 ms post-stimulus
-  window**, for each subject.
-- Report the **grand average** of that contralateral-minus-ipsilateral amplitude over the
-  subjects, in **microvolts**.
-  First average trials separately for target-left and target-right. Within each subject,
-  give the two visual fields **equal weight (0.5 each)**, irrespective of retained trial
-  counts: contra = 0.5*(left-target PO8 + right-target PO7), ipsi =
-  0.5*(left-target PO7 + right-target PO8). The pooled fixed-electrode comparison also
-  uses equal field weights. Then give all 12 subjects equal weight. Do not replace
-  this endpoint with trial-count-weighted field or subject pooling.
-
-## Output Location
-
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
-
-## Required Outputs
-
-- `n2pc.json` — at minimum `{"n2pc_amplitude_uv": <float>, "electrode_pair": "PO7/PO8",
-  "measure": "mean contralateral-minus-ipsilateral amplitude, 200-300 ms",
-  "window_ms": [200, 300], "n_subjects": <int>}`. Also report, for contrast, the
-  `contralateral_amplitude_uv`, `ipsilateral_amplitude_uv`, and the pooled fixed-electrode
-  difference `fixed_po8_minus_po7_pooled_uv_for_reference`.
-  Include `n_subjects_negative`, `n_left_target_trials_total`, and
-  `n_right_target_trials_total`, recomputed from the complete per-subject table.
-- `per_subject.csv` — one row per subject (the exact analysis sample, real subject ids):
-  `subject, n_left_trials, n_right_trials, contra_uv, ipsi_uv, n2pc_uv,
-  fixed_po8_minus_po7_pooled_uv`. The per-subject `n2pc_uv` is the signed
-  contralateral-minus-ipsilateral amplitude (a negativity); its mean is the reported
-  headline `n2pc_amplitude_uv`.
-- `run_metadata.json` — dataset id, subjects, electrode pair, reference, band-pass,
-  baseline, and the measurement window you used.
-  Record observed SHA256 for both files of each subject, distinguishing observed
-  digests from independently pinned expected digests. An explicit `N2PC_DIR` must contain
-  every non-empty paired `.set`/`.fdt`; missing pairs are a failed precondition, not a
-  reason to silently fetch a different cache.
-- `findings.md` — a few sentences reporting the N2pc amplitude. State only what your
-  analysis supports.
-
-## Failure handling
-
-If the ERP CORE N2pc recordings cannot be resolved, exit non-zero with `failed_precondition`
-and a non-empty reason, and still write parseable `run_metadata.json`, `n2pc.json`, and
-`findings.md`.
+Grading is binary: complete valid evidence receives 1, otherwise 0.
+`findings.md` must be nonempty, but is not checked for keywords or a preferred
+biological conclusion. On a failed precondition, exit nonzero and preserve a
+`failure_report.json` with the stage and reason. Do not replace partial evidence
+with plausible success files or retry against a different source.

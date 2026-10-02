@@ -1,255 +1,162 @@
-"""Reference solution for N2PC-001.
+"""Offline fixed12 signed-lateralization oracle; no outcome-based acceptance.
 
-Reproduce the ERP CORE N2pc visual-search effect: the **N2pc component amplitude** at the
-**PO7/PO8** electrode pair in its 200-300 ms window, quantified as the
-**contralateral-minus-ipsilateral** difference and grand-averaged over subjects
-1, 3-13, with the whole pipeline pinned by the task.
-
-The one choice the brief leaves un-cued is **how the contralateral / ipsilateral waveforms
-are formed from the two electrodes given the target's visual field**. The N2pc is a
-*lateralized* component: for a target in the **left** visual field it appears over the
-**right** posterior scalp (PO8), and for a **right**-field target over the **left**
-posterior scalp (PO7). The target side is carried by the *tens* digit of the 3-digit
-stimulus code (1 = target left, 2 = target right; the hundreds digit is the target colour
-and the units digit the gap position, both irrelevant to laterality). The component must
-therefore be built by *re-mapping the electrodes per trial*: contralateral =
-(PO8 on left-target trials, PO7 on right-target trials), ipsilateral = the mirror. Averaged
-this way the contralateral-minus-ipsilateral difference is a robust negativity (~-1.4 uV).
-
-A pipeline that instead takes a **fixed** electrode difference across all trials (e.g.
-PO8-PO7, or PO7-PO8, without splitting by target side) *pools the two visual fields*: the
-lateralized negativity sits on opposite electrodes for the two fields and, because the
-field is balanced, cancels almost completely (grand-average |difference| ~ 0.3 uV). Only the
-per-side contralateral/ipsilateral assignment recovers the component; everything else
-(subjects, 0.1-30 Hz band-pass, average reference over the 30 scalp electrodes, -200..0
-baseline, epochs, the PO7/PO8 pair and the 200-300 ms window, mean amplitude) is pinned.
-
-The contralateral-minus-ipsilateral difference is a difference between two scalp electrodes,
-so it is independent of the EEG reference.
-
-Validated (MNE 1.12.1, ERP CORE N2pc, subjects 1/3/4/5/6/7/8/9/10/11/12/13; PO7/PO8;
-0.1-30 Hz; -200..0 baseline; 200-300 ms mean amplitude; per subject then mean over the 12):
-    contralateral-minus-ipsilateral (correct N2pc)      : -1.38 uV   <-- reported here
-    fixed PO8-PO7 across all trials (pooled, naive)      : +0.34 uV
-    fixed PO7-PO8 across all trials (pooled, naive)      : -0.34 uV
-12/12 subjects show a negative contralateral-minus-ipsilateral N2pc.
-
-Proof-of-work deliverable: a PER-SUBJECT table (per_subject.csv) with each subject's signed
-contralateral, ipsilateral, contralateral-minus-ipsilateral (N2pc) and pooled fixed-electrode
-amplitudes. The grand-average N2pc is the mean of the per-subject N2pc column; the pooled
-fixed-electrode difference (~0) is the discriminating quantity a field-pooled pipeline
-reports instead.
+MNE EEG reader and segmented FIR are the supplied implementation, not a claim
+that numerical -99 handling reproduces the legacy unsegmented pipeline.
 """
+from __future__ import annotations
+
+import argparse
 import csv
-import hashlib
 import json
 import os
-import sys
-import tempfile
-import urllib.request
-import warnings
 from pathlib import Path
+import platform
 
 import numpy as np
-from cache_contract import require_pairs
-from lateralization_contract import equal_field_amplitudes
+import scipy
+import mne
 
-warnings.filterwarnings("ignore")
-
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-OUT.mkdir(parents=True, exist_ok=True)
-
-SUBJECTS = [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-EOG = ["HEOG_left", "HEOG_right", "VEOG_lower"]
-# target side = tens digit of the 3-digit stimulus code
-LEFT = {"111", "112", "211", "212"}    # target in LEFT visual field  -> contralateral = PO8
-RIGHT = {"121", "122", "221", "222"}   # target in RIGHT visual field -> contralateral = PO7
-L_FREQ, H_FREQ = 0.1, 30.0
-BASELINE = (-0.2, 0.0)
-WIN = (0.200, 0.300)                   # N2pc measurement window, s
-# OSF file ids for sub-XXX_task-N2pc_eeg.{set,fdt} (ERP CORE N2pc node yefrq, BIDS-compatible)
-OSF = {
-    1: ("60078009e80d3708eca59ed0", "60077ffeba010908978910b5"),
-    3: ("6007806d86541a092614bc4e", "60078065e80d3708eca5a074"),
-    4: ("60078089e80d3708eca5a0f6", "60078084e80d3708eaa592c8"),
-    5: ("600780ace80d3708eaa59320", "60078098e80d3708eaa59300"),
-    6: ("600780c5ba010908a7893ce5", "600780bfba010908978910d5"),
-    7: ("600780e686541a092614bd07", "600780dbe80d3708e7a586fc"),
-    8: ("6007810be80d3708e2a57755", "600780ff86541a092c1534dc"),
-    9: ("6007812eba010908a7893eae", "60078127ba010908a7893e7e"),
-    10: ("6007816b86541a092614be07", "6007815d86541a092c153ba7"),
-    11: ("600781a0ba010908a7894081", "6007818eba01090892890b1e"),
-    12: ("600781ca86541a092c15443a", "600781c5e80d3708eca5a5e9"),
-    13: ("600781f186541a092614bf0b", "600781e4ba0109089e8922f0"),
-}
+import core
+import source_reader as source
 
 
-def fail(reason):
-    (OUT / "run_metadata.json").write_text(json.dumps(
-        {"status": "failed_precondition", "reason": reason, "dataset_id": "erpcore_n2pc"}, indent=2))
-    (OUT / "n2pc.json").write_text(json.dumps({"status": "failed_precondition", "reason": reason}))
-    (OUT / "findings.md").write_text(f"# Failed precondition\n\n{reason}\n")
-    sys.stderr.write(reason + "\n")
-    sys.exit(1)
+def write_json(path,value):
+    with path.open('x',encoding='utf-8') as stream:json.dump(value,stream,indent=2,allow_nan=False);stream.write('\n')
 
 
-def data_dir():
-    """Use a local cache if N2PC_DIR holds the files; else fetch the BIDS files from OSF."""
-    env = os.environ.get("N2PC_DIR")
-    if env:
-        try:
-            require_pairs(env, SUBJECTS)
-        except FileNotFoundError as error:
-            fail(str(error))
-        return Path(env)
-    d = Path(tempfile.mkdtemp(prefix="erpcore_n2pc_"))
-    for s in SUBJECTS:
-        set_id, fdt_id = OSF[s]
-        for fid, ext in ((set_id, "set"), (fdt_id, "fdt")):
-            dst = d / f"sub-{s:03d}_task-N2pc_eeg.{ext}"
-            for attempt in range(4):
-                try:
-                    urllib.request.urlretrieve(f"https://osf.io/download/{fid}/", dst)
-                    break
-                except Exception as e:  # pragma: no cover
-                    if attempt == 3:
-                        fail(f"OSF download failed for sub-{s:03d} .{ext}: {e}")
+def write_npz(path,arrays):
+    with path.open('xb') as stream:np.savez_compressed(stream,**arrays)
+
+
+def write_csv(path,columns,rows):
+    with path.open('x',newline='',encoding='utf-8') as stream:
+        writer=csv.DictWriter(stream,fieldnames=columns,extrasaction='raise');writer.writeheader()
+        for row in rows:writer.writerow({k:('' if v is None else int(v) if type(v) is bool else v) for k,v in row.items()})
+
+
+def validate_destinations(output_dir,private_dir,data_dir,method_path):
+    output=source.safe_path(output_dir);private=source.safe_path(private_dir) if private_dir else None
+    here=Path(__file__).resolve().parent
+    code_root=here.parent if (here.parent/'task.toml').is_file() else here
+    protected=[source.safe_path(data_dir),source.safe_path(method_path),code_root]
+    destinations=[output]+([private] if private is not None else [])
+    for destination in destinations:
+        source.need(not os.path.lexists(destination) and destination.parent.is_dir(),'fresh_destination_with_existing_parent')
+        for item in protected:
+            source.need(destination!=item and destination not in item.parents and item not in destination.parents,'source_or_code_output_overlap')
+    if private is not None:
+        source.need(output!=private and output not in private.parents and private not in output.parents,'output_private_overlap')
+    return output,private
+
+
+def processing_observed(subject,trials,segments,contract):
+    return dict(subject=subject,eeg_reference_channels=contract['filter']['eeg_reference_channels'],
+                excluded_eog_channels=contract['filter']['excluded_eog_channels'],filter_segments=segments,fir_length=33793,
+                epoch_offsets=[-205,461],baseline_offsets=[-204,0],measurement_offsets=[205,307],
+                n_left_retained=sum(r['retained'] and r['target_field']=='left' for r in trials),
+                n_right_retained=sum(r['retained'] and r['target_field']=='right' for r in trials),
+                drop_reason_counts={k:sum(r['drop_reason']==k for r in trials) for k in ('out_of_data','boundary_crossing','bad_annotation')})
+
+
+def combine_arrays(parts):
+    return dict(subject=np.concatenate([p['subject'] for p in parts]),source_event_index=np.concatenate([p['source_event_index'] for p in parts]),
+                channel_labels=np.array(['PO7','PO8']),sample_offsets=core.OFFSETS.copy(),epochs_uv=np.concatenate([p['epochs_uv'] for p in parts],axis=0))
+
+
+def analyze(inputs,warning_records,private_dir=None,pilot_subject=None):
+    subjects=[pilot_subject] if pilot_subject is not None else list(source.SUBJECTS)
+    annotations=[];trials=[];parts=[];observed=[];processing=[]
+    for subject in subjects:
+        metadata=source.read_metadata(inputs,subject)
+        ann,rows,segments,obs=core.annotate_and_select(metadata)
+        eeg=source.load_mne_eeg(inputs,metadata,warning_records)
+        pair=core.filter_reference(eeg,segments,inputs['contract'],subject,warning_records)
+        del eeg
+        arrays=core.extract_epochs(pair,rows)
+        if private_dir is not None:
+            write_npz(private_dir/f'subject_{subject:03d}.npz',dict(
+                filtered_referenced_pair_uv=pair,filter_segments=np.asarray(segments,dtype=np.int64),
+                **arrays))
+        annotations.extend(ann);trials.extend(rows);parts.append(arrays);observed.append(obs)
+        processing.append(processing_observed(subject,rows,segments,inputs['contract']))
+    arrays=combine_arrays(parts)
+    trials,people,waveforms,result=core.derive(trials,arrays,subjects,pilot=pilot_subject is not None)
+    metadata=dict(status='resource_pilot' if pilot_subject is not None else 'ok',dataset_id='erp-core-n2pc-fixed12',
+                  source_manifest_sha256=source.SOURCE_SHA256,method_contract_sha256=source.METHOD_SHA256,subjects=subjects,
+                  source_files=[{k:r[k] for k in ('subject','role','path','object_id','version','size_bytes','sha256','md5')} for r in inputs['manifest']['files']],
+                  source_observed=observed,processing_observed=processing,
+                  software_versions=dict(python=platform.python_version(),numpy=np.__version__,scipy=scipy.__version__,mne=mne.__version__),
+                  implementation='Owned source authentication/metadata and event/epoch algebra; MNE EEG reader and per-segment Hamming FIR, explicit30-channel reference. Not legacy numeric-boundary equivalence.',
+                  warnings=warning_records)
+    if pilot_subject is not None:
+        scope=dict(subjects_decoded=subjects,all24_originals_authenticated=True,complete_fixed12=False)
+        result['resource_pilot_scope']=scope;metadata['resource_pilot_scope']=scope
+    return dict(annotations=annotations,trials=trials,arrays=arrays,people=people,waveforms=waveforms,result=result,metadata=metadata)
+
+
+def findings(result):
+    value=result['n2pc_amplitude_uv'];fixed=result['fixed_po8_minus_po7_pooled_uv_for_reference']
+    show=lambda x:'undefined' if x is None else f'{x:.9g} uV'
+    return (f"# Signed N2pc method control\n\nStatus: {result['status']}. "
+            f"The equal-field then equal-person signed200–300 ms contrast is {show(value)}; "
+            f"the fixed PO8−PO7 comparator is {show(fixed)}. Retained support: "
+            f"{result['n_left_target_trials_total']} left and {result['n_right_target_trials_total']} right, "
+            f"with {result['n_dropped_target_events_total']} source-support drops.\n\n"
+            "The numeric−99 discontinuity is explicitly segmented for filtering and crossing-epoch rejection. "
+            "PO7/PO8 use the fixed30-electrode average reference; peripheral channels are excluded. "
+            "The signed values are descriptive, without a required polarity or fixed-channel cancellation. "
+            "This fixed-cohort raw-data adaptation is not the paper's cleaned35-person characterization. "
+            "No ICA, ocular, amplitude or behavioral rejection is added. The microvolt calibration follows "
+            "the declared EEGLAB/MNE convention, not an independent calibration measurement.\n")
+
+
+def emit(output,analysis,contract):
+    schema=contract['output_schema']
+    for name,key in (('annotations.csv','annotations'),('trials.csv','trials'),('per_subject.csv','people'),('waveforms.csv','waveforms')):
+        write_csv(output/name,list(schema[name]['required_columns']),analysis[key])
+    write_npz(output/'response_epochs.npz',analysis['arrays'])
+    write_json(output/'n2pc.json',analysis['result']);write_json(output/'run_metadata.json',analysis['metadata'])
+    with (output/'findings.md').open('x',encoding='utf-8') as stream:stream.write(findings(analysis['result']))
+
+
+def run(data_dir,method_path,output_dir,private_dir=None,pilot_subject=None):
+    output,private=validate_destinations(output_dir,private_dir,data_dir,method_path)
+    output.mkdir(mode=0o700)
+    warnings=[];stage='create_private_evidence'
     try:
-        require_pairs(d, SUBJECTS)
-    except FileNotFoundError as error:
-        fail(str(error))
-    return d
+        if private is not None:private.mkdir(mode=0o700)
+        stage='authenticate_all24_originals_and_method';inputs=source.load_inputs(data_dir,method_path)
+        stage='source_metadata_signal_and_derivation';analysis=analyze(inputs,warnings,private,pilot_subject)
+        stage='emit_public_eight_artifacts';emit(output,analysis,inputs['contract'])
+        if private is not None:
+            stage='emit_private_receipts'
+            write_json(private/'analysis_receipt.json',dict(source_manifest_sha256=source.SOURCE_SHA256,method_contract_sha256=source.METHOD_SHA256,
+                       status=analysis['result']['status'],n_epochs=len(analysis['arrays']['subject']),
+                       source_observed=analysis['metadata']['source_observed'],processing_observed=analysis['metadata']['processing_observed'],warnings=warnings))
+        return analysis['result']
+    except BaseException as error:
+        failure=dict(status='failed_precondition',stage=stage,reason=str(error),error_type=type(error).__name__,warnings=warnings)
+        write_json(output/'failure_report.json',failure)
+        for name in ('n2pc.json','run_metadata.json'):
+            if not os.path.lexists(output/name):write_json(output/name,failure)
+        if not os.path.lexists(output/'findings.md'):
+            with (output/'findings.md').open('x',encoding='utf-8') as stream:stream.write('Run failed; see the authoritative failure_report.json. No successful result is claimed.\n')
+        raise
 
 
-try:
-    import mne
-    mne.set_log_level("ERROR")
-except Exception as e:  # pragma: no cover
-    fail(f"mne import failed: {e}")
-
-DDIR = data_dir()
-RAW_SHA256 = {}
-for path in require_pairs(DDIR, SUBJECTS):
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for block in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(block)
-    RAW_SHA256[path.name] = digest.hexdigest()
-
-
-def subject_evokeds(subj):
-    """Target-left and target-right stimulus-locked averages at PO7/PO8 (average reference,
-    0.1-30 Hz, -200..0 baseline)."""
-    raw = mne.io.read_raw_eeglab(f"{DDIR}/sub-{subj:03d}_task-N2pc_eeg.set", preload=True)
-    raw.set_channel_types({c: "eog" for c in EOG if c in raw.ch_names})
-    raw.filter(L_FREQ, H_FREQ, picks="eeg", verbose=False)
-    raw.set_eeg_reference("average", projection=False, verbose=False)
-    events, eid = mne.events_from_annotations(raw, verbose=False)
-    inv = {v: k for k, v in eid.items()}
-    rows = [[o, 0, 1 if inv[c] in LEFT else 2]
-            for o, _, c in events if inv[c] in LEFT or inv[c] in RIGHT]
-    ep = mne.Epochs(raw, np.array(rows), {"left": 1, "right": 2}, tmin=-0.2, tmax=0.45,
-                    baseline=BASELINE, reject=None, preload=True, picks=["PO7", "PO8"], verbose=False)
-    return ep["left"].average(), ep["right"].average(), len(ep["left"]), len(ep["right"])
+def main(argv=None):
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--data-dir',default=os.environ.get('N2PC_DIR','/app/data/n2pc'))
+    parser.add_argument('--method-contract',default='/app/method_contract.json')
+    parser.add_argument('--output-dir',default=os.environ.get('OUTPUT_DIR','/app/output'))
+    parser.add_argument('--private-dir')
+    parser.add_argument('--pilot-subject',type=int,choices=[8])
+    args=parser.parse_args(argv)
+    try:
+        result=run(args.data_dir,args.method_contract,args.output_dir,args.private_dir,args.pilot_subject)
+        print(json.dumps({k:result[k] for k in ('status','n_subjects','n_target_events_total','n_dropped_target_events_total')}));return 0
+    except BaseException as error:
+        print(json.dumps(dict(status='failed_precondition',error_type=type(error).__name__)));return 1
 
 
-def win_mean(evk, ch):
-    t = evk.times
-    m = (t >= WIN[0]) & (t <= WIN[1])
-    return 1e6 * float(evk.data[evk.ch_names.index(ch), m].mean())
-
-
-try:
-    per_subject = []  # subject, n_left, n_right, contra, ipsi, n2pc, fixed
-    for s in SUBJECTS:
-        L, R, nl, nr = subject_evokeds(s)
-        # contralateral: PO8 for left-field target, PO7 for right-field target
-        contra, ipsi, fixed_difference = equal_field_amplitudes(
-            win_mean(L, "PO7"), win_mean(L, "PO8"),
-            win_mean(R, "PO7"), win_mean(R, "PO8"))
-        per_subject.append((s, nl, nr, contra, ipsi, contra - ipsi, fixed_difference))
-    n2pc_list = [r[5] for r in per_subject]
-    contra = float(np.mean([r[3] for r in per_subject]))
-    ipsi = float(np.mean([r[4] for r in per_subject]))
-    n2pc = float(np.mean(n2pc_list))
-    fixed = float(np.mean([r[6] for r in per_subject]))
-    n_neg = int(sum(x < 0 for x in n2pc_list))
-    n_left_tot = int(sum(r[1] for r in per_subject))
-    n_right_tot = int(sum(r[2] for r in per_subject))
-except SystemExit:
-    raise
-except Exception as e:  # pragma: no cover
-    fail(f"could not compute the N2pc amplitude: {e}")
-
-# PER-SUBJECT proof-of-work table
-with open(OUT / "per_subject.csv", "w", newline="") as f:
-    w = csv.DictWriter(f, fieldnames=["subject", "n_left_trials", "n_right_trials",
-                                      "contra_uv", "ipsi_uv", "n2pc_uv",
-                                      "fixed_po8_minus_po7_pooled_uv"])
-    w.writeheader()
-    for s, nl, nr, c, i, d, fx in per_subject:
-        w.writerow(dict(subject=s, n_left_trials=nl, n_right_trials=nr,
-                        contra_uv=round(c, 6), ipsi_uv=round(i, 6), n2pc_uv=round(d, 6),
-                        fixed_po8_minus_po7_pooled_uv=round(fx, 6)))
-
-(OUT / "n2pc.json").write_text(json.dumps({
-    "n2pc_amplitude_uv": n2pc,
-    "electrode_pair": "PO7/PO8",
-    "measure": "mean contralateral-minus-ipsilateral amplitude, 200-300 ms",
-    "window_ms": [200, 300],
-    "bandpass_hz": [L_FREQ, H_FREQ],
-    "n_subjects": len(SUBJECTS),
-    "n_subjects_negative": n_neg,
-    "contralateral_amplitude_uv": contra,
-    "ipsilateral_amplitude_uv": ipsi,
-    "fixed_po8_minus_po7_pooled_uv_for_reference": fixed,
-    "n_left_target_trials_total": int(n_left_tot),
-    "n_right_target_trials_total": int(n_right_tot),
-    "per_subject_csv": "per_subject.csv",
-}, indent=2))
-
-(OUT / "run_metadata.json").write_text(json.dumps({
-    "status": "ok",
-    "dataset_id": "erpcore_n2pc (ERP CORE, N2pc task, subjects 1/3-13)",
-    "subjects": SUBJECTS,
-    "electrode_pair": "PO7/PO8",
-    "reference": "average (30 scalp electrodes; EOG excluded)",
-    "bandpass_hz": [L_FREQ, H_FREQ],
-    "baseline_ms": [int(BASELINE[0] * 1000), int(BASELINE[1] * 1000)],
-    "epoch_bounds_ms": [-200, 450],
-    "target_field_weights": {"left": 0.5, "right": 0.5},
-    "measurement_window_ms": [200, 300],
-    "measure": "mean contralateral-minus-ipsilateral amplitude at PO7/PO8, grand-averaged",
-    "target_side_from": "tens digit of the 3-digit stimulus code (1=left, 2=right)",
-    "raw_file_sha256_observed": RAW_SHA256,
-    "raw_file_expected_digest_status": "not_independently_pinned",
-    "scope": "N12 raw-data simplified lateralization methods adaptation",
-    "qc_omitted": ["ICA", "HEOG artifact rejection", "behavioral trial exclusions"],
-}, indent=2))
-
-(OUT / "findings.md").write_text(f"""# N2PC-001 - N2pc component amplitude (ERP CORE N2pc, subjects 1/3-13)
-
-In the ERP CORE N2pc visual-search task, attending to a lateral target elicits a posterior
-**N2pc**: a negativity over the hemisphere **contralateral** to the target's visual field,
-at the **PO7/PO8** pair. Measured as the **mean contralateral-minus-ipsilateral amplitude in
-the 200-300 ms window** (0.1-30 Hz band-pass, average reference, -200..0 baseline) and
-grand-averaged over the {len(SUBJECTS)} subjects, the N2pc is **{n2pc:.2f} uV**
-(contralateral {contra:.2f} uV, ipsilateral {ipsi:.2f} uV; {n_neg}/{len(SUBJECTS)} subjects
-negative). Per-subject contralateral/ipsilateral and N2pc amplitudes are in `per_subject.csv`.
-
-The component is lateralized relative to the target: for a left-field target it appears over
-the right posterior scalp (PO8) and for a right-field target over the left (PO7), so the
-contralateral and ipsilateral waveforms are formed by re-mapping the two electrodes per
-target side. A fixed-electrode difference (e.g. PO8-PO7) pooled across the two balanced
-visual fields cancels to ~{fixed:.2f} uV; only the per-side contralateral/ipsilateral
-assignment recovers the component. The reported value ({n2pc:.2f} uV) is that
-contralateral-minus-ipsilateral difference.
-
-This is an N=12 raw-data methods adaptation, not the paper's full N=35 characterization
-or 200–275 ms endpoint. No ICA, HEOG rejection, or behavioral exclusions were applied;
-ocular/response contamination may remain. The signed lateralized difference alone does
-not establish artifact-free covert attention or reproduce the paper's quality-controlled
-finding.
-""")
-print(f"OK: N2pc (contra-ipsi) = {n2pc:.3f} uV | fixed PO8-PO7 pooled = {fixed:.3f} uV | "
-      f"neg {n_neg}/{len(SUBJECTS)} | trials L={n_left_tot} R={n_right_tot}")
+if __name__=='__main__':raise SystemExit(main())

@@ -1,0 +1,528 @@
+{
+  "status": "frozen_before_signal_values",
+  "pipeline_id": "erpcore-n2pc-fixed12-method-v2",
+  "scientific_role": "Original-data signed lateralization method control; not the paper's N35 cleaned characterization, population effect or model-difficulty evidence",
+  "subjects": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "source_manifest_sha256": "ada7a37ede5c498063d324bc9d5c254b457c5aecab9d41c622c66c38a8e21541",
+  "source": {
+    "stage": "Original OSF version1 raw BIDS-compatible SET/FDT, no added display-delay correction/resampling",
+    "sfreq_hz": 1024,
+    "n_channels": 33,
+    "trials": 1,
+    "xmin": 0,
+    "channel_labels": [
+      "FP1",
+      "F3",
+      "F7",
+      "FC3",
+      "C3",
+      "C5",
+      "P3",
+      "P7",
+      "P9",
+      "PO7",
+      "PO3",
+      "O1",
+      "Oz",
+      "Pz",
+      "CPz",
+      "FP2",
+      "Fz",
+      "F4",
+      "F8",
+      "FC4",
+      "FCz",
+      "Cz",
+      "C4",
+      "C6",
+      "P4",
+      "P8",
+      "P10",
+      "PO8",
+      "PO4",
+      "O2",
+      "HEOG_left",
+      "HEOG_right",
+      "VEOG_lower"
+    ],
+    "source_reference": "common",
+    "units_header": null,
+    "calibration": "EEGLAB/MNE convention: FDT float32 values represent microvolts; MNE multiplies by1e-6 to volts. This is a declared reader convention, not independently measured physical calibration. No gain inferred from channel-selection history.",
+    "storage": "Little-endian float32, channel-fast interleaving; reshape(nbchan,pnts) in Fortran order. Exact paired basename, size and full source hashes required before interpretation.",
+    "source_bad_channels": "Not inspected or used; metadata reports null, never asserts artifact-free data."
+  },
+  "events": {
+    "identity": "subject plus zero-based original EEG.event row; preserve every row and original urevent link separately",
+    "type": "Require finite integral numeric source type; event_description=str(int(type)); event_type_json holds the original numeric JSON value. Do not parse arbitrary strings. Unrecognized numeric codes stay non-target ledger rows.",
+    "left_codes": [
+      111,
+      112,
+      211,
+      212
+    ],
+    "right_codes": [
+      121,
+      122,
+      221,
+      222
+    ],
+    "behavior": "201/202 and all other non-target codes do not affect retention; no correctness, RT or response-presence selection",
+    "clock": "onset_s=(float64(latency_samples)-1)/1024; sample=int(rint(onset_s*1024)), nearest integer ties-to-even. Preserve original onset even if out of data; never rely on annotation clipping. These power-of-two operations agree with direct rint(L-1) on the authenticated integer target latencies.",
+    "duplicate_target_samples": "Fail precondition; never merge/drop repeated target identity. Same-sample non-target events are not duplicate targets.",
+    "duration": "Retain finite values in source sample units; report absent/empty/nonfinite separately and blank numerical duration. Boundary duration describes historical loss, not a new current-time interval.",
+    "unsupported_bad_annotations": "This fixed bundle has numeric codes and no BAD strings. Unsupported nonnumeric/BAD source annotations fail precondition. No undocumented BAD interval algorithm."
+  },
+  "boundaries": {
+    "type": -99,
+    "cut": "Require finite latency L=k+0.5 with integer0<=k<=N; cut=floor(L). Retain original ledger row; sort unique cuts with0,N to form nonempty half-open segments.",
+    "filter": "Filter each segment independently; no bridging across discontinuities.",
+    "epoch": "A full interval[sample-205,sample+462) must lie in one segment. Keep support flags; drop out_of_data first, then boundary_crossing; no partial epoch/interpolation.",
+    "disclosed_change": "Explicit -99 segmentation/crossing rejection repairs old reliance on MNE defaults, which do not automatically interpret numeric-99 as a skipped acquisition span. Chosen from structural evidence before EEG values, not to reproduce an old amplitude."
+  },
+  "filter": {
+    "sfreq_hz": 1024,
+    "precision": "float64",
+    "passband_hz": [
+      0.1,
+      30
+    ],
+    "transition_widths_hz": [
+      0.1,
+      7.5
+    ],
+    "n_taps": 33793,
+    "center": 16896,
+    "formula": "h=-LP(33793,0.05Hz); add LP(451,33.75Hz) centered at16896. LP(L,f)[n]=(2*f/1024)*sinc((2*f/1024)*(n-(L-1)/2))*(0.54-0.46*cos(2*pi*n/(L-1))); normalize each LP by its coefficient sum. sinc(x)=sin(pi*x)/(pi*x).",
+    "padding": "For each segment x lengthL use e=min(33793,L)-1. Left extension2*x[0]-reverse(x[1:e+1]); right2*x[-1]-reverse(x[-e-1:-1]); empty extensions whene=0. Full linear convolution, take[e+16896:e+16896+L]. One centered FIR pass, not filtfilt.",
+    "reference": "Filter each of the30 specified EEG channels identically, then subtract their simultaneous arithmetic mean from PO7 and PO8. Referencing before the same linear filter is an accepted equivalent. Peripheral channels never enter the reference.",
+    "eeg_reference_channels": [
+      "FP1",
+      "F3",
+      "F7",
+      "FC3",
+      "C3",
+      "C5",
+      "P3",
+      "P7",
+      "P9",
+      "PO7",
+      "PO3",
+      "O1",
+      "Oz",
+      "Pz",
+      "CPz",
+      "FP2",
+      "Fz",
+      "F4",
+      "F8",
+      "FC4",
+      "FCz",
+      "Cz",
+      "C4",
+      "C6",
+      "P4",
+      "P8",
+      "P10",
+      "PO8",
+      "PO4",
+      "O2"
+    ],
+    "excluded_eog_channels": [
+      "HEOG_left",
+      "HEOG_right",
+      "VEOG_lower"
+    ],
+    "no_additions": "No notch, detrend, resampling, ICA, clipping, interpolation, amplitude/ocular/behavioral trial rejection or participant exclusion.",
+    "implementation": "Equivalent mathematics within public tolerances accepted; software/version/FFT blocking is not a secret grading requirement."
+  },
+  "epochs": {
+    "nominal_s": [
+      -0.2,
+      0.45
+    ],
+    "offsets_inclusive": [
+      -205,
+      461
+    ],
+    "n_samples": 667,
+    "baseline_s": [
+      -0.2,
+      0
+    ],
+    "baseline_offsets_inclusive": [
+      -204,
+      0
+    ],
+    "baseline_n_samples": 205,
+    "measurement_s": [
+      0.2,
+      0.3
+    ],
+    "measurement_offsets_inclusive": [
+      205,
+      307
+    ],
+    "measurement_n_samples": 103,
+    "primitive": "Full prebaseline filtered/average-referenced PO7/PO8 microvolt epochs on common retained trials.",
+    "baseline": "Subtract each trial/channel's own mean over offsets-204..0; do not include-205.",
+    "empty_support": "Retain all12 people. A field with no retained trials is null; other field remains defined. Two-field composites require both fields, and full12 group composites require all12, otherwise null. No available-case replacement."
+  },
+  "aggregation": {
+    "trial": "Subtract each trial/channel's own accepted-epoch baseline mean; average the fixed window. Keep candidate support source-authoritative.",
+    "field": "Unweighted mean of retained trials within each target field, including all colors/gaps/correctness states.",
+    "subject": "contra=(left_PO8+right_PO7)/2; ipsi=(left_PO7+right_PO8)/2; n2pc=contra-ipsi; fixed=((left_PO8-left_PO7)+(right_PO8-right_PO7))/2.",
+    "group": "Equal arithmetic mean over all12 fixed people when all12 quantities defined; otherwise explicitnull, no available-case substitution.",
+    "waveform": "Same baseline/field/person/group algebra at every full epoch offset; one common trial set for all scalars and traces.",
+    "rounding": "Recompute all validation targets directly from accepted epoch samples, not chained through rounded submitted baseline/window/person CSV fields. Optional negative count uses direct own person value<0."
+  },
+  "output_schema": {
+    "schema_id": "n2pc-fixed12-source-epochs-v2",
+    "status": "frozen_before_signal_values",
+    "subjects": [
+      1,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "scope": "Descriptive equal-field then equal-person signed200-300ms method adaptation; no required outcome, inference, paper replication or difficulty claim.",
+    "files": [
+      "annotations.csv",
+      "trials.csv",
+      "response_epochs.npz",
+      "per_subject.csv",
+      "waveforms.csv",
+      "n2pc.json",
+      "run_metadata.json",
+      "findings.md"
+    ],
+    "precision": {
+      "prebaseline_epochs_uv": {
+        "atol": 0.000001,
+        "rtol": 0.000001,
+        "reference": "grader-reconstructed source epoch"
+      },
+      "derived_uv": {
+        "atol": 1e-8,
+        "rtol": 0.000001,
+        "reference": "recomputed directly from accepted submitted epochs"
+      },
+      "source_time_s": {
+        "atol": 1e-9,
+        "rtol": 0
+      },
+      "identity_counts_samples_support": "exact",
+      "test": "abs(submitted-reference) <= atol + rtol*abs(reference); every required finite scalar/sample must pass",
+      "no_secondary_gate": "No source-bank-derived amplitude, sign, negative-person count, variance, correlation or fixed-channel-null requirement after source epoch acceptance."
+    },
+    "serialization": {
+      "csv": "UTF-8 or UTF-8-BOM, unique exact required column names, flexible finite numeric notation; extra finite descriptive columns allowed. Required source keys unique; row order irrelevant.",
+      "csv_integer": "Exactly integral finite numeric token; not Boolean. Source subject IDs are integer12-cohort membership, not arbitrary digit extraction.",
+      "csv_boolean": "0/1 or case-insensitive true/false; numeric non-Boolean counts are separate.",
+      "csv_missing": "Empty string only for a field declared nullable in its exact state; no NaN/Inf or sentinel substitution.",
+      "json": "Strict duplicate-key rejection, finite JSON numbers, integer fields exactly integral JSON numbers but not Boolean; typed null only where specified. Harmless finite descriptive extra fields allowed.",
+      "source_literal_json": "A CSV cell containing strict JSON encoding of the source literal field; preserves scalar/list/string/null structure. Final source-field admissible types depend on inspected headers, not inferred digit stripping.",
+      "npz": "No pickle/object dtype, duplicate archive members or duplicate scientific keys; explicit integer axes non-Boolean, channel labels Unicode, epochs finite real numeric values. Permitted harmless extra arrays must remain bounded, non-object and finite.",
+      "reordering": "Coherently reordered subject/event rows, epoch rows, channel axis and sample-offset axis are accepted after exact keyed alignment; no duplicate, omitted, additional or fabricated required keys.",
+      "limits": {
+        "aggregate_output_bytes": 268435456,
+        "npz_compressed_bytes": 134217728,
+        "npz_expanded_bytes": 268435456,
+        "npz_members": 32,
+        "max_npy_header_bytes": 65536,
+        "max_npy_dimensions": 3,
+        "max_annotations_rows": 10000,
+        "max_trials_rows": 5000,
+        "max_waveforms_rows": 8671,
+        "max_subject_rows": 12,
+        "max_epochs": 5000,
+        "epoch_channels": 2,
+        "epoch_samples": 667,
+        "max_findings_bytes": 1048576,
+        "max_json_bytes": 16777216,
+        "max_csv_field_bytes": 1048576,
+        "note": "Bounds cover all7716 sourceevents/3847targets before any signal analysis. Extra finite descriptive fields remain allowed within bounds."
+      }
+    },
+    "annotations.csv": {
+      "key": [
+        "subject",
+        "source_event_index"
+      ],
+      "membership": "Every original SET event row from every fixed subject, including all non-target and unsupported events; source_event_index is original zero-based row identity.",
+      "required_columns": {
+        "subject": "integer fixed-cohort ID",
+        "source_event_index": "nonnegative integer",
+        "event_type_json": "source_literal_json",
+        "latency_samples": "finite original one-based latency",
+        "duration_samples": "finite source duration iff duration_status=finite; otherwise empty. Never reinterpret boundary duration as a current excluded interval.",
+        "urevent_json": "source_literal_json, preserving source indexing and null",
+        "event_description": "decimal string of the original integral numeric event type, without decimal point; unsupported nonnumeric type is failed_precondition",
+        "onset_s": "source-derived finite recording-relative onset, prior to eligibility/drop decisions",
+        "sample": "exact integer zero-based rounded event sample, including out-of-recording values if the source rule permits",
+        "target_field": "left|right|none under exact public code map",
+        "is_boundary": "Boolean from public token rule",
+        "is_bad": "false for this fixed-source method; unsupported nonnumeric/BAD event types fail precondition rather than silently invent QC",
+        "duration_status": "absent|empty|nonfinite|finite; a missing field is absent, a present zero-size value is empty, NaN/Inf is nonfinite; preserve distinction",
+        "boundary_cut_sample": "integer floor(latency_samples) iff is_boundary, otherwise empty"
+      },
+      "null_policy": "duration_samples empty iff duration_status!=finite; boundary_cut_sample empty iff nonboundary; urevent_json contains null iff source absent/empty. Source event type and latency are mandatory."
+    },
+    "trials.csv": {
+      "key": [
+        "subject",
+        "source_event_index"
+      ],
+      "membership": "Exactly all target-code candidates, including dropped trials; no correctness/RT/response-presence exclusion.",
+      "required_columns": {
+        "subject": "integer",
+        "source_event_index": "nonnegative integer",
+        "event_code": "one of111,112,121,122,211,212,221,222",
+        "target_field": "left|right",
+        "sample": "integer",
+        "epoch_start_sample": "integer inclusive",
+        "epoch_end_sample": "integer inclusive",
+        "out_of_data": "Boolean",
+        "crosses_boundary": "Boolean",
+        "overlaps_bad": "Boolean",
+        "retained": "Boolean",
+        "drop_reason": "retained|out_of_data|boundary_crossing; precedence out_of_data then boundary_crossing. overlaps_bad is always false under this fixed-source contract.",
+        "po7_baseline_uv": "nullable derived_uv",
+        "po8_baseline_uv": "nullable derived_uv",
+        "po7_prebaseline_window_uv": "nullable derived_uv",
+        "po8_prebaseline_window_uv": "nullable derived_uv",
+        "po7_corrected_window_uv": "nullable derived_uv",
+        "po8_corrected_window_uv": "nullable derived_uv",
+        "trial_contra_minus_ipsi_uv": "nullable derived_uv, target-field mapped signed difference",
+        "trial_po8_minus_po7_uv": "nullable derived_uv, fixed signed channel difference"
+      },
+      "null_policy": "All eight measurement columns finite iff retained, empty iff dropped. Support/sample fields source-bound independently of measurements."
+    },
+    "response_epochs.npz": {
+      "required_arrays": {
+        "subject": {
+          "shape": [
+            "E"
+          ],
+          "dtype": "integer non-Boolean",
+          "meaning": "retained event subject keys"
+        },
+        "source_event_index": {
+          "shape": [
+            "E"
+          ],
+          "dtype": "integer non-Boolean",
+          "meaning": "retained original source-event keys"
+        },
+        "channel_labels": {
+          "shape": [
+            2
+          ],
+          "dtype": "Unicode",
+          "meaning": "unique PO7 and PO8; coherent order arbitrary"
+        },
+        "sample_offsets": {
+          "shape": [
+            "K"
+          ],
+          "dtype": "integer non-Boolean",
+          "meaning": "unique complete frozen epoch offsets; coherent order arbitrary"
+        },
+        "epochs_uv": {
+          "shape": [
+            "E",
+            2,
+            "K"
+          ],
+          "dtype": "finite real numeric non-Boolean",
+          "meaning": "filtered and exact average-referenced, PREBASELINE microvolts"
+        }
+      },
+      "membership": "Every and only retained trials.csv key once; no data-dependent truncation/channel substitution.",
+      "empty": "E may be0 only if canonical source support truly retains none; arrays still retain exact channel/offset axes.",
+      "clock_precondition": "Authenticated source rate1024Hz, same frozen667sample axis for all12; unexpected clock fails, no resampling."
+    },
+    "per_subject.csv": {
+      "key": [
+        "subject"
+      ],
+      "membership": "Exactly12 fixed subject IDs, never available-case cohort reduction.",
+      "required_columns": {
+        "subject": "integer",
+        "n_target_events": "nonnegative integer",
+        "n_left_candidates": "nonnegative integer",
+        "n_right_candidates": "nonnegative integer",
+        "n_left_trials": "nonnegative integer retained",
+        "n_right_trials": "nonnegative integer retained",
+        "n_dropped_out_of_data": "nonnegative integer primary reason count",
+        "n_dropped_boundary_crossing": "nonnegative integer primary reason count",
+        "n_dropped_bad_annotation": "nonnegative integer primary reason count",
+        "status": "defined|empty_left|empty_right|empty_both",
+        "left_po7_uv": "nullable derived_uv",
+        "left_po8_uv": "nullable derived_uv",
+        "right_po7_uv": "nullable derived_uv",
+        "right_po8_uv": "nullable derived_uv",
+        "contra_uv": "nullable derived_uv",
+        "ipsi_uv": "nullable derived_uv",
+        "n2pc_uv": "nullable derived_uv",
+        "fixed_po8_minus_po7_pooled_uv": "nullable derived_uv; pooled here means equal field weights, not trial-count weighting"
+      },
+      "null_policy": "A field's two values null iff that field has0 retained trials; other field values remain defined. Four two-field composites finite iff both fields have retained support, otherwise null."
+    },
+    "waveforms.csv": {
+      "key": [
+        "scope",
+        "subject",
+        "sample_offset"
+      ],
+      "membership": "Every frozen offset for each of12 subject scopes, plus one group scope; no missing time samples/interpolation.",
+      "required_columns": {
+        "scope": "subject|group",
+        "subject": "fixed integer ID for subject scope; empty for group",
+        "sample_offset": "integer",
+        "time_s": "finite sample_offset/sfreq; source_time_s tolerance",
+        "n_expected_subjects": "1 for subject scope,12 for group",
+        "n_left_defined_subjects": "integer0..n_expected_subjects",
+        "n_right_defined_subjects": "integer0..n_expected_subjects",
+        "n_contrast_defined_subjects": "integer0..n_expected_subjects",
+        "status": "defined|empty_left|empty_right|empty_both for subject; defined|incomplete_field_support for group",
+        "left_po7_uv": "nullable derived_uv",
+        "left_po8_uv": "nullable derived_uv",
+        "right_po7_uv": "nullable derived_uv",
+        "right_po8_uv": "nullable derived_uv",
+        "contra_uv": "nullable derived_uv",
+        "ipsi_uv": "nullable derived_uv",
+        "n2pc_uv": "nullable derived_uv",
+        "fixed_po8_minus_po7_pooled_uv": "nullable derived_uv"
+      },
+      "null_policy": "Subject field traces exist iff that field has retained support. Group field trace exists iff that field is defined in all12; group contrast traces exist iff all12 have both fields. No available-case waveform."
+    },
+    "n2pc.json": {
+      "required_fields": {
+        "status": "ok for complete run; resource_pilot explicitly rejected by production grader",
+        "analysis_status": "defined|incomplete_field_support",
+        "subjects": "exact fixed12 unique integer membership, order irrelevant",
+        "n_subjects": "12",
+        "n_subjects_with_defined_n2pc": "integer0..12",
+        "n_subjects_negative": "integer count of numerically accepted submitted per_subject.csv rows with defined n2pc_uv<0; derived amplitudes must first pass their unchanged tolerances; no minimum or reference sign gate; descriptive near-zero counts can depend on permitted rounding",
+        "n_left_target_trials_total": "nonnegative integer retained across all12",
+        "n_right_target_trials_total": "nonnegative integer retained across all12",
+        "n_target_events_total": "nonnegative integer all candidates",
+        "n_dropped_target_events_total": "nonnegative integer all dropped",
+        "n2pc_amplitude_uv": "nullable derived_uv equal-person full12 signed mean",
+        "contralateral_amplitude_uv": "nullable derived_uv equal-person full12 mean",
+        "ipsilateral_amplitude_uv": "nullable derived_uv equal-person full12 mean",
+        "fixed_po8_minus_po7_pooled_uv_for_reference": "nullable derived_uv equal-person full12 fixed contrast; no nearzero requirement",
+        "electrode_pair": "PO7/PO8",
+        "units": "uV",
+        "window_ms": [
+          200,
+          300
+        ],
+        "field_weights": {
+          "left": 0.5,
+          "right": 0.5
+        },
+        "subject_weighting": "equal_fixed12",
+        "measure": "signed mean contralateral-minus-ipsilateral amplitude"
+      },
+      "null_policy": "Four aggregate amplitudes all finite iff n_subjects_with_defined_n2pc=12, otherwise allnull; counts remain exact and finite."
+    },
+    "run_metadata.json": {
+      "required_fields": {
+        "status": "ok for complete run, resource_pilot only for external authoring checks",
+        "dataset_id": "erp-core-n2pc-fixed12",
+        "source_manifest_sha256": "exact frozen public manifest SHA256 checked against private authority",
+        "method_contract_sha256": "exact frozen public method SHA256 checked against private authority",
+        "subjects": "exact fixed12 unique integer membership",
+        "source_files": "24 order-free records keyed subject+role, each path/object_id/version/size_bytes/sha256/md5 exactly source-authoritative",
+        "source_observed": "12 records keyed subject; required nested field list below",
+        "processing_observed": "12 records keyed subject; required nested field list below",
+        "software_versions": "nonempty object of string versions; truthful implementation description, no required private implementation name",
+        "implementation": "nonempty descriptive string; not a prose/numerical target",
+        "warnings": "list of recorded warning records with subject/null,stage,category,message; no automatic empty-list outcome target"
+      },
+      "source_observed_required_fields": [
+        "subject",
+        "set_path",
+        "fdt_path",
+        "literal_fdt_pointer",
+        "sfreq_hz",
+        "n_samples",
+        "n_channels",
+        "channel_labels",
+        "source_reference_json",
+        "source_units_json",
+        "source_bad_channels",
+        "n_source_events",
+        "event_type_counts",
+        "n_target_left",
+        "n_target_right",
+        "n_boundary_events",
+        "n_bad_annotations",
+        "history_sha256"
+      ],
+      "source_observed_rules": "source_reference_json is the direct JSON value of source ref ('common'); source_units_json is null for absent unit/units; source_bad_channels is null because no source reject/QC flags are inspected or used. Do not infer absence of artifacts. event_type_counts maps normalized integral decimal strings to exact counts; history_sha256 is UTF-8 exact source history, not script contents. All source facts recomputed from authenticated source.",
+      "processing_observed_required_fields": [
+        "subject",
+        "eeg_reference_channels",
+        "excluded_eog_channels",
+        "filter_segments",
+        "fir_length",
+        "epoch_offsets",
+        "baseline_offsets",
+        "measurement_offsets",
+        "n_left_retained",
+        "n_right_retained",
+        "drop_reason_counts"
+      ],
+      "processing_observed_rules": "filter_segments is an ordered list of half-open [start,stop] integer pairs. eeg_reference_channels and excluded_eog_channels list exact canonical labels (sets accepted where order has no meaning). epoch_offsets/baseline_offsets/measurement_offsets are two-element inclusive endpoint arrays. drop_reason_counts contains all out_of_data,boundary_crossing,bad_annotation keys, including zero. No coefficient byte hash or implementation/software equality required."
+    },
+    "findings.md": {
+      "rule": "Bounded nonempty UTF-8 free prose, no keyword, sign, quality, causal, inference or difficulty grading. Human-facing explanation should state signed values/support and scope limits."
+    },
+    "derivation": {
+      "trial": "Subtract each trial/channel's own accepted-epoch baseline mean; average the fixed window. Keep candidate support source-authoritative.",
+      "field": "Unweighted mean of retained trials within each target field, including all colors/gaps/correctness states.",
+      "subject": "contra=(left_PO8+right_PO7)/2; ipsi=(left_PO7+right_PO8)/2; n2pc=contra-ipsi; fixed=((left_PO8-left_PO7)+(right_PO8-right_PO7))/2.",
+      "group": "Equal arithmetic mean over all12 fixed people when all12 quantities defined; otherwise explicitnull, no available-case substitution.",
+      "waveform": "Same baseline/field/person/group algebra at every full epoch offset; one common trial set for all scalars and traces.",
+      "rounding": "Recompute all validation targets directly from accepted epoch samples, not chained through rounded submitted baseline/window/person CSV fields. Optional negative count uses direct own person value<0."
+    },
+    "failure_and_pilot": {
+      "reserved_marker": "failure_report.json",
+      "failed_run": "Nonzero exit, fresh preserved failure marker with status/stage/reason; any marker lexists rejects apparent successful public output, including empty/dangling marker.",
+      "source_precondition_vs_undefined": "Source identity/calibration/unsupported clock failure is not mathematical empty-field support. A complete valid run may truthfully report undefined aggregates from declared support rules.",
+      "pilot": "Explicit resource_pilot status and truthful scoped subset; never graded as complete12. Any production-validator reuse by an external pilot comparator must be labeled nonproduction and cannot rewrite evidence.",
+      "output_safety": "Fresh destination and source/code disjointness; no links/nonregular artifact writes, overwrite, automatic refresh/retry or silent cohort change."
+    }
+  },
+  "failure_policy": {
+    "reserved_marker": "failure_report.json",
+    "failed_run": "Nonzero exit, fresh preserved failure marker with status/stage/reason; any marker lexists rejects apparent successful public output, including empty/dangling marker.",
+    "source_precondition_vs_undefined": "Source identity/calibration/unsupported clock failure is not mathematical empty-field support. A complete valid run may truthfully report undefined aggregates from declared support rules.",
+    "pilot": "Explicit resource_pilot status and truthful scoped subset; never graded as complete12. Any production-validator reuse by an external pilot comparator must be labeled nonproduction and cannot rewrite evidence.",
+    "output_safety": "Fresh destination and source/code disjointness; no links/nonregular artifact writes, overwrite, automatic refresh/retry or silent cohort change."
+  },
+  "calibration_status": "Uncalibrated easy/method control. No required sign/magnitude/variance/fixed-channel cancellation or minimum negative count."
+}

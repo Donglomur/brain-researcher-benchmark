@@ -1,77 +1,56 @@
-# N2PC-001 — N2pc component amplitude (ERP CORE visual search)
+# N2PC-001 — signed lateralization method control
 
-## Dataset
-ERP CORE **N2pc** task, BIDS-compatible continuous EEGLAB recordings, OSF node `yefrq`
-(parent project `thsqg`), fetched at runtime from `https://osf.io/download/<id>/` (no
-credentials). Subjects **1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13** (subject 2 is not in the
-released N2pc set). 30 scalp electrodes + 3 EOG, 1024 Hz.
+This is a fixed twelve-person, original-data methods adaptation using the ERP
+CORE N2pc visual-search recordings. It is not a reproduction of the paper's
+cleaned N=35 characterization or its recommended 200–275 ms endpoint.
 
-## Paper
-Kappenman, Farrens, Zhang, Stewart & Luck (2021), *NeuroImage*, ERP CORE
-(https://doi.org/10.1016/j.neuroimage.2020.117465). N2pc component: Luck & Hillyard (1994).
+## Scientific target
 
-## Deliverable
-The **N2pc component amplitude** at the **PO7/PO8** pair — the mean
-**contralateral-minus-ipsilateral** amplitude in the **200-300 ms** window, grand-averaged
-over the 12 subjects. The quantity is a difference between two scalp electrodes, hence
-**reference-independent** (well-posed / convention-invariant).
+Measure the signed PO7/PO8 contralateral-minus-ipsilateral mean over 200–300 ms.
+Average trials within target field, give left and right fields equal weights,
+then give the twelve fixed participants equal weights. Report the component
+channel means and fixed PO8-minus-PO7 comparator without requiring any sign,
+magnitude, cancellation, between-person variance or minimum negative count.
 
-## Reproduced result
-**N2pc = -1.38 uV** (exact -1.375; contralateral 1.59, ipsilateral 2.97 uV; **12/12
-subjects negative**). Validated with MNE 1.12.1, 0.1-30 Hz band-pass, average reference,
--200..0 baseline, all target-stimulus events, mean amplitude, per subject then averaged.
+The mapping is public: left targets use PO8 as contralateral, right targets use
+PO7. Difficulty must not come from withholding this definition or an estimator.
 
-## Un-cued lever (private reviewer note)
-The one un-cued analytic choice is **how the contralateral/ipsilateral waveforms are formed
-from PO7/PO8 given the target's visual field.** The N2pc is *lateralized*: a left-field
-target draws the negativity over the right scalp (PO8), a right-field target over the left
-(PO7). Target side is the **tens digit** of the 3-digit stimulus code (1=left, 2=right; the
-hundreds digit is colour and the units digit the gap — both distractors). The component must
-be built by **re-mapping the electrodes per target side** (contra = PO8 on left-target
-trials, PO7 on right-target trials). A pipeline that instead takes a **fixed** electrode
-difference across all trials (PO8-PO7 or PO7-PO8) **pools the two visual fields**, on which
-the negativity sits over opposite electrodes; because the field is balanced it cancels almost
-completely. The instruction names the deliverable as "contralateral-minus-ipsilateral" (the
-component's definition) but never cues the per-side re-mapping or warns against pooling.
+## Paper and adaptation boundary
 
-## Step-0 numbers
-| analysis | value |
-|---|---|
-| contralateral-minus-ipsilateral (correct N2pc) | **-1.375 uV** |
-| fixed PO8-PO7 across all trials, pooled (naive) | +0.336 uV |
-| fixed PO7-PO8 across all trials, pooled (naive) | -0.336 uV |
+[Kappenman et al. (2021), ERP CORE](https://doi.org/10.1016/j.neuroimage.2020.117465)
+provides the public recordings and the component characterization. Table 1
+identifies the paper's N2pc sample and PO7/PO8 readout; Table 2 specifies its
+measurement window. The task retains its pre-existing twelve IDs, 200–300 ms
+window, average EEG reference and all-target simplified analysis instead.
+No ICA, ocular/behavioral/RT rejection, subject exclusion, display-delay
+correction or resampling is silently inferred from the paper.
 
-Robustness of the correct value: -1.374 to -1.378 uV across 0.1-20/30/40 Hz low-pass,
-average vs no re-reference, and -150/-200 ms baselines; 12/12 subjects negative. The pooled
-fixed-electrode difference stays near zero (|.| ~ 0.34 uV) — the lateralization collapses.
+The independent reporting unit is the participant. The task does not establish
+population generalization, artifact-free covert attention, significance, onset
+or electrode localization. The simplified signal can contain ocular activity.
 
-## Grading — proof-of-work verifier
-The grade is carried by NUMBERS against a held-out reference (`tests/reference.npz`), built
-by running the oracle (`solution/compute.py`) on the pinned ERP CORE N2pc sample (subjects
-1/3-13; content pinned by the OSF file ids in `solution/compute.py`). Three pillars
-(`tests/proof_of_work.py` + `tests/test_outputs.py`):
+## Sources
 
-1. **Per-subject SIGNED proof of work** — `per_subject.csv` must cover the exact 12-subject
-   sample (real ids), be non-constant, and match the held-out per-subject
-   contralateral-minus-ipsilateral `n2pc_uv` (SIGNED, tol 0.85 uV, ≥80% of subjects). An
-   abs()-ed, sign-flipped, or field-pooled table fails.
-2. **Recompute** — the mean of the submitted `n2pc_uv` column must equal both the reference
-   grand-average (−1.375 uV) and the reported `n2pc_amplitude_uv`.
-3. **Discriminating number (lateralized-vs-pooled)** — the reported N2pc must be a clear
-   negativity (≤ −0.70 uV, within 0.40 of −1.375), and the reported pooled fixed-electrode
-   difference must be near zero (reference +0.336 uV). A pooled fixed-electrode pipeline
-   (~±0.34 uV) cannot match the signed per-subject N2pc.
+The fixed IDs are 1,3,4,5,6,7,8,9,10,11,12,13. No claim is made that subject2 was
+unreleased. The public source manifest binds all24 original raw BIDS-compatible
+SET/FDT files to OSF version1, exact lengths, SHA256 and MD5. Original bytes total
+1,051,981,416. Acquisition receipts remain external to the task.
 
-Validation matrix (subprocess pytest per case): honest oracle → PASS; no-table → FAIL;
-constant table → FAIL; non-constant fabricated (right mean, wrong per-item) → FAIL; naive
-pooled fixed-electrode → FAIL.
+Runtime is offline; the intended image contains authenticated originals and
+public contracts, not derived EEG arrays or numerical answers. The source notice
+retains both the component node's CC-BY4.0 and the official resource page's
+CC-BY-SA4.0 notices without declaring which controls redistribution. Local
+validation is not authorization to publish the data or image.
 
-Reference-build data: pinned OSF file ids in `solution/compute.py`; per-subject `n2pc_uv`
-range −0.28…−2.84 uV, all 12 negative, grand-average −1.375 uV.
+## Verification and delivery status
 
-Packaging note: ERP CORE N2pc raw EEGLAB files are >90 MB total, so they are fetched at
-runtime from the pinned OSF ids (`allow_internet=true`); baking a derived per-subject
-snapshot into `environment/` is a maintainer follow-up.
+The repair replaces the old broad aggregate answer bank with authenticated
+source epochs and complete signed arithmetic recomputation. Baseline, filter,
+clock, retention and weighting rules must be public before numerical execution;
+equivalent implementations are accepted within prospectively fixed tolerances.
+Prose keywords and a preferred biological finding are not grading criteria.
 
-## Step-5 frontier calibration
-PENDING.
+See REPAIR_STATUS.md for measured validation and delivery evidence. The `easy`
+metadata label marks this as a method control, not an empirical model-difficulty
+estimate. No Sol/frontier calibration, public data release, push or merge is
+implied by a local repair or an oracle passing its verifier.
