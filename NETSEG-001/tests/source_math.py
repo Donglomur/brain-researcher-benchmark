@@ -8,17 +8,17 @@ from __future__ import annotations
 
 import csv
 import hashlib
-import importlib.util
 import json
 import math
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import stat
 
 import numpy as np
 from scipy.linalg import qr
 
 METHOD_SHA256 = "d3b67c864af6855b654ddf5e803e7908bc0d973ae7d5ea45b27604fc5787db47"
+SOURCE_SHA256 = "d0c4f2afdfe9161907fe64d74ab07e85e6162726f5efc0b10ff46cf2ece954f1"
 EPS = np.finfo(np.float64).eps
 
 
@@ -55,7 +55,7 @@ def finite_json(value):
         require(math.isfinite(value), "Nonfinite JSON")
 
 
-def read_json(path):
+def parse_json(body):
     def pairs(items):
         result = {}
         for k, v in items:
@@ -66,10 +66,95 @@ def read_json(path):
     def bad(value):
         raise AssertionError(f"Nonfinite JSON token: {value}")
 
-    value = json.loads(regular(path).read_text(), object_pairs_hook=pairs,
-                       parse_constant=bad)
+    value = json.loads(body, object_pairs_hook=pairs, parse_constant=bad)
     finite_json(value)
     return value
+
+
+def read_json(path):
+    return parse_json(regular(path).read_text())
+
+
+def authenticated_json(path, expected_sha256, name):
+    """Hash and parse the same bounded bytes, not two pathname reads."""
+    path = regular(path)
+    require(path.stat().st_size < 2_000_000, f"{name}: JSON size bound")
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, "rb") as handle:
+        require(stat.S_ISREG(os.fstat(handle.fileno()).st_mode), f"{name}: JSON must be regular")
+        body = handle.read(2_000_001)
+    require(len(body) < 2_000_000, f"{name}: JSON size bound")
+    require(hashlib.sha256(body).hexdigest() == expected_sha256, f"Frozen {name} identity mismatch")
+    return parse_json(body)
+
+
+def verify_source_file(path, expected_size, expected_sha256):
+    """Bounded grader-owned hashing, never execute source-adjacent helpers."""
+    path = regular(path)
+    before = path.stat()
+    require(before.st_size == expected_size, "Source size mismatch")
+    h, total = hashlib.sha256(), 0
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, "rb") as handle:
+        opened = os.fstat(handle.fileno())
+        require(stat.S_ISREG(opened.st_mode) and opened.st_size == expected_size and
+                (opened.st_dev, opened.st_ino) == (before.st_dev, before.st_ino), "Source changed during opening")
+        while True:
+            block = handle.read(min(1024*1024, expected_size-total+1))
+            if not block:
+                break
+            total += len(block)
+            require(total <= expected_size, "Source grew during verification")
+            h.update(block)
+        after = os.fstat(handle.fileno())
+    fields = ("st_dev", "st_ino", "st_size", "st_mtime_ns", "st_ctime_ns")
+    require(all(getattr(opened, k) == getattr(after, k) for k in fields), "Source changed during verification")
+    require(total == expected_size and h.hexdigest() == expected_sha256, "Source SHA256 mismatch")
+
+
+def authenticate_source(root):
+    """Verify fixed 86-file inputs using only grader-owned code and pins.
+
+    In particular /opt/source/stage_data.py and any cached Python bytecode are
+    not imported or trusted. This authenticates source contents, not a
+    participant's choice or modification of processing/helper software.
+    """
+    root = Path(root).absolute()
+    for node in (root, *root.parents):
+        require(not node.is_symlink(), "Source symlink ancestor")
+    require(stat.S_ISDIR(root.stat().st_mode), "Source root must be a directory")
+    manifest = authenticated_json(root / "source_manifest.json", SOURCE_SHA256, "source manifest")
+    rows = manifest["files"]
+    require(isinstance(rows, list) and len(rows) == 86 and type(manifest["n_files"]) is int
+            and manifest["n_files"] == 86, "Source manifest count")
+    expected, directories, total = {"source_manifest.json"}, set(), 0
+    for row in rows:
+        name = row["path"]
+        require(isinstance(name, str) and name and not name.startswith("/") and
+                "\\" not in name and "\x00" not in name and
+                all(part not in ("", ".", "..") for part in name.split("/")), "Unsafe source manifest path")
+        require(name not in expected, "Duplicate source manifest path")
+        expected.add(name)
+        directories.update(str(p) for p in PurePosixPath(name).parents if str(p) != ".")
+        size, checksum = row["size_bytes"], row["sha256"]
+        require(type(size) is int and size > 0, "Source manifest size")
+        require(isinstance(checksum, str) and len(checksum) == 64 and
+                all(c in "0123456789abcdef" for c in checksum), "Source manifest digest")
+        total += size
+    require(type(manifest["total_bytes"]) is int and manifest["total_bytes"] == total, "Source total bytes")
+    found = set()
+    for path in root.rglob("*"):
+        name, mode = path.relative_to(root).as_posix(), path.lstat().st_mode
+        if stat.S_ISDIR(mode):
+            require(name in directories, "Unexpected source directory")
+        else:
+            require(stat.S_ISREG(mode), "Nonregular source inventory entry")
+            require(name in expected, "Unexpected source file")
+            found.add(name)
+    require(found == expected, "Missing source file")
+    for row in rows:
+        verify_source_file(root / row["path"], row["size_bytes"], row["sha256"])
+    return manifest
 
 
 def numeric(array, name):
@@ -257,7 +342,7 @@ def verify_header(header, method, prefix):
 def load_reference(source_dir=None, method_path=None):
     """Authenticate and reconstruct once; callers may share returned immutable basis.
 
-    Each public call re-authenticates via the fixed stager. No accepted outputs
+    Each public call re-authenticates via grader-owned code. No accepted outputs
     or validation verdicts are cached. Tests can reuse one returned reference.
     """
     import nibabel as nib
@@ -266,16 +351,8 @@ def load_reference(source_dir=None, method_path=None):
     method_path = Path(method_path or os.environ.get("REPAIR_METHOD_PATH", "/app/method_contract.json"))
     if not method_path.exists() and method_path == Path("/app/method_contract.json"):
         method_path = local_environment / "method_contract.json"
-    require(digest(method_path) == METHOD_SHA256, "Frozen method identity mismatch")
-    method = read_json(method_path)
-    helper = local_environment / "stage_data.py"
-    if not helper.exists():
-        helper = Path("/opt/source/stage_data.py")
-    regular(helper)
-    spec = importlib.util.spec_from_file_location("netseg_source_verifier", helper)
-    stage = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(stage)
-    manifest = stage.verify_staged(root)
+    method = authenticated_json(method_path, METHOD_SHA256, "method")
+    manifest = authenticate_source(root)
     entries = manifest["files"]
     require(len(entries) == method["source"]["n_files"], "Source entry count")
     def single(role, person=None):
@@ -343,7 +420,7 @@ def load_reference(source_dir=None, method_path=None):
                     n_parcels=100, group_counts=counts, bold_headers=headers, atlas_header=atlas_header,
                     selected_confound_columns=columns, tr_seconds_used=None)
     metadata = dict(status="ok", task_id=method["task_id"], method_id=method["method_id"],
-                    source_manifest_sha256=digest(root / method["source"]["manifest_filename"]),
+                    source_manifest_sha256=SOURCE_SHA256,
                     method_contract_sha256=METHOD_SHA256,
                     source_sha256={r["path"]: r["sha256"] for r in entries}, source_observed=observed)
     return dict(method=method, participants=people, parcels=parcels,

@@ -5,9 +5,12 @@ by a separately gated authoring driver. It never reads oracle output.
 """
 import copy
 import csv
+import hashlib
 import json
 import os
 from pathlib import Path
+import sys
+from types import SimpleNamespace
 import zipfile
 
 import numpy as np
@@ -386,3 +389,101 @@ def test_cap_boundary_float32_receipts(tmp_path, reference):
     mutate_npz(out, lambda a: a.update({k: a[k].astype(np.float32)
                                       for k in ("fisher_z", "positive_z")}))
     p.validate_output_directory(out, ref)
+
+
+@pytest.fixture
+def tiny_source(tmp_path, monkeypatch):
+    """86 few-byte manufactured files; only the manifest pin is substituted."""
+    root = tmp_path / "source"; root.mkdir()
+    (root / "provenance").mkdir()
+    rows = []
+    for i in range(86):
+        name = f"tiny-{i}.bin" if i < 83 else f"provenance/tiny-{i}.txt"
+        body = f"fixture-{i}".encode()
+        (root / name).write_bytes(body)
+        rows.append(dict(path=name, size_bytes=len(body), sha256=hashlib.sha256(body).hexdigest(),
+                         role="manufactured", participant_id=None))
+    manifest = dict(files=rows, n_files=86, total_bytes=sum(r["size_bytes"] for r in rows))
+    body = json.dumps(manifest).encode()
+    (root / "source_manifest.json").write_bytes(body)
+    monkeypatch.setattr(s, "SOURCE_SHA256", hashlib.sha256(body).hexdigest())
+    return root, manifest
+
+
+def test_grader_owned_source_auth_unchanged(tiny_source):
+    root, manifest = tiny_source
+    assert s.authenticate_source(root) == manifest
+
+
+@pytest.mark.parametrize("kind", ["manifest", "corrupt_same_size", "truncated", "missing", "extra_file",
+                                  "extra_directory", "symlink_file", "symlink_directory", "dangling", "fifo"])
+def test_grader_owned_source_auth_rejects(tiny_source, kind):
+    root, manifest = tiny_source
+    first = root / manifest["files"][0]["path"]
+    if kind == "manifest":
+        (root / "source_manifest.json").write_text(json.dumps(dict(manifest, claimed="changed")))
+    elif kind == "corrupt_same_size": first.write_bytes(b"x"*first.stat().st_size)
+    elif kind == "truncated": first.write_bytes(b"x")
+    elif kind == "missing": first.unlink()
+    elif kind == "extra_file": (root / "extra").write_bytes(b"x")
+    elif kind == "extra_directory": (root / "empty-extra").mkdir()
+    elif kind == "symlink_file":
+        first.unlink(); first.symlink_to(root / manifest["files"][1]["path"])
+    elif kind == "symlink_directory": (root / "alias").symlink_to(root / "provenance", target_is_directory=True)
+    elif kind == "dangling": (root / "dangling").symlink_to(root / "absent")
+    else:
+        first.unlink(); os.mkfifo(first)
+    with pytest.raises((AssertionError, OSError)):
+        s.authenticate_source(root)
+
+
+def test_spoofed_runtime_helper_cannot_skip_hashes(tiny_source, monkeypatch):
+    root, manifest = tiny_source
+    calls = []
+    def spoof(*args): calls.append(True); return manifest
+    # Simulates an agent-visible helper or already imported poisoned module.
+    monkeypatch.setitem(sys.modules, "netseg_source_verifier", SimpleNamespace(verify_staged=spoof))
+    first = root / manifest["files"][0]["path"]
+    first.write_bytes(b"x"*first.stat().st_size)
+    with pytest.raises(AssertionError, match="SHA256"):
+        s.authenticate_source(root)
+    assert not calls
+
+
+def test_runtime_helper_is_not_an_authentication_dependency(tiny_source, monkeypatch):
+    root, manifest = tiny_source
+    def poison(*args): raise AssertionError("Untrusted helper executed")
+    monkeypatch.setitem(sys.modules, "netseg_source_verifier", SimpleNamespace(verify_staged=poison))
+    assert s.authenticate_source(root) == manifest
+
+
+def test_source_root_symlink_rejected(tiny_source):
+    root, _ = tiny_source
+    link = root.with_name("source-alias"); link.symlink_to(root, target_is_directory=True)
+    with pytest.raises(AssertionError, match="symlink"):
+        s.authenticate_source(link)
+
+
+def test_production_source_manifest_pin():
+    assert s.digest(Path(__file__).parents[1] / "environment/source_manifest.json") == s.SOURCE_SHA256
+
+
+@pytest.mark.parametrize("name", ["source manifest", "method"])
+def test_authenticated_json_parses_same_hashed_buffer(tmp_path, monkeypatch, name):
+    path = tmp_path / "public.json"
+    original = b'{"version":1}'
+    path.write_bytes(original)
+    parser = s.parse_json
+    def swap_path_after_read(body):
+        assert body == original
+        path.write_text('{"version":2}')
+        return parser(body)
+    monkeypatch.setattr(s, "parse_json", swap_path_after_read)
+    assert s.authenticated_json(path, hashlib.sha256(original).hexdigest(), name) == {"version": 1}
+
+
+@pytest.mark.parametrize("body", [b'{"x":1,"x":2}', b'{"extra":1e999}', b'{"x":NaN}'])
+def test_authenticated_json_still_strict(tmp_path, body):
+    path = tmp_path / "public.json"; path.write_bytes(body)
+    with pytest.raises(AssertionError):
+        s.authenticated_json(path, hashlib.sha256(body).hexdigest(), "manufactured")

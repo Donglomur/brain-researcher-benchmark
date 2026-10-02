@@ -26,10 +26,16 @@ Those controls are intentionally inconsistent component interventions, not new
 scientific analyses. The verifier accepts coherent ordering changes, rounded
 primitives with their own recomputed derivatives, and unrestricted report wording.
 
-All **315 native integration tests passed**, zero failures, errors or skips:
-247 source-free checks, one grading check, six genuine/equivalent positives and
+All **335 native integration tests passed**, zero failures, errors or skips:
+267 source-free checks, one grading check, six genuine/equivalent positives and
 61 wrong-output checks. This is engineering/source-consistency evidence, not
 proof of a paper finding or model difficulty.
+
+The initial 315-case pass and implementation commit are preserved. A subsequent
+trust-boundary review removed the grader's import of the agent-visible staging
+helper: the grader now owns the frozen manifest pin, hashes/parses the same JSON
+bytes and verifies every source file directly. Twenty new integrity fixtures
+and the complete 335-case rerun passed without changing scientific numerics.
 
 Clean-commit Harbor oracle, final-image regressions and delivery-identity audit
 are the next gates; their immutable-commit receipts will remain external rather
