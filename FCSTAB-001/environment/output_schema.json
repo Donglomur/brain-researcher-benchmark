@@ -1,0 +1,227 @@
+{
+  "schema_version": "fcstab-output-contract-v3",
+  "task_id": "FCSTAB-001",
+  "status": "fixed_before_connectivity_and_endpoints",
+  "source_manifest_sha256": "c57fed19c165e8a606c2b6a9aef89099103a2642d6ab54b93bf525d71ea46171",
+  "method_contract_sha256": "004a396e4f4f37db956083939c84465819b7d3cd1a69569721c39e7884734ee4",
+  "public_selection_kernel_sha256": "a58264a5bb3ffd82b291434b2ca22843c276a42dab66d5e5abe220eb77ed7a49",
+  "files": [
+    "connectivity.npz",
+    "stability.csv",
+    "selection_evidence.json",
+    "summary.json",
+    "findings.md"
+  ],
+  "completion": "All five files present and valid; any failure_report.json entry, including a dangling link, invalidates completion. Undefined inferential endpoints with declared statuses are valid complete outputs.",
+  "limits": {
+    "entire_output_tree_bytes": 100663296,
+    "output_entries": 1000,
+    "npz_stored_bytes": 67108864,
+    "npz_expanded_bytes": 134217728,
+    "npz_members": 16,
+    "npy_header_bytes": 16384,
+    "max_npz_array_ndim": 32,
+    "selection_evidence_json_bytes": 16777216,
+    "summary_json_bytes": 8388608,
+    "csv_bytes": 1048576,
+    "csv_rows": 100000,
+    "csv_field_bytes": 1048576,
+    "json_depth": 64,
+    "findings_bytes": 65536
+  },
+  "serialization": {
+    "encoding": "UTF-8; BOM allowed",
+    "json": "Objects with unique keys; finite typed numbers, exact Boolean or null as declared. Numeric strings are not JSON numbers.",
+    "csv": "Numeric decimal/scientific notation accepted; identity strings preserved literally; additional columns allowed and ignored.",
+    "npz": "Unpickled primitive real-numeric, Boolean or UTF-8 string arrays only. No object/structured/complex arrays; no nonfinite required or extra arrays. Stored or deflate ZIP members, one unique safe .npy basename each; NPY version 1 or 2.",
+    "integer_axes": "Exact value-integral finite non-Boolean numeric arrays accepted, including floats; no dtype fingerprint.",
+    "mask": "Boolean or exact integer 0/1 array.",
+    "extras": "Finite bounded descriptive JSON fields, NPZ arrays, CSV columns and additional regular files allowed. They do not override any required value. Optional fit/support diagnostics are not numerical targets.",
+    "unsafe_paths": "No symlinks (including ancestors/members), special files, duplicate archive members or pickle. File bytes are checked before/after bounded same-buffer read."
+  },
+  "authority": {
+    "source": "Private independently reconstructed canonical common ROI/edge membership and source Fisher-z.",
+    "selections": "Accepted source-bound Fisher-z, canonical subject/pair order and declared deterministic seed0, never hidden canonical sets.",
+    "row_replay": "Accepted stability.csv rows after comparison with selected accepted-z means/deltas; forward linear identity uses sum of all three receipt bounds.",
+    "evidence": "Duplicate first/second means are receipts against the same accepted-z computation, not replacement values for CSV and not exactly equated to separately rounded CSV.",
+    "reliability": "Accepted per-person reliability receipts after comparison with accepted-z/source-support replay drive reliability summaries.",
+    "inference": "Shared SHA-bound public/private selection_kernel, with source anchors on SAME accepted sets and declared resolution/fidelity. No second canonical t/p/TOST/Pearson/Spearman/count target."
+  },
+  "tolerances": {
+    "fisher_z": {
+      "atol": 0.000001,
+      "rtol": 0.000001
+    },
+    "participant_scalar": {
+      "atol": 0.000001,
+      "rtol": 0.000001
+    },
+    "summary_scalar": {
+      "atol": 1e-8,
+      "rtol": 0.000001
+    },
+    "active_centered_edge_relative": 0.000001,
+    "active_full_delta_error_relative_to_source_centered_norm": 0.000001,
+    "formula": "abs(a-b)<=atol+rtol*abs(b). Fidelity support and status are exact source-defined, not inferred from displayed rounded numbers."
+  },
+  "connectivity_npz": {
+    "arrays": {
+      "subject_ids": "[40] unique literal decimal SUB_ID strings; exact mapped fixed cohort",
+      "segment_ids": "[3] unique strings first,second,full",
+      "roi_ids": "[200] exact unique original column IDs 1..200",
+      "common_roi_mask": "[200] source-exact mask aligned to roi_ids",
+      "edge_roi_i": "[E] lower original ROI ID",
+      "edge_roi_j": "[E] upper original ROI ID; every common-ROI pair i<j exactly once",
+      "fisher_z": "[40,3,E] finite real non-Boolean numeric values; coherent subject/segment/edge permutation allowed"
+    },
+    "source_mask": "All source-person x3-segment SD>1e-8; no support recomputation from receipts.",
+    "E": "M*(M-1)/2, 1<=E<=19900",
+    "fisher_domain": "abs(z)<=atanh(.999999)+1e-6+1e-6*atanh(.999999)"
+  },
+  "stability_csv": {
+    "required_columns": [
+      "subject_id",
+      "n_edges",
+      "forward_first_half",
+      "forward_second_half",
+      "forward_delta",
+      "reverse_delta",
+      "independent_delta",
+      "random_delta"
+    ],
+    "rows": 40,
+    "row_key": "subject_id",
+    "n_edges": "Exact E, not selected k",
+    "numeric_domain": "All six means/deltas finite; signed values are allowed.",
+    "authority": "All group delta/count/inference computations use these accepted rows in canonical subject order."
+  },
+  "selection_evidence_json": {
+    "schema_version": "fcstab-selection-v3",
+    "task_id": "FCSTAB-001",
+    "status": "complete",
+    "required": [
+      "schema_version",
+      "task_id",
+      "status",
+      "pins",
+      "n_edges",
+      "k",
+      "seed",
+      "subjects"
+    ],
+    "pins": [
+      "source_manifest_sha256",
+      "method_contract_sha256",
+      "output_schema_sha256",
+      "subject_ids_sha256"
+    ],
+    "n_edges": "exact E",
+    "k": "max(1,E//10)",
+    "seed": 0,
+    "subjects": {
+      "length": 40,
+      "key": "subject_id",
+      "fields": {
+        "subject_id": "literal decimal SUB_ID",
+        "training_subject_ids": "all other39 exact identities; order immaterial",
+        "forward_edge_indices": "k unique exact integral JSON numeric indices into submitted edge axis; set order immaterial",
+        "reverse_edge_indices": "same",
+        "independent_edge_indices": "same",
+        "random_edge_indices": "same",
+        "means": "four scheme keys forward/reverse/independent/random, each {first:finite signed real,second:finite signed real}",
+        "reliability": {
+          "overlap": "[0,1]",
+          "edge_pearson": "[-1,1] or null when source-inactive",
+          "edge_spearman": "[-1,1] or null when source-inactive",
+          "status": "ok | source_insufficient_edges | source_constant"
+        }
+      }
+    }
+  },
+  "summary_json": {
+    "schema_version": "fcstab-summary-v3",
+    "task_id": "FCSTAB-001",
+    "status": "complete",
+    "required": [
+      "schema_version",
+      "task_id",
+      "status",
+      "pins",
+      "n_subjects",
+      "cohort",
+      "source_files",
+      "source_observed",
+      "software",
+      "selection_schemes",
+      "equivalence",
+      "forward_top_decile_connectivity",
+      "reliability",
+      "source_inference_support"
+    ],
+    "pins": "same four exact pins as evidence",
+    "n_subjects": 40,
+    "cohort": "40 keyed records {file_id,subject_id}, literal source mapping; order immaterial",
+    "source_files": "Complete authenticated42 source-manifest member dictionaries keyed path; required record fields are exact, order immaterial; no substituted helper authority.",
+    "source_observed": {
+      "n_source_files": 42,
+      "source_bytes": 16147721,
+      "n_selected_derivatives": 40,
+      "total_frames": 7840,
+      "n_phenotype_rows": 1112,
+      "n_named_phenotype_rows": 1035,
+      "n_no_filename_rows": 77,
+      "phenotype_columns": "exact original ordered header",
+      "phenotype_ledger": "1112 records keyed phenotype_row_index, with exact typed file_id,subject_id,source_subject_id_token,selected_derivative,source_path,tokens{SITE_ID,EYE_STATUS_AT_SCAN}; source order may be permuted coherently",
+      "persons": "closed FILE_ID dictionary. Required each: source_path/source_sha256/subject_id/phenotype_row_index/tokens/n_frames/n_columns/L/header/header_sha256/source_column_ids/all_finite/segment_support{first,second,full}/exact_constant_mask{first,second,full}; masks/source axes exact.",
+      "segment_ids": [
+        "first",
+        "second",
+        "full"
+      ],
+      "roi_ids": "ordered original1..200",
+      "common_roi_mask": "canonical ordered200Boolean values",
+      "clock": {
+        "TR_verified": false,
+        "frame_order": "original source row order"
+      }
+    },
+    "software": "object with nonempty python,numpy,scipy strings; descriptive, no exact version-string gate",
+    "selection_schemes": "four exact scheme keys, records specified below",
+    "equivalence": "independent-delta TOST record below",
+    "forward_top_decile_connectivity": {
+      "first_half_mean": "finite signed real",
+      "second_half_mean": "finite signed real",
+      "change": "finite signed mean accepted forward_delta"
+    },
+    "reliability": {
+      "overlap": "finite [0,1] mean accepted overlap",
+      "edge_pearson": "{mean:real[-1,1]|null,n_defined:int0..40,n_undefined:int0..40,status:ok|undefined_member}",
+      "edge_spearman": "same complete-denominator family"
+    },
+    "source_inference_support": "four scheme keys, each {status:active|source_zero_variance|numerical_resolution}; numeric diagnostic extras optional/ungraded"
+  },
+  "group_record": {
+    "n": 40,
+    "df": 39,
+    "delta_mean": "finite signed real",
+    "delta_sd": "finite nonnegative real",
+    "delta_se": "finite nonnegative real",
+    "n_negative": "integer0..40; accepted CSV delta<0",
+    "inference_status": "ok | source_zero_variance | numerical_resolution | numerical_underflow | numerical_nonfinite",
+    "t": "finite signed real or null",
+    "p": "finite [0,1] or null",
+    "ci95_lo": "finite signed real or null",
+    "ci95_hi": "finite signed real or null",
+    "null_policy": "All t/p/CI null unless inference_status ok; descriptors retain own accepted-row values."
+  },
+  "tost_record": {
+    "margin_z": 0.05,
+    "p_lower": "finite[0,1] or null",
+    "p_upper": "finite[0,1] or null",
+    "tost_p": "finite[0,1] or null",
+    "equivalent_within_margin": "Boolean or null, strict unrounded own replay p<.05",
+    "status": "same support/numerical status as independent group"
+  },
+  "findings": "Nonempty UTF-8 text. Describe fixed-cohort single-run signed selection sensitivity and nominal inference limits. No prose, direction, significance, equivalence, magnitude or difficulty target.",
+  "interpretation": "A fixed-cohort methods/control adaptation, not a paper-finding reproduction or a calibrated model-difficulty claim. No direction, significance, equivalence or endpoint outcome is required."
+}

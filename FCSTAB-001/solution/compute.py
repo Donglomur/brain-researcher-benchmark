@@ -1,249 +1,274 @@
-#!/usr/bin/env python3
-"""Reference solution (oracle) for FCSTAB-001.
+"""Import-safe FCSTAB original-source oracle; no bank or private grader imports.
 
-Within-run change of the strongest resting-state functional connections, done so the
-selection artefact is separated from any genuine early-to-late effect. Cohort: the first
-40 quality-checked ABIDE cpac/CC200 subjects -- ALL from a single site (PITT), eyes CLOSED,
-one ~4.9-min run each (196 TRs at TR=1.5 s). The pre-extracted Craddock-200 ROI time series
-are BAKED into the image (no internet); this script reads them from the baked NPZ.
-
-The scientific point (written into findings.md): selecting the top-decile edges on the
-first half makes the naive (second - first) contrast SELECTION-CONTAMINATED -- the first-half
-mean of the selected set is inflated by first-half noise, so second - first is biased
-downward by a negative selection component. That contrast therefore CANNOT by itself
-establish that the strongest connections genuinely weaken across the run. To show this and
-to estimate the selection-free change, the oracle computes, per subject, the signed Fisher-z
-change (second - first) of the top-decile edges under FOUR selection schemes:
-
-  forward     -- top decile selected on the FIRST half   (biased DOWN by selection)
-  reverse     -- top decile selected on the SECOND half   (biased UP  by selection)
-  independent -- top-decile strong-edge set selected from the OTHER 39 subjects (LOSO),
-                 i.e. independent of this subject's two halves -> selection-free estimate
-  random      -- a size-matched random edge set           -> selection-free control
-
-Forward and reverse have opposite signs of similar magnitude (the sign of the "effect" is
-set by which half you select on); their average, and the independent/random estimates, are
-near zero. A prespecified equivalence test (TOST, margin 0.05 z) is applied to the
-selection-free (independent) estimate, and edge-level reliability (top-decile set overlap,
-edge rank Spearman, ICC) is reported as the honest within-run stability statement.
+Source bytes are loaded by the separate oracle reader. The digest-bound public
+kernel supplies the declared SD/Fisher/replay recipe. Success emits exactly the
+five public artifacts. No endpoint sign, size, significance or equivalence gate.
 """
+import argparse
+import copy
+import csv
 import hashlib
+import io
 import json
+import math
 import os
-import sys
 from pathlib import Path
+import platform
+import re
+import stat
+import zipfile
 
 import numpy as np
+import scipy
 
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-OUT.mkdir(parents=True, exist_ok=True)
+import source_reader
 
-FRAC = 0.10          # top decile
-EQUIV_MARGIN = 0.05  # prespecified equivalence margin (Fisher-z) for the selection-free estimate
-SEED = 0
-
-# exact pinned cohort (first 40 quality-checked ABIDE cpac subjects; all PITT, eyes closed)
-PINNED_SUB_IDS = [50003, 50004, 50005, 50006, 50007, 50008, 50010, 50011, 50012, 50013,
-                  50014, 50015, 50016, 50020, 50022, 50023, 50024, 50025, 50026, 50027,
-                  50028, 50030, 50031, 50032, 50033, 50034, 50035, 50036, 50037, 50038,
-                  50039, 50040, 50041, 50042, 50043, 50044, 50045, 50046, 50047, 50048]
-
-
-def fail(reason):
-    (OUT / "summary.json").write_text(json.dumps(
-        {"status": "failed_precondition", "reason": str(reason)}, indent=2), encoding="utf-8")
-    (OUT / "findings.md").write_text(
-        f"# FCSTAB-001 - failed_precondition\n\n{reason}\n", encoding="utf-8")
-    sys.stderr.write(f"failed_precondition: {reason}\n")
-    sys.exit(1)
+METHOD_SHA = '004a396e4f4f37db956083939c84465819b7d3cd1a69569721c39e7884734ee4'
+SCHEMA_SHA = 'bedafa3a91bcb6d6b83dd3ae6d4f2d4d9f7a58cc1f65631be3e5e7e86a47fadf'
+KERNEL_SHA = 'a58264a5bb3ffd82b291434b2ca22843c276a42dab66d5e5abe220eb77ed7a49'
+FILES = ('connectivity.npz', 'stability.csv', 'selection_evidence.json', 'summary.json', 'findings.md')
+CSV_COLUMNS = ('subject_id', 'n_edges', 'forward_first_half', 'forward_second_half',
+               'forward_delta', 'reverse_delta', 'independent_delta', 'random_delta')
+SEGMENTS = ('first', 'second', 'full')
+CAPS = dict(entire_output_tree_bytes=96*1024**2, output_entries=1000,
+            npz_stored_bytes=64*1024**2, npz_expanded_bytes=128*1024**2, npz_members=16,
+            selection_evidence_json_bytes=16*1024**2, summary_json_bytes=8*1024**2,
+            csv_bytes=1024**2, findings_bytes=65536, json_depth=64)
 
 
-def find_data():
-    """Locate the baked CC200 NPZ (no internet)."""
-    cands = []
-    if os.environ.get("FCSTAB_DATA"):
-        cands.append(Path(os.environ["FCSTAB_DATA"]))
-    cands += [Path("/app/data/abide_cc200_pitt40.npz"),
-              Path(__file__).resolve().parent.parent / "environment" / "data" / "abide_cc200_pitt40.npz"]
-    for p in cands:
-        if p.exists():
-            return p
-    fail("baked CC200 data (abide_cc200_pitt40.npz) not found; expected it in /app/data")
+class OracleError(ValueError):
+    pass
 
 
-def edges_z(x):
-    """Upper-triangle Fisher-z of the ROI x ROI correlation of a (T, R) array."""
-    C = np.corrcoef(x, rowvar=False)
-    iu = np.triu_indices(C.shape[0], k=1)
-    return np.arctanh(np.clip(C[iu], -0.999999, 0.999999))
+def require(ok, reason):
+    if not ok: raise OracleError(reason)
 
 
-def group_stats(a):
-    from scipy import stats
-    a = np.asarray(a, float)
-    n = a.size
-    m = float(a.mean())
-    sd = float(a.std(ddof=1))
-    se = sd / np.sqrt(n)
-    t, p = stats.ttest_1samp(a, 0.0)
-    lo, hi = stats.t.interval(0.95, n - 1, loc=m, scale=se)
-    return {"delta_mean": m, "delta_sd": sd, "delta_se": float(se),
-            "ci95_lo": float(lo), "ci95_hi": float(hi),
-            "t": float(t), "p": float(p), "n_negative": int((a < 0).sum()), "n": int(n)}
+def disjoint(a, b):
+    require(a != b and a not in b.parents and b not in a.parents, 'output overlaps protected source/code/document')
 
 
-def tost_equivalent(a, margin):
-    """Two one-sided tests that mean(a) lies within +/- margin. Returns (p_tost, equivalent)."""
-    from scipy import stats
-    a = np.asarray(a, float)
-    n = a.size
-    m = a.mean()
-    se = a.std(ddof=1) / np.sqrt(n)
-    dfree = n - 1
-    p_lo = stats.t.sf((m - (-margin)) / se, dfree)   # H0: mean <= -margin
-    p_hi = stats.t.sf((margin - m) / se, dfree)       # H0: mean >= +margin
-    p_tost = float(max(p_lo, p_hi))
-    return p_tost, bool(p_tost < 0.05)
+def policy_now():
+    return source_reader.Policy(method_sha=METHOD_SHA, schema_sha=SCHEMA_SHA, kernel_sha=KERNEL_SHA)
 
 
-def main():
-    path = find_data()
-    blob = path.read_bytes()
-    d = np.load(path, allow_pickle=False)
-    ts_all = np.asarray(d["timeseries"], dtype=float)          # (S, T, R)
-    sub_ids = [int(x) for x in d["subject_ids"]]
-    data_sha = hashlib.sha256(np.ascontiguousarray(d["timeseries"]).tobytes()).hexdigest()
-    S, T, R = ts_all.shape
-    L = T // 2
-
-    # common ROI mask: keep ROIs non-degenerate in the full run AND both halves of EVERY subject
-    keep = np.ones(R, bool)
-    for ts in ts_all:
-        keep &= (ts.std(axis=0) > 1e-8)
-        keep &= (ts[:L].std(axis=0) > 1e-8)
-        keep &= (ts[T - L:].std(axis=0) > 1e-8)
-    if keep.sum() < 20:
-        fail(f"too few non-degenerate ROIs across the cohort ({int(keep.sum())})")
-
-    # per-subject first/second-half and full-run edge vectors on the common ROI set
-    z1 = np.array([edges_z(ts[:L, keep]) for ts in ts_all])
-    z2 = np.array([edges_z(ts[T - L:, keep]) for ts in ts_all])
-    zf = np.array([edges_z(ts[:, keep]) for ts in ts_all])
-    if not (np.isfinite(z1).all() and np.isfinite(z2).all() and np.isfinite(zf).all()):
-        fail("non-finite edges after common-ROI masking")
-    E = z1.shape[1]
-    k = max(1, int(FRAC * E))
-    rng = np.random.default_rng(SEED)
-
-    rows = []
-    selection_evidence = {}
-    fwd, rev, ind, rnd = [], [], [], []
-    ff, fs = [], []
-    overlaps, spearmans, iccs = [], [], []
-    from scipy import stats
-    for i in range(S):
-        a1, a2 = z1[i], z2[i]
-        sf = np.argsort(a1)[-k:]           # forward: strongest on first half
-        sr = np.argsort(a2)[-k:]           # reverse: strongest on second half
-        others = np.delete(np.arange(S), i)
-        si = np.argsort(zf[others].mean(0))[-k:]   # independent (LOSO) strong-edge set
-        ridx = rng.choice(E, size=k, replace=False)
-        selection_evidence[str(sub_ids[i])] = {
-            "training_subject_ids": [str(sub_ids[j]) for j in others],
-            "forward_edge_indices": sf.tolist(), "reverse_edge_indices": sr.tolist(),
-            "independent_edge_indices": si.tolist(), "random_edge_indices": ridx.tolist()}
-
-        f_first, f_second = float(a1[sf].mean()), float(a2[sf].mean())
-        d_fwd = f_second - f_first
-        d_rev = float(a2[sr].mean() - a1[sr].mean())
-        d_ind = float(a2[si].mean() - a1[si].mean())
-        d_rnd = float(a2[ridx].mean() - a1[ridx].mean())
-
-        rows.append((sub_ids[i], E, f_first, f_second, d_fwd, d_rev, d_ind, d_rnd))
-        ff.append(f_first); fs.append(f_second)
-        fwd.append(d_fwd); rev.append(d_rev); ind.append(d_ind); rnd.append(d_rnd)
-        overlaps.append(len(set(sf.tolist()) & set(sr.tolist())) / k)
-        spearmans.append(float(stats.spearmanr(a1, a2).statistic))
-        iccs.append(float(np.corrcoef(a1, a2)[0, 1]))
-
-    (OUT / "selection_evidence.json").write_text(json.dumps(selection_evidence))
-    # ---- required per-subject CSV --------------------------------------------------------
-    with open(OUT / "stability.csv", "w", encoding="utf-8") as fh:
-        fh.write("subject_id,n_edges,forward_first_half,forward_second_half,"
-                 "forward_delta,reverse_delta,independent_delta,random_delta\n")
-        for sid, e, f1, f2, df, dr, di, dn in rows:
-            fh.write(f"{sid},{e},{f1:.6f},{f2:.6f},{df:.6f},{dr:.6f},{di:.6f},{dn:.6f}\n")
-
-    schemes = {"forward": group_stats(fwd), "reverse": group_stats(rev),
-               "independent": group_stats(ind), "random": group_stats(rnd)}
-    avg_fr = group_stats((np.array(fwd) + np.array(rev)) / 2.0)
-    tost_p, equivalent = tost_equivalent(ind, EQUIV_MARGIN)
-    g_ff, g_fs = float(np.mean(ff)), float(np.mean(fs))
-    pct = 100.0 * (g_fs - g_ff) / g_ff if g_ff else float("nan")
-
-    summary = {
-        "status": "ok",
-        "n_subjects": S,
-        "atlas": "Craddock-200 (CC200), nilearn ABIDE cpac filt_noglobal derivatives (baked, offline)",
-        "metric": "Fisher z-transformed Pearson correlation, upper-triangle edges",
-        "selection": "top decile (10%) of edges; four selection schemes",
-        "cohort": {
-            "site": "PITT (single site, all 40 subjects)",
-            "eye_status_at_scan": "closed",
-            "n_timepoints": int(T),
-            "tr_seconds": 1.5,
-            "run_minutes_approx": round(T * 1.5 / 60.0, 2),
-            "n_rois_total": int(R),
-            "n_rois_used": int(keep.sum()),
-            "n_edges": int(E),
-            "data_sha256": data_sha,
-        },
-        # signed second-minus-first Fisher-z change of the top-decile set, by selection scheme
-        "selection_schemes": schemes,
-        "avg_forward_reverse": avg_fr,     # selection bias cancels -> ~ genuine effect
-        "forward_top_decile_connectivity": {
-            "first_half_mean": g_ff, "second_half_mean": g_fs,
-            "change": g_fs - g_ff, "pct_change": pct,
-        },
-        "equivalence": {
-            "target": "independent_delta (selection-free estimate)",
-            "margin_z": EQUIV_MARGIN, "tost_p": tost_p, "equivalent_within_margin": equivalent,
-        },
-        "reliability": {
-            "top_decile_set_overlap_first_vs_second": float(np.mean(overlaps)),
-            "edge_rank_spearman_first_vs_second": float(np.mean(spearmans)),
-            "edge_pearson_first_vs_second": float(np.mean(iccs)),
-        },
-        "conclusion": ("Selection-dependent contrasts do not by themselves establish temporal weakening. "
-                       + ("The independent estimate meets the prespecified0.05z equivalence criterion."
-                          if equivalent else
-                          "Equivalence is not established at the prespecified0.05z margin.")),
-        "preprocessing": {
-            "pipeline": "cpac", "band_pass_filtering": True, "global_signal_regression": False,
-            "quality_checked": True,
-            "halves": "equal contiguous, first L=floor(T/2) TRs vs last L TRs",
-            "roi_inclusion": "ROIs non-degenerate in the full run and both halves of every subject",
-            "selection_fraction": FRAC, "seed": SEED,
-        },
-    }
-    (OUT / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
-
-    fmean = schemes["forward"]["delta_mean"]; rmean = schemes["reverse"]["delta_mean"]
-    imean = schemes["independent"]["delta_mean"]; nmean = schemes["random"]["delta_mean"]
-    ilo, ihi = schemes["independent"]["ci95_lo"], schemes["independent"]["ci95_hi"]
-    findings = (
-        f"# Within-run selected-edge sensitivity\n\n"
-        f"Forward/reverse/independent/random signed changes: {fmean:+.5f}/{rmean:+.5f}/"
-        f"{imean:+.5f}/{nmean:+.5f}. Independent95%CI=[{ilo:+.5f},{ihi:+.5f}]. "
-        f"TOST p={tost_p:.5g}, equivalent_within0.05z={equivalent}. "
-        f"Edge Pearson between halves={np.mean(iccs):.4f} (not ICC). "
-        "Selected-set contrasts are selection-dependent. Their reversal is not proof that "
-        "no temporal process exists; independent estimates and uncertainty carry that assessment. "
-        "Non-significance alone does not establish stability or equivalence.\n")
-    (OUT / "findings.md").write_text(findings, encoding="utf-8")
-    print(f"[FCSTAB-001] S={S} E={E} k={k} | forward {fmean:+.3f} reverse {rmean:+.3f} "
-          f"independent {imean:+.3f} random {nmean:+.3f} | TOST p={tost_p:.3f} equiv={equivalent}")
+def prepare_output(output_dir, protected):
+    output = source_reader.safe_path(output_dir)
+    for path in protected: disjoint(output, source_reader.safe_path(path))
+    if os.path.lexists(output):
+        require(stat.S_ISDIR(output.lstat().st_mode) and not any(output.iterdir()), 'output must be absent or an empty real directory')
+    else:
+        output.mkdir(parents=True, mode=0o755)
+    info = output.lstat()
+    return output, (info.st_dev, info.st_ino)
 
 
-if __name__ == "__main__":
-    main()
+def guard_output(root, identity):
+    source_reader.safe_path(root)
+    info = root.lstat()
+    require(stat.S_ISDIR(info.st_mode) and (info.st_dev, info.st_ino) == identity, 'output directory changed')
+    require(not os.path.lexists(root/'failure_report.json'), 'authoritative failure marker')
+
+
+def publish(root, identity, name, raw, cap):
+    guard_output(root, identity)
+    require(name in FILES and type(raw) is bytes and 0 < len(raw) <= cap, 'artifact byte cap')
+    with (root/name).open('xb') as stream:
+        stream.write(raw)
+    guard_output(root, identity)
+
+
+def failure(root, identity, phase, exc):
+    # Preserve all prior bytes and any preexisting/dangling failure marker.
+    source_reader.safe_path(root); info = root.lstat()
+    require(stat.S_ISDIR(info.st_mode) and (info.st_dev, info.st_ino) == identity, 'cannot safely mark changed output')
+    if os.path.lexists(root/'failure_report.json'): return
+    data = dict(status='failed', task_id='FCSTAB-001', phase=phase, error_type=type(exc).__name__,
+                reason=str(exc) if isinstance(exc, OracleError) else 'source_kernel_or_io_failure',
+                outputs_complete=False)
+    with (root/'failure_report.json').open('xb') as stream:
+        stream.write((json.dumps(data, allow_nan=False, sort_keys=True, indent=2)+'\n').encode())
+
+
+def schema_caps(schema):
+    require(type(schema) is dict and schema.get('task_id') == 'FCSTAB-001', 'schema task identity')
+    declared = schema.get('limits')
+    require(type(declared) is dict and schema.get('files') == list(FILES), 'schema files and limits')
+    result = {}
+    for key, maximum in CAPS.items():
+        value = declared.get(key)
+        require(type(value) is int and 0 < value <= maximum, 'invalid or excessive schema cap: '+key)
+        result[key] = value
+    return result
+
+
+def source_primitives(basis, kernel):
+    """Oracle-owned common mask and kernel Pearson, never private helpers."""
+    raw = np.asarray(basis['raw'])
+    ids, files = basis['subject_ids'], basis['participant_file_ids']
+    require(raw.dtype == np.dtype('float64') and raw.ndim == 3 and bool(np.isfinite(raw).all()), 'finite original float64 matrix')
+    people, frames, columns = raw.shape
+    require(people == len(ids) == len(files) and people >= 2 and frames//2 >= 2 and columns >= 2,
+            'source matrix shape')
+    require(all(type(s) is str for s in ids+files) and len(set(ids)) == len(ids) and len(set(files)) == len(files), 'source identity axes')
+    half = frames//2
+    ranges = ((0, half), (frames-half, frames), (0, frames))
+    sd = np.empty((people, 3, columns), dtype=np.float64)
+    constants = np.empty_like(sd, dtype=bool)
+    for person in range(people):
+        for segment, (start, stop) in enumerate(ranges):
+            for roi in range(columns):
+                values = raw[person, start:stop, roi]
+                constants[person, segment, roi] = bool(np.all(values == values[0]))
+                sd[person, segment, roi] = kernel.population_sd(values)
+    require(bool(np.isfinite(sd).all()) and bool((sd >= 0).all()), 'source population SD domain')
+    support = sd > 1e-8
+    common = np.all(support, axis=(0, 1))
+    kept = np.flatnonzero(common)
+    require(len(kept) >= 2, 'failed_precondition: fewer than two common ROIs')
+    lower, upper = np.triu_indices(len(kept), 1)
+    pairs = np.column_stack((kept[lower]+1, kept[upper]+1)).astype(np.int64)
+    fisher = np.empty((people, 3, len(pairs)), dtype=np.float64)
+    for person in range(people):
+        for segment, (start, stop) in enumerate(ranges):
+            fisher[person, segment] = kernel.fisher_z(np.ascontiguousarray(raw[person, start:stop][:, kept]))
+    require(bool(np.isfinite(fisher).all()), 'source Fisher nonfinite')
+    observed = copy.deepcopy(basis['source_observed'])
+    for i, fid in enumerate(files):
+        observed['persons'][fid]['segment_support'] = {name: support[i, j].tolist() for j, name in enumerate(SEGMENTS)}
+        observed['persons'][fid]['exact_constant_mask'] = {name: constants[i, j].tolist() for j, name in enumerate(SEGMENTS)}
+    observed.update(segment_ids=list(SEGMENTS), roi_ids=list(range(1, columns+1)), common_roi_mask=common.tolist())
+    arrays = dict(subject_ids=np.asarray(ids, dtype='U'), segment_ids=np.asarray(SEGMENTS, dtype='U'),
+                  roi_ids=np.arange(1, columns+1, dtype=np.int64), common_roi_mask=common,
+                  edge_roi_i=pairs[:, 0], edge_roi_j=pairs[:, 1], fisher_z=fisher)
+    return arrays, pairs, observed
+
+
+def documents(basis, arrays, pairs, observed, kernel):
+    result = kernel.analyze(arrays['fisher_z'], arrays['fisher_z'], basis['subject_ids'], pairs)
+    pins = dict(basis['pins'])
+    require(set(pins) == {'source_manifest_sha256','method_contract_sha256','output_schema_sha256','subject_ids_sha256'}
+            and all(type(v) is str and re.fullmatch('[0-9a-f]{64}', v) for v in pins.values()), 'source document pins')
+    evidence = dict(schema_version='fcstab-selection-v3', task_id='FCSTAB-001', status='complete', pins=pins,
+                    n_edges=result['n_edges'], k=result['k'], seed=0,
+                    subjects=[dict(subject_id=sid, **result['evidence'][sid]) for sid in basis['subject_ids']])
+    summary = dict(schema_version='fcstab-summary-v3', task_id='FCSTAB-001', status='complete', pins=pins,
+                   n_subjects=len(basis['subject_ids']),
+                   cohort=[dict(file_id=fid, subject_id=sid) for fid, sid in zip(basis['participant_file_ids'], basis['subject_ids'])],
+                   source_files=basis['source_files'], source_observed=observed,
+                   software=dict(python=platform.python_version(), numpy=np.__version__, scipy=scipy.__version__),
+                   source_inference_support={key:dict(status=value['status']) for key, value in result['support_diagnostics'].items()},
+                   **result['summaries'])
+    return result['rows'], evidence, summary
+
+
+def json_bytes(value, depth_cap):
+    def walk(item, depth=0):
+        require(depth <= depth_cap, 'JSON depth cap')
+        if isinstance(item, float): require(math.isfinite(item), 'JSON nonfinite')
+        elif isinstance(item, (list, dict)):
+            for child in item.values() if isinstance(item, dict) else item: walk(child, depth+1)
+    walk(value)
+    return (json.dumps(value, sort_keys=True, indent=2, allow_nan=False)+'\n').encode('utf-8')
+
+
+def npz_bytes(arrays, caps):
+    require(len(arrays) == 7 and len(arrays) <= caps['npz_members'], 'NPZ member count')
+    for value in arrays.values():
+        require(isinstance(value, np.ndarray) and value.dtype.kind in 'fiuUb', 'NPZ primitive dtype')
+        if value.dtype.kind in 'fiu': require(bool(np.isfinite(value).all()), 'NPZ nonfinite')
+    require(sum(v.nbytes for v in arrays.values()) <= caps['npz_expanded_bytes'], 'NPZ expanded cap')
+    stream = io.BytesIO(); np.savez(stream, **arrays); raw = stream.getvalue()
+    require(len(raw) <= caps['npz_stored_bytes'], 'NPZ stored cap')
+    with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+        require(sum(x.file_size for x in archive.infolist()) <= caps['npz_expanded_bytes'], 'NPZ expanded cap')
+    return raw
+
+
+def csv_bytes(rows):
+    output = io.StringIO(newline=''); writer = csv.DictWriter(output, fieldnames=CSV_COLUMNS, lineterminator='\n')
+    writer.writeheader()
+    for row in rows:
+        require(set(row) == set(CSV_COLUMNS), 'generated CSV columns')
+        writer.writerow(row)  # Python repr preserves binary64 round-trip precision.
+    return output.getvalue().encode('utf-8')
+
+
+def findings(summary):
+    lines = ['# Fixed-cohort selection sensitivity', '',
+             'These signed later-minus-earlier Fisher-z summaries compare four edge-selection rules within the same runs.',
+             'They do not establish a neural temporal effect, selection-free stability, or guaranteed forward/reverse bias cancellation.',
+             'The common ROI mask uses the full cohort. LOSO excludes the held-out participant from ranking only; selectors overlap.',
+             'Participant t/TOST results are nominal model-based diagnostics, not validated coverage for these shared selectors.',
+             'The inherited ±0.05 Fisher-z equivalence margin is pedagogical, not a validated neural or clinical threshold.',
+             'Edge Pearson/Spearman describe edge patterns and are not ICC. The frame-indexed sources do not verify TR or duration.', '']
+    for name, record in summary['selection_schemes'].items():
+        lines.append(f"- {name}: signed mean change {record['delta_mean']:.12g}; inference status {record['inference_status']}.")
+    lines += ['', 'Undefined inference is retained with its public status; no participant or scheme is dropped.']
+    return ('\n'.join(lines)+'\n').encode('utf-8')
+
+
+def _run(data_dir, manifest_path, method_path, schema_path, subject_ids_path, kernel_path, output_dir, *, policy):
+    code = Path(__file__).absolute().parent
+    code_root = code.parent if (code.parent/'task.toml').is_file() else code
+    root, identity = prepare_output(output_dir, [data_dir, manifest_path, method_path, schema_path,
+                                                subject_ids_path, kernel_path, code_root])
+    phase = 'authority_pins'
+    try:
+        require(type(policy) is source_reader.Policy and all(type(pin) is str and re.fullmatch('[0-9a-f]{64}', pin)
+                for pin in (policy.source_sha, policy.method_sha, policy.schema_sha, policy.kernel_sha, policy.subject_ids_sha)),
+                'unfrozen authority')
+        phase = 'source_loading'
+        basis = source_reader.load(data_dir, manifest_path, method_path, schema_path, subject_ids_path, policy=policy)
+        require(basis['status'] == 'complete' and basis['raw'].shape[0] == policy.subjects, 'incomplete source scope')
+        require(basis['method'].get('task_id') == 'FCSTAB-001', 'method task identity')
+        caps = schema_caps(basis['schema'])
+        kernel = source_reader.load_kernel(kernel_path, policy.kernel_sha)
+        phase = 'source_support_and_Fisher'
+        arrays, pairs, observed = source_primitives(basis, kernel)
+        phase = 'own_full_precision_replay'
+        rows, evidence, summary = documents(basis, arrays, pairs, observed, kernel)
+        phase = 'artifact_publication'
+        contents = dict(zip(FILES, [npz_bytes(arrays, caps), csv_bytes(rows),
+                        json_bytes(evidence, caps['json_depth']), json_bytes(summary, caps['json_depth']), findings(summary)]))
+        per_file = [caps[k] for k in ('npz_stored_bytes','csv_bytes','selection_evidence_json_bytes','summary_json_bytes','findings_bytes')]
+        require(len(FILES) <= caps['output_entries'] and sum(map(len, contents.values())) <= caps['entire_output_tree_bytes'],
+                'total output cap')
+        for name, cap in zip(FILES, per_file): publish(root, identity, name, contents[name], cap)
+        phase = 'final_inventory'
+        guard_output(root, identity)
+        entries = list(root.iterdir())
+        require({p.name for p in entries} == set(FILES) and all(stat.S_ISREG(p.lstat().st_mode) for p in entries), 'late output inventory')
+        require(all((root/name).stat().st_size == len(raw) for name, raw in contents.items()), 'artifact size changed')
+        for name, raw in contents.items():
+            source_reader.hashed_bytes(root/name, hashlib.sha256(raw).hexdigest(), len(raw))
+        guard_output(root, identity)
+        return dict(status='complete', task_id='FCSTAB-001', n_subjects=len(rows), n_edges=len(pairs),
+                    files=list(FILES), total_output_bytes=sum(map(len, contents.values())))
+    except BaseException as exc:
+        failure(root, identity, phase, exc)
+        raise
+
+
+def run(data_dir='/app/data/fcstab', manifest_path='/app/source_manifest.json', method_path='/app/method_contract.json',
+        schema_path='/app/output_schema.json', subject_ids_path='/app/subject_ids.txt', kernel_path='/app/selection_kernel.py',
+        output_dir='/app/output'):
+    return _run(data_dir, manifest_path, method_path, schema_path, subject_ids_path, kernel_path, output_dir, policy=policy_now())
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    for name, default in [('data-dir', os.environ.get('DATA_DIR', '/app/data/fcstab')),
+                          ('manifest-path','/app/source_manifest.json'), ('method-path','/app/method_contract.json'),
+                          ('schema-path','/app/output_schema.json'), ('subject-ids-path','/app/subject_ids.txt'),
+                          ('kernel-path','/app/selection_kernel.py'), ('output-dir',os.environ.get('OUTPUT_DIR','/app/output'))]:
+        parser.add_argument('--'+name, default=default)
+    args = parser.parse_args(argv)
+    try:
+        print(json.dumps(run(**vars(args)), allow_nan=False, sort_keys=True)); return 0
+    except Exception as exc:
+        print(json.dumps(dict(status='failed', error_type=type(exc).__name__))); return 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())
