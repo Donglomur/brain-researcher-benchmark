@@ -1,0 +1,288 @@
+{
+  "schema_version": "n170-method-v1",
+  "task_id": "N170PROFILE-001",
+  "analysis_scope": "paper-derived shifted_ds adaptation; not the full ERP CORE paper pipeline",
+  "paper": {
+    "doi": "10.1016/j.neuroimage.2020.117465",
+    "target": "N170 characterization in Figure 2 and Tables 1–3",
+    "independent_unit": "participant",
+    "limits": "30-scalp average reference, no ICA, .1–30 Hz FIR, no additional onset low-pass; explicit ERPLAB-inspired measurement, not exact MATLAB/software or biological onset equivalence"
+  },
+  "subjects": [
+    "2",
+    "3",
+    "4",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40"
+  ],
+  "excluded_subjects": [
+    "1",
+    "5",
+    "16"
+  ],
+  "source_manifest_sha256": "3970137c64990f680468baf1d51b89a73a61a748639795541e2c2734777b54cd",
+  "source": {
+    "stage": "shifted_ds",
+    "sfreq_hz": 256,
+    "n_channels": 33,
+    "n_trials": 1,
+    "xmin": 0,
+    "reference_token": "common",
+    "channel_labels": [
+      "FP1",
+      "F3",
+      "F7",
+      "FC3",
+      "C3",
+      "C5",
+      "P3",
+      "P7",
+      "P9",
+      "PO7",
+      "PO3",
+      "O1",
+      "Oz",
+      "Pz",
+      "CPz",
+      "FP2",
+      "Fz",
+      "F4",
+      "F8",
+      "FC4",
+      "FCz",
+      "Cz",
+      "C4",
+      "C6",
+      "P4",
+      "P8",
+      "P10",
+      "PO8",
+      "PO4",
+      "O2",
+      "HEOG_left",
+      "HEOG_right",
+      "VEOG_lower"
+    ],
+    "signal_storage": "little-endian float32; flat index channel + 33*time",
+    "units": "microvolts by EEGLAB compatibility convention, not encoded by FDT",
+    "source_unit_fields": "absent",
+    "source_ica_fields": "empty; never applied",
+    "already_shifted": true,
+    "additional_event_shift_ms": 0,
+    "resample": false,
+    "source_reference_not_inferred_from_token": true
+  },
+  "reference": {
+    "channels": [
+      "FP1",
+      "F3",
+      "F7",
+      "FC3",
+      "C3",
+      "C5",
+      "P3",
+      "P7",
+      "P9",
+      "PO7",
+      "PO3",
+      "O1",
+      "Oz",
+      "Pz",
+      "CPz",
+      "FP2",
+      "Fz",
+      "F4",
+      "F8",
+      "FC4",
+      "FCz",
+      "Cz",
+      "C4",
+      "C6",
+      "P4",
+      "P8",
+      "P10",
+      "PO8",
+      "PO4",
+      "O2"
+    ],
+    "operation": "ordinary arithmetic mean across all30 channels at each sample, subtracted before filtering",
+    "finite_policy": "all continuous values of contributing30 channels finite; excluded EOG not a new gate"
+  },
+  "filter": {
+    "low_hz": 0.1,
+    "high_hz": 30,
+    "low_transition_hz": 0.1,
+    "high_transition_hz": 7.5,
+    "full_length_samples": 8449,
+    "window": "symmetric Hamming",
+    "design": "centered sum of individually sized DC-normalized lowpasses: upper minus lower; MNE1.12.1 firwin auto",
+    "component_length": "round(3.3/((b-a)/2)) then next odd, normalized Nyquist breakpoints",
+    "phase": "one-pass centered zero-phase, not filtfilt",
+    "padding": "reflect_limited odd reflection, e=min(kernel_length,segment_length)-1",
+    "short_segments": "retain full kernel, reflect only available samples, no duration exclusion",
+    "extra_onset_filter": false
+  },
+  "events": {
+    "face_codes": [
+      1,
+      40
+    ],
+    "car_codes": [
+      41,
+      80
+    ],
+    "normalize": "finite non-Boolean integral number or stripped signed decimal integer string; otherwise no code",
+    "all_rows_retained": true,
+    "target_sample": "rint(latency-1), ties-to-even",
+    "boundary_tokens": [
+      "-99 numeric or normalized integer string",
+      "stripped case-insensitive boundary"
+    ],
+    "boundary_cut": "ceil(latency-1) in0..pnts, deduplicate cuts",
+    "boundary_duration": "removed samples; not a bad recorded interval",
+    "other_annotations": "document only, no implicit BAD-prefix exclusion",
+    "duplicate_target_samples": "all target rows sharing rounded sample excluded; preserve each row",
+    "bad_target_or_boundary_latency": "failed_precondition"
+  },
+  "epoch": {
+    "sample_offsets_inclusive": [
+      -51,
+      102
+    ],
+    "n_samples": 154,
+    "baseline_offsets_inclusive": [
+      -51,
+      0
+    ],
+    "baseline_operation": "per-channel ordinary mean, subtract before trial averaging",
+    "eligibility": "whole epoch in recording and one continuous filter segment; no repeated target sample",
+    "rejection_reason_precedence": [
+      "out_of_bounds",
+      "duplicate_target_sample",
+      "crosses_boundary",
+      "peak_to_peak",
+      "accepted"
+    ],
+    "ptp_threshold_uv": 150,
+    "rejection": "strictly greater than threshold on any of30 contributing channels; equality retained",
+    "ptp_receipts": "all geometrically eligible trials including artifact rejects",
+    "average_order": "original event row order within subject/condition",
+    "average": "ordinary mean of accepted PO8 epochs, equal trial weights",
+    "minimum_trials": 1
+  },
+  "measurement": {
+    "electrode": "PO8",
+    "contrast": "face-minus-car",
+    "baseline_ms": [
+      -200,
+      0
+    ],
+    "amplitude_window_ms": [
+      110,
+      150
+    ],
+    "onset_window_ms": [
+      10,
+      150
+    ],
+    "window_snap": "nearest sample; first index on distance tie; inclusive endpoints",
+    "amplitude_sample_offsets": [
+      28,
+      38
+    ],
+    "onset_sample_offsets": [
+      3,
+      38
+    ],
+    "amplitude": "signed arithmetic sample mean after measurement-time rebaseline",
+    "local_peak_neighborhood_samples": 3,
+    "peak": "strictly below immediate neighbours and both3-sample side means; deepest local, earliest tie; otherwise earliest in-window global minimum",
+    "onset": "selected peak must be negative; walk backward to nearest in-window sample at or above halfheight; equality accepted; return sample time",
+    "padding": "actual3 samples on each side qualify local peak only, never expand onset window",
+    "interpolation": false,
+    "boundary_substitution": false,
+    "departures_from_pinned_erplab": [
+      "require actual negative voltage",
+      "earliest equal-depth candidate rather than median position",
+      "accept exact halfheight equality"
+    ],
+    "source_support": "missing condition remains undefined; numerical_zero_difference nulls onset only"
+  },
+  "precision": {
+    "waveform_rtol_supnorm": 1e-8,
+    "roundoff_eps_multiplier": 64,
+    "scale_floor_uv": 1,
+    "source_wave_checks": [
+      "face",
+      "car",
+      "measurement-rebaselined derived face-car"
+    ],
+    "onset_resolution": "maxabs(source_rebased_difference)<=64*eps64*max(1,maxabs(source_face),maxabs(source_car))",
+    "accepted_authority": "source-close accepted face/car -> one derived/rebased difference -> measurements -> unrounded group; no source-onset scalar gate",
+    "voltage_receipt_atol_uv": 0.000001,
+    "voltage_receipt_rtol": 0.000001,
+    "time_receipt_atol_ms": 0.000001,
+    "time_receipt_rtol": 0,
+    "counts_flags_indices_statuses": "exact"
+  },
+  "group": {
+    "n_expected": 37,
+    "independent_unit": "participant",
+    "mean": "ordinary unrounded participant mean in canonical subject order",
+    "ci": "sample SD/sqrt(37), Student t df36, two-sided95%",
+    "missing": "per-endpoint complete-cohort null summary; no available-case t36",
+    "constant": "defined constant cohort gives point CI",
+    "no_required_outcome": [
+      "sign",
+      "significance",
+      "minimum variance",
+      "paper number",
+      "historical bake/reference",
+      "onset separation",
+      "minimum retained trial count beyond1 per defined condition"
+    ]
+  },
+  "runtime": {
+    "network": false,
+    "gpus": 0,
+    "cpus": 2,
+    "memory_mb": 8192
+  },
+  "primary_sources": [
+    "https://github.com/lucklab/ERP_CORE/tree/c18b43d70d791ca914d90410afe4ff06d6f7f429/N170",
+    "https://github.com/ucdavis/erplab/blob/4efa5c30b62c1b20c6252de8dc9863575996317c/functions/localpeak.m",
+    "https://github.com/mne-tools/mne-python/blob/v1.12.1/mne/filter.py"
+  ]
+}

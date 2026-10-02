@@ -1,0 +1,182 @@
+{
+  "schema_version": "n170-output-v1",
+  "task_id": "N170PROFILE-001",
+  "required_files": [
+    "annotations.csv",
+    "trials.csv",
+    "erp_evidence.npz",
+    "per_subject.csv",
+    "n170.json",
+    "run_metadata.json",
+    "findings.md"
+  ],
+  "nulls": {
+    "csv": "empty field",
+    "json": null,
+    "npz": "missing condition=false plus zero-sentinel finite waveform, never measured"
+  },
+  "order": "scientific keys and named axes may be coherently permuted; exact canonical sample offsets determine chronology",
+  "csv": {
+    "annotations": {
+      "key": [
+        "subject_id",
+        "source_event_index"
+      ],
+      "columns": [
+        "subject_id",
+        "source_event_index",
+        "type_json",
+        "latency_json",
+        "duration_json",
+        "urevent_json",
+        "normalized_event_code",
+        "event_role"
+      ],
+      "max_rows": 40000
+    },
+    "trials": {
+      "key": [
+        "subject_id",
+        "source_event_index"
+      ],
+      "columns": [
+        "subject_id",
+        "source_event_index",
+        "condition",
+        "event_sample",
+        "epoch_first_sample",
+        "epoch_last_sample",
+        "epoch_status",
+        "accepted",
+        "rejection_reason"
+      ],
+      "max_rows": 10000
+    },
+    "per_subject": {
+      "key": [
+        "subject_id"
+      ],
+      "columns": [
+        "subject_id",
+        "n_face_candidates",
+        "n_car_candidates",
+        "n_face_accepted",
+        "n_car_accepted",
+        "n_face_rejected",
+        "n_car_rejected",
+        "waveform_status",
+        "amp_po8_uv",
+        "amplitude_status",
+        "onset_ms",
+        "onset_status",
+        "measurement_baseline_uv",
+        "peak_selection",
+        "peak_sample_offset",
+        "peak_time_ms",
+        "peak_uv",
+        "half_height_uv",
+        "crossing_sample_offset"
+      ],
+      "max_rows": 37
+    }
+  },
+  "npz": {
+    "subject_ids": [
+      "S",
+      "Unicode"
+    ],
+    "condition_labels": [
+      "C",
+      "Unicode"
+    ],
+    "sample_offsets": [
+      "K",
+      "integral real non-Boolean"
+    ],
+    "condition_defined": [
+      "S,C",
+      "Boolean"
+    ],
+    "evoked_po8_uv": [
+      "S,C,K",
+      "finite real"
+    ],
+    "rejection_channel_labels": [
+      "H",
+      "Unicode"
+    ],
+    "epoch_subject_ids": [
+      "E",
+      "Unicode"
+    ],
+    "epoch_source_event_index": [
+      "E",
+      "integral real non-Boolean"
+    ],
+    "epoch_peak_to_peak_uv": [
+      "E,H",
+      "finite nonnegative real"
+    ],
+    "epoch_po8_baseline_uv": [
+      "E",
+      "finite real"
+    ]
+  },
+  "dimensions": {
+    "S": 37,
+    "C": 2,
+    "H": 30,
+    "K": 154,
+    "E": "source-defined geometrically eligible target epochs, including artifact rejects"
+  },
+  "group_required": [
+    "schema_version",
+    "n_subjects",
+    "electrode",
+    "amp_po8_uv",
+    "amp_po8_ci95",
+    "onset_latency_ms",
+    "onset_ci95",
+    "amplitude_summary",
+    "onset_summary"
+  ],
+  "summary_required": [
+    "status",
+    "n_expected",
+    "n_defined",
+    "n_missing",
+    "missing_subject_ids",
+    "mean",
+    "sample_sd",
+    "standard_error",
+    "df",
+    "ci95",
+    "interval_kind"
+  ],
+  "metadata_required": [
+    "schema_version",
+    "task_id",
+    "status",
+    "source_manifest_sha256",
+    "method_contract_sha256",
+    "output_schema_sha256",
+    "measurement_kernel_sha256",
+    "cohort",
+    "source_files",
+    "source_observed",
+    "analysis_observed",
+    "software_versions",
+    "warnings"
+  ],
+  "limits": {
+    "per_file_bytes": 33554432,
+    "total_output_bytes": 134217728,
+    "npz_expanded_bytes": 134217728,
+    "npz_entries": 32,
+    "npz_dimensions": 3,
+    "findings_bytes": 65536
+  },
+  "extras": "bounded regular files and descriptive fields permitted; no extra estimator branch",
+  "failure": "failure_report.json blocks acceptance even if a stale complete bundle exists",
+  "findings": "nonempty UTF-8 scientifically scoped description; no keyword/number/sign fingerprint"
+}
