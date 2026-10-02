@@ -1,68 +1,114 @@
-# Macroscale connectivity gradients: the principal gradient (GRADIENT-001)
+# Connectivity gradients on a fixed movie cohort
 
-## Scientific context
+Characterise the network organisation of connectivity gradients in the fixed
+20-person released developmental movie cohort, using the Schaefer 400-parcel,
+seven-network atlas and the four public configurations. This is a descriptive
+method application, not a replication of the adult HCP cohort in
+[Margulies et al. (2016)](https://doi.org/10.1073/pnas.1608282113), a population
+inference, or a test with a required stable/unstable result.
 
-Low-dimensional *gradients* from nonlinear embedding of the functional connectome
-are a standard summary of macroscale cortical organisation (Margulies et al., 2016;
-Vos de Wael et al., 2020, *BrainSpace*,
-https://doi.org/10.1038/s42003-020-0794-7). The **principal** gradient — the leading
-axis — is the headline object of these analyses, and its network organisation is
-the result most often reported.
+The complete mathematical and serialization specifications are
+`/app/method_contract.json` and `/app/output_schema.json`. Use the original files
+under `/app/data/gradient`, authenticated by its `source_manifest.json`; do not
+fetch replacement data or use historical reference outputs. Preserve all fixed
+people, all 168 released frames, and all 400 source parcel IDs. Effective TR=2 s
+and frame origin=0 are computational conventions, not independently established
+movie-onset or slice-timing references.
 
-## Task
+## Computation
 
-Using the nilearn-pinned preprocessed (MNI152) derivatives of OpenNeuro `ds000228`
-(`nilearn.datasets.fetch_development_fmri`, first 20 subjects) over the 400-region
-Schaefer 7-network parcellation, compute **per-subject** macroscale gradients by
-diffusion-map embedding, make them comparable across subjects, and **characterise
-the organisation of the group-level principal gradient** — i.e. which cortical
-systems it separates and what anchors its extremes. Summarise your characterisation
-in `findings.md`, stating only what your analysis actually supports.
+Use the exact participant order in the contract. It comes from the pinned Nilearn
+loader and pandas ordering, not lexical IDs. The first/last-ten groups are
+convenience subsets of that order, not randomized or independent replication
+groups; their age composition can differ.
 
-Standard implementation choices the cited methods leave to the analyst (kernel,
-sparsity, number of components, how individual embeddings are made comparable across
-subjects, temporal filtering, and sign handling) should follow common practice; the
-brief does not spell them out.
+1. Transfer atlas labels to each native BOLD grid by the declared nearest
+   identity-world mapping. Average calibrated voxel values in float64 using all
+   assigned voxels and no implicit brain mask. The atlas's legacy FSL
+   MNI152/MNI152NLin6Asym coordinates and the BOLD's MNI152NLin2009cAsym designation
+   do not establish nonlinear inter-template registration: this is a disclosed
+   operational mask approximation.
+2. Demean and linearly detrend parcels and the 15 named nuisance columns;
+   standardize nuisance columns, apply the pivoted QR projection, and retain
+   residuals without final z-scoring. The band-pass arm applies the specified
+   0.01–0.1 Hz fifth-order Butterworth SOS filter **after** regression, not joint
+   data/confound filtering.
+3. Apply the public numerical-resolution guard before Pearson FC. A parcel is
+   active only when its residual centered L2 norm exceeds
+   `1e-12 * sqrt(168) * max(1, original_raw_sample_SD)`. Both arms use the same
+   original raw scale. This prevents projection roundoff becoming apparent
+   signal; do not omit members, add epsilon to Pearson denominators, or replace
+   undefined FC with zero. Preserve masks and scale/norm/threshold diagnostics.
+4. Form four complete group-mean FCs: `nobp_all`, `bp_all`,
+   `nobp_firstHalf`, and `nobp_secondHalf`. In every embedding keep exactly the
+   largest **40 signed** entries per FC row among all 400 candidates including
+   the diagonal; exact ties choose smaller source parcel ID. The diagonal is not
+   forcibly retained. Use normalized-angle affinity and alpha=0.5.
+5. Solve the real symmetric diffusion operator, retaining ten leading algebraic
+   nontrivial modes and the eleventh eigenvalue as a boundary diagnostic. Use
+   multiscale `lambda/(1-lambda)` coordinates. This explicitly corrects
+   BrainSpace 0.1.20's symmetric eigensolver on a nonsymmetric row-normalized
+   operator and its largest-magnitude selection, and replaces the floating
+   expression that can retain 39 rather than 40 entries.
+6. Give each raw coordinate its largest-absolute-entry sign. Align all 20
+   no-band-pass embeddings by the specified ten-dimensional generalized
+   Procrustes procedure initialized with raw `nobp_all`. Save every iteration's
+   rotations, reference and distance. Residual-valid bases in unresolved
+   eigenvalue blocks and certified nonunique optimal rotations are accepted;
+   there is no hidden reference-basis gate.
 
-## Output Location
+Source-canonical means, cleaned series, FC, support and eigenvalues govern the
+operator and diffusion scaling. Serialized receipts are not rethresholded to
+create a different graph. Accepted certified eigenvectors and rotations govern
+coordinates and summaries; rounded CSV values do not decide apex labels.
 
-## Public sensitivity contract
+## Reporting and undefined results
 
-This is a paper-derived method application on movie data, not the original Margulies
-cohort finding. Use diffusion maps, normalized-angle kernel, sparsity0.9, 10 components,
-random_state=0 and Procrustes alignment. Preserve component ordering, not arbitrary
-subspace rotations; orient group g1 so mean(Default)>=mean(Vis).
-Compare no-band-pass/all20, band-pass0.01–0.1Hz/all20, no-band-pass/first10 and
-no-band-pass/last10. Missing subjects fail. Save subject_ids.json in aligned-array
-order, gradients_unaligned.npy, and configuration_CONFIG.npy for each group gradient.
-robustness.json configs require config, subject_ids, bandpass, method, sign_convention,
-gradient_path, gradient_sha256, apex_network. method contains approach=dm,
-kernel=normalized_angle, sparsity=0.9, n_components=10, random_state=0.
-principal_gradient_identity_robust is whether all computed configurations share an apex.
-Report the actual measured stable or sensitive outcome with scope limitations.
+Preserve the distinction between embedding each group-mean FC and averaging
+aligned individual coordinates. An aligned coordinate is a multicomponent
+rotation, not necessarily the individual's first eigenvector. Report all seven
+network means for all five quantities, orientation signs, apex/bottom and the
+descriptive leading-plane between/within ratio. Report all 190 signed
+cross-person parcelwise correlations before/after alignment and each person's
+complete 19-partner mean.
 
+No apex identity, consistency gain, sign, between/within lower bound, or
+stable/fragile narrative is required. The robustness Boolean reports whether all
+four defined apex labels agree: true, false and null (incomplete support) are
+valid. Undefined denominators, near-singular multiscale factors, unresolved
+principal axes and unresolved retained-component boundaries use the public
+null/status rules. Keep every member and dependency count. A completed run can
+honestly contain undefined estimands.
 
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
+Signed top-40 normalized-angle affinity is a BrainSpace-derived method choice,
+not the exact original paper algorithm. The paper used adult HCP data, different
+FC aggregation, residual-negative pruning and cosine similarity. Figures 1 and 3
+supply context, not an expected answer for this movie cohort. Numerical
+tolerances do not establish scientific stability near sparsity, sign, spectral
+gap or apex ties.
 
-## Required Outputs
+## Outputs
 
-- `gradients_aligned.npy` — float array `n_subjects × 400 × n_components`, the
-  per-subject gradients made cross-subject comparable.
-- `consistency.json` — cross-subject reproducibility of the principal gradient
-  (`aligned_signed`) and `n_subjects`.
-- `group_gradient.csv` — one row per parcel: `parcel_index, network, g1, g2, g3`
-  (`network` is one of the seven canonical Yeo/Schaefer networks; any standard
-  spelling is accepted).
-- `network_gradient.csv` — one row per network: `network, mean_g1, mean_g2, mean_g3, n_parcels`.
-- `run_metadata.json` — dataset id, n subjects, parcellation, method, and a
-  `principal_gradient_identity` field stating, in plain terms, what the principal
-  gradient's network organisation is.
-- `findings.md` — a short written summary (a few sentences) of what you found about
-  the principal gradient's network organisation and how confident you are in it.
-  State only what your analysis actually supports.
+Write these eight files to `${OUTPUT_DIR}` (default `/app/output`):
 
-## Failure handling
+- `cohort.csv`: all 20 identities, frozen positions and subset membership.
+- `parcels.csv`: all 20×400 source parcel/support records.
+- `gradient_arrays.npz`: keyed source receipts, FCs, spectral certificates,
+  Procrustes histories, displayed coordinates, masks and pairwise measurements.
+- `configurations.csv`: all five quantities × seven networks.
+- `per_subject.csv`: all 20 people, support/status and signed consistency.
+- `results.json`: complete denominators and descriptive group summaries.
+- `run_metadata.json`: exact public pins, source/header/support facts, software
+  versions, numerical amendments and actual warnings.
+- `findings.md`: measured results and limitations, acknowledging undefined
+  support. There is no phrase-based grading.
 
-If the pinned dataset or the Schaefer parcellation cannot be resolved, exit
-non-zero with `failed_precondition` and a non-empty reason, and still write a
-parseable `run_metadata.json`, `consistency.json`, and `findings.md`.
+Coherent keyed axis/row reorderings and harmless finite extras are allowed within
+public bounds. Preserve enough spectral-array precision for the published
+residual/orthogonality certificates. See the schema for exact fields, null/mask
+rules and size limits.
+
+Use a fresh output directory and protect source/code/contracts. On unsupported
+source or numerical failure, exit nonzero and preserve `failure_report.json`
+with a reason. Do not fabricate completion, silently retry changed settings, or
+choose exclusions from outcomes. A `resource_pilot` is not a complete submission.
