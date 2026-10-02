@@ -1,282 +1,236 @@
-"""Reference solution for VISCAT-001.
-
-Deliverable: from the human medial-temporal-lobe (MTL) single-neuron recordings in the new/old
-recognition-memory task (DANDI 000004, Faraut/Rutishauser), report how well an individual
-visually-category-selective MTL neuron discriminates its preferred visual category from the other
-categories during the recognition phase -- the mean single-neuron preferred-category-vs-rest ROC AUC
-across the category-selective neurons -- together with the proportion of MTL neurons that are
-category-selective.
-
-Each recognition trial shows an image drawn from one of five visual categories (houses, landscapes,
-mobility/vehicles, phones, small animals; `stimCategory` in {1..5}). A neuron is "category-selective"
-because its firing rate differs across the five categories, and each such neuron has a "preferred"
-category (the one it fires most for). The preferred-category-vs-rest AUC then measures how well the
-neuron's firing separates its preferred category from the rest.
-
-The correct analysis keeps the neuron SELECTION and preferred-category assignment independent of the
-AUC ESTIMATE. If you (a) call a neuron category-selective and (b) pick its preferred category on a
-set of trials, and then (c) measure the preferred-vs-rest AUC on those SAME trials, the AUC is
-inflated by a winner's curse (non-independence / "double dipping", Kriegeskorte et al. 2009): among
-five categories you pick the one whose noise happened to give the highest firing, and on the same
-trials that noise still separates it from the rest. The honest estimate selects the category-selective
-neurons and fixes their preferred category on one split of the recognition trials and measures the
-preferred-vs-rest AUC on a held-out split.
-
-Validated ground truth (DANDI 000004, ALL sessions pooled; MTL = hippocampus + amygdala units by
-electrode location; recognition phase; per-trial firing rate over the [0.2, 1.7] s window after
-stimulus onset; category-selective = Kruskal-Wallis across the five categories p < 0.05; preferred
-category = highest mean firing rate; preferred-vs-rest AUC in the neuron's preferred direction):
-  n MTL neurons pooled                 = ~1864
-  proportion category-selective        = ~0.167
-  NAIVE  mean preferred-vs-rest AUC, selected AND measured on the SAME trials   = ~0.70
-  CORRECT mean preferred-vs-rest AUC, selection/preferred on train, AUC on held-out = ~0.57
-Unlike a null signal, visual-category selectivity is a genuine positive effect: the honest held-out
-preferred-vs-rest AUC (~0.57) stays clearly above chance (and the category-selective fraction, ~0.17,
-is well above the 0.05 chance false-positive rate). But the SAME-trials estimate (~0.70) materially
-overstates it. A reported ~0.70 fails the match.
-"""
+"""Offline, source-authenticated VISCAT method control. Import performs no I/O."""
+import argparse
+import csv
+import hashlib
 import json
 import os
+from pathlib import Path
+import platform
+import stat
 import sys
 import warnings
-from pathlib import Path
 
+import h5py
 import numpy as np
+import scipy
 
-warnings.filterwarnings("ignore")
+import core
+import source_reader
 
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-OUT.mkdir(parents=True, exist_ok=True)
-
-DANDISET = "000004"
-manifest_path = Path("/app/data_manifest.json")
-if not manifest_path.exists():
-    manifest_path = Path(__file__).parents[1] / "environment/data_manifest.json"
-DATA_MANIFEST = json.loads(manifest_path.read_text())
-EXPECTED_ASSETS = {r["path"]: r for r in DATA_MANIFEST["assets"]}
-REGION_KEYS = ("Hippocampus", "Amygdala")   # medial temporal lobe
-WIN = (0.2, 1.7)          # s after stimulus onset
-CATS = (1, 2, 3, 4, 5)    # the five visual categories (stimCategory)
-SEL_ALPHA = 0.05          # category-selective: Kruskal-Wallis across the five categories
-N_SPLITS = 50             # repeated stratified halves for the honest held-out estimate
-SEED = 0
+METHOD_SHA256 = "945f61392b72f065fd5c6067b8ae578a4168986dd01fe8c21e1c4900e51842ac"
+SOURCE_SHA256 = "3819f2b5e9403f184b94be7d1374476c964c08c054763ec7b8d40cf6bbf7e7b9"
+HELPER_SHA256 = "f844ab4e4bc6d3efccca3c4b19277b2fec5484685b93a2481ca9d882cc99bcf2"
 
 
-def fail(reason):
-    (OUT / "run_metadata.json").write_text(json.dumps(
-        {"status": "failed_precondition", "reason": reason, "dandiset": DANDISET}, indent=2))
-    (OUT / "results.json").write_text(json.dumps({"status": "failed_precondition", "reason": reason}))
-    (OUT / "findings.md").write_text(f"# Failed precondition\n\n{reason}\n")
-    sys.stderr.write(reason + "\n")
-    sys.exit(1)
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
 
 
-try:
-    import h5py
-    import remfile
-    from dandi.dandiapi import DandiAPIClient
-    from pynwb import NWBHDF5IO
-    from scipy.stats import kruskal, rankdata
-except Exception as e:  # pragma: no cover
-    fail(f"missing dependency: {e}")
+def safe_path(value):
+    literal = os.fspath(value)
+    require(isinstance(literal, str) and "\x00" not in literal and ".." not in literal.split("/"), "Unsafe parent traversal/path")
+    path = Path(literal).absolute()
+    for node in (path, *path.parents):
+        require(not node.is_symlink(), "Symlink path or ancestor")
+        if node.exists() and node != path:
+            require(node.is_dir(), "Nondirectory ancestor")
+    return path
 
 
-def auc_pref_vs_rest(scores, is_pref):
-    """ROC AUC that the preferred-category trials (is_pref==1) have higher firing than the rest."""
-    is_pref = np.asarray(is_pref).astype(int)
-    npos = int(is_pref.sum())
-    nneg = len(is_pref) - npos
-    if npos == 0 or nneg == 0:
-        return 0.5
-    r = rankdata(scores)
-    return float((r[is_pref == 1].sum() - npos * (npos + 1) / 2.0) / (npos * nneg))
+def regular(path):
+    path = safe_path(path)
+    require(stat.S_ISREG(path.stat().st_mode), "Expected regular input file")
+    return path
 
 
-def selective_and_preferred(fr, cat):
-    """(p-value of the across-category Kruskal-Wallis test, preferred category by mean firing rate)."""
-    groups = [fr[cat == c] for c in CATS if (cat == c).sum() > 0]
+def json_value(body):
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            require(key not in result, "Duplicate JSON key")
+            result[key] = value
+        return result
+    def bad(value):
+        raise ValueError("Nonfinite JSON token: " + value)
+    result = json.loads(body, object_pairs_hook=pairs, parse_constant=bad)
+    json.dumps(result, allow_nan=False)
+    return result
+
+
+def load_method(path):
+    body = regular(path).read_bytes()
+    require(hashlib.sha256(body).hexdigest() == METHOD_SHA256, "Frozen method hash mismatch")
+    method = json_value(body)
+    require(method["source"]["manifest_sha256"] == SOURCE_SHA256 and method["task_id"] == "VISCAT-001", "Wrong source/method binding")
+    return method
+
+
+def load_inputs(data_dir, contract_path):
+    method = load_method(contract_path)
+    helper = Path(__file__).absolute().parents[1] / "environment/stage_data.py"
+    if not helper.exists():
+        helper = Path("/opt/source/stage_data.py")
+    helper = regular(helper)
+    body = helper.read_bytes()
+    require(hashlib.sha256(body).hexdigest() == HELPER_SHA256, "Supplied source helper identity mismatch")
+    # Execute exactly the checked source bytes; never import source-adjacent pyc.
+    namespace = {"__name__": "viscat_source_staging", "__file__": str(helper)}
+    exec(compile(body, str(helper), "exec"), namespace)
+    manifest = namespace["verify_staged"](data_dir)
+    require(len(manifest["files"]) == 87, "Incomplete authenticated source inventory")
+    return method, manifest
+
+
+def source_scope(data_dir, manifest, pilot=False):
+    """Authenticate first in load_inputs; read canonical originals, not a bank."""
+    entries = sorted(manifest["files"], key=lambda r: r["path"])
+    require(entries, "No original assets")
+    if pilot:
+        entries = entries[:1]
+    sessions, trials, units, records, observed = [], [], [], [], []
+    for entry in entries:
+        session, source_trials, source_units, source_records, source_observed = source_reader.read_session(
+            regular(Path(data_dir) / entry["path"]), entry)
+        sessions.append(session); trials.extend(source_trials); units.extend(source_units)
+        records.extend(source_records); observed.append(source_observed)
+    return sessions, trials, units, records, observed
+
+
+def source_observed(sessions, observed):
+    return dict(n_sessions=len(sessions), n_patients=len({s["subject_id"] for s in sessions}),
+                n_source_trials=sum(s["n_source_trials"] for s in sessions),
+                n_recognition_trials=sum(s["n_recognition_trials"] for s in sessions),
+                n_source_units=sum(s["n_source_units"] for s in sessions),
+                n_mtl_units=sum(s["n_mtl_units"] for s in sessions), sessions=observed)
+
+
+def metadata(method, manifest, sessions, observed, headline, pilot, captured_warnings):
+    result = dict(status="resource_pilot" if pilot else "complete", task_id="VISCAT-001", dandiset_id="000004",
+                  published_version="0.220126.1852", source_manifest_sha256=SOURCE_SHA256,
+                  method_contract_sha256=METHOD_SHA256, source_sha256={r["path"]: r["sha256"] for r in manifest["files"]},
+                  method_contract=method, headline_population=headline, source_observed=source_observed(sessions, observed),
+                  software_versions={"implementation": "source-h5py-scipy-ranks-rational-H",
+                                     "python": platform.python_version(), "numpy": np.__version__,
+                                     "scipy": scipy.__version__, "h5py": h5py.__version__},
+                  warnings=captured_warnings)
+    if pilot:
+        result["resource_pilot_scope"] = dict(asset_path=sessions[0]["asset_path"], n_processed_assets=1)
+    return result
+
+
+def disjoint(a, b):
+    require(a != b and a not in b.parents and b not in a.parents, "Source/code/evidence paths overlap")
+
+
+def prepare_destinations(data_dir, contract_path, output_dir, private_dir=None):
+    source, contract = safe_path(data_dir), safe_path(contract_path)
+    code = safe_path(Path(__file__).absolute().parent)
+    code_root = code.parent if (code.parent / "task.toml").is_file() else code
+    helper_root = safe_path("/opt/source")
+    destinations = [safe_path(output_dir)] + ([safe_path(private_dir)] if private_dir is not None else [])
+    for path in destinations:
+        require(not path.exists(), "Preserve existing output/private evidence")
+        for protected in (source, contract, code_root, helper_root):
+            disjoint(path, protected)
+    if len(destinations) == 2:
+        disjoint(*destinations)
+    for path in destinations:
+        path.mkdir(parents=True, exist_ok=False)
+    return destinations[0], destinations[1] if len(destinations) == 2 else None
+
+
+def write_json(path, value):
+    with Path(path).open("x", encoding="utf-8") as stream:
+        json.dump(value, stream, indent=2, allow_nan=False)
+        stream.write("\n")
+
+
+def write_csv(path, rows, columns):
+    with Path(path).open("x", encoding="utf-8", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=columns, extrasaction="raise")
+        writer.writeheader()
+        for row in rows:
+            require(set(row) == set(columns), "Oracle output schema mismatch: " + Path(path).name)
+            writer.writerow({key: int(value) if isinstance(value, bool) else value for key, value in row.items()})
+
+
+def write_outputs(output, private, method, sessions, trials, units, neurons, events, arrays, meta, results):
+    for name, rows in (("sessions.csv", sessions), ("trials.csv", trials), ("units.csv", units),
+                       ("neurons.csv", neurons), ("split_events.csv", events)):
+        write_csv(output / name, rows, method["outputs"][name]["columns"])
+    require(set(arrays) == set(method["outputs"]["responses.npz"]["arrays"]), "Response NPZ schema mismatch")
+    with (output / "responses.npz").open("xb") as handle:
+        np.savez_compressed(handle, **arrays)
+    with (output / "findings.md").open("x", encoding="utf-8") as handle:
+        handle.write("Descriptive category-selection sensitivity in released recorded units. "
+                     "Both explicitly defined populations are reported; their membership and selection conditions differ. "
+                     "Overlapping trial halves and within-patient clustering preclude an independent patient-level inference. "
+                     "The response window, stored event multiplicities, source category dictionaries and source irregularities are retained.\n")
+        handle.write(f"\nFull-data selected units: {results['n_category_selective']}/{results['n_mtl_units']}.\n")
+        for name in core.POPULATIONS:
+            population = results["populations"][name]
+            mean = "undefined (empty population)" if population["mean_auc"] is None else format(population["mean_auc"], ".17g")
+            handle.write(f"\n{name}: mean AUC {mean}; {population['n_units']} units.\n")
+    if private is not None:
+        tables = dict(sessions=sessions, trials=trials, units=units, neurons=neurons, split_events=events)
+        with (private / "analysis_arrays.npz").open("xb") as handle:
+            np.savez_compressed(handle, **arrays, tables_json=np.asarray(json.dumps(tables, allow_nan=False)),
+                                metadata_json=np.asarray(json.dumps(meta, allow_nan=False)),
+                                results_json=np.asarray(json.dumps(results, allow_nan=False)))
+    write_json(output / "results.json", results)
+    write_json(output / "run_metadata.json", meta)
+
+
+def failure(output, error):
+    result = dict(status="failed_precondition", task_id="VISCAT-001", reason=str(error) or type(error).__name__)
+    write_json(output / "failure_report.json", result)
+    for name in ("results.json", "run_metadata.json"):
+        if not (output / name).exists():
+            write_json(output / name, result)
+    if not (output / "findings.md").exists():
+        with (output / "findings.md").open("x", encoding="utf-8") as stream:
+            stream.write("No complete scientific result: " + result["reason"] + "\n")
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--data-dir", default="/app/data/viscat")
+    parser.add_argument("--contract-path")
+    parser.add_argument("--output-dir", default=os.environ.get("OUTPUT_DIR", "/app/output"))
+    parser.add_argument("--private-dir")
+    parser.add_argument("--pilot-first-asset", action="store_true")
+    parser.add_argument("--headline-population", choices=core.POPULATIONS, default=core.POPULATIONS[1])
+    parser.add_argument("--print-contract", action="store_true")
+    args = parser.parse_args(argv)
+    path = safe_path(args.contract_path) if args.contract_path else (Path("/app/method_contract.json") if Path("/app/method_contract.json").exists()
+            else Path(__file__).absolute().parents[1] / "environment/method_contract.json")
+    if args.print_contract:
+        print(json.dumps(load_method(path), indent=2, allow_nan=False))
+        return 0
+    output, private = prepare_destinations(args.data_dir, path, args.output_dir, args.private_dir)
     try:
-        _, p = kruskal(*groups)
-    except Exception:
-        p = 1.0
-    means = np.array([fr[cat == c].mean() if (cat == c).sum() > 0 else -np.inf for c in CATS])
-    pref = CATS[int(np.argmax(means))]
-    return float(p), pref
+        require(np.__version__ == "2.2.6", "Supplied oracle RNG sequence requires NumPy2.2.6")
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            method, manifest = load_inputs(args.data_dir, path)
+            sessions, trials, units, records, observed = source_scope(args.data_dir, manifest, args.pilot_first_asset)
+            neurons, events, arrays = core.analyze(records)
+        captured = [str(item.message) for item in caught]
+        meta = metadata(method, manifest, sessions, observed, args.headline_population, args.pilot_first_asset, captured)
+        results = core.summarize(neurons, sessions, len(arrays["spike_count"]), args.headline_population, meta["status"])
+        if args.pilot_first_asset:
+            results["resource_pilot_scope"] = meta["resource_pilot_scope"]
+        write_outputs(output, private, method, sessions, trials, units, neurons, events, arrays, meta, results)
+        print(json.dumps(dict(status=meta["status"], n_sessions=len(sessions), n_mtl_units=len(neurons),
+                              n_response_rows=len(arrays["spike_count"]), n_split_events=len(events),
+                              warnings=captured), allow_nan=False))
+    except Exception as error:
+        failure(output, error)
+        print(type(error).__name__ + ": " + str(error), file=sys.stderr)
+        return 1
+    return 0
 
 
-def collect_neurons():
-    """Stream every session's recognition-phase MTL spiking; return list of per-neuron records.
-
-    Each record: id ('<asset stem>__u<unit id>'), region, fr (per-recognition-trial firing rate in
-    the [0.2, 1.7] s window), cat (the trial's visual category, stimCategory 1..5). Only the MTL
-    units' spike_times are read, so streaming stays light.
-    """
-    neurons = []
-    n_sessions = 0
-    with DandiAPIClient() as client:
-        ds = client.get_dandiset(DANDISET, DATA_MANIFEST["version"])
-        paths = sorted(a.path for a in ds.get_assets() if a.path.endswith(".nwb"))
-        if len(paths) != 87 or set(paths) != set(EXPECTED_ASSETS):
-            fail("published asset list differs from the exact 87-session manifest")
-        if not paths:
-            fail(f"no NWB assets in dandiset {DANDISET}")
-        for p in paths:
-            try:
-                stem = p.split("/")[-1][:-4] if p.endswith(".nwb") else p.split("/")[-1]
-                asset = ds.get_asset_by_path(p)
-                if str(asset.identifier) != EXPECTED_ASSETS[p]["asset_id"]:
-                    fail(f"published asset identity mismatch: {p}")
-                url = asset.get_content_url(follow_redirects=1, strip_query=False)
-                io = NWBHDF5IO(file=h5py.File(remfile.File(url), "r"), load_namespaces=True)
-                nwb = io.read()
-                tr = nwb.trials.to_dataframe()
-                rec = tr[tr["stim_phase"] == "recog"]
-                on = rec["stim_on_time"].values.astype(float)
-                cat = rec["stimCategory"].values.astype(int)
-                if len(on) < 20 or len(np.unique(cat)) < len(CATS):
-                    fail(f"required session {p} lacks usable category trials")
-                u = nwb.units
-                el = nwb.electrodes.to_dataframe()
-                uid = np.asarray(u.id[:])
-                for i in range(len(u.id)):
-                    eidx = u["electrodes"][i].index.values
-                    locs = el.loc[eidx, "location"].values
-                    loc = str(locs[0]) if len(locs) else ""
-                    if not any(k in loc for k in REGION_KEYS):
-                        continue
-                    st = np.asarray(u["spike_times"][i]).astype(float)
-                    fr = (np.searchsorted(st, on + WIN[1]) - np.searchsorted(st, on + WIN[0])) \
-                        / (WIN[1] - WIN[0])
-                    neurons.append(dict(
-                        id=f"{stem}__u{int(uid[i])}",
-                        region=("Hippocampus" if "Hippocampus" in loc else "Amygdala"),
-                        fr=fr.astype(float), cat=cat.astype(int)))
-                n_sessions += 1
-            except Exception as exc:
-                fail(f"required session {p} failed: {exc}")
-    return neurons, n_sessions
-
-
-neurons, n_sessions = collect_neurons()
-if len(neurons) < 200:
-    fail(f"too few MTL neurons pooled ({len(neurons)}) -- streaming may have failed")
-
-rng = np.random.default_rng(SEED)
-
-# ---- pinned per-neuron quantities on all recognition trials (NEUTRAL table + naive contrast) ----
-sel_flags = np.zeros(len(neurons), dtype=bool)
-all_auc = np.zeros(len(neurons))          # pinned per-neuron preferred-vs-rest AUC (all trials)
-for j, rec in enumerate(neurons):
-    fr, cat = rec["fr"], rec["cat"]
-    p, pref = selective_and_preferred(fr, cat)
-    all_auc[j] = auc_pref_vs_rest(fr, cat == pref)   # SAME trials -> inflated for selected cells
-    if p < SEL_ALPHA:
-        sel_flags[j] = True
-prop_sel = float(sel_flags.mean())
-naive_auc = float(np.mean(all_auc[sel_flags])) if sel_flags.any() else float("nan")
-
-# ---- honest estimate: select the category-selective neurons and fix their preferred category on a ----
-# ---- TRAIN split, measure the preferred-vs-rest AUC on the HELD-OUT split, repeat and average --------
-held = [[] for _ in neurons]
-split_rows = []
-for rep in range(N_SPLITS):
-    for j, rec in enumerate(neurons):
-        fr, cat = rec["fr"], rec["cat"]
-        n = len(fr)
-        idx = np.arange(n)
-        tr = []
-        for c in CATS:
-            ci = idx[cat == c]
-            if len(ci) < 2:
-                continue
-            ci = ci.copy()
-            rng.shuffle(ci)
-            tr.extend(ci[:len(ci) // 2])
-        tr = np.array(sorted(tr))
-        te = np.setdiff1d(idx, tr)
-        if len(tr) < 8 or len(te) < 8:
-            continue
-        p, pref = selective_and_preferred(fr[tr], cat[tr])   # selection + preferred on TRAIN only
-        if p < SEL_ALPHA:
-            held[j].append(auc_pref_vs_rest(fr[te], cat[te] == pref))   # AUC on HELD-OUT trials
-            split_rows.append({"neuron_id": rec["id"], "split": rep,
-                "train_trial_ids": "|".join(map(str, tr)), "test_trial_ids": "|".join(map(str, te)),
-                "preferred_category": pref, "heldout_auc": held[j][-1]})
-per_cell_heldout = [np.mean(h) for h in held if len(h) >= 5]
-honest_auc = float(np.mean(per_cell_heldout)) if per_cell_heldout else float("nan")
-import csv
-with open(OUT / "selected_splits.csv", "w", newline="") as f:
-    writer = csv.DictWriter(f, fieldnames=["neuron_id", "split", "train_trial_ids", "test_trial_ids", "preferred_category", "heldout_auc"])
-    writer.writeheader()
-    writer.writerows(split_rows)
-
-# ---- write the NEUTRAL per-neuron table ----
-import csv
-with open(OUT / "neurons.csv", "w", newline="") as f:
-    w = csv.writer(f)
-    w.writerow(["neuron_id", "region", "n_trials", "category_selective", "pref_vs_rest_auc",
-                "heldout_splits", "heldout_eligible", "heldout_auc"])
-    for j, rec in enumerate(neurons):
-        w.writerow([rec["id"], rec["region"], len(rec["cat"]),
-                    int(sel_flags[j]), round(float(all_auc[j]), 4), len(held[j]),
-                    int(len(held[j]) >= 5), float(np.mean(held[j])) if len(held[j]) >= 5 else ""])
-
-results = {
-    # headline: honest single-neuron preferred-category-vs-rest discriminability of category cells
-    "category_selective_pref_vs_rest_auc": round(honest_auc, 4),
-    "proportion_category_selective": round(prop_sel, 4),
-    "n_mtl_neurons": len(neurons),
-    "n_category_selective": int(sel_flags.sum()),
-    "headline_population": "crossfit_selected_at_least_five_splits",
-    "n_crossfit_eligible": len(per_cell_heldout),
-    "n_sessions": n_sessions,
-    # contrast value: the SAME-TRIALS (non-independent) estimate -- inflated, reported for transparency
-    "same_trials_pref_vs_rest_auc_inflated": round(naive_auc, 4),
-    "params": {
-        "region": "MTL (hippocampus + amygdala) by peak-channel electrode location",
-        "phase": "recognition",
-        "response_window_s": list(WIN),
-        "categories": "five visual categories (stimCategory 1..5)",
-        "category_selective": "Kruskal-Wallis across the five categories, p < %.2f" % SEL_ALPHA,
-        "pref_vs_rest_auc": "ROC AUC classifying the preferred category vs the other four from firing "
-                            "rate; neuron selection and preferred category estimated on training "
-                            "trials, AUC evaluated on held-out trials",
-        "held_out_scheme": "%d repeated stratified halves" % N_SPLITS,
-    },
-}
-(OUT / "results.json").write_text(json.dumps(results, indent=2))
-
-(OUT / "run_metadata.json").write_text(json.dumps({
-    "status": "ok", "dandiset": DANDISET, "n_sessions": n_sessions,
-    "published_version": DATA_MANIFEST["version"], "asset_manifest": DATA_MANIFEST,
-    "byte_hash_verification": "expected published hashes; selected fields streamed, full bytes not hashed",
-    "n_mtl_neurons": len(neurons), "n_category_selective": int(sel_flags.sum()),
-    "region": "hippocampus + amygdala (MTL)", "phase": "recognition",
-    "response_window_s": list(WIN),
-    "category_selective_test": "Kruskal-Wallis across five visual categories p<%.2f" % SEL_ALPHA,
-    "pref_vs_rest_auc_definition": "single-neuron ROC AUC preferred category vs the other four, "
-                                   "selection/preferred category on train + AUC on held-out trials",
-}, indent=2))
-
-(OUT / "findings.md").write_text(
-    f"# Single-neuron visual-category selectivity in human MTL -- DANDI 000004\n\n"
-    f"Pooling {len(neurons)} medial-temporal-lobe units (hippocampus + amygdala) across "
-    f"{n_sessions} recognition sessions, **{100*prop_sel:.1f}%** are category-selective "
-    f"(recognition-period firing rate differs across the five visual categories, "
-    f"Kruskal-Wallis p<0.05).\n\n"
-    f"Estimating each category-selective neuron's preferred category on one split of the recognition "
-    f"trials and measuring its preferred-category-vs-rest ROC AUC on a held-out split gives a mean "
-    f"single-neuron AUC of **{honest_auc:.3f}** for a DISTINCT population of {len(per_cell_heldout)} "
-    f"units selected in at least five training splits. This is a descriptive pooled-unit endpoint, "
-    f"not patient-level inference or a confidence-tested above-chance finding. It differs "
-    f"than the {naive_auc:.3f} obtained when the same trials are used to pick the preferred category "
-    f"and to score the AUC, which is inflated by selection (a winner's curse over the five "
-    f"categories).\n\n"
-    f"Reported headline: mean held-out preferred-category-vs-rest AUC = **{honest_auc:.3f}** "
-    f"(full-data proportion category-selective = {prop_sel:.3f}). Populations/denominators "
-    f"are separate. This is the expanded release with KW selection and a1.5-second window, "
-    f"not the published ANOVA/one-second result. Patient/session-clustered uncertainty "
-    f"and null/equivalence evidence are not computed.\n")
-
-print(f"n_mtl_neurons={len(neurons)} n_sessions={n_sessions} prop_sel={prop_sel:.4f} "
-      f"honest_auc={honest_auc:.4f} naive_auc={naive_auc:.4f}")
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,100 +1,157 @@
-# Single-neuron visual-category selectivity in the human medial temporal lobe (VISCAT-001)
+# Visual-category preference in human MTL recordings
 
-## Scientific context
+Reproduce a specified descriptive analysis of public single-unit recordings.
+Report how selection and evaluation choices define two different populations of
+recorded units. This is a paper-derived method control, not a reproduction of
+either paper's numerical finding or a test of patient-population prevalence.
 
-Patients undergoing intracranial monitoring for epilepsy performed a **declarative new/old
-recognition-memory task** while single neurons were recorded from the human medial temporal lobe
-(MTL: hippocampus and amygdala) (Faraut et al. 2018, *Scientific Data*,
-"Dataset of human medial temporal lobe single neuron activity during declarative memory
-encoding and recognition", https://doi.org/10.1038/sdata.2018.10; Rutishauser lab).
-The expanded NWB release is Chandravadia et al. 2020, "A NWB-based dataset and processing
-pipeline of human single-neuron activity during a declarative memory task",
-https://doi.org/10.1038/s41597-020-0415-9. On every trial the subject
-views a single image drawn from one of **five visual categories** (houses, landscapes,
-mobility/vehicles, phones, and small animals; the trial's category is stored in `stimCategory`,
-values `1..5`). A long-standing question is whether individual MTL neurons carry a **visual-category**
-signal -- whether a single neuron's firing rate distinguishes images of one visual category from the
-others -- and how strong that single-neuron signal is.
+## Data and paper correspondence
 
-## Task
+All 87 original NWB assets from DANDI 000004, published version
+0.220126.1852, are available offline under /app/data/viscat.
+The source manifest in that directory records the exact asset identities,
+immutable object versions, sizes and SHA-256 hashes. Verify the complete bundle
+before analysis. Do not download, replace, omit or silently repair source files.
 
-This expanded-release Kruskal-Wallis/1.5-second analysis is an explicit method
-adaptation, not a named ANOVA/one-second paper reproduction. Full-data-selected and
-crossfit-selected populations differ. Declare headline_population as
-full_data_selected_same_trials (with selection caveat) or
-crossfit_selected_at_least_five_splits: 50 stratified halves/default_rng(0), selection
-and preferred category from training, AUC only on held-out trials, mean AUC per unit,
-include units selected in >=5 splits. Add heldout_splits/heldout_eligible/heldout_auc
-to neurons.csv, n_crossfit_eligible to results and selected_splits.csv with unit,
-split, disjoint train/test trial IDs, preferred_category and heldout_auc. Report
-both denominator populations; no patient-level above-chance claim without clustered
-uncertainty. Use the exact 87 assets in `/app/data_manifest.json`, published version 0.220126.1852;
-expected published SHA hashes are distinct from fully byte-verified local files.
+[Faraut et al. (2018)](https://doi.org/10.1038/sdata.2018.10), Table 2 and the
+selective-cell Methods, provides the three visual-category variants and a
+1.5-second response interval beginning 200 ms after stimulus onset.
+[Chandravadia et al. (2020)](https://doi.org/10.1038/s41597-020-0415-9), Figure 5f,
+uses a one-second ANOVA analysis on the expanded release. Our all-session,
+Kruskal–Wallis and repeated-half recipe below is an explicit adaptation:
+neither original ANOVA result nor the original behavior-filtered population is
+being reproduced.
 
-Using **all sessions** of DANDI dandiset **`000004`**, analyze the **recognition phase** and
-**report how well an individual category-selective MTL neuron discriminates its preferred visual
-category from the other categories** -- the mean single-neuron **preferred-category-vs-rest ROC AUC**
-across the category-selective neurons -- and the **proportion of MTL neurons that are
-category-selective**.
+The full public numerical and output schema is /app/method_contract.json.
+It specifies required columns, array axes, types, nulls and tolerances. Implement
+the stated mathematics by any equivalent method; there is no hidden estimator.
 
-Fetch the assets at runtime from the DANDI archive: obtain each asset's content URL with the
-`DandiAPIClient` (`get_dandiset("000004", "0.220126.1852").get_asset_by_path(...)`) and read it by streaming
-the remote NWB (e.g. with `remfile`); reading only the units' `spike_times` and the trials table
-keeps the streaming light. Do not assume a local copy.
+## Source measurements
 
-Pinned analysis choices (use exactly these so the reported numbers are comparable):
+Retain every original session, trial and unit in the source ledgers. Analyze all
+trials whose literal phase is recog and all units whose sole recorded
+electrode-table link has a location containing Hippocampus or Amygdala.
+Keep source rows AND IDs, asset path/UUID, subject ID, electrode row/ID, original
+channel and exact location. This is a recorded electrode link, not a measured
+peak channel. Do not apply additional behavior, confidence, firing-rate or unit-QC
+exclusions.
 
-- **Neurons / region.** Consider units in the **MTL** -- map each unit to its peak-channel
-  electrode's brain-region `location` and keep units whose location contains `Hippocampus` or
-  `Amygdala`. Pool neurons across all sessions.
-- **Phase / trials.** Use the **recognition** trials only (`stim_phase == "recog"`). Each trial's
-  visual category is `stimCategory` (`1` = houses, `2` = landscapes, `3` = mobility, `4` = phones,
-  `5` = small animals).
-- **Response.** For each neuron and each recognition trial, take the mean firing rate over the
-  window **`[0.2, 1.7]` s after stimulus onset** (`stim_on_time`).
-- **Category-selective.** A neuron is **category-selective** if its recognition-period firing rate
-  differs across the five visual categories by a **Kruskal-Wallis test at p < 0.05**.
-- **Preferred category.** A neuron's **preferred category** is the one with the highest mean firing
-  rate.
-- **Preferred-category-vs-rest ROC AUC.** For a neuron, this is the area under the ROC curve for
-  classifying its **preferred category** vs the **other four categories** from the neuron's firing
-  rate (positive class = the preferred category, so a neuron that fires more for its preferred
-  category has an AUC `> 0.5`).
+Category codes 1–5 are session-local. Preserve each code's literal category_name
+and full external_image_file; do not apply the first variant's labels globally.
 
-Report the **mean single-neuron preferred-category-vs-rest ROC AUC over the category-selective
-neurons** (the headline number), and the **proportion of MTL neurons that are category-selective**.
+| Original image-path prefix | Literal names for codes 1, 2, 3, 4, 5 |
+| --- | --- |
+| newolddelay | houses, landscapes, mobility, phones, smallAnimal |
+| newolddelay2 | fruit, kids, military, space, zzanimal |
+| newolddelay3 | 1cars, 2food, 3people, 4spatial, 5animals |
 
-Report a mean preferred-category-vs-rest AUC you would stand behind as the single-neuron
-visual-category signal, stating only what your analysis actually supports.
+These path/name correspondences identify the observed stimulus variants; they
+are not an invented literal NWB variant field or a cross-session category
+ontology. Use numeric codes only within each session's statistical comparisons.
 
-## Output Location
+Count every stored timestamp occurrence in the half-open interval
+[float64(stim_on_time)+0.2, float64(stim_on_time)+1.7).
+Divide by 1.5 for Hz. Preserve the common arbitrary acquisition-clock origin,
+full timestamp precision and multiplicity. Some arrays are unsorted; a stable
+sorted copy, direct interval predicates or equivalent counting is valid.
+Never binary-search unsorted input, deduplicate, shift clocks independently,
+or modify the source.
 
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
+Audit source TTL and experiment-ID links using each session's original mapping.
+Retain finite original start/onset/offset/stop fields. All rows require
+start=onset and onset<=offset; recognition additionally requires offset<=stop.
+Known learning-only stop-field anomalies remain literal diagnostics, not a
+reason to drop valid recognition data. Observation intervals are absent:
+continuous recording coverage is unknown and cannot be inferred from spike
+extrema. The fixed post-onset response window can extend beyond stimulus display.
+Released events are not independently authenticated unique physical spikes.
 
-## Required Outputs
+## Statistics and splits
 
-- `neurons.csv` -- one row per analysed MTL neuron, with columns
-  `neuron_id, region, n_trials, category_selective, pref_vs_rest_auc`:
-  - `neuron_id` -- identify each neuron as `<session>__u<unit_id>`, where `<session>` is the NWB
-    asset's file name without the `.nwb` extension and `<unit_id>` is the unit's integer id in that
-    file's units table (e.g. `sub-P10HMH_ses-20060901_ecephys+image__u3`).
-  - `region` -- the unit's MTL region (`Hippocampus` or `Amygdala`).
-  - `n_trials` -- the number of recognition trials used for that neuron.
-  - `category_selective` -- `1` if the neuron is category-selective (Kruskal-Wallis p < 0.05), else `0`.
-  - `pref_vs_rest_auc` -- the neuron's single-neuron preferred-category-vs-rest ROC AUC.
-- `results.json` -- the headline result: the mean single-neuron preferred-category-vs-rest ROC AUC of
-  the category-selective neurons, the proportion of MTL neurons that are category-selective, the
-  number of MTL neurons and the number category-selective, the number of sessions, and the analysis
-  parameters you used.
-- `run_metadata.json` -- dandiset id, number of sessions, number of MTL neurons and number
-  category-selective, region, phase, response window, and your definitions of category-selective and
-  of the preferred-category-vs-rest AUC.
-- `findings.md` -- a short written summary (a few sentences) stating the single-neuron
-  preferred-category-vs-rest discriminability of category-selective MTL neurons. State only what your
-  analysis actually supports.
+Use integer occurrence counts as the rank-statistic primitive.
 
-## Failure handling
+For each MTL unit, use all recognition trials for a five-group Kruskal–Wallis
+test with average ranks, pooled tie correction and chi-square survival with
+four degrees of freedom. There is no continuity correction. Selection means
+unrounded p<0.05. Explicitly handle all-identical counts as H=0, p=1,
+status all_tied, not selected. Do not convert arbitrary errors to p=1.
 
-If the dandiset assets cannot be resolved or the sessions lack the expected units / recognition
-data, exit non-zero with `failed_precondition` and a non-empty reason, and still write a parseable
-`run_metadata.json`, `results.json`, and `findings.md`.
+The preferred category has the largest mean count; compare exact integer
+sum/count fractions and break exact ties by the smallest numeric category code.
+Preferred-versus-rest AUC is the probability that a preferred count exceeds a
+rest count, plus half credit for equal counts. Record its exact doubled-U
+numerator and class sizes. Do not flip the AUC: highest mean does not guarantee
+AUC above 0.5. Missing support is undefined, not 0.5.
+
+Generate 50 stratified training halves with one NumPy Generator(PCG64(0)),
+using the NumPy 2.2.6 shuffle sequence. Traverse repetitions 0–49, then units
+ordered by lexical full asset path and original unit-table row, then categories
+1–5. For each category, copy recognition-position indices in original trial
+order, shuffle the copy, and take the first floor(n/2) indices.
+Sort their union into original trial order; the complement is held out.
+Do not reset the RNG per unit/session or share membership between units.
+The contract specifies unsupported cases and their zero-RNG-consumption rule.
+
+For every supported split, compute selection and preference using TRAINING
+counts only; compute unflipped AUC on the held-out counts using that training
+preference. Save all fifty events per unit, including unselected events,
+and their source-keyed membership. All five categories must exist for full-data
+statistics and have at least two trials each for a supported split.
+Keep unsupported rows and explicit nulls; do not silently shrink denominators.
+
+## Two separately defined populations
+
+Report both:
+
+1. full_data_selected_same_trials: equal-unit mean full-data AUC among units
+   selected on those same full-data trials.
+2. crossfit_selected_at_least_five_splits: first average held-out AUC within
+   each unit over its training-selected splits, then average units selected in
+   at least five of the fifty splits, weighting units equally.
+
+A unit selected on one to four splits retains its diagnostic conditional mean
+but is not eligible for the second population; zero selected splits gives null.
+Full-data selection is not required for second-population eligibility.
+Empty populations have count zero and mean null, not a substituted chance score.
+
+Also report selected/all-MTL proportion, supported/unsupported counts, each
+population's denominator and their overlap. Declare either population as the
+headline and make the headline value agree with it. Neither a particular
+mean/order nor an above-chance conclusion is required.
+
+The first estimate is selection-conditioned. The second uses dependent,
+overlapping halves and eligibility determined across the full procedure.
+The populations differ; their difference is not an identified estimate of
+selection bias. Units are nested in sessions and repeated patients, not
+independent people or necessarily distinct biological neurons across sessions.
+No IID-unit/split confidence interval, patient-generalization, neural-specificity
+or cell-prevalence claim follows from these summaries.
+
+## Required outputs and grading
+
+Write to OUTPUT_DIR, default /app/output, following the public contract:
+
+- sessions.csv: every source asset and its identity/support counts.
+- trials.csv: every original trial, including nonanalysis rows and local categories.
+- units.csv: every original unit and exact electrode mapping/inclusion.
+- responses.npz: source-keyed integer counts, rates and complete split membership.
+- neurons.csv: all MTL units' full-data statistics and conditional summaries.
+- split_events.csv: all MTL unit × repetition events and their arithmetic.
+- results.json: both populations, denominators, overlap and declared headline.
+- run_metadata.json: exact source/method identities, measured diagnostics and
+  actual implementation versions.
+- findings.md: a short, appropriately qualified interpretation.
+
+The verifier reconstructs source primitives and splits and checks complete
+identity coverage, public arithmetic and aggregation. It accepts coherent
+row/axis reorderings and equivalent implementations within the published
+tolerances. Findings text is not keyword-graded. A source-consistent result
+does not prove how it was historically produced.
+Scoring is binary: 1 for the complete verified contract, otherwise 0; partial
+outputs are not proportionally scored.
+
+Use a fresh output directory. On invalid source, nonfinite input, inconsistent
+identity or unexpected numerical failure, exit nonzero and write an explicit
+failed_precondition receipt with a reason. Do not overwrite prior evidence,
+drop problematic observations silently, or present partial success as a
+complete analysis.

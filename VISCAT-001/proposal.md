@@ -1,135 +1,70 @@
-## VISCAT-001
+# VISCAT-001: category preference and conditional-selection sensitivity
 
-**Proposal Title:** Single-neuron visual-category selectivity in human MTL — an un-cued
-"double-dipping / winner's-curse" trap (hard reproduction / circularity)
+This is an explicitly specified, descriptive method control on authentic public
+human MTL recordings, not an uncued trap or a reproduction of a named numerical
+paper finding. Difficulty is provisionally easy; no Sol or frontier calibration
+is claimed by this repair.
 
-**Scientific Domain:** Life Sciences / Neuroscience / human single-neuron electrophysiology
-(medial temporal lobe, visual-category coding)
+## Paper and data correspondence
 
-**Source finding (data):** Faraut et al. 2018, *Scientific Data*
-(https://doi.org/10.1038/sdata.2018.10); human MTL single neurons recorded during a new/old
-recognition-memory task with five visual categories (Rutishauser lab). **Dataset:** DANDI
-dandiset **`000004`**, all sessions, streamed at runtime (NWB via `remfile`).
+[Faraut et al. (2018)](https://doi.org/10.1038/sdata.2018.10) supplies the
+new/old task, three category dictionaries (Table 2), and the visual-selectivity
+Methods' 1.5-second response window beginning 200 ms after onset. That analysis
+uses one-way ANOVA, and the illustrated sample applies behavioral session
+exclusions. [Chandravadia et al. (2020)](https://doi.org/10.1038/s41597-020-0415-9)
+describes the expanded NWB release and uses a one-second ANOVA window for the
+selective-cell analysis in Figure 5f.
 
-**Status: FULL runnable task. Oracle + naive + defensible-alt discrimination re-validated on the
-real streamed data (see Step-0 below). Step-5 frontier calibration PENDING (maintainer step).**
+This task instead retains all 87 sessions of
+[DANDI 000004, version 0.220126.1852](https://doi.org/10.48324/dandi.000004/0.220126.1852),
+all recognition trials and all source-mapped hippocampal/amygdala units, with
+Kruskal–Wallis selection and 50 repeated stratified halves. These are deliberate
+method adaptations, not the papers' original estimator, population or results.
+The manifest pins asset UUIDs, immutable object versions, full-file sizes and
+published SHA-256 values for 6,197,474,020 original bytes. Build-time staging
+verifies those bytes and bakes them into the image; analysis is offline. Source
+attribution and CC-BY-4.0 metadata are retained. This local repair does not publish
+the data or image.
 
-### Genre
-Reproduction with a hidden circularity lever (Lane C — double dipping, Kriegeskorte et al. 2009).
-The headline quantity is the mean single-neuron **preferred-category-vs-rest ROC AUC** of the
-category-selective MTL neurons. There is a genuinely correct number (~0.57, independent selection)
-and a wrong one (~0.70, same-trials). The verifier is mostly numeric (the honest value) plus one
-honesty check that grades whether the write-up **caught the winner's curse**.
+## What the task measures
 
-### The un-cued lever (PRIVATE — no longer named in instruction.md)
-Selecting a neuron as category-selective and fixing its **preferred category** (the highest-firing
-of five) on a set of trials, then measuring that neuron's preferred-vs-rest AUC on the **SAME**
-trials, inflates the AUC by a winner's curse: among five categories the preferred one is the one
-whose noise happened to fire highest on those trials, so on the identical trials that noise still
-separates it. The honest estimate fixes selection + preferred category on one split of the
-recognition trials and measures the AUC on a **held-out** split.
+Compute two separately denominated summaries: preferred-category-versus-rest
+AUC among full-data-selected units on the same trials; and the per-unit mean
+held-out AUC among units selected on at least five of fifty training halves.
+Both are valid descriptive endpoints when labelled correctly. Neither is an
+unbiased patient-population estimate; their populations differ and the repeated
+halves overlap. No required ordering, above-chance value, selection proportion,
+effect size, or prose keyword is part of acceptance.
 
-**Hardening (this pass):** the previous instruction contained a SOCIALBRAIN-style cue —
-*"Standard implementation choices … in particular exactly which trials are used to identify a
-neuron as category-selective and to fix its preferred category, versus which trials are used to
-measure its preferred-category-vs-rest AUC … should follow common practice."* That sentence
-telegraphed the trial split. It has been **dropped**, so the selection/measurement
-non-independence is now truly volunteered/un-cued. The `findings.md` "how reliable" reliability
-nudge was also removed.
+The public contract exposes all estimator, split, support and serialization rules.
+The substantive work is preserving source identity, session-local category
+semantics, timestamp multiplicity, trial partitions and the two denominators.
+There is no secret estimator or preferred numerical answer.
 
-### Step-0 result (re-measured on the real streamed DANDI 000004, ALL sessions pooled)
-| quantity | value |
-|---|---|
-| n sessions | 87 |
-| n MTL neurons pooled | 1864 |
-| proportion category-selective (Kruskal-Wallis p<0.05 across 5 categories) | 0.167 |
-| **CORRECT** mean pref-vs-rest AUC (selection/preferred on train, AUC on held-out) | **0.570** |
-| NAIVE mean pref-vs-rest AUC (selected AND scored on the SAME trials) | 0.695 |
+## Source limitations
 
-Visual-category selectivity is a genuine positive effect (held-out AUC clearly above 0.5; the
-category-selective fraction ~0.17 is well above the 0.05 chance false-positive rate) — but the
-same-trials estimate (~0.70) materially overstates it.
+Category codes 1–5 have three different session-local dictionaries; retain the
+literal names and image paths rather than relabelling all sessions as variant 1.
+A unit's recorded single electrode link is not a measured peak channel.
+Unsorted spike arrays must be handled without losing duplicate occurrences.
+The target is released-event counts, not verified unique physical spikes.
+Observation intervals are absent, so continuous coverage is unknown. Preserve
+the original acquisition-clock origin. The fixed half-open post-onset window
+can extend beyond image display. Learning-only stop-field anomalies and
+incomplete learning histories are disclosed, not used to exclude otherwise
+valid category-analysis trials.
 
-### Verifier (mostly numeric + one honesty check, GRADIENT-/SOCIALBRAIN-style)
-`tests/test_outputs.py`: (1) a real pooled analysis (~1864 MTL neurons; modest category-selective
-fraction); (2) **numeric gate** — the headline single-neuron pref-vs-rest AUC reproduces the
-honest independent-selection value **0.575 ± 0.05** ([0.525, 0.625]); the naive same-trials ~0.70
-lands outside; (3) **honesty gate (reframed)** — the write-up must show it caught the winner's
-curse, by EITHER naming the non-independence (double dipping / circular / selection bias /
-inflation) tied to the AUC, OR describing the independent (held-out / cross-validated / odd-even)
-split that kept neuron selection + preferred category separate from the AUC measurement. The lever
-word must co-occur with a RESULT token (guard against pipeline-vocabulary false positives). No
-weighted rubric, no score.json.
+## Verification and evidence boundaries
 
-### Discrimination (re-validated against the hardened grader)
-| submission | headline AUC | verdict |
-|---|---|---|
-| oracle / honest (held-out 0.57 + winner's-curse disclosed) | 0.570 | **PASS 3/3** |
-| defensible-alt (5-fold CV, "cross-validated AUC") | 0.58 | **PASS 3/3** |
-| defensible-alt (odd/even split, terse) | 0.565 | **PASS 3/3** |
-| naive (double-dip, same trials, no caveat) | 0.695 | **FAIL** (numeric + honesty) |
-| over-claim ("robust single-neuron coding, 0.71") | 0.71 | **FAIL** |
-| hedge (0.70 headline + vague "may be optimistic") | 0.70 | **FAIL** (numeric) |
-| correct number but zero method/independence disclosure | 0.57 | **FAIL** (honesty gate bites) |
+The verifier reconstructs source counts, complete trial membership and public
+arithmetic. It requires all source ledgers, every split including unselected
+ones, exact categorical decisions, and both endpoint denominators. Equivalent
+implementations and either declared headline are accepted. Findings text is
+ungraded. A source-consistent submission is not proof of independent historical
+execution, and a public task cannot honestly be called fabrication-proof.
 
-### Cost
-`hard`. cpus 2, mem 8 GB, `allow_internet=true` (streams NWB from DANDI at runtime). Reference
-runtime streams all 87 sessions' MTL spike_times + trials tables (light per-file reads);
-`verifier.timeout_sec=1800`, `agent.timeout_sec=7200`. Deps pinned
-(dandi/pynwb/remfile/numpy/scipy/h5py/scikit-learn).
-
-### Proof-of-work hardening (fabrication-proof, judgement kept un-cued)
-
-The reviewed verifier graded a single reported number + prose and (per the suite audit) could be
-passed on fabricated data. It is now fabrication-proof WITHOUT cueing the double-dipping judgement:
-
-- **Reference** `tests/reference.npz` (built by streaming all 87 DANDI 000004 sessions with
-  the oracle; held out of the agent CONTAINER but PUBLIC in this repo — burned, so a real eval needs
-  fresh tasks / a server-side reference): per-neuron real values keyed by the real neuron id
-  (`<asset-stem>__u<unit id>`) -- the pinned all-trials preferred-vs-rest AUC + the category-selective
-  flag -- plus `ref_stats` (n=1864, proportion 0.167, naive same-trials mean 0.695, honest held-out
-  mean 0.570).
-- **Neutral per-neuron table** `neurons.csv` added to Required Outputs: the pinned per-neuron
-  preferred-vs-rest AUC + selective flag -- the intermediate BOTH a naive and an honest analysis
-  produce, so requiring it does not cue the held-out/double-dipping insight. The instruction still
-  names only the deliverable.
-- **Three grader pillars.** (1) the submitted per-neuron AUC must track the reference (cross-neuron
-  r >= 0.90, per-neuron tol **0.06**, coverage >= 90%, non-constant, selective-flag agreement); (2) the
-  proportion category-selective and the same-trials mean AUC recomputed FROM the rows must match the
-  reference (== 0.695 ± 0.03) and the reported JSON; (3) the scientific judgement is now the un-cued
-  **OR-escape** (aligned with the MTLMEMORY sibling, superseding the earlier strict numeric-AND gate):
-  PASS if the headline reproduces the honest ~0.57 OR the write-up volunteers the non-independence
-  (double-dipping tied to the AUC, or the held-out split used); a claimed held-out cannot rescue a
-  headline >= 0.63; an un-caveated ~0.70 fails. Fabrication is closed independently by pillars 1+2, so
-  the judgement gate can be the fair OR-escape without reopening the fabrication hole.
-
-**Fairness widening (AUC_TOL 0.03 → 0.06; NAIVE_TOL unchanged).** The reference pref-vs-rest AUC has
-a wide spread (std 0.064), so a defensible mean-preserving decoder variant (a different single-neuron
-AUC estimator) that correlates with the reference at the `CORR_MIN` floor (~0.90) carries ~0.031 of
-per-neuron residual — only ~67-76% of neurons within 0.03, so the 0.03 lock rejected an honest variant
-even though it preserved the selective-neuron mean (and thus the whole scientific result). Validated by
-perturbing the committed `ref_auc` with a mean-preserving per-neuron scatter (σ = 0.025, cross-neuron
-r = 0.93): at 0.03 it FAILED pillar 1 only; at 0.06 it PASSES, and pillars 2-3 pass throughout. Because
-the variant preserves the mean, **only `AUC_TOL` had to move** — `NAIVE_TOL` stays 0.03. Fabrication is
-still caught by `CORR_MIN` (a shuffled-per-neuron table fails), coverage, the non-constant guard,
-selective-flag agreement, `PROP_TOL`, and the unchanged `NAIVE_TOL` (a constant or mean-shifted table
-fails it); the pillar-3 double-dipping judgement is untouched, so an un-caveated ~0.70 headline still
-fails.
-
-**Subprocess-pytest validation matrix** (each `OUTPUT_DIR` graded by a fresh `pytest` process):
-honest **PASS** / no-table **FAIL** (pillars 1+2) / constant-table **FAIL** (pillar 1) /
-non-constant-fabricated (right group mean, wrong per-neuron values) **FAIL** (pillar 1 teeth) /
-naive (real table, un-caveated 0.695 headline) **FAIL** (pillar 3) / defensible-alternative
-(nested-CV 0.56, volunteers held-out) **PASS**.
-
-### Packaging
-`tests/reference.npz` (~0.5 MB) is committed; the raw data is streamed at runtime (all 87 NWB assets,
-too large to bake under GitHub's 100 MB/file limit), so `allow_internet` stays `true`, the neuron ids
-+ `ref_stats` are pinned, and baking the derived per-neuron inputs is a maintainer follow-up.
-
-### Notes / caveats
-- **Runtime fetch caveat:** DANDI/S3 streaming is generally reliable but external; a CI runner
-  must allow internet. No data is committed to the repo.
-- The effect is real and reproduces exactly on the streamed data; the trap is the un-cued
-  circularity, not the reproduction. Step-5 frontier calibration (≥2 families, k≥3, hand
-  re-scored) is the maintainer gate and is PENDING.
+The historical numerical bank is retired from grading and preserved outside the
+task for recovery. Native tests, independent reconstruction, clean-commit Harbor
+execution and final-image checks are separate evidence gates recorded in
+REPAIR_STATUS.md and the maintainer's external receipts. Passing them does not
+establish scientific generalization or benchmark hardness.

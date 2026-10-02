@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "task_id": "VISCAT-001",
+  "method_id": "released-mtl-category-selection-v1",
+  "contract_status": "frozen_before_original_category_statistics",
+  "scope": {
+    "target": "Descriptive pooled-recorded-unit conditional category-selection sensitivity in the fixed expanded human MTL release; not a paper-number reproduction or patient-population inference.",
+    "papers": [
+      {"doi": "10.1038/sdata.2018.10", "relationship": "Faraut2018 uses one-way 1x5 ANOVA in a 1.5-second interval starting 0.2 seconds after onset and applies additional behavioral criteria. Its Table2 defines session-variant category dictionaries."},
+      {"doi": "10.1038/s41597-020-0415-9", "relationship": "Chandravadia2020 describes the expanded NWB release; Fig5 visual selection uses one-way 1x5 ANOVA in a one-second interval starting 0.2 seconds after onset. The present KW/1.5-second/50-half method is an explicit adaptation."}
+    ],
+    "independence": "Recorded units cluster within sessions and repeated patients; unit keys do not prove distinct biological neurons across sessions. Repeated halves overlap, and final >=5-selection eligibility uses all repeated training events. A test trial in one repeat may affect selection in another. No IID-unit/split CI, independent outer validation, patient-generalization, neuron-prevalence, neural-specificity or causal claim is implied.",
+    "forbidden_outcome_gates": "No required AUC band, above-chance result, direction, same-trial versus held-out ordering, selected fraction, biological absence or prose keywords. Both declared headline populations are valid."
+  },
+  "source": {
+    "dandiset_id": "000004",
+    "published_version": "0.220126.1852",
+    "runtime_directory": "/app/data/viscat",
+    "manifest_filename": "source_manifest.json",
+    "manifest_sha256": "3819f2b5e9403f184b94be7d1374476c964c08c054763ec7b8d40cf6bbf7e7b9",
+    "n_assets": 87,
+    "total_original_bytes": 6197474020,
+    "integrity": "Authenticate the frozen manifest and every original size/SHA256 in the exact closed inventory before source parsing. Regular files only; no symlink or external HDF5 data links. No runtime network, cached response array, historical bank or scientific source replacement.",
+    "session_key": "Exact full original asset_path. Literal /general/session_id may be absent and remains null; do not synthesize it from a date.",
+    "unit_key": "asset_path + '::unit=' + base10 original unit_id without padding",
+    "canonical_order": "Assets sorted by Unicode full path, then original zero-based unit-table row; recognition trials in original trial-table row order. IDs are identities, not row positions.",
+    "text": "Strict UTF-8; preserve original category names, paths, IDs, phase strings and label tokens without normalization. variant_prefix is the first original image-path component interpreted with Windows slash semantics; the original full path is separately unchanged.",
+    "unit_mapping": "Use /units/electrodes DynamicTableRegion and electrodes_index to the original /general/extracellular_ephys/electrodes table ROW. Require exactly one valid link per unit; preserve electrode row/ID/origChannel/location. Include iff location contains case-sensitive Hippocampus or Amygdala; both is ambiguous and fails. This is not a peak-channel measurement. No firing, waveform, behavior, isolation or confidence exclusion.",
+    "trial_selection": "All and only stim_phase='recog'. Preserve all original learn rows as non_recognition_phase. No correctness/confidence/label/history filter. Only learn/recog source phase tokens are supported.",
+    "category_source": "Original integer stimCategory codes1..5 and nonempty category_name. Require a consistent code/name/path-prefix dictionary within each session, preserving learning and recognition rows. Group by within-session numeric code, never globally by a presumed universal semantic name.",
+    "category_variants": {
+      "newolddelay": ["houses", "landscapes", "mobility", "phones", "smallAnimal"],
+      "newolddelay2": ["fruit", "kids", "military", "space", "zzanimal"],
+      "newolddelay3": ["1cars", "2food", "3people", "4spatial", "5animals"]
+    },
+    "category_variant_rule": "These exact code-order dictionaries are established by the pre-count original metadata gate; a variant prefix is a released path identity, not a new universal category ontology. Unknown/conflicting mappings fail rather than relabel or drop sessions.",
+    "clock": "All original event/trial/spike seconds retain their arbitrary common nonzero acquisition origin. Event and experiment timestamps are finite, nondecreasing and exactly equal; decode original TTL strings as exact decimal integers. Parse learning/recognition IDs from general/data_collection and cross-check acquisition experiment description. Every trial onset/off/stop must match exactly one same-phase TTL1/2/6 respectively.",
+    "trial_times": "All start/on/off/stop values finite; start==on and on<=off for all rows. Recognition additionally off<=stop. Keep literal learning stop values even when before onset; report full-chain violations, never reassign, shift or exclude the source session.",
+    "old_new_audit": "Preserve source label tokens. Recognition tokens0/1 remain decoded for provenance only, not category selection. Record exact full-path presence in that session's learning rows. Literal description reverses old/new semantics; preserve the text/conflict flag. Incomplete exposure history does not relabel or drop recognition trials.",
+    "spikes": "Validate every unit ragged index and finite stored timestamp. Stable-sort a COPY for search counts while preserving every duplicate occurrence. No deduplication, source rewriting, concatenation repair or raw-unsorted search. Observation coverage is unknown because units/obs_intervals and intervals/invalid_times are absent; do not infer it from spike extrema. Unexpected observation tables fail pending explicit contract review.",
+    "known_limitations": "Pre-count receipts report13 unordered units/7 sessions/20 adjacent inversions/2046 extra exact timestamp occurrences,97 learning-only timing violations in one session,160 old-labelled images missing from released learning in8 sessions, and windows extending beyond stimulus offset. Their physical/export origins are unresolved; all released records and recognition windows remain in scope.",
+    "structural_counts_not_outcome_targets": {"n_sessions": 87, "n_subject_ids": 59, "n_recognition_rows": 8700, "recognition_per_category_per_session": 20, "variant_sessions": {"newolddelay": 42, "newolddelay2": 20, "newolddelay3": 25}}
+  },
+  "response": {
+    "window_seconds": [0.2, 1.7],
+    "duration_seconds": 1.5,
+    "equation": "start=float64(stim_on_time)+float64(0.2); end=float64(stim_on_time)+float64(1.7); count every stored timestamp s satisfying start<=s<end. Require finite end>start. rate_hz=integer_count/float64(1.5).",
+    "scope": "Every mapped MTL unit x every recognition row. Window is not clipped at stimulus offset, trial end or spike extrema. It can contain post-offset activity; it is not guaranteed pure visual activity."
+  },
+  "statistics": {
+    "categories": [1, 2, 3, 4, 5],
+    "rank_input": "Exact integer counts. A common positive1.5-second rate denominator preserves order/ties.",
+    "support": "Full KW requires all five categories nonempty. Missing category gives insufficient_category_support; keep counts/sums/means/rank sums/tie_sum where computable, but H/p/preference/U/AUC null and selected=false. Small groups remain included; small_group_warning is true iff any present group has fewer than5 rows.",
+    "ranks": "Average ranks1..N with pooled count ties; rank_sum_twice_cat_c is the exact integer sum of doubled ranks for category c. tie_sum=sum(t^3-t) for pooled tie multiplicities, exact integer.",
+    "kw": "H0=12/[N*(N+1)]*sum((rank_sum_twice_cat_c/2)^2/n_c)-3*(N+1); Ctie=1-tie_sum/(N^3-N); H=H0/Ctie; p=chi2.sf(H,4). No continuity correction. Mathematical H is nonnegative; implementations must not convert unrelated exceptions into p1. Exact-rational H is allowed to avoid cancellation.",
+    "all_tied": "When all pooled counts are identical and all groups exist: status=all_tied, H=0,p=1, selected=false, preferred_category=1, preferred_tied=true, AUC=0.5. This explicit convention avoids a library all-identical exception.",
+    "selection": "status=ok and unrounded p<0.05; no multiplicity correction in this descriptive method-control threshold. All-tied/unsupported are false.",
+    "preferred": "Choose highest category mean count, comparing exact integer sums/denominators; equal means choose smallest numeric code and preferred_tied=true. mean_rate_cat_c=sum_count_cat_c/(1.5*n_cat_c); null only when n_cat_c=0.",
+    "auc": "u_preferred_twice=2*sum(count_pref>count_rest)+sum(count_pref==count_rest) over every preferred/rest pair. AUC=u_preferred_twice/(2*n_preferred*n_rest), unflipped. Highest mean need not give AUC>=0.5. Empty positive/rest class is undefined, never fabricated0.5.",
+    "invalid_arithmetic": "Fail explicitly on nonfinite/invalid arrays or unexpected numerical errors; do not silently omit a unit or convert an exception to a nonselective result."
+  },
+  "splits": {
+    "n_repeats": 50,
+    "minimum_selected_repeats": 5,
+    "rng": {"api": "numpy.random.Generator", "bit_generator": "PCG64", "seed": 0, "numpy_version": "2.2.6"},
+    "schedule": "Initialize once. Repeat0..49 outer, then canonical MTL unit order, then numeric category1..5. For each category copy its recognition-position indices in original row order, call rng.shuffle(copy), and take first floor(n_c/2). Union train rows in original row order; test is ordered complement. Never rng.choice, reset seeds, sort unit IDs or share one session mask across units.",
+    "support": "Require at least2 original recognition rows in every category to produce a split. Otherwise consume no RNG for that unit in any repeat, status=insufficient_category_support, all membership entries false, all train/test support/statistic/preference fields null and both selection flags false. False membership does not imply test for unsupported events.",
+    "training": "All KW selection, preferred category and preference ties use only training counts. Compute train preferred-vs-rest AUC as a diagnostic. Test AUC uses the training preference without flipping, including for nonselected splits. No test-selected preference or full-data preference substitution.",
+    "rows": "All50 events per MTL unit are mandatory, including all_tied, unselected and unsupported. status reflects training KW status for supported splits. included_in_conditional_summary==train_selected.",
+    "conditional_mean": "For each unit, equal-weight mean test_auc over train_selected splits; null if zero. A mean based on1..4 selected splits remains diagnostic but ineligible; >=5 is eligible regardless of full-data selection. All repeated halves are dependent."
+  },
+  "aggregation": {
+    "headline_population_allowed": ["full_data_selected_same_trials", "crossfit_selected_at_least_five_splits"],
+    "full_data_selected_same_trials": "Equal-unit mean same_trial_auc among full-data category_selective=true units.",
+    "crossfit_selected_at_least_five_splits": "Equal-unit mean conditional_auc among heldout_eligible=true units. Do not pool split rows across units.",
+    "empty": "n_units=0,mean_auc=null,status=empty_population; no failure and no chance substitution.",
+    "selectivity_fraction": "n_category_selective/n_mtl_units using ALL mapped MTL units, not only supported or selected units; null if denominator0. Report supported/unsupported counts separately.",
+    "overlap": "Report full_only,conditional_only,both,neither among all MTL units. No claim these are the same selected population.",
+    "headline": "preferred_category_auc and headline_status exactly select the declared population, which may be either allowed name. Both populations are always reported."
+  },
+  "tolerances": {
+    "source_times_seconds": {"atol": 1e-9, "rtol": 0},
+    "rate_auc_mean_proportion": {"atol": 1e-8, "rtol": 0},
+    "probability": {"atol": 1e-10, "rtol": 1e-7},
+    "kw_H": {"atol": 1e-10, "rtol": 1e-8},
+    "exact": "Source IDs/categories/labels/counts/sums/rank sums/tie_sum/U2/masks/Boolean flags and source dictionaries exact. Selection/preference/support/eligibility derive from unrounded exact primitives, not rounded submitted floats. Source strings, literal nulls, manifest and method object exact.",
+    "domains": "Counts/sums/H/rates nonnegative; p/AUC/proportions in[0,1]; U2 in[0,2*n_preferred*n_rest]. Only explicitly nullable fields may be null. No NaN/Inf or bool-as-integer."
+  },
+  "serialization": {
+    "csv": "Required columns once, UTF-8 comma-separated; coherent key-based row/column reorder and harmless extra columns accepted. Null is empty field. Boolean0/1 or true/false. Exact integral decimal/scientific numeric forms accepted without fractional truncation.",
+    "json": "Finite native numbers, true Boolean fields, no duplicate keys. Required keys remain present when null. Named identity/count/population objects closed; harmless descriptive outer keys allowed.",
+    "npz": "allow_pickle=False. Unicode unit-key axis, integer non-Boolean axes/counts, floating rates, Boolean membership. Coherent axis/response/repeat permutations accepted. Extra harmless primitive arrays allowed; no object arrays.",
+    "software": "Actual nonempty string-to-string software_versions; equivalent implementations need not claim the oracle's libraries.",
+    "evidence": "Fresh disjoint output/private directories outside all source and code/contract inputs; no symlink ancestors or overwriting. Failure receipts do not become complete outputs."
+  },
+  "outputs": {
+    "sessions.csv": {
+      "keys": ["asset_path"], "coverage": "All87 original assets; pilot explicitly scoped subset only",
+      "columns": ["asset_path","asset_id","source_sha256","subject_id","nwb_identifier","literal_session_id","variant_prefix","n_source_trials","n_learning_trials","n_recognition_trials","n_new","n_old","n_source_units","n_mtl_units","n_electrodes","status"],
+      "types": "String identities; literal_session_id nullable string; n_* nonnegative exact integers; status=ok. variant_prefix exact source image prefix, not invented date/session ID."
+    },
+    "trials.csv": {
+      "keys": ["asset_path","source_trial_row"], "coverage": "Every original trial row including learning",
+      "columns": ["asset_path","source_trial_row","trial_id","stim_phase","category_code","category_name","variant_prefix","source_label_token","source_label","external_image_file","image_in_learning","start_time_s","stim_on_time_s","stim_off_time_s","stop_time_s","included","status"],
+      "types": "source_trial_row nonnegative integer; trial_id integer; category_code integer1..5; exact source strings; finite source times; included Boolean; status included_recognition or non_recognition_phase. source_label integer0/1 and image_in_learning Boolean only for recognition, otherwise both null; literal token always retained."
+    },
+    "units.csv": {
+      "keys": ["asset_path","source_unit_row"], "coverage": "Every original unit including non-MTL",
+      "columns": ["asset_path","unit_key","source_unit_row","unit_id","n_electrode_links","electrode_row","electrode_id","original_channel","location","included","region","exclusion_reason"],
+      "types": "Exact identities/integers; source rows nonnegative, n_electrode_links1; included Boolean; region Hippocampus/Amygdala or null exactly if excluded; exclusion_reason included_mtl/non_mtl_location."
+    },
+    "responses.npz": {
+      "dimensions": {"U":"all MTL units","R":"all unit x recognition-row pairs","B":50},
+      "arrays": {
+        "unit_key":{"dtype":"Unicode","shape":["U"]},
+        "response_unit_index":{"dtype":"integer","shape":["R"]},
+        "source_trial_row":{"dtype":"integer","shape":["R"]},
+        "trial_id":{"dtype":"integer","shape":["R"]},
+        "category_code":{"dtype":"integer","shape":["R"]},
+        "spike_count":{"dtype":"integer","shape":["R"]},
+        "rate_hz":{"dtype":"floating","shape":["R"]},
+        "repeat_id":{"dtype":"integer","shape":[50]},
+        "train_membership":{"dtype":"Boolean","shape":[50,"R"]}
+      },
+      "rules":"Every unit_key once; response_unit_index indexes that supplied axis. Each(unit_key,source_trial_row) exactly once for its session's recognition rows; original trial_id/category agree with trials.csv. All repeats0..49 exactly once. train_membership follows the frozen global RNG and response keys; unsupported allfalse has status semantics above."
+    },
+    "neurons.csv": {
+      "keys":["unit_key"], "coverage":"All MTL units irrespective of selection",
+      "columns":["unit_key","asset_path","subject_id","unit_id","region","n_trials","n_cat_1","n_cat_2","n_cat_3","n_cat_4","n_cat_5","sum_count_cat_1","sum_count_cat_2","sum_count_cat_3","sum_count_cat_4","sum_count_cat_5","mean_rate_cat_1","mean_rate_cat_2","mean_rate_cat_3","mean_rate_cat_4","mean_rate_cat_5","rank_sum_twice_cat_1","rank_sum_twice_cat_2","rank_sum_twice_cat_3","rank_sum_twice_cat_4","rank_sum_twice_cat_5","tie_sum","full_status","small_group_warning","kw_H","kw_p","category_selective","preferred_category","preferred_tied","n_preferred","n_rest","u_preferred_twice","same_trial_auc","n_usable_splits","n_selected_splits","conditional_auc","conditional_status","heldout_eligible"],
+      "types":"Identity strings/integers; n_*,sum_count_*,rank_sum_twice_*,tie_sum exact nonnegative integers; mean_rate nullable only for absent category. full_status ok/all_tied/insufficient_category_support. kw_H/kw_p/preferred_category/preferred_tied/n_preferred/n_rest/u_preferred_twice/same_trial_auc null only for insufficient support; otherwise finite declared domains, preference1..5 and Boolean tie. category_selective/small_group_warning/heldout_eligible Boolean. conditional_status defined/no_selected_splits; conditional_auc null iff selected count0. n_usable_splits0or50; selected<=usable; heldout_eligible iff selected>=5."
+    },
+    "split_events.csv": {
+      "keys":["unit_key","repeat"], "coverage":"Every MTL unit x all50 repeats, including unselected/unsupported",
+      "columns":["unit_key","repeat","status","n_train_cat_1","n_train_cat_2","n_train_cat_3","n_train_cat_4","n_train_cat_5","n_test_cat_1","n_test_cat_2","n_test_cat_3","n_test_cat_4","n_test_cat_5","train_sum_count_cat_1","train_sum_count_cat_2","train_sum_count_cat_3","train_sum_count_cat_4","train_sum_count_cat_5","train_mean_rate_cat_1","train_mean_rate_cat_2","train_mean_rate_cat_3","train_mean_rate_cat_4","train_mean_rate_cat_5","train_rank_sum_twice_cat_1","train_rank_sum_twice_cat_2","train_rank_sum_twice_cat_3","train_rank_sum_twice_cat_4","train_rank_sum_twice_cat_5","train_tie_sum","train_small_group_warning","train_H","train_p","train_selected","train_preferred_category","train_preferred_tied","train_n_preferred","train_n_rest","train_u_preferred_twice","train_auc","test_n_preferred","test_n_rest","test_u_preferred_twice","test_auc","included_in_conditional_summary"],
+      "types":"repeat exact0..49; status ok/all_tied/insufficient_category_support. Supported rows all fields finite/non-null with support/sums/ranks/tie_sum/U2 exact integers, means/H nonnegative, p/AUC in[0,1], preference1..5, flags Boolean. Unsupported rows every n_train/n_test/train_/test_ field null EXCEPT train_selected=false; included_in_conditional_summary=false. No train membership is generated for unsupported events."
+    },
+    "results.json": {
+      "required_fields":["status","task_id","headline_population","headline_status","preferred_category_auc","n_sessions","n_patients","n_source_units","n_mtl_units","n_full_test_defined","n_full_test_undefined","n_category_selective","proportion_category_selective","n_crossfit_eligible","n_response_rows","n_split_events","populations","population_overlap"],
+      "types":"status complete (resource_pilot only for explicit pilot); task_id VISCAT-001; counts nonnegative exact integers; proportion null only denominator0; headline_population allowed name; headline_status defined/empty_population; preferred_category_auc nullable probability selected from that population.",
+      "populations":{"required_exact_keys":["full_data_selected_same_trials","crossfit_selected_at_least_five_splits"],"each_required_exact_fields":["n_units","mean_auc","status"],"types":"n_units nonnegative integer; mean_auc probability or null iff n_units0; status defined/empty_population."},
+      "population_overlap":{"required_exact_fields":["full_only","conditional_only","both","neither"],"types":"Nonnegative exact integers summing to n_mtl_units."},
+      "rules":"Both populations always present; counts recompute complete ledgers; n_patients counts distinct literal subject IDs across sessions, not units; n_split_events=50*n_mtl_units. All-tied full tests are defined, not undefined. No aggregate outcome target."
+    },
+    "run_metadata.json": {
+      "required_fields":["status","task_id","dandiset_id","published_version","source_manifest_sha256","method_contract_sha256","source_sha256","method_contract","headline_population","source_observed","software_versions","warnings"],
+      "types":"status complete/resource_pilot; task_id VISCAT-001; dandiset_id000004/published_version0.220126.1852 exactstrings; hashes exact; source_sha256 closed full87-path map; method_contract exact public object; headline same as results; software_versions nonempty string map; warnings array of captured nonempty strings (empty allowed).",
+      "source_observed": {
+        "required_fields":["n_sessions","n_patients","n_source_trials","n_recognition_trials","n_source_units","n_mtl_units","sessions"],
+        "session_keys":["asset_path"],
+        "session_required_fields":["asset_path","nwb_version","session_start_time","timestamps_reference_time","event_timestamp_unit","experiment_timestamp_unit","spike_times_literal_unit","n_events","event_timestamps_finite","event_timestamps_nondecreasing","experiment_timestamps_exactly_match_events","phase_experiment_ids","clock_mapping_counts","source_label_description","label_description_conflicts_with_released_code_semantics","label_membership_counts","unit_electrode_link_counts","units_obs_intervals_present","invalid_times_present","observation_coverage","all_spikes_finite","all_unit_spikes_nondecreasing","raw_adjacent_inversions","n_unordered_units","raw_adjacent_duplicate_spikes","duplicate_timestamp_occurrences","n_learning_temporal_order_violations","n_recognition_temporal_order_violations","category_code_dtype","category_name_description","variant_prefix","category_mapping"],
+        "nested_objects": {
+          "phase_experiment_ids":"Closed learn/recog integer source mapping.",
+          "clock_mapping_counts":"Closed n_trials,onset_exact_unique_ttl1,offset_exact_unique_ttl2,trial_end_exact_unique_ttl6,start_equals_stim_on; nonnegative integers equal trial count when source passes.",
+          "label_membership_counts":"Closed code0_absent_from_learning,code0_present_in_learning,code1_absent_from_learning,code1_present_in_learning; nonnegative exact original full-path counts.",
+          "unit_electrode_link_counts":"Closed zero,one,multiple; source mapping requires zero=multiple=0,one=n_source_units.",
+          "category_mapping":"Order-free five records keyed category_code1..5, each closed {category_code,category_name,variant_prefix,n_recognition}; exact original names/path prefix/support."
+        },
+        "types":"n_* and duplicate/inversion counters nonnegative exact integers; actual identity/date/description strings, nullable literal unit/description attributes, true Boolean presence/clock flags; observation_coverage='unknown'. all_unit_spikes_nondecreasing is measured before copy sorting. duplicate_timestamp_occurrences=sum(len(raw)-len(unique(raw))) per original unit; never a deduplication instruction. Temporal violations count literal full-chain predicate separately per phase."
+      }
+    },
+    "findings.md":{"type":"nonempty_UTF8_text","grading":"No keywords, fixed phrasing, expected effects, ordering, selected proportion or biological conclusion required."}
+  },
+  "failure_and_pilot": {
+    "failure":"Exit nonzero; fresh results.json/run_metadata.json status failed_precondition and nonempty reason plus findings.md. If failure occurs after partial publication, retain files and add failure_report.json; verifier rejects failure marker even with any complete marker. Never silently omit source rows or overwrite prior evidence.",
+    "pilot":"Only explicit --pilot-first-asset: authenticate full87 bytes, compute the first lexical asset only, all its MTL units/recognition trials/all50 repeats. status resource_pilot plus resource_pilot_scope with asset_path and n_processed_assets1; source_sha256 still full87. Tables/counts/source_observed cover processed subset, never represented as complete cohort or usable full reference bank.",
+    "reference_performance":"Source-only reference can cache deterministic statistics after exact full source primitive/membership identity checks, never from a submitted summary or claimed hash. No reused174 response arrays, old reference bank or oracle outputs as source inputs."
+  }
+}
