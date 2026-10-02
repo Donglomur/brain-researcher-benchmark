@@ -1,164 +1,205 @@
-"""Reference solution for MOVIESYNC-001 -- the correct inter-subject correlation
-(ISC) of the movie-evoked BOLD response in visual cortex.
-
-The task (un-cued) asks for the inter-subject correlation of the movie response in visual
-cortex, with the dataset, atlas, region set, nuisance regression and band-pass all pinned.
-The one thing left free is HOW the "inter-subject correlation" is computed -- and it is
-decisive.
-
-Inter-subject correlation can be estimated two ways that give materially different numbers:
-
-  * PAIRWISE ISC: the average Pearson correlation between the time courses of every
-    PAIR of participants. This is literally "the correlation between participants" and is the
-    convention-invariant measure of between-subject similarity.
-
-  * LEAVE-ONE-OUT ISC: correlate each participant's time course with the MEAN of
-    all the OTHER participants, then average. Averaging N-1 subjects suppresses idiosyncratic
-    noise and builds a high-SNR template, so each subject correlates much more strongly with
-    that average than with any single other subject. LOO-ISC is therefore systematically
-    higher than the pairwise value (here about 2.4x) and is NOT comparable to it
-    (Nastase et al. 2019, SCAN).
-
-Validated ground truth (nilearn 0.13.1, fetch_development_fmri n_subjects=40, MSDL atlas,
-confound-cleaned, band-pass 0.01-0.1 Hz, mean over the three visual-cortex regions
-["Vis","Striate","Occ post"]):
-
-    pairwise ISC (CORRECT) : 0.152
-    leave-one-out ISC      : 0.365   (chance ~ 0.0)
-
-Both estimators are legitimate, but target different quantities. The higher-SNR group
-template explains the larger leave-one-out value; this does not make it an artifact.
-"""
+"""Source-only supplied MOVIESYNC oracle. Importing this module does no I/O."""
 from __future__ import annotations
-
+import argparse
+import csv
+import hashlib
+import importlib.metadata
 import json
 import os
-import traceback
 from pathlib import Path
+import platform
+import sys
+import time
+import warnings
 
 import numpy as np
+import core
+import source_reader as source
 
-OUTPUT_DIR = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-TASK_ID = "MOVIESYNC-001"
-DATASET_ID = "development_fmri (ds000228, Richardson et al. 2018)"
-N_SUBJECTS = 40
-VISUAL_REGIONS = ["Vis", "Striate", "Occ post"]
-CHANCE = 0.0
-
-
-def wj(name: str, payload: dict) -> None:
-    (OUTPUT_DIR / name).write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+COHORT_FIELDS = ('participant_id','participant_source_row','bold_path','confounds_path','n_frames',
+                 'n_confound_rows','n_maps','map_rank','nuisance_rank','n_active_visual','status')
+PAIR_FIELDS = ('participant_a','participant_b','map_id','map_label','r','status')
+ROW_FIELDS = ('participant_id','map_id','map_label','isc_pairwise','pairwise_status','pairwise_n_expected',
+              'pairwise_n_defined','isc_loo','loo_status','loo_n_expected','loo_n_defined','loo_n_active_contributors')
 
 
-def write_failfast(reason: str) -> None:
-    wj("isc_results.json", {"visual_isc": None, "n_subjects": 0, "chance": CHANCE,
-                            "status": "failed_precondition", "reason": reason})
-    wj("run_metadata.json", {"task_id": TASK_ID, "dataset_id": DATASET_ID,
-                             "status": "failed_precondition", "reason": reason})
-    (OUTPUT_DIR / "findings.md").write_text(
-        f"# Findings\n\nAnalysis did not complete: {reason}.\n", encoding="utf-8")
+def disjoint(a, b):
+    return a != b and a not in b.parents and b not in a.parents
 
 
-def _zscore_rows(x: np.ndarray) -> np.ndarray:
-    return (x - x.mean(1, keepdims=True)) / (x.std(1, keepdims=True) + 1e-9)
+def prepare_destinations(output, private, report, protected):
+    destinations = [source.safe_path(p) for p in (output, private, report) if p is not None]
+    protected = [source.safe_path(p) for p in protected]
+    for p in destinations:
+        core.require(not os.path.lexists(p), 'fresh exclusive output required')
+        core.require(p.parent.is_dir(), 'output parent must already exist')
+        for q in protected:
+            core.require(disjoint(p, q), 'output overlaps protected input/code')
+    for i, p in enumerate(destinations):
+        for q in destinations[:i]:
+            core.require(disjoint(p, q), 'evidence destinations overlap')
+    Path(output).mkdir(mode=0o700)
+    if private is not None:
+        Path(private).mkdir(mode=0o700)
 
 
-def main() -> None:
-    from nilearn.datasets import fetch_development_fmri, fetch_atlas_msdl
-    from nilearn.maskers import NiftiMapsMasker
-
-    import os
-    import re
-
-    dev = fetch_development_fmri(n_subjects=N_SUBJECTS, verbose=0)
-    msdl = fetch_atlas_msdl(verbose=0)
-    labels = list(msdl.labels)
-
-    def _sid(path):
-        m = re.search(r"(sub-[A-Za-z0-9]+)", os.path.basename(path))
-        return m.group(1) if m else os.path.basename(path)
-
-    sids = [_sid(f) for f in dev.func]
-
-    masker = NiftiMapsMasker(maps_img=msdl.maps, standardize="zscore_sample",
-                             low_pass=0.1, high_pass=0.01, t_r=2.0, verbose=0)
-    ts = [masker.fit_transform(f, confounds=c) for f, c in zip(dev.func, dev.confounds)]
-
-    T = min(t.shape[0] for t in ts)
-    M = np.stack([t[:T] for t in ts], axis=0)          # subjects x time x regions
-    n_sub = M.shape[0]
-    vis_idx = [labels.index(name) for name in VISUAL_REGIONS]
-
-    pairwise_per_region = []
-    loo_per_region = []
-    persub_pairwise = np.zeros(n_sub)   # subject i's mean correlation with every OTHER subject
-    persub_loo = np.zeros(n_sub)        # subject i vs the mean of the others
-    for r in vis_idx:
-        x = _zscore_rows(M[:, :, r])                   # subjects x time (z-scored per subject)
-        # PAIRWISE: mean off-diagonal correlation between subjects (CORRECT)
-        C = np.corrcoef(x)
-        iu = np.triu_indices(n_sub, 1)
-        pairwise_per_region.append(float(C[iu].mean()))
-        persub_pairwise += (C.sum(1) - np.diag(C)) / (n_sub - 1)   # per-subject row mean off-diag
-        # LEAVE-ONE-OUT: each subject vs mean of the others
-        loo = np.array([np.corrcoef(x[i], np.delete(x, i, axis=0).mean(0))[0, 1]
-                        for i in range(n_sub)])
-        loo_per_region.append(float(loo.mean()))
-        persub_loo += loo
-    persub_pairwise /= len(vis_idx)
-    persub_loo /= len(vis_idx)
-
-    isc_pairwise = float(np.mean(pairwise_per_region))
-    isc_loo = float(np.mean(loo_per_region))
-
-    # required intermediate: the per-subject inter-subject correlation (both estimators), the
-    # finest grain the analysis produces. The mean of the per-subject pairwise column equals the
-    # headline pairwise ISC exactly.
-    import csv as _csv
-    with open(OUTPUT_DIR / "isc_per_subject.csv", "w", newline="") as _f:
-        _w = _csv.writer(_f)
-        _w.writerow(["subject", "isc_pairwise", "isc_loo"])
-        for i in range(n_sub):
-            _w.writerow([sids[i], round(float(persub_pairwise[i]), 6),
-                         round(float(persub_loo[i]), 6)])
-
-    wj("isc_results.json", {
-        "visual_isc": round(isc_pairwise, 4),
-        "isc_per_region": {name: round(v, 4) for name, v in zip(VISUAL_REGIONS, pairwise_per_region)},
-        "n_subjects": int(n_sub),
-        "n_timepoints": int(T),
-        "chance": CHANCE,
-        # named so it is unambiguously NOT the reported estimate
-        "leave_one_out_isc": round(isc_loo, 4),
-    })
-    wj("run_metadata.json", {
-        "task_id": TASK_ID, "status": "ok", "dataset_id": DATASET_ID,
-        "atlas": "MSDL", "regions": VISUAL_REGIONS,
-        "preprocessing": "NiftiMapsMasker, confound-cleaned, band-pass 0.01-0.1 Hz, zscore_sample",
-        "isc_estimator": "pairwise",
-        "n_subjects": int(n_sub), "n_timepoints": int(T),
-    })
-    (OUTPUT_DIR / "findings.md").write_text(
-        "# Findings: inter-subject correlation of the movie response in visual cortex\n\n"
-        f"Using {n_sub} participants of the development_fmri cohort (Pixar *Partly Cloudy* movie), "
-        "MSDL visual-cortex time series were confound-cleaned and band-passed (0.01-0.1 Hz).\n\n"
-        f"**Inter-subject correlation (visual cortex): {isc_pairwise:.3f}** (chance ~ 0).\n\n"
-        "This is the *pairwise* ISC: the mean Pearson correlation between the movie time courses of "
-        "every pair of participants, i.e. the correlation between two participants. For reference, "
-        f"correlating each participant with the mean of all the others (leave-one-out) gives "
-        f"{isc_loo:.3f}. Averaging participants yields a higher-SNR comparison template and a "
-        "different estimand, not an invalid estimate. Both are legitimate; they should not be "
-        f"compared without their estimator labels. The pairwise {isc_pairwise:.3f} is reported here.\n",
-        encoding="utf-8")
-
-    print(f"n={n_sub} T={T} | pairwise ISC={isc_pairwise:.4f} | leave-one-out ISC={isc_loo:.4f}")
+def write_json(path, value):
+    with Path(path).open('x', encoding='utf-8') as f:
+        json.dump(value, f, indent=2, sort_keys=True, allow_nan=False)
+        f.write('\n')
 
 
-if __name__ == "__main__":
+def write_npz(path, arrays):
+    with Path(path).open('xb') as f:
+        np.savez_compressed(f, **arrays)
+
+
+def write_csv(path, fields, rows):
+    with Path(path).open('x', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=fields, extrasaction='raise')
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({key: ('' if row[key] is None else row[key]) for key in fields})
+
+
+def versions():
+    return dict(python=platform.python_version(), **{
+        name: importlib.metadata.version(name) for name in ('numpy','scipy','nibabel','nilearn')})
+
+
+def pilot_analysis(x, ids, estimator):
+    pa = np.asarray([[core.norm(core.center(x[0, :, k])) > core.ACTIVE_BOUND for k in range(3)]])
+    empty = lambda n: dict(value=None, status='incomplete_support', n_expected=n, n_defined=0)
+    result = dict(schema_version='moviesync-results-v2', status='resource_pilot', isc_estimator=estimator,
+                  visual_isc=None, visual_isc_status='incomplete_support', n_subjects=1,
+                  n_timepoints=168, reference_zero=0., estimators={k: empty(40) for k in ('pairwise','loo')},
+                  per_subject=[], per_region=[], resource_pilot_scope=dict(participant_ids=ids,
+                  extraction_only=True, isc_computed=False, full_source_inventory_authenticated=True))
+    return dict(pairs=[], rows=[], results=result, person_active=pa,
+                template_active=np.zeros_like(pa), templates=None)
+
+
+def compute(args):
+    output = source.safe_path(args.output_dir)
+    private = source.safe_path(args.private_dir) if args.private_dir else None
+    report = source.safe_path(args.report) if args.report else None
+    data = source.safe_path(args.data_dir)
+    contract = source.safe_path(args.contract_path)
+    schema = source.safe_path(args.schema_path)
+    code = source.safe_path(Path(__file__).absolute().parent)
+    task_root = code.parent if (code.parent / 'task.toml').is_file() else code
+    prepare_destinations(output, private, report, [data, contract, schema, task_root])
+    start = time.monotonic()
+    captured = []
+    messages = []
     try:
-        main()
-    except Exception as exc:  # noqa: BLE001
-        write_failfast(f"{type(exc).__name__}: {str(exc)[:200]} | {traceback.format_exc()[-300:]}")
+        with warnings.catch_warnings(record=True) as messages:
+            warnings.simplefilter('always')
+            inputs = source.authenticate(data, contract, schema)
+            common = source.load_common(inputs)
+            ids = list(core.IDS[:1] if args.pilot_first_subject else core.IDS)
+            people = []
+            for pid in ids:
+                person = source.load_person(inputs, common, pid)
+                if private is not None:
+                    write_npz(private / f'{pid}.npz', dict(raw_coefficients=person['raw_coefficients'],
+                              isc_inputs=person['isc_inputs'], **person['private']))
+                people.append(person)
+            raw = np.stack([p['raw_coefficients'] for p in people])
+            x = np.stack([p['isc_inputs'] for p in people])
+            if args.pilot_first_subject:
+                analysis = pilot_analysis(x, ids, args.isc_estimator)
+            else:
+                analysis = core.derive(x, ids, common['visual_ids'], common['map_labels'], estimator=args.isc_estimator)
+            arrays = dict(participant_ids=np.asarray(ids), map_ids=np.arange(39, dtype=np.int64),
+                          map_labels=np.asarray(common['map_labels']), frame_indices=np.arange(168, dtype=np.int64),
+                          raw_coefficients=raw, visual_map_ids=np.asarray(common['visual_ids'], dtype=np.int64),
+                          isc_inputs=x, person_active=analysis['person_active'], template_active=analysis['template_active'])
+            for i, p in enumerate(people):
+                p['cohort']['n_active_visual'] = int(np.count_nonzero(analysis['person_active'][i]))
+            source_files = [{key: row.get(key) for key in ('path','role','participant_id','size_bytes','sha256')}
+                            for row in inputs['manifest']['files']]
+            atlas_header = {key: value for key, value in common['atlas_header'].items()
+                            if key not in ('raw_TR','raw_toffset','temporal_units')}
+            observed = dict(participant_ids=ids,
+                            map_labels=[dict(map_id=i, map_label=label) for i, label in enumerate(common['map_labels'])],
+                            visual_map_ids=common['visual_ids'], headers=[p['header'] for p in people],
+                            atlas_header=atlas_header, confound_column_names={pid:p['confound_columns'] for pid,p in zip(ids,people)},
+                            participant_column_names=common['participant_header'], effective_TR_s=2., effective_origin_s=0.,
+                            frame_alignment='released_frame_index_only_no_measured_movie_onset')
+            status = 'resource_pilot' if args.pilot_first_subject else 'ok'
+            metadata = dict(schema_version='moviesync-metadata-v2', status=status, task_id='MOVIESYNC-001',
+                            isc_estimator=args.isc_estimator, **inputs['identity'], source_files=source_files,
+                            source_observed=observed, software_versions=versions())
+            if args.pilot_first_subject:
+                metadata['resource_pilot_scope'] = analysis['results']['resource_pilot_scope']
+            write_csv(output/'cohort.csv', COHORT_FIELDS, [p['cohort'] for p in people])
+            write_npz(output/'timecourses.npz', arrays)
+            write_csv(output/'isc_pairs.csv', PAIR_FIELDS, analysis['pairs'])
+            write_csv(output/'isc_per_subject.csv', ROW_FIELDS, analysis['rows'])
+            write_json(output/'isc_results.json', analysis['results'])
+            write_json(output/'run_metadata.json', metadata)
+            if args.pilot_first_subject:
+                findings = 'Resource pilot: one fixed person extracted; no ISC or population result computed.\n'
+            else:
+                p, l = (analysis['results']['estimators'][key] for key in ('pairwise','loo'))
+                findings = (f"Fixed-cohort descriptive ISC, all {len(ids)} participants and168 released frames.\n\n"
+                            f"Pairwise: {p['value']} ({p['n_defined']}/{p['n_expected']} participant summaries); "
+                            f"leave-one-out: {l['value']} ({l['n_defined']}/{l['n_expected']}). "
+                            f"Declared headline: {args.isc_estimator}.\n\n"
+                            'These arithmetic-r endpoints summarize different comparisons. No sign, ordering or chance-significance '
+                            'claim follows from completing this computation. Released-frame alignment is not measured movie-onset '
+                            'alignment. This all168-frame visual-component adaptation is not the publication\'s TR11:168 '
+                            'ToM/pain functional-maturity analysis, population inference or a task-difficulty result.\n')
+            with (output/'findings.md').open('x', encoding='utf-8') as f:
+                f.write(findings)
+            if private is not None:
+                write_npz(private/'analysis_arrays.npz', arrays)
+            captured = [dict(category=m.category.__name__, message=str(m.message)) for m in messages]
+        inventory = {p.name:dict(size_bytes=p.stat().st_size, sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+                     for p in sorted(output.iterdir())}
+        receipt = dict(status=status, elapsed_s=time.monotonic()-start, n_subjects=len(ids),
+                       n_frames=168, n_maps=39, n_visual_maps=3, pair_rows=len(analysis['pairs']),
+                       person_region_rows=len(analysis['rows']), warnings=captured, files=inventory,
+                       **inputs['identity'])
+        if report is not None:
+            write_json(report, receipt)
+        return receipt
+    except Exception as exc:
+        captured = [dict(category=m.category.__name__, message=str(m.message)) for m in messages]
+        failure = dict(status='failed_precondition', reason=f'{type(exc).__name__}: {exc}',
+                       elapsed_s=time.monotonic()-start, warnings=captured)
+        write_json(output/'failure_report.json', failure)
+        if report is not None and not os.path.lexists(report):
+            write_json(report, failure)
         raise
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--data-dir', default=os.environ.get('DATA_DIR','/app/data/moviesync'))
+    parser.add_argument('--contract-path', default=os.environ.get('METHOD_CONTRACT','/app/method_contract.json'))
+    parser.add_argument('--schema-path', default=os.environ.get('OUTPUT_SCHEMA','/app/output_schema.json'))
+    parser.add_argument('--output-dir', default=os.environ.get('OUTPUT_DIR','/app/output'))
+    parser.add_argument('--private-dir')
+    parser.add_argument('--report')
+    parser.add_argument('--isc-estimator', choices=('pairwise','loo','leave-one-out'), default='pairwise')
+    parser.add_argument('--pilot-first-subject', action='store_true')
+    parser.add_argument('--print-contract', action='store_true')
+    args = parser.parse_args()
+    if args.print_contract:
+        text = source.stable_bytes(args.contract_path, 1024*1024)
+        source.strict_json(text)
+        sys.stdout.write(text.decode('utf-8'))
+        return 0
+    try:
+        result = compute(args)
+    except Exception as exc:
+        print(f'{type(exc).__name__}: {exc}', file=sys.stderr)
+        return 1
+    print(json.dumps(result, sort_keys=True, allow_nan=False))
+    return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

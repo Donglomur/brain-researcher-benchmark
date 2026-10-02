@@ -1,74 +1,25 @@
-## MOVIESYNC-001
+# MOVIESYNC-001 repair proposal
 
-**Proposal Title:** Inter-subject correlation of the movie-evoked visual-cortex response — a clean reproduction / easy control (estimator-agnostic)
+## Scientific target
 
-**Scientific Domain:** Life Sciences · **Field:** Neuroscience · **Subfield:** Naturalistic fMRI / Inter-subject correlation
+An honest fixed-cohort descriptive method control: compute two legitimate ISC estimators from the same released 40-person development_fmri subset and three named MSDL visual components. Pairwise compares individuals; LOO compares each individual with a template excluding that individual. Both headline declarations are accepted under the public formulas. There is no required sign, amplitude band, estimator ordering, chance margin, inter-person variation, prose conclusion or model-hardness claim.
 
-**Source paper (landscape):** Hasson et al. (2004), *Science* 303:1634 (inter-subject correlation); Richardson et al. (2018), *Nature Communications* 9:1027 (`development_fmri`, OpenNeuro ds000228); Nastase et al. (2019), *SCAN* (ISC estimator taxonomy). Anchor for the `naturalistic fMRI` / `functional connectivity` topics.
+The atlas archive README describes its names as plotting labels rather than final anatomical labeling. The three named components do not establish exact visual-cortex boundaries.
 
-**Status: EASY CONTROL — full runnable task, grader fixed and re-validated on real data.**
+The task is not a replication of Hasson 2004 or Richardson 2018. Richardson's ToM/pain functional-maturity endpoint, paper cohort and TR 11:168 window differ from this all 168-released-frame visual-component summary. Frame-index alignment and TR 2 are operational release conventions, not a claim of measured movie-onset alignment. Pair/LOO dependence and the single-film convenience sample prevent treating these estimates as independent population observations.
 
-### What this task is
+## Prospective numerical repair
 
-A faithful **reproduction / easy control**: on the pinned `development_fmri` cohort (Pixar *Partly Cloudy*), extract the three MSDL visual-cortex regions with the pinned masker/confound/band-pass recipe and report the **inter-subject correlation (ISC)** of the movie response. It has calibration value — a competent agent recovers an above-chance visual ISC — and is not forced to be hard.
+The public method and output schema replace undocumented defaults and historical-answer gates with exact source membership, all 39-map joint least squares, explicit linear resampling, full-grid float64 extraction, specified signal/confound filtering and nuisance projection, and final sample-z-scoring. The hidden second population-SD-plus-1e-9 normalization is removed openly. The arithmetic-r target is preserved rather than silently replaced with Fisher averaging.
 
-### Fairness fix (why this revision exists)
+Seven compact artifacts expose all raw map coefficients, source-bound final ISC timecourses, every component-level pair and LOO result, complete support and both aggregation trees. Canonical person/template activity and explicit centered fidelity prevent source-close serialization noise from inventing correlation in inactive or cancelling templates. A finite constant contributor remains included in LOO. Accepted series drive all downstream replay; no secondary hidden ISC-answer target is imposed. Undefined values propagate fixed denominators without deleting people or regions.
 
-The previous grader pinned the dataset, atlas, region set, nuisance regression and band-pass but **left the ISC estimator unnamed**, then failed any leave-one-out estimate (~0.365) as an "inflated artifact," accepting only the pairwise value (~0.152). That is a **fairness bug**: leave-one-out ISC (correlate each participant with the mean of the others) is a completely standard, widely used estimator (Hasson 2004 used exactly this template approach; BrainIAK and most naturalistic-fMRI toolboxes default to it). Nastase et al. 2019 catalog both pairwise and leave-one-out as legitimate — leave-one-out is simply larger because it correlates against a higher-SNR template, not wrong. Failing a scientifically-correct leave-one-out answer violates the fairness contract.
+## Verification and interpretation boundary
 
-**Resolution (widen the band + make the deliverable unambiguous):**
-- `instruction.md` now states explicitly that **either** estimator (pairwise or leave-one-out) is acceptable, and asks the submission to name which it used in `run_metadata.json`. There is no hidden trap.
-- The grader accepts any legitimate above-chance visual-cortex ISC in the band **[0.05, 0.60]** — which contains both the pairwise (0.152) and leave-one-out (0.365) estimates and reasonable variants of either — and only fails a wrong quantity.
+Original-source authentication, numerical reconstruction, genuine equivalent-output acceptance, discriminating wrong-method controls, clean-image execution and final packaging each require their own recorded gate. Shared numerical libraries in separate implementations are disclosed; agreement is not claimed to be a completely independent scientific replication. Free findings are not phrase-graded. There is no requirement for an unfavorable control to produce a particular gap: numerical indistinguishability under the public tolerances must be reported honestly.
 
-### Ground truth (re-validated on real data, this revision)
+## Current validation status
 
-nilearn 0.13.1, `fetch_development_fmri(n_subjects=40)`, MSDL atlas, `NiftiMapsMasker(standardize="zscore_sample", low_pass=0.1, high_pass=0.01, t_r=2.0)`, confound-cleaned, mean over `["Vis","Striate","Occ post"]`:
+The public contracts were frozen before this revision's original-signal execution. The historical numerical bank was preserved without loading it and removed from the task. A fixed first-person source comparison, full-40 oracle, and the amended 323-case native verifier suite passed, including seven equivalent positives and 22 effective negatives. The production image acquired all pinned sources with zero retries and passed a no-mount baked-source identity check. Initial fixture failures and an OSF transport failure remain preserved. See `authoring/REPAIR_STATUS.md` for the checkpoint and limitations; clean-commit Harbor execution and final artifact identity require separate delivery receipts. These checks do not establish scientific replication or model difficulty.
 
-| estimator | visual-cortex ISC |
-|---|---|
-| pairwise (mean r over subject pairs) | **0.152** |
-| leave-one-out (subject vs mean of others) | **0.365** |
-| chance | ~0.0 |
-
-### Verifier (2 plain checks; both must pass)
-
-1. **`test_isc_reported`** — a parseable inter-subject correlation was produced, and it is above chance (`max > 0.03`).
-2. **`test_isc_is_a_valid_visual_estimate`** — at least one reported ISC candidate lies in the valid visual-cortex band `[0.05, 0.60]`. Schema-robust (walks every JSON at any depth plus prose), estimator-agnostic (per-region and leave-one-out values are no longer excluded), and rejects only a wrong quantity.
-
-### Discrimination (re-validated on real data)
-
-| answer | test 1 | test 2 | verdict |
-|---|---|---|---|
-| pairwise ISC 0.152 (reference) | pass | pass | **PASS** |
-| leave-one-out ISC 0.365 (previously failed — the fairness bug) | pass | pass | **PASS** |
-| chance / wrong-region ISC 0.012 | **fail** | **fail** | **FAIL** |
-| degenerate near-unity 0.98 (self-correlation / undropped-diagonal bug) | pass | **fail** | **FAIL** |
-
-Both defensible correct answers now pass; a wrong quantity fails on both ends of the band.
-
-### Cost
-
-`hard` resource envelope inherited (cpus 2, mem 8 GB, internet on to fetch ds000228 + MSDL; timeouts 3600 s), but scientifically an easy control — the masker extraction over 40 subjects dominates runtime (~a few minutes); the ISC itself is trivial.
-
-## Proof-of-work verifier (v-pow, 2026-09)
-
-Clean REPRODUCTION -> QSMDIPOLE model: the single ISC headline is validated through a required
-per-subject intermediate. Held-out reference `tests/reference.npz` (from `solution/compute.py`,
-never shipped): per-subject pairwise ISC + per-subject leave-one-out ISC for the 40 pinned
-development_fmri participants + `ref_stats` (pairwise mean 0.152, leave-one-out mean 0.365,
-per-region pairwise, chance 0). reference.npz sha256 41850b42b2b5f802. New required output
-`isc_per_subject.csv`; the mean of the pairwise column equals the headline pairwise ISC exactly.
-
-Pillars (subprocess-validated): (1) per-subject pairwise AND leave-one-out ISC track the held-out
-reference across participants (cross-subject r>=0.85, non-constant, per-subject tol); (2) the
-headline recomputes as the mean of the per-subject column == reference == reported; (3) the
-reported headline matches the reference for the DECLARED estimator (pairwise 0.152 OR
-leave-one-out 0.365; both accepted) and is one of the two legitimate values, above chance -- a
-fabricated number, or a value inconsistent with the declared estimator, fails.
-
-Validation matrix: honest (pairwise) PASS | no-table FAIL | constant FAIL | fabricated per-subject
-FAIL | fabricated-headline FAIL | wrong-estimator-label FAIL | defensible (leave-one-out) PASS.
-
-Packaging: pinned nilearn fetch_development_fmri(n=40) + MSDL; nilearn 0.13.1 stack. Data
-runtime-fetched, `allow_internet=true` retained. Baking the per-subject ISC inputs is a maintainer
-follow-up.
+Primary context: [Hasson 2004](https://doi.org/10.1126/science.1089506), [Richardson 2018](https://doi.org/10.1038/s41467-018-03399-2), [Nastase 2019](https://doi.org/10.1093/scan/nsz037). Exact computational authority is the task's public `environment/method_contract.json` and `environment/output_schema.json`, not a historical paper result.

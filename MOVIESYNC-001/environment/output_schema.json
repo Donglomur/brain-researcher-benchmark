@@ -1,0 +1,54 @@
+{
+  "schema_version": "moviesync-output-v2",
+  "status": "frozen_before_original_BOLD_values",
+  "files": ["cohort.csv", "timecourses.npz", "isc_pairs.csv", "isc_per_subject.csv", "isc_results.json", "run_metadata.json", "findings.md"],
+  "general": {"csv_encoding": "UTF-8 with optional BOM", "csv_null": "empty cell only", "json": "finite typed JSON, no duplicate keys; null only where declared", "integer": "exact integral non-Boolean values; CSV numeric notation is not restricted", "npz_integral_axes": "Exact integral non-Boolean numeric values; integer or finite float storage allowed when each required small integer key is exactly represented", "bool_csv": "true/false or 1/0", "row_order": "ungraded; all required keys complete and unique", "extras": "Harmless finite extras within all method byte/entry/depth limits allowed; maximum32 NPZ dimensions applies to extras, required shapes remain fixed"},
+  "cohort.csv": {
+    "key": ["participant_id"], "rows": 40,
+    "columns": {"participant_id": "literal fixed source ID", "participant_source_row": "original zero-based participants TSV row integer", "bold_path": "manifest relative path", "confounds_path": "manifest relative path", "n_frames": "168", "n_confound_rows": "168", "n_maps": "39", "map_rank": "integer 0..39", "nuisance_rank": "integer 0..15", "n_active_visual": "integer 0..3", "status": "ok"},
+    "note": "Complete fixed cohort; no outcome exclusions. Rank and active counts are source-authoritative computational diagnostics, not desired minima."
+  },
+  "timecourses.npz": {
+    "arrays": {
+      "participant_ids": {"dtype": "Unicode or bytes string, no objects", "shape": [40]},
+      "map_ids": {"dtype": "exact integral non-Boolean numeric", "shape": [39], "values": "0..38 exactly once"},
+      "map_labels": {"dtype": "Unicode or bytes string, no objects", "shape": [39], "axis": "map_ids"},
+      "frame_indices": {"dtype": "exact integral non-Boolean numeric", "shape": [168], "values": "0..167 exactly once"},
+      "raw_coefficients": {"dtype": "finite real floating", "shape": [40,168,39], "axes": ["participant_ids","frame_indices","map_ids"]},
+      "visual_map_ids": {"dtype": "exact integral non-Boolean numeric", "shape": [3], "values": "original map IDs of Vis, Striate, Occ post, any coherent order"},
+      "isc_inputs": {"dtype": "finite real floating", "shape": [40,168,3], "axes": ["participant_ids","frame_indices","visual_map_ids"]},
+      "person_active": {"dtype": "Boolean", "shape": [40,3], "axes": ["participant_ids","visual_map_ids"], "meaning": "canonical source support"},
+      "template_active": {"dtype": "Boolean", "shape": [40,3], "axes": ["participant_ids","visual_map_ids"], "meaning": "canonical source leave-one-out template support"}
+    },
+    "note": "Raw full39 coefficients and final3 series are independently source-bound; no recomputation of cleaning from rounded raw receipts. All support flags source-canonical."
+  },
+  "isc_pairs.csv": {
+    "key": ["participant_a","participant_b","map_id"], "rows": 2340,
+    "columns": {"participant_a": "literal participant ID", "participant_b": "different literal participant ID", "map_id": "original visual map integer ID", "map_label": "literal corresponding label", "r": "nullable real", "status": "ok|inactive_person"},
+    "pair_orientation": "unordered key; either orientation accepted but not both, exactly780 pairs per region"
+  },
+  "isc_per_subject.csv": {
+    "key": ["participant_id","map_id"], "rows": 120,
+    "columns": {"participant_id": "literal participant ID", "map_id": "original visual map integer ID", "map_label": "literal corresponding label", "isc_pairwise": "nullable real", "pairwise_status": "ok|incomplete_pair_support", "pairwise_n_expected": "39", "pairwise_n_defined": "integer 0..39", "isc_loo": "nullable real", "loo_status": "ok|inactive_target|inactive_template", "loo_n_expected": "39", "loo_n_defined": "39 finite included contributors, including constants", "loo_n_active_contributors": "canonical active contributor count 0..39"},
+    "note": "Both diagnostics required regardless of headline; participant-level three-region values reside in results."
+  },
+  "isc_results.json": {
+    "required": {"schema_version": "moviesync-results-v2", "status": "ok", "isc_estimator": "pairwise|loo|leave-one-out", "visual_isc": "nullable real, selected estimator headline value", "visual_isc_status": "ok|incomplete_support", "n_subjects": 40, "n_timepoints": 168, "reference_zero": 0.0,
+      "estimators": {"pairwise": "aggregate", "loo": "aggregate"},
+      "per_region": "list exactly3 keyed map_id: {map_id,map_label,pairwise:aggregate,loo:aggregate}",
+      "per_subject": "list exactly40 keyed participant_id: {participant_id,pairwise:aggregate,loo:aggregate}"},
+    "aggregate": "{value:nullable real,status:ok|incomplete_support,n_expected:integer,n_defined:integer}",
+    "denominators": {"headline": 40, "person": 3, "pairwise_region": 780, "loo_region": 40}
+  },
+  "run_metadata.json": {
+    "required": {"schema_version": "moviesync-metadata-v2", "status": "ok", "task_id": "MOVIESYNC-001", "method_sha256": "exact public method bytes", "output_schema_sha256": "exact public schema bytes", "source_manifest_sha256": "exact released manifest bytes", "isc_estimator": "same accepted declaration as results", "source_files": "complete manifest file list reduced to exact path,role,participant_id nullable,size_bytes,sha256; row order ungraded", "source_observed": "object below", "software_versions": "object with nonempty actual versions for python,numpy,scipy,nibabel,nilearn; not_used allowed only for unused library"},
+    "source_observed": {"participant_ids": "complete40 literal IDs", "map_labels": "list39 records {map_id,map_label}", "visual_map_ids": "3 original IDs", "headers": "list40 keyed participant_id with shape,affine,source_dtype,spatial_units,temporal_units,raw_TR,raw_toffset,effective_scaling_slope,effective_scaling_intercept", "atlas_header": "shape,affine,source_dtype,spatial_units,effective_scaling_slope,effective_scaling_intercept", "confound_column_names": "object literal participant ID to complete original TSV header list", "participant_column_names": "complete source TSV header list", "effective_TR_s": 2.0, "effective_origin_s": 0.0, "frame_alignment": "released_frame_index_only_no_measured_movie_onset"},
+    "header_nulls": "raw_TR and raw_toffset may be null only for nonfinite source fields; all scientific arrays and effective scaling finite",
+    "header_numeric_tolerance": {"atol": 1e-9, "rtol": 1e-9},
+    "dtype_aliases": "Equivalent real dtype names/byte-order aliases accepted when scientifically identical",
+    "extras": "Additional finite descriptive metadata is ungraded; it cannot override required identity or scientific fields. No timestamps/elapsed time/host paths required."
+  },
+  "findings.md": {"requirement": "nonempty UTF-8 free prose; no mandatory sign, ordering or interpretation phrases"},
+  "failure": {"marker": "failure_report.json", "status": "failed_precondition", "reason": "nonempty string", "rule": "Preserve partial evidence and stop; never emit misleading complete success or overwrite existing files."},
+  "pilot": {"status": "resource_pilot", "rule": "Explicit partial scope; does not satisfy full production schema counts or success. Parent-reviewed pilot command and comparison are separate from participant grading."}
+}

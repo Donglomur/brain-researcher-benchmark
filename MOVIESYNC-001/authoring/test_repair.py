@@ -1,43 +1,38 @@
-"""Verifier fixtures use the retained reference for grading tests, not scientific validation."""
-import importlib.util
-import json
+"""Manufactured authoring regressions; no bank, source payload, or original fit."""
 from pathlib import Path
-
+import sys
+import numpy as np
 import pytest
 
-ROOT = Path(__file__).resolve().parents[1]
-spec = importlib.util.spec_from_file_location("moviesync_grader", ROOT / "tests/test_outputs.py")
-grader = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(grader)
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"tests"))
+import artifact_reader as a
+import isc_math as m
+import proof_of_work as p
 
 
-@pytest.fixture
-def reference_rows(monkeypatch):
-    ref = grader._reference()
-    rows = {i: (ref["pairwise"][i], ref["loo"][i]) for i in ref["ids"]}
-    monkeypatch.setattr(grader, "_submitted", lambda: (rows, True, True))
-    return ref
+@pytest.mark.parametrize("estimator",["pairwise","loo","leave-one-out"])
+def test_declared_estimators_without_bank(estimator):
+    x=np.tile(np.arange(8.)[None,:,None],(3,1,1))
+    ref=dict(participant_ids=np.array(["A","B","C"]),visual_map_ids=np.array([0]),map_ids=np.array([0]),map_labels=np.array(["visual"]))
+    _,_,result=p.expected_tables_and_results(x,m.support(x),ref,estimator)
+    assert result["isc_estimator"] == estimator
+    assert result["visual_isc"] == pytest.approx(1., rel=0., abs=1e-14)
 
 
-@pytest.mark.parametrize("estimator,column", [("pairwise", "pairwise"), ("loo", "loo")])
-def test_both_legitimate_estimators(monkeypatch, reference_rows, estimator, column):
-    monkeypatch.setattr(grader, "_metadata", lambda: {"isc_estimator": estimator})
-    monkeypatch.setattr(grader, "_results", lambda: {"visual_isc": reference_rows["stats"][column]})
-    for name in dir(grader):
-        if name.startswith("test_"):
-            getattr(grader, name)()
+@pytest.mark.parametrize("estimator",[None,"custom","LOO"])
+def test_undeclared_estimator_rejected_without_outcomes(estimator):
+    with pytest.raises(a.ArtifactError,match="estimator enum"):
+        p.expected_tables_and_results(None,None,None,estimator)
 
 
-@pytest.mark.parametrize("estimator", [None, "custom", "loo"])
-def test_missing_unknown_and_mislabeled_fail(monkeypatch, reference_rows, estimator):
-    monkeypatch.setattr(grader, "_metadata", lambda: {"isc_estimator": estimator})
-    monkeypatch.setattr(grader, "_results", lambda: {"visual_isc": reference_rows["stats"]["pairwise"]})
-    with pytest.raises(AssertionError):
-        grader.test_headline_matches_declared_estimator()
+def test_literal_ids_and_duplicate_keys():
+    rows=[{"participant_id":"sub-pixar001"},{"participant_id":"wrong001"}]
+    assert len(a.keyed_rows(rows,["participant_id"]))==2
+    with pytest.raises(a.ArtifactError,match="duplicate"):
+        a.keyed_rows(rows[:1]*2,["participant_id"])
 
 
-def test_duplicate_ids_fail(tmp_path):
-    path = tmp_path / "rows.csv"
-    path.write_text("subject,isc_pairwise\nsub-001,0.1\nsub-001,0.2\n")
-    with pytest.raises(AssertionError, match="duplicate"):
-        grader.pw.load_submitted(path)
+def test_no_bank_reader_in_production():
+    assert not hasattr(p,"load_reference")
+    text=(Path(__file__).resolve().parents[1]/"tests/test_outputs.py").read_text()
+    assert "s.reconstruct()" in text and "reference.npz" not in text
