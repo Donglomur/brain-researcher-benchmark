@@ -1,0 +1,172 @@
+{
+  "contract_status": "frozen_before_original_BOLD_values",
+  "task_id": "NETSEG-001",
+  "method_id": "development-movie-schaefer100-zero-clipped-pooled-pairs-v2",
+  "scope": {
+    "target": "Cross-sectional descriptive system-segregation method adaptation on exactly 40 released movie-watching derivatives",
+    "independent_unit": "participant",
+    "not_claimed": ["Chan original-cohort replication", "Richardson original processing or endpoint replication", "within-person development", "causal age effect", "clinical validity", "verified anatomical equivalence between MNI templates"],
+    "outcome_constraints": "No required effect sign, magnitude, significance, participant variability, ranking or prose keywords"
+  },
+  "source": {
+    "runtime_directory": "/app/data/netseg",
+    "manifest_filename": "source_manifest.json",
+    "manifest_identity": "The separately frozen public source_manifest.json and verify_staged authenticate the exact 86-entry runtime bundle. Never substitute the earlier authentication-evidence manifest.",
+    "n_files": 86,
+    "n_original_files": 83,
+    "n_provenance_files": 3,
+    "n_original_bytes": 249618344,
+    "roles": ["bold", "confounds", "participants", "atlas_image", "atlas_labels", "provenance"],
+    "paths": "83 exact original basenames at the source root; three provenance/* files; source_manifest.json. No reduced-confound cache, extra files, symlinks or special files.",
+    "source_identity": "Authenticate exact relative paths, sizes and SHA256 before numerical use; preserve original bytes. Participant keys are literal sub-pixarNNN strings, never digit-stripped.",
+    "participant_ids": ["sub-pixar001", "sub-pixar002", "sub-pixar003", "sub-pixar004", "sub-pixar005", "sub-pixar006", "sub-pixar007", "sub-pixar008", "sub-pixar009", "sub-pixar010", "sub-pixar011", "sub-pixar012", "sub-pixar013", "sub-pixar014", "sub-pixar015", "sub-pixar016", "sub-pixar017", "sub-pixar018", "sub-pixar019", "sub-pixar020", "sub-pixar021", "sub-pixar022", "sub-pixar023", "sub-pixar024", "sub-pixar025", "sub-pixar026", "sub-pixar027", "sub-pixar028", "sub-pixar029", "sub-pixar030", "sub-pixar031", "sub-pixar123", "sub-pixar124", "sub-pixar125", "sub-pixar126", "sub-pixar127", "sub-pixar128", "sub-pixar129", "sub-pixar130", "sub-pixar131"],
+    "cohort": {"n_source_phenotype_rows": 155, "n_selected": 40, "group_counts": {"child": 31, "adult": 9}, "phenotype_key": "participant_id", "group_column": "Child_Adult", "age_column": "Age", "source_row_index": "Zero-based original data-row index, excluding header", "selection": "Exactly the declared IDs; other source-table people are not analysis exclusions; no new participant or frame exclusions"},
+    "observed_structure": {
+      "bold_shape": [50, 59, 50, 168],
+      "bold_affine": [[4, 0, 0, -96], [0, 4, 0, -132], [0, 0, 4, -78], [0, 0, 0, 1]],
+      "bold_storage_dtype": "int8", "bold_spatial_units": "unknown", "bold_temporal_units": "unknown", "bold_zooms": [4, 4, 4, 1], "bold_qform_code": 0, "bold_sform_code": 2,
+      "atlas_shape": [182, 218, 182], "atlas_affine": [[-1, 0, 0, 90], [0, 1, 0, -126], [0, 0, 1, -72], [0, 0, 0, 1]],
+      "atlas_storage_dtype": "float32", "atlas_spatial_units": "mm", "atlas_temporal_units": "sec", "atlas_qform_code": 1, "atlas_sform_code": 1,
+      "atlas_labels": "Finite exactly integral voxel values 0..100; LUT has one exact original row for each label 1..100", "confound_rows": 168, "selected_confound_values": "All 15 selected columns finite for all 168 rows and all 40 people"
+    },
+    "units_limitation": "BOLD header unit codes are unknown. Its fourth zoom is the stored number 1, not evidence of TR=1 second. README supports a 4-mm spatial grid and the acquisition article describes TR=2 seconds contextually; no temporal frequency filter or seconds-based operation is performed. Preserve measured header units and scaling without inventing physiological signal units."
+  },
+  "geometry": {
+    "atlas": "Schaefer2018_100Parcels_7Networks_order_FSLMNI152_1mm.nii.gz",
+    "labels": "Schaefer2018_100Parcels_7Networks_order.txt",
+    "grid_id": "bold_grid_0",
+    "transfer": "Identity-world nearest-neighbor atlas-label transfer to original BOLD voxel centres; never interpolate BOLD values",
+    "mapping": "For integer target voxel v=(i,j,k,1), source atlas coordinate a=inv(A_atlas) @ A_bold @ v, computed in float64. If any a_d is outside the continuous closed interval [0,atlas_shape[d]-1], label=0. Otherwise nearest integer=floor(a_d+0.5), with the stated float64 addition. Read that original atlas voxel label.",
+    "source_frame_convention": "Zero-based original BOLD frame indices 0..167; no discarded or reordered frames in numerical construction",
+    "roi_convention": "Original LUT IDs 1..100, background 0 excluded. Network is the exact third underscore-separated token of labels 7Networks_{LH|RH}_{network}_... .",
+    "network_names": ["Vis", "SomMot", "DorsAttn", "SalVentAttn", "Limbic", "Cont", "Default"],
+    "coverage": "Every original cortical label 1..100 must occur on the transferred target grid. Missing support is SOURCE_PRECONDITION_FAILURE; no common-ROI or participant-specific selection.",
+    "spatial_limit": "Atlas source is MNI152NLin6Asym; BOLD derivatives identify MNI152NLin2009cAsym. Identity-world transfer is a declared template approximation, not an estimated nonlinear anatomical registration."
+  },
+  "preprocessing": {
+    "dtype": "float64",
+    "scaled_data": "Read calibrated/scaled NIfTI values using each image proxy's effective slope and intercept; promote to float64. Do not infer physical signal units, use stored int8 codes or replace nonfinite values.",
+    "raw_mean": "For each person/frame/label, arithmetic mean of all target-grid voxels with that label. All 40 full decoded BOLD arrays and all selected confound values must be finite; no hidden within-parcel voxel selection.",
+    "confound_columns": ["trans_x", "trans_y", "trans_z", "rot_x", "rot_y", "rot_z", "framewise_displacement", "a_comp_cor_00", "a_comp_cor_01", "a_comp_cor_02", "a_comp_cor_03", "a_comp_cor_04", "a_comp_cor_05", "csf", "white_matter"],
+    "confound_missingness": "Exactly 168 rows, selected columns unique and finite. Any missing/invalid/nonfinite selected value is SOURCE_PRECONDITION_FAILURE; no imputation. Unselected original columns are not added to the model.",
+    "detrend": "For each signal or selected confound column x: x0=x-mean(x); t=arange(T)-mean(arange(T)); u=t/sqrt(sum(t*t)); D(x)=x0-u*(u.T@x0). Apply independently to both raw parcel means and selected confounds.",
+    "confound_standardization": "After detrending, recenter each nuisance column; population SD=sqrt(mean(centered_column**2)); replace SD<eps64 by 1 only for scaling, then divide. This does not impute source values.",
+    "nuisance_projection": "Pivoted economic QR of the standardized nuisance matrix C[:,pivot]=Q@R. Retain Q columns whose corresponding abs(diag(R))>100*eps64; rank is the number retained. Residual=D(raw_mean)-Q_keep@(Q_keep.T@D(raw_mean)). No extra intercept or regressors.",
+    "eps64": 2.220446049250313e-16,
+    "canonical_support": "Recenter residuals; define residual_sd and original raw_mean SD using ddof=1 across all 168 frames. Every participant/ROI must satisfy residual_sd > 1e-12*max(1,raw_sd). Otherwise SOURCE_PRECONDITION_FAILURE, never parcel/person dropping, zero-filled correlation or an outcome-specific numerical floor.",
+    "standardized_clean": "Divide each recentered residual vector by its sample SD (ddof=1). This standardized vector is the source-bound downstream computational primitive.",
+    "disabled": ["additional smoothing", "additional brain mask", "global signal regression", "high-variance confounds", "temporal filtering", "scrubbing", "frame deletion", "participant exclusion", "ROI exclusion"],
+    "tr_seconds_used": null
+  },
+  "acceptance_basis": {
+    "canonical_source": "Verifier authenticates original files and independently reconstructs exact geometry/raw means/cleaning. Source-defined support and nuisance rank are canonical pre-serialization quantities and explicitly declared here.",
+    "raw_receipts": "Submitted raw means and raw/residual SD diagnostics are source-bound receipts only; do not re-clean their rounded values.",
+    "accepted_primitives": "After matching complete axes and source-close standardized_clean vectors, cast submitted standardized_clean to float64 and derive every downstream field from those accepted vectors. Require finite values and strictly positive own centered L2 for every vector.",
+    "single_recomputation": "Compute r, z, positive_z, pair sums/means/ratio and all group statistics once from accepted standardized_clean. Compare each submitted derived field directly to that same calculation, not to recursively rounded r/z/ratio receipts. No second secret reference FC, sign, ratio, cohort mean or contrast target.",
+    "near_boundary": "A source-close vector may produce a different exact-zero downstream edge or within mean. Accept only coherent own-derived values/status/null propagation; do not silently floor denominators or impose original-outcome categories.",
+    "implementation_equivalence": "Equivalent numerical libraries, coherent axis/table reordering and reasonable numeric serialization are accepted within the public field tolerances. Exact software versions are not graded. No claim about historical execution order is certified."
+  },
+  "endpoint": {
+    "edge_family": "All 4950 unique unordered label pairs (i,j),1<=i<j<=100. Default order is ascending i then j; explicit edge axes permit any coherent permutation. No diagonal or duplicated symmetric pairs.",
+    "pearson": "For each accepted standardized vector, subtract its own mean. r_ij=dot(centered_i,centered_j)/(L2_i*L2_j). Finite roundoff excursions of absolute r above 1 by at most 1e-12 are clamped to [-1,1]; larger excursions fail.",
+    "fisher": "z=atanh(clip(r,-0.999999,0.999999)); positive_z=max(z,0). Raw r remains the unclipped-to-0.999999 Pearson receipt.",
+    "partition": "Within if original LUT network(i)==network(j), otherwise between. Pool all pairs in each family; do not first average systems equally or remove nonpositive edges.",
+    "primary": "within_sum=sum(positive_z[within]); between_sum=sum(positive_z[between]); mean_within=within_sum/n_within; mean_between=between_sum/n_between; numerator=mean_within-mean_between; segregation=numerator/mean_within.",
+    "undefined": "If mean_within is exactly zero, segregation is undefined with status=zero_within_mean, CSV blank and JSON null. Keep all other finite counts/sums/means/numerator. Otherwise status=ok. No epsilon denominator floor.",
+    "natural_domains": "Counts exact/nonnegative; raw/residual SD nonnegative; saved Pearson in [-1,1]. Fisher z magnitude and positive_z upper bound are atanh(.999999), with serialization allowance derived.atol+derived.rtol*atanh(.999999) solely at that cap; each field must still match its own recomputed value under the unchanged derived tolerance. Positive_z/sums/means remain strictly nonnegative. Defined segregation<=1 with no arbitrary lower bound. All other required numbers finite.",
+    "optional_sensitivity": "Signed or positive-pair-excluded variants may be separate named optional extras. Neither is a substitute for any required primary field; absence is not penalized."
+  },
+  "group_summary": {
+    "aggregation": "Equal participant arithmetic means, never edge/frame pseudo-replication. Keep all 40, child31/adult9; n_defined and n_undefined explicitly counted.",
+    "group_record": "For cohort and each group, if every member has defined segregation, mean=mean(S), sample_variance=sum((S-mean)**2)/(n-1), status=ok. If any member is undefined, mean and sample_variance null, status=undefined_member. Do not replace the requested full-group endpoint by a finite-subset mean.",
+    "contrast": "If both entire groups defined, estimate=adult_mean-child_mean; se=sqrt(adult_sample_variance/9+child_sample_variance/31); ci95=[estimate-1.96*se,estimate+1.96*se],status=ok. If either group undefined, estimate,se,ci95 null,status=undefined_member. Exact constant group values have variance0 and a zero-width contribution; no arbitrary dispersion gate.",
+    "interpretation": "Descriptive normal-Wald contrast in a selected cross-sectional convenience cohort, with nine adults/shared movie and age-related confounding; not within-person change or a causal estimate."
+  },
+  "tolerances": {
+    "comparison": "abs(actual-expected)<=atol+rtol*abs(expected), with reference arguments as explicitly defined by acceptance_basis",
+    "raw_receipt": {"atol": 0.00001, "rtol": 0.0000001},
+    "standardized_clean_source": {"atol": 0.000002, "rtol": 0.000002},
+    "derived": {"atol": 0.000001, "rtol": 0.000002},
+    "source_scalar_metadata": {"atol": 0.000000001, "rtol": 0.000000001},
+    "exact": "Original IDs/strings, counts, axis coverage, grid/label support, declared source categories, source/method hashes and status/null support. Integral numeric notation/width may differ without changing value; bool is never a number."
+  },
+  "serialization": {
+    "csv": "UTF-8 with required named columns, no duplicate headers or duplicate/missing keys; columns and rows may be reordered; harmless extra columns ignored. Finite decimal/scientific notation allowed, exactly integral integer fields accepted without lossy int(float) parsing. Undefined numeric cells are empty, never NaN/Inf strings.",
+    "json": "Finite JSON only recursively; no duplicate object keys or NaN/Infinity/exponent overflow. Required numbers are JSON numbers, never Boolean/numeric strings. Required null fields explicit. Harmless descriptive extras allowed except closed source identities/group identities.",
+    "npz": "Load with allow_pickle=False. Required numeric arrays must be real integer/float, never Boolean for integer or numeric quantities; no object arrays. Exactly integral finite real numeric key arrays within int64 accepted. All required numeric arrays finite; no inactive ROI slots or NaNs in a successful primary. String participant axis uses Unicode or UTF-8 byte arrays.",
+    "axis_joins": "participant_id joins all NPZ participant axes to participants.csv; frame_index permutes axis1 of both timecourse tensors; parcel_id permutes axis2 and diagnostic ROI axes. Edge endpoints are original numeric parcel IDs, not positions in the submitted parcel axis, and jointly permute axis1 of r/z/positive matrices.",
+    "findings": "Nonempty free text; no required keywords or literal explanatory sentence."
+  },
+  "artifacts": {
+    "participants.csv": {
+      "key": ["participant_id"],
+      "columns": ["participant_id", "source_row_index", "group", "age", "bold_path", "confounds_path", "n_frames", "n_parcels", "n_confounds", "nuisance_rank", "grid_id"],
+      "types": {"participant_id": "literal source ID", "source_row_index": "int", "group": "child|adult", "age": "finite source number", "bold_path": "manifest relative path", "confounds_path": "manifest relative path", "n_frames": "int168", "n_parcels": "int100", "n_confounds": "int15", "nuisance_rank": "int0..15, canonical source-defined", "grid_id": "bold_grid_0"}
+    },
+    "parcels.csv": {
+      "key": ["parcel_id"],
+      "columns": ["parcel_id", "source_lut_row_index", "label", "hemisphere", "network", "native_voxel_count", "target_voxel_count", "grid_id"],
+      "types": {"parcel_id": "int1..100", "source_lut_row_index": "zero-based source data row int", "label": "exact original LUT string", "hemisphere": "LH|RH", "network": "exact LUT network token", "native_voxel_count": "positive int", "target_voxel_count": "positive int", "grid_id": "bold_grid_0"}
+    },
+    "connectivity.npz": {
+      "arrays": {
+        "participant_id": {"shape": [40], "type": "source string keys"},
+        "frame_index": {"shape": [168], "type": "integer keys0..167"},
+        "parcel_id": {"shape": [100], "type": "integer keys1..100"},
+        "edge_i": {"shape": [4950], "type": "integer original parcel ID"},
+        "edge_j": {"shape": [4950], "type": "integer original parcel ID, strictly greater than edge_i"},
+        "raw_mean": {"shape": [40, 168, 100], "type": "finite real", "tolerance": "raw_receipt"},
+        "standardized_clean": {"shape": [40, 168, 100], "type": "finite real", "tolerance": "standardized_clean_source"},
+        "raw_sd": {"shape": [40, 100], "type": "finite nonnegative real", "tolerance": "raw_receipt"},
+        "residual_sd": {"shape": [40, 100], "type": "finite positive real, source-defined support diagnostic", "tolerance": "raw_receipt"},
+        "pearson_r": {"shape": [40, 4950], "type": "finite real", "tolerance": "derived"},
+        "fisher_z": {"shape": [40, 4950], "type": "finite real", "tolerance": "derived"},
+        "positive_z": {"shape": [40, 4950], "type": "finite nonnegative real", "tolerance": "derived"}
+      }
+    },
+    "segregation.csv": {
+      "key": ["participant_id"],
+      "columns": ["participant_id", "group", "n_within_pairs", "n_between_pairs", "within_sum", "between_sum", "mean_within", "mean_between", "numerator", "segregation", "status"],
+      "types": {"participant_id": "source ID", "group": "source child|adult", "n_within_pairs": "positive int", "n_between_pairs": "positive int", "within_sum": "finite nonnegative real", "between_sum": "finite nonnegative real", "mean_within": "finite nonnegative real", "mean_between": "finite nonnegative real", "numerator": "finite real", "segregation": "finite real or empty iff zero_within_mean", "status": "ok|zero_within_mean"},
+      "numeric_tolerance": "derived"
+    },
+    "cohort_results.json": {
+      "required": ["status", "task_id", "method_id", "n_participants", "n_defined", "n_undefined", "cohort", "groups", "adult_minus_child"],
+      "constants": {"status": "ok", "task_id": "NETSEG-001", "method_id": "development-movie-schaefer100-zero-clipped-pooled-pairs-v2", "n_participants": 40},
+      "types": {"n_defined": "nonnegative int", "n_undefined": "nonnegative int", "cohort": "group_record", "groups": "object with exactly child and adult group_record values", "adult_minus_child": "contrast_record"},
+      "group_record": {"required": ["n", "n_defined", "n_undefined", "mean", "sample_variance", "status"], "types": {"n": "positive int", "n_defined": "nonnegative int", "n_undefined": "nonnegative int", "mean": "finite real or null iff undefined_member", "sample_variance": "finite nonnegative real or null iff undefined_member", "status": "ok|undefined_member"}},
+      "contrast_record": {"required": ["estimate", "se", "ci95", "status"], "types": {"estimate": "finite real or null iff undefined_member", "se": "finite nonnegative real or null iff undefined_member", "ci95": "ordered two finite numbers or null iff undefined_member", "status": "ok|undefined_member"}},
+      "numeric_tolerance": "derived"
+    },
+    "run_metadata.json": {
+      "required": ["status", "task_id", "method_id", "source_manifest_sha256", "method_contract_sha256", "source_sha256", "source_observed", "software_versions", "warnings"],
+      "constants": {"status": "ok", "task_id": "NETSEG-001", "method_id": "development-movie-schaefer100-zero-clipped-pooled-pairs-v2"},
+      "source_sha256": "Closed exact object of all86 manifest relative paths to their SHA256 values, including provenance; manifest itself is represented separately by source_manifest_sha256",
+      "method_contract_sha256": "SHA256 of exact public method_contract.json bytes",
+      "source_manifest_sha256": "SHA256 of exact authenticated public source_manifest.json bytes",
+      "software_versions": "Nonempty object with nonempty string keys, actual values any finite JSON; independent implementation/library names allowed",
+      "warnings": "Array of finite JSON diagnostic records; empty allowed; no exact prose/version gate",
+      "source_observed": {
+        "required": ["n_source_participants", "n_selected_participants", "n_frames", "n_parcels", "group_counts", "bold_headers", "atlas_header", "selected_confound_columns", "tr_seconds_used"],
+        "constants": {"n_source_participants": 155, "n_selected_participants": 40, "n_frames": 168, "n_parcels": 100, "group_counts": {"child": 31, "adult": 9}, "tr_seconds_used": null},
+        "bold_headers": "40 header_record objects keyed by exact participant_id, ordering irrelevant",
+        "atlas_header": "One header_record object without participant_id, for original atlas image",
+        "selected_confound_columns": "Exact ordered list from preprocessing.confound_columns"
+      },
+      "header_record": {
+        "required": ["source_path", "shape", "affine", "storage_dtype", "intensity_slope", "intensity_intercept", "zooms", "spatial_units", "temporal_units", "qform_code", "sform_code"],
+        "additional_bold_required": ["participant_id"],
+        "types": {"source_path": "exact manifest relative path", "shape": "array of positive integer dimensions", "affine": "4x4 finite numeric effective affine", "storage_dtype": "exact original NIfTI storage dtype name", "intensity_slope": "finite effective proxy slope", "intensity_intercept": "finite effective proxy intercept", "zooms": "finite numeric original header zooms", "spatial_units": "exact decoded original unit string", "temporal_units": "exact decoded original unit string", "qform_code": "nonnegative int", "sform_code": "nonnegative int", "participant_id": "source ID for BOLD only"},
+        "numeric_tolerance": "source_scalar_metadata"
+      }
+    },
+    "findings.md": {"type": "nonempty free UTF-8 text"}
+  },
+  "failure_policy": {
+    "source_precondition": "Missing/hash-mismatched/nonfinite/unsupported source, wrong cohort/grid/labels/confounds or numerically degenerate source parcel is failure, not an exclusion. Exit nonzero with a reason.",
+    "receipt": "Create reserved failure_receipt.json exclusively with status=failed_precondition and a nonempty reason. Any existing failure_receipt.json, including dangling symlink, makes the output nongradable even when other success files remain.",
+    "no_overwrite": "Require fresh output/evidence destinations, reject symlink paths/ancestors or source/output overlap. Preserve partial artifacts on failure; do not overwrite evidence or silently retry.",
+    "pilot": "If a separately authorized resource pilot processes fewer than40, declare resource_pilot in results and metadata, preserve full source-authentication scope, and do not present partial summaries as the required full cohort. Pilot cannot pass full grading.",
+    "success": "All seven required artifacts complete. Exact-zero within mean is a valid explicitly undefined endpoint, not a source-precondition failure."
+  }
+}
