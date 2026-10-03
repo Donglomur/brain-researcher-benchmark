@@ -1,235 +1,260 @@
-"""Reusable proof-of-work helpers for GRADIENT-001 (macroscale principal gradient).
+"""Source-bound spectral certificates and accepted-coordinate report replay.
 
-A passing submission must be impossible to produce without actually computing the per-subject
-diffusion-map gradients on the real ds000228 / Schaefer-400/7 connectomes. The held-out reference
-(tests/reference.npz, kept out of the container) stores the group-gradient leading-3 loadings (400
-parcels) and the discriminating robustness numbers (cross-subject reproducibility after vs before
-alignment; 7-network differentiability; the apex networks observed across defensible analytic
-choices). The per-parcel loadings are graded by a ROTATION/SIGN-INVARIANT subspace overlap, which
-is stable (>= 0.94) across the exact band-pass / subsample choices that flip the apex identity, so
-it is robust to a defensible pipeline yet impossible for a fabricated gradient to hit.
-
-R2 hedge: the graded conclusion is a RIGOR verdict scoped to this cohort and these analytic choices
--- the grader never forces a universal "identity unstable" claim, only that a robustness check was
-run and the discriminating numbers are the real ones.
+No historical bank or oracle imports. Valid repeated-block eigenbases and GPA
+minimizers are accepted rather than requiring hidden reference coordinates.
 """
-import csv
-import json
-import os
-import re
-from pathlib import Path
+from __future__ import annotations
 
+import copy
+from decimal import Decimal
 import numpy as np
 
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-REF_PATH = Path(os.environ.get("GRADIENT_REFERENCE",
-                               str(Path(__file__).resolve().parent / "reference.npz")))
-NETWORKS = ["Vis", "SomMot", "DorsAttn", "SalVentAttn", "Limbic", "Cont", "Default"]
+import artifact_reader as a
+import gradient_math as m
+import gradient_reporting as r
 
 
-def load_reference():
-    d = np.load(REF_PATH, allow_pickle=False)
-    out = {"group_g": np.asarray(d["ref_group_g"], float),
-           "nets": [str(x) for x in d["ref_nets"]],
-           "stats": json.loads(str(d["ref_stats"]))}
-    if "ref_persubj" in d.files:
-        out["persubj"] = np.asarray(d["ref_persubj"], float)   # (n_ref, 400, 3) held-out per-subject
+def strings(values, name, ndim=1):
+    a.require(isinstance(values, np.ndarray) and values.ndim == ndim and values.dtype.kind in "US", name + ": string axis")
+    try: out = np.char.decode(values, "utf-8") if values.dtype.kind == "S" else values.astype(str)
+    except UnicodeError as exc: raise a.ArtifactError(name + ": invalid text") from exc
+    a.require(np.all(out != ""), name + ": empty ID")
     return out
 
 
-def load_persubject():
-    """Load the submitted per-subject gradients_aligned.npy as (n, 400, K>=3), float."""
-    p = OUT / "gradients_aligned.npy"
-    assert p.exists(), "missing required output gradients_aligned.npy"
-    g = np.load(p)
-    g = np.asarray(g, float)
-    assert g.ndim == 3 and g.shape[1] == 400 and g.shape[2] >= 3, \
-        f"expected per-subject 400-region gradients (n x 400 x k>=3), got shape {g.shape}"
-    return g
+def axis(values, expected, name, integer=False):
+    a.require(isinstance(values, np.ndarray) and values.shape == (len(expected),), name + ": axis size")
+    parsed = a.integer_array(values) if integer else strings(values, name)
+    a.require(parsed.ndim == 1 and len(parsed) == len(expected), name + ": axis size")
+    items = parsed.tolist()
+    a.require(len(set(items)) == len(items) and set(items) == set(expected), name + ": exact unique membership")
+    return np.asarray([items.index(x) for x in expected])
 
 
-def signed_consistency(grad_arr, comp=0):
-    """Mean pairwise correlation of one gradient component across subjects (recomputes
-    aligned_signed straight from a per-subject array)."""
-    C = np.array([grad_arr[i, :, comp] for i in range(grad_arr.shape[0])], float)
-    if C.shape[0] < 2:
-        return 0.0
-    cc = np.corrcoef(C)
-    iu = np.triu_indices(C.shape[0], 1)
-    v = cc[iu]
-    v = v[np.isfinite(v)]
-    return float(np.mean(v)) if v.size else 0.0
+def numeric(actual, expected, name, atol=1e-6, rtol=1e-6):
+    actual, expected = np.asarray(actual), np.asarray(expected)
+    a.require(actual.shape == expected.shape and actual.dtype.kind in "iuf", name + ": numeric shape/type")
+    a.require(not np.isinf(actual).any() and np.array_equal(np.isnan(actual), np.isnan(expected)), name + ": undefined mask")
+    finite = np.isfinite(expected)
+    a.require(np.isfinite(actual[finite]).all(), name + ": nonfinite")
+    a.require(np.all(np.abs(actual[finite] - expected[finite]) <= atol + rtol * np.abs(expected[finite])), name + ": source/replay mismatch")
 
 
-def recompute_group_from_persubject(grad_arr):
-    """Group principal-gradient loadings recomputed as the across-subject mean of the submitted
-    per-subject array (leading 3 components)."""
-    return np.nanmean(grad_arr, axis=0)[:, :3]
+def boolean(actual, expected, name):
+    actual = np.asarray(actual)
+    a.require(actual.dtype.kind == "b" and np.array_equal(actual, expected), name + ": exact Boolean mask")
 
 
-def per_subject_best_overlap(grad_arr, ref_persubj):
-    """Same-order overlap; exact IDs/components are authenticated by the v2 contract."""
-    assert grad_arr.shape[0] == ref_persubj.shape[0] == 20
-    return np.asarray([subspace_overlap(g[:, :3], r[:, :3])
-                       for g, r in zip(grad_arr, ref_persubj)], float)
+def canonical_arrays(submitted, reference):
+    expected = reference["arrays"]
+    method = reference["method"]
+    people = expected["participant_ids"].tolist()
+    groups = [x["id"] for x in method["configurations"]]
+    embeddings = ["subject:" + x for x in people] + ["configuration:" + x for x in groups]
+    quantities = groups + ["aligned_mean"]
+    keys = set(reference["schema"]["gradient_arrays_npz"]["arrays"])
+    a.require(keys <= set(submitted), "missing required NPZ array")
+    dimensions = dict(person=axis(submitted["participant_ids"], people, "participant_ids"),
+                      frame=axis(submitted["frame_indices"], expected["frame_indices"].tolist(), "frame_indices", True),
+                      parcel=axis(submitted["parcel_ids"], expected["parcel_ids"].tolist(), "parcel_ids", True),
+                      arm=axis(submitted["arm_ids"], ["nobp", "bp"], "arm_ids"),
+                      config=axis(submitted["configuration_ids"], groups, "configuration_ids"),
+                      embedding=axis(submitted["embedding_ids"], embeddings, "embedding_ids"),
+                      quantity=axis(submitted["quantity_ids"], quantities, "quantity_ids"))
+    layouts = dict(source_positions=("person",), configuration_membership=("config", "person"),
+                   raw_means=("person", "frame", "parcel"), geometry_valid=("person", "parcel"),
+                   raw_sample_sd=("person", "parcel"), activity_threshold=("person", "parcel"),
+                   cleaned_series=("person", "arm", "frame", "parcel"),
+                   clean_centered_l2=("person", "arm", "parcel"), person_parcel_active=("person", "arm", "parcel"),
+                   fc=("person", "arm", "parcel", "parcel"), configuration_fc=("config", "parcel", "parcel"),
+                   configuration_parcel_active=("config", "parcel"), operator_valid=("embedding",),
+                   embedding_valid=("embedding",), principal_valid=("embedding",), retained_span_valid=("embedding",),
+                   eigenvalues=("embedding", None), eigenvectors=("embedding", "parcel", None),
+                   raw_diffusion=("embedding", "parcel", None), gpa_rotations=(None, "person", None, None),
+                   gpa_reference_history=(None, "parcel", None), gpa_distances=(None,),
+                   aligned_gradients=("person", "parcel", None), display_signs=("quantity", None),
+                   display_coordinates=("quantity", "parcel", None), display_valid=("quantity", None))
+    result = {}
+    for key, layout in layouts.items():
+        value = submitted[key]
+        a.require(isinstance(value, np.ndarray) and value.ndim == len(layout), key + ": dimension count")
+        for dimension, label in enumerate(layout):
+            if label is not None:
+                order = dimensions[label]
+                a.require(value.shape[dimension] == len(order), key + ": axis length")
+                value = np.take(value, order, axis=dimension)
+        result[key] = value
+    scalar = submitted["gpa_n_iterations"]
+    a.require(isinstance(scalar, np.ndarray) and scalar.shape == (), "GPA scalar shape")
+    result["gpa_n_iterations"] = a.integer_array(scalar).item()
+    pairs = [(left, right) for i, left in enumerate(people) for right in people[i + 1:]]
+    raw_pair_ids = submitted['pair_participant_ids']
+    a.require(isinstance(raw_pair_ids, np.ndarray) and raw_pair_ids.shape == (len(pairs), 2), "complete pair axis")
+    pair_ids = strings(raw_pair_ids, "pair IDs", 2)
+    a.require(pair_ids.shape == (len(pairs), 2), "complete pair axis")
+    supplied = [frozenset(row) for row in pair_ids.tolist()]
+    a.require(all(len(row) == 2 for row in supplied) and len(set(supplied)) == len(pairs) and
+              set(supplied) == {frozenset(row) for row in pairs}, "complete unique nonself pair identities")
+    order = [supplied.index(frozenset(row)) for row in pairs]
+    for key in ("signed_pair_consistency", "pair_consistency_valid"):
+        a.require(submitted[key].shape == (len(pairs), 2), key + ": pair shape")
+        result[key] = submitted[key][order]
+    return result
 
 
-def canon_net(label):
-    s = re.sub(r"[^a-z]", "", str(label).lower())
-    for key, code in (("default", "Default"), ("limbic", "Limbic"), ("dors", "DorsAttn"),
-                      ("sal", "SalVentAttn"), ("vent", "SalVentAttn"), ("vis", "Vis"),
-                      ("som", "SomMot"), ("motor", "SomMot"), ("cont", "Cont"), ("frontopar", "Cont")):
-        if key in s:
-            return code
-    return "NA"
+def source_receipts(arrays, reference):
+    expected = reference["arrays"]
+    a.require(np.array_equal(a.integer_array(arrays["source_positions"]), expected["source_positions"]), "source order positions")
+    for key in ("geometry_valid", "person_parcel_active", "configuration_membership", "configuration_parcel_active"):
+        boolean(arrays[key], expected[key], key)
+    numeric(arrays["raw_means"], expected["raw_means"], "raw_means", 1e-5, 1e-7)
+    for key in ("cleaned_series", "raw_sample_sd", "clean_centered_l2", "activity_threshold"):
+        numeric(arrays[key], expected[key], key)
+        if key != "cleaned_series": a.require(np.all(arrays[key][np.isfinite(arrays[key])] >= 0), key + ": nonnegative domain")
+    for key in ("fc", "configuration_fc"): numeric(arrays[key], expected[key], key, 1e-8, 1e-7)
 
 
-def subspace_overlap(A, B):
-    """Mean canonical correlation of the column spaces of A and B (rotation + sign invariant)."""
-    A = np.asarray(A, float); B = np.asarray(B, float)
-    Qa, _ = np.linalg.qr(A - A.mean(0))
-    Qb, _ = np.linalg.qr(B - B.mean(0))
-    s = np.linalg.svd(Qa.T @ Qb, compute_uv=False)
-    return float(np.mean(np.clip(s, 0.0, 1.0)))
+def certified_coordinates(arrays, reference):
+    bases = reference["source_bases"]
+    n, p = len(reference["arrays"]["participant_ids"]), len(reference["arrays"]["parcel_ids"])
+    k = reference["method"]["diffusion"]["n_components"]
+    e = len(bases)
+    for key, shape in (("eigenvalues", (e, k + 1)), ("eigenvectors", (e, p, k)), ("raw_diffusion", (e, p, k))):
+        a.require(arrays[key].shape == shape, key + ": fixed shape")
+    gradients = []
+    for index, basis in enumerate(bases):
+        if basis is None:
+            for key in ("eigenvalues", "eigenvectors", "raw_diffusion"):
+                numeric(arrays[key][index], np.full_like(arrays[key][index], np.nan, dtype=float), key + ": unavailable source")
+            gradients.append(None)
+        else:
+            lambdas = arrays["eigenvalues"][index]
+            a.require(np.all(np.abs(lambdas) <= 1 + m.EIGEN_ATOL), "eigenvalue natural domain")
+            saved = arrays["raw_diffusion"][index] if basis["multiscale_defined"] else None
+            if saved is None: numeric(arrays["raw_diffusion"][index], np.full((p, k), np.nan), "undefined diffusion")
+            gradients.append(m.validate_spectrum(arrays["eigenvectors"][index], lambdas, saved, basis))
+    statuses = [r.embedding_status(basis, g) for basis, g in zip(bases, gradients)]
+    boolean(arrays["operator_valid"], [b is not None for b in bases], "operator_valid")
+    boolean(arrays["embedding_valid"], [g is not None for g in gradients], "embedding_valid")
+    boolean(arrays["principal_valid"], [x[1] == "ok" for x in statuses], "principal_valid")
+    boolean(arrays["retained_span_valid"], [x[2] == "ok" for x in statuses], "retained_span_valid")
+    gpa_available = all(b is not None and b["gpa_eligible"] for b in bases[:n + 1])
+    if gpa_available:
+        gpa = m.validate_gpa_history(np.stack(gradients[:n]), gradients[n], arrays["gpa_rotations"],
+                                     arrays["gpa_reference_history"], arrays["gpa_distances"],
+                                     arrays["gpa_n_iterations"], arrays["aligned_gradients"])
+    else:
+        a.require(arrays["gpa_n_iterations"] == 0, "undefined GPA iteration count")
+        for key, shape in (("gpa_rotations", (0, n, k, k)), ("gpa_reference_history", (0, p, k)), ("gpa_distances", (0,))):
+            a.require(arrays[key].shape == shape and arrays[key].dtype.kind in "iuf", key + ": undefined shape")
+        numeric(arrays["aligned_gradients"], np.full((n, p, k), np.nan), "undefined aligned gradients")
+        gpa = None
+    return gradients, gpa
 
 
-def _norm(s):
-    return re.sub(r"[^a-z0-9]", "", str(s).lower())
+def match(actual, expected, name, *, csv=False, atol=1e-6, rtol=1e-6):
+    if expected is None:
+        a.require(actual == "" if csv else actual is None, name + ": null required")
+    elif isinstance(expected, (bool, np.bool_)):
+        value = a.csv_boolean(actual) if csv else actual
+        a.require(type(value) is bool and value == expected, name + ": Boolean mismatch")
+    elif isinstance(expected, (int, np.integer)):
+        a.require(a.integer(actual, json_number=not csv) == expected, name + ": integer mismatch")
+    elif isinstance(expected, (float, np.floating, Decimal)):
+        value = a.real(actual, json_number=not csv)
+        a.require(abs(value - float(expected)) <= atol + rtol * abs(float(expected)), name + ": numeric mismatch")
+        if any(token in name for token in ("between_within", "_gap")): a.require(value >= 0, name + ": nonnegative domain")
+        if name.endswith(("unaligned_signed", "aligned_signed", ".value")):
+            a.require(abs(value) <= 1 + 2e-6, name + ": correlation domain")
+    elif isinstance(expected, str):
+        a.require(isinstance(actual, str) and actual == expected, name + ": literal mismatch")
+    elif isinstance(expected, dict):
+        a.require(isinstance(actual, dict) and set(expected) <= set(actual), name + ": required object fields")
+        for key, value in expected.items(): match(actual[key], value, name + "." + key, csv=csv, atol=atol, rtol=rtol)
+    elif isinstance(expected, (list, tuple)):
+        a.require(isinstance(actual, list) and len(actual) == len(expected), name + ": list support")
+        for index, (left, right) in enumerate(zip(actual, expected)): match(left, right, name + f"[{index}]", atol=atol, rtol=rtol)
+    else: raise a.ArtifactError(name + ": unexpected internal expected type")
 
 
-def load_group_gradient():
-    """Return (G 400x3, nets list) from group_gradient.csv, ordered by parcel_index if present."""
-    p = OUT / "group_gradient.csv"
-    assert p.exists(), "missing required output group_gradient.csv"
-    rows = list(csv.DictReader(open(p, encoding="utf-8")))
-    assert rows, "group_gradient.csv has no data rows"
-    hdr = list(rows[0].keys())
-
-    def col(*cands):
-        for c in cands:
-            for h in hdr:
-                if _norm(h) == c:
-                    return h
-        for h in hdr:
-            if any(c in _norm(h) for c in cands):
-                return h
-        return None
-
-    ci = col("parcelindex", "parcel", "index", "roi")
-    cn = col("network", "net", "yeo")
-    c1, c2, c3 = col("g1", "gradient1", "grad1"), col("g2", "gradient2", "grad2"), col("g3", "gradient3", "grad3")
-    assert c1 and c2 and c3, f"group_gradient.csv must have g1,g2,g3 columns (columns: {hdr})"
-    recs = []
-    for r in rows:
-        try:
-            g = [float(r[c1]), float(r[c2]), float(r[c3])]
-        except (TypeError, ValueError):
-            continue
-        idx = None
-        if ci is not None:
-            try:
-                idx = int(float(r[ci]))
-            except (TypeError, ValueError):
-                idx = None
-        net = canon_net(r[cn]) if cn is not None else "NA"
-        recs.append((idx, net, g))
-    if all(x[0] is not None for x in recs):
-        recs.sort(key=lambda x: x[0])
-    G = np.array([x[2] for x in recs], float)
-    nets = [x[1] for x in recs]
-    return G, nets
+def table(actual, expected, keys, name, integer_keys=(), tolerance=(1e-6, 1e-6)):
+    have = a.keyed_rows(actual, keys, integer_columns=integer_keys)
+    want = {tuple(row[key] for key in keys): row for row in expected}
+    a.require(set(have) == set(want), name + ": exact keyed membership")
+    for key, row in want.items(): match(have[key], row, name, csv=True, atol=tolerance[0], rtol=tolerance[1])
 
 
-def between_within(G, nets):
-    """7-network differentiability in the leading gradient plane (g1-g2)."""
-    g12 = G[:, :2]
-    nets = np.asarray(nets)
-    present = [n for n in NETWORKS if (nets == n).sum() >= 2]
-    if len(present) < 5:
-        return 0.0
-    cent = np.array([g12[nets == n].mean(0) for n in present])
-    between = float(np.var(cent, 0).sum())
-    within = float(np.mean([g12[nets == n].var(0).sum() for n in present]))
-    return between / within if within else 0.0
+def keyed_list(actual, expected, key, name):
+    a.require(isinstance(actual, list) and all(isinstance(row, dict) and key in row for row in actual), name + ": keyed list")
+    keys = [a.integer(row[key], json_number=True) if isinstance(expected[0][key], int) else row[key] for row in actual]
+    a.require(len(keys) == len(set(keys)) and set(keys) == {row[key] for row in expected}, name + ": exact keyed membership")
+    return [actual[keys.index(row[key])] for row in expected]
 
 
-def network_means_from_rows(G, nets):
-    nets = np.asarray(nets)
-    return {n: [float(G[nets == n, j].mean()) for j in range(3)]
-            for n in NETWORKS if (nets == n).sum() >= 1}
+def metadata(actual, reference):
+    expected = reference["metadata"]
+    actual = copy.deepcopy(actual)
+    a.require(isinstance(actual, dict), "metadata object")
+    actual["source_files"] = keyed_list(actual.get("source_files"), expected["source_files"], "path", "source_files")
+    observed = actual.get("source_observed")
+    want = expected["source_observed"]
+    a.require(isinstance(observed, dict), "source_observed object")
+    observed["atlas_labels"] = keyed_list(observed.get("atlas_labels"), want["atlas_labels"], "parcel_id", "atlas labels")
+    supplied = observed.get("participant_ids")
+    a.require(isinstance(supplied, list) and len(supplied) == len(set(supplied)) and set(supplied) == set(want["participant_ids"]), "metadata participant membership")
+    observed["participant_ids"] = want["participant_ids"]
+    for name in ("headers", "confound_column_names", "voxel_support_by_subject", "raw_clock_metadata"):
+        a.require(isinstance(observed.get(name), dict) and set(observed[name]) == set(want[name]), "metadata exact participant map: " + name)
+    for person in want["voxel_support_by_subject"]:
+        observed["voxel_support_by_subject"][person] = keyed_list(observed["voxel_support_by_subject"][person], want["voxel_support_by_subject"][person], "parcel_id", "voxel support")
+    for got, target in [(observed.get("atlas_header"), want["atlas_header"])] + [(observed["headers"][person], want["headers"][person]) for person in want["headers"]]:
+        a.require(isinstance(got, dict) and isinstance(got.get("source_dtype"), str), "source dtype receipt")
+        try: dtype = np.dtype(got["source_dtype"])
+        except TypeError as exc: raise a.ArtifactError("source dtype receipt") from exc
+        a.require(dtype == np.dtype(target["source_dtype"]), "source dtype mismatch")
+        got["source_dtype"] = target["source_dtype"]
+    a.require(isinstance(observed.get("frame_alignment"), str) and observed["frame_alignment"].strip(), "clock description required")
+    observed["frame_alignment"] = want["frame_alignment"]
+    filtered = {key: value for key, value in expected.items() if key != "software_versions"}
+    match(actual, filtered, "metadata", atol=1e-9, rtol=1e-9)
+    versions = actual.get("software_versions")
+    a.require(isinstance(versions, dict) and set(expected["software_versions"]) <= set(versions) and
+              all(isinstance(versions[key], str) and versions[key].strip() for key in expected["software_versions"]), "actual software strings required")
+    a.require(isinstance(actual.get("warnings"), list), "warnings list required")
+    amendment = actual.get("numerical_method_amendments")
+    a.require(isinstance(amendment, str) and amendment.strip(), "method amendment description required")
 
 
-def load_json(name):
-    p = OUT / name
-    if p.exists():
-        try:
-            return json.loads(p.read_text(encoding="utf-8"))
-        except Exception:
-            pass
-    return {}
+def validate(output_dir, reference):
+    a.require(reference.get("pilot") is False and reference.get("source_bases") is not None, "full source reconstruction required")
+    a.require(reference["arrays"]["participant_ids"].shape == (20,) and reference["arrays"]["parcel_ids"].shape == (400,), "fixed full20/400 source")
+    submitted = a.read_artifacts(output_dir)
+    arrays = canonical_arrays(submitted["gradient_arrays.npz"], reference)
+    source_receipts(arrays, reference)
+    gradients, gpa = certified_coordinates(arrays, reference)
+    derived = r.derive(reference, gradients, gpa)
+    for key, expected in derived["arrays"].items():
+        if key in ("quantity_ids", "pair_participant_ids"): continue
+        if expected.dtype.kind == "b": boolean(arrays[key], expected, key)
+        elif key == "display_signs": a.require(np.array_equal(a.integer_array(arrays[key]), expected), "display signs")
+        else: numeric(arrays[key], expected, key)
+    table(submitted["cohort.csv"], reference["cohort"], ("participant_id",), "cohort", tolerance=(1e-9, 1e-9))
+    table(submitted["parcels.csv"], reference["parcels"], ("participant_id", "parcel_id"), "parcels", ("parcel_id",), (1e-9, 1e-9))
+    table(submitted["configurations.csv"], derived["configurations"], ("quantity", "network"), "configurations")
+    table(submitted["per_subject.csv"], derived["per_subject"], ("participant_id",), "per_subject")
+    results = copy.deepcopy(submitted["results.json"])
+    wanted = derived["results"]
+    results["configuration_summaries"] = keyed_list(results.get("configuration_summaries"), wanted["configuration_summaries"], "config", "configuration summaries")
+    for got, target in zip(results["configuration_summaries"], wanted["configuration_summaries"]):
+        subjects = got.get("subject_ids")
+        a.require(isinstance(subjects, list) and len(subjects) == len(set(subjects)) and set(subjects) == set(target["subject_ids"]), "configuration source membership")
+        got["subject_ids"] = target["subject_ids"]
+    match(results, wanted, "results")
+    a.require(isinstance(results.get("claim_scope"), str) and results["claim_scope"].strip(), "nonempty claim scope description")
+    metadata(submitted["run_metadata.json"], reference)
+    a.check_inventory(output_dir)
+    return dict(status="accepted", n_subjects=20, n_parcels=400, n_configurations=4,
+                n_operator_valid=int(np.sum(arrays["operator_valid"])), gpa_defined=gpa is not None)
 
 
-def find_number(obj, key_re):
-    out = []
-
-    def walk(o, key=""):
-        if isinstance(o, dict):
-            for k, v in o.items():
-                walk(v, str(k))
-        elif isinstance(o, list):
-            for v in o:
-                walk(v, key)
-        elif isinstance(o, (int, float)) and not isinstance(o, bool):
-            if re.search(key_re, key, re.I):
-                out.append(float(o))
-    walk(obj)
-    return out
-
-
-def written_blob():
-    blob = ""
-    for name in ("findings.md", "run_metadata.json", "robustness.json", "consistency.json"):
-        p = OUT / name
-        if p.exists():
-            blob += "\n" + p.read_text(encoding="utf-8")
-    return blob.lower()
-
-
-def count_configs():
-    """Number of distinct analysis configurations the submission reports (structured lists)."""
-    best = 0
-    for name in ("robustness.json", "run_metadata.json"):
-        obj = load_json(name)
-        stack = [obj]
-        while stack:
-            cur = stack.pop()
-            if isinstance(cur, list) and any(isinstance(x, dict) for x in cur):
-                best = max(best, len([x for x in cur if isinstance(x, dict)]))
-                for x in cur:
-                    stack.append(x)
-            elif isinstance(cur, dict):
-                stack.extend(cur.values())
-            elif isinstance(cur, list):
-                stack.extend(cur)
-    return best
-
-
-def distinct_apex_networks():
-    """Distinct apex/anchor networks reported across configs (structured or prose)."""
-    nets = set()
-    for name in ("robustness.json", "run_metadata.json"):
-        obj = load_json(name)
-
-        def walk(o, key=""):
-            if isinstance(o, dict):
-                for k, v in o.items():
-                    walk(v, str(k))
-            elif isinstance(o, list):
-                for v in o:
-                    walk(v, key)
-            elif isinstance(o, str) and re.search(r"apex|anchor|top|peak|dominant", key, re.I):
-                c = canon_net(o)
-                if c != "NA":
-                    nets.add(c)
-        walk(obj)
-    return nets
+validate_output_directory = validate

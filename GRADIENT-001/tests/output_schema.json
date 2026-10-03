@@ -1,0 +1,213 @@
+{
+  "schema_version": "gradient-output-v2",
+  "task_id": "GRADIENT-001",
+  "contract_status": "frozen_before_original_BOLD_values",
+  "files": [
+    "cohort.csv",
+    "parcels.csv",
+    "gradient_arrays.npz",
+    "configurations.csv",
+    "per_subject.csv",
+    "results.json",
+    "run_metadata.json",
+    "findings.md"
+  ],
+  "cohort_csv": {
+    "key": [
+      "participant_id"
+    ],
+    "rows": 20,
+    "fields": {
+      "participant_id": "literal string",
+      "source_position": "integer0..19",
+      "phenotype_row_index": "nonnegativeinteger",
+      "age": "finite source number",
+      "child_adult": "literal source group",
+      "bold_path": "relative source path",
+      "confounds_path": "relative source path",
+      "n_frames": "168",
+      "first_half": "Boolean",
+      "second_half": "Boolean"
+    }
+  },
+  "parcels_csv": {
+    "key": [
+      "participant_id",
+      "parcel_id"
+    ],
+    "rows": 8000,
+    "fields": {
+      "participant_id": "literal source participant ID",
+      "parcel_id": "integer1..400",
+      "label": "literal source LUT label",
+      "network": "oneof7exact",
+      "n_voxels": "nonnegativeinteger for this participant's native BOLD grid",
+      "support_sha256": "SHA256 of ascending C-flat support indices serialized as little-endian int64 bytes; empty support hashes the empty byte string",
+      "geometry_status": "ok|empty_geometry"
+    }
+  },
+  "gradient_arrays_npz": {
+    "arrays": {
+      "participant_ids": "U[20], source literal IDs",
+      "source_positions": "integer[20], positions in frozen loader order",
+      "frame_indices": "integer[168],0..167",
+      "parcel_ids": "integer[400], source1..400",
+      "arm_ids": "U[2], nobp,bp",
+      "configuration_ids": "U[4], public configuration names",
+      "configuration_membership": "bool[4,20]",
+      "raw_means": "float[20,168,400]",
+      "geometry_valid": "bool[20,400]",
+      "raw_sample_sd": "float[20,400], original rawmeans centered ddof1 scale, NaN only at absent geometry",
+      "cleaned_series": "float[20,2,168,400]",
+      "clean_centered_l2": "float[20,2,400], accurately centered norm, NaN only at absent geometry",
+      "activity_threshold": "float[20,400], 1e-12*sqrt(168)*max(1,raw_sample_sd), NaN only at absent geometry",
+      "person_parcel_active": "bool[20,2,400]",
+      "fc": "float[20,2,400,400]",
+      "configuration_fc": "float[4,400,400]",
+      "configuration_parcel_active": "bool[4,400]",
+      "embedding_ids": "U[24], subject:<literalID> for20 followed configuration:<ID> for4, key order may vary coherently",
+      "operator_valid": "bool[24], complete400 source FC and finite positive-degree operator available",
+      "embedding_valid": "bool[24]",
+      "principal_valid": "bool[24]",
+      "retained_span_valid": "bool[24]",
+      "eigenvalues": "float[24,11], nontrivial canonical lambda receipts",
+      "eigenvectors": "float[24,400,10], orthonormal U",
+      "raw_diffusion": "float[24,400,10], signed G receipt",
+      "gpa_n_iterations": "scalar integer0..10",
+      "gpa_rotations": "float[I,20,10,10]",
+      "gpa_reference_history": "float[I+1,400,10] when GPA defined; shape[0,400,10] if unavailable",
+      "gpa_distances": "float[I]",
+      "aligned_gradients": "float[20,400,10]",
+      "quantity_ids": "U[5], four configurations and aligned_mean",
+      "display_signs": "integer[5,10], +/-1 on defined coordinates,0 if undefined",
+      "display_coordinates": "float[5,400,10]",
+      "display_valid": "bool[5,10]",
+      "pair_participant_ids": "U[190,2], every unordered source pair exactlyonce",
+      "signed_pair_consistency": "float[190,2], raw/aligned g1",
+      "pair_consistency_valid": "bool[190,2]"
+    },
+    "axis_semantics": "Every key family complete, unique and coherently reorderable; arbitrary row/column order is not a grading signal. Eigen component columns remain ordered1..10; iteration IDs chronological0..I. Reconstruct frozen subject order before all reductions.",
+    "undefined": "Raw means, scale/norm/threshold and cleaned vectors NaN only at false geometry; FC NaN iff either parcel inactive. Eigenvalues and eigenvectors are finite iff operator_valid, including multiscale_singular; all11 eigenvalues/all U NaN otherwise. raw_diffusion is allNaN iff embedding_valid false. principal_valid false alone does not invalidate the retained eigenbasis/G. retained_span_valid false alone retains eigenbasis/G but disables GPA. Undefined GPA has I=0, empty rotations/history/distances and allNaN aligned_gradients. Display/pair entries are NaN iff corresponding maskfalse, signs0 iff displayinvalid. All other required/extra numeric values finite; no pickle/object arrays.",
+    "receipts": "Canonical source inputs govern masks/operator. A source-close rounded receipt does not create new signal or move spectral cutoff. Coordinates from accepted valid U/canonical lambda/certified rotations drive reports."
+  },
+  "configurations_csv": {
+    "key": [
+      "quantity",
+      "network"
+    ],
+    "rows": 35,
+    "fields": {
+      "quantity": "4configIDs|aligned_mean",
+      "network": "oneof7exact",
+      "n_subjects_expected": "20or10",
+      "n_subjects_defined": "integer0..expected: for a configuration, contributors with all400 source-active parcels in its arm; for aligned_mean, available final aligned subjects(20 if GPA defined,0 otherwise)",
+      "n_parcels": "source network count",
+      "status": "ok|source_incomplete|multiscale_singular|principal_degenerate|constant_coordinate|alignment_undefined",
+      "mean_g1": "nullable real",
+      "mean_g2": "nullable real",
+      "mean_g3": "nullable real",
+      "mean_g4": "nullable real",
+      "mean_g5": "nullable real",
+      "mean_g6": "nullable real",
+      "mean_g7": "nullable real",
+      "mean_g8": "nullable real",
+      "mean_g9": "nullable real",
+      "mean_g10": "nullable real",
+      "apex_network": "nullable exactnetwork",
+      "bottom_network": "nullable exactnetwork",
+      "between_within": "nullable nonnegative real",
+      "between_within_status": "ok|source_incomplete|multiscale_singular|plane_degenerate|zero_within|alignment_undefined",
+      "principal_gap": "nullable nonnegative real",
+      "retained_boundary_gap": "nullable nonnegative real"
+    }
+  },
+  "per_subject_csv": {
+    "key": [
+      "participant_id"
+    ],
+    "rows": 20,
+    "fields": {
+      "participant_id": "literal",
+      "embedding_status": "ok|inactive_parcel|multiscale_singular",
+      "principal_status": "ok|principal_degenerate|constant_coordinate|embedding_undefined",
+      "retained_span_status": "ok|retained_boundary_degenerate|embedding_undefined",
+      "unaligned_signed": "nullable[-1,1]",
+      "aligned_signed": "nullable[-1,1]",
+      "n_partners_expected": "19",
+      "unaligned_n_defined": "0..19",
+      "aligned_n_defined": "0..19",
+      "nuisance_rank": "0..15",
+      "raw_principal_gap": "nullable nonnegative",
+      "retained_boundary_gap": "nullable nonnegative"
+    }
+  },
+  "results_json": {
+    "schema_version": "gradient-results-v2",
+    "required": {
+      "status": "ok",
+      "n_subjects": 20,
+      "n_parcels": 400,
+      "n_components": 10,
+      "n_frames": 168,
+      "unaligned_signed": "aggregate",
+      "aligned_signed": "aggregate",
+      "configuration_summaries": "4keyed records{config,subject_ids,bandpass,embedding_status,principal_status,retained_span_status,apex_network,bottom_network,between_within,between_within_status,principal_gap,retained_boundary_gap}",
+      "aligned_mean_summary": "{quantity:aligned_mean,status,n_subjects_expected:20,n_subjects_defined:0or20,apex_network,bottom_network,between_within,between_within_status,principal_gap,retained_boundary_gap}; status follows configurations.csv, gaps refer to nobp_all reference",
+      "principal_gradient_identity_robust": "null|Boolean",
+      "robustness_status": "ok|incomplete_configuration_support",
+      "apex_networks_observed": "distinctdefinednetworklistinpublicorder",
+      "gpa": "{status:ok|alignment_undefined,n_iterations,termination:converged|iteration_cap|undefined}",
+      "claim_scope": "nonempty descriptive string; no verbatim prose gate"
+    },
+    "aggregate": "{value:nullable signed[-1,1],status:ok|incomplete_support,n_expected:190,n_defined:0..190}"
+  },
+  "run_metadata_json": {
+    "schema_version": "gradient-metadata-v2",
+    "required": {
+      "status": "ok",
+      "task_id": "GRADIENT-001",
+      "source_manifest_sha256": "exactfrozenSHA",
+      "method_sha256": "exactfrozenSHA",
+      "output_schema_sha256": "exactfrozenSHA",
+      "source_files": "completekeyedmanifestidentityrecords path/role/participant_id/size_bytes/sha256",
+      "source_observed": "{participant_ids:frozen20membership,source_order:20literalIDs,participant_column_names,confound_column_names:keyedbyID,headers:keyedbyID,atlas_header,atlas_labels:400keyedrecords,voxel_support_by_subject,frame_alignment:released_frame_index_only_no_measured_movie_onset,raw_clock_metadata,effective_TR_s:2,effective_origin_s:0}",
+      "software_versions": "actualnonemptystrings python/numpy/scipy/nibabel/nilearn/brainspace; not_used permittedforunusedlibrary",
+      "numerical_method_amendments": "symmetric diffusion operator; largest-algebraic nontrivial modes instead of largest magnitude; exact40 signedrowretention; explicit float64 source means; public raw-scale nuisance-residual activity guard",
+      "warnings": "all actual numerical warnings, empty list allowed; no expected-direction warning policy"
+    },
+    "source_observed_fields": {
+      "headers": "Each ID -> {shape,affine,source_dtype,spatial_units,temporal_units,raw_TR,raw_toffset,effective_scaling_slope,effective_scaling_intercept}. Dtype uses endian-aware NumPy dtype.str; semantically identical dtype aliases allowed.",
+      "atlas_header": "{shape,affine,source_dtype,spatial_units,effective_scaling_slope,effective_scaling_intercept}",
+      "atlas_labels": "Complete order-free400 records {parcel_id,label,network}",
+      "voxel_support_by_subject": "Each ID -> complete order-free400 records {parcel_id,n_voxels,support_sha256}",
+      "raw_clock_metadata": "Each ID -> {raw_TR,raw_toffset,temporal_units}",
+      "participant_column_names": "Original source TSV header order",
+      "confound_column_names": "Each ID -> original source TSV header order"
+    },
+    "extras": "Finite well-typed descriptive fields allowed but not new scientific authority."
+  },
+  "findings_md": "Nonempty free prose reporting measured quantities/undefined support and limits; no phrase, sign, apex, stability or difficulty grading.",
+  "serialization": {
+    "csv": "UTF8/BOM accepted; arbitrary row/column order, complete keyedmembership, extra harmless finite columns allowed; undefined required numeric cells empty",
+    "json": "Finite standard JSON, no duplicatekeys; null only for explicitundefined; numeric fields require JSONnumbers notBoolean/numericstrings; extra finite descriptivefields allowed",
+    "npz": "allow_pickleFalse; numeric integer axes value-based exactintegralnonBoolean; masksactualBoolean; stringaxesUnicode/UTF8bytes; arraysreorder coherently; declaredNaNs only",
+    "source_proof": "No alternate submittedbank/sourcepin/hiddenreference path is authority.",
+    "limits": {
+      "total_artifact_bytes": 268435456,
+      "npz_compressed_bytes": 268435456,
+      "npz_expanded_bytes": 268435456,
+      "max_npz_members": 64,
+      "max_npz_array_ndim": 32,
+      "max_npy_header_bytes": 16384,
+      "max_csv_bytes": 16777216,
+      "max_csv_rows": 100000,
+      "max_csv_field_bytes": 1048576,
+      "max_json_bytes": 8388608,
+      "max_json_depth": 64,
+      "max_findings_bytes": 1048576,
+      "max_output_entries": 1000
+    }
+  },
+  "natural_domains": "All norms/degrees/counts/SSE-like distances nonnegative; eigenvalues in[-1,1] up to public eigenvalue uncertainty; reportedcorrelations [-1,1] plus scalar serialization envelope; no outcome-dependent lower bound.",
+  "failure": "failure_report.json presence disqualifies complete grading; resource_pilot never qualifies; nonfinite extras and malformed/unsafe inventory rejected."
+}

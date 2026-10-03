@@ -1,0 +1,278 @@
+{
+  "schema_version": "gradient-method-v2",
+  "task_id": "GRADIENT-001",
+  "contract_status": "frozen_before_original_BOLD_values",
+  "claim_scope": "Fixed20 released movie-data four-arm descriptive method application; not the Margulies HCP finding, a population inference, a causal effect or a model-difficulty claim.",
+  "source": {
+    "data_root": "/app/data/gradient",
+    "manifest": "source_manifest.json",
+    "manifest_sha256": "6afac2a68c4ca4847265ac5f890d56aa53a658e78f13b32e0f15f74007ed91c7",
+    "participant_ids": ["sub-pixar126", "sub-pixar124", "sub-pixar123", "sub-pixar125", "sub-pixar016", "sub-pixar015", "sub-pixar014", "sub-pixar013", "sub-pixar012", "sub-pixar011", "sub-pixar001", "sub-pixar008", "sub-pixar007", "sub-pixar006", "sub-pixar005", "sub-pixar004", "sub-pixar003", "sub-pixar002", "sub-pixar009", "sub-pixar010"],
+    "participant_order_status": "Authenticated structural gate: exact Nilearn0.12.1 selection and pandas2.2.3 default sort_values(by=['Child_Adult']); not lexical halves. First10 contains4adults/6children, second10 contains10children.",
+    "candidate_membership": [
+      "sub-pixar001",
+      "sub-pixar002",
+      "sub-pixar003",
+      "sub-pixar004",
+      "sub-pixar005",
+      "sub-pixar006",
+      "sub-pixar007",
+      "sub-pixar008",
+      "sub-pixar009",
+      "sub-pixar010",
+      "sub-pixar011",
+      "sub-pixar012",
+      "sub-pixar013",
+      "sub-pixar014",
+      "sub-pixar015",
+      "sub-pixar016",
+      "sub-pixar123",
+      "sub-pixar124",
+      "sub-pixar125",
+      "sub-pixar126"
+    ],
+    "n_subjects": 20,
+    "n_frames": 168,
+    "frame_indices": "0..167, all retained",
+    "effective_TR_seconds": 2,
+    "frame_origin_seconds": 0,
+    "clock_scope": "Operational released-frame convention; not an independently established movie-onset or slice-time clock. No trimming/censoring.",
+    "atlas": "Schaefer2018_400Parcels_7Networks_order_FSLMNI152_2mm",
+    "n_parcels": 400,
+    "parcel_ids": "source LUT integers1..400",
+    "networks": [
+      "Vis",
+      "SomMot",
+      "DorsAttn",
+      "SalVentAttn",
+      "Limbic",
+      "Cont",
+      "Default"
+    ],
+    "geometry_scope": "Atlas legacyFSLMNI152/MNI152NLin6Asym versus BOLD MNI152NLin2009cAsym: identity-world nearest label transfer is an operational approximation, not verified nonlinear registration.",
+    "preconditions": "All fixed source files authenticated before parsing; exact cohort/frames/LUT and finite calibrated BOLD/selected confounds. No value-selected person/parcel deletion; absent geometry or inactive signals remain accounted for. Structural gate observed all20 same50x59x50x168 grid/affine, int8 stored BOLD with source scaling, zooms4/4/4/1 and unknown spatial/temporal units; selected15 confounds finite; all400 transferred parcels nonempty. Source bytes, not these observations, authenticate inputs. Raw header time zoom1 is not silently substituted for operationalTR2."
+  },
+  "software_reference": {
+    "python": "3.12",
+    "numpy": "2.1.3",
+    "scipy": "1.14.1",
+    "pandas": "2.2.3",
+    "nibabel": "5.3.2",
+    "nilearn": "0.12.1",
+    "scikit_learn": "1.5.2",
+    "brainspace": "0.1.20 historical algorithm context, not its nonsymmetric eigsh operator"
+  },
+  "configurations": [
+    {
+      "id": "nobp_all",
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "bandpass": false
+    },
+    {
+      "id": "bp_all",
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "bandpass": true
+    },
+    {
+      "id": "nobp_firstHalf",
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "bandpass": false
+    },
+    {
+      "id": "nobp_secondHalf",
+      "positions": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "bandpass": false
+    }
+  ],
+  "spatial_extraction": {
+    "dtype": "float64 after effective source calibration",
+    "resample": "Source atlas label image to each source BOLD grid. Reference transform scipy.linalg.inv(atlas_affine) @ bold_affine, exact equal-grid shortcut; scipy.ndimage.affine_transform order0, modeconstant,cval0,prefilterFalse. Atlas image only, not BOLD interpolation.",
+    "support": "All voxel centres on the BOLD grid with the resulting source integer parcel ID; ascending C-flat voxel index. No implicit brain mask/smoothing/nearest rescue.",
+    "mean": "np.mean(np.ascontiguousarray(calibrated_volume.ravel(order='C')[sorted_support],dtype=float64),dtype=float64), each original frame independently.",
+    "empty_parcel": "Keep source ID and zero voxel count; raw/clean/FC dependent values undefined with explicit mask; do not substitute zero signal or shrink the400-parcel estimator.",
+    "amendment": "Explicit float64 voxel averaging replaces implicit decoded-dtype label mean."
+  },
+  "cleaning": {
+    "confounds": [
+      "trans_x",
+      "trans_y",
+      "trans_z",
+      "rot_x",
+      "rot_y",
+      "rot_z",
+      "framewise_displacement",
+      "a_comp_cor_00",
+      "a_comp_cor_01",
+      "a_comp_cor_02",
+      "a_comp_cor_03",
+      "a_comp_cor_04",
+      "a_comp_cor_05",
+      "csf",
+      "white_matter"
+    ],
+    "missing": "Selected15 columns must be finite at every retained frame; no imputation or censoring. Other original columns retained as metadata but unused.",
+    "detrend": "For each signal/confound column remove float64 temporal mean, then project out v=(arange(T)-mean(arange(T)))/sqrt(sum(v_unscaled^2)). Original exact-constant columns are represented as exact zero.",
+    "confound_scaling": "After detrending center again; divide by population SD (ddof0), with SD<eps64 replaced by1; exact constants zero.",
+    "projection": "Pivoted economic QR of standardized confounds; retain Q columns whose abs(diag(R))>100*eps64. Y_nobp=Y_detrended-Q@(Q.T@Y_detrended). No final z-score.",
+    "bp": "Y_bp=sosfiltfilt(butter(5,[.01,.1],btype='bandpass',fs=.5,output='sos'),Y_nobp,axis=0,padtype='odd',padlen=33). This is separate filtering AFTER regression, not joint data/confound filtering.",
+    "order": "Both all20 and half configurations reuse the same no-band-pass subject preprocessing; no re-fitting nuisances per subgroup.",
+    "activity": "Canonical person/arm/parcel is active iff geometry exists and centeredL2(clean_arm)>1e-12*sqrt(T)*max(1,raw_sample_SD). raw_sample_SD is the centered original raw-mean sample SD (ddof1), exactconstant raw gives0; the same original raw scale is used for both arms. Centering uses accurately summed math.fsum/T, exactconstant guard and scaled Euclidean norm. Record raw_sample_sd, clean_centered_l2 and activity_threshold. This prospective numerical-resolution rule prevents nuisance-projection roundoff from manufacturing FC; it is not outcome-selected QC. Keep all people/parcels and propagate undefined support.",
+    "constant_policy": "Pearson is computed only on source-canonical active vectors, with no epsilon added to its denominator. Submitted rounded signals cannot change the canonical support mask."
+  },
+  "connectivity": {
+    "canonical": "Float64 np.corrcoef(Y.T) on source-canonical active columns; retain upper-triangle values and mirror exactly; active diagonal1; inactive rows/columns explicit NaN with false parcel validity. No nan_to_num, rectification or zero imputation.",
+    "group": "For each configuration, average each complete source-canonical subject FC entry in frozen participant order (float64 NumPy mean), then mirror upper triangle and active diagonal1. Any missing/inactive participant-parcel invalidates that parcel for this complete group; no contributor omission.",
+    "computational_authority": "Canonical source-derived raw means, cleaned vectors, support and FC govern all spectral operators. Submitted raw/clean/FC arrays are source-close receipts only, never re-cleaned/rethresholded to establish the operator."
+  },
+  "affinity": {
+    "retained_per_row": 40,
+    "selection": "Keep exactly40 largest SIGNED FC values out of400 candidates including diagonal eligibility; ties choose smaller source parcel ID. All other entries zero. Diagonal not inserted again or forcibly preserved against the tie order. This corrects floating int((1-.9)*400)=39.",
+    "row_normalization": "Divide sparsified row by Euclidean norm; zero norm invalid operator.",
+    "kernel": "W_ij=1-arccos(clip(dot(unit_sparse_row_i,unit_sparse_row_j),-1,1))/pi; symmetric upper mirrored, diagonal1. No preselection absolute value or positive-only pruning.",
+    "alpha": 0.5,
+    "anisotropic": "q_i=sum_j W_ij; Walpha_ij=W_ij/(sqrt(q_i)*sqrt(q_j)); d_i=sum_j Walpha_ij.",
+    "symmetric_operator": "S_ij=Walpha_ij/(sqrt(d_i)*sqrt(d_j)); compute upper triangle and mirror exactly, not an additional averaging operation. Solve real symmetric problem, not eigsh on nonsymmetric D^-1 Walpha. Positive finite degrees required.",
+    "amendment": "Prospectively corrects BrainSpace0.1.20 nonsymmetric-eigensolver use and largest-magnitude selection to the symmetric operator's largest algebraic nontrivial modes; not bitwise replication of that implementation."
+  },
+  "diffusion": {
+    "n_components": 10,
+    "order": "Largest algebraic eigenvalues after the stationary mode, descending; retain10, compute11th for boundary diagnostic. No largest-magnitude substitution.",
+    "stationary": "u0=sqrt(d)/sqrt(sum(d)), stationary eigenvalue1; canonical source symmetric solver establishes nontrivial eigenvalues.",
+    "coordinate": "G_ik=(U_ik/u0_i)*lambda_k/(1-lambda_k). Canonical source lambda values determine scaling; serialized lambda is a tolerance-bound receipt, not a new scaling input.",
+    "raw_sign": "For each diffusion coordinate choose the largest absolute G entry, exact ties smaller parcelID; flip U and G together so that anchor is nonnegative. All-zero coordinate uses +1. A constant g1 has explicit constant_coordinate status/null endpoints; other finite constant coordinates may be reported as constant-valued means without an additional categorical status.",
+    "eigenvalue_uncertainty": 1e-8,
+    "unresolved_gap": 4e-8,
+    "certificate": {
+      "eigenvalue_absolute_error": 1e-8,
+      "column_residual_l2_max": 1e-8,
+      "orthogonality_max_abs": 1e-7,
+      "stationary_dot_abs_max": 1e-8
+    },
+    "basis_equivalence": "Any ordered orthonormal residual-valid basis within unresolved repeated retained eigenvalue blocks is accepted. No canonical eigenvector correlation or hidden basis gate; no arbitrary rotation mixing separated eigenvalues.",
+    "undefined": "Any invalid400-parcel FC prevents its embedding. Non-simple stationary mode or 1-lambda1<=4e-8 gives multiscale_singular. Gap(lambda1,lambda2)<=4e-8 gives principal_degenerate, so g1 endpoint/apex is null. Gap(lambda10,lambda11)<=4e-8 gives retained_boundary_degenerate, disabling full10 GPA for dependent quantities without deleting people. Finite spectral diagnostics retained.",
+    "precision_scope": "Residual and serialization envelopes do not guarantee endpoint stability near an eigenvalue gap, sparsity cutoff, zero norm or sign/apex tie."
+  },
+  "alignment": {
+    "subjects": "All20 no-band-pass source embeddings; none omitted.",
+    "initial_reference": "Accepted unoriented nobp_all group diffusion embedding, raw largest-absolute sign convention.",
+    "center": false,
+    "scale": false,
+    "allow_reflections": true,
+    "max_iterations": 10,
+    "tolerance": 0.00001,
+    "rotation": "At each iteration C_i=G_i.T@old_reference; R_i orthogonal minimizes ||G_i R_i-old_reference||F. Certify maxabs(R_i.T R_i-I)<=1e-7 and nuclear_norm(C_i)-trace(R_i.T C_i)<=1e-7*max(1,nuclear_norm(C_i)); no secret SVD rotation.",
+    "update": "Align ORIGINAL raw subject G_i using this iteration's R_i; new_reference=mean_i(G_i@R_i) in frozen participant order. new_dist=sum((old_reference-new_reference)^2). dist starts infinity. Stop when prior dist finite and abs(new_dist-dist)<1e-5, else update dist; cap10.",
+    "history": "Store each rotation, reference and distance. Verifier recomputes reference history/stopping from accepted spectral vectors, canonical lambda and certified rotations; rounded stored history is evidence only.",
+    "undefined": "If any required embedding lacks complete valid10-dimensional retained support, no GPA/mean-aligned/after-alignment consistency; preserve explicit nulls/status. Lower internal degeneracies alone do not invalidate alignment.",
+    "scope": "An aligned coordinate is a rotated multicomponent coordinate, not necessarily the individual's eigenvector1. Mean aligned coordinates differ from embedding a group-mean FC."
+  },
+  "summaries": {
+    "quantities": [
+      "nobp_all",
+      "bp_all",
+      "nobp_firstHalf",
+      "nobp_secondHalf",
+      "aligned_mean"
+    ],
+    "group_orientation": "For the4 mean-FC embeddings orient reported g1 so mean(Default)>=mean(Vis); equality leaves raw sign. Other9 coordinates retain raw sign. For mean aligned coordinates apply this rule separately to all10. Preserve unoriented raw embeddings and explicit signs. If a group principal coordinate is degenerate or constant, its displayed g1/network means/apex/bottom are undefined while other finite coordinates remain reported. The aligned_mean g1 requires both a defined nobp_all reference principal coordinate AND its own nonconstant across-parcel vector; otherwise null endpoints, with constant_coordinate for its own constant when the reference is valid. This does not invalidate its complete10-D GPA or other finite aligned_mean coordinates. Leading-plane B/W can remain defined when its two-dimensional span is resolved.",
+    "networks": "All7 original network labels; arithmetic unweighted parcel mean within each network for every coordinate. Configurations.csv has35 rows. Source parcel membership is exact.",
+    "apex_bottom": "Largest/smallest reported network mean_g1, ties in declared network order. Undefined principal/support -> null, never impose Default apex or any other network.",
+    "between_within": "Descriptive leading-plane ratio: B=sum_d variance_ddof0({network mean_gd},d=1,2); W=mean_network(sum_d variance_ddof0(parcel_gd within network,d=1,2)); each variance is exactly0 when all its entries equal, otherwise float64 np.var(ddof0). This exactconstant guard applies both across network centres and within each network; no numerical threshold is added. Network centres use float64 np.mean. B/W only if W>0 and leading plane supported. Zero W ->null/status, no >1.2 threshold. Gap(lambda2,lambda3)<=4e-8 marks group leading-plane ambiguity; internal lambda1/lambda2 tie alone does not destroy the2D span.",
+    "consistency": "Signed Pearson across400 parcel values for component1 for all190 unordered subject pairs, separately raw and aligned. Arithmetic pair means; per-person means use all19 partners. Complete undefined propagation; no required gain and no abs(r). Raw g1 undefined if any dependent principal axis unresolved; aligned g1 requires valid full GPA and resolved reference principal coordinate.",
+    "robustness": "principal_gradient_identity_robust is Boolean equality of all4 defined apex labels; if any apex undefined return null/status. No required true/false.",
+    "aggregate_authority": "Source binding first; then regenerate G, GPA/history, network/scalar summaries from the accepted certified spectral vectors/rotations. No separate hidden expected apex/consistency answer gate. Descriptive group orientation/apex uses these recomputed coordinates, not rounded CSV means."
+  },
+  "tolerances": {
+    "raw_mean": {
+      "atol": 0.00001,
+      "rtol": 1e-7
+    },
+    "cleaned_series": {
+      "atol": 0.000001,
+      "rtol": 0.000001
+    },
+    "fc": {
+      "atol": 1e-8,
+      "rtol": 1e-7
+    },
+    "coordinates_and_scalars": {
+      "atol": 0.000001,
+      "rtol": 0.000001
+    },
+    "metadata_float": {
+      "atol": 1e-9,
+      "rtol": 1e-9
+    },
+    "identity": "IDs, masks, source bytes, member counts, statuses, config membership, iteration count, labels exact; nonBoolean integral numeric axes accepted. Raw/eigen arrays require enough precision for all stated certificates."
+  },
+  "failure_and_pilot": {
+    "complete_status": "ok may include explicitly undefined estimands",
+    "failure": "On unsupported source/invalid numeric arithmetic, nonzero exit and failure_report.json with nonempty reason; no fabricated completed outputs. Grader rejects failure marker even empty/dangling.",
+    "pilot": "Only under separate parent gate, statusresource_pilot with explicit scope, never production pass.",
+    "io": "Protected read-only source/code/docs; exclusive fresh output/private destinations, reject overlap/symlinks/special files. No fetch at oracle or grade time, no implicit reference cache, no retries or outcome-driven threshold adjustments."
+  }
+}
