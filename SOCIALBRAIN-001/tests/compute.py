@@ -25,7 +25,11 @@ def load_helpers():
         if not stat.S_ISREG(before.st_mode) or not 0 < before.st_size <= 1024**2:
             raise ValueError('solution_code_cap')
         raw = path.read_bytes()
-        if path.stat() != before or hashlib.sha256(raw).hexdigest() != pin:
+        # Reading a freshly copied Harbor file can legitimately update atime.
+        # Identity/content metadata must stay fixed; access time is not identity.
+        signature = lambda s: (s.st_dev, s.st_ino, s.st_mode, s.st_size,
+                               s.st_mtime_ns, s.st_ctime_ns)
+        if signature(path.stat()) != signature(before) or hashlib.sha256(raw).hexdigest() != pin:
             raise ValueError('solution_code_identity')
         payloads[name] = raw
     result = {}

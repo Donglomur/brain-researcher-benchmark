@@ -86,3 +86,38 @@ def test_code_identity_and_symlink_fail(tmp_path, monkeypatch, kind):
     monkeypatch.setattr(c, '__file__', str(directory / 'compute.py'))
     monkeypatch.setattr(c, 'CODE_PINS', {'helper.py': '0' * 64})
     with pytest.raises(ValueError): c.load_helpers()
+
+
+def test_fresh_copied_helper_access_time_is_not_identity(tmp_path, monkeypatch):
+    import hashlib
+    import os
+    directory = tmp_path / 'code'; directory.mkdir()
+    target = directory / 'helper.py'
+    payload = b'VALUE = 42\n'
+    target.write_bytes(payload)
+    info = target.stat()
+    os.utime(target, ns=(1, info.st_mtime_ns))
+    monkeypatch.setattr(c, '__file__', str(directory / 'compute.py'))
+    monkeypatch.setattr(c, 'CODE_PINS', {'helper.py': hashlib.sha256(payload).hexdigest()})
+    assert c.load_helpers()['helper'].VALUE == 42
+
+
+def test_helper_mtime_change_during_read_is_rejected(tmp_path, monkeypatch):
+    import hashlib
+    import os
+    directory = tmp_path / 'code'; directory.mkdir()
+    target = directory / 'helper.py'
+    payload = b'raise RuntimeError("must not execute")\n'
+    target.write_bytes(payload)
+    monkeypatch.setattr(c, '__file__', str(directory / 'compute.py'))
+    monkeypatch.setattr(c, 'CODE_PINS', {'helper.py': hashlib.sha256(payload).hexdigest()})
+    original = Path.read_bytes
+    def changed(path):
+        raw = original(path)
+        if path == target:
+            info = path.stat()
+            os.utime(path, ns=(info.st_atime_ns, info.st_mtime_ns + 1_000_000_000))
+        return raw
+    monkeypatch.setattr(Path, 'read_bytes', changed)
+    with pytest.raises(ValueError, match='solution_code_identity'):
+        c.load_helpers()

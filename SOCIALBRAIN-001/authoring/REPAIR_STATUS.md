@@ -46,6 +46,13 @@ recorded externally against the resulting commit, so recording those results
 does not change the task being measured. Native success is not itself a claim
 that a particular later commit, model or hosted execution has passed.
 
+The first clean-commit Harbor attempt failed before source analysis: the solution
+loader compared the complete `stat` tuple, including access time. Reading freshly
+copied files legitimately changed that field despite identical content hashes.
+The repair compares inode/device/mode/size/mtime/ctime only. Eleven entrypoint
+fixtures, including fresh-file access-time and concurrent-mtime cases, pass.
+The failed attempt remains retained; scientific operators and bounds are unchanged.
+
 Production runs only `tests/test_outputs.py::test_source_bound_socialbrain`.
 All other fixture tests and `authoring/test_actual_controls.py` are authoring QA,
 not extra acceptance requirements imposed on a submitted result.
