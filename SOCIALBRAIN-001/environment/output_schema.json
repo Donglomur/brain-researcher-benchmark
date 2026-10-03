@@ -1,0 +1,171 @@
+{
+  "schema_version": "socialbrain-output-contract-v2",
+  "task_id": "SOCIALBRAIN-001",
+  "status": "frozen_pre_signal_v2",
+  "method_sha256": "fb75a7cc8858de75f4269175d57c41cb70bf182409c0c68410931976672c5a12",
+  "source_manifest_sha256": "9458c48ac61e1e8b0ee36d513ebf6e7613e889a9895747ca46d4c7bd50af8d0b",
+  "reporting_kernel_sha256": "89db8ca04db493d5f8522246200b7c8b11562856b2fb977f201748b1ebb1f4d6",
+  "retained_key_names": "Historical resource_caps_proposal and digest_proposal keys are retained for interface compatibility; their contents are frozen rules, not pending choices.",
+  "authority": "Only accepted source-close cleaned ROI series define participant metrics and downstream statistics. Raw/GS arrays, CSV measurements, metadata diagnostics and JSON endpoints are receipts, not alternate inputs.",
+  "required_files": ["signal_evidence.npz", "network_connectivity.csv", "age_effects.json", "run_metadata.json", "findings.md"],
+  "common_rules": {
+    "output_dir": "/app/output",
+    "failure_marker": "failure_report.json is authoritative if it lexists, even as a broken symlink or alongside otherwise valid artifacts. Check before and after validation.",
+    "success": "Exactly the five required named regular artifacts must exist. Harmless bounded regular extra files/fields are allowed; none supplies scientific authority.",
+    "paths": "No symlinks, devices, FIFOs, path escapes or duplicate normalized paths. Output must be disjoint from source/code inputs; creation may use a fresh absent or real empty output directory, never overwrite source or stale evidence.",
+    "json": "UTF-8; reject duplicate keys and NaN/Infinity literals; JSON numbers must be actual finite numbers, not strings or Booleans. Undefined required numbers use null only.",
+    "csv": "UTF-8, unique nonempty column names, exactly one row per required key. Numeric scientific notation is allowed. Blank string is the only undefined numeric token; do not use NaN, infinity, None or fabricated zero.",
+    "ids": "Literal exact strings; no numeric aliases, stripped prefixes, zero padding repairs or fuzzy ID matching.",
+    "integers": "Required array integer axes may use finite exactly integral numeric values, not Boolean dtype; scalar JSON integer fields require actual non-Boolean integers. Counts cannot be negative.",
+    "booleans": "Required Boolean NPZ arrays have Boolean dtype. Required JSON Boolean fields have actual Boolean type.",
+    "permutations": "Accept coherent participant, frame, ROI, pipeline, CSV column/row, keyed JSON record and source-file permutations. Original ordered documentary headers and source-frame numbers retain their literal meanings.",
+    "extras": "Required scientific fields are always validated. Optional descriptive strings and finite extra numeric arrays/fields within published caps are not a prose or algorithm gate.",
+    "no_scoring_qa_closure": "Production scores one source-bound validation of the submitted artifacts. Mutation/equivalence authoring tests are not additional acceptance requirements on arbitrary near-boundary valid submissions."
+  },
+  "resource_caps_proposal": {
+    "status": "Frozen pre-BOLD bounds, unchanged after confirmation of the 26,040-frame structural dimensions.",
+    "entire_output_tree_bytes": 536870912,
+    "max_regular_files": 32,
+    "max_directories": 64,
+    "max_directory_depth": 32,
+    "signal_evidence_npz_bytes": 268435456,
+    "npz_total_uncompressed_bytes": 536870912,
+    "max_npz_members": 32,
+    "max_npz_array_ndim": 32,
+    "max_npy_header_bytes": 65536,
+    "max_json_depth": 64,
+    "network_connectivity_csv_bytes": 1048576,
+    "age_effects_json_bytes": 1048576,
+    "run_metadata_json_bytes": 33554432,
+    "findings_md_bytes": 1048576,
+    "npz_types": "Boolean, signed/unsigned integer, finite real floating point, fixed-width Unicode/bytes only; no object, pickle, complex, structured dtype or repeated ZIP members."
+  },
+  "dimensions": {
+    "S": 155,
+    "R": 12,
+    "A": 2,
+    "T_subject": 168,
+    "F": 26040,
+    "n_children": 122,
+    "n_adults": 33,
+    "metric_ids": ["within_tom", "within_pain", "across_network", "across_network_gsr"]
+  },
+  "signal_evidence.npz": {
+    "required_arrays": {
+      "subject_ids": {"shape": ["S"], "kind": "string", "semantics": "Exact fixed 155 literal IDs; axis for canonical_active only."},
+      "roi_ids": {"shape": ["R"], "kind": "string", "semantics": "Exact twelve method ROI IDs; axis for raw_roi, cleaned_roi and canonical_active."},
+      "pipeline_ids": {"shape": ["A"], "kind": "string", "semantics": "Exact without_GSR and with_GSR; axis for cleaned_roi and canonical_active."},
+      "frame_subject_ids": {"shape": ["F"], "kind": "string", "semantics": "Literal subject of each frame row; repeats expected."},
+      "frame_indices": {"shape": ["F"], "kind": "exact_integral_nonboolean", "semantics": "Zero-based original released frame index; (frame_subject_ids,frame_indices) is an exact complete unique key."},
+      "raw_roi": {"shape": ["F", "R"], "kind": "finite_real", "semantics": "Source-bound scaled voxel means before temporal cleaning, in original source signal units; receipt only."},
+      "global_signal": {"shape": ["F"], "kind": "finite_real", "semantics": "Source-bound mean of individually detrended GS-mask voxel series; receipt only, never nuisance-design authority."},
+      "cleaned_roi": {"shape": ["F", "A", "R"], "kind": "finite_real", "semantics": "Accepted canonical-support source-close clean primitive; all participant and group measurements replay from this array."},
+      "canonical_active": {"shape": ["S", "A", "R"], "kind": "boolean", "semantics": "Exact source-defined pre-standardization activity mask, not rethresholded accepted values or submitted diagnostics."}
+    },
+    "comparison": "Pointwise raw/GS and clean tolerances from method; additionally compare centered active clean directions within each subject/arm/ROI at relative L2 <= 1e-6 without an absolute floor.",
+    "inactive": "Canonical clean sentinel is zero; finite submitted inactive entries within source pointwise tolerance are permitted but ignored. They never create a defined edge.",
+    "keying": "Reorder all axes coherently to canonical literal IDs and source frame order before any arithmetic. Do not depend on archive member or row order."
+  },
+  "network_connectivity.csv": {
+    "n_rows": 155,
+    "key": ["subject_id"],
+    "required_columns": ["subject_id", "age", "group", "mean_fd", "within_tom", "within_pain", "across_network", "across_network_gsr", "within_tom_status", "within_pain_status", "across_network_status", "across_network_gsr_status"],
+    "source_fields": {"subject_id": "literal source ID", "age": "finite source Age, no inferred adult cutoff", "group": "exact source child/adult", "mean_fd": "finite observed-entry source FD mean before fill; receipt only"},
+    "metrics": "Required metric values in [-1,1] equal own unrounded accepted-clean replay within derived scalar tolerance; blank iff replay is undefined.",
+    "metric_status_enum": ["ok", "inactive_roi", "numerical_failure"],
+    "null_pattern": "status ok iff finite metric; otherwise blank. Every participant remains present.",
+    "precision": "Six-decimal derived metric receipts may be accepted when within declared tolerance. They must never be read back as inputs to ranks or adult means."
+  },
+  "age_effects.json": {
+    "required_top_level": {
+      "schema_version": "socialbrain-results-v2",
+      "task_id": "SOCIALBRAIN-001",
+      "status": "complete",
+      "source_manifest_sha256": "frozen exact SHA256",
+      "method_sha256": "frozen exact SHA256",
+      "output_schema_sha256": "frozen exact SHA256",
+      "n_children": 122,
+      "n_adults": 33,
+      "within_tom": "child_metric_record",
+      "within_pain": "child_metric_record",
+      "across_network": "child_metric_record",
+      "across_network_gsr": "child_metric_record",
+      "adult_means": "dict exact four metric keys -> finite [-1,1] or null",
+      "adult_support": "dict exact four metric keys -> adult_support_record"
+    },
+    "child_metric_record": {
+      "required_fields": ["r", "p", "status", "n_expected", "n_defined", "df", "motion_adjusted_rank_r", "motion_adjusted_rank_p", "motion_adjusted_rank_status", "motion_adjusted_nuisance_rank", "motion_adjusted_df"],
+      "types": "r/p and motion_adjusted r/p are finite numbers or null; n_expected,n_defined,df,nuisance_rank and adjusted_df are exact non-Boolean integers; statuses strings.",
+      "domains": "r in [-1,1], p in [0,1], 0<=n_defined<=n_expected=122; df=120; adjusted_df=122-canonical_nuisance_rank-1.",
+      "statuses": ["incomplete_subject_support", "insufficient_df", "constant_source_metric", "inactive_age_rank", "inactive_connectivity_rank", "numerical_failure", "perfect_correlation", "ok"],
+      "patterns": "ok -> both r,p finite; perfect_correlation -> abs(r)=1,p=0; all other statuses -> corresponding r,p both null. Ordinary and motion-adjusted statuses may differ; support counts describe the same complete participant slots.",
+      "rank_authority": "Ranks are computed from unrounded accepted-clean-derived values, not CSV numbers. FD/age covariates are canonical source values. No hidden source r/p or canonical outcome-rank target."
+    },
+    "adult_support_record": {
+      "required_fields": ["n_expected", "n_defined", "status"],
+      "domains": "Exact n_expected=33, 0<=n_defined<=33.",
+      "statuses": ["ok", "incomplete_subject_support", "numerical_failure"],
+      "patterns": "ok requires all33 values defined and adult mean finite; otherwise mean null. A constant complete adult group is valid."
+    },
+    "comparison": "Own replay under method-derived scalar tolerance plus exact discrete support/status/null checks. Complete refers to completed processing, not a forced finite endpoint."
+  },
+  "run_metadata.json": {
+    "required_top_level": {
+      "schema_version": "socialbrain-metadata-v2",
+      "task_id": "SOCIALBRAIN-001",
+      "dataset_id": "ds000228",
+      "status": "complete",
+      "source_manifest_sha256": "frozen exact SHA256",
+      "method_sha256": "frozen exact SHA256",
+      "output_schema_sha256": "frozen exact SHA256",
+      "reporting_kernel_sha256": "frozen exact SHA256 of the disclosed byte-identical public/private reporting kernel",
+      "analysis_scope": "nonempty descriptive string; no exact prose fingerprint",
+      "cohort": "155 records keyed by literal subject_id",
+      "roi_definitions": "12 records keyed by literal roi_id, exact network/radius/center",
+      "source_files": "complete 330-member final manifest identity list keyed by relative path; total source bytes 942572457",
+      "source_observed": "source_observed_record",
+      "analysis_observed": "analysis_observed_record",
+      "software_versions": "dict of actual nonempty version strings for python,numpy,scipy,nibabel,nilearn,scikit_learn; not a version acceptance fingerprint",
+      "warnings": "list of strings, possibly empty; no forced warning count"
+    },
+    "cohort_record": {"required_fields": ["subject_id", "age", "group", "mean_fd", "mean_fd_observed_count", "mean_fd_missing_frame_indices"], "authority": "Exact original joins and missing-index support; numeric age/FD receipts source-bound. All 168 original FD entries per subject are observed, including the first frame: observed count 168 and missing-frame list empty."},
+    "roi_definition": {"required_fields": ["roi_id", "network", "center_mm", "radius_mm"], "authority": "Exact method-defined values."},
+    "source_file_record": {"required_fields": ["path", "role", "subject_id", "size_bytes", "sha256"], "authority": "Complete exact final inventory; subject_id literal or null for shared documents/template. Additional upstream identity fields are allowed."},
+    "source_observed_record": {
+      "required_fields": ["participants_column_names", "template", "persons", "frame_alignment"],
+      "participants_column_names": "Original ordered table header, exact source strings.",
+      "frame_alignment": "nonempty descriptive statement preserving original released frame order and explicitly not asserting measured movie onset; no exact prose gate",
+      "template": "record with path,sha256,header and normalization; exact source/method receipts. Preserve raw unknown units; the millimeter convention is documentary, not a rewritten header.",
+      "persons": "155 records keyed subject_id, each requiring bold_path,confounds_path,bold_header,frame_count,confound_column_names,selected_confound_columns,excluded_confound_columns,missing_selected_entries,mean_fd_sum,mean_fd_observed_count,roi_supports,global_support. Original column-name order and frame indices remain exact. Each frame_count is 168; each original header and participant-specific scaling pair must be preserved."
+    },
+    "bold_or_template_header": {
+      "required_fields": ["shape", "selected_affine", "storage_dtype", "spatial_units", "temporal_units", "zooms", "raw_toffset", "raw_scl_slope", "raw_scl_inter", "effective_slope", "effective_intercept"],
+      "numeric_policy": "Finite numeric metadata under method header tolerance; only raw documentary nonfinite header values use literal strings NaN,+Inf,-Inf, never scientific-array nonfinite values. BOLD raw spatial/temporal units remain unknown and fourth zoom remains 1; do not replace them by mm/sec or the separately documented 2-second TR. Per-participant original slope/intercept values are not assumed equal.",
+      "dtype_policy": "Accept semantic NumPy dtype equality for this explicit storage_dtype field, including legitimate aliases; reject wrong kind,width,byteorder,structured or object types. No arbitrary key-name-based normalization."
+    },
+    "missing_selected_entries": "List keyed by (frame_index,column_name), retaining any original missing token and applied value; exact source membership. The authenticated frozen source has no missing selected entry, so this list is empty for every participant and no fill is applied.",
+    "support_record": {
+      "required_fields": ["n_voxels", "support_sha256"],
+      "roi_supports": "12 records also containing roi_id; exact keyed membership.",
+      "digest_proposal": "SHA256(b'SOCIALBRAIN_support_v2\\n' + source_shape3 as little-endian int64 + selected_affine4x4 as C-order little-endian float64 with signed zeros normalized + ascending C-flat voxel indices as little-endian int64). Same rule for GS support.",
+      "status": "Frozen grid-inclusive digest encoding and keyed vocabulary, qualified by exact independent/oracle geometry comparison before BOLD values."
+    },
+    "analysis_observed_record": {
+      "required_fields": ["persons", "child_motion_nuisance_rank"],
+      "persons": "155 records keyed subject_id; each has pipelines list keyed pipeline_id, each requiring cleaning_rank,roi_activity records keyed roi_id and n_active_rois.",
+      "roi_activity": "roi_id,raw_centered_l2,residual_centered_l2,activity_threshold,active. Scalars are diagnostic receipts, active is exact canonical Boolean; never rethreshold diagnostics.",
+      "scope": "No canonical source age r,p,adult mean or hidden endpoint is required in metadata."
+    },
+    "extra_keys": "Harmless descriptive additions accepted at object levels; declared literal-ID dictionaries/lists must retain exact required membership."
+  },
+  "findings.md": {
+    "requirement": "Nonempty UTF-8 text within cap. No keyword, stance, sign, significance or difficulty gate.",
+    "expected_human_scope": "Describe measured two-arm results and missingness/support with the method's cross-sectional, shared-movie, GSR and paper-adaptation limits. This expectation is not a prose-score classifier."
+  },
+  "failure": {
+    "execution": "Any source identity/shape/geometry/missingness precondition failure exits nonzero and preserves an authoritative failure_report.json in an eligible owned output directory. Never create a failure marker inside source/code/document inputs.",
+    "statistics": "A scientifically undefined participant/group endpoint is not an execution failure: keep all identities and explicit null/status/support records.",
+    "no_fallback": "No download in grading, bank fallback, copied cohort endpoint, substituted template, dropped person or invented zero endpoint."
+  },
+  "pending": []
+}

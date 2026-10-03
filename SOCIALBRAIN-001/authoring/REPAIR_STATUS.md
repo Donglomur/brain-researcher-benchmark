@@ -1,12 +1,51 @@
-# Public GSR/motion sensitivity adaptation
+# SOCIALBRAIN-001 repair validation
 
-Both pipelines are now explicit; no mandatory null without GSR versus negative with GSR answer or prose
-is graded. Fisher-z edge aggregation, child motion-adjusted rank estimates, actual IDs,
-exactly 155-subject coverage and source-hash receipts are implemented. This remains an honestly bounded
-method adaptation, not the Richardson primary-motor/artifact-adjusted paper analysis.
-The old raw-r/index-ID reference is invalid and intentionally rejected. Genuine new v2
-reference requires correct IDs, Fisher quantities, motion metadata and subject input hashes.
-Pending offline original-source bake, genuine full 155-subject oracle/reference regeneration,
-sample integrity/full real fixtures and clean-container evidence. Do not recycle old arrays.
-The oracle main entrypoint and parseable failed-precondition outputs have executable
-regression tests. These tests do not replace the pending full-data oracle.
+This revision is an explicit Richardson-derived GSR/motion sensitivity methods
+case, not an exact paper-pipeline replication. Difficulty is unassigned. No new
+model run, push, merge or source-bearing image publication is part of this repair.
+
+The frozen source manifest binds330 original/template/provenance members,
+942572457bytes. All155 participants and26040frames are retained. Unknown NIfTI
+unit fields are preserved; release-documented millimeter coordinates and2-second
+TR are disclosed separately. This unfiltered task uses original frame order.
+No selected confound entry is missing and no value is imputed.
+
+The old bank is removed from grading and recoverable in prior Git history and
+the checked local retired-bank archive. No bank values supplied the new target.
+Source paths independently authenticate/decode/reconstruct signals; generic
+header/table parsing, numerical libraries and the public reporting kernel are
+shared explicitly. Accepted source-close clean series drive their own downstream
+statistics. There is no expected sign, p-band, GSR ordering or prose-keyword gate.
+
+## Completed checks
+
+- 694 installed source-free fixtures passed.
+- One-participant and all155-participant independent/oracle primitive archives and
+  canonical metadata match byte-for-byte under the frozen contract.
+- Full private source reconstruction72.78s; oracle135.77s, under2CPU/4GiB envelopes.
+- 123 source-free fixtures qualify the separate hash-only baked-image auditor.
+
+The first oracle-reader startup fixture failed on an obsolete helper hash before
+source access; corrected binding passes. The failed record remains in the external
+tracking directory. Scientific operators, source membership and tolerances did
+not change based on observed signal values.
+
+## Native integration and delivery boundary
+
+The mounted-source native oracle writes all five artifacts and receives reward1
+from the single production test. Thirteen separate authoring controls pass:
+one genuine baseline, three equivalent representations and nine effective
+rejections. The cold build captured330members with0automatic retries; its642HTTP
+requests include OSF redirects. A no-mount, hash-only audit checks all340 baked
+application files and source receipts successfully. No private `/solution` or
+`/tests` assets are baked into the runtime image; its source data and public
+contracts are present and authenticated.
+
+Clean-commit Harbor, actual-image QA and Google Sheet delivery evidence are
+recorded externally against the resulting commit, so recording those results
+does not change the task being measured. Native success is not itself a claim
+that a particular later commit, model or hosted execution has passed.
+
+Production runs only `tests/test_outputs.py::test_source_bound_socialbrain`.
+All other fixture tests and `authoring/test_actual_controls.py` are authoring QA,
+not extra acceptance requirements imposed on a submitted result.
