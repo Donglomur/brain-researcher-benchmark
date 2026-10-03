@@ -1,9 +1,34 @@
 #!/bin/bash
 set -euo pipefail
-apt-get update && apt-get install -y curl
-curl -LsSf https://astral.sh/uv/0.9.7/install.sh | sh
-source $HOME/.local/bin/env
-if uvx --with pytest==8.4.1 --with pytest-json-ctrf==0.3.5 --with numpy==2.1.3 \
-   pytest --ctrf /logs/verifier/ctrf.json /tests/test_outputs.py -rA
-then echo 1 > /logs/verifier/reward.txt; exit 0
-else te=$?; echo 0 > /logs/verifier/reward.txt; exit $te; fi
+mkdir -p /logs/verifier
+printf '0\n' > /logs/verifier/reward.txt
+export PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+unset PYTEST_ADDOPTS PYTEST_PLUGINS
+if timeout --kill-after=10s 240s python3 -I -B -c '
+import hashlib,os,stat,sys,tempfile
+from pathlib import Path
+sys.pycache_prefix=tempfile.mkdtemp(prefix="petvt-private-cache-")
+root=Path("/tests")
+pins={"test_outputs.py":"1fcbdc2c5b0cec3b7d8100575aa557c16c44b771f56c2c2a55cdc53ae49d4ecb",
+      "grader_bootstrap.py":"974e8bd41bcdabe44948ab906f4bcf512eb7968abbec08b4920791be346d74f3"}
+for name,pin in pins.items():
+    p=root/name
+    assert not p.is_symlink()
+    with os.fdopen(os.open(p,os.O_RDONLY|os.O_NOFOLLOW),"rb") as stream:
+        before=os.fstat(stream.fileno());raw=stream.read(262145)
+        signature=lambda s:(s.st_dev,s.st_ino,s.st_mode,s.st_size,s.st_mtime_ns,s.st_ctime_ns)
+        assert stat.S_ISREG(before.st_mode) and 0<before.st_size<=262144
+        assert signature(before)==signature(os.fstat(stream.fileno()))==signature(p.lstat())
+    assert len(raw)==before.st_size and hashlib.sha256(raw).hexdigest()==pin
+import pytest
+from importlib.metadata import entry_points
+plugins=[e.load() for e in entry_points(group="pytest11") if e.dist.metadata["Name"].lower()=="pytest-json-ctrf"]
+assert len(plugins)==1
+raise SystemExit(pytest.main(["-q","-c","/dev/null","--rootdir=/tests","--noconftest","--import-mode=importlib","-p","no:cacheprovider","-o","junit_family=xunit1","--ctrf","/logs/verifier/ctrf.json","--junitxml=/logs/verifier/junit.xml","/tests/test_outputs.py::test_source_bound_petvt_sensitivity"],plugins=plugins))
+'; then
+    printf '1\n' > /logs/verifier/reward.txt
+else
+    status=$?
+    printf '0\n' > /logs/verifier/reward.txt
+    exit "$status"
+fi

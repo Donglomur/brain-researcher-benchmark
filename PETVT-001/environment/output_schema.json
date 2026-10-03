@@ -1,0 +1,430 @@
+{
+  "schema_version": "petvt-output-v2",
+  "task_id": "PETVT-001",
+  "status": "frozen_after_source_structure_before_original_kinetic_fits",
+  "source_manifest_sha256": "2e45467d3ef720a686b13a16ac33288369e3685044d243a5fe55128910adcfc8",
+  "method_contract_sha256": "260a010f65be9a850b3ff46eaed0f5c7ec9b76c2d48cddbbd15e6636eecb8178",
+  "files": [
+    "vt_estimates.csv",
+    "kinetic_evidence.npz",
+    "sensitivity_summary.json",
+    "run_metadata.json",
+    "findings.md"
+  ],
+  "limits": {
+    "entire_output_tree_bytes": 33554432,
+    "file_bytes": {
+      "vt_estimates.csv": 1048576,
+      "kinetic_evidence.npz": 16777216,
+      "sensitivity_summary.json": 1048576,
+      "run_metadata.json": 8388608,
+      "findings.md": 65536
+    },
+    "npz_members": 64,
+    "npz_total_uncompressed_bytes": 16777216,
+    "npy_header_bytes": 65536,
+    "npy_dimensions": 4,
+    "npy_elements_per_array": 2000000,
+    "json_depth": 64,
+    "csv_rows": 28,
+    "csv_columns": 64,
+    "csv_field_bytes": 16384,
+    "output_tree_files": 256,
+    "output_tree_directories": 64,
+    "output_tree_directory_depth": 32
+  },
+  "closed_files": false,
+  "extra_files": "Bounded harmless regular files/directories are allowed and their stat sizes count toward total output bytes. They are not opened, parsed, executed or graded; symlinks and devices are not followed or allowed.",
+  "no_symlinks_devices_or_hardlinked_required_files": true,
+  "authoritative_failure_marker": "failure_report.json at output root rejects even alongside valid-looking outputs",
+  "json": "strict UTF-8, duplicate keys and all nonfinite numbers rejected, exact Boolean/count domains, null for unavailable",
+  "csv": {
+    "encoding": "UTF-8",
+    "delimiter": ",",
+    "keys": [
+      "subject_id",
+      "assumption_id",
+      "estimator_id"
+    ],
+    "n_rows": 28,
+    "key_domain": "complete seven participants x both assumptions x both estimators from method",
+    "required_columns": [
+      "subject_id",
+      "assumption_id",
+      "estimator_id",
+      "status",
+      "n_fit_rows",
+      "rank",
+      "coefficient_0",
+      "coefficient_1",
+      "vt",
+      "nonpositive_vt",
+      "residual_rss",
+      "rss_status"
+    ],
+    "extra_columns": "permitted within caps; no acceptance role",
+    "null_token": "",
+    "boolean_tokens": [
+      "true",
+      "false"
+    ],
+    "integer_fields": [
+      "n_fit_rows",
+      "rank"
+    ],
+    "nullable_fields": [
+      "rank",
+      "coefficient_0",
+      "coefficient_1",
+      "vt",
+      "nonpositive_vt",
+      "residual_rss"
+    ],
+    "status_values": [
+      "ok",
+      "input_time_support_unavailable",
+      "insufficient_fit_rows",
+      "nonpositive_tissue_for_logan",
+      "zero_design_column",
+      "rank_deficient",
+      "ma1_denominator_unresolved",
+      "numerical_failure"
+    ],
+    "rss_status_values": [
+      "ok",
+      "unavailable",
+      "numerical_underflow",
+      "numerical_overflow"
+    ],
+    "numeric_receipts": "coefficient fields and VT are receipts of full-precision accepted NPZ coefficients; RSS is replayed with accepted coefficients and canonical source design/response, never a second canonical endpoint target"
+  },
+  "npz": {
+    "allow_pickle": false,
+    "storage": "safe real integer/float arrays, exact Boolean masks, fixed-width UTF-8-compatible strings; no object, structured, complex, datetime or void arrays",
+    "extra_arrays": "permitted only within all parser caps; not scientific authority",
+    "finite_real_arrays": true,
+    "zero_masked_slots": "canonical unavailable numeric receipts use finite zero and false mask; mask is source-defined and cannot be activated by rounding",
+    "axes": {
+      "S": 7,
+      "A": 2,
+      "E": 2,
+      "C": 2,
+      "F": 231,
+      "K": 155,
+      "R": 68
+    },
+    "required_arrays": {
+      "subject_ids": {
+        "shape": [
+          "S"
+        ],
+        "kind": "string"
+      },
+      "assumption_ids": {
+        "shape": [
+          "A"
+        ],
+        "kind": "string"
+      },
+      "estimator_ids": {
+        "shape": [
+          "E"
+        ],
+        "kind": "string"
+      },
+      "cortical_column_ids": {
+        "shape": [
+          "R"
+        ],
+        "kind": "string"
+      },
+      "frame_subject_ids": {
+        "shape": [
+          "F"
+        ],
+        "kind": "string"
+      },
+      "frame_indices": {
+        "shape": [
+          "F"
+        ],
+        "kind": "integer"
+      },
+      "frame_start_s": {
+        "shape": [
+          "F"
+        ],
+        "kind": "real"
+      },
+      "frame_end_s": {
+        "shape": [
+          "F"
+        ],
+        "kind": "real"
+      },
+      "tissue_concentration": {
+        "shape": [
+          "F"
+        ],
+        "kind": "real"
+      },
+      "tissue_integral": {
+        "shape": [
+          "F"
+        ],
+        "kind": "real"
+      },
+      "plasma_integral": {
+        "shape": [
+          "F",
+          "A"
+        ],
+        "kind": "real"
+      },
+      "plasma_integral_defined": {
+        "shape": [
+          "F",
+          "A"
+        ],
+        "kind": "bool"
+      },
+      "fit_mask": {
+        "shape": [
+          "F"
+        ],
+        "kind": "bool"
+      },
+      "knot_subject_ids": {
+        "shape": [
+          "K"
+        ],
+        "kind": "string"
+      },
+      "knot_source_rows": {
+        "shape": [
+          "K"
+        ],
+        "kind": "integer",
+        "synthetic_anchor_key": -1,
+        "observed_representative": "minimum contributing original source-row index"
+      },
+      "knot_time_s": {
+        "shape": [
+          "K"
+        ],
+        "kind": "real"
+      },
+      "parent_input": {
+        "shape": [
+          "K",
+          "A"
+        ],
+        "kind": "real"
+      },
+      "coefficients": {
+        "shape": [
+          "S",
+          "A",
+          "E",
+          "C"
+        ],
+        "kind": "real",
+        "authority": "source-bound accepted coefficients, downstream replayed once"
+      },
+      "coefficients_defined": {
+        "shape": [
+          "S",
+          "A",
+          "E"
+        ],
+        "kind": "bool"
+      },
+      "model_rank": {
+        "shape": [
+          "S",
+          "A",
+          "E"
+        ],
+        "kind": "integer",
+        "unavailable_key": -1
+      },
+      "model_column_scales": {
+        "shape": [
+          "S",
+          "A",
+          "E",
+          "C"
+        ],
+        "kind": "real"
+      },
+      "model_singular_values": {
+        "shape": [
+          "S",
+          "A",
+          "E",
+          "C"
+        ],
+        "kind": "real"
+      },
+      "model_diagnostics_defined": {
+        "shape": [
+          "S",
+          "A",
+          "E"
+        ],
+        "kind": "bool"
+      }
+    },
+    "permutations": "coherent S/A/E axes, frame rows keyed(subject_id,original_frame_index), knot rows keyed(subject_id,original_blood_row_or_minus1), and cortical labels may reorder; duplicate/missing keys reject; fixed coefficient-column order is not reorderable",
+    "no_rounded_design_refit": true
+  },
+  "summary": {
+    "schema_version": "petvt-summary-v2",
+    "status": "complete",
+    "groups": {
+      "n_rows": 4,
+      "keys": [
+        "assumption_id",
+        "estimator_id"
+      ],
+      "fields": [
+        "n_expected",
+        "n_defined",
+        "status",
+        "mean",
+        "sample_sd",
+        "minimum",
+        "maximum"
+      ]
+    },
+    "paired_changes": {
+      "n_rows": 14,
+      "keys": [
+        "subject_id",
+        "estimator_id"
+      ],
+      "fields": [
+        "status",
+        "delta_vt"
+      ],
+      "direction": "sample_time_reference minus already_image_reference",
+      "status_values": [
+        "ok",
+        "unavailable_pair",
+        "numerical_failure"
+      ]
+    },
+    "paired_summaries": {
+      "n_rows": 2,
+      "keys": [
+        "estimator_id"
+      ],
+      "fields": [
+        "n_expected",
+        "n_defined",
+        "status",
+        "mean",
+        "sample_sd",
+        "minimum",
+        "maximum"
+      ]
+    },
+    "group_status_values": [
+      "ok",
+      "incomplete",
+      "numerical_failure"
+    ],
+    "all_seven_or_null": true,
+    "own_accepted_coefficient_replay": true
+  },
+  "metadata": {
+    "schema_version": "petvt-metadata-v2",
+    "task_id": "PETVT-001",
+    "status": "complete",
+    "required_pins": [
+      "source_manifest_sha256",
+      "method_contract_sha256",
+      "output_schema_sha256"
+    ],
+    "source_files": {
+      "n_rows": 31,
+      "key": "path",
+      "required_fields": [
+        "path",
+        "role",
+        "participant_id",
+        "size_bytes",
+        "sha256",
+        "git_blob_sha1"
+      ]
+    },
+    "source_observed": {
+      "persons": {
+        "n_rows": 7,
+        "key": "subject_id",
+        "required_fields": [
+          "subject_id",
+          "tac_path",
+          "blood_path",
+          "tac_columns",
+          "blood_columns",
+          "cortical_columns",
+          "frame_count",
+          "frame_starts_s",
+          "frame_ends_s",
+          "n_blood_rows",
+          "missing_selected_entries",
+          "invalid_domain_entries",
+          "blood_row_ledger",
+          "coalesced_knot_ledger",
+          "retained_knot_rows",
+          "retained_knot_times_s",
+          "input_time_support",
+          "inserts_zero_anchor",
+          "source_clock"
+        ]
+      },
+      "coalesced_knot_record": [
+        "time_s",
+        "representative_source_row",
+        "contributing_row_indices",
+        "multiplicity",
+        "exact_pair_equal"
+      ],
+      "numeric_clock_tolerance": {
+        "atol": 0.000001,
+        "rtol": 0
+      },
+      "source_tokens_rows_ids_domains_exact": true,
+      "no_canonical_vt_targets_in_metadata": true
+    },
+    "software": {
+      "required_nonempty_strings": [
+        "python",
+        "numpy",
+        "scipy"
+      ],
+      "version_string_grading": false
+    },
+    "warnings": "list of descriptive strings, possibly empty"
+  },
+  "tolerances": {
+    "source_real_receipts": {
+      "atol": 1e-8,
+      "rtol": 0.000001
+    },
+    "coefficient_receipts": {
+      "atol": 1e-8,
+      "rtol": 0.000001
+    },
+    "ma1_source_supported_vector_relative_l2": 0.000001,
+    "ma1_source_supported_denominator_relative_error": 0.000001,
+    "derived_scalar_receipts": {
+      "atol": 0.000001,
+      "rtol": 0.000001
+    },
+    "counts_keys_masks_statuses": "exact",
+    "unavailable_nulls": "exact"
+  },
+  "findings": "nonempty UTF-8 explanation of both assumptions and supported/unavailable results; no exact prose, forced direction, fixed value range or biological conclusion"
+}

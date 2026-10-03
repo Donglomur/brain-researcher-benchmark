@@ -1,122 +1,57 @@
-## PETVT-001
+# PETVT-001: conditional arterial-input sensitivity
 
-**Proposal Title:** Estimate the TSPO distribution volume V_T from dynamic [18F]SF51 PET with an invasive (arterial-input) kinetic model — an un-cued input-construction judgement (robustness / reporting-quality axis)
+This repair retains seven baseline participants and released ds005619 1.1.0
+gtmseg TAC/manual-blood sources. It replaces historical outcome matching with
+an explicit two-assumption methods application. Blood sample times do not
+resolve the activity decay-reference time: both already-image-reference and
+sample-time-reference interpretations remain assumptions, not conclusions
+inferred from model agreement or fitted magnitude.
 
-**Scientific Domain:** Life Sciences · **Field:** Neuroscience · **Subfield:** Molecular imaging / PET pharmacokinetic modelling
+The public protocol fixes an equal-weight 68-region cortical composite,
+30-minute unweighted Logan/MA1 fitting, exact transformed-input piecewise-linear
+integration and frame-duration tissue integration. All seven people and all
+28 fit slots remain visible. Signed estimates and unavailable input/rank/
+denominator support are retained. There is no answer band, required direction,
+model-agreement requirement or historical reference-array target.
 
-**Source finding:** first-in-human evaluation of [18F]SF51, a candidate TSPO (18 kDa translocator protein) radioligand (OpenNeuro **ds005619**, CC0; Yan et al.; monkey precursor Yan et al. 2023 *EJNMMI* 50:2962). Invasive kinetics: Logan et al. 1990 (graphical V_T); Ichise et al. 2002 (MA1); 2TCM. Dataset ships **PETPrep-extracted regional TACs** + **arterial blood** (plasma activity, HPLC parent fraction, whole blood), fetched at runtime from OpenNeuro (open, no credentials, snapshot 1.1.0).
+The human SF51 study and classical estimators supply context, not target
+answers. This composite graphical-model application is not a reproduction of
+the paper's regional two-tissue-compartment fits. The small cohort and unresolved
+input-reference assumption do not establish tracer validity or genotype effects.
 
-**Status: FULL runnable task — DE-CUED this revision; grader re-validated on real data.** Second real-data PET task (after PETREF-001) and the first **invasive / arterial-input** one. New on three axes vs PETREF: **dataset** (ds005619, not ds001420), **tracer/target** (TSPO [18F]SF51, not SERT [11C]DASB), and **quantification family** (arterial-input **V_T**, not reference-tissue **BP_ND**). Genre: **reproduction** with an un-cued input-construction judgement.
+## Sources and verification
 
-### De-cue (why this revision exists)
+The manifest fixes 31 original Git blobs (481,091 bytes) at snapshot 1.1.0,
+commit `358a370c010a792484585b80d28adb699ec28927`. Acquisition checks Git blob
+and SHA256 identities. Originals and public contracts are exposed in the image,
+with no fitted answers. Runtime and grading are offline.
 
-The input-construction judgement was partly **cued**: the instruction enumerated the blood column `metabolite_parent_fraction` and glossed it as "the intact-parent fraction of plasma radioactivity, from HPLC" — handing the agent the exact correction to apply — and the `findings.md` requirement asked it to justify its input "and why." This revision **withholds that cue**: the instruction no longer names or glosses the parent-fraction column (it points the agent to inspect the blood file's own header) and drops the "and why." The agent must now discover from the header that the input is metabolite-corrected parent-in-plasma, so the judgement is genuinely un-cued. The write-up check (`test_input_construction_justified`) was tightened to require the metabolite/parent concept to **co-occur** with an input/plasma/bias context — a bare column-name echo no longer passes.
+Every blood row stays in the ledger. Exact duplicate-time, identical plasma/
+parent pairs are coalesced without averaging; no undocumented padding deletion
+is allowed. This representation rule was frozen after a bounded structural
+equality diagnostic and before fitting.
 
-### Why this exists (new axis: invasive input)
+Independent source parsing, composite/integral construction and result replay
+replace the old answer bank. Both routes use the declared SciPy least-squares
+solver; independent SVD software is not claimed. Accepted source-close
+coefficients drive each endpoint and summary once. Public conditioning protects
+the MA1 quotient without a second canonical V_T gate. Complete-seven summaries
+report missing support instead of changing denominators.
 
-PETREF-001 is a *reference-tissue* PET task (no blood). Many important tracers — TSPO among them — have **no reference region** and must be quantified against a **metabolite-corrected arterial plasma** input. Building that input from a raw blood recording is the central, easily-mishandled step of invasive PET quantification, and it is genuinely off the critical path: an agent can produce a plausible-looking V_T from the wrong input and never notice.
+## Validation status
 
-### Step-0 (validated, real — reproduces on obtainable data)
+Manufactured math/parser/source/replay/entrypoint qualifications passed before
+original fitting. Independent static review identified and corrected a CSV
+coefficient-receipt tolerance mismatch and an RSS-only overflow status mismatch.
+The fixed-subject original pilot passed independent route checks, followed by
+the full seven-person oracle and independent grade. The clean image passed
+187 tests: 168 manufactured cases, four genuine/representation positives,
+14 effective rejection controls and one production source-bound test. Its
+40-file application inventory was independently audited as opaque hashes,
+with no fitted outputs or private code baked into the image. Clean Harbor
+delivery is recorded separately in external receipts; model difficulty has
+not been calibrated. Historical outputs and failures are external audit only.
 
-Fetched the 7 participants' PETPrep TACs + arterial blood (no credentials) and estimated **cerebral-cortex V_T** with Logan (Ichise MA1 as cross-check), input = metabolite-corrected, decay-referenced arterial plasma (`plasma × parent_fraction × exp(+λt)`, λ for 18F):
-
-| sub | Logan V_T | MA1 V_T |
-|---|---|---|
-| sf02 | 1.067 | 1.060 |
-| sf05 | 0.628 | 0.627 |
-| sf06 | 0.999 | 0.993 |
-| sf07 | 0.781 | 0.778 |
-| sf08 | 0.456 | 0.455 |
-| sf09 | 0.523 | 0.523 |
-| sf10 | 1.127 | 1.117 |
-
-Cohort-mean cortical **V_T = 0.797 mL·cm⁻³** (< 1), **max/min = 2.47×**, Logan≈MA1 to ~1%. This reproduces the source study's two headline findings: [18F]SF51 has **notably low brain V_T (< 1)** yet **remains sensitive to the rs6971 polymorphism** (~2× V_T range across affinity genotypes). Estimator- and window-invariance confirmed: Logan V_T over t* = 20/30/40/60 min gives cohort means 0.782/0.797/0.809/0.820 (a 5 % drift — at equilibrium over the full ~120-min scan). Units cross-checked against the paper (cortex peak SUV ≈ 1.47 at 3 min vs the reported "SUV 1.4 at 3 min").
-
-### The un-cued lever (Step-0 measured — LARGE, and adversarially "confirming")
-
-The input to an arterial-input V_T is the **metabolite-corrected arterial plasma of the intact parent**. The blood file ships three columns from which a plausible input can be built; only one is correct. Measured cohort-mean cortical V_T under each:
-
-| model input | cohort-mean V_T | vs correct |
-|---|---|---|
-| **metabolite-corrected plasma, decay-referenced** (correct) | **0.797** | — |
-| plasma **without** parent-fraction (metabolite) correction | 0.514 | **−35 %** |
-| **whole-blood** instead of plasma | 0.448 | **−44 %** |
-| plasma left on a different **decay** footing than the TACs | 1.011 | **+27 %** (Logan also fails to plateau: 16 % t* drift) |
-
-The decay convention is proven, not assumed: Logan V_T drift over t* is minimised at **exactly one** decay-correction of the raw blood (+16 % at N=0, **+5 % at N=1**, −6 % at N=2), i.e. the samples are stored un-decay-corrected and must be brought onto the TACs' injection-time footing. The instruction states only the neutral data facts (samples recorded at draw time; radioactivity in Bq/mL) and points the agent to the blood file header; the **plasma-vs-whole-blood and parent-fraction corrections are now fully un-cued** (the parent-fraction column is no longer named or glossed) — those carry the −35 %/−44 % gaps.
-
-**Adversarial property:** the two naive inputs push V_T **lower** (0.45–0.51) — *even more* consistent with the paper's "V_T < 1" headline than the correct 0.80. An agent that skips the parent-fraction correction or grabs whole-blood gets a number that *feels confirmed*. This is the trap.
-
-**Honesty note (no-fake-traps discipline):** the numeric lever is genuinely large (−35 % to −44 %), unlike PETREF-001's ~3 % reference-region lever. The graphical **t\*/scan-window** choice, by contrast, is *weak* here (Logan V_T stable to ~5 % across t* 20–60 min; a 0–60 min truncation only −8 %), because [18F]SF51 equilibrates fast — so this task is **not** framed around the window lever the original PATLAKKI/SUVR briefs anticipated; the honest, large lever on this dataset is **input construction**, and that is what is gated.
-
-### Verifier (3 plain checks, human-looking pytest)
-
-`tests/test_outputs.py`: (1) cortical V_T present for the ~7-participant cohort, physiologically plausible, and an invasive V_T estimator actually named; (2) **reproduction** — cohort-mean cortical V_T in the validated band **[0.68, 0.92]** AND a ≥1.6× per-participant spread (the ~2× genotype range); (3) **input justified** — `findings.md` articulates the model input as a considered choice, with the metabolite/parent-correction concept **co-occurring** with an input/plasma or a bias/choice context (or an explicit statement that V_T depends on the input construction), not merely "we used the arterial input" and not a bare column-name echo (the same pipeline-vocabulary false-positive class guarded against in SOCIALBRAIN/DEVCONN). Check 2 is the mechanical discriminator: you cannot land in [0.68, 0.92] without the correct input construction; check 3 additionally requires the agent to have *volunteered* the judgement now that the cue is withheld.
-
-**Offline discrimination (re-validated on real data, this revision):**
-
-| output | check1 | check2 (reproduce) | check3 (justify) | verdict |
-|---|---|---|---|---|
-| reference solution (Logan, metabolite-corrected plasma, full reasoning) | PASS | PASS (0.797) | PASS | **PASS** |
-| whole-blood input | PASS | **FAIL** (0.448) | **FAIL** | **FAIL** |
-| plasma, no metabolite correction | PASS | **FAIL** (0.514) | — | **FAIL** |
-| correct V_T but terse "arterial input" report (no volunteered judgement) | PASS | PASS (0.797) | **FAIL** | **FAIL** |
-
-### Difficulty — NOT yet gated (frontier runs pending)
-
-Oracle passes (reward 1.0 offline on live-fetched real data this revision; the reference `compute.py` fetches live OpenNeuro and writes the three artefacts; `harbor -a oracle` to confirm in-container). Adversarial input choices fail as tabulated. The **≥2-frontier-family, k≥3 difficulty gate has not been run** (no Harbor/agent access in this authoring session). **Honest expectation:** the input-construction judgement is now genuinely un-cued (the parent-fraction column is withheld from the instruction) and the naive shortcuts return an *even more paper-consistent* number, so this is a plausible **hard** candidate; but until the gate runs it is recorded as **untested difficulty**. If agents still pass, the remaining ratchet is to also withhold the decay-footing note (adding a third input trap) rather than adding rigor.
-
-### Data provenance / reliability caveats
-
-- Fetch is the OpenNeuro file API (`/snapshots/1.1.0/files/<colon-path>`, 302→S3); no credentials. Pinned to snapshot **1.1.0**. TACs are the `pvc-nopvc`-equivalent (uncorrected) `desc-gtmseg` extraction; a `pvc-agtm` variant also ships but PVC is not gated here.
-- License **CC0** (`dataset_description.json`).
-- Small cohort (n = 7, all baseline). The oracle grades the **cohort mean**, which is robust; per-participant V_T is reported for the spread check.
-
-### Relationship to the assigned brief (PATLAKKI / SUVRWIN)
-
-Delivered in the PATLAKKI-001 slot (graphical kinetic quantification with an off-critical-path input/window lever). The assigned *irreversible-tracer Patlak Ki* and *tau/amyloid SUVR-window* instantiations were **not buildable on obtainable, container-feasible open data** (see the campaign report): across all 36 OpenNeuro PET datasets, only ds001420 (used by PETREF-001) and ds005619 ship pre-extracted regional TAC tables; every dynamic-FDG set is 10–76 GB of raw images with no TACs and no in-container segmentation, and the tau/amyloid sets ship neither regional TACs nor reference-region masks. ds005619 (reversible TSPO, arterial input → V_T) is the one feasible new substrate, so the graphical-kinetics task is realised as a **V_T** reproduction with the input-construction lever — a different dataset, tracer and quantity from PETREF-001.
-
-### Cost
-
-`hard` bracket by convention; actually light (fetches 7 × ~60 KB TAC TSVs + 7 × ~1.5 KB blood TSVs; Logan/MA1 fits run in seconds). cpus 2, mem 4 GB, internet on, timeouts 1800–3000 s. Deps: numpy 2.1.3 / scipy 1.14.1 / pandas 2.2.3.
-
----
-
-## Proof-of-work verifier (2026-09)
-
-The prior grader checked only a cohort-mean V_T band [0.68, 0.92] + a max/min>=1.6 spread +
-prose — a fabricated per-participant table with a right-ish mean and spread passed. This
-revision applies the proof-of-work contract (per-subject held-out reference, QSMDIPOLE
-reproduction model).
-
-**Held-out reference** (`tests/reference.npz`, built from `solution/compute.py` on the real
-ds005619 TACs + arterial blood, never shipped to the agent): the seven per-participant
-cortical V_T (metabolite-corrected, decay-referenced arterial-plasma input) keyed by real id,
-plus `ref_stats` (naive whole-blood mean 0.448, uncorrected-plasma 0.514, non-decay 1.011 vs
-honest 0.797). sha256 `b701496c67b70b48dbe1c05d4bbe23fa4fd25fad1775b906b7cc92afa2cbb018`.
-
-**Neutral per-item table** (already required): `vt_estimates.csv`. Pillars: (1) per-subject
-V_T within 15% of the held-out reference (>=6/7) — the naive input constructions are 17-50%
-off per subject; (2) cohort mean recomputed from the rows == reference == reported JSON;
-(3) the cohort V_T graded as a number — closer to the honest metabolite-corrected value than
-to any naive-input mean, with a real (descriptive) per-subject spread; (4) secondary
-input-construction prose. Instruction stays un-cued (no "metabolite-corrected input" hint).
-
-**R2 hedge applied**: the graded conclusion is ONLY the V_T magnitude + the input
-construction. The rs6971 genotype attribution is dropped everywhere (no genotype column,
-n = 7): the grader never checks genotype, and `solution/compute.py`'s `findings.md` no longer
-attributes the between-participant V_T spread to the polymorphism — it reports the spread
-descriptively and states it cannot be attributed to rs6971 from the provided data.
-
-**Validation** (subprocess pytest per case, `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`, numpy 2.1.3):
-
-| case | result |
-|---|---|
-| honest (oracle, descoped findings) | PASS |
-| defensible (MA1 cross-estimator) | PASS |
-| no table | FAIL |
-| constant table | FAIL |
-| fabricated (right cohort mean, reversed per-subject) | FAIL (pillar 1) |
-| naive whole-blood input | FAIL |
-
-`test.sh` now provisions numpy 2.1.3. Data still fetches at runtime; the grader is offline.
+Difficulty is provisional. Passing demonstrates implementation of the declared
+sensitivity analysis, not resolution of the true blood-reference convention or
+external scientific validity.

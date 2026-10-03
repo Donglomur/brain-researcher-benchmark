@@ -1,82 +1,69 @@
-# Distribution volume of a TSPO radioligand from dynamic [18F]SF51 PET (PETVT-001)
+# Two blood-reference assumptions in arterial-input PET kinetics
 
-## Scientific context
+Use seven released baseline participants from OpenNeuro ds005619 snapshot 1.1.0
+to measure sensitivity to two explicit assumptions about blood activity reference
+time. This is a methods-sensitivity case, not paper replication or identification
+of the true blood-reference convention.
 
-[18F]SF51 is a candidate PET radioligand for the 18 kDa translocator protein (TSPO), a
-marker used to study neuroinflammation. TSPO has no brain region free of specific binding,
-so its ligands are quantified with an **arterial input function** (an invasive study with
-blood sampling) rather than a reference-tissue model. The headline outcome is the **total
-distribution volume V_T** (mL.cm-3) — the equilibrium ratio of tissue to
-(parent-in-plasma) radioligand concentration. TSPO binding is also modulated by the common
-*rs6971* single-nucleotide polymorphism, which sorts people into high-, mixed- and
-low-affinity binders. (Source study: OpenNeuro `ds005619`; Yan et al., the first-in-human
-evaluation of [18F]SF51; monkey precursor Yan et al. 2023, *EJNMMI*; Logan et al. 1990;
-Ichise et al. 2002, MA1.)
+Original TACs, manual blood tables, matched sidecars and provenance are staged
+offline under `/app/data/petvt`. Their exact 31-member identity is in
+`/app/source_manifest.json`, also inside the source directory. Read
+`/app/SOURCE_NOTICE.md`, `/app/ANALYSIS_CONTRACT.md`,
+`/app/method_contract.json` and `/app/output_schema.json`.
+These are the complete public scientific and serialization rules. Do not
+substitute sources, participants or historical answers.
 
-## Data
+For sub-sf02, sub-sf05, sub-sf06, sub-sf07, sub-sf08, sub-sf09 and sub-sf10:
 
-OpenNeuro `ds005619` (CC0): seven healthy participants, one baseline brain scan each,
-dynamic [18F]SF51 acquired ~0–120 min with concurrent arterial blood sampling. Use the
-**PETPrep-extracted regional time-activity curves** (TACs) and the **arterial blood
-recording**, fetched at runtime from OpenNeuro (open, no credentials), snapshot `1.1.0`:
+1. Form each frame's equal-weight mean of the 68 cortical region columns.
+   This is not a volume-weighted cortex or a mean of separately fitted regional V_T.
+2. Preserve every original blood row in the eligibility/duplicate ledger.
+   Coalesce only exact same-time, identical plasma-and-parent pairs without
+   averaging. Conflicting pairs fail. Do not discard time-zero rows as presumed
+   padding. Use the operational pre-bolus zero anchor only when zero is absent.
+3. Apply both assumptions at the paired observed knots:
+   `already_image_reference` uses plasma × parent fraction;
+   `sample_time_reference` additionally multiplies by
+   exp(log(2) × (time − image_reference) / 6586.2), with times in seconds.
+   Neither branch is called correct. Interpolate transformed knots linearly.
+4. Use exact piecewise-linear input integration and frame-duration tissue
+   integration in minutes. Fit unweighted Logan and MA1 to every frame midpoint
+   at or after 30 minutes, using the published normalized least-squares recipe.
+   No held-tail extrapolation, adaptive window, outcome-selected cutoff or
+   exclusion of signed nonpositive estimates is allowed.
+5. Retain all 28 participant/assumption/estimator slots and typed unavailable
+   results. Report complete-seven summaries for four families and each signed
+   paired assumption change (sample-time minus already-image-reference).
+   Incomplete families have null group statistics, not changed denominators.
 
-```
-https://openneuro.org/crn/datasets/ds005619/snapshots/1.1.0/files/<PATH>
-```
+Write five required artifacts to `${OUTPUT_DIR:-/app/output}`:
 
-where `<PATH>` is the file path with `/` replaced by `:` (the endpoint 302-redirects to the
-file; follow redirects). For each participant `sub-XX` in
-`{sf02, sf05, sf06, sf07, sf08, sf09, sf10}` there are two files:
+- `vt_estimates.csv`: 28 keyed records with status, fit-row count, rank,
+  coefficient receipts, signed V_T, nonpositive flag and RSS diagnostics.
+- `kinetic_evidence.npz`: complete source-bound cortical/frame/knot axes and
+  primitive receipts, masks, source-design diagnostics and coefficients, with
+  the exact arrays in the output schema.
+- `sensitivity_summary.json`: four complete-family summaries, all 14 signed
+  paired changes and two complete paired summaries.
+- `run_metadata.json`: three authority hashes, complete source identity and
+  row ledgers, software strings and warnings; no answer targets.
+- `findings.md`: describe both assumptions, the estimand, fitted estimates,
+  sample SD/defined counts, signed sensitivity and unavailable results. Explain
+  the unresolved reference convention. Do not infer genotype, clinical effects,
+  tracer validity or paper replication.
 
-```
-derivatives:petprep_extract_tacs:sub-XX:ses-baseline:sub-XX_ses-baseline_trc-sf51_desc-gtmseg_tacs.tsv
-sub-XX:ses-baseline:pet:sub-XX_ses-baseline_trc-sf51_recording-manual_blood.tsv
-```
+The verifier reconstructs source primitives independently. Source-close
+submitted NPZ coefficients are the single downstream authority for V_T and
+summaries; CSV coefficients and primitive/design diagnostics are receipts,
+never separate refitting inputs. Canonical source support and the public
+coefficient/MA1-relative fidelity rules are enforced, not a historical V_T,
+preferred direction, estimator agreement or physiological range. The two
+implementations share the specified SciPy least-squares solver, not source
+extraction or integral/replay code.
 
-* The **TAC** TSV has one row per PET frame. Columns include `frame_start`, `frame_end`
-  (seconds) and one column per FreeSurfer/gtmseg region, among them the cortical
-  gray-matter regions `ctx-lh-*` / `ctx-rh-*`, plus subcortical and cerebellar regions, all
-  in **Bq/mL**. The TAC values are **decay-corrected to injection time**.
-* The **blood** TSV has one row per sample. It carries the sample
-  `time` (seconds, relative to injection) and the measured blood/plasma radioactivity in
-  **Bq/mL**; inspect the file header for the full set of measured quantities it provides.
-  Rows with `time == 0` after the first sample are padding and should be ignored.
-Sampling time is not evidence of the activity decay footing. Do not automatically
-multiply byexp(lambda×time): activity already referenced to PET time-zero must not
-be decay-corrected a second time. A source-documented per-subject
-`blood_decay_receipt.json` must specify `blood_activity_reference` as
-`pet_time_zero` or `draw_time`, with a source citation; if unavailable, report
-failed_precondition rather than silently impose an unsupported assumption.
-
-## Task
-
-For **each of the seven participants**, estimate the [18F]SF51 total distribution volume
-**V_T in the cerebral cortex** (cortical gray matter) using an **invasive (arterial-input)
-kinetic model**, and summarise the cohort: the average cortical V_T and how it varies across
-participants.
-
-Standard implementation choices the invasive-input framework leaves to the analyst — **how
-to construct the model input from the blood recording**, which V_T estimator (graphical or
-compartmental), the frame weighting, and the fit window — should follow **common practice
-for an arterial-input, reversibly-binding brain radioligand**; the brief does not spell them
-out.
-
-## Output Location
-
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
-
-## Required Outputs
-
-- `vt_estimates.csv` — one row per participant, with columns `subject, session, target,
-  input, model, VT` (extra columns such as a cross-check estimator are welcome).
-- `run_metadata.json` — dataset id, snapshot, target region, the model/input you used, and
-  the per-participant and mean cortical V_T.
-- `findings.md` — a short written summary: the per-participant and mean cortical V_T, how
-  V_T varies across the cohort, and an account of the model input you built from the blood
-  recording and the estimator you used. State only what your analysis supports.
-
-## Failure handling
-
-If the dataset cannot be fetched or the expected TAC/blood columns are absent, exit non-zero
-with `failed_precondition` and a non-empty reason, and still write a parseable
-`run_metadata.json`, `vt_estimates.csv`, and `findings.md`.
+Malformed or changed sources are errors: exit nonzero with a concise
+`failure_report.json` in a safe output directory. Method-defined numerical
+unavailability is retained, not a task failure. Never serialize NaN/Infinity.
+Bounded harmless extra reports/code are allowed but have no acceptance role.
+Analysis and grading are offline. Difficulty metadata is provisional and
+has not been calibrated by model runs.
