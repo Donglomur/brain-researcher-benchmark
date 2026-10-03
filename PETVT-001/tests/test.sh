@@ -9,8 +9,8 @@ import hashlib,os,stat,sys,tempfile
 from pathlib import Path
 sys.pycache_prefix=tempfile.mkdtemp(prefix="petvt-private-cache-")
 root=Path("/tests")
-pins={"test_outputs.py":"1fcbdc2c5b0cec3b7d8100575aa557c16c44b771f56c2c2a55cdc53ae49d4ecb",
-      "grader_bootstrap.py":"974e8bd41bcdabe44948ab906f4bcf512eb7968abbec08b4920791be346d74f3"}
+pins={"test_outputs.py":"b62094421e713a39e1dd6a1ed1c40a5a873e9bf42dc07f3958dd18f278965e72",
+      "grader_bootstrap.py":"557e431e4ea5774b76ac632acdcf57d652fc3381ba08b9b6b31468b2cd589bdd"}
 for name,pin in pins.items():
     p=root/name
     assert not p.is_symlink()

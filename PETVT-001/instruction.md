@@ -65,5 +65,34 @@ Malformed or changed sources are errors: exit nonzero with a concise
 `failure_report.json` in a safe output directory. Method-defined numerical
 unavailability is retained, not a task failure. Never serialize NaN/Infinity.
 Bounded harmless extra reports/code are allowed but have no acceptance role.
+
+## Metadata serialization clarification (version 2.1)
+
+The source, method and output-schema JSON documents and their three SHA-256
+identities remain unchanged. This clarification supplies nested field spellings
+that version 2.0 did not specify; it changes no scientific rule or tolerance.
+
+For each `source_observed.persons[].blood_row_ledger` record, retain the original
+row order, integer `source_row` and numeric `time_s`. Eligibility may be encoded
+as either `paired_eligible` or `eligible` (exact JSON Boolean). Missing fields
+may be encoded as `reasons` using `missing_plasma_radioactivity` and/or
+`missing_metabolite_parent_fraction`, or as `missing_columns` using the original
+column names without the `missing_` prefix. These are duplicate-free lists;
+their order is immaterial. A paired row has an empty list and eligibility true;
+a missing-pair row has the corresponding nonempty list and eligibility false.
+Optional descriptive `status` strings are not an independent acceptance target.
+If the recognized strings `paired` or `missing_pair` are used, they must agree
+with eligibility; other strings do not replace the required eligibility and
+missingness fields. If both field encodings are present they must agree. Optional row-level
+`invalid_domain_entries` must be empty for these qualified sources. Every row,
+time, eligibility and missing field remains checked against the original source.
+
+Within `source_clock`, retain `time_zero`, `scan_start_s`, `injection_start_s`,
+`image_reference_s` and `half_life_s`. The activity unit may be represented by
+`concentration_units`, or by both `pet_units` and `plasma_units`. All provided
+unit aliases must agree with the source (`Bq/mL`); optional `blood_time_units`
+must be `s`. Contradictory aliases, missing rows, nonfinite numbers, wrong units,
+changed source identities and incorrect numerical outputs are rejected.
+
 Analysis and grading are offline. Difficulty metadata is provisional and
 has not been calibrated by model runs.

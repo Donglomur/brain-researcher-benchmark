@@ -11,7 +11,7 @@ CODE_PINS={
     'artifact_reader':'6b26c0fbd252b811fd36434debd46aca7a5e9fa3b615cedd1ed7bf3213f35a9e',
     'reference_math':'6841ccc60e3dfc7fef453b75459956f1888e012f157ffaa7fe4486305e260edb',
     'source_reference':'f37ef45967fa2f47e557772f71d282e76c142b960a039fa3b4c08bfb5fa65de7',
-    'proof_of_work':'f31769805f037a8498a0f2e6343e2da4a0ab4cc68c70dd5ed6b8d585f897bd89'}
+    'proof_of_work':'43385c0490577c3106ec493143f13a554dbb17da900f58791d59c8594f3a342b'}
 DOC_PINS={'source_manifest.json':'2e45467d3ef720a686b13a16ac33288369e3685044d243a5fe55128910adcfc8',
     'method_contract.json':'260a010f65be9a850b3ff46eaed0f5c7ec9b76c2d48cddbbd15e6636eecb8178',
     'output_schema.json':'23f68ffbbaefb40081fe9d33e1f020af85c69f0cec88d5216394766f267a97d0'}

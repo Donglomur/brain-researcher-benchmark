@@ -73,6 +73,52 @@ def close_array(actual,expected):
         check(np.allclose(actual,expected,atol=1e-8,rtol=1e-6),'source primitive receipt')
 
 
+def blood_ledger(rows):
+    """Canonicalize only the public, equivalent eligibility encodings.
+
+    The original schema named the ledger, not these nested field spellings.
+    Every present alias is checked; no submitted source value is repaired.
+    """
+    check(type(rows)is list,'blood ledger list');result=[]
+    columns=('plasma_radioactivity','metabolite_parent_fraction')
+    reason_domain={'missing_'+name for name in columns}
+    for row in rows:
+        check(type(row)is dict,'blood ledger record');view=dict(row)
+        flags=[row[k]for k in ('paired_eligible','eligible')if k in row]
+        check(flags and all(type(v)is bool for v in flags) and all(v==flags[0]for v in flags),'eligibility aliases')
+        sets=[]
+        for key in ('reasons','missing_columns'):
+            if key not in row:continue
+            values=row[key]
+            domain=reason_domain if key=='reasons'else set(columns)
+            check(type(values)is list and all(type(v)is str and v in domain for v in values)
+                  and len(set(values))==len(values),'missing-column aliases')
+            sets.append(set(values)if key=='reasons'else{'missing_'+v for v in values})
+        check(sets and all(v==sets[0]for v in sets),'missing-column aliases')
+        check(flags[0]==(not sets[0]),'eligibility/reasons contradiction')
+        if 'status'in row:
+            check(type(row['status'])is str,'descriptive status string')
+            if row['status']in ('paired','missing_pair'):
+                check(row['status']==('paired'if flags[0]else'missing_pair'),'eligibility status contradiction')
+        if 'invalid_domain_entries'in row:equal(row['invalid_domain_entries'],[])
+        view['paired_eligible']=flags[0]
+        view['reasons']=['missing_'+c for c in columns if 'missing_'+c in sets[0]]
+        result.append(view)
+    return result
+
+
+def source_clock(value):
+    """Preserve clock values; accept equivalent explicit concentration units."""
+    check(type(value)is dict,'source clock record');view=dict(value)
+    if 'concentration_units'not in value:
+        check('pet_units'in value and 'plasma_units'in value,'complete concentration unit aliases')
+    units=[value[k]for k in ('concentration_units','pet_units','plasma_units')if k in value]
+    check(units and all(type(v)is str and v==units[0]for v in units),'concentration unit aliases')
+    if 'blood_time_units'in value:equal(value['blood_time_units'],'s')
+    view['concentration_units']=units[0]
+    return view
+
+
 def metadata(actual,reference):
     equal(actual,dict(schema_version='petvt-metadata-v2',task_id='PETVT-001',status='complete',**reference['pins']))
     keyed_equal(actual['source_files'],reference['source_files'],['path'])
@@ -84,7 +130,10 @@ def metadata(actual,reference):
         view=dict(person);view['source_clock']=dict(person['source_clock'])
         for key in ('scan_start_s','injection_start_s','image_reference_s','half_life_s'):
             view['source_clock'][key]=float(view['source_clock'][key])
-        equal(found[person['subject_id'],],view,atol=1e-6,rtol=0)
+        submitted=dict(found[person['subject_id'],])
+        submitted['blood_row_ledger']=blood_ledger(submitted['blood_row_ledger'])
+        submitted['source_clock']=source_clock(submitted['source_clock'])
+        equal(submitted,view,atol=1e-6,rtol=0)
     check(type(actual['warnings'])is list and all(type(w)is str for w in actual['warnings']),'warning strings')
     software=actual['software'];check(type(software)is dict and all(type(software.get(k))is str and software[k]
         for k in ('python','numpy','scipy')),'software provenance strings')

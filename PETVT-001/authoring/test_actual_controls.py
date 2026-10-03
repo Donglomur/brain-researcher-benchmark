@@ -14,7 +14,7 @@ pytestmark=pytest.mark.skipif(os.environ.get('REPAIR_RUN_ACTUAL_CONTROLS')!='1',
 @pytest.fixture(scope='module')
 def baseline():
     path=Path('/tests/grader_bootstrap.py');raw=path.read_bytes()
-    assert hashlib.sha256(raw).hexdigest()=='974e8bd41bcdabe44948ab906f4bcf512eb7968abbec08b4920791be346d74f3'
+    assert hashlib.sha256(raw).hexdigest()=='557e431e4ea5774b76ac632acdcf57d652fc3381ba08b9b6b31468b2cd589bdd'
     boot=types.ModuleType('actual_boot');boot.__file__=str(path);exec(compile(raw,str(path),'exec'),boot.__dict__)
     c=boot.load_private();m=c['modules'];d=c['documents']
     reference=m['source_reference'].reconstruct('/app/data/petvt',d['source_manifest.json'],d['method_contract.json'],d['output_schema.json'])
