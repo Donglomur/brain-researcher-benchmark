@@ -62,6 +62,37 @@ Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
   alpha power ratio (eyes-closed vs eyes-open) you measured and what it means. State
   only what your analysis actually supports.
 
+### Metadata field schema
+
+Use these exact top-level names in `run_metadata.json`; additional honest fields
+are welcome. This example declares the required settings, not computed results:
+
+```json
+{
+  "dataset_id": "PhysioNet EEGMMIDB",
+  "dataset_version": "1.0.0",
+  "subjects": [1, 2, 3, 4, 5],
+  "runs": {"eyes_open": 1, "eyes_closed": 2},
+  "band_hz": [8, 13],
+  "channels": ["O1", "Oz", "O2"],
+  "reference": "common_average",
+  "power_units": "V^2/Hz",
+  "aggregation": "mean_of_subject_ratios",
+  "welch": {
+    "segment_sec": 2, "n_fft": 320, "n_overlap": 0,
+    "window": "hamming", "remove_dc": true, "average": "mean"
+  }
+}
+```
+
+Dataset-name aliases identifying EEGBCI/EEGMMIDB, equivalent subject-ID spellings,
+channel-name capitalization, `reference: "CAR"`, and equivalent `V²/Hz` or
+`V2/Hz` unit typography are accepted. `welch.window` may also be
+`"periodic_hamming"` or `"periodic hamming"`; all refer to the prescribed periodic
+window. No additional `psd_method` key is required: the `welch` object carries the
+method contract. Optional implementation descriptions cannot replace any required
+setting. All per-subject, group and whole-head numerical checks still apply.
+
 ## Failure handling
 
 If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a
