@@ -1,0 +1,116 @@
+{
+  "schema_version": "ratplace-method-v2",
+  "task_id": "RATPLACE-001",
+  "status": "fixed_after_tracking_structure_before_spike_values_and_spatial_endpoints",
+  "amendment": {
+    "prior": "methods_proposal_v1.md",
+    "reason": "Released Position physical-unit metadata conflicts with author raw-cm usage. No calibration inferred from plausible size, speed, firing or null results.",
+    "approved_change": "Camera-observation-window scale-invariant raw-coordinate case; physical speed/running selection removed.",
+    "not_claimed": [
+      "rat or spaceflight reproduction",
+      "running-only estimator",
+      "validated centimeters",
+      "biological pyramidal or place-cell classification",
+      "unbiased information estimator"
+    ]
+  },
+  "source": {
+    "dandiset": "001695",
+    "version": "0.260319.2023",
+    "subject": "M02",
+    "session": "20240312T100000",
+    "nwb_version": "2.9.0",
+    "source_sha256": "323e99a1ec1b028a35da8cd955f2671a1f9e1853b46622c19863424943c962db",
+    "n_positions": 47270,
+    "n_units": 110,
+    "n_spikes": 3891350,
+    "position_path": "/processing/behavior/AnimalPosition/Position",
+    "units_path": "/units",
+    "position_metadata": {
+      "unit": "centimeters",
+      "conversion": 0.01,
+      "offset": 0
+    },
+    "position_computation": "Original raw XY only; declared metadata preserved but not used for physical-scale claims.",
+    "spike_time_unit": "seconds",
+    "window_seconds": [
+      4583.485466666667,
+      6474.363466666668
+    ],
+    "window_semantics": "Supplied first-to-last camera timestamps, half-open; not a source-defined maze epoch.",
+    "upstream_limitations": "Independent camera/TTL acquisition; author preprocessing includes confidence rejection, PCHIP filling and median filtering. No claim every finite released row is directly observed."
+  },
+  "tracking": {
+    "max_gap_seconds": 0.1,
+    "valid_pair": "finite XY at both endpoints; strictly increasing finite timestamps; dt<=max_gap_seconds",
+    "interval": "[t[i],t[i+1]) intersect fixed window; left-sample position; last sample never extended",
+    "physical_speed_filter": false,
+    "new_interpolation": false,
+    "new_smoothing": false
+  },
+  "grid": {
+    "shape": [
+      4,
+      5
+    ],
+    "n_bins": 20,
+    "bounds": "Per-axis min/max of raw left positions owning positive-duration valid pieces, behavior only",
+    "binning": "edges=np.linspace(min,max,n+1,dtype=float64); bin=searchsorted(edges,value,side='right')-1; exact upper endpoint assigned final bin; flat=5*x+y",
+    "degenerate_axis": "failed_precondition",
+    "occupancy": "math.fsum durations in original time order within each bin",
+    "rate_defined": "occupancy>0; source-zero occupancy remains exactly0"
+  },
+  "selection": {
+    "region": "CA1",
+    "min_spikes": 50,
+    "rate_lower_exclusive": 0.05,
+    "rate_upper_exclusive": 5,
+    "denominator": "Total valid observed duration, not running time.",
+    "ledger": "All110 source units retained in numeric source-ID order; strings preserve canonical decimal rendering without aliases.",
+    "reasons": [
+      "non_CA1",
+      "insufficient_spikes",
+      "rate_not_above_lower",
+      "rate_not_below_upper",
+      "included"
+    ],
+    "precedence": "Listed order; only first failing reason.",
+    "zero_eligible": "Completed honest status no_eligible_units with empty eligible axis and null means."
+  },
+  "null": {
+    "draws": 300,
+    "seed": 20250901,
+    "min_shift_seconds": 20,
+    "window": "Single fixed camera window; duration must exceed40s.",
+    "unit_index": "Zero-based rank of original integer unit ID among all110 IDs sorted numerically, not eligibility-dependent.",
+    "rng": "np.random.Generator(np.random.PCG64(np.random.SeedSequence([seed,unit_index,0])))",
+    "offsets": "rng.uniform(20,window_duration-20,size=300) in draw_id0..299 order",
+    "mapping": "window_start + ((spike-window_start+offset) % window_duration); all original spikes in window before masking; reassignment to original tracking intervals",
+    "undefined": "A zero-count shifted draw has false mask and zero numeric placeholder. Any undefined draw makes null mean, adjusted and p_upper null; do not redraw.",
+    "interpretation": "Conditional elapsed-time-shift comparison, not proof of spatial specificity or universal bias correction."
+  },
+  "information": {
+    "raw": "math.fsum((count/N)*math.log2((count/N)/(occupancy/T)) for count>0); bits/spike",
+    "null_mean": "math.fsum(all300 defined shifted informations)/300",
+    "adjusted": "raw-null_mean; negative values retained",
+    "p_upper": "(1+count(shifted_information>=raw_information))/301; inclusive exact comparisons, no tolerance in decision",
+    "zero_occupancy_count": "contract_error",
+    "headline": "Equal-unit means of accepted CSV receipts, not independent hidden endpoint targets; null/adjusted/p headline unavailable if any eligible required endpoint is undefined."
+  },
+  "precision": {
+    "occupancy_atol_seconds": 1e-9,
+    "occupancy_rtol": 1e-12,
+    "offset_atol_seconds": 1e-10,
+    "offset_rtol": 0,
+    "derived_atol": 0.000001,
+    "derived_rtol": 1e-9,
+    "counts_axes_masks": "exact after coherent permutation mapping",
+    "linear_coherence": "Sum of scalar bounds for adjusted=raw-null. P_upper decision/count is exact full-precision primitive replay; displayed p scalar tolerance only."
+  },
+  "runtime": {
+    "numpy": "2.2.6",
+    "h5py": "3.16.0",
+    "threads": 1,
+    "network": false
+  }
+}

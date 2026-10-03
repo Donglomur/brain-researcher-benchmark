@@ -1,0 +1,105 @@
+{
+  "schema_version": "ratplace-output-schema-v2",
+  "task_id": "RATPLACE-001",
+  "files": [
+    "spatial_information.csv",
+    "spatial_evidence.npz",
+    "results.json",
+    "run_metadata.json",
+    "findings.md"
+  ],
+  "max_member_bytes": 33554432,
+  "max_total_bytes": 134217728,
+  "max_files": 64,
+  "npz": {
+    "arrays": {
+      "unit_ids": "Unicode decimal source IDs; eligible U; arbitrary coherent axis order",
+      "bin_ids": "integer permutation0..19",
+      "draw_ids": "integer permutation0..299",
+      "occupancy_seconds": "finite real[20], canonical zero bins exactly0, remaining positive source-close",
+      "raw_counts": "nonnegative integer[U,20]",
+      "shifted_counts": "nonnegative integer[U,300,20]",
+      "shift_offsets_seconds": "finite real[U,300], source RNG-close after matching unit/draw IDs",
+      "shift_defined": "bool[U,300], exact shifted total>0"
+    },
+    "extra_arrays": "Bounded safe non-object finite numeric/string arrays allowed; never scientific authority.",
+    "storage": "No pickle/object/structured types; real i/u/f, bool or Unicode/bytes axes; maximum3dimensions; no nonfinite numeric placeholders."
+  },
+  "csv": {
+    "required_columns": [
+      "unit_id",
+      "n_spikes",
+      "mean_rate_hz",
+      "raw_bits_per_spike",
+      "null_mean_bits_per_spike",
+      "shift_adjusted_bits_per_spike",
+      "p_upper",
+      "status"
+    ],
+    "status": [
+      "ok",
+      "undefined_null_draw"
+    ],
+    "nullable": [
+      "null_mean_bits_per_spike",
+      "shift_adjusted_bits_per_spike",
+      "p_upper"
+    ],
+    "null_token": "empty",
+    "row_order": "arbitrary exact eligible identity coverage, no duplicates",
+    "extra_columns": "Bounded descriptive extras allowed; no alternative authority"
+  },
+  "results": {
+    "schema_version": "ratplace-output-v2",
+    "task_id": "RATPLACE-001",
+    "status": [
+      "complete",
+      "no_eligible_units"
+    ],
+    "required": [
+      "n_units",
+      "n_null_defined_units",
+      "mean_raw_bits_per_spike",
+      "mean_null_bits_per_spike",
+      "mean_shift_adjusted_bits_per_spike"
+    ],
+    "authority": "Means of accepted CSV rows using math.fsum; n_units0 all meansnull; any row undefined =>null andadjusted meansnull."
+  },
+  "metadata": {
+    "schema_version": "ratplace-output-v2",
+    "task_id": "RATPLACE-001",
+    "status": [
+      "complete",
+      "no_eligible_units"
+    ],
+    "required": [
+      "pins",
+      "source_observed",
+      "all_units",
+      "analysis"
+    ],
+    "source_observed": {
+      "nwb_version": "literal source string, 2.9.0",
+      "position_path": "/processing/behavior/AnimalPosition/Position",
+      "position_metadata": {"unit": "centimeters", "conversion": 0.01, "offset": 0},
+      "reference_frame": "literal UTF-8 scalar from original Position/reference_frame",
+      "n_positions": 47270,
+      "n_units": 110,
+      "n_spikes": 3891350,
+      "clock_unit": "seconds",
+      "physical_calibration_conflict": true,
+      "physical_units_used_for_analysis": false,
+      "upstream_interpolation_flags_certified": false
+    },
+    "all_units": "All110 records unit_id(str)/source_row(int zero-based original row)/cell_area(str)/cell_type(str)/stored_spike_count(int)/window_spike_count(int)/observed_spike_count(int)/eligible(bool)/reason(str); exact source-defined values, arbitrary record order by explicit unit_id; bounded extras are descriptive, not alternative authority.",
+    "analysis": "window_seconds,grid_shape,grid_edges_raw,valid_pair_count,invalid_pair_count,valid_observed_seconds,physical_speed_filter:false; no fabricated mazeepoch.",
+    "pins": [
+      "source_manifest_sha256",
+      "method_contract_sha256",
+      "output_schema_sha256"
+    ]
+  },
+  "findings": "Nonempty bounded UTF-8 text; interpretation judged through explicit public scope and numerical outputs, not hidden keyword or required-outcome trigger.",
+  "failure": "Any failure_report.json lexists is authoritative failure. Oracle writes failed_precondition marker and nonzero status; partial/resource_pilot artifacts never production.",
+  "benign_variation": "Coherent unit/bin/draw permutations, record/key order, safe real storage satisfying precision, harmless metadata/prose/version extras accepted; no blanket six-decimal guarantee for offsets/occupancy."
+}

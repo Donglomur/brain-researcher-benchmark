@@ -1,84 +1,17 @@
-# Hippocampal place-cell spatial information on a familiar track (RATPLACE-001)
+# Mouse CA1 normalized-position spatial information
 
-> **Task quarantined — scientific input precondition not met (2026-10-01).**
-> Inspection of the pinned NWB shows that its position series is sampled at
-> spike occurrence times, not on an independent 50 Hz behavior clock. The
-> occupancy/running analysis below therefore cannot be supported by this asset.
-> It is retained as the historical intended task, not a runnable benchmark or
-> an instruction to manufacture a spatial-information estimate. The oracle now
-> exits with `failed_precondition` before downloading data or fitting anything.
-> See `SOURCE_BLOCKER.md`; no valid replacement reference is available yet.
+Using the original NWB recording baked into /app/data/ratplace, implement the fixed normalized-position methods case described in /app/methods.md and /app/method_contract.json. RATPLACE-001 is a legacy task identifier: this recording is mouse M02, not a rat or spaceflight experiment.
 
-## Scientific context
+The source has independent camera tracking, but physical-unit metadata conflict with author raw-coordinate usage. Preserve this limitation. Use the supplied camera observation window, a scale-invariant 4 x 5 grid, the disclosed CA1 operational unit selection, and 300 deterministic elapsed-window shifts. Do not infer centimeters, speed, maze epochs, biological cell class, or a required outcome.
 
-Hippocampal CA1 pyramidal cells are classically *place cells*: individual neurons fire
-in restricted regions of an environment, and the amount of spatial detail a cell carries
-is summarised by the **Skaggs spatial information** rate (Skaggs et al. 1993, *Advances
-in Neural Information Processing Systems*; Skaggs, McNaughton, Gothard & Markus, 1996),
+Authenticate the source using /app/source_manifest.json. No network access is needed or allowed at runtime. Do not use a hidden reference bank or substitute derived example data.
 
-```
-I  =  Σ_i  p_i · (λ_i / λ̄) · log2(λ_i / λ̄)      [bits per spike]
-```
+Write these five artifacts to OUTPUT_DIR (default /app/output):
 
-where the environment is discretised into bins `i`, `p_i` is the fraction of time the
-animal occupied bin `i`, `λ_i` is the cell's firing rate in that bin, and `λ̄ = Σ_i p_i λ_i`
-is its overall mean rate. It is the standard scalar readout of how spatially informative a
-hippocampal neuron is, and the per-cell values are routinely averaged to describe a
-population.
+- spatial_information.csv — all eligible units, exact counts and own-replay scalar receipts.
+- spatial_evidence.npz — bounded source-bound occupancy, counts, offsets, masks and explicit axes.
+- results.json — equal-unit summaries derived from accepted CSV receipts.
+- run_metadata.json — all-source unit ledger, provenance, tracking/clock support and fixed contract pins.
+- findings.md — a concise interpretation limited to this methods case and source limitations.
 
-## Task
-
-Using the NWB file for **Rat 1, session `ses-19980425T124500`** from DANDI dandiset
-**`001754`** (`sub-Rat1/sub-Rat1_ses-19980425T124500_behavior+ecephys.nwb`), **compute the
-Skaggs spatial information (bits/spike) for the recorded CA1 units and report the
-population mean.**
-
-Fetch the asset at runtime from the DANDI archive (e.g. `DandiAPIClient`); do not assume a
-local copy. Restrict the analysis to the session's **Baseline rectangular-track** condition
-(the epochs whose `session_type` is `BL`), and to **running** periods only (compute the
-animal's speed from the tracked position and drop samples below a low running threshold, a
-few px/s, so that stationary periods do not dominate the occupancy). Build each cell's
-firing-rate map over a **4 × 5 grid of 20 spatial bins** spanning the range of occupied
-positions, using the matching occupancy map for `p_i`. Analyse the **CA1 pyramidal units**
-— the recording targets area CA1; keep well-sampled putative principal cells (a minimum
-spike count on the track during running and a mean running rate below ~5 Hz, which excludes
-the few fast-spiking interneurons).
-
-Standard implementation choices the method leaves to the analyst (the exact running-speed
-cutoff within a sensible range, the smoothing of the speed trace, how spikes are assigned
-to position samples, minimum-spike and rate cutoffs for including a unit) should follow
-common practice; the brief does not spell them out.
-For the numerical case, use running speed >5 px/s, at least50 running spikes and
-0.05<running rate<5 Hz. Align every spike to its original position sampling cell
-(50 Hz) before masking running samples; never snap across removed intervals.
-Compute300 elapsed-time circular shifts independently within each BL epoch, with
-minimum20-second shifts and seed20250901. Report raw and shuffle-null means and
-their difference per unit; no small corrected value, absence, or bias-dominance
-conclusion is required. A synthetic positive control is an alignment diagnostic,
-not a replacement for real Rat1 data or proof of biological absence.
-
-Report, in plain terms, **the mean CA1 place-cell spatial information for this track and how
-strong the spatial coding is** — stating only what your analysis actually supports.
-
-## Output Location
-
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
-
-## Required Outputs
-
-- `spatial_information.csv` — one row per analysed CA1 unit:
-  `unit_index, tetrode, cluster_id, n_spikes, mean_rate_hz, spatial_information_bits_per_spike`.
-  Also include `shuffle_null_bits_per_spike`, `corrected_bits_per_spike`.
-- `results.json` — the headline result: the **population mean** spatial information you would
-  report for these CA1 units (`mean_spatial_information_bits_per_spike`), `n_units`, and the
-  binning / running / selection parameters you used.
-- `run_metadata.json` — dandiset id, session, epoch(s) used, n units, grid, running threshold.
-- `findings.md` — a short written summary (a few sentences) stating the mean CA1 place-cell
-  spatial information on this track and how strong the spatial coding is. State only what
-  your analysis actually supports.
-
-## Failure handling
-
-If the dandiset asset cannot be resolved or the session lacks the expected position/units
-data, exit non-zero with `failed_precondition` and a non-empty reason, and still write a
-parseable `run_metadata.json`, `results.json`, and `findings.md`.
+Exact typed fields, null rules, storage bounds and permitted coherent permutations are in /app/output_schema.json. Undefined null draws, no eligible units, and negative adjusted information are valid when correctly represented. A resource pilot is not a completed submission. Any failure_report.json means failure, not partial success.

@@ -1,4 +1,9 @@
-# Independent tracking is not established
+# Historical source blocker: retired rat source
+
+This record concerns the retired source, not the active mouse methods case.
+The user-approved replacement is documented in environment/SOURCE_NOTICE.md
+and environment/methods.md. The old source diagnosis remains unchanged; no
+claim is made that its missing independent tracking was recovered.
 
 The exact public asset is DANDI `001754/0.260728.1352`, asset
 `b8dbee0b-e84e-45f9-998d-39bee1803fc9`,
@@ -43,10 +48,10 @@ rebuild the declared estimator, or approve another public source with a complete
 behavior trajectory while retaining an honestly labeled spatial-information
 method case. Do not regenerate the former approximately 0.09-bit answer.
 
-The existing `tests/reference.npz` is untouched and stale; the prior verifier
-already rejects its missing `elapsed-time-running-v1` identity. The oracle now
-also fails before any network access or analysis. The new regression checks only
-this safety behavior, not spatial-information validity or a reward-1 oracle.
+At the original quarantine, tests/reference.npz was untouched and stale and
+the oracle failed before analysis. During the approved replacement, that bank
+was copied and SHA-authenticated opaquely outside the task and retired from the
+active verifier. The old guarded implementation remains recoverable in Git.
 
 Local original-byte receipts (outside the task image):
 

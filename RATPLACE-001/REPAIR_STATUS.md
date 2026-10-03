@@ -1,25 +1,35 @@
-# Validation gate
+# Replacement methods-case validation
 
-## Current blocker — 2026-10-01
+The original rat/spaceflight formulation is retired because its released positions
+were sampled at spike occurrence times rather than an independent behavior clock.
+SOURCE_BLOCKER.md preserves that historical diagnosis. The user approved a
+different public continuous-tracking source and an honestly labeled methods case.
 
-The following earlier timestamp repair is insufficient: original-byte inspection
-shows that the source positions themselves are sampled at spike times, not
-independently at 50 Hz. `SOURCE_BLOCKER.md` documents the evidence. The oracle
-is quarantined with an unconditional scientific-precondition failure before
-network access or numerical computation. No spatial maps, shuffle estimates,
-replacement bank, or passing container oracle were generated. This task is
-**not repaired or release-ready**. Independent tracking recovery or an approved
-data/target revision remains necessary.
+The replacement uses one immutable mouse CA1 NWB from DANDI 001695. Its independent
+25 Hz camera provenance is documented, but conflicting coordinate calibration and
+upstream interpolation limit interpretation. After structure-only review and
+before spike statistics, the method was fixed to a dimensionless 4-by-5 grid over
+the supplied camera observation window, with no physical speed or maze-epoch claim.
+Public environment/methods.md and the pinned contracts give the full estimator.
 
-## Historical contained repair (not scientific validation)
+Two independently composed source reconstruction paths produced byte-identical
+full primitive arrays and source ledgers. They share bounded source-I/O guards,
+NumPy/HDF5 libraries, and disclosed information/reporting algebra; they do not
+share the spike-to-tracking counting implementation. The verifier authenticates
+original bytes and replays accepted source-close primitives and submitted receipts.
+There is no hidden numerical answer bank or forced place-cell count/outcome.
 
-Real spikes and the optional positive control now share original timestamp-cell
-alignment, and null shifts operate in elapsed time within BL epochs, not a
-compressed running index. Corrected values must equal raw minus submitted null,
-not pass an unbounded negative-value/prose escape. All old unit selection/raw/null
-references are stale; the verifier requires a genuinely regenerated
-`elapsed-time-running-v1` reference. Speed gradients/smoothing now split BL boundaries,
-invalid positions and timestamp gaps. Published version and authoritative raw SHA256
-are enforced; existing output caches with wrong bytes fail. Pending: raw/null source
-receipts and shuffle bank recomputation, offline staging and container oracle. Unit fixtures do not
-validate neural information estimates or paper findings.
+Precommit local evidence: 157 distinct full-QA cases passed, including 142
+manufactured cases, one production check, four coherent actual-output positives and
+ten effective actual-output rejection probes. The production wrapper separately
+passed its single scoring case. A genuinely cold source-only build fetched exactly
+one pinned 61,347,328-byte NWB with no retries/redirects; a no-mount hash-only check
+verified its closed runtime inventory. Harbor and final-image delivery receipts
+are external tracking records and are not implied by these precommit checks.
+
+The old 5,410-byte bank was preserved opaquely outside the active task before
+removal (SHA256 8482e8df60a93a51401f4e89a280ea927393a6c3aaee7f3e297e4ef8c3f3ba8f).
+Its numerical contents were not read or reused. Retired code remains recoverable
+from Git history. These checks establish source/implementation consistency, not
+a reproduction of the original paper estimator, biological place-cell identity,
+a spaceflight result, population inference, or model-difficulty calibration.
