@@ -1,0 +1,367 @@
+{
+  "schema_version": "devconn-output-contract-v2",
+  "task_id": "DEVCONN-001",
+  "status": "frozen_before_signal_execution",
+  "source_manifest_sha256": "0fb419ee0dbea59376f5b0dc1e91d26502e8203d6e7b02334b979e6a1d9f66e3",
+  "method_sha256": "e8ba3df50c7cc4bf8b83e2db559c0f1e515f10bf4c45498da84076306e883f6e",
+  "reporting_kernel_sha256": "2b3abe5fe37d3ad68db57301afa68cf6b0f5409abaf81bc5b06494ae4bf88638",
+  "authority": "Accepted source-close cleaned_roi is the only downstream numeric primitive. Source-canonical geometry/support/age/FD define fixed choices; raw, CSV, bootstrap arrays and JSON are receipts.",
+  "required_files": [
+    "signal_evidence.npz",
+    "connectivity_metrics.csv",
+    "age_effects.json",
+    "run_metadata.json",
+    "findings.md"
+  ],
+  "common_rules": {
+    "output_dir": "/app/output",
+    "failure": "failure_report.json lexists before/after validation invalidates success, including broken symlink. Never overwrite sources/code/stale output.",
+    "regular": "All five required files must be ordinary files. No symlinks/FIFOs/devices/traversal. Bounded harmless extra files/fields are allowed.",
+    "json": "UTF8, no duplicate keys or NaN/Infinity; actual finite numbers not Boolean/string, actual non-Boolean integers for counts/ranks; undefined scientific scalar=null.",
+    "csv": "Unique nonempty headers and one row per literal subject_id. Scientific numeric notation allowed; undefined number only blank, not NaN/None/0.",
+    "ids": "Literal original participant and coordinate IDs, no aliases or normalization. Required string axes checked for exact shape/kind before conversion or expansion.",
+    "permutations": "Coherent participant/frame/ROI/metric/association/draw row and keyed metadata/CSV permutations accepted; original documentary column order and source row identity remain exact. Bootstrap child_ids must be the sorted canonical source child order because indices reference this explicitly fixed order.",
+    "extra": "Finite harmless numeric extras/descriptive strings within caps allowed; no prose/version-string scoring fingerprint.",
+    "partition": "Production scores one source-bound artifact validation. Authoring equivalence/mutation tests never become extra acceptance gates."
+  },
+  "resource_caps": {
+    "entire_output_tree_bytes": 536870912,
+    "max_regular_files": 32,
+    "max_directories": 64,
+    "max_directory_depth": 32,
+    "signal_evidence_npz_bytes": 268435456,
+    "npz_total_uncompressed_bytes": 536870912,
+    "max_npz_members": 40,
+    "max_npz_array_ndim": 32,
+    "max_npy_header_bytes": 65536,
+    "max_json_depth": 64,
+    "connectivity_metrics_csv_bytes": 1048576,
+    "age_effects_json_bytes": 1048576,
+    "run_metadata_json_bytes": 33554432,
+    "findings_md_bytes": 1048576,
+    "npz_types": "No pickle/object/complex/structured dtype, duplicate ZIP paths or nonfinite numeric arrays. Fixed Unicode/bytes, real numeric and Boolean arrays only. Undefined numeric slots use finite0 sentinel plus false defined flag."
+  },
+  "dimensions": {
+    "S": 155,
+    "R": 264,
+    "F": 26040,
+    "T_subject": 168,
+    "C": 122,
+    "D": 1000,
+    "M": 3,
+    "A": 2,
+    "n_children": 122,
+    "n_adults": 33,
+    "metric_ids": [
+      "short_range",
+      "long_range",
+      "segregation"
+    ],
+    "association_ids": [
+      "raw",
+      "motion_adjusted"
+    ]
+  },
+  "signal_evidence.npz": {
+    "required_arrays": {
+      "subject_ids": {
+        "shape": [
+          "S"
+        ],
+        "kind": "string",
+        "semantics": "Exact155 literal IDs; axis for canonical_active"
+      },
+      "roi_ids": {
+        "shape": [
+          "R"
+        ],
+        "kind": "string",
+        "semantics": "Exact264 literal Power row IDs; axis for raw/clean/active"
+      },
+      "frame_subject_ids": {
+        "shape": [
+          "F"
+        ],
+        "kind": "string",
+        "semantics": "Repeated literal subject for each frame row"
+      },
+      "frame_indices": {
+        "shape": [
+          "F"
+        ],
+        "kind": "exact_integral_nonboolean",
+        "semantics": "Original zero-based released frame; exactunique complete(subject,frame) key"
+      },
+      "raw_roi": {
+        "shape": [
+          "F",
+          "R"
+        ],
+        "kind": "finite_real",
+        "semantics": "Scaled source means, receipt only; source raw tolerance"
+      },
+      "cleaned_roi": {
+        "shape": [
+          "F",
+          "R"
+        ],
+        "kind": "finite_real",
+        "semantics": "Accepted sole downstream primitive; pointwise and canonical-active centered relative fidelity"
+      },
+      "canonical_active": {
+        "shape": [
+          "S",
+          "R"
+        ],
+        "kind": "boolean",
+        "semantics": "Exact source prestandardization activity; inactive tinyjitter ignored"
+      },
+      "bootstrap_child_ids": {
+        "shape": [
+          "C"
+        ],
+        "kind": "string",
+        "semantics": "Exact sorted122 source child IDs, defining index values below; not a reorderable axis"
+      },
+      "bootstrap_draw_ids": {
+        "shape": [
+          "D"
+        ],
+        "kind": "exact_integral_nonboolean",
+        "semantics": "Unique full0..999 set; may coherently permute draw rows"
+      },
+      "bootstrap_metric_ids": {
+        "shape": [
+          "M"
+        ],
+        "kind": "string",
+        "semantics": "Exactshort_range,long_range,segregation; permits coherent permutations"
+      },
+      "bootstrap_association_ids": {
+        "shape": [
+          "A"
+        ],
+        "kind": "string",
+        "semantics": "Exactraw,motion_adjusted; permits coherent permutations"
+      },
+      "bootstrap_indices": {
+        "shape": [
+          "D",
+          "C"
+        ],
+        "kind": "exact_integral_nonboolean",
+        "semantics": "Each row exactseed11 draw of122 indices0..121 into sorted bootstrap_child_ids. Columns are ordered RNG draw slots, not subject labels."
+      },
+      "bootstrap_r": {
+        "shape": [
+          "D",
+          "M",
+          "A"
+        ],
+        "kind": "finite_real",
+        "semantics": "Own replay correlation if defined, otherwise exact0 sentinel; never downstream authority"
+      },
+      "bootstrap_defined": {
+        "shape": [
+          "D",
+          "M",
+          "A"
+        ],
+        "kind": "boolean",
+        "semantics": "Exact own replay support"
+      },
+      "bootstrap_status": {
+        "shape": [
+          "D",
+          "M",
+          "A"
+        ],
+        "kind": "string",
+        "semantics": "Exact own replay typed reason"
+      },
+      "bootstrap_motion_nuisance_rank": {
+        "shape": [
+          "D"
+        ],
+        "kind": "exact_integral_nonboolean",
+        "semantics": "SourceFD rank in each resample"
+      },
+      "bootstrap_motion_df": {
+        "shape": [
+          "D"
+        ],
+        "kind": "exact_integral_nonboolean",
+        "semantics": "122-q-1 in each resample"
+      }
+    },
+    "keying": "Normalize required axes to canonical source geometry/frame and fixed RNG order before comparison. Raw and derived receipts do not replace their authorities.",
+    "inactive": "Canonicalzero clean, admittedpointwise tinyjitter ignored; no resuscitation of inactiveedges."
+  },
+  "connectivity_metrics.csv": {
+    "n_rows": 155,
+    "key": [
+      "subject_id"
+    ],
+    "required_columns": [
+      "subject_id",
+      "age",
+      "group",
+      "mean_fd",
+      "n_active_rois",
+      "short_range",
+      "long_range",
+      "segregation",
+      "short_range_status",
+      "long_range_status",
+      "segregation_status",
+      "short_range_n_nominal_edges",
+      "short_range_n_used_edges",
+      "long_range_n_nominal_edges",
+      "long_range_n_used_edges"
+    ],
+    "source_fields": "Age/group from originalphenotype, zero-filledFDsum/T and canonicalactivecount; no FD<5 or cross-person variation gate.",
+    "metric_units": "Signed Fisher-z means, NOT [-1,1] correlation scale; family bounded byatanh(.999), segregation twice that. Comparison tolerance applies at representable domain boundaries; no abs.",
+    "metrics": "Own acceptedclean replay within derived tolerance; blank iff corresponding typed status unavailable. Every155 person remains."
+  },
+  "age_effects.json": {
+    "required_top_level": {
+      "schema_version": "devconn-results-v2",
+      "task_id": "DEVCONN-001",
+      "status": "complete",
+      "source_manifest_sha256": "exact frozen pin",
+      "method_sha256": "exact frozen pin",
+      "output_schema_sha256": "exact frozen pin",
+      "population": "children_only",
+      "n_children": 122,
+      "n_adults": 33,
+      "children_age_spearman": "exact3metric keys -> child_record",
+      "group_means": "exact3metric keys -> {child:mean_record,adult:mean_record}",
+      "segregation_child_vs_adult": "welch_record",
+      "motion_control": "{segregation_low_motion_restriction:restricted_welch_record}"
+    },
+    "child_record": {
+      "fields": [
+        "r",
+        "p",
+        "status",
+        "n_expected",
+        "n_defined",
+        "df",
+        "motion_adjusted_rank_r",
+        "motion_adjusted_rank_p",
+        "motion_adjusted_rank_status",
+        "motion_adjusted_nuisance_rank",
+        "motion_adjusted_df",
+        "raw_bootstrap",
+        "motion_adjusted_bootstrap"
+      ],
+      "patterns": "Own signedr[-1,1]/p[0,1] ornull, exactsupport/status; rawdf120,adjusted122-q-1; completeexpect122. Perfectr±1 retains p0.",
+      "bootstrap": "Each {ci95:[lower,upper] ornull,n_expected:1000,n_defined:0..1000,status:'ok' or'incomplete_bootstrap_support'}; fullslotlinearpct only."
+    },
+    "mean_record": "{mean:finite Fisher-zunits ornull,n_expected:fixed membership,n_defined:actual defined,status:'ok' or'incomplete_subject_support'}; completeconstantsvalid.",
+    "welch_record": "{child:mean_record,adult:mean_record,difference:finite ornull,t:finite ornull,p:[0,1] ornull,df:positivefinite ornull,status:declared reason}. If unavailable all t/p/dfnull; means/difference retained when computable. Complete unrounded accepted segregation and canonical-group variance support.",
+    "restricted_welch_record": "welch_record plusfd_thresh exact0.2,child_ids/adult_ids exact canonicalFD<.2 subset keyedmembership. This is restriction, not matching.",
+    "statuses": [
+      "ok",
+      "perfect_correlation",
+      "incomplete_subject_support",
+      "insufficient_df",
+      "constant_source_metric",
+      "inactive_age_rank",
+      "inactive_connectivity_rank",
+      "numerical_failure",
+      "insufficient_group_size",
+      "zero_standard_error",
+      "numerical_overflow",
+      "numerical_underflow"
+    ],
+    "comparison": "Own replay numeric tolerance with exact discrete/nullsupport. No canonicalexpected age/r/p/CI/testoutcome target."
+  },
+  "run_metadata.json": {
+    "required_top_level": {
+      "schema_version": "devconn-metadata-v2",
+      "task_id": "DEVCONN-001",
+      "dataset_id": "ds000228",
+      "status": "complete",
+      "source_manifest_sha256": "frozenpin",
+      "method_sha256": "frozenpin",
+      "output_schema_sha256": "frozenpin",
+      "reporting_kernel_sha256": "frozenpin",
+      "analysis_scope": "nonemptydescription",
+      "cohort": "155literalkeyedrecords",
+      "roi_definitions": "264literalkeyedrecords",
+      "source_files": "complete316identityrecords",
+      "source_observed": "originalheaders/tables/coordinateledger",
+      "analysis_observed": "perpersoncleaning/activity andglobaldistancebinreceipts",
+      "software_versions": "actualnonemptyversionstrings,notgradingfingerprint",
+      "warnings": "stringlist,possiblyempty"
+    },
+    "cohort_record": [
+      "subject_id",
+      "age",
+      "group",
+      "mean_fd",
+      "mean_fd_observed_count",
+      "mean_fd_missing_frame_indices"
+    ],
+    "roi_definition": [
+      "roi_id",
+      "center_mm",
+      "radius_mm"
+    ],
+    "source_file_record": [
+      "path",
+      "role",
+      "subject_id",
+      "size_bytes",
+      "sha256"
+    ],
+    "source_observed": {
+      "participants_column_names": "Original participant-table column names in original order",
+      "coordinates": "{path,sha256,column_names}: original coordinate source identity and exact ROI,X,Y,Z order",
+      "persons": "Complete keyed list of source_person records",
+      "frame_alignment": "Nonempty description; all released frames retained; no measured movie-onset assertion"
+    },
+    "source_person": {
+      "subject_id": "Literal subject identity",
+      "bold_path": "Original manifest-relative BOLD path",
+      "confounds_path": "Original manifest-relative confounds path",
+      "bold_header": "All header_fields below, preserving original raw values",
+      "frame_count": "Original row count; 168",
+      "confound_column_names": "All original column names in original order",
+      "selected_confound_columns": "Exact ordered 14-column method design",
+      "excluded_confound_columns": "Remaining original columns in source order, including FD",
+      "missing_selected_entries": "Keyed (frame_index,column_name) list of {frame_index,column_name,original_token,applied_value}; only declared missing tokens, value0",
+      "mean_fd_sum": "math.fsum of original finite FD entries",
+      "mean_fd_observed_count": "Original finite FD count, including finite initial0",
+      "mean_fd_missing_entries": "Keyed missing FD token/location/value records with the same fields as selected missing entries",
+      "mean_fd_missing_frame_indices": "Exact missing FD frame set",
+      "mean_fd_zero_filled_sum": "Original finite sum plus missing entries filled0",
+      "mean_fd_denominator": "Original full frame count, not observed count",
+      "roi_supports": "Complete keyed {roi_id,n_voxels,support_sha256} list"
+    },
+    "header_fields": [
+      "shape",
+      "selected_affine",
+      "storage_dtype",
+      "spatial_units",
+      "temporal_units",
+      "zooms",
+      "raw_toffset",
+      "raw_scl_slope",
+      "raw_scl_inter",
+      "effective_slope",
+      "effective_intercept"
+    ],
+    "header_rules": "Preserve rawunknownunits/zoom;documentaryTR2 separate. Storage dtype semantic alias permitted onlyexplicitdtypefield. Nonfinite raw documentaryfields use literalNaN,+Inf,-Inf strings, never scientificarrays.",
+    "analysis_observed": {
+      "persons": "Complete keyed {subject_id,cleaning_rank,n_active_rois,roi_activity} list. roi_activity contains complete keyed {roi_id,raw_centered_l2,residual_centered_l2,activity_threshold,active} records.",
+      "distance_bins": "{q1_mm,q2_mm,n_pairs,n_short_edges,n_long_edges,membership_sha256}; exact membership/counts with header-tolerance distance quantiles. These are source geometry receipts, not hidden endpoints."
+    },
+    "extra": "Descriptions/extra fields harmless; closed literalidentitysets remain exact. Metadata diagnostic numeric tolerance distinct fromscientificreceipt tolerance."
+  },
+  "findings.md": {
+    "requirement": "NonemptyUTF8 readable report. Oracle reports its actual child raw/adjusted estimates,bootstrapavailability,group descriptives andrestrictionlimits.",
+    "grading": "No keywords/expecteddirection/conclusion. Numerical authority is structuredsource-bound output."
+  }
+}

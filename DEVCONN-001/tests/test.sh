@@ -1,9 +1,45 @@
 #!/bin/bash
 set -euo pipefail
-apt-get update && apt-get install -y curl
-curl -LsSf https://astral.sh/uv/0.9.7/install.sh | sh
-source $HOME/.local/bin/env
-if uvx --with pytest==8.4.1 --with pytest-json-ctrf==0.3.5 --with numpy==2.1.3 --with scipy==1.14.1 --with pandas==2.2.3 \
-   pytest --ctrf /logs/verifier/ctrf.json /tests/test_outputs.py -rA
-then echo 1 > /logs/verifier/reward.txt; exit 0
-else te=$?; echo 0 > /logs/verifier/reward.txt; exit $te; fi
+mkdir -p /logs/verifier
+printf '0\n' > /logs/verifier/reward.txt
+export PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1
+export PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+unset PYTEST_ADDOPTS PYTEST_PLUGINS
+if timeout --signal=TERM --kill-after=10s 1800s python3 -I -B -c '
+import hashlib, os, stat, sys, tempfile, types
+from pathlib import Path
+sys.pycache_prefix = tempfile.mkdtemp(prefix="devconn-trusted-pycache-")
+root = Path("/tests")
+assert root.is_dir() and not root.is_symlink()
+pins = {"score_submission.py": "210e1246e2fe1de91446ecd85a753e18c6d94acfbb769fe870bbc60f1993227e",
+        "test_outputs.py": "ace93937de3dc7020c2f934d39f9522d913ece2fd7985e3d503220b8a64310bc"}
+buffers = {}
+signature = lambda s: (s.st_dev,s.st_ino,s.st_mode,s.st_size,s.st_mtime_ns,s.st_ctime_ns)
+for name, digest in pins.items():
+    path = root / name
+    with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW), "rb") as stream:
+        before = os.fstat(stream.fileno())
+        assert stat.S_ISREG(before.st_mode) and 0 < before.st_size <= 1048576
+        raw = stream.read(1048577)
+        assert signature(before) == signature(os.fstat(stream.fileno())) == signature(path.lstat())
+    assert len(raw) == before.st_size and hashlib.sha256(raw).hexdigest() == digest
+    buffers[name] = raw
+module = types.ModuleType("score_submission")
+module.__file__ = str(root / "score_submission.py")
+sys.modules[module.__name__] = module
+exec(compile(buffers["score_submission.py"], module.__file__, "exec"), module.__dict__)
+import pytest
+from importlib.metadata import entry_points
+plugins = [entry.load() for entry in entry_points(group="pytest11")
+           if entry.dist.metadata["Name"].lower() == "pytest-json-ctrf"]
+assert len(plugins) == 1, "fixed CTRF plugin unavailable"
+raise SystemExit(pytest.main(["-c", "/dev/null", "--rootdir=/tests", "--confcutdir=/tests", "-p", "no:cacheprovider",
+    "-o", "junit_family=xunit1", "--ctrf", "/logs/verifier/ctrf.json",
+    "--junitxml=/logs/verifier/junit.xml", "/tests/test_outputs.py::test_source_bound_devconn", "-rA"], plugins=plugins))
+'; then
+    printf '1\n' > /logs/verifier/reward.txt
+else
+    status=$?
+    printf '0\n' > /logs/verifier/reward.txt
+    exit "$status"
+fi

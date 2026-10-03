@@ -1,38 +1,64 @@
-# Child-only movie-data connectivity/motion sensitivity (DEVCONN-001)
+# Child-only movie connectivity and motion sensitivity (DEVCONN-001)
 
-Fair et al. (2009), "Functional Brain Networks Develop from a Local to Distributed
-Organization", motivates the question. This task uses public ds000228 movie-watching
-data as a paper-derived methods case, not a reproduction of Fair's resting-state
-four-network finding.
+Fair et al. (2009), *Functional Brain Networks Develop from a “Local to
+Distributed” Organization* ([paper](https://doi.org/10.1371/journal.pcbi.1000381)),
+motivates the question. Apply a related distance-based connectivity analysis to
+the released ds000228 movie-watching derivatives. This is a **paper-derived
+methods and sensitivity case**, not a reproduction of Fair's resting-state
+cohort, four-network analysis, or developmental finding.
+The specific motivation is the paper's Figure 5 distance-dependent child/adult
+comparison, not Figure 4 community detection. The tertile Fisher-z summaries and
+child-only rank inference below are explicit adaptations, not the paper's estimator.
 
-Use all 155 subjects from nilearn.datasets.fetch_development_fmri (122 children, 33 adults),
-joining age/group by actual participant_id, not array position. Extract the Power 2011
-264-ROI coordinates with 5 mm spheres. Preprocess with detrend,zscore_sample,band-pass 0.009–0.08 Hz,
-TR = 2 s and nuisance six motion+six aCompCor+WM+CSF (zero-fill missing confound values).
+Use the fixed originals under `/app/data/devconn`, whose complete identities are
+in `/app/source_manifest.json`: 155 participants (122 children, 33 adults), their
+full confound tables and phenotype table, and the original 264 Power ROI centers.
+Everything needed is available offline. Do not fetch substitute data. Preserve
+literal participant/ROI IDs and join by identity, not position.
 
-Use Euclidean ROI-pair distances. Short-range edges fall strictly below the lower
-distance tertile; long-range strictly above the upper tertile. Average Fisher-z
-correlations within each bin. Segregation is short_range-long_range.
+The public numerical contract is `/app/method_contract.json`, with explanations
+in `/app/ANALYSIS_CONTRACT.md` and output fields in `/app/output_schema.json`.
+`/app/reporting_kernel.py` is the disclosed downstream reporting implementation;
+you may use it or implement an equivalent calculation. Source extraction and
+cleaning still need to be reconstructed from the originals. The verifier compares
+source-close primitives and then replays the submitted cleaned signals, not a
+hidden target effect or a prescribed conclusion.
 
-Primary age estimands are children only. For short_range,long_range,segregation,
-report Spearman r/p and motion-adjusted rank correlation r/p (residualize connectivity
-and age ranks against meanFD rank+intercept,df = n - 3). Include participant-bootstrap 95%
-percentile CIs for both correlations: sort child rows by actual subject_id, then
-1,000 complete-row resamples using default_rng seed 11. Preserve child/adult means.
-FD < 0.2 group comparison is low-motion restriction, not matching; report Welch t,p
-and sample counts. Pooled-child/adult age associations, if included, are exploratory.
+Extract 5 mm spheres at every Power coordinate, using the stated sphere support
+convention. Keep all 168 released frames for each participant. Preserve original
+header/scaling metadata; use the separately documented operational MNI-mm/TR=2 s
+convention, not an invented measured onset. Detrend and band-pass both ROI signals
+and the 14 specified nuisance columns at 0.009–0.08 Hz, regress the nuisance design,
+and sample-standardize. FD is a separate motion covariate, not a nuisance regressor.
+Only the declared missing tokens may be zero-filled, with their locations recorded.
 
-Write to OUTPUT_DIR (default /app/output):
-- connectivity.csv: exactly 155 unique subject_id,age,group,short_range,long_range,
-  segregation,mean_fd. MeanFD is mean zero-filled framewise_displacement.
-- age_effects.json: population="children_only",n_children,n_adults;
-  children_age_spearman measure objects with r,p,ci95,motion_adjusted_r,
-  motion_adjusted_p,motion_adjusted_ci95,n; group_means; motion_control containing
-  segregation_low_motion_restriction with t,p,n_child,n_adult,fd_thresh.
-- run_metadata.json: analysis_scope="paper-derived child-only movie-data motion sensitivity",
-  cohort, atlas/bins, preprocessing, original-source SHA256 receipts.
-- findings.md: measured associations, uncertainty and limitations. No forced attenuation,
-  non-significance or causal-motion-artifact conclusion. Do not infer absence from p>.05.
+Use signed correlations and average their Fisher-z transforms within strict lower
+and upper distance-tertile bins. Do **not** transform these means back with tanh.
+Segregation is short-range minus long-range. Report canonical-active ROI and edge
+coverage; undefined values must remain explicitly unavailable rather than become
+zeros, dropped people, or replacement draws.
 
-If data/cohort integrity cannot be established, exit nonzero and write parseable
-failed_precondition metadata and a reason in age_effects.json/findings.md.
+For children only, report age Spearman and FD-rank-adjusted associations for all
+three metrics, and 1,000 seed-11 participant-bootstrap draws with percentile CIs.
+Retain child/adult means and signed segregation Welch descriptives, both for the
+full cohort and the separate strict FD<0.2 restriction. This restriction is not
+motion matching. Recompute rank/variance support and degrees of freedom as stated
+in the public contract, including degenerate and undefined cases.
+
+Write these five files to `/app/output`:
+
+- `signal_evidence.npz`: raw and cleaned ROI signals, identity/activity axes, and
+  complete bootstrap receipts with defined/status masks.
+- `connectivity_metrics.csv`: all 155 participant metrics, covariates and edge counts.
+- `age_effects.json`: child inference, uncertainty, group means and Welch descriptives.
+- `run_metadata.json`: source identities, headers, missingness, geometry and QC receipts.
+- `findings.md`: the measured results, uncertainty, coverage and interpretation limits.
+
+Coherent output-axis permutations and numerically equivalent implementations are
+accepted. Scores are binary: one complete source-bound validation must pass;
+there is no proportional-scoring promise. No direction, attenuation, significance,
+effect-size floor, narrative keyword, or implementation version is required.
+If a precondition fails, preserve the evidence, exit nonzero, and write a
+`failure_report.json` in a safe output directory. Do not change inputs or overwrite
+an earlier output to make the task pass. See `/app/SOURCE_NOTICE.md` for provenance
+and the unresolved license notice attached to the packaged Power coordinates.

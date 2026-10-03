@@ -1,21 +1,22 @@
 version = "1.1"
-instruction_version = "1.0"
-test_version = "1.0"
+instruction_version = "3.0"
+test_version = "3.0"
+artifacts = ["/app/output", "/app/source_manifest.json", "/app/method_contract.json", "/app/output_schema.json", "/app/reporting_kernel.py", "/app/ANALYSIS_CONTRACT.md", "/app/SOURCE_NOTICE.md"]
 
 [metadata]
 task_id = "DEVCONN-001"
-title = "Reproduce the developmental local-to-distributed connectivity result — un-cued motion confound"
-category = "Reproduction"
-difficulty = "hard"
-dataset_source = "OpenNeuro (nilearn-pinned derivatives)"
+title = "Child-only movie connectivity and motion sensitivity"
+category = "fMRI / connectivity methods"
+# Difficulty unassigned pending separately authorized current-head calibration.
+dataset_source = "155 fixed original public development-fMRI derivatives and original Power coordinate CSV; identity-pinned build-time capture, offline runtime"
 dataset_id = "ds000228"
-source_paper = "Fair et al. 2009, PLoS Comput Biol (10.1371/journal.pcbi.1000381)"
+source_paper = "Fair et al. 2009, 10.1371/journal.pcbi.1000381, Figure 5 motivation; explicit public-data methods adaptation, not paper-finding replication."
 
 [verifier]
-timeout_sec = 7200.0
+timeout_sec = 1800.0
 
 [agent]
-timeout_sec = 7200.0
+timeout_sec = 5400.0
 
 [environment]
 build_timeout_sec = 2400.0
@@ -23,7 +24,7 @@ cpus = 2
 memory_mb = 8192
 storage_mb = 16384
 gpus = 0
-allow_internet = true
+allow_internet = false
 
 [verifier.env]
 
