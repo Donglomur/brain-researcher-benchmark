@@ -160,6 +160,41 @@ def test_roi_coordinates_allow_json_numeric_float_spelling(fabricated):
     assert V.verify_artifacts(actual,canonical)['status']=='ok'
 
 
+@pytest.mark.parametrize('mode',['canonical','alias','both','alias_with_normalized'])
+def test_normalization_maximum_encodings_and_no_mutation(fabricated,mode):
+    canonical,actual=fabricated
+    record=actual['run_metadata.json']['source_observed']['template']['normalization']
+    if mode!='canonical': record['source_maximum']=record['maximum']
+    if mode in ('alias','alias_with_normalized'): del record['maximum']
+    if mode=='alias_with_normalized': record['normalized_maximum']=1.
+    saved=copy.deepcopy(record)
+    assert V.verify_artifacts(actual,canonical)['status']=='ok'
+    assert record==saved
+
+
+@pytest.mark.parametrize('mode',['missing','conflict','near_conflict','wrong','bool','string','nan','inf',
+    'operator','normalized_wrong','normalized_bool','normalized_string','source_hash','wrong_clean'])
+def test_normalization_alias_does_not_weaken_receipts(fabricated,mode):
+    canonical,actual=fabricated
+    record=actual['run_metadata.json']['source_observed']['template']['normalization']
+    record['source_maximum']=record.pop('maximum')
+    if mode=='missing': del record['source_maximum']
+    elif mode=='conflict': record['maximum']=record['source_maximum']+1
+    elif mode=='near_conflict': record['maximum']=record['source_maximum']+1e-12
+    elif mode=='wrong': record['source_maximum']+=1
+    elif mode=='bool': record['source_maximum']=True
+    elif mode=='string': record['source_maximum']='20'
+    elif mode=='nan': record['source_maximum']=float('nan')
+    elif mode=='inf': record['source_maximum']=float('inf')
+    elif mode=='operator': record['operator']='divide_by_mean'
+    elif mode=='normalized_wrong': record['normalized_maximum']=20.
+    elif mode=='normalized_bool': record['normalized_maximum']=True
+    elif mode=='normalized_string': record['normalized_maximum']='1'
+    elif mode=='source_hash': actual['run_metadata.json']['source_observed']['template']['sha256']='0'*64
+    else: actual['signal_evidence.npz']['cleaned_roi'][0,0,0]+=.1
+    with pytest.raises(ValueError): V.verify_artifacts(actual,canonical)
+
+
 @pytest.mark.parametrize('sign',[-1.,1.])
 def test_csv_metric_domain_is_strict_even_within_receipt_tolerance(fabricated,sign):
     canonical,actual=fabricated

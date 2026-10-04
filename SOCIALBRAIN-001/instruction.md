@@ -69,3 +69,23 @@ If source integrity, geometry or a declared precondition fails, exit nonzero and
 write `failure_report.json` with the reason in your owned output directory.
 Preserve that failure; do not download replacements, omit participants or invent
 zero endpoints. Keep outputs separate from the source files and public contracts.
+
+## Template-normalization receipt clarification
+
+In `run_metadata.json`, `source_observed.template.normalization` is an object:
+
+- `dtype`: exactly `"float32"`, the computation dtype (not a storage-dtype alias).
+- `operator`: exactly `"divide_by_global_maximum"`.
+- `maximum` or `source_maximum`: a finite JSON number recording the maximum of
+  the original template after conversion to float32, **before** normalization.
+  Either key is accepted. If both appear they must have equal numeric values;
+  both refer to this same source maximum, not the normalized maximum.
+- Optional `normalized_maximum`: if included, a finite JSON number equal to 1
+  under the header-receipt tolerance (`atol=1e-10`, `rtol=1e-9`).
+
+The source maximum uses that same existing receipt tolerance. Booleans and
+numeric strings are not numbers. Missing maxima, conflicting aliases, wrong
+source values and wrong operators fail. These accepted key spellings supplement
+the pinned `/app/output_schema.json`; its hash still identifies those exact
+bytes. All source identities, signal calculations, numerical tolerances and
+other required output fields are unchanged.

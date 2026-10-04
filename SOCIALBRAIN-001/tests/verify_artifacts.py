@@ -170,6 +170,18 @@ def compare_header(actual,expected):
     scalar_equal(a,b,1e-10,1e-9)
 
 
+def compare_normalization(actual,expected):
+    """Compare source receipts with explicit, non-mutating maximum aliases."""
+    scalar_equal(fields(actual,('dtype','operator')),fields(expected,('dtype','operator')))
+    names=[name for name in ('maximum','source_maximum') if name in actual]
+    need(bool(names),'normalization_source_maximum')
+    values=[number(actual[name],json_mode=True) for name in names]
+    need(all(value==values[0] for value in values),'normalization_alias_conflict')
+    scalar_equal(values[0],float(expected['maximum']),1e-10,1e-9)
+    if 'normalized_maximum' in actual:
+        scalar_equal(actual['normalized_maximum'],1.,1e-10,1e-9)
+
+
 def validate_metadata(actual,canonical,replay):
     fixed=dict(schema_version='socialbrain-metadata-v2',task_id='SOCIALBRAIN-001',dataset_id='ds000228',
                status='complete',**pins())
@@ -191,7 +203,8 @@ def validate_metadata(actual,canonical,replay):
     scalar_equal(observed['participants_column_names'],wanted['participants_column_names'])
     need(type(observed['frame_alignment']) is str and observed['frame_alignment'].strip(),'frame_alignment')
     a,b=observed['template'],wanted['template']
-    scalar_equal(fields(a,('path','sha256','normalization')),fields(b,('path','sha256','normalization')),1e-10,1e-9)
+    scalar_equal(fields(a,('path','sha256')),fields(b,('path','sha256')),1e-10,1e-9)
+    compare_normalization(a.get('normalization'),b['normalization'])
     compare_header(a.get('header'),b['header'])
     person_fields=('subject_id','bold_path','confounds_path','frame_count','confound_column_names','selected_confound_columns',
                    'excluded_confound_columns','mean_fd_sum','mean_fd_observed_count')

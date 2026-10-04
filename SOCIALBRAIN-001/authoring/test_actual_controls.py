@@ -16,7 +16,7 @@ import numpy as np
 import pytest
 
 
-BOOTSTRAP_SHA = 'c6d70f3a433c5360f4e2bd8fe2af4dcbf0e9d8a94cce8415b34beb0d5435a95f'
+BOOTSTRAP_SHA = 'a1b79ef90d21901839f76189ab981fea64991f65980059cfeead23c96f6b5838'
 
 
 def private_bootstrap():

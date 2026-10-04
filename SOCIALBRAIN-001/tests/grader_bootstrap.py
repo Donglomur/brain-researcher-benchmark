@@ -22,7 +22,7 @@ PRIVATE_PINS = {
     'reporting_kernel': '89db8ca04db493d5f8522246200b7c8b11562856b2fb977f201748b1ebb1f4d6',
     'source_reference': '96e46fc80c30b77daa6c36d9148dc71d9ea636c947b60f991482f69f6180b037',
     'io_contract': 'ce5614b774fadebd58b557ec9a3bbf23fcaa4e9dc7a13a06b85275080086c78f',
-    'verify_artifacts': '1a5f9627ff890735c767e33cb0c5e6fcd5b88244fb33007a44c17204240179f4',
+    'verify_artifacts': '25df63d85957817b5f58a39c20e8d1b04dce0f5d105284a4be75787d09a8e43e',
 }
 DOCUMENT_PINS = {
     'manifest_path': ('source_manifest.json', '9458c48ac61e1e8b0ee36d513ebf6e7613e889a9895747ca46d4c7bd50af8d0b'),

@@ -11,7 +11,7 @@ from pathlib import Path
 sys.pycache_prefix = tempfile.mkdtemp(prefix="socialbrain-trusted-pycache-")
 root = Path("/tests")
 assert root.is_dir() and not root.is_symlink()
-pins = {"score_submission.py": "9f1c3ac8acab44a699bb43a02ee8471f5ab10c61d0b5bc22758478e74504a26c",
+pins = {"score_submission.py": "a770296bde986303914ae66d3654344e8163a84095e9d3c2f07c25ef48066c80",
         "test_outputs.py": "426fa07a5f9da88040c62df42c3f2c2c439af59a66c61296d32068bd44a99d89"}
 buffers = {}
 signature = lambda s: (s.st_dev,s.st_ino,s.st_mode,s.st_size,s.st_mtime_ns,s.st_ctime_ns)
