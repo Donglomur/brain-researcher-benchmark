@@ -188,6 +188,29 @@ def keyed_list(actual, expected, key, name):
     return [actual[keys.index(row[key])] for row in expected]
 
 
+def configuration_records(actual, expected):
+    """Accept equivalent record lists or config-keyed JSON objects.
+
+    Outer keys supply an omitted inner ID, but never override a conflicting ID.
+    Other fields still undergo the unchanged complete numerical/source replay.
+    """
+    if isinstance(actual, dict):
+        rows = []
+        for config, row in actual.items():
+            a.require(isinstance(config, str) and isinstance(row, dict), "configuration summaries: keyed object")
+            a.require("config" not in row or row["config"] == config, "configuration summaries: conflicting config identity")
+            rows.append(dict(row, config=config))
+        actual = rows
+    a.require(isinstance(actual, list) and all(isinstance(row, dict) and
+              isinstance(row.get("config"), str) for row in actual), "configuration summaries: typed config records")
+    ordered = keyed_list(actual, expected, "config", "configuration summaries")
+    # This alias is limited to the configuration-level source-inactive case.
+    # The caller has already certified source masks/operator availability.
+    return [dict(row, embedding_status="inactive_parcel")
+            if row.get("embedding_status") == "source_incomplete" and target["embedding_status"] == "inactive_parcel"
+            else row for row, target in zip(ordered, expected)]
+
+
 def metadata(actual, reference):
     expected = reference["metadata"]
     actual = copy.deepcopy(actual)
@@ -219,7 +242,9 @@ def metadata(actual, reference):
               all(isinstance(versions[key], str) and versions[key].strip() for key in expected["software_versions"]), "actual software strings required")
     a.require(isinstance(actual.get("warnings"), list), "warnings list required")
     amendment = actual.get("numerical_method_amendments")
-    a.require(isinstance(amendment, str) and amendment.strip(), "method amendment description required")
+    descriptions = [amendment] if isinstance(amendment, str) else amendment
+    a.require(isinstance(descriptions, list) and descriptions and
+              all(isinstance(value, str) and value.strip() for value in descriptions), "method amendment description required")
 
 
 def validate(output_dir, reference):
@@ -241,7 +266,7 @@ def validate(output_dir, reference):
     table(submitted["per_subject.csv"], derived["per_subject"], ("participant_id",), "per_subject")
     results = copy.deepcopy(submitted["results.json"])
     wanted = derived["results"]
-    results["configuration_summaries"] = keyed_list(results.get("configuration_summaries"), wanted["configuration_summaries"], "config", "configuration summaries")
+    results["configuration_summaries"] = configuration_records(results.get("configuration_summaries"), wanted["configuration_summaries"])
     for got, target in zip(results["configuration_summaries"], wanted["configuration_summaries"]):
         subjects = got.get("subject_ids")
         a.require(isinstance(subjects, list) and len(subjects) == len(set(subjects)) and set(subjects) == set(target["subject_ids"]), "configuration source membership")

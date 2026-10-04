@@ -112,3 +112,85 @@ Use a fresh output directory and protect source/code/contracts. On unsupported
 source or numerical failure, exit nonzero and preserve `failure_report.json`
 with a reason. Do not fabricate completion, silently retry changed settings, or
 choose exclusions from outcomes. A `resource_pilot` is not a complete submission.
+
+## JSON field and representation clarification (version 2.1)
+
+The source, method and output-schema JSON files and their SHA-256 identities
+remain unchanged. This section clarifies the JSON containers and documentary
+fields without changing estimators, source truth, tolerances or null rules.
+JSON objects reject duplicate keys; counts/Booleans are typed, numeric strings
+are not numeric receipts, and all JSON numbers must be finite. Required
+unavailable values use null. Extra finite descriptive fields are allowed.
+
+`results.json` requires `schema_version: gradient-results-v2`, `status: ok`,
+`n_subjects`, `n_parcels`, `n_components`, `n_frames`, `unaligned_signed`,
+`aligned_signed`, `configuration_summaries`, `aligned_mean_summary`,
+`principal_gradient_identity_robust`, `robustness_status`,
+`apex_networks_observed`, `gpa` and a nonempty descriptive `claim_scope` string.
+The fixed counts and all computed values remain as specified by the contracts.
+
+- Each signed aggregate is an object with `value`, `status`, `n_expected` and
+  `n_defined`; the complete 190-pair mean is null unless all pairs are defined.
+- `configuration_summaries` may be a list of four records carrying `config`,
+  **or** an object keyed by the four exact configuration IDs. In the object form
+  an inner `config` may be omitted; if present it must equal its outer key.
+  Every configuration appears once. Missing/unknown/duplicate/conflicting
+  identities are errors. Order does not matter.
+- Each configuration record requires `subject_ids`, `bandpass`,
+  `embedding_status`, `principal_status`, `retained_span_status`, `apex_network`,
+  `bottom_network`, `between_within`, `between_within_status`, `principal_gap`
+  and `retained_boundary_gap`, in addition to its configuration identity.
+  `subject_ids` is a duplicate-free list with exact source membership; list
+  order is immaterial. Field values are checked against source-bound replay.
+  For configuration-level `embedding_status` only, `inactive_parcel` and
+  `source_incomplete` both denote an unavailable group embedding caused by
+  source-inactive parcel support. The alias is accepted only when the source
+  masks and certified operator establish that case; it does not denote an
+  available embedding or `multiscale_singular`. Other statuses/nulls/gaps remain
+  unchanged, and this alias does not apply to per-subject CSV status fields.
+- `aligned_mean_summary` is an object with `quantity: aligned_mean`, `status`,
+  `n_subjects_expected`, `n_subjects_defined`, `apex_network`, `bottom_network`,
+  `between_within`, `between_within_status`, `principal_gap` and
+  `retained_boundary_gap`. It remains distinct from group-FC embeddings.
+- `gpa` is an object with `status`, `n_iterations` and `termination`, using the
+  schema's enum/null-support rules. `apex_networks_observed` is the distinct
+  defined-network list in public network order. The robustness Boolean/null
+  and status remain computed quantities, not desired outcomes.
+
+`run_metadata.json` requires `schema_version: gradient-metadata-v2`, `status:
+ok`, `task_id: GRADIENT-001`, the exact `source_manifest_sha256`, `method_sha256`
+and `output_schema_sha256`, `source_files`, `source_observed`,
+`software_versions`, `numerical_method_amendments` and `warnings`.
+
+- `source_files` is an order-free list of complete source records, keyed by
+  `path`, each containing `path`, `role`, `participant_id` (nullable for shared
+  files), `size_bytes` and `sha256`.
+- `source_observed` requires `participant_ids`, `source_order`,
+  `participant_column_names`, `confound_column_names`, `headers`, `atlas_header`,
+  `atlas_labels`, `voxel_support_by_subject`, `frame_alignment`,
+  `raw_clock_metadata`, `effective_TR_s` and `effective_origin_s`.
+  `participant_ids` is an order-free exact-membership list; `source_order` and
+  original column-name lists retain source order. The four per-person fields
+  `confound_column_names`, `headers`, `voxel_support_by_subject` and
+  `raw_clock_metadata` are objects keyed by all 20 literal IDs.
+- Each header record carries `shape`, `affine`, `source_dtype`, `spatial_units`,
+  `temporal_units`, `raw_TR`, `raw_toffset`, `effective_scaling_slope` and
+  `effective_scaling_intercept`. `atlas_header` carries the same spatial fields
+  but does not require the three temporal fields. Shapes and affine row/column
+  axes are ordered. Equivalent endian-aware dtype spellings are accepted.
+- `atlas_labels` is an order-free list of 400 records keyed by `parcel_id`, with
+  `label` and `network`. Each per-person voxel-support value is an order-free
+  list of 400 records keyed by `parcel_id`, with `n_voxels` and `support_sha256`.
+  Each raw-clock record has `raw_TR`, `raw_toffset` and `temporal_units`.
+  Header and clock numbers retain the source values, not the effective clock.
+- `frame_alignment` is a nonempty descriptive string, not a verbatim phrase
+  target. `software_versions` contains nonempty actual-version strings for
+  python/numpy/scipy/nibabel/nilearn/brainspace (`not_used` is allowed when true).
+- `numerical_method_amendments` may be one nonempty descriptive string or a
+  nonempty list of nonempty descriptive strings. No exact phrase is required;
+  the machine-readable source/operator checks enforce the actual method.
+  `warnings` is a list of actual warning descriptions/records, which may be
+  empty; its content is not matched to a hidden expected warning list.
+
+All source identities, membership/support, array certificates, CSV receipts,
+derived numbers and scientific statuses continue to be checked independently.

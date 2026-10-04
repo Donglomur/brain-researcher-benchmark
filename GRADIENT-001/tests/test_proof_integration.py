@@ -88,6 +88,35 @@ def test_csv_rows_columns_and_keyed_json_order_are_not_signals(output,reference)
     assert p.validate(output,reference)["status"]=="accepted"
 
 
+@pytest.mark.parametrize("inner_id", [True, False])
+def test_config_mapping_and_amendment_list_full_replay(output,reference,inner_id):
+    def configs(value):
+        value["configuration_summaries"] = {row["config"]: row for row in reversed(value["configuration_summaries"])}
+        if not inner_id:
+            for row in value["configuration_summaries"].values(): del row["config"]
+    rewrite_json(output,"results.json",configs)
+    rewrite_json(output,"run_metadata.json",lambda value:value.update(
+        numerical_method_amendments=["Explicit source conditioning.", "Corrected symmetric diffusion operator."]))
+    assert p.validate(output,reference)["status"]=="accepted"
+
+
+def test_mapping_does_not_hide_changed_replayed_number(output,reference):
+    def change(value):
+        value["configuration_summaries"] = {row["config"]: row for row in value["configuration_summaries"]}
+        value["configuration_summaries"]["nobp_all"]["between_within"] += 1.
+    rewrite_json(output,"results.json",change)
+    with pytest.raises(ValueError,match="numeric mismatch"): p.validate(output,reference)
+
+
+def test_unavailable_configuration_status_alias_with_full_source_guards(tmp_path):
+    reference=f.manufactured_reference(undefined=True);out=f.emit(tmp_path/"undefined_alias",reference)
+    def change(value):
+        for row in value["configuration_summaries"]: row["embedding_status"]="source_incomplete"
+        value["configuration_summaries"]={row["config"]:row for row in value["configuration_summaries"]}
+    rewrite_json(out,"results.json",change)
+    assert p.validate(out,reference)["n_operator_valid"]==0
+
+
 def test_all_coherent_npz_axes_and_pair_direction_reorder(output,reference):
     def reorder(arrays):
         permutations={name:np.arange(len(arrays[key]))[::-1] for name,key in (
