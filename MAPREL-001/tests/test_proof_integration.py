@@ -1,5 +1,6 @@
 """Manufactured full400 evidence; assignment double is explicitly not package QA."""
 import csv
+from copy import deepcopy
 import json
 
 import numpy as np
@@ -235,6 +236,91 @@ def test_documentary_dtype_key_is_not_semantic_magic(manufactured):
     root, ref = manufactured
     edit_json(root, lambda x: x["source_observed"]["gradient_l"]["arrays"][0]["metadata"].update(dtype="float32"), "run_metadata.json")
     with pytest.raises(ValueError, match="literal exact"): p.validate_output_directory(root, ref)
+
+
+@pytest.mark.parametrize("field,description", [
+    ("cortical_join", "Joined original hemisphere-local vertex identities from the brain-model axis."),
+    ("sphere_coordinate_transform", "none"),
+    ("map_support", "All nonbackground cortical vertices retained without imputation.")])
+def test_authored_atlas_descriptions_have_no_private_prose_fingerprint(manufactured, field, description):
+    root, ref = manufactured
+    edit_json(root, lambda x: x["source_observed"]["atlas"].update({field: description}), "run_metadata.json")
+    before = (root/"run_metadata.json").read_bytes()
+    assert p.validate_output_directory(root, ref)["status"] == "accepted"
+    assert (root/"run_metadata.json").read_bytes() == before
+
+
+@pytest.mark.parametrize("field", p.ATLAS_DESCRIPTION_FIELDS)
+@pytest.mark.parametrize("value", [None, "", "  \n", True, 0, {}, []])
+def test_atlas_descriptions_reject_empty_or_malformed_values(manufactured, field, value):
+    root, ref = manufactured
+    edit_json(root, lambda x: x["source_observed"]["atlas"].update({field: value}), "run_metadata.json")
+    with pytest.raises(ValueError): p.validate_output_directory(root, ref)
+
+
+@pytest.mark.parametrize("field", p.ATLAS_DESCRIPTION_FIELDS)
+def test_atlas_descriptions_remain_required(manufactured, field):
+    root, ref = manufactured
+    edit_json(root, lambda x: x["source_observed"]["atlas"].pop(field), "run_metadata.json")
+    with pytest.raises(ValueError): p.validate_output_directory(root, ref)
+
+
+def test_structured_support_receipts_accept_correct_reordered_source_counts(manufactured):
+    root, ref = manufactured
+    edit_json(root, lambda x: x["source_observed"]["atlas"].update(
+        map_support=deepcopy(ref["source_map_support"])[::-1]), "run_metadata.json")
+    assert p.validate_output_directory(root, ref)["status"] == "accepted"
+
+
+@pytest.mark.parametrize("defect", ["included_vertices", "finite_vertices", "nonfinite_vertices", "zero_vertices",
+                                    "missing_count", "bool_count", "fractional_count", "string_count",
+                                    "missing_map", "duplicate_map", "extra_map"])
+def test_structured_support_receipts_reject_false_or_incomplete_counts(manufactured, defect):
+    root, ref = manufactured
+    records = deepcopy(ref["source_map_support"])
+    if defect in ("included_vertices", "finite_vertices", "nonfinite_vertices", "zero_vertices"):
+        records[0][defect] += 1
+    elif defect == "missing_count": del records[0]["zero_vertices"]
+    elif defect == "bool_count": records[0]["zero_vertices"] = False
+    elif defect == "fractional_count": records[0]["zero_vertices"] = .5
+    elif defect == "string_count": records[0]["zero_vertices"] = "0"
+    elif defect == "missing_map": records.pop()
+    elif defect == "duplicate_map": records[1] = dict(records[0])
+    else: records.append(dict(records[0], map_id="invented"))
+    edit_json(root, lambda x: x["source_observed"]["atlas"].update(map_support=records), "run_metadata.json")
+    with pytest.raises(ValueError): p.validate_output_directory(root, ref)
+
+
+def test_structured_support_requires_private_source_count_authority(manufactured):
+    root, ref = manufactured
+    counts = ref.pop("source_map_support")
+    edit_json(root, lambda x: x["source_observed"]["atlas"].update(map_support=counts), "run_metadata.json")
+    with pytest.raises(ValueError, match="private source map support required"):
+        p.validate_output_directory(root, ref)
+
+
+@pytest.mark.parametrize("defect", ["source_hash", "support_hash", "hemisphere", "map", "centroid",
+                                    "structure_digest", "zero_count", "label_name", "original_metadata"])
+def test_documentary_prose_never_replaces_source_or_join_correctness(manufactured, defect):
+    root, ref = manufactured
+    edit_json(root, lambda x: x["source_observed"]["atlas"].update(
+        cortical_join="An independent description of the original vertex join.",
+        sphere_coordinate_transform="none", map_support="The complete cortical support."), "run_metadata.json")
+    if defect == "source_hash":
+        edit_json(root, lambda x: x["source_files"][0].update(sha256="0"*64), "run_metadata.json")
+    elif defect == "support_hash": edit_csv(root, lambda rows: rows[0].update(support_sha256="0"*64))
+    elif defect == "hemisphere": edit_csv(root, lambda rows: rows[0].update(hemisphere="R"))
+    elif defect == "map": edit_csv(root, lambda rows: rows[0].update(gradient2=str(float(rows[0]["gradient2"])+1)))
+    elif defect == "centroid": edit_npz(root, lambda z: z["centroids"].__setitem__((0, 0), z["centroids"][0, 0]+1))
+    elif defect == "structure_digest":
+        edit_json(root, lambda x: x["source_observed"]["atlas"]["structures"][0].update(vertex_ids_sha256="0"*64), "run_metadata.json")
+    elif defect == "zero_count":
+        edit_json(root, lambda x: x["source_observed"]["atlas"].update(excluded_zero_entries=1), "run_metadata.json")
+    elif defect == "label_name":
+        edit_json(root, lambda x: x["source_observed"]["atlas"].update(label_map_name="changed"), "run_metadata.json")
+    else:
+        edit_json(root, lambda x: x["source_observed"]["gradient_l"]["arrays"][0]["metadata"].update(dtype="made up"), "run_metadata.json")
+    with pytest.raises(ValueError): p.validate_output_directory(root, ref)
 
 
 @pytest.mark.parametrize("kind", ["empty", "dangling", "directory"])

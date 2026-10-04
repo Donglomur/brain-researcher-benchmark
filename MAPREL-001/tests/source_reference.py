@@ -295,10 +295,19 @@ def reduce_parcels(structure):
     maps = np.empty((len(ids), 2), dtype=np.float64)
     centroids = np.empty((len(ids), 3), dtype=np.float64)
     support_hashes = []
+    source_map_support = [dict(map_id=key, included_vertices=0, finite_vertices=0,
+                               nonfinite_vertices=0, zero_vertices=0)
+                          for key in ('gradient2', 'thickness')]
     for i, vertices in enumerate(supports):
         h = 'L' if hemi[i] == 0 else 'R'; suffix = h.lower()
         for j, kind in enumerate(('gradient', 'thickness')):
-            maps[i, j] = np.mean(structure['values'][f'{kind}_{suffix}'][vertices], dtype=np.float64)
+            samples = structure['values'][f'{kind}_{suffix}'][vertices]
+            maps[i, j] = np.mean(samples, dtype=np.float64)
+            receipt = source_map_support[j]
+            receipt['included_vertices'] += len(samples)
+            receipt['finite_vertices'] += int(np.count_nonzero(np.isfinite(samples)))
+            receipt['nonfinite_vertices'] += int(np.count_nonzero(~np.isfinite(samples)))
+            receipt['zero_vertices'] += int(np.count_nonzero(samples == 0))
         center = np.mean(structure['values'][f'sphere_{suffix}'][vertices], axis=0, dtype=np.float64)
         norm = np.linalg.norm(center)
         need(np.isfinite(center).all() and math.isfinite(norm) and norm > 0, 'supported_centroid')
@@ -307,7 +316,8 @@ def reduce_parcels(structure):
     need(np.isfinite(maps).all() and np.isfinite(centroids).all(), 'finite_parcel_primitives')
     return dict(parcel_ids=ids, labels=structure['labels'], networks=structure['networks'], hemisphere=hemi,
                 support_n=np.asarray([len(s) for s in supports], dtype=np.int64), support_sha256=support_hashes,
-                centroids=centroids, maps=maps, source_observed=structure['source_observed'])
+                centroids=centroids, maps=maps, source_observed=structure['source_observed'],
+                source_map_support=source_map_support)
 
 
 def reconstruct(data_dir, manifest_path, method_path, schema_path, pins):

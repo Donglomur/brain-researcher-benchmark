@@ -61,6 +61,19 @@ def test_axis_order_is_discovered():
     assert r['source_observed']['atlas']['brain_model_axis_index'] == 0
 
 
+def test_support_counts_are_original_supported_vertices_not_parcel_means():
+    payloads = fixture_payloads()
+    # Vertex 1 on the left is an unsupported zero and must not enter counts.
+    payloads['gradient_l'] = gii([0, 0, 20, 80, 30], 'L')
+    payloads['thickness_r'] = gii([5, 2, 6, 0, 7, 8], 'R')
+    result = m.reduce_parcels(m.inspect_sources(payloads, IDS))
+    assert result['source_map_support'] == [
+        dict(map_id=key, included_vertices=6, finite_vertices=6,
+             nonfinite_vertices=0, zero_vertices=1)
+        for key in ('gradient2', 'thickness')]
+    np.testing.assert_array_equal(result['maps'], [[25, 3], [0, 1], [12, 8], [6, 1]])
+
+
 def test_structure_only_never_reduces(monkeypatch):
     monkeypatch.setattr(m, 'reduce_parcels', lambda *a: pytest.fail('reduction'))
     s = m.inspect_sources(fixture_payloads(), IDS)

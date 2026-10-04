@@ -21,8 +21,19 @@ def reference():
                 maps=np.column_stack([np.sin(x/9)+x/300, np.cos(x/13)-x/700]),
                 pins=dict(source_manifest_sha256="a"*64, method_contract_sha256="b"*64, output_schema_sha256="c"*64),
                 source_files=[dict(path="dummy.gii", role="gradient_l", size_bytes=17, sha256="d"*64)],
-                source_observed={role: dict(arrays=[dict(shape=[1200], dtype="<f4", metadata={"dtype": "documentary literal"})])
-                                 for role in p.GIFTI_ROLES})
+                source_observed={**{role: dict(arrays=[dict(shape=[1200], dtype="<f4", metadata={"dtype": "documentary literal"})])
+                                   for role in p.GIFTI_ROLES},
+                    "atlas": dict(shape=[1, 1200], label_axis_index=0, brain_model_axis_index=1,
+                        label_map_name="manufactured", excluded_zero_entries=0, label_keys=list(range(401)),
+                        structures=[dict(brain_structure="CIFTI_STRUCTURE_CORTEX_"+side,
+                            entries=600, nonzero_entries=600, hemisphere=hemi, full_surface_vertices=1200,
+                            vertex_ids_sha256=digest*64) for side,hemi,digest in (("LEFT","L","e"),("RIGHT","R","f"))],
+                        cortical_join="brain_structure_and_local_vertex_id",
+                        sphere_coordinate_transform="stored_pointset_no_transform",
+                        map_support="nonzero_cortical_labels_no_imputation")},
+                source_map_support=[dict(map_id=key, included_vertices=1200, finite_vertices=1200,
+                                         nonfinite_vertices=0, zero_vertices=0)
+                                    for key in ("gradient2", "thickness")])
 
 
 def fake_construct(centroids, hemisphere, parcel_ids, method, seed, count):

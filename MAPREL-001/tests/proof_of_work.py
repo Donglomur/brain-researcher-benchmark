@@ -20,6 +20,7 @@ PARCEL_FIELDS = ("parcel_id", "label", "network", "hemisphere", "n_vertices",
 SOURCE_FIELDS = ("path", "role", "size_bytes", "sha256")
 PINS = ("source_manifest_sha256", "method_contract_sha256", "output_schema_sha256")
 GIFTI_ROLES = ("gradient_l", "gradient_r", "thickness_l", "thickness_r", "sphere_l", "sphere_r")
+ATLAS_DESCRIPTION_FIELDS = ("cortical_join", "sphere_coordinate_transform", "map_support")
 
 
 def match(actual, expected, name, *, atol=1e-6, rtol=0., csv=False):
@@ -120,10 +121,33 @@ def metadata_expected(reference, mapped):
                                                               n_active=sum(m.active(raw[idx, 0]) for idx in positions.T))))
 
 
-def source_metadata(actual, expected):
-    """Dtype aliases only at declared GIFTI array dtype fields, not free metadata."""
+def source_metadata(actual, expected, source_map_support=None):
+    """Match source facts, not the spelling of three authored descriptions.
+
+    Original GIFTI metadata and atlas labels remain exact. A structured map
+    support receipt is checked against independently counted source vertices.
+    """
     a.require(isinstance(actual, dict), "source observed record")
     normalized = deepcopy(actual)
+    required = deepcopy(expected)
+    if "atlas" in required:
+        atlas = normalized.get("atlas")
+        a.require(isinstance(atlas, dict), "source atlas record")
+        for field in ATLAS_DESCRIPTION_FIELDS:
+            a.require(field in atlas, "source atlas description missing "+field)
+            value = atlas[field]
+            if field == "map_support" and isinstance(value, list):
+                a.require(source_map_support is not None, "private source map support required")
+                have = keyed_json(value, "map_id")
+                want = keyed_json(source_map_support, "map_id")
+                a.require(set(have) == set(want) == {"gradient2", "thickness"}, "both source map support records")
+                for key in want:
+                    match(have[key], want[key], "source map support")
+            else:
+                a.require(type(value) is str and bool(value.strip()), "source atlas nonempty description "+field)
+            # These three fields are documentary descriptions, not source-file
+            # literals. Their method claims never replace map/support checks.
+            required["atlas"].pop(field)
     for role in GIFTI_ROLES:
         if role not in expected: continue
         want = expected[role]["arrays"]
@@ -139,7 +163,7 @@ def source_metadata(actual, expected):
             a.require(dtype.fields is None and dtype.subdtype is None and dtype.kind in "iuf"
                       and dtype == target, "semantic source dtype")
             submitted["dtype"] = canonical["dtype"]
-    match(normalized, expected, "source observed", atol=1e-9, rtol=1e-9)
+    match(normalized, required, "source observed", atol=1e-9, rtol=1e-9)
 
 
 def validate_metadata(actual, reference, mapped):
@@ -151,7 +175,7 @@ def validate_metadata(actual, reference, mapped):
     have_files, want_files = keyed_json(actual.get("source_files"), "path"), keyed_json(expected["source_files"], "path")
     a.require(set(have_files) == set(want_files), "closed source file identities")
     for key in want_files: match(have_files[key], want_files[key], "source file")
-    source_metadata(actual.get("source_observed"), expected["source_observed"])
+    source_metadata(actual.get("source_observed"), expected["source_observed"], reference.get("source_map_support"))
     have_analysis = actual.get("analysis_observed")
     a.require(isinstance(have_analysis, dict), "analysis observed record")
     have_maps = keyed_json(have_analysis.get("map_support"), "map_id")

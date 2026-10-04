@@ -64,6 +64,42 @@ Write these five files in `/app/output`:
    result does not establish a causal explanation or prove absence of a
    relationship. There are no required prose keywords or verdict direction.
 
+### Metadata representation
+
+The JSON field names and structure in `output_schema.json` are required.
+`run_metadata.json` uses `schema_version="maprel-metadata-v2"`,
+`task_id="MAPREL-001"`, and `status="ok"`; `results.json` instead uses
+`schema_version="maprel-results-v2"` and `status="complete"`. The three contract
+hashes are SHA-256 strings for the supplied unchanged files. `source_files`
+contains every manifest record with exact relative `path`, literal `role`,
+integer `size_bytes`, and SHA-256 string; record order is immaterial.
+
+In `source_observed`, preserve the original GIFTI metadata, array intents,
+shapes, coordinate systems, hemisphere declarations, and source-ordered arrays.
+The atlas record requires `shape`, `label_axis_index`, `brain_model_axis_index`,
+`label_map_name`, source-ordered `structures`, `excluded_zero_entries`, sorted
+`label_keys`, and these three documentary fields:
+
+- `cortical_join`: nonempty description of the brain-structure/local-vertex-ID
+  join. No exact phrase, keyword, or private spelling is required.
+- `sphere_coordinate_transform`: nonempty description of the sphere-coordinate
+  treatment. For example, `"none"` can describe using stored pointsets directly.
+- `map_support`: either a nonempty description of the nonzero cortical-label
+  support, or two records keyed by `map_id` (`"gradient2"`, `"thickness"`).
+  Each record requires exact integer `included_vertices`, `finite_vertices`,
+  `nonfinite_vertices`, and `zero_vertices`, counted over all retained original
+  support vertices for that map. Structured counts are verified against the
+  original inputs; all-zero/missing/extra-map or conflicting counts do not pass.
+
+The prose fields are documentation, not evidence that a correct join or
+transform occurred. Original parcel membership, support counts/digests, signed
+map means, centroids, hemisphere identities, assignments and result arithmetic
+remain independently source-bound. Source-derived literal labels and original
+GIFTI metadata are not free-form descriptions. `analysis_observed` must retain
+the two Boolean map-activity records and integer remap-support counts specified
+in the schema. `software_versions` is a nonempty string-to-nonempty-string
+object for actual software; `warnings` is a list of strings, possibly empty.
+
 Coherently reordered keyed evidence, equivalent numerical dtype spellings and
 bounded harmless extra evidence are accepted as described in the schema. Full
 precision parcel values are recommended; rounded r/p receipts never determine
