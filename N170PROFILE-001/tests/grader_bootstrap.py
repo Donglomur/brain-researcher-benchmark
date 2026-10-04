@@ -22,7 +22,7 @@ PRIVATE_PINS = {
     'mat_metadata': '66fb278c78255e382b85359d26e76df2059c3f9c9dfb2b3ca73ec138148623f7',
     'independent_fir': '86e0886c018517ab37b887677de140cf477cfc3d1a5d08f82f3b1d5d91de143f',
     'source_reference': '6e8d1c8cae9262e55a4da2598edf29dc4bd58c1ffae173fccd8dee723bb2a097',
-    'proof_of_work': '6bc6cc17943c511f0cc1f8409bb9c55d253f0a7703678e5ae9c8e5457578d198',
+    'proof_of_work': '4867fd6d152861c272bca899f4c85bf6d702b2435b6187b1fa3b0d6ee909af8a',
 }
 MAX_CODE_BYTES = 1024 * 1024
 DOCUMENT_PINS = {

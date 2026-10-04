@@ -71,6 +71,13 @@ Exact fields, nulls and numerical bounds are public in
 six-decimal scalar receipts are acceptable. Coherent row/axis permutations and
 bounded descriptive extras are allowed.
 
+Metadata uses manifest-relative source paths or the equivalent absolute paths
+under `/app/data/n170profile/`. The public output contract also specifies the
+equivalent face/car Boolean-map, MAT-layout and source-proven empty optional
+MAT-field representations. These are documentary aliases only; source
+identities, raw header strings, waveform support and all scientific checks
+remain unchanged.
+
 The verifier independently reconstructs the original-source condition averages,
 checks trial selection, and recomputes measurements and group summaries from
 your accepted waveform evidence. It does not use an old numerical answer bank.

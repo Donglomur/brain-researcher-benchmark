@@ -257,10 +257,94 @@ def validate_groups(given, expected):
             need(io.number(ci[0],True) <= io.number(ci[1],True), "ordered headline CI")
 
 
+def source_path(value):
+    """Canonical manifest spelling, without opening or resolving submitted paths."""
+    need(type(value) is str and bool(value) and "\0" not in value and "\\" not in value,
+         "source path string")
+    prefix = "/app/data/n170profile/"
+    if value.startswith("/"):
+        need(value.startswith(prefix), "source path root")
+        value = value[len(prefix):]
+    need(all(part not in ("", ".", "..") for part in value.split("/")),
+         "source path components")
+    return value
+
+
+def condition_flags(value):
+    """Metadata-only Boolean encoding; the NPZ evidence mask is unchanged."""
+    if type(value) is dict:
+        need(set(value) == set(CONDITIONS), "condition flags exact names")
+        value = [value[name] for name in CONDITIONS]
+    need(type(value) is list and len(value) == 2 and all(type(v) is bool for v in value),
+         "condition flags Boolean pair")
+    return list(value)
+
+
+def documentary_empty_fields(given, expected, fields):
+    """Only named optional MAT fields already proven empty by the source reader."""
+    if type(given) is not dict or type(expected) is not dict:
+        return given
+    result = dict(given)
+    for field in fields:
+        if (field in given and field in expected and expected[field] is None
+                and type(given[field]) is list and len(given[field]) == 0):
+            result[field] = None
+    return result
+
+
+def metadata_view(given, reference):
+    """Normalize documentary aliases in fresh mappings, never submitted bytes."""
+    need(type(given) is dict, "metadata record")
+    view = dict(given)
+    need(type(given.get("source_files")) is list, "source files list")
+    records = []
+    for row in given["source_files"]:
+        need(type(row) is dict and "path" in row, "source file path required")
+        record = dict(row, path=source_path(row["path"]))
+        if "manifest_path" in row:
+            need(source_path(row["manifest_path"]) == record["path"], "conflicting manifest path")
+        records.append(record)
+    view["source_files"] = records
+    original_people = keyed(reference["source_observed"]["persons"], ("subject_id",))
+    for section in ("source_observed", "analysis_observed"):
+        value = given.get(section)
+        need(type(value) is dict and type(value.get("persons")) is list, section+": persons required")
+        people = []
+        for row in value["persons"]:
+            need(type(row) is dict, section+": person record")
+            person = dict(row)
+            if section == "source_observed":
+                for field in ("set_path", "fdt_path"):
+                    need(field in row, "required source "+field)
+                    person[field] = source_path(row[field])
+                if row.get("mat_layout") == "EEG":
+                    person["mat_layout"] = "scalar_EEG_struct"
+                need(type(row.get("subject_id")) is str, "literal metadata subject")
+                expected = original_people.get((row["subject_id"],), {})
+                if "header_fields" in row:
+                    person["header_fields"] = documentary_empty_fields(
+                        row["header_fields"], expected.get("header_fields"),
+                        ("subject", "group", "condition", "session"))
+                if type(row.get("channel_records")) is list:
+                    channels = expected.get("channel_records", [])
+                    person["channel_records"] = [documentary_empty_fields(
+                        record, channels[i] if i < len(channels) else None,
+                        ("ref", "theta", "radius", "X", "Y", "Z", "sph_theta",
+                         "sph_phi", "sph_radius", "type", "urchan"))
+                        for i, record in enumerate(row["channel_records"])]
+            else:
+                need("condition_defined" in row, "required condition flags")
+                person["condition_defined"] = condition_flags(row["condition_defined"])
+            people.append(person)
+        view[section] = dict(value, persons=people)
+    return view
+
+
 def validate_metadata(given, reference):
     expected = dict(schema_version="n170-output-v1",task_id="N170PROFILE-001",status="complete",
                     **pins(),measurement_kernel_sha256=KERNEL_SHA,cohort=list(SUBJECTS),
                     source_files=reference["source_files"])
+    given = metadata_view(given, reference)
     match(given,expected)
     for name in ("source_observed","analysis_observed"):
         need(name in given, "required metadata "+name)

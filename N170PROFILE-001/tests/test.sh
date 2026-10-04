@@ -21,7 +21,7 @@ with os.fdopen(fd, "rb") as stream:
 identity = lambda s: (s.st_dev,s.st_ino,s.st_mode,s.st_size,s.st_mtime_ns,s.st_ctime_ns)
 assert identity(before) == identity(after) == identity(path.lstat()), "bootstrap changed"
 assert len(raw) == before.st_size
-assert hashlib.sha256(raw).hexdigest() == "3e1c4264d8854c49581789cb9e481b79ac97769a8439cbb1f455ef092ac30f5e", "bootstrap identity"
+assert hashlib.sha256(raw).hexdigest() == "f970848430a22f0fb640a8e8c052afcd7a4b569e2b800916875a0c5326bfc84e", "bootstrap identity"
 module = types.ModuleType("grader_bootstrap")
 module.__file__ = str(path)
 sys.modules[module.__name__] = module

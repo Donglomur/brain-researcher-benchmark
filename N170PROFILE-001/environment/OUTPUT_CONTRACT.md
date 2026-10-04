@@ -94,6 +94,16 @@ subject_id,role(set|fdt),path,size_bytes,sha256. cohort is the exact literal37
 list. Metadata pins are source_manifest_sha256,method_contract_sha256,
 output_schema_sha256,measurement_kernel_sha256 and match private frozen authority.
 
+For source_files[].path and source_observed.persons[].set_path/fdt_path, accept
+either the exact manifest-relative name or that same name prefixed by
+/app/data/n170profile/. Other roots, empty path components, backslashes,
+traversal components (. or ..), missing/duplicate records and wrong source
+identities are rejected. An optional source_files[].manifest_path must name
+the same file in one of those two forms. Path spelling does not substitute for
+subject/role, exact source size, SHA-256 or source-derived checks. These path
+aliases do not apply to literal_data_pointer or raw header_fields: preserve
+those original strings, including historical filepath values, literally.
+
 source_observed.persons is a keyed subject_id list. Each record contains:
 subject_id,set_path,fdt_path,literal_data_pointer,mat_layout,header_fields,
 channel_labels,channel_records,event_fields,n_events,boundary_event_indices,
@@ -104,11 +114,35 @@ union. Boundary cuts include0 and pnts; ICA fields report shapes, not applied
 weights. The source reader provides this public documentary view, not private
 arrays/debug diagnostics or source-derived endpoint targets.
 
+mat_layout is scalar_EEG_struct (also accepted as EEG) for a scalar top-level
+EEG structure, or flat_fields for fields stored directly at MAT top level.
+The declared layout must match the original file; it is not a freely chosen
+implementation label. header_fields contains each present original field from:
+setname,filename,filepath,subject,group,condition,session,nbchan,trials,pnts,
+srate,xmin,xmax,ref,saved,datfile,history,comments,unit,units. Do not invent an
+absent source field. Original raw list order and nonempty values are preserved.
+
+For source-proven empty optional MAT metadata, null and [] are equivalent only
+for header_fields.{subject,group,condition,session} and each channel_records
+record's {ref,theta,radius,X,Y,Z,sph_theta,sph_phi,sph_radius,type,urchan} fields.
+The keys must still be present whenever present in the source. Nonempty or
+missing values are not normalized, and an independently nonempty source value
+cannot be replaced by null or []. This allowance does not apply to scientific
+waveforms, counts, endpoint nulls, source strings or other metadata fields.
+ica_field_shapes maps each present original ICA field (icaweights,icasphere,
+icawinv,icachansind,icaact) to its ordered original integer dimension list.
+
 analysis_observed.persons is a keyed subject_id list. Each record contains:
 subject_id,n_face_candidates,n_face_accepted,n_face_rejected,n_car_candidates,
 n_car_accepted,n_car_rejected,condition_defined(face,car),rejection_counts(all
 five reason keys, including zero counts),n_eligible_epochs. No amplitude or
 onset source targets belong in analysis_observed.
+
+Here condition_defined may be the two-Boolean list [face_defined,car_defined]
+or the exact two-key object {"face":<Boolean>,"car":<Boolean>}. Object-key order
+is immaterial; true/false must be JSON Booleans, not strings or numbers. Both
+encodings must reproduce the independently checked per-condition support.
+The separate NPZ condition_defined remains an actual Boolean S×2 array.
 
 Required documentary values bind to the independent source view: integer
 counts/indices, Booleans, strings and raw list ordering exact; finite real header
