@@ -1,0 +1,122 @@
+{
+  "pipeline_id": "registered-choice-window-split-v2",
+  "dataset_id": "dandi-000017-0.240329.1926",
+  "dandiset_id": "000017",
+  "dandiset_version": "0.240329.1926",
+  "asset_id": "92694e6e-84fd-4198-a7e3-64e764f8e086",
+  "asset_path": "sub-Cori/sub-Cori_ses-20161214T120000.nwb",
+  "source_sha256": {
+    "sub-Cori_ses-20161214T120000.nwb": "d8433a826049f82cd832f41f98a9f9fafad0ac66998d4dbfd89b15b594fc4236"
+  },
+  "source_size_bytes": {
+    "sub-Cori_ses-20161214T120000.nwb": 311814662
+  },
+  "trial_selection": {
+    "included": true,
+    "allowed_choices": [
+      -1,
+      1
+    ],
+    "finite_alignment_columns": [
+      "visual_stimulus_time",
+      "response_time"
+    ],
+    "order": "NWB_trials_table",
+    "chronology_check": "nondecreasing_stimulus_time"
+  },
+  "choice_labels": {
+    "-1": "right",
+    "1": "left"
+  },
+  "units": {
+    "selection": "all_NWB_units",
+    "order": "NWB_units_table",
+    "quality_filter": null
+  },
+  "features": {
+    "windows": {
+      "stimulus": {
+        "alignment": "visual_stimulus_time",
+        "bounds_s": [
+          0.0,
+          0.25
+        ]
+      },
+      "peri_response": {
+        "alignment": "response_time",
+        "bounds_s": [
+          -0.1,
+          0.1
+        ]
+      }
+    },
+    "boundary": "left_closed_right_open",
+    "clip_to_trial": false,
+    "transform": "raw_spike_count"
+  },
+  "standardizer": {
+    "name": "StandardScaler",
+    "with_mean": true,
+    "with_std": true,
+    "variance_ddof": 0,
+    "fit_on": "training_fold_only"
+  },
+  "classifier": {
+    "name": "LogisticRegression",
+    "C": 1.0,
+    "penalty": "l2",
+    "solver": "lbfgs",
+    "tol": 0.0001,
+    "max_iter": 2000,
+    "fit_intercept": true,
+    "class_weight": null,
+    "random_state": null,
+    "convergence_warning": "error",
+    "decision_zero_choice": -1
+  },
+  "cross_validation": {
+    "blocked": {
+      "name": "KFold",
+      "n_splits": 5,
+      "shuffle": false
+    },
+    "random": {
+      "name": "StratifiedKFold",
+      "n_splits": 5,
+      "shuffle": true,
+      "random_state": 0
+    },
+    "reuse_membership_across_windows": true
+  },
+  "baseline": {
+    "name": "training_fold_majority",
+    "tie_choice": -1,
+    "global_majority_fraction": "descriptive_only"
+  },
+  "aggregation": {
+    "headline": "mean_of_five_fold_accuracies",
+    "fold_std_ddof": 0,
+    "primary_recipe": "stimulus_blocked",
+    "pooled_accuracy": "all_heldout_trials"
+  },
+  "response_timing": {
+    "before_stimulus": "response < stimulus",
+    "within_stimulus_window": "stimulus <= response < stimulus + 0.25",
+    "at_or_after_window_end": "response >= stimulus + 0.25",
+    "event": "registered_response_not_movement_onset"
+  },
+  "tolerances": {
+    "decision_atol": 1e-06,
+    "decision_rtol": 1e-06,
+    "probability_atol": 1e-06,
+    "probability_rtol": 1e-06,
+    "summary_atol": 1e-06,
+    "categorical_predictions": "exact"
+  },
+  "software": {
+    "numpy": "2.2.6",
+    "scipy": "1.14.1",
+    "scikit-learn": "1.7.2",
+    "h5py": "3.16.0"
+  }
+}

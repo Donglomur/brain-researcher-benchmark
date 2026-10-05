@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "dandiset_id": "000017",
+  "dandiset_version": "0.240329.1926",
+  "doi": "10.48324/dandi.000017/0.240329.1926",
+  "version_metadata_url": "https://api.dandiarchive.org/api/dandisets/000017/versions/0.240329.1926/",
+  "license": "CC-BY-4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution": "Steinmetz, Nicholas; Zatka-Haas, Peter; Carandini, Matteo; Harris, Kenneth; Wang, Renee (2024) Distributed coding of choice, action and engagement across the mouse brain (Version 0.240329.1926) [Data set]. DANDI archive. https://doi.org/10.48324/dandi.000017/0.240329.1926",
+  "source_paper": {
+    "title": "Distributed coding of choice, action and engagement across the mouse brain",
+    "doi": "10.1038/s41586-019-1787-x",
+    "relationship": "One original study session in its published NWB conversion; the benchmark is a secondary all-recorded-unit prediction method-sensitivity case, not a reproduction of the paper's residualized regional analysis."
+  },
+  "source_handling": "The single published NWB is copied byte-for-byte and SHA256-verified at image build. It is not converted or filtered by the staging step. No runtime download is required.",
+  "interpretation_notes": {
+    "response_choice": "The NWB trial description defines -1 as Right, +1 as Left, and 0 as No-go. This is the final registered response, which can differ from the initial wheel turn.",
+    "included": "The source flag concerns disengagement; it does not include the paper's response-timing exclusions.",
+    "alignment": "Trial timestamps share the session time base in seconds. response_time is retained as the registered-response alignment, not relabeled movement onset. A response-event overlap count does not establish whether any movement occurred in the stimulus window.",
+    "units": "All stored clusters includes phy_annotations=1 multi-unit activity as well as values2 and3. The source paper generally used annotations>=2. Unit IDs are preserved in NWB row order; they are not row offsets.",
+    "source_conversion_limits": "The unused wheel_moves series has twice as many timestamps as data values. The unused continuous wheel's stored rate appears to contain a sampling interval rather than Hz. This task does not repair or use those series to infer movement onset.",
+    "author_documentation_url": "https://github.com/nsteinme/steinmetz-et-al-2019/wiki/data-files"
+  },
+  "files": [
+    {
+      "path": "sub-Cori_ses-20161214T120000.nwb",
+      "role": "session_nwb",
+      "source_path": "sub-Cori/sub-Cori_ses-20161214T120000.nwb",
+      "asset_id": "92694e6e-84fd-4198-a7e3-64e764f8e086",
+      "size_bytes": 311814662,
+      "sha256": "d8433a826049f82cd832f41f98a9f9fafad0ac66998d4dbfd89b15b594fc4236",
+      "digest_provenance": "Published dandi:sha2-256 in the version-specific asset metadata, retrieved before source download",
+      "metadata_url": "https://api.dandiarchive.org/api/dandisets/000017/versions/0.240329.1926/assets/92694e6e-84fd-4198-a7e3-64e764f8e086/",
+      "download_url": "https://api.dandiarchive.org/api/assets/92694e6e-84fd-4198-a7e3-64e764f8e086/download/",
+      "transport_url": "https://dandiarchive.s3.us-east-2.amazonaws.com/blobs/eed/3ed/eed3ed78-e076-468a-b48f-0d3f4ee0319c",
+      "transport_provenance": "Exact contentUrl published by the version-specific DANDI asset metadata"
+    }
+  ]
+}
