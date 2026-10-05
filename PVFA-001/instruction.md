@@ -1,70 +1,146 @@
-# Fractional anisotropy of periventricular white matter (PVFA-001)
+# Diffusion-model sensitivity in a diffusion-defined proxy ROI
 
-## Scientific context
+Compare model-derived FA estimates on one original Sherbrooke diffusion scan.
+Use any two or all three public recipes below and designate one as your main
+model. This is a paper-derived method case, not a reproduction of an original
+cohort finding or an independently validated estimate of tissue microstructure.
 
-Fractional anisotropy (FA) from diffusion MRI is the most widely reported marker
-of white-matter microstructure. White matter that borders the lateral ventricles
-(periventricular white matter — e.g. the margins of the corpus callosum, the
-corona radiata, the fornix) is a routine target in studies of ageing, small-vessel
-disease, hydrocephalus and multiple sclerosis, and its FA is a standard summary
-measure (Metzler-Baddeley et al. 2012, *NeuroImage*).
+## Data and scientific scope
 
-## Task
+The original image/b-values and documented upstream orientation-corrected
+b-vectors are under `/app/data/sherbrooke`. Verify `data_manifest.json` and its
+checksums. The bundle has one b0 and 64 directions each at b=1000, 2000 and
+3500 s/mm². Do not apply another gradient flip or reorient the image. Inputs
+are CC0 and runtime is offline. Original source:
+https://digital.lib.washington.edu/researchworks/handle/1773/38475.
 
-Using the multi-shell diffusion-MRI dataset shipped by dipy
-(`dipy.data.read_sherbrooke_3shell` / `fetch_sherbrooke_3shell` — a single subject
-acquired at **b = 0, 1000, 2000 and 3500 s/mm²**), **estimate the fractional
-anisotropy of periventricular white matter and report its mean over the region
-defined below.**
+The two-compartment signal model is
+`S = S0 * [(1-f)*exp(-b*gᵀDg) + f*exp(-b*0.003)]`.
+Its method connection is Hoy et al. (2014),
+https://doi.org/10.1016/j.neuroimage.2014.09.053, and Henriques et al. (2017),
+Eq. 1 and WLS/NLS methods, https://doi.org/10.5281/zenodo.495237.
+This Sherbrooke acquisition is not those papers' original analysis cohort.
+Conventional tensor FA and two-compartment tissue-tensor FA are different
+model summaries; neither supplies independent ground truth for the other.
 
-Pin the following so the number is reproducible:
+## Public preprocessing and ROI
 
-- **Brain mask:** from the b0 volume with `median_otsu`
-  (`vol_idx=[0], median_radius=4, numpass=2, dilate=1`).
-- **Pre-smoothing:** apply a **1.25 mm FWHM Gaussian** spatial smoothing to the
-  DWI volumes before any fitting.
-- **Reference FA/MD maps (for locating the region):** fit a standard diffusion
-  tensor to the **b ≤ 1000** shells (b0 + b=1000) and take its FA and MD maps.
-- **CSF seed:** brain voxels with **MD > 2.0×10⁻³ mm²/s and FA < 0.2** (the
-  ventricular cerebrospinal fluid).
-- **Periventricular white-matter region:** dilate the CSF seed by **2 iterations**
-  with `scipy.ndimage.binary_dilation` (its default structuring element — first-order
-  / 6-neighbour connectivity), remove the CSF seed itself, and keep the voxels that
-  are inside the brain mask with
-  **0.8×10⁻³ < MD < 1.5×10⁻³ mm²/s and FA > 0.25**. This is the region of interest.
-- **Model estimation:** estimate the diffusion tensor / model on the **b = 0, 1000
-  and 2000** shells (the b = 3500 shell is too heavily diffusion-weighted for
-  tensor estimation and is excluded).
+Complete numerical settings, source identities and library versions are in
+`/app/method_contract.json`. Use that recipe or a numerically equivalent
+implementation. The provided stack is DIPY 1.12.1, NumPy 2.1.3 and SciPy 1.14.1.
 
-Other standard implementation details the analysis leaves to the analyst (the exact
-tensor estimator, how the model is conditioned) should follow common diffusion-MRI
-practice; the brief does not spell them out.
+1. Construct the brain mask from the original unsmoothed b0 with `median_otsu`:
+   median radius 4, two passes, dilation 1, no cropping.
+2. Smooth each volume used for ROI construction or fitting spatially in float64:
+   Gaussian FWHM **0.625 voxels**,
+   sigma `0.625/sqrt(8*log(2))`, `mode="reflect"`, `truncate=4`. Do not smooth
+   across volumes. Unused b=3500 volumes need not be smoothed. The NIfTI header
+   does not declare spatial units; do not label
+   this kernel as a verified physical-mm length.
+3. Fit the low-b WLS tensor (b0+1000) in the brain mask. Seed every in-brain
+   voxel with MD>0.002 mm²/s and FA<0.2. Dilate this seed by two iterations of
+   six-neighbor binary dilation, remove the seed, and retain in-brain voxels
+   with 0.0008<MD<0.0015 mm²/s and FA>0.25.
 
-## Output Location
+This is a diffusion-defined high-MD/low-FA-adjacent tissue **proxy**, not an
+anatomical ventricular or white-matter segmentation. Preserve every resulting
+voxel in the acquisition's zero-based i,j,k coordinates. Only an empty ROI is
+a precondition failure; do not tune thresholds to obtain a desired count.
 
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
+## Accepted model recipes
 
-## Required Outputs
+- `dti_b1000`: b0+1000 two-pass WLS. Floor signal at 1e-4 for logs; use OLS
+  predicted-signal weights, pseudoinverse cutoff 1e-15, and the public DIPY
+  eigenvalue floor `1e-6/(-design.min())`. Retain raw tensor coefficients and
+  fitted negative-log S0 before eigenvalue flooring.
+- `dti_b2000`: the same recipe with b0+1000+2000.
+- `fwdti`: b0+1000+2000, instrumented DIPY WLS initialization and signal-space
+  Levenberg–Marquardt fit. Isotropic diffusivity is 0.003 mm²/s. Initialization
+  uses observed-signal-squared weights, minimum signal 1e-6, MD boundary 0.0027,
+  and the public 9/19/19 fraction grids. NLS starts from the initialized tensor,
+  negative log observed b0, and `asin(2*f_init-1)+pi/2`. The fraction transform
+  is `f=(1+sin(ft-pi/2))/2`; no Cholesky transform, analytic fit Jacobian,
+  extra weighting or tensor/S0 box bounds are used. `leastsq` settings are
+  ftol=xtol=1.49012e-8, gtol=0, maxfev=1800, epsfcn=None, factor=100, diag=None.
+  Retain the actual fitted S0 and raw tensor, not only clipped eigenvalues/FA.
 
-- `results.json` — must include `fa_periventricular_wm` (your mean FA over the
-  region above), `n_roi_voxels`, and the shells your estimate used.
-- `fa_voxelwise.csv` — the per-voxel table underlying your reported region-mean FA:
-  one row per periventricular ROI voxel, with columns `i,j,k` (its voxel index in
-  the acquisition array) and `fa` (its fractional anisotropy). Its mean over the
-  rows must equal your reported `fa_periventricular_wm`.
-- `fa_sweep.csv` — the per-voxel FA under each diffusion model you evaluate. Estimate
-  the FA with at least two diffusion models over the same ROI and give the per-voxel
-  FA for each: columns `i,j,k` (voxel index), `model` (a short label for that model /
-  estimator), and `fa`. One row per (voxel, model).
-- `run_metadata.json` — dataset id, shells available vs used, the region
-  definition, and the preprocessing you applied.
-- `findings.md` — a short written summary reporting the periventricular
-  white-matter FA, how you obtained it, and how you interpret it: what the number
-  does and does not tell you about the underlying tissue, and any caveats your
-  analysis supports.
+The template defines the exact initialization and failure branches. In
+particular, low-signal/MD sentinels, an initial fraction>=0.99 that skips NLS,
+or exhausted/failed optimization are not converged tissue fits. Successful NLS
+termination codes are 1–4. Do not silently substitute the initializer after a
+failed decomposition. Numerical warnings and convergence/identifiability
+limitations should be reported, not suppressed as evidence of success.
 
-## Failure handling
+For every candidate, compute predictions and SSE from its **raw** tensor,
+actual fitted S0 and fraction against the unfloored, smoothed source signal.
+`nrmse=sqrt(SSE/n_volumes)/max(observed_b0,1e-6)`. Reported FA/MD use the
+declared eigenvalue flooring (zero for fwdti); record how many eigenvalues
+changed. Clipped FA is a computational summary, not proof of a physical tensor.
 
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a
-non-empty reason, and still write a parseable `run_metadata.json`, `results.json`,
-and `findings.md`.
+Keep every model×ROI row, including skipped and failed fits. An eligible row
+requires a successful finite fit/prediction, positive fitted S0, a nonzero
+reported tensor and 0<=f<1. Preserve finite failed candidates but mark them
+ineligible. Unattempted final parameters/metrics are blank, not zero estimates.
+`init_md` is the preliminary observed-weighted WLS MD used for initialization's
+MD check. Fraction boundary flags at <=1e-6 and >=1-1e-6 are diagnostic only.
+Do not add a residual, rank or physiological exclusion after inspecting results.
+
+Report each model's eligible-row means. Also intersect eligibility across the
+**selected** models and compute their paired FA differences on that common
+support. Empty-support means/differences are JSON null. No free-water model,
+effect direction, minimum gap, particular valid count or prose keywords are
+required. The two single-tensor models alone are an acceptable pair.
+
+## Required outputs
+
+Write to `${OUTPUT_DIR}` (default `/app/output`). CSV rows/columns may be
+reordered. Every required identity must appear exactly once; extra descriptive
+columns are allowed. Retain adequate precision.
+
+- `fa_voxelwise.csv`: `i,j,k,fa` for every ROI voxel under the main model.
+- `fa_sweep.csv`: `i,j,k,model,fa` for every selected model×ROI voxel.
+- `fit_parameters.csv`: complete model×ROI rows with
+  `i,j,k,model,status,fit_attempted,eligible,common_valid,Dxx,Dxy,Dyy,Dxz,Dyz,Dzz,`
+  `neg_log_S0,S0_hat,f,fa,md,sse,nrmse,n_eigenvalues_clipped,optimizer_status,nfev,`
+  `init_f,init_md,n_signal_floored,observed_b0,normalization_scale,`
+  `boundary_f_low,boundary_f_high`.
+  DTI has f=0, blank optimizer_status and nfev=0. Status is one of `ok`,
+  `invalid_input`, `insufficient_signal`, `md_threshold`, `initialization_failed`,
+  `high_initial_fraction`, `optimizer_failed`, `nonfinite_candidate`,
+  `decomposition_failed`. The FA tables reflect available candidate FA, even
+  for finite failed candidates; headline means use eligible rows only.
+- `results.json`: `status:"ok"`, `pipeline_id:"sherbrooke-proxy-fa-v2"`,
+  `main_model,n_roi_voxels,n_common_valid,fa_proxy_roi,by_model,common_valid`.
+  `fa_proxy_roi` is the main model's own eligible-row mean.
+  `by_model[model]` contains `n_valid,fa_mean,md_mean,f_mean,S0_hat_mean,nrmse_mean,`
+  `status_counts,n_eigenvalues_clipped_total,n_voxels_eigenvalues_clipped`.
+  Zero-count statuses may be included or omitted in status-count dictionaries.
+  `common_valid` contains `n_voxels`, `by_model` with the same five means on
+  common support, and `paired_fa_differences`. For each lexicographically sorted
+  selected pair left/right, name the contrast `right_minus_left` and average
+  rightFA-leftFA on common support.
+- `run_metadata.json`: the public template plus `status:"ok"`, `main_model`,
+  `fitted_models,n_roi_voxels,n_brain_voxels,n_seed_voxels,n_common_valid,`
+  `status_counts_by_model`.
+- `findings.md`: a numerical comparison with support counts and fit limitations.
+  Do not interpret a higher fitted FA as independently demonstrated tissue
+  recovery, an isotropic signal fraction as measured CSF volume, or the proxy
+  mask as validated periventricular anatomy.
+
+The verifier checks the complete source-defined ROI, model-bound raw parameters,
+signal predictions, residuals, clipped metrics and recomputed summaries. Public
+tolerances include tensor coefficients atol1e-8/rtol1e-5, f/FA atol/rtol1e-5,
+S0 normalized by the declared scale atol/rtol1e-5, normalized predictions
+atol1e-5, residual arithmetic1e-6, and MD arithmetic atol1e-8/rtol1e-6.
+Identities, model selection and coverage
+are exact. Eigenvector signs, the periodic ft parameter, optimizer messages and
+exact evaluation counts are not point-matched. Scoring is all-or-nothing.
+Authoring-only arrays are not required participant outputs.
+Within-row algebra (including S0 from the retained intercept), cross-file
+consistency and recomputed summaries use atol=rtol=1e-6. Normalized source
+prediction matching uses absolute tolerance 1e-5 with no relative component.
+
+If source verification or required preprocessing fails, exit nonzero with
+parseable results/metadata carrying `status:"failed_precondition"`, a nonempty
+reason and findings. Do not fabricate missing observations or drop troublesome
+ROI coordinates to obtain a passing summary.

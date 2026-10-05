@@ -1,0 +1,77 @@
+{
+  "task_id": "PVFA-001",
+  "dataset": "Sherbrooke three-shell human diffusion MRI",
+  "dataset_id": "sherbrooke_3shell",
+  "source_version": "dipy-1.12.1-corrected-bvec",
+  "repository_handle": "1773/38475",
+  "repository_item_date": "2017-04-12",
+  "repository_metadata_url": "https://digital.lib.washington.edu/server/api/core/items/a8b2acb0-54d3-4f2f-99b8-d6e0f5a8a71e",
+  "repository_item_url": "https://digital.lib.washington.edu/researchworks/handle/1773/38475",
+  "license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "license_evidence_url": "https://digital.lib.washington.edu/server/api/core/bitstreams/b9316338-f586-4fb3-8008-4ff7b7cddaa9/content",
+  "attribution": "Sherbrooke Connectivity Imaging Lab (SCIL), Sherbrooke three-shell acquisition distributed by DIPY; UW ResearchWorks deposition by Ariel Rokem, handle 1773/38475, issued 2017-04-12. The repository explicitly declares CC0 1.0 Universal. Image and b-values are original UW bytes; b-vectors are the upstream DIPY orientation-corrected derivative. This single example acquisition is a diffusion-model-sensitivity substrate, not documented as a subject from the cited free-water or partial-volume papers' original cohorts. No anatomical ventricular label or independent tissue/free-water ground truth is supplied.",
+  "observed_geometry": {
+    "shape": [128, 128, 60, 193],
+    "stored_dtype": "uint16",
+    "nifti_header_zooms": [2.0, 2.0, 2.0],
+    "nifti_spatial_units": "unknown",
+    "bvec_shape": [193, 3],
+    "b_values_s_per_mm2": [0, 1000, 2000, 3500],
+    "shell_volume_counts": [1, 64, 64, 64],
+    "note": "Header values were inspected without altering source bytes. The NIfTI unit field does not explicitly declare millimeters. No source reorientation, local gradient transformation, smoothing, mask, ROI, or fit is part of this input bundle."
+  },
+  "bvec_correction": {
+    "upstream_version": "DIPY 1.12.1",
+    "commit": "1aee6a3a2bb74bfc7c16c9421bd3d47ec9f9de76",
+    "commit_url": "https://github.com/dipy/dipy/commit/1aee6a3a2bb74bfc7c16c9421bd3d47ec9f9de76",
+    "pull_request_url": "https://github.com/dipy/dipy/pull/3847",
+    "description": "Upstream correction of flipped Sherbrooke b-vectors. Relative to the original UW 3-by-193 array, the distributed corrected file is 193-by-3 with its x component negated. The corrected bytes are downloaded directly; this task does not apply a second flip.",
+    "original": {
+      "metadata_url": "https://digital.lib.washington.edu/server/api/core/bitstreams/4fcb57f4-b44e-4155-8567-c52270995370",
+      "url": "https://digital.lib.washington.edu/server/api/core/bitstreams/4fcb57f4-b44e-4155-8567-c52270995370/content",
+      "size_bytes": 14787,
+      "md5": "0c83f7e8b917cd677ad58a078658ebb7",
+      "sha256": "11524dc4e5f7266cba6ac43820b9428ab8670764cc78c8be6f4ec62158997e68"
+    },
+    "derived_path": "HARDI193.bvec"
+  },
+  "checksum_provenance": {
+    "verified_on": "2026-10-01",
+    "method": "UW bitstream metadata and the pinned DIPY fetcher were retrieved before source downloads. Fresh image and b-value bytes matched UW's published MD5 and size; corrected b-vector bytes matched DIPY 1.12.1's published MD5. SHA256 was then calculated from verified bytes. Original and corrected b-vector numeric arrays were independently compared to confirm the upstream transpose and x-component flip. PVFA-001 reuses only these authenticated source bytes, rechecking size, MD5, and SHA256; no earlier task's masks, fits, or outputs are reused.",
+    "dipy_fetcher_version": "1.12.1",
+    "dipy_fetcher_url": "https://raw.githubusercontent.com/dipy/dipy/1.12.1/dipy/data/fetcher.py"
+  },
+  "files": [
+    {
+      "path": "HARDI193.nii.gz",
+      "role": "image",
+      "source_identity": "unmodified_original",
+      "size_bytes": 192499333,
+      "md5": "0b735e8f16695a37bfbd66aab136eb66",
+      "sha256": "2ad46e5c0ae3895da7db7c8f7c308816d3c1d7a08baba8cea77a633aae681a12",
+      "url": "https://digital.lib.washington.edu/server/api/core/bitstreams/28691a7c-262a-48aa-8848-5d8da0201721/content",
+      "metadata_url": "https://digital.lib.washington.edu/server/api/core/bitstreams/28691a7c-262a-48aa-8848-5d8da0201721"
+    },
+    {
+      "path": "HARDI193.bval",
+      "role": "bval",
+      "source_identity": "unmodified_original",
+      "size_bytes": 4825,
+      "md5": "e9b9bb56252503ea49d31fb30a0ac637",
+      "sha256": "b0614efa30ca8f5fdd1c29e88fc7caa652c9759f3942a3619c83e9c69f024877",
+      "url": "https://digital.lib.washington.edu/server/api/core/bitstreams/06d89887-da2e-4635-b551-407f587fd7ae/content",
+      "metadata_url": "https://digital.lib.washington.edu/server/api/core/bitstreams/06d89887-da2e-4635-b551-407f587fd7ae"
+    },
+    {
+      "path": "HARDI193.bvec",
+      "role": "bvec",
+      "source_identity": "upstream_orientation_corrected_derivative",
+      "size_bytes": 14993,
+      "md5": "72818d139f803f19ddb032cd011d452f",
+      "sha256": "a5861583c04e9e3782ee6e7f737479520cfea576635f14eefbd4eaf1e441a20b",
+      "url": "https://workshop.dipy.org/services/data/researchworks/bitstream/handle/1773/38475/HARDI193.bvec",
+      "metadata_url": "https://raw.githubusercontent.com/dipy/dipy/1.12.1/dipy/data/fetcher.py"
+    }
+  ]
+}
