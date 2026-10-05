@@ -1,13 +1,14 @@
-FROM python:3.10
-
-# allensdk pins an old numpy that does not build on 3.12; Python 3.10 is required.
-# Versions pinned to a combination verified to install and run end-to-end
-# (allensdk 2.16.2 with numpy 1.23.5 / pandas 1.5.3 / scipy 1.10.1 / h5py 3.16.0).
-RUN pip install --no-cache-dir \
-      numpy==1.23.5 \
-      pandas==1.5.3 \
-      scipy==1.10.1 \
-      h5py==3.16.0 \
-      allensdk==2.16.2
-
+FROM ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3 AS dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      ca-certificates python3 python3-venv python3-pip curl git bash && \
+    python3 -m pip install --break-system-packages --no-cache-dir \
+      numpy==2.2.6 pytest==8.4.1 pytest-json-ctrf==0.3.5 && \
+    rm -rf /var/lib/apt/lists/*
 WORKDIR /app
+
+FROM dependencies AS runtime
+COPY stage_data.py source_manifest.json /opt/source/
+RUN python3 /opt/source/stage_data.py --destination /app/data/allen
+COPY method_contract.json /app/method_contract.json
+ENV OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1

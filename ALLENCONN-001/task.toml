@@ -1,21 +1,22 @@
-version = "1.1"
-instruction_version = "1.1"
-test_version = "1.1"
+version = "1.2"
+instruction_version = "2.0"
+test_version = "2.0"
+artifacts = ["/app/output", "/app/data/allen/source_manifest.json"]
 
 [metadata]
 task_id = "ALLENCONN-001"
-title = "Self-referential strongest projections in the mouse mesoscale connectome (Allen anterograde tracer atlas)"
-category = "Connectivity"
-difficulty = "hard"
-dataset_source = "Allen Mouse Brain Connectivity Atlas (allensdk MouseConnectivityCache)"
-dataset_id = "allen-mouse-connectivity"
+title = "Self-maximum projection-density descriptor with explicit atlas coverage"
+category = "Method control"
+difficulty = "easy"
+dataset_source = "Official Allen Brain Atlas API responses, checksum-frozen research snapshot"
+dataset_id = "allen-connectivity-20261001"
 source_paper = "Oh et al. 2014, Nature (10.1038/nature13186)"
 
 [verifier]
-timeout_sec = 1800.0
+timeout_sec = 900.0
 
 [agent]
-timeout_sec = 9000.0
+timeout_sec = 3600.0
 
 [environment]
 build_timeout_sec = 2400.0
@@ -23,7 +24,7 @@ cpus = 2
 memory_mb = 8192
 storage_mb = 16384
 gpus = 0
-allow_internet = true
+allow_internet = false
 
 [verifier.env]
 
