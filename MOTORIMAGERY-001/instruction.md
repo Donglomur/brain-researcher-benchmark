@@ -1,59 +1,132 @@
-# Decoding imagined movement from the EEG (MOTORIMAGERY-001)
+# Held-run EEG condition decoding (MOTORIMAGERY-001)
 
-## Scientific context
+Compute an offline hands-versus-feet condition decoder and its within-run
+pair-preserving permutation reference distribution for ten fixed participants. Use the public
+recipe below. This is a method-control analysis of cue-labeled conditions,
+not a reproduction of a named BCI2000 performance result or an online BCI test.
 
-In a motor-imagery brain-computer interface (BCI), the user *imagines* moving a limb and a
-classifier reads out, **for that user**, which movement was imagined from the sensorimotor
-rhythms (the mu, ~8-12 Hz, and beta, ~13-30 Hz, bands) of the EEG. The standard pipeline
-spatially filters the band-passed EEG with **Common Spatial Patterns (CSP)** and classifies the
-log-variance features with **linear discriminant analysis (LDA)**. The headline result of such a
-study is the **cross-validated decoding accuracy**.
+## Original public data
 
-## Task
+The 30 original EDF+ recordings from PhysioNet EEG Motor Movement/Imagery
+version 1.0.0 are under `/app/data/eegbci/S001/S001R06.edf`, etc.
+Use subjects 1–10, runs 6, 10 and 14. The image includes the original embedded
+annotations, published checksums and attribution in `data_manifest.json`.
+Runtime access is offline. The dataset is ODC-By 1.0:
+https://doi.org/10.13026/C28G6P.
 
-Using the PhysioNet **EEG Motor Movement/Imagery** dataset
-(`mne.datasets.eegbci.load_data`, **subjects `1-10`**, **runs `[6, 10, 14]`** — the *imagined*
-"both fists" vs "both feet" runs), build a per-subject **CSP + LDA** decoder of **imagined hands
-vs feet** and report its **cross-validated decoding accuracy**, averaged over the subjects.
+T1 means imagined both fists (class 0); T2 means imagined both feet (class 1);
+T0 is rest and is not an epoch. Top/bottom visual cues covary with condition,
+so decoding does not isolate motor-imagery physiology from cue/attention effects.
+Schalk et al. (2004), https://doi.org/10.1109/TBME.2004.827072, is system
+provenance, not the specific ten-subject analysis reproduced here.
 
-Pin the pipeline so the result reproduces:
+## Public computation contract
 
-- For each subject, load runs `[6, 10, 14]` and concatenate them. Standardise the channel names
-  (`mne.datasets.eegbci.standardize`) and set the `standard_1005` montage.
-- Band-pass filter the EEG to **7-30 Hz** (FIR).
-- The annotations mark **T1 = both fists (hands)** and **T2 = both feet (feet)**; ignore the rest
-  periods (T0). Extract epochs from **1.0 to 2.0 s** after each cue, using **all EEG channels**,
-  with no baseline correction.
-- Decoder: **CSP with 4 components** (log-variance features) followed by **LDA**.
-- Evaluate with **5-fold stratified cross-validation** within each subject.
+The complete library settings and source hashes are provided in
+`/app/method_contract.json`. Use MNE 1.12.1, scikit-learn 1.8.0,
+NumPy 2.2.6 and SciPy 1.17.0, or a numerically equivalent implementation.
 
-Report the **decoding accuracy** as the mean, across the 10 subjects, of each subject's
-cross-validated accuracy (chance = 0.5 for this two-class problem).
+- Process each acquisition run separately. Retain all 64 EEG channels in
+  original order, standardize channel names and use the standard_1005 montage.
+  Do not rereference, interpolate, apply ICA or fit preprocessing across runs.
+- Apply a run-local 7–30 Hz FIR filter: automatic length/transition widths,
+  zero phase, Hamming window, firwin design, reflect_limited padding,
+  skipping edge/bad_acq_skip annotations. Use one numerical worker.
+- Build epochs from 1.0 through 2.0 seconds after every T1/T2 cue: 161 samples
+  at 160 Hz, including both endpoints. No baseline, projection, detrending,
+  amplitude rejection or decimation. Respect BAD annotations and record
+  out-of-bounds/annotation exclusions; do not silently remove other trials.
+  Assign `event_index` as the zero-based chronological **T1/T2-only** index
+  within each run, before exclusions. `event_sample` is the original run-local
+  cue sample, with rounded annotation onset; duplicate cue samples are invalid.
+- Within each subject, leave out one entire acquisition run at a time.
+  Fit CSP and LDA only on the other two runs. CSP: four components, empirical
+  concatenated-class covariance, no regularization/trace normalization,
+  log mean-power features, mutual-information component ordering; remaining
+  rank/restriction defaults are explicit in the template. LDA: SVD solver,
+  empirical class priors, tolerance 1e-4, no shrinkage.
+- Save the decision score for class 1 minus class 0. Positive score predicts
+  class 1; zero or negative predicts class 0. Observed accuracy is pooled over
+  all held-out epochs of that subject, **not** an unweighted fold mean.
 
-## Output Location
+### Conditional permutation analysis
 
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
+The original source schedule has one hand and one foot cue in every adjacent
+pair of task events (indices 0/1, 2/3, ..., 12/13); event 14 is a singleton.
+Preserve that structure. Replicate 0 uses the original labels. For each subject
+independently initialize `numpy.random.RandomState(0)`. Generate replicates
+1 through 200 in order; inside each replicate visit runs 6, 10, 14 in order,
+then original pair IDs `event_index//2` in ascending order. For each complete
+retained two-event pair call `rng.permutation(original_labels_of_pair)`.
+Keep singleton labels fixed, including any surviving member whose pair partner
+was excluded. Do not compact retained rows into new pairs. Always permute the
+original labels, not the preceding permutation. Keep source membership and
+held-run folds fixed. Refit CSP and LDA within every fold of every replicate.
 
-## Required Outputs
+Use the same pooled out-of-fold accuracy for observed and permuted data.
+For each subject:
+`perm_p=(1+count(null_accuracy >= observed_accuracy))/201`.
+Compute null mean and population SD (`ddof=0`), and Holm-adjust the ten
+per-subject p-values as one family. Use strict `p<0.05` for counts.
+The minimum p is 1/201; this is a coarse Monte Carlo calculation, not proof
+that a subject is above or below an exact physiological threshold.
 
-- `decoding_results.json` — the headline result as
-  `{"accuracy": <float>, "cohen_kappa": <float>, "n_subjects": 10,
-  "n_epochs_total": <int>, "n_classes": 2, "chance_level": 0.5}`, plus the individual-level
-  reliability summary: `group_p_vs_chance` (one-sample t of the 10 subject accuracies vs 0.5),
-  `finite_sample_null_sd` (the per-subject permutation-null SD), `n_subjects_significant_perm_p05`
-  and `n_subjects_below_chance`.
-- `per_subject.csv` — one row per subject (real subject ids):
-  `subject, n_epochs, accuracy, kappa, perm_p`. The per-subject `accuracy` is the subject's
-  cross-validated decoding accuracy; its mean across subjects is the reported headline
-  `accuracy`, and `perm_p` is the per-subject permutation-test p-value.
-- `run_metadata.json` — dataset id, subjects, runs, band, epoch window, channels, decoder, and
-  the cross-validation scheme you used.
-- `findings.md` — a short written summary (a few sentences) reporting the cross-validated
-  decoding accuracy (and Cohen kappa) you obtained and **what it supports about using this
-  decoder as a motor-imagery BCI**. State only what your analysis actually supports.
+This shuffle assumes label exchangeability within the original adjacent pairs.
+It preserves the observed scheduling constraint but does not establish the
+historical randomization mechanism or eliminate all temporal dependence.
+It is a conditional method reference, not a verified causal randomization test.
+Do not choose another null or tune the pipeline to obtain a desired significant
+count. No particular count or accuracy direction is required by the grader.
 
-## Failure handling
+Average subject accuracies and subject Cohen kappas equally across ten people.
+`finite_sample_null_sd` is the mean of the ten individual null SDs, not a
+pooled-null SD or a significance cutoff. Also report the two-sided one-sample
+t statistic and p-value of subject accuracies versus 0.5. If between-subject
+variance is zero, report JSON null for both. The selected ten participants
+do not support an unrestricted population claim.
 
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a non-empty
-reason, and still write a parseable `run_metadata.json`, `decoding_results.json`, and
-`findings.md`.
+## Required outputs
+
+Write to `${OUTPUT_DIR}` (default `/app/output`). CSV rows may be reordered;
+identities, coverage, integer counts and permutation membership must be exact.
+
+- `source_epochs.csv`: every original T1/T2 event, including exclusions:
+  `subject,run,event_index,event_sample,source_class,retained,drop_reason`.
+  `retained` is 0 or 1. Retained rows have empty reason; excluded rows use
+  `out_of_bounds`, `annotation`, or both joined by a semicolon.
+- `oof_predictions.csv`: every retained event × all 201 replicates:
+  `subject,run,event_index,event_sample,replicate,source_class,target_class,
+  predicted_class,decision_score`. Original `source_class` is unchanged;
+  `target_class` is that replicate's possibly permuted label.
+- `fold_receipts.csv`: every subject × replicate × held-out run:
+  `subject,replicate,test_run,n_train,n_test,n_train_class0,n_train_class1,
+  n_test_class0,n_test_class1,accuracy`. Counts refer to that replicate's
+  target labels; accuracy recomputes from its held-out rows.
+- `per_subject.csv`: ten unique rows:
+  `subject,n_epochs,n_runs,accuracy,kappa,perm_p,holm_p,null_mean,null_sd,
+  n_null_ge_observed`.
+- `decoding_results.json`: `status:"ok"`,
+  `pipeline_id:"eegbci-paired-null-held-run-csp-v3"`,
+  `n_subjects,n_epochs_total,n_classes,chance_level,accuracy,cohen_kappa,
+  finite_sample_null_sd,group_t_vs_chance,group_p_vs_chance,
+  n_subjects_significant_perm_p05,n_subjects_significant_holm_p05,
+  n_subjects_below_chance,n_subjects_above_half_nominal,
+  permutation_p_resolution`.
+- `run_metadata.json`: the public contract plus `status:"ok"`,
+  `n_subjects,n_epochs_total,n_source_events,n_dropped_epochs,channels,sfreq`
+  and `n_epochs_by_run`, a list of
+  `{subject,run,n_source_events,n_retained,n_dropped}`.
+- `findings.md`: a short numerical summary and the limits above. Offline
+  nonsignificance is not evidence that someone cannot operate an online BCI.
+
+The verifier checks source-bound decision scores (atol 1e-7, rtol 1e-5),
+their predicted signs, all label permutations, folds and recomputed summaries
+(atol/rtol 1e-6). Retain adequate decimal precision. Numerically equivalent
+scores near zero can change a predicted sign; resulting statistics must still
+be computed from the submitted scores/predictions. No prose keywords or
+performance/significance bands are graded. Scoring is all-or-nothing.
+Authoring-only model/source arrays are not participant outputs.
+
+If input verification, epoch construction or a required fit fails, exit nonzero
+and write parseable result and metadata JSON with `status:"failed_precondition"`
+and a nonempty reason, plus findings. Do not fabricate, pad or drop data to pass.
