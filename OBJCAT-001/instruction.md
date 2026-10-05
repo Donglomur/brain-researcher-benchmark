@@ -1,65 +1,118 @@
-# Object-category decoding across occipitotemporal cortex (OBJCAT-001)
+# Whole-brain object-category decoding with nested feature selection
 
-## Scientific context
+Haxby et al. (2001, *Science*, https://doi.org/10.1126/science.1063736)
+studied distributed category-related response patterns in ventral temporal
+cortex. This task uses their public subject-2 data for a modern whole-brain
+classification method case. It does not reproduce the original six-subject
+pattern-correlation result or establish occipitotemporal localization.
 
-Haxby et al. (2001, *Science* 293:2425, https://doi.org/10.1126/science.1063736)
-showed that the distributed pattern of response across occipitotemporal cortex carries
-information about which object category a person is viewing. Because the whole-brain mask
-contains far more voxels than there are training samples, MVPA pipelines routinely reduce
-the feature set to the most category-selective voxels, and report the **cross-validated
-decoding accuracy** of the resulting classifier.
+Estimate eight-category, leave-one-run-out accuracy of a linear SVM using
+500 features selected independently within each training fold. Report the
+source-indexed held-out predictions and selected features, so the result can
+be traced to the actual samples and training-only selection.
 
-## Task
+## Data and scope
 
-Using the classic Haxby dataset (`nilearn.datasets.fetch_haxby`), **decode the eight object
-categories from occipitotemporal cortex with a linear support-vector classifier that uses
-the most category-selective voxels, and report its cross-validated 8-way decoding
-accuracy.**
+Original BOLD, labels and supplied whole-brain mask are baked into
+`/app/data/objcat`; `data_manifest.json` records exact filenames, hashes,
+source URLs and terms. Do not fetch data at runtime or substitute a VT mask.
+The public numerical metadata template is `/app/method_contract.json`.
 
-Work with **`subject 2`** only. Fetch it with `fetch_haxby(subjects=[2])`; the returned
-object gives the 4-D BOLD run (`func[0]`), the whole-brain analysis mask (`mask`), and a
-labels/session table (`session_target[0]`) that lists, for every volume, the stimulus
-category (`labels`) and the acquisition run it belongs to (`chunks`).
+Use subject 2 only: all 1,452 original volumes for runwise preprocessing,
+then all 864 non-rest volumes in the eight categories `bottle`, `cat`,
+`chair`, `face`, `house`, `scissors`, `scrambledpix`, `shoe`.
+Original labels determine run IDs 0–11 and zero-based original volume IDs.
+There are 72 non-rest volumes per run. Never renumber retained volume IDs.
 
-Pin the analysis as follows so the number is comparable:
+The separately distributed whole-brain mask is a fixed supplied input. Its
+generation history and independent-selection provenance are not established;
+do not interpret it as independently validated anatomical discovery.
 
-- **Samples:** every volume whose `labels` is one of the eight object categories
-  (`bottle, cat, chair, face, house, scissors, scrambledpix, shoe`) — i.e. drop only the
-  `rest` volumes and keep the eight object conditions.
-- **Features:** the voxels inside the whole-brain mask (`mask`), extracted with `nilearn`'s
-  `NiftiMasker` using per-run z-scored, detrended voxel time series
-  (`standardize="zscore_sample"`, `detrend=True`, with the acquisition runs passed as
-  `runs=chunks` so each run is standardized separately).
-- **Feature reduction:** the classifier uses the **500 voxels most selective for object
-  category** — the 500 voxels with the highest ANOVA F-statistic (scikit-learn
-  `sklearn.feature_selection.f_classif` / `SelectKBest(k=500)`) computed across the eight
-  categories.
-- **Classifier:** a linear SVM, `sklearn.svm.SVC(kernel="linear", C=1.0)`.
-- **Cross-validation:** leave-one-run-out over the acquisition runs (`chunks`).
+## Analysis
 
-Report the leave-one-run-out cross-validated 8-way decoding accuracy of this classifier
-(chance = 1/8 = 0.125).
+1. Verify the supplied hashes and BOLD/mask shape and affine alignment; no
+   resampling or smoothing. Use the finite binary mask's nonzero voxels in
+   NumPy C order. A feature index is its zero-based position in this mask
+   ordering; `(i,j,k)` is its zero-based source voxel coordinate.
+2. Extract scaled source BOLD as float64. Clean every complete acquisition run
+   **including rest**, separately: remove each voxel's intercept and linear
+   trend, then divide by its sample standard deviation (`ddof=1`). The fixed
+   implementation is `nilearn.signal.clean` with original `runs`,
+   `detrend=True`, `standardize="zscore_sample"`, `t_r=2.5`, no confounds or
+   temporal filters. Constant residual signals stay zero under Nilearn's
+   constant-signal convention. Only after cleaning remove `rest`. This is
+   offline unlabeled normalization of the held-out run, not online decoding.
+3. Leave one acquisition run out. Within the other 11 runs (792 volumes),
+   compute the eight-group one-way ANOVA F statistic with `f_classif` and
+   select the 500 highest-scoring features. Selection must not see any
+   held-out labels or volumes. Use scikit-learn 1.8 `SelectKBest` ordering:
+   stable ascending sort, take the last 500; exact tied scores favor later
+   feature indices. Constant-feature NaNs rank as the smallest representable
+   float64 value. Require at least 500 finite-F candidates and finite selected
+   scores; otherwise stop, rather than substituting features. Pass selected
+   columns to the classifier in ascending feature-index order.
+4. Fit `SVC(kernel="linear", C=1.0, tol=0.001, shrinking=True,
+   cache_size=200, probability=False, class_weight=None, max_iter=-1,
+   decision_function_shape="ovr", break_ties=False, random_state=None)`.
+   Other declared settings are `degree=3`, `gamma="scale"`, `coef0=0.0`
+   (irrelevant to this linear kernel). Predict the 72 held-out volumes once.
+   Repeat for all 12 runs. No hyperparameter search or sample exclusions.
+5. Report each fold's correct-count/72 accuracy and their arithmetic mean.
+   Equal fold sizes also make this the pooled accuracy. The nominal balanced
+   chance level is 1/8; no above-chance test or population inference is asked.
 
-## Output Location
+The supplied stack uses NumPy 2.2.6, SciPy 1.17.0, scikit-learn 1.8.0,
+NiBabel 5.4.2 and Nilearn 0.13.1. The explicit float64 recipe is the target,
+not the older task's rounded accuracy. Equivalent implementations of these
+operations are acceptable. ANOVA scores rank features; they are not valid
+voxelwise significance tests for autocorrelated fMRI volumes.
 
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
+## Outputs
 
-## Required Outputs
+Write to `${OUTPUT_DIR}` (default `/app/output`):
 
-- `decoding_results.json` — at least a field `cv_accuracy` (float in 0–1), the
-  cross-validated 8-way decoding accuracy you obtained, plus `n_samples`, `n_voxels`
-  (voxels in the mask before reduction), `n_selected` (500), `n_categories`, `n_runs`, and
-  `chance`.
-- `per_fold.csv` — one row per leave-one-run-out fold, with columns
-  `fold, held_out_run, n_test_samples, accuracy` (the held-out accuracy of each fold).
-  Your reported `cv_accuracy` must be the mean of these per-fold accuracies.
-- `run_metadata.json` — dataset id, subject, mask, and the preprocessing / feature-reduction
-  / classifier choices you made.
-- `findings.md` — a short written summary stating the cross-validated 8-way decoding
-  accuracy and how you evaluated it. State only what your analysis actually supports.
+- `decoding_results.json`: `status`, `pipeline_id`, `cv_accuracy`, `n_samples`,
+  `n_voxels` (mask before selection), `n_selected` (500), `n_categories`,
+  `n_runs`, `chance`.
+- `predictions.csv`: each non-rest source volume exactly once, with
+  `volume_id,held_out_run,true_label,predicted_label`.
+- `per_fold.csv`: one row per held-out run, with
+  `fold,held_out_run,n_train_samples,n_test_samples,accuracy`. `fold` is the
+  one-based ordinal of the held-out run in ascending run order.
+- `selected_features.csv`: exactly 500 rows per run, with
+  `held_out_run,feature_index,i,j,k,f_statistic`; no duplicate run/feature pairs.
+- `run_metadata.json`: the fields of `/app/method_contract.json`, plus
+  `status`, `n_samples`, `n_voxels`, `n_selected`, `n_categories`, `n_runs`,
+  `n_full_volumes`, `cleaned_dtype` (`float64`). The template is public metadata,
+  not a numerical answer. Additional fields are allowed.
+- `findings.md`: a short account of the measured result, evaluation and limits.
+  Do not claim a particular accuracy, circular-comparison gap, localization or
+  population effect in advance. No special prose wording is required.
 
-## Failure handling
+For a successful complete analysis, both JSON `status` fields must be strings
+equal to `"ok"` or `"success"`; these are equivalent success labels. Neither
+omitting the field nor reporting a failed/partial status is accepted. JSON
+counts must denote exact integers, `cv_accuracy` and `chance` finite numbers,
+and `pipeline_id` the string supplied in the public template. Preserve the
+template's structure and values in `run_metadata.json`: hashes are strings in
+the supplied filename-to-hash object, ordered arrays remain arrays, nested
+settings remain objects, and strings/booleans/null retain their JSON types. The added
+count fields must agree with the analyzed source, and `cleaned_dtype` is the
+string `"float64"`. Extra metadata fields are allowed but do not override these
+required fields.
 
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a non-empty
-reason, and still write parseable `run_metadata.json`, `decoding_results.json`, and
-`findings.md`.
+CSV row order is immaterial. Equivalent integer notation is accepted for IDs
+and counts. All reported numeric values must be finite; F-statistic tolerance
+is absolute `1e-8` plus relative `1e-6`, accuracy tolerance is absolute `1e-6`.
+Retain enough precision; labels and selected membership are exact, and ties
+are decided from unrounded scores, not rounded CSV values.
+
+A select-once comparison is not required. If discussed, it is a different,
+label-leaking procedure and cannot replace the nested result; no predetermined
+direction or magnitude of its accuracy difference is assumed.
+
+On missing/mismatched inputs, invalid geometry/support or a failed fit, exit
+nonzero and write parseable metadata/results with `status="failed_precondition"`
+and a nonempty reason, plus `findings.md`. Do not invent outputs or silently
+drop inconvenient samples/features. Public source availability does not settle
+redistribution permission; preserve the source notices in the manifest.

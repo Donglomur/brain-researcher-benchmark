@@ -1,0 +1,170 @@
+{
+  "task_id": "OBJCAT-001",
+  "pipeline_id": "haxby2-runwise-anova500-loro-v2",
+  "dataset_id": "haxby2001",
+  "subject": 2,
+  "source_manifest_sha256": "702e97410687dea0193f5d300d988e86c02a1c14cd1fac3016f7a6f7d865cb3a",
+  "source_sha256": {
+    "subj2/bold.nii.gz": "d3e71d07ef780d11673580653cdbe10365e4e93fd78d0f8ed27582086fd0b701",
+    "subj2/labels.txt": "9bda5eaa9900b7506b4836348a67e5c38f76eda5d11ee9f337577821b64e4800",
+    "mask.nii.gz": "d9b531908176bdb5e749f144852ed2adce0712bb476a3fc607abe939363f0b1d"
+  },
+  "geometry": {
+    "bold_shape": [
+      40,
+      64,
+      64,
+      1452
+    ],
+    "mask_shape": [
+      40,
+      64,
+      64
+    ],
+    "affine": [
+      [
+        -3.5,
+        0,
+        0,
+        68.25
+      ],
+      [
+        0,
+        3.75,
+        0,
+        -118.125
+      ],
+      [
+        0,
+        0,
+        3.75,
+        -118.125
+      ],
+      [
+        0,
+        0,
+        0,
+        1
+      ]
+    ],
+    "header_zooms": [
+      3.5,
+      3.75,
+      3.75,
+      2.5
+    ],
+    "header_units": [
+      "mm",
+      "sec"
+    ],
+    "stored_bold_dtype": "int16",
+    "stored_mask_dtype": "int16"
+  },
+  "mask": {
+    "path": "mask.nii.gz",
+    "scope": "supplied whole-brain mask",
+    "membership": "finite binary source mask values == 1",
+    "feature_order": "C-order voxel index",
+    "resampling": false,
+    "smoothing_fwhm": null,
+    "affine_match_atol": 0.000001
+  },
+  "preprocessing": {
+    "extraction": "original scaled BOLD values inside fixed mask; float64",
+    "cleaning_unit": "full acquisition run including rest",
+    "implementation": "nilearn.signal.clean",
+    "detrend": true,
+    "standardize": "zscore_sample",
+    "standard_deviation_ddof": 1,
+    "t_r": 2.5,
+    "low_pass": null,
+    "high_pass": null,
+    "confounds": null,
+    "sample_mask": null,
+    "ensure_finite": false,
+    "rest_removal": "after full-run cleaning",
+    "dtype": "float64"
+  },
+  "samples": {
+    "categories": [
+      "bottle",
+      "cat",
+      "chair",
+      "face",
+      "house",
+      "scissors",
+      "scrambledpix",
+      "shoe"
+    ],
+    "n_full_volumes": 1452,
+    "n_nonrest_volumes": 864,
+    "run_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "full_volumes_per_run": 121,
+    "nonrest_volumes_per_run": 72,
+    "class_volumes_per_run": 9,
+    "volume_id": "zero-based original BOLD volume"
+  },
+  "feature_selection": {
+    "name": "SelectKBest",
+    "score_func": "f_classif",
+    "k": 500,
+    "fit_scope": "training runs only, refit for each held-out run",
+    "sort": "stable ascending mergesort, select last 500",
+    "exact_tie": "larger C-order feature index wins at cutoff",
+    "nan_scores": "rank as float64 minimum; retain diagnostic NaN",
+    "precondition": "at least 500 finite F scores and all selected F scores finite",
+    "classifier_feature_order": "ascending source feature index",
+    "interpretation": "feature ranking, not voxelwise inferential significance"
+  },
+  "classifier": {
+    "name": "SVC",
+    "kernel": "linear",
+    "C": 1,
+    "degree": 3,
+    "gamma": "scale",
+    "coef0": 0,
+    "tol": 0.001,
+    "shrinking": true,
+    "cache_size": 200,
+    "probability": false,
+    "class_weight": null,
+    "verbose": false,
+    "max_iter": -1,
+    "decision_function_shape": "ovr",
+    "break_ties": false,
+    "random_state": null
+  },
+  "cross_validation": {
+    "name": "leave-one-run-out",
+    "headline": "unweighted mean of 12 fold accuracies",
+    "training_samples_per_fold": 792,
+    "test_samples_per_fold": 72,
+    "prediction": "libsvm one-vs-one votes; break_ties=false, not argmax OVR scores"
+  },
+  "numerical_tolerances": {
+    "f_statistic_atol": 1e-8,
+    "f_statistic_rtol": 0.000001,
+    "accuracy_atol": 0.000001,
+    "identities_selected_features_predicted_labels": "exact"
+  },
+  "software": {
+    "numpy": "2.2.6",
+    "scipy": "1.17.0",
+    "scikit-learn": "1.8.0",
+    "nilearn": "0.13.1",
+    "nibabel": "5.4.2"
+  }
+}
