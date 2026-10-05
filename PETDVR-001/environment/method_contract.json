@@ -1,0 +1,406 @@
+{
+  "status": "frozen_before_TAC_fitting",
+  "task_id": "PETDVR-001",
+  "pipeline_id": "petdvr-fixed-window-reference-logan-v2",
+  "scientific_role": "Fixed-window sensitivity of a simplified reference-Logan slope on supplied regional DASB TACs; not validated DASB kinetic truth, a named biological-result reproduction, or four independent participants",
+  "paper_anchor": {
+    "doi": "10.1097/00004647-199609000-00008",
+    "location": "Logan1996 Theory and Methods Eqs5–8, especially simplified Eq7",
+    "claim_boundary": "The omitted efflux contribution is proportional to C_reference/C_target. The paper's constant C_target/C_reference condition is equivalent to constancy of its reciprocal only where both concentrations are nonzero. Both reciprocal ratios are diagnostics here, not corrections or biological validation. Graph linearity or a stable ratio does not establish true DVR, valid reference biology, or DASB-specific applicability. The original paper investigated other tracers."
+  },
+  "dataset": {
+    "dataset_id": "ds001420",
+    "snapshot": "1.2.0",
+    "git_commit_sha1": "2b21a6d6e57cf712ec068faf594be4bbf14cdcbe",
+    "git_tree_sha1": "c937d6f6c05c0e7c788190f4962c0393534a7212",
+    "source_manifest_sha256": "9ca371309a1a5b5e8ebbc80b5c40d1b766bff666774b9f243f6cc27ca1def6a6",
+    "n_original_files": 24,
+    "scans": [
+      [
+        "sub-01",
+        "ses-baseline"
+      ],
+      [
+        "sub-01",
+        "ses-rescan"
+      ],
+      [
+        "sub-02",
+        "ses-baseline"
+      ],
+      [
+        "sub-02",
+        "ses-rescan"
+      ]
+    ],
+    "targets": [
+      "highbinding",
+      "left_thalamus",
+      "right_thalamus",
+      "left_caudate",
+      "right_caudate",
+      "left_putamen",
+      "right_putamen"
+    ],
+    "reference_column": "reference",
+    "reference_provenance": "Use the supplied reference column verbatim; recorded extraction labels8/47 are cerebellar cortex, but AGTM-derived provenance must not be replaced by an uncorrected equal-hemisphere average or asserted receptor-free biological truth.",
+    "highbinding_provenance": "Use the supplied composite verbatim. Extraction label membership is documented; no new composite weighting or processing-equivalence claim is made.",
+    "data_stage": "Published PETPrep1 regional derivatives. Motion correction, segmentation, TAC extraction and correction lineage are not rerun or independently validated by this task.",
+    "units": "Raw PET sidecars state Bq/mL; regional TAC units are attributed through that extraction lineage, not a missing TAC-specific unit sidecar. Integration uses minutes, yielding Bq*min/mL; graph coordinates/intercept are minutes and slope is dimensionless."
+  },
+  "source_preconditions": {
+    "identity": "Verify frozen manifest and all24 original size/SHA256 pins before parsing required source values. No runtime network or substitute source.",
+    "time": "Original frame IDs are zero-based TAC row indices. TSV frame_start/frame_end must match original PET JSON FrameTimesStart and FrameDuration. Durations must be positive and contiguous, first start0, ScanStart=InjectionStart=0, ImageDecayCorrected=true and ImageDecayCorrectionTime=0. No time shift, resampling, interpolation or extra decay correction.",
+    "concentrations": "All supplied reference and seven target frame values must be finite. Finite negative values and zeros are retained without clipping. Unknown/nonfinite activity or unknown temporal gaps cannot be integrated and cause failed_precondition.",
+    "known_metadata_only": {
+      "n_frames": 140,
+      "n_graph_rows": 980,
+      "n_fit_rows": 280,
+      "n_window_member_rows": 3584,
+      "common50_start40_n_candidate_frames_per_scan": 2,
+      "sub01_baseline_native_end_s": 3216,
+      "other_native_end_s": 5400,
+      "common50_sub01_baseline_actual_end_s": 2916,
+      "common50_other_actual_end_s": 3000
+    }
+  },
+  "integration": {
+    "method": "piecewise_constant_original_frame_average_to_midpoint",
+    "formula": "For C in target or reference, d_i=(frame_end_s-frame_start_s)/60, I_C(i)=sum_{j<i}(C_j*d_j)+0.5*C_i*d_i.",
+    "origin": "Time0, using every original earlier frame, even before a fit start or at graph-invalid points. Never reset integrals at the fit start.",
+    "approximation": "Whole-frame area uses the frame-average measurement; within the current frame assume constant activity and take half its area. This is a declared discretization, not an exact underlying continuous-time integral or a claim about the paper's discretization.",
+    "not_allowed": "No invented zero-concentration origin, midpoint trapezoid substitution, partial-frame truncation, rebinning, smoothing, clipping or additional decay correction."
+  },
+  "graph": {
+    "x_min": "integral_reference_bq_min_per_ml / C_target",
+    "y_min": "integral_target_bq_min_per_ml / C_target",
+    "graph_status": "ok when C_target!=0 and computed coordinates are finite; zero_target when C_target==0. Arithmetic overflow/nonfinite results are failed_precondition, not silently dropped.",
+    "target_over_reference": "C_target/C_reference when C_reference!=0, otherwise undefined zero_reference",
+    "reference_over_target": "C_reference/C_target when C_target!=0, otherwise undefined. This describes the shape of the omitted-efflux contribution, not a k2prime-corrected model.",
+    "signed_values": "Finite negative concentrations and signed graph/ratio values are valid numerical inputs; no epsilon denominators or physiological plausibility gate."
+  },
+  "windows": {
+    "start_min": [
+      0,
+      10,
+      20,
+      30,
+      40
+    ],
+    "end_policies": {
+      "native": "last original frame_end_s of the same scan",
+      "common50": 3000
+    },
+    "membership": "Original frame_mid_s >=60*start_min AND original frame_end_s <=requested_end_s. Boundary equality is included. Do not replace actual frame IDs by rounded fit times.",
+    "actual_support": "Report requested end and actual first-frame start/last-frame end separately. common50 is an upper acquisition limit, not equal effective support across scans.",
+    "n_window": "Number of original temporal candidate frames, regardless of graph or ratio validity",
+    "n_fit": "Number of graph-valid temporal candidates; used for minimum-support/rank checks even when no fit is ultimately reported",
+    "n_ratio": "Number of temporal candidate frames with defined target_over_reference; independent of graph eligibility, including C_target==0 if C_reference!=0",
+    "no_selection": "Every scan×target×start×end-policy combination is required, including undefined fits. No best-window selection, residual threshold, fallback, superiority band or effect-direction requirement."
+  },
+  "ols": {
+    "objective": "Unweighted least squares y=logan_slope*x+intercept, using graph-valid temporal candidates only",
+    "minimum_graph_frames": 3,
+    "centered_moments": "xbar=mean(x), ybar=mean(y), Sxx=sum((x-xbar)^2), Sxy=sum((x-xbar)*(y-ybar)), Syy=sum((y-ybar)^2)",
+    "rank_threshold_min2": "1e-24*max(1,sum(x*x))",
+    "rank_rule": "If n_fit<3, fit_status=insufficient_frames. Otherwise if Sxx<=rank_threshold_min2, fit_status=rank_deficient_under_public_rule. Otherwise compute logan_slope=Sxy/Sxx and intercept_min=ybar-logan_slope*xbar. Nonfinite intermediates/results fail explicitly.",
+    "precision_gate_limit": "The rank threshold is a disclosed numerical-resolution rule in fixed minute coordinates, not a physical identifiability statement or exact mathematical rank test. No epsilon is added to a denominator.",
+    "prediction": "predicted_y_min=logan_slope*x_min+intercept_min; algebraically equivalent centered prediction is accepted",
+    "residual": "residual_y_min=predicted_y_min-y_min (predicted minus observed)",
+    "sse_min2": "sum(residual_y_min^2)",
+    "rmse_min": "sqrt(sse_min2/n_fit), not residual standard error with n-2",
+    "r_squared": "1-sse_min2/Syy if Syy>0; null with r_squared_status=constant_y if Syy==0. If the fit is undefined, null with r_squared_status=fit_unavailable.",
+    "undefined": "No slope/intercept/prediction/residual/SSE/RMSE/R2 for insufficient or numerically rank-deficient fits. Preserve source counts, candidate bounds and computable Sxx/Sxy/Syy/rank threshold. n_fit0 makes all moments/threshold undefined, not0."
+  },
+  "ratio_diagnostics": {
+    "support": "All n_ratio temporal candidates independently of Logan fit status",
+    "moments": "ratio_mean=arithmetic mean; ratio_min/max=extrema; ratio_population_sd=sqrt(mean((ratio-ratio_mean)^2)); ratio_cv=ratio_population_sd/abs(ratio_mean) when mean!=0, otherwise null",
+    "trend": "Fit an unweighted line ratio=ratio_time_slope_per_min*t_mid_min+intercept with centered sums when n_ratio>=2 and time Sxx>0. Report its slope; no stability threshold or kinetic conclusion.",
+    "no_ratios": "n_ratio0 => all ratio moments/CV/trend null; ratio_cv_status=no_valid_ratio and ratio_trend_status=no_valid_ratio",
+    "one_ratio": "n_ratio1 => mean/min/max known, population SD0, CV0 if mean!=0; time slope null with insufficient_distinct_times",
+    "zero_mean": "Any exactly zero ratio mean => CV null with zero_mean; finite signed ratios still contribute every other diagnostic",
+    "independence": "Ratio diagnostics remain available for windows whose Logan fit is undefined. Ratio constancy does not itself identify DVR."
+  },
+  "summaries": {
+    "paired_changes": "For each of two original subjects×seven targets×two end policies×five starts, retain both original scan fit statuses and slopes. If both statusok, signed change=rescan_slope-baseline_slope and pair_status=ok; otherwise change=null and pair_status=incomplete_pair. No percentage, absolute-value conversion or single-scan replacement.",
+    "group_windows": "For each of70 target×end-policy×start cells, report n_expected_scans4 and n_expected_subjects2; exact defined-scan identities/count and represented subject identities/count. Mean slope is the equal mean over defined scan slopes, null if none. Report exact complete-pair subject IDs/count and equal mean signed pair change, null if none.",
+    "interpretation": "Four scans are two repeated participants. These available-case summaries are descriptive, and native durations differ. No population inference, independent-n4 claim, preferred-window headline or scientifically validated DVR."
+  },
+  "fit_statuses": [
+    "ok",
+    "insufficient_frames",
+    "rank_deficient_under_public_rule"
+  ],
+  "outputs": {
+    "source_frames.csv": [
+      "subject",
+      "session",
+      "frame_index",
+      "frame_start_s",
+      "frame_end_s",
+      "frame_duration_s",
+      "frame_mid_s",
+      "reference",
+      "highbinding",
+      "left_thalamus",
+      "right_thalamus",
+      "left_caudate",
+      "right_caudate",
+      "left_putamen",
+      "right_putamen"
+    ],
+    "graph_points.csv": [
+      "subject",
+      "session",
+      "target",
+      "frame_index",
+      "integral_target_bq_min_per_ml",
+      "integral_reference_bq_min_per_ml",
+      "x_min",
+      "y_min",
+      "graph_status",
+      "target_over_reference",
+      "ratio_status",
+      "reference_over_target"
+    ],
+    "window_fits.csv": [
+      "subject",
+      "session",
+      "target",
+      "end_policy",
+      "start_min",
+      "requested_end_s",
+      "n_window",
+      "n_fit",
+      "n_ratio",
+      "first_window_frame",
+      "last_window_frame",
+      "first_fit_frame",
+      "last_fit_frame",
+      "actual_window_start_s",
+      "actual_window_end_s",
+      "actual_fit_first_mid_s",
+      "actual_fit_last_mid_s",
+      "fit_status",
+      "Sxx_min2",
+      "Sxy_min2",
+      "Syy_min2",
+      "rank_threshold_min2",
+      "logan_slope",
+      "intercept_min",
+      "sse_min2",
+      "rmse_min",
+      "r_squared",
+      "r_squared_status",
+      "ratio_mean",
+      "ratio_min",
+      "ratio_max",
+      "ratio_population_sd",
+      "ratio_cv",
+      "ratio_cv_status",
+      "ratio_time_slope_per_min",
+      "ratio_trend_status"
+    ],
+    "fit_points.csv": [
+      "subject",
+      "session",
+      "target",
+      "end_policy",
+      "start_min",
+      "frame_index",
+      "graph_valid",
+      "in_fit",
+      "point_status",
+      "predicted_y_min",
+      "residual_y_min"
+    ],
+    "summary.json": [
+      "status",
+      "task_id",
+      "pipeline_id",
+      "n_scans",
+      "n_subjects",
+      "targets",
+      "start_min",
+      "end_policies",
+      "paired_changes",
+      "group_windows"
+    ],
+    "run_metadata.json": [
+      "status",
+      "task_id",
+      "pipeline_id",
+      "source_manifest_sha256",
+      "method_contract_sha256",
+      "source_sha256",
+      "method_contract",
+      "source_observed",
+      "software_versions"
+    ],
+    "findings.md": "Nonempty free numerical summary and interpretation limits; no required keywords, sign, superiority or kinetic-validity assertion"
+  },
+  "output_definitions": {
+    "common": {
+      "identities": "subject/session use original strings sub-01/sub-02 and ses-baseline/ses-rescan; target is exact supplied column; frame_index is original zero-based TSV row; end_policy is native/common50; start_min is one of0/10/20/30/40",
+      "ordering": "CSV rows/columns and JSON keyed-record arrays may be reordered; join source keys, never row position. Duplicate identities are invalid.",
+      "missing": "CSV blank or JSON null only for explicitly undefined quantities. Never zero, NaN or Infinity as a missing placeholder. Source activity fields themselves must be finite.",
+      "booleans": "graph_valid and in_fit are booleans or equivalent0/1 representation",
+      "categorical_authority": "Support/zero/rank/status classifications and counts derive from unrounded original inputs. Tolerated rounded numeric reporting must not change required categories.",
+      "extras": "Harmless extra columns/top-level metadata are allowed. Optional two-term reference regressions are ungraded and do not replace required fits; they are not plasma MA1 or independent kinetic validation."
+    },
+    "source_frames.csv": {
+      "key": [
+        "subject",
+        "session",
+        "frame_index"
+      ],
+      "required_rows": 140,
+      "meaning": "Original sidecar-bound times in seconds and verbatim source reference/seven target activity values"
+    },
+    "graph_points.csv": {
+      "key": [
+        "subject",
+        "session",
+        "target",
+        "frame_index"
+      ],
+      "required_rows": 980,
+      "graph_status_values": [
+        "ok",
+        "zero_target"
+      ],
+      "ratio_status_values": [
+        "ok",
+        "zero_reference"
+      ],
+      "nulls": "x_min/y_min/reference_over_target blank exactly for zero_target; target_over_reference blank exactly for zero_reference"
+    },
+    "window_fits.csv": {
+      "key": [
+        "subject",
+        "session",
+        "target",
+        "end_policy",
+        "start_min"
+      ],
+      "required_rows": 280,
+      "bounds": "first/last_window_frame refer to temporal candidates; actual_window_start/end are their first original start and last original end. first/last_fit_frame and actual_fit_first/last_mid refer to graph-valid candidates even when minimum/rank rule prevents a fit. Empty support makes respective bounds blank.",
+      "fit_status_values": [
+        "ok",
+        "insufficient_frames",
+        "rank_deficient_under_public_rule"
+      ],
+      "r_squared_status_values": [
+        "ok",
+        "constant_y",
+        "fit_unavailable"
+      ],
+      "ratio_cv_status_values": [
+        "ok",
+        "zero_mean",
+        "no_valid_ratio"
+      ],
+      "ratio_trend_status_values": [
+        "ok",
+        "insufficient_distinct_times",
+        "no_valid_ratio"
+      ],
+      "moments": "Sxx/Sxy/Syy are centered graph moments over n_fit candidates; rank threshold follows public rule. For n_fit1, centered moments0 remain computable; n_fit0 makes moments/threshold blank."
+    },
+    "fit_points.csv": {
+      "key": [
+        "subject",
+        "session",
+        "target",
+        "end_policy",
+        "start_min",
+        "frame_index"
+      ],
+      "required_rows": 3584,
+      "membership": "Every temporal window candidate appears, including zero_target points and all candidates of undefined fits; no rows outside the time/end mask.",
+      "graph_valid": "True iff graph_status=ok",
+      "in_fit": "True iff graph_valid and this window fit_status=ok; otherwise false. n_fit is eligible graph support, whereas the sum of in_fit is0 for an undefined fit.",
+      "point_status": "zero_target if graph invalid; else fit_unavailable if fit undefined; otherwise used. Predictions/residuals exist only for used rows."
+    },
+    "summary.json": {
+      "status": "ok",
+      "task_id": "PETDVR-001",
+      "pipeline_id": "petdvr-fixed-window-reference-logan-v2",
+      "n_scans": 4,
+      "n_subjects": 2,
+      "targets": "Exact seven dataset.targets strings",
+      "start_min": [
+        0,
+        10,
+        20,
+        30,
+        40
+      ],
+      "end_policies": [
+        "native",
+        "common50"
+      ],
+      "paired_changes": "140 records with fields subject,target,end_policy,start_min,baseline_fit_status,rescan_fit_status,baseline_slope,rescan_slope,rescan_minus_baseline,pair_status. Exact key is first4 fields. Each source slope is null iff unavailable; difference null unless both statusesok. pair_status=ok|incomplete_pair.",
+      "group_windows": "70 records with fields target,end_policy,start_min,n_expected_scans,n_expected_subjects,n_defined_scans,defined_scans,n_represented_subjects,represented_subjects,mean_logan_slope,n_defined_pairs,defined_pair_subjects,mean_rescan_minus_baseline. Key first3; expected counts4/2. defined_scans is array of [subject,session]; subject arrays contain original strings. Means null iff corresponding count0."
+    },
+    "run_metadata.json": {
+      "status": "ok",
+      "task_id": "PETDVR-001",
+      "pipeline_id": "petdvr-fixed-window-reference-logan-v2",
+      "source_manifest_sha256": "Lowercase SHA256 of exact staged source_manifest.json bytes",
+      "method_contract_sha256": "Lowercase SHA256 of exact public method_contract.json bytes",
+      "source_sha256": "Exact path→SHA256 mapping for all24 original manifest files, not only concentration tables",
+      "method_contract": "Complete parsed public method object, without substituting prose or hidden settings",
+      "source_observed": {
+        "scans": "Four records using source_observed_scan definition below; joined by subject/session"
+      },
+      "software_versions": "Nonempty object of truthful library-name→version strings. Equivalent implementations are accepted without exact oracle-library-version matching."
+    },
+    "source_observed_scan": {
+      "subject": "Original subject string",
+      "session": "Original session string",
+      "tac_path": "Original manifest TAC path",
+      "pet_metadata_path": "Original raw PET sidecar path",
+      "n_frames": "Original TAC row count",
+      "tac_columns": "All original TSV column names in original order",
+      "source_time_unit": "s",
+      "analysis_time_unit": "min",
+      "activity_unit": "Bq/mL",
+      "activity_unit_evidence": "raw_pet_sidecar_and_derivative_lineage_not_TAC_specific_sidecar",
+      "scan_start_s": "Original ScanStart0",
+      "injection_start_s": "Original InjectionStart0",
+      "image_decay_corrected": "Original boolean true",
+      "image_decay_correction_time_s": "Original0",
+      "native_end_s": "Last original frame end",
+      "common50_actual_end_s": "Last complete original frame end<=3000",
+      "first_frame_start_s": "Original0",
+      "frames_contiguous": "Boolean verified from original start/duration"
+    }
+  },
+  "failure_policy": "Checksum/schema/time/nonfinite arithmetic failures exit nonzero and write statusfailed_precondition plus nonempty reason in run_metadata.json/summary.json and nonempty findings.md. Undefined fixed-window fits are expected valid output rows, not global failure.",
+  "execution_state": "This contract was frozen before original TAC concentrations were read or fitted for this repair. Source-only timing support was verified at freeze; data-dependent slopes, ratio statistics and rank statuses were not used to choose this method.",
+  "verification_tolerances": {
+    "source_time_s": {
+      "atol": 1e-9,
+      "rtol": 0
+    },
+    "source_activity_bq_per_ml": {
+      "atol": 0.000001,
+      "rtol": 1e-8
+    },
+    "integrals_and_graph_numeric": {
+      "atol": 1e-7,
+      "rtol": 1e-8
+    },
+    "fit_and_ratio_numeric": {
+      "atol": 1e-7,
+      "rtol": 1e-7
+    },
+    "precision_moments": {
+      "atol": 1e-10,
+      "rtol": 1e-8
+    },
+    "arithmetic": "Source agreement per field plus direct submitted integral/coordinate/prediction/residual/summary arithmetic with propagated contributing-field tolerances; do not accept coherent compensating errors or reclassify categorical support from rounded values.",
+    "tiny_rank_threshold": "rank_threshold_min2 compared with rtol1e-8,atol0; exact zero/status handling is authoritative, never hidden by a generic1e-7 tolerance"
+  }
+}

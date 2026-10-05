@@ -1,74 +1,105 @@
-# Serotonin-transporter DVR from dynamic [11C]DASB PET (PETDVR-001)
+# Reference-Logan window sensitivity on public DASB TACs
 
-## Scientific context
+Analyze the four original deposited PETPrep regional TAC tables from OpenNeuro
+ds001420, snapshot 1.2.0: two people, baseline and rescan for each. This is a
+paper-derived **method sensitivity control**, not reproduction of a named regional
+binding finding or validation of absolute DASB distribution volume ratios (DVRs).
 
-[11C]DASB is the standard PET radioligand for the serotonin transporter (SERT). It is a
-reversibly-binding tracer with no arterial input, so its regional binding is summarised by
-the **distribution volume ratio DVR** — the equilibrium ratio of the total distribution
-volume in a target region to that in a reference region assumed free of specific binding.
-For a reversible tracer with a reference region, DVR is obtained directly from the
-**Logan reference-tissue graphical plot**, whose slope is the DVR (Logan et al., 1996,
-*JCBFM*; Ichise et al., 2002, *JCBFM*, MA1). Data: Knudsen et al., 2016, *NeuroImage*
-(the Cimbi database); Nørgaard & Ganz et al., 2022, *Scientific Data*,
-https://doi.org/10.1038/s41597-022-01164-1.
+## Scientific question
 
-## Data
+How do simplified reference-Logan slopes, fit residuals and target/reference
+concentration ratios change across declared fitting windows and scan durations?
+Report all cases; do not select a winning window or equate high R-squared with
+validated kinetics.
 
-OpenNeuro `ds001420` (a [11C]DASB test-retest dataset: 2 participants, each scanned
-twice). Use the **PETPrep-derived regional time-activity curves** (TACs), which are
-motion-corrected and sampled on a FreeSurfer segmentation. Fetch the four TAC tables at
-runtime from OpenNeuro (open, no credentials), snapshot `1.2.0`:
+The method is motivated by Logan et al. (1996),
+[reference-tissue graphical analysis](https://doi.org/10.1097/00004647-199609000-00008),
+especially the distinction between the reference-efflux expression and its simplified
+form (Equations 6–7). Here we compute only the simplified form. Omitting the
+reference-efflux term needs assumptions beyond an apparently straight plot.
+Concentration-ratio stability is diagnostic, not proof of DVR validity. No efflux
+constant, arterial input, independent binding ground truth or validated DASB window
+is supplied. A two-term reference regression would not be plasma-input Ichise MA1.
+
+## Offline source data
+
+Use `/app/data/petdvr/source_manifest.json` and its 24 checksum-pinned original
+source/lineage files. The four TAC paths follow:
 
 ```
-https://openneuro.org/crn/datasets/ds001420/snapshots/1.2.0/files/<PATH>
+derivatives/PETPrep1/<subject>/<session>/pet/<subject>_<session>_pvc-nopvc_desc-mc_tacs.tsv
 ```
 
-where `<PATH>` is the file path with `/` replaced by `:` (the endpoint 302-redirects to
-the file; follow redirects). The four TAC files are:
+Subjects are `sub-01`, `sub-02`; sessions are `ses-baseline`, `ses-rescan`.
+Analyze exactly these seven columns separately: `highbinding`, `left_thalamus`,
+`right_thalamus`, `left_caudate`, `right_caudate`, `left_putamen`, `right_putamen`.
+Use the supplied `reference` column, not a newly constructed bilateral average.
+That column matches the deposited AGTM reference stream; extraction logs select
+cerebellar cortex labels 8 and 47. The archive does not establish its exact extraction
+revision or the high-binding composite's weighting. Do not infer identical correction
+history for every column from the TSV filename.
 
-```
-derivatives:PETPrep1:sub-01:ses-baseline:pet:sub-01_ses-baseline_pvc-nopvc_desc-mc_tacs.tsv
-derivatives:PETPrep1:sub-01:ses-rescan:pet:sub-01_ses-rescan_pvc-nopvc_desc-mc_tacs.tsv
-derivatives:PETPrep1:sub-02:ses-baseline:pet:sub-02_ses-baseline_pvc-nopvc_desc-mc_tacs.tsv
-derivatives:PETPrep1:sub-02:ses-rescan:pet:sub-02_ses-rescan_pvc-nopvc_desc-mc_tacs.tsv
-```
+Frame times are seconds. Check each TSV against its raw PET JSON sidecar. The sidecars
+declare Bq/mL and extraction logs use `--no-rescale`, but TAC-specific units metadata
+are absent: units are inherited from that lineage, not independently calibrated.
+The published snapshot declares CC0 and requests Cimbi attribution. The
+[PET-BIDS paper](https://doi.org/10.1038/s41597-022-01164-1) provides the dataset-format
+context, not this task's numerical endpoint.
 
-Each TSV has one row per PET frame. Columns include `frame_start`, `frame_end` (seconds),
-a pre-computed `reference` column (the reference-tissue TAC), a `highbinding` column (the
-SERT high-binding composite), and one column per FreeSurfer region, among them
-`left_thalamus`, `right_thalamus`, `left_caudate`, `right_caudate`, `left_putamen`,
-`right_putamen`, all in Bq/mL. **Use the provided `reference` column as the reference
-tissue** so the reference region is fixed across the analysis.
+## Public analysis contract
 
-## Task
+`/app/method_contract.json` is the complete machine-readable method and output
+contract. All scientific choices and required fields are public. Equivalent numerical
+implementations are welcome; no particular library or hidden automatic selector is
+required.
 
-For **each of the four scans**, estimate the [11C]DASB **distribution volume ratio DVR**
-with the **Logan reference-tissue graphical method** (DVR is the slope of the Logan plot),
-using the provided `reference` tissue. Report DVR in the **high-binding SERT territory**
-(the `highbinding` region) and, as a regional profile, in the bilateral **thalamus**,
-**caudate**, and **putamen**. Summarise the values across the four scans.
+1. Preserve source frame order and signed finite concentrations. Convert times to
+   minutes. Approximate each concentration as constant within its original frame:
+   its integral to frame midpoint is the sum of all preceding concentration-times-
+   duration products plus half the current product. Always integrate from scan start,
+   including frames before the fitting window. Do not invent a zero concentration
+   at injection or reset the integral at the fitting start.
+2. Form `x = integral(reference) / target` and
+   `y = integral(target) / target`. A zero target makes that frame's graph
+   coordinates undefined, not a small epsilon denominator. Keep its source record.
+3. Evaluate every start in 0, 10, 20, 30, 40 minutes under both end policies:
+   `native` and `common50`. Include a frame only if its midpoint is at/after the
+   start and its **complete original frame end** is at/before the end cutoff.
+   Do not clip or interpolate partial frames. Report actual retained frame bounds.
+4. Fit unweighted least squares with an intercept to the valid graph coordinates.
+   The contract defines minimum frame count, numerical rank convention, predictions,
+   signed residuals and diagnostics. Preserve undefined fits with explicit reasons;
+   do not silently fall back to another window.
+5. Independently summarize target/reference concentration ratios for window frames
+   with nonzero reference, including valid ratio frames that have undefined graph
+   coordinates. Report counts, dispersion and time slope as specified. Do not use
+   these diagnostics as a hidden acceptance or exclusion threshold.
+6. Report signed within-person rescan-minus-baseline slope differences, and descriptive
+   per-target/window scan summaries with available scan/person counts. These are
+   four scans from **two** people, not four independent participants.
 
-Standard implementation choices the graphical framework leaves to the analyst — the frame
-weighting and the details of fitting the plot — should follow common practice **for this
-tracer**; the brief does not spell them out.
+The first baseline scan ends at 53.6 minutes; the other three end at 90 minutes.
+Consequently native-end paired comparisons are duration-confounded. The common50
+policy avoids later frames but still ends at 48.6 minutes for that first scan versus
+50 minutes for the others. Report that residual support difference. The 40-minute
+common50 windows contain only two frames and must remain insufficient-frame cases.
 
-## Output Location
+## Deliverables and grading
 
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
+Write the seven files specified by `output_definitions` in the public contract to
+`${OUTPUT_DIR}` (default `/app/output`): source frame ledger, graph coordinates,
+all 280 window fits, window-frame predictions/residuals, numerical summary,
+run metadata and a concise `findings.md`.
 
-## Required Outputs
+The verifier requires complete source-bound coverage and recomputes signed summaries;
+it checks source values, frame membership, integrals, fits and diagnostics against an
+independent calculation. Row/column order and extra ungraded diagnostics are allowed.
+Required numerical values must be finite, except contract-defined undefined fields
+represented explicitly. Binary reward is 1 only if all required checks pass; there is
+no promised proportional score. Findings are not graded by preferred keywords or
+expected scientific direction.
 
-- `dvr_estimates.csv` — one row per scan and region, with columns `subject, session,
-  target, reference_region, model, DVR` (extra columns such as a cross-check estimator are
-  welcome).
-- `run_metadata.json` — dataset id, snapshot, target regions, reference region, model, and
-  the per-scan and mean high-binding DVR plus the per-region mean DVR.
-- `findings.md` — a short written summary: the per-scan and mean high-binding DVR, the
-  regional DVR profile, and an account of how you fit the Logan plot and why. State only
-  what your analysis supports.
-
-## Failure handling
-
-If the dataset cannot be fetched or the expected TAC columns are absent, exit non-zero with
-`failed_precondition` and a non-empty reason, and still write a parseable
-`run_metadata.json`, `dvr_estimates.csv`, and `findings.md`.
+Explain sensitivity and limitations without asserting a true optimal window, a
+validated absolute DVR, a population effect, or reproduction of paper-specific values.
+On a source/metadata/checksum failure, exit nonzero with a useful diagnostic; never
+download replacement data or manufacture a successful result.
