@@ -1,95 +1,88 @@
-# The N400 semantic word-pair effect at CPz (N400-001)
+# Target-word N400 amplitude in a fixed ERP CORE subset
 
-## Scientific context
+Estimate the signed unrelated-minus-related target-word ERP amplitude at CPz,
+300–500 ms, separately for subjects 1–12 and then average equally across subjects.
 
-The **N400** is a centro-parietal negative ERP component that is larger (more negative)
-for words that are **semantically unrelated** to a preceding context than for related
-words, and is maximal at midline central-parietal sites such as **CPz**. In the ERP CORE
-word-pair association paradigm (Kappenman, Farrens, Zhang, Stewart & Luck, 2021,
-*NeuroImage*, https://doi.org/10.1016/j.neuroimage.2020.117465), each trial presents a
-**prime** word followed by a **target** word, and the participant judges whether the two
-words are semantically related. The canonical readout is the **unrelated-minus-related
-difference wave** and its amplitude in the N400 window.
+## Scientific scope
 
-## Task
+[ERP CORE (Kappenman et al., 2021)](https://doi.org/10.1016/j.neuroimage.2020.117465),
+Figure 2 and Tables 1–2, motivates the contrast, CPz site and measurement window.
+The published N400 characterization used 39 participants, ICA, artifact rejection,
+and correctness/reaction-time exclusions. This task instead uses a fixed 12-person
+subset, a specified FIR filter, and no such exclusions. It is an original-data
+method control, **not a reproduction of the published cleaned amplitude**. Do not
+infer a population effect, a precise onset, or artifact-free physiology from it.
 
-Using the ERP CORE **N400** continuous EEG recordings for **subjects 1-12**, **compute the
-unrelated-minus-related N400 difference-wave amplitude at electrode CPz in the 300-500 ms
-window** and report it (microvolts), following the fixed processing below.
+## Offline data and public method
 
-### Data (ERP CORE N400, downsampled continuous EEGLAB files, subjects 1-12)
+Original `<subject>_N400_shifted_ds.set` / `.fdt` pairs are in
+`/app/data/erpcore_n400`. `data_manifest.json` identifies each OSF version-1 source
+and its size, SHA256 and MD5. Verify these identities; no downloads or substitutes
+are needed. The files already include the original stimulus-delay correction and
+256 Hz downsampling. Do not apply either operation again.
 
-Each subject has a `<n>_N400_shifted_ds.set` header and a matching `.fdt` data file that
-must sit in the same directory. Download both files for each subject from OSF at
-`https://osf.io/download/<id>/`:
+`/app/method_contract.json` is the complete public numerical and output contract.
+Follow that contract; equivalent numerical implementations are welcome. The
+following points summarize its important choices:
 
-```
-subj   .set id                         .fdt id
-1      5f1694d20596f601307a31c0        5f1694d00596f6013579eea0
-2      5f169db50870f2014b097fda        5f169db20596f601357a038b
-3      5f16a6be0596f6012c7a1d1f        5f16a6bb6ef440013ebd3c2e
-4      5f16aff70596f6012c7a27f2        5f16aff30596f6013e79a466
-5      5f16b1d20870f2014b09a318        5f16b1cf6ef4400155bc9530
-6      5f16b2cf6ef440014fbcbdbe        5f16b2cd0870f2014b09a4dd
-7      5f16b3b36ef4400149bcea77        5f16b3b00870f201500972da
-8      5f16b49b0596f6012c7a2da6        5f16b4980596f601357a29a9
-9      5f16b5776ef4400155bc9e0d        5f16b5736ef4400154bc9aa4
-10     5f1695950596f601307a331d        5f1695930596f6013579f09c
-11     5f1696566ef4400148bca87f        5f1696530596f6012f7a0633
-12     5f1697226ef4400148bca9fb        5f16971f0870f2014b097388
-```
+- Retain every original event in a source ledger. Related **targets** are 211/212;
+  unrelated targets are 221/222. Codes 111/112/121/122 are primes, and 201/202 are
+  responses, not target stimuli. Correctness and reaction time do not select trials.
+- Use CPz referenced to `(P9 + P10)/2`. Only these three channels are needed for
+  this readout; identically filtering all EEG channels gives the same result.
+- Use the explicit float64, zero-phase, 0.1–30 Hz Hamming FIR defined in the
+  contract. Its 8,449 coefficients and segment-edge padding are public, including
+  the construction formula. One centered FIR pass is not `filtfilt`. Do not add
+  ICA, notch filtering, interpolation, clipping or amplitude-based rejection.
+- Respect original discontinuities: independently filter each continuous segment
+  and exclude target epochs crossing a segment boundary. A boundary's duration
+  describes removed historical data, not an extra current interval to discard.
+  Keep structural exclusions and their reasons in the trial ledger.
+- Convert the original 1-based event latency to the nearest zero-based sample,
+  ties to even. Do not silently merge target events with the same rounded sample.
+  The nominal −200..800 ms epoch comprises offsets −51..205 inclusive at 256 Hz.
+  Baseline offsets are −51..0; measurement offsets are 77..128, both inclusive.
+  These correspond to actual epoch endpoints −199.21875/800.78125 ms and
+  measurement endpoints 300.78125/500 ms.
+- Subtract each trial's baseline mean, average trials equally within condition,
+  and subtract related from unrelated. Preserve the sign. Average the 12 subject
+  differences equally, not by trial count; do not force negative values.
 
-Save each pair as `<n>_N400_shifted_ds.set` / `<n>_N400_shifted_ds.fdt` (the `.set`
-references the `.fdt` by name). Read with `mne.io.read_raw_eeglab`.
+## Required outputs
 
-### Event codes (ERP CORE N400 word-pair association scheme)
+Write these eight files to `${OUTPUT_DIR}` (default `/app/output`). Exact columns,
+null conventions, JSON fields and numerical tolerances are in the public contract.
 
-Stimulus event codes are three digits **XYZ**:
+| File | Required evidence |
+| --- | --- |
+| `source_events.csv` | Every source event, original index/type/latency/duration, role, sample and eligibility |
+| `segments.csv` | Source segment bounds and actual filter padding |
+| `trial_measurements.csv` | Every candidate target, retained/dropped status, baseline and signed window measurements |
+| `curves.csv` | All 257 samples of each subject's related, unrelated and difference curves |
+| `per_subject.csv` | Exact subject coverage, candidate/retained/dropped counts and signed condition/difference amplitudes |
+| `n400.json` | Equal-subject headline, source support, contrast and measurement definition |
+| `run_metadata.json` | Source hashes, public contract and observed source structure, software provenance |
+| `findings.md` | A concise numerical summary and the interpretation limits of this adaptation |
 
-| digit | meaning | values |
-|-------|---------|--------|
-| hundreds (X) | word type | 1 = prime, 2 = target |
-| tens (Y) | word-pair type | 1 = related, 2 = unrelated |
-| ones (Z) | word list | 1 = list 1, 2 = list 2 |
+Use the EEGLAB FDT microvolt storage convention; these headers contain no explicit
+voltage-unit annotation. If a reader converts to volts, convert back once when
+reporting. Missing measurements on structurally dropped trials are
+blank, not zero, NaN or infinity. Every participant must retain at least one trial
+in each target condition. Missing sources, unsupported structure, nonfinite signal
+values or ambiguous target identity must fail explicitly, not yield fabricated
+measurements. On failure write `status: failed_precondition` and a nonempty reason
+in `run_metadata.json` and `n400.json`, plus a short `findings.md`, then exit nonzero.
 
-So the stimulus codes are 111, 112, 121, 122 (prime words) and 211, 212, 221, 222 (target
-words). Response codes 201 (correct) and 202 (incorrect) are behavioural and are not
-stimulus events.
+The verifier checks original-source identity, all event/trial/curve/subject
+measurements and their aggregation. There is no required sign, effect size,
+prime-null result or pooled-halving relationship, and no prose keyword gate.
+A prime-plus-target sensitivity analysis is optional and ungraded. Software
+version strings are provenance, not a requirement to use one implementation.
+Scoring is binary: all required checks pass for reward 1; otherwise reward 0.
 
-### Fixed processing (pin exactly)
+## Attribution and access scope
 
-- Mark `HEOG_left`, `HEOG_right`, `VEOG_lower` as EOG; the other 30 channels are scalp EEG.
-- Band-pass filter the EEG **0.1-30 Hz**.
-- Re-reference the EEG to the **average of the mastoid-adjacent electrodes P9 and P10**.
-- Epoch **-200 to 800 ms** around stimulus onset, apply a **-200 to 0 ms baseline**, and
-  **average all epochs** of each condition (no additional peak-to-peak artifact
-  rejection).
-- Form the **unrelated-minus-related** difference wave (average of the unrelated condition
-  minus average of the related condition), per subject.
-- Measure the N400 as the **mean amplitude of the CPz unrelated-minus-related difference
-  wave over the 300-500 ms window**, per subject.
-- Report the **mean across the 12 subjects** of that per-subject amplitude.
-
-## Output Location
-
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
-
-## Required Outputs
-
-- `n400.json` — at minimum `{"n400_difference_amplitude_uv": <float>, "channel": "CPz",
-  "window_ms": [300, 500], "n_subjects": <int>}`.
-- `per_subject.csv` — one row per subject (the exact 12-subject sample, real subject ids):
-  `subject, n400_uv`, each subject's signed unrelated-minus-related N400 difference-wave
-  amplitude at CPz over the 300-500 ms window (microvolts); its mean across subjects is the
-  reported headline `n400_difference_amplitude_uv`. You may add any further columns you find
-  useful.
-- `run_metadata.json` — dataset id, n subjects, the reference and filter you used, the
-  baseline and measurement window, and the event codes entering each condition.
-- `findings.md` — a few sentences reporting the unrelated-minus-related N400 amplitude at
-  CPz. State only what your analysis supports.
-
-## Failure handling
-
-If the ERP CORE N400 files cannot be resolved, exit non-zero with `failed_precondition`
-and a non-empty reason, and still write parseable `run_metadata.json`, `n400.json`, and
-`findings.md`.
+Credit Emily Kappenman, Steven Luck and the ERP CORE contributors. The OSF N400
+node currently reports CC-BY 4.0; the pinned author repository's `License.txt`
+states CC-BY-SA 4.0. Both scoped notices are recorded in the source manifest; this
+task does not claim that either supersedes the other or clear public redistribution.

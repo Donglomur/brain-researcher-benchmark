@@ -1,0 +1,401 @@
+{
+  "status": "frozen_before_signal_values",
+  "pipeline_id": "erpcore-n400-target-subset-v2",
+  "scientific_role": "12-participant original-data N400 target-word method adaptation, not the paper's cleaned 39-participant amplitude reproduction",
+  "subjects": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "source_stage": "Original OSF version1 shifted_ds SET/FDT pairs: upstream stimulus delay correction and 256 Hz resampling already performed; do not repeat either",
+  "source_expectation": {
+    "sfreq_hz": 256,
+    "channels_readout": [
+      "CPz",
+      "P9",
+      "P10"
+    ],
+    "eog": [
+      "HEOG_left",
+      "HEOG_right",
+      "VEOG_lower"
+    ],
+    "trials": 1
+  },
+  "event_codes": {
+    "related_target": [
+      211,
+      212
+    ],
+    "unrelated_target": [
+      221,
+      222
+    ],
+    "related_prime": [
+      111,
+      112
+    ],
+    "unrelated_prime": [
+      121,
+      122
+    ],
+    "correct_response": [
+      201
+    ],
+    "incorrect_response": [
+      202
+    ]
+  },
+  "events": {
+    "identity": "subject plus original zero-based EEG.event array index; retain every original event row without sorting or deleting",
+    "latency": "Finite original 1-based possibly fractional latency_samples; onset_seconds=(latency_samples-1)/256",
+    "rounding": "Nonboundary event_sample=rint(latency_samples-1), nearest integer ties-to-even; no timing correction added",
+    "type": "Preserve source string event labels; numeric integral types canonicalize to decimal integer strings. Record original type representation in private source receipt. Known codes only determine task roles.",
+    "duration": "Original duration_samples retained numerically when finite; blank if genuinely absent/empty/nonfinite and duration_status records absent|empty|nonfinite|finite. A boundary duration counts historical removed samples, not a current interval to censor.",
+    "duplicates": "Retain all original identities; duplicate rounded target samples are failed_precondition, not silently merged",
+    "selection": "Every target is a candidate, irrespective of correctness or RT. Prime/response/other events remain in source_events but never contribute target epochs. No ICA, interpolation, amplitude rejection, clipping or participant exclusion."
+  },
+  "boundaries": {
+    "types": [
+      "boundary",
+      "-99"
+    ],
+    "segments": "Sorted unique cuts together with0,N define nonempty half-open source segments [a,b); retaining all original boundary rows even when cuts coincide. Boundary event_sample is blank, boundary_cut_sample records exact cut.",
+    "edge_markers": "0.5 andN+.5 are permitted source edge markers; they do not create empty segments or shift events",
+    "epoch_crossing": "Target interval[event_sample-51,event_sample+206) must be contained in exactly one source segment. No clipping, padding, bridging, or duration-based censoring. Drop out-of-data first, then boundary-crossing; retain reason.",
+    "latency_requirement": "For standard finite half-integer L=k+.5, require0<=k<=N and use cutk=floor(L). Fail explicitly for non-half-integer boundaries; do not round ambiguous discontinuities."
+  },
+  "filter": {
+    "kind": "Explicit symmetric Hamming-window FIR equivalent to MNE1.12.1 firwin0.1–30 Hz defaults at256 Hz",
+    "n_taps": 8449,
+    "center": 4224,
+    "formula": "h=-LP(8449,0.05Hz); addLP(113,33.75Hz) centered at4224. LP(L,f)[n]=(2f/256)*sinc((2f/256)*(n-(L-1)/2))*(0.54-0.46*cos(2*pi*n/(L-1))), normalized by its coefficient sum; sinc(x)=sin(pi*x)/(pi*x).",
+    "transitions_hz": [
+      0.1,
+      7.5
+    ],
+    "passband_hz": [
+      0.1,
+      30
+    ],
+    "half_amplitude_hz": [
+      0.05,
+      33.75
+    ],
+    "precision": "float64",
+    "segment_padding": "For segment lengthL, e=min(8449,L)-1; prepend/append e repeats of segment endpoint value. Linear full convolution withh; retain indices[e+4224:e+4224+L]. This is one centered noncausal FIR pass, not filtfilt.",
+    "channels": "Only CPz,P9,P10 are numerically required because no artifact/QC selection uses other EEG channels. Filtering all EEG with the identical linear segment operator is equivalent for this readout.",
+    "reference": "filtered_CPz-(filtered_P9+filtered_P10)/2; equivalent applying the same linear filter to CPz-(P9+P10)/2 is accepted",
+    "no_additions": "No extra DC removal, resampling, notch, ICA, clipping or data-dependent filter changes",
+    "implementation_acceptance": "Equivalent numerical implementations accepted; software version strings are provenance, not a correctness gate. Explicit SciPy convolution is suitable for independent validation."
+  },
+  "epochs": {
+    "offsets_inclusive": [
+      -51,
+      205
+    ],
+    "n_samples": 257,
+    "times_ms": "sample_offset*1000/256",
+    "nominal_ms": [
+      -200,
+      800
+    ],
+    "actual_ms": [
+      -199.21875,
+      800.78125
+    ],
+    "baseline_offsets_inclusive": [
+      -51,
+      0
+    ],
+    "measurement_offsets_inclusive": [
+      77,
+      128
+    ],
+    "baseline_n_samples": 52,
+    "measurement_n_samples": 52,
+    "measurement_actual_ms": [
+      300.78125,
+      500
+    ],
+    "trial_values": "Baseline=mean filtered/rereferenced CPz over52 baseline samples. Raw measurement=mean over52 measurement samples before baseline removal. Corrected measurement=raw measurement-baseline. Full epoch subtracts that same scalar baseline. Output values in microvolts.",
+    "empty_condition": "Fail if any subject has no retained target in either condition; do not drop the subject or impute0."
+  },
+  "aggregation": "Equal trial mean within each subject/condition; full difference curve=unrelated-related. Each condition's measurement-window curve mean equals its corrected trial-measurement mean. Per-subject signed N400=unrelated_uv-related_uv. Headline is equal arithmetic mean across the exact12 subjects, never trial-count weighting, absolute value or forced negativity.",
+  "outputs": {
+    "source_events.csv": [
+      "subject",
+      "event_index",
+      "event_type",
+      "latency_samples",
+      "duration_samples",
+      "duration_status",
+      "event_sample",
+      "boundary_cut_sample",
+      "role",
+      "condition",
+      "segment_id",
+      "retained",
+      "drop_reason"
+    ],
+    "segments.csv": [
+      "subject",
+      "segment_id",
+      "start_sample",
+      "end_sample_exclusive",
+      "n_samples",
+      "filter_length",
+      "pad_samples"
+    ],
+    "trial_measurements.csv": [
+      "subject",
+      "event_index",
+      "event_type",
+      "event_sample",
+      "condition",
+      "segment_id",
+      "epoch_start_sample",
+      "epoch_end_sample_exclusive",
+      "status",
+      "drop_reason",
+      "baseline_uv",
+      "window_raw_mean_uv",
+      "window_baseline_corrected_uv"
+    ],
+    "curves.csv": [
+      "subject",
+      "sample_offset",
+      "time_ms",
+      "related_uv",
+      "unrelated_uv",
+      "difference_uv"
+    ],
+    "per_subject.csv": [
+      "subject",
+      "n_related_candidate",
+      "n_unrelated_candidate",
+      "n_related_retained",
+      "n_unrelated_retained",
+      "n_related_dropped",
+      "n_unrelated_dropped",
+      "related_uv",
+      "unrelated_uv",
+      "n400_uv"
+    ],
+    "n400.json": [
+      "status",
+      "pipeline_id",
+      "channel",
+      "contrast",
+      "n_subjects",
+      "subject_ids",
+      "window_ms",
+      "epoch_sample_offsets",
+      "baseline_sample_offsets",
+      "measurement_sample_offsets",
+      "n400_difference_amplitude_uv",
+      "related_mean_amplitude_uv",
+      "unrelated_mean_amplitude_uv",
+      "n_target_events",
+      "n_retained_target_epochs",
+      "n_subjects_negative",
+      "n_subjects_zero",
+      "n_subjects_positive"
+    ],
+    "run_metadata.json": [
+      "status",
+      "task_id",
+      "pipeline_id",
+      "source_manifest_sha256",
+      "method_contract_sha256",
+      "source_sha256",
+      "method_contract",
+      "source_observed",
+      "software_versions"
+    ],
+    "findings.md": "Nonempty measured summary and honest adaptation limitations; no keyword or result-direction gate"
+  },
+  "roles": [
+    "target",
+    "prime",
+    "response",
+    "boundary",
+    "other"
+  ],
+  "conditions": [
+    "related",
+    "unrelated"
+  ],
+  "trial_statuses": [
+    "retained",
+    "dropped"
+  ],
+  "drop_reasons": [
+    "",
+    "not_target",
+    "out_of_data",
+    "boundary_crossing"
+  ],
+  "null_semantics": "For nontarget source events condition is related/unrelated only for primes, blank for responses/boundaries/other; retained0,drop_reason not_target. Candidate target structural drops retain known bounds, source identity and condition but all measured numeric values blank. Unknown source duration is blank with explicit duration_status. No NaN/Infinity public numerics.",
+  "segment_id": "For nonboundary event anchors inside recording, identify the half-open segment containing event_sample; otherwise blank. This is the anchor segment even if its target epoch crosses a boundary. Boundaries use blank segment_id and explicit cut. Segment identity never implies epoch eligibility.",
+  "optional_branch": "Prime+target pooled sensitivity is not required or searched by regex in unknown extra fields. If no explicit separate branch is frozen, it is unscored explanatory output only; no compulsory pooled-halving claim.",
+  "private_evidence": "Outside public output: exact source events/header metadata; original3-channel traces or immutable source links; filter coefficients; filtered/rereferenced CPz; all retained257-sample epochs and per-target identity/drop arrays; exact public tables/metadata/results. No answer bank in image.",
+  "frozen_at_utc": "2026-10-02T02:01:38Z",
+  "task_id": "N400-001",
+  "source_observed_preflight": {
+    "n_subjects": 12,
+    "channels": 33,
+    "sfreq_hz": 256,
+    "trials_per_dataset": 1,
+    "source_events": 4343,
+    "target_events": 1440,
+    "boundary_records": 0,
+    "duration_fields_present": false,
+    "channel_indices_zero_based": {
+      "CPz": 14,
+      "P9": 8,
+      "P10": 26
+    },
+    "all_paired_lengths_match_float32": true,
+    "ica_fields_empty": true,
+    "limitation": "No actual boundaries in this selected original data; boundary handling exercised by unit fixtures only. History records stimulus shift; 256Hz header and named saved-stage script establish upstream downsampling."
+  },
+  "tolerances": {
+    "amplitude_uv": {
+      "atol": 0.000001,
+      "rtol": 0.000001
+    },
+    "source_latency_samples": {
+      "atol": 1e-9,
+      "rtol": 0
+    },
+    "source_duration_samples": {
+      "atol": 1e-9,
+      "rtol": 0
+    },
+    "times_ms": {
+      "atol": 1e-9,
+      "rtol": 0
+    },
+    "categorical": "All source keys, condition/role, support, counts, statuses and signs used for descriptive counts are authoritative from unrounded original source analysis. Rounding an amplitude within numerical tolerance must not change required categories. No forced negative gate.",
+    "arithmetic": "Compare submitted scalar/curve/trial aggregation both to source-authoritative results and directly to its contributing submitted fields with rounding-aware propagated tolerance; do not permit coherent per-subject errors to cancel in the group mean."
+  },
+  "units": {
+    "source_storage": "EEGLAB external float32 little-endian, channel-fast Fortran order (33,pnts)",
+    "source_voltage": "microvolts under EEGLAB storage convention; MNE EEGLAB reader returns volts using1e-6 conversion",
+    "output_voltage": "microvolts",
+    "independent_check": "Direct original FDT values and MNE reader route must match dimensional conversion before acceptance."
+  },
+  "stopping_conditions": [
+    "checksum or original pair mismatch",
+    "unexpected sample rate,channels,layout",
+    "nonfinite required channel samples",
+    "ambiguous boundary or duplicate rounded target sample",
+    "any subject with no valid target in either condition",
+    "resource cap exceeded"
+  ],
+  "no_posthoc_retuning": true,
+  "output_definitions": {
+    "common": {
+      "json_status": "ok for all twelve subjects; resource_pilot identifies subject1-only development output and is not an accepted submission; failed_precondition plus reason is non-accepted diagnostic output",
+      "csv_unknown": "Empty field only where the contract explicitly permits unknown or unmeasured values. NaN/Inf are forbidden in public numeric fields.",
+      "row_order": "CSV order is not graded; join exact source keys. Metadata subjects list is joined by subject. Source event_index always denotes original EEG.event order, never CSV row position.",
+      "extra_fields": "Harmless top-level output fields and truthful alternative software-version provenance may be retained; source identities and required method metadata cannot be replaced by arbitrary prose.",
+      "retained": "source_events.csv retained is integer0 or1; trial_measurements.csv status is retained or dropped"
+    },
+    "n400.json": {
+      "status": "ok",
+      "pipeline_id": "erpcore-n400-target-subset-v2",
+      "channel": "CPz",
+      "contrast": "unrelated minus related (target words)",
+      "n_subjects": 12,
+      "subject_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "window_ms": [
+        300,
+        500
+      ],
+      "epoch_sample_offsets": [
+        -51,
+        205
+      ],
+      "baseline_sample_offsets": [
+        -51,
+        0
+      ],
+      "measurement_sample_offsets": [
+        77,
+        128
+      ],
+      "n400_difference_amplitude_uv": "Finite equal-subject arithmetic mean of per_subject.n400_uv; not pooled by trial count",
+      "related_mean_amplitude_uv": "Finite equal-subject mean of related_uv",
+      "unrelated_mean_amplitude_uv": "Finite equal-subject mean of unrelated_uv",
+      "n_target_events": "Integer sum of both condition candidate counts over subjects",
+      "n_retained_target_epochs": "Integer sum of both condition retained counts over subjects",
+      "n_subjects_negative": "Count of authoritative unrounded subject N400 values strictly below0",
+      "n_subjects_zero": "Count of authoritative unrounded subject N400 values exactly0",
+      "n_subjects_positive": "Count of authoritative unrounded subject N400 values strictly above0"
+    },
+    "run_metadata.json": {
+      "status": "ok",
+      "task_id": "N400-001",
+      "pipeline_id": "erpcore-n400-target-subset-v2",
+      "source_manifest_sha256": "Lowercase SHA256 of original bytes of staged data_manifest.json",
+      "method_contract_sha256": "Lowercase SHA256 of original bytes of public method_contract.json",
+      "source_sha256": "Exact object mapping all24 manifest files[].path original basenames to their verified files[].sha256 strings, including inputs not used by a pilot",
+      "method_contract": "Parsed full public method_contract.json object; exact nested declared source/method metadata, not substituted prose",
+      "source_observed": {
+        "subjects": "One record per analyzed subject with at least the required fields defined by source_observed_subject below; full submission has all12 original subject IDs. Row order may vary."
+      },
+      "software_versions": "Object of truthful string version labels for libraries actually used. Alternative implementations and software versions are accepted; equality to the oracle's version strings is not a grading condition."
+    },
+    "source_observed_subject": {
+      "subject": "Integer original subject ID1..12",
+      "set_path": "Original SET basename from corresponding manifest entry",
+      "fdt_path": "Original FDT basename from corresponding manifest entry",
+      "sfreq_hz": "Finite original EEG.srate,256 for this input",
+      "n_samples": "Integer original EEG.pnts",
+      "n_channels": "Integer original EEG.nbchan,33 for this input",
+      "channel_labels": "All33 exact original EEG.chanlocs labels in source order",
+      "readout_channel_indices": {
+        "CPz": 14,
+        "P9": 8,
+        "P10": 26
+      },
+      "header_reference": "Original EEG.ref string,common for this input; this does not replace the declared P9/P10 calculation",
+      "n_source_events": "Integer original EEG.event count, including nontargets",
+      "event_type_counts": "Object mapping canonical original event-type strings to integer occurrence counts; numeric original integral codes use decimal integer strings",
+      "n_boundary_events": "Integer number of original boundary or-99 records; zero in this source",
+      "n_segments": "Integer number of nonempty source segments after unique declared cuts,one in this source",
+      "n_target_candidates": "Integer count of all211/212/221/222 events before structural epoch drops",
+      "n_retained_target_epochs": "Integer count of retained target events",
+      "n_dropped_out_of_data": "Integer count of target events with that structural drop reason",
+      "n_dropped_boundary_crossing": "Integer count of target events with that structural drop reason",
+      "duration_fields_present": "Boolean whether any original event has a duration field; false in these inputs, not a measured zero duration",
+      "ica_fields_empty": "Boolean whether original icaweights,icasphere,icawinv,icachansind arrays are all empty",
+      "history_sha256": "Lowercase SHA256 of exact original EEG.history string encoded UTF8, with no whitespace stripping or path rewriting"
+    },
+    "findings.md": "Nonempty free summary of measured signed results and adaptation limitations. No required wording, direction, prime-null or pooled-halving assertion."
+  }
+}

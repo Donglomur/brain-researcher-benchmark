@@ -1,15 +1,16 @@
-version = "1.1"
-instruction_version = "1.0"
-test_version = "1.0"
+version = "1.2"
+instruction_version = "2.0"
+test_version = "2.0"
+artifacts = ["/app/output", "/app/oracle_private", "/app/data/erpcore_n400/data_manifest.json"]
 
 [metadata]
 task_id = "N400-001"
-title = "N400 unrelated-minus-related amplitude at CPz — ERP-CORE"
-category = "EEG / ERP"
-difficulty = "hard"
-dataset_source = "ERP CORE (OSF)"
+title = "Target-word N400 amplitude in a fixed ERP CORE subset"
+category = "EEG / ERP method control"
+difficulty = "easy"
+dataset_source = "ERP CORE N400 OSF version-1 SET/FDT pairs, checksum-pinned and staged offline"
 dataset_id = "erpcore_n400"
-source_paper = "Kappenman, Farrens, Zhang, Stewart & Luck 2021 (ERP CORE), NeuroImage"
+source_paper = "Kappenman et al. 2021, DOI 10.1016/j.neuroimage.2020.117465; Figure 2 and Tables 1-2 method anchor, not the cleaned 39-subject finding reproduction"
 
 [verifier]
 timeout_sec = 1800.0
@@ -20,10 +21,10 @@ timeout_sec = 3600.0
 [environment]
 build_timeout_sec = 2400.0
 cpus = 2
-memory_mb = 8192
+memory_mb = 4096
 storage_mb = 16384
 gpus = 0
-allow_internet = true
+allow_internet = false
 
 [verifier.env]
 
