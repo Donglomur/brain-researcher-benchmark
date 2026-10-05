@@ -1,15 +1,16 @@
-version = "1.1"
-instruction_version = "1.0"
-test_version = "1.0"
+version = "1.2"
+instruction_version = "2.0"
+test_version = "2.0"
+artifacts = ["/app/output", "/app/data/sleep-edf/data_manifest.json"]
 
 [metadata]
 task_id = "SLEEPSTAGE-001"
-title = "5-class AASM sleep staging on Sleep-EDF"
-category = "Reproduction"
-difficulty = "hard"
-dataset_source = "PhysioNet (mne.datasets.sleep_physionet)"
+title = "Subject-held-out five-class sleep staging on Sleep-EDF"
+category = "Method validation"
+difficulty = "easy"
+dataset_source = "PhysioNet Sleep-EDF Expanded 1.0.0; checksum-pinned original EDFs baked offline"
 dataset_id = "Sleep-EDF Expanded (sleep-cassette, age cohort)"
-source_paper = "Kemp et al. 2000 (Sleep-EDF); AASM staging"
+source_paper = "Sleep-EDF data resource (10.13026/C2X676); modern staging adaptation, not Kemp et al. 2000 reproduction"
 
 [verifier]
 timeout_sec = 3600.0
@@ -23,7 +24,7 @@ cpus = 2
 memory_mb = 8192
 storage_mb = 16384
 gpus = 0
-allow_internet = true
+allow_internet = false
 
 [verifier.env]
 

@@ -1,78 +1,65 @@
-## SLEEPSTAGE-001
+# SLEEPSTAGE-001: subject-held-out sleep-staging baseline
 
-**Proposal Title:** 5-class AASM sleep staging on Sleep-EDF — an un-cued cross-validation-leakage over-claim (does the write-up volunteer that a random epoch-wise k-fold inflates the accuracy?)
+## Scientific scope
 
-**Scientific Domain:** Life Sciences · **Field:** Neuroscience · **Subfield:** Sleep EEG / machine-learning evaluation (leakage)
+An easy method control on six original Sleep-EDF age-cohort recordings (subjects
+0–5, night 1). The task measures five-class random-forest staging accuracy and
+pooled Cohen kappa when one subject is held out. Its acquired EEG and expert
+hypnograms are real; the crop, feature recipe and classifier are declared modern
+analysis choices.
 
-**Source finding / benchmark:** Automatic 5-class AASM sleep staging on the **Sleep-EDF Expanded** database (Kemp et al. 2000; PhysioNet), reported as cross-validated accuracy / Cohen kappa. **Dataset:** `mne.datasets.sleep_physionet.age.fetch_data`, subjects `[0,1,2,3,4,5]`, recording 1. Genre: **reproduction reframed to an over-claim / leakage (judgement) grade**.
+The original annotations follow Rechtschaffen–Kales. Combining stages 3 and 4
+into N3 yields the declared five labels, not a new AASM expert rescoring. This
+task does not reproduce Kemp et al. (2000)'s neuronal feedback/slow-wave result,
+and it does not establish clinical or population-wide performance. The age-cohort
+source is the Sleep Cassette study; the data-resource citation alone does not
+make the random-forest endpoint a result from the cited paper.
 
-### The un-cued failure axis (PRIVATE — reviewers only)
+## Immutable inputs and execution
 
-**Axis: statistical inference — cross-validation leakage (circularity/leakage family, Kriegeskorte-style).** The deliverable ("report the **cross-validated** staging accuracy / Cohen kappa") names the metric but never says *how* to cross-validate. Consecutive 30-s epochs from one night are highly autocorrelated (sleep is piecewise-stationary) and share subject identity, so a **random epoch-wise k-fold leaks**: near-duplicate neighbours of each test epoch, and other epochs from the same subject, land in the training set → the accuracy is **inflated** (0.832 vs 0.775). The honest, subject-generalising estimate is **subject-wise (leave-one-subject-out)** CV. Everything else is pinned (subjects, recording, channels Fpz-Cz + Pz-Oz, 30-s epochs, the 5-class AASM mapping, relative band-power features, RandomForest(200, seed 0)), so only the CV scheme moves the number.
+The twelve unmodified PSG/hypnogram EDFs are identified in the public manifest.
+Their expected SHA256 values come from the primary PhysioNet version-1.0.0
+checksum file obtained before download. The build uses the officially documented
+public S3 mirror for transport, with exact URL/identity allowlists and the same
+checksums. ODC Attribution 1.0 licensing and source attribution are retained.
+The task and verifier run offline; no dataset-cache mount or simulated fallback
+is required. The same raw source bundle can serve AASMSTAGE-001, but the two tasks
+have different feature/classifier/metric contracts and cannot share references.
 
-**Why this axis and not a "leak that survives LOSO":** the pinned pipeline is scale-invariant (RandomForest) and its features are per-epoch (per-epoch relative band power, per-epoch Welch PSD), so a feature-standardisation-fit-across-all-subjects leak produces **no measurable signal** (RF ignores feature scale; measured no-op). For this pipeline the only real, measured leakage lever is the **CV split** itself. Rather than change the pinned classifier to a scale-sensitive one (whose standardisation leak on band-power features is expected to be negligible), the task keeps the genuine, measured CV-scheme leak and hardens the *grade*.
+## Public analysis and verification
 
-**Distinct from AASMSTAGE-001** (same dataset): AASMSTAGE-001 pins LOSO and grades the **class-imbalance** over-claim (overall vs stage-fair accuracy). This task pins nothing about the CV scheme and grades the **leakage** over-claim (random epoch-wise vs subject-wise CV) — a different failure family, so the two are not a monoculture on the same lever.
+The instruction publishes annotation-index cropping, complete 30-second epoch
+selection, channel order, Welch window/segment/DC handling, normalized-bin feature
+definition, RF settings and subject-wise held-out unit. Subject and epoch order
+are pinned for the seeded forest. All source epoch IDs and labels are retained.
 
-### De-cued + reframed in this revision
+The sleepedf-loso-v2 bank is built only from a real repaired oracle execution.
+Its builder reopens the hash-verified EDFs to validate epoch onsets/classes before
+retaining predictions. The verifier compares source-keyed true and predicted
+classes, recomputes every confusion cell, each subject's accuracy/kappa and pooled
+metrics, and validates the public source/estimator metadata.
 
-- Prior version **point-matched** the subject-wise accuracy (`|acc-0.775|<0.03`), which effectively told the agent which CV scheme to use and reduced the task to a number.
-- Now: the required `per_fold.csv` output (which nudged toward CV structure) is dropped; the instruction asks only for the cross-validated accuracy + kappa, and never mentions leakage, autocorrelation, subject-wise CV or generalisation.
-- The verifier grades the **judgement**, not the number.
+The earlier grade could accept a joint permutation of confusion-matrix class
+names, because accuracy and kappa do not change. Source-stage binding closes that
+hole. Score-preserving predicted-class mutations are also rejected. Row order,
+equivalent integral numeric formats, extra columns and non-English prose are
+accepted. Only disclosed rounding tolerances remain; there is no minimum accuracy,
+required variability, hidden random-split contrast, or keyword gate.
 
-### Step-0 (validated, real data — mne 1.12.1, sklearn 1.8.0)
+## Validation boundary
 
-Pinned subject set `[0,1,2,3,4,5]`, recording 1; RandomForest(200, random_state=0) on relative band-power features; 5828 epochs:
+The maintainer retains raw-data oracle outputs, feature receipts, independent
+manual epoch/SciPy-Welch checks, actual-output adversarial fixtures and final
+clean-commit Harbor receipts outside the task image. See REPAIR_STATUS.md and the
+external receipt for measured status. Shared EDF readers/classifier libraries
+limit the independence of secondary checks.
 
-| CV scheme | accuracy | Cohen kappa |
-|---|---|---|
-| **subject-wise (leave-one-subject-out) — honest** | **0.775** | 0.682 |
-| random epoch-wise 5-fold — naive/leaky | 0.832 | 0.763 |
+Passing these tests supports numerical agreement with this particular public
+method contract. It does not prove how an agent trained its model, replicate an
+original paper finding, or establish model difficulty. No Sol/frontier calibration
+has been run; the public reference history requires contamination-aware later
+evaluation. Resource contract: 2 CPUs, 8 GiB RAM, no GPU.
 
-Gap (random − subject-wise) = **0.0575** accuracy, correctly signed (random inflated).
-
-### Verifier — proof-of-work (3 pillars, NUMBERS not keywords)
-
-The grade is carried against a reference (`tests/reference.npz`) built by running the oracle on
-the pinned Sleep-EDF set (subjects [0..5], night 1); it is held out of the agent CONTAINER but
-PUBLIC in this repo — burned, so a real eval needs fresh tasks / a server-side reference.
-`tests/proof_of_work.py` + `tests/test_outputs.py`:
-
-1. **Per-subject proof of work** — `per_subject.csv` must cover the 6-subject LOSO sample
-   (real ids), be non-constant, and match the held-out per-subject leave-one-subject-out
-   accuracy (tol 0.06) and kappa (tol 0.08), ≥80% of subjects.
-2. **Recompute** — the epoch-weighted mean of the submitted `accuracy` must equal both the
-   reference subject-wise accuracy (0.775) and the reported headline accuracy.
-3. **Discriminating number (LOSO-vs-random)** — the reported headline must be the subject-wise
-   accuracy (0.775 ± **0.045**) and kappa (0.682), the reported random-k-fold accuracy must match
-   the reference (0.832 ± 0.05), and the subject-wise value must be at least 0.04 BELOW the
-   random-k-fold value. A run that reports the leaky random-k-fold accuracy (0.832) as the
-   headline fails (also on the recompute pillar).
-
-**Fairness widening (GROUP_TOL 0.035 → 0.045).** ±0.035 on the group accuracy/kappa was thinner
-than plausible pipeline / library-version drift (~5%). Validated by perturbing the committed
-reference per-item values (`ref_acc`/`ref_kappa`/`subj_*`/`rand_*`) by a +0.04 shift: at ±0.035
-that honest alternative FAILED the headline (pillar 3) and the recompute (pillar 2); at ±0.045 it
-PASSES. **HONEST-LIMITATION:** the widening is CAPPED at 0.045 because it must stay below the
-LOSO-vs-random-kfold gap (0.058) — otherwise reporting the leaky random-kfold accuracy (0.832) as
-the headline would slip through. So this task can only absorb ~5% drift, at the low end of the
-plausible range; a larger honest drift cannot be admitted without weakening the leakage
-discriminator (`GAP_MIN` = 0.04 still independently blocks headline = random-kfold). Not widened:
-`RAND_TOL`, `GAP_MIN`, per-subject tolerances. A constant/fabricated table and the leaky-headline
-over-claim still fail.
-
-Validation matrix (subprocess pytest per case): honest oracle → PASS; no-table → FAIL;
-constant → FAIL; non-constant fabricated (right mean, wrong per-item) → FAIL; naive
-(random-k-fold-as-headline) → FAIL. Reference-build: per-subject LOSO accuracy [0.76,0.83,
-0.72,0.82,0.75,0.76]; subject-wise 0.775 / random 0.832 (5828 epochs).
-
-### Validation (MEASURED locally)
-
-- **Oracle** (`solution/compute.py`, unchanged — already contrasts the schemes and names the leakage): real run gives subject-wise 0.775 / random 0.832; new verifier **PASS (2/2)** on the actual output.
-- **Naive / over-claim / hedge / terse-LOSO / pipeline-vocab** fixtures **FAIL**; **defensible** LOSO-with-rationale and contrast fixtures **PASS**.
-- Data fetches at runtime via `sleep_physionet.age.fetch_data` (PhysioNet); `allow_internet=true`. **Caveat:** PhysioNet throttles downloads (~4 min/subject); the subject set is pinned small (6). Dev validation used the cached copy under `~/mne_data/physionet-sleep-data`.
-- **Live gate (Step-5 frontier calibration, ≥2 families, k≥3, hand re-scored) = maintainer.**
-
-### Cost
-
-`hard`. cpus 2, mem 8 GB, internet on (downloads 6 subjects × 1 night of Sleep-EDF; PhysioNet is slow — generous timeouts). Deps: mne 1.12.1 + numpy/scipy/scikit-learn/pooch.
+Sources: https://physionet.org/content/sleep-edfx/1.0.0/
+and the explicitly adapted MNE sleep-staging tutorial:
+https://mne.tools/1.12/auto_tutorials/clinical/60_sleep.html

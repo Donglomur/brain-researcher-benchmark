@@ -1,204 +1,262 @@
-"""Reference solution for SLEEPSTAGE-001.
+"""Offline six-subject Sleep-EDF LOSO method baseline.
 
-Stage sleep into the 5 AASM classes (W, N1, N2, N3, REM) from the Sleep-EDF
-(PhysioNet, mne.datasets.sleep_physionet) EEG, in 30-s epochs, and report the
-CROSS-VALIDATED staging accuracy and Cohen kappa on a pinned set of subjects.
-
-The one choice the brief leaves un-cued is the cross-validation scheme. Consecutive
-30-s epochs from the same recording are highly autocorrelated (sleep is piecewise
-stationary) and come from the same subject, so a RANDOM epoch-wise k-fold puts
-near-duplicate neighbours of each test epoch into the training set and leaks subject
-identity -> the accuracy is badly INFLATED. The honest estimate of how well the stager
-generalises to a NEW night/subject is SUBJECT-WISE cross-validation
-(leave-one-subject-out), where all of a subject's epochs are held out together.
-
-Everything else is pinned (subjects, recording, channels, 30-s epochs, the 5-class AASM
-mapping, the relative band-power features, and a 200-tree random forest), so only the
-CV scheme moves the number. Validated on the pinned subject set (see findings.md):
-subject-wise accuracy is materially LOWER than the random-k-fold accuracy.
-
-Proof-of-work deliverable: a PER-SUBJECT table (per_subject.csv) with each held-out
-subject's test-epoch count, leave-one-subject-out accuracy and Cohen kappa. The group
-subject-wise accuracy is the epoch-weighted mean of these per-subject accuracies; the
-random-k-fold accuracy (higher, leaky) is reported only for contrast.
+The original R&K annotations are collapsed into five labels; this is neither an
+AASM rescoring nor a numerical reproduction of Kemp's slow-wave finding.
+Importing this module performs no analysis, download, or filesystem writes.
 """
 import csv
+import hashlib
 import json
 import os
-import sys
 from pathlib import Path
+import sys
 
 import numpy as np
 
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-OUT.mkdir(parents=True, exist_ok=True)
-
-SUBJECTS = [0, 1, 2, 3, 4, 5]   # PINNED fixed subject set
-RECORDING = [1]                 # night 1
-
-# AASM 5-class mapping (stage 3 and 4 merge into N3)
+PIPELINE_ID = "sleepedf-loso-v2"
+DATASET_ID = "sleep-edfx-1.0.0"
+SUBJECTS = list(range(6))
+RECORDING = 1
+CHANNELS = ["EEG Fpz-Cz", "EEG Pz-Oz"]
+CLASSES = ["W", "N1", "N2", "N3", "REM"]
+BANDS = [[0.5, 4], [4, 8], [8, 12], [12, 16], [16, 30]]
 ANN2LABEL = {"Sleep stage W": 0, "Sleep stage 1": 1, "Sleep stage 2": 2,
              "Sleep stage 3": 3, "Sleep stage 4": 3, "Sleep stage R": 4}
-CLASS_NAMES = ["W", "N1", "N2", "N3", "REM"]
-BANDS = [(0.5, 4.0), (4.0, 8.0), (8.0, 12.0), (12.0, 16.0), (16.0, 30.0)]  # delta theta alpha sigma beta
+PREPROCESSING = {
+    "crop_rule": "second_annotation_minus_1800_to_penultimate_plus_1800",
+    "n_fft": 300, "n_per_seg": 300, "n_overlap": 0, "window": "hamming",
+    "remove_dc": True, "average": "mean", "fmin": 0.5, "fmax": 30.0,
+    "normalization": "sum_psd_bins", "band_reduction": "mean",
+    "feature_order": "band_then_channel", "bands": BANDS,
+}
+CLASSIFIER = {
+    "name": "RandomForestClassifier", "n_estimators": 200, "random_state": 0,
+    "criterion": "gini", "max_depth": None, "min_samples_split": 2,
+    "min_samples_leaf": 1, "max_features": "sqrt", "bootstrap": True,
+}
+PREDICTION_FIELDS = ["subject", "recording", "onset_sample", "true_class",
+                     "predicted_class", "heldout_subject"]
 
 
-def fail(reason):
-    (OUT / "run_metadata.json").write_text(json.dumps(
-        {"status": "failed_precondition", "reason": reason,
-         "dataset_id": "sleep-edf (PhysioNet Sleep-EDF Expanded)"}, indent=2))
-    (OUT / "staging_results.json").write_text(json.dumps(
-        {"status": "failed_precondition", "reason": reason}))
-    (OUT / "findings.md").write_text(f"# Failed precondition\n\n{reason}\n")
-    sys.stderr.write(reason + "\n")
-    sys.exit(1)
+def metadata_contract(source_sha256):
+    """Return the public, data-specific analysis contract."""
+    return {
+        "pipeline_id": PIPELINE_ID, "dataset_id": DATASET_ID,
+        "subjects": SUBJECTS, "recording": RECORDING, "channels": CHANNELS,
+        "epoch_sec": 30, "sfreq": 100, "classes": CLASSES,
+        "preprocessing": PREPROCESSING, "classifier": CLASSIFIER,
+        "cv_scheme": "leave-one-subject-out", "source_sha256": source_sha256,
+    }
 
 
-try:
+def load_inputs(data_dir):
+    """Validate all twelve staged EDFs before resolving subject/file pairs."""
+    data_dir = Path(data_dir).resolve()
+    manifest = json.loads((data_dir / "data_manifest.json").read_text())
+    entries = manifest["files"]
+    if len(entries) != 2 * len(SUBJECTS):
+        raise ValueError("require exactly six PSG/hypnogram pairs")
+    pairs, source_sha256 = {}, {}
+    for item in entries:
+        subject, recording, role = item["subject"], item["recording"], item["role"]
+        if type(subject) is not int or subject not in SUBJECTS:
+            raise ValueError("source manifest has an unexpected subject")
+        if type(recording) is not int or recording != RECORDING or role not in {"psg", "hypnogram"}:
+            raise ValueError("source manifest has an unexpected recording or role")
+        key = (subject, role)
+        relative = Path(item["path"])
+        path = (data_dir / relative).resolve()
+        if relative.is_absolute() or not path.is_relative_to(data_dir):
+            raise ValueError("source manifest paths must stay inside the data directory")
+        if key in pairs or item["path"] in source_sha256:
+            raise ValueError("duplicate source manifest entry")
+        if path.stat().st_size != item["size_bytes"]:
+            raise ValueError(f"source size mismatch: {relative}")
+        with path.open("rb") as stream:
+            digest = hashlib.file_digest(stream, "sha256").hexdigest()
+        if digest != item["sha256"]:
+            raise ValueError(f"source SHA256 mismatch: {relative}")
+        pairs[key] = path
+        source_sha256[item["path"]] = digest
+    expected = {(s, role) for s in SUBJECTS for role in ("psg", "hypnogram")}
+    if set(pairs) != expected:
+        raise ValueError("source manifest does not contain the exact six recording pairs")
+    return pairs, source_sha256
+
+
+def subject_epochs(psg, hypnogram, *, preload=True):
+    """Apply the declared crop and return source-keyed, chronological epochs."""
     import mne
-    from mne.datasets.sleep_physionet.age import fetch_data
-    from mne.time_frequency import psd_array_welch
-    from sklearn.ensemble import RandomForestClassifier
-    from sklearn.model_selection import StratifiedKFold, LeaveOneGroupOut
-    from sklearn.metrics import accuracy_score, cohen_kappa_score
-    mne.set_log_level("ERROR")
-except Exception as e:  # pragma: no cover
-    fail(f"import failed: {e}")
 
-
-def subject_features(subj):
-    """Relative band-power features (5 bands x 2 EEG channels) for each 30-s epoch."""
-    psg, hyp = fetch_data(subjects=[subj], recording=RECORDING, verbose=False)[0]
-    raw = mne.io.read_raw_edf(psg, stim_channel=False, verbose=False, preload=False)
-    ann = mne.read_annotations(hyp)
-    # trim the long wake padding before/after lights-off (standard Sleep-EDF handling)
-    ann.crop(ann[1]["onset"] - 30 * 60, ann[-2]["onset"] + 30 * 60, verbose=False)
+    raw = mne.io.read_raw_edf(psg, stim_channel=False, preload=False, verbose=False)
+    if raw.info["sfreq"] != 100:
+        raise ValueError("the pinned EEG derivations must be sampled at 100 Hz")
+    if not set(CHANNELS).issubset(raw.ch_names):
+        raise ValueError("one of the two prescribed EEG derivations is absent")
+    ann = mne.read_annotations(hypnogram)
+    if len(ann) < 3:
+        raise ValueError("insufficient annotations for the prescribed crop")
+    crop_start = float(ann[1]["onset"] - 1800)
+    crop_end = float(ann[-2]["onset"] + 1800)
+    ann.crop(crop_start, crop_end, verbose=False)
     raw.set_annotations(ann, emit_warning=False)
-    raw.pick([c for c in raw.ch_names if "Fpz-Cz" in c or "Pz-Oz" in c]).load_data()
-    events, _ = mne.events_from_annotations(raw, event_id=ANN2LABEL, chunk_duration=30.0,
-                                            verbose=False)
-    tmax = 30.0 - 1.0 / raw.info["sfreq"]
-    ep = mne.Epochs(raw, events, None, 0.0, tmax, baseline=None, preload=True,
-                    verbose=False, on_missing="ignore")
-    y = ep.events[:, 2]
-    data = ep.get_data()
-    sf = raw.info["sfreq"]
-    psds, freqs = psd_array_welch(data, sfreq=sf, fmin=0.5, fmax=30.0,
-                                  n_fft=int(sf * 3), verbose=False)
-    rel = psds / psds.sum(axis=-1, keepdims=True)
-    X = np.concatenate([rel[:, :, (freqs >= lo) & (freqs < hi)].mean(axis=-1)
-                        for lo, hi in BANDS], axis=1)
-    return X, y
+    raw.pick(CHANNELS)
+    if raw.ch_names != CHANNELS:
+        raise ValueError("unexpected EEG channel order")
+    if preload:
+        raw.load_data(verbose=False)
+    events, _ = mne.events_from_annotations(
+        raw, event_id=ANN2LABEL, chunk_duration=30.0, verbose=False)
+    epochs = mne.Epochs(
+        raw, events, event_id=None, tmin=0.0, tmax=29.99,
+        baseline=None, preload=preload, on_missing="ignore", verbose=False)
+    if not preload:
+        epochs.drop_bad(verbose=False)
+    onsets = epochs.events[:, 0].astype(np.int64)
+    labels = epochs.events[:, 2].astype(np.int64)
+    if not len(onsets) or np.any(np.diff(onsets) <= 0):
+        raise ValueError("source epochs are empty or not strictly chronological")
+    observed = {
+        "crop_start_s": crop_start, "crop_end_s": crop_end,
+        "n_epochs": int(len(onsets)),
+        "first_onset_sample": int(onsets[0]), "last_onset_sample": int(onsets[-1]),
+    }
+    return epochs, labels, onsets, observed
 
 
-try:
-    Xs, ys, groups = [], [], []
-    for s in SUBJECTS:
-        X, y = subject_features(s)
-        Xs.append(X); ys.append(y); groups.append(np.full(len(y), s))
-    X = np.concatenate(Xs); y = np.concatenate(ys); g = np.concatenate(groups)
-except Exception as e:
-    fail(f"could not build features from Sleep-EDF: {e}")
+def subject_features(psg, hypnogram):
+    """Compute the declared ten band/channel features without cross-epoch fitting."""
+    from mne.time_frequency import psd_array_welch
 
-if len(np.unique(g)) < len(SUBJECTS) or len(y) < 3000:
-    fail(f"insufficient data: {len(np.unique(g))} subjects, {len(y)} epochs")
+    epochs, labels, onsets, observed = subject_epochs(psg, hypnogram)
+    psd, frequencies = psd_array_welch(
+        epochs.get_data(), sfreq=100, fmin=0.5, fmax=30.0,
+        n_fft=300, n_per_seg=300, n_overlap=0, window="hamming",
+        remove_dc=True, average="mean", n_jobs=1, verbose=False)
+    denominator = psd.sum(axis=-1, keepdims=True)
+    if not np.isfinite(psd).all() or np.any(denominator <= 0):
+        raise ValueError("invalid or zero-power EEG epoch")
+    relative = psd / denominator
+    features = np.concatenate([
+        relative[:, :, (frequencies >= lo) & (frequencies < hi)].mean(axis=-1)
+        for lo, hi in BANDS
+    ], axis=1)
+    if features.shape != (len(labels), 10) or not np.isfinite(features).all():
+        raise ValueError("invalid ten-feature EEG matrix")
+    return features, labels, onsets, observed
 
 
-def rf():
-    return RandomForestClassifier(n_estimators=200, random_state=0, n_jobs=-1)
+def write_json(path, value):
+    Path(path).write_text(json.dumps(value, indent=2, allow_nan=False) + "\n")
 
 
-# ---- honest estimate: SUBJECT-WISE (leave-one-subject-out) ----
-logo = LeaveOneGroupOut()
-rows, yt, yp = [], [], []
-for tr, te in logo.split(X, y, g):
-    clf = rf().fit(X[tr], y[tr])
-    pred = clf.predict(X[te])
-    subj = int(g[te][0])
-    rows.append(dict(subject=subj, fold=f"subject_{subj}", n_test_epochs=int(len(te)),
-                     accuracy=float(accuracy_score(y[te], pred)),
-                     kappa=float(cohen_kappa_score(y[te], pred))))
-    yt.append(y[te]); yp.append(pred)
-rows.sort(key=lambda r: r["subject"])
-yt = np.concatenate(yt); yp = np.concatenate(yp)
-acc_subj = float(accuracy_score(yt, yp))
-kappa_subj = float(cohen_kappa_score(yt, yp))
+def write_csv(path, fields, rows):
+    with Path(path).open("w", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(rows)
 
-# ---- for the write-up: the random epoch-wise k-fold (leaky) number, for contrast ----
-skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-yt2, yp2 = [], []
-for tr, te in skf.split(X, y):
-    clf = rf().fit(X[tr], y[tr])
-    yt2.append(y[te]); yp2.append(clf.predict(X[te]))
-yt2 = np.concatenate(yt2); yp2 = np.concatenate(yp2)
-acc_rand = float(accuracy_score(yt2, yp2))
-kappa_rand = float(cohen_kappa_score(yt2, yp2))
 
-# PER-SUBJECT proof-of-work table
-with open(OUT / "per_subject.csv", "w", newline="") as f:
-    w = csv.DictWriter(f, fieldnames=["subject", "n_test_epochs", "accuracy", "kappa"])
-    w.writeheader()
-    for r in rows:
-        w.writerow(dict(subject=r["subject"], n_test_epochs=r["n_test_epochs"],
-                        accuracy=round(r["accuracy"], 6), kappa=round(r["kappa"], 6)))
+def run(output_dir, data_dir):
+    import mne
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score, cohen_kappa_score, confusion_matrix
+    from sklearn.model_selection import LeaveOneGroupOut
 
-# retained per-fold table (same content, fold-labelled)
-with open(OUT / "per_fold.csv", "w", newline="") as f:
-    w = csv.DictWriter(f, fieldnames=["fold", "n_test_epochs", "accuracy", "kappa"])
-    w.writeheader()
-    for r in rows:
-        w.writerow(dict(fold=r["fold"], n_test_epochs=r["n_test_epochs"],
-                        accuracy=round(r["accuracy"], 6), kappa=round(r["kappa"], 6)))
+    mne.set_log_level("ERROR")
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    inputs, source_sha256 = load_inputs(data_dir)
+    features, labels, groups, onset_samples, observations = [], [], [], [], []
+    for subject in SUBJECTS:
+        x, y, onsets, observed = subject_features(
+            inputs[subject, "psg"], inputs[subject, "hypnogram"])
+        features.append(x)
+        labels.append(y)
+        groups.append(np.full(len(y), subject, dtype=np.int64))
+        onset_samples.append(onsets)
+        observations.append({"subject": subject, "recording": RECORDING, **observed})
+    x, y, groups, onsets = map(np.concatenate, (features, labels, groups, onset_samples))
+    if set(np.unique(y)) != set(range(len(CLASSES))):
+        raise ValueError("the source cohort does not contain all five scored classes")
+    np.savez_compressed(
+        output_dir / "feature_receipt.npz", features=x, subject=groups,
+        recording=np.full(len(y), RECORDING, dtype=np.int64), onset_sample=onsets,
+        true_class=np.asarray(CLASSES, dtype="U3")[y])
+    predictions = np.full(len(y), -1, dtype=np.int64)
+    subject_rows, count_rows = [], []
+    parameters = {key: value for key, value in CLASSIFIER.items() if key != "name"}
+    for train, test in LeaveOneGroupOut().split(x, y, groups):
+        subject = int(groups[test][0])
+        if set(groups[train]) != set(SUBJECTS) - {subject}:
+            raise ValueError("unexpected LOSO training membership")
+        model = RandomForestClassifier(**parameters, n_jobs=2)
+        predictions[test] = model.fit(x[train], y[train]).predict(x[test])
+        subject_rows.append({
+            "subject": subject, "n_test_epochs": int(len(test)),
+            "accuracy": float(accuracy_score(y[test], predictions[test])),
+            "kappa": float(cohen_kappa_score(y[test], predictions[test])),
+        })
+        matrix = confusion_matrix(y[test], predictions[test], labels=range(len(CLASSES)))
+        for i, truth in enumerate(CLASSES):
+            for j, prediction in enumerate(CLASSES):
+                count_rows.append({"subject": subject, "true_class": truth,
+                                   "predicted_class": prediction, "n_epochs": int(matrix[i, j])})
+    if np.any(predictions < 0):
+        raise ValueError("some source epochs have no held-out prediction")
+    prediction_rows = [
+        {"subject": int(subject), "recording": RECORDING, "onset_sample": int(onset),
+         "true_class": CLASSES[int(truth)], "predicted_class": CLASSES[int(prediction)],
+         "heldout_subject": int(subject)}
+        for subject, onset, truth, prediction in zip(groups, onsets, y, predictions)
+    ]
+    accuracy = float(accuracy_score(y, predictions))
+    kappa = float(cohen_kappa_score(y, predictions))
+    result = {
+        "pipeline_id": PIPELINE_ID, "cv_scheme": "leave-one-subject-out",
+        "accuracy": accuracy, "cohen_kappa": kappa, "n_subjects": len(SUBJECTS),
+        "n_epochs": int(len(y)), "n_classes": len(CLASSES), "classes": CLASSES,
+    }
+    metadata = {"status": "ok", **metadata_contract(source_sha256),
+                "per_subject_observations": observations}
+    write_csv(output_dir / "epoch_predictions.csv", PREDICTION_FIELDS, prediction_rows)
+    write_csv(output_dir / "per_subject.csv",
+              ["subject", "n_test_epochs", "accuracy", "kappa"], subject_rows)
+    write_csv(output_dir / "confusion_counts.csv",
+              ["subject", "true_class", "predicted_class", "n_epochs"], count_rows)
+    write_json(output_dir / "staging_results.json", result)
+    write_json(output_dir / "run_metadata.json", metadata)
+    (output_dir / "findings.md").write_text(
+        "# Sleep-EDF LOSO method baseline\n\n"
+        f"Across {len(y)} scored epochs from six held-out recordings, accuracy was "
+        f"{accuracy:.6f} and pooled Cohen kappa was {kappa:.6f}. Each subject's night "
+        "was predicted using only the other five subjects. The source-keyed epoch "
+        "predictions reproduce every confusion matrix and reported metric.\n\n"
+        "These recordings use the original Rechtschaffen–Kales annotations, with "
+        "stages 3 and 4 collapsed into N3. They were not rescored under AASM rules. "
+        "This fixed six-recording method baseline supports a limited new-subject "
+        "evaluation within the selected cohort; it does not reproduce Kemp's "
+        "original slow-wave finding or establish performance in other populations.\n")
+    print(json.dumps({"status": "ok", **result}, allow_nan=False))
+    return result
 
-(OUT / "staging_results.json").write_text(json.dumps({
-    "cv_scheme": "leave-one-subject-out",
-    "accuracy": acc_subj,
-    "cohen_kappa": kappa_subj,
-    "n_subjects": len(SUBJECTS),
-    "n_epochs": int(len(y)),
-    "n_classes": 5,
-    "classes": CLASS_NAMES,
-    "random_kfold_accuracy_for_reference": acc_rand,
-    "random_kfold_kappa_for_reference": kappa_rand,
-    "per_subject_csv": "per_subject.csv",
-}, indent=2))
 
-(OUT / "run_metadata.json").write_text(json.dumps({
-    "status": "ok",
-    "dataset_id": "sleep-edf (PhysioNet Sleep-EDF Expanded, age cohort)",
-    "subjects": SUBJECTS,
-    "recording": RECORDING,
-    "channels": ["EEG Fpz-Cz", "EEG Pz-Oz"],
-    "epoch_sec": 30,
-    "classes": CLASS_NAMES,
-    "features": "relative band power (delta/theta/alpha/sigma/beta) per channel, Welch n_fft=3s",
-    "classifier": "RandomForestClassifier(n_estimators=200, random_state=0)",
-    "cv_scheme": "leave-one-subject-out (subject-wise)",
-}, indent=2))
+def main():
+    output_dir = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+    data_dir = Path(os.environ.get("SLEEPEDF_DATA_DIR", "/app/data/sleep-edf"))
+    try:
+        run(output_dir, data_dir)
+    except Exception as error:
+        output_dir.mkdir(parents=True, exist_ok=True)
+        failure = {"status": "failed_precondition", "reason": str(error),
+                   "dataset_id": DATASET_ID, "pipeline_id": PIPELINE_ID}
+        write_json(output_dir / "run_metadata.json", failure)
+        write_json(output_dir / "staging_results.json", failure)
+        (output_dir / "findings.md").write_text(f"# Failed precondition\n\n{error}\n")
+        print(f"failed_precondition: {error}", file=sys.stderr)
+        return 1
+    return 0
 
-(OUT / "findings.md").write_text(f"""# SLEEPSTAGE-001 - 5-class AASM sleep staging (Sleep-EDF)
 
-On the pinned Sleep-EDF set (subjects {SUBJECTS}, night 1; EEG Fpz-Cz + Pz-Oz; 30-s
-epochs; relative band-power features; 200-tree random forest), the **honest,
-subject-generalising** staging performance -- **leave-one-subject-out**
-cross-validation -- is:
-
-* **accuracy = {acc_subj:.3f}**
-* **Cohen kappa = {kappa_subj:.3f}**
-
-over {len(y)} epochs across the 5 AASM classes ({", ".join(CLASS_NAMES)}). Per-subject
-leave-one-subject-out accuracy and kappa are in `per_subject.csv`.
-
-## Why subject-wise, not random k-fold
-Consecutive 30-s epochs from one night are highly autocorrelated and share subject
-identity, so a **random epoch-wise k-fold leaks**: near-duplicate neighbours of each
-test epoch, and other epochs from the same subject, sit in the training set. On these
-data that inflates the estimate to accuracy = {acc_rand:.3f} (kappa {kappa_rand:.3f}) --
-about {acc_rand - acc_subj:.3f} higher than the subject-wise value. That inflated number
-does **not** reflect how the stager would generalise to a new subject/night; the
-subject-wise figures above do.
-""")
-
-print(f"OK: subject-wise acc={acc_subj:.4f} kappa={kappa_subj:.4f} | "
-      f"random-kfold acc={acc_rand:.4f} kappa={kappa_rand:.4f} | "
-      f"gap={acc_rand - acc_subj:.4f} | n_epochs={len(y)}")
+if __name__ == "__main__":
+    raise SystemExit(main())
