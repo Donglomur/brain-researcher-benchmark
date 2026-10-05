@@ -1,0 +1,97 @@
+{
+  "schema_version": 2,
+  "method_id": "errmon-single-person-response-average-reference-v2",
+  "scope": "A descriptive computational adaptation using one MNE-modified ERP CORE Flankers recording, not the paper's group ERN result or exact preprocessing.",
+  "source_manifest_sha256": "31b2d095d29abb0236d2439b67c1a7fc7c301c2562ee46de74f399934095df60",
+  "subject": "001",
+  "input": {
+    "directory": "/app/data/errmon",
+    "filename": "ERP-CORE_Subject-001_Task-Flankers_eeg.fif",
+    "sfreq_hz": 1024,
+    "n_samples": 935936,
+    "first_sample": 0,
+    "eeg_channels": ["FP1", "F3", "F7", "FC3", "C3", "C5", "P3", "P7", "P9", "PO7", "PO3", "O1", "Oz", "Pz", "CPz", "FP2", "Fz", "F4", "F8", "FC4", "FCz", "Cz", "C4", "C6", "P4", "P8", "P10", "PO8", "PO4", "O2"],
+    "eog_channels": ["HEOG_left", "HEOG_right", "VEOG_lower"],
+    "calibration": "Use each stored FIF range times cal to obtain volts, then multiply by 1e6 once for microvolts. Stored cal is 9.999999974752427e-7, not exactly 1e-6.",
+    "source_preconditions": "Exact authenticated source; no bad channels, projectors, BAD/EDGE/bad_acq_skip annotations, mapped sample ties, nonzero annotation durations, or annotation times outside recording. All mapped annotations must be finite. Unexpected state fails explicitly; do not silently repair it.",
+    "historical_reference": "custom_ref_applied=1; the original reference identity and historical processing/export stage are not established. Re-reference the released voltages as specified below."
+  },
+  "events": {
+    "description_to_role": {
+      "response/left": "response_left",
+      "response/right": "response_right",
+      "stimulus/compatible/target_left": "stimulus_compatible_left",
+      "stimulus/compatible/target_right": "stimulus_compatible_right",
+      "stimulus/incompatible/target_left": "stimulus_incompatible_left",
+      "stimulus/incompatible/target_right": "stimulus_incompatible_right"
+    },
+    "annotation_index": "Zero-based original annotation array index, never reindexed after selection.",
+    "sample_rule": "Nearest integer sample with ties to even, following MNE time_as_index(onset,use_rounding=True,origin=orig_time); add first_samp only when orig_time is not null. This fixed source has first_samp=0 and orig_time=null.",
+    "pairing": "For each stimulus, select the earliest response strictly after its sample and strictly before the next stimulus sample; the final interval ends at n_samples. Never reuse a response. Preserve every stimulus and annotation in the ledgers. A mapped same-sample tie fails the source precondition, rather than receiving a hidden tie-break.",
+    "error_definition": "Response hand differs from target hand, independently of compatible/incompatible stimulus.",
+    "reaction_time": "(response_sample-stimulus_sample)/sfreq_hz. No reaction-time threshold or censoring.",
+    "annotation_dispositions": ["paired_stimulus", "unanswered_stimulus", "paired_response", "extra_response", "orphan_response", "unmapped"],
+    "unknown_rule": "Preserve an unrecognized, non-boundary annotation as unmapped, do not infer an event code. Unpaired responses before any stimulus are orphan_response; additional responses in an answered interval are extra_response.",
+    "pair_statuses": ["paired", "unanswered"]
+  },
+  "processing": {
+    "arithmetic": "Float64 computation; numerically equivalent implementations and serialization precision are accepted within the public tolerances.",
+    "reference": "Subtract the unweighted simultaneous mean of exactly the 30 listed EEG channels. Exclude all three EOG channels. No channel dropping, interpolation or SSP application.",
+    "filter": {
+      "passband_hz": [0.1, 30.0],
+      "transition_widths_hz": [0.1, 7.5],
+      "design": "MNE 1.12.1 Raw.filter FIR/firwin, symmetric Hamming window, phase=zero, pad=reflect_limited; apply once to the uninterrupted continuous record, not separately to epochs or conditions, and not forward-backward filtfilt.",
+      "kernel_length": 33793,
+      "construction": "At 1024 Hz, construct DC-normalized low-pass sinc times symmetric Hamming kernels: 33793 taps at 0.05 Hz and 451 taps at 33.75 Hz. Center the latter in 33793 zeros, then subtract the former. For length N and cutoff c, h[n]=(2c/fs)*sinc((2c/fs)*(n-(N-1)/2))*(0.54-0.46*cos(2*pi*n/(N-1))), normalized by its sum.",
+      "padding_and_alignment": "For record x of length L, e=min(33793,L)-1. Extend [2*x[0]-x[e:0:-1],x,2*x[-1]-x[-2:-e-2:-1]]. Take full linear convolution with the kernel and retain L values starting at e+16896. Equivalent overlap-add implementation is valid.",
+      "reference_order": "This identical linear filter and fixed linear average reference commute; either order is valid."
+    },
+    "epoch_seconds": [-0.25, 0.55],
+    "sample_offset_inclusive": [-256, 563],
+    "epoch_samples": 820,
+    "epoch_rule": "Use every paired response with a complete common epoch at these offsets. Boundary-incomplete pairs remain in trials.csv with epoch_status=outside_record and no measurements; unanswered trials use epoch_status=unpaired. No padding or condition-dependent support.",
+    "baseline_seconds_inclusive": [-0.2, 0.0],
+    "baseline_offsets_inclusive": [-204, 0],
+    "baseline_samples": 205,
+    "measurement_seconds_inclusive": [0.0, 0.1],
+    "measurement_offsets_inclusive": [0, 102],
+    "measurement_samples": 103,
+    "window_rule": "Select offsets by the inclusive inequalities on offset/sfreq, not by rounding the baseline boundary to -205. Zero belongs to both windows.",
+    "other_preprocessing": "None: no additional artifact/amplitude rejection, ICA, detrending, resampling, imputation, stimulus-delay shift, clipping or RT exclusion. Absence of BAD annotations is not evidence of artifact-free EEG."
+  },
+  "estimand": {
+    "channel": "FCz",
+    "units": "microvolt",
+    "contrast": "error-minus-correct",
+    "definition": "From each retained prebaseline epoch X, baseline b is its mean over -204..0; Y=X-b; trial window mean is mean(Y[0..102]). Condition waveforms are means of Y across retained trials of that condition. Report the signed error-condition mean minus correct-condition mean, without an absolute value or required sign.",
+    "independent_unit": "One participant; trials are within-person observations, not independent people. No population significance, localization or causal inference.",
+    "undefined": "With an empty condition, emit null JSON and empty CSV numeric cells for its mean/waveform and the contrast, status=insufficient_condition. Keep all ledgers and available quantities; do not fabricate trials. On source/precondition failure, exit nonzero with failed_precondition plus reason in ern.json/run_metadata.json/findings.md."
+  },
+  "outputs": {
+    "annotations.csv": ["annotation_index", "onset_s", "duration_s", "description", "event_sample", "event_role", "paired_stimulus_annotation_index", "disposition"],
+    "trials.csv": ["stimulus_annotation_index", "stimulus_sample", "response_annotation_index", "response_sample", "target_hand", "response_hand", "compatibility", "is_error", "rt_s", "pair_status", "epoch_status", "baseline_mean_uv", "window_mean_prebaseline_uv", "window_mean_uv"],
+    "response_epochs.npz": {"stimulus_annotation_index": "E integer trial keys", "sample_offset": "T integer sample offsets", "fcz_prebaseline_uv": "E by T finite real numeric array in microvolts, before baseline correction"},
+    "fcz_waveforms.csv": ["sample_offset", "time_s", "error_uv", "correct_uv", "difference_uv"],
+    "ern.json": ["status", "subject", "electrode", "units", "contrast", "n_annotations", "n_stimuli", "n_paired_trials", "n_error_trials", "n_correct_trials", "n_retained_trials", "measurement_offsets_inclusive", "measurement_samples", "error_mean_uv", "correct_mean_uv", "ern_amplitude_uv"],
+    "run_metadata.json": ["status", "method_id", "method_contract_sha256", "source_manifest_sha256", "source_fif_sha256", "sfreq_hz", "n_samples", "first_sample", "eeg_channels", "eog_channels", "bads", "n_projectors", "custom_ref_applied", "historical_reference_known", "n_annotations", "n_stimuli", "n_paired_trials", "n_retained_trials", "software_versions", "warnings"],
+    "findings.md": "Nonempty free prose stating what this single-person adaptation supports. No prescribed keywords, sign or causal interpretation."
+  },
+  "serialization": {
+    "location": "OUTPUT_DIR, default /app/output; input override ERRMON_DATA_DIR, default /app/data/errmon.",
+    "event_roles": "Use values from description_to_role, or unmapped. paired_stimulus_annotation_index identifies a paired stimulus for its own annotation and paired response; otherwise empty.",
+    "trial_values": "target_hand/response_hand are left or right; compatibility is compatible or incompatible; is_error is 0 or 1. Unpaired response fields/is_error/rt and excluded trial voltage measurements are empty. epoch_status is retained, outside_record or unpaired.",
+    "counts": "n_error_trials and n_correct_trials refer to retained epochs; n_paired_trials counts all paired stimuli before the common epoch boundary check.",
+    "statuses": "ok, insufficient_condition or failed_precondition; authenticated fixed-source output cannot claim insufficient_condition if its true retained source support includes both conditions.",
+    "metadata": "historical_reference_known=false; software_versions is a nonempty object describing actual tools, not necessarily MNE; warnings is an array of actual warnings, possibly empty. The contract and source hashes bind the complete public recipe without requiring a duplicate prose recipe.",
+    "flexibility": "CSV row/column ordering, coherent NPZ trial/time-axis reordering, harmless extra columns/keys/files, and numerically equivalent real numeric serialization are allowed. Keys must be unique and exhaustive. NPZ object arrays/pickles and missing/nonfinite required quantities are rejected. JSON must be finite or explicit null only where undefined. No unit guessing or time interpolation."
+  },
+  "verification": {
+    "source_epoch_atol_uv": 0.000001,
+    "source_epoch_rtol": 0.000001,
+    "derived_atol_uv": 0.00000001,
+    "derived_rtol": 0.000001,
+    "time_atol_seconds": 0.000000001,
+    "rule": "abs(submitted-reference)<=atol+rtol*abs(reference). Exact source event, pairing, retained-trial and integer-time support is required. Source bank binds full prebaseline epochs; baseline, window, waveforms and signed contrast are recomputed from the accepted submitted epochs, not graded against a second hidden scalar. No amplitude-range, sign, correlation, report-keyword, significance or outcome-gap target.",
+    "reward": "Binary contract completion: 1 only when all required source-fidelity, completeness and internal-consistency checks pass; otherwise 0. No proportional scoring claim."
+  }
+}
