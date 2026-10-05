@@ -1,184 +1,51 @@
-"""Reusable proof-of-work helpers for NETINTEG-001's grader.
-
-A passing submission must be IMPOSSIBLE to produce without running the real density-matched
-global-efficiency analysis on the real ADHD-200 participants. These helpers validate the
-submitted per-participant efficiency.csv against a reference built from the oracle
-(tests/reference.npz; held out of the agent CONTAINER but PUBLIC in this repo (burned) -- a real
-eval needs fresh tasks / a server-side reference), recompute the efficiency<->overall-strength
-confound correlation FROM
-the submitted rows, and expose the discriminating absolute-vs-density-matched contrast.
-"""
-import csv
+"""Private original-source reference loader; legacy scalar banks fail closed."""
 import json
-import math
-import re
-import statistics
 from pathlib import Path
-
 import numpy as np
+from graph_contract import (PARTICIPANTS,PIPELINE_ID,derive,required_object,require,validate_output_directory)
 
+METHOD_SHA256 = "8053a2afbe2a23d1dabd70e03e55bace10e70b221b84a97a959e7f7894f5273d"
+SOURCE_MANIFEST_SHA256 = "6bc0e95fdd48ed3d3229acc9ce9e48a55860837a5e10d3acade4f0d645cbc5aa"
+BUILDER_ID = "original-source-parcel-bincount-gelsd-bfs-v2"
+BANK_KEYS = {"ref_participants","ref_weights","ref_path_histogram","ref_metadata_json",
+    "ref_ranking_json","ref_graph_rows_json","ref_efficiency_rows_json","ref_provenance_json"}
 
-def canon_id(s):
-    return re.sub(r"\D", "", str(s)).lstrip("0")
+def _json_scalar(archive,key):
+    value = archive[key]
+    require(value.shape == () and value.dtype.kind in "US", f"Invalid non-object reference scalar {key}")
+    def reject(token):
+        raise AssertionError(f"Nonfinite reference JSON {token}")
+    return json.loads(str(value),parse_constant=reject)
 
-
-def _norm(s):
-    return re.sub(r"[^a-z0-9]", "", str(s).lower())
-
-
-def load_reference(path):
-    z = np.load(path, allow_pickle=True)
-    # conn_pos = a GSR-robust positive/absolute strength proxy (mean over positive edges).
-    # Signed mean FC is centred to ~0 under global-signal regression, so the density confound
-    # must be measured against a positive-strength proxy to be pipeline-robust.
-    conn_pos = z["ref_conn_pos"] if "ref_conn_pos" in z.files else z["ref_conn"]
-    ref = {
-        "ids": [canon_id(x) for x in z["ref_ids"]],
-        "eff": np.asarray(z["ref_eff"], dtype=float),
-        "conn": np.asarray(z["ref_conn"], dtype=float),
-        "conn_pos": np.asarray(conn_pos, dtype=float),
-        "eff_abs": np.asarray(z["ref_eff_abs"], dtype=float),
-        "stats": json.loads(str(z["ref_stats"])),
-    }
-    ref["by_id"] = {i: (float(e), float(c)) for i, e, c in zip(ref["ids"], ref["eff"], ref["conn"])}
-    return ref
-
-
-def load_submitted(path, id_cols, eff_cols, conn_cols):
-    """Return {canon_id: (efficiency, mean_connectivity_or_nan)}."""
-    rows = list(csv.DictReader(open(path, encoding="utf-8")))
-    if not rows:
-        return {}
-    headers = list(rows[0].keys())
-    norm_to_raw = {}
-    for h in headers:
-        norm_to_raw.setdefault(_norm(h), h)
-
-    def pick(cands, exclude=()):
-        for c in cands:
-            if c in norm_to_raw and not any(e in c for e in exclude):
-                return norm_to_raw[c]
-        for nrm, raw in norm_to_raw.items():
-            if any(c in nrm for c in cands) and not any(e in nrm for e in exclude):
-                return raw
-        return None
-
-    id_c = pick(id_cols)
-    eff_c = pick(eff_cols)
-    conn_c = pick(conn_cols, exclude=("efficiency",))
-    submitted = {}
-    if id_c is None or eff_c is None:
-        return submitted
-    for r in rows:
-        cid = canon_id(r.get(id_c, ""))
-        if not cid:
-            continue
-        try:
-            e = float(r.get(eff_c))
-        except (TypeError, ValueError):
-            continue
-        c = float("nan")
-        if conn_c is not None:
-            try:
-                c = float(r.get(conn_c))
-            except (TypeError, ValueError):
-                c = float("nan")
-        if not math.isfinite(e):
-            continue
-        submitted[cid] = (e, c)
-    return submitted
-
-
-def pearson(x, y):
-    x = np.asarray(x, float); y = np.asarray(y, float)
-    if len(x) < 3 or np.std(x) == 0 or np.std(y) == 0:
-        return float("nan")
-    return float(np.corrcoef(x, y)[0, 1])
-
-
-def check_subjects_and_values(submitted, ref, eff_tol, corr_min, cover, match, eps=1e-4):
-    """Pillar 1. Raise AssertionError unless the submitted per-participant efficiency is the
-    real DENSITY-MATCHED per-subject work: coverage of the real ids, non-constant, and -- the
-    PRIMARY teeth -- cross-subject corr(submitted, reference density-matched efficiency) >=
-    corr_min (submitting the confounded ABSOLUTE-threshold efficiency instead fails here, the
-    two rankings are near-disjoint at r~-0.28; a fabrication gives ~0). The absolute band
-    (`eff_tol`) is a secondary sanity check, set wide enough to admit a defensible density-range
-    choice (a wider proportional-density sweep shifts efficiency by ~0.05-0.06)."""
-    ref_ids = set(ref["ids"])
-    matched = [i for i in submitted if i in ref_ids]
-    coverage = len(matched) / max(1, len(ref_ids))
-    assert coverage >= cover, (
-        f"efficiency.csv covers only {coverage:.1%} of the {len(ref_ids)} real ADHD-200 "
-        f"participants by id (need >= {cover:.0%}). Fabricated or missing participant ids.")
-    sub_eff = [submitted[i][0] for i in matched]
-    assert statistics.pstdev(sub_eff) > eps, (
-        "submitted global efficiency is constant across participants -- not computed per subject")
-    ref_eff = [ref["by_id"][i][0] for i in matched]
-    rc = pearson(sub_eff, ref_eff)
-    assert math.isfinite(rc) and rc >= corr_min, (
-        f"submitted per-participant efficiency does not track the density-matched reference "
-        f"(cross-subject r={rc:.3f} < {corr_min}). Either the values were fabricated, or the "
-        f"CONFOUNDED absolute-threshold efficiency (which is near-disjoint from the "
-        f"density-matched ranking) was submitted as the answer.")
-    close = sum(1 for a, b in zip(sub_eff, ref_eff) if abs(a - b) <= eff_tol)
-    frac = close / max(1, len(matched))
-    assert frac >= match, (
-        f"only {frac:.1%} of matched participants have efficiency within {eff_tol} of the "
-        f"density-matched reference (need >= {match:.0%}); the per-subject values are not real.")
-    return matched
-
-
-def reference_abs_cross_corr(submitted, ref):
-    """Diagnostic: cross-subject corr of the submitted efficiency with the ABSOLUTE reference."""
-    ref_ids = set(ref["ids"])
-    matched = [i for i in submitted if i in ref_ids]
-    by_abs = {i: float(a) for i, a in zip(ref["ids"], ref["eff_abs"])}
-    return pearson([submitted[i][0] for i in matched], [by_abs[i] for i in matched])
-
-
-def find_number(obj, key_patterns, exclude=None):
-    exc = [re.compile(e) for e in (exclude or [])]
-    pats = [re.compile(p) for p in key_patterns]
-    stack = [obj]
-    while stack:
-        cur = stack.pop(0)
-        if isinstance(cur, dict):
-            for k, v in cur.items():
-                nk = _norm(k)
-                if isinstance(v, (int, float)) and not isinstance(v, bool):
-                    if any(p.search(nk) for p in pats) and not any(e.search(nk) for e in exc):
-                        try:
-                            fv = float(v)
-                            if math.isfinite(fv):
-                                return fv
-                        except Exception:
-                            pass
-            stack.extend(cur.values())
-        elif isinstance(cur, list):
-            stack.extend(cur)
-    return None
-
-
-def collect_confound_corrs(objs):
-    """Return (abs_corrs, dm_corrs): reported efficiency<->overall-strength correlations tagged
-    by convention. Used for the discriminating pillar-3 contrast."""
-    abs_corrs, dm_corrs = [], []
-
-    def walk(obj, path=""):
-        if isinstance(obj, dict):
-            for k, v in obj.items():
-                walk(v, path + "/" + str(k).lower())
-        elif isinstance(obj, list):
-            for x in obj:
-                walk(x, path)
-        elif isinstance(obj, (int, float)) and not isinstance(obj, bool):
-            v = float(obj)
-            if -1.01 <= v <= 1.01 and re.search(r"corr|strength|confound|_r\b|pearson", path):
-                if re.search(r"absolute|abs\b|_abs|fixed|cutoff", path):
-                    abs_corrs.append(v)
-                elif re.search(r"proportion|densit|match", path):
-                    dm_corrs.append(v)
-    for o in objs:
-        if o is not None:
-            walk(o)
-    return abs_corrs, dm_corrs
+def load_reference(path=Path(__file__).with_name("reference.npz")):
+    with np.load(path,allow_pickle=False) as archive:
+        require(set(archive.files) == BANK_KEYS, "Legacy/unrecognized reference schema; genuine source-only rebuild required")
+        participants = archive["ref_participants"]
+        require(participants.dtype.kind in "iu" and participants.shape == (40,)
+            and tuple(map(int,participants)) == PARTICIPANTS, "Wrong source-reference cohort")
+        weights = np.array(archive["ref_weights"],dtype=np.float64)
+        require(weights.shape == (40,4950) and np.isfinite(weights).all(), "Incomplete source reference connectomes")
+        require(np.max(np.abs(weights)) <= 1+1e-12, "Invalid empirical reference correlations")
+        metadata = _json_scalar(archive,"ref_metadata_json")
+        provenance = _json_scalar(archive,"ref_provenance_json")
+        require(isinstance(metadata,dict) and isinstance(provenance,dict), "Reference metadata/provenance must be objects")
+        require(metadata.get("pipeline_id") == PIPELINE_ID and metadata.get("status") == "ok", "Reference pipeline/full-run identity invalid")
+        require(len(METHOD_SHA256) == 64 and len(SOURCE_MANIFEST_SHA256) == 64, "Source/method not yet frozen; legacy bank cannot be reused")
+        required_object(provenance,dict(builder_id=BUILDER_ID,pipeline_id=PIPELINE_ID,
+            method_contract_sha256=METHOD_SHA256,source_manifest_sha256=SOURCE_MANIFEST_SHA256),(0,0),"reference provenance")
+        require(metadata.get("method_contract_sha256") == METHOD_SHA256 and metadata.get("source_manifest_sha256") == SOURCE_MANIFEST_SHA256,
+            "Reference method/source fingerprints differ from frozen task")
+        require(isinstance(metadata.get("source_sha256"),dict) and metadata["source_sha256"], "Missing reference source hashes")
+        require(provenance.get("source_sha256") == metadata["source_sha256"], "Reference lineage disagreement")
+        graph_rows = _json_scalar(archive,"ref_graph_rows_json")
+        efficiency_rows = _json_scalar(archive,"ref_efficiency_rows_json")
+        ranking = _json_scalar(archive,"ref_ranking_json")
+        histogram = np.array(archive["ref_path_histogram"])
+    reference = derive(PARTICIPANTS,weights)
+    require(histogram.dtype.kind in "iu" and histogram.shape == (40,8,100) and np.array_equal(histogram,reference["histograms"]),
+        "Reference hop histograms do not derive from complete source connectomes")
+    required_object({"rows":graph_rows},{"rows":reference["graph_rows"]},(1e-13,1e-13),"bank graph arithmetic")
+    required_object({"rows":efficiency_rows},{"rows":reference["efficiency_rows"]},(1e-13,1e-13),"bank efficiency arithmetic")
+    required_object(ranking,reference["ranking"],(1e-12,1e-12),"bank ranking arithmetic")
+    reference["metadata"],reference["provenance"] = metadata,provenance
+    return reference

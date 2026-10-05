@@ -1,64 +1,88 @@
-# Network integration across participants: who has the most integrated brain? (NETINTEG-001)
+# Cortical graph efficiency: a threshold-sensitivity control
 
-## Scientific context
+Estimate how a declared graph-construction recipe affects participant-level
+binary global efficiency. Use all 40 released ADHD-200 subset runs and the
+original Schaefer-2018 100-parcel/17-network/2-mm cortical atlas. This is a
+paper-derived **method control**, not a reproduction of a paper's cohort or
+numerical finding, a clinical comparison, or a ranking of intrinsic brain function.
 
-**Global efficiency** — the mean inverse shortest-path length of a network — is the standard
-graph measure of functional-network **integration**: how readily information can move between
-any two regions of the connectome (Latora & Marchiori, 2001; Rubinov & Sporns, 2010,
-*NeuroImage*; Bullmore & Sporns, 2009). Comparing the integration of individual participants'
-resting-state networks is a common way to relate brain organisation to cognition or diagnosis.
+Latora and Marchiori (2001), Eq. 1, motivates averaging reciprocal shortest-path
+lengths. Here the graph is specifically undirected and binary, and unreachable
+pairs contribute zero. Van den Heuvel et al. (2017), Methods and Fig. 3, motivates
+examining threshold sensitivity; it does not establish that equal density removes
+confounding. The five-density grid and 40-person/Schaefer100 analysis below are
+explicit task adaptations, not settings copied from those results.
 
-## Task
+## Public inputs and method
 
-Using nilearn's ADHD-200 resting-state subset
-(`nilearn.datasets.fetch_adhd(n_subjects=40)`), parcellate each participant's fMRI with the
-**Schaefer-2018 100-region / 17-network** cortical atlas
-(`nilearn.datasets.fetch_atlas_schaefer_2018(n_rois=100, yeo_networks=17, resolution_mm=2)`)
-and form the parcel×parcel **Pearson correlation** connectome. For each participant, compute
-the **global efficiency** of the functional connectome, then **rank the participants by
-integration and identify which individuals have the most integrated brain networks.**
+All inputs are already available offline in `/app/data/netinteg`; its
+`source_manifest.json` specifies the exact original paths, participant identities,
+sizes and SHA256 pins. Do not download or substitute data. The authoritative
+public recipe and complete nested output schemas are `/app/method_contract.json`.
+Read it before analysis. The ADHD source is released preprocessed data: its complete
+inherited processing history is not established. Its usage terms are noncommercial
+research; the atlas/software license does not override those terms.
 
-The standard construction choices the measure leaves to the analyst — nuisance regression and
-temporal filtering, and how the correlation connectome is sparsified/thresholded and binarized
-before the graph measure is computed — should follow common practice; the brief does not spell
-them out.
+Use the following fixed recipe, with any numerically equivalent implementation:
 
-Report, in plain terms, **the participant ranking and which participants are the most
-integrated** — stating only what your analysis actually supports.
+1. Resample **labels**, not BOLD, to each original 3-mm BOLD grid. Use nearest
+   neighbor with the public affine, half-voxel and background rules. Retain all
+   100 original parcel IDs and take float64 spatial means over their assigned voxels.
+2. Retain every original frame. Regress the supplied 17-column confound set,
+   including `global` and `linearTrend`, using the public centering, constant-column,
+   SVD rank and residual numerical-zero rules. Add no filtering, smoothing or
+   scrubbing. Form empirical Pearson correlations of the cleaned parcel signals;
+   do not silently use a shrinkage covariance estimator.
+3. Construct five proportional binary graphs at densities
+   `[0.05, 0.075, 0.10, 0.15, 0.20]`, requesting respectively
+   `[248, 371, 495, 742, 990]` of the 4,950 unordered pairs. Order **signed**
+   correlations, include every exact tie at the cutoff, and report realized density.
+   Also construct the three required absolute-cutoff graphs at `[0.2, 0.3, 0.4]`.
+   Keep isolates and use all 4,950 pairs in every efficiency denominator.
+4. The primary score is the equal arithmetic mean of the five proportional
+   efficiencies, not an integral or AUC. Report full rankings for it and all eight
+   configurations. Top-eight sets include everyone tied at the eighth score;
+   ordering within exact ties is free. Use average ranks for Spearman correlations.
+5. Report both signed mean connectivity and the mean positive part (sum of
+   `max(r,0)` divided by **all** 4,950 pairs), as well as all public sensitivity
+   diagnostics. No effect sign, correlation magnitude, rank reversal, disjoint
+   top set or preferred thresholding convention is assumed or required.
 
-## Data
+## Outputs
 
-**Dataset:** ADHD-200 resting-state (nilearn `fetch_adhd`) + Schaefer-2018 atlas. Both are
-downloaded programmatically at runtime by the loaders named above — nothing is pre-placed in
-the container, so **internet access is required** on the first run (cached locally afterwards).
-Participants are identified by the numeric subject id in each functional filename (e.g.
-`0010042_rest_tshift_RPI_voreg_mni.nii.gz` → `10042`).
+Write these six files to `${OUTPUT_DIR}` (default `/app/output`):
 
-**Use exactly these 40 participants** (the set `fetch_adhd(n_subjects=40)` returns; pin them so
-the cohort and ranking are reproducible), reported under their numeric ids: `10042`, `10064`,
-`10128`, `21019`, `23008`, `23012`, `27011`, `27018`, `27034`, `27037`, `1019436`, `1206380`,
-`1418396`, `1517058`, `1552181`, `1562298`, `1679142`, `2014113`, `2497695`, `2950754`,
-`3007585`, `3154996`, `3205761`, `3520880`, `3624598`, `3699991`, `3884955`, `3902469`,
-`3994098`, `4016887`, `4046678`, `4134561`, `4164316`, `4275075`, `6115230`, `7774305`,
-`8409791`, `8697774`, `9744150`, `9750701`.
+- `connectomes.csv`: all 198,000 participant/ROI-pair correlations.
+- `graph_metrics.csv`: all 320 participant/configuration rows, including edge,
+  cutoff-tie, connectivity, density and binary-efficiency measurements.
+- `efficiency.csv`: all 40 participant primary scores and both strength measures.
+- `ranking.json`: all full rankings, inclusive top-eight sets and the specified
+  cohort-level correlations, overlap counts and density-pair sensitivities.
+- `run_metadata.json`: exact source and method identities, observed source geometry,
+  parcel coverage, frame/confound/rank records and actual software versions.
+- `findings.md`: a concise account of the measured sensitivity and its limits.
 
-## Output Location
+The complete column names, JSON fields, undefined-value rules and numerical
+tolerances are public in the method contract. CSV row/column order and harmless
+extra descriptive fields are free. Alternative software is welcome. Exact source
+and scientific identities are not optional. Numerical serialization rounding must
+not redefine graph membership or create new ranking ties; retain full-precision
+arrays internally. Narrative wording is not a grading keyword gate.
 
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
+There is no proportional partial scoring: a complete source-consistent analysis
+receives reward 1; an incomplete or inconsistent analysis receives 0. A matching
+answer is not proof that a particular computation was executed. The authoring
+reference is public in the repository but excluded from the runtime image, so
+later model evaluation must account for possible answer contamination.
 
-## Required Outputs
+If a required source or numerical precondition fails, exit nonzero and write
+`run_metadata.json` with `status=failed_precondition` and a reason, a header-only
+`efficiency.csv`, and a nonempty `findings.md`. Do not silently drop a person,
+parcel or frame, invent a correlation, or label a partial analysis successful.
 
-- `efficiency.csv` — one row per participant: `participant, global_efficiency` (extra columns
-  are welcome).
-- `ranking.json` — the participants ordered most-to-least integrated, and the set of most
-  integrated participants (`top_integrated`).
-- `run_metadata.json` — dataset, number of participants, atlas, the method used, and an
-  `integration_conclusion` field stating, in plain terms, what your ranking is.
-- `findings.md` — a short written summary of the ranking and which participants are most
-  integrated. State only what your analysis actually supports.
+## Sources
 
-## Failure handling
-
-If the dataset or the atlas cannot be resolved, exit non-zero with `failed_precondition` and a
-non-empty reason, and still write a parseable `run_metadata.json`, `efficiency.csv`, and
-`findings.md`.
+- Latora & Marchiori (2001), [Efficient Behavior of Small-World Networks, Eq. 1](https://arxiv.org/html/cond-mat/0101396v1).
+- Van den Heuvel et al. (2017), [Proportional thresholding in resting-state fMRI functional connectivity networks and consequences for patient-control connectome studies](https://people.csail.mit.edu/ythomas/publications/2017Threshold-NeuroImage.pdf).
+- [Pinned Nilearn 0.12.1 ADHD subset description and usage terms](https://raw.githubusercontent.com/nilearn/nilearn/0.12.1/nilearn/datasets/description/adhd.rst).
+- [Original Schaefer atlas at the pinned CBIG commit](https://github.com/ThomasYeoLab/CBIG/tree/d1454a611f7de10a3b36665e6fbb3fb6c770d140/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI).

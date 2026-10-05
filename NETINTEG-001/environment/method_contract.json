@@ -1,0 +1,575 @@
+{
+  "task_id": "NETINTEG-001",
+  "pipeline_id": "adhd40-empirical-pearson-binary-efficiency-v2",
+  "contract_status": "frozen_before_subject_signal_analysis",
+  "scientific_role": "paper-derived fixed-recipe cortical graph-method control and threshold sensitivity; not an original-paper cohort replication or intrinsic brain ranking",
+  "independent_observational_unit": "one released participant/run; parcels, edges and threshold settings are not additional independent people",
+  "source": {
+    "dataset_id": "nilearn-adhd40-preprocessed-subset",
+    "participants": [
+      10042,
+      10064,
+      10128,
+      21019,
+      23008,
+      23012,
+      27011,
+      27018,
+      27034,
+      27037,
+      1019436,
+      1206380,
+      1418396,
+      1517058,
+      1552181,
+      1562298,
+      1679142,
+      2014113,
+      2497695,
+      2950754,
+      3007585,
+      3154996,
+      3205761,
+      3520880,
+      3624598,
+      3699991,
+      3884955,
+      3902469,
+      3994098,
+      4016887,
+      4046678,
+      4134561,
+      4164316,
+      4275075,
+      6115230,
+      7774305,
+      8409791,
+      8697774,
+      9744150,
+      9750701
+    ],
+    "n_participants": 40,
+    "runs_per_participant": 1,
+    "source_basename_pid_rule": "original seven-digit zero-padded subject filename; public participant is its exact positive integer, not arbitrary digit extraction",
+    "source_input_stage": "released preprocessed BOLD and supplied nuisance regressors; complete inherited filtering/smoothing/preprocessing history is not established",
+    "raw_activity_reads_before_freeze": "None: only original byte identities, source headers and atlas-only geometry were inspected before this contract was frozen.",
+    "source_manifest_filename": "source_manifest.json",
+    "source_manifest_sha256": "6bc0e95fdd48ed3d3229acc9ce9e48a55860837a5e10d3acade4f0d645cbc5aa",
+    "source_hash_authority": "All40 original NITRC subject archives and the metadata archive were freshly retrieved over HTTPS; all83 selected original members exactly match the prior cached identities. Archive/member SHA256 values are locally measured reproducibility pins, not publisher checksums or an immutable upstream commitment. Atlas image/LUT/license are anchored by independently published Git blob identities at the pinned commit.",
+    "required_source_identity": "exact closed manifest path/size/SHA256/role membership, all 40 original BOLD-confound joins, exact atlas image and LUT; no runtime fetch or source substitution",
+    "usage_terms": "ADHD subset is described by Nilearn as noncommercial research data; public availability does not establish unrestricted redistribution or commercial permission",
+    "atlas": {
+      "name": "Schaefer2018 original 100 parcels, Yeo17 network ordering, FSLMNI152 2 mm",
+      "n_rois": 100,
+      "roi_ids": "all integers 1 through 100 in increasing ID order",
+      "background_label": 0,
+      "upstream_commit": "d1454a611f7de10a3b36665e6fbb3fb6c770d140",
+      "image_basename": "Schaefer2018_100Parcels_17Networks_order_FSLMNI152_2mm.nii.gz",
+      "image_sha256": "5f85dbe3c5eadd1892c8b6e6363a504b97784b6c74591be036e77cac6511c0e9",
+      "label_table_basename": "Schaefer2018_100Parcels_17Networks_order.txt",
+      "label_table_sha256": "542de73a04c37a12bd80c9dba31b5d1e98ece57e31a79f022c0eaa6af3146984",
+      "expected_source_shape": [
+        91,
+        109,
+        91
+      ],
+      "expected_source_affine": [
+        [
+          -2,
+          0,
+          0,
+          90
+        ],
+        [
+          0,
+          2,
+          0,
+          -126
+        ],
+        [
+          0,
+          0,
+          2,
+          -72
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "observed_source_storage_dtype": "float32",
+      "label_table_policy": "preserve exact original ID/name mapping, parse all 100 labels; the first numeric ID and label string are used, color fields are not analysis variables",
+      "scope": "cortical parcels, not an all-brain node set",
+      "structural_inspection_status": "Original atlas91x109x91 and exact labels0..100 verified; geometry-only resampling to61x73x61 retains all100 original parcels with107..957 voxels each and no target coordinates outside the atlas closed-center domain. Full structural mapping is retained in the source manifest."
+    },
+    "runtime_root": "/app/data/netinteg"
+  },
+  "geometry": {
+    "coordinate_convention": "original voxel-index axes and NIfTI image affine; no canonical reorientation, crop, padding, BOLD interpolation or extra brain mask",
+    "target": "each original BOLD spatial grid; all 40 source headers are expected to match the declared shared grid",
+    "expected_bold_spatial_shape": [
+      61,
+      73,
+      61
+    ],
+    "expected_bold_affine": [
+      [
+        -3,
+        0,
+        0,
+        90
+      ],
+      [
+        0,
+        3,
+        0,
+        -126
+      ],
+      [
+        0,
+        0,
+        3,
+        -72
+      ],
+      [
+        0,
+        0,
+        0,
+        1
+      ]
+    ],
+    "nifti_numeric_scaling": "apply original header scaling when loading; convert actual BOLD intensities to float64 before spatial or temporal reduction",
+    "atlas_labels": "finite exact integer labels 0 through 100; verify original LUT identity and all required nonbackground labels",
+    "resampling_transform": "for output BOLD index x, input atlas coordinate is inverse(atlas_affine) @ bold_affine @ [x,1]",
+    "observed_source_transform": "the original source affines share translations and axis directions, so the declared transform is exactly1.5 times each BOLD voxel coordinate; odd BOLD coordinates produce exact half-integer atlas positions",
+    "resampling": {
+      "method": "nearest-neighbor",
+      "reference_semantics": "scipy.ndimage.affine_transform",
+      "order": 0,
+      "mode": "constant",
+      "cval": 0,
+      "prefilter": false,
+      "output_shape": "original BOLD spatial shape",
+      "half_voxel_rule": "after the continuous-coordinate domain check, evaluate floor(coordinate+0.5) in float64 on each axis; exact positive half-integers round upward, not ties-to-even np.rint. The float64 addition itself is part of the rule: a representational neighbor below a half-integer can round onto the integer when0.5 is added, as in nextafter(0.5,-inf)+0.5==1.0",
+      "outside_domain": "if any continuous atlas coordinate is <0 or >source_shape[axis]-1, assign background0 before rounding; the valid domain is the closed interval between first and last voxel centers, not an expanded half-voxel box and not nearest-edge extension"
+    },
+    "parcel_reduction": "arithmetic mean of every voxel assigned to that original ROI ID on the target grid; float64 accumulation, with C-order voxel enumeration for reproducibility",
+    "coverage_precondition": "all 100 ROI IDs have at least one target-grid voxel; no missing ROI, dropped column or substituted zero signal is allowed",
+    "resampling_relation_to_nilearn": "explicit target-data nearest-neighbor adaptation; verify independently against pinned source geometry instead of asserting bitwise equivalence to all Nilearn paths"
+  },
+  "preprocessing": {
+    "dtype": "float64",
+    "frame_selection": "all original frames in original chronological order; no deletion, scrubbing, interpolation or temporal resampling",
+    "additional_spatial_smoothing": null,
+    "additional_high_pass_hz": null,
+    "additional_low_pass_hz": null,
+    "additional_detrend": false,
+    "important_distinction": "no additional detrend does not mean no linear trend regression: the original linearTrend confound is retained, and the released source may already have unknown inherited processing",
+    "confound_delimiter": "tab",
+    "confound_columns": [
+      "csf",
+      "constant",
+      "linearTrend",
+      "wm",
+      "global",
+      "motion-pitch",
+      "motion-roll",
+      "motion-yaw",
+      "motion-x",
+      "motion-y",
+      "motion-z",
+      "gm",
+      "compcor1",
+      "compcor2",
+      "compcor3",
+      "compcor4",
+      "compcor5"
+    ],
+    "confound_join": "exact one supplied row per original BOLD frame, in original order; no numeric-header row or index column treated as a confound",
+    "finite_precondition": "every selected source BOLD value, confound value and intermediate used by the recipe is finite; undefined data are not silently omitted or replaced",
+    "global_regressor": "the supplied global column is explicitly included; this is not a no-GSR pipeline",
+    "constant_confound_rule": "a column is exactly constant iff every original value equals its first value; record and remove only such columns before standardization",
+    "original_constant_signal_precondition": "before centering, fail if any original parcel column has every value exactly equal to its first value; do not normalize mean-subtraction roundoff from a constant signal",
+    "signal_centering": "subtract each parcel's arithmetic mean across all T frames",
+    "confound_centering": "for each retained confound subtract its arithmetic mean across all T frames",
+    "confound_scaling": "divide each centered retained column by sqrt(sum(centered_column**2)/T), the population SD; nonconstant columns with nonpositive/nonfinite computed SD fail the precondition",
+    "confound_svd": {
+      "matrix_shape": "T by K, where K is the count after exactly constant columns are removed",
+      "decomposition": "thin SVD of the centered population-standardized confound matrix",
+      "float64_epsilon": 2.220446049250313e-16,
+      "rank_threshold": "max(T,K) * float64_epsilon * largest_singular_value",
+      "retained_modes": "strictly greater than the threshold; equality is excluded",
+      "empty_matrix": "K=0 gives rank0, threshold0 and an empty nuisance span",
+      "projection": "R = demeaned_parcel_signals - U_retained @ (U_retained.T @ demeaned_parcel_signals)",
+      "equivalent_implementations": "another stable orthogonal-span implementation is acceptable if it implements the same declared rank rule and produces source-equivalent results; SVD vector signs are not graded"
+    },
+    "residual_centering": "subtract each residual parcel column's arithmetic mean again",
+    "residual_standardization": "divide each re-centered residual parcel by sample SD sqrt(sum(residual**2)/(T-1))",
+    "constant_residual_precondition": "after nuisance projection and residual re-centering, define original_L2 as the L2 norm of the original centered parcel column and residual_L2 as the L2 norm of its re-centered residual. Fail if residual_L2 <=10*max(T,K)*float64_epsilon*max(original_L2,float64_tiny), or either norm/intermediate is nonfinite or original_L2 is zero. K is the number of nonconstant confound columns before SVD rank selection; float64_tiny=2.2250738585072014e-308. This dimension-scaled roundoff guard is a numerical-zero condition, not physiological amplitude selection. Do not add epsilon, omit parcels or impute correlations",
+    "estimator": "empirical Pearson, not Ledoit-Wolf or another shrinkage covariance",
+    "correlation_formula": "for i<j, sum(Z[:,i]*Z[:,j])/(T-1), where Z is the standardized residual matrix; mirror this single upper-triangle value and set the diagonal to1",
+    "correlation_clipping": "Do not clip off-diagonal connectome weights. Require finite values with abs(r)<=1+1e-12; excursions beyond that bound fail the numerical precondition. Keep smaller arithmetic excursions unchanged.",
+    "nilearn_equivalence_claim": "this fully specified SVD-cleaning/Pearson recipe is the public task adaptation; it is not a claim that Nilearn's default covariance estimator or confound rank policy is identical"
+  },
+  "graphs": {
+    "n_nodes": 100,
+    "node_ids": "original atlas ROI IDs 1 through100, including isolated nodes",
+    "n_unordered_pairs": 4950,
+    "diagonal_edges": false,
+    "directed": false,
+    "binary": true,
+    "weight_order": "signed original empirical correlations, not absolute values or positive-only clipped values",
+    "proportional": {
+      "densities": [
+        0.05,
+        0.075,
+        0.1,
+        0.15,
+        0.2
+      ],
+      "k_requested": [
+        248,
+        371,
+        495,
+        742,
+        990
+      ],
+      "rounding": "nearest integer, ties to even, on density*4950; explicit k values above are authoritative",
+      "cutoff": "k-th largest unrounded upper-triangle correlation",
+      "selection": "include every pair with correlation >= cutoff, including every exact cutoff tie",
+      "density_disclosure": "actual retained edge count divided by4950 can exceed nominal density when cutoff ties occur"
+    },
+    "absolute": {
+      "cutoffs": [
+        0.2,
+        0.3,
+        0.4
+      ],
+      "selection": "include every pair with unrounded correlation >= fixed cutoff",
+      "required": true,
+      "role": "parallel sensitivity endpoint, not an intrinsically wrong or inferior graph",
+      "k_requested_output": null
+    },
+    "signed_edge_interpretation": "a retained negative or zero correlation becomes the same binary unit-length edge as any retained positive correlation; this is not a signed weighted network analysis",
+    "paths": "unweighted integer shortest-hop paths on the full symmetric 100-node adjacency",
+    "unreachable": "inverse distance0; do not remove disconnected pairs or isolated nodes from the denominator",
+    "efficiency": "sum_{i<j,reachable}(1/d_ij)/4950, equivalently the ordered-pair sum divided by100*99",
+    "exact_score_representation": "compute counts h_d of unordered pairs at each finite integer distance d=1..99, then E=(sum_d Fraction(h_d,d))/4950; retain the resulting exact rational value for mathematical equality and ranking ties",
+    "graph_zero_cases": "empty, disconnected and complete graphs are all valid; no nonzero-efficiency, nonconstant-cohort or physiological band is required",
+    "primary": "unweighted arithmetic mean of the five proportional efficiencies, using exact rational arithmetic for score equality; not trapezoidal AUC",
+    "required_configuration_count": 8,
+    "required_graph_rows": 320
+  },
+  "strength": {
+    "mean_signed_correlation": "sum of all4950 signed upper-triangle correlations divided by4950",
+    "mean_positive_part_correlation": "sum of max(r,0) across all4950 upper-triangle correlations divided by4950; NOT the conditional mean over positive edges",
+    "role": "descriptive same-participant diagnostic; a correlation sign or change is not causal confound identification"
+  },
+  "rankings_and_sensitivity": {
+    "ordering": "descending exact rational graph score; any order among exactly equal scores is accepted",
+    "primary_ordering": "descending exact rational five-density mean",
+    "top_k": 8,
+    "top_set": "include all people whose exact score is at least the eighth largest score, so the set may contain more than8 participants; order within the JSON top set is irrelevant",
+    "pearson": "ordinary centered product-moment correlation across the40 people, not across edges or configuration rows. For exact rational graph-score or realized-density inputs, test constancy and subtract their exact rational mean before converting centered deviations to float64; do not first round scores to float64 and thereby collapse distinct exact scores",
+    "spearman": "Pearson correlation of average ranks formed from exact rational efficiency scores; no argsort-of-argsort or ID-dependent tie ranks",
+    "constant_input": "if either input vector is exactly constant, report value=null and status=undefined_constant; no near-zero epsilon or forced coefficient",
+    "correlation_statuses": [
+      "ok",
+      "undefined_constant"
+    ],
+    "diagnostic_coefficient_roundoff": "for a finite computed Pearson or Spearman diagnostic coefficient, values outside[-1,1] by at most1e-12 are clamped to the nearest endpoint; a larger excursion or nonfinite coefficient fails the numerical precondition. This affects only descriptive correlation coefficients, never connectome weights, graph membership or exact score ties",
+    "primary_correlations": [
+      "efficiency_vs_mean_signed_correlation",
+      "efficiency_vs_mean_positive_part_correlation"
+    ],
+    "per_configuration_correlations": [
+      "efficiency_vs_mean_signed_correlation",
+      "efficiency_vs_mean_positive_part_correlation",
+      "realized_density_vs_mean_signed_correlation",
+      "realized_density_vs_mean_positive_part_correlation",
+      "spearman_vs_primary"
+    ],
+    "density_sensitivity": "report all10 unordered pairs of distinct proportional density settings, with tie-correct Spearman across40 people",
+    "expected_direction": null,
+    "expected_top_set_disjointness": null,
+    "expected_correlation_magnitude": null,
+    "rounding_policy": "mathematical graph membership, cutoff ties, exact score ties and top sets are authoritative from unrounded source-derived arrays. Permitted printed rounding does not authorize changing these categories and must not create an incidental rejection when it introduces an apparent numerical tie. Correlations and summaries derive from full-precision arrays, not re-reading rounded CSV text."
+  },
+  "outputs": {
+    "connectomes.csv": [
+      "participant",
+      "roi_i",
+      "roi_j",
+      "correlation"
+    ],
+    "graph_metrics.csv": [
+      "participant",
+      "scheme",
+      "parameter",
+      "n_nodes",
+      "n_possible_edges",
+      "k_requested",
+      "correlation_cutoff",
+      "n_at_cutoff",
+      "n_edges",
+      "realized_density",
+      "n_negative_edges",
+      "n_zero_edges",
+      "n_components",
+      "n_connected_pairs",
+      "n_disconnected_pairs",
+      "minimum_selected_correlation",
+      "global_efficiency"
+    ],
+    "efficiency.csv": [
+      "participant",
+      "n_densities",
+      "global_efficiency",
+      "mean_signed_correlation",
+      "mean_positive_part_correlation"
+    ],
+    "ranking.json": [
+      "status",
+      "task_id",
+      "pipeline_id",
+      "n_participants",
+      "n_rois",
+      "n_configurations",
+      "top_k",
+      "ranking_by_efficiency",
+      "top_by_efficiency",
+      "primary_correlations",
+      "configuration_rankings",
+      "density_pairwise_spearman"
+    ],
+    "run_metadata.json": [
+      "status",
+      "task_id",
+      "pipeline_id",
+      "source_manifest_sha256",
+      "method_contract_sha256",
+      "source_sha256",
+      "method_contract",
+      "source_observed",
+      "software_versions"
+    ],
+    "findings.md": "nonempty narrative; no keyword, causal claim, expected sign or ranking-change gate"
+  },
+  "output_definitions": {
+    "table_membership": {
+      "connectomes.csv": "all198000 unique(participant,roi_i,roi_j) keys, i<j; every one of4950 source-label pairs for every one of40 participants",
+      "graph_metrics.csv": "all320 unique(participant,scheme,parameter) keys; scheme is proportional or absolute, numeric parameter is one of the declared five densities or three cutoffs",
+      "efficiency.csv": "all40 original participant IDs, exactly once",
+      "configuration_rankings": "all8 unique(scheme,parameter) records",
+      "density_pairwise_spearman": "all10 unique(density_low,density_high) records with density_low<density_high"
+    },
+    "graph_fields": {
+      "parameter": "nominal density for proportional; fixed correlation cutoff for absolute",
+      "n_nodes": "100 including isolates",
+      "n_possible_edges": "4950 unordered distinct-node pairs",
+      "k_requested": "declared integer for proportional, blank for absolute",
+      "correlation_cutoff": "unrounded k-th-largest value for proportional; declared parameter for absolute",
+      "n_at_cutoff": "number of all4950 original pair correlations exactly equal to cutoff",
+      "n_edges": "number of pairs selected by the declared cutoff rule",
+      "realized_density": "n_edges/4950",
+      "n_negative_edges": "selected pairs whose original signed correlation is <0",
+      "n_zero_edges": "selected pairs whose original signed correlation is exactly0",
+      "n_components": "connected components of all100 nodes, including isolated-node components",
+      "n_connected_pairs": "unordered distinct-node pairs joined by any finite path",
+      "n_disconnected_pairs": "4950 minus n_connected_pairs",
+      "minimum_selected_correlation": "minimum signed weight among selected edges; blank only when n_edges=0",
+      "global_efficiency": "binary all-pair efficiency defined in graphs"
+    },
+    "correlation_object": {
+      "required_keys": [
+        "value",
+        "status",
+        "n_participants"
+      ],
+      "value": "finite number between-1 and1 for statusok; JSONnull for undefined_constant",
+      "status": "ok or undefined_constant",
+      "n_participants": "40; do not drop people on the basis of their score or strength"
+    },
+    "primary_correlations": "object with exactly the two named correlation diagnostics, each a correlation_object",
+    "configuration_ranking_record": {
+      "required_keys": [
+        "scheme",
+        "parameter",
+        "ranking_by_efficiency",
+        "top_by_efficiency",
+        "top_set_overlap_with_primary",
+        "correlations"
+      ],
+      "scheme": "proportional or absolute",
+      "parameter": "declared numeric density/cutoff",
+      "ranking_by_efficiency": "all 40 IDs, descending exact score, arbitrary order only within exact ties",
+      "top_by_efficiency": "all IDs at or above this configuration's eighth-largest exact score; set order irrelevant",
+      "top_set_overlap_with_primary": "cardinality of intersection of the two inclusive top sets; can exceed8 when boundary ties exist",
+      "correlations": "object with the five named per-configuration diagnostics, each a correlation_object"
+    },
+    "density_pairwise_record": {
+      "required_keys": [
+        "density_low",
+        "density_high",
+        "spearman"
+      ],
+      "density_low": "the smaller of two distinct declared proportional settings",
+      "density_high": "the larger setting",
+      "spearman": "correlation_object using exact graph-score average ranks"
+    },
+    "source_sha256": "closed object mapping every staged manifest path to its exact lowercase SHA256; not a second unverified source list",
+    "source_observed": {
+      "required_keys": [
+        "atlas",
+        "participants"
+      ],
+      "atlas": {
+        "required_keys": [
+          "image_path",
+          "label_table_path",
+          "source_shape",
+          "source_affine",
+          "storage_dtype",
+          "intensity_slope",
+          "intensity_intercept",
+          "spatial_units",
+          "temporal_units",
+          "source_label_ids",
+          "target_shape",
+          "target_affine",
+          "parcels"
+        ],
+        "image_path": "exact source manifest atlas-image path",
+        "label_table_path": "exact source manifest atlas-LUT path",
+        "source_shape": "three integer original atlas dimensions",
+        "source_affine": "original4x4 image affine",
+        "storage_dtype": "original atlas NIfTI dtype name, float32 for this release; labels must nevertheless be exact integers",
+        "intensity_slope": "effective original atlas scaling slope from its data proxy",
+        "intensity_intercept": "effective original atlas scaling intercept from its data proxy",
+        "spatial_units": "original atlas spatial unit string, mm",
+        "temporal_units": "original atlas temporal unit string, sec; no atlas time-series analysis is implied",
+        "source_label_ids": "complete original numeric label set including0; order irrelevant",
+        "target_shape": "original BOLD spatial shape61x73x61",
+        "target_affine": "declared original BOLD affine",
+        "parcels": "all100 records with roi_id(integer),label(exact original LUT string),n_voxels(integer>0 on the resampled grid); record order irrelevant"
+      },
+      "participant_record": {
+        "required_keys": [
+          "participant",
+          "bold_path",
+          "confounds_path",
+          "bold_shape",
+          "affine",
+          "voxel_sizes_mm",
+          "tr_s",
+          "storage_dtype",
+          "intensity_slope",
+          "intensity_intercept",
+          "spatial_units",
+          "temporal_units",
+          "n_frames",
+          "n_confounds",
+          "confound_columns",
+          "constant_confound_columns",
+          "retained_confound_columns",
+          "confound_rank",
+          "confound_rank_threshold",
+          "all_inputs_finite",
+          "all_residual_parcels_nonconstant"
+        ],
+        "participant": "exact original positive integer subject ID",
+        "bold_path": "exact original BOLD path in source manifest",
+        "confounds_path": "paired original confound path in source manifest",
+        "bold_shape": "four original dimensions, including n_frames",
+        "affine": "original4x4 BOLD affine",
+        "voxel_sizes_mm": "three original spatial zooms",
+        "tr_s": "original header temporal zoom in seconds; no resampling to a common TR",
+        "storage_dtype": "original on-disk NIfTI data type, not the float64 working array type",
+        "intensity_slope": "effective finite original scaling slope from the image data proxy, after normalizing absent source scaling to its effective value; not a consumed nibabel header's None",
+        "intensity_intercept": "effective finite original scaling intercept from the image data proxy, not a consumed header's None",
+        "spatial_units": "original NIfTI spatial unit string; expected mm, never inferred solely from voxel magnitudes",
+        "temporal_units": "original NIfTI temporal unit string; expected sec, used to interpret tr_s",
+        "n_frames": "all original BOLD frames and confound rows",
+        "n_confounds": "17 original columns before exactly constant column removal",
+        "confound_columns": "the declared ordered original17 names",
+        "constant_confound_columns": "original-order names identified by the exact constant rule; no outcome-dependent selection",
+        "retained_confound_columns": "the remaining original-order names",
+        "confound_rank": "retained SVD singular-mode count under the public rank threshold",
+        "confound_rank_threshold": "computed finite nonnegative public threshold,0 only for empty confound span",
+        "all_inputs_finite": "true for successful output",
+        "all_residual_parcels_nonconstant": "true for successful output"
+      }
+    },
+    "software_versions": "nonempty string-to-nonempty-string mapping reporting the actual implementation; not required to equal the oracle's libraries",
+    "status": "ok for a complete successful40-person analysis; resource_pilot is authoring-only and never valid as a complete submission",
+    "undefined": "CSV empty cell and JSONnull only for explicitly defined cases; do not substitute numeric0, NaN or Inf",
+    "identity_parsing": "accept exact integral numeric notation including leading zeros, decimal and scientific notation when it preserves the integer value; reject booleans, fractions, nonfinite values and arbitrary mixed-text aliases",
+    "formatting": "CSV row and column order, JSON record order keyed by declared IDs, and harmless extra columns/top-level descriptive fields are free. Duplicate/missing/extra scientific identities are not ignored. The source hash mapping and full public method object are closed-world; arbitrary optional analyses are not recursively keyword-scanned."
+  },
+  "verification_tolerances": {
+    "status": "fixed_before_subject_signal_analysis",
+    "connectome_correlation": {
+      "atol": 1e-8,
+      "rtol": 0.000001
+    },
+    "graph_efficiency_and_strength": {
+      "atol": 1e-8,
+      "rtol": 0.000001
+    },
+    "correlation_diagnostics": {
+      "atol": 0.000001,
+      "rtol": 0.000001
+    },
+    "source_geometry": {
+      "atol": 0.000001,
+      "rtol": 0
+    },
+    "source_tr_s": {
+      "atol": 1e-8,
+      "rtol": 1e-8
+    },
+    "source_intensity_scaling": {
+      "atol": 0,
+      "rtol": 1e-10
+    },
+    "zero_source_intensity_offset": "exactly0; do not apply a generic geometry absolute tolerance to intensity scaling",
+    "confound_rank_threshold": {
+      "atol": 0,
+      "rtol": 1e-8
+    },
+    "declared_parameter_matching": {
+      "atol": 1e-12,
+      "rtol": 0
+    },
+    "integer_identity_counts_categories": "exact",
+    "cutoff_and_minimum_weight": "same tolerance as connectome_correlation; this tolerance does not permit altered source edge membership",
+    "realized_density": "derive from exact edge count/4950; compare numeric representation within graph_efficiency_and_strength tolerance",
+    "categorical_authority": "original source-driven unrounded cutoff membership and exact rational score ties, not incidental ordering of tolerated rounded participant floats",
+    "numeric_self_consistency": "complete source-bound values plus recomputation from full-precision source-equivalent arrays; when serialized numeric contributors are tolerated rounded values, propagate their declared precision instead of imposing a tighter hidden arithmetic requirement",
+    "no_broad_similarity_gate": "no cross-person correlation-to-reference acceptance, partial matching fraction, score dispersion minimum, physiological band or expected sensitivity direction"
+  },
+  "authoring_evidence_not_public_requirements": [
+    "all source-extracted raw parcel time series",
+    "all cleaned standardized parcel time series",
+    "source confound values, scaling and retained-span evidence",
+    "complete original/resampled atlas mapping and parcel membership",
+    "full correlation matrices and all8 adjacency matrices per participant",
+    "unordered path-length histograms and exact rational graph/primary scores",
+    "independent original-source recomputation and genuine participant-format positive"
+  ],
+  "failure_handling": {
+    "action": "nonzero exit before publishing a successful result; no silent subject/parcel/frame drop, source substitution or numerical fallback",
+    "required_failure_artifacts": [
+      "run_metadata.json",
+      "efficiency.csv",
+      "findings.md"
+    ],
+    "metadata": "status=failed_precondition and a nonempty reason; include available checked source identity without inventing observations",
+    "efficiency_csv": "header-only required efficiency schema",
+    "findings": "nonempty failure explanation",
+    "additional_failure_artifacts": "permitted, but partial products must not claim statusok"
+  },
+  "freeze_evidence": "Source byte/header and atlas-geometry checks plus source-free numerical fixtures passed before any participant signal/confound-value analysis. The original participant cohort, recipe, eight configurations, tolerance values and failure rules were fixed without inspecting new scientific outcomes."
+}
