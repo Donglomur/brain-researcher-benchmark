@@ -1,15 +1,16 @@
-version = "1.1"
-instruction_version = "1.0"
-test_version = "1.0"
+version = "1.2"
+instruction_version = "2.0"
+test_version = "2.0"
+artifacts = ["/app/output", "/app/oracle_private", "/app/data/somato/data_manifest.json"]
 
 [metadata]
 task_id = "SOMATOERD-001"
-title = "Contralateral sensorimotor beta ERD to median-nerve stimulation — MNE somato"
-category = "MEG / time-frequency"
-difficulty = "hard"
-dataset_source = "MNE somato (median-nerve MEG)"
+title = "Fixed-sensor total beta-power change in original somato MEG"
+category = "MEG / method control"
+difficulty = "easy"
+dataset_source = "MNE somato OSF archive version 8, checksum-pinned and staged offline"
 dataset_id = "somato"
-source_paper = "MNE-Python somatosensory dataset (median-nerve MEG); Pfurtscheller & Lopes da Silva 1999, event-related desynchronization"
+source_paper = "Pfurtscheller and Lopes da Silva 1999, section 3.1/Figure 3, DOI 10.1016/S1388-2457(99)00141-8; method anchor, not numerical finding reproduction"
 
 [verifier]
 timeout_sec = 1800.0
@@ -21,9 +22,9 @@ timeout_sec = 3600.0
 build_timeout_sec = 2400.0
 cpus = 2
 memory_mb = 8192
-storage_mb = 20480
+storage_mb = 16384
 gpus = 0
-allow_internet = true
+allow_internet = false
 
 [verifier.env]
 
