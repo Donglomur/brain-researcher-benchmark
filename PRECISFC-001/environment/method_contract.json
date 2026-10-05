@@ -1,0 +1,951 @@
+{
+  "schema_version": "1.0",
+  "pipeline_id": "msc-six-person-censoring-sensitivity-v2",
+  "contract_status": "frozen_before_original_BOLD_value_analysis",
+  "estimand": {
+    "name": "Within-person similarity of three released session connectomes under two frame-selection rules",
+    "scope": "Secondary descriptive computational method-control, not a replication of a paper finding",
+    "independent_unit": "person",
+    "primary_population": "all six fixed people; both arms remain primary",
+    "secondary_population": "fixed operational duration-QC subset; unchanged common edge support",
+    "limitations": [
+      "Three session pairs within a person overlap and are not independent replicates.",
+      "Edges and voxels are not independent people.",
+      "Within-person pattern similarity does not establish individual identification without a between-person comparison.",
+      "All-frame data are already processed derivatives, including source interpolation and filtering, not raw unprocessed data.",
+      "Duration-QC conditioning changes the described population and is not a causal motion intervention.",
+      "No required direction, gap, minimum reliability, subject ranking, clinical conclusion, or scientific robustness claim."
+    ]
+  },
+  "source": {
+    "dataset_id": "ds000224",
+    "release": "1.0.4",
+    "release_commit": "727a0a4e25ec3f7bea1a20c955ea860206b31e77",
+    "doi": "10.18112/openneuro.ds000224.v1.0.4",
+    "dataset_license": "CC0 as declared by this release; distinct from legacy archive PDDL metadata",
+    "source_manifest_filename": "source_manifest.json",
+    "source_manifest_sha256": "4f7fc73e548cfdf744fabbc382cebdd1edff968fe6edd7c1ca846958a1fbb967",
+    "source_manifest_pin_status": "all_36_complete_originals_authenticated_before_analysis",
+    "subjects": [
+      "MSC01",
+      "MSC02",
+      "MSC05",
+      "MSC06",
+      "MSC08",
+      "MSC09"
+    ],
+    "sessions": [
+      "func01",
+      "func02",
+      "func03"
+    ],
+    "n_runs": 18,
+    "roles_per_run": [
+      "bold",
+      "tmask"
+    ],
+    "n_original_files": 36,
+    "required_member_identity_fields": [
+      "subject",
+      "session",
+      "role",
+      "path",
+      "size_bytes",
+      "sha256",
+      "published_md5",
+      "git_blob_sha1",
+      "version_id",
+      "etag",
+      "url"
+    ],
+    "header_preflight_member_manifest_sha256": "19d8fbd8388b0c6c877db5c585129ce1754894a550206471d279836644e69b99",
+    "header_preflight_is_full_BOLD_identity": false,
+    "preconditions": [
+      "Authenticate the frozen source manifest and all original source files before numerical analysis; no mutable-path or alternate-dataset fallback.",
+      "Exact complete subject/session/role key set, regular files, no source overwrite or symlink substitution.",
+      "All original BOLD values finite after declared NIfTI scaling; no imputation or silent exclusion.",
+      "Each source tmask is one dimensional with exactly 818 finite entries, every entry numerically equal to 0 or 1; no truth-value coercion of other numbers.",
+      "All original headers meet the common expected geometry below; do not resample a mismatch into compliance."
+    ],
+    "expected_header": {
+      "shape": [
+        48,
+        64,
+        48,
+        818
+      ],
+      "stored_dtype": "float32",
+      "byte_order": "little",
+      "voxel_offset_bytes": 352,
+      "spatial_zooms_mm": [
+        3,
+        3,
+        3
+      ],
+      "xyzt_units_code": 10,
+      "spatial_unit": "mm",
+      "temporal_unit": "sec",
+      "qform_code": 0,
+      "qform": null,
+      "sform_code": 3,
+      "sform": [
+        [
+          3,
+          0,
+          0,
+          -70.5
+        ],
+        [
+          0,
+          3,
+          0,
+          -105
+        ],
+        [
+          0,
+          0,
+          3,
+          -60
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "raw_scl_slope": 0,
+      "raw_scl_inter": 0,
+      "effective_scale": 1,
+      "effective_offset": 0,
+      "raw_header_tr_seconds": 1,
+      "description_required_suffix": "_333_zmdt_resid_ntrpl_bpss_zmdt.4dfp.ifh converted with nifti_4dfp"
+    }
+  },
+  "provenance": {
+    "power_integer_coordinate_source": "Nilearn 0.12.1 packaged power_2011.csv",
+    "power_integer_coordinate_sha256": "a052a4231d727348a44f8ba55e6663cb8beedc4f5b0415b3563beb82f16f9564",
+    "power_author_page": "https://www.jonathanpower.net/2011-neuron-bigbrain.html",
+    "power_author_xlsx_sha256": "c128cf0e5929745ffdd88812fa496ece562d1fcc8d5f5ba390cbc198ab1bf9e0",
+    "power_author_readme_sha256": "1115d2a82941a48aea7907493eae3e901f60ebc324ea1a7c0947b52bae575483",
+    "power_coordinate_rounding": "Use the published integer coordinates as-is; their author-table lineage is half-away-from-zero, not ties-to-even. Do not substitute unrounded MNI or original 711 centres.",
+    "fourdfp_distribution_commit": "746dd5dce34807d85a820ac02aa22887a71005ed",
+    "published_transform_filename": "711-2B_to_MNI152lin_T1_t4",
+    "published_transform_sha256": "d633fab9a8f62d1486776d9b6eabd6a181ce083596ba27b9e4f039f2ba66af21",
+    "point_direction": "Original t4_pts inverts the stored matrix to map 711 points to MNI; use the stored matrix itself for the reverse MNI-to-711 point mapping.",
+    "coordinate_bridge": "Documented canonical-333 4dfp orientation/spacing/centre and stored-axis conversion reproduce every observed sform; physical 711 point coordinates are unchanged by array flips.",
+    "historical_export_limitation": "Exact historical converter binary, invocation and source IFH are unavailable. Code/header agreement is operational lineage evidence, not per-subject registration accuracy or byte-level historical-execution proof.",
+    "msc_processing_commit": "d9356b046965b5abc193fafd548694e89c88d042",
+    "msc_params_sha256": "1a77f83695ad8ecda115e99e0b59c36ad790b9638c21c6a5e17399d958c5b385",
+    "msc_fcprocess_sha256": "2f5f90e88fe1a0ff5bbb97235b0ac42a7f570f0571df8a5889d07f5b074e0381",
+    "time_grid_evidence": "Released acquisition metadata and MSC.params specify 2.2 seconds. FCPROCESS_MSC preserves original run indices through source-ordered mask splitting, interpolation into masked columns, filter padding/unpadding, in-place detrending and unchanged frame-count writing.",
+    "time_export_limitation": "A documented converter fallback to 1 second can explain the header discrepancy, but the missing historical IFH prevents proving that specific cause. Analysis timing is an explicit acquisition-frame-indexing assumption, not a repaired or measured header truth."
+  },
+  "timing": {
+    "policy_id": "explicit_acquisition_frame_interval_override",
+    "raw_header_interval_seconds": 1,
+    "analysis_interval_seconds": 2.2,
+    "analysis_interval_rational": {
+      "numerator": 11,
+      "denominator": 5
+    },
+    "original_frame_indices": {
+      "first": 0,
+      "last": 817
+    },
+    "retained_duration_formula": "n_retained * 11 / 5 seconds",
+    "qc_per_session_integer_predicate": "11 * n_retained >= 3000",
+    "qc_per_person_predicate": "all three sessions satisfy the per-session predicate",
+    "qc_threshold_seconds": 600,
+    "no_rounded_minutes_for_classification": true,
+    "interpretation": "Operational retained-frame duration, not contiguous clean time, independent information, or elapsed first-to-last-retained time. Original headers remain unchanged."
+  },
+  "geometry": {
+    "geometry_id": "released_canonical_333",
+    "n_rois": 264,
+    "roi_ids": {
+      "first": 1,
+      "last": 264
+    },
+    "mni_to_world_matrix": [
+      [
+        0.953903,
+        -0.003872,
+        -0.021291,
+        -0.1135
+      ],
+      [
+        -0.010402,
+        0.950932,
+        -0.016412,
+        -3.4194
+      ],
+      [
+        0.020852,
+        0.055067,
+        0.946383,
+        2.5682
+      ],
+      [
+        0,
+        0,
+        0,
+        1
+      ]
+    ],
+    "homogeneous_convention": "column vectors; c_world = T @ [x_MNI,y_MNI,z_MNI,1]",
+    "additional_point_axis_flip": false,
+    "radius_mm": 5,
+    "membership": "In-FOV integer voxel centres only: squared Euclidean distance from A@[i,j,k,1] to c_world <= 25, with no epsilon.",
+    "operation_order": "float64 matrix products; for distance use (dx*dx + dy*dy) + dz*dz; no rounding of transformed centres or distances before inclusion",
+    "canonical_voxel_order": "lexicographic (i,j,k), equivalent to C-order array-index enumeration",
+    "allow_overlapping_spheres": true,
+    "voxel_weighting": "equal weights",
+    "implicit_brain_mask": false,
+    "nearest_voxel_rescue": false,
+    "spatial_resampling_or_smoothing": false,
+    "empty_sphere_rule": "failed_precondition; never silently omit the ROI",
+    "boundary_diagnostic": "For each ROI, min(abs(distance_squared-25)) over every original in-FOV voxel centre, units mm^2.",
+    "fov_limitation": "Spheres are truncated to original in-FOV voxel centres. No extrapolation, fractional-volume weighting, or extra anatomical mask."
+  },
+  "numerics": {
+    "dtype": "float64",
+    "eps64": 2.220446049250313e-16,
+    "additional_detrending_regression_filtering_standardization": false,
+    "roi_means": "Arithmetic mean of original scaled voxel values over the fixed sphere for each original frame.",
+    "roi_source_peak_abs": "For each run and ROI, max(abs(original scaled voxel value)) over all sphere voxels and all 818 frames; this is source-bound, not inferred from the ROI means.",
+    "arm_names": [
+      "all_frames",
+      "censored"
+    ],
+    "arm_selection": {
+      "all_frames": "all original frame indices",
+      "censored": "exactly source tmask == 1"
+    },
+    "stable_vector_classification": {
+      "input": "one finite vector x with N elements; applies to selected ROI series and to common-edge Fisher-z vectors",
+      "precedence": [
+        "N<2: insufficient support",
+        "max(x)==min(x): exact constant",
+        "scaled centred L2 <= scaled bound: numerically constant",
+        "otherwise ok"
+      ],
+      "scale": "s = max(abs(x))",
+      "zero_scale": "s=0 implies exact constant; diagnostic raw/centred L2 and bound are exactly 0",
+      "nonzero_scale_formulas": {
+        "u": "x/s",
+        "c": "u-mean(u)",
+        "scaled_raw_l2": "sqrt(sum(u*u))",
+        "scaled_centered_l2": "sqrt(sum(c*c))",
+        "scaled_zero_bound": "10*N*eps64*scaled_raw_l2"
+      },
+      "exact_constant_diagnostics": "For a nonzero exact constant vector use scaled_raw_l2=sqrt(N), scaled_centered_l2=0 and the stated scaled bound; do not introduce mean-subtraction roundoff.",
+      "insufficient_support_diagnostics": "N<2 is checked first; L2 and bound fields are undefined/null, including for N=1.",
+      "reported_original_units": {
+        "raw_l2": "s*scaled_raw_l2",
+        "centered_l2": "s*scaled_centered_l2",
+        "zero_bound": "s*scaled_zero_bound"
+      },
+      "classification_uses_scaled_quantities": true,
+      "diagnostic_tolerances_never_modify_classification": true,
+      "nonfinite_rule": "Any nonfinite computed scale, norm, bound or coefficient is a numerical failure, not a dropped row."
+    },
+    "pearson": "For two ok vectors, dot(c_x/scaled_centered_l2_x, c_y/scaled_centered_l2_y).",
+    "pearson_roundoff": {
+      "range": [
+        -1,
+        1
+      ],
+      "maximum_overshoot_for_clamp": 1e-12,
+      "larger_overshoot": "numerical failure"
+    },
+    "fisher_z": {
+      "formula": "atanh(clip(raw_r,-0.999,0.999))",
+      "clip": 0.999,
+      "clip_count_predicate": "abs(raw_r)>0.999"
+    },
+    "common_roi": "ROI is ok in both arms of all 18 runs, recomputed from accepted submitted ROI means by the public rule.",
+    "candidate_edges": {
+      "n": 34716,
+      "definition": "all original ROI-ID pairs (i,j) with 1<=i<j<=264",
+      "canonical_order": "lexicographic (i,j)"
+    },
+    "edge_valid": "Both endpoint ROIs are common; one common mask shared across all runs, arms and QC subsets.",
+    "invalid_edge_storage": "raw_r and fisher_z must be NaN at every invalid edge for every run/arm; finite at every valid edge; no infinities.",
+    "session_pairs": [
+      [
+        "func01",
+        "func02"
+      ],
+      [
+        "func01",
+        "func03"
+      ],
+      [
+        "func02",
+        "func03"
+      ]
+    ],
+    "pair_measure": "Pearson correlation of the two session Fisher-z vectors restricted to the shared common edge set; no second Fisher transformation.",
+    "person_measure": "Arithmetic mean of all three expected pair correlations; no available-pair averaging or frame weighting.",
+    "group_measure": "Arithmetic mean of all expected person values in the named population; equal person weights; no available-person averaging."
+  },
+  "undefined": {
+    "roi_status": [
+      "ok",
+      "insufficient_frames",
+      "constant",
+      "numerically_constant"
+    ],
+    "pair_status": [
+      "ok",
+      "insufficient_common_edges",
+      "constant_edge_vector",
+      "numerically_constant_edge_vector"
+    ],
+    "pair_status_precedence": "Fewer than two common edges first; otherwise exact constant if either vector is exact constant; otherwise numerically constant if either vector is numerically constant; otherwise ok.",
+    "person_status": [
+      "ok",
+      "incomplete_pairs"
+    ],
+    "group_status": [
+      "ok",
+      "incomplete_subjects",
+      "empty_qc_subset"
+    ],
+    "null_propagation": "Undefined pair -> person null unless all three pairs defined; undefined expected person -> group null; zero eligible QC people -> null/empty_qc_subset.",
+    "qc_membership_independent_of_measure_definedness": true,
+    "successful_run_can_have_undefined_estimands": true,
+    "csv_missing_numeric": "empty string only",
+    "json_missing_numeric": "null only; NaN and Infinity forbidden",
+    "npz_missing_numeric": "NaN only at explicitly invalid raw_r/fisher_z entries; all roi_means and roi_source_peak_abs finite"
+  },
+  "validation": {
+    "source_bound_primitives": [
+      "exact original source IDs",
+      "exact voxel membership",
+      "exact original frame keys",
+      "exact source tmask",
+      "all ROI means within public source-scale tolerance and the explicit per-arm centred-signal fidelity condition",
+      "all source peak-absolute values within public tolerance"
+    ],
+    "centred_signal_fidelity": {
+      "scope": "Every run/ROI separately on both all_frames and censored source-selected frame sets, after pointwise ROI-mean binding.",
+      "stable_centred_vector": "For finite x, compute s=max(abs(x)); for exact constants set d to exact zeros, including s=0; otherwise u=x/s and d=s*(u-mean(u)). Use the same public stable centering for submitted and reference vectors.",
+      "stable_l2": "For nonempty finite v, m=max(abs(v)); norm=0 if m=0, otherwise m*sqrt(sum((v/m)^2)); empty v has norm0. Reject a nonfinite result.",
+      "insufficient_support": "For N<2, only source pointwise binding and the insufficient_frames rule apply; do not call min/max on an empty vector.",
+      "exact_constant_reference": "For N>=2 and max(reference)==min(reference), require max(submitted)==min(submitted) exactly. Its level may differ within the existing pointwise tolerance. No added temporal variation is permitted.",
+      "both_inactive_nonexact_reference": "For a nonexact reference, if both reference and submitted status are constant or numerically_constant under the public vector rule, pointwise binding suffices; neither shape contributes to common-edge FC.",
+      "active_case": "For a nonexact reference, if either vector status is ok, require stable_l2(d_submitted-d_reference) <= 1e-6*stable_l2(d_reference), with no absolute error floor.",
+      "relative_l2_tolerance": 0.000001,
+      "absolute_l2_floor": 0,
+      "reference_status_role": "Only selects this publicly defined source-fidelity branch. It does not impose a separate exact equality gate on submitted status/common support or any downstream result.",
+      "precision_limitation": "Full-precision NPZ is required. Near-constant active reference vectors can demand finer centred-signal accuracy than pointwise tolerances or rounded exports alone. An independent discrepancy must be reported rather than triggering an automatic tolerance relaxation.",
+      "endpoint_limitation": "Constrained temporal-shape error does not guarantee stability of a nearly constant connectome edge vector or its session correlation. Preserve diagnostics and coherent undefined/support changes; do not claim scientific robustness from acceptance."
+    },
+    "derived_authority": "Recompute all statuses, common support, raw_r, fisher_z, pair/person/group values and counters from accepted submitted ROI means plus exact source masks/geometry. Source-bank derived labels and values are diagnostic only; no second exact reference-status, common-mask or derived-value gate.",
+    "accepted_near_boundary_changes": "An ROI-mean perturbation satisfying BOTH pointwise and centred-signal fidelity can cross a numerical-zero boundary. Require the submitted support, statuses, every affected FC/pair/summary and null to coherently follow its own accepted primitives; do not reject solely for differing source-bank support. Record instability as a limitation, not scientific robustness.",
+    "recompute_scope": "Actually recompute every valid FC from the accepted ROI means. Checking only arithmetic among submitted derived claims is insufficient. Values valid only under submitted support need no undefined reference FC counterpart.",
+    "no_tolerance_in_status_predicates": true,
+    "tolerances": {
+      "centre_or_affine_mm": {
+        "atol": 1e-9,
+        "rtol": 0
+      },
+      "boundary_distance_squared_mm2": {
+        "atol": 1e-9,
+        "rtol": 0
+      },
+      "roi_mean": {
+        "formula": "abs(submitted-reference) <= 1e-10*source_peak_abs + 1e-9*abs(reference_mean)",
+        "source_peak_authority": "authenticated original source; not the tolerated submitted peak",
+        "zero_peak": "requires exactly zero ROI mean"
+      },
+      "source_peak_abs": {
+        "atol": 0,
+        "rtol": 1e-10
+      },
+      "norm_or_zero_bound": {
+        "formula": "abs(submitted-recomputed) <= 1e-9*abs(recomputed) + 1e-10*source_peak_abs*sqrt(N)",
+        "classification": "Recomputed scaled classification is authoritative; this tolerance is diagnostic comparison only.",
+        "roi_scale": "authenticated original sphere source_peak_abs",
+        "pair_scale": "max absolute entry of the recomputed Fisher-z vector for that session/arm on common edges"
+      },
+      "r_z_pair": {
+        "atol": 1e-8,
+        "rtol": 1e-7
+      },
+      "person_or_group_summary": {
+        "atol": 0.000001,
+        "rtol": 0
+      },
+      "duration_seconds_or_minutes": {
+        "atol": 1e-9,
+        "rtol": 0
+      },
+      "source_timing_constants": {
+        "atol": 0,
+        "rtol": 0
+      }
+    },
+    "categorical": "Exact key sets, integer counts, statuses, Boolean flags, group membership and source/method identity after public key joins. No exact bank-derived category requirement beyond own-primitive recomputation.",
+    "required_controls": [
+      "pointwise-close arbitrary temporal noise added to an exact constant rejected",
+      "active centred-signal shape beyond relative fidelity rejected despite pointwise closeness",
+      "exact constant-level change within pointwise tolerance accepted",
+      "nonexact both-inactive fidelity branch accepted with coherent nulls",
+      "coherent accepted near-zero-boundary support change satisfying centred fidelity",
+      "same perturbation with stale support/FC rejected",
+      "undefined propagation",
+      "empty QC subset",
+      "both arms distinctly recomputed",
+      "no correlation-only or either-arm source match"
+    ],
+    "numeric_domains": "Non-null source peaks, L2 norms, zero bounds and geometry boundary distances are nonnegative independently of numerical closeness. Reported raw_r, pair_r and person/group correlations are in [-1,1]; Fisher-z values are in [-atanh(0.999),atanh(0.999)]. Apply the public Pearson roundoff clamp before reporting; tolerances do not license impossible values."
+  },
+  "serialization": {
+    "required_files": [
+      "session_qc.csv",
+      "roi_geometry.csv",
+      "roi_status.csv",
+      "connectivity_arrays.npz",
+      "session_pairs.csv",
+      "reliability.csv",
+      "reliability_stats.json",
+      "run_metadata.json",
+      "findings.md"
+    ],
+    "csv": {
+      "encoding": "UTF-8",
+      "header_required": true,
+      "row_order_free": true,
+      "extra_named_columns_ignored": true,
+      "duplicate_headers_or_keys": "reject",
+      "integral_notation": "finite exactly integral values, including 1.0, accepted for integer fields",
+      "booleans": [
+        "0",
+        "1",
+        "false",
+        "true"
+      ],
+      "nonfinite_numeric_strings": "reject"
+    },
+    "npz": {
+      "allow_pickle": false,
+      "object_arrays": "reject",
+      "identifier_axes": "Explicit axes may be coherently reordered; reject duplicates, missing or foreign IDs. Realign before checking.",
+      "frame_axis": "Each run's frame_indices is a complete unique permutation of 0..817 and must reorder tmask and roi_means coherently.",
+      "voxel_axis": "voxel_offsets follows roi_ids; each segment has exactly its source sphere membership without duplicates, independent of within-segment order.",
+      "extra_named_arrays": "ignored unless they conflict with a required key"
+    },
+    "json": {
+      "finite_only": true,
+      "duplicate_keys": "reject",
+      "extra_descriptive_fields": "allowed unless conflicting with required scientific fields",
+      "numeric_types": "Required numeric values must be finite JSON numbers, never booleans or numeric strings; integer counts must be exactly integral. Required Boolean flags must be JSON booleans."
+    },
+    "output_safety": "Exclusive fresh output/private/evidence destinations; no overwrite of originals, an existing completed result, symlink target or source ancestor/descendant. Failure receipts remain separate and explicit.",
+    "output_status": {
+      "complete": "ok",
+      "failed_source_or_numerical_precondition": "failed_precondition",
+      "ok_may_include_null_estimands": true
+    }
+  },
+  "outputs": {
+    "session_qc.csv": {
+      "key": [
+        "subject_id",
+        "session_id"
+      ],
+      "n_rows": 18,
+      "columns": [
+        "subject_id",
+        "session_id",
+        "n_frames",
+        "n_retained",
+        "n_excluded",
+        "header_tr_seconds",
+        "analysis_tr_seconds",
+        "tr_policy",
+        "retained_seconds",
+        "retained_minutes",
+        "duration_qc_pass"
+      ],
+      "integer_fields": [
+        "n_frames",
+        "n_retained",
+        "n_excluded"
+      ],
+      "boolean_fields": [
+        "duration_qc_pass"
+      ],
+      "nullable_fields": [],
+      "rules": [
+        "n_frames=818",
+        "n_retained=sum(source tmask)",
+        "n_excluded=818-n_retained",
+        "header_tr_seconds=1.0",
+        "analysis_tr_seconds=2.2",
+        "tr_policy=timing.policy_id",
+        "retained_minutes=retained_seconds/60",
+        "duration_qc_pass uses exact integer predicate"
+      ]
+    },
+    "roi_geometry.csv": {
+      "key": [
+        "roi_id"
+      ],
+      "n_rows": 264,
+      "columns": [
+        "roi_id",
+        "geometry_id",
+        "mni_x_mm",
+        "mni_y_mm",
+        "mni_z_mm",
+        "world_x_mm",
+        "world_y_mm",
+        "world_z_mm",
+        "radius_mm",
+        "n_voxels",
+        "boundary_min_abs_mm2"
+      ],
+      "integer_fields": [
+        "roi_id",
+        "mni_x_mm",
+        "mni_y_mm",
+        "mni_z_mm",
+        "n_voxels"
+      ],
+      "nullable_fields": [],
+      "rules": [
+        "original ROI IDs and published integer centres exact",
+        "geometry_id=geometry.geometry_id",
+        "radius_mm=5",
+        "n_voxels equals corresponding voxel_offsets difference and must be positive",
+        "world coordinates and boundary diagnostic follow geometry formulas"
+      ]
+    },
+    "roi_status.csv": {
+      "key": [
+        "subject_id",
+        "session_id",
+        "arm",
+        "roi_id"
+      ],
+      "n_rows": 9504,
+      "columns": [
+        "subject_id",
+        "session_id",
+        "arm",
+        "roi_id",
+        "n_frames",
+        "raw_l2",
+        "centered_l2",
+        "zero_bound",
+        "status",
+        "common_roi"
+      ],
+      "integer_fields": [
+        "roi_id",
+        "n_frames"
+      ],
+      "boolean_fields": [
+        "common_roi"
+      ],
+      "nullable_fields": [
+        "raw_l2",
+        "centered_l2",
+        "zero_bound"
+      ],
+      "rules": [
+        "status recomputed from this run/arm/ROI accepted means",
+        "norm/bound null if and only if n_frames<2",
+        "common_roi repeats the same all-run/both-arm intersection for that ROI"
+      ]
+    },
+    "connectivity_arrays.npz": {
+      "arrays": {
+        "run_subject": {
+          "shape": [
+            18
+          ],
+          "dtype": "unicode string",
+          "values": "subject component of each unique complete run key"
+        },
+        "run_session": {
+          "shape": [
+            18
+          ],
+          "dtype": "unicode string",
+          "values": "session component paired with run_subject"
+        },
+        "roi_ids": {
+          "shape": [
+            264
+          ],
+          "dtype": "integer",
+          "values": "1..264 exactly once"
+        },
+        "arm_names": {
+          "shape": [
+            2
+          ],
+          "dtype": "unicode string",
+          "values": [
+            "all_frames",
+            "censored"
+          ]
+        },
+        "frame_indices": {
+          "shape": [
+            18,
+            818
+          ],
+          "dtype": "integer",
+          "values": "0..817 exactly once in each run"
+        },
+        "tmask": {
+          "shape": [
+            18,
+            818
+          ],
+          "dtype": "Boolean or integer 0/1",
+          "values": "source mask aligned with frame_indices"
+        },
+        "roi_means": {
+          "shape": [
+            18,
+            818,
+            264
+          ],
+          "dtype": "float64",
+          "values": "finite full original ROI means"
+        },
+        "roi_source_peak_abs": {
+          "shape": [
+            18,
+            264
+          ],
+          "dtype": "float64",
+          "values": "finite nonnegative source-derived peaks"
+        },
+        "voxel_offsets": {
+          "shape": [
+            265
+          ],
+          "dtype": "integer",
+          "values": "starts at 0, strictly increasing, ends at N; prefix offsets in roi_ids order"
+        },
+        "voxel_ijk": {
+          "shape": [
+            "N",
+            3
+          ],
+          "dtype": "integer",
+          "values": "in-FOV membership triplets, unique within each ROI segment; overlap across ROIs allowed"
+        },
+        "common_roi": {
+          "shape": [
+            264
+          ],
+          "dtype": "Boolean or integer 0/1",
+          "values": "own-primitive intersection in roi_ids order"
+        },
+        "edge_roi_ids": {
+          "shape": [
+            34716,
+            2
+          ],
+          "dtype": "integer",
+          "values": "every original pair (i,j), i<j, exactly once"
+        },
+        "edge_valid": {
+          "shape": [
+            34716
+          ],
+          "dtype": "Boolean or integer 0/1",
+          "values": "common membership of both edge endpoints"
+        },
+        "raw_r": {
+          "shape": [
+            18,
+            2,
+            34716
+          ],
+          "dtype": "float64",
+          "values": "finite iff edge_valid, otherwise NaN"
+        },
+        "fisher_z": {
+          "shape": [
+            18,
+            2,
+            34716
+          ],
+          "dtype": "float64",
+          "values": "finite iff edge_valid, otherwise NaN"
+        }
+      }
+    },
+    "session_pairs.csv": {
+      "key": [
+        "subject_id",
+        "arm",
+        "session_a",
+        "session_b"
+      ],
+      "n_rows": 36,
+      "columns": [
+        "subject_id",
+        "arm",
+        "session_a",
+        "session_b",
+        "n_candidate_edges",
+        "n_common_edges",
+        "raw_l2_a",
+        "centered_l2_a",
+        "zero_bound_a",
+        "raw_l2_b",
+        "centered_l2_b",
+        "zero_bound_b",
+        "pair_r",
+        "status"
+      ],
+      "integer_fields": [
+        "n_candidate_edges",
+        "n_common_edges"
+      ],
+      "nullable_fields": [
+        "raw_l2_a",
+        "centered_l2_a",
+        "zero_bound_a",
+        "raw_l2_b",
+        "centered_l2_b",
+        "zero_bound_b",
+        "pair_r"
+      ],
+      "rules": [
+        "session_a/session_b use the three unordered canonical pairs with a<b",
+        "n_candidate_edges=34716",
+        "norm fields null iff n_common_edges<2",
+        "pair_r finite iff status=ok",
+        "all fields recomputed from accepted ROI means, not tolerated submitted FC values"
+      ]
+    },
+    "reliability.csv": {
+      "key": [
+        "subject_id"
+      ],
+      "n_rows": 6,
+      "columns": [
+        "subject_id",
+        "n_sessions",
+        "n_frames_total",
+        "n_frames_retained",
+        "minimum_retained_seconds",
+        "minimum_retained_minutes",
+        "qc_pass",
+        "n_pairs_expected",
+        "censored_n_pairs_defined",
+        "reliability_censored",
+        "censored_status",
+        "all_frames_n_pairs_defined",
+        "reliability_all_frames",
+        "all_frames_status"
+      ],
+      "integer_fields": [
+        "n_sessions",
+        "n_frames_total",
+        "n_frames_retained",
+        "n_pairs_expected",
+        "censored_n_pairs_defined",
+        "all_frames_n_pairs_defined"
+      ],
+      "boolean_fields": [
+        "qc_pass"
+      ],
+      "nullable_fields": [
+        "reliability_censored",
+        "reliability_all_frames"
+      ],
+      "rules": [
+        "n_sessions=3 and n_pairs_expected=3",
+        "qc_pass=all three source-duration predicates",
+        "each reliability finite iff corresponding status=ok and defined pairs=3",
+        "no diagnostic missingness changes QC inclusion"
+      ]
+    },
+    "reliability_stats.json": {
+      "required_fields": [
+        "status",
+        "pipeline_id",
+        "n_subjects",
+        "n_sessions_per_subject",
+        "n_runs",
+        "n_rois",
+        "n_candidate_edges",
+        "n_common_rois",
+        "n_common_edges",
+        "n_frames_total",
+        "n_frames_retained",
+        "qc_included_subject_ids",
+        "qc_excluded_subject_ids",
+        "group_mean_reliability",
+        "roi_status_counts",
+        "pair_status_counts",
+        "fisher_clip_counts"
+      ],
+      "fixed_fields": {
+        "status": "ok",
+        "pipeline_id": "msc-six-person-censoring-sensitivity-v2",
+        "n_subjects": 6,
+        "n_sessions_per_subject": 3,
+        "n_runs": 18,
+        "n_rois": 264,
+        "n_candidate_edges": 34716,
+        "n_frames_total": 14724
+      },
+      "group_mean_reliability": {
+        "required_keys": [
+          "all_six_censored",
+          "all_six_all_frames",
+          "conditional_qc_censored",
+          "conditional_qc_all_frames"
+        ],
+        "entry_required_fields": [
+          "value",
+          "status",
+          "n_expected",
+          "n_defined"
+        ],
+        "entry_rules": [
+          "value finite iff status=ok, otherwise null",
+          "n_expected=6 for all_six and exact QC subset size for conditional_qc",
+          "n_defined counts finite person values among expected IDs",
+          "empty QC has status=empty_qc_subset,n_expected=0,n_defined=0,value=null",
+          "nonempty n_defined<n_expected has status=incomplete_subjects,value=null"
+        ]
+      },
+      "count_objects": {
+        "roi_status_counts": "known ROI status keys only, total9504; omitted known status keys mean zero",
+        "pair_status_counts": "known pair status keys only, total36; omitted known status keys mean zero",
+        "fisher_clip_counts": "object with all_frames and censored counts over 18 runs and common edges using recomputed abs(raw_r)>0.999"
+      },
+      "qc_id_lists": "Unique exact partition of the six source IDs; order irrelevant; membership from source masks and fixed rational timing only"
+    },
+    "run_metadata.json": {
+      "required_fields": [
+        "status",
+        "pipeline_id",
+        "method_contract",
+        "method_contract_sha256",
+        "source_manifest_sha256",
+        "source_files",
+        "source_observed",
+        "analysis_observed",
+        "software_versions"
+      ],
+      "method_contract": "Exact parsed frozen public contract, not this draft; compare required typed values and permit no changed scientific setting.",
+      "source_files": {
+        "n_rows": 36,
+        "key": [
+          "subject_id",
+          "session_id",
+          "role"
+        ],
+        "required_fields": [
+          "subject_id",
+          "session_id",
+          "role",
+          "path",
+          "size_bytes",
+          "sha256",
+          "published_md5",
+          "git_blob_sha1",
+          "version_id",
+          "etag"
+        ],
+        "rule": "Equal the authenticated public source manifest identities, order-free"
+      },
+      "source_observed": {
+        "required_fields": [
+          "n_subjects",
+          "n_runs",
+          "n_original_files",
+          "headers",
+          "timing_policy",
+          "original_files_modified"
+        ],
+        "fixed_fields": {
+          "n_subjects": 6,
+          "n_runs": 18,
+          "n_original_files": 36,
+          "original_files_modified": false
+        },
+        "headers": {
+          "n_rows": 18,
+          "key": [
+            "subject_id",
+            "session_id"
+          ],
+          "required_fields": [
+            "subject_id",
+            "session_id",
+            "shape",
+            "stored_dtype",
+            "byte_order",
+            "voxel_offset_bytes",
+            "spatial_zooms_mm",
+            "xyzt_units_code",
+            "spatial_unit",
+            "temporal_unit",
+            "qform_code",
+            "qform",
+            "sform_code",
+            "sform",
+            "raw_scl_slope",
+            "raw_scl_inter",
+            "effective_scale",
+            "effective_offset",
+            "raw_header_tr_seconds",
+            "description"
+          ],
+          "rule": "Original source observations; exact strings/scalars except explicit geometry tolerance; no invented replacement header."
+        },
+        "timing_policy": "Exact public timing object, including raw1.0, analysis2.2 and qualified override"
+      },
+      "analysis_observed": {
+        "required_fields": [
+          "n_common_rois",
+          "n_common_edges",
+          "n_frames_total",
+          "n_frames_retained",
+          "qc_included_subject_ids",
+          "qc_excluded_subject_ids",
+          "roi_status_counts",
+          "pair_status_counts"
+        ],
+        "rule": "Recomputed fields equal the matching reliability_stats.json fields; no independent hidden numeric targets."
+      },
+      "software_versions": {
+        "required_keys": [
+          "python",
+          "numpy",
+          "nibabel"
+        ],
+        "rule": "Nonempty truthful version strings; use 'not_used' for an unused named library, including nibabel when an equivalent reader is used. Differing equivalent software is permitted; no exact participant package-version gate."
+      },
+      "status": "ok for complete production outputs even if some estimands are undefined; failed_precondition receipts are not a passing complete submission"
+    },
+    "findings.md": {
+      "format": "UTF-8 free prose",
+      "rule": "Required nonempty artifact, but no lexical keywords, sign, magnitude, exclusion narrative, paper replication or desired conclusion is graded."
+    }
+  },
+  "authoring_evidence_policy": {
+    "public_template_contains_no_fitted_answers": true,
+    "source_only_reference": "Recompute all source-bound primitives from authenticated originals, independently of oracle output; reference derived fields are diagnostic.",
+    "independence_limits": "Sharing a low-level NIfTI reader is disclosed; independent geometry/reduction/correlation code does not prove historical preprocessing, biological validity or population generalization.",
+    "execution": "Contract and source identities frozen before original BOLD value analysis. Authoring execution requires source-free tests, a bounded pilot and a separate full-run gate; a passing computational control is not scientific validation or model calibration.",
+    "source_outcome_retuning": false
+  }
+}

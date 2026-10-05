@@ -1,0 +1,55 @@
+{
+  "status": "documented_operational_coordinate_chain_not_historical_binary_proof",
+  "source_coordinates": {
+    "file": "power_2011.csv",
+    "release": "Nilearn 0.12.1",
+    "url": "https://raw.githubusercontent.com/nilearn/nilearn/0.12.1/nilearn/datasets/data/power_2011.csv",
+    "space": "Author-described linear MNI152 coordinates, rounded to published integer millimeters",
+    "unknown": "No exact modern MNI152 template filename or content digest is established.",
+    "author_original_archive": "https://www.dropbox.com/s/4dr9uby03o6gjln/2011_Neuron_data_updated.zip?dl=1",
+    "author_page": "https://www.jonathanpower.net/2011-neuron-bigbrain.html",
+    "original_table_space": "711-2L",
+    "original_table_vs_published_transform_max_abs_mm": 0.005000102861520972,
+    "comparison_scope": "Metadata comparison of all 264 published paired coordinates; no affine fitting or image analysis"
+  },
+  "point_transform": {
+    "file": "711-2B_to_MNI152lin_T1_t4",
+    "url": "https://raw.githubusercontent.com/ysu001/PUP/746dd5dce34807d85a820ac02aa22887a71005ed/4dfp/4dfp_scripts/711-2B_to_MNI152lin_T1_t4",
+    "git_blob_sha1": "47379c930e7fc6bf61a3efd47b738fa4c3bf8a68",
+    "direction": "For an input MNI homogeneous point, multiply by the stored printed T matrix to obtain 711 physical coordinates. The named forward t4_pts command internally inverts T for 711-to-MNI points.",
+    "direction_source": "https://github.com/ysu001/PUP/blob/746dd5dce34807d85a820ac02aa22887a71005ed/4dfp/imglin/t4_pts.c#L114",
+    "t4_storage_note": "Printed mathematical rows are used directly; no extra transpose or guessed axis flip."
+  },
+  "destination": {
+    "dataset": "OpenNeuro ds000224 1.0.4",
+    "target_template": "TRIO_Y_NDC, a representative in 711-2B coordinate space; not asserted identical to the Power 711-2L template",
+    "processing_source": "https://github.com/MidnightScanClub/MSCcodebase/blob/d9356b046965b5abc193fafd548694e89c88d042/Processing/MSC.params",
+    "canonical_333": {
+      "dimensions": [48, 64, 48],
+      "orientation": 2,
+      "mmppix": [3, -3, -3],
+      "center": [73.5, -87, -84],
+      "definition_source": "https://github.com/ysu001/PUP/blob/746dd5dce34807d85a820ac02aa22887a71005ed/4dfp/t4imgs_4dfp/t4imgs_4dfp.c#L404"
+    },
+    "exported_affine": [[3, 0, 0, -70.5], [0, 3, 0, -105], [0, 0, 3, -60], [0, 0, 0, 1]],
+    "qform_code": 0,
+    "sform_code": 3,
+    "units": "mm",
+    "physical_point_bridge": "Identity: documented 4dfp physical coordinates are retained while the converter reorders stored spatial indices. No additional point-axis flip is applied.",
+    "exporter_source": "https://github.com/ysu001/PUP/blob/746dd5dce34807d85a820ac02aa22887a71005ed/4dfp/nifti_4dfp/4dfp-format.c#L280",
+    "stored_axis_source": "https://github.com/ysu001/PUP/blob/746dd5dce34807d85a820ac02aa22887a71005ed/4dfp/nifti_4dfp/transform.c#L214"
+  },
+  "temporal_metadata": {
+    "observed_header_tr_seconds": 1.0,
+    "published_acquisition_tr_seconds": 2.2,
+    "observed_frames_per_image_and_mask": 818,
+    "frame_preserving_processing_source": "https://github.com/MidnightScanClub/MSCcodebase/blob/d9356b046965b5abc193fafd548694e89c88d042/Processing/FCPROCESS_MSC.m#L1210",
+    "interpretation": "Using 2.2 seconds is an explicit acquisition-frame indexing assumption, supported by acquisition metadata and documented index-preserving processing, not a corrected or measured derivative header.",
+    "exporter_default": "The published converter uses 1 second when the IFH fourth scaling factor is zero/absent. The exact historical IFH is unavailable, so this is a possible mechanism, not proven causality."
+  },
+  "limits": [
+    "The exact historical export binary, invocation, IFH and per-subject registration accuracy are not authenticated.",
+    "Source metadata and a documented coordinate chain do not establish task outcomes or biological validity.",
+    "The Power author README does not establish a standalone atlas data license; do not substitute a software license."
+  ]
+}

@@ -1,72 +1,67 @@
-## PRECISFC-001
+# PRECISFC-001: a public-contract connectome sensitivity control
 
-**Proposal Title:** Test-retest reliability of the individual functional connectome (MSC) — an un-cued data-quality gap (documented low-quality-subject exclusion)
+This task is retained as an **easy computational method control**, not a hard
+paper-finding reproduction. Gordon et al. (2017), *Precision Functional Mapping
+of Individual Human Brains*, provides the scientific context and Midnight Scan
+Club dataset attribution ([paper](https://doi.org/10.1016/j.neuron.2017.07.011)).
+The six-person, three-session, Power264 analysis below is a secondary adaptation;
+it is not the paper's data-quantity reliability characterization or a fingerprint
+identification experiment. No Figure/Table result is claimed to be reproduced.
 
-**Scientific Domain:** Life Sciences · **Field:** Neuroscience · **Subfield:** Precision resting-state functional connectivity
+## Fixed question and independent unit
 
-**Source finding:** Gordon et al. (2017), *Neuron*, https://doi.org/10.1016/j.neuron.2017.07.011 ("Precision Functional Mapping of Individual Human Brains"); Laumann et al. (2015); Seitzman et al. (2019). Data: OpenNeuro `ds000224` (Midnight Scan Club) **volume-pipeline** resting-state derivatives, fetched at runtime from the public no-credentials S3 bucket.
+How does selecting the released temporal-mask frames change each person's
+cross-session connectivity-pattern similarity on a common edge support? Both
+all-frame and censored arms, on all six fixed people, are primary. Equal-person
+group summaries and a separate publicly defined duration-QC subset are reported.
+The three pairs per person overlap; neither pairs nor edges enlarge the person N.
+No required effect direction, numeric headline, participant ranking, ID exclusion,
+drowsiness attribution or minimum reliability is graded.
 
-**Status: FULL runnable task, real fetched data.** A new dataset (MSC) and a new failure axis for the suite — an **un-cued data-quality / sample-selection** judgement — distinct from the motion *wrong-cause* confound in DEVCONN-001 / CLINCONN-001.
+## Original public substrate, qualified geometry and time
 
-**De-cue pass (2026-09) — single, fully-un-cued lever.** The previous version gated on **two** controls, frame-censoring **and** subject-exclusion, but the frame-censoring half was **semi-cued** (the instruction handed the per-run temporal mask `*_tmask.txt` and the required `reliability.csv` demanded a frame-count column) and requiring it created a **fairness tension**: excluding the two documented low-quality subjects *without* censoring already recovers the honest reliability (0.649 vs 0.660 — the MSC derivatives are already nuisance-regressed, so censoring the *usable* subjects barely moves them), so a correct exclude-but-don't-censor answer would have been failed. This pass removes the censoring telegraphs (the frame-count column is gone from the required schema; the tmask is now only a factual directory entry) and reframes the grader to gate **solely on the genuinely un-cued judgement** — recognising that the documented low-quality subjects (MSC08 drowsy, MSC09 high-motion) contaminate the naive group estimate and should be excluded/flagged. Frame-censoring is now an **accepted refinement, not a requirement**. (This supersedes the earlier "require both controls independently" hardening.) Re-validated on the real cached MSC data (below).
+The build stages 18 original processed NIfTIs plus 18 original masks from
+[OpenNeuro ds000224 release 1.0.4](https://doi.org/10.18112/openneuro.ds000224.v1.0.4).
+Release commit, Git-annex MD5/size, immutable S3 version IDs and measured complete
+SHA256 values are frozen in `environment/source_manifest.json`. Source data are
+already interpolated, nuisance-processed and filtered; all-frame is not raw.
+No surrogate cohort or author-generated signal replaces the originals.
 
-### Why this exists
+The published 4dfp stored transform maps Power's published integer MNI centres
+to 711 physical coordinates. Original point-transform code, the author's paired
+coordinate table and converter/canonical-333 definitions support its direction
+and match all observed sforms. This is operational provenance, not proof of the
+exact historical converter invocation, original IFH or subject registration quality.
 
-Asked to "quantify the test-retest reliability of the individual connectome" over a fixed list of six subjects, an agent loads the processed BOLD runs, correlates the per-session connectomes, and reports a single group reliability figure (~0.53) — without volunteering that two of those subjects are **documented low-quality outliers** the estimate should set aside: MSC08 (pervasive drowsiness → unstable networks; only ~24% of frames usable; its own cross-session reliability collapses to ~0.09, plainly visible in the agent's per-subject table) and MSC09 (excessive motion). The task lists all six subjects and never says any should be excluded. The individual connectome is in fact highly reliable (~0.65) once the two documented low-quality subjects are set aside.
+All derivative headers record 1.0 second. Acquisition metadata specifies 2.2
+seconds and published processing preserves frame indices. The public method
+therefore declares a 2.2-second acquisition-frame assumption for retained-duration
+QC while retaining the observed 1.0-second headers. Neither metadata discrepancy
+nor spatial conversion is hidden as a difficulty lever. Source and atlas licensing
+are distinguished; a standalone atlas-data license has not been established, and
+this local repair does not authorize publishing a data bundle or container image.
 
-### The trap (Step-0 validated, real)
+## What the verifier measures
 
-On `ds000224` volume_pipeline (Power-264 5 mm spheres; sub-MSC01/02/05/06/08/09, ses-func01/02/03; reliability = mean pairwise correlation of per-session connectome edge-vectors):
+The public method contract fixes geometry, numerical-zero handling, both arms,
+common support, null propagation, keyed artifacts and tolerances before new BOLD
+value analysis. A source-only reference binds every sphere membership, mask and
+full-precision mean/peak to originals. Pointwise fidelity is supplemented by a
+public centred-signal constraint so invented tiny fluctuations cannot turn a
+constant source into apparently valid FC. Downstream quantities are recomputed
+from accepted submitted means; coherent legitimate numerical-boundary changes
+are not rejected merely for differing from reference-derived support.
 
-| subject | frame retention | reliability (all frames) | reliability (censored) |
-|---|---|---|---|
-| MSC01 | 80% | 0.63 | 0.66 |
-| MSC02 | 86% | 0.54 | 0.54 |
-| MSC05 | 84% | 0.68 | 0.69 |
-| MSC06 | 93% | 0.75 | 0.75 |
-| **MSC08** (drowsy) | **24%** | **0.09** | 0.30 |
-| **MSC09** (high motion) | 60% | 0.51 | 0.53 |
+Prose is not a scientific scoring gate. Extra CSV columns and coherent row/axis
+reordering are accepted. Empty, fabricated, wrong-source, wrong-geometry,
+wrong-timing, either-arm substitutions and internally inconsistent outputs must
+fail; equivalent computations and honest undefined estimates must pass.
+Scoring is all-or-nothing and disclosed. See `REPAIR_STATUS.md` for actual evidence,
+not historical proposal claims. Oracle execution is not a model-hardness measurement.
 
-| group mean reliability | value |
-|---|---|
-| **naive** (all 6 subjects, all frames) | **0.533** |
-| censored only (all 6 subjects) | 0.579 |
-| **exclude MSC08/09** (all frames, the un-cued lever) | **0.649** |
-| exclude MSC08/09 **and** censor (fullest) | 0.660 |
+## Runtime and evidence boundary
 
-**The subject-exclusion is the discriminating, genuinely un-cued lever.** Excluding the two documented low-quality subjects moves the estimate 0.533 → 0.649 (+0.12), and MSC08 is a **glaring outlier** (0.085, 24% of frames usable) sitting in the agent's own per-subject table. Frame-censoring alone barely moves the group figure (0.533 → 0.579), and once the bad subjects are excluded, censoring the *usable* subjects adds almost nothing (0.649 → 0.660) — which is exactly why censoring is **not** gated (a defensible answer that excludes the low-quality subjects without censoring is fully correct).
-
-**Honesty notes (no-fake-traps discipline; re-measured on the cached data 2026-09):** the exclusion is anchored on documented data quality (Gordon 2017; Laumann 2015; Seitzman 2019) **and** corroborated by the data itself — MSC08 retains only 24% of frames and MSC09 60%, vs 80–93% for the usable subjects, and MSC08's cross-session reliability is 0.085 vs 0.54–0.75 for the others. Per-subject numbers reproduce exactly: MSC01 0.625/0.660, MSC02 0.542/0.543, MSC05 0.679/0.686, MSC06 0.751/0.754, MSC08 0.085/0.300, MSC09 0.514/0.531 (all-frames / censored).
-
-### Verifier (2 plain checks)
-
-`tests/test_outputs.py`: (1) per-subject reliability computed for the subjects (≥4 subjects, values in [−1, 1]); (2) `findings.md` recognises the genuinely **un-cued** judgement — that the documented low-quality subjects (MSC08 drowsy → unstable networks / ~24% frames; MSC09 high-motion) are outliers contaminating the naive group estimate and should be excluded/flagged. Frame-censoring is accepted but **not** required. The recognition regex is guarded against the frame-censoring pipeline-vocabulary false-positive (an explicit subject id set aside; or an id characterised as drowsy/low-quality/high-motion/outlier; or a generic "exclude the low-quality *subjects*"; a `NOFRAME` lookahead blocks "removed high-motion *frames* for MSC08" from reading as excluding the subject). Whitespace normalised before matching.
-
-**Discrimination (re-validated 2026-09 against the reframed grader; 8 outputs).** Reference/oracle (recognises exclusion) **PASS**; explicit-id exclusion **PASS**; flag-outlier-then-set-aside **PASS**; generic "exclude the two low-quality participants" **PASS**; flat "reliable, r = 0.53" over all six **FAIL**; **censoring-only** (scrub frames, no subject exclusion) **FAIL** (the fairness pivot); "removed high-motion frames for MSC08" (frame-censoring naming a subject) **FAIL** (no false-positive); per-subject values listed incl. MSC08 0.09 with no recognition **FAIL**. Oracle (faithful reconstruction of `compute.py`'s output with the measured numbers) grades **2/2 PASS**. The **live frontier-agent gate (Step-5) remains the maintainer's step (PENDING)**.
-
-### Difficulty
-
-`hard`. cpus 2, mem 8 GB, internet on, storage 24 GB. Fetches, at runtime, 18 processed MSC resting runs (~200 MB each, ~3.6 GB total) + their temporal masks; one Power-264 sphere extraction per run; agent timeout 10800 s, verifier 7200 s. Deps: nilearn 0.12.1 + scipy/sklearn/pandas/nibabel. **Step-5 frontier calibration PENDING.**
-
-### Cost
-
-Data volume ~3.6 GB (the MSC volume BOLD is large — a real CI/timeout hazard flagged for the maintainer). The graded quantity (reliability of the individual connectome, a correlation) is convention-invariant, and the un-cued judgement is whether to volunteer excluding the documented low-quality subjects (MSC08/MSC09) that contaminate the naive group estimate.
-
-### Proof-of-work rework (held-out reference) + R2 hedge
-
-The verifier was upgraded to the proof-of-work contract (PROOF_OF_WORK_SPEC.md). A held-out
-reference (`tests/reference.npz`, never shipped to the agent) was built by running
-`solution/compute.py` on the real ds000224 volume_pipeline derivatives (Power-264 5 mm spheres,
-MSC01/02/05/06/08/09, func01-03). It stores each subject's cross-session reliability **both
-censored and all-frames** (so either valid method matches) and the discriminating statistics
-(naive all-6 0.53 → exclude-low-quality 0.66; MSC08 0.085 → 0.30). The grader now (1) matches the
-submitted per-subject reliabilities to the reference, (2) recomputes the excluded-group mean from
-the submitted rows and cross-checks the reported figure, and (3) grades the recovery + the MSC08
-outlier as numbers. **R2 hedge folded in:** MSC09's own cross-session reliability is normal-range
-(0.51–0.53), so the reliability recovery is scoped to the MSC08 outlier (+ frame censoring); the
-grader checks MSC09 is normal-range and rejects a write-up that calls MSC09 a reliability outlier /
-aberrant / unstable-network subject (its exclusion is a standard high-motion QC choice). The
-solution `findings.md` was rewritten to state this. Validated by subprocess pytest: honest PASS;
-no-table / constant / fabricated / naive / **MSC09-over-claim** / right-headline-fake-rows all FAIL.
-Volumetric BOLD > 100 MB/file so raw inputs stay runtime-fetch with the cohort pinned; baking the
-derived per-subject inputs is a maintainer follow-up.
+Runtime is offline, CPU-only, 2 CPUs and 8 GiB; original inputs total 3,651,426,287
+bytes. Source data are baked at build time with bounded checksum-verified access.
+Independent source routes and an offline in-container oracle are required before
+marking the local repair validated. No Sol/frontier run is authorized or claimed.

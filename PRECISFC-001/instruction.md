@@ -1,64 +1,91 @@
-# Test-retest reliability of the individual functional connectome (PRECISFC-001)
+# Within-person connectome similarity under frame censoring
 
-## Scientific context
+Estimate how frame selection changes cross-session connectome similarity in six
+Midnight Scan Club participants. This is a descriptive computational method control,
+not a reproduction of a named result in Gordon et al. (2017), *Precision Functional
+Mapping of Individual Human Brains* (doi:10.1016/j.neuron.2017.07.011). Within-person
+similarity alone does not establish individual identification.
 
-A central result of "precision" resting-state fMRI is that the whole-brain functional
-connectome is **individual-specific and highly reproducible across sessions**: given
-repeated scans of the same person, the region×region connectivity matrix is stable enough to
-act as an individual fingerprint (Gordon et al. 2017, *Neuron*, "Precision Functional Mapping
-of Individual Human Brains"; Laumann et al. 2015). The **Midnight Scan Club** (MSC) dataset
-(OpenNeuro `ds000224`) was built for exactly this: ten subjects, each scanned across ten
-separate resting-state sessions, with a released **volume-pipeline** that provides, per
-session, a processed resting-state BOLD run in a common (Talairach) space.
+## Inputs and public analysis contract
 
-## Task
+The complete offline bundle is `/app/data/precisfc`. Its `source_manifest.json`
+authenticates 36 original released files: processed volumetric BOLD and temporal
+masks for MSC01, MSC02, MSC05, MSC06, MSC08 and MSC09, each at func01–func03.
+These are OpenNeuro ds000224 release 1.0.4 derivatives, not unprocessed acquisitions.
+The bundle also contains the published Power264 integer coordinates, original
+4dfp point transform, acquisition metadata and qualified coordinate/timing lineage.
+Do not fetch another dataset, modify originals or silently repair an input mismatch.
 
-Using the MSC volume-pipeline resting-state derivatives of `ds000224`, **quantify the
-test-retest reliability of the individual functional connectome across sessions** for the
-following subjects and sessions:
+Read `/app/method_contract.json`. It is the authoritative public definition of
+geometry, frame selection, stable numerical rules, output schemas and acceptance
+tolerances. Its SHA256 is
+`497b436132ee5723c3f7209489d77477fe2412ade1190f9aa95d0baf7bf9cda6`;
+the source-manifest SHA256 is
+`4f7fc73e548cfdf744fabbc382cebdd1edff968fe6edd7c1ca846958a1fbb967`.
+Equivalent implementations are welcome; no hidden estimator or desired outcome
+is required. Authenticate all source files before analysis.
 
-- subjects: `sub-MSC01`, `sub-MSC02`, `sub-MSC05`, `sub-MSC06`, `sub-MSC08`, `sub-MSC09`
-- sessions per subject: `ses-func01`, `ses-func02`, `ses-func03`
+## Analysis
 
-For each subject and session, extract mean BOLD time series from the **Power et al. (2011)
-264-ROI coordinate atlas** (`nilearn.datasets.fetch_coords_power_2011`, 5 mm spheres) and
-form the ROI×ROI correlation matrix (Fisher-z). Define each subject's **cross-session
-reliability** as the mean pairwise similarity (correlation) between that subject's per-session
-connectome edge-vectors, and summarise a **group-level reliability** across subjects.
+1. Map the published integer MNI coordinates into the released 711 physical
+   coordinate system using the public stored transform. Extract equal-weight
+   means from original in-FOV voxel centres within 5 mm, using the original sform.
+   Do not guess an identity mapping, add an axis flip, resample, add a brain mask,
+   or rescue an empty sphere with its nearest voxel. Record exact membership and
+   source peak-absolute values, not just correlations.
+2. Compute both `all_frames` and `censored` arms for every run. The second keeps
+   exactly source-mask entries equal to one. Both arms use the released already
+   processed data; neither is a raw-data or causal motion-removal baseline.
+3. Follow the public stable constant/numerical-zero rules. Use one common ROI
+   intersection across both arms of all 18 runs, and its common edge set for every
+   comparison. Form Pearson connectivity and Fisher-z values with the stated
+   clipping rule. No extra detrending, filtering or nuisance regression is needed.
+4. For each person and arm, correlate the common-edge Fisher-z vectors for each
+   of the three session pairs, then average all three correlations. Give equal
+   weight to each person in the primary all-six mean. Session pairs overlap;
+   people, not edges or pairs, are the independent units.
+5. Separately report conditional duration-QC means on the same edge support.
+   The original headers say 1.0 second, whereas acquisition metadata and documented
+   frame-preserving processing support 2.2 seconds. Explicitly use the public
+   **acquisition-frame indexing assumption**, preserving both reported values and
+   leaving the headers untouched. Retained duration is `n_retained * 11/5`
+   seconds. Include a person in conditional QC only if `11*n_retained >= 3000`
+   in each of their three sessions. Do not exclude a person by ID or outcome.
+6. Preserve undefined estimates and diagnostics. Fewer than two common edges,
+   constant vectors, incomplete pairs or an empty QC population are not zeros.
+   They can be valid outcomes of a successfully completed analysis.
 
-Report, in plain terms, **how reliable the individual functional connectome is across
-sessions on these data** — stating only what your analysis actually supports.
+The coordinate bridge is supported by documented tool code and observed headers;
+the exact historical export binary/IFH and individual registration accuracy are
+not established. The timing override is a disclosed assumption, not corrected
+header truth. Duration QC describes retained frames, not continuous clean time
+or independent information. Discuss these limits without asserting a required
+direction, size, subject ranking, exclusion narrative or causal explanation.
 
-## Data access
+## Deliverables and grading
 
-The MSC volume-pipeline derivatives are public (no credentials) on S3. Per session, the
-directory `.../talaraich/` contains two files:
+Write these nine artifacts to `${OUTPUT_DIR}` (default `/app/output`), using the
+complete public schema in `/app/method_contract.json`:
 
-```
-https://s3.amazonaws.com/openneuro.org/ds000224/derivatives/volume_pipeline/sub-<ID>/processed_restingstate_timecourses/ses-<SES>/talaraich/sub-<ID>_ses-<SES>_task-rest_bold_talaraich.nii.gz
-.../sub-<ID>_ses-<SES>_task-rest_bold_talaraich_tmask.txt
-```
+- `session_qc.csv`: all 18 run identities, frame counts, both timing values and QC.
+- `roi_geometry.csv`: 264 coordinate mappings, voxel counts and boundary diagnostics.
+- `roi_status.csv`: each run/arm/ROI's support, norms, status and common membership.
+- `connectivity_arrays.npz`: keyed full-precision ROI means, source peaks, original
+  frame/mask and voxel identities, and both arms' connectivity arrays.
+- `session_pairs.csv`: all 36 keyed pair measurements with numerical diagnostics.
+- `reliability.csv`: both arms and duration-QC status for every person.
+- `reliability_stats.json`: primary and conditional means, counts and null reasons.
+- `run_metadata.json`: exact method/source identity and truthful input/software observations.
+- `findings.md`: a short nonempty interpretation; prose keywords are not graded.
 
-The `*_talaraich.nii.gz` is the processed resting-state BOLD run; a `*_tmask.txt` file
-accompanies each run in the same directory.
+CSV rows and explicit NPZ axes may be coherently reordered. Full-precision means
+must satisfy the public pointwise **and centred-signal fidelity** conditions;
+pointwise-close invented temporal variation is not acceptable. The verifier then
+recomputes support, connectivity and summaries from your accepted means, rather
+than enforcing hidden reference labels at numerical boundaries. Keep genuine
+undefined values coherent throughout. Grading is binary: complete source-bound,
+internally consistent outputs receive 1; there is no proportional-scoring promise.
 
-## Output Location
-
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
-
-## Required Outputs
-
-- `reliability.csv` — one row per subject: `subject_id, n_sessions, reliability` (you may add
-  any further columns you find useful).
-- `reliability_stats.json` — the per-subject reliability values and a group-level reliability
-  summary, plus the number of subjects.
-- `run_metadata.json` — dataset id, subjects, sessions, atlas, the reliability metric, and the
-  preprocessing choices you made.
-- `findings.md` — a short written summary stating how reliable the individual functional
-  connectome is across sessions on these data. State only what your analysis supports.
-
-## Failure handling
-
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a non-empty
-reason, and still write parseable `run_metadata.json`, `reliability_stats.json`, and
-`findings.md`.
+Use fresh output destinations. A failed source or numerical precondition must
+stop analysis with an explicit reason; it is not a passing complete submission.
+Do not overwrite an existing result, private evidence, source file or symlink target.
