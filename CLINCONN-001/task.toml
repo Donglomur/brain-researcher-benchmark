@@ -1,18 +1,19 @@
-version = "1.1"
-instruction_version = "1.0"
-test_version = "1.0"
+version = "1.2"
+instruction_version = "2.0"
+test_version = "2.0"
+artifacts = ["/app/output", "/app/oracle_private", "/app/data/clinconn/source_manifest.json"]
 
 [metadata]
 task_id = "CLINCONN-001"
-title = "Reproduce the schizophrenia-vs-control resting-connectivity difference (ds000030)"
-category = "Reproduction"
-difficulty = "hard"
+title = "CNP diagnosis-association sensitivity to motion adjustment and restriction"
+category = "Method control"
+difficulty = "easy"
 dataset_source = "OpenNeuro (fMRIPrep derivatives)"
-dataset_id = "ds000030"
-source_paper = "Poldrack et al. 2016, Scientific Data (10.1038/sdata.2016.110)"
+dataset_id = "ds000030_R1.0.5"
+source_paper = "Poldrack 2016 cohort descriptor; Gorgolewski 2017 Figure 1/Table 1 preprocessing; Power 2012 motion-sensitivity rationale, not the same finding"
 
 [verifier]
-timeout_sec = 7200.0
+timeout_sec = 1800.0
 
 [agent]
 timeout_sec = 7200.0
@@ -23,7 +24,7 @@ cpus = 2
 memory_mb = 8192
 storage_mb = 16384
 gpus = 0
-allow_internet = true
+allow_internet = false
 
 [verifier.env]
 

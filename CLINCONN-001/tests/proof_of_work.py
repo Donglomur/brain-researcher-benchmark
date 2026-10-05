@@ -1,346 +1,113 @@
-"""Reusable proof-of-work helpers for CLINCONN-001's grader (see PROOF_OF_WORK_SPEC.md).
-
-A passing submission must be IMPOSSIBLE to produce without running the real resting-state
-connectivity analysis on the real ds000030 fMRIPrep subjects. These helpers validate the
-SUBMITTED per-subject table against a held-out reference built from the oracle run
-(tests/reference.npz), recompute the naive group contrast FROM the submitted rows, and expose
-the discriminating post-control statistic for the numeric judgement.
-
-Only numpy + stdlib (the verifier installs numpy; nothing else).
-"""
-import csv
+"""Private original-source bank. Historical scalar/correlation banks fail closed."""
+import hashlib
 import json
-import math
-import re
-import statistics
-from pathlib import Path
-
 import numpy as np
+import connectivity_contract as q
 
-
-def canon_id(s):
-    """Canonical ds000030 subject id = the digit run, leading zeros stripped.
-    'sub-10159' -> '10159'."""
-    return re.sub(r"\D", "", str(s)).lstrip("0")
-
-
-def _norm(s):
-    return re.sub(r"[^a-z0-9]", "", str(s).lower())
+BUILDER_ID = 'original-cnp-surface-source-v2'
+METHOD_SHA256 = '7378a0ccd4663907e2e8df3db724ba9caa3e21ee80b955ea637863db1769a23c'
+SOURCE_MANIFEST_SHA256 = 'f4ea1c9f5a3a75d722fedd2cece082dd84502f20c5c7d2d11704c5bcc45594e3'
 
 
 def load_reference(path):
-    z = np.load(path, allow_pickle=True)
-    ref = {
-        "ids": [canon_id(x) for x in z["ref_ids"]],
-        "group": [str(x).lower() for x in z["ref_group"]],
-        "mean": np.asarray(z["ref_mean"], float),
-        "short": np.asarray(z["ref_short"], float),
-        "long": np.asarray(z["ref_long"], float),
-        "stats": json.loads(str(z["ref_stats"])),
-    }
-    fd = np.asarray(z["ref_fd"], float) if "ref_fd" in z.files else np.full(len(ref["ids"]), np.nan)
-    ref["fd"] = fd
-    ref["by_id"] = {i: {"group": g, "mean": m, "short": s, "long": l, "fd": f}
-                    for i, g, m, s, l, f in zip(ref["ids"], ref["group"], ref["mean"],
-                                                ref["short"], ref["long"], fd)}
+    with np.load(path, allow_pickle=False) as archive:
+        required = {'ref_'+k for k in q.ARRAY_FIELDS} | {'reference_json'}
+        q.require(required <= set(archive.files), 'Obsolete/incomplete source bank')
+        q.require(archive['reference_json'].shape == () and archive['reference_json'].dtype.kind == 'U',
+                  'Primitive bank metadata required')
+        payload = json.loads(str(archive['reference_json']))
+        ref = {k: np.array(archive['ref_'+k]) for k in q.ARRAY_FIELDS}
+    q.require(isinstance(payload, dict) and {'provenance', 'metadata', 'cohort_rows',
+              'parcel_rows', 'edge_rows', 'connectivity_rows', 'method_contract_json',
+              'source_manifest_json'} <= set(payload), 'Missing bank provenance')
+    provenance = payload['provenance']
+    q.require(provenance.get('builder_id') == BUILDER_ID and provenance.get('status') == 'complete',
+              'Bank is not a complete original-source computation')
+    q.require(provenance.get('method_contract_sha256') == METHOD_SHA256 and
+              provenance.get('source_manifest_sha256') == SOURCE_MANIFEST_SHA256,
+              'Untrusted source/method bank identity')
+    ref.update(payload)
+    validate_reference(ref)
+    ref['derived'] = q.summarize(ref)
     return ref
 
 
-def _canon_group(s):
-    s = _norm(s)
-    if "schz" in s or "schiz" in s or s == "sz" or "patient" in s:
-        return "schz"
-    if "control" in s or s in ("hc", "con", "ctrl", "td"):
-        return "control"
-    return s
-
-
-def load_submitted(path):
-    """Return {canon_id: {group, mean, short, long}} from the submitted connectivity.csv.
-
-    Tolerant column matching: subject id, group, mean_fc, short_range_fc, long_range_fc."""
-    rows = list(csv.DictReader(open(path, encoding="utf-8")))
-    if not rows:
-        return {}
-    headers = list(rows[0].keys())
-    norm_to_raw = {}
-    for h in headers:
-        norm_to_raw.setdefault(_norm(h), h)
-
-    def pick(cands, exclude=()):
-        for c in cands:
-            if c in norm_to_raw:
-                return norm_to_raw[c]
-        for nrm, raw in norm_to_raw.items():
-            if any(c in nrm for c in cands) and not any(e in nrm for e in exclude):
-                return raw
-        return None
-
-    id_c = pick(("subjectid", "subject", "participantid", "participant", "subid", "id"))
-    grp_c = pick(("group", "diagnosis", "dx"))
-    mean_c = pick(("meanfc", "meanconn", "meanconnectivity"), exclude=("short", "long", "fd"))
-    short_c = pick(("shortrangefc", "shortrange", "shortfc", "short"))
-    long_c = pick(("longrangefc", "longrange", "longfc", "long"))
-    fd_c = pick(("meanfd", "meanframewise", "framewisedisplacement", "fdmean", "meanmotion"),
-                exclude=("gt", "diff", "vs")) or pick(("fd",), exclude=("fc", "gt", "diff", "vs"))
-    out = {}
-    if id_c is None or short_c is None:
-        return out
-    for r in rows:
-        cid = canon_id(r.get(id_c, ""))
-        if not cid:
-            continue
-        try:
-            short = float(r.get(short_c))
-        except (TypeError, ValueError):
-            continue
-        if not math.isfinite(short):
-            continue
-
-        def gf(col):
-            if col is None:
-                return None
-            try:
-                v = float(r.get(col))
-                return v if math.isfinite(v) else None
-            except (TypeError, ValueError):
-                return None
-        out[cid] = {
-            "group": _canon_group(r.get(grp_c, "")) if grp_c else "",
-            "mean": gf(mean_c), "short": short, "long": gf(long_c), "fd": gf(fd_c)}
-    return out
-
-
-def pearson(x, y):
-    x = np.asarray(x, float); y = np.asarray(y, float)
-    if len(x) < 3 or np.std(x) == 0 or np.std(y) == 0:
-        return float("nan")
-    return float(np.corrcoef(x, y)[0, 1])
-
-
-def check_subjects_and_values(sub, ref, val_tol, corr_min, cover, match, eps):
-    """Pillar 1. Raise AssertionError unless the submitted table is real per-subject work.
-
-    (a) coverage of the reference subjects by real id; (b) non-constant short_range_fc;
-    (c) cross-subject corr(submitted short, reference short) >= corr_min AND per-subject abs
-    match for >= `match` of matched subjects; (d) the real group label matches for the
-    matched subjects (a hard phenotype fact)."""
-    ref_ids = set(ref["ids"])
-    matched = [i for i in sub if i in ref_ids]
-    coverage = len(matched) / max(1, len(ref_ids))
-    assert coverage >= cover, (
-        f"connectivity.csv covers only {coverage:.1%} of the {len(ref_ids)} real ds000030 "
-        f"subjects by id (need >= {cover:.0%}). Fabricated or missing participant ids.")
-
-    sub_short = [sub[i]["short"] for i in matched]
-    ref_short = [ref["by_id"][i]["short"] for i in matched]
-    assert statistics.pstdev(sub_short) > eps, \
-        "submitted short_range_fc is constant across subjects -- not computed per subject"
-
-    rc = pearson(sub_short, ref_short)
-    assert math.isfinite(rc) and rc >= corr_min, (
-        f"submitted per-subject short-range connectivity does not track the reference "
-        f"(cross-subject r={rc:.3f} < {corr_min}). Values were not computed from the real "
-        f"fMRIPrep rest timeseries.")
-    close = sum(1 for a, b in zip(sub_short, ref_short) if abs(a - b) <= val_tol)
-    frac = close / max(1, len(matched))
-    assert frac >= match, (
-        f"only {frac:.1%} of matched subjects have short_range_fc within {val_tol} of the "
-        f"reference (need >= {match:.0%}); the per-subject values are not the real ones.")
-
-    # mean_fc, if present, must also track the reference (second independent per-subject column)
-    if all(sub[i]["mean"] is not None for i in matched) and matched:
-        sub_mean = [sub[i]["mean"] for i in matched]
-        ref_mean = [ref["by_id"][i]["mean"] for i in matched]
-        rm = pearson(sub_mean, ref_mean)
-        assert math.isfinite(rm) and rm >= corr_min, (
-            f"submitted per-subject mean_fc does not track the reference "
-            f"(cross-subject r={rm:.3f} < {corr_min}).")
-
-    # group label must match the real phenotype for the matched subjects
-    have_grp = [i for i in matched if sub[i]["group"] in ("schz", "control")]
-    if have_grp:
-        gmatch = sum(1 for i in have_grp if sub[i]["group"] == ref["by_id"][i]["group"])
-        gfrac = gmatch / len(have_grp)
-        assert gfrac >= cover, (
-            f"only {gfrac:.1%} of subjects carry the real diagnosis label (need >= {cover:.0%}); "
-            f"the group column is not the real ds000030 phenotype.")
-    return matched
-
-
-def welch_t(a, b):
-    """Welch two-sample t (a vs b), NaN if degenerate. Matches scipy.ttest_ind(equal_var=False)."""
-    a = np.asarray(a, float); b = np.asarray(b, float)
-    na, nb = len(a), len(b)
-    if na < 2 or nb < 2:
-        return float("nan")
-    va, vb = a.var(ddof=1), b.var(ddof=1)
-    denom = math.sqrt(va / na + vb / nb)
-    if denom == 0:
-        return float("nan")
-    return float((a.mean() - b.mean()) / denom)
-
-
-def recompute_naive_short_t(sub, matched, ref):
-    """Pillar 2. Recompute the naive short-range Welch t (SCHZ vs CONTROL) FROM the submitted
-    rows using the submitted group labels."""
-    schz = [sub[i]["short"] for i in matched if sub[i]["group"] == "schz"]
-    ctrl = [sub[i]["short"] for i in matched if sub[i]["group"] == "control"]
-    return welch_t(schz, ctrl), len(schz), len(ctrl)
-
-
-def check_fd_column(sub, ref, val_tol, corr_min, cover, match):
-    """Validate the submitted per-subject mean_fd column against the held-out reference FD (real
-    framewise displacement). A fabricated or constant FD cannot reproduce the FD-covariate collapse
-    recomputed in pillar 3."""
-    ref_ids = set(ref["ids"])
-    matched = [i for i in sub if i in ref_ids and sub[i].get("fd") is not None
-               and math.isfinite(sub[i]["fd"]) and not math.isnan(ref["by_id"][i]["fd"])]
-    coverage = len(matched) / max(1, len(ref_ids))
-    assert coverage >= cover, (
-        f"connectivity.csv provides a usable per-subject mean_fd for only {coverage:.1%} of the "
-        f"{len(ref_ids)} real ds000030 subjects (need >= {cover:.0%}). mean framewise displacement "
-        f"is a standard motion QC summary and is required per subject.")
-    sub_fd = [sub[i]["fd"] for i in matched]
-    ref_fd = [ref["by_id"][i]["fd"] for i in matched]
-    assert statistics.pstdev(sub_fd) > 1e-6, "submitted mean_fd is constant across subjects -- fabricated"
-    rc = pearson(sub_fd, ref_fd)
-    assert math.isfinite(rc) and rc >= corr_min, (
-        f"submitted per-subject mean_fd does not track the reference (cross-subject r={rc:.3f} < "
-        f"{corr_min}); the framewise-displacement values were not read from the real confounds.")
-    close = sum(1 for a, b in zip(sub_fd, ref_fd) if abs(a - b) <= val_tol)
-    frac = close / max(1, len(matched))
-    assert frac >= match, (
-        f"only {frac:.1%} of matched subjects have mean_fd within {val_tol} of the reference "
-        f"(need >= {match:.0%}); the per-subject FD values are not the real ones.")
-    return matched
-
-
-def fd_covariate_short_t(sub, matched):
-    """Recompute the FD-covariate group t (SCHZ vs CONTROL on short-range FC, controlling mean_fd)
-    FROM the submitted rows. Mirrors solution/compute.py's fd_partial: OLS of short on
-    [1, schz_indicator, mean_fd]; t of the schz coefficient. numpy-only. Returns NaN if the FD
-    column is missing/degenerate or a group is empty."""
-    rows = [i for i in matched if sub[i].get("fd") is not None and math.isfinite(sub[i]["fd"])
-            and sub[i]["group"] in ("schz", "control")]
-    if len(rows) < 20:
-        return float("nan")
-    y = np.array([sub[i]["short"] for i in rows], float)
-    schz = np.array([1.0 if sub[i]["group"] == "schz" else 0.0 for i in rows], float)
-    fd = np.array([sub[i]["fd"] for i in rows], float)
-    if schz.sum() < 2 or (len(rows) - schz.sum()) < 2 or np.std(fd) == 0:
-        return float("nan")
-    X = np.c_[np.ones(len(rows)), schz, fd]
-    n = len(rows)
-    try:
-        b, *_ = np.linalg.lstsq(X, y, rcond=None)
-        res = y - X @ b
-        dof = n - 3
-        se = np.sqrt((res @ res) / dof * np.linalg.inv(X.T @ X)[1, 1])
-    except np.linalg.LinAlgError:
-        return float("nan")
-    if not math.isfinite(se) or se == 0:
-        return float("nan")
-    return float(b[1] / se)
-
-
-def find_number(obj, key_patterns, exclude=None):
-    """Depth-first search for the first finite float under a key whose normalised name matches
-    any regex in `key_patterns` and matches none in `exclude`."""
-    exc = [re.compile(e) for e in (exclude or [])]
-    pats = [re.compile(p) for p in key_patterns]
-    stack = [obj]
-    while stack:
-        cur = stack.pop(0)
-        if isinstance(cur, dict):
-            for k, v in cur.items():
-                nk = _norm(k)
-                if isinstance(v, (int, float)) and not isinstance(v, bool):
-                    if any(p.search(nk) for p in pats) and not any(e.search(nk) for e in exc):
-                        fv = float(v)
-                        if math.isfinite(fv):
-                            return fv
-            stack.extend(cur.values())
-        elif isinstance(cur, list):
-            stack.extend(cur)
-    return None
-
-
-def find_path_number(obj, path_include=(), leaf_re=None, path_exclude=(), prefer=None,
-                     path_require_any=None):
-    """Return a finite float leaf value chosen by path + leaf-key matching. Robust to nesting.
-
-    - `path_include`: every token must appear in the joined normalised ancestor path.
-    - `leaf_re`: if given, the LEAF key (normalised) must match this regex (identifies the
-      quantity, e.g. the t-statistic vs its p-value).
-    - `path_exclude`: none of these tokens may appear in the joined path (branch exclusion).
-    - `path_require_any`: if given, at least one of these tokens must appear in the joined path
-      (a HARD requirement, unlike `prefer`). Use it to demand an EXPLICIT label -- e.g. a
-      motion / FD-controlled marker -- so that an unlabelled (naive) leaf is NOT returned. When no
-      leaf carries such a label the function returns None, and the caller skips its cross-check.
-    - `prefer`: among matches, prefer one whose path contains a prefer token; else shallowest.
-    """
-    lre = re.compile(leaf_re) if leaf_re else None
-    hits = []
-
-    def walk(cur, path):
-        if isinstance(cur, dict):
-            for k, v in cur.items():
-                walk(v, path + [_norm(k)])
-        elif isinstance(cur, list):
-            for v in cur:
-                walk(v, path)
-        elif isinstance(cur, (int, float)) and not isinstance(cur, bool):
-            fv = float(cur)
-            if not math.isfinite(fv):
-                return
-            leaf = path[-1] if path else ""
-            p = ".".join(path)
-            if not all(t in p for t in path_include):
-                return
-            if any(e in p for e in path_exclude):
-                return
-            if path_require_any and not any(t in p for t in path_require_any):
-                return
-            if lre is None or lre.search(leaf):
-                hits.append((len(path), p, fv))
-
-    walk(obj, [])
-    if not hits:
-        return None
-    if prefer:
-        pref = [h for h in hits if any(pt in h[1] for pt in prefer)]
-        if pref:
-            hits = pref
-    hits.sort(key=lambda h: h[0])
-    return hits[0][2]
-
-
-def find_scoped(obj, scope_patterns, key_patterns, exclude=None):
-    """Find a number under a sub-object whose key matches a scope pattern (e.g. the
-    'short_range_fc' block) then the value key (e.g. 't'). Falls back to a global scoped search
-    where the key name itself carries both meanings."""
-    exc = [re.compile(e) for e in (exclude or [])]
-    scopes = [re.compile(p) for p in scope_patterns]
-    keys = [re.compile(p) for p in key_patterns]
-
-    def walk(cur, in_scope):
-        if isinstance(cur, dict):
-            for k, v in cur.items():
-                nk = _norm(k)
-                now = in_scope or any(s.search(nk) for s in scopes)
-                if isinstance(v, (int, float)) and not isinstance(v, bool):
-                    if now and any(kp.search(nk) for kp in keys) and not any(e.search(nk) for e in exc):
-                        fv = float(v)
-                        if math.isfinite(fv):
-                            return fv
-                r = walk(v, now)
-                if r is not None:
-                    return r
-        elif isinstance(cur, list):
-            for v in cur:
-                r = walk(v, in_scope)
-                if r is not None:
-                    return r
-        return None
-    return walk(obj, False)
+def validate_reference(ref):
+    """Check complete identity/algebra; does not pretend this re-reads raw data."""
+    meta = ref['metadata']; method = meta['method_contract']
+    q.require(hashlib.sha256(ref['method_contract_json'].encode()).hexdigest() == METHOD_SHA256 and
+              hashlib.sha256(ref['source_manifest_json'].encode()).hexdigest() == SOURCE_MANIFEST_SHA256,
+              'Bank original contract bytes are untrusted')
+    q.match(method, json.loads(ref['method_contract_json']), 'bank public method', 'exact', closed=True)
+    original_manifest = json.loads(ref['source_manifest_json'])
+    q.match(meta['source_sha256'], {r['path']: r['sha256'] for r in original_manifest['files']},
+            'bank source map', 'exact', closed=True)
+    q.require(meta['status'] == 'complete' and meta['task_id'] == 'CLINCONN-001', 'Incomplete bank metadata')
+    q.require(meta['method_contract_sha256'] == METHOD_SHA256 and
+              meta['source_manifest_sha256'] == SOURCE_MANIFEST_SHA256, 'Mismatched bank fingerprints')
+    q.require(isinstance(meta['source_sha256'], dict) and meta['source_sha256'] and
+              all(isinstance(k, str) and isinstance(v, str) and len(v) == 64 and
+                  set(v) <= set('0123456789abcdef') for k, v in meta['source_sha256'].items()),
+              'Invalid bank source hashes')
+    subjects = ref['subject_id']; parcels = ref['parcel_id']; edges = ref['edge_id']
+    for axis in (subjects, parcels):
+        q.require(axis.dtype.kind == 'U' and axis.ndim == 1 and len(set(axis.tolist())) == len(axis),
+                  'Invalid source string axis')
+    q.require(subjects.tolist() == sorted(subjects.tolist()), 'Noncanonical bank participant order')
+    cohort = q.keyed(ref['cohort_rows'], ['subject_id'])
+    q.require(len(cohort) == method['cohort']['n_candidates'] and len(subjects) == method['cohort']['n_selected'],
+              'Incomplete original cohort bank')
+    selected = sorted(r['subject_id'] for r in cohort.values() if r['selected'])
+    q.require(selected == subjects.tolist(), 'Cohort/array membership mismatch')
+    unavailable = sorted(r['subject_id'] for r in cohort.values() if not r['selected'])
+    q.require(unavailable == sorted(method['cohort']['unavailable_released_derivatives']), 'Unapproved source exclusion')
+    prows = q.keyed(ref['parcel_rows'], ['parcel_id'])
+    included = [r for r in prows.values() if r['included']]
+    included.sort(key=lambda r: (r['hemisphere'], r['annotation_index']))
+    q.require([r['parcel_id'] for r in included] == parcels.tolist(), 'Wrong canonical atlas axis')
+    n, p = len(subjects), len(parcels)
+    ii, jj = np.triu_indices(p, 1); e = len(ii)
+    q.require(edges.dtype.kind in 'iu' and np.array_equal(edges, np.arange(e)), 'Wrong full candidate edge axis')
+    erows = sorted(ref['edge_rows'], key=lambda r: r['edge_id'])
+    q.require(len(erows) == e, 'Incomplete candidate edge catalogue')
+    centers = np.array([[r['centroid_'+v] for v in 'xyz'] for r in included], float)
+    for index, row in enumerate(erows):
+        q.require(row['edge_id'] == index and row['parcel_i'] == parcels[ii[index]] and
+                  row['parcel_j'] == parcels[jj[index]], 'Wrong edge endpoints')
+        q.close(row['distance'], float(np.linalg.norm(centers[ii[index]]-centers[jj[index]])),
+                'geometry', 'bank geometry')
+    for name in q.ARRAY_FIELDS[3:]:
+        expected = (n, p) if name.startswith('parcel_') else (n, e)
+        q.require(ref[name].shape == expected, 'Wrong bank source matrix shape')
+    status = ref['parcel_status']
+    q.require(status.dtype.kind == 'U' and np.isin(status, ['ok', 'constant_input', 'numerical_zero_residual']).all(),
+              'Unknown bank parcel status')
+    for name in ('parcel_original_centered_l2', 'parcel_residual_l2', 'parcel_zero_bound'):
+        x = ref[name]
+        q.require(x.dtype.kind == 'f' and np.isfinite(x).all() and (x >= 0).all(), 'Invalid bank norm')
+    crows = q.keyed(ref['connectivity_rows'], ['subject_id'])
+    q.require(set(crows) == {(s,) for s in subjects}, 'Incomplete source subject audit')
+    for index, sid in enumerate(subjects):
+        row = crows[(sid,)]
+        q.require(row['group'] == cohort[(sid,)]['group'], 'Wrong source diagnosis')
+        q.require(row['n_frames'] > 33 and row['n_fd_defined'] == row['n_frames']-(not row['first_fd_defined']),
+                  'Wrong FD support denominator')
+        q.require(row['n_confound_columns'] == 13 and 0 <= row['nuisance_rank'] <= 13, 'Wrong nuisance support')
+        q.close(row['nuisance_rank_threshold'], 100*q.EPS, 'floor', 'nuisance rank threshold')
+        q.close(row['mean_fd'], row['fd_sum']/row['n_fd_defined'], 'source', 'FD arithmetic')
+        q.require(row['mean_fd'] >= 0 and row['qc_fd_lt_0_2'] == (row['mean_fd'] < .2), 'Wrong source QC category')
+        bound = 10*max(row['n_frames'], 13)*q.EPS*np.maximum(ref['parcel_original_centered_l2'][index], q.TINY)
+        q.array_close(ref['parcel_zero_bound'][index], bound, 'floor', 'source normalization bound')
+    expected_valid = (status[:, ii] == 'ok') & (status[:, jj] == 'ok')
+    q.require(ref['edge_valid'].dtype.kind == 'b' and np.array_equal(ref['edge_valid'], expected_valid),
+              'Bank validity does not follow source parcels')
+    valid = ref['edge_valid']
+    for name in ('raw_r', 'fisher_z'):
+        q.require(ref[name].dtype.kind == 'f' and np.array_equal(np.isnan(ref[name]), ~valid)
+                  and np.isfinite(ref[name][valid]).all() and not np.isinf(ref[name]).any(),
+                  'Wrong bank undefined pattern')
+    q.require(np.all(np.abs(ref['raw_r'][valid]) <= 1+1e-12), 'Invalid bank Pearson coefficient')
+    q.require(ref['fisher_clipped'].dtype.kind == 'b' and
+              np.array_equal(ref['fisher_clipped'], valid & (np.abs(ref['raw_r']) > .999)), 'Wrong bank Fisher clipping flags')
+    transformed = np.arctanh(np.clip(ref['raw_r'][valid], -.999, .999))
+    q.require(np.allclose(ref['fisher_z'][valid], transformed, atol=1e-12, rtol=1e-12), 'Bank Fisher transform is inconsistent')

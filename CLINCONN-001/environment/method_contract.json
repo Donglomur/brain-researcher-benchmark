@@ -1,0 +1,655 @@
+{
+  "schema_version": 1,
+  "task_id": "CLINCONN-001",
+  "analysis_class": "secondary_observational_method_sensitivity_control",
+  "source": {
+    "dataset": "ds000030",
+    "version": "ds000030_R1.0.5",
+    "layer": "released_fmriprep_fsaverage5_task_rest_derivatives",
+    "dataset_license": "PDDL",
+    "atlas_mesh_specific_license": "not established",
+    "availability": "frozen before signal values; no download-failure cohort fallback",
+    "preprocessing_reference": "Gorgolewski et al. 2017, https://f1000research.com/articles/6-1262/v2",
+    "dataset_reference": "Poldrack et al. 2016, doi:10.1038/sdata.2016.110",
+    "motion_rationale": "Power et al. 2012, doi:10.1016/j.neuroimage.2011.10.018",
+    "source_identity_sha256": "931a3e8792a0e8e8d503dd9d16b2e407fccbc609004b2b8fd77af6548e188854",
+    "source_manifest_sha256": "f4ea1c9f5a3a75d722fedd2cece082dd84502f20c5c7d2d11704c5bcc45594e3"
+  },
+  "cohort": {
+    "candidate_predicate": {
+      "rest": "1",
+      "diagnosis": [
+        "SCHZ",
+        "CONTROL"
+      ]
+    },
+    "n_original_participants": 272,
+    "n_candidates": 177,
+    "unavailable_released_derivatives": [
+      "sub-10299",
+      "sub-10428",
+      "sub-10501",
+      "sub-10971",
+      "sub-11121"
+    ],
+    "n_selected": 172,
+    "selected_group_counts": {
+      "SCHZ": 50,
+      "CONTROL": 122
+    },
+    "order": "lexicographic exact participant_id",
+    "independent_unit": "subject",
+    "no_further_subject_exclusions": true
+  },
+  "geometry": {
+    "template": "fsaverage5",
+    "annotation_reader": "FreeSurfer annotation table indices, orig_ids=False; original names and packed color-table identity preserved in source bytes",
+    "hemisphere_order": [
+      "L",
+      "R"
+    ],
+    "exclude_names": {
+      "Unknown": "unknown_label",
+      "Medial_wall": "medial_wall"
+    },
+    "unassigned_index": -1,
+    "unassigned_reason": "unassigned",
+    "empty_label_reason": "empty_label",
+    "cortical_parcel_order": "included annotation-table indices in ascending order within L then R",
+    "catalogue": "all original annotation-table rows plus -1 if actually observed",
+    "centroid": "float64 equal-weight mean of stored pial vertex coordinates, no affine/resampling/area weighting",
+    "distance": "Euclidean straight-line distance between centroids; includes interhemispheric edges; not cortical geodesic or tract length",
+    "coordinate_units": "mm",
+    "coordinate_frame": "native FreeSurfer SurfaceRAS (tkRAS) by documented pial-export convention; literal GIFTI dataspace=UNKNOWN, xformspace=3, identity matrix retained; not a claim of MNI coordinates",
+    "vertex_correspondence": "documented canonical fsaverage5 provenance; not independently re-derived from raw anatomy; equal dimensions alone are insufficient",
+    "exclusion_precedence": [
+      "unassigned",
+      "unknown_label",
+      "medial_wall",
+      "empty_label",
+      "included"
+    ],
+    "pointset_transform": "none; use stored coordinates",
+    "included_parcels_per_hemisphere": 74,
+    "expected_annotation_rows_per_hemisphere": 76,
+    "expected_name_indices": {
+      "Unknown": 0,
+      "Medial_wall": 42
+    },
+    "vertex_correspondence_limit": "Canonical fsaverage5 index correspondence is supported by released preprocessing/atlas provenance and structural checks, not an independent byte comparison to the original installed FreeSurfer6 mesh or a new registration."
+  },
+  "temporal": {
+    "tr_s": 2,
+    "frame_selection": "all released frames in original order; no censoring/interpolation/concatenation",
+    "parcellation": "convert source vertices to float64 BEFORE equal-weight mean accumulation",
+    "confounds": [
+      "X",
+      "Y",
+      "Z",
+      "RotX",
+      "RotY",
+      "RotZ",
+      "aCompCor00",
+      "aCompCor01",
+      "aCompCor02",
+      "aCompCor03",
+      "aCompCor04",
+      "aCompCor05",
+      "WhiteMatter"
+    ],
+    "confound_missingness": "all 13 columns finite on every retained frame; no imputation",
+    "detrending": "both signals and confounds: remove column mean and projection onto centered frame index 0..T-1",
+    "filter": {
+      "kind": "Butterworth",
+      "order": 5,
+      "band_hz": [
+        0.009,
+        0.08
+      ],
+      "fs_hz": 0.5,
+      "representation": "scipy.signal.butter(5,[0.009,0.08],btype='bandpass',fs=0.5,output='sos')",
+      "application": "same zero-phase forward/backward SOS filtering on detrended signals and confounds",
+      "padtype": "odd",
+      "padlen": 33,
+      "initial_state": "steady state scaled to the extended endpoint for each forward/backward pass",
+      "minimum_frames_exclusive": 33
+    },
+    "nuisance_standardization": "after filtering, center each nuisance column and divide by population SD; SD<eps uses 1",
+    "nuisance_projection": "pivoted economic QR of standardized filtered nuisance; retain Q columns where abs(diag(R))>100*float64 epsilon; subtract Q@(Q.T@filtered_signal)",
+    "final_standardization": "recenter residual and divide by sample SD ddof=1 only for valid parcels",
+    "nuisance_rank_threshold": 2.220446049250313e-14,
+    "no_additional_global_signal_regression": true,
+    "parcel_validity": {
+      "precedence": [
+        "constant_input",
+        "numerical_zero_residual",
+        "ok"
+      ],
+      "constant_input": "all original parcel-mean time samples exactly equal",
+      "numerical_zero_residual": "centered residual L2 <= zero_bound",
+      "zero_bound": "10*max(T,13)*float64_epsilon*max(original_centered_L2,float64_tiny)",
+      "no_anatomical_inference_from_zero_variance": true
+    },
+    "frame_count": "Use actual subject-specific released frames; do not infer/pad/truncate from raw total scan duration. Source structural gate found171 with152 and sub-10524 with128; no duration-based exclusion."
+  },
+  "fd": {
+    "source_column": "FramewiseDisplacement",
+    "unit": "mm",
+    "first_row": "if source is n/a/empty include no value; if finite nonnegative include its actual value",
+    "later_rows": "must be finite and nonnegative; missing later rows fail precondition",
+    "sum": "sum only defined source FD values in float64",
+    "mean": "fd_sum/n_fd_defined",
+    "no_defined_values": "failed_precondition",
+    "qc_threshold_mm": 0.2,
+    "qc_rule": "strictly less than threshold on unrounded source mean",
+    "qc_interpretation": "restriction, not motion matching; no BOLD frame removal",
+    "source_measurement": "released Power-style sum of absolute successive translations plus radius-50-mm-scaled rotations; no FD recomputation from rounded export"
+  },
+  "connectivity": {
+    "correlation": "empirical Pearson: centered dot product divided by centered L2 norms; no shrinkage",
+    "roundoff_overshoot_tolerance": 1e-12,
+    "roundoff_rule": "abs(r)<=1+1e-12 may be clamped to [-1,1]; larger overshoot fails",
+    "fisher_clip": 0.999,
+    "fisher_transform": "atanh(clip(r,-0.999,0.999))",
+    "fisher_clipped": "valid and abs(raw_r)>0.999 before clipping",
+    "edge_valid": "both cortical endpoint parcel statuses ok in that subject",
+    "common_valid": "edge_valid true in EVERY selected subject",
+    "common_set_usage": "fixed for all subject summaries and every crude/adjusted/QC-restricted model",
+    "edge_order": "upper triangle i<j of canonical included parcel axis",
+    "undefined_array_value": "NaN ONLY for raw_r/fisher_z at false edge_valid; no infinities",
+    "distance_quantiles": {
+      "probabilities": [
+        0.3333333333333333,
+        0.6666666666666666
+      ],
+      "method": "linear: sorted d, h=(E-1)*p, linear interpolation between floor(h) and ceil(h)",
+      "family": "only common-valid edges across all 172 selected subjects",
+      "short": "distance<q1",
+      "long": "distance>q2",
+      "middle": "all other common edges including exact quantile ties",
+      "excluded": "excluded_not_common",
+      "no_common_edges": "q1/q2 null, zero bins; mean/short/long FC null; no edge-family substitution"
+    },
+    "subject_summaries": "unweighted mean Fisher-z over each fixed common-valid family; empty family yields null"
+  },
+  "models": {
+    "diagnosis_coding": {
+      "SCHZ": 1,
+      "CONTROL": 0
+    },
+    "short_range": {
+      "all_crude": {
+        "rows": "all selected",
+        "design": [
+          "intercept",
+          "diagnosis"
+        ]
+      },
+      "all_fd_adjusted": {
+        "rows": "all selected",
+        "design": [
+          "intercept",
+          "diagnosis",
+          "mean_fd"
+        ]
+      },
+      "qc_fd_lt_0_2": {
+        "rows": "strict unrounded mean_fd<0.2",
+        "design": [
+          "intercept",
+          "diagnosis"
+        ]
+      }
+    },
+    "edgewise": [
+      "all_crude",
+      "all_fd_adjusted"
+    ],
+    "solver": "float64 SVD or mathematically equivalent QR/pseudoinverse; beta=Xplus@y; no inverse normal-equations requirement",
+    "rank": "s>max(n,p)*eps*smax",
+    "contrast_estimability": "e_diagnosis projection residual onto retained right-singular row space has L2<=100*max(n,p)*eps; full column rank is not required",
+    "df": "n-rank",
+    "covariance": "SSE/df times Xplus@Xplus.T; classical homoskedastic, not Welch/HC3",
+    "ci95": "estimate +/-1.96*SE; normal-Wald, not finite-sample t interval",
+    "test": "signed t=estimate/SE; two-sided p=2*StudentT.sf(abs(t),df)",
+    "residual_zero_rule": "exact constant y gives diagnosis estimate0 and SSE0; otherwise residual L2<=10*max(n,p)*eps*max(centered_y_L2,float64_tiny) is numerical zero SSE, with raw residuals retained privately",
+    "status_precedence": [
+      "excluded_not_common_or_empty_response_bin",
+      "missing_group",
+      "insufficient_df",
+      "rank_deficient",
+      "zero_se",
+      "ok"
+    ],
+    "status_details": {
+      "missing_group": "either diagnosis group absent",
+      "insufficient_df": "n-rank<=0",
+      "rank_deficient": "diagnosis contrast not estimable, not merely redundant nuisance",
+      "zero_se": "identified estimate and SE0/SSE0/CI retained; t/p null",
+      "ok": "all identified finite statistics"
+    },
+    "excluded_edge_record": "counts/rank/df=0, all floating inference blank; qcfc excluded_not_common",
+    "invalid_model_record": "preserve actual n/group counts/rank/df; estimate,se,ci,t,p,sse null when diagnosis unidentified or residual df unavailable",
+    "constant_response": "if identifiable with positive df, estimate0,se0,sse0,ci[0,0],t/p null",
+    "no_forced_direction_or_significance": true,
+    "empty_response_bin": "Retain actual requested model cohort counts/design rank/df; all inference including SSE null. Do not recompute edge family or subject selection."
+  },
+  "descriptive": {
+    "qcfc": "Pearson across all selected subjects of original mean FD and common-edge Fisher-z; non-common edges excluded",
+    "pearson_min_n": 2,
+    "pearson_constant_rule": "exactly constant values or zero centered L2 produce undefined correlation",
+    "qcfc_status_precedence": [
+      "excluded_not_common",
+      "insufficient_n",
+      "constant_fd",
+      "constant_edge",
+      "ok"
+    ],
+    "map_correlation": "Pearson across common edges with both finite model t and finite QC-FC; descriptive r only, no p",
+    "map_status_precedence": [
+      "insufficient_n",
+      "constant_group_t",
+      "constant_qcfc",
+      "ok"
+    ],
+    "edge_threshold": "strict abs(t)>2 on finite t only; report defined/undefined counts and finite denominator",
+    "patient_higher": "t>2 among thresholded; fraction null if none",
+    "no_chance_fraction_or_multiplicity_claim": true
+  },
+  "axes": {
+    "subject_id": "Exact original participants.tsv identifier, e.g. sub-10159; no arbitrary digit extraction or aliasing.",
+    "source_participant_row": "Zero-based original participants.tsv data-row index, not the selected-cohort index.",
+    "parcel_id": "Hemisphere L or R plus original annotation-table row index, e.g. L:1. Annotation table and surface ordering must first pass the structural gate.",
+    "parcel_axis": "All explicitly included cortical parcels, L then R, ascending original annotation-table row index within hemisphere.",
+    "edge_id": "Zero-based lexicographic upper-triangle index on the canonical included cortical parcel axis; a candidate edge exists even if later computationally invalid for one or more participants.",
+    "subject_axis": "Lexicographically sorted exact selected source subject IDs.",
+    "array_order": "Axes may be reordered if identity arrays and every dependent array are reordered consistently; CSV row/column order is not graded. No duplicate or missing identity is allowed."
+  },
+  "outputs": {
+    "cohort.csv": {
+      "rows": "Exactly the 177 source candidates satisfying source rest=1 and diagnosis in SCHZ/CONTROL, including the five predeclared unavailable controls.",
+      "key": [
+        "subject_id"
+      ],
+      "columns": [
+        "source_participant_row",
+        "subject_id",
+        "group",
+        "source_rest",
+        "available_left",
+        "available_right",
+        "available_confounds",
+        "selected",
+        "exclusion_reason"
+      ],
+      "group": [
+        "SCHZ",
+        "CONTROL"
+      ],
+      "exclusion_reason": [
+        "selected",
+        "unavailable_released_derivatives"
+      ],
+      "rule": "Availability comes from the frozen source ledger, not the current download outcome; all 172 selected files must subsequently verify or execution fails. Flags are explicit booleans/0-or-1, never missing."
+    },
+    "parcels.csv": {
+      "rows": "Every original annotation legend row in both hemispheres, including excluded entries, plus any source-observed unassigned label if present. Structural gate fixes exact representation before signals.",
+      "key": [
+        "parcel_id"
+      ],
+      "columns": [
+        "parcel_id",
+        "hemisphere",
+        "annotation_index",
+        "annotation_name",
+        "n_vertices",
+        "included",
+        "exclusion_reason",
+        "centroid_x",
+        "centroid_y",
+        "centroid_z"
+      ],
+      "exclusion_reason": [
+        "included",
+        "unknown_label",
+        "medial_wall",
+        "unassigned",
+        "empty_label"
+      ],
+      "centroids": "Equal-weight original pial-coordinate means for every nonempty label, including excluded labels. Empty label has blank centroid fields. Units/frame are source metadata, not inferred millimetres."
+    },
+    "edges.csv": {
+      "rows": "Every unordered pair of included cortical parcels exactly once, including computationally non-common edges.",
+      "key": [
+        "edge_id"
+      ],
+      "columns": [
+        "edge_id",
+        "parcel_i",
+        "parcel_j",
+        "distance",
+        "n_valid_subjects",
+        "common_valid",
+        "distance_bin"
+      ],
+      "distance_bin": [
+        "short",
+        "middle",
+        "long",
+        "excluded_not_common"
+      ],
+      "rule": "Distances are Euclidean pial-centroid distances. Common validity requires both endpoints valid for every selected subject. Quantiles use only common-valid distances. Strict d<q1 and d>q2; ties remain middle. Categories derive from unrounded original-source calculations."
+    },
+    "connectivity.csv": {
+      "rows": "Exactly all 172 selected source participants.",
+      "key": [
+        "subject_id"
+      ],
+      "columns": [
+        "subject_id",
+        "group",
+        "n_frames",
+        "tr_s",
+        "fd_sum",
+        "n_fd_defined",
+        "first_fd_defined",
+        "mean_fd",
+        "qc_fd_lt_0_2",
+        "n_confound_columns",
+        "nuisance_rank",
+        "nuisance_rank_threshold",
+        "n_valid_parcels",
+        "n_invalid_parcels",
+        "n_common_edges",
+        "n_saturated_common_edges",
+        "mean_fc",
+        "short_range_fc",
+        "long_range_fc"
+      ],
+      "fd": "Mean over the declared defined FD rows; an undefined first row is omitted, not replaced by zero. Every later FD must be finite/nonnegative. All BOLD frames remain. Strict QC membership follows unrounded source mean FD.",
+      "fc": "Unweighted Fisher-z means over the same common-valid edge/bin sets for every participant. Empty bin yields blank mean, not zero or silent replacement.",
+      "rank": "Public pivoted-QR nuisance-span rule. Rank and threshold reported; factor signs/pivot order are not participant-output requirements."
+    },
+    "subject_edge_fc.npz": {
+      "format": "Primitive NumPy arrays loadable with allow_pickle=False; no object arrays.",
+      "arrays": {
+        "subject_id": "Unicode[S] exact selected IDs",
+        "parcel_id": "Unicode[P] exact included cortical parcel IDs",
+        "edge_id": "integer[E] exact candidate edge IDs",
+        "parcel_status": "Unicode[S,P]: ok, constant_input, or numerical_zero_residual",
+        "parcel_original_centered_l2": "float64-compatible[S,P], finite/nonnegative original centered parcel-signal norm",
+        "parcel_residual_l2": "float64-compatible[S,P], finite/nonnegative post-cleaning centered residual norm before sample-z-scoring",
+        "parcel_zero_bound": "float64-compatible[S,P], public scale-aware numerical-zero bound",
+        "raw_r": "float64-compatible[S,E], Pearson coefficient where both endpoints valid; otherwise NaN exactly as a declared undefined sentinel",
+        "fisher_z": "float64-compatible[S,E], atanh(clip(raw_r,-0.999,0.999)) where valid; otherwise NaN",
+        "edge_valid": "bool[S,E], true iff both source parcel statuses are ok",
+        "fisher_clipped": "bool[S,E], true iff valid and unrounded abs(raw_r)>0.999; false for invalid"
+      },
+      "undefined_rule": "NaN is allowed ONLY in raw_r/fisher_z at explicitly false edge_valid cells. Infinity, finite fabricated substitutes in undefined cells, or NaN at valid cells are invalid. No other required numeric array may contain nonfinite values.",
+      "rule": "All subject-specific valid candidate edges are reported, not only the common subset. Every common edge remains identical across crude, adjusted, and QC-restricted analyses. Raw-r/source binding prevents affine or Fisher-transform forgeries."
+    },
+    "edge_stats.csv": {
+      "rows": "Exactly two rows per candidate edge, keyed all_crude or all_fd_adjusted; non-common rows remain with explicit excluded status.",
+      "key": [
+        "edge_id",
+        "model"
+      ],
+      "columns": [
+        "edge_id",
+        "model",
+        "status",
+        "n",
+        "n_schz",
+        "n_control",
+        "rank",
+        "df",
+        "estimate",
+        "se",
+        "ci95_low",
+        "ci95_high",
+        "t",
+        "p",
+        "sse",
+        "qcfc_status",
+        "qcfc_r"
+      ],
+      "model": [
+        "all_crude",
+        "all_fd_adjusted"
+      ],
+      "status": [
+        "ok",
+        "zero_se",
+        "excluded_not_common",
+        "missing_group",
+        "insufficient_df",
+        "rank_deficient"
+      ],
+      "qcfc_status": [
+        "ok",
+        "excluded_not_common",
+        "constant_fd",
+        "constant_edge",
+        "insufficient_n"
+      ],
+      "effect": "Signed diagnosis coefficient, SCHZ=1/CONTROL=0, classical homoskedastic OLS SE, normal-Wald estimate+/-1.96SE interval, two-sided t-reference p with declared residual df. No Welch interchange.",
+      "undefined_rule": "Excluded edge rows have all count/rank/df fields0 and floating inference fields blank. Invalid model rows preserve actual n/group counts/rank/df, with estimate/se/CI/t/p/SSE blank. zero_se preserves identified estimate, se0, interval and SSE0, with t/p blank.",
+      "qcfc": "Across-all-subject Pearson(mean FD, edge Fisher-z), repeated identically on both model rows for convenient joining. Undefined status/value must agree with original-source support."
+    },
+    "group_stats.json": {
+      "fields": {
+        "status": "complete",
+        "task_id": "CLINCONN-001",
+        "n_candidates": "integer",
+        "n_subjects": "integer",
+        "group_counts": "exact keys SCHZ,CONTROL -> integer",
+        "n_candidate_edges": "integer",
+        "n_common_edges": "integer",
+        "distance_bins": "object {q1,q2,n_short,n_middle,n_long}; q values in source pial coordinate units, both null if no common-valid edges",
+        "group_means": "exact measure keys mean_fc,short_range_fc,long_range_fc,mean_fd; each {SCHZ: nullable finite mean,CONTROL: nullable finite mean}",
+        "short_range_effects": "exact keys all_crude,all_fd_adjusted,qc_fd_lt_0_2; each effect record below",
+        "edgewise_abs_t_gt_2": "exact keys all_crude,all_fd_adjusted; each threshold-summary record below",
+        "group_map_vs_qcfc": "exact keys all_crude,all_fd_adjusted; each correlation record below"
+      },
+      "effect_record": {
+        "status": "ok|zero_se|empty_response_bin|missing_group|insufficient_df|rank_deficient",
+        "n": "integer included subjects",
+        "n_schz": "integer",
+        "n_control": "integer",
+        "rank": "integer numerical design rank",
+        "df": "integer n-rank, or 0 if no rows",
+        "estimate": "nullable signed diagnosis coefficient",
+        "se": "nullable classical SE",
+        "ci95": "length2 nullable values; estimate+/-1.96SE when identified",
+        "t": "nullable signed coefficient/SE",
+        "p": "nullable two-sided t-reference p",
+        "sse": "nullable nonnegative residual sum of squares"
+      },
+      "threshold_summary_record": {
+        "n_common_edges": "integer",
+        "n_defined_t": "integer finite-t denominator",
+        "n_undefined_t": "integer",
+        "n_abs_t_gt_2": "integer strict threshold count",
+        "fraction_abs_t_gt_2": "count/defined denominator; null if denominator0",
+        "n_patient_higher": "integer t>2 among thresholded",
+        "patient_higher_fraction": "n_patient_higher/n_abs_t_gt_2; null if no thresholded edges"
+      },
+      "correlation_record": {
+        "status": "ok|insufficient_n|constant_group_t|constant_qcfc",
+        "n_edges": "integer pairwise-defined common-edge support",
+        "r": "nullable signed descriptive Pearson; no edge-independent p-value"
+      },
+      "rule": "Nullability is determined by source support/algebra, not an expected scientific pattern. QC membership, threshold categories, and undefined support are source-authoritative despite tolerated numeric rounding. No chance=.05, required significance, direction, or attenuation field."
+    },
+    "run_metadata.json": {
+      "fields": [
+        "status",
+        "task_id",
+        "dataset_id",
+        "source_manifest_sha256",
+        "method_contract_sha256",
+        "source_sha256",
+        "method_contract",
+        "source_observed",
+        "software"
+      ],
+      "status": "complete",
+      "source_sha256": "Closed path->SHA256 map exactly matching all pinned analysis inputs; no invented extra sources.",
+      "method_contract": "Closed copy of the full public method object, including geometry/cleaning/OLS/tolerance definitions; type-aware comparison, bool is not numeric.",
+      "source_observed": {
+        "n_source_participants": "original phenotype row count",
+        "n_candidates": "177 source candidates",
+        "n_selected": "172 selected participants",
+        "n_unavailable": "5 predeclared unavailable controls",
+        "group_counts": "exact SCHZ/CONTROL selected counts",
+        "atlas": {
+          "rule": "Required closed source-observed atlas object below, verified against the actual original annotation and pial inputs. These conventions distinguish literal headers from provenance-inferred coordinate units.",
+          "required_value": {
+            "template": "fsaverage5",
+            "coordinate_units": "mm",
+            "coordinate_frame": "native FreeSurfer SurfaceRAS (tkRAS) by documented pial-export convention; literal GIFTI dataspace=UNKNOWN, xformspace=3, identity matrix retained; not a claim of MNI coordinates",
+            "applied_transform": "none",
+            "hemispheres": {
+              "L": {
+                "annotation_sha256": "c2401d6137949f33788283a4926cb61cb3b0bfe5bda1b368c22aa921ea06d38d",
+                "pial_sha256": "1e76fe43ac194c15fd272643f7ae7995621e2a496b3102b2d6175f0f8e6d7fc8",
+                "n_vertices": 10242,
+                "n_faces": 20480,
+                "n_annotation_rows": 76,
+                "unknown_annotation_index": 0,
+                "medial_wall_annotation_index": 42,
+                "n_unknown_vertices": 0,
+                "n_medial_wall_vertices": 888,
+                "n_unassigned_vertices": 0,
+                "pointset_structure": "CortexLeft",
+                "pointset_surface": "Pial",
+                "pointset_dataspace": 0,
+                "pointset_xformspace": 3,
+                "pointset_xform": [
+                  [
+                    1,
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              },
+              "R": {
+                "annotation_sha256": "99c028f9f9d8dce617e9f29a5ebdc2f1b187d83650b68128fae53c3669588da7",
+                "pial_sha256": "fdfae008bc10acf7cba82737ea5db9a7298948c41884a2d3330a785783a60a91",
+                "n_vertices": 10242,
+                "n_faces": 20480,
+                "n_annotation_rows": 76,
+                "unknown_annotation_index": 0,
+                "medial_wall_annotation_index": 42,
+                "n_unknown_vertices": 0,
+                "n_medial_wall_vertices": 881,
+                "n_unassigned_vertices": 0,
+                "pointset_structure": "CortexRight",
+                "pointset_surface": "Pial",
+                "pointset_dataspace": 0,
+                "pointset_xformspace": 3,
+                "pointset_xform": [
+                  [
+                    1,
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        "subjects": "Exactly172 order-free records {subject_id,n_frames,n_vertices_left,n_vertices_right,n_confounds_rows,tr_s,surface_dtype_left,surface_dtype_right}; original header-derived values, dtype strings float32, per-subject frame counts preserved."
+      },
+      "software": "Nonempty string->nonempty string object reporting actual implementation, not required to equal oracle package versions.",
+      "extras": "Harmless extra top-level or descriptive source_observed fields accepted; source identity/method objects and named statistical-model families remain closed."
+    },
+    "findings.md": {
+      "rule": "Nonempty human-readable findings. No regex keywords, causal conclusion, attenuated effect, near-null result, or significance required. Scientific limitations belong in instruction and human review."
+    }
+  },
+  "tolerances": {
+    "raw_r": {
+      "atol": 1e-7,
+      "rtol": 0.000001
+    },
+    "fisher_z_and_subject_means": {
+      "atol": 0.000001,
+      "rtol": 0.000001
+    },
+    "ols_estimates_se_sse_t_p_ci_and_descriptive_r": {
+      "atol": 0.000001,
+      "rtol": 0.00001
+    },
+    "source_fd_and_time": {
+      "atol": 1e-10,
+      "rtol": 1e-8
+    },
+    "geometry_coordinates_and_distances": {
+      "atol": 0.00001,
+      "rtol": 1e-7
+    },
+    "parcel_norms": {
+      "atol": 1e-10,
+      "rtol": 1e-7
+    },
+    "normalization_floor": {
+      "atol": 0,
+      "rtol": 1e-7
+    },
+    "counts_ids_flags_categories": "exact source identity and unrounded categorical decisions"
+  },
+  "parsing": {
+    "csv_flags": "true/false or numeric0/1 accepted; no other nonempty strings",
+    "csv_integral": "finite exact integral notation allowed, including scientific notation",
+    "npz_integers": "primitive integer, not Boolean",
+    "json_numbers": "finite numbers only, bool is not a number; undefined is null",
+    "numerical_categories": "source-authoritative unrounded membership/validity/bin/threshold categories; tolerable serialized rounding must not change them",
+    "software": "honest nonempty strings, not required to match oracle versions",
+    "prose": "nonempty findings, no phrase/significance/causality matching",
+    "extra_fields": "harmless CSV/metadata descriptions accepted; required numeric axes/models and parsed method/source identity are closed"
+  },
+  "failure": {
+    "source_integrity_or_schema": "failed_precondition and nonzero exit; never refetch or alter selected cohort",
+    "scientifically_undefined": "complete accountable artifacts with prescribed undefined statuses, not fabricated numbers",
+    "existing_output": "refuse preexisting/symlinked destinations; source, public output and private receipt roots must be distinct and nonnested"
+  }
+}

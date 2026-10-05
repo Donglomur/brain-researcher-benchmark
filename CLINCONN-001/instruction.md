@@ -1,76 +1,93 @@
-# Resting-state connectivity in schizophrenia vs. controls (CLINCONN-001)
+# Resting connectivity and motion sensitivity in the CNP cohort
 
-## Scientific context
+Estimate the signed schizophrenia–control association in resting-state
+connectivity, and its sensitivity to mean framewise displacement (FD).
+Report the measurements even if adjustment strengthens, reverses, or leaves
+the association unchanged. No particular direction or null result is required.
 
-Resting-state functional connectivity (FC) has been widely proposed as a biomarker of
-schizophrenia, with many reports of altered cortico-cortical connectivity in patients
-relative to healthy controls. The UCLA Consortium for Neuropsychiatric Phenomics (CNP)
-study (Poldrack et al. 2016, *Scientific Data*) is a large, openly available dataset
-(OpenNeuro `ds000030`) that includes a schizophrenia group and a healthy-control group with
-resting-state fMRI, and it ships preprocessed **fMRIPrep derivatives**, making it a standard
-testbed for case-vs-control resting-connectivity comparisons.
+This is a secondary method/sensitivity analysis of public CNP data, not a
+reproduction of a schizophrenia finding in the dataset descriptor.
+[Poldrack et al. 2016](https://doi.org/10.1038/sdata.2016.110) describes the cohort;
+[Gorgolewski et al. 2017, Figure 1 and Table 1](https://f1000research.com/articles/6-1262/v2)
+describes its preprocessing and unavailable derivatives. The distance-dependent
+motion effects in [Power et al. 2012](https://doi.org/10.1016/j.neuroimage.2011.10.018)
+motivate checking sensitivity; they do not determine this cohort's answer.
 
-## Task
+## Offline source and cohort
 
-Using the released **fMRIPrep derivatives** of `ds000030` (legacy release `R1.0.5`, under
-`.../derivatives/fmriprep/`), **compute resting-state functional connectivity for the
-schizophrenia group and the healthy-control group and report whether — and how — resting FC
-differs between the two groups.**
+Use only the original files staged under `/app/data/clinconn`, authenticated by
+the source manifest there. The bundle contains the legacy `ds000030_R1.0.5`
+fsaverage5 resting surface derivatives, original confounds and phenotype/timing
+metadata, and fixed Destrieux annotations and fsaverage5 pial meshes. Do not
+download, resample, regenerate preprocessing, or substitute a newer dataset.
 
-Work from the fMRIPrep resting-run outputs of every subject that has a rest run in the two
-groups (diagnosis `SCHZ` and `CONTROL` in `participants.tsv`). Summarise each subject's
-connectivity (mean edge strength, and short- vs long-range edges by inter-node distance), then
-compare the schizophrenia group with the control group — both a subject-level summary and an
-edge-wise comparison.
+The original participants table identifies 177 candidates with a rest run and
+diagnosis `SCHZ` or `CONTROL`. Five controls have no released left/right surface
+or confound files: `sub-10299`, `sub-10428`, `sub-10501`, `sub-10971`, `sub-11121`.
+They also appear in the preprocessing paper's missing-T1 list. Account for all
+177 candidates, with these availability exclusions declared before analysis.
+Analyze the fixed remaining 172 participants: 50 SCHZ and 122 CONTROL.
+A missing or corrupt selected input is an error, not permission to drop a subject.
 
-**Pin the pipeline as follows so the per-subject connectivity is reproducible.** Use the surface
-`space-fsaverage5` outputs (`*.L.func.gii` / `*.R.func.gii`) with the **Destrieux (a2009s)
-surface parcellation** (~148 cortical regions; `nilearn` `fetch_atlas_surf_destrieux`),
-region-mean time series. Clean each parcel time series with the supplied confounds — the 6
-motion parameters, aCompCor(6) and WhiteMatter — detrending, band-pass 0.009–0.08 Hz and z-scoring
-(e.g. `nilearn.signal.clean`, `t_r = 2.0`). Form the ROI×ROI Pearson correlation matrix and take
-its Fisher-z upper triangle; drop edges touching a zero-variance (medial-wall) parcel. Bin edges
-by inter-node (parcel-centroid) distance into terciles: `short_range` = shortest third,
-`long_range` = longest third; `mean_fc` = mean over all edges.
+The exact legacy dataset metadata declares PDDL. File-specific redistribution
+licensing for the supplied atlas/mesh copies is not established; do not equate
+Nilearn's software license with a license for every bundled data file.
 
-Report, in plain terms, **whether resting-state functional connectivity differs between the
-schizophrenia group and controls on these data** — stating only what your analysis actually
-supports.
+## Public analysis contract
 
-## Data access
+`/app/method_contract.json` specifies the full estimator, source identities,
+field names, undefined cases and tolerances. It is public; no undisclosed
+denoising choice or expected diagnosis effect is needed.
 
-`ds000030` fMRIPrep derivatives are public (no credentials) on S3, e.g.
+- Use float64 equal-weight vertex means for anatomically named cortical
+  parcels, with explicit annotation-based Unknown/Medial_wall exclusions.
+  Use the source-bound pial centroid geometry; distance is Euclidean, not
+  cortical geodesic distance or tract length.
+- Detrend and bandpass both parcel series and the 13 declared nuisance columns,
+  project out the nuisance span, then sample-standardize residuals. The band is
+  0.009–0.08 Hz at TR 2 s. The contract fixes filter order, endpoint handling,
+  rank and numerical-zero rules. Use each subject's actual released frame count;
+  do not force equal scan durations, add GSR, or censor frames.
+- Mean FD uses defined successive-frame measurements. An undefined first FD
+  is excluded from its denominator, not treated as measured zero. Later
+  missing or negative FD is a failed precondition. Keep all original BOLD frames.
+- Compute Pearson correlations and the disclosed clipped Fisher transform.
+  Use the same cohort-wide valid edges for every subject, summary and model.
+  Define short and long ranges by strict distance-tercile boundaries, including
+  the contract's treatment of ties; do not recompute them in a subgroup.
+- For short-range connectivity, report three signed OLS diagnosis coefficients:
+  all-cohort crude, all-cohort adjusted for mean FD, and crude within the strict
+  `mean_fd < 0.2` subset. The last is a QC restriction, **not motion matching**.
+  Code SCHZ=1 and CONTROL=0. Report each model's subjects, estimate, classical
+  SE, normal-Wald 95% interval and t-reference test as specified.
+- Also report complete signed crude/FD-adjusted edgewise OLS results and
+  descriptive QC-FC associations. Counts at `|t| > 2` are uncorrected summaries,
+  not corrected discoveries or an expected “5% chance” benchmark. Do not treat
+  dependent edges as independent participants for a biological p-value.
 
-```
-https://s3.amazonaws.com/openneuro/ds000030/ds000030_R1.0.5/uncompressed/participants.tsv
-https://s3.amazonaws.com/openneuro/ds000030/ds000030_R1.0.5/uncompressed/derivatives/fmriprep/<sub>/func/<sub>_task-rest_bold_space-fsaverage5.L.func.gii
-.../<sub>_task-rest_bold_space-fsaverage5.R.func.gii
-.../<sub>_task-rest_bold_confounds.tsv
-```
+Equivalent implementations of this public estimator are accepted within its
+numerical tolerances. Preserve legitimate zero estimates and explicitly undefined
+quantities. Do not add outcome-based exclusions, force attenuation, take absolute
+diagnosis coefficients, or turn nonsignificance into evidence of equivalence.
 
-(the `_confounds.tsv` columns include the 6 motion parameters, aCompCor/tCompCor components,
-WhiteMatter, GlobalSignal, and FramewiseDisplacement).
+## Required outputs
 
-## Output Location
+Write to `${OUTPUT_DIR}` (default `/app/output`). Exact schemas are in the public
+contract. Supply the candidate cohort ledger, original parcel/edge catalogues,
+per-subject connectivity and FD diagnostics, full subject-by-edge numeric arrays,
+complete edgewise results, `group_stats.json`, `run_metadata.json`, and
+`findings.md`. They must describe the same source identities and recompute from
+the same signed measurements. Keep sufficient precision; row order and prose
+wording are not grading targets.
 
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
+Interpret differences between adjustment and restriction as observational
+sensitivity. Age, sex, medication and selection remain unadjusted limitations.
+These analyses cannot establish that motion causes the entire diagnosis
+association, that diagnosis-related signal is absent, or that a biomarker
+generalizes beyond this cohort. A change in significance is not itself a test
+that two effect estimates differ.
 
-## Required Outputs
-
-- `connectivity.csv` — one row per subject:
-  `subject_id, group, mean_fc, short_range_fc, long_range_fc, mean_fd` (the per-subject
-  intermediate the group comparison is computed from; `mean_fd` = the subject's mean framewise
-  displacement, a standard motion QC summary from the confounds — report it alongside the
-  connectivity values).
-- `group_stats.json` — the schizophrenia-vs-control comparison: `group_means` per measure,
-  the group test per measure, an edge-wise summary of how many connections differ between
-  groups, and the group sizes.
-- `run_metadata.json` — dataset id, derivatives used, n subjects per group, atlas,
-  distance bins, and the preprocessing choices you made.
-- `findings.md` — a short written summary stating whether resting-state FC differs between
-  the schizophrenia group and controls on these data. State only what your analysis supports.
-
-## Failure handling
-
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a non-empty
-reason, and still write parseable `run_metadata.json`, `group_stats.json`, and `findings.md`.
+If source/schema or numerical prerequisites fail, exit nonzero and write
+parseable `group_stats.json`, `run_metadata.json`, and `findings.md` with
+`status: failed_precondition` and a nonempty reason. Preserve existing evidence
+destinations; never fabricate a completed analysis.
