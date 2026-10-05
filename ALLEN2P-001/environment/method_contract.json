@@ -1,0 +1,187 @@
+{
+  "contract_version": "ALLEN2P-001-v2",
+  "task_id": "ALLEN2P-001",
+  "scientific_role": "Single-field archived-dF/F descriptive method control and optional split sensitivity; not numerical reproduction of de Vries2020 Figure3 responsive-event population.",
+  "paper_anchor": {
+    "doi": "10.1038/s41593-019-0550-9",
+    "sections": [
+      "Methods:Stimuli",
+      "Methods:dF/F computation",
+      "Methods:Event detection",
+      "Methods:Response metrics",
+      "Figure3"
+    ],
+    "differences": "Paper analyzes detected calcium events and responsive cells across areas/layers/Cre lines. This custom response and all-cell denominator do not replicate that estimand; 50-split selectivity is a custom sensitivity, not the paper's signal-correlation splits."
+  },
+  "input": {
+    "root": "/app/source",
+    "file": "501271265.nwb",
+    "source_manifest": "/app/source/source_manifest.json",
+    "source_sha256": "7c9f26aea7f636126c7fe0c1fdf445229b1850601d03be7d30a13c3cda4578b1",
+    "ophys_experiment_id": 501271265,
+    "targeted_structure": "VISp",
+    "session_type": "three_session_A",
+    "stage": "Released processed dF/F; no validation of upstream motion correction, segmentation, neuropil correction or dF/F. Failed eye tracking; no pupil-QC claim."
+  },
+  "cells": "All stored dF/F rows, source_cell_index zero-based; retain original paired cell_specimen_ids and roi_ids. No responsive/QC exclusions or independent sorting of IDs.",
+  "presentations": "Original NWB row index is source_row_id; trial_index is zero-based chronological sorting by(start_frame,end_frame,source_row_id). Blank if blank_sweep>0 OR direction/temporal_frequency missing. All rows including blanks retained in receipt and RNG axis; only nonblank rows enter tuning. Require exact8directions 0..315step45 and positive TF grid.",
+  "response": "Arithmetic mean of original dF/F in custom half-open[start_frame,end_frame), float64 accumulation. Require0<=start<end<=n_source_frames; do not repair intervals. No additional baseline subtraction, rectification, clipping or smoothing. Nonfinite source response-window values, means, finite-required components or overflow fail precondition.",
+  "conditions": "Direction ascending then positive temporal_frequency ascending. Average per-presentation responses equally, not duration-weighted. Preference is largest training condition mean, ignoring missing conditions; exactties choose lowest direction then lowest frequency. All missing: no_selection_conditions.",
+  "methods": [
+    "same_trials",
+    "repeated_split_mean_ratio"
+  ],
+  "default_method": "same_trials",
+  "same_trials": "All nonblank presentations for both selection and measurement; one estimate/cell,replicate0,selection_half=all,measurement_half=all.",
+  "repeated_split": {
+    "seed": 0,
+    "rng": "numpy.random.default_rng(0),PCG64",
+    "n_replicates": 50,
+    "mask": "50 consecutive calls rng.random(n_presentations_total)<0.5 in chronological all-row order including blanks. A=mask,B=complement.",
+    "estimates": "replicate1..50 with A->B then B->A;100estimates/cell. No source-response-dependent RNG or resampling."
+  },
+  "ratios": {
+    "orthogonal": "R_orth=(R_pref+90+R_pref-90)/2 at selected training temporal frequency; directions modulo360.",
+    "osi": "(R_pref-R_orth)/(R_pref+R_orth)",
+    "dsi": "(R_pref-R_null)/(R_pref+R_null),null direction=pref+180mod360",
+    "undefined": "no_selection_conditions; else missing_measurement_condition for required absent condition; else zero_denominator when denominator is exactly0. Independent validity per metric. Preserve signed finite values, even outside[-1,1] or from tiny/negative denominator; no epsilon or clipping.",
+    "aggregation": "Arithmetic mean of own defined ratios per cell, separately for OSI/DSI; report n_valid_osi/n_valid_dsi. No valid estimates -> empty CSV metric and no_valid_estimates. Otherwise status defined. Apply threshold once to these final metrics; not mean of split-specific flags."
+  },
+  "threshold": 0.5,
+  "selective": "int(definedOSI>0.5 OR definedDSI>0.5),strictgreater-than. Denominator all source cells, including both-undefined;notflagged is not biologicallyuntuned.",
+  "split_fraction_summary": "For each of50replicates compute fractions flagged in each direction over all cells, then their mean. Report mean and populationSD(ddof0) of50pairedfractions separately from mean-ratio-then-threshold primary. Overlapping splits not independent replicates or confidence interval.",
+  "statuses": {
+    "selection": [
+      "ok",
+      "no_selection_conditions"
+    ],
+    "ratio": [
+      "ok",
+      "no_selection_conditions",
+      "missing_measurement_condition",
+      "zero_denominator"
+    ],
+    "per_neuron": [
+      "defined",
+      "no_valid_estimates"
+    ]
+  },
+  "numeric_format": "Full precision recommended. Undefined numeric CSV cells empty only; JSON null only for genuinely undefined values. Never NaN/Infinity/string garbage. Finite zeros retain0; no silent coercion.",
+  "tolerances": {
+    "response_abs": 1e-10,
+    "response_rel": 1e-8,
+    "ratio_abs": 0.000001,
+    "ratio_rel": 0.000001,
+    "fraction_abs": 1e-10,
+    "source_identity_counts_status_flags": "exact; categorical decisions from unrounded source-derived values"
+  },
+  "outputs": {
+    "presentations.csv": [
+      "trial_index",
+      "source_row_id",
+      "start_frame",
+      "end_frame",
+      "n_frames",
+      "direction_deg",
+      "temporal_frequency_hz",
+      "blank_sweep",
+      "tuning_included"
+    ],
+    "trial_responses.csv": [
+      "cell_specimen_id",
+      "source_row_id",
+      "mean_dff"
+    ],
+    "condition_means.csv": [
+      "cell_specimen_id",
+      "direction_deg",
+      "temporal_frequency_hz",
+      "n_trials",
+      "mean_dff"
+    ],
+    "estimates.csv": [
+      "cell_specimen_id",
+      "replicate",
+      "selection_half",
+      "measurement_half",
+      "selection_status",
+      "preferred_direction_deg",
+      "preferred_temporal_frequency_hz",
+      "n_selection_pref",
+      "selection_pref_mean_dff",
+      "n_measure_pref",
+      "n_measure_orth_plus",
+      "n_measure_orth_minus",
+      "n_measure_null",
+      "r_pref",
+      "r_orth_plus",
+      "r_orth_minus",
+      "r_orth",
+      "r_null",
+      "osi_denominator",
+      "dsi_denominator",
+      "osi",
+      "dsi",
+      "osi_status",
+      "dsi_status"
+    ],
+    "per_neuron.csv": [
+      "source_cell_index",
+      "cell_specimen_id",
+      "roi_id",
+      "osi",
+      "dsi",
+      "n_valid_osi",
+      "n_valid_dsi",
+      "osi_status",
+      "dsi_status",
+      "selective"
+    ],
+    "results.json": [
+      "method",
+      "n_neurons_total",
+      "n_selective",
+      "selective_fraction",
+      "threshold",
+      "n_osi_defined",
+      "n_dsi_defined",
+      "n_either_defined",
+      "n_both_undefined",
+      "n_osi_undefined",
+      "n_dsi_undefined",
+      "n_estimates_per_cell"
+    ],
+    "run_metadata.json": [
+      "status",
+      "task_id",
+      "method",
+      "source_manifest_sha256",
+      "source_nwb_sha256",
+      "method_contract_sha256",
+      "source_sha256",
+      "ophys_experiment_id",
+      "targeted_structure",
+      "session_type",
+      "n_neurons_total",
+      "n_source_frames",
+      "n_presentations_total",
+      "n_presentations_nonblank",
+      "n_conditions",
+      "directions_deg",
+      "temporal_frequencies_hz",
+      "software_versions",
+      "method_contract"
+    ],
+    "findings.md": "Nonempty free prose with measured method result and scientific limits. No phrase/keyword scoring."
+  },
+  "extra_repeated_results": [
+    "split_fraction_mean",
+    "split_fraction_sd"
+  ],
+  "verification": "Column/row order flexible, key tuples unique and complete. Verify source numerical lineage, recompute all train/measure estimates and summaries. Both methods accepted; no correlation, prose, expected fraction range or required split-versus-same direction/gap gate.",
+  "software": {
+    "python": "3.12",
+    "numpy": "2.2.6",
+    "h5py": "3.13.0"
+  }
+}

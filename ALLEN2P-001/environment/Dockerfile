@@ -1,19 +1,16 @@
-# AllenSDK requires Python 3.10.
-FROM python:3.10
-
-# Pinned to the versions verified for this task. Two pins are load-bearing for AllenSDK 2.16.2:
-#   * setuptools<81 keeps pkg_resources importable (AllenSDK imports it at module load);
-#   * statsmodels==0.13.5 keeps statsmodels.sandbox.stats.multicomp.multipletests importable
-#     (removed in statsmodels 0.14+), which AllenSDK's receptive-field code imports on load.
-RUN pip install --no-cache-dir \
-      "setuptools<81" \
-      allensdk==2.16.2 \
-      numpy==1.23.5 \
-      pandas==1.5.3 \
-      scipy==1.10.1 \
-      h5py==3.16.0 \
-      statsmodels==0.13.5 \
-      pynwb==2.8.3 \
-      hdmf==6.2.0 \
-      tables==3.10.1
+FROM ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3 AS dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates python3 python3-venv python3-pip && \
+    python3 -m pip install --break-system-packages --no-cache-dir \
+      numpy==2.2.6 h5py==3.13.0 pytest==8.4.1 pytest-json-ctrf==0.3.5 && \
+    rm -rf /var/lib/apt/lists/*
 WORKDIR /app
+ENV OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1
+
+FROM dependencies AS source
+COPY fetch_data.py source_manifest.json /opt/source/
+RUN python3 /opt/source/fetch_data.py --destination /app/source
+
+FROM dependencies AS runtime
+COPY --from=source /app/source /app/source
+COPY method_contract.json /app/method_contract.json
