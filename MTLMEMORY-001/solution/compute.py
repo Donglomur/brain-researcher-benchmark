@@ -1,233 +1,303 @@
-"""Reference solution for MTLMEMORY-001.
-
-Deliverable: from the human medial-temporal-lobe (MTL) single-neuron recordings in the new/old
-recognition-memory task (DANDI 000004, Faraut/Rutishauser), report how well an individual
-memory-selective MTL neuron discriminates NOVEL from FAMILIAR images during recognition -- the mean
-single-neuron new/old ROC AUC across the memory-selective neurons -- together with the proportion of
-MTL neurons that are memory-selective.
-
-The correct analysis keeps the neuron SELECTION independent of the discriminability ESTIMATE. A
-neuron is called "memory-selective" because its recognition-period firing rate separates novel from
-familiar trials, and the same separation is then what the new/old ROC AUC measures. If you select
-the neurons on a set of trials and then measure their AUC on those SAME trials, the AUC is inflated
-by a winner's curse (non-independence / "double dipping", Kriegeskorte et al. 2009): you picked the
-neurons whose noise happened to separate the labels, and on the same trials that noise still
-separates the labels. The honest estimate selects the memory-selective neurons (and their preferred
-novelty/familiarity direction) on one split of the recognition trials and measures the new/old AUC
-on a held-out split.
-
-Validated ground truth (DANDI 000004, ALL 87 sessions pooled, MTL = hippocampus + amygdala units by
-electrode location; recognition phase; per-trial firing rate over the [0.2, 1.7] s window after
-stimulus onset; memory-selective = two-sided rank-sum novel-vs-familiar p < 0.05; new/old AUC taken
-in the neuron's preferred direction):
-  n MTL neurons pooled              = 1864
-  proportion memory-selective       = 0.057   (barely above the 0.05 chance false-positive rate)
-  NAIVE  mean new/old AUC of MS cells, selected AND measured on the SAME trials  = 0.629
-  CORRECT mean new/old AUC of MS cells, selection/direction on train, AUC on held-out = 0.516
-The apparent ~0.63 single-neuron memory signal is almost entirely a selection artifact: the
-memory-selective fraction is at the chance false-positive rate, and out-of-sample the discrimination
-is ~0.51 (chance).
-
-Also writes the NEUTRAL per-neuron table neurons.csv (the pinned per-neuron new/old AUC + the
-memory-selective flag) -- the intermediate both a naive and an honest analysis produce.
-"""
+"""Offline released-event/label selection-sensitivity oracle; no expected-outcome gates."""
+import argparse
 import csv
+import hashlib
+import importlib.util
 import json
 import os
-import sys
-import warnings
 from pathlib import Path
+import platform
+import sys
 
+import h5py
 import numpy as np
+import scipy
+from scipy.stats import norm, rankdata
 
-warnings.filterwarnings("ignore")
+from source_reader import read_session, require
 
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-OUT.mkdir(parents=True, exist_ok=True)
-
-DANDISET = "000004"
-REGION_KEYS = ("Hippocampus", "Amygdala")   # medial temporal lobe
-WIN = (0.2, 1.7)          # s after stimulus onset
-MS_ALPHA = 0.05           # memory-selective: two-sided rank-sum novel vs familiar
-N_SPLITS = 60             # repeated stratified halves for the honest held-out estimate
-SEED = 0
+TASK = "MTLMEMORY-001"
+METHOD_SHA256 = "7e2ed03d8887a62206db229e52024793852a55c1b34202965d4f4fec3038e37d"
+MANIFEST_SHA256 = "3819f2b5e9403f184b94be7d1374476c964c08c054763ec7b8d40cf6bbf7e7b9"
+POPULATIONS = ("full_data_selected_same_trials", "crossfit_selected_at_least_five_splits")
+REPEATS = 60
 
 
-def fail(reason):
-    (OUT / "run_metadata.json").write_text(json.dumps(
-        {"status": "failed_precondition", "reason": reason, "dandiset": DANDISET}, indent=2))
-    (OUT / "results.json").write_text(json.dumps({"status": "failed_precondition", "reason": reason}))
-    (OUT / "findings.md").write_text(f"# Failed precondition\n\n{reason}\n")
-    sys.stderr.write(reason + "\n")
-    sys.exit(1)
+def load_inputs(data_dir, method_path):
+    raw = Path(method_path).read_bytes()
+    require(hashlib.sha256(raw).hexdigest() == METHOD_SHA256, "Public method checksum mismatch")
+    method = json.loads(raw)
+    paths = [Path(__file__).resolve().parents[1] / "environment/stage_data.py", Path("/opt/source/stage_data.py")]
+    stager_path = next((p for p in paths if p.is_file()), None)
+    require(stager_path is not None, "Source integrity helper not found")
+    spec = importlib.util.spec_from_file_location("mtl_source_stage", stager_path)
+    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    manifest = module.verify_staged(Path(data_dir))
+    require(hashlib.sha256((Path(data_dir) / "source_manifest.json").read_bytes()).hexdigest() == MANIFEST_SHA256, "Source manifest checksum mismatch")
+    require(manifest["version"] == "0.220126.1852" and len(manifest["files"]) == 87, "Wrong original source release")
+    require(method["source_policy"]["source_manifest_sha256"] == MANIFEST_SHA256, "Method/source mismatch")
+    return method, manifest
 
 
-try:
-    import h5py
-    import remfile
-    from dandi.dandiapi import DandiAPIClient
-    from pynwb import NWBHDF5IO
-    from scipy.stats import mannwhitneyu
-    from sklearn.metrics import roc_auc_score
-except Exception as e:  # pragma: no cover
-    fail(f"missing dependency: {e}")
+def rank_batch(new, old):
+    """Rows are independent units/splits; exact count ranks and explicit asymptotic MWW."""
+    new, old = np.asarray(new), np.asarray(old)
+    require(new.ndim == old.ndim == 2 and len(new) == len(old), "Rank batch shape mismatch")
+    require(new.dtype.kind in "iu" and old.dtype.kind in "iu" and np.all(new >= 0) and np.all(old >= 0), "Rank input must be nonnegative integer counts")
+    n0, n1 = new.shape[1], old.shape[1]
+    require(n0 > 0 and n1 > 0, "Rank batch requires both classes")
+    pooled = np.concatenate([new, old], axis=1)
+    ranks = rankdata(pooled, method="average", axis=1, nan_policy="raise")
+    twice = 2 * np.sum(ranks[:, n0:], axis=1) - n1 * (n1 + 1)
+    require(np.isfinite(twice).all() and np.all(twice == np.rint(twice)), "Nonintegral U2")
+    u2 = twice.astype(np.int64)
+    require(np.all((0 <= u2) & (u2 <= 2*n0*n1)), "Invalid rank statistic")
+    auc = u2.astype(np.float64) / (2*n0*n1)
+    tie_sum = np.empty(len(pooled), dtype=np.int64)
+    all_tied = np.empty(len(pooled), dtype=bool)
+    for row, values in enumerate(pooled):
+        _, counts = np.unique(values, return_counts=True)
+        tie_sum[row] = sum(int(x)**3-int(x) for x in counts)
+        all_tied[row] = len(counts) == 1
+    n = n0+n1
+    variance = n0*n1/12 * (n+1 - tie_sum.astype(np.float64)/(n*(n-1)))
+    require(np.all(variance[~all_tied] > 0), "Invalid tie-corrected rank variance")
+    p = np.ones(len(pooled), dtype=np.float64)
+    u = u2.astype(np.float64)/2
+    z = (np.maximum(u[~all_tied], n0*n1-u[~all_tied]) - n0*n1/2 - .5) / np.sqrt(variance[~all_tied])
+    p[~all_tied] = np.minimum(1., 2*norm.sf(z))
+    sign = np.where(auc >= .5, 1, -1).astype(np.int64)
+    require(np.isfinite(p).all() and np.all((0 <= p) & (p <= 1)), "Nonfinite rank probability")
+    return dict(u2=u2, auc=auc, p=p, sign=sign, selected=p < .05, tie_sum=tie_sum, variance=variance)
 
 
-def auc(scores, labels):
-    if len(np.unique(labels)) < 2:
-        return 0.5
-    return roc_auc_score(labels, scores)
-
-
-def collect_neurons():
-    """Stream every session's recognition-phase MTL spiking; return list of per-neuron records.
-
-    Each record: id ('<asset stem>__u<unit id>'), region, fr (per-recognition-trial firing rate in
-    the [0.2, 1.7] s window), lab (1 for familiar/old, 0 for novel/new). Only the MTL units'
-    spike_times are read, so the streaming stays light.
-    """
-    neurons = []
-    n_sessions = 0
-    with DandiAPIClient() as client:
-        ds = client.get_dandiset(DANDISET, "draft")
-        paths = sorted(a.path for a in ds.get_assets() if a.path.endswith(".nwb"))
-        if not paths:
-            fail(f"no NWB assets in dandiset {DANDISET}")
-        for p in paths:
-            try:
-                stem = p.split("/")[-1][:-4] if p.endswith(".nwb") else p.split("/")[-1]
-                url = ds.get_asset_by_path(p).get_content_url(follow_redirects=1, strip_query=False)
-                io = NWBHDF5IO(file=h5py.File(remfile.File(url), "r"), load_namespaces=True)
-                nwb = io.read()
-                tr = nwb.trials.to_dataframe()
-                rec = tr[tr["stim_phase"] == "recog"]
-                on = rec["stim_on_time"].values.astype(float)
-                lab = (rec["new_old_labels_recog"].values.astype(str) == "1").astype(int)
-                if len(on) < 20 or len(np.unique(lab)) < 2:
-                    continue
-                u = nwb.units
-                el = nwb.electrodes.to_dataframe()
-                uid = np.asarray(u.id[:])
-                for i in range(len(u.id)):
-                    eidx = u["electrodes"][i].index.values
-                    locs = el.loc[eidx, "location"].values
-                    loc = str(locs[0]) if len(locs) else ""
-                    if not any(k in loc for k in REGION_KEYS):
-                        continue
-                    st = np.asarray(u["spike_times"][i]).astype(float)
-                    fr = (np.searchsorted(st, on + WIN[1]) - np.searchsorted(st, on + WIN[0])) \
-                        / (WIN[1] - WIN[0])
-                    neurons.append(dict(
-                        id=f"{stem}__u{int(uid[i])}",
-                        region=("Hippocampus" if "Hippocampus" in loc else "Amygdala"),
-                        fr=fr.astype(float), lab=lab.astype(int)))
-                n_sessions += 1
-            except Exception:
+def generate_membership(records):
+    ends = np.cumsum([len(x["labels"]) for x in records], dtype=np.int64)
+    bounds = np.r_[0, ends]
+    masks = np.zeros((REPEATS, int(bounds[-1])), dtype=bool)
+    rng = np.random.Generator(np.random.PCG64(0))
+    for repeat in range(REPEATS):
+        for index, record in enumerate(records):
+            groups = [np.flatnonzero(record["labels"] == value) for value in [0, 1]]
+            if min(map(len, groups)) < 4:
                 continue
-    return neurons, n_sessions
+            for group in groups:
+                chosen = rng.choice(group, size=len(group)//2, replace=False, shuffle=True)
+                masks[repeat, bounds[index] + chosen] = True
+    return masks, bounds
 
 
-neurons, n_sessions = collect_neurons()
-if len(neurons) < 200:
-    fail(f"too few MTL neurons pooled ({len(neurons)}) -- streaming may have failed")
-
-rng = np.random.default_rng(SEED)
-
-# ---- pinned per-neuron quantities on all recognition trials (NEUTRAL table + naive contrast) ----
-ms_flags = np.zeros(len(neurons), dtype=bool)
-all_auc = np.zeros(len(neurons))          # pinned per-neuron new/old AUC, preferred direction, all trials
-for j, rec in enumerate(neurons):
-    fr, lab = rec["fr"], rec["lab"]
-    try:
-        _, p = mannwhitneyu(fr[lab == 0], fr[lab == 1], alternative="two-sided")
-    except Exception:
-        p = 1.0
-    a = auc(fr, lab)
-    all_auc[j] = max(a, 1.0 - a)
-    if p < MS_ALPHA:
-        ms_flags[j] = True
-prop_ms = float(ms_flags.mean())
-naive_auc = float(np.mean(all_auc[ms_flags])) if ms_flags.any() else float("nan")
-
-# ---- honest estimate: select memory-selective neurons and their preferred novelty/familiarity ----
-# ---- direction on a TRAIN split, measure the new/old AUC on the HELD-OUT split, repeat & average --
-held = [[] for _ in neurons]
-for rep in range(N_SPLITS):
-    for j, rec in enumerate(neurons):
-        fr, lab = rec["fr"], rec["lab"]
-        idx = np.arange(len(lab))
-        i0, i1 = idx[lab == 0], idx[lab == 1]
-        if len(i0) < 4 or len(i1) < 4:
+def analyze(records):
+    masks, bounds = generate_membership(records)
+    n_units = len(records)
+    full = {key: np.full(n_units, np.nan) for key in ["u2", "auc", "p", "sign", "tie_sum", "variance"]}
+    split = {key: np.full((n_units, REPEATS), np.nan) for key in ["train_u2", "train_auc", "train_p", "train_sign", "test_u2", "test_auc", "test_directed"]}
+    full_selected = np.zeros(n_units, dtype=bool)
+    train_selected = np.zeros((n_units, REPEATS), dtype=bool)
+    class_groups = {}
+    for index, record in enumerate(records):
+        labels, counts = record["labels"], record["counts"]
+        require(labels.ndim == counts.ndim == 1 and len(labels) == len(counts), "Count/label axis mismatch")
+        require(np.all((labels == 0) | (labels == 1)), "Unexpected rank label")
+        n0, n1 = int(np.count_nonzero(labels == 0)), int(np.count_nonzero(labels == 1))
+        class_groups.setdefault((n0, n1), []).append(index)
+    for (n0, n1), indices in class_groups.items():
+        if min(n0, n1) == 0:
             continue
-        trn = np.concatenate([rng.choice(i0, len(i0) // 2, replace=False),
-                              rng.choice(i1, len(i1) // 2, replace=False)])
-        te = np.setdiff1d(idx, trn)
-        try:
-            _, p = mannwhitneyu(fr[trn][lab[trn] == 0], fr[trn][lab[trn] == 1], alternative="two-sided")
-        except Exception:
-            p = 1.0
-        if p < MS_ALPHA:                         # selected as memory-selective on TRAIN only
-            sign = 1.0 if auc(fr[trn], lab[trn]) >= 0.5 else -1.0   # preferred direction on TRAIN
-            held[j].append(auc(fr[te] * sign, lab[te]))            # new/old AUC on HELD-OUT trials
-per_cell_heldout = [np.mean(h) for h in held if len(h) >= 5]
-honest_auc = float(np.mean(per_cell_heldout)) if per_cell_heldout else float("nan")
+        new = np.stack([records[i]["counts"][records[i]["labels"] == 0] for i in indices])
+        old = np.stack([records[i]["counts"][records[i]["labels"] == 1] for i in indices])
+        stats = rank_batch(new, old)
+        for key in full:
+            full[key][indices] = stats[key]
+        full_selected[indices] = stats["selected"]
+        if min(n0, n1) < 4:
+            continue
+        for repeat in range(REPEATS):
+            trains = [masks[repeat, bounds[i]:bounds[i+1]] for i in indices]
+            vectors = {}
+            for label, name in [(0, "new"), (1, "old")]:
+                vectors["train_"+name] = np.stack([records[i]["counts"][train & (records[i]["labels"] == label)] for i, train in zip(indices, trains)])
+                vectors["test_"+name] = np.stack([records[i]["counts"][~train & (records[i]["labels"] == label)] for i, train in zip(indices, trains)])
+            train = rank_batch(vectors["train_new"], vectors["train_old"])
+            test = rank_batch(vectors["test_new"], vectors["test_old"])
+            for key in ["u2", "auc", "p", "sign"]:
+                split["train_"+key][indices, repeat] = train[key]
+            for key in ["u2", "auc"]:
+                split["test_"+key][indices, repeat] = test[key]
+            split["test_directed"][indices, repeat] = np.where(train["sign"] == 1, test["auc"], 1-test["auc"])
+            train_selected[indices, repeat] = train["selected"]
+    neurons, events = [], []
+    for i, record in enumerate(records):
+        n0 = int(np.count_nonzero(record["labels"] == 0)); n1 = len(record["labels"])-n0
+        full_ok = min(n0, n1) >= 1; split_ok = min(n0, n1) >= 4
+        n_selected = int(train_selected[i].sum())
+        conditional = float(np.mean(split["test_directed"][i, train_selected[i]])) if n_selected else None
+        def fvalue(key, integer=False):
+            return (int(full[key][i]) if integer else float(full[key][i])) if full_ok else None
+        neurons.append(dict(unit_key=record["unit_key"], asset_path=record["asset_path"], subject_id=record["subject_id"],
+            unit_id=record["unit_id"], region=record["region"], n_trials=n0+n1, n_new=n0, n_old=n1,
+            full_status="ok" if full_ok else "insufficient_class_support", u_old_twice=fvalue("u2", True),
+            auc_old=fvalue("auc"), full_p=fvalue("p"), preferred_sign=fvalue("sign", True),
+            same_trial_auc=max(float(full["auc"][i]), 1-float(full["auc"][i])) if full_ok else None,
+            memory_selective=bool(full_selected[i]), n_usable_splits=REPEATS if split_ok else 0,
+            n_selected_splits=n_selected, conditional_auc=conditional,
+            conditional_status="defined" if n_selected else "no_selected_splits", heldout_eligible=n_selected >= 5))
+        for repeat in range(REPEATS):
+            def svalue(key, integer=False):
+                return (int(split[key][i, repeat]) if integer else float(split[key][i, repeat])) if split_ok else None
+            events.append(dict(unit_key=record["unit_key"], repeat=repeat, status="ok" if split_ok else "insufficient_class_support",
+                n_train_new=n0//2 if split_ok else None, n_train_old=n1//2 if split_ok else None,
+                n_test_new=n0-n0//2 if split_ok else None, n_test_old=n1-n1//2 if split_ok else None,
+                train_u_old_twice=svalue("train_u2", True), train_auc_old=svalue("train_auc"), train_p=svalue("train_p"),
+                train_selected=bool(train_selected[i, repeat]), train_preferred_sign=svalue("train_sign", True),
+                test_u_old_twice=svalue("test_u2", True), test_auc_old=svalue("test_auc"), test_directed_auc=svalue("test_directed"),
+                included_in_conditional_summary=bool(train_selected[i, repeat])))
+    def concatenate(key, dtype):
+        return np.concatenate([np.asarray(x[key], dtype=dtype) for x in records]) if records else np.empty(0, dtype=dtype)
+    count_array = concatenate("counts", np.int64)
+    primitive = dict(unit_key=np.asarray([x["unit_key"] for x in records], dtype=str),
+        response_unit_index=np.repeat(np.arange(n_units, dtype=np.int64), np.diff(bounds)),
+        source_trial_row=concatenate("source_trial_row", np.int64), trial_id=concatenate("trial_id", np.int64),
+        source_label=concatenate("labels", np.int64), spike_count=count_array, rate_hz=count_array.astype(np.float64)/1.5,
+        repeat_id=np.arange(REPEATS, dtype=np.int64), train_membership=masks)
+    private = {"full_"+key: value for key, value in full.items()}
+    private.update(split); private.update(full_selected=full_selected, train_selected=train_selected, response_bounds=bounds)
+    return neurons, events, primitive, private
 
-# ---- write the NEUTRAL per-neuron table ----
-with open(OUT / "neurons.csv", "w", newline="") as f:
-    w = csv.writer(f)
-    w.writerow(["neuron_id", "region", "n_trials", "memory_selective", "new_old_auc"])
-    for j, rec in enumerate(neurons):
-        w.writerow([rec["id"], rec["region"], len(rec["lab"]),
-                    int(ms_flags[j]), round(float(all_auc[j]), 4)])
 
-results = {
-    # headline: honest single-neuron new/old discriminability of memory-selective MTL neurons
-    "memory_selective_new_old_auc": round(honest_auc, 4),
-    "proportion_memory_selective": round(prop_ms, 4),
-    "n_mtl_neurons": len(neurons),
-    "n_memory_selective": int(ms_flags.sum()),
-    "n_sessions": n_sessions,
-    # contrast value: the SAME-TRIALS (non-independent) estimate -- inflated, reported for transparency
-    "same_trials_new_old_auc_inflated": round(naive_auc, 4),
-    "params": {
-        "region": "MTL (hippocampus + amygdala) by peak-channel electrode location",
-        "phase": "recognition",
-        "response_window_s": list(WIN),
-        "memory_selective": "two-sided Wilcoxon rank-sum novel vs familiar, p < %.2f" % MS_ALPHA,
-        "new_old_auc": "ROC AUC classifying novel vs familiar from firing rate, taken in the "
-                       "neuron's preferred (novelty/familiarity) direction; selection and preferred "
-                       "direction estimated on training trials, AUC evaluated on held-out trials",
-        "held_out_scheme": "%d repeated stratified halves" % N_SPLITS,
-    },
-}
-(OUT / "results.json").write_text(json.dumps(results, indent=2))
+def summarize(sessions, neurons, headline):
+    require(headline in POPULATIONS, "Unknown headline population")
+    same = [x["same_trial_auc"] for x in neurons if x["memory_selective"]]
+    conditional = [x["conditional_auc"] for x in neurons if x["heldout_eligible"]]
+    def population(values):
+        return dict(n_units=len(values), mean_auc=float(np.mean(values)) if values else None, status="defined" if values else "empty_population")
+    populations = dict(zip(POPULATIONS, [population(same), population(conditional)]))
+    overlap = dict(full_only=0, conditional_only=0, both=0, neither=0)
+    for neuron in neurons:
+        a, b = neuron["memory_selective"], neuron["heldout_eligible"]
+        overlap["both" if a and b else "full_only" if a else "conditional_only" if b else "neither"] += 1
+    return dict(status="complete", task_id=TASK, headline_population=headline, headline_status=populations[headline]["status"],
+        memory_selective_new_old_auc=populations[headline]["mean_auc"], n_sessions=len(sessions),
+        n_patients=len({x["subject_id"] for x in sessions}), n_source_units=sum(x["n_source_units"] for x in sessions),
+        n_mtl_units=len(neurons), n_full_test_defined=sum(x["full_status"] == "ok" for x in neurons),
+        n_full_test_undefined=sum(x["full_status"] != "ok" for x in neurons), n_memory_selective=len(same),
+        proportion_memory_selective=len(same)/len(neurons) if neurons else None, n_crossfit_eligible=len(conditional),
+        n_response_rows=sum(x["n_trials"] for x in neurons), n_split_events=REPEATS*len(neurons), populations=populations, population_overlap=overlap)
 
-(OUT / "run_metadata.json").write_text(json.dumps({
-    "status": "ok", "dandiset": DANDISET, "n_sessions": n_sessions,
-    "n_mtl_neurons": len(neurons), "n_memory_selective": int(ms_flags.sum()),
-    "region": "hippocampus + amygdala (MTL)", "phase": "recognition",
-    "response_window_s": list(WIN),
-    "memory_selective_test": "rank-sum novel vs familiar p<%.2f" % MS_ALPHA,
-    "new_old_auc_definition": "single-neuron ROC AUC novel vs familiar, preferred direction, "
-                              "selection/direction on train + AUC on held-out trials",
-}, indent=2))
 
-(OUT / "findings.md").write_text(
-    f"# Single-neuron new/old discriminability in human MTL -- DANDI 000004\n\n"
-    f"Pooling {len(neurons)} medial-temporal-lobe units (hippocampus + amygdala) across "
-    f"{n_sessions} recognition sessions, **{100*prop_ms:.1f}%** are memory-selective "
-    f"(recognition-period firing rate separates novel from familiar images, rank-sum p<0.05) -- "
-    f"barely above the 5% expected by chance.\n\n"
-    f"For those memory-selective neurons, the honest single-neuron new/old ROC AUC -- with the "
-    f"neurons and their preferred novelty/familiarity direction chosen on training trials and the "
-    f"AUC measured on **held-out** recognition trials -- is **{honest_auc:.2f}**, essentially "
-    f"chance. Measuring the same neurons' AUC on the SAME trials used to select them gives "
-    f"{naive_auc:.2f}, but that value is inflated: the neurons were picked because their firing "
-    f"happened to separate the labels, so re-scoring them on the identical trials is circular. "
-    f"Out of sample the apparent single-neuron memory signal in mean firing rate does not hold up "
-    f"(~{honest_auc:.2f}). So the defensible single-neuron new/old discriminability of "
-    f"memory-selective MTL neurons is ~{honest_auc:.2f}, not ~{naive_auc:.2f}.\n"
-)
+def make_metadata(manifest, method, sessions, observed, headline, pilot):
+    return dict(status="resource_pilot" if pilot else "complete", task_id=TASK, dandiset_id="000004", published_version="0.220126.1852",
+        source_manifest_sha256=MANIFEST_SHA256, method_contract_sha256=METHOD_SHA256,
+        source_sha256={x["path"]: x["sha256"] for x in manifest["files"]}, method_contract=method, headline_population=headline,
+        source_observed=dict(n_sessions=len(sessions), n_patients=len({x["subject_id"] for x in sessions}),
+            n_source_trials=sum(x["n_source_trials"] for x in sessions), n_recognition_trials=sum(x["n_recognition_trials"] for x in sessions),
+            n_source_units=sum(x["n_source_units"] for x in sessions), n_mtl_units=sum(x["n_mtl_units"] for x in sessions), sessions=observed),
+        software_versions=dict(python=platform.python_version(), numpy=np.__version__, scipy=scipy.__version__, h5py=h5py.__version__))
 
-print(f"n_mtl={len(neurons)} sessions={n_sessions} prop_ms={prop_ms:.3f} "
-      f"HONEST_auc={honest_auc:.4f} NAIVE_same_trials_auc={naive_auc:.4f}")
+
+def safe_path(path):
+    path = Path(os.path.abspath(path))
+    for part in [path, *path.parents]:
+        require(not part.is_symlink(), f"Symlink destination/source ancestor: {part}")
+    return path
+
+
+def prepare_destinations(data_dir, output_dir, private_dir):
+    source, output, private = map(safe_path, [data_dir, output_dir, private_dir])
+    for a, b in [(source, output), (source, private), (output, private)]:
+        require(a != b and a not in b.parents and b not in a.parents, "Source/output/private paths must be disjoint and nonnested")
+    for path in [output, private]:
+        require(not path.exists() or (path.is_dir() and not any(path.iterdir())), f"Refusing existing evidence: {path}")
+    for path in [output, private]:
+        path.mkdir(parents=True, exist_ok=True)
+    return output, private
+
+
+def write_json(path, value):
+    with Path(path).open("x", encoding="utf-8") as stream:
+        json.dump(value, stream, indent=2, allow_nan=False); stream.write("\n")
+
+
+def write_csv(path, columns, rows):
+    with Path(path).open("x", encoding="utf-8", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=columns)
+        writer.writeheader(); writer.writerows(rows)
+
+
+def save_npz(path, arrays):
+    with Path(path).open("xb") as stream:
+        np.savez_compressed(stream, **arrays)
+
+
+def findings(results, pilot):
+    if pilot:
+        return "# Resource pilot only\n\nOnly the first lexicographic source asset was analyzed. This is not a complete submission or a full-cohort estimate.\n"
+    rows = ["# Released-event/label selection sensitivity", "", "| Population | Recorded units | Mean AUC |", "|---|---:|---:|"]
+    for name, value in results["populations"].items():
+        number = "undefined" if value["mean_auc"] is None else format(value["mean_auc"], ".12g")
+        rows.append(f"| {name} | {value['n_units']} | {number} |")
+    rows += ["", f"Full-data selection: {results['n_memory_selective']} / {results['n_mtl_units']} source-mapped MTL unit records; {results['n_sessions']} sessions from {results['n_patients']} released subject IDs.", "",
+        "These are conditional descriptive method summaries, not unbiased outer validation, physical memory ground truth, an absence/equivalence test, or patient-population inference. Units cluster within sessions and repeated patients; the overlapping random halves are dependent.", "",
+        "The fixed 0.2–1.7 s response includes post-stimulus-offset activity in some trials. All released label codes and timestamp occurrences are retained, including unresolved old-label exposure histories, unordered timestamps and exact multiplicities. Continuous observation support is unknown. No behavioral or quality exclusions, deduplication, label reversal, or expected-direction filter was applied."]
+    return "\n".join(rows)+"\n"
+
+
+def execute(data_dir, method_path, output, private, pilot=False, headline=POPULATIONS[1]):
+    method, manifest = load_inputs(data_dir, method_path)
+    files = sorted(manifest["files"], key=lambda x: x["path"])
+    if pilot:
+        files = files[:1]
+    sessions, trials, units, records, observed = [], [], [], [], []
+    for index, source in enumerate(files):
+        session, trial_rows, unit_rows, unit_records, source_observed = read_session(Path(data_dir)/source["path"], source)
+        sessions.append(session); trials.extend(trial_rows); units.extend(unit_rows); records.extend(unit_records); observed.append(source_observed)
+        print(f"Verified and counted source asset {index+1}/{len(files)}: {source['path']}", flush=True)
+    neurons, splits, primitive, diagnostics = analyze(records)
+    metadata = make_metadata(manifest, method, sessions, observed, headline, pilot)
+    results = summarize(sessions, neurons, headline)
+    if pilot:
+        results.update(status="resource_pilot", scope="first lexicographic asset only; all numbers summarize this one asset, not the full cohort", asset_path=files[0]["path"])
+    diagnostics.update(primitive)
+    diagnostics.update(metadata_json=np.asarray(json.dumps(metadata, sort_keys=True, allow_nan=False)), results_json=np.asarray(json.dumps(results, sort_keys=True, allow_nan=False)))
+    # Write evidence before publishing complete-status JSON markers.
+    save_npz(private/"analysis_arrays.npz", diagnostics)
+    for name, rows in [("sessions.csv", sessions), ("trials.csv", trials), ("units.csv", units), ("split_events.csv", splits), ("neurons.csv", neurons)]:
+        write_csv(output/name, method["outputs"][name]["columns"], rows)
+    save_npz(output/"trial_counts.npz", primitive)
+    with (output/"findings.md").open("x", encoding="utf-8") as stream:
+        stream.write(findings(results, pilot))
+    write_json(output/"run_metadata.json", metadata)
+    write_json(output/"results.json", results)
+    print(json.dumps(results, allow_nan=False), flush=True)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--data-dir", type=Path, default=Path(os.environ.get("SOURCE_DIR", "/app/data/mtlmemory")))
+    parser.add_argument("--method-contract", type=Path, default=Path(os.environ.get("METHOD_CONTRACT", "/app/method_contract.json")))
+    parser.add_argument("--output-dir", type=Path, default=Path(os.environ.get("OUTPUT_DIR", "/app/output")))
+    parser.add_argument("--private-dir", type=Path, default=Path(os.environ.get("PRIVATE_DIR", "/app/oracle_private")))
+    parser.add_argument("--pilot-first-asset", action="store_true")
+    parser.add_argument("--headline-population", choices=POPULATIONS, default=POPULATIONS[1])
+    args = parser.parse_args(argv)
+    output = None
+    try:
+        output, private = prepare_destinations(args.data_dir, args.output_dir, args.private_dir)
+        execute(args.data_dir, args.method_contract, output, private, args.pilot_first_asset, args.headline_population)
+    except Exception as error:
+        reason = str(error) or type(error).__name__
+        if output is not None:
+            failure = dict(status="failed_precondition", task_id=TASK, reason=reason, error_type=type(error).__name__)
+            for name in ["results.json", "run_metadata.json", "failure.json"]:
+                if not (output/name).exists():
+                    write_json(output/name, failure)
+            if not (output/"findings.md").exists():
+                with (output/"findings.md").open("x", encoding="utf-8") as stream:
+                    stream.write("# Failed precondition\n\n"+reason+"\n")
+        print(f"{type(error).__name__}: {reason}", file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

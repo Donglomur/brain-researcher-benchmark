@@ -1,0 +1,754 @@
+{
+  "schema_version": 3,
+  "task_id": "MTLMEMORY-001",
+  "title": "Released-event-count and released-label MTL conditional-selection sensitivity",
+  "scope": {
+    "analysis_type": "descriptive_method_control",
+    "dataset": "DANDI 000004",
+    "version": "0.220126.1852",
+    "n_required_assets": 87,
+    "source_membership": "Every exact published NWB asset in the frozen source manifest; full original bytes verified before use; no unavailable-session exclusion.",
+    "independent_unit_boundary": "Recorded units are clustered within sessions and repeated patients. Unit/session keys do not establish distinct biological neurons across recordings.",
+    "measurement_target": "Order-invariant counts of released stored timestamp occurrences, including exact multiplicity, contrasted by the released original0/1 labels. These are not authenticated counts of unique physical spikes or independently verified exposure histories for every trial.",
+    "not_claimed": [
+      "exact reproduction of either paper",
+      "absence or equivalence of memory signals",
+      "false-discovery proportion",
+      "patient-population inference",
+      "unbiased outer validation",
+      "causal memory specificity",
+      "out-of-session or out-of-patient generalization",
+      "every repeated timestamp is a distinct physical spike",
+      "complete independently verified old-image exposure histories"
+    ],
+    "papers": [
+      {
+        "doi": "10.1038/sdata.2018.10",
+        "correspondence": "Faraut2018 supplies the 200ms-to-1700ms response interval; its behavioral exclusions, correctly recognized trials and bootstrap mean-selection method are not reproduced."
+      },
+      {
+        "doi": "10.1038/s41597-020-0415-9",
+        "correspondence": "Chandravadia2020 describes the expanded NWB dataset; its one-second response interval and bootstrap selection are not reproduced."
+      }
+    ]
+  },
+  "source_policy": {
+    "source_manifest_sha256": "3819f2b5e9403f184b94be7d1374476c964c08c054763ec7b8d40cf6bbf7e7b9",
+    "runtime_network": false,
+    "verify_manifest_and_complete_file_sha256": true,
+    "unexpected_or_missing_source_files": "failed_precondition",
+    "session_order": "lexicographic full manifest NWB asset path, Unicode codepoint order",
+    "session_key": "exact full manifest asset_path, including directory and .nwb suffix",
+    "unit_key": "asset_path + '::unit=' + base10 source unit_id with no leading zero padding",
+    "unit_order": "session_order, then original zero-based NWB units table row; not sorted unit IDs",
+    "trial_order": "original zero-based NWB trials table row within the session; not sorted trial IDs",
+    "unit_identity": "asset_path plus source unit row and source integer unit_id; all must agree",
+    "trial_identity": "asset_path plus source trial row and source integer trial_id; all must agree",
+    "text_decoding": "Strict UTF-8 for HDF5 bytes; retain exact original strings, case, slashes and punctuation; no basename extraction or destructive ID normalization.",
+    "unit_region": {
+      "relation": "/units/electrodes and /units/electrodes_index reference electrode-table ROW positions, not electrode IDs",
+      "required_cardinality": 1,
+      "ambiguous_empty_or_multiple_links": "failed_precondition; never choose first link or invent peak channel",
+      "electrode_table": "/general/extracellular_ephys/electrodes",
+      "selection": "Include a unit iff its sole referenced location contains case-sensitive 'Hippocampus' or 'Amygdala'. If both strings occur, fail ambiguous anatomy.",
+      "region": "Hippocampus or Amygdala for included units; null for non-MTL units",
+      "excluded_unit_retention": "All source units remain in units.csv with included=false and exclusion_reason=non_mtl_location.",
+      "quality_exclusions": "none; no firing-rate, waveform, behavior, confidence, or isolation threshold"
+    },
+    "trials": {
+      "table": "/intervals/trials",
+      "required_columns": [
+        "id",
+        "stim_phase",
+        "new_old_labels_recog",
+        "external_image_file",
+        "start_time",
+        "stim_on_time",
+        "stim_off_time",
+        "stop_time"
+      ],
+      "phase_tokens": [
+        "learn",
+        "recog"
+      ],
+      "selection": "All and only phase exactly 'recog'; keep every other original row in trials.csv as non_recognition_phase.",
+      "recognition_label_tokens": {
+        "0": "released_new_label",
+        "1": "released_old_label"
+      },
+      "unknown_recognition_label": "failed_precondition, never coerce to class0",
+      "learning_labels": "Preserve literal source tokens (including 'NA'); decoded class and learning-membership evidence are null for non-recognition rows.",
+      "image_history_check": "Record whether each recognition row's exact original full external_image_file string occurs among the SAME session's released learning rows. This is an audit measurement, not an inclusion/relabeling precondition. All original0/1 labels and recognition rows remain unchanged even when a code1 image is absent from those learning rows. No path normalization, basename comparison, response/correctness substitution or outcome-selected reversal.",
+      "source_description_conflict": "The released label-column description reverses new/old meanings. Retain its literal text. Original native-code/converter lineage plus complete-history sessions support code0=new/code1=old; the analysis preserves these released labels rather than following the erroneous description or changing them from partial image histories.",
+      "incomplete_learning_history": "The source audit finds160 code1 recognition rows across8 sessions whose full image paths are absent from the released learning rows; their true prior exposure is not independently established here. Keep all of them and report the per-session crosstab. Absence from a released learning table does not imply novel status and is not repaired by inventing missing rows.",
+      "behavioral_exclusions": "none; all recognition trials retained regardless of reported response, correctness or confidence",
+      "finite_times": "All four required timestamps finite for every row, with start_time==stim_on_time and stim_on_time<=stim_off_time. Recognition rows additionally require stim_off_time<=stop_time. Preserve all original learning stop_time values even if they violate the full temporal ordering; they are not response-window inputs. Never sort/reassign times or infer missing trial ends.",
+      "empty_or_one_class_support": "Keep the complete source ledger and all mapped MTL units; statistics use explicit insufficient_class_support, not a fabricated chance estimate. Counts remain defined for any existing recognition rows.",
+      "learning_stop_time_exception": "The fixed source contains97 learning rows in one session with stop_time before stim_on_time. Retain every literal row and count this diagnostic per asset. No recognition row has this defect. Matching a stored stop value to a same-phase TTL6 does not establish that the event ended the same biological learning trial."
+    },
+    "clock": {
+      "native_unit": "seconds",
+      "origin": "one original arbitrary acquisition-clock origin, preserved across events, trials and spikes; no subtraction of first event, phase start or first spike",
+      "event_timestamp_path": "/acquisition/events/timestamps",
+      "experiment_timestamp_path": "/acquisition/experiment_ids/timestamps",
+      "event_data_path": "/acquisition/events/data",
+      "experiment_id_path": "/acquisition/experiment_ids/data",
+      "timestamp_consistency": "Event and experiment timestamp arrays exactly agree; event times finite and nondecreasing. TTL tokens such as '1.0' decode as exact finite integers, not digit stripping.",
+      "trial_event_check": "Each row's stored onset, stimulus offset and stop_time matches exactly one same-phase TTL1, TTL2 and TTL6 respectively; start_time equals stim_on_time. The stored stop field is distinct from stimulus offset. Exact TTL linkage does not prove correct same-biological-trial assignment for the disclosed learning stop-field anomalies; no reassignment is authorized.",
+      "phase_lookup": "Use the original learning/recognition experiment-ID mapping recorded in general/data_collection and acquisition descriptions; retain actual mapping in source_observed. Do not assume codes from a different session.",
+      "spike_units": "The spike_times dataset may have no literal unit attribute. Seconds are supported by NWB semantics and upstream common 1e6 conversion, not an invented measured attribute. Preserve null for absent literal attributes.",
+      "spikes": "All source ragged indexes valid and every stored timestamp finite. Original order can be nonmonotone. Count interval cardinality independently of order, preserving EVERY occurrence and its multiplicity. A stable sorted COPY is allowed for search-based counting; the original source stays unchanged. Never searchsorted an unsorted array, deduplicate, shift or infer/drop concatenated segments.",
+      "stored_event_irregularities": "The pre-count structural audit finds13 unordered units across7 sessions,20 adjacent downward steps and2046 duplicate timestamp occurrences beyond the first equal value. Zero raw-adjacent duplicate pairs does not mean timestamps are unique. Large backward jumps and repeats have unresolved physical origin; retain them as released records, not as verified distinct physical spikes.",
+      "observation_intervals": "Report units/obs_intervals and intervals/invalid_times presence. In their absence observation_coverage='unknown'; do not infer recording support from spike extrema or exclude response windows from those extrema.",
+      "unexpected_observation_tables": "Pause the structural gate before freezing if present; no unstated censoring or continuity assumption."
+    }
+  },
+  "response": {
+    "onset_column": "stim_on_time",
+    "start_offset_seconds": 0.2,
+    "end_offset_seconds": 1.7,
+    "duration_seconds": 1.5,
+    "endpoint_arithmetic": "Convert original onset/spike seconds to float64; start=onset+float64(0.2), end=onset+float64(1.7).",
+    "interval": "half_open_start_inclusive_end_exclusive",
+    "count_equation": "spike_count = sum over EVERY released stored timestamp occurrence s of1[start<=s<end], independent of storage order and including exact duplicate occurrences",
+    "counting_fairness": "Direct Boolean interval counts, stable-sorted-copy binary search, or an equivalent exact algorithm are accepted. Stable sorting is not a scientific exclusion or source mutation. No requirement to use a particular sorting/counting implementation, and no acceptance of deduplicated counts.",
+    "rate_equation": "rate_hz = spike_count / float64(1.5)",
+    "rank_input": "integer spike counts, mathematically identical ordering/ties to rates divided by the common positive duration",
+    "no_truncation": "Do not stop the window at stimulus offset or trial end. This fixed response interval can contain post-offset/question-related activity; it is not a pure visual or motor-independent response."
+  },
+  "rank_statistics": {
+    "positive_class": {
+      "source_label": 1,
+      "meaning": "released_old_label"
+    },
+    "negative_class": {
+      "source_label": 0,
+      "meaning": "released_new_label"
+    },
+    "support": "Defined iff both class counts are at least1; otherwise status=insufficient_class_support and all U/AUC/p/direction fields null.",
+    "u_old_twice": "2*number(old_count>new_count) + number(old_count==new_count), summed over every old/new pair; exact nonnegative integer",
+    "auc_old": "u_old_twice / (2*n_old*n_new)",
+    "test": "independent-samples Mann-Whitney-Wilcoxon rank-sum; two-sided asymptotic with pooled-tie variance and continuity correction",
+    "scipy_equivalent": {
+      "alternative": "two-sided",
+      "method": "asymptotic",
+      "use_continuity": true,
+      "nan_policy": "raise"
+    },
+    "tie_sum": "sum(t_g^3-t_g) over multiplicities of every distinct count in the pooled samples; exact integer",
+    "variance_equation": "n_old*n_new/12 * (N+1 - tie_sum/(N*(N-1))), N=n_old+n_new",
+    "tail_equation": "z=(max(U_old,n_old*n_new-U_old)-n_old*n_new/2-0.5)/sqrt(variance); p=min(1,2*NormalSurvival(z))",
+    "all_tied_convention": "If every pooled count is exactly equal: u_old_twice=n_old*n_new, auc_old=0.5, p=1, preferred_sign=+1.",
+    "invalid_arithmetic": "failed_precondition; no caught exception may become p=1 or AUC=0.5",
+    "selection_alpha": 0.05,
+    "selection": "status=ok AND unrounded p<0.05",
+    "preferred_sign": "+1 if unrounded auc_old>=0.5, else -1; the exact AUC tie chooses+1",
+    "same_trial_auc": "max(auc_old,1-auc_old); computed for every supported MTL unit, summarized only over full-data-selected units"
+  },
+  "repeated_halves": {
+    "n_repeats": 60,
+    "repeat_ids": "integers0..59",
+    "rng": {
+      "api": "numpy.random.Generator",
+      "bit_generator": "PCG64",
+      "seed": 0,
+      "numpy_sequence_contract_version": "2.2.6"
+    },
+    "initialization": "One global Generator(PCG64(0)) initialized once for the complete task, not per session/unit/repeat.",
+    "traversal": "repeat0..59 outer; then all MTL units in canonical session full-path/original-unit-row order; class0 draw then class1 draw for each supported unit",
+    "class_support": "At least4 recognition trials in EACH source class for that unit/session.",
+    "unsupported": "Retain all60 split rows as insufficient_class_support, no RNG draws, all train_membership entries false; false entries do NOT imply test membership for an unsupported split.",
+    "sampling": "For each class, call rng.choice(original recognition-position indices of that class, size=floor(n_class/2), replace=False, shuffle=True). Concatenate class0 then class1 draws. The remainder in original trial-row order is test membership.",
+    "membership_identity": "Write/read original trial row and trial ID through the source-keyed response axis; compressed recognition positions are internal only.",
+    "training": "Compute U_old, raw AUC and p on training counts only; selection uses p<0.05; preferred direction uses training AUC only.",
+    "test": "Compute test u_old_twice and auc_old on the complementary held-out membership. Directed test AUC is test_auc_old if train_preferred_sign=+1, otherwise1-test_auc_old. Never fold the test AUC or use full-data direction.",
+    "diagnostic_vs_included": "Compute test AUC for every supported split, including nonselected splits; included_in_conditional_summary is exactly the training-selected flag.",
+    "partition_properties": "Supported train/test disjoint, union exactly all recognition trials of that unit; no cross-session/unit mixing.",
+    "conditional_mean": "Equal-weight mean of directed test AUC over training-selected repeats for each unit; null if no selected repeats.",
+    "eligibility": "n_selected_splits>=5; eligibility does not require full-data selection.",
+    "interpretation": "Overlapping random halves are dependent. Conditioning final eligibility on total training-selection count is not independent outer validation; a trial's role changes across repeats."
+  },
+  "aggregation": {
+    "headline_population_allowed": [
+      "full_data_selected_same_trials",
+      "crossfit_selected_at_least_five_splits"
+    ],
+    "full_data_selected_same_trials": "Equal-weight mean same-trial preferred AUC over full-data-selected recorded units.",
+    "crossfit_selected_at_least_five_splits": "Equal-weight mean per-unit conditional held-out AUC over units with at least5 training-selected repeats, regardless of full-data selection.",
+    "selected_proportion": "n_memory_selective / n_mtl_units; denominator includes all source-mapped MTL units, with separately reported full-test unsupported count; null only if denominator0.",
+    "empty_population": "Mean null and status=empty_population; counts exactly0; do not replace by0.5 and do not fail solely because the source produced no selected/eligible units.",
+    "no_pooled_split_weighting": "Do not average all selected split rows across units directly; differing split counts must not change unit weights.",
+    "population_overlap": "Report full-data-selected only, conditional-eligible only, both and neither among all MTL units.",
+    "uncertainty": "No confidence interval, clustered bootstrap, null/permutation, false-discovery or patient-level test is required or implied.",
+    "direction_gate": "none; held-out AUC can be below0.5; either mean can be larger and any source-derived selected fraction is permitted"
+  },
+  "verification_tolerances": {
+    "source_times_seconds": {
+      "atol": 1e-9,
+      "rtol": 0
+    },
+    "rate_and_auc": {
+      "atol": 1e-8,
+      "rtol": 0
+    },
+    "probability": {
+      "atol": 1e-10,
+      "rtol": 1e-7
+    },
+    "counts_ids_masks_categories": "exact; integers are not booleans; no float-to-int truncation or uint overflow",
+    "source_headers": "type-aware exact values for literal strings/units/IDs/Boolean presence flags; original source hashes and frozen method object exact",
+    "categorical_authority": "Selection, preferred direction, support and >=5 eligibility come from unrounded source-count arithmetic. Accepted rounding of p/AUC does not change those categories.",
+    "arithmetic": "Recompute each scalar from the complete count/membership receipts, then per-unit and population summaries; use the corresponding published p or rate/AUC tolerance. No correlation, rank-shape, plausible-count, expected-outcome or prose-keyword gate.",
+    "domains": "Counts>=0; U2 in[0,2*n0*n1]; probabilities/AUCs/proportions in[0,1]; rates>=0; source/category integer values exact. No NaN/Inf substitutions."
+  },
+  "serialization": {
+    "csv": "UTF-8 comma-separated, one header, required columns present once; extra harmless columns allowed. Rows/columns may reorder when source keys are preserved.",
+    "csv_null": "empty field only for a publicly nullable value",
+    "csv_boolean": "0/1 or case-insensitive true/false; no other numeric thresholding",
+    "csv_integer": "Exact integral decimal or scientific notation accepted; reject Boolean tokens, nonfinite, fractional or precision-losing coercions.",
+    "json": "Required keys present even when null; finite native numeric values, true Boolean fields, no duplicated keys; no NaN/Inf. Harmless descriptive outer keys allowed, but source identities, method object and named model/population families are closed.",
+    "npz": "allow_pickle=False; required string axes Unicode, integer axes/counts signed or unsigned integer dtypes, membership Boolean, rates floating. Reject objects, Boolean count arrays and invalid integer casts. Additional harmless primitive arrays allowed.",
+    "order": "Canonicalization uses exact keys, not row order. All NPZ axis/response/repeat permutations must update indices/arrays coherently. Source row fields are immutable identity values, not output row numbers.",
+    "software": "Report actual nonempty string-to-string implementation versions; do not require the oracle's library identities for mathematically equivalent results."
+  },
+  "outputs": {
+    "sessions.csv": {
+      "coverage": "one row for every required87 original asset",
+      "keys": [
+        "asset_path"
+      ],
+      "columns": [
+        "asset_path",
+        "asset_id",
+        "source_sha256",
+        "subject_id",
+        "nwb_identifier",
+        "literal_session_id",
+        "n_source_trials",
+        "n_learning_trials",
+        "n_recognition_trials",
+        "n_new",
+        "n_old",
+        "n_source_units",
+        "n_mtl_units",
+        "n_electrodes",
+        "status"
+      ],
+      "types": {
+        "asset_path": "string",
+        "asset_id": "string",
+        "source_sha256": "sha256",
+        "subject_id": "string",
+        "nwb_identifier": "string",
+        "literal_session_id": "nullable_string",
+        "n_source_trials": "nonnegative_integer",
+        "n_learning_trials": "nonnegative_integer",
+        "n_recognition_trials": "nonnegative_integer",
+        "n_new": "nonnegative_integer",
+        "n_old": "nonnegative_integer",
+        "n_source_units": "nonnegative_integer",
+        "n_mtl_units": "nonnegative_integer",
+        "n_electrodes": "nonnegative_integer",
+        "status": "ok"
+      },
+      "rules": "literal_session_id comes only from /general/session_id and is empty if absent; do not invent one from date. Session key is asset_path, not literal_session_id. Counts recompute from complete ledgers."
+    },
+    "trials.csv": {
+      "coverage": "every original trial table row, including learning/non-recognition rows",
+      "keys": [
+        "asset_path",
+        "source_trial_row"
+      ],
+      "columns": [
+        "asset_path",
+        "source_trial_row",
+        "trial_id",
+        "stim_phase",
+        "source_label_token",
+        "source_label",
+        "external_image_file",
+        "image_in_learning",
+        "start_time_s",
+        "stim_on_time_s",
+        "stim_off_time_s",
+        "stop_time_s",
+        "included",
+        "status"
+      ],
+      "types": {
+        "asset_path": "string",
+        "source_trial_row": "nonnegative_integer",
+        "trial_id": "integer",
+        "stim_phase": "string",
+        "source_label_token": "string",
+        "source_label": "nullable_integer_0_or_1",
+        "external_image_file": "string",
+        "image_in_learning": "nullable_boolean",
+        "start_time_s": "finite_float",
+        "stim_on_time_s": "finite_float",
+        "stim_off_time_s": "finite_float",
+        "stop_time_s": "finite_float",
+        "included": "boolean",
+        "status": "included_recognition|non_recognition_phase"
+      },
+      "null_rule": "source_label and image_in_learning are null exactly for non-recognition rows; literal source_label_token is always preserved. All required source times remain finite even for excluded phase rows."
+    },
+    "units.csv": {
+      "coverage": "every original unit table row, including non-MTL units",
+      "keys": [
+        "asset_path",
+        "source_unit_row"
+      ],
+      "columns": [
+        "asset_path",
+        "unit_key",
+        "source_unit_row",
+        "unit_id",
+        "n_electrode_links",
+        "electrode_row",
+        "electrode_id",
+        "original_channel",
+        "location",
+        "included",
+        "region",
+        "exclusion_reason"
+      ],
+      "types": {
+        "asset_path": "string",
+        "unit_key": "string",
+        "source_unit_row": "nonnegative_integer",
+        "unit_id": "integer",
+        "n_electrode_links": "integer_1",
+        "electrode_row": "nonnegative_integer",
+        "electrode_id": "integer",
+        "original_channel": "integer",
+        "location": "string",
+        "included": "boolean",
+        "region": "nullable_Hippocampus_or_Amygdala",
+        "exclusion_reason": "included_mtl|non_mtl_location"
+      },
+      "rules": "Preserve source unit ID, table row, electrode row, electrode ID and original channel separately. region is null exactly when included=false. No peak-channel, numeric-ID coincidence or group-name substitute."
+    },
+    "trial_counts.npz": {
+      "dimensions": {
+        "U": "all included MTL unit records",
+        "R": "sum over included units of their session's recognition-trial count",
+        "B": 60
+      },
+      "arrays": {
+        "unit_key": {
+          "dtype": "Unicode",
+          "shape": [
+            "U"
+          ],
+          "rule": "every included unit_key once; no excluded units"
+        },
+        "response_unit_index": {
+          "dtype": "integer",
+          "shape": [
+            "R"
+          ],
+          "rule": "index into supplied unit_key axis;0<=index<U"
+        },
+        "source_trial_row": {
+          "dtype": "integer",
+          "shape": [
+            "R"
+          ],
+          "rule": "original local trial row of the unit's asset"
+        },
+        "trial_id": {
+          "dtype": "integer",
+          "shape": [
+            "R"
+          ],
+          "rule": "original trial ID agreeing with trials.csv at that source row"
+        },
+        "source_label": {
+          "dtype": "integer",
+          "shape": [
+            "R"
+          ],
+          "rule": "exact original decoded0/1 recognition code"
+        },
+        "spike_count": {
+          "dtype": "integer",
+          "shape": [
+            "R"
+          ],
+          "rule": "nonnegative exact half-open original-source response count"
+        },
+        "rate_hz": {
+          "dtype": "floating",
+          "shape": [
+            "R"
+          ],
+          "rule": "finite spike_count/1.5"
+        },
+        "repeat_id": {
+          "dtype": "integer",
+          "shape": [
+            60
+          ],
+          "rule": "each integer0..59 exactly once"
+        },
+        "train_membership": {
+          "dtype": "Boolean",
+          "shape": [
+            60,
+            "R"
+          ],
+          "rule": "rows correspond to repeat_id; columns to response rows; exact frozen RNG membership; allfalse for unsupported unit repeats"
+        }
+      },
+      "coverage": "Each (unit_key,source_trial_row) pair exists exactly once for every recognition trial in that unit's session. No other response pairs. All original IDs/labels agree with source ledgers.",
+      "order": "Any coherent permutation of unit_key, response rows or repeat_id is accepted, with response_unit_index and train_membership updated accordingly."
+    },
+    "split_events.csv": {
+      "coverage": "every included MTL unit times all60 repeat IDs, including nonselected/unsupported repeats",
+      "keys": [
+        "unit_key",
+        "repeat"
+      ],
+      "columns": [
+        "unit_key",
+        "repeat",
+        "status",
+        "n_train_new",
+        "n_train_old",
+        "n_test_new",
+        "n_test_old",
+        "train_u_old_twice",
+        "train_auc_old",
+        "train_p",
+        "train_selected",
+        "train_preferred_sign",
+        "test_u_old_twice",
+        "test_auc_old",
+        "test_directed_auc",
+        "included_in_conditional_summary"
+      ],
+      "types": {
+        "unit_key": "string",
+        "repeat": "integer_0_to_59",
+        "status": "ok|insufficient_class_support",
+        "n_train_new": "nullable_nonnegative_integer",
+        "n_train_old": "nullable_nonnegative_integer",
+        "n_test_new": "nullable_nonnegative_integer",
+        "n_test_old": "nullable_nonnegative_integer",
+        "train_u_old_twice": "nullable_nonnegative_integer",
+        "train_auc_old": "nullable_probability",
+        "train_p": "nullable_probability",
+        "train_selected": "boolean",
+        "train_preferred_sign": "nullable_integer_minus1_or_plus1",
+        "test_u_old_twice": "nullable_nonnegative_integer",
+        "test_auc_old": "nullable_probability",
+        "test_directed_auc": "nullable_probability",
+        "included_in_conditional_summary": "boolean"
+      },
+      "unsupported_rule": "status=insufficient_class_support iff original n_new<4 or n_old<4. All support/statistic/direction fields nullable here are null, not zero support from interpreting an allfalse mask; both selection/inclusion flags false.",
+      "supported_rule": "All nullable fields are required finite/non-null under status=ok. Both classes exist in train/test. train_selected==included_in_conditional_summary; test_directed_auc can be below0.5 and is retained even for train_selected=false."
+    },
+    "neurons.csv": {
+      "coverage": "every included MTL unit exactly once, irrespective of full-data/split selection",
+      "keys": [
+        "unit_key"
+      ],
+      "columns": [
+        "unit_key",
+        "asset_path",
+        "subject_id",
+        "unit_id",
+        "region",
+        "n_trials",
+        "n_new",
+        "n_old",
+        "full_status",
+        "u_old_twice",
+        "auc_old",
+        "full_p",
+        "preferred_sign",
+        "same_trial_auc",
+        "memory_selective",
+        "n_usable_splits",
+        "n_selected_splits",
+        "conditional_auc",
+        "conditional_status",
+        "heldout_eligible"
+      ],
+      "types": {
+        "unit_key": "string",
+        "asset_path": "string",
+        "subject_id": "string",
+        "unit_id": "integer",
+        "region": "Hippocampus|Amygdala",
+        "n_trials": "nonnegative_integer",
+        "n_new": "nonnegative_integer",
+        "n_old": "nonnegative_integer",
+        "full_status": "ok|insufficient_class_support",
+        "u_old_twice": "nullable_nonnegative_integer",
+        "auc_old": "nullable_probability",
+        "full_p": "nullable_probability",
+        "preferred_sign": "nullable_integer_minus1_or_plus1",
+        "same_trial_auc": "nullable_probability",
+        "memory_selective": "boolean",
+        "n_usable_splits": "nonnegative_integer",
+        "n_selected_splits": "nonnegative_integer",
+        "conditional_auc": "nullable_probability",
+        "conditional_status": "defined|no_selected_splits",
+        "heldout_eligible": "boolean"
+      },
+      "rules": "n_trials=n_new+n_old; full nullable values null only for empty class support, with memory_selective=false. n_usable_splits is0 or60 under this fixed source policy. n_selected_splits counts every training-selected split; conditional_auc is the mean over those splits when count>0, otherwise null. A mean based on1..4 splits remains diagnostic, while heldout_eligible is exactly count>=5."
+    },
+    "results.json": {
+      "required_fields": [
+        "status",
+        "task_id",
+        "headline_population",
+        "headline_status",
+        "memory_selective_new_old_auc",
+        "n_sessions",
+        "n_patients",
+        "n_source_units",
+        "n_mtl_units",
+        "n_full_test_defined",
+        "n_full_test_undefined",
+        "n_memory_selective",
+        "proportion_memory_selective",
+        "n_crossfit_eligible",
+        "n_response_rows",
+        "n_split_events",
+        "populations",
+        "population_overlap"
+      ],
+      "types": {
+        "status": "complete",
+        "task_id": "MTLMEMORY-001",
+        "headline_population": "full_data_selected_same_trials|crossfit_selected_at_least_five_splits",
+        "headline_status": "defined|empty_population",
+        "memory_selective_new_old_auc": "nullable_probability",
+        "n_sessions": "nonnegative_integer",
+        "n_patients": "nonnegative_integer",
+        "n_source_units": "nonnegative_integer",
+        "n_mtl_units": "nonnegative_integer",
+        "n_full_test_defined": "nonnegative_integer",
+        "n_full_test_undefined": "nonnegative_integer",
+        "n_memory_selective": "nonnegative_integer",
+        "proportion_memory_selective": "nullable_probability",
+        "n_crossfit_eligible": "nonnegative_integer",
+        "n_response_rows": "nonnegative_integer",
+        "n_split_events": "nonnegative_integer",
+        "populations": "closed_object",
+        "population_overlap": "closed_object"
+      },
+      "populations": {
+        "required_exact_keys": [
+          "full_data_selected_same_trials",
+          "crossfit_selected_at_least_five_splits"
+        ],
+        "each_value": {
+          "required_exact_fields": [
+            "n_units",
+            "mean_auc",
+            "status"
+          ],
+          "types": {
+            "n_units": "nonnegative_integer",
+            "mean_auc": "nullable_probability",
+            "status": "defined|empty_population"
+          }
+        }
+      },
+      "population_overlap": {
+        "required_exact_fields": [
+          "full_only",
+          "conditional_only",
+          "both",
+          "neither"
+        ],
+        "types": "all nonnegative_integer"
+      },
+      "rules": "Both populations always reported. Headline scalar/status exactly select the declared population. n_patients counts distinct literal source subject IDs across required sessions, not units. n_split_events=60*n_mtl_units; overlap counts sum to n_mtl_units. Full-test defined+undefined sum to n_mtl_units. Empty population requires n_units0, mean_aucnull and empty_population status."
+    },
+    "run_metadata.json": {
+      "required_fields": [
+        "status",
+        "task_id",
+        "dandiset_id",
+        "published_version",
+        "source_manifest_sha256",
+        "method_contract_sha256",
+        "source_sha256",
+        "method_contract",
+        "headline_population",
+        "source_observed",
+        "software_versions"
+      ],
+      "types": {
+        "status": "complete",
+        "task_id": "MTLMEMORY-001",
+        "dandiset_id": "000004",
+        "published_version": "0.220126.1852",
+        "source_manifest_sha256": "sha256",
+        "method_contract_sha256": "sha256",
+        "source_sha256": "closed_exact_manifest_path_to_sha256_object",
+        "method_contract": "closed_exact_public_method_object",
+        "headline_population": "same declared choice as results.json",
+        "source_observed": "object",
+        "software_versions": "nonempty_string_to_nonempty_string_object"
+      },
+      "source_observed": {
+        "required_fields": [
+          "n_sessions",
+          "n_patients",
+          "n_source_trials",
+          "n_recognition_trials",
+          "n_source_units",
+          "n_mtl_units",
+          "sessions"
+        ],
+        "types": {
+          "n_sessions": "nonnegative_integer",
+          "n_patients": "nonnegative_integer",
+          "n_source_trials": "nonnegative_integer",
+          "n_recognition_trials": "nonnegative_integer",
+          "n_source_units": "nonnegative_integer",
+          "n_mtl_units": "nonnegative_integer",
+          "sessions": "list_of_complete_original_asset_records_order_free"
+        },
+        "session_record": {
+          "keys": [
+            "asset_path"
+          ],
+          "required_fields": [
+            "asset_path",
+            "nwb_version",
+            "session_start_time",
+            "timestamps_reference_time",
+            "event_timestamp_unit",
+            "experiment_timestamp_unit",
+            "spike_times_literal_unit",
+            "n_events",
+            "event_timestamps_finite",
+            "event_timestamps_nondecreasing",
+            "experiment_timestamps_exactly_match_events",
+            "phase_experiment_ids",
+            "clock_mapping_counts",
+            "source_label_description",
+            "label_description_conflicts_with_released_code_semantics",
+            "label_membership_counts",
+            "unit_electrode_link_counts",
+            "units_obs_intervals_present",
+            "invalid_times_present",
+            "observation_coverage",
+            "all_spikes_finite",
+            "all_unit_spikes_nondecreasing",
+            "raw_adjacent_inversions",
+            "n_unordered_units",
+            "raw_adjacent_duplicate_spikes",
+            "duplicate_timestamp_occurrences",
+            "n_learning_temporal_order_violations",
+            "n_recognition_temporal_order_violations"
+          ],
+          "types": {
+            "asset_path": "string",
+            "nwb_version": "string",
+            "session_start_time": "string",
+            "timestamps_reference_time": "string",
+            "event_timestamp_unit": "nullable_string",
+            "experiment_timestamp_unit": "nullable_string",
+            "spike_times_literal_unit": "nullable_string",
+            "n_events": "nonnegative_integer",
+            "event_timestamps_finite": "boolean",
+            "event_timestamps_nondecreasing": "boolean",
+            "experiment_timestamps_exactly_match_events": "boolean",
+            "phase_experiment_ids": "closed_object",
+            "clock_mapping_counts": "closed_object",
+            "source_label_description": "string",
+            "label_description_conflicts_with_released_code_semantics": "boolean",
+            "label_membership_counts": "closed_object",
+            "unit_electrode_link_counts": "closed_object",
+            "units_obs_intervals_present": "boolean",
+            "invalid_times_present": "boolean",
+            "observation_coverage": "unknown",
+            "all_spikes_finite": "boolean",
+            "all_unit_spikes_nondecreasing": "boolean",
+            "raw_adjacent_inversions": "nonnegative_integer",
+            "n_unordered_units": "nonnegative_integer",
+            "raw_adjacent_duplicate_spikes": "nonnegative_integer",
+            "duplicate_timestamp_occurrences": "nonnegative_integer",
+            "n_learning_temporal_order_violations": "nonnegative_integer",
+            "n_recognition_temporal_order_violations": "nonnegative_integer"
+          },
+          "phase_experiment_ids": {
+            "required_exact_fields": [
+              "learn",
+              "recog"
+            ],
+            "types": "integer values from that session's source mapping"
+          },
+          "clock_mapping_counts": {
+            "required_exact_fields": [
+              "n_trials",
+              "onset_exact_unique_ttl1",
+              "offset_exact_unique_ttl2",
+              "trial_end_exact_unique_ttl6",
+              "start_equals_stim_on"
+            ],
+            "types": "all nonnegative_integer; matching counts equal n_trials when the structural precondition passes"
+          },
+          "label_membership_counts": {
+            "required_exact_fields": [
+              "code0_absent_from_learning",
+              "code0_present_in_learning",
+              "code1_absent_from_learning",
+              "code1_present_in_learning"
+            ],
+            "types": "all nonnegative_integer and exactly source-derived; compare original full paths, never basenames. Positive code1_absent counts are retained, not a failure or relabeling rule."
+          },
+          "unit_electrode_link_counts": {
+            "required_exact_fields": [
+              "zero",
+              "one",
+              "multiple"
+            ],
+            "types": "all nonnegative_integer; zero/multiple0 and one=n_source_units when the source gate passes"
+          },
+          "stored_spike_diagnostics": {
+            "all_unit_spikes_nondecreasing": "true iff every original unit sequence has no adjacent decrease before any copy sorting",
+            "raw_adjacent_inversions": "sum over source units of count(raw_s[j+1]<raw_s[j])",
+            "n_unordered_units": "number of source unit sequences with at least one raw adjacent inversion",
+            "raw_adjacent_duplicate_spikes": "sum over source units of count(raw_s[j+1]==raw_s[j]) in ORIGINAL stored order",
+            "duplicate_timestamp_occurrences": "sum over source units of len(raw_s)-len(unique(raw_s)), comparing exact timestamp values; no cross-unit merging; computation is diagnostic only and must not deduplicate response counts"
+          },
+          "rules": "Only compact measured observations are duplicated here. Do not copy every trial/unit row into metadata; those are public CSV ledgers. Literal absent HDF5 unit attributes remain null. Date strings remain source strings and never shift timestamps. Source nonmonotonicity and missing old-image learning membership are reported honestly, never forced true/zero. Additional harmless descriptive fields may be present, but the named identity/count objects remain closed and source-exact.",
+          "temporal_order_diagnostics": "For each phase separately, count original rows failing start_time<=stim_on_time<=stim_off_time<=stop_time, using literal finite source values. Learning violations are retained and reported; recognition violations remain failed_precondition. The counts diagnose records, not corrected physical timing."
+        }
+      }
+    },
+    "findings.md": {
+      "type": "nonempty_UTF8_text",
+      "grading": "No keywords, exact phrasing, expected effect, selected fraction or between-method direction required."
+    }
+  },
+  "failure_handling": {
+    "source_or_computation_precondition": "Exit nonzero and write parseable run_metadata.json/results.json with status='failed_precondition' and nonempty reason, plus nonempty findings.md; never publish a complete result or silently drop source sessions/units/trials.",
+    "resource_pilot": "Explicit status='resource_pilot'; never accepted as a complete87-asset output or reference bank.",
+    "valid_empty_statistical_population": "Not a precondition failure; retain complete source tables/counts, zero population counts and null means with declared statuses.",
+    "evidence_safety": "Original sources read-only; fresh output/report destinations outside source tree; do not overwrite prior analysis evidence or follow symlinked destinations."
+  },
+  "verifier_performance": {
+    "source_bank": "Generated only from authenticated original sources using an independently implemented count/statistical route; oracle output may be consulted only after construction for validation. Historical numerical reference is not an input.",
+    "memoization": "Within one verifier process, canonicalize and exactly validate source integer counts, labels, IDs, split masks and scientific contract before reusing cached rank/split statistics. Cache keys must cover the complete primitive scientific identity, not submitted summaries, approximate floats, file path or a claimed hash alone.",
+    "not_refitting_each_mutation": "Rank statistics are deterministic functions of exact counts/membership. Reference-derived statistics may be reused after exact primitive equality is established; all submitted scalar receipts, selected events, per-unit means and population arithmetic are still checked.",
+    "input_mutation": "Any changed count, label, key or membership must fail the source comparison or trigger a genuinely distinct cache key; never reuse acceptance on a lossy or partial identity."
+  },
+  "contract_status": "frozen_after_explicit_nonanalysis_learning_timing_amendment",
+  "structural_contract_revision": {
+    "prior_method_sha256": "2e30bc3775278dc3c80f767960ca50aeb1bacb0779a60a3734fc538b8daeb565",
+    "reason": "All three initial complete-source attempts failed the prior all-row temporal-order precondition before full-cohort rank/split analysis or bank publication. Retained original structural metadata identifies97 learning-only rows with stop_time before onset in one asset; all8700 recognition rows satisfy temporal order.",
+    "evidence_boundary": "The original structural preflight checked exact same-phase TTL linkage but missed full within-row ordering. This correction follows one-asset numerical pilots and prefix response counting in failed full attempts; it is not represented as preceding all response counts. No response results were used to choose the correction.",
+    "unchanged": "All87 original source files, all recognition trials and released labels, unit selection, event multiplicities, onset-based response window, rank test, random sequence, selection thresholds, summaries and numerical tolerances remain unchanged.",
+    "resolution": "Keep all finite literal learning timestamps and diagnose non-analysis stop-field inconsistencies without reassignment, source rewriting, exclusion or invented chronology. Recognition timing remains a strict precondition."
+  }
+}
