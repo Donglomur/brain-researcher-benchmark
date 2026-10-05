@@ -1,0 +1,268 @@
+{
+  "pipeline_id": "ivim-explicit-qc-v2",
+  "dataset_id": "ivim-figshare-3395704-v1",
+  "source_sha256": {
+    "IVIM.nii.gz": "c360a1eb252815bf6ad5cc1d27ff351bc57aaaea3349853c97a5cb5176cf727d",
+    "IVIM.bvals": "0d35b62862dc648dea241290024a3b6aeb2f7b63aaba79ac1a03e9001f8afea1",
+    "IVIM.bvecs": "1d3262bf345cab948873c2347a2e05d5117881a6fac2bc14a7949b7fb6c12aa3"
+  },
+  "shape": [
+    256,
+    256,
+    54,
+    21
+  ],
+  "affine": [
+    [
+      -0.9375,
+      0,
+      0,
+      120.03099822998047
+    ],
+    [
+      0,
+      0.9375,
+      0,
+      -91.56149291992188
+    ],
+    [
+      0,
+      0,
+      2.5,
+      -75.1500015258789
+    ],
+    [
+      0,
+      0,
+      0,
+      1
+    ]
+  ],
+  "header_voxel_sizes": [
+    0.9375,
+    0.9375,
+    2.5
+  ],
+  "header_spatial_units": "mm",
+  "source_processing": "depositor_registered_and_direction_averaged",
+  "bvals": [
+    0,
+    10,
+    20,
+    30,
+    40,
+    60,
+    80,
+    100,
+    120,
+    140,
+    160,
+    180,
+    200,
+    300,
+    400,
+    500,
+    600,
+    700,
+    800,
+    900,
+    1000
+  ],
+  "b0_threshold": 0,
+  "parameter_order": [
+    "S0",
+    "f",
+    "Dstar",
+    "D"
+  ],
+  "diffusivity_units": "mm^2/s",
+  "roi": {
+    "x": [
+      90,
+      120
+    ],
+    "y": [
+      90,
+      120
+    ],
+    "z": 33,
+    "output_unit": "all_900_fixed_box_voxels",
+    "b0_observed": "mean_of_measured_b_equals_zero",
+    "tissue_rule": "b0_observed > 0.5 * median(finite_positive_box_b0_observed)",
+    "input_eligible": "tissue_and_all_21_signals_finite_and_strictly_positive",
+    "reorientation": null,
+    "smoothing": null,
+    "resampling": null
+  },
+  "model": "S0 * (f * exp(-b * Dstar) + (1-f) * exp(-b * D))",
+  "normalization": "observed_signal / observed_mean_b0",
+  "methods": {
+    "trr_explicit": {
+      "solver": {
+        "method": "trf",
+        "jacobian": "analytic",
+        "loss": "linear",
+        "tr_solver": "exact",
+        "ftol": 1e-10,
+        "xtol": 1e-10,
+        "gtol": 1e-10,
+        "max_nfev": 1000
+      },
+      "x_scale": [
+        1,
+        0.1,
+        0.01,
+        0.001
+      ],
+      "fit_parameter_order": [
+        "a",
+        "f",
+        "Dstar",
+        "D"
+      ],
+      "bounds_lower": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bounds_upper": [
+        null,
+        1,
+        1,
+        1
+      ],
+      "null_upper_bound_means": "unbounded",
+      "initialization": {
+        "regression": "OLS log(normalized_signal) = intercept - b * slope",
+        "D_b_min_inclusive": 400,
+        "a_Dstar_b_max_inclusive": 200,
+        "f": "1 - exp(high_b_intercept) / exp(low_b_intercept)",
+        "a_lower": 1e-8,
+        "f_clip": [
+          0.000001,
+          0.999999
+        ],
+        "diffusivity_clip": [
+          1e-8,
+          0.99999999
+        ]
+      },
+      "component_canonicalization": "if_converged_Dstar_less_than_D_swap_and_f_equals_1_minus_f",
+      "fallback": false
+    },
+    "segmented_b200": {
+      "S0": "observed_mean_b0",
+      "high_b": "b >= 200",
+      "high_b_regression": "OLS log(normalized_signal) = intercept - b * D",
+      "f": "1 - exp(intercept)",
+      "initial_admissibility": "0 < f < 1 and 0 <= D < 1",
+      "low_b": "b < 200",
+      "fit": "Dstar_only_original_normalized_signal_residual_with_S0_D_f_fixed",
+      "Dstar_bounds": [
+        "D",
+        1
+      ],
+      "Dstar_initial": "clip(0.01, D+1e-8*(1-D), 1-1e-8*(1-D))",
+      "solver": {
+        "method": "trf",
+        "jacobian": "analytic",
+        "loss": "linear",
+        "tr_solver": "exact",
+        "ftol": 1e-10,
+        "xtol": 1e-10,
+        "gtol": 1e-10,
+        "max_nfev": 1000
+      },
+      "x_scale": [
+        0.01
+      ],
+      "fallback": false
+    }
+  },
+  "qc": {
+    "fit_statuses": [
+      "not_tissue",
+      "invalid_signal",
+      "initialization_invalid",
+      "segmented_out_of_bounds",
+      "optimizer_failed",
+      "invalid_parameters",
+      "degenerate_or_unordered",
+      "ok"
+    ],
+    "status_definitions": {
+      "not_tissue": "source_b0_tissue_threshold_not_met_no_solver",
+      "invalid_signal": "tissue_but_any_source_measurement_nonfinite_or_nonpositive_no_solver",
+      "initialization_invalid": "log_linear_initialization_not_finite_or_failed_no_solver",
+      "segmented_out_of_bounds": "segmented_initial_f_not_strictly_0_to_1_or_D_not_0_inclusive_to_1_exclusive_no_solver",
+      "optimizer_failed": "optimizer_exception_or_unsuccessful_termination_candidate_not_admitted",
+      "invalid_parameters": "optimizer_success_but_nonfinite_or_out_of_computational_bounds",
+      "degenerate_or_unordered": "optimizer_success_but_f_not_strictly_0_to_1_or_Dstar_not_greater_than_D",
+      "ok": "optimizer_success_and_numerically_admissible"
+    },
+    "optimizer_status": "SciPy_OptimizeResult_status_integer_minus_1_to_4_or_empty_if_no_result_success_requires_positive",
+    "nfev": "SciPy_reported_function_evaluations_1_to_1000_or_0_if_no_OptimizeResult",
+    "failed_candidates": "retain_defined_initial_or_last_iterate_parameters_as_diagnostics_never_as_valid_fallback_fits",
+    "numerical_validity": "eligible_and_solver_success_and_finite_S0>0_and_0<f<1_and_0<=D<Dstar<=1",
+    "common_valid": "intersection_of_both_methods_numerical_validity",
+    "boundary_exclusion": false,
+    "residual_exclusion": false,
+    "bound_flag_epsilon": 1e-8,
+    "bound_flag_order": [
+      "a_lower",
+      "f_lower",
+      "f_upper",
+      "Dstar_lower",
+      "Dstar_upper",
+      "D_lower",
+      "D_upper",
+      "Dstar_D_lower"
+    ],
+    "bound_flag_delimiter": "|",
+    "bound_flag_distances": [
+      "S0/S0obs",
+      "f",
+      "1-f",
+      "Dstar",
+      "1-Dstar",
+      "D",
+      "1-D",
+      "Dstar-D"
+    ],
+    "bound_flag_rule": "emit_name_if_corresponding_distance_is_finite_and_less_than_or_equal_to_epsilon",
+    "undefined_csv": "empty",
+    "undefined_json": null,
+    "nrmse": "sqrt(mean((prediction-observed_signal)**2)) / observed_mean_b0",
+    "parameter_bounds_are": "computational_guards_not_physiological_reference_ranges"
+  },
+  "verification": {
+    "parameter_atol": {
+      "S0_over_b0": 0.000001,
+      "f": 0.000001,
+      "Dstar": 1e-8,
+      "D": 1e-8
+    },
+    "parameter_rtol": 0.000001,
+    "normalized_prediction_atol": 0.00001,
+    "nrmse_atol": 0.000001,
+    "summary_atol": {
+      "S0_mean_over_mask_mean_observed_b0": 0.000001,
+      "f_mean": 0.000001,
+      "Dstar_mean": 1e-8,
+      "D_mean": 1e-8,
+      "nrmse_mean": 0.000001
+    },
+    "geometry_atol": 0.000001,
+    "undefined_pattern": "must_match_the_declared_source_bound_recipe",
+    "optimizer_history": "status_and_nfev_checked_semantically_not_exact_iteration_history",
+    "bound_flags": "recomputed_from_submitted_parameters_not_a_separate_exclusion_gate"
+  },
+  "software": {
+    "numpy": "2.2.6",
+    "scipy": "1.14.1",
+    "nibabel": "5.3.2",
+    "dipy": "1.12.1",
+    "h5py": "3.16.0"
+  }
+}

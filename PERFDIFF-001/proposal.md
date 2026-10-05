@@ -1,136 +1,85 @@
-## PERFDIFF-001
+# PERFDIFF-001: IVIM fitting and numerical-admissibility sensitivity
 
-**Proposal Title:** IVIM perfusion fraction f in a diffusion-MRI ROI — an un-cued **estimator-dependence / over-claim** trap (judgement genre)
+## Scientific scope
 
-**Scientific Domain:** Life Sciences · **Field:** Neuroscience · **Subfield:** Diffusion/perfusion MRI (IVIM)
+Retain as a paper-derived **method / easy control**, using the modern
+biexponential signal model implemented by DIPY. [Le Bihan et al. (1988)](https://doi.org/10.1148/radiology.168.2.3393671)
+provides the foundational diffusion/perfusion separation context; this task
+does not reproduce its historical acquisition, cohort, figure or clinical finding.
 
-**Source finding / method:** Le Bihan et al. (1988), *Radiology*, https://doi.org/10.1148/radiology.168.2.3393671 (separation of diffusion and perfusion by IVIM); fit-method sensitivity: Barbieri et al. (2016), *Magn. Reson. Med.* (impact of the fitting algorithm on IVIM parameters); While (2017), *Magn. Reson. Med.* (IVIM estimation). **Dataset:** the dipy-shipped IVIM subject, fetched at runtime via `dipy.data.fetch_ivim` / `read_ivim` — real, public diffusion MRI, 21 b-values from 0 to 1000 s/mm². Real data, no synthetic/planted truth.
+[Barbieri et al. (2016)](https://doi.org/10.1002/mrm.25765) motivates fitting-method
+sensitivity using upper-abdominal data, and [While (2017)](https://doi.org/10.1002/mrm.26598)
+studies fitting approaches through simulations. Neither is the source cohort
+for this single public brain acquisition. No numerical spread, estimator ranking,
+population range, or physiological ground truth is assumed.
 
-**Genre:** over-claim / judgement (mirror of GRADIENT-001). The honest answer is that f is choice-dependent; the task grades whether the write-up **discovers and reports the dependence** rather than asserting one confident value.
+## Public substrate
 
-### The un-cued lever
+Use [Eric Peterson's IVIM dataset, Figshare v1](https://doi.org/10.6084/m9.figshare.3395704.v1).
+The deposited image is already registered and averaged across three directions,
+yielding 21 b-value volumes. It is not raw direction-resolved diffusion data.
+Only the source image, b-values and b-vectors are used; the deposited fitted
+parameter image is deliberately excluded.
 
-The IVIM biexponential is ill-conditioned: the perfusion compartment (f, D\*) is constrained almost entirely by the few low-b (< ~200 s/mm²) points, so f and D\* trade off strongly and the result **depends materially on the fitting algorithm** — a well-known IVIM pitfall. dipy's default `IvimModel` is the full-biexponential Trust-Region NLLS (`fit_method='trr'`); a segmented two-step fit (D from high-b, then f) is the other classic estimator. The instruction names the deliverable (f, D, D\* in a fixed ROI) and pins the ROI, but **never** mentions fit-method, estimator, robustness, or that f is choice-dependent. An un-cued agent calls `IvimModel(gtab).fit(...)` (which defaults to `trr`) and reports one confident f ≈ 0.21.
+The versioned source identities, published MD5, verified SHA256, byte sizes and
+CC0 licensing are recorded in the manifest. Original bytes are downloaded at
+image-build time and supplied offline. The task does not synthesize a cohort or
+silently substitute cached data.
 
-### The trap (Step-0 validated, real data)
+## Numerical and scientific repair
 
-Same ROI (slice z=33, box x[90:120] y[90:120], ~850–900 tissue voxels), same voxels, two standard estimators:
+The old default-DIPY output mixed optimized parameters with initialization/fallback
+returns, while globally suppressing warnings. Its two methods also used different
+valid-voxel denominators. Consequently, an apparent difference could combine
+algorithm behavior, failed fitting and sample selection. Old reference numbers
+and claims that they demonstrate a particular scientific effect are withdrawn.
 
-| estimator | f (ROI mean) | f (median) | D* (mm²/s) |
-|---|---|---|---|
-| Full biexponential Trust-Region NLLS (`trr`, dipy default) | **0.213** | 0.200 | 6.5e-3 |
-| Segmented two-step fit | **0.121** | 0.085 | 1.7e-2 |
+The revised public baseline explicitly specifies:
 
-ROI-mean f ranges **0.12–0.21** across estimators; per-voxel it spans ~**0.03–0.36**; D\* differs ~3×. (A variable-projection fit, dipy `fit_method='varpro'`, lands in between at f ≈ 0.15 — the same downward shift.) So f is **not** a single well-determined number on these data — the honest deliverable is a range with the estimator-dependence stated, not one confident value.
+- Full bounded nonlinear fitting with observed-b0 signal normalization, analytic
+  derivatives, initialization, optimizer settings and recorded termination.
+- A named segmented b200 approximation, with high-b log-linear tissue estimation
+  followed by an original-signal low-b fast-component fit. It does not clip and
+  re-log residuals or discard a fitted low-b intercept.
+- Every coordinate in the fixed box remains represented, including source-ineligible,
+  failed and degenerate rows. Initialization projection is recorded, never silently
+  substituted for a failed nonlinear solution.
+- Separate per-method admissibility counts and a shared, paired comparison set.
+  Bounds and ordered components are numerical definitions, not validated biological
+  ranges or a test of parameter identifiability.
+- Retained measured/predicted signals and residuals, with no post-hoc residual or
+  minimum-spread exclusion.
 
-### Verifier (3 plain checks, mirrors GRADIENT-001)
+The exact contract is public in the instruction and metadata template. This is
+a comparison of two specified computational recipes, not a claim that only these
+estimators are scientifically valid.
 
-`tests/test_outputs.py`: (1) a real biexponential IVIM fit — plausible f plus a pseudo-diffusion D\*; (2) **estimator sensitivity was checked** — ≥2 per-method fits, or ≥2 named estimator families, or an explicit reported f-range; (3) **the dependence is not over-claimed** — findings link the perfusion fraction to a fit/estimator-dependence statement (a range, not a point), not a single confident f. The dependence phrase must **co-occur** with an f / D\* token, so merely naming two fitters in a methods list does not pass. No rubric, no score file; numbers searched at any json depth with a findings.md fallback.
+## Verifier and validation
 
-**Offline discrimination (locked):** oracle (trr + segmented, reports the range) → **3/3 PASS**. Two realistic naive outputs, built from real runs: (a) single default `trr`, confident "f = 0.21" → checks 2 **and** 3 FAIL; (b) *ran both* fitters but still reports one confident f and only names the methods in a pipeline line → check 3 **FAIL** (the pipeline-naming false-pass the GRADIENT/DEVCONN reviews warned about, defeated here). So the failure is the un-cued over-claim, not a format bug.
+Bind full S0/f/D/Dstar estimates and statuses to source-derived coordinates and
+the declared recipe, not just a correlated f map. Join primary, sweep and parameter
+tables by identity; reconstruct predicted curves and residuals, recompute validity
+and common-set summaries, and preserve signed paired differences.
 
-### Hardening pass (tb-science bar)
+Reject missing/padded/duplicate coordinates, fabricated diffusivities, copied
+second methods, forged success masks, wrong denominators, disconnected tables
+and incorrect source/recipe metadata. Accept equivalent numeric formatting,
+row order, additional descriptive columns and either permitted primary method.
+No English keywords, mandatory difference or direction are graded; scoring is
+all-or-nothing.
 
-Verifier was already at the GRADIENT-001 bar: three plain reviewer-style checks, numbers
-searched at any json depth, and the over-claim honesty check already GUARDED so the
-dependence phrase must **co-occur** with an f / D\* result token (naming two fitters in a
-methods list does not pass). The only residual cue was a mild reliability nudge in the
-`findings.md` required-output line ("and how confident you are in it") — for THIS task the
-trap *is* over-confidence in the single f, so that phrase was more on-the-nose than the
-generic GRADIENT-001 wording. It was stripped; the deliverable now just asks for the
-values. No verifier change. Re-validated offline against four constructed outputs (oracle,
-single-fitter naive, ran-both-but-overclaims, and a defensible trr+varpro alternative):
-oracle-pass / naive-fail / overclaim-fail / fair-alt-pass = Y/Y/Y/Y.
+A genuine source-run bank, independent signal/derivative checks, repeatability,
+actual-output regression matrix and clean-commit in-container oracle are separate
+validation gates. Small authoring fixtures alone establish none of these.
+Actual execution status belongs in REPAIR_STATUS.md and the retained external
+receipt, not a historical proposal claim.
 
-### Difficulty — Step-5 frontier calibration PENDING
+## Limits and delivery
 
-Oracle **reward 1.0** (locked locally). The ≥2-frontier-family gate (does GPT-5.x / Claude volunteer the estimator-sensitivity check and report f as a range, or fit once and assert a single perfusion fraction?) is a maintainer step. Prior: IVIM fit-method dependence is a specialist caveat an un-cued agent is unlikely to volunteer — the dipy IVIM tutorial fits a single estimator — so the over-claim trap has teeth.
+A low residual or successful optimizer does not establish a unique or unbiased
+perfusion parameter. The source image is already processed, the ROI is operational,
+and this is one acquisition. No Sol/frontier run, scientific acceptance, push or
+merge is implied. Public answer material also requires contamination-aware later
+model evaluation.
 
-### PROOF-OF-WORK REWORK (this revision — un-cued judgment, fair caveat path preserved)
-
-The keyword-only estimator-dependence check (fabrication-vulnerable per the suite audit) is
-replaced by a held-out per-voxel reference + three numeric pillars, WITHOUT cueing the
-fit-method judgment (the instruction still names only "estimate the IVIM perfusion fraction f
-with dipy's IvimModel").
-
-- **Held-out reference** (`tests/reference.npz`, sha256 `5f1d2736…7e7f`, ~8 KB, committed,
-  never shipped): the per-voxel perfusion fraction f over the fixed 900-voxel ROI for two fit
-  methods — trr biexponential NLLS 0.213, segmented two-step 0.121 — built by running the pinned
-  pipeline on the real dipy IVIM subject (numpy 2.1.3 / scipy 1.14.1 / dipy 1.12.1).
-- **Neutral intermediate output** (new, un-cued): `f_voxelwise.csv` — the per-voxel f the
-  standard pipeline already produces (columns `i,j,k,f`).
-- **Pillar 1** — the per-voxel f table covers the real ROI (≥50 %), is non-constant, and
-  correlates ≥0.65 with some real fit method (a fabricated/constant/guessed table matches none).
-- **Pillar 2** — the ROI-mean f recomputes to a reported f and a physically real perfusion
-  fraction.
-- **Pillar 3** — the fit-method dependence graded as NUMBERS OR (the FAIR single-fit-that-
-  caveats path the coordinator required kept) a negation-guarded ill-conditioning /
-  estimator-dependence caveat. A single confident f with no caveat over-claims.
-
-**Validation matrix (subprocess pytest per case):** honest (reports trr + segmented f) PASS ·
-honest-caveat (single trr fit + ill-conditioning caveat, one number) PASS · no-table / constant
-/ fabricated-non-constant / fabricated-coords FAIL (pillar 1) · naive over-claim (real trr map +
-bare confident 0.213, no caveat) FAIL (pillar 3 only; pillars 1–2 pass).
-
-### Cost
-
-`hard`. cpus 2, mem 8 GB, internet on (dipy fetches the IVIM subject, ~1 download). trr fit + a pure-numpy segmented fit over the ROI ≈ tens of seconds; timeouts agent 3600 s / verifier 900 s. Deps: dipy 1.12.1 + numpy/scipy/nibabel (no cvxpy — the second estimator is a pure numpy/scipy segmented fit, so the environment stays dependency-light and build-robust).
-
-### Second-pass fix (2026-09): the fit-method sweep is now PER-VOXEL-BACKED (single-fit+caveat removed)
-
-The red-team confirmed the pre-existing **fair single-fit-that-caveats path was the hole**: a
-naive single IVIM fit (one estimator) + a generic "f is estimator-dependent / ill-conditioned"
-sentence passed pillar 3 without ever running a second estimator — a guessable sentence, no
-proof of the spread. Per SECOND_PASS_BRIEF §5 ("keep PERFDIFF's fair single-fit-caveat path only
-if it still cannot pass on a naive value + a textbook sentence" — it could), that path is
-**removed** and the sweep is now a **required per-voxel table matched to the held-out reference**.
-
-**What changed**
-- New Required Output `f_sweep.csv`: the per-voxel f under each IVIM fitting method evaluated
-  (columns `i,j,k,method,f`, ≥2 methods). Instruction describes it neutrally as "the per-voxel
-  perfusion fraction under each IVIM fitting method you evaluate" — it does **not** name the
-  estimators or say the biexponential is ill-conditioned.
-- Pillar 3 rewritten (`test_estimator_sweep_matches_reference`): each sweep group must be a REAL
-  per-voxel fit — cover the ROI, non-constant, match ONE held-out fit-method's f pattern
-  (r ≥ 0.65) AND its ROI-mean f (≤ 0.05) — with ≥2 groups at DISTINCT methods spanning ≥ 0.05.
-  The prose caveat path and reported-scalar `straddle` branch are removed. IVIM has no single
-  "correct" estimator, so no `require_config`: the honest answer is the spread demonstrated with
-  ≥2 real fits (trr ~0.21 and segmented ~0.12).
-- `solution/compute.py` now writes `f_sweep.csv` from the trr and segmented fits it already
-  computes.
-
-**Why un-fabricable** (measured on the reference maps): trr and segmented f maps are
-distinguishable (cross-r 0.762 < self 1.0). A fabricated group matches no method's pattern; a
-rescaled/shifted copy of one fit is scale/shift-invariant in r → best-correlates with the SAME
-method → not a distinct method, and its shifted mean no longer matches → a single fit cannot be
-duplicated into a fake spread. Only running ≥2 real estimators passes.
-
-**Adversarial self-validation** (subprocess pytest, fixtures from the held-out per-method
-reference maps):
-
-| case | verdict | mechanism |
-|---|---|---|
-| honest (trr headline + trr/segmented per-voxel sweep) | **PASS** | all pillars |
-| defensible: version-drift f noise on both methods (r ≈ 0.80) | **PASS** | r ≥ 0.65 |
-| attack C: single trr fit + "ill-conditioned / estimator-dependent" caveat, 1 sweep group | **FAIL** | < 2 methods |
-| attack A: fabricated sweep (random f, right means) | **FAIL** | 0 methods matched |
-| attack C: real trr + rescaled copy relabeled `segmented` (mean→0.12) | **FAIL** | best-corr → trr → 1 method |
-| attack C: real trr duplicated & relabeled `segmented` | **FAIL** | 1 distinct method |
-| attack C: real trr + fabricated `segmented` (wrong pattern, right mean) | **FAIL** | fabricated group dropped → 1 method |
-
-The naive single-fit-plus-caveat (the removed path) and every fabricate/rescale/duplicate
-variant now FAIL while honest + defensible PASS.
-
-**Honest-limitations (blunt):**
-- *Live-dipy not run.* dipy is not installed here and the sample download stalls, so the fixtures
-  were synthesised from the committed held-out per-method reference maps. `compute.py` writes the
-  sweep from the trr (dipy, deterministic) and segmented (pure numpy lstsq, deterministic) fits
-  it already computes; a maintainer must confirm on a live dipy run (no committed reference-build
-  script exists).
-- *Accepted set = {trr, segmented}.* The reference holds only these two methods, so an agent
-  whose second estimator is neither (e.g. varpro) may not match a second config and would fail;
-  segmented is the canonical second IVIM estimator, and the instruction points to "≥2 fitting
-  methods". A maintainer could add more reference configs to widen the accepted set.
-- *Mild cue (accepted 5(a)).* Requiring a per-method f table cues that f depends on the fit
-  method. The retained teeth: the spread must be COMPUTED with ≥2 real per-voxel fits, which a
-  single-fit-plus-caveat, a guessed scalar, or a rescaled copy cannot fake.
+Resource ceiling: 2 CPU, 8 GiB RAM, no GPU, 3600 s agent, 900 s verifier.
