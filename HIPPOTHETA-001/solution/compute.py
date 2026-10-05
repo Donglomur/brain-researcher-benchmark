@@ -1,235 +1,417 @@
-"""Reference solution for HIPPOTHETA-001.
+"""Offline fixed-electrode locomotion-conditioning method control.
 
-Deliverable: the hippocampal theta (6-10 Hz) peak frequency of the CA1 LFP for session
-sub-e15-13f1 ses-220117 (DANDI 000552, Huszar et al. 2022, "Preconfigured dynamics in the
-hippocampus are guided by embryonic birthdate and rate of neurogenesis"). The instruction asks
-only for "the theta peak frequency"; it does NOT mention movement, running speed, state, or REM.
-
-The off-critical-path judgement this targets (un-cued, over-claim genre): theta frequency is
-state-dependent, so a single whole-recording number over-claims a state-independent identity.
-Running (locomotion) theta is FAST (~9 Hz), whereas theta during REM sleep and awake immobility
-is ~1.5 Hz SLOWER (~7.4-7.5 Hz). This recording is a ~7 h session that is mostly home-cage
-rest/sleep with a single ~31 min maze epoch. So the theta-band spectral peak taken over the
-WHOLE recording (the naive default) is dragged down to ~7.9 Hz by the dominant slow-theta
-(REM / immobility) periods. This reference VOLUNTEERS the state-conditioning the task never asks
-for -- it pairs the LFP with the behaviour (position) file, conditions on the animal's movement,
-recovers the movement-related theta peak of ~9 Hz, and reports the frequency as state-dependent.
-
-Validated ground truth (DANDI 000552, sub-e15-13f1 ses-220117, LFP 1250 Hz, best theta-power
-channel, Welch 4 s windows, parabolic peak interpolation, 6-10 Hz band):
-  CORRECT  during locomotion (speed > 5 units/s) : 9.0 Hz  (stable 8.98-9.01 across channels) <- reported
-  NAIVE    whole recording, no movement gating    : 7.9 Hz
-The locomotion peak is stable across the chosen channel and the running threshold.
+All estimators and source limitations are public. Importing this module performs
+no source reads, numerical analysis, directory creation, or network requests.
 """
+import argparse
 import csv
+import hashlib
+import importlib.metadata
 import json
+import math
 import os
+from pathlib import Path, PurePosixPath
+import platform
 import sys
-from pathlib import Path
 
+import h5py
 import numpy as np
 
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-OUT.mkdir(parents=True, exist_ok=True)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from spectral_contract import FS, WINDOW, HOP, window_spectrum, theta_integral, peak_summary
 
-DANDISET = "000552"
-LFP_ASSET = "sub-e15-13f1/sub-e15-13f1_ses-e15-13f1-220117-raw_ecephys.nwb"
-BEH_ASSET = "sub-e15-13f1/sub-e15-13f1_ses-e15-13f1-220117_behavior+ecephys.nwb"
-THETA = (6.0, 10.0)          # theta band (Hz)
-SEARCH = (5.0, 11.0)         # slightly wider search so a peak at the band edge is captured
-BROADBAND = (2.0, 45.0)      # broadband range written to spectrum.csv (1/f background + theta)
-RUN_THRESH = 5.0             # locomotion: running speed above this (position units / s)
-SMOOTH_S = 0.25             # position smoothing before differencing (s)
+PIPELINE_ID = "fixed-channel-gap-safe-welch-v2"
+METHOD_SHA256 = "33985c49ac69c03be8e0f483a0fe78d328982a7a46351b9bdba9b25b1ce7218b"
+MANIFEST_SHA256 = "175cdbcbeaa8259bd8f825521919bdd71698a65e03341d9f391c19c783075ec8"
+TABLE = "/general/extracellular_ephys/electrodes"
+PUBLIC_FILES = ("behavior.csv", "blocks.csv", "bouts.csv", "windows.csv", "spectrum.csv",
+                "results.json", "run_metadata.json", "findings.md")
 
 
-def fail(reason):
-    (OUT / "run_metadata.json").write_text(json.dumps(
-        {"status": "failed_precondition", "reason": reason,
-         "dandiset": DANDISET, "lfp_asset": LFP_ASSET, "behavior_asset": BEH_ASSET}, indent=2))
-    (OUT / "results.json").write_text(json.dumps({"status": "failed_precondition", "reason": reason}))
-    (OUT / "findings.md").write_text(f"# Failed precondition\n\n{reason}\n")
-    sys.stderr.write(reason + "\n")
-    sys.exit(1)
+def require(condition, reason):
+    if not condition:
+        raise ValueError(reason)
 
 
-def content_url(client, path):
-    asset = client.get_dandiset(DANDISET, "draft").get_asset_by_path(path)
-    return asset.get_content_url(follow_redirects=1, strip_query=False)
+def sha256(path):
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as stream:
+        for chunk in iter(lambda: stream.read(4 * 1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
-# ---- open both assets by streaming (no full download) ----
-try:
-    import warnings
-    warnings.filterwarnings("ignore")
-    import remfile
-    import h5py
-    from dandi.dandiapi import DandiAPIClient
-    with DandiAPIClient() as client:
-        lfp_url = content_url(client, LFP_ASSET)
-        beh_url = content_url(client, BEH_ASSET)
-    hr = h5py.File(remfile.File(lfp_url), "r")
-    hb = h5py.File(remfile.File(beh_url), "r")
-except Exception as e:
-    fail(f"could not resolve/stream DANDI {DANDISET} assets: {e}")
-
-# ---- LFP handle ----
-try:
-    es = hr["processing/ecephys/LFP/ElectricalSeriesLFP"]
-    data = es["data"]
-    fs = float(es["starting_time"].attrs["rate"])
-    n_samp, n_ch = data.shape
-except Exception as e:
-    fail(f"LFP ElectricalSeries missing/unexpected: {e}")
-
-# ---- position -> running speed ----
-try:
-    from scipy.ndimage import gaussian_filter1d
-    sp = hb["processing/behavior/SubjectPosition/SpatialSeries"]
-    pos = sp["data"][:]
-    pts = sp["timestamps"][:]
-except Exception as e:
-    fail(f"position SpatialSeries missing/unexpected: {e}")
-
-if pos.ndim != 2 or pos.shape[1] < 2 or len(pts) < 100:
-    fail(f"position data unexpected shape {pos.shape}")
-
-good = np.isfinite(pos[:, 0]) & np.isfinite(pos[:, 1])
-if good.sum() < 100:
-    fail("too few finite position samples")
-x = np.interp(pts, pts[good], pos[good, 0])
-y = np.interp(pts, pts[good], pos[good, 1])
-dt = float(np.median(np.diff(pts)))
-fs_pos = 1.0 / dt
-sig = max(SMOOTH_S * fs_pos, 1.0)
-xs = gaussian_filter1d(x, sig)
-ys = gaussian_filter1d(y, sig)
-speed = np.sqrt(np.gradient(xs, pts) ** 2 + np.gradient(ys, pts) ** 2)
-
-t0, t1 = float(pts[0]), float(pts[-1])   # the epoch during which position is tracked (the maze)
-
-# running segments (contiguous runs of speed > threshold) -> LFP sample ranges
-run = speed > RUN_THRESH
-segments = []
-i, n = 0, len(run)
-while i < n:
-    if run[i]:
-        j = i
-        while j < n and run[j]:
-            j += 1
-        a, b = int(pts[i] * fs), int(pts[j - 1] * fs)
-        if 0 <= a < b <= n_samp:
-            segments.append((a, b))
-        i = j
-    else:
-        i += 1
-run_time = sum((b - a) for a, b in segments) / fs
-if run_time < 60:
-    fail(f"too little locomotion time detected ({run_time:.1f}s)")
-
-# ---- pick a clear-theta hippocampal channel from a window inside the maze epoch ----
-from scipy import signal
+def text(value):
+    if isinstance(value, np.ndarray) and value.shape == ():
+        value = value.item()
+    if isinstance(value, bytes):
+        return value.decode("utf-8")
+    require(isinstance(value, str), "expected scalar source text")
+    return value
 
 
-def welch_spectrum(x, nperseg=None):
-    if nperseg is None:
-        nperseg = int(4 * fs)
-    if len(x) < nperseg:
-        nperseg = max(256, len(x) // 2)
-    return signal.welch(x, fs=fs, nperseg=nperseg, noverlap=nperseg // 2)
+def load_inputs(source_dir, method_contract):
+    source_dir, method_contract = Path(source_dir), Path(method_contract)
+    manifest_path = source_dir / "source_manifest.json"
+    require(not source_dir.is_symlink() and not manifest_path.is_symlink()
+            and not method_contract.is_symlink(), "symlinked input is not allowed")
+    require(sha256(method_contract) == METHOD_SHA256, "public method contract checksum mismatch")
+    require(sha256(manifest_path) == MANIFEST_SHA256, "source manifest checksum mismatch")
+    contract, manifest = json.loads(method_contract.read_text()), json.loads(manifest_path.read_text())
+    require(manifest["version"] == contract["source"]["version"]
+            and manifest["dandiset_id"] == "000552", "wrong source release")
+    files = manifest["files"]
+    require(len(files) == 2 and {r["role"] for r in files} == {"raw", "behavior"},
+            "exactly the two original source assets are required")
+    paths, source_hashes = {}, {}
+    for expected in contract["source"]["files"]:
+        entry = next(row for row in files if row["role"] == expected["role"])
+        require(all(entry[k] == v for k, v in expected.items()), "source identity mismatch")
+        relative = PurePosixPath(entry["path"])
+        require(not relative.is_absolute() and ".." not in relative.parts, "unsafe source path")
+        path = source_dir
+        for part in relative.parts:
+            path = path / part
+            require(not path.is_symlink(), "symlinked source component")
+        require(path.is_file() and path.stat().st_size == entry["size_bytes"], "source size mismatch")
+        require(sha256(path) == entry["sha256"], "source checksum mismatch")
+        paths[entry["role"]] = path
+        source_hashes[entry["path"]] = entry["sha256"]
+    return {"contract": contract, "manifest": manifest, "paths": paths,
+            "source_sha256": source_hashes, "method_contract_sha256": METHOD_SHA256,
+            "source_manifest_sha256": MANIFEST_SHA256}
 
 
-def peak_from(f, P, search=SEARCH):
-    m = (f >= search[0]) & (f <= search[1])
-    fb, Pb = f[m], P[m]
-    k = int(np.argmax(Pb))
-    if 0 < k < len(Pb) - 1:                      # parabolic interpolation of the peak
-        y0, y1, y2 = Pb[k - 1], Pb[k], Pb[k + 1]
-        den = (y0 - 2 * y1 + y2)
-        delta = 0.5 * (y0 - y2) / den if den != 0 else 0.0
-        return float(fb[k] + delta * (fb[1] - fb[0]))
-    return float(fb[k])
+def read_source(inputs):
+    """Check original metadata/mapping and read only the fixed LFP column."""
+    c, observed = inputs["contract"], {}
+    with h5py.File(inputs["paths"]["raw"], "r") as raw:
+        es, table = raw[c["lfp"]["path"]], raw[TABLE]
+        data, starting = es["data"], es["starting_time"]
+        require(data.shape == (c["lfp"]["n_samples"], c["lfp"]["n_channels"]), "LFP shape mismatch")
+        require(str(data.dtype) == c["lfp"]["dtype"], "LFP dtype mismatch")
+        require("timestamps" not in es and "channel_conversion" not in es, "unexpected LFP timing/scaling")
+        require(text(starting.attrs["unit"]) == "seconds", "LFP time unit mismatch")
+        require(float(starting[()]) == c["lfp"]["start_seconds"]
+                and float(starting.attrs["rate"]) == c["lfp"]["rate_hz"], "LFP clock mismatch")
+        require(text(data.attrs["unit"]) == c["lfp"]["unit"], "LFP voltage unit mismatch")
+        conversion, offset = float(data.attrs["conversion"]), float(data.attrs["offset"])
+        require(np.isclose(conversion, c["lfp"]["conversion"], atol=0, rtol=1e-15)
+                and offset == 0, "LFP calibration mismatch")
+        region = es["electrodes"]
+        require(raw[region.attrs["table"]].name == TABLE, "wrong electrode table reference")
+        row = int(region[c["channel"]["lfp_column"]])
+        require(row == c["channel"]["electrode_table_row"], "wrong electrode row")
+        electrode_id = int(table["id"][row])
+        channel_name, location = text(table["channel_name"][row]), text(table["location"][row])
+        require(electrode_id == c["channel"]["electrode_id"] and channel_name == c["channel"]["channel_name"]
+                and location == c["channel"]["location"], "source channel identity mismatch")
+        calendar, reference = text(raw["session_start_time"][()]), text(raw["timestamps_reference_time"][()])
+        session = text(raw["general/session_id"][()])
+        require(calendar == c["clocks"]["raw_calendar"] and reference == calendar
+                and session == c["source"]["session"] + "_raw", "raw session/calendar mismatch")
+        observed.update(raw_session_id=session, raw_calendar=calendar, raw_timestamps_reference_time=reference,
+                        n_lfp_samples=data.shape[0], n_lfp_channels=data.shape[1], lfp_dtype=str(data.dtype),
+                        lfp_start_seconds=float(starting[()]), lfp_rate_hz=float(starting.attrs["rate"]),
+                        lfp_unit=text(data.attrs["unit"]), lfp_conversion=conversion, lfp_offset=offset,
+                        lfp_column=0, electrode_table_row=row, electrode_id=electrode_id,
+                        channel_name=channel_name, location=location)
+        counts = np.asarray(data[:, 0])
+    with h5py.File(inputs["paths"]["behavior"], "r") as behavior:
+        series = behavior[c["behavior"]["path"]]
+        data, stamps = series["data"], series["timestamps"]
+        require(data.shape == tuple(c["behavior"]["shape"]) and stamps.shape == (data.shape[0],),
+                "position shape mismatch")
+        require(text(data.attrs["unit"]) == c["behavior"]["unit"]
+                and text(stamps.attrs["unit"]) == "seconds", "behavior units mismatch")
+        require(float(data.attrs["conversion"]) == 1 and float(data.attrs["offset"]) == 0,
+                "position calibration mismatch")
+        reference_frame = text(series["reference_frame"][()])
+        require(reference_frame == c["behavior"]["reference_frame"], "position reference frame mismatch")
+        calendar, reference = text(behavior["session_start_time"][()]), text(behavior["timestamps_reference_time"][()])
+        session = text(behavior["general/session_id"][()])
+        require(calendar == c["clocks"]["behavior_calendar"] and reference == calendar
+                and session == c["source"]["session"], "behavior session/calendar mismatch")
+        position, timestamps = np.asarray(data[:], dtype=np.float64), np.asarray(stamps[:], dtype=np.float64)
+        require(np.isfinite(timestamps).all() and np.all(np.diff(timestamps) > 0), "invalid original timestamps")
+        require(timestamps[0] == c["behavior"]["first_timestamp_s"]
+                and timestamps[-1] == c["behavior"]["last_timestamp_s"], "behavior time support mismatch")
+        observed.update(behavior_session_id=session, behavior_calendar=calendar,
+                        behavior_timestamps_reference_time=reference, position_n_rows=len(timestamps),
+                        position_unit=text(data.attrs["unit"]), position_conversion=float(data.attrs["conversion"]),
+                        position_offset=float(data.attrs["offset"]), position_reference_frame=reference_frame,
+                        position_first_timestamp_s=float(timestamps[0]), position_last_timestamp_s=float(timestamps[-1]))
+    require(set(observed) == set(c["source_observed_fields"]), "source metadata receipt incomplete")
+    return {"counts": counts, "position": position, "timestamps": timestamps, "observed": observed}
 
 
-# a ~150 s window near the middle of the maze epoch, all channels (one chunk per channel)
-wmid = 0.5 * (t0 + t1)
-ws = int(max(t0, wmid - 75) * fs)
-we = int(min(t1, wmid + 75) * fs)
-try:
-    block = data[ws:we, :].astype(np.float32)
-except Exception as e:
-    fail(f"could not read LFP channel-selection window: {e}")
-fw, Pw = signal.welch(block, fs=fs, nperseg=int(4 * fs), axis=0)
-theta_mask = (fw >= THETA[0]) & (fw <= THETA[1])
-theta_power = Pw[theta_mask, :].mean(axis=0)
-best_ch = int(np.argmax(theta_power))
+def central_derivative(times, values):
+    h0, h1 = times[1] - times[0], times[2] - times[1]
+    require(h0 > 0 and h1 > 0, "derivative timestamps must increase")
+    return (-h1 / (h0 * (h0 + h1)) * values[0]
+            + (h1 - h0) / (h0 * h1) * values[1]
+            + h0 / (h1 * (h0 + h1)) * values[2])
 
-# ---- read the chosen channel across the maze epoch, gather locomotion LFP ----
-try:
-    lfp_epoch = data[int(t0 * fs):int(t1 * fs), best_ch].astype(np.float32)
-except Exception as e:
-    fail(f"could not read chosen LFP channel: {e}")
-base = int(t0 * fs)
-chunks = []
-for a, b in segments:
-    ia, ib = a - base, b - base
-    if 0 <= ia < ib <= len(lfp_epoch):
-        chunks.append(lfp_epoch[ia:ib])
-lfp_run = np.concatenate(chunks) if chunks else np.array([])
-if len(lfp_run) < int(4 * fs):
-    fail("insufficient locomotion LFP after gating")
 
-f_run, P_run = welch_spectrum(lfp_run)
-theta_peak = peak_from(f_run, P_run)
+def select_intervals(speed, block_id):
+    selected = np.zeros(len(speed), dtype=bool)
+    selected[:-1] = (np.isfinite(speed[:-1]) & np.isfinite(speed[1:])
+                    & (speed[:-1] > 5) & (speed[1:] > 5)
+                    & (block_id[:-1] >= 0) & (block_id[:-1] == block_id[1:]))
+    return selected
 
-# whole-recording peak (for the write-up's contrast only; NOT the reported value)
-try:
-    lfp_full = data[:, best_ch].astype(np.float32)
-    whole_peak = peak_from(*welch_spectrum(lfp_full))
-except Exception:
-    whole_peak = float("nan")
 
-# ---- spectrum table (the finest intermediate the estimate is read from) ----
-# Written broadband (2-45 Hz) so it carries the real 1/f background and the theta peak's shape
-# (bandwidth) on top of it -- a real CA1 LFP spectrum, not just the narrow theta window.
-with open(OUT / "spectrum.csv", "w", newline="") as f:
-    w = csv.writer(f)
-    w.writerow(["frequency_hz", "power"])
-    for fr, pwv in zip(f_run, P_run):
-        if BROADBAND[0] <= fr <= BROADBAND[1]:
-            w.writerow([float(fr), float(pwv)])
+def make_bouts(times, block_id, selected, fs, lfp_start, n_samples):
+    bouts, i = [], 0
+    while i < len(times) - 1:
+        if not selected[i]:
+            i += 1
+            continue
+        first = i
+        while i < len(times) - 1 and selected[i] and block_id[i] == block_id[first]:
+            i += 1
+        a, b = math.ceil((times[first] - lfp_start) * fs), math.floor((times[i] - lfp_start) * fs)
+        require(0 <= a <= b <= n_samples, "behavior bout outside original LFP support")
+        n_windows = max(0, 1 + (b - a - WINDOW) // HOP)
+        bouts.append(dict(bout_id=len(bouts), block_id=int(block_id[first]), start_row=first, end_row=i,
+                          start_time_s=float(times[first]), stop_time_s=float(times[i]), start_sample=a,
+                          end_sample=b, n_samples=b - a, n_windows=n_windows,
+                          status="retained" if n_windows else "short"))
+    return bouts
 
-results = {
-    "theta_peak_frequency_hz": round(theta_peak, 3),   # REPORTED: locomotion theta peak
-    "theta_band_hz": list(THETA),
-    "channel": best_ch,
-    "running_criterion": f"speed > {RUN_THRESH} position-units/s (locomotion)",
-    "locomotion_time_s": round(run_time, 1),
-    "whole_recording_theta_peak_hz": round(whole_peak, 3),  # slow, state-contaminated (context)
-    "params": {"lfp_rate_hz": fs, "spectral_estimator": "Welch, 4 s Hann windows, 50% overlap",
-               "peak": "parabolic-interpolated argmax over 5-11 Hz"},
-}
-(OUT / "results.json").write_text(json.dumps(results, indent=2))
 
-(OUT / "run_metadata.json").write_text(json.dumps({
-    "status": "ok", "dandiset": DANDISET, "lfp_asset": LFP_ASSET, "behavior_asset": BEH_ASSET,
-    "session": "sub-e15-13f1 ses-e15-13f1-220117", "lfp_rate_hz": fs, "n_channels": int(n_ch),
-    "channel": best_ch, "running_criterion": f"speed > {RUN_THRESH} units/s",
-    "locomotion_time_s": round(run_time, 1),
-}, indent=2))
+def prepare_behavior(position, timestamps, fs=FS, lfp_start=0, n_samples=31878000):
+    position, times = np.asarray(position, dtype=np.float64), np.asarray(timestamps, dtype=np.float64)
+    require(position.shape == (len(times), 2) and len(times) >= 2, "invalid behavior arrays")
+    require(np.isfinite(times).all() and np.all(np.diff(times) > 0), "invalid original timestamps")
+    dt0 = float(np.median(np.diff(times)))
+    valid = np.isfinite(position).all(axis=1)
+    block_id = np.full(len(times), -1, dtype=np.int64)
+    smoothed, speed = np.full_like(position, np.nan), np.full(len(times), np.nan)
+    blocks, i = [], 0
+    while i < len(times):
+        if not valid[i]:
+            i += 1
+            continue
+        first = i
+        while i + 1 < len(times) and valid[i + 1] and times[i + 1] - times[i] <= 1.5 * dt0:
+            i += 1
+        stop = i + 1
+        block_id[first:stop] = len(blocks)
+        local_times = times[first:stop]
+        for row in range(first, stop):
+            if times[row] - times[first] < 1 or times[stop - 1] - times[row] < 1:
+                continue
+            # Search bounds only identify candidates: floating t+1/t-1 can
+            # differ from the actual abs(t_j-t_i)<=1 predicate at one boundary.
+            left = max(first, first + np.searchsorted(local_times, times[row] - 1, side="left") - 1)
+            right = min(stop, first + np.searchsorted(local_times, times[row] + 1, side="right") + 1)
+            indices = np.arange(left, right)
+            indices = indices[np.abs(times[indices] - times[row]) <= 1]
+            weights = np.exp(-0.5 * ((times[indices] - times[row]) / 0.25) ** 2)
+            smoothed[row] = (weights / np.sum(weights)) @ position[indices]
+            require(np.isfinite(smoothed[row]).all(), "nonfinite smoothed position")
+        for row in range(first + 1, stop - 1):
+            if np.isfinite(smoothed[row - 1:row + 2]).all():
+                velocity = central_derivative(times[row - 1:row + 2], smoothed[row - 1:row + 2])
+                speed[row] = np.hypot(*velocity)
+                require(np.isfinite(speed[row]), "nonfinite speed")
+        blocks.append(dict(block_id=len(blocks), start_row=first, end_row_exclusive=stop, n_rows=stop - first,
+                           start_time_s=float(times[first]), last_time_s=float(times[stop - 1]),
+                           n_smoothed=int(np.isfinite(smoothed[first:stop]).all(axis=1).sum()),
+                           n_speed_valid=int(np.isfinite(speed[first:stop]).sum())))
+        i = stop
+    selected = select_intervals(speed, block_id)
+    bouts = make_bouts(times, block_id, selected, fs, lfp_start, n_samples)
+    return {"position": position, "timestamps": times, "position_valid": valid, "block_id": block_id,
+            "smoothed_position": smoothed, "speed": speed, "selected_interval_to_next": selected,
+            "blocks": blocks, "bouts": bouts, "dt0_s": dt0, "gap_threshold_s": 1.5 * dt0}
 
-(OUT / "findings.md").write_text(
-    f"# Hippocampal theta peak frequency - sub-e15-13f1 ses-220117\n\n"
-    f"Estimated the CA1 LFP power spectrum (Welch, 4 s windows) on channel {best_ch} while the "
-    f"mouse was locomoting ({run_time:.0f} s of running, speed > {RUN_THRESH} units/s on the "
-    f"maze), and took the peak of the 6-10 Hz theta band.\n\n"
-    f"**Theta peak frequency during locomotion = {theta_peak:.2f} Hz.** This movement-related "
-    f"theta is fast (~9 Hz). For contrast, the theta-band peak taken over the whole ~7 h "
-    f"recording is {whole_peak:.2f} Hz: that session is mostly rest/sleep, and theta during REM "
-    f"and awake immobility is ~1.5 Hz slower, so a spectrum that does not condition on locomotion "
-    f"is pulled down toward ~7.9 Hz and understates the movement-related theta frequency. The "
-    f"theta peak frequency is state-dependent; the locomotion estimate (~{theta_peak:.1f} Hz) is "
-    f"stable across the theta channel used and the exact running-speed cutoff.\n"
-)
 
-print(f"best_ch={best_ch} run_time={run_time:.0f}s LOCOMOTION_peak={theta_peak:.3f}Hz "
-      f"whole_recording_peak={whole_peak:.3f}Hz")
+def planned_windows(prepared, n_samples):
+    rows = []
+    for condition in ("locomotion", "whole_session"):
+        spans = prepared["bouts"] if condition == "locomotion" else [
+            {"bout_id": -1, "start_sample": 0, "end_sample": n_samples}]
+        index = 0
+        for span in spans:
+            for start in range(span["start_sample"], span["end_sample"] - WINDOW + 1, HOP):
+                rows.append(dict(condition=condition, bout_id=span["bout_id"], window_index=index,
+                                 start_sample=start, end_sample=start + WINDOW))
+                index += 1
+    return rows
+
+
+def analyze_windows(counts, prepared, conversion, offset=0, pilot_windows=None):
+    counts = np.asarray(counts)
+    require(counts.ndim == 1 and np.isfinite(counts).all(), "nonfinite or invalid fixed-channel LFP")
+    require(pilot_windows is None or 1 <= pilot_windows <= 4, "pilot limit must be1..4")
+    windows, sums = [], {k: np.zeros(WINDOW // 2 + 1) for k in ("locomotion", "whole_session")}
+    numbers = {k: 0 for k in sums}
+    for row in planned_windows(prepared, len(counts)):
+        condition = row["condition"]
+        if pilot_windows is not None and numbers[condition] >= pilot_windows:
+            continue
+        x = counts[row["start_sample"]:row["end_sample"]].astype(np.float64) * conversion + offset
+        frequencies, power = window_spectrum(x)
+        row.update(mean_volts=float(np.mean(x)), mean_square_volts=float(np.mean(x * x)),
+                   theta_power_v2=theta_integral(frequencies, power))
+        require(all(np.isfinite(row[k]) for k in ("mean_volts", "mean_square_volts", "theta_power_v2")),
+                "nonfinite window receipt")
+        windows.append(row)
+        sums[condition] += power
+        numbers[condition] += 1
+    require(all(numbers.values()), "no complete locomotion or whole-session window")
+    spectra = {k: sums[k] / numbers[k] for k in sums}
+    conditions = {k: {"n_windows": numbers[k], **peak_summary(frequencies, spectra[k])} for k in sums}
+    return {"windows": windows, "frequencies": frequencies, "spectra": spectra, "conditions": conditions}
+
+
+def make_results(contract, prepared, analysis, status="ok"):
+    counts = {}
+    for row in analysis["windows"]:
+        if row["condition"] == "locomotion":
+            counts[row["bout_id"]] = counts.get(row["bout_id"], 0) + 1
+    bouts = prepared["bouts"]
+    return {"status": status, "pipeline_id": PIPELINE_ID, "channel": contract["channel"],
+            "n_behavior_rows": len(prepared["timestamps"]),
+            "n_valid_position_rows": int(prepared["position_valid"].sum()),
+            "n_behavior_blocks": len(prepared["blocks"]), "n_locomotion_bouts": len(bouts),
+            "n_retained_bouts": sum(b["n_windows"] > 0 for b in bouts),
+            "n_short_bouts": sum(b["n_windows"] == 0 for b in bouts),
+            "dt0_s": prepared["dt0_s"], "gap_threshold_s": prepared["gap_threshold_s"],
+            "locomotion_interval_duration_s": sum(b["stop_time_s"] - b["start_time_s"] for b in bouts),
+            "locomotion_sample_support_s": sum(b["n_samples"] for b in bouts) / FS,
+            "locomotion_used_support_s": sum(WINDOW + HOP * (n - 1) for n in counts.values()) / FS,
+            "peak_difference_hz": (analysis["conditions"]["locomotion"]["theta_peak_frequency_hz"]
+                                   - analysis["conditions"]["whole_session"]["theta_peak_frequency_hz"]),
+            "conditions": analysis["conditions"]}
+
+
+def make_metadata(inputs, source, status="ok"):
+    return {"status": status, "task_id": "HIPPOTHETA-001", "pipeline_id": PIPELINE_ID,
+            "source_manifest_sha256": inputs["source_manifest_sha256"],
+            "method_contract_sha256": inputs["method_contract_sha256"],
+            "source_sha256": inputs["source_sha256"], "source_observed": source["observed"],
+            "software_versions": {"python": platform.python_version(), **{
+                package: importlib.metadata.version(package) for package in ("numpy", "scipy", "h5py")}},
+            "method_contract": inputs["contract"]}
+
+
+def nullable(value):
+    return float(value) if np.isfinite(value) else None
+
+
+def behavior_rows(prepared):
+    rows = []
+    for i, timestamp in enumerate(prepared["timestamps"]):
+        x, y = prepared["position"][i]
+        sx, sy = prepared["smoothed_position"][i]
+        speed, block = prepared["speed"][i], int(prepared["block_id"][i])
+        rows.append(dict(row_id=i, timestamp_s=float(timestamp), x_cm=nullable(x), y_cm=nullable(y),
+                         position_valid=int(prepared["position_valid"][i]), block_id=block if block >= 0 else None,
+                         smoothed_x_cm=nullable(sx), smoothed_y_cm=nullable(sy),
+                         smoothed_valid=int(np.isfinite([sx, sy]).all()), speed_cm_s=nullable(speed),
+                         speed_valid=int(np.isfinite(speed)),
+                         selected_interval_to_next=int(prepared["selected_interval_to_next"][i])))
+    return rows
+
+
+def ensure_fresh_outputs(output_dir, private_dir):
+    output, private = Path(output_dir), Path(private_dir)
+    require(not output.is_symlink() and not private.is_symlink(), "symlinked output directory")
+    require(private.resolve() != output.resolve() and output.resolve() not in private.resolve().parents,
+            "private evidence must remain outside the public output directory")
+    for path in [*(output / name for name in PUBLIC_FILES), private / "analysis_arrays.npz"]:
+        require(not path.exists() and not path.is_symlink(), f"refusing to overwrite existing evidence: {path}")
+
+
+def write_outputs(inputs, source, prepared, analysis, output_dir, private_dir, status="ok"):
+    ensure_fresh_outputs(output_dir, private_dir)
+    output, private = Path(output_dir), Path(private_dir)
+    output.mkdir(parents=True, exist_ok=True)
+    private.mkdir(parents=True, exist_ok=True)
+    results, metadata = make_results(inputs["contract"], prepared, analysis, status), make_metadata(inputs, source, status)
+    tables = {"behavior": behavior_rows(prepared), "blocks": prepared["blocks"], "bouts": prepared["bouts"],
+              "windows": analysis["windows"], "spectrum": [
+                  {"condition": name, "frequency_hz": float(f), "power_v2_per_hz": float(p)}
+                  for name, power in analysis["spectra"].items() for f, p in zip(analysis["frequencies"], power)]}
+    for name, rows in tables.items():
+        with (output / f"{name}.csv").open("x", newline="") as stream:
+            writer = csv.DictWriter(stream, fieldnames=inputs["contract"]["outputs"][f"{name}.csv"])
+            writer.writeheader()
+            writer.writerows(rows)
+    for name, obj in (("results.json", results), ("run_metadata.json", metadata)):
+        with (output / name).open("x") as stream:
+            json.dump(obj, stream, indent=2, allow_nan=False)
+            stream.write("\n")
+    conditions = results["conditions"]
+    with (output / "findings.md").open("x") as stream:
+        stream.write(f"# Fixed-electrode descriptive method control ({status})\n\n")
+        for name, values in conditions.items():
+            stream.write(f"{name}: {values['n_windows']} complete windows; interpolated6–10 Hz band maximum "
+                         f"{values['theta_peak_frequency_hz']:.9g} Hz; band-edge={values['peak_at_band_edge']}, "
+                         f"tied grid maxima={values['peak_tie_count']}.\n\n")
+        stream.write(f"Locomotion minus whole-session peak: {results['peak_difference_hz']:.9g} Hz.\n\n"
+                     f"Only {results['n_retained_bouts']} of {results['n_locomotion_bouts']} selected bouts "
+                     f"contribute complete windows; {results['n_short_bouts']} are shorter than four seconds. "
+                     f"Unique used locomotion support is {results['locomotion_used_support_s']:.9g} s, "
+                     f"versus {results['locomotion_interval_duration_s']:.9g} s selected by the speed rule. "
+                     "This sustained-window subset does not represent every above-threshold moment.\n\n"
+                     "This is a custom single-session method control, not the paper's birthdate/connectivity finding. "
+                     "Electrode anatomy is unknown. Original relative clocks are inherited, not independently TTL-verified; "
+                     "conflicting source calendar dates are retained without a calendar shift. A band maximum does not prove "
+                     "a physiological oscillation or artifact-free signal. Whole session is not REM or immobility. "
+                     "Overlapping windows and nested condition samples are not independent biological replicates; "
+                     "no causal, anatomical, inferential or model-hardness claim is made.\n")
+    arrays = {"pipeline_id": np.array(PIPELINE_ID), "raw_lfp_counts": source["counts"],
+              "original_position": source["position"], "original_timestamps": source["timestamps"],
+              "frequencies": analysis["frequencies"],
+              **{key: prepared[key] for key in ("smoothed_position", "speed", "position_valid", "block_id", "selected_interval_to_next")},
+              **{f"psd_{name}": power for name, power in analysis["spectra"].items()},
+              **{f"{name}_json": np.array(json.dumps(rows, allow_nan=False)) for name, rows in tables.items()},
+              "results_json": np.array(json.dumps(results, allow_nan=False)),
+              "metadata_json": np.array(json.dumps(metadata, allow_nan=False))}
+    with (private / "analysis_arrays.npz").open("xb") as stream:
+        np.savez_compressed(stream, **arrays)
+    return results
+
+
+def failure_outputs(output_dir, reason):
+    output = Path(output_dir)
+    output.mkdir(parents=True, exist_ok=True)
+    result = {"status": "failed_precondition", "pipeline_id": PIPELINE_ID, "task_id": "HIPPOTHETA-001", "reason": str(reason)}
+    for name in ("results.json", "run_metadata.json"):
+        if not (output / name).exists():
+            with (output / name).open("x") as stream:
+                json.dump(result, stream, allow_nan=False)
+    if not (output / "findings.md").exists():
+        with (output / "findings.md").open("x") as stream:
+            stream.write(f"Failed precondition: {reason}\n")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--source-dir", "--data-dir", type=Path, default=Path("/app/source"))
+    parser.add_argument("--method-contract", type=Path, default=Path("/app/method_contract.json"))
+    parser.add_argument("--output-dir", type=Path, default=Path(os.environ.get("OUTPUT_DIR", "/app/output")))
+    parser.add_argument("--private-dir", type=Path, default=Path(os.environ.get("PRIVATE_DIR", "/app/oracle_private")))
+    parser.add_argument("--pilot-windows", "--max-windows-per-condition", type=int, choices=range(1, 5))
+    args = parser.parse_args()
+    ensure_fresh_outputs(args.output_dir, args.private_dir)
+    try:
+        inputs = load_inputs(args.source_dir, args.method_contract)
+        source = read_source(inputs)
+        prepared = prepare_behavior(source["position"], source["timestamps"], n_samples=len(source["counts"]))
+        analysis = analyze_windows(source["counts"], prepared, source["observed"]["lfp_conversion"],
+                                   source["observed"]["lfp_offset"], args.pilot_windows)
+        result = write_outputs(inputs, source, prepared, analysis, args.output_dir, args.private_dir,
+                               "resource_pilot" if args.pilot_windows is not None else "ok")
+        print(json.dumps(result, allow_nan=False))
+    except Exception as exc:
+        failure_outputs(args.output_dir, exc)
+        raise
+
+
+if __name__ == "__main__":
+    main()

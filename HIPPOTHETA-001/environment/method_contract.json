@@ -1,0 +1,287 @@
+{
+  "contract_id": "fixed-channel-gap-safe-welch-v2",
+  "task_id": "HIPPOTHETA-001",
+  "scientific_role": "Custom fixed-electrode original-recording locomotion-conditioning method control; not a paper birthdate/connectivity reproduction, validated CA1-localized theta measurement, sleep-state classification or causal effect.",
+  "paper": {
+    "doi": "10.1038/s41593-022-01138-x",
+    "methods": [
+      "State scoring",
+      "Theta-cycle detection",
+      "Spatial ratemap analyses"
+    ],
+    "deviations": "Paper theta-cycle analysis uses 6–12 Hz Chebyshev/Hilbert with anatomically/physiologically selected channels and identified wake; spatial ratemaps use Kalman velocity and >1.5 cm/s. This recipe is custom."
+  },
+  "source": {
+    "root": "/app/source",
+    "manifest": "source_manifest.json",
+    "dandiset_id": "000552",
+    "version": "0.230630.2304",
+    "session": "e15_13f1_220117",
+    "files": [
+      {
+        "role": "raw",
+        "path": "sub-e15-13f1/sub-e15-13f1_ses-e15-13f1-220117-raw_ecephys.nwb",
+        "asset_id": "9f3b0bd1-8228-4942-8a26-f69d74bae64f",
+        "size_bytes": 6838127257,
+        "sha256": "53cababa409c23aab40253388bddab4b6e96124277c80051ec64a57096962d68"
+      },
+      {
+        "role": "behavior",
+        "path": "sub-e15-13f1/sub-e15-13f1_ses-e15-13f1-220117_behavior+ecephys.nwb",
+        "asset_id": "3af386b1-0db7-460f-b394-7dca8f9b1e24",
+        "size_bytes": 270053655,
+        "sha256": "ea31f668a3a333c4253e7ae7fcfa50cb15a5f953fb3bd9dae022babfc7bbb16f"
+      }
+    ]
+  },
+  "channel": {
+    "lfp_column": 0,
+    "electrode_table_row": 0,
+    "electrode_id": 0,
+    "channel_name": "1",
+    "location": "unknown",
+    "selection": "Fixed before signal inspection. Never select a more favorable channel."
+  },
+  "clocks": {
+    "raw_calendar": "2011-08-18T00:00:00-04:00",
+    "behavior_calendar": "2022-01-17T00:00:00-05:00",
+    "basis": "Use original relative seconds without calendar shift. Shared relative origin is an upstream assumption, not independently TTL-verified."
+  },
+  "lfp": {
+    "path": "/processing/ecephys/LFP/ElectricalSeriesLFP",
+    "n_samples": 31878000,
+    "n_channels": 128,
+    "dtype": "int16",
+    "start_seconds": 0,
+    "rate_hz": 1250,
+    "unit": "volts",
+    "conversion": 1.95e-7,
+    "offset": 0,
+    "scaling": "float64(counts)*conversion+offset; no additional gain multiplication, filtering, artifact clipping or channel search."
+  },
+  "behavior": {
+    "path": "/processing/behavior/SubjectPosition/SpatialSeries",
+    "shape": [
+      55242,
+      2
+    ],
+    "unit": "cm",
+    "conversion": 1,
+    "offset": 0,
+    "reference_frame": "Arbitrary, camera",
+    "first_timestamp_s": 6596.563233333333,
+    "last_timestamp_s": 8438.397133333334,
+    "timestamps": "Finite strictly increasing original seconds; fail on duplicates/decreases/nonfinite values. Do not sort or resample.",
+    "gap_rule": "dt0=median(diff(timestamps)); split at invalid x/y or adjacent original gap >1.5*dt0. No interpolation across missing samples; each coordinate's known finite value remains in the receipt.",
+    "smoother": "For each valid block and original row i with t_i-t_first>=1 and t_last-t_i>=1: weights exp(-0.5*((t_j-t_i)/0.25)^2) on same-block samples with abs(t_j-t_i)<=1; normalize weights and sum x/y. Other smoothed values undefined.",
+    "sigma_seconds": 0.25,
+    "truncate_seconds": 1,
+    "gap_factor": 1.5,
+    "derivative": "For interior row i only if smoothed values i-1,i,i+1 are defined. h0=t_i-t_i-1,h1=t_i+1-t_i; derivative=-h1/(h0*(h0+h1))*p_i-1+(h1-h0)/(h0*h1)*p_i+h0/(h1*(h0+h1))*p_i+1. speed=hypot(dx,dy). Endpoints unsupported.",
+    "speed_threshold_cm_s": 5,
+    "selection": "Select [t_i,t_i+1) only when both endpoint speeds exist and are strictly >5. Merge adjacent selected intervals within the same block only.",
+    "sample_bounds": "For bout[u,v), a=ceil((u-lfp_start)*fs), b=floor((v-lfp_start)*fs). Require0<=a<=b<=N; no clipping. Included sample support[t_n,t_n+1) stays within bout."
+  },
+  "welch": {
+    "window_samples": 5000,
+    "hop_samples": 2500,
+    "nfft": 5000,
+    "window": "periodic Hann w[n]=0.5-0.5*cos(2*pi*n/N)",
+    "detrend": "subtract float64 arithmetic mean separately in every window",
+    "density": "abs(rfft((x-mean)*w))^2 / (fs*sum(w^2)); double bins1..2499 only; unitsV^2/Hz",
+    "average": "arithmetic mean of all complete individual-window PSDs; not equal-bout weighting",
+    "locomotion": "Start at a+2500*k while start+5000<=b, independently per bout; short bouts retained in ledger with0 windows.",
+    "whole_session": "Start at2500*k while start+5000<=N; entire fixed column, not REM or immobility.",
+    "receipts": "mean_volts and mean_square_volts computed from original calibrated window before detrending. theta_power_v2=0.25*(0.5*P6 + sum(P6.25..9.75) +0.5*P10)."
+  },
+  "peak": {
+    "band_hz": [
+      6,
+      10
+    ],
+    "grid": "Maximum of inclusive band; exact tie lowest frequency.",
+    "interpolation": "Interior-band maximum only: delta=0.5*(Pleft-Pright)/(Pleft-2*Pcenter+Pright); peak=fgrid+delta*0.25. Band edge or zero curvature uses grid. No narrower accepted band, expected direction or spectral-shape gate.",
+    "qc": "Report edge flag and exact number of grid-bin maxima. A band maximum is not proof of a physiological oscillation."
+  },
+  "outputs": {
+    "behavior.csv": [
+      "row_id",
+      "timestamp_s",
+      "x_cm",
+      "y_cm",
+      "position_valid",
+      "block_id",
+      "smoothed_x_cm",
+      "smoothed_y_cm",
+      "smoothed_valid",
+      "speed_cm_s",
+      "speed_valid",
+      "selected_interval_to_next"
+    ],
+    "blocks.csv": [
+      "block_id",
+      "start_row",
+      "end_row_exclusive",
+      "n_rows",
+      "start_time_s",
+      "last_time_s",
+      "n_smoothed",
+      "n_speed_valid"
+    ],
+    "bouts.csv": [
+      "bout_id",
+      "block_id",
+      "start_row",
+      "end_row",
+      "start_time_s",
+      "stop_time_s",
+      "start_sample",
+      "end_sample",
+      "n_samples",
+      "n_windows",
+      "status"
+    ],
+    "windows.csv": [
+      "condition",
+      "bout_id",
+      "window_index",
+      "start_sample",
+      "end_sample",
+      "mean_volts",
+      "mean_square_volts",
+      "theta_power_v2"
+    ],
+    "spectrum.csv": [
+      "condition",
+      "frequency_hz",
+      "power_v2_per_hz"
+    ],
+    "results.json": [
+      "status",
+      "pipeline_id",
+      "channel",
+      "n_behavior_rows",
+      "n_valid_position_rows",
+      "n_behavior_blocks",
+      "n_locomotion_bouts",
+      "n_retained_bouts",
+      "n_short_bouts",
+      "dt0_s",
+      "gap_threshold_s",
+      "locomotion_interval_duration_s",
+      "locomotion_sample_support_s",
+      "locomotion_used_support_s",
+      "peak_difference_hz",
+      "conditions"
+    ],
+    "run_metadata.json": [
+      "status",
+      "task_id",
+      "pipeline_id",
+      "source_manifest_sha256",
+      "method_contract_sha256",
+      "source_sha256",
+      "source_observed",
+      "software_versions",
+      "method_contract"
+    ],
+    "findings.md": "Nonempty measured summary with limitations; no phrase or keyword scoring."
+  },
+  "conditions": [
+    "locomotion",
+    "whole_session"
+  ],
+  "condition_result_fields": [
+    "n_windows",
+    "theta_peak_grid_hz",
+    "theta_peak_frequency_hz",
+    "peak_at_band_edge",
+    "peak_tie_count",
+    "theta_power_v2"
+  ],
+  "peak_difference_hz": "conditions.locomotion.theta_peak_frequency_hz minus conditions.whole_session.theta_peak_frequency_hz; signed descriptive difference, no required direction.",
+  "locomotion_used_support_s": "Union duration of complete locomotion windows: sum(5000+2500*(n_windows-1))/1250 over bouts with n_windows>0; not sum of overlapping window durations.",
+  "source_observed_fields": [
+    "raw_session_id",
+    "behavior_session_id",
+    "raw_calendar",
+    "behavior_calendar",
+    "raw_timestamps_reference_time",
+    "behavior_timestamps_reference_time",
+    "n_lfp_samples",
+    "n_lfp_channels",
+    "lfp_dtype",
+    "lfp_start_seconds",
+    "lfp_rate_hz",
+    "lfp_unit",
+    "lfp_conversion",
+    "lfp_offset",
+    "lfp_column",
+    "electrode_table_row",
+    "electrode_id",
+    "channel_name",
+    "location",
+    "position_n_rows",
+    "position_unit",
+    "position_conversion",
+    "position_offset",
+    "position_reference_frame",
+    "position_first_timestamp_s",
+    "position_last_timestamp_s"
+  ],
+  "table_semantics": "row_id original0-based; block_id chronological0-based valid blocks, invalid rows blank; flags0/1. Bout end_row is final interval endpoint, not exclusive. Bouts status retained|short. Whole-session bout_id=-1; window_index consecutive per condition. All source rows/blocks/bouts retained; no unsupported numeric zero fabrication.",
+  "numeric_format": "Undefined numeric CSV cells empty only; JSON null only genuinely undefined. Finite source coordinates retained individually even if other axis invalid. No NaN/Infinity. Counts/keys/statuses/categories exact from unrounded source; row/column order flexible.",
+  "tolerances": {
+    "source_conversion": {
+      "atol": 0,
+      "rtol": 1e-10
+    },
+    "source_numeric": {
+      "atol": 1e-9,
+      "rtol": 1e-10
+    },
+    "derived_behavior": {
+      "atol": 1e-8,
+      "rtol": 1e-7
+    },
+    "mean_volts": {
+      "normalize_by": "lfp.conversion",
+      "atol": 1e-9,
+      "rtol": 1e-7
+    },
+    "power": {
+      "normalize_by": "lfp.conversion**2",
+      "atol": 1e-9,
+      "rtol": 0.000001
+    },
+    "interpolated_peak_hz": {
+      "atol": 0.000001,
+      "rtol": 0
+    },
+    "peak_difference_hz": {
+      "atol": 0.000002,
+      "rtol": 0
+    },
+    "duration_s": {
+      "atol": 1e-8,
+      "rtol": 1e-9
+    },
+    "categories": "Exact source keys, counts, support, mapping, zero offsets, integer IDs, frequency grid, peak bin, ties, edge flags. Other observed times/rates use source_numeric and conversions use source_conversion. Normalization is a numerical comparison scale, not a physiological cutoff."
+  },
+  "software": {
+    "python": "3.12",
+    "numpy": "2.2.6",
+    "scipy": "1.14.1",
+    "h5py": "3.13.0"
+  },
+  "failure": "On source/header/clock-unit contract mismatch, invalid timestamps, no full locomotion window or nonfinite numerical output, exit nonzero and write parseable failed_precondition results/run_metadata with reason plus findings. Existing evidence must not be overwritten.",
+  "limits": [
+    "Unknown electrode anatomy",
+    "Inherited relative-clock alignment, conflicting calendar fields retained",
+    "Single original session",
+    "Window and smoothing recipe custom",
+    "Overlapping windows and whole/locomotion subsets not independent replicates",
+    "No artifact-free or REM inference",
+    "No model-hardness evidence"
+  ]
+}

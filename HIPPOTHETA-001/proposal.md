@@ -1,110 +1,75 @@
-## HIPPOTHETA-001
+# HIPPOTHETA-001: fixed-channel state-conditioning method control
 
-**Proposal Title:** The hippocampal theta peak frequency of a freely-moving mouse CA1 recording — one un-cued off-critical-path over-claim (asserting a single state-independent theta frequency when it is state-dependent)
+This task measures how a declared locomotion restriction changes the descriptive
+6–10 Hz spectral maximum of one recorded channel, relative to its mixed-session
+spectrum. Either ordering, equal estimates and boundary maxima are valid results.
+It is an **easy method control**, not an established hard task.
 
-**Scientific Domain:** Life Sciences · **Field:** Neuroscience · **Subfield:** Systems neuroscience / hippocampal oscillations
+## Paper relationship
 
-**Source finding:** Huszár, Zhang, Blockus, Buzsáki (2022), *Nature Neuroscience*, https://doi.org/10.1038/s41593-022-01138-x. **Dataset:** DANDI dandiset **`000552`** (chronic mouse CA1 recordings, NWB), fetched at runtime. Pinned session: **`sub-e15-13f1` / `ses-e15-13f1-220117`**, using two assets — the LFP raw-ecephys file (`...-220117-raw_ecephys.nwb`, ~6.8 GB, streamed one channel at a time) and the behaviour file (`...-220117_behavior+ecephys.nwb`, ~270 MB, position).
+[Huszár et al. (2022)](https://doi.org/10.1038/s41593-022-01138-x),
+*Preconfigured dynamics in the hippocampus are guided by embryonic birthdate and
+rate of neurogenesis*, supplied the original recordings. The relevant anchors are
+the Methods sections **Behavior**, **State scoring**, **Theta-cycle detection**
+and **Spatial ratemap analyses**, not a numerical figure target. The paper recorded
+position with camera/TTL alignment and discusses behavior-dependent analyses;
+it used 6–12 Hz Chebyshev filtering/Hilbert cycles on anatomically selected LFP
+channels. Its spatial-rate-map velocity method uses Kalman filtering and a
+1.5 cm/s cutoff. None of those is this task's Gaussian-speed >5 cm/s,
+fixed-column, 4-second Welch recipe. No figure/table, birthdate effect,
+connectivity result or cohort statistic is claimed to be reproduced here.
 
-**Status: FULL runnable task** (real-data, runtime DANDI streaming fetch via `DandiAPIClient` + `remfile`, `allow_internet=true`). **Over-claim / recognition genre** with a numeric anchor — the GRADIENT-001 pattern (assert a single confident identity that the data does not support), applied to a state-dependent oscillation frequency.
+## Original-source substrate and known limitations
 
-### The measurement and the un-cued lever (de-cued)
+[DANDI 000552, published version 0.230630.2304](https://doi.org/10.48324/dandi.000552/0.230630.2304),
+CC-BY-4.0, supplies exactly two assets of subject `e15-13f1`, session `220117`:
+raw-ecephys NWB and behavior+ecephys NWB, together 7,108,180,912 bytes. The public
+source manifest pins asset IDs, full SHA256, sizes and immutable object versions.
+The image build verifies full objects; the task runs offline. No synthetic main
+input, mutable draft lookup, runtime stream or reference answers are installed.
 
-The brief pins the deliverable — the **peak frequency of the 6-10 Hz theta rhythm in the CA1 LFP for this session** — and the non-lever machinery (LFP at 1250 Hz, a clear-theta hippocampal channel, a Welch spectrum). The previous version *instructed* the lever ("while the mouse is locomoting", "derive the running speed", "during locomotion"); that telegraph has been removed. The instruction now names only the quantity and provides the behaviour asset (tracked position) as available data, never telling the analyst to condition on movement or state.
+The NWB electrodes and groups have location `unknown`. Column 0 / electrode 0 /
+source channel name `1` is fixed **before any signal values were inspected**,
+not chosen for its theta power. It is a recorded-channel analysis, not confirmed
+CA1 or laminar localization. The study's CA1 implant description does not repair
+missing per-electrode metadata.
 
-The single off-critical-path judgement: **theta frequency is state-dependent.** Running (locomotion) theta is FAST (~9 Hz); theta during REM sleep and awake immobility is ~1.5 Hz SLOWER (~7.4-7.5 Hz). This session is a ~7.08 h recording that is **mostly home-cage rest/sleep** with a single ~30.7 min maze epoch. So a theta-band spectral peak taken over the **whole recording** (the naive default — open the LFP, Welch it, read the 6-10 Hz peak) is dragged down to ~7.9 Hz by the dominant slow-theta periods. A mature analyst VOLUNTEERS the state-conditioning, recovers the ~9 Hz movement theta, and reports the frequency as state-dependent — exactly as a mature GRADIENT-001 answer reports that the principal-gradient identity is not stable.
+The raw file's calendar/reference date is 2011-08-18; the behavior file's is
+2022-01-17. We retain that discrepancy. The paired IDs, upstream
+[Buzcode clock convention](https://github.com/buzsakilab/buzcode/wiki/Data-Formatting-Standards#behavior),
+converter's original behavior timestamps and matching relative epoch durations
+support an **inherited common-relative-clock assumption**, not independent TTL
+verification. We do not shift one series by the calendar difference. Converter
+notes describe calendar bugs, but the exact executed converter commit is not
+embedded in these assets. The result is conditional on this timing assumption.
 
-The extra wrinkle raising the floor: LFP and position live in **two different NWB files** of the session, so the analyst must pair them on the shared clock before it can condition on movement at all.
+## Public estimator and verifier
 
-### The trap (Step-0 re-validated, real data)
+`instruction.md` and `/app/method_contract.json` expose the fixed channel,
+physical-unit scaling, original-timestamp Gaussian smoother, gap/invalid-position
+rules, central derivative, strict speed threshold, conservative sample bounds,
+complete-window selection, periodic-Hann density normalization and peak rule.
+Neither smoothing nor spectral windows can bridge separate valid bouts.
+The same channel and spectral estimator are used for the whole recording.
 
-Best theta-power channel, Welch 4 s Hann windows, parabolic-interpolated peak over 5-11 Hz, 6-10 Hz band:
+Source-bound tables carry every original behavior row, valid support block,
+selected bout, contributing window and both complete spectra. The verifier
+checks numerical values and their aggregation, not a spectral-shape correlation,
+plausible frequency range, prose phrase, favorable difference or software-version
+string. Genuine independently implemented output must pass; missing, fabricated,
+rescaled, misaligned and internally inconsistent output must fail. All-or-nothing
+grading is disclosed; there is no promised proportional partial credit.
 
-| LFP subset | theta peak | reading |
-|---|---|---|
-| **whole recording** (no state conditioning) | **~7.9 Hz** | naive over-claim — dominated by rest/REM slow theta |
-| REM sleep only | ~7.4 Hz | slow theta |
-| awake immobility (speed < 1) only | ~7.5 Hz | slow theta |
-| **locomotion** (speed > 5 units/s) | **~9.0 Hz** | movement-related theta ← honest |
-| maze epoch, no speed gate | 8.90 Hz | (conditioned on the behavioural epoch) |
+The mixed-session spectrum includes whatever states and artifacts were recorded.
+There is no sleep-state classification, artifact-removal inference or REM claim.
+A band-restricted maximum is not by itself evidence of a physiological rhythm.
+The channel, clock, smoothing and threshold choices define the estimand; they do
+not establish state causality or a universal hippocampal frequency.
 
-Speed within the maze: 79% of time > 1 unit/s, 36% > 5 unit/s (so the maze epoch is movement-dominated). The locomotion peak is stable across the theta channel (48/63/78 → ~9.0; oracle max-power pick → ~9.0) and the running cutoff (>3 → 8.86, >5 → 8.99). Gap ≈ 1.0-1.1 Hz vs the naive whole-recording value.
+## Validation boundary
 
-### The failure mode (un-cued, over-claim)
-
-The agent estimates one theta peak over the whole LFP, asserts a single flat ~7.9 Hz, and never asks whether it depends on the animal's behavioural state — when it does. Only conditioning on movement recovers the movement-related ~9 Hz.
-
-### Verifier (3 plain checks, over-claim genre — cf. GRADIENT-001)
-
-`tests/test_outputs.py`: (1) a theta peak in a plausible band and a `findings.md` that mentions theta; (2) **the analysis conditioned on the animal's movement / behavioural state** — a structured multi-condition report, or prose that conditions/compares theta across movement vs rest/REM (co-occurrence guarded so the bare "running an eight-maze" *context* does not count) — the check a whole-recording answer fails; (3) **the reported theta peak reproduces the movement value (~8.9 ± 0.55 Hz), or the prose explicitly reports the faster running theta (~9 Hz) distinct from the slower rest/REM theta** — a flat ~7.9 Hz whole-recording estimate fails. A value the submission labelled whole-recording / REM / immobility / rest is never taken as the headline. Offline discrimination (locked; self-tested on synthetic + real oracle): reference oracle **PASS**; whole-recording naive (~7.9) **FAILS**; a context-only "ran an eight-maze" mention does not sneak past the conditioning check.
-
-**Fairness / no-fake-trap:** this is the GRADIENT-001 over-claim genre — a submission that computes a real number but asserts it as a single state-independent identity, without checking the axis it actually varies on (here, behavioural state), over-claims and fails. The honest answer is a real, reproducible value (~9 Hz movement theta) plus the state-dependence.
-
-### Difficulty — Step-5 frontier calibration PENDING
-
-Oracle **reward 1.0** (re-validated on the pinned DANDI assets; single-channel streaming over S3 range requests via remfile); whole-recording naive baseline **reward 0**. The ≥2-frontier-family gate (GPT-5.x + Claude, k≥3 each) is the maintainer's step and is **not yet run**.
-
-### Cost
-
-`hard`. cpus 2, mem 12 GB, internet on. Streams a channel-selection window (all channels, one ~120 s block ≈ 100 MB) plus one full channel of the ~6.8 GB LFP (~130 MB over S3 range requests) and a ~270 MB behaviour file — not the whole dandiset (~1.5 TB); DANDI/S3 can throttle. Agent timeout 7200 s, verifier 1800 s. Deps: dandi 0.78 / pynwb 4.2 / numpy / scipy / pandas / h5py / scikit-learn / remfile / fsspec (pinned in the Dockerfile).
-
-### Proof-of-work verifier (added)
-
-The grader is now proof-of-work (see `PROOF_OF_WORK_SPEC.md`): the reported peak cannot be produced
-without the real movement-conditioned spectral analysis.
-
-- **Held-out reference** `tests/reference.npz` (from `solution/compute.py`, never shipped): the
-  honest locomotion-conditioned power spectrum over 5–11 Hz + `ref_stats` (locomotion peak 9.01 Hz,
-  whole-recording peak 7.93 Hz, best channel 64). The locomotion spectrum's 5–11 Hz shape
-  correlates 0.90–1.0 across hippocampal channels but only ~0.14 with the whole-recording spectrum.
-- **Neutral per-item table** `spectrum.csv` (frequency, power) — any spectral analysis produces one,
-  so requiring it does not cue the state-conditioning lever.
-- **Pillars:** (1) `spectrum.csv` is a real broadband LFP spectrum (non-constant, median/peak power
-  guard rejects a synthetic bump) whose 5–11 Hz shape tracks the held-out movement-conditioned
-  reference (band r ≥ 0.88) and whose 6–10 Hz peak sits at ~9 Hz; (2) the headline peak lies in the
-  honest band `[8.4, 9.6]` (the naive whole-recording ~7.9 fails) and equals the submitted
-  spectrum's peak (CSV↔JSON); (3) **state-dependence recognised** (fail if absent): a volunteered
-  slower non-movement / whole-recording peak (~7.9 Hz) or prose that theta frequency is
-  state-dependent (running vs rest/REM/immobility).
-- **Validation matrix (subprocess pytest):** honest PASS; no-table FAIL; constant-spectrum FAIL;
-  fabricated gaussian bump at 9 Hz FAIL; naive whole-recording (7.9 Hz + whole spectrum) FAIL.
-
-### Second-pass hardening (broadband 1/f structure, not just the peak band)
-
-Red-team finding: the pillar-1 spectrum match ran over the **narrow 5–11 Hz** window only (plus a
-median/peak "broadband" guard computed inside that same narrow window), so a **synthetic 9 Hz
-Gaussian bump** — whose 5–11 Hz shape peaks at 9 Hz — passed the correlation, and ~9 Hz is guessable
-from priors. Fix: `spectrum.csv` must now be reported **broadband (2–45 Hz)** and match the real CA1
-LFP spectral STRUCTURE, not just the theta band:
-
-- **broadband log-shape correlation ≥ 0.9** against a held-out broadband reference (`ref_freq_full`/
-  `ref_pow_full`, rebuilt from `solution/compute.py`);
-- **1/f-background landmarks**: `P(3 Hz)/P(peak) ≥ 0.9` (a real spectrum has substantial low-frequency
-  power comparable to the theta peak — a lone bump has ~none: ratio ~0.001) and
-  `10 ≤ P(peak)/P(35 Hz) ≤ 150` (a real, bounded high-frequency falloff to a noise floor — a bump or a
-  pure power law without a noise floor gives a runaway ratio, 170–2800+);
-- **theta half-width** above the 1/f background in the real range (≈2.9–5.3 Hz across channels/nperseg).
-
-The movement-band peak discriminator (narrow 5–11 Hz shape + peak in `[8.4, 9.6]`), CSV↔JSON
-self-consistency, and state-dependence recognition are kept unchanged.
-
-**Validation matrix (subprocess pytest, this pass):** honest PASS; defensible alt-channel PASS;
-**lone 9 Hz Gaussian bump FAIL** (broadband corr 0.59 + P3/Ppk 0.001); **weak-1/f + bump FAIL**
-(P3/Ppk 0.56); **naive whole-recording spectrum FAIL** whether the peak is reported as the honest-
-looking 9 Hz (spectrum peaks at 7.9 → CSV↔JSON fails) or as the naive 7.9 Hz (headline-band fails).
-**RESIDUAL (HONEST-LIMITATION, blunt):** a fully hand-reconstructed synthetic spectrum — correct 1/f
-amplitude at 3 Hz, correct log-log slope, a realistic high-frequency noise floor, AND a theta bump of
-the right height and width — still passes. That is intrinsic to any shape-based check, but it now
-requires reproducing essentially this recording's entire broadband spectrum (five session-specific
-quantities, none in the container), not the single guessable "~9 Hz" scalar; the peak-vs-state
-judgement then relies partly on the frontier gate.
-
-**Data pin (reference build):** DANDI `000552` (draft). LFP asset
-`sub-e15-13f1/sub-e15-13f1_ses-e15-13f1-220117-raw_ecephys.nwb` (asset-id
-`9f3b0bd1-8228-4942-8a26-f69d74bae64f`,
-`dandi:sha2-256 = 53cababa409c23aab40253388bddab4b6e96124277c80051ec64a57096962d68`); behaviour asset
-`sub-e15-13f1/sub-e15-13f1_ses-e15-13f1-220117_behavior+ecephys.nwb` (asset-id
-`3af386b1-0db7-460f-b394-7dca8f9b1e24`,
-`dandi:sha2-256 = ea31f668a3a333c4253e7ae7fcfa50cb15a5f953fb3bd9dae022babfc7bbb16f`). Mutable
-**draft** version; paths + hashes pin the exact blobs. Streamed at runtime with `remfile`
-(`allow_internet=true`); baking (6.8 GB LFP) is impractical — maintainer keeps runtime fetch.
+Earlier hidden-channel/state-direction/shape-based references and author-reported
+rewards are historical, not evidence for this new contract. See `REPAIR_STATUS.md`
+and the external execution receipt for measured validation on the actual local
+commit. Mechanics fixtures are not biological data. No Sol/frontier calibration,
+remote push, merge or data/image publication is part of this repair.
