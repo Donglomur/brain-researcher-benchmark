@@ -1,149 +1,168 @@
-"""Reference solution for QSMDIPOLE-001.
+"""Source-derived CF-L2 method control; no I/O on import.
 
-Reconstruct the magnetic susceptibility map of one QSM-Challenge-2016 subject from the
-single-orientation local tissue field by the pinned closed-form L2 (Tikhonov, gradient-
-regularized) dipole inversion specified in protocol.json, then report the mean
-susceptibility (ppb) of each deep-gray nucleus, so that it reproduces the deep-gray
-susceptibility of the held-out STI chi_33 reference (globus pallidus ~159 ppb,
-putamen ~72 ppb).
-
-The one judgement the brief does not spell out: how the reconstructed map is referenced.
-A closed-form dipole inversion of the provided (already zero-mean) tissue field returns a
-map on the SAME implicit scale as the STI reference (its brain-mask mean is ~0). Reporting
-that map's nuclei values directly reproduces the reference. Subtracting a CSF/ventricle or
-white-matter reference offset — a common habit when reporting "absolute" susceptibility —
-shifts every value by that region's susceptibility (~14 ppb for CSF, ~20-40 ppb for WM on
-this subject) and no longer matches the STI reference. The reference solution therefore
-reports the reconstruction on its native scale (no extra referencing).
-
-Validated (STEP-0, this subject): pinned CF-L2 gives globus pallidus 153 ppb, putamen 78 ppb
-vs STI chi_33 159 / 72 ppb (within ~6 ppb). A CSF-referenced report gives 139 / 64 ppb;
-a whole-brain -> WM re-reference gives 173 / 97 ppb; a differently-regularized inversion
-(plain Tikhonov) gives 98 / 50 ppb -- all miss.
+D(0)=1/3 is a computational convention, not an absolute susceptibility reference
+or a zero brain-mask mean constraint.
 """
 from __future__ import annotations
-
+import argparse
 import csv
+import hashlib
 import json
 import os
-import sys
 from pathlib import Path
 
-import numpy as np
 import nibabel as nib
+import numpy as np
 
-DATA = Path(os.environ.get("DATA_DIR", "/app/data"))
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-OUT.mkdir(parents=True, exist_ok=True)
+PIPELINE_ID = "qsm2016-cfl2-native-dc-v2"
+SHAPE = (160, 160, 160)
+VOXEL = (1.0625, 1.0625, 1.0714285714285714)
+AFFINE = [[1.0625, 0., 0., 1.0625], [0., 1.0625, 0., 1.0625],
+          [0., 0., 1.0714285373687744, 1.0714285373687744], [0., 0., 0., 1.]]
+INPUT_HASHES = {
+    "evaluation_mask.nii.gz": "5c8a25e17372a789144361503bdbac1c892e21ec03b841467508c10281416b69",
+    "phs_tissue.nii.gz": "b53d34aff4bca09639768cd16d321af59a9ab158da18655f7829a1a401495b8c",
+    "msk.nii.gz": "b9961d0f431e47cfc97577bce7f70a702dcfe9dccd09b5735d319d0f7975a538",
+}
+CSV_FIELDS = ["label", "nucleus", "n_voxels", "susceptibility_ppb"]
 
 
-def fail(reason: str) -> None:
-    (OUT / "run_metadata.json").write_text(json.dumps(
-        {"status": "failed_precondition", "reason": reason,
-         "dataset_id": "qsm2016_recon_challenge"}, indent=2), encoding="utf-8")
-    (OUT / "nuclei_susceptibility.csv").write_text(
-        "label,nucleus,susceptibility_ppb\n", encoding="utf-8")
-    (OUT / "findings.md").write_text(f"# Failed precondition\n\n{reason}\n", encoding="utf-8")
-    sys.stderr.write(reason + "\n")
-    sys.exit(1)
+def metadata_contract():
+    """Public static template: only source and recipe definitions, no answers."""
+    return {"pipeline_id": PIPELINE_ID, "dataset_id": "qsm2016_recon_challenge",
+            "input_hashes": dict(INPUT_HASHES), "shape": list(SHAPE),
+            "voxel_size_mm": list(VOXEL), "affine": AFFINE,
+            "reg": 0.09, "b0_axis_index": 2, "dc_kernel": 1.0 / 3.0,
+            "fft_norm": "backward", "padding": "none_periodic",
+            "gradient_spacing": "voxel_index_no_mm_scaling",
+            "mask_application": "post_inversion_only",
+            "referencing": "native_dc_convention_no_offset",
+            "field_units": "ppm", "map_units": "ppm", "roi_statistic": "median_ppb"}
 
 
 def dipole_kernel(shape, voxel, b0_axis=2):
-    ks = [np.fft.fftfreq(n, d=v) for n, v in zip(shape, voxel)]
-    KX, KY, KZ = np.meshgrid(ks[0], ks[1], ks[2], indexing="ij")
-    K = [KX, KY, KZ]
-    k2 = KX * KX + KY * KY + KZ * KZ
-    kb = K[b0_axis]
-    with np.errstate(invalid="ignore", divide="ignore"):
-        D = 1.0 / 3.0 - (kb * kb) / np.where(k2 == 0.0, 1.0, k2)
-    D[0, 0, 0] = 1.0 / 3.0                 # protocol: D(0) := 1/3
-    return D
+    if len(shape) != 3 or len(voxel) != 3 or b0_axis not in (0, 1, 2):
+        raise ValueError("require three spatial dimensions and a valid B0 axis")
+    if any(n <= 0 or int(n) != n for n in shape) or not np.all(np.isfinite(voxel)) or min(voxel) <= 0:
+        raise ValueError("invalid grid or voxel spacing")
+    axes = np.meshgrid(*(np.fft.fftfreq(n, d=v) for n, v in zip(shape, voxel)), indexing="ij")
+    k2 = sum(k*k for k in axes)
+    kernel = np.full(shape, 1.0/3.0, dtype=float)
+    np.subtract(kernel, np.divide(axes[b0_axis]**2, k2,
+                                out=np.zeros_like(k2), where=k2 != 0), out=kernel)
+    return kernel
 
 
 def gradient_operator(shape):
-    k1, k2, k3 = np.meshgrid(np.arange(shape[0]), np.arange(shape[1]),
-                             np.arange(shape[2]), indexing="ij")
-    return (np.abs(1 - np.exp(2j * np.pi * k1 / shape[0])) ** 2 +
-            np.abs(1 - np.exp(2j * np.pi * k2 / shape[1])) ** 2 +
-            np.abs(1 - np.exp(2j * np.pi * k3 / shape[2])) ** 2)
+    axes = np.meshgrid(*(np.arange(n) for n in shape), indexing="ij")
+    return sum(np.abs(1 - np.exp(2j*np.pi*k/n))**2 for k, n in zip(axes, shape))
 
 
-def cf_l2(field, mask, voxel, b0_axis, reg):
-    D = dipole_kernel(field.shape, voxel, b0_axis)
-    E = gradient_operator(field.shape)
-    with np.errstate(invalid="ignore", divide="ignore"):
-        Xk = np.conj(D) * np.fft.fftn(field) / (np.abs(D) ** 2 + reg * E)
-    chi = np.real(np.fft.ifftn(Xk))
-    return chi * mask
+def cf_l2(field, mask, voxel, b0_axis, reg, return_unmasked=False):
+    field = np.asarray(field, dtype=float)
+    mask = np.asarray(mask)
+    if field.ndim != 3 or mask.shape != field.shape or not np.isfinite(field).all():
+        raise ValueError("finite three-dimensional field and aligned mask required")
+    if not np.isin(mask, [0, 1]).all() or not np.isfinite(reg) or reg <= 0:
+        raise ValueError("binary mask and positive regularization required")
+    kernel = dipole_kernel(field.shape, voxel, b0_axis)
+    penalty = gradient_operator(field.shape)
+    spectrum = kernel * np.fft.fftn(field, norm="backward") / (kernel**2 + reg*penalty)
+    unmasked = np.fft.ifftn(spectrum, norm="backward").real
+    result = unmasked * mask
+    if not np.isfinite(result).all():
+        raise ValueError("non-finite reconstructed map")
+    return (result, unmasked) if return_unmasked else result
+
+
+def read_inputs(data):
+    data = Path(data)
+    manifest = json.loads((data / "input_manifest.json").read_text())
+    protocol = json.loads((data / "protocol.json").read_text())
+    if manifest.get("files") != INPUT_HASHES:
+        raise ValueError("unexpected input manifest")
+    if protocol.get("method_contract") != metadata_contract():
+        raise ValueError("protocol differs from the public fixed recipe")
+    images = {}
+    for name, expected in INPUT_HASHES.items():
+        path = data / name
+        if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+            raise ValueError(f"source SHA256 mismatch: {name}")
+        img = nib.load(path)
+        if img.shape != SHAPE or not np.array_equal(img.affine, np.asarray(AFFINE)):
+            raise ValueError("source geometry mismatch")
+        if not np.allclose(img.header.get_zooms()[:3], VOXEL, atol=1e-7, rtol=0):
+            raise ValueError("source spacing mismatch")
+        arr = np.asarray(img.dataobj, dtype=float)
+        if not np.isfinite(arr).all():
+            raise ValueError("non-finite source volume")
+        images[name] = arr
+    field, mask, roi = (images[name] for name in ("phs_tissue.nii.gz", "msk.nii.gz", "evaluation_mask.nii.gz"))
+    if not np.isin(mask, [0, 1]).all() or not mask.any():
+        raise ValueError("brain mask must be nonempty and binary")
+    if not np.equal(roi, np.rint(roi)).all() or not np.isin(roi, range(12)).all():
+        raise ValueError("evaluation labels must be integers 0..11")
+    for label in range(1, 7):
+        select = roi == label
+        if not select.any() or not np.all(mask[select] == 1):
+            raise ValueError("empty or out-of-brain measurement ROI")
+    return field, mask.astype(bool), roi.astype(np.uint8)
+
+
+def run(data, output):
+    field, mask, roi = read_inputs(data)
+    chi, unmasked = cf_l2(field, mask, VOXEL, 2, .09, return_unmasked=True)
+    # Derive every reported statistic from exactly the submitted serialization.
+    saved = chi.astype(np.float32)
+    np.save(output / "susceptibility_ppm.npy", saved, allow_pickle=False)
+    saved64 = saved.astype(float)
+    rows = [{"label": label, "nucleus": f"ROI_{label}", "n_voxels": int(np.sum(roi == label)),
+             "susceptibility_ppb": float(np.median(saved64[roi == label])*1000)}
+            for label in range(1, 7)]
+    with (output / "nuclei_susceptibility.csv").open("w", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=CSV_FIELDS)
+        writer.writeheader(); writer.writerows(rows)
+    meta = metadata_contract() | {"status": "ok", "n_brain_voxels": int(mask.sum()),
+                                  "n_rois_reported": len(rows),
+                                  "brain_mask_mean_ppb": float(saved64[mask].mean()*1000)}
+    (output / "run_metadata.json").write_text(json.dumps(meta, indent=2, allow_nan=False)+"\n")
+    # Independent authoring check only; not a participant output requirement.
+    np.savez_compressed(output / "analysis_arrays.npz", chi_unmasked=unmasked)
+    body = "# Source-derived closed-form L2 reconstruction control\n\n"
+    body += "\n".join(f"- ROI_{r['label']}: {r['susceptibility_ppb']:.6f} ppb (median; {r['n_voxels']} voxels)." for r in rows)
+    body += f"\n\nBrain-mask mean: {meta['brain_mask_mean_ppb']:.6f} ppb.\n\n"
+    body += ("The original challenge code supplies the CF-L2 recipe, regularization 0.09, "
+             "physical spacing and D(0)=1/3 convention. All six values are medians from "
+             "the saved map, not named-nucleus findings or the paper's regional "
+             "error metric. The evaluation regions are small numeric-label "
+             "samples; their individual anatomical identities are not authenticated.\n\n"
+             "D(0)=1/3 implies the pre-mask computational mean is three times the "
+             "input-field mean; post-masking does not enforce a zero brain mean. No "
+             "CSF/WM offset is applied. This convention does not establish absolute "
+             "susceptibility or equality with STI chi33. Single-orientation inversion, "
+             "regularization and tissue anisotropy limit biological interpretation. "
+             "The map tests a declared source-derived numerical calculation, not "
+             "challenge-wide superiority or empirical model difficulty.\n\n"
+             "Original archive and shipped arrays/geometry were compared exactly; "
+             "the shipped gzip/header/datatype representations differ losslessly. "
+             "The archive is publicly accessible, but dataset redistribution terms "
+             "remain unestablished; the included utility-code license is not a data license.\n")
+    (output / "findings.md").write_text(body)
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--data", type=Path, default=Path(os.environ.get("DATA_DIR", "/app/data")))
+    parser.add_argument("--output", type=Path, default=Path(os.environ.get("OUTPUT_DIR", "/app/output")))
+    args = parser.parse_args(); args.output.mkdir(parents=True, exist_ok=True)
     try:
-        protocol = json.loads((DATA / "protocol.json").read_text())
-    except Exception as e:
-        fail(f"could not read protocol.json: {e}")
-        return
-    try:
-        field = np.asarray(nib.load(str(DATA / protocol["field_file"])).dataobj, float)
-        mask = np.asarray(nib.load(str(DATA / protocol["mask_file"])).dataobj) > 0
-        roi = np.rint(np.asarray(nib.load(str(DATA / protocol["roi_file"])).dataobj)).astype(int)
-    except Exception as e:
-        fail(f"could not load input volumes: {e}")
-        return
-
-    voxel = [float(v) for v in protocol["voxel_size_mm"]]
-    b0_axis = int(protocol["b0_axis_index"])
-    reg = float(protocol["inversion"]["reg"])
-    labels = {int(k): v for k, v in protocol["roi_labels"].items()}
-
-    # pinned closed-form L2 dipole inversion; native scale (no extra referencing)
-    chi = cf_l2(field, mask, voxel, b0_axis, reg)          # ppm
-    if not np.isfinite(chi[mask]).all():
-        fail("reconstructed susceptibility contains non-finite values")
-        return
-
-    # per-nucleus report (deep-gray labels 1-6), susceptibility in ppb
-    rows = []
-    for lab in sorted(l for l in labels if l <= 6):
-        sel = roi == lab
-        if int(sel.sum()) == 0:
-            continue
-        val_ppb = float(np.median(chi[sel]) * 1000.0)
-        rows.append((lab, labels[lab], round(val_ppb, 2)))
-
-    with open(OUT / "nuclei_susceptibility.csv", "w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        w.writerow(["label", "nucleus", "susceptibility_ppb"])
-        for lab, name, val in rows:
-            w.writerow([lab, name, val])
-
-    np.save(OUT / "susceptibility_ppm.npy", chi.astype(np.float32))
-
-    (OUT / "run_metadata.json").write_text(json.dumps({
-        "status": "ok",
-        "dataset_id": "qsm2016_recon_challenge",
-        "method": "closed-form L2 (gradient-regularized Tikhonov) dipole inversion",
-        "reg": reg,
-        "b0_direction": protocol["b0_direction"],
-        "referencing": "native dipole-inversion scale (brain-mask mean ~0); no CSF/WM offset applied",
-        "reported_statistic": "per-nucleus median susceptibility (ppb)",
-        "brain_mask_mean_ppb": round(float(np.mean(chi[mask]) * 1000.0), 3),
-        "n_nuclei_reported": len(rows),
-    }, indent=2), encoding="utf-8")
-
-    gp = next((v for l, n, v in rows if l == 3), None)
-    put = next((v for l, n, v in rows if l == 2), None)
-    (OUT / "findings.md").write_text(
-        "# Deep-gray susceptibility (QSM 2016 challenge subject)\n\n"
-        "Reconstructed the single-orientation tissue field with the pinned closed-form L2 "
-        "(gradient-regularized) dipole inversion and reported each deep-gray nucleus's mean "
-        "susceptibility on the reconstruction's native scale (brain-mask mean ~0), i.e. the "
-        "same implicit scale as the STI chi_33 reference.\n\n"
-        f"- Globus pallidus: {gp} ppb\n- Putamen: {put} ppb\n\n"
-        "These reproduce the STI reference's deep-gray susceptibility (globus pallidus ~159, "
-        "putamen ~72 ppb). No CSF/ventricle or white-matter reference offset was subtracted; "
-        "doing so would shift every value off the reference scale.\n",
-        encoding="utf-8")
+        run(args.data, args.output)
+    except Exception as exc:
+        reason = f"{type(exc).__name__}: {exc}"
+        (args.output / "run_metadata.json").write_text(json.dumps({"status": "failed_precondition", "reason": reason})+"\n")
+        (args.output / "nuclei_susceptibility.csv").write_text(",".join(CSV_FIELDS)+"\n")
+        (args.output / "findings.md").write_text("# Failed precondition\n\n"+reason+"\n")
+        raise SystemExit(reason)
 
 
 if __name__ == "__main__":
