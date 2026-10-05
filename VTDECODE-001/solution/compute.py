@@ -1,31 +1,14 @@
-"""Reference solution for VTDECODE-001 — the correct, leakage-free reproduction.
+"""Declared run-held-out SVM method case on Haxby subject-1 VT patterns.
 
-The task (un-cued) asks for the cross-validated decoding accuracy of a linear SVM on
-the eight Haxby object categories in ventral-temporal cortex, subject 1, with the
-masker/classifier pinned. The one choice left free is the CROSS-VALIDATION SCHEME —
-and it is decisive.
-
-In this paradigm each object category is presented in a sustained block within a run,
-so successive volumes from the same run are strongly temporally autocorrelated. If the
-folds are drawn at RANDOM (ignoring run structure), near-duplicate volumes from one
-block land in both train and test, and the classifier is scored partly on samples that
-leak information from its training set -> the accuracy is badly inflated.
-
-The correct, standard estimate blocks the cross-validation by acquisition run
-(`chunks`): leave-one-run-out. Then train and test never share a run/block.
-
-Validated ground truth (nilearn 0.13.1 / scikit-learn 1.8.0, subject 1, mask_vt,
-drop rest, NiftiMasker zscore_sample+detrend, SVC linear C=1):
-
-    leave-one-run-out (CORRECT) : cv_accuracy = 0.722
-    random 8-fold  (LEAKY)      : cv_accuracy = 0.958   (chance = 0.125)
-
-So the honest number is ~0.72; the ~0.96 a random-fold pipeline reports is a
-temporal-leakage artifact.
+Clean full runs separately before dropping rest, and report exact source-indexed
+OOF predictions. Random-fold evaluation is a separately labeled within-run
+sensitivity, not the unseen-run estimand. The old globally cleaned numeric bank
+is stale and must not be treated as truth for this revised recipe.
 """
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import traceback
 from pathlib import Path
@@ -41,6 +24,23 @@ DATASET_ID = "haxby2001"
 SUBJECT = 1
 CHANCE = 1.0 / 8.0
 OBJECTS = ["bottle", "cat", "chair", "face", "house", "scissors", "scrambledpix", "shoe"]
+PIPELINE_ID = "runwise-clean-loro-v2"
+
+
+def source_inputs():
+    data = Path(os.environ.get("DATA_DIR", "/app/data"))
+    manifest = json.loads((data / "data_manifest.json").read_text())
+    expected = {"subj1/bold.nii.gz", "subj1/mask4_vt.nii.gz", "subj1/labels.txt"}
+    assert {record["path"] for record in manifest["files"]} == expected
+    hashes = {}
+    for record in manifest["files"]:
+        path = data / record["path"]
+        assert path.stat().st_size == record["size_bytes"], f"Source size changed: {path.name}"
+        with path.open("rb") as stream:
+            digest = hashlib.file_digest(stream, "sha256").hexdigest()
+        assert digest == record["sha256"], f"Source checksum changed: {path.name}"
+        hashes[record["path"]] = digest
+    return data, hashes
 
 
 def wj(name: str, payload: dict) -> None:
@@ -58,35 +58,40 @@ def write_failfast(reason: str) -> None:
 
 
 def main() -> None:
-    from nilearn.datasets import fetch_haxby
     from nilearn.maskers import NiftiMasker
     from sklearn.svm import SVC
     from sklearn.base import clone
     from sklearn.model_selection import LeaveOneGroupOut, KFold, cross_val_score
 
-    hx = fetch_haxby(subjects=[SUBJECT])
-    func = hx.func[0]
-    mask_vt = hx.mask_vt[0]
-    labels = pd.read_csv(hx.session_target[0], sep=r"\s+")
+    data, source_sha256 = source_inputs()
+    func = data / "subj1/bold.nii.gz"
+    mask_vt = data / "subj1/mask4_vt.nii.gz"
+    labels = pd.read_csv(data / "subj1/labels.txt", sep=r"\s+")
     y = labels["labels"].values
     runs = labels["chunks"].values
 
     keep = y != "rest"
-    masker = NiftiMasker(mask_img=mask_vt, standardize="zscore_sample", detrend=True, t_r=2.5)
+    masker = NiftiMasker(mask_img=mask_vt, standardize="zscore_sample", detrend=True, t_r=2.5,
+                         runs=runs)
     X = masker.fit_transform(func)
+    volume_ids = np.flatnonzero(keep)
     X, y, runs = X[keep], y[keep], runs[keep]
 
-    clf = SVC(kernel="linear", C=1.0)
+    clf = SVC(kernel="linear", C=1.0, tol=0.001, shrinking=True)
 
-    # CORRECT: leave-one-run-out (blocked by acquisition run -> no within-run leakage).
+    # Public unseen-run estimand: no acquisition run contributes to both train and test.
     # Iterate the folds by hand so the per-fold held-out accuracy is keyed to the run held out.
     logo = LeaveOneGroupOut()
     per_run = {}
+    predictions = []
     for tr, te in logo.split(X, y, groups=runs):
         held = int(np.unique(runs[te])[0])
         m = clone(clf)
         m.fit(X[tr], y[tr])
-        per_run[held] = (float(m.score(X[te], y[te])), int(len(te)))
+        predicted = m.predict(X[te])
+        per_run[held] = (float(np.mean(predicted == y[te])), int(len(te)))
+        predictions.extend(dict(volume_id=int(volume_ids[i]), held_out_run=held,
+                                true_label=str(y[i]), predicted_label=str(p)) for i, p in zip(te, predicted))
     held_runs = sorted(per_run)
     loro_scores = np.array([per_run[r][0] for r in held_runs])
     cv_accuracy = float(loro_scores.mean())
@@ -101,6 +106,10 @@ def main() -> None:
     # required intermediate: one row per cross-validation fold (held-out run + its accuracy),
     # so the single headline accuracy is backed by a validated per-fold breakdown.
     import csv as _csv
+    with open(OUTPUT_DIR / "predictions.csv", "w", newline="", encoding="utf-8") as fh:
+        w = _csv.DictWriter(fh, fieldnames=["volume_id", "held_out_run", "true_label", "predicted_label"])
+        w.writeheader()
+        w.writerows(predictions)
     with open(OUTPUT_DIR / "per_fold.csv", "w", newline="", encoding="utf-8") as fh:
         w = _csv.writer(fh)
         w.writerow(["fold", "held_out_run", "n_test_samples", "accuracy"])
@@ -118,26 +127,32 @@ def main() -> None:
     })
     wj("run_metadata.json", {
         "task_id": TASK_ID, "status": "ok", "dataset_id": DATASET_ID, "subject": SUBJECT,
-        "mask": "mask_vt", "categories": OBJECTS,
+        "mask": "mask4_vt", "categories": OBJECTS, "pipeline_id": PIPELINE_ID,
+        "preprocessing": {"detrend": True, "standardize": "zscore_sample", "t_r": 2.5,
+                          "cleaning_unit": "acquisition_run", "clean_before_rest_removal": True},
         "features": "NiftiMasker(mask_vt), standardize=zscore_sample, detrend=True, t_r=2.5",
-        "classifier": "SVC(kernel=linear, C=1.0)",
-        "cross_validation": "leave-one-run-out over acquisition runs (chunks)",
+        "classifier": {"name": "SVC", "kernel": "linear", "C": 1.0, "tol": 0.001, "shrinking": True},
+        "cross_validation": "leave-one-run-out", "source_sha256": source_sha256,
         "n_samples": n_samples, "n_voxels": n_voxels, "n_runs": n_runs,
     })
     (OUTPUT_DIR / "findings.md").write_text(
         "# Findings: decoding eight object categories from ventral-temporal cortex (Haxby, subject 1)\n\n"
         f"A linear SVM (C=1) was trained on the z-scored, detrended VT patterns ({n_voxels} voxels inside "
         f"`mask_vt`) to classify the eight object categories from {n_samples} volumes across {n_runs} "
-        "acquisition runs.\n\n"
+        "acquisition runs. Each full run was cleaned independently, including its rest volumes; "
+        "rest volumes were removed only after cleaning.\n\n"
         f"**Cross-validated decoding accuracy: {cv_accuracy:.3f}** (chance = {CHANCE:.3f}).\n\n"
         "Because each category is presented as a sustained block within a run, volumes from the same run are "
         "strongly temporally autocorrelated. I therefore evaluated the classifier with **leave-one-run-out** "
         "cross-validation (folds blocked by acquisition run), so that no run contributes samples to both "
         "training and testing. Evaluated this way the accuracy is "
         f"{cv_accuracy:.3f}. For comparison, a random {8}-fold split that ignores run structure reports "
-        f"{random_kfold_accuracy:.3f}; that estimate is inflated by within-run temporal leakage (near-adjacent "
-        "volumes appearing in both train and test), so it overstates true out-of-sample decoding. The run-blocked "
-        f"{cv_accuracy:.3f} is the accuracy I report.\n", encoding="utf-8")
+        f"{random_kfold_accuracy:.3f}. It allows samples from the same run in training and testing, "
+        "and therefore does not estimate unseen-run generalization. The run-blocked "
+        f"{cv_accuracy:.3f} is the accuracy I report. This is a modern single-subject method case, "
+        "not the original paper's pattern-correlation statistic or population-level evidence. "
+        "Accuracy is conditional on the supplied fixed VT mask; independent ROI selection "
+        "and an end-to-end ROI-discovery pipeline are not evaluated here.\n", encoding="utf-8")
 
     print(f"n={n_samples} vox={n_voxels} runs={n_runs} | LORO cv_accuracy={cv_accuracy:.4f} | "
           f"random-kfold(leaky)={random_kfold_accuracy:.4f}")
