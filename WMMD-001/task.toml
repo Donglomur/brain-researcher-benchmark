@@ -1,15 +1,16 @@
-version = "1.1"
-instruction_version = "1.0"
-test_version = "1.0"
+version = "1.2"
+instruction_version = "2.0"
+test_version = "2.0"
+artifacts = ["/app/output", "/app/data/cfin/data_manifest.json"]
 
 [metadata]
 task_id = "WMMD-001"
-title = "White-matter mean diffusivity — cfin multi-b acquisition"
-category = "Diffusion MRI"
-difficulty = "hard"
-dataset_source = "dipy (read_cfin_dwi)"
+title = "Source-bound CFIN model-dependent MD and FA method control"
+category = "Method control"
+difficulty = "easy"
+dataset_source = "CFIN original University of Washington image and gradient bitstreams, hash pinned"
 dataset_id = "cfin_multib"
-source_paper = "Jensen & Helpern 2010 (diffusional kurtosis); Veraart et al. 2011 (DKI bias of DTI)"
+source_paper = "Hansen & Jespersen 2016 (10.1038/sdata.2016.72); Jensen & Helpern 2010 (method); Veraart et al. 2011 (motivation, not reproduced rat/Rician result)"
 
 [verifier]
 timeout_sec = 1800.0
@@ -23,7 +24,7 @@ cpus = 2
 memory_mb = 8192
 storage_mb = 16384
 gpus = 0
-allow_internet = true
+allow_internet = false
 
 [verifier.env]
 

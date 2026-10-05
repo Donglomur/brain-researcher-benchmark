@@ -1,58 +1,101 @@
-# White-matter mean diffusivity from a multi-b diffusion acquisition (WMMD-001)
+# Conditional white-matter diffusivity on CFIN (WMMD-001)
 
-## Scientific context
+Estimate mean diffusivity (MD) and fractional anisotropy (FA) on one public human
+diffusion acquisition, using **one** of the three specified model configurations.
+This is a paper-derived method control, not reproduction of an unbiased biological
+quantity or a population finding. Rotational invariance does not make MD independent
+of model, shell range, noise or preprocessing.
 
-Mean diffusivity (MD) and fractional anisotropy (FA) are the standard rotationally
-invariant summaries of the water-diffusion signal in a white-matter region. MD (the
-average of the diffusion-tensor eigenvalues) is a convention-invariant physical quantity
-with units of mm^2/s, independent of any fibre-orientation convention. This task asks you
-to report the mean MD and FA over a fixed white-matter ROI from a single subject's
-diffusion MRI acquisition.
+## Data and scientific scope
 
-## Task
+The original CFIN image and gradients are staged under `/app/data/cfin`; the
+`data_manifest.json` records their sizes, hashes, URLs and CC0 source. No network
+is needed. There are 496 volumes, one b0 at index 0 and 33 directions at each
+b=200,400,...,3000 s/mm²; the human acquisition used inversion-recovery CSF
+suppression. Use the unsmoothed source values and native voxel geometry.
+The dataset is described by Hansen & Jespersen (2016),
+https://doi.org/10.1038/sdata.2016.72.
 
-Using dipy's pinned `cfin_multib` diffusion acquisition
-(`dipy.data.read_cfin_dwi`; b-values 0, 200, 400, ..., 3000 s/mm^2), **estimate the
-white-matter mean diffusivity (MD) and fractional anisotropy (FA) over the region of
-interest defined below, and report the ROI-mean MD and ROI-mean FA.**
+Jensen & Helpern (2010), https://doi.org/10.1002/nbm.1518, motivates the
+diffusion/kurtosis signal expansion. Veraart et al. (2011),
+https://doi.org/10.1002/mrm.22603, motivates model-dependent tensor estimation:
+its rat/Rician-estimation result is **not** the human log-WLS analysis requested
+here. No independent diffusivity truth is supplied.
 
-The ROI is pinned exactly so the reported means are well defined; the only thing left to
-your judgement is **how you model the diffusion signal from this acquisition** to obtain
-MD and FA.
+## Public estimator contract
 
-### Region of interest (fixed)
+The full metadata templates for all choices are in `/app/method_contract.json`.
+Choose `dki_all` (DKI, all 496 volumes), `dti_lowb` (DTI, 166 volumes with
+`round(bvals,-2)<=1000`), or `dti_all` (DTI, all 496 volumes). All three are
+valid conditional estimators here. You need not compute or compare the other two.
 
-- Brain mask: `dipy.segment.mask.median_otsu` on the acquisition with
-  `vol_idx=[0], median_radius=4, numpass=2, dilate=1`.
-- Reference FA for the ROI: fit a diffusion tensor
-  (`dipy.reconst.dti.TensorModel`) on the **b <= 1000** shells only and take its FA.
-- ROI = the brain mask intersected with (reference FA > 0.5). This is the white-matter
-  ROI over which you report the means (about 1x10^4 voxels).
+1. Brain mask: DIPY 1.12.1 `median_otsu`, `vol_idx=[0]`,
+   `median_radius=4`, `numpass=2`, `autocrop=False`, `dilate=1`.
+2. Define a common ROI by low-b DTI-WLS on that brain mask, with
+   `min_signal=1e-4`: keep every voxel with finite FA strictly greater than 0.5.
+   Use `gradient_table(..., b0_threshold=50, atol=0.01)`.
+   Do not add exclusions, smooth data or rescale signal.
+3. For your selected configuration use the DIPY 1.12.1 DTI/DKI design matrix
+   `A`. Its first six columns encode
+   `Dxx,Dxy,Dyy,Dxz,Dyz,Dzz`; its final column is -1, so the final coefficient
+   is `-log(S0)`. DKI's intervening 15 columns encode dimensionful quartic
+   coefficients, not normalized kurtosis. Their exact order is in the template.
+4. On each voxel fit two-pass WLS:
+   `y=log(max(raw_signal,1e-4))`,
+   `beta_OLS=pinv(A,rcond=1e-15)@y`,
+   `w=exp(A@beta_OLS)`,
+   `beta=pinv(w[:,None]*A,rcond=1e-15)@(w*y)`.
+   Keep these **raw** coefficients as the fit receipt.
+5. Diagonalize the raw diffusion tensor and floor **each** eigenvalue at
+   `1e-6/(-A.min())`, as in the pinned baseline. Compute MD and FA from these
+   floored eigenvalues. For signal prediction, replace only the first six
+   coefficients with the reconstructed floored tensor; retain raw quartic
+   coefficients and intercept. Predict `exp(A@beta_postfloor)`.
+6. Report `S0_hat=exp(-beta[-1])`, not a default S0 of 1.
+   `observed_b0` is the mean raw b0 signal (one volume here);
+   `normalization_scale=max(observed_b0,1e-4)`.
+   `nrmse` is RMSE of the predicted versus **raw** selected signal divided by
+   that scale. `log_rmse` uses `y-A@beta` before eigenvalue flooring.
+   Count selected samples below the signal floor and raw eigenvalues below the
+   eigenvalue floor. Keep every ROI voxel, including poorly fitting ones.
+   These diagnostics are not physiological acceptance thresholds.
 
-Use this exact ROI. The reference-FA tensor above only *defines* the ROI; you must still
-decide for yourself how to estimate the MD and FA that you report over it.
+Equivalent numerical implementations of this public estimator are welcome.
+The exact complete ROI, model declaration and units are checked; rows may be
+reordered. No correlation-only test, hidden MD band or preferred model is used.
+Numeric tolerances: raw diffusion coefficients atol 1e-10, quartic coefficients
+1e-12, intercept 1e-7 (all rtol 1e-6); MD/FA/residuals atol/rtol 1e-6;
+S0 divided by normalization scale atol/rtol 1e-6; normalized predictions
+atol 1e-5, rtol 1e-6. Do not round coefficients aggressively.
 
-## Output Location
+## Outputs
 
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
+Write to `${OUTPUT_DIR}` (default `/app/output`).
 
-## Required Outputs
+- `md_voxelwise.csv`: exactly one row per ROI voxel, integer `i,j,k`, followed
+  by `md,fa,S0_hat,observed_b0,normalization_scale,nrmse,log_rmse,
+  n_signal_floored,n_eigenvalues_floored` and `beta_0,...,beta_(P-1)`;
+  P=22 for DKI and 7 for DTI. All numeric values must be finite.
+  MD is in `1e-3 mm^2/s`; FA is dimensionless. Raw diffusion coefficients
+  remain in mm²/s and quartic coefficients in mm⁴/s².
+- `diffusivity.json`: `status:"ok"`,
+  `pipeline_id:"cfin-unsmoothed-wls-md-fa-v2"`, selected `model_config`,
+  `md_units:"1e-3 mm^2/s"`, `n_wm_voxels`, and arithmetic voxel means
+  `md_mean,fa_mean,S0_hat_mean,nrmse_mean,log_rmse_mean`.
+  Include `n_signal_floored_total,n_eigenvalues_floored_total,
+  n_voxels_signal_floored,n_voxels_eigenvalues_floored`, recomputed from your rows.
+- `run_metadata.json`: the selected object from `method_contract.json`,
+  plus `status:"ok"`, `n_wm_voxels` and `n_brain_voxels`.
+- `findings.md`: briefly state the selected model, estimates, residual/flooring
+  diagnostics and limitations. ROI selection depends on low-b FA; one scan and
+  log-WLS do not establish unbiasedness, generalization or physiological truth.
+  Do not assert an uncomputed model comparison.
 
-- `diffusivity.json` — at minimum
-  `{"md_mean": <float>, "fa_mean": <float>, "md_units": "1e-3 mm^2/s", "n_wm_voxels": <int>}`.
-  **Report `md_mean` in units of 1e-3 mm^2/s (i.e. um^2/ms)** — a white-matter MD is of
-  order 0.8 in these units. `fa_mean` is dimensionless in [0, 1].
-- `md_voxelwise.csv` — the per-voxel table underlying your reported ROI-mean MD: one row per
-  white-matter ROI voxel, with columns `i,j,k` (its voxel index in the acquisition array) and
-  `md` (its mean diffusivity, in the same 1e-3 mm^2/s units as `md_mean`). Its mean over the
-  rows must equal your reported `md_mean`.
-- `run_metadata.json` — dataset id, the diffusion model / estimation method you used, and
-  the ROI voxel count.
-- `findings.md` — a few sentences reporting the ROI-mean MD and FA and how you estimated
-  them. State only what your analysis supports.
+Scoring is all-or-nothing; no proportional-scoring claim is made. Quantitative
+grading does not use prose keywords. The authoring-only reference archive is
+not a required participant output.
 
-## Failure handling
-
-If the `cfin_multib` acquisition cannot be resolved, exit non-zero with
-`failed_precondition` and a non-empty reason, and still write a parseable
-`run_metadata.json`, `diffusivity.json`, and `findings.md`.
+If source verification or a required finite fit fails, exit nonzero and write
+parseable `run_metadata.json` and `diffusivity.json` with
+`status:"failed_precondition"` and a nonempty reason, plus `findings.md`.
+Do not invent or drop measurements to obtain a passing result.

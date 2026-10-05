@@ -1,270 +1,276 @@
-"""Reusable proof-of-work helpers for the single-subject diffusion over-claim tasks
-(KURTFIT/FODCROSS/PERFDIFF/WMMD/PVFA). See PROOF_OF_WORK_SPEC.md.
+"""Complete source-bound receipts for one public WLS diffusion configuration.
 
-A passing submission must be impossible to produce without running the real per-voxel
-analysis on the real dipy dataset:
-
-  Pillar 1 (real per-voxel table): the submitted per-voxel <metric> table must cover the
-    pinned real ROI voxels, be non-constant, and its per-voxel values must MATCH the real
-    per-voxel reference of SOME valid model/estimator/cap config (max Pearson r over configs
-    >= CORR on the shared voxels). A fabricated / constant / guessed table matches no config.
-  Pillar 2 (recompute + cross-check): the ROI mean recomputed from the submitted rows must
-    equal the reported headline (consistency) AND land within VAL_TOL of some config's real
-    ROI mean (a table whose rows don't generate a real headline fails).
-  Pillar 3 (discriminating number, un-cued): graded per task in the task's test_outputs.py.
-
-The reference (tests/reference.npz) holds, held out from the agent:
-  ref_roi_ijk : (N,3) int voxel coords of the pinned ROI (config-independent recipe, or the
-                honest-config ROI when the recipe leaves the ROI mildly config-dependent).
-  map_<cfg>   : per-ROI-voxel <metric> for each valid config, in ref_roi_ijk order.
-  ref_stats   : JSON with per-config ROI means + tolerances + discriminating thresholds.
+These are computational references, not independent diffusivity truth. No
+correlation, physiological band, incomplete coverage or prose keyword can pass.
 """
+from __future__ import annotations
+
 import csv
 import json
-import os
-import re
-import statistics
 from pathlib import Path
 
 import numpy as np
 
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
+PIPELINE_ID = "cfin-unsmoothed-wls-md-fa-v2"
+CONFIGS = ("dki_all", "dti_lowb", "dti_all")
+MD_UNITS = "1e-3 mm^2/s"
+SIGNAL_FLOOR = 1e-4
+REPORT_ATOL = REPORT_RTOL = 1e-6
+PRED_ATOL, PRED_RTOL = 1e-5, 1e-6
+METRICS = ("md", "fa", "S0_hat", "observed_b0", "normalization_scale",
+           "nrmse", "log_rmse", "n_signal_floored", "n_eigenvalues_floored")
+INTEGER_METRICS = {"n_signal_floored", "n_eigenvalues_floored"}
+FILES = ("md_voxelwise.csv", "diffusivity.json", "run_metadata.json", "findings.md")
 
 
-def ref_path(default_name="reference.npz"):
-    return Path(os.environ.get("POW_REFERENCE",
-                               str(Path(__file__).resolve().parent / default_name)))
+def finite(value, name):
+    assert not isinstance(value, (bool, np.bool_)), f"{name}: boolean is not a number"
+    try: result = float(value)
+    except (ValueError, TypeError, OverflowError) as exc:
+        raise AssertionError(f"{name}: expected finite number") from exc
+    assert np.isfinite(result), f"{name}: expected finite number"
+    return result
 
 
-def load_reference(default_name="reference.npz"):
-    d = np.load(ref_path(default_name), allow_pickle=False)
-    ijk = d["ref_roi_ijk"].astype(np.int64)
-    maps = {k[len("map_"):]: d[k].astype(np.float64) for k in d.files if k.startswith("map_")}
-    stats = json.loads(str(d["ref_stats"]))
-    return {"ijk": ijk, "maps": maps, "stats": stats}
+def integer(value, name):
+    value = finite(value, name)
+    assert value.is_integer(), f"{name}: expected exact integer"
+    return int(value)
 
 
-# ---------- submitted per-voxel table ----------------------------------------------------
-def _norm(s):
-    return re.sub(r"[^a-z0-9]", "", str(s).lower())
+def load_json(path):
+    try: value = json.loads(Path(path).read_text(encoding="utf-8-sig"))
+    except (ValueError, OSError) as exc: raise AssertionError(f"cannot read {path}") from exc
+    assert isinstance(value, dict), f"{path}: expected object"
+    return value
 
 
-def load_voxel_table(filename, value_hints):
-    """Load a per-voxel CSV with i,j,k coordinate columns + one <metric> value column.
-    Returns {(i,j,k): float}. Tolerant to column naming and column order."""
-    p = OUT / filename
-    assert p.exists(), f"missing required per-voxel table {p}"
-    rows = list(csv.DictReader(open(p, encoding="utf-8")))
-    assert rows, f"{filename} has no data rows"
-    header = list(rows[0].keys())
-    norm = {c: _norm(c) for c in header}
-
-    def find(cands, exclude=()):
-        for c in header:
-            n = norm[c]
-            if n in cands and not any(e in n for e in exclude):
-                return c
-        return None
-
-    ci = find({"i", "x", "vi", "voxeli", "ix"})
-    cj = find({"j", "y", "vj", "voxelj", "iy"})
-    ck = find({"k", "z", "vk", "voxelk", "iz", "slice", "slicez"})
-    # value column: a hinted name, else the first numeric non-coord column
-    cv = None
-    for c in header:
-        if any(h in norm[c] for h in value_hints):
-            cv = c
-            break
-    coordset = {ci, cj, ck}
-    if cv is None:
-        for c in header:
-            if c in coordset:
-                continue
-            try:
-                float(rows[0][c])
-                cv = c
-                break
-            except (TypeError, ValueError):
-                continue
-    assert ci and cj and ck, f"{filename} needs i,j,k voxel-coordinate columns (got {header})"
-    assert cv, f"{filename} needs a numeric <metric> value column (got {header})"
-    out = {}
-    for r in rows:
-        try:
-            key = (int(round(float(r[ci]))), int(round(float(r[cj]))), int(round(float(r[ck]))))
-            out[key] = float(r[cv])
-        except (TypeError, ValueError, KeyError):
-            continue
-    return out
+def design_matrix(bvals, bvecs, config):
+    """Explicit DIPY 1.12.1 design convention, no b-vector renormalization."""
+    assert config in CONFIGS
+    b = np.asarray(bvals, float)
+    g = np.asarray(bvecs, float)
+    assert g.shape == (len(b), 3) and np.isfinite(b).all() and np.isfinite(g).all()
+    x, y, z = g.T
+    columns = [-b*x*x, -2*b*x*y, -b*y*y, -2*b*x*z, -2*b*y*z, -b*z*z]
+    if config == "dki_all":
+        powers = [(4,0,0),(0,4,0),(0,0,4),(3,1,0),(3,0,1),(1,3,0),(0,3,1),
+                  (1,0,3),(0,1,3),(2,2,0),(2,0,2),(0,2,2),(2,1,1),(1,2,1),(1,1,2)]
+        multiplicity = [1,1,1,4,4,4,4,4,4,6,6,6,12,12,12]
+        columns += [b*b/6*m*x**a*y**c*z**d for (a,c,d), m in zip(powers, multiplicity)]
+    columns.append(-np.ones(len(b)))
+    return np.column_stack(columns)
 
 
-def align(submitted, ref):
-    """Return per-config paired (sub_vec, ref_vec) on the shared, finite voxels.
-    Also returns coverage = shared/len(ref_ijk)."""
-    idx = {tuple(int(x) for x in v): n for n, v in enumerate(ref["ijk"])}
-    shared_sub, shared_pos = [], []
-    for key, val in submitted.items():
-        n = idx.get(key)
-        if n is not None and np.isfinite(val):
-            shared_sub.append(val)
-            shared_pos.append(n)
-    shared_sub = np.asarray(shared_sub, float)
-    shared_pos = np.asarray(shared_pos, int)
-    coverage = len(shared_pos) / max(1, len(ref["ijk"]))
-    paired = {}
-    for cfg, m in ref["maps"].items():
-        rv = m[shared_pos] if len(shared_pos) else np.array([])
-        fin = np.isfinite(rv) & np.isfinite(shared_sub) if len(rv) else np.array([], bool)
-        paired[cfg] = (shared_sub[fin], rv[fin])
-    return coverage, paired, shared_sub
+def derive(beta, signal, design, bvals):
+    """Reconstruct every required value from raw coefficients and source signal."""
+    beta, signal, design = (np.asarray(value, float) for value in (beta, signal, design))
+    assert beta.ndim == signal.ndim == design.ndim == 2
+    assert beta.shape[0] == signal.shape[0] and beta.shape[1] == design.shape[1]
+    assert signal.shape[1] == design.shape[0] == len(bvals)
+    assert beta.shape[1] in (7, 22) and all(np.isfinite(value).all() for value in (beta, signal, design))
+    assert np.all(design[:, -1] == -1), "design intercept must be -1"
+    b0 = np.asarray(bvals) <= 50
+    assert b0.any(), "source configuration requires b0"
+    observed = np.mean(signal[:, b0], axis=1)
+    scale = np.maximum(observed, SIGNAL_FLOOR)
+    tensor = np.empty((len(beta), 3, 3))
+    tensor[:, 0, 0], tensor[:, 1, 1], tensor[:, 2, 2] = beta[:, 0], beta[:, 2], beta[:, 5]
+    tensor[:, 0, 1] = tensor[:, 1, 0] = beta[:, 1]
+    tensor[:, 0, 2] = tensor[:, 2, 0] = beta[:, 3]
+    tensor[:, 1, 2] = tensor[:, 2, 1] = beta[:, 4]
+    eigenvalues, eigenvectors = np.linalg.eigh(tensor)
+    floor = 1e-6 / (-float(design.min()))
+    clipped = np.maximum(eigenvalues, floor)
+    md_mm = np.mean(clipped, axis=1)
+    fa = np.sqrt(1.5*np.sum((clipped-md_mm[:, None])**2, axis=1)/np.sum(clipped**2, axis=1))
+    tensor_post = (eigenvectors*clipped[:, None, :]) @ np.swapaxes(eigenvectors, 1, 2)
+    post = beta.copy()
+    post[:, :6] = tensor_post[:, [0,0,1,0,1,2], [0,1,1,2,2,2]]
+    with np.errstate(over="ignore", invalid="ignore"):
+        s0 = np.exp(-beta[:, -1])
+    assert np.isfinite(s0).all() and np.all(s0 > 0), "nonfinite/nonpositive coefficient-derived S0"
+    predictions = np.empty(signal.shape)
+    nrmse, log_rmse = np.empty(len(beta)), np.empty(len(beta))
+    for start in range(0, len(beta), 512):
+        end = min(start+512, len(beta))
+        with np.errstate(over="ignore", invalid="ignore"):
+            predicted = np.exp(post[start:end] @ design.T)
+            raw_log_residual = beta[start:end] @ design.T - np.log(np.maximum(signal[start:end], SIGNAL_FLOOR))
+            nrmse[start:end] = np.sqrt(np.mean((predicted-signal[start:end])**2, axis=1))/scale[start:end]
+            log_rmse[start:end] = np.sqrt(np.mean(raw_log_residual**2, axis=1))
+        assert np.isfinite(predicted).all(), "nonfinite post-floor signal prediction"
+        predictions[start:end] = predicted / scale[start:end, None]
+    result = {
+        "md": md_mm*1000, "fa": fa, "S0_hat": s0, "observed_b0": observed,
+        "normalization_scale": scale, "nrmse": nrmse, "log_rmse": log_rmse,
+        "n_signal_floored": np.sum(signal < SIGNAL_FLOOR, axis=1),
+        "n_eigenvalues_floored": np.sum(eigenvalues < floor, axis=1),
+        "normalized_predictions": predictions,
+    }
+    assert all(np.isfinite(value).all() for value in result.values()), "nonfinite derived receipt"
+    return result
 
 
-def best_corr(paired):
-    best, who = -2.0, None
-    for cfg, (s, r) in paired.items():
-        if len(s) >= 50 and np.std(s) > 0 and np.std(r) > 0:
-            c = float(np.corrcoef(s, r)[0, 1])
-            if c > best:
-                best, who = c, cfg
-    return best, who
+def summarize(config, values):
+    return {
+        "status": "ok", "pipeline_id": PIPELINE_ID, "model_config": config,
+        "md_units": MD_UNITS, "n_wm_voxels": len(values["md"]),
+        **{key+"_mean": float(np.mean(values[key])) for key in ("md", "fa", "S0_hat", "nrmse", "log_rmse")},
+        "n_signal_floored_total": int(np.sum(values["n_signal_floored"])),
+        "n_eigenvalues_floored_total": int(np.sum(values["n_eigenvalues_floored"])),
+        "n_voxels_signal_floored": int(np.count_nonzero(values["n_signal_floored"])),
+        "n_voxels_eigenvalues_floored": int(np.count_nonzero(values["n_eigenvalues_floored"])),
+    }
 
 
-def best_agreement(paired):
-    """For integer-valued per-voxel tables (e.g. fODF peak counts): the max fraction of shared
-    voxels whose rounded value equals the reference, over configs. Kills a random/fabricated
-    integer table (chance agreement) while a real estimator self-matches ~1.0."""
-    best, who = -1.0, None
-    for cfg, (s, r) in paired.items():
-        if len(s) >= 50:
-            a = float(np.mean(np.rint(s) == np.rint(r)))
-            if a > best:
-                best, who = a, cfg
-    return best, who
+def match_metadata(actual, expected, name="metadata"):
+    if isinstance(expected, dict):
+        assert isinstance(actual, dict), f"{name}: expected object"
+        if name.endswith("source_sha256") or name.endswith("input_hashes"):
+            assert actual == expected, f"{name}: source hash set mismatch"
+            return
+        for key, value in expected.items():
+            assert key in actual, f"{name}: missing {key}"
+            match_metadata(actual[key], value, name+"."+key)
+    elif isinstance(expected, list):
+        assert isinstance(actual, list) and len(actual) == len(expected), f"{name}: list mismatch"
+        for index, value in enumerate(expected): match_metadata(actual[index], value, f"{name}[{index}]")
+    elif isinstance(expected, bool) or expected is None or isinstance(expected, str):
+        assert type(actual) is type(expected) and actual == expected, f"{name}: public recipe mismatch"
+    else:
+        tolerance = 1e-6 if any(key in name for key in ("affine", "voxel_size", "header_zoom")) else 1e-12*abs(expected)
+        assert abs(finite(actual, name)-expected) <= tolerance, f"{name}: public recipe mismatch"
 
 
-def best_mean_match(recomputed_mean, config_means, tol):
-    """Return (cfg, err) for the config whose ROI mean is closest to `recomputed_mean`."""
-    best, who = 1e9, None
-    for cfg, mu in config_means.items():
-        e = abs(recomputed_mean - float(mu))
-        if e < best:
-            best, who = e, cfg
-    return who, best
+def match_summary(actual, expected):
+    for key, value in expected.items():
+        assert key in actual, f"summary missing {key}"
+        if isinstance(value, str): assert actual[key] == value, f"summary {key} mismatch"
+        elif isinstance(value, int): assert integer(actual[key], key) == value, f"summary {key} mismatch"
+        else: assert np.isclose(finite(actual[key], key), value, atol=REPORT_ATOL, rtol=REPORT_RTOL), f"summary {key} is not derived from submitted rows"
 
 
-def mean_in_range(mean, config_means, margin):
-    """Scale anchor robust to intermediate-but-valid configs: the recomputed ROI mean must lie
-    within [min_config - margin, max_config + margin]. Catches a globally rescaled/fabricated
-    map (correlation is scale-invariant, so pillar 1 alone cannot), while accepting any real
-    model/estimator/cap whose mean sits between the stored configs."""
-    mus = [float(v) for v in config_means.values()]
-    return (min(mus) - margin) <= mean <= (max(mus) + margin)
+def coefficient_match(beta, expected):
+    tolerance = np.full(beta.shape[1], 1e-12)
+    tolerance[:6] = 1e-10; tolerance[-1] = 1e-7
+    assert np.all(np.abs(beta-expected) <= tolerance + 1e-6*np.abs(expected)), "raw coefficients differ from declared source model"
 
 
-def nonconstant(values, eps=1e-6):
-    v = [x for x in values if np.isfinite(x)]
-    return len(v) >= 20 and statistics.pstdev(v) > eps
+def validate_reference(reference):
+    stats = reference["stats"]
+    assert stats["pipeline_id"] == PIPELINE_ID, "obsolete reference pipeline"
+    assert set(stats["metadata_by_config"]) == set(CONFIGS)
+    assert set(stats["results_by_config"]) == set(CONFIGS)
+    ijk, signal = reference["ijk"], reference["signal"]
+    assert ijk.ndim == 2 and ijk.shape[1] == 3 and ijk.dtype.kind in "iu"
+    assert len(ijk) > 0 and len(set(map(tuple, ijk))) == len(ijk) and np.all(ijk >= 0)
+    assert signal.shape == (len(ijk), len(reference["bvals"])) and np.isfinite(signal).all()
+    assert reference["bvecs"].shape == (len(reference["bvals"]), 3)
+    assert integer(stats["n_brain_voxels"], "bank brain count") >= len(ijk)
+    for config in CONFIGS:
+        expected_indices = np.flatnonzero(np.round(reference["bvals"], -2) <= 1000) if config == "dti_lowb" else np.arange(len(reference["bvals"]))
+        entry = reference["configs"][config]
+        assert np.array_equal(entry["indices"], expected_indices), "reference source shell membership mismatch"
+        expected_design = design_matrix(reference["bvals"][expected_indices], reference["bvecs"][expected_indices], config)
+        assert entry["design"].shape == expected_design.shape and np.allclose(entry["design"], expected_design, atol=1e-10, rtol=1e-12), "reference design convention mismatch"
+        assert entry["beta"].shape == (len(ijk), expected_design.shape[1])
+        derived = derive(entry["beta"], signal[:, expected_indices], entry["design"], reference["bvals"][expected_indices])
+        for key in METRICS:
+            assert entry[key].shape == (len(ijk),) and np.isfinite(entry[key]).all()
+            if key in INTEGER_METRICS: assert np.array_equal(entry[key], derived[key]), f"reference {key} mismatch"
+            else: assert np.allclose(entry[key], derived[key], atol=1e-10, rtol=1e-9), f"reference {key} arithmetic mismatch"
+        contract = stats["metadata_by_config"][config]
+        assert contract["pipeline_id"] == PIPELINE_ID and contract["model_config"] == config
+        assert contract["source_sha256"] == stats["source_sha256"]
+        match_summary(stats["results_by_config"][config], summarize(config, entry))
+        entry["normalized_predictions"] = derived["normalized_predictions"]
+    reference["index"] = {tuple(int(v) for v in xyz): index for index, xyz in enumerate(ijk)}
+    return reference
 
 
-# ---------- reported-number harvesting (un-cued: search JSON leaves + findings) ------------
-def load_json(name):
-    p = OUT / name
-    if not p.exists():
-        return None
+def load_reference(path=None):
+    path = Path(path) if path is not None else Path(__file__).with_name("reference.npz")
     try:
-        return json.loads(p.read_text(encoding="utf-8"))
-    except Exception:
-        return None
+        with np.load(path, allow_pickle=False) as bank:
+            reference = {"ijk": bank["ref_roi_ijk"], "signal": bank["ref_signal"],
+                         "bvals": bank["ref_bvals"], "bvecs": bank["ref_bvecs"],
+                         "stats": json.loads(str(bank["ref_stats"].item())), "configs": {}}
+            for config in CONFIGS:
+                reference["configs"][config] = {"indices": bank["volume_indices_"+config], "design": bank["design_"+config],
+                                                "beta": bank["beta_"+config], **{key: bank[key+"_"+config] for key in METRICS}}
+    except (OSError, ValueError, KeyError) as exc: raise AssertionError("missing, corrupt or obsolete measured reference bank") from exc
+    return validate_reference(reference)
 
 
-def walk_numbers(obj, key_re=None):
-    """Yield (key, float) for every numeric leaf; if key_re given, only keys matching it."""
-    out = []
-    stack = [(None, obj)]
-    while stack:
-        k, v = stack.pop()
-        if isinstance(v, dict):
-            for kk, vv in v.items():
-                stack.append((kk, vv))
-        elif isinstance(v, list):
-            for vv in v:
-                stack.append((k, vv))
-        elif isinstance(v, (int, float)) and not isinstance(v, bool):
-            if key_re is None or (k and re.search(key_re, str(k), re.I)):
-                out.append((k, float(v)))
-    return out
+def require_files(output):
+    for name in FILES: assert (Path(output)/name).is_file(), f"missing required output {name}"
+    assert (Path(output)/"findings.md").read_text(encoding="utf-8-sig").strip(), "empty findings.md"
 
 
-def findings_text():
-    p = OUT / "findings.md"
-    return p.read_text(encoding="utf-8") if p.exists() else ""
+def read_voxel_table(path, reference, config):
+    p = reference["configs"][config]["beta"].shape[1]
+    columns = ["i", "j", "k", *METRICS, *[f"beta_{j}" for j in range(p)]]
+    with Path(path).open(newline="", encoding="utf-8-sig") as stream:
+        reader = csv.DictReader(stream)
+        assert reader.fieldnames is not None, "missing voxel CSV header"
+        reader.fieldnames = [key.strip() for key in reader.fieldnames]
+        assert len(reader.fieldnames) == len(set(reader.fieldnames)), "duplicate CSV column"
+        assert set(columns) <= set(reader.fieldnames), "missing required voxel CSV columns"
+        found = {}
+        for row in reader:
+            if not any(str(value or "").strip() for value in row.values()): continue
+            key = tuple(integer(row[c], "voxel "+c) for c in ("i", "j", "k"))
+            assert key not in found, "duplicate voxel coordinates"
+            assert key in reference["index"], "voxel outside complete source ROI"
+            values = {name: finite(row[name], name) for name in columns[3:]}
+            for name in INTEGER_METRICS:
+                values[name] = integer(row[name], name)
+                assert values[name] >= 0, "negative floor count"
+            found[key] = values
+    assert set(found) == set(reference["index"]), "voxel table must cover every source ROI voxel exactly once"
+    ordered = [found[tuple(int(v) for v in xyz)] for xyz in reference["ijk"]]
+    return {"beta": np.array([[row[f"beta_{j}"] for j in range(p)] for row in ordered]),
+            **{name: np.array([row[name] for row in ordered]) for name in METRICS}}
 
 
-def harvest_metric_values(json_names, lo, hi, findings_terms, json_key_re=None):
-    """All plausible metric values [lo,hi] the submission reports anywhere: JSON leaves in range
-    (optionally only under keys matching `json_key_re`, to avoid harvesting a co-reported
-    different metric such as FA next to MD) + numbers in findings.md near a metric term."""
-    vals = []
-    for name in json_names:
-        obj = load_json(name)
-        if obj:
-            for k, v in walk_numbers(obj):
-                if not (lo <= v <= hi):
-                    continue
-                if json_key_re is not None and not (k and re.search(json_key_re, str(k), re.I)):
-                    continue
-                vals.append(v)
-    text = findings_text()
-    if text:
-        term = "(?:" + "|".join(findings_terms) + ")"
-        num = r"([01]?\.\d{2,}|\d\.\d{2,})"
-        for m in re.finditer(term + r"[^\n]{0,60}?" + num, text, re.I):
-            try:
-                f = float(m.group(1))
-                if lo <= f <= hi:
-                    vals.append(f)
-            except ValueError:
-                pass
-        for m in re.finditer(num + r"[^\n]{0,40}?" + term, text, re.I):
-            try:
-                f = float(m.group(1))
-                if lo <= f <= hi:
-                    vals.append(f)
-            except ValueError:
-                pass
-    return vals
+def validate_voxel_receipt(table, reference, config):
+    entry = reference["configs"][config]
+    coefficient_match(table["beta"], entry["beta"])
+    indices = entry["indices"]
+    derived = derive(table["beta"], reference["signal"][:, indices], entry["design"], reference["bvals"][indices])
+    for key in METRICS:
+        if key in INTEGER_METRICS:
+            assert np.array_equal(table[key], derived[key]), f"{key} does not match source/coefficient floor count"
+        elif key == "S0_hat":
+            assert np.allclose(table[key]/derived["normalization_scale"], derived[key]/derived["normalization_scale"], atol=REPORT_ATOL, rtol=REPORT_RTOL), "S0_hat not derived from raw intercept"
+        else:
+            assert np.allclose(table[key], derived[key], atol=REPORT_ATOL, rtol=REPORT_RTOL), f"{key} not derived from source signal and raw coefficients"
+    assert np.allclose(derived["normalized_predictions"], entry["normalized_predictions"], atol=PRED_ATOL, rtol=PRED_RTOL), "normalized predictions differ from declared source model"
+    return derived
 
 
-def near_config(value, config_means, tol):
-    return any(abs(value - float(mu)) <= tol for mu in config_means.values())
+def validate_summaries(output, table, reference, config):
+    output = Path(output)
+    match_summary(load_json(output/"diffusivity.json"), summarize(config, table))
+    metadata = load_json(output/"run_metadata.json")
+    match_metadata(metadata, reference["stats"]["metadata_by_config"][config])
+    assert metadata.get("status") == "ok"
+    assert integer(metadata.get("n_wm_voxels"), "n_wm_voxels") == len(reference["ijk"])
+    assert integer(metadata.get("n_brain_voxels"), "n_brain_voxels") == reference["stats"]["n_brain_voxels"]
 
 
-def straddle(values, config_means, near_tol, min_spread):
-    """Detect an un-cued numeric dependence claim: >=2 reported values that each match a real
-    config mean (within near_tol) and together span >= min_spread. Returns (ok, span, lo, hi)."""
-    real = sorted({round(v, 4) for v in values if near_config(v, config_means, near_tol)})
-    if len(real) < 2:
-        return False, 0.0, None, None
-    span = real[-1] - real[0]
-    return (span >= min_spread), span, real[0], real[-1]
+def read_submission(output, reference):
+    result = load_json(Path(output)/"diffusivity.json")
+    config = result.get("model_config")
+    assert config in CONFIGS, "declare one public model_config"
+    assert result.get("md_units") == MD_UNITS, "explicit MD units must be 1e-3 mm^2/s; no magnitude guessing"
+    return config, read_voxel_table(Path(output)/"md_voxelwise.csv", reference, config)
 
 
-# ---------- negation-aware prose guard (SECONDARY / fallback) ------------------------------
-_NEG = (r"(?:not|no|n't|without|never|hardly|scarcely|far from|rather than|instead of|"
-        r"rule[sd]? out|ruled out|cannot|can't|isn't|aren't|wasn't|weren't|doesn't|don't|"
-        r"didn't|fails? to|unable to|unlikely to|does not|do not)")
-
-
-def neg_before(text, start, window=48):
-    pre = text[max(0, start - window):start]
-    return re.search(r"(?<![a-z])" + _NEG + r"(?![a-z])[\s\w,'\"()-]{0,20}$", pre, re.I) is not None
-
-
-def unnegated(text, pat, window=48):
-    for m in re.finditer(pat, text, re.I):
-        if neg_before(text, m.start(), window):
-            continue
-        if re.search(r"\b" + _NEG + r"\b", m.group(0), re.I):
-            continue
-        return True
-    return False
+def validate_output_directory(output, reference):
+    require_files(output)
+    config, table = read_submission(output, reference)
+    validate_voxel_receipt(table, reference, config)
+    validate_summaries(output, table, reference, config)
+    return config, table
