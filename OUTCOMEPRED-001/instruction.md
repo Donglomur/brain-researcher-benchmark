@@ -1,70 +1,121 @@
-# Decoding upcoming trial outcome from population spiking in the IBL Brain-Wide Map (OUTCOMEPRED-001)
+# Feedback-aligned population decoding: a within-session method control
 
-## Scientific context
+Estimate how decoding of the released rewarded/unrewarded flag changes across
+specified feedback-relative spike-count windows in one IBL mouse recording.
+This is a retrospective method/sensitivity case, not online prediction, a
+pre-feedback absence claim, or reproduction of a published decoding score.
+Preserve the measured outcome even if it contradicts an expected pre/post pattern.
 
-In the International Brain Laboratory (IBL) standardized decision task (The IBL et al. 2021,
-*eLife*, "Standardized and reproducible measurement of decision-making in mice",
-https://doi.org/10.7554/eLife.63711; Brain-Wide Map, https://doi.org/10.1101/2023.07.04.547681),
-a head-fixed mouse sees a Gabor patch of varying contrast on the left or right and turns a wheel
-to bring it to centre; a correct turn is rewarded and an incorrect turn produces an error tone.
-Neuropixels probes record hundreds of neurons simultaneously across many brain areas. A standard
-population-level question is how well a single trial's **upcoming outcome** — whether the mouse
-will be rewarded or make an error — can be read out from the simultaneously recorded spiking.
+## Original public substrate and paper relationship
 
-## Task
+The processed NWB is already available offline at
+`/app/data/outcomepred/session.nwb`. Its source manifest is in the same directory.
+Do not download anything at runtime. Use all released cluster rows, not a
+quality-selected subset or a guessed number of neurons.
 
-Using the NWB file for session
-**`sub-NYU-37/sub-NYU-37_ses-21d21fc3-4201-4edc-802a-c67b61952548_desc-processed_behavior+ecephys.nwb`**
-from DANDI dandiset **`000409`**, **decode the mouse's upcoming trial outcome (rewarded vs. error)
-from the population spiking and report the cross-validated decoding accuracy relative to chance.**
+- DANDI `000409/0.260309.1324`, asset `73c3cf70-88a0-43ae-b7fd-03a0ac156222`;
+  [versioned dataset](https://doi.org/10.48324/dandi.000409/0.260309.1324).
+- Subject NYU-37, session `21d21fc3-4201-4edc-802a-c67b61952548`.
+- Original processed behavior/spike-sorting derivative, not raw voltages.
+  SHA-256 `f46fa114f07a00080cdc1860913df245326a17bf249d3749ee659cabd157784a`.
+- CC-BY-4.0; attribute International Brain Laboratory et al. and the dataset.
 
-Fetch this one session's asset at runtime from the DANDI archive — obtain its download/content
-URL with the `DandiAPIClient` (`get_dandiset("000409", "draft").get_asset_by_path(...)`) and read
-it; do not download the whole dandiset and do not assume a local copy.
+[IBL 2021](https://doi.org/10.7554/eLife.63711) describes the behavioral task.
+[IBL 2025 Figure 6 and decoding Methods](https://doi.org/10.1038/s41586-025-09235-0)
+provide the paper-derived population-decoding context. Their regional,
+quality-selected, post-feedback 200-ms analysis uses L1, class weighting,
+balanced accuracy, nested regularization selection, repeated CV and nulls.
+Our all-cluster single-session L2 fixed-C analysis is an adaptation, not that
+finding. There is no assumed paper answer to recover.
 
-Use the trials on which the mouse made a left/right choice and an outcome was delivered (a valid
-`mouse_wheel_choice` with a finite `feedback_time`); the outcome label is `is_mouse_rewarded`.
-Balance the rewarded and error trials so that chance is 0.5 (or, if you prefer, keep all trials
-and report the majority-class chance level explicitly). Build the population feature for each
-trial as **each recorded unit's spike count in a time window** (one count per unit, using **all
-recorded units**), and train a **standardized linear classifier** (e.g. logistic regression) to
-predict the outcome, scored by **5-fold cross-validated accuracy**. Report the accuracy together
-with the chance level.
+## Public numerical contract
 
-Standard implementation choices the brief leaves to the analyst (which trial event the spike-count
-window is placed relative to, its length, how the cross-validation folds are assigned, the
-classifier's regularization strength) should follow common practice for reading out an *upcoming*
-outcome.
+Read `/app/method_contract.json`: it is the complete public specification,
+including all required field names, source semantics, numerical tolerances and
+output schemas. The following summarizes it; no hidden estimator choice is needed.
 
-Report, in plain terms, **how accurately the upcoming trial outcome can be decoded on this session,
-relative to chance** — stating only what your analysis actually supports.
+1. Verify the source. Preserve original trial/unit IDs and their separate positional
+   row indices. Require true Boolean `is_mouse_rewarded`; it is the released
+   feedback-derived flag, not an independent physical water-delivery measurement.
+   Keep every released cluster and every stored duplicate spike occurrence.
+2. Eligible trials have finite stimulus onset and feedback, and choice exactly
+   `clockwise` or `counter_clockwise`. Form ascending eligible source-row arrays
+   for labels1 (rewarded) and0. With one `RandomState(0)`, draw k from label1
+   **then** k from label0 without replacement, where k is the smaller count;
+   perform both draws even if a whole class is selected. Sort the combined rows.
+   Require k>=5 for the fixed five-fold analysis; do not add further exclusions.
+3. Use a separate `StratifiedKFold(5, shuffle=True, random_state=0)` on this ordered
+   sample. Reuse these exact folds for every window. Trial folds describe one
+   recording; they are not independent animals.
+4. Count each cluster's spikes in half-open intervals `[feedback+start,feedback+end)`:
+   `headline_pre` [-200,-50) ms; `control_post` [0,400) ms; and 19 `curve_<start>`
+   windows starting at -500,-450,...,+400 ms, each 200 ms wide. Curve IDs use
+   seconds with three decimals, e.g. `curve_-0.500`, `curve_0.000`.
+   Form endpoints independently as unrounded float64 feedback plus integer-ms/1000.
+   Count occurrences, not rates; do not silently sort, deduplicate or round spikes.
+5. For each of the 105 analysis/fold fits, standardize training counts only using
+   population variance and the numerical-constant rule in the contract. Fit
+   `sum(logaddexp(0,z)-y*z)+dot(w,w)/2`, with `z=Xscaled@w+b` and unpenalized b.
+   No feature selection, weights, tuning or rank gate. C=1 L2 permits more units
+   than training trials. The supplied sklearn solver is one implementation;
+   any equivalent finite solution with mean-objective gradient infinity<=1e-9
+   is acceptable. Preserve actual warnings and raw termination information.
+6. Score>0 predicts rewarded1; score<=0 predicts0. Report ordinary fold accuracy,
+   unweighted mean of five folds, separately pooled OOF accuracy, and population
+   fold SD. Summaries must recompute from your submitted labels. Fold SD is not a CI.
 
-## Output Location
+No accuracy band, expected pre/post gap, profile-correlation threshold,
+above-chance result, successful comparator or particular prose phrase is required.
+Signed decisions are compared within public 1e-5 absolute +1e-6 relative tolerance;
+summaries within absolute1e-6. Source times allow absolute1e-9 seconds; original
+unrounded times still define counts. Integer identity/count values are exact.
+Equivalent row/column ordering, consistently labeled NPZ axes, integral scientific
+notation and honest alternative numerical implementations are accepted.
 
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
+## Eight required outputs
 
-## Required Outputs
+Write to `${OUTPUT_DIR}` (default `/app/output`); detailed columns/nested fields
+are specified under `outputs` in `/app/method_contract.json`.
 
-- `results.json` — the headline result: `cross_validated_accuracy` (the population outcome-decoding
-  accuracy you would report), `chance_level`, `n_trials`, `n_units`, and the analysis parameters
-  you used (window, cross-validation, classifier).
-- `folds.csv` — the per-fold cross-validated accuracies your headline accuracy is the mean of: one
-  row per cross-validation fold, with the fold index and that fold's accuracy (columns e.g.
-  `fold,accuracy`).
-- `decoding_vs_window.csv` — the decoding accuracy as a function of window latency: slide a
-  fixed **0.20 s** spike-count window across successive latencies relative to each trial's outcome
-  (feedback) time — window start from **-0.50 s to +0.40 s in 0.05 s steps** (window =
-  `[feedback + start, feedback + start + 0.20]`) — and, for each window position, report the
-  cross-validated decoding accuracy using the same balanced trials, feature construction, decoder
-  and cross-validation as your headline analysis. Columns: `window_start_s, window_end_s, accuracy`
-  (one row per window position).
-- `run_metadata.json` — dandiset id, session, n trials, n units, outcome definition, window, CV.
-- `findings.md` — a short written summary (a few sentences) stating how accurately the upcoming
-  trial outcome can be decoded relative to chance, and how reliable that estimate is. State only
-  what your analysis actually supports.
+| Artifact | Required evidence |
+| --- | --- |
+| `source_trials.csv` | Every original trial, times/choice/label, eligibility, selection reason and selected fold |
+| `spike_counts.npz` | Primitive integer counts for all21 windows × selected trials × all units, with original identity axes; no pickle |
+| `trial_predictions.csv` | Complete source-keyed OOF labels and signed decisions for every window/trial |
+| `folds.csv` | All105 fits' train/test class supports, correct counts and accuracy |
+| `decoding_vs_window.csv` | All19 fixed-width windows' mean-fold accuracy, pooled accuracy and fold SD |
+| `results.json` | Source/selected counts, named headline/post summaries and all21 analysis summaries |
+| `run_metadata.json` | Exact public source/method objects and byte hashes, source QC/support,105 fit diagnostics, truthful software versions |
+| `findings.md` | Short interpretation of the actual results and their limits; no keyword matching |
 
-## Failure handling
+`source_trials.csv` accounts for excluded and eligible-but-unsampled rows as well
+as selected ones. Missing original times/unselected folds are empty cells.
+`run_metadata.json` includes the entire parsed method contract under `method`;
+its `source` is that contract's exact source object. Hash the method and source
+manifest bytes, not reformatted JSON. `support_by_analysis` is a list of21 objects
+with an `analysis` key and the seven named support counts. `fits` is a list of105
+analysis/fold objects. Honest library versions/statuses may differ; exact source
+and method identities may not. Harmless top-level descriptions are allowed.
 
-If the dandiset asset cannot be resolved or the session lacks the expected trials/units data,
-exit non-zero with `failed_precondition` and a non-empty reason, and still write a parseable
-`run_metadata.json`, `results.json`, and `findings.md`.
+## Interpretation and coverage limits
+
+The released clusters are mostly MUA; no additional QC/re-sorting is requested.
+The file lacks unit observation intervals and invalid-time annotations. Count
+stored spikes, but explicitly mark continuous observation support as unknown;
+zero counts and spike extrema do not prove uninterrupted observation. Report
+window overlap with trial/stimulus/registered-choice/task-epoch times as described
+in the contract, without turning those diagnostics into post hoc exclusions.
+
+Feedback alignment uses a later observed timestamp: it is retrospective, not a
+deployable prediction trigger. Pre-feedback does not generally mean pre-choice
+or pre-movement. High post-feedback decoding cannot identify its sensory, motor
+or reward cause; chance-like accuracy cannot establish absence. The 150/400-ms
+headline/comparator widths differ, whereas the19-point curve has fixed200-ms
+width. Random folds and balanced subsampling do not establish chronological,
+new-session, new-mouse or natural-prevalence performance. No null/equivalence or
+causal test is supplied here.
+
+If source integrity/schema or numerical prerequisites fail, exit nonzero and
+write parseable `results.json`, `run_metadata.json` and `findings.md` with
+`status: failed_precondition` and a nonempty reason. Do not fabricate a complete
+result, refetch, alter the cohort or overwrite an existing evidence destination.

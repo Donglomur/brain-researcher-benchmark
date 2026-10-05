@@ -1,0 +1,358 @@
+{
+  "schema_version": 2,
+  "task_id": "OUTCOMEPRED-001",
+  "method_id": "released-cluster-feedback-window-control-v2",
+  "scope": "Retrospective within-session feedback-aligned fixed-window sensitivity; not prospective, causal, absence or new-animal inference.",
+  "source": {
+    "source_manifest_sha256": "d87c000f92d2aa54b4eaa0de50d5ffd7ab3035141d1fccd45b4e674d1c56d63d",
+    "dandiset_id": "000409",
+    "dandiset_version": "0.260309.1324",
+    "asset_id": "73c3cf70-88a0-43ae-b7fd-03a0ac156222",
+    "nwb_sha256": "f46fa114f07a00080cdc1860913df245326a17bf249d3749ee659cabd157784a",
+    "subject_id": "NYU-37",
+    "session_id": "21d21fc3-4201-4edc-802a-c67b61952548",
+    "runtime_path": "/app/data/outcomepred/session.nwb",
+    "representation": "Published processed NWB, not raw voltages; all released clusters, not quality-selected single neurons.",
+    "outcome_semantics": "Released Boolean is_mouse_rewarded; upstream feedbackType == 1.0 mapping. Original unknown feedback codes cannot be reconstructed; not independent physical water-delivery measurement."
+  },
+  "source_validation": {
+    "trial_paths": [
+      "id",
+      "start_time",
+      "stop_time",
+      "gabor_stimulus_onset_time",
+      "feedback_time",
+      "choice_registration_time",
+      "wheel_movement_onset_time",
+      "mouse_wheel_choice",
+      "is_mouse_rewarded"
+    ],
+    "trials_group": "/intervals/trials",
+    "units_group": "/units",
+    "trial_and_unit_ids": "unique signed-int64-compatible original IDs, preserve positional rows separately",
+    "reward": "Require original Boolean dtype; never cast missing or arbitrary codes to error.",
+    "spikes": "One ragged train per original unit, nonnegative finite nondecreasing float64 seconds; repeated timestamps count separately. Index must be nondecreasing nonnegative integral, last equals spike_times length.",
+    "clock": "session_start_time and timestamps_reference_time equal; source seconds unchanged",
+    "unit_policy": "all released unit rows, no quality/region/rate/rank selection, no re-sorting",
+    "observation_support": "unknown: no Units observation intervals or invalid_times in this released file. Count stored occurrences, including zeros; do not infer continuous recording coverage from spike extrema.",
+    "task_epoch": "Report source task epoch and window overlap descriptively, not as proof of unit observation or additional exclusion."
+  },
+  "selection": {
+    "eligibility": "finite stimulus onset AND finite feedback AND choice exactly clockwise or counter_clockwise",
+    "reason_precedence": [
+      "invalid_choice",
+      "nonfinite_stimulus",
+      "nonfinite_feedback",
+      "eligible_not_sampled",
+      "selected"
+    ],
+    "label_0": "released rewarded False",
+    "label_1": "released rewarded True",
+    "class_balance": "k=min(number eligible label1,number eligible label0); k>=5; choose k from each class",
+    "rng": "numpy.random.RandomState(0)",
+    "draw_order": "eligible source rows in ascending positional order; choice(label1,k,replace=False), then choice(label0,k,replace=False) using same RNG, including full-minority draw; concatenate then sort selected source row positions",
+    "folds": "separate StratifiedKFold(n_splits=5,shuffle=True,random_state=0) on selected chronological labels; fold IDs0..4 identical across all analyses",
+    "no_additional_exclusions": true
+  },
+  "windows": [
+    {
+      "analysis": "headline_pre",
+      "start_ms": -200,
+      "end_ms": -50
+    },
+    {
+      "analysis": "control_post",
+      "start_ms": 0,
+      "end_ms": 400
+    },
+    {
+      "analysis": "curve_-0.500",
+      "start_ms": -500,
+      "end_ms": -300
+    },
+    {
+      "analysis": "curve_-0.450",
+      "start_ms": -450,
+      "end_ms": -250
+    },
+    {
+      "analysis": "curve_-0.400",
+      "start_ms": -400,
+      "end_ms": -200
+    },
+    {
+      "analysis": "curve_-0.350",
+      "start_ms": -350,
+      "end_ms": -150
+    },
+    {
+      "analysis": "curve_-0.300",
+      "start_ms": -300,
+      "end_ms": -100
+    },
+    {
+      "analysis": "curve_-0.250",
+      "start_ms": -250,
+      "end_ms": -50
+    },
+    {
+      "analysis": "curve_-0.200",
+      "start_ms": -200,
+      "end_ms": 0
+    },
+    {
+      "analysis": "curve_-0.150",
+      "start_ms": -150,
+      "end_ms": 50
+    },
+    {
+      "analysis": "curve_-0.100",
+      "start_ms": -100,
+      "end_ms": 100
+    },
+    {
+      "analysis": "curve_-0.050",
+      "start_ms": -50,
+      "end_ms": 150
+    },
+    {
+      "analysis": "curve_0.000",
+      "start_ms": 0,
+      "end_ms": 200
+    },
+    {
+      "analysis": "curve_0.050",
+      "start_ms": 50,
+      "end_ms": 250
+    },
+    {
+      "analysis": "curve_0.100",
+      "start_ms": 100,
+      "end_ms": 300
+    },
+    {
+      "analysis": "curve_0.150",
+      "start_ms": 150,
+      "end_ms": 350
+    },
+    {
+      "analysis": "curve_0.200",
+      "start_ms": 200,
+      "end_ms": 400
+    },
+    {
+      "analysis": "curve_0.250",
+      "start_ms": 250,
+      "end_ms": 450
+    },
+    {
+      "analysis": "curve_0.300",
+      "start_ms": 300,
+      "end_ms": 500
+    },
+    {
+      "analysis": "curve_0.350",
+      "start_ms": 350,
+      "end_ms": 550
+    },
+    {
+      "analysis": "curve_0.400",
+      "start_ms": 400,
+      "end_ms": 600
+    }
+  ],
+  "counting": {
+    "interval": "[feedback+start,feedback+end)",
+    "arithmetic": "float64(original feedback)+float64(integer milliseconds/1000), independently for each endpoint; no rounding feedback, no cumulative floating arange",
+    "features": "integer spike occurrence counts, not rates; every selected trial and every released unit in every window",
+    "boundary_rule": "left included, right excluded, duplicate occurrences preserved",
+    "missing_coverage": "no coverage-based exclusions or imputation; unknown continuous observation explicitly disclosed"
+  },
+  "model": {
+    "scaling": "train-only arithmetic mean and population variance separately per analysis/fold; StandardScaler numerical-constant test var <= n*eps*var+(n*mean*eps)^2 (eps=float64 epsilon); constant scale=1, otherwise sqrt(var)",
+    "objective": "sum(logaddexp(0,z)-y*z) + dot(w,w)/(2*C); z=Xscaled@w+b; b unpenalized",
+    "C": 1,
+    "class_weight": null,
+    "sample_weight": null,
+    "feature_selection": false,
+    "hyperparameter_search": false,
+    "reference_implementation": {
+      "estimator": "sklearn.linear_model.LogisticRegression",
+      "solver": "newton-cholesky",
+      "l1_ratio": 0,
+      "tol": 1e-10,
+      "max_iter": 100,
+      "fit_intercept": true
+    },
+    "equivalent_implementations": "Any finite optimizer meeting the same objective and mean-objective gradient infinity <=1e-9; raw termination/warnings must be preserved, no exact iteration/status gate.",
+    "mean_objective_gradient_infinity_max": 1e-9,
+    "classification": "decision_score > 0 => rewarded1, otherwise0; zero ties label0",
+    "rank": "U>N and rank-deficient features are allowed; no rank-based exclusions or extra regularization"
+  },
+  "statistics": {
+    "accuracy": "ordinary n_correct/n_test, not balanced_accuracy",
+    "mean_accuracy": "unweighted arithmetic mean of five fold accuracies",
+    "accuracy_sd": "population SD (ddof=0) of five fold accuracies, descriptive not CI",
+    "pooled_oof_accuracy": "total correct/all selected trials; separately named",
+    "chance": 0.5,
+    "pre_post_gap": "control_post mean_accuracy minus headline_pre mean_accuracy, descriptive with unequal widths",
+    "performance_gate": "none: no expected sign, accuracy interval, profile correlation, significance, equivalence or required post-control success"
+  },
+  "tolerances": {
+    "integer_identity_and_counts": "exact values; finite integral CSV scientific notation allowed; not bool/fraction/nonfinite",
+    "time_seconds_absolute": 1e-9,
+    "time_seconds_relative": 0,
+    "decision_score_absolute": 0.00001,
+    "decision_score_relative": 0.000001,
+    "summary_absolute": 0.000001,
+    "summary_relative": 0,
+    "near_zero_rule": "Accepted scores may change sign within score tolerance; prediction must follow submitted score and every summary recomputes from submitted predictions."
+  },
+  "outputs": {
+    "source_trials.csv": {
+      "rows": "all original trials",
+      "columns": [
+        "source_trial_row",
+        "trial_id",
+        "stimulus_time_s",
+        "feedback_time_s",
+        "choice_registration_time_s",
+        "wheel_movement_onset_time_s",
+        "choice",
+        "rewarded",
+        "eligible",
+        "selected",
+        "selection_reason",
+        "fold"
+      ],
+      "missing": "nonfinite source time or unselected fold serialized empty; eligibility/selection/rewarded explicit0/1"
+    },
+    "spike_counts.npz": {
+      "format": "primitive arrays only; allow_pickle=False; no object or pickle; nonnegative integer counts; axis order free if consistently labeled",
+      "arrays": {
+        "analysis": "Unicode(21)",
+        "window_start_s": "float64(21)",
+        "window_end_s": "float64(21)",
+        "source_trial_row": "integer(N)",
+        "trial_id": "integer(N)",
+        "source_unit_row": "integer(U)",
+        "unit_id": "integer(U)",
+        "spike_count": "nonnegative integer(21,N,U)"
+      }
+    },
+    "trial_predictions.csv": {
+      "rows": "21*N unique analysis/source_trial_row",
+      "columns": [
+        "analysis",
+        "source_trial_row",
+        "trial_id",
+        "fold",
+        "label",
+        "prediction",
+        "decision_score",
+        "window_start_s",
+        "window_end_s"
+      ]
+    },
+    "folds.csv": {
+      "rows": 105,
+      "columns": [
+        "analysis",
+        "fold",
+        "n_train_trials",
+        "n_test_trials",
+        "n_train_class0",
+        "n_train_class1",
+        "n_test_class0",
+        "n_test_class1",
+        "n_correct",
+        "accuracy"
+      ]
+    },
+    "decoding_vs_window.csv": {
+      "rows": 19,
+      "columns": [
+        "analysis",
+        "window_start_s",
+        "window_end_s",
+        "accuracy",
+        "pooled_oof_accuracy",
+        "accuracy_sd"
+      ]
+    },
+    "results.json": {
+      "required_fields": [
+        "status",
+        "n_source_trials",
+        "n_eligible_trials",
+        "n_selected_trials",
+        "n_units",
+        "eligible_class_counts",
+        "selected_class_counts",
+        "chance",
+        "headline",
+        "post_feedback",
+        "post_minus_pre",
+        "analyses"
+      ],
+      "status": "complete",
+      "class_counts": "objects with keys0 and1",
+      "headline_and_post_feedback": "analysis, mean_accuracy, pooled_oof_accuracy, accuracy_sd",
+      "analyses": "list of21 same four-field objects; unique analysis IDs; order free"
+    },
+    "run_metadata.json": {
+      "required_fields": [
+        "source",
+        "source_manifest_sha256",
+        "method_contract_sha256",
+        "method",
+        "source_summary",
+        "support_by_analysis",
+        "fits",
+        "software"
+      ],
+      "source": "exact source object from this public contract",
+      "method": "entire parsed public method_contract JSON, no contradictory nested additions",
+      "source_manifest_sha256": "SHA256 of staged manifest bytes",
+      "method_contract_sha256": "SHA256 of method_contract bytes",
+      "source_summary": {
+        "required_fields": [
+          "n_source_trials",
+          "n_units",
+          "n_stored_spikes",
+          "duplicate_adjacent_spike_pairs",
+          "nwb_version",
+          "session_start_time",
+          "timestamps_reference_time",
+          "kilosort_label_counts",
+          "ibl_quality_score_counts",
+          "probe_counts",
+          "observation_support",
+          "task_epoch_start_s",
+          "task_epoch_stop_s"
+        ],
+        "quality_counts": "objects keyed by source label / str(float(score)); no quality exclusion",
+        "observation_support": "unknown"
+      },
+      "support_by_analysis": "21 objects keyed by analysis with n_starts_before_trial_start,n_ends_after_trial_stop,n_starts_before_stimulus,n_ends_after_choice_registration,n_starts_before_task_epoch,n_ends_after_task_epoch,n_overlapping_selected_window_pairs; compare unrounded source times, half-open overlap positive length, each unordered selected-trial pair once; descriptive not exclusions",
+      "fits": "105 unique analysis/fold objects: mean_gradient_inf finite >=0 <=1e-9; finite_parameters true; optimizer_status JSON string or number preserving raw status; warnings list of strings. Optional extra optimizer diagnostics allowed.",
+      "software": "nonempty map of nonempty implementation/version strings; truthful alternative implementations accepted"
+    },
+    "findings.md": {
+      "requirement": "nonempty readable scientific summary, no keywords graded"
+    }
+  },
+  "serialization": "CSV row/column order and consistently labeled NPZ axes may vary; JSON extra top-level descriptions accepted. Required identity/method/source maps must not conflict. Summary floats finite; bool not numeric. No requirement for hardcoded prose or source accuracy. Output directory must contain these eight artifacts.",
+  "interpretation_limits": [
+    "one mouse/session, folds and clusters not biological replicates",
+    "released clusters mostly MUA; no well-isolated-neuron claim",
+    "unknown uninterrupted unit observation",
+    "retrospective feedback alignment is not online prediction",
+    "pre-feedback is not necessarily pre-choice/movement",
+    "different window widths confound pure timing comparison",
+    "random within-session folds do not establish forward-time/new-session/new-animal generalization",
+    "balanced subset is not natural-prevalence deployment evaluation",
+    "point accuracy and fold SD do not establish absence/significance/causality",
+    "Nature2025 Fig6 uses regional quality-selected cohort, post200ms, L1/class weights/balanced accuracy/nested CV/nulls; this is an adaptation, not that finding"
+  ]
+}
