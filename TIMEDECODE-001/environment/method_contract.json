@@ -1,0 +1,114 @@
+{
+  "schema_version": "timedecode-method-2.0",
+  "role": "easy_within_recording_fixed_recipe_method_control",
+  "paper_relationship": {
+    "Gramfort_2013": "Adaptation of section 3.3, Figure 8 and Table 3; not its left-only per-time SVC/ShuffleSplit numerical result.",
+    "King_Dehaene_2014": "Held-out-trial temporal-decoding motivation; pooled-time LR is not a temporal-generalization matrix."
+  },
+  "source": {
+    "raw": "MEG/sample/sample_audvis_filt-0-40_raw.fif",
+    "events": "MEG/sample/sample_audvis_filt-0-40_raw-eve.fif",
+    "read_units": "float64 SI T/m for gradiometers",
+    "channels": "all source gradiometers in original order, excluding source bads",
+    "added_filter": null,
+    "interpolate_bads": false,
+    "resample": false,
+    "decim": 1,
+    "decim_reason": "Keep released 40-Hz low-pass signal at native 150.15374755859375-Hz sampling; decim2 has inadequate Nyquist."
+  },
+  "epochs": {
+    "event_classes": {"1": 0, "2": 0, "3": 1, "4": 1},
+    "classes": ["auditory", "visual"],
+    "other_events": "record in source ledger as not_target; never classifier rows",
+    "tmin_s": -0.2,
+    "tmax_s": 0.5,
+    "offset_rule": "integer round(tmin*sfreq)..round(tmax*sfreq), both endpoints included; subtract raw.first_samp to index raw",
+    "baseline": "per-epoch per-sensor mean over offsets <=0, including offset0, subtracted from all epoch values",
+    "projection": "source SSP restricted to selected gradiometers; verify identity here because all supplied vectors are mag/EEG-only; do not fit new projectors",
+    "detrend": null,
+    "grad_peak_to_peak_limit_T_per_m": 4e-10,
+    "reject_rule": "reject any selected sensor PTP strictly greater than limit over all 106 full-rate samples; equality retained",
+    "reject_by_annotation": true,
+    "source_annotations_expected": 0,
+    "failure": "nonfinite selected signal, unexpected relevant source projection/annotation or invalid source identity is failed_precondition, not an invented clean epoch",
+    "trial_id": "zero-based retained chronological target-event position; preserve source_event_index and absolute event sample",
+    "analysis_window_s": [0.05, 0.45],
+    "analysis_time_rule": "select exact integer offsets/sfreq inclusively inside analysis_window; no rounded linspace"
+  },
+  "folds": {
+    "unit": "retained trial",
+    "algorithm": "sklearn.model_selection.StratifiedKFold",
+    "n_splits": 5,
+    "shuffle": true,
+    "random_state": 42,
+    "input_order": "retained chronological trials; labels0auditory1visual",
+    "fold_labels": "1..5 in split generator order",
+    "reuse": "identical trial-to-fold assignment for pooled and every per_time model",
+    "feasibility": "each class at least five retained trials; both classes in every training fold"
+  },
+  "estimators": {
+    "pooled": "one model per fold trained on all analysis-time rows of training trials, trial-major time-minor order; predict every time of held-out trials",
+    "per_time": "one separate model per fold and time trained on training trials at that time only",
+    "scaler": "training observations only, per-feature arithmetic mean and population standard deviation (ddof0); constant/numerically constant StandardScaler features use scale1",
+    "scaler_reference": "sklearn.preprocessing.StandardScaler(with_mean=True,with_std=True)",
+    "logistic_objective": "sum_i(logaddexp(0,z_i)-y_i*z_i)+0.5*sum_j(w_j*w_j), z=X_standardized@w+b; unpenalized intercept",
+    "C": 1.0,
+    "class_weight": null,
+    "sample_weight": null,
+    "fit_intercept": true,
+    "reference_solver": "sklearn1.8 LogisticRegression(solver='newton-cholesky',l1_ratio=0,C=1,tol=1e-10,max_iter=100)",
+    "equivalent_solvers": "allowed when converged to same public objective within score tolerances",
+    "optimization_gate": "finite coefficients and scores; no convergence warning; infinity norm of gradient of objective/n_train <=1e-9; record all warnings and actual iterations rather than suppress them",
+    "decision": "signed score>0 ->visual1; score<=0 ->auditory0",
+    "required_random_sample_split": false
+  },
+  "aggregation": {
+    "headline": "unweighted arithmetic mean of five pooled-model fold accuracies",
+    "pooled_oof_accuracy": "total correct pooled-model rows divided by all held-out trial-time rows, separately named",
+    "timecourse_accuracy": "at each time, unweighted mean of five per_time-model fold accuracies",
+    "timecourse_pooled_accuracy": "at each time, all per_time-model OOF correct trials divided by retained trials",
+    "nominal_uniform_guessing": 0.5,
+    "no_outcome_gate": "no required above-chance score, nonconstant curve/folds, expected gap/sign, ranking or prose keyword"
+  },
+  "outputs": {
+    "source_epochs.csv": ["source_event_index", "event_sample", "previous_value", "event_code", "modality", "retained", "drop_reason", "trial_id", "max_ptp_T_per_m", "max_ptp_channel"],
+    "source_ledger_categories": ["retained", "not_target", "amplitude", "out_of_bounds", "annotation"],
+    "source_ledger_nulls": "blank modality for non-target, blank trial_id for non-retained; blank PTP/channel for non-target or unavailable epoch; retained is0/1",
+    "oof_predictions.csv": ["estimator", "source_event_index", "trial_id", "time_index", "sample_offset", "time_s", "fold", "true_class", "predicted_class", "decision_score"],
+    "per_fold.csv": ["estimator", "time_index", "fold", "n_train_trials", "n_test_trials", "n_train_samples", "n_test_samples", "n_train_class0", "n_train_class1", "n_test_class0", "n_test_class1", "n_correct", "accuracy"],
+    "per_fold_semantics": "class counts are trials; time_index blank for pooled, integer for per_time; key estimator,time_index,fold",
+    "decoding_timecourse.csv": ["time_index", "sample_offset", "time_s", "accuracy", "pooled_accuracy", "n_test_trials"],
+    "decoding_results.json": "status=ok, accuracy, pooled_oof_accuracy, n_trials, n_time_samples_per_trial, n_samples_total, n_classes=2, n_channels, n_folds=5, classes, chance_level=0.5",
+    "run_metadata.json": "status=ok, source_manifest_sha256, method_contract_sha256, complete source_metadata and support_metadata, nonempty software_versions, fitting_diagnostics; scientific source fields checked, actual version strings/iteration counts not secretly matched",
+    "findings.md": "nonempty actual measured summary with within-recording/one-person and estimator limitations; no keyword grading",
+    "private_authoring_receipts": "all source epoch features, retained source-event IDs, folds, scaler means/scales, coefficients/intercepts, full signed scores, gradients and warning diagnostics; excluded from participant image"
+  },
+  "numeric_tolerances": {
+    "decision_score_atol": 1e-5,
+    "decision_score_rtol": 1e-6,
+    "time_s_atol": 1e-10,
+    "ptp_atol_T_per_m": 1e-20,
+    "ptp_rtol": 1e-7,
+    "accuracy_atol": 1e-6,
+    "integer_identity": "exact, integral numeric notation allowed",
+    "classification_near_zero": "submitted class must follow its own signed score; a numerically equivalent near-zero score can change a label within score tolerance; summaries must recompute from submitted labels"
+  },
+  "metadata_fields": {
+    "source_metadata": ["sfreq_hz", "highpass_hz", "lowpass_hz", "first_samp", "last_samp", "n_times", "n_source_channels", "selected_grad_names", "source_bads", "source_projector_descriptions", "grad_projector_rank", "annotation_count", "source_event_code_counts"],
+    "support_metadata": ["n_source_events", "n_candidate_trials", "n_retained_trials", "n_rejected_trials", "retained_event_code_counts", "epoch_offsets", "analysis_offsets", "baseline_offsets", "candidate_full_epoch_overlap_pairs", "candidate_analysis_overlap_pairs", "candidate_prior_analysis_next_baseline_overlap_pairs", "retained_full_epoch_overlap_pairs", "retained_analysis_overlap_pairs", "retained_prior_analysis_next_baseline_overlap_pairs"],
+    "offset_fields": "complete integer offset arrays, not just endpoints",
+    "event_code_counts": "JSON objects keyed by original integer code written as string; include all original codes for source and1/2/3/4 including zeros for retained",
+    "overlap_pairs": "count adjacent chronological target pairs with any inclusive raw sample overlap in the indicated windows; source samples rather than nominal stimulus intervals",
+    "fitting_diagnostics": ["n_models", "all_converged", "max_mean_gradient_inf", "warnings"],
+    "fit_requirement": "n_models=5+5*n_times, all_converged=true, finite nonnegative max_mean_gradient_inf<=1e-9; warnings list preserved, convergence warnings mean failure; exact iteration counts not required",
+    "software_versions": "nonempty object of honest nonempty version strings; not identical-to-oracle gate"
+  },
+  "scope_limits": [
+    "One person and one recording; trials/time rows/sensors/folds are not independent people.",
+    "Whole-trial grouping prevents same-trial row overlap, not all temporal dependence or source-level preprocessing reuse. Source event metadata has 149 overlapping adjacent candidate epochs and 71 prior-analysis/next-baseline overlaps; no posthoc exclusions or universal leakage-free claim.",
+    "No claim of new-person/new-session/unseen-latency generalization, cognitive onset, hardware evaluation or paper numerical reproduction.",
+    "Source license does not establish unrestricted data/image redistribution; local method-control use only.",
+    "Oracle/source checks do not establish model difficulty; public answers remain contamination risks."
+  ],
+  "reward": "all-or-nothing; every required scientific/schema check must pass; no proportional-credit promise"
+}

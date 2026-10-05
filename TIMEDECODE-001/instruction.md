@@ -1,64 +1,125 @@
-# Decoding stimulus modality from single-trial MEG (TIMEDECODE-001)
+# Within-recording modality decoding (TIMEDECODE-001)
 
-## Scientific context
+Compute two explicitly different auditory-versus-visual decoding estimates from
+the original MNE sample recording. This is a **fixed-recipe method control**, not
+a numerical reproduction of a paper finding or evidence of generalization to new
+people or sessions. Gramfort et al. (2013), §3.3/Figure8/Table3 demonstrates left-only
+per-time SVC decoding; this task instead pools left/right stimuli, uses logistic
+regression and compares pooled-time with separately fitted per-time models.
 
-When a stimulus is presented, the sensor-level MEG response carries information about what
-was presented. A common way to quantify this is to train a classifier on the single-trial
-sensor pattern and report its **cross-validated decoding accuracy** -- the fraction of
-held-out examples whose class the decoder gets right. Here the two classes are the
-**modality** of the stimulus: **auditory** vs **visual**.
+## Original inputs and public method
 
-## Task
+The offline source root is `/app/data/timedecode`. Its `source_manifest.json`
+identifies the original OSF version6 archive, both publisher-provided archive
+checksums and exact selected member checksums:
 
-Using the MNE **sample** dataset (`mne.datasets.sample`, the
-`sample_audvis_filt-0-40_raw.fif` recording and its event file
-`sample_audvis_filt-0-40_raw-eve.fif`), build a single-trial **auditory vs visual**
-decoder from the MEG and report its **cross-validated decoding accuracy**.
+- `MEG/sample/sample_audvis_filt-0-40_raw.fif`;
+- `MEG/sample/sample_audvis_filt-0-40_raw-eve.fif`;
+- `version.txt`.
 
-Pin the pipeline so the result reproduces:
+Check source identity before analysis. This is an already filtered/downsampled
+released recording, not untouched high-rate acquisition. Do not fetch data,
+substitute a toy cohort, repair samples silently or change the provided files.
+No unrestricted recording/image redistribution permission is established.
 
-- Read the raw file and the events. The four stimulus events are
-  `1 = auditory/left`, `2 = auditory/right`, `3 = visual/left`, `4 = visual/right`;
-  the class label is the **modality**: auditory = {1, 2}, visual = {3, 4}.
-- Use the **gradiometer** channels only (`meg="grad"`, exclude bads).
-- Epoch from **-0.2 to 0.5 s** around each stimulus, `baseline=(None, 0)`, `proj=True`,
-  reject epochs with `grad = 4000e-13`, and **decimate by 2**.
-- Treat **each post-stimulus time sample in the 0.05-0.45 s window as one example**: the
-  feature vector for an example is the gradiometer values at that time sample, and its
-  label is the modality of the trial it comes from. Pool these examples over all trials
-  and all time samples in the window.
-- Standardise the features (`StandardScaler`) and classify with
-  `LogisticRegression(max_iter=1000)`.
-- Estimate the decoding accuracy by cross-validation using **5 folds**, and report the
-  mean accuracy across folds. The fold count is fixed at 5 for reproducibility; the
-  cross-validation scheme itself (how the folds are constructed) is left to your
-  judgement and should follow sound cross-validation practice.
+`/app/method_contract.json` is the complete public estimator, schema, tolerances
+and failure contract, including exact metadata fields. Read it before analysis.
+The essential choices are:
 
-Report the **decoding accuracy** (chance = 0.5 for this two-class problem).
+1. Stimulus codes1/2 are auditory0; codes3/4 are visual1. Preserve every supplied
+   original event row and absolute sample index in a selection/rejection ledger.
+   Other event codes are recorded but are not classifier observations.
+2. Select original gradiometers in source order, excluding original bads. Use
+   source SSP only: the supplied vectors cover mag/EEG, so the selected-grad
+   projection is identity; do not claim it cleans these gradiometers.
+3. Epoch−0.2…0.5s using rounded integer source-sample offsets, inclusive endpoints;
+   subtract each channel's epoch baseline mean through time0 inclusive. No added
+   detrend, filter, resampling or decimation. Keep native150.15374755859375Hz;
+   directly decimating by2 would put Nyquist below the released40Hz low-pass.
+4. Reject a target epoch if any selected channel's full-rate peak-to-peak range
+   is **strictly greater than4e−10T/m** over the full epoch. Preserve its original
+   event identity and measured rejection evidence. Follow the public handling
+   of out-of-bounds/annotations/nonfinite inputs. Do not force historical counts.
+5. Retain exact native times within0.05…0.45s. Each retained trial has one label.
+   Use `StratifiedKFold(5, shuffle=True, random_state=42)` on chronological
+   retained trials, not flattened trial-time rows. Reuse this trial-fold mapping
+   for **both** estimators and every latency. At least five trials per class
+   must survive; otherwise fail explicitly.
+6. For each model, fit feature means and population standard deviations on its
+   own training observations only (`StandardScaler` constant-feature behavior).
+   Fit binary L2 logistic regression with C1 and an unpenalized intercept:
+   `sum(logaddexp(0,z)-y*z) + 0.5*sum(w*w)`, where `z=X_standardized@w+b`.
+   The public reference uses newton-cholesky, tol1e−10, max_iter100. Equivalent
+   converged solvers are acceptable; finite mean-objective gradient infinity
+   norm must be≤1e−9. Preserve fitting warnings; do not suppress convergence
+   failure. Predict visual1 for signed score>0, auditory0 otherwise.
+7. **Pooled:** one model per fold, trained on every analysis-time row from its
+   training trials (trial-major/time-minor ordering), evaluated on all time rows
+   of held-out trials. **Per-time:** separately fit one model at each latency
+   and fold, using training trials at that latency alone. Neither is a
+   train-time×test-time temporal-generalization matrix.
 
-## Output Location
+The headline is the **unweighted mean of five pooled-model fold accuracies**.
+Also report its separately named all-OOF correct/total value. For each per-time
+model latency, report both mean-fold and all-OOF accuracy. Unequal fold sizes can
+make these summaries differ. Nominal uniform-guessing accuracy0.5 is descriptive,
+not a required performance gate. No positive leakage gap or random-sample-split
+analysis is required.
 
-Write all outputs to `${OUTPUT_DIR}` (default `/app/output`).
+## Outputs
 
-## Required Outputs
+Write seven files to `${OUTPUT_DIR}` (default `/app/output`). Exact column/field
+names and null conventions are public in `method_contract.json`.
 
-- `decoding_results.json` — the headline result as
-  `{"cv_scheme": <str>, "accuracy": <float>, "n_trials": <int>,
-  "n_samples_total": <int>, "n_classes": 2, "chance_level": 0.5}`.
-- `per_fold.csv` — one row per cross-validation fold:
-  `fold, n_test_samples, accuracy`.
-- `decoding_timecourse.csv` — the decoding accuracy as a function of post-stimulus time:
-  one row per post-stimulus time sample in the 0.05-0.45 s analysis window,
-  `time_s, accuracy`, where `accuracy` is the cross-validated accuracy of the same decoder
-  trained and tested on the gradiometer pattern at that single time sample (each trial
-  contributes one example at each time sample).
-- `run_metadata.json` — dataset id, contrast, sensors, epoch window, analysis window,
-  decoder, and the cross-validation scheme you used.
-- `findings.md` — a short written summary (a few sentences) stating the cross-validated
-  decoding accuracy you obtained. State only what your analysis actually supports.
+- `source_epochs.csv`: all original event rows, modality, retained/drop status,
+  compact retained-trial ID, full-epoch maximum PTP and its channel when defined.
+  The `modality` column accepts `0` or `auditory` for event codes1/2, and `1` or
+  `visual` for codes3/4, including rejected target epochs. It must be blank for
+  non-target events. Numeric integral notation is accepted, but unknown or
+  source-inconsistent labels are rejected. This encoding allowance is only for
+  this descriptive ledger field; classifier `true_class` and `predicted_class`
+  remain numeric0/1 as specified in the public method contract.
+- `oof_predictions.csv`: the complete retained trial×time grid for **each**
+  estimator, original event identity, native offset/time, true class, trial fold,
+  predicted class and signed decision score.
+- `per_fold.csv`: five pooled rows and five rows per latency for per-time models;
+  keyed by estimator/time/fold, with train/test trial and sample counts, **trial**
+  class counts, correct count and accuracy. Pooled `time_index` is blank.
+- `decoding_timecourse.csv`: full native analysis grid and the **per-time** model's
+  mean-fold `accuracy` and all-OOF `pooled_accuracy`; the latter name denotes its
+  aggregation, not the pooled-time classifier.
+- `decoding_results.json`: pooled-model headline and all-OOF accuracy, exact
+  sample/trial/channel/fold support and class/guessing definitions.
+- `run_metadata.json`: source/method file SHA256s; all listed source clock,
+  channel/projector/event and epoch-overlap/support fields; honest software
+  versions and numerical fit diagnostics. Counts are observations, not targets.
+- `findings.md`: a brief actual-result summary distinguishing the estimators and
+  the limits below. Wording is not keyword-graded.
 
-## Failure handling
+Rows/columns may be reordered and harmless extra fields are accepted. Identities,
+counts and integer-valued coordinates must match exactly. Signed scores are
+compared with atol1e−5+rtol1e−6; reported classes must follow their own score,
+including numerically equivalent near-zero decisions. Recompute all statistics
+from those submitted decisions. Time tolerance is1e−10s, PTP tolerance is
+1e−20+1e−7relative, and accuracy tolerance1e−6. Full scientific details and source
+binding are checked; matching an approximate curve shape is insufficient.
+Reward is all-or-nothing, not proportional partial credit.
 
-If the dataset cannot be resolved, exit non-zero with `failed_precondition` and a
-non-empty reason, and still write a parseable `run_metadata.json`,
-`decoding_results.json`, and `findings.md`.
+## Interpretation and failure handling
+
+One person/recording does not become a cohort because it has many trials, sensors
+or time rows. Whole-trial folds prevent direct same-trial row splitting, but the
+source event schedule is strongly structured and some adjacent full epochs and
+prior-analysis/next-baseline windows share raw samples. This is **not fully
+independent or universally leakage-free validation**. Do not claim a cognitive
+onset, hardware comparison, new-person/session/latency generalization, or that a
+lower score itself establishes a correct estimator.
+
+For a failed source/precondition/convergence check, exit nonzero and write
+parseable `run_metadata.json` and `decoding_results.json` with
+`status="failed_precondition"` and a nonempty reason, plus `findings.md`.
+Do not overwrite existing evidence or produce a partial grid marked successful.
+
+Sources: [Gramfort et al.2013](https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2013.00267/full),
+[King & Dehaene2014](https://doi.org/10.1016/j.tics.2014.01.002),
+[MNE sample source documentation](https://mne.tools/1.12/documentation/datasets.html#sample).

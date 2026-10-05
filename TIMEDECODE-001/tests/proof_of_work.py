@@ -1,163 +1,61 @@
-"""Reusable proof-of-work helpers for TIMEDECODE-001 (single-trial MEG modality decoding).
-
-A passing submission must be impossible to produce without running the real trial-grouped
-cross-validation on the real pooled (trial x time) MEG samples: the reported accuracy must be
-the honest trial-grouped value (materially below the leaky random-k-fold value), it must
-recompute from the submitted per-fold rows, and the per-fold accuracies must themselves sit in
-the trial-grouped (leakage-free) band, not the inflated random-k-fold band.
-"""
-import csv
+"""Primitive source-recomputed reference; historical scalar-only banks fail closed."""
 import json
-import math
-import os
-import re
-import statistics
 from pathlib import Path
-
 import numpy as np
+from prediction_contract import require,match
 
-OUT = Path(os.environ.get("OUTPUT_DIR", "/app/output"))
-REF_PATH = Path(os.environ.get("TIMEDECODE_REFERENCE",
-                               str(Path(__file__).resolve().parent / "reference.npz")))
-
-
-def load_reference():
-    d = np.load(REF_PATH, allow_pickle=False)
-    out = {"fold_acc": np.asarray(d["ref_fold_acc"], float),
-           "stats": json.loads(str(d["ref_stats"]))}
-    if "ref_timecourse" in d.files:
-        out["timecourse"] = np.asarray(d["ref_timecourse"], float)
-        out["time_s"] = np.asarray(d["ref_time_s"], float)
-    return out
+METHOD_SHA256 = "b4ff29fb1dcf767d6362fb944081fc7200cd77039ebacf83ca7398f761f1da73"
+SOURCE_MANIFEST_SHA256 = "533bc28bbcc1e8fe53880504b75756ee4035ecb423e3be84c5fddf1660b779f6"
+BUILDER_ID = "original-fif-explicit-epochs-trust-exact-v2"
+ARRAYS = ("events","retained_event_indices","labels","folds","analysis_offsets","epoch_offsets","channel_names",
+    "features","pooled_scores","per_time_scores","model_estimator","model_time_index","model_fold",
+    "scaler_mean","scaler_scale","coef","intercept","gradient_inf")
 
 
-def _norm(s):
-    return re.sub(r"[^a-z0-9]", "", str(s).lower())
-
-
-def load_results():
-    for name in ("decoding_results.json", "results.json"):
-        p = OUT / name
-        if p.exists():
-            try:
-                return json.loads(p.read_text(encoding="utf-8"))
-            except Exception:
-                pass
-    return {}
-
-
-def headline_accuracy(res):
-    """The single reported cross-validated accuracy (never a labelled leaky/random one)."""
-    if not isinstance(res, dict):
-        return None
-    for k, v in res.items():
-        if k.lower() == "accuracy" and isinstance(v, (int, float)) and not isinstance(v, bool):
-            return float(v)
-    for k, v in res.items():
-        kl = _norm(k)
-        if (isinstance(v, (int, float)) and not isinstance(v, bool) and "acc" in kl
-                and not any(t in kl for t in ("random", "kfold", "leak", "reference", "chance",
-                                              "naive", "perfold", "fold"))):
-            return float(v)
-    return None
-
-
-def reported_leaky(res):
-    out = []
-    if isinstance(res, dict):
-        for k, v in res.items():
-            kl = _norm(k)
-            if (isinstance(v, (int, float)) and not isinstance(v, bool)
-                    and any(t in kl for t in ("random", "kfold", "leaky"))
-                    and "acc" in kl and "chance" not in kl):
-                out.append(float(v))
-    return out
-
-
-def load_per_fold():
-    """Return (accuracies, n_test_samples_list, n_test_trials_list_or_None)."""
-    p = OUT / "per_fold.csv"
-    assert p.exists(), "missing required output per_fold.csv"
-    rows = list(csv.DictReader(open(p, encoding="utf-8")))
-    assert rows, "per_fold.csv has no data rows"
-    hdr = list(rows[0].keys())
-    acc_col = next((h for h in hdr if ("acc" in _norm(h) or "score" in _norm(h))
-                    and "sample" not in _norm(h)), None)
-    assert acc_col, f"per_fold.csv has no accuracy column (columns: {hdr})"
-    ns_col = next((h for h in hdr if "sample" in _norm(h) or _norm(h) in ("ntest", "n")), None)
-    nt_col = next((h for h in hdr if "trial" in _norm(h)), None)
-    accs, nss, nts = [], [], []
-    for r in rows:
-        try:
-            a = float(r[acc_col])
-        except (TypeError, ValueError):
-            continue
-        if not math.isfinite(a):
-            continue
-        accs.append(a / 100.0 if a > 1.5 else a)
-        if ns_col:
-            try:
-                nss.append(float(r[ns_col]))
-            except (TypeError, ValueError):
-                nss.append(float("nan"))
-        if nt_col:
-            try:
-                nts.append(float(r[nt_col]))
-            except (TypeError, ValueError):
-                nts.append(float("nan"))
-    return np.asarray(accs, float), (nss if ns_col else None), (nts if nt_col else None)
-
-
-def load_timecourse():
-    """Return (time_s, accuracy) arrays from the required decoding_timecourse.csv.
-
-    The per-time-sample decoding accuracy in the 0.05-0.45 s window: at a single time
-    sample every trial contributes one example, so this profile is the same whatever the
-    pooled-sample fold scheme is -- a neutral record that a real decoder was actually run.
-    """
-    p = OUT / "decoding_timecourse.csv"
-    assert p.exists(), "missing required output decoding_timecourse.csv"
-    rows = list(csv.DictReader(open(p, encoding="utf-8")))
-    assert rows, "decoding_timecourse.csv has no data rows"
-    hdr = list(rows[0].keys())
-    t_col = next((h for h in hdr if "time" in _norm(h) or _norm(h) in ("t", "ts", "sample")), None)
-    a_col = next((h for h in hdr if ("acc" in _norm(h) or "score" in _norm(h))
-                  and "time" not in _norm(h)), None)
-    assert t_col and a_col, f"decoding_timecourse.csv needs time and accuracy columns (columns: {hdr})"
-    ts, accs = [], []
-    for r in rows:
-        try:
-            t = float(r[t_col])
-            a = float(r[a_col])
-        except (TypeError, ValueError):
-            continue
-        if not (math.isfinite(t) and math.isfinite(a)):
-            continue
-        ts.append(t)
-        accs.append(a / 100.0 if a > 1.5 else a)
-    order = np.argsort(ts)
-    return np.asarray(ts, float)[order], np.asarray(accs, float)[order]
-
-
-def timecourse_shape_corr(sub_t, sub_a, ref_t, ref_a):
-    """Pearson corr of the submitted profile against the reference on the reference time grid
-    (magnitude-invariant, so it proves a real decoder ran without discriminating the fold scheme)."""
-    lo = max(sub_t.min(), ref_t.min())
-    hi = min(sub_t.max(), ref_t.max())
-    grid = ref_t[(ref_t >= lo - 1e-9) & (ref_t <= hi + 1e-9)]
-    if len(grid) < 3:
-        return float("nan"), 0
-    sub_on = np.interp(grid, sub_t, sub_a)
-    ref_on = np.interp(grid, ref_t, ref_a)
-    if np.std(sub_on) < 1e-9 or np.std(ref_on) < 1e-9:
-        return float("nan"), len(grid)
-    return float(np.corrcoef(sub_on, ref_on)[0, 1]), len(grid)
-
-
-def nonconstant(accs, eps):
-    return len(accs) >= 3 and statistics.pstdev(accs.tolist()) > eps
-
-
-def findings_text():
-    p = OUT / "findings.md"
-    return p.read_text(encoding="utf-8").lower() if p.exists() else ""
+def load_reference(path=Path(__file__).with_name("reference.npz")):
+    with np.load(path,allow_pickle=False) as archive:
+        require(set(archive.files)==set(ARRAYS)|{"reference_json"},"Legacy/unrecognized bank; genuine source-only regeneration required")
+        scalar = archive["reference_json"]
+        require(scalar.shape==() and scalar.dtype.kind in "US","Invalid primitive reference JSON")
+        reference = json.loads(str(scalar),parse_constant=lambda token: (_ for _ in ()).throw(AssertionError("Nonfinite bank JSON")))
+        require(isinstance(reference,dict),"Reference metadata must be an object")
+        reference.update({key:np.array(archive[key]) for key in ARRAYS})
+    provenance = reference["provenance"]
+    match(provenance,dict(builder_id=BUILDER_ID,source_manifest_sha256=SOURCE_MANIFEST_SHA256,method_contract_sha256=METHOD_SHA256),"reference provenance")
+    meta = reference["metadata"]
+    require(meta["status"]=="ok" and meta["source_manifest_sha256"]==SOURCE_MANIFEST_SHA256 and meta["method_contract_sha256"]==METHOD_SHA256,"Wrong reference identity/full-run state")
+    n,t,c = len(reference["labels"]),len(reference["analysis_offsets"]),len(reference["channel_names"])
+    require(reference["events"].shape==(319,3) and reference["events"].dtype.kind in "iu","Complete original event table required")
+    require(t==60 and c==203 and 10<=n<=288,"Reference source support invalid")
+    for name in ("retained_event_indices","labels","folds","analysis_offsets","epoch_offsets","model_time_index","model_fold"):
+        require(reference[name].dtype.kind in "iu",f"Invalid integer reference {name}")
+    require(reference["labels"].shape==reference["folds"].shape==reference["retained_event_indices"].shape==(n,),"Invalid trial reference axes")
+    require(np.all(np.isin(reference["labels"],[0,1])) and set(reference["folds"])==set(range(1,6)),"Invalid reference labels/folds")
+    require(np.array_equal(reference["epoch_offsets"],np.arange(-30,76)) and np.array_equal(reference["analysis_offsets"],np.arange(8,68)),"Wrong native source time grid")
+    indices = reference["retained_event_indices"]
+    require(np.all((indices>=0)&(indices<319)) and np.all(np.diff(indices)>0),"Wrong retained original event order")
+    source_labels = np.array([0 if code in (1,2) else 1 if code in (3,4) else -1 for code in reference["events"][indices,2]])
+    require(np.array_equal(source_labels,reference["labels"]),"Reference labels not source-derived")
+    require(reference["features"].shape==(n,c,t) and np.isfinite(reference["features"]).all(),"Invalid source feature tensor")
+    m = 5+5*t
+    require(reference["scaler_mean"].shape==reference["scaler_scale"].shape==reference["coef"].shape==(m,c),"Invalid full model state")
+    require(all(reference[key].shape==(m,) for key in ("intercept","gradient_inf","model_estimator","model_time_index","model_fold")),"Invalid model axes")
+    require(np.all(reference["scaler_scale"]>0) and np.all((reference["gradient_inf"]>=0)&(reference["gradient_inf"]<=1e-9)),"Invalid scaler/convergence reference")
+    for key in ("scaler_mean","scaler_scale","coef","intercept","gradient_inf"):
+        require(np.isfinite(reference[key]).all(),"Nonfinite model reference")
+    keys = set()
+    for row,(estimator,ti,fold) in enumerate(zip(reference["model_estimator"],reference["model_time_index"],reference["model_fold"])):
+        estimator = str(estimator)
+        key = (estimator,int(ti),int(fold))
+        require(key not in keys,"Duplicate reference model")
+        keys.add(key)
+        test = reference["folds"]==fold
+        values = reference["features"][test].transpose(0,2,1).reshape(-1,c) if estimator=="pooled" else reference["features"][test,:,ti]
+        score = ((values-reference["scaler_mean"][row])/reference["scaler_scale"][row])@reference["coef"][row]+reference["intercept"][row]
+        expected = reference[estimator+"_scores"][test].ravel() if estimator=="pooled" else reference[estimator+"_scores"][test,ti]
+        require(np.allclose(score,expected,atol=1e-10,rtol=1e-10),"Bank score/model/source algebra mismatch")
+    require(keys=={("pooled",-1,f) for f in range(1,6)}|{("per_time",ti,f) for ti in range(t) for f in range(1,6)},"Incomplete reference models")
+    for name in ("pooled_scores","per_time_scores"):
+        require(reference[name].shape==(n,t) and np.isfinite(reference[name]).all(),"Incomplete source OOF scores")
+    reference["times"] = reference["analysis_offsets"]/meta["source_metadata"]["sfreq_hz"]
+    return reference
