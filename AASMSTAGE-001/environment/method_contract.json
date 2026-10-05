@@ -1,0 +1,203 @@
+{
+  "contract_status": "frozen_before_original_EEG_features_and_fits",
+  "task_id": "AASMSTAGE-001",
+  "pipeline_id": "sleepedf-welch256-loso-v2",
+  "scientific_scope": {
+    "target": "Six-person, first-recording, two-channel collapsed-R&K sleep-staging tutorial method control with separately defined metric weightings.",
+    "labels": "Original released R&K annotations, merging stages 3 and 4; not newly rescored AASM labels.",
+    "independent_unit": "Held-out subject; serial epochs are not independent patients.",
+    "limitations": ["Not a reproduction of a Kemp classifier or published performance.", "Not a clinical generalization or causal claim.", "No required accuracy, imbalance gap, stage ranking, subject variability, or direction.", "No demonstrated frontier-agent or Sol difficulty claim.", "Independent feature reconstruction may share the publicly pinned scikit-learn forest engine; tree traversal is not proof of correct training."]
+  },
+  "source": {
+    "dataset_id": "sleep-edfx",
+    "version": "1.0.0",
+    "doi": "10.13026/C2X676",
+    "license": "ODC-By-1.0",
+    "url": "https://physionet.org/content/sleep-edfx/1.0.0/",
+    "runtime_directory": "/app/data/aasmstage",
+    "manifest_filename": "source_manifest.json",
+    "manifest_sha256": "241be998b50465f17431dba963499dbb34c355a2e17533a1dd0d659f4e837cbb",
+    "subjects": [0, 1, 2, 3, 4, 5],
+    "recording": 1,
+    "files": [
+      {"subject": 0, "psg": "SC4001E0-PSG.edf", "hypnogram": "SC4001EC-Hypnogram.edf"},
+      {"subject": 1, "psg": "SC4011E0-PSG.edf", "hypnogram": "SC4011EH-Hypnogram.edf"},
+      {"subject": 2, "psg": "SC4021E0-PSG.edf", "hypnogram": "SC4021EH-Hypnogram.edf"},
+      {"subject": 3, "psg": "SC4031E0-PSG.edf", "hypnogram": "SC4031EC-Hypnogram.edf"},
+      {"subject": 4, "psg": "SC4041E0-PSG.edf", "hypnogram": "SC4041EC-Hypnogram.edf"},
+      {"subject": 5, "psg": "SC4051E0-PSG.edf", "hypnogram": "SC4051EC-Hypnogram.edf"}
+    ],
+    "identity_policy": "Verify the pinned manifest bytes and every original size/SHA256 before EEG processing. The source directory contains exactly the manifest and its twelve flat regular EDF files, with no symlinks or unexpected files. Do not modify originals or use historical features, predictions, or banks.",
+    "preconditions": ["Exactly one PSG/hypnogram pair per subject/recording.", "PSG/hypnogram literal start date and time agree; no date-inferred annotation shift.", "Annotation orig_time is null and its sole timekeeping TAL is index 0 with onset 0 seconds.", "Original non-timekeeping TAL-description order equals annotation order; preserve both zero-based indices.", "Selected EEG channels are rows 0 and 1, labels EEG Fpz-Cz and EEG Pz-Oz, each 100 Hz and literal physical dimension uV.", "All annotation onsets/durations are finite, durations nonnegative, and the final clipped bounds/chunk starts are aligned to the 100 Hz sample grid.", "Fail ambiguous overlapping mapped candidate epochs or duplicate original sample keys; never silently merge or deduplicate.", "Every retained raw EEG sample and all computed spectral features must be finite; each PSD normalization denominator must be strictly positive."]
+  },
+  "classes": {
+    "ids": [1, 2, 3, 4, 5],
+    "names": ["W", "N1", "N2", "N3", "REM"],
+    "annotation_mapping": {"Sleep stage W": 1, "Sleep stage 1": 2, "Sleep stage 2": 3, "Sleep stage 3": 4, "Sleep stage 4": 4, "Sleep stage R": 5},
+    "other_descriptions": "Unmapped, including Movement time and Sleep stage ?. Preserve their original annotation rows and any complete chunks; class is null and they do not enter features or fitting. No substring/digit-based relabeling."
+  },
+  "epochs": {
+    "channels": ["EEG Fpz-Cz", "EEG Pz-Oz"],
+    "sfreq_hz": 100,
+    "duration_s": 30,
+    "n_samples": 3000,
+    "source_clock": "Annotation seconds relative to the first PSG sample; original EDF sample 0 is time 0. first_samp=0. No timezone or date offset is inferred.",
+    "crop": "Use the original annotation list: requested_left=onset[1]-1800; requested_right=onset[-2]+1800. Require at least three rows and requested_right>requested_left. Intersect with [0,T], T=n_PSG_samples/100.",
+    "annotation_intersection": "For original [onset,onset+duration], L=max(onset,requested_left,0), R=min(onset+duration,requested_right,T). R<L is outside_crop_or_recording and its effective bounds/tail are null. R==L is retained as a zero-span annotation, with finite equal effective bounds and zero chunks/tail.",
+    "chunk_generation": "For every intersecting annotation, mapped OR unmapped, generate starts with float64 arange(L,R,30); retain a complete candidate if R-start >= 30-1e-8. The grid is anchored at final clipped L, not the unclipped annotation onset. chunk_index indexes these generated complete chunks from 0. Do not create incomplete candidate epochs.",
+    "duration_test_tolerance_s": 1e-8,
+    "sample_conversion": "onset_sample=int(round_ties_to_even(start*100)); end_sample_exclusive=onset_sample+3000. Source sample alignment is a precondition, not a license to shift epochs. Keep the original PSG coordinates, not crop-relative or retained-row IDs.",
+    "annotation_status_precedence": ["outside_crop_or_recording if R<L", "unsupported_stage if the description is unmapped", "used if mapped with at least one complete candidate", "no_complete_chunk otherwise"],
+    "annotation_chunk_count": "n_complete_chunks counts all complete candidates, including unsupported-stage candidates and any dropped candidates. discarded_tail_s=max(0,(R-L)-30*n_complete_chunks), or null when R<L.",
+    "epoch_drop_precedence": ["unsupported_stage", "outside_recording", "overlap_bad_annotation", "retained"],
+    "bad_annotation_rule": "A candidate overlaps a source annotation whose description begins with BAD case-insensitively if bad_duration>0 and start<bad_end and start+30>bad_start. Zero-duration BAD annotations and boundary-only contact do not overlap. The frozen sources contain no such BAD annotations.",
+    "retention": "retained is true exactly when drop_reason=retained. outside_recording means onset_sample<0 or end_sample_exclusive>n_PSG_samples. Unknown/movement candidates remain in epochs.csv with null stage_id and retained=false.",
+    "extra_processing": {"baseline": null, "resampling": false, "additional_filtering": false, "rereferencing": false, "projection": false, "amplitude_rejection": false, "class_balancing": false}
+  },
+  "features": {
+    "source_dtype": "float64",
+    "source_unit": "V",
+    "calibration": "For each selected EDF channel independently: slope=(physical_max-physical_min)/(digital_max-digital_min); intercept=physical_min-digital_min*slope; volts=(float64(raw_int16)*slope+intercept)*1e-6. Preserve source channel-specific calibration; do not pool calibrations.",
+    "welch": {"n_fft": 256, "n_per_seg": 256, "n_overlap": 0, "window": "periodic_hamming", "window_formula": "w[n]=0.54-0.46*cos(2*pi*n/256), n=0..255", "remove_dc": true, "average": "mean", "one_sided": true, "scaling": "density", "zero_padding": false, "n_complete_segments": 11, "segment_starts": [0, 256, 512, 768, 1024, 1280, 1536, 1792, 2048, 2304, 2560], "unused_epoch_tail_samples": 184},
+    "welch_equation": "Subtract the mean separately in each complete segment; multiply by w; compute 256-point rFFT; |FFT|^2/(100*sum(w^2)); double bins 1..127 but not DC/Nyquist; arithmetic-mean the eleven periodograms. Do not detrend the entire epoch instead of individual segments.",
+    "normalization": "Select bins whose frequency satisfies 0.5<=f<=30: indices 2..76, frequencies 0.78125..29.6875 Hz. psd_sum is the sum of these 75 unnormalized PSD-bin heights, required positive/finite; divide selected bin heights by that sum, separately for each epoch/channel.",
+    "psd_sum_units": "V^2/Hz (sum of density-bin heights, not integrated power)",
+    "bands": [
+      {"name": "delta", "interval_hz": [0.5, 4.5], "right_open": true, "bins_inclusive": [2, 11], "n_bins": 10},
+      {"name": "theta", "interval_hz": [4.5, 8.5], "right_open": true, "bins_inclusive": [12, 21], "n_bins": 10},
+      {"name": "alpha", "interval_hz": [8.5, 11.5], "right_open": true, "bins_inclusive": [22, 29], "n_bins": 8},
+      {"name": "sigma", "interval_hz": [11.5, 15.5], "right_open": true, "bins_inclusive": [30, 39], "n_bins": 10},
+      {"name": "beta", "interval_hz": [15.5, 30], "right_open": true, "bins_inclusive": [40, 76], "n_bins": 37}
+    ],
+    "reduction": "Arithmetic mean of normalized bin heights within each half-open band. These are not summed/integrated bandpower fractions. For each channel sum(n_bins*feature)=1, not sum(feature)=1.",
+    "order": ["delta_fpz_cz", "delta_pz_oz", "theta_fpz_cz", "theta_pz_oz", "alpha_fpz_cz", "alpha_pz_oz", "sigma_fpz_cz", "sigma_pz_oz", "beta_fpz_cz", "beta_pz_oz"],
+    "domain": "Each feature is finite and nonnegative, and is <=1/n_bins_for_its_band + feature.atol + feature.rtol*(1/n_bins_for_its_band), using verification_tolerances.feature. This propagates the declared serialization allowance at the mathematical upper endpoint, without permitting negative values. psd_sum is strictly positive. No imputation, smoothing across epochs, feature scaler, or learned preprocessing."
+  },
+  "classifier": {
+    "reference_implementation": "scikit-learn 1.8.0 RandomForestClassifier",
+    "input_dtype": "float32 (conversion from computed float64 features)",
+    "parameters": {"n_estimators": 200, "criterion": "gini", "max_depth": null, "min_samples_split": 2, "min_samples_leaf": 1, "min_weight_fraction_leaf": 0.0, "max_features": "sqrt", "max_leaf_nodes": null, "min_impurity_decrease": 0.0, "bootstrap": true, "oob_score": false, "n_jobs": 1, "random_state": 42, "verbose": 0, "warm_start": false, "class_weight": null, "ccp_alpha": 0.0, "max_samples": null, "monotonic_cst": null},
+    "fit_order": "Six fresh forests, held-out subject 0..5. For each forest concatenate training subjects in ascending order and each subject's retained epochs in ascending original onset_sample. No sample_weight or resampling beyond the forest's declared bootstrap.",
+    "prediction": "Average the 200 leaf class distributions in tree order; class columns are always [1,2,3,4,5], with zero for a class absent from the training fold. Reference tree traversal casts input to float32, follows <= threshold left and > threshold right.",
+    "equivalent_implementation": "Source-equivalent independently reconstructed features/models are permitted within the published feature/probability tolerances. Shared pinned tree training must be disclosed, not called an independently implemented forest algorithm. Retained tree state is authoring evidence, not a required participant artifact."
+  },
+  "cross_validation": {"scheme": "leave-one-subject-out", "heldout_subjects": [0, 1, 2, 3, 4, 5], "training_subjects": "Exactly the other five source subjects; full retained epoch coverage, no source subset or held-out-subject fit.", "prediction_key": ["subject", "recording", "onset_sample"]},
+  "metrics": {
+    "confusion": "C[a,b] counts accepted held-out predictions with true class a and predicted class b, a,b=1..5. Require all 25 cells per subject, including zeros; pooled C is the sum of six subject matrices.",
+    "overall_accuracy": "trace(C)/N, N=sum(C)",
+    "recall": "C[k,k]/sum(C[k,:]); if truth support is zero, value null and status=undefined_no_true_epochs.",
+    "balanced_accuracy": "Unweighted mean of recalls over classes with positive true support. Report n_supported_classes; all five classes are supported in the frozen pooled source. No zero-filling absent truth classes.",
+    "headline": "staging_results.accuracy and balanced_accuracy both equal balanced_accuracy computed from POOLED confusion counts, not the mean of subject balanced accuracies.",
+    "kappa": "(N*trace(C)-sum_k(row_total[k]*column_total[k]))/(N*N-sum_k(row_total[k]*column_total[k])). Test denominator zero using exact integer arithmetic. Zero gives null and undefined_degenerate_marginals; otherwise defined.",
+    "empty_support": "A complete source run requires at least one retained epoch for each of six subjects and each LOSO training set. Empty source support fails before fitting; helper arithmetic may represent no-epoch results as undefined but must not fabricate a successful cohort.",
+    "probability_and_label_acceptance": "Each five-vector must match genuine source-reference probabilities within the public bounds, remain finite in [0,1], and sum to one within its declared tolerance. predicted_stage must be the smallest class ID among exact maxima of the SUBMITTED probabilities. Do not impose a separate exact reference-prediction gate at rounding-sensitive ties. Recompute all confusion counts and metrics from accepted submitted labels.",
+    "no_direction_gate": "Overall and balanced accuracies are distinct legitimate weighting schemes. No required gap, clinical threshold, stage ordering, nonconstant scores, chance proximity, or effect-sign test."
+  },
+  "verification_tolerances": {
+    "source_time_s": {"atol": 1e-9, "rtol": 0},
+    "feature": {"atol": 1e-12, "rtol": 1e-9},
+    "psd_sum": {"atol": 0, "rtol": 1e-9},
+    "probability": {"atol": 1e-10, "rtol": 1e-9},
+    "probability_sum": {"atol": 5.5e-9, "rtol": 0},
+    "weighted_feature_normalization": {"atol": 1.1e-9, "rtol": 0},
+    "metric": {"atol": 1e-6, "rtol": 0},
+    "exact": "All source IDs, annotations/descriptions, sample bounds, classes, candidate/drop categories, fold memberships, integer counts, source header literal strings, source hashes and method identity. JSON boolean is never a number.",
+    "comparison": "abs(actual-reference)<=atol+rtol*abs(reference). No raw SI absolute floor for psd_sum. Categories/support use exact source primitives; labels alone use the explicit submitted-probability rule. Required numeric domains still apply. Keep sufficient digits: full float64 precision is recommended for features/probabilities; six decimals suffice for metrics.",
+    "arithmetic_fairness": "Metrics are recomputed directly from exact accepted integer confusion counts, not rounded per-subject scores. Do not tighten tolerance by averaging separately rounded outputs. Weighted feature normalization and probability sum use their explicit aggregate allowances."
+  },
+  "serialization": {
+    "csv": "UTF-8 with one header; all required columns present exactly once. Extra harmless columns and arbitrary column/row ordering are accepted. Duplicate scientific keys, missing rows, fabricated IDs and duplicate headers fail.",
+    "csv_integer": "Parse integral decimal/scientific notation exactly; do not strip arbitrary non-digits or lose precision through float conversion. Boolean tokens are not integer IDs/counts.",
+    "csv_boolean": "Only literal 0/1 or case-insensitive true/false. No null boolean.",
+    "undefined": "Required undefined CSV numeric cells are empty; JSON values are null with the declared status. Do not substitute NaN/Inf, zero, or an omitted required field.",
+    "json": "Native finite numbers, booleans, strings, arrays, objects or null; reject duplicate keys and nonfinite numeric literals including overflow. Required numeric values cannot be strings or booleans. Harmless descriptive extras are permitted except in explicitly closed scientific objects.",
+    "array_order": "Only declared identity-keyed record arrays are order-free. Channel order, class order, feature order, and fixed algorithm sequences remain ordered.",
+    "findings": "Nonempty readable text; no required phrase, keyword, length beyond nonempty, or performance interpretation gate."
+  },
+  "types": {
+    "subject": "integer in {0,1,2,3,4,5}", "recording": "integer exactly 1", "index": "nonnegative integer", "count": "nonnegative integer", "stage": "integer in {1,2,3,4,5}", "finite": "finite real number, not boolean", "time": "finite seconds, source_time_s tolerance", "positive": "finite real >0", "boolean": "boolean", "string": "UTF-8 string; source literal fields may be empty", "nonempty_string": "nonempty UTF-8 string", "sha256": "64 lowercase hexadecimal characters", "null": "null only", "metric": "finite real in [0,1]", "kappa": "finite real in [-1,1]", "feature": "finite nonnegative dimensionless value <=1/n_bins + feature.atol + feature.rtol*(1/n_bins), with the band bin count and verification_tolerances.feature", "probability": "finite real in [0,1]", "annotation_status": "one of outside_crop_or_recording, unsupported_stage, used, no_complete_chunk", "drop_reason": "one of unsupported_stage, outside_recording, overlap_bad_annotation, retained", "kappa_status": "one of defined, undefined_degenerate_marginals", "recall_status": "one of defined, undefined_no_true_epochs", "nullable_suffix": "A type suffixed ? also permits undefined null/empty, only under the explicitly described condition.", "object_reference": "A type named @Name refers to the fully specified object_types.Name fields; every listed field is required."
+  },
+  "outputs": {
+    "annotations.csv": {
+      "key": ["subject", "recording", "annotation_index"],
+      "coverage": "Every original annotation-description row, including outside crop and unsupported labels; preserve source annotation/TAL identity.",
+      "columns": {"subject": "subject", "recording": "recording", "annotation_index": "index", "tal_index": "index", "onset_s": "time", "duration_s": "time", "description": "string", "stage_id": "stage?", "effective_onset_s": "time?", "effective_stop_s": "time?", "n_complete_chunks": "count", "discarded_tail_s": "time?", "status": "annotation_status"},
+      "null_rules": "stage_id is null exactly for unmapped descriptions. Effective bounds and tail are null exactly when R<L. Otherwise bounds are retained, tail nonnegative, including R==L. Counts include unmapped complete chunks."
+    },
+    "epochs.csv": {
+      "key": ["subject", "recording", "onset_sample"],
+      "coverage": "Every complete generated chunk of every intersecting annotation, including unmapped Movement time; no incomplete chunk rows.",
+      "columns": {"subject": "subject", "recording": "recording", "annotation_index": "index", "chunk_index": "index", "onset_s": "time", "onset_sample": "index", "end_sample_exclusive": "index", "n_samples": "count", "stage_id": "stage?", "retained": "boolean", "drop_reason": "drop_reason"},
+      "rules": "stage_id joins original annotation mapping; n_samples=3000; end=onset_sample+3000; annotation/chunk fields and status are source-bound. Optional display epoch_id never substitutes for original sample identity."
+    },
+    "epoch_features.csv": {
+      "key": ["subject", "recording", "onset_sample"],
+      "coverage": "Exactly every retained epoch once, no dropped epochs.",
+      "columns": {"subject": "subject", "recording": "recording", "onset_sample": "index", "delta_fpz_cz": "feature", "delta_pz_oz": "feature", "theta_fpz_cz": "feature", "theta_pz_oz": "feature", "alpha_fpz_cz": "feature", "alpha_pz_oz": "feature", "sigma_fpz_cz": "feature", "sigma_pz_oz": "feature", "beta_fpz_cz": "feature", "beta_pz_oz": "feature", "psd_sum_fpz_cz": "positive", "psd_sum_pz_oz": "positive"}
+    },
+    "epoch_predictions.csv": {
+      "key": ["subject", "recording", "onset_sample"],
+      "coverage": "Exactly every retained epoch once; its own subject is held out.",
+      "columns": {"subject": "subject", "recording": "recording", "onset_sample": "index", "heldout_subject": "subject", "true_stage": "stage", "predicted_stage": "stage", "prob_w": "probability", "prob_n1": "probability", "prob_n2": "probability", "prob_n3": "probability", "prob_rem": "probability"}
+    },
+    "per_subject.csv": {
+      "key": ["subject"],
+      "coverage": "Exactly six rows, one per held-out subject.",
+      "columns": {"subject": "subject", "recording": "recording", "training_subjects": "JSON array of five unique subject integers; order-free", "n_train_epochs": "count", "n_test_epochs": "count", "n_train_w": "count", "n_train_n1": "count", "n_train_n2": "count", "n_train_n3": "count", "n_train_rem": "count", "n_test_w": "count", "n_test_n1": "count", "n_test_n2": "count", "n_test_n3": "count", "n_test_rem": "count", "overall_accuracy": "metric", "balanced_accuracy": "metric", "kappa": "kappa?", "kappa_status": "kappa_status", "n_supported_classes": "count"},
+      "rules": "Training membership/counts derive from all retained other-subject epochs; test counts derive from this subject. Metrics derive from this subject's accepted predictions. Kappa null iff status is undefined_degenerate_marginals."
+    },
+    "confusion_counts.csv": {
+      "key": ["subject", "true_stage", "predicted_stage"],
+      "coverage": "All six times five times five cells, including zero cells.",
+      "columns": {"subject": "subject", "true_stage": "stage", "predicted_stage": "stage", "n_epochs": "count"}
+    },
+    "staging_results.json": {"type": "@Results", "rules": "All metrics/counts must recompute from the same accepted complete OOF predictions. Both headline aliases are the pooled balanced accuracy."},
+    "run_metadata.json": {"type": "@RunMetadata", "rules": "All listed nested fields are public requirements. Extra descriptive fields are allowed unless an object explicitly says closed; no particular prose/version spelling beyond actual nonempty software version strings."},
+    "findings.md": {"type": "nonempty_string", "rules": "Only nonempty text is graded; report the calculation and its scope honestly."}
+  },
+  "object_types": {
+    "Results": {
+      "fields": {"status": "literal ok", "task_id": "literal AASMSTAGE-001", "pipeline_id": "literal sleepedf-welch256-loso-v2", "cv_scheme": "literal leave-one-subject-out", "n_subjects": "integer 6", "n_stages": "integer 5", "stages": "ordered array [W,N1,N2,N3,REM]", "n_epochs_total": "count", "n_supported_classes": "count", "accuracy": "metric", "balanced_accuracy": "metric", "overall_accuracy_for_reference": "metric", "cohen_kappa": "kappa?", "kappa_status": "kappa_status", "per_class": "array of exactly five @ClassMetric, keyed by stage_id"},
+      "extra_fields": "Harmless descriptive or separately named secondary metrics allowed; cannot replace required endpoints."
+    },
+    "ClassMetric": {"fields": {"stage_id": "stage", "n_true": "count", "n_predicted": "count", "n_correct": "count", "recall": "metric?", "recall_status": "recall_status"}, "rules": "n_true/recall use pooled true-class rows. recall null iff n_true=0, with undefined_no_true_epochs; otherwise defined."},
+    "RunMetadata": {
+      "fields": {"status": "literal ok", "task_id": "literal AASMSTAGE-001", "pipeline_id": "literal sleepedf-welch256-loso-v2", "dataset_id": "literal sleep-edfx", "dataset_version": "literal 1.0.0", "source_manifest_sha256": "sha256 matching pinned manifest bytes", "method_contract_sha256": "sha256 of the public method_contract.json bytes", "source_sha256": "closed object with exactly the twelve source.files basenames as keys and their manifest SHA256 strings as values", "method_contract": "closed object equal to the complete public method_contract.json, type-aware and with ordered algorithm arrays", "source_observed": "@SourceObserved", "feature_dtype": "literal float64", "forest_input_dtype": "literal float32", "software_versions": "nonempty object of nonempty software-name strings to nonempty actual version strings"},
+      "rules": "No exact software-version object equality is required for equivalent implementations. Source/method digest and exact source-hash map are mandatory. No source signal/feature/model answer is embedded in the pure public contract."
+    },
+    "SourceObserved": {
+      "fields": {"n_subjects": "integer 6", "n_source_annotations": "count", "n_candidate_epochs": "count", "n_retained_epochs": "count", "n_dropped_epochs": "count", "subjects": "array of exactly six @SubjectObserved, keyed by (subject,recording)"},
+      "rules": "All counts derive from source ledgers. Harmless descriptive extras are allowed; subject identities/coverage remain exact."
+    },
+    "SubjectObserved": {
+      "fields": {"subject": "subject", "recording": "recording", "psg_path": "string exactly its manifest basename", "hypnogram_path": "string exactly its manifest basename", "psg_header": "@EDFHeader", "hypnogram_header": "@EDFHeader", "header_start_date_time_match": "boolean true", "annotation_orig_time": "null", "annotation_timekeepers": "array containing exactly @Timekeeper with tal_index=0,onset_s=0", "annotation_source_order_equal_mne": "boolean true", "first_samp": "integer 0", "sfreq_hz": "finite exactly 100", "n_samples": "count", "recording_duration_s": "time", "eeg_channels": "ordered array of two @EEGChannel for EEG Fpz-Cz then EEG Pz-Oz", "n_source_annotations": "count", "annotation_description_counts": "object mapping exact present source description strings to positive integer counts; no invented labels", "n_bad_prefix_annotations": "count", "n_annotation_gaps": "count", "n_annotation_overlaps": "count", "requested_crop_start_s": "time", "requested_crop_stop_s": "time", "effective_crop_start_s": "time", "effective_crop_stop_s": "time", "n_candidate_epochs": "count", "n_retained_epochs": "count", "n_dropped_epochs": "count", "annotation_status_counts": "@AnnotationStatusCounts", "epoch_status_counts": "@EpochStatusCounts", "n_duplicate_candidate_start_samples": "count"},
+      "rules": "Literal source headers and original IDs are exact. Computed seconds use source_time_s tolerance. description_counts is closed to exact source keys. Per-status counts may omit known zero entries, never nonzero or unknown statuses. n_samples is per selected EEG channel; both must agree. n_annotation_gaps and n_annotation_overlaps compare each consecutive pair of original annotation-description rows in source order: delta=current.onset_s-(previous.onset_s+previous.duration_s); gap if delta>source_time_s.atol+source_time_s.rtol*abs(previous.onset_s+previous.duration_s), overlap if delta is below the negative of that tolerance, otherwise neither. These diagnostics are before any clipping, mapping, or chunking."
+    },
+    "EDFHeader": {
+      "fields": {"version": "string", "start_date": "string", "start_time": "string", "header_bytes": "count", "reserved": "string", "n_records": "count", "record_duration_text": "string", "n_signals": "count", "header_sha256": "sha256"},
+      "rules": "Trim only EDF fixed-field padding when interpreting source strings. record_duration_text is the original trimmed ASCII field, not a reformatted decimal. header_sha256 hashes exactly the original header_bytes bytes. No need to invent UTC or publish patient-identification prose."
+    },
+    "EEGChannel": {
+      "fields": {"row": "index", "label": "string", "transducer": "string", "physical_dimension": "literal uV", "physical_min_text": "string", "physical_max_text": "string", "digital_min_text": "string", "digital_max_text": "string", "prefilter": "string", "samples_per_record_text": "string", "reserved": "string", "sfreq_hz": "finite exactly 100", "n_samples": "count"},
+      "rules": "Original trimmed EDF header strings, channel order/row and sample count are bound to source. Calibration text is parsed numerically for the feature equation but preserved literally here. Do not reinterpret source prefilter prose as a new processing instruction."
+    },
+    "Timekeeper": {"fields": {"tal_index": "index", "onset_s": "time"}},
+    "AnnotationStatusCounts": {"closed": true, "fields": {"outside_crop_or_recording": "count, may be omitted only if zero", "unsupported_stage": "count, may be omitted only if zero", "used": "count, may be omitted only if zero", "no_complete_chunk": "count, may be omitted only if zero"}},
+    "EpochStatusCounts": {"closed": true, "fields": {"unsupported_stage": "count, may be omitted only if zero", "outside_recording": "count, may be omitted only if zero", "overlap_bad_annotation": "count, may be omitted only if zero", "retained": "count, may be omitted only if zero"}}
+  },
+  "failure_handling": {
+    "precondition_failure": "Exit nonzero before fitting or further processing; write parseable run_metadata.json and staging_results.json with status=failed_precondition and a nonempty reason, plus nonempty findings.md. Header-only CSVs may be written but are not a complete graded result. Never impute invalid features, silently drop a subject/epoch, reuse an old bank, or fabricate a full output.",
+    "resource_pilot": "Any deliberately partial authoring run must state status=resource_pilot and its processed scope; it is never a complete graded submission and must not replace the full reference.",
+    "evidence_safety": "Do not overwrite existing output files, private evidence, reports, or reference destinations. Validate all destinations before scientific processing; reject symlink leaves/ancestors and use exclusive file creation. Preserve existing source and failed-run evidence; a retry must use fresh destinations. If safe failure artifacts cannot be created without overwriting existing evidence, exit nonzero and report the reason on stderr instead."
+  },
+  "authoring_evidence": {
+    "not_participant_requirements": ["Raw epoch arrays and full PSDs", "Float32 forest-input views", "Per-fold tree seeds, structure, thresholds, leaf class distributions and canonical training keys", "Source-only build command and script/input hashes", "Separate oracle and independent participant-format outputs and comparisons"],
+    "gates": "Fresh source-only generation after approved pilot/full resource gates; no historical numerical-bank import or oracle-output input during reference construction. Preserve the old bank and failures before an explicitly approved genuine replacement. Source-free fixtures, source validation, native tests, Harbor execution and frontier calibration remain separate evidence tiers."
+  },
+  "references": [
+    {"role": "source release and license", "url": "https://physionet.org/content/sleep-edfx/1.0.0/"},
+    {"role": "tutorial inspiration, not identical algorithm or performance", "url": "https://mne.tools/1.12/auto_tutorials/clinical/60_sleep.html"},
+    {"role": "explicit Welch API", "url": "https://mne.tools/1.12/generated/mne.time_frequency.psd_array_welch.html"},
+    {"role": "reference forest implementation", "url": "https://scikit-learn.org/1.8/modules/generated/sklearn.ensemble.RandomForestClassifier.html"}
+  ]
+}
