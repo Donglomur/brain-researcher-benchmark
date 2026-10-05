@@ -1,139 +1,68 @@
-## KURTFIT-001
+# KURTFIT-001: CFIN white-matter shell-cap sensitivity
 
-**Proposal Title:** Mean kurtosis of white matter from multi-shell diffusion MRI (DKI) — an un-cued **b-shell-cap / cumulant-validity multiverse** (over-claim genre; grade the discovery, not a point value)
+## Scope
 
-**Scientific Domain:** Life Sciences · **Field:** Neuroscience · **Subfield:** Diffusion MRI microstructure
+A paper-derived **method / easy-control** case on original public CFIN diffusion
+data, associated with Hansen and Jespersen (2016), Scientific Data 3:160072,
+https://doi.org/10.1038/sdata.2016.72. Jensen et al. (2005),
+https://doi.org/10.1002/mrm.20508, supplies the DKI method context.
 
-**Source finding / method:** Jensen et al. (2005), *Magn. Reson. Med.*, https://doi.org/10.1002/mrm.20508 (diffusional kurtosis imaging); Jensen & Helpern (2010), *NMR Biomed.* (DKI review); Veraart et al. (2011), *Magn. Reson. Med.* (estimation/weighting in DKI). **Dataset:** the dipy-shipped CFIN multi-shell single subject (Hansen & Jespersen, *Sci. Data* 2016), fetched at runtime via `dipy.data.fetch_cfin_multib` / `read_cfin_dwi` — real, public human diffusion MRI, b = 0..3000 s/mm² in steps of 200.
+The target is a declared WLS shell-cap comparison on a single fixed FA-defined
+ROI. It is not a reproduction of Jensen's original participants or a specific
+paper figure's numbers, and no shell cap is established as unbiased biological
+truth. The smoothing width and baseline estimator are task choices. The prior
+proposal's hidden-estimator, monotonic-decline and “un-fabricable” claims have
+been withdrawn; its old numerical table is stale after the physical-mm repair.
 
-**Genre:** over-claim / no-multiverse (grade the write-up's discovery, GRADIENT-001 style). Real data, no synthetic/planted truth.
+## Source and execution contract
 
-> **HARDENING NOTE (reframe, this revision).** The first cut strict-point-matched a *capped* MK (1.021 ± 0.035) and failed the all-shell value (0.957). Two problems: (a) the discriminating gap was narrow (0.064 with a 0.035 tolerance — a ~0.03 margin), and (b) it graded a hidden point value rather than a metacognitive choice. Per the tb-science bar the task now grades the **discovery** (over-claim / point-estimate-no-multiverse axis): does the write-up recognise that "the white-matter mean kurtosis" is **b-shell-cap-dependent** — that including high-b shells biases MK downward because DKI's cumulant expansion is only valid at moderate b? The reported MK value (all-shell **or** capped) is **not** point-matched; the failure is reporting a single MK as a fixed number without volunteering the shell dependence.
+Original NIfTI, b-value and b-vector files come from the public CC0 UW
+ResearchWorks deposit (handle 1773/38488), associated with the paper's data.
+The build manifest pins immutable bitstream UUIDs, original byte sizes,
+published MD5 checksums and locally verified SHA256 checksums. Only these three
+files are downloaded during image construction; an unused anatomical scan is
+not fetched. Runtime has no network access or dependence on a shared user cache.
 
-### The un-cued discovery / lever
+The public instruction specifies the brain mask, physical Gaussian conversion,
+moderate-b DTI ROI, WLS estimator, exact source-volume selection and MK clipping.
+Caps are actual available maxima 1000, 1400, 2000, 2400 and 3000, with 2000 as the
+declared headline baseline. Any two or more caps including 2000 are sufficient.
 
-DKI is a **cumulant (Taylor) expansion** of the log diffusion signal in b, valid only at **moderate b** (≈ up to 2000–2500 s/mm²). Beyond that the quadratic kurtosis term stops describing the signal, so **including the high-b shells biases mean kurtosis downward** — MK on this data falls **monotonically** from 1.121 (b≤1000) to 0.957 (b≤3000), a 0.164 (~15%) swing. So "the white-matter mean kurtosis" is not a single number: it depends on the b-value cap. The instruction names the deliverable (MK in white matter) and the data, and pins the reproducibility-critical preprocessing (brain mask, 1.25 mm FWHM smoothing, WM = FA > 0.4, MK clipped to [0,3]) — but it **never** mentions the shell cap, cumulant validity, or "high-b", and (this revision) no longer lists "which shells enter the model" as a free choice. A knowledgeable agent discovers and reports the shell-cap dependence (sweeping caps, or capping at moderate b for the stated cumulant-validity reason and linking it to the downward bias); a naive one throws every shell at `DiffusionKurtosisModel` and reports a single MK.
+## Verifier and evidence
 
-### The multiverse (Step-0 validated, real data — the widened gap)
+The verifier requires exact complete ROI membership, finite per-voxel MK within
+absolute 1e-5 of each declared cap, and JSON/CSV arithmetic within 1e-6.
+All submitted groups are checked. Unknown caps, duplicate/fractional coordinates,
+partial coverage, padded rows, cap copying and mean-preserving distortions fail.
+Equivalent row ordering, numeric formats, extra CSV columns and valid two-cap
+subsets pass. Source/estimator metadata is checked; English keywords and a
+predetermined spread/direction are not graded. Scoring is binary.
 
-Fixed WM ROI (tensor FA > 0.4 on the b≤2000 fit, 11 695 voxels), MK = `mk(0, 3)`, sweeping the DKI b-cap over the SAME ROI:
+The bank is regenerated by `authoring/build_reference.py` only from a retained
+real oracle fit plus independently checksum-verified original inputs. The builder
+reconstructs ROI membership, MK from fitted parameters and signal residuals.
+`authoring/check_independent.py` separately solves two-step NumPy WLS on up to
+256 deterministic ROI voxels per cap. Shared design matrices, ROI fitting,
+parameter conversion, analytical MK and prediction are explicitly identified:
+this checks implementation agreement, not biological ground truth.
 
-| b-cap | 1000 | 1200 | 1400 | 1600 | 1800 | 2000 | 2200 | 2400 | 2600 | 2800 | 3000 |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| **MK** | 1.121 | 1.072 | 1.062 | 1.051 | 1.036 | **1.021** | 1.009 | 0.995 | 0.983 | 0.970 | **0.957** |
+Authoring tests cover source staging, parsing, physical units and mutations of
+actual oracle outputs. Final evidence belongs to the exact clean commit and
+retained Harbor result/config/lock/verifier outputs, not to this proposal alone.
+See `REPAIR_STATUS.md` and the external repair receipt for execution state.
 
-MK falls **monotonically**; full spread **0.164 (~15%)** — a dramatic, real, discoverable dependence (vs the old 0.064 capped-vs-all-shell gap). The un-cued agent never sweeps, so it never sees it. Smoothing is a strong nuisance axis (no-smoothing shifts the whole curve), which is exactly why the 1.25 mm FWHM smoothing is **pinned**; with it pinned, the shell-cap dependence is the phenomenon to discover.
+## Limits and difficulty
 
-### Verifier (3 plain checks — discovery, not point-match)
-
-`tests/test_outputs.py`: (1) a DKI fit produced a physically-plausible WM mean kurtosis (any b-cap value 0.5–1.8 passes — the value is **not** the discriminator); (2) a white-matter ROI (voxel count or FA definition) was reported; (3) **the write-up discovers the shell-cap dependence** — a b-range/cumulant term must CO-OCCUR with a statement that MK is biased/changes/depends (branch 1), OR an explicit cumulant-expansion validity statement (only valid at moderate b / breaks down at high b) is present (branch 2). **False-positive guard:** naming "shells", "b-values", or the pinned "b=0..3000" range is pipeline vocabulary — the check never passes on that alone; the b-range/cumulant term must be linked to MK being biased/changing (SOCIALBRAIN-001 / DEVCONN-001 pipeline-vocab guard). Numbers searched at any json depth; no rubric, no score file.
-
-**Offline discrimination (re-validated on real data this revision):**
-| submission | test 1–2 | test 3 (discovery) | reward |
-|---|---|---|---|
-| **oracle** (cap sweep reported + downward-bias/cumulant explanation) | PASS | **PASS** | **1.0** |
-| **defensible** — capped 1.021 + cumulant-validity + downward-bias explanation | PASS | **PASS** | **1.0** |
-| **defensible** — multiverse sweep reported | PASS | **PASS** | **1.0** |
-| naive all-shell (single MK 0.957, no dependence) | PASS | **FAIL** | 0 |
-| capped-but-unexplained (1.021, "restricted to b≤2000 as recommended", no mechanism) | PASS | **FAIL** | 0 |
-| over-claim (0.957 as a "robust definitive marker") | PASS | **FAIL** | 0 |
-| hedge ("results may vary… interpret with caution", shells name-dropped) | PASS | **FAIL** | 0 |
-
-So *either* the moderate-b or the all-shell number can head a **passing** answer as long as the write-up volunteers the shell-cap dependence; the failure is the un-cued over-claim of a single fixed MK, never the estimator choice or an output-format bug. Note the capped-but-unexplained answer fails: capping for a remembered rule without articulating the dependence is not the discovery.
-
-### PROOF-OF-WORK REWORK (this revision — un-cued judgment preserved)
-
-The keyword-only discovery check (fabrication-vulnerable per the suite audit: it passes on a
-plausible number + a keyword sentence over fabricated data) is replaced by a held-out
-per-voxel reference and three numeric pillars, WITHOUT cueing the shell-cap judgment (the
-instruction still names only "the white-matter mean kurtosis").
-
-- **Held-out reference** (`tests/reference.npz`, sha256 `7bb7be9d…d7537`, ~206 KB, committed,
-  never shipped to the agent): the per-voxel MK map over the fixed 11 695-voxel WM ROI for a
-  DKI b-cap sweep, built by running the pinned pipeline on the real dipy CFIN multi-shell
-  subject (`dipy.data.read_cfin_dwi`; numpy 2.1.3 / scipy 1.14.1 / dipy 1.12.1). Per-cap
-  ROI-mean MK: b≤1000 1.121, b≤1400 1.062, b≤2000 1.021, b≤2500 0.995, b≤3000 0.957.
-- **Neutral intermediate table** (new Required Output, un-cued): `mk_voxelwise.csv` — the
-  per-voxel MK the standard pipeline already produces (columns `i,j,k,mk`). Naming the
-  per-voxel table hints nothing about the shell cap.
-- **Pillar 1** — the submitted per-voxel table covers the real ROI (≥50 %), is non-constant,
-  and its per-voxel values correlate ≥0.80 with some real b-cap config (probe: adjacent caps
-  0.92–0.96, caps 2000–3000 ≥0.84; a fabricated/constant/guessed table matches none).
-- **Pillar 2** — the ROI mean recomputed from the rows equals the reported `mean_kurtosis_wm`
-  (tol 0.04) and lands within 0.07 of a real b-cap value.
-- **Pillar 3** — the shell-cap dependence graded as NUMBERS: ≥2 reported MK values that are
-  each near a real b-cap mean and span ≥0.05 (the capped-vs-all-shell decline), with a
-  negation-guarded cumulant-validity prose fallback for the honest single-moderate-b-fit-
-  that-caveats path. A bare single MK with no recognition fails.
-
-**Validation matrix (subprocess pytest per case):** honest (oracle) PASS · defensible
-(capped 1.021 + cumulant mechanism, one number) PASS · no-table FAIL (pillar 1) · constant
-FAIL (pillar 1) · fabricated non-constant / right-group-mean FAIL (pillar 1 corr) ·
-fabricated-coords FAIL (coverage) · naive over-claim (real all-shell map + single MK 0.957,
-no recognition) FAIL (pillar 3 only; pillars 1–2 pass, confirming the fabrication and the
-over-claim are caught by different pillars).
-
-### Second-pass fix (2026-09): the shell-cap sweep is now PER-VOXEL-BACKED (kills naive-fit + caveat)
-
-The red-team confirmed pillar 3 was gameable: its two branches let a **naive single fit + a
-textbook cumulant-validity sentence** pass (prose fallback), and even the numeric branch matched
-*reported scalars* (~1.02 and ~0.96) that are guessable from priors — the CORRECTED (moderate-b)
-estimate was never enforced to be PRESENT and computed. Per SECOND_PASS_BRIEF §5 (diffusion
-over-claim), the sweep is now a **required per-voxel table matched to the held-out reference**.
-
-**What changed**
-- New Required Output `mk_sweep.csv`: the per-voxel WM MK for each shell subset evaluated
-  (columns `i,j,k,max_b,mk`, ≥2 subsets). Instruction describes it neutrally as "MK as a
-  function of which b-shells are included" — it does **not** name cumulant validity or which cap
-  is correct.
-- Pillar 3 rewritten (`test_shell_cap_sweep_matches_reference`): each sweep group must be a REAL
-  per-voxel fit — cover the ROI, be non-constant, match ONE held-out b-cap config's spatial
-  pattern (Pearson r ≥ 0.80) AND that config's ROI mean (≤ 0.06) — and **≥2 groups must match
-  DISTINCT caps** whose means span ≥ 0.05 (the real decline). The prose fallback and the
-  reported-scalar `straddle` branch are removed. Reference and ROI unchanged (the reference
-  already stores per-voxel maps for all 5 caps).
-- `solution/compute.py` now writes `mk_sweep.csv` from the per-cap fits it already computes.
-
-**Why un-fabricable** (measured on the reference maps): the five per-cap maps are spatially
-distinguishable (self r = 1.0; max cross-cap r = 0.927; caps that span ≥ 0.05 in mean have
-cross-r ≤ 0.84). A fabricated/guessed group matches no config's pattern. A **globally rescaled**
-copy of one real fit is scale-invariant in r → best-correlates with the SAME config → not a
-distinct cap, and its shifted mean no longer matches that config's mean. So a single fit cannot
-be duplicated into a fake decline; only running the real analysis at ≥2 distinct caps passes.
-
-**Adversarial self-validation** (subprocess pytest, fixtures built from the held-out per-cap
-reference maps — see honest-limitation on live-dipy below):
-
-| case | verdict | mechanism |
-|---|---|---|
-| honest oracle (headline b≤2000 + 5-cap per-voxel sweep) | **PASS** | all pillars |
-| defensible: minimal 2-cap sweep (corrected 2000 vs naive 3000, span 0.064) | **PASS** | span ≥ 0.05 |
-| defensible: version-drift noise on every map (per-voxel r ≈ 0.90) | **PASS** | r ≥ 0.80 with margin |
-| attack A: fabricated sweep (right means, random per-voxel pattern) | **FAIL** | no config-pattern match |
-| attack C: real naive all-shell fit, sweep has 1 group | **FAIL** | < 2 groups |
-| attack C: all-shell fit + rescaled copy relabeled b≤2000 (mean→1.021) | **FAIL** | same config; mean≠1.021 vs its config |
-| attack C: all-shell fit + additively-shifted copy (mean 1.01) relabeled b≤2000 | **FAIL** | both map to config 3000 → 1 distinct cap |
-| attack C: all-shell fit duplicated under two labels | **FAIL** | 1 distinct cap, span 0 |
-
-Attack A and every attack-C variant (guessed/scaled/duplicated corrected value) now FAIL while
-honest + defensible PASS — the corrected estimate must be a real per-voxel fit, not a scalar.
-
-**Honest-limitations (blunt):**
-- *Live-dipy not run.* dipy is not installed here and the CFIN sample download stalls, so the
-  honest/defensible fixtures were synthesised from the committed held-out per-cap reference maps
-  (which were themselves built by the pinned dipy pipeline). `compute.py` only *adds* the
-  per-voxel write of the `mkc` it already computes, so a live run reproduces the reference maps
-  (modulo dipy version); the r ≥ 0.80 threshold has ~0.10 margin against the measured version-
-  drift proxy. A maintainer should confirm on a live dipy run.
-- *Mild cue (accepted 5(a)).* Requiring a per-shell-subset MK table cues that MK depends on
-  shells — the metacognitive "did they volunteer it un-prompted" axis is partially surrendered
-  to make the judgment un-fabricable. The retained teeth: the decline must be COMPUTED per-voxel
-  at ≥2 real caps, which a naive single-fit-plus-sentence cannot fake.
-
-### Difficulty — Step-5 frontier calibration PENDING
-
-Oracle **reward 1.0** (locked locally). The ≥2-frontier-family gate (does GPT-5.x / Claude spontaneously sweep the b-cap or flag the cumulant-validity dependence, or report the canonical dipy-tutorial all-shell MK as "the" WM mean kurtosis?) is a maintainer step. Prior: the dipy DKI tutorial loads all shells and reports one MK map, so the single-number over-claim is the natural un-cued default — the trap has teeth.
-
-### Cost
-
-`hard`. cpus 2, mem 8 GB, internet on (dipy fetches the CFIN multi-b subject, ~1 download). The reference now fits a tensor + a headline DKI + a 5-cap DKI sweep over the fixed WM ROI ≈ 3–4 min locally (well within the 3600 s agent / 900 s verifier timeouts). Deps: dipy 1.12.1 + numpy/scipy/nibabel/h5py.
+Fixed-pipeline numerical agreement does not prove that an arbitrary submission
+ran an honest program; published answer material creates contamination risk.
+There is no frontier-model run or claim of Sol failure. This task is retained as
+an easy method control, not advertised as a hard un-cued scientific discovery.
+The rebuilt baseline contains unstable fits: at cap 2000, 1,210/17,170 voxels
+have signal NRMSE above 0.1 and 173 above 1, while 1,213 MK values hit zero.
+These observations are disclosed, not removed by an outcome-selected ROI.
+Low signal and zero-valued source measurements contribute to the tail. The
+headline is the mean of the declared clipped estimator, not a validated tissue
+microstructure estimate. Numerical implementation agreement does not resolve
+these model inadequacies. A future biologically interpretable inference task
+would need a separately specified, justified QC/estimation contract.
+Budget: 2 CPU, 8 GiB RAM, agent 3600 s, verifier 900 s, offline after image build.
