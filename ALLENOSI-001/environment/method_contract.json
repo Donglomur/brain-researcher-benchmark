@@ -1,0 +1,97 @@
+{
+  "pipeline_id": "allen-visp-two-point-osi-v2",
+  "dataset_id": "allen-visual-coding-neuropixels",
+  "dandiset_id": "000021",
+  "dandiset_version": "0.251116.2246",
+  "asset_path": "sub-707296975/sub-707296975_ses-721123822.nwb",
+  "asset_id": "224b57e5-c9a3-46ef-85db-966713f3ccbe",
+  "subject_id": "707296975",
+  "session_id": "721123822",
+  "source_sha256": {
+    "sub-707296975_ses-721123822.nwb": "4e284295a1be5c6cca49df84fab52ad38b4749d2361b2edebeb676051cf09921"
+  },
+  "region": "VISp",
+  "source_manifest_sha256": "0997a4b254812d6967c87444809039197a4864d98838c4f6432d05cdfccd6534",
+  "unit_selection": {
+    "mapping": "units.peak_channel_id to electrodes.id then location",
+    "primary": "all source VISp clusters; no QC or response filter",
+    "ordering": "original source row order; IDs never renumbered"
+  },
+  "presentations": {
+    "table": "intervals/drifting_gratings_presentations",
+    "blank_rule": "missing orientation; temporal_frequency may also be missing",
+    "missing_tokens": [
+      "",
+      "null",
+      "none",
+      "nan"
+    ],
+    "directions_degrees": [
+      0,
+      45,
+      90,
+      135,
+      180,
+      225,
+      270,
+      315
+    ],
+    "contrast": 0.8,
+    "temporal_frequency": "all finite positive source levels, ascending",
+    "support": "every direction x temporal-frequency cell nonempty",
+    "duration": "original stop_time minus start_time; finite and positive"
+  },
+  "invalid_intervals": {
+    "table": "intervals/invalid_times",
+    "policy": "fail if any source invalid interval overlaps a selected stimulus window; also baseline windows if QC requested; do not drop units or presentations"
+  },
+  "responses": {
+    "interval": "[start_time, stop_time)",
+    "rate": "integer count divided by actual presentation duration",
+    "condition_mean": "unweighted mean of per-presentation rates",
+    "duplicate_spike_timestamps": "retained; no sorting or deduplication"
+  },
+  "osi": {
+    "preferred_tf": "largest single-direction condition mean across each TF",
+    "tf_tie": "exact equality; lowest temporal frequency",
+    "folding": "equal mean of opposite-direction condition means",
+    "orientations_degrees": [
+      0,
+      45,
+      90,
+      135
+    ],
+    "orientation_tie": "exact equality; lowest orientation",
+    "orthogonal": "(preferred_orientation + 90) modulo 180",
+    "formula": "(R_pref-R_orth)/(R_pref+R_orth)",
+    "zero_denominator": "OSI=0, osi_defined=false, selective=false",
+    "selective": "strictly OSI > 0.5 from unrounded counts/durations",
+    "threshold": 0.5,
+    "preference_data": "same trials as reported responses; descriptive only"
+  },
+  "optional_qc": {
+    "isi_violations_lt": 0.5,
+    "amplitude_cutoff_lt": 0.1,
+    "presence_ratio_gt": 0.9,
+    "missing_metrics": "retain primary unit, blank unavailable metrics, qc_pass=false",
+    "baseline_interval": "[start_time-0.5, start_time)",
+    "baseline_mean": "unweighted mean of per-presentation 0.5-second rates",
+    "peak_rate_gt_hz": 2,
+    "peak_minus_baseline_gt_hz": 1,
+    "empty_denominator": "null fraction; zero numerator and denominator",
+    "primary_effect": "none"
+  },
+  "numerical_tolerances": {
+    "rates_osi_fractions_atol": 0.000001,
+    "rates_osi_fractions_rtol": 0.000001,
+    "source_times_atol_seconds": 1e-9,
+    "source_times_rtol": 0,
+    "qc_metrics_atol": 0.000001,
+    "qc_metrics_rtol": 0.000001,
+    "ids_counts_categories": "exact"
+  },
+  "software": {
+    "numpy": "2.1.3",
+    "h5py": "3.12.1"
+  }
+}
