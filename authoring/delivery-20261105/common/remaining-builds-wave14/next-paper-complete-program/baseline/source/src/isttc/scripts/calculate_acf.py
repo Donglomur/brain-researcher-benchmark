@@ -1,0 +1,659 @@
+"""
+Functions to calculate autocorrelation function.
+
+On continuous signal:
+* using ACF equation (my_acf and my_autocorr replicate acf function from stattools),
+* using iSTTC,
+
+On trials:
+* Pearsonr trial averaged (as in Murray et al, 2014),
+* iSTTC trial averaged (with 0-padding),
+* iSTTC trial concat (with 0-padding).
+"""
+import warnings
+import numpy as np
+from scipy.stats import pearsonr, ConstantInputWarning
+
+def my_autocorr(signal_, lag_=1, verbose_=False):
+    """
+    Manually computes autocorrelation at a specified lag for a 1D signal without using acf function. Just a sanity check.
+
+    :param signal_: ndarray of shape (n_bins,),
+        Binned spike train for which autocorrelation is computed.
+    :param lag_: int,
+        Lag at which to compute autocorrelation. Must be less than the length of the signal.
+    :param verbose_: bool, default False,
+        If True, prints internal computation details for debugging.
+
+    :return:
+        ac_lag : float,
+            Autocorrelation value at the specified lag.
+    """
+    if verbose_:
+        print('Calc for lag {}, input length {}'.format(lag_, signal_.shape))
+
+    signal_mean = np.mean(signal_)
+    denominator = sum((signal_ - signal_mean) ** 2)
+    if verbose_:
+        print('y_mean = {}, denominator = {}'.format(signal_mean, denominator))
+    numerator_p1 = signal_[lag_:] - signal_mean
+    numerator_p2 = signal_[:-lag_] - signal_mean
+    if verbose_:
+        print('shape numerator_p1 {}, numerator_p2 {}'.format(numerator_p1.shape, numerator_p2.shape))
+    numerator = sum(numerator_p1 * numerator_p2)
+    ac_lag = numerator / denominator
+    if verbose_:
+        print('acf_lag {}'.format(ac_lag))
+    return ac_lag
+
+
+def my_acf(signal_, n_lags_=2, verbose_=False):
+    """
+    Computes the autocorrelation function (ACF) of a 1D signal without using acf function. Just a sanity check.
+
+    :param signal_: ndarray of shape (n_bins,),
+        Binned spike train for which autocorrelation is computed.
+    :param n_lags_: int,
+        Number of lags to compute. If greater than or equal to signal length, it will be reduced to len(signal) - 1.
+    :param verbose_: bool, default False,
+        If True, prints diagnostic information. If False, runs silently.
+
+    :return:
+        acf_result : ndarray of shape (n_lags_ + 1,),
+            Autocorrelation values for lags 0 to n_lags_. The value at index 0 is always 1 (self-correlation).
+            Subsequent values are computed using a custom correlation function.
+    """
+    acf_result = [1]
+    if n_lags_ >= len(signal_):
+        n_lags = n_lags_ - 1
+        if verbose_:
+            print('n_lags ({}) is >= signal length ({}). Setting n_lags to {}...'
+                  .format(n_lags_, len(signal_), n_lags))
+    else:
+        n_lags = n_lags_
+
+    for i in range(1, (n_lags + 1)):
+        acf_result.append(my_autocorr(signal_, i, verbose_))
+    return np.array(acf_result)
+
+
+def acf_pearsonr_trial_avg(trials_time_series_2d_, n_lags_, verbose_=False):
+    """
+    Trial-averaged autocorrelation using Pearson correlation coefficient (PearsonR).
+    If autocorrelation at a specific time lag cannot be calculated, NaN is returned for that lag.
+
+    :param trials_time_series_2d_: ndarray of shape (n_trials, n_bins),
+        Binned spiking data where each row represents a trial and each column a time bin.
+    :param n_lags_: int,
+        Number of time lags for which autocorrelation should be computed.
+    :param verbose_: bool, default False,
+        If True, prints diagnostic information. If False, runs silently.
+
+    :return:
+        acf_matrix : ndarray of shape (n_lags, n_lags),
+            Upper triangular matrix (excluding the diagonal) containing pairwise Pearson correlation
+            coefficients between time bins across trials. Diagonal is set to 1. NaNs indicate undefined correlations.
+        acf_average : ndarray of shape (n_lags,),
+            Trial-averaged autocorrelation function across time lags. Each entry `k` corresponds to the
+            average Pearson correlation at lag `k`, computed from the `k`-th diagonal of `acf_matrix`.
+            NaNs indicate that a mean could not be computed (e.g. due to insufficient valid values).
+    """
+    time_series_a = trials_time_series_2d_[:, :n_lags_]
+    n_bins = time_series_a.shape[1]
+    if verbose_:
+        print('n_bins to use {}'.format(n_bins))
+
+    acf_matrix = np.zeros((n_bins, n_bins))
+    for i in np.arange(n_bins - 1):
+        for j in np.arange(i + 1, n_bins):  # filling i-th row
+            with warnings.catch_warnings():
+                warnings.filterwarnings('error')
+                try:
+                    r, p = pearsonr(time_series_a[:, i], time_series_a[:, j])
+                    acf_matrix[i, j] = r
+                except ConstantInputWarning as e:
+                    print('ERROR: Pearson r can not be calculated for i={}, j={}, error {}'.format(i, j, e))
+                    acf_matrix[i, j] = np.nan
+    np.fill_diagonal(acf_matrix, 1)
+
+    acf_average = np.zeros((n_bins,))
+    for i in range(n_bins):
+        with warnings.catch_warnings():
+            warnings.filterwarnings('error')
+            try:
+                acf_average[i] = np.nanmean(np.diag(acf_matrix, k=i))
+            except RuntimeWarning as e:
+                print('ERROR: ACF average (mean) can not be calculated for lag={}'.format(i), e)
+                acf_average[i] = np.nan
+
+    return acf_matrix, acf_average
+
+
+def sttc_calculate_t(spiketrain_, n_spikes_, dt_, t_start_, t_stop_, verbose_=True):
+    """
+    Computes the proportion of total recording time that lies within ±dt of any spike in the spike train.
+    This is referred to as T in the STTC calculation.
+
+    :param spiketrain_: list of float,
+        Timestamps of spikes.
+    :param n_spikes_: int,
+        Total number of spikes in the spike train.
+    :param dt_: float,
+        Temporal window (half-width) around each spike to be considered as "tiled".
+    :param t_start_: float,
+        Start time of the recording window.
+    :param t_stop_: float,
+        End time of the recording window.
+    :param verbose_: bool, default False,
+        If True, prints detailed computation information.
+
+    :return:
+        time_abs: float,
+            Total duration of non-overlapping intervals within ±dt of all spikes.
+        time_prop: float,
+            Proportion of total time (relative to recording window) that is covered by the tiled intervals.
+            Used as `T_A` or `T_B` in the STTC formula.
+    """
+    if verbose_:
+        print(f'sttc_calculate_t  spiketrain {spiketrain_}, n spikes {n_spikes_}')
+    if n_spikes_ == 0:
+        return 0, 0
+
+    # Maximum possible time
+    time_abs = 2 * n_spikes_ * dt_
+    if verbose_:
+        print(f'Initial time_abs: {time_abs}')
+
+    # Handle single spike case
+    if n_spikes_ == 1:
+        if verbose_:
+            print('n spike 1')
+        # Adjust for the first spike
+        if spiketrain_[0] - t_start_ < dt_:
+            time_abs += spiketrain_[0] - dt_ - t_start_
+            if verbose_:
+                print(f'n spike 1, adjustment for first spike: {time_abs}')
+        # Adjust for the last spike
+        if t_stop_ - spiketrain_[-1] < dt_:
+            time_abs += t_stop_ - (spiketrain_[-1] + dt_)
+            if verbose_:
+                print(f'n spike 1, adjustment for last spike: {time_abs}')
+
+    else:  # Multiple spikes case
+        diff = np.diff(spiketrain_)
+        idx = diff < (2 * dt_)
+        time_abs -= 2 * idx.sum() * dt_ - diff[idx].sum()
+        # Adjust for the first spike
+        if spiketrain_[0] - t_start_ < dt_:
+            time_abs += spiketrain_[0] - dt_ - t_start_
+        # Adjust for the last spike
+        if t_stop_ - spiketrain_[-1] < dt_:
+            time_abs += t_stop_ - (spiketrain_[-1] + dt_)
+
+    if verbose_:
+        print(f'Adjusted time_abs: {time_abs}')
+
+    # Calculate the proportion of the total recording time
+    time_prop = time_abs / (t_stop_ - t_start_)
+    if verbose_:
+        print(f'Total time: {t_stop_ - t_start_}, Time proportion: {time_prop}')
+
+    return time_abs, time_prop
+
+
+def sttc_calculate_p(spiketrain_1_, spiketrain_2_, n_spikes_1_, n_spikes_2_, dt_):
+    """
+    Computes the number of spikes in the reference spike train that fall within ±dt of any spike in the target train.
+    This count is used to calculate P in the STTC calculation.
+
+    :param spiketrain_1_: list of float,
+        Spike times of the reference train (the one being tested for spikes being within ±dt of any spike from the
+        target train).
+    :param spiketrain_2_: list of float,
+        Spike times of the target train.
+    :param n_spikes_1_: int,
+        Number of spikes in the reference train.
+    :param n_spikes_2_: int,
+        Number of spikes in the target train.
+    :param dt_: float,
+        Temporal window (half-width) used to define spike proximity.
+
+    :return:
+        n_tiled_spikes: int,
+            Total number of spikes in the reference train that fall within ±dt of at least one spike in the target train.
+            Used as numerator to compute `P_A` or `P_B` in the STTC formula.
+    """
+    n_tiled_spikes = 0
+    j = 0
+
+    for i in range(n_spikes_1_):
+        while j < n_spikes_2_:
+            time_diff = spiketrain_1_[i] - spiketrain_2_[j]
+
+            if np.abs(time_diff) <= dt_:  # Spike in train 2 within dt of train 1
+                n_tiled_spikes += 1
+                break
+            elif time_diff < 0:  # Current spike in train 2 is too late
+                break
+            else:  # Current spike in train 2 is too early; move to next spike
+                j += 1
+
+    return n_tiled_spikes
+
+
+def sttc(spiketrain_1_l_, spiketrain_2_l_, t_start_, t_stop_, dt_, verbose_=True):
+    """
+    Computes the Spike Time Tiling Coefficient (STTC) between two spike trains as described in Cutts and Eglen, 2014.
+
+    :param spiketrain_1_l_: list of float,
+        Timestamps of spikes from first spike train.
+    :param spiketrain_2_l_: list of float,
+        Timestamps of spikes from second spike train.
+    :param t_start_: float,
+        Start time of the recording window (same units as spike times).
+    :param t_stop_: float,
+        End time of the recording window.
+    :param dt_: float,
+        Temporal window (half-width) within which spikes from one train are considered to be "tiled" by spikes from the other.
+    :param verbose_: bool, default True,
+        If True, prints internal computation results and diagnostics.
+
+    :return:
+        sttc_result : float,
+            Spike Time Tiling Coefficient value in the range [-1, 1], if either spike train is empty, returns 0.
+    """
+    n_a, n_b = len(spiketrain_1_l_), len(spiketrain_2_l_)
+
+    # Handle cases where one or both spike trains are empty
+    if n_a == 0 or n_b == 0:
+        return 0
+
+    # Calculate tiling and proportion times for both spike trains
+    time_a, t_a = sttc_calculate_t(spiketrain_1_l_, n_a, dt_, t_start_, t_stop_, verbose_)
+    time_b, t_b = sttc_calculate_t(spiketrain_2_l_, n_b, dt_, t_start_, t_stop_, verbose_)
+
+    # Calculate proportions of tiled spikes
+    p_a = sttc_calculate_p(spiketrain_1_l_, spiketrain_2_l_, n_a, n_b, dt_) / n_a
+    p_b = sttc_calculate_p(spiketrain_2_l_, spiketrain_1_l_, n_b, n_a, dt_) / n_b
+
+    # Compute STTC result
+    if t_a * p_b == 1 and t_b * p_a == 1:
+        sttc_result = 1
+    elif t_a * p_b == 1:
+        sttc_result = 0.5 * (p_a - t_b) / (1 - p_a * t_b) + 0.5
+    elif t_b * p_a == 1:
+        sttc_result = 0.5 + 0.5 * (p_b - t_a) / (1 - p_b * t_a)
+    else:
+        sttc_result = 0.5 * (p_a - t_b) / (1 - p_a * t_b) + 0.5 * (p_b - t_a) / (1 - p_b * t_a)
+
+    if verbose_:
+        print(f'STTC: {sttc_result}')
+
+    return sttc_result
+
+
+def sttc_fixed_2t(spiketrain_1_l_, spiketrain_2_l_, dt_, t_a_, t_b_, verbose_=False):
+    """
+    Calculate the Spike Time Tiling Coefficient (STTC) for two spike trains with fixed t_a and t_b.
+
+    :param spiketrain_1_l_: list of float,
+        Timestamps of spikes from first spike train.
+    :param spiketrain_2_l_: list of float,
+        Timestamps of spikes from second spike train.
+    :param t_a_: float,
+        Proportion of total time (relative to recording window) that is covered by the tiled intervals, T term for the
+        first spike train.
+    :param t_b_: float,
+        Proportion of total time (relative to recording window) that is covered by the tiled intervals, T term for the
+        second spike train.
+    :param dt_: float,
+        Temporal window (half-width) within which spikes from one train are considered to be "tiled" by spikes from the other.
+    :param verbose_: bool, default False,
+        If True, prints internal computation results and diagnostics.
+
+    :return:
+        sttc_result : float,
+            Spike Time Tiling Coefficient value in the range [-1, 1], if either spike train is empty, returns 0.
+
+    """
+    n_a, n_b = len(spiketrain_1_l_), len(spiketrain_2_l_)
+
+    # Return 0 if either of the spike trains is empty
+    if n_a == 0 or n_b == 0:
+        return 0
+
+    # Calculate the proportions of tiled spikes
+    p_a = sttc_calculate_p(spiketrain_1_l_, spiketrain_2_l_, n_a, n_b, dt_) / n_a
+    p_b = sttc_calculate_p(spiketrain_2_l_, spiketrain_1_l_, n_b, n_a, dt_) / n_b
+
+    # Compute STTC result based on t_a, t_b, and p_a, p_b
+    if t_a_ * p_b == 1 and t_b_ * p_a == 1:
+        sttc_result = 1
+    elif t_a_ * p_b == 1:
+        sttc_result = 0.5 * (p_a - t_b_) / (1 - p_a * t_b_) + 0.5
+    elif t_b_ * p_a == 1:
+        sttc_result = 0.5 + 0.5 * (p_b - t_a_) / (1 - p_b * t_a_)
+    else:
+        sttc_result = 0.5 * (p_a - t_b_) / (1 - p_a * t_b_) + 0.5 * (p_b - t_a_) / (1 - p_b * t_a_)
+
+    if verbose_:
+        print(f'STTC: {sttc_result}')
+
+    return sttc_result
+
+
+def acf_sttc(signal_, n_lags_, lag_shift_, sttc_dt_, signal_length_, verbose_=False):
+    """
+    Computes an autocorrelation function (ACF) using the Spike Time Tiling Coefficient (STTC).
+
+    Note: All temporal inputs (`lag_shift_`, `sttc_dt_`, `signal_length_`) must use the same time unit.
+
+    :param signal_: 1D of float,
+        Spike times from a single spike train.
+    :param n_lags_: int,
+        Number of time lags to compute the autocorrelation over.
+    :param lag_shift_: float,
+        Size of each time shift (in the same units as `signal_` and `sttc_dt_`). Defines spacing between lags.
+    :param sttc_dt_: float,
+        Temporal window (±dt) used in the STTC calculation.
+    :param signal_length_: float,
+        Total duration of the spike train (same unit as `signal_`).
+    :param verbose_: bool, default False,
+        If True, prints intermediate diagnostic information.
+
+    :return:
+        acf_l : list of float,
+            List of STTC values representing the autocorrelation function across time lags.
+            - The first value corresponds to the STTC of the signal with itself (no shift).
+            - Subsequent values correspond to STTCs at increasing lag shifts, where parts of the spike train
+              are shifted and compared with their temporally aligned counterparts.
+    """
+    # Determine the shift values for the autocorrelation calculation
+    if lag_shift_ * n_lags_ == signal_length_:
+        shift_ms_l = np.linspace(lag_shift_, lag_shift_ * (n_lags_ - 1), n_lags_ - 1).astype(int)
+    else:
+        shift_ms_l = np.linspace(lag_shift_, lag_shift_ * n_lags_, n_lags_).astype(int)
+    if verbose_:
+        print('shift_ms_l {}'.format(shift_ms_l))
+
+    # Calculate the STTC for the original (unshifted) signal
+    sttc_no_shift = sttc(signal_, signal_, t_start_=0, t_stop_=signal_length_, dt_=sttc_dt_, verbose_=verbose_)
+    acf_l = [sttc_no_shift]
+
+    # Iterate through each shift and calculate the STTC for shifted signals
+    for shift_ms in shift_ms_l:
+        spike_1 = signal_[signal_ >= shift_ms]
+        spike_2 = signal_[signal_ < signal_length_ - shift_ms]
+        # align, only 1st
+        spike_1_aligned = spike_1 - shift_ms
+        if verbose_:
+            print('spike_1 {}, spike_2 {}'.format(spike_1.shape, spike_2.shape))
+        isttc = sttc(spike_1_aligned, spike_2, t_start_=0, t_stop_=signal_length_ - shift_ms, dt_=sttc_dt_,
+                     verbose_=verbose_)
+        acf_l.append(isttc)
+
+    return acf_l
+
+
+def sttc_calculate_t_fast(spiketrain_, n_spikes_, dt_, t_start_, t_stop_, verbose_=False):
+    """
+    Fast version of sttc_calculate_t using vectorised overlap calculation.
+
+    Mirrors the reference function return values: absolute tiled time and
+    tiled-time proportion.
+    """
+    if n_spikes_ == 0:
+        return 0, 0
+
+    spiketrain = np.asarray(spiketrain_, dtype=np.float64)
+    time_abs = 2.0 * n_spikes_ * dt_
+
+    if n_spikes_ > 1:
+        diff = np.diff(spiketrain)
+        overlap = diff < 2 * dt_
+        time_abs -= 2 * dt_ * overlap.sum() - diff[overlap].sum()
+
+    if spiketrain[0] - t_start_ < dt_:
+        time_abs += spiketrain[0] - dt_ - t_start_
+    if t_stop_ - spiketrain[-1] < dt_:
+        time_abs += t_stop_ - (spiketrain[-1] + dt_)
+
+    time_prop = time_abs / (t_stop_ - t_start_)
+    if verbose_:
+        print(f'STTC fast T: time_abs {time_abs}, time_prop {time_prop}')
+    return float(time_abs), float(time_prop)
+
+
+def sttc_calculate_p_fast(spiketrain_1_, spiketrain_2_, n_spikes_1_, n_spikes_2_, dt_):
+    """
+    Fast version of sttc_calculate_p using np.searchsorted.
+
+    Returns the number of spikes in the first train that are within +/-dt of
+    any spike in the second train, matching sttc_calculate_p.
+    """
+    if n_spikes_1_ == 0 or n_spikes_2_ == 0:
+        return 0
+
+    spiketrain_1 = np.asarray(spiketrain_1_, dtype=np.float64)
+    spiketrain_2 = np.asarray(spiketrain_2_, dtype=np.float64)
+    lo = np.searchsorted(spiketrain_2, spiketrain_1 - dt_, side="left")
+    hi = np.searchsorted(spiketrain_2, spiketrain_1 + dt_, side="right")
+    return int((hi > lo).sum())
+
+
+def acf_sttc_fast(signal_, n_lags_, lag_shift_, sttc_dt_, signal_length_, verbose_=False):
+    """
+    Fast autocorrelation using STTC.
+
+    This is equivalent to acf_sttc but uses np.searchsorted for the P term.
+    """
+    signal = np.asarray(signal_, dtype=np.float64)
+    acf = np.full(n_lags_ + 1, np.nan, dtype=np.float32)
+    acf[0] = 0.0 if len(signal) == 0 else 1.0
+
+    for k in range(1, n_lags_ + 1):
+        shift = k * lag_shift_
+        t_stop = signal_length_ - shift
+        if t_stop <= 0:
+            acf[k] = 0.0
+            continue
+
+        spike_1 = signal[signal >= shift] - shift
+        spike_2 = signal[signal < t_stop]
+        n_a, n_b = len(spike_1), len(spike_2)
+        if n_a == 0 or n_b == 0:
+            acf[k] = 0.0
+            continue
+
+        _, t_a = sttc_calculate_t_fast(spike_1, n_a, sttc_dt_, 0, t_stop, verbose_)
+        _, t_b = sttc_calculate_t_fast(spike_2, n_b, sttc_dt_, 0, t_stop, verbose_)
+        p_a = sttc_calculate_p_fast(spike_1, spike_2, n_a, n_b, sttc_dt_) / n_a
+        p_b = sttc_calculate_p_fast(spike_2, spike_1, n_b, n_a, sttc_dt_) / n_b
+
+        d1 = 1.0 - p_a * t_b
+        d2 = 1.0 - p_b * t_a
+        t1 = (p_a - t_b) / d1 if abs(d1) > 1e-10 else np.nan
+        t2 = (p_b - t_a) / d2 if abs(d2) > 1e-10 else np.nan
+        acf[k] = float(0.5 * (t1 + t2))
+
+    return acf
+
+
+def acf_sttc_trial_concat(spike_train_l_: list, n_lags_: int, lag_shift_: int, sttc_dt_: int,
+                          trial_len_: int, zero_padding_len_: int, verbose_: bool = True) -> np.ndarray:
+    """
+    Computes the autocorrelation function (ACF) using the Spike Time Tiling Coefficient (STTC)
+    across concatenated spike train trials. Each trial is zero-padded before concatenation to
+    prevent artificial correlations across trial boundaries. ACF is computed by iteratively
+    shifting spike times within each trial.
+    T term (absolute time) is calculated for trials, summed up and divided by the signal len(sum of trial len
+    without zero padding). T is calculated per time lag (on shifted trials).
+
+    :param spike_train_l_: list of spike trains, every element of the list contains spikes from 1 trial, length of the
+    list is equal to the number of trials. Spike times are realigned (each trial starts at time 0).
+    :param n_lags_: int, number of lags.
+    :param lag_shift_: int, shift for a time lag (in time points).
+    :param sttc_dt_: int, dt parameter for STTC calculation (in time points).
+    :param trial_len_: int, len of a trial (in time points). All trials have the same length.
+    :param zero_padding_len_: int, len of zero padding (in time points).
+    :param verbose_: bool, default False, diagnostic printout if True, silent otherwise
+    :return: 1d array, autocorrelation function.
+    """
+
+    def concatenate_trials_with_padding(spike_train_l, padding_len):
+        concatenated = np.asarray(spike_train_l[0])
+        for idx_spike_train, spike_train in enumerate(spike_train_l[1:], start=1):
+            concatenated = np.hstack((concatenated, np.asarray(spike_train) + idx_spike_train * padding_len))
+        return concatenated
+
+    def calculate_t_term(spike_train_l, trial_len, dt, verbose):
+        abs_time_sum = sum(sttc_calculate_t(spike_train, len(spike_train), dt, 0, trial_len, verbose)[0]
+                           for spike_train in spike_train_l)
+        return abs_time_sum / (len(spike_train_l) * trial_len)
+
+    if verbose_:
+        print('Processing {} trials: n lags {}, lag shift {}, sttc dt {}, zero padding len {}'.
+              format(len(spike_train_l_), n_lags_, lag_shift_, sttc_dt_, zero_padding_len_))
+
+    # calculate for the non-shifted signal (lag 0)
+    spike_train_concat = concatenate_trials_with_padding(spike_train_l_, zero_padding_len_)
+    time_proc_sum = calculate_t_term(spike_train_l_, trial_len_, sttc_dt_, verbose_)
+    sttc_no_shift = sttc_fixed_2t(spike_train_concat, spike_train_concat, dt_=sttc_dt_,
+                                  t_a_=time_proc_sum, t_b_=time_proc_sum, verbose_=verbose_)
+    acf_l = [sttc_no_shift]
+
+    # generate signal shifts
+    if lag_shift_ * n_lags_ == trial_len_:
+        shifts_l = np.linspace(lag_shift_, lag_shift_ * (n_lags_ - 1), n_lags_ - 1).astype(int)
+    else:
+        shifts_l = np.linspace(lag_shift_, lag_shift_ * n_lags_, n_lags_).astype(int)
+    if verbose_:
+        print('Generated lag shifts: {}'.format(shifts_l))
+
+    # calculated for shifted signal
+    for shift in shifts_l:
+        if verbose_:
+            print('Calculating sttc for lag shift {}'.format(shift))
+        # Get shifted spike trains
+        spike_train_1_shifted_l, spike_train_2_shifted_l = [], []
+        for idx, trial in enumerate(spike_train_l_, start=0):
+            spike_train_1_shifted_l.append(list(trial[trial >= shift] - shift))
+            spike_train_2_shifted_l.append(list(trial[trial < trial_len_ - shift]))
+        # Concatenate shifted spike trains
+        spike_trial_1_concat = concatenate_trials_with_padding(spike_train_1_shifted_l, zero_padding_len_)
+        spike_trial_2_concat = concatenate_trials_with_padding(spike_train_2_shifted_l, zero_padding_len_)
+        if verbose_:
+            print('spike_1 {}, spike_2 {}'.format(spike_trial_1_concat.shape, spike_trial_2_concat.shape))
+            print(spike_trial_1_concat)
+            print(spike_trial_2_concat)
+        # Calculate T term for sttc
+        time_prop_sum_shift_1 = calculate_t_term(spike_train_1_shifted_l, trial_len_ - shift, sttc_dt_, verbose_)
+        time_prop_sum_shift_2 = calculate_t_term(spike_train_2_shifted_l, trial_len_ - shift, sttc_dt_, verbose_)
+        # Calculate sttc for the shifted signals
+        isttc = sttc_fixed_2t(spike_trial_1_concat, spike_trial_2_concat, dt_=sttc_dt_,
+                              t_a_=time_prop_sum_shift_1, t_b_=time_prop_sum_shift_2, verbose_=verbose_)
+        acf_l.append(isttc)
+
+    return acf_l
+
+
+def get_lag_arrays(spike_train_l_: list, lag_1_idx_: int, lag_2_idx_: int, lag_shift_: int, zero_padding_len_: int):
+    """
+    Prepares spike arrays for acf_sttc_trial_avg.
+
+    :param spike_train_l_: list of spike trains, every element of the list contains spikes from 1 trial, length of the
+    list is equal to the number of trials. Spike times are realigned (each trial starts at time 0).
+    :param lag_1_idx_: int, index for the first lag.
+    :param lag_2_idx_: int, index for the first lag.
+    :param lag_shift_: int, shift for a time lag (in time points)
+    :param zero_padding_len_: int, len of zero padding (in time points).
+    :return: Two 1D arrays containing spike times for lag 1 and lag 2.
+    """
+
+    def extract_lag(spike_train: np.ndarray, lag_idx: int, lag_shift: int) -> np.ndarray:
+        """Extract spikes corresponding to a specific lag."""
+        start = lag_idx * lag_shift
+        end = start + lag_shift
+        return spike_train[(spike_train > start) & (spike_train <= end)]
+
+    def add_spacing(lag_list: list, spacing: int) -> list:
+        """Add zero-padding spacing to lag arrays."""
+        return [lag + i * spacing for i, lag in enumerate(lag_list)]
+
+    # Extract spikes for both lags
+    first_lag_l = [extract_lag(trial, lag_1_idx_, lag_shift_) for trial in spike_train_l_]
+    second_lag_l = [extract_lag(trial, lag_2_idx_, lag_shift_) for trial in spike_train_l_]
+
+    # Add padding zeros
+    first_lag_spaced = add_spacing(first_lag_l, zero_padding_len_)
+    second_lag_spaced = add_spacing(second_lag_l, zero_padding_len_)
+
+    # Flatten arrays to 1D
+    lag1_l = np.hstack(first_lag_spaced).tolist() if first_lag_spaced else []
+    lag2_l = np.hstack(second_lag_spaced).tolist() if second_lag_spaced else []
+    return lag1_l, lag2_l
+
+
+def acf_sttc_trial_avg(spike_train_l_: list, n_lags_: int, lag_shift_: int, sttc_dt_: int, zero_padding_len_: int,
+                       verbose_: bool = True):
+    """
+    Trial averaged autocorrelation using STTC. T term is calculated as in sttc_trail_concat, "trials" are chunks of
+    lag_shift size. The length of the signal for T term calc is sum of all chunks (no zero padding in T term).
+
+    :param spike_train_l_: list of spike trains, every element of the list contains spikes from 1 trial, length of the
+    list is equal to the number of trials. Spike times are realigned (each trial starts at time 0).
+    :param n_lags_: int, number of lags
+    :param lag_shift_: int, shift for a time lag (in time points)
+    :param sttc_dt_: int, dt parameter for STTC calculation
+    :param zero_padding_len_: int, len of zero padding (in time points).
+    :param verbose_: bool, default False, diagnostic printout if True, silent otherwise
+    :return: 2d autocorrelation matrix n_lags x n_lags, 1d array, autocorrelation function.
+    """
+    def extract_lag(spike_train: np.ndarray, lag_idx: int, lag_shift: int) -> np.ndarray:
+        """Extract spikes corresponding to a specific lag."""
+        start = lag_idx * lag_shift
+        end = start + lag_shift
+        return spike_train[(spike_train > start) & (spike_train <= end)]
+
+    def calculate_t_term(spike_train_l, trial_len, dt, verbose):
+        abs_time_sum = sum(sttc_calculate_t(spike_train, len(spike_train), dt, 0, trial_len, verbose)[0]
+                           for spike_train in spike_train_l)
+        return abs_time_sum / (len(spike_train_l) * trial_len)
+
+    if verbose_:
+        print('Processing {} trials: n lags {}, lag shift {}, sttc dt {}, zero padding len {}'.
+              format(len(spike_train_l_), n_lags_, lag_shift_, sttc_dt_, zero_padding_len_))
+    acf_matrix = np.zeros((n_lags_, n_lags_))
+
+    for i in np.arange(n_lags_ - 1):
+        for j in np.arange(i + 1, n_lags_):  # filling i-th row
+            # get arrays for T term calculation - without zero padding
+            # Extract spikes for both lags
+            first_lag_l = [extract_lag(trial, i, lag_shift_) for trial in spike_train_l_]
+            second_lag_l = [extract_lag(trial, j, lag_shift_) for trial in spike_train_l_]
+            first_lag_l_aligned = [trial - lag_shift_ * i for trial in first_lag_l]
+            first_lag_2_aligned = [trial - lag_shift_ * j for trial in second_lag_l]
+            l1_t = calculate_t_term(first_lag_l_aligned, lag_shift_, sttc_dt_, verbose_)
+            l2_t = calculate_t_term(first_lag_2_aligned, lag_shift_, sttc_dt_, verbose_)
+
+            # get arrays for sttc - with zero padding
+            lag_1_spikes_l, lag_2_spikes_l = get_lag_arrays(spike_train_l_, i, j,
+                                                            lag_shift_=lag_shift_, zero_padding_len_=zero_padding_len_)
+            l1_aligned = [spike - lag_shift_ * i for spike in lag_1_spikes_l]
+            l2_aligned = [spike - lag_shift_ * j for spike in lag_2_spikes_l]
+            sttc_lag = sttc_fixed_2t(l1_aligned, l2_aligned, sttc_dt_, t_a_=l1_t, t_b_=l2_t, verbose_=verbose_)
+            acf_matrix[i, j] = sttc_lag
+
+    np.fill_diagonal(acf_matrix, 1)
+
+    acf_average = np.zeros((n_lags_,))
+    for i in range(n_lags_):
+        acf_average[i] = np.nanmean(np.diag(acf_matrix, k=i))
+
+    return acf_matrix, acf_average
+
+
+
+
+
+
