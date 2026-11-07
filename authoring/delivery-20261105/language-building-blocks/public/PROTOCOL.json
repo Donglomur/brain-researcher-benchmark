@@ -1,0 +1,196 @@
+{
+  "schema": "language_building_blocks_v1",
+  "task_id": "PAPER-ROOT-ADD-001",
+  "sessions": [
+    {
+      "id": "p1_1",
+      "person": "p1",
+      "time_bins": 24010,
+      "units": 33,
+      "word_rows": 239,
+      "llm_layers": 33
+    },
+    {
+      "id": "p1_2",
+      "person": "p1",
+      "time_bins": 17371,
+      "units": 39,
+      "word_rows": 417,
+      "llm_layers": 33
+    },
+    {
+      "id": "p2_1",
+      "person": "p2",
+      "time_bins": 24012,
+      "units": 19,
+      "word_rows": 144,
+      "llm_layers": 33
+    },
+    {
+      "id": "p2_2",
+      "person": "p2",
+      "time_bins": 24011,
+      "units": 22,
+      "word_rows": 214,
+      "llm_layers": 33
+    },
+    {
+      "id": "p3_1",
+      "person": "p3",
+      "time_bins": 24020,
+      "units": 38,
+      "word_rows": 663,
+      "llm_layers": 33
+    },
+    {
+      "id": "p3_2",
+      "person": "p3",
+      "time_bins": 48040,
+      "units": 55,
+      "word_rows": 920,
+      "llm_layers": 33
+    },
+    {
+      "id": "p4_1",
+      "person": "p4",
+      "time_bins": 72051,
+      "units": 66,
+      "word_rows": 501,
+      "llm_layers": 33
+    },
+    {
+      "id": "p5_1",
+      "person": "p5",
+      "time_bins": 36777,
+      "units": 45,
+      "word_rows": 1249,
+      "llm_layers": 33
+    },
+    {
+      "id": "p5_2",
+      "person": "p5",
+      "time_bins": 72050,
+      "units": 37,
+      "word_rows": 1173,
+      "llm_layers": 33
+    },
+    {
+      "id": "p6_1",
+      "person": "p6",
+      "time_bins": 24010,
+      "units": 17,
+      "word_rows": 118,
+      "llm_layers": 33
+    },
+    {
+      "id": "p7_1",
+      "person": "p7",
+      "time_bins": 72052,
+      "units": 25,
+      "word_rows": 641,
+      "llm_layers": 33
+    },
+    {
+      "id": "p7_2",
+      "person": "p7",
+      "time_bins": 144111,
+      "units": 22,
+      "word_rows": 417,
+      "llm_layers": 33
+    },
+    {
+      "id": "p8_1",
+      "person": "p8",
+      "time_bins": 24012,
+      "units": 82,
+      "word_rows": 1382,
+      "llm_layers": 33
+    },
+    {
+      "id": "p8_2",
+      "person": "p8",
+      "time_bins": 24011,
+      "units": 67,
+      "word_rows": 2382,
+      "llm_layers": 33
+    }
+  ],
+  "bin_seconds": 0.1,
+  "pca_components": 30,
+  "native_ridge_alpha": 0.01,
+  "native_lags": [
+    -20,
+    -19,
+    -18,
+    -17,
+    -16,
+    -15,
+    -14,
+    -13,
+    -12,
+    -11,
+    -10,
+    -9,
+    -8,
+    -7,
+    -6,
+    -5,
+    -4,
+    -3,
+    -2,
+    -1,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "native_lexical_lags": [
+    -3,
+    -2,
+    -1
+  ],
+  "native_control_lag": -10,
+  "native_shuffle_seed": 20,
+  "prospective": {
+    "folds": 5,
+    "lag": -10,
+    "inner_folds": 3,
+    "alpha_grid": [
+      0.01,
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "arms": [
+      "candidate",
+      "context",
+      "lexical",
+      "random_token",
+      "clock"
+    ],
+    "support": "all-three-lexical-family first-component non-NaN intersection; complete named sessions, no outcome exclusions",
+    "target": "all released session-specific units; centered3-bin mean with boundary exclusion",
+    "primary": "equal-person mean of within-person session mean of per-unit Pearson; all unit correlations must be defined for primary",
+    "ties": "larger alpha, then smaller feature-option index",
+    "feature_basis": "publisher global PCA, fixed and transductive; no raw text or new models"
+  },
+  "native_primary": "equal-person/session mean absolute unit-context correlation error over full40x33 support; undefined trusted support makes primary null",
+  "no_binary_success_threshold": true
+}

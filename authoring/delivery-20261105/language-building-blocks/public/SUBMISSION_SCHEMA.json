@@ -1,0 +1,1102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Language central panel submission manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "mode",
+    "protocol_sha256",
+    "design_sha256",
+    "files"
+  ],
+  "properties": {
+    "schema": {
+      "const": "language_submission_v1"
+    },
+    "mode": {
+      "enum": [
+        "native",
+        "prediction"
+      ]
+    },
+    "protocol_sha256": {
+      "const": "4245db34f8eb38b2697fca40f82421e98ca5d6a0f569eeb085cf8aa2238241d9"
+    },
+    "design_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "path",
+          "bytes",
+          "sha256"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 33554432
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "case_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "x-runtime_contract": {
+    "native_file_ids": [
+      "p1_1",
+      "p1_2",
+      "p2_1",
+      "p2_2",
+      "p3_1",
+      "p3_2",
+      "p4_1",
+      "p5_1",
+      "p5_2",
+      "p6_1",
+      "p7_1",
+      "p7_2",
+      "p8_1",
+      "p8_2"
+    ],
+    "prediction_file_ids": [
+      "p1_1_f0",
+      "p1_1_f1",
+      "p1_1_f2",
+      "p1_1_f3",
+      "p1_1_f4",
+      "p1_2_f0",
+      "p1_2_f1",
+      "p1_2_f2",
+      "p1_2_f3",
+      "p1_2_f4",
+      "p2_1_f0",
+      "p2_1_f1",
+      "p2_1_f2",
+      "p2_1_f3",
+      "p2_1_f4",
+      "p2_2_f0",
+      "p2_2_f1",
+      "p2_2_f2",
+      "p2_2_f3",
+      "p2_2_f4",
+      "p3_1_f0",
+      "p3_1_f1",
+      "p3_1_f2",
+      "p3_1_f3",
+      "p3_1_f4",
+      "p3_2_f0",
+      "p3_2_f1",
+      "p3_2_f2",
+      "p3_2_f3",
+      "p3_2_f4",
+      "p4_1_f0",
+      "p4_1_f1",
+      "p4_1_f2",
+      "p4_1_f3",
+      "p4_1_f4",
+      "p5_1_f0",
+      "p5_1_f1",
+      "p5_1_f2",
+      "p5_1_f3",
+      "p5_1_f4",
+      "p5_2_f0",
+      "p5_2_f1",
+      "p5_2_f2",
+      "p5_2_f3",
+      "p5_2_f4",
+      "p6_1_f0",
+      "p6_1_f1",
+      "p6_1_f2",
+      "p6_1_f3",
+      "p6_1_f4",
+      "p7_1_f0",
+      "p7_1_f1",
+      "p7_1_f2",
+      "p7_1_f3",
+      "p7_1_f4",
+      "p7_2_f0",
+      "p7_2_f1",
+      "p7_2_f2",
+      "p7_2_f3",
+      "p7_2_f4",
+      "p8_1_f0",
+      "p8_1_f1",
+      "p8_1_f2",
+      "p8_1_f3",
+      "p8_1_f4",
+      "p8_2_f0",
+      "p8_2_f1",
+      "p8_2_f2",
+      "p8_2_f3",
+      "p8_2_f4"
+    ],
+    "native_arrays": {
+      "p1_1": {
+        "population": [
+          40,
+          33
+        ],
+        "unit": [
+          33,
+          40,
+          33
+        ],
+        "time_shuffle": [
+          40,
+          33
+        ],
+        "random_token": [
+          1,
+          33
+        ],
+        "sentence_swap": [
+          1,
+          33
+        ],
+        "ngram1": [
+          1,
+          33
+        ],
+        "ngram3": [
+          1,
+          33
+        ],
+        "ngram5": [
+          1,
+          33
+        ],
+        "ngram7": [
+          1,
+          33
+        ],
+        "ngram10": [
+          1,
+          33
+        ],
+        "sem_syn": [
+          3,
+          1
+        ],
+        "sem_syn_shuffle": [
+          3,
+          1
+        ],
+        "word2vec": [
+          3,
+          1
+        ],
+        "word2vec_shuffle": [
+          3,
+          1
+        ],
+        "syn": [
+          3,
+          1
+        ],
+        "syn_shuffle": [
+          3,
+          1
+        ]
+      },
+      "p1_2": {
+        "population": [
+          40,
+          33
+        ],
+        "unit": [
+          39,
+          40,
+          33
+        ],
+        "time_shuffle": [
+          40,
+          33
+        ],
+        "random_token": [
+          1,
+          33
+        ],
+        "sentence_swap": [
+          1,
+          33
+        ],
+        "ngram1": [
+          1,
+          33
+        ],
+        "ngram3": [
+          1,
+          33
+        ],
+        "ngram5": [
+          1,
+          33
+        ],
+        "ngram7": [
+          1,
+          33
+        ],
+        "ngram10": [
+          1,
+          33
+        ],
+        "sem_syn": [
+          3,
+          1
+        ],
+        "sem_syn_shuffle": [
+          3,
+          1
+        ],
+        "word2vec": [
+          3,
+          1
+        ],
+        "word2vec_shuffle": [
+          3,
+          1
+        ],
+        "syn": [
+          3,
+          1
+        ],
+        "syn_shuffle": [
+          3,
+          1
+        ]
+      },
+      "p2_1": {
+        "population": [
+          40,
+          33
+        ],
+        "unit": [
+          19,
+          40,
+          33
+        ],
+        "time_shuffle": [
+          40,
+          33
+        ],
+        "random_token": [
+          1,
+          33
+        ],
+        "sentence_swap": [
+          1,
+          33
+        ],
+        "ngram1": [
+          1,
+          33
+        ],
+        "ngram3": [
+          1,
+          33
+        ],
+        "ngram5": [
+          1,
+          33
+        ],
+        "ngram7": [
+          1,
+          33
+        ],
+        "ngram10": [
+          1,
+          33
+        ],
+        "sem_syn": [
+          3,
+          1
+        ],
+        "sem_syn_shuffle": [
+          3,
+          1
+        ],
+        "word2vec": [
+          3,
+          1
+        ],
+        "word2vec_shuffle": [
+          3,
+          1
+        ],
+        "syn": [
+          3,
+          1
+        ],
+        "syn_shuffle": [
+          3,
+          1
+        ]
+      },
+      "p2_2": {
+        "population": [
+          40,
+          33
+        ],
+        "unit": [
+          22,
+          40,
+          33
+        ],
+        "time_shuffle": [
+          40,
+          33
+        ],
+        "random_token": [
+          1,
+          33
+        ],
+        "sentence_swap": [
+          1,
+          33
+        ],
+        "ngram1": [
+          1,
+          33
+        ],
+        "ngram3": [
+          1,
+          33
+        ],
+        "ngram5": [
+          1,
+          33
+        ],
+        "ngram7": [
+          1,
+          33
+        ],
+        "ngram10": [
+          1,
+          33
+        ],
+        "sem_syn": [
+          3,
+          1
+        ],
+        "sem_syn_shuffle": [
+          3,
+          1
+        ],
+        "word2vec": [
+          3,
+          1
+        ],
+        "word2vec_shuffle": [
+          3,
+          1
+        ],
+        "syn": [
+          3,
+          1
+        ],
+        "syn_shuffle": [
+          3,
+          1
+        ]
+      },
+      "p3_1": {
+        "population": [
+          40,
+          33
+        ],
+        "unit": [
+          38,
+          40,
+          33
+        ],
+        "time_shuffle": [
+          40,
+          33
+        ],
+        "random_token": [
+          1,
+          33
+        ],
+        "sentence_swap": [
+          1,
+          33
+        ],
+        "ngram1": [
+          1,
+          33
+        ],
+        "ngram3": [
+          1,
+          33
+        ],
+        "ngram5": [
+          1,
+          33
+        ],
+        "ngram7": [
+          1,
+          33
+        ],
+        "ngram10": [
+          1,
+          33
+        ],
+        "sem_syn": [
+          3,
+          1
+        ],
+        "sem_syn_shuffle": [
+          3,
+          1
+        ],
+        "word2vec": [
+          3,
+          1
+        ],
+        "word2vec_shuffle": [
+          3,
+          1
+        ],
+        "syn": [
+          3,
+          1
+        ],
+        "syn_shuffle": [
+          3,
+          1
+        ]
+      },
+      "p3_2": {
+        "population": [
+          40,
+          33
+        ],
+        "unit": [
+          55,
+          40,
+          33
+        ],
+        "time_shuffle": [
+          40,
+          33
+        ],
+        "random_token": [
+          1,
+          33
+        ],
+        "sentence_swap": [
+          1,
+          33
+        ],
+        "ngram1": [
+          1,
+          33
+        ],
+        "ngram3": [
+          1,
+          33
+        ],
+        "ngram5": [
+          1,
+          33
+        ],
+        "ngram7": [
+          1,
+          33
+        ],
+        "ngram10": [
+          1,
+          33
+        ],
+        "sem_syn": [
+          3,
+          1
+        ],
+        "sem_syn_shuffle": [
+          3,
+          1
+        ],
+        "word2vec": [
+          3,
+          1
+        ],
+        "word2vec_shuffle": [
+          3,
+          1
+        ],
+        "syn": [
+          3,
+          1
+        ],
+        "syn_shuffle": [
+          3,
+          1
+        ]
+      },
+      "p4_1": {
+        "population": [
+          40,
+          33
+        ],
+        "unit": [
+          66,
+          40,
+          33
+        ],
+        "time_shuffle": [
+          40,
+          33
+        ],
+        "random_token": [
+          1,
+          33
+        ],
+        "sentence_swap": [
+          1,
+          33
+        ],
+        "ngram1": [
+          1,
+          33
+        ],
+        "ngram3": [
+          1,
+          33
+        ],
+        "ngram5": [
+          1,
+          33
+        ],
+        "ngram7": [
+          1,
+          33
+        ],
+        "ngram10": [
+          1,
+          33
+        ],
+        "sem_syn": [
+          3,
+          1
+        ],
+        "sem_syn_shuffle": [
+          3,
+          1
+        ],
+        "word2vec": [
+          3,
+          1
+        ],
+        "word2vec_shuffle": [
+          3,
+          1
+        ],
+        "syn": [
+          3,
+          1
+        ],
+        "syn_shuffle": [
+          3,
+          1
+        ]
+      },
+      "p5_1": {
+        "population": [
+          40,
+          33
+        ],
+        "unit": [
+          45,
+          40,
+          33
+        ],
+        "time_shuffle": [
+          40,
+          33
+        ],
+        "random_token": [
+          1,
+          33
+        ],
+        "sentence_swap": [
+          1,
+          33
+        ],
+        "ngram1": [
+          1,
+          33
+        ],
+        "ngram3": [
+          1,
+          33
+        ],
+        "ngram5": [
+          1,
+          33
+        ],
+        "ngram7": [
+          1,
+          33
+        ],
+        "ngram10": [
+          1,
+          33
+        ],
+        "sem_syn": [
+          3,
+          1
+        ],
+        "sem_syn_shuffle": [
+          3,
+          1
+        ],
+        "word2vec": [
+          3,
+          1
+        ],
+        "word2vec_shuffle": [
+          3,
+          1
+        ],
+        "syn": [
+          3,
+          1
+        ],
+        "syn_shuffle": [
+          3,
+          1
+        ]
+      },
+      "p5_2": {
+        "population": [
+          40,
+          33
+        ],
+        "unit": [
+          37,
+          40,
+          33
+        ],
+        "time_shuffle": [
+          40,
+          33
+        ],
+        "random_token": [
+          1,
+          33
+        ],
+        "sentence_swap": [
+          1,
+          33
+        ],
+        "ngram1": [
+          1,
+          33
+        ],
+        "ngram3": [
+          1,
+          33
+        ],
+        "ngram5": [
+          1,
+          33
+        ],
+        "ngram7": [
+          1,
+          33
+        ],
+        "ngram10": [
+          1,
+          33
+        ],
+        "sem_syn": [
+          3,
+          1
+        ],
+        "sem_syn_shuffle": [
+          3,
+          1
+        ],
+        "word2vec": [
+          3,
+          1
+        ],
+        "word2vec_shuffle": [
+          3,
+          1
+        ],
+        "syn": [
+          3,
+          1
+        ],
+        "syn_shuffle": [
+          3,
+          1
+        ]
+      },
+      "p6_1": {
+        "population": [
+          40,
+          33
+        ],
+        "unit": [
+          17,
+          40,
+          33
+        ],
+        "time_shuffle": [
+          40,
+          33
+        ],
+        "random_token": [
+          1,
+          33
+        ],
+        "sentence_swap": [
+          1,
+          33
+        ],
+        "ngram1": [
+          1,
+          33
+        ],
+        "ngram3": [
+          1,
+          33
+        ],
+        "ngram5": [
+          1,
+          33
+        ],
+        "ngram7": [
+          1,
+          33
+        ],
+        "ngram10": [
+          1,
+          33
+        ],
+        "sem_syn": [
+          3,
+          1
+        ],
+        "sem_syn_shuffle": [
+          3,
+          1
+        ],
+        "word2vec": [
+          3,
+          1
+        ],
+        "word2vec_shuffle": [
+          3,
+          1
+        ],
+        "syn": [
+          3,
+          1
+        ],
+        "syn_shuffle": [
+          3,
+          1
+        ]
+      },
+      "p7_1": {
+        "population": [
+          40,
+          33
+        ],
+        "unit": [
+          25,
+          40,
+          33
+        ],
+        "time_shuffle": [
+          40,
+          33
+        ],
+        "random_token": [
+          1,
+          33
+        ],
+        "sentence_swap": [
+          1,
+          33
+        ],
+        "ngram1": [
+          1,
+          33
+        ],
+        "ngram3": [
+          1,
+          33
+        ],
+        "ngram5": [
+          1,
+          33
+        ],
+        "ngram7": [
+          1,
+          33
+        ],
+        "ngram10": [
+          1,
+          33
+        ],
+        "sem_syn": [
+          3,
+          1
+        ],
+        "sem_syn_shuffle": [
+          3,
+          1
+        ],
+        "word2vec": [
+          3,
+          1
+        ],
+        "word2vec_shuffle": [
+          3,
+          1
+        ],
+        "syn": [
+          3,
+          1
+        ],
+        "syn_shuffle": [
+          3,
+          1
+        ]
+      },
+      "p7_2": {
+        "population": [
+          40,
+          33
+        ],
+        "unit": [
+          22,
+          40,
+          33
+        ],
+        "time_shuffle": [
+          40,
+          33
+        ],
+        "random_token": [
+          1,
+          33
+        ],
+        "sentence_swap": [
+          1,
+          33
+        ],
+        "ngram1": [
+          1,
+          33
+        ],
+        "ngram3": [
+          1,
+          33
+        ],
+        "ngram5": [
+          1,
+          33
+        ],
+        "ngram7": [
+          1,
+          33
+        ],
+        "ngram10": [
+          1,
+          33
+        ],
+        "sem_syn": [
+          3,
+          1
+        ],
+        "sem_syn_shuffle": [
+          3,
+          1
+        ],
+        "word2vec": [
+          3,
+          1
+        ],
+        "word2vec_shuffle": [
+          3,
+          1
+        ],
+        "syn": [
+          3,
+          1
+        ],
+        "syn_shuffle": [
+          3,
+          1
+        ]
+      },
+      "p8_1": {
+        "population": [
+          40,
+          33
+        ],
+        "unit": [
+          82,
+          40,
+          33
+        ],
+        "time_shuffle": [
+          40,
+          33
+        ],
+        "random_token": [
+          1,
+          33
+        ],
+        "sentence_swap": [
+          1,
+          33
+        ],
+        "ngram1": [
+          1,
+          33
+        ],
+        "ngram3": [
+          1,
+          33
+        ],
+        "ngram5": [
+          1,
+          33
+        ],
+        "ngram7": [
+          1,
+          33
+        ],
+        "ngram10": [
+          1,
+          33
+        ],
+        "sem_syn": [
+          3,
+          1
+        ],
+        "sem_syn_shuffle": [
+          3,
+          1
+        ],
+        "word2vec": [
+          3,
+          1
+        ],
+        "word2vec_shuffle": [
+          3,
+          1
+        ],
+        "syn": [
+          3,
+          1
+        ],
+        "syn_shuffle": [
+          3,
+          1
+        ]
+      },
+      "p8_2": {
+        "population": [
+          40,
+          33
+        ],
+        "unit": [
+          67,
+          40,
+          33
+        ],
+        "time_shuffle": [
+          40,
+          33
+        ],
+        "random_token": [
+          1,
+          33
+        ],
+        "sentence_swap": [
+          1,
+          33
+        ],
+        "ngram1": [
+          1,
+          33
+        ],
+        "ngram3": [
+          1,
+          33
+        ],
+        "ngram5": [
+          1,
+          33
+        ],
+        "ngram7": [
+          1,
+          33
+        ],
+        "ngram10": [
+          1,
+          33
+        ],
+        "sem_syn": [
+          3,
+          1
+        ],
+        "sem_syn_shuffle": [
+          3,
+          1
+        ],
+        "word2vec": [
+          3,
+          1
+        ],
+        "word2vec_shuffle": [
+          3,
+          1
+        ],
+        "syn": [
+          3,
+          1
+        ],
+        "syn_shuffle": [
+          3,
+          1
+        ]
+      }
+    },
+    "native_keys": "value_NAME float32/64 + defined_NAME uint8 integer0/1; undefined value0; all sixteen fields",
+    "prediction_keys": [
+      "prediction"
+    ],
+    "prediction_shape": "case.rows \u00d7 all session units, float32/64 finite",
+    "candidate_metrics_accepted": false,
+    "binary_success_threshold": null
+  }
+}
