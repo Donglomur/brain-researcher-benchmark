@@ -1,0 +1,43 @@
+# Mapping neuronal language building blocks
+
+Canonical ID: **PAPER-ROOT-ADD-001**. This is one task with two explicitly different interfaces. It covers the released central model-to-neuron predictivity panel, not the whole paper's linguistic selectivity, decoding, LFP, anatomical localization or causal claims.
+
+The source is Cai et al., *Mapping the neuronal building blocks of human language with language models*, Nature (2026), DOI [10.1038/s41586-026-10691-5](https://doi.org/10.1038/s41586-026-10691-5), with [Zenodo release 20128462](https://zenodo.org/records/20128462). The unchanged article is supplied for local research under its CC BY-NC-ND terms; data/code are separately declared CC BY 4.0. No public redistribution approval is implied. Spoken strings are withheld by the release; no transcript reconstruction, model download or new embeddings are required.
+
+## Complete scope and units
+
+Use all 14 sessions from all eight people in PROTOCOL.json: p1_1, p1_2, p2_1, p2_2, p3_1, p3_2, p4_1, p5_1, p5_2, p6_1, p7_1, p7_2, p8_1, p8_2. Header census establishes 567 session-specific neuron columns, 100-ms bins, 30 supplied PCA components and 33 LLM layers. These are not 567 independent people, and separately sorted sessions do not establish repeated neuron identities. No person/session/unit/layer is selected using response outcomes. The artifact interfaces preserve all named units.
+
+Inputs include complete firing-rate and speaker matrices, word-onset/offset and sentence qid metadata, full-context Vicuna, random-token Vicuna, context lengths 1/3/5/7/10, combined semantic/syntactic, word2vec and syntactic features. Supplied PCA was computed globally before neural sentence validation; it is a fixed transductive feature basis. No claim of training-only PCA or deployment on new text follows. Speaker column zero is used even when a second column exists. Header metadata does not verify actual arrays or numerical parity.
+
+## Native reconstruction
+
+Receive the complete released central panel. Emit one NPZ per session plus submission.json. Exact keys, shapes, masks and IDs are in SUBMISSION_SCHEMA.json and protocol.py. This is artifact reconstruction: matching values does not attest estimator execution.
+
+The native recipe uses alpha .01 ridge with intercept, leave-one-sentence-out fits, and pooled out-of-fold Pearson correlation, rather than mean fold correlation. Targets have the source's centered three-bin cumulative-sum smoothing and zero endpoints. Population targets average neurons before smoothing. Unit targets smooth each neuron. The full-context population, unit and time-permuted curves use all 40 lags -2.0 to +1.9 seconds, including the source's asymmetric lag/speaker mask and zero padding. Positive lag shifts features/qids while keeping the response-time speaker mask; negative lag shifts responses. See SOURCE_METHODS.md for precise support.
+
+All-layer random-token and same-length sentence-swap controls and all five context-length families use -1 second. The three lexical families and their time-permuted controls use -0.3/-0.2/-0.1 seconds. sem_syn and word2vec exclude words whose first PCA component is NaN before rasterization; syn uses all rows. The 2D lexical arrays gain a singleton layer without changing values. Background covariates equal whole-retained-word means; floor(start*10):floor(end*10) is right-exclusive and later rows overwrite overlaps. Invalid qids use sentinel 99999. All scripts' supplied-PCA branch is used; no unavailable raw-feature fallback is invoked.
+
+Time permutations reset NumPy RandomState(20) separately per session/arm after smoothing. Sentence swapping uses Python Random(20), sorted qid groups, same-length choices excluding self where possible, with replacement across choices and identity for singleton groups. It is not a global derangement, not confined to training folds, and not a clean neural-specific causal null.
+
+For every field provide finite Pearson values in [-1,1] and a uint8 defined mask; encode undefined entries as zero with mask zero. Candidate masks must exactly match the root-bound trusted reference. Primary continuous error is the equal-person mean of within-person session mean absolute error over **every unit × 40 lags × 33 layers**. Any undefined trusted primary element makes the primary null/unscorable; defined-support diagnostics remain. Other fields' MAE, maximum residual and support are reported separately. There is no binary tolerance, paper-level success claim or invented composite reward.
+
+## Prospective purged sentence prediction
+
+This separate task is not the historical analysis. Five chronological sentence folds per session produce 70 isolated episodes. Complete common lexical-support words define matched support for every arm. Responses are every unit's smoothed firing at word-bin minus ten bins (-1 second); padded target boundaries are excluded. Training sentences exclude the held fold. Any training target sharing a raw firing bin with a query target is purged; inner validation applies the same rule. Pooled query rows occur exactly once per session.
+
+For each episode receive only training targets/covariates, query covariates, and case.json. Query targets, other folds' training targets and the operator tree must be absent. The common covariates contain all supplied LLM/lexical families and observed within-sentence position/duration plus absolute session clock. This is retrospective speech reconstruction, not causal future prediction: spoken-word features and centered smoothing may depend on later times. Order/clock information is disclosed; a gain is not automatically neural-content-specific. The scientific unit is the person; models can train on calibration sentences of each held session. This is not zero-shot held-person neural decoding.
+
+Submit a single `prediction` float32/64 array (query rows × all session units) per episode, with the exact case hash in submission.json. No candidate-supplied metric or baseline score is accepted. The trusted scorer pools all five folds, computes per-unit Pearson and equal-person/session averages, and reports paired gains against four **operator-produced and root-bound** baselines: full-context, lexical, random-token and clock. Undefined units produce a null full-support primary, not selective averaging. All 70 candidate files admit before any private numerical file opens.
+
+Baseline source selects a layer/family and alpha from [.01,.1,1,10,100] using three chronological training-sentence folds, training-only standardization and full-unit mean Pearson; ties prefer larger alpha then lower option index. Final refits use only outer-training rows. All LLM layers remain eligible; no query outcomes select a layer, alpha, support or endpoint. The model-to-neuron nuisance comparison is descriptive within these eight exposed participants. No confidence interval, population significance, difficulty or improvement has been established.
+
+## Access and execution boundary
+
+A receives the unchanged paper, these task/schema/protocol/dependency materials and the selected input view. B receives exactly the same plus the curated, unchanged author Python sources in ACCESS.json. Supplied access is controlled; prior knowledge is not. The public directory is a union, **not an A mount**. Stage the explicit A or B allowlist. The private implementation, numerical reference, targets and operator bindings are never initial candidate materials. Article results are shared prior exposure; no hidden-test novelty claim follows.
+
+Native reconstruction exposes the complete neural responses. A solver previously given that native pool, another fold's training targets, or saved reference outputs is not eligible for a hidden-query interpretation on the same panel. The prospective route requires separately enrolled, fresh isolated episodes; its public-source exposure still prevents a claim of unseen population generalization.
+
+No native execution/sandbox controller is supplied here. Staging helpers are deterministic builders. A qualified external owner must enforce fresh per-episode contexts, restricted filesystem access, producer closure before grading, and trusted-baseline provenance. Local source construction alone establishes none of those runtime guarantees.
+
+Full neural/embedding inputs, generated reference and validated numerical environment are currently missing. The complete selected 168 NPY members total 788,596,416 expanded bytes / 418,374,622 compressed bytes before timing files. The existing 100-MB construction allocation only covered authentic source/header metadata. No convenient session, layer or control subset substitutes for the complete panel.
