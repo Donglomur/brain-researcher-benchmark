@@ -7,3 +7,5 @@ The broader overlay contains 505 exact reviewed source/contract/notice files, al
 Actual recordings, derived arrays, held-out answers, operator predictions, participant rosters, acquisition request ledgers and local execution artifacts are omitted. No scientific qualification or model-performance result follows from this publication. See PUBLICATION_SCOPE.md for the limitations.
 
 Subsequent reviewed source changes will be integrated here. The full local development history stays local; this branch starts from the existing public fork base and receives only reviewed source overlays. Licensing notices included in the reviewed sources are retained.
+
+The next reviewed integration adds 64 source files from two subagent batches: the Hundred Models dimension analyses and the iSTTC reproduction/improvement program. See WAVE14_SOURCE_SCOPE.md for component licensing and deliberately missing operator dependencies. The original eight-file OFC export passed 23 author and 7 independent invented correctness controls in a clean directory; this verifies that component only, not the broader benchmark runtime.
