@@ -1,0 +1,49 @@
+{
+  "$comment": "Scorer additionally enforces duplicate-key rejection, exact fullpanel ID coverage, finite nonboolean values, sum1 within1e-6, lexical integer schema_version and256000000-byte cap.",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "predictions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "probabilities": {
+            "items": {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            "maxItems": 39,
+            "minItems": 39,
+            "type": "array"
+          },
+          "query_id": {
+            "pattern": "^[0-9a-f]{24}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query_id",
+          "probabilities"
+        ],
+        "type": "object"
+      },
+      "maxItems": 200000,
+      "minItems": 1,
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "type": "integer"
+    },
+    "task_id": {
+      "const": "NEURAL-089"
+    }
+  },
+  "required": [
+    "schema_version",
+    "task_id",
+    "predictions"
+  ],
+  "type": "object"
+}
