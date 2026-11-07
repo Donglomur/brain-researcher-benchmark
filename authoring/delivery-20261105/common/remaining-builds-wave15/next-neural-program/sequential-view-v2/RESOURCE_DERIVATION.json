@@ -1,0 +1,60 @@
+{
+  "adapter_read_cap_bytes": 4000000,
+  "array_payload_bytes": {
+    "canonical_store": 345600000,
+    "query_view": 6400000,
+    "training_view": 339200000,
+    "v1_54_replicated_complete_fold_views": 18662400000
+  },
+  "array_transport": "Exact100x10x400 C-order little-endian float32 source profile; output128-byte NPY headers. No value conversion or reduction.",
+  "capacity_reserved": false,
+  "full_scope": {
+    "candidate_queries": 21600,
+    "native_phases": 270,
+    "people": 54,
+    "source_phase_arrays": 216
+  },
+  "host_data_read_passes": {
+    "initial_canonical_authentication": 345600000,
+    "other": "bounded pool/gold/source/output metadata and EOF reservations",
+    "per_fold_query_source_gather_plus_output_hash_plus_initial_and_four_after_phase_authentications": 44800000,
+    "per_fold_training_source_gather_plus_output_hash_plus_two_view_authentications": 1356800000,
+    "three_model_hashes_each_fold": "pre-rename,post-rename,final-retirement; at most3*model_cap"
+  },
+  "host_memory": "Transport is streamed but native capture retains bounded model/base64 buffers; hostRSS is not measured bysourcecontrols. Real host/image/cgroup/memory adequacy is an explicit missing runtime prerequisite.",
+  "model_cap_bytes": 536870912,
+  "model_cap_rationale": "512MiB exceeds complete training array plusmetadata, permitting a lossless exemplar policy without forced shrinkage. It is an explicit finite resource profile, not empirical adequacy.",
+  "native_fit": {
+    "holder_memory_bytes": 4294967296,
+    "output_tmpfs_bytes": 553648128,
+    "raw_model_bytes": 536870912,
+    "reply_cap_bytes": 715840000,
+    "response_reservation_bytes": 1000000000
+  },
+  "native_logical_inputs": "One full mounted training input pass +fourquerypasses +one sealed model pass reserved per fold. Native repeated reads/page cache/physical I/O are not measured or capped by this logical allowance.",
+  "native_prediction": {
+    "holder_memory_bytes": 134217728,
+    "output_tmpfs_bytes": 8388608,
+    "raw_output_bytes": 262144,
+    "reply_cap_bytes": 400000,
+    "response_reservation_bytes": 16000000
+  },
+  "new_grant_not_repair_v1_overruns": true,
+  "no_model_accumulation": "One fitmodel renamed in samefold, no extra fitcopy; all model/query/training bodies absent before next fold. Retain receipts and final predictions only.",
+  "observer_read_cap_bytes": 360000000,
+  "observer_seconds": 900,
+  "outer_failure_extra_seconds": 60,
+  "physical_bound_kind": "Conditional policy allowance, not filesystem worst-case proof. Live/terminal allocated-size and20GiBfloor+freshOTHER guards fail closed. Durable retirement precedes next-stagecapacity credit.",
+  "retained_logical_policy_upper_bytes": 1104896000,
+  "retained_phase_cap_bytes": 1610612736,
+  "retained_physical_allowance_bytes": 505716736,
+  "schema": "neural084_sequential_resource_derivation_v2",
+  "scientific_qualification": false,
+  "selected": false,
+  "source_physical_store": "One canonical store already held before selection; existing bytes remain charged in disk occupancy. The stage does not delete or refund canonical data or original MAT files.",
+  "whole_seconds_formula": "54*(fit_seconds+infer_seconds+3*reference_seconds+5*130+240)+2400",
+  "worker_read_cap_bytes": 323719316992,
+  "worker_read_formula": "54*(8*345600000 +4*536870912 +1000000000 +4*16000000)+1000000000",
+  "worker_write_cap_bytes": 47955429248,
+  "worker_write_formula": "54*(345600000+536870912)+270000000+32000000"
+}
