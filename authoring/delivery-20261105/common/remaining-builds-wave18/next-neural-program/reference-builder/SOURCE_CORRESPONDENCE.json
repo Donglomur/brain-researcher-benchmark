@@ -1,0 +1,34 @@
+{
+  "schema": "neural083_reference_source_correspondence_v1",
+  "original": {
+    "path": "authoring/delivery-20261105/neural083/public/reference_program.py",
+    "bytes": 4245,
+    "sha256": "d70f8cb96f6664cd3dd7c3a828b52475188ae6c513bbf0521f4b31ed119804d7"
+  },
+  "successor": {
+    "path": "authoring/delivery-20261105/common/remaining-builds-wave18/next-neural-program/reference-builder/reference_core.py",
+    "bytes": 9711,
+    "sha256": "d6d6c631ab01ce0a62e0343caec8bb927064c19ae2da0bd6b90c1eb0a1916f19"
+  },
+  "same_scientific_operations": [
+    "Training calibration-only mask if any, otherwise every donor; identical chosen-row order and smoothed prior formula.",
+    "Five predeclared folds in0..4 order; the same test/train masks, insufficient class support fallback and early fold-fit ordering.",
+    "Class pooled sample covariance np.cov(flat,rowvar=False,ddof=1); covariance ridge1e-6*trace(total)/20, scipy.linalg.eigh(right,total+ridge*I), eigenvector columns[0,1,-2,-1].",
+    "Feature np.einsum(ntc,ck->ntk), sample variance along axis1/ddof1, strict positive finite variances then natural log. Context mean/std ontraining axis0, zero SD replaced1.",
+    "LDA solverlsqr/shrinkageauto/equalpriors; Platt LogisticRegression C1/lbfgs/max_iter1000/seed83083, n_iter>=1000 refuses beforefinalreadout.",
+    "Full chosen-data final refit occurs after OOF Platt fit; query inference uses only that readout and frozencalibrator. Positiveclass index found from actualclasses ordering."
+  ],
+  "packaging_changes": [
+    "Nested readout closures become serializable source-defined Readout instances; all learned numpy/scikit-learn state stays in the trusted sealed artifact.",
+    "OOF metadata/masks/score bookkeeping uses Python lists. Float decisions are explicitly converted to Pythonfloat, then sklearn receives a2Dlist andintegerlist; the original supplied float64 ndarray andinteger ndarray. Same intended estimator/mathematics, no numerical/byte parity claim.",
+    "Original single-call numerical failures become explicit abstention state duringfit or caught inference errors in parentworker; malformed complete-input metadata refusesbeforefit.",
+    "Original query count/shape checks move to infer; fit receives noqueryoperand. Added complete10600+calibration metadata/sourcegeometry and bounded finite-float32 checks.",
+    "Stdlib pickle is permitted only for this frozen reference own artifact after trusted pin/custody joins; not a safe untrusted serialization format. Parent will inline same core into same __main__ source forfitandinfer."
+  ],
+  "nonclaims": [
+    "No NumPy/SciPy/sklearn import or fit was executed in controls.",
+    "No genuine neural arrays, targets, keys or authentic model/native/scorer calls.",
+    "No historical MATLAB or originalcombinedCLI numerical equivalence, referencecompetence, runtime/scientificqualification.",
+    "Sourcefit/infer split does not by itself prove arbitrarycandidate noqueryadaptation; parentmethodadmission remainsrequired."
+  ]
+}
