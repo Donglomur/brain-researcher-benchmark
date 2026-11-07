@@ -1,0 +1,61 @@
+{
+  "inputs_json": {
+    "fields": [
+      "schema_version",
+      "task_id",
+      "runs"
+    ],
+    "run_fields": [
+      "partition",
+      "group_id",
+      "path",
+      "windows",
+      "bytes",
+      "sha256"
+    ]
+  },
+  "panel_json": {
+    "fields": [
+      "schema_version",
+      "task_id",
+      "query_ids"
+    ],
+    "support": "every eligible event from full held native run"
+  },
+  "prepared_h5": {
+    "attrs": {
+      "sampling_rate_hz": 250,
+      "schema_version": 1,
+      "task_id": "NEURAL-089",
+      "units": "training_channel_standard_deviations"
+    },
+    "ids": "N fixed-byte S24 opaque IDs",
+    "labels": "N int16 0..38 ONLY in training/validation",
+    "windows": "N\u00d7306\u00d7125 little-endian float32, finite, clipped\u00b110"
+  },
+  "privacy": "No transcripts,event/time/duration fields,original run names or source attrs in query HDF5. Separate target/provenance files are operator-only.",
+  "private_targets": {
+    "fields": [
+      "schema_version",
+      "task_id",
+      "panel_sha256",
+      "targets"
+    ],
+    "not_candidate_visible": true,
+    "target_fields": [
+      "query_id",
+      "label"
+    ]
+  },
+  "source_layout": {
+    "attrs": [
+      "sample_frequency",
+      "channel_names",
+      "channel_types"
+    ],
+    "channel_schema": "channel_schema.json",
+    "data": "306\u00d7N float32/float64",
+    "times": "N float32/float64;zero origin250Hz"
+  },
+  "task_id": "NEURAL-089"
+}

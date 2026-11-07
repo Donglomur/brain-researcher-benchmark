@@ -1,0 +1,78 @@
+{
+  "baseline": {
+    "batch_size": 128,
+    "estimator": "SGDClassifier log_loss l2 alpha1e-4 optimal random_state89 shuffleFalse averageFalse",
+    "features": "306channels\u00d7five25sample means",
+    "scaler": "partial_fit training only",
+    "source": "baseline.py",
+    "status": "prospective source; not authorCNN and not empirically fit",
+    "training_passes": 5,
+    "tuning": false
+  },
+  "biological_unit": "one participant subject0; recording runs are within-person partitions",
+  "construction_scope": {
+    "actual_model_fits": 0,
+    "empirical_scores": 0,
+    "full_preparation_run": false,
+    "recording_headers_and_clock_checked": 1
+  },
+  "edition": "2025 phoneme semantics on explicit pinned archive/code snapshot audited2026",
+  "metrics": {
+    "absent_class": "zero, retained in fixed39 denominator",
+    "argmax_ties": "lowest class index",
+    "full_query_support": true,
+    "primary": "macro_f1_39",
+    "scientific_success_threshold": null,
+    "secondary": "accuracy"
+  },
+  "normalization": {
+    "clip": [
+      -10,
+      10
+    ],
+    "fit_scope": "all continuous samples in88 training runs only",
+    "mean": "pooled population per-channel",
+    "output_dtype": "float32",
+    "source_mutation": false,
+    "std": "pooled population ddof0 per-channel"
+  },
+  "provisional_implementation_choices": [
+    "strict input-failure policy replacing loader skips/clamps",
+    "float64 stable pooledmoments thenfloat32 standardized windows",
+    "opaqueID JSON/HDF5 interface",
+    "fixed streamingSGD comparator",
+    "native run split retained without unseen-session/stimulus claim"
+  ],
+  "schema_version": 1,
+  "split": {
+    "not_claimed": [
+      "cross-person generalization",
+      "all-story physical-session holdout",
+      "unseen stimulus chapters"
+    ],
+    "query": [
+      "0",
+      "12",
+      "Sherlock1",
+      "2"
+    ],
+    "run_manifest": "source_assets.json",
+    "train_runs": 88,
+    "validation": [
+      "0",
+      "11",
+      "Sherlock1",
+      "2"
+    ]
+  },
+  "target": {
+    "all_selected_events_required": true,
+    "channels": 306,
+    "classes": "classes.json",
+    "label_rule": "kindphoneme; excludesil/oov_S;segment.split(_)[0]",
+    "source_timing": "int(timemeg*250)",
+    "unknown_class_or_invalid_window": "fail whole preparation",
+    "window_samples": 125
+  },
+  "task_id": "NEURAL-089"
+}

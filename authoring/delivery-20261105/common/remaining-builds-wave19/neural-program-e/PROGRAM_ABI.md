@@ -1,0 +1,20 @@
+# Full90 fixed-program interface
+
+The exact prospective condition is `full90_native_split_pointwise_controls_v1` for existing NEURAL-089. Freeze one UTF-8 Python program (≤131,072 bytes) before any numerical access. It is used for all four conditions. The independently captured reference has its own source and state. Source/model/exposure review must approve the actual candidate, fixed reference, cached numerical image and full resource plan; source construction does not select them.
+
+Every invocation is a fresh isolated process. Entry arguments are `fit --input /input/INPUT.json --model-output /output/model.bin` or `infer --input /input/INPUT.json --model /model/model.bin --output /output/prediction.json`. Fit outputs exactly one ordinary bounded model file. Infer outputs exactly one ordinary UTF-8 prediction file. The trusted holder captures output only after the producer has exited naturally and been removed. Host mounts are read-only, networking is absent, and scratch/output are separately bounded. Candidate state cannot be carried across invocations outside its explicitly captured model. Runtime qualification of this architecture remains absent.
+
+`INPUT.json` has schema `neural089-program-input-v1` and one of:
+
+* `fit_neural`: `runs` contains all 89 permitted labeled run descriptors, in original source order. Each descriptor has partition, opaque group ID, row count, sorted opaque IDs, pinned NPY features and pinned raw little-endian int16 labels. Features retain all rows ×306 channels ×125 float32 samples. Training and validation roles are explicit. Validation may select candidate hyperparameters but cannot fit estimators or normalization, and there is no final refit on validation. The fixed reference ignores validation. The MEG/permuted-label treatment name is not exposed in this metadata.
+* `fit_prior`: `counts` contains only the 39 aggregate training-label counts. No individual IDs, run metadata, neural features or development/query information are supplied.
+* `infer_neural`: exactly one opaque `query_id` and pinned `features` array of shape306×125. The same input schema and exact same sealed MEG model are used for ordinary and zero-valued query contrasts. Treatment labels, other query IDs, full query count, source filenames/times, transcripts and targets are absent.
+* `infer_prior`: no query-specific fields. Return one fixed vector for trusted broadcasting over all query IDs.
+
+Neural inference outputs exactly `query_id` and `probabilities`; prior inference outputs exactly `probabilities`. The vector contains all39 finite numeric entries in the fixed source class order, each in[0,1], summing to1 within absolute1e-6. Boolean/nonfinite values, duplicate JSON keys, wrong/extra IDs, omitted classes and extra fields are invalid. The per-phase prediction cap is32,768 bytes. The unchanged original full-panel cap remains256,000,000 bytes per arm; a larger full result fails rather than dropping queries.
+
+Each role has three independent fits (MEG, permuted labels, prior). Its MEG model also serves ZERO_MEG. All other model and cross-role reuse is forbidden. Each role requires3Q+4 phases; both roles require6Q+8 and six sealed models. The maximum model file is256MiB. These limits do not establish feasibility or cost. The actual Q and full prepared input sizes must be admitted; historical source counts cannot substitute.
+
+The reference serializes its own fitted scikit-learn state using pickle. This is a trusted-reference artifact boundary only. Neither candidate artifacts nor arbitrary external model files may be deserialized by the reference or the grader. Candidate models remain opaque files executed only by their own isolated program.
+
+Pointwise fresh execution restricts cross-query state and batch statistics; it does not prove arbitrary code cannot adapt within one query window. Independent method review is still required. The development/use and public-data contamination limitations in DESIGN.md remain part of every result. A complete output does not establish scientific validity or reference competence.
