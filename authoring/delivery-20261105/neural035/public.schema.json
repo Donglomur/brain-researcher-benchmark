@@ -1,0 +1,99 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "sessions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "neural035-public-v1"
+    },
+    "sessions": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "session_id",
+          "cell_ids",
+          "file",
+          "bytes",
+          "sha256",
+          "calibration_starts_seconds",
+          "validation_starts_seconds",
+          "queries"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "cell_ids": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 100000,
+            "items": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "file": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}\\.npz$"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20000000
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "calibration_starts_seconds": {
+            "const": [
+              0,
+              30,
+              60,
+              90
+            ]
+          },
+          "validation_starts_seconds": {
+            "const": [
+              150
+            ]
+          },
+          "queries": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "query_id",
+                "start_seconds"
+              ],
+              "properties": {
+                "query_id": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "start_seconds": {
+                  "enum": [
+                    210,
+                    270
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

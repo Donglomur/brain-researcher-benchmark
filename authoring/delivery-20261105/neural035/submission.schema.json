@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "predictions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "neural035-order-predictions-v1"
+    },
+    "predictions": {
+      "type": "array",
+      "minItems": 28,
+      "maxItems": 28,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "query_id",
+          "ordering_scores"
+        ],
+        "properties": {
+          "query_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "ordering_scores": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 100000,
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Exact query IDs and vector widths are joined to the trusted public manifest; nonboolean finite values, unique IDs and no extra keys enforced by order_core."
+}
