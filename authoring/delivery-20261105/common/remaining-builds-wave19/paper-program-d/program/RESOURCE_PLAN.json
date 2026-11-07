@@ -1,0 +1,46 @@
+{
+  "schema": "critical_init_full29_resource_profile_v1",
+  "scientific_producer_phases": 261,
+  "native_role_phases": 87,
+  "forecast_fit_role_phases": 87,
+  "forecast_stream_role_phases": 87,
+  "operator_stream_methods": [
+    "dmd",
+    "persistence",
+    "diagonal_ar"
+  ],
+  "host_preparation_and_final_grading_are_additional": true,
+  "actual_shape_and_resource_qualification": false,
+  "symbolic_components": {
+    "all_full_standardized_numeric": "8*sum(N_s*T_s)",
+    "all_development_numeric": "8*sum(N_s*floor(4*T_s/5))",
+    "all_five_method_predictions": "5*8*sum(N_s*(T_s-5-floor(4*T_s/5)))",
+    "all_model_capture_ceiling": "87*selected_model_cap",
+    "native_intermediate_capture_ceiling": "87*64MiB",
+    "complete_native_panels_ceiling": "3*64MiB",
+    "reference_model_numeric": "8*(N*k+k*k+2*N), k=min(1000,N); metadata additional",
+    "additional": "all staged full original/prefix/material copies, typed headers, immutable source/model captures, actual native dense covariance workspace, raw original storage, journals, external observation, host/runtime overhead and OTHER"
+  },
+  "retention_is_not_cumulative_IO": true,
+  "managed_budget_is_not_complete_OS_physical_IO": true,
+  "time_memory_and_disk_are_not_measured": true,
+  "candidate_and_reference_same_declared_CPU_memory_phase_budgets": true,
+  "holder_memory_bytes": 268435456,
+  "holder_CPU": 1,
+  "held_model_volume": "bounded local-driver tmpfs cap+1MiB, requiring nativeLinuxDocker qualification",
+  "stream_predictions": "one fixedwidth response at a time; hostcapture extent derived from fullshape",
+  "no_automatic_retry_no_support_reduction": true,
+  "root_selection_requires_explicit_finite_complete_limits": true,
+  "qualifications": {
+    "authentic_input": false,
+    "native": false,
+    "reference_competence": false,
+    "scientific": false,
+    "submission_ready": false
+  },
+  "outer_managed_limits": "Separate explicitly selected outer_limits; total declared managed read/write ceilings are controller limits plus outer_limits, never one reused cap.",
+  "outer_retention_and_other": "Root accounts both retention allowances and other active holds; each actual write/copy checks available capacity. Occupied outputs and future allowances remain distinct.",
+  "original_clocks": "One observer BOOT origin; controller work_end=origin+limits.wall_seconds; outerend=origin+outer_limits.wall_seconds, at least120s later. Root independently admits outer durable return and terminal close.",
+  "managed_transport_accounting": "Every actual Docker/duplex stdout and stderr read is charged before overflow admission; captured decoded chunks are additionally charged as materialized rereads. Duplex outbound request bytes are separately reported, not retained-file writes. Startup authority reads are bounded before materialization and charged to the successful original-clock budget.",
+  "grading_source_binding": "Independent grading authority pins the same complete source manifest as the collection and preparation; all members, including grading dependencies, authenticate before protected targets. Exclusive operator custody remains an external prerequisite."
+}
