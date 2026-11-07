@@ -1,3 +1,5 @@
+> **Branch status — neuroscience benchmark construction:** This branch adds a planned 100-paper / 100-neural-task suite. These are source and task definitions under construction, not 200 validated benchmarks. See [current source scope](docs/neuroscience-benchmarks/SOURCE_SNAPSHOT.md). Results for the three original examples below are inherited from the base repository and are separate from this new suite.
+
 # brain-researcher-benchmark
 
 A small benchmark of **un-cued scientific judgement** for coding/agent systems, in
