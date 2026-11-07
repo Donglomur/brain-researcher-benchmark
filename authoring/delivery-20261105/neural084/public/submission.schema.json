@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NEURAL084 per-fold raw scores",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "generation",
+    "fold",
+    "predictions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "neural084_scores_v1"
+    },
+    "generation": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "fold": {
+      "type": "string",
+      "pattern": "^fold0(0[1-9]|[1-4][0-9]|5[0-4])$"
+    },
+    "predictions": {
+      "type": "array",
+      "minItems": 400,
+      "maxItems": 400,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "scores"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "scores": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  }
+}
