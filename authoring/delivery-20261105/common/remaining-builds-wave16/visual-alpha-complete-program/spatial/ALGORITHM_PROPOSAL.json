@@ -1,0 +1,159 @@
+{
+  "schema": "visual_alpha_portable_training_profile_v1",
+  "profile": "visual_alpha_trainonly_sourcegrid_varpro_scipy1171_v1",
+  "scientific_qualification": false,
+  "source_only": true,
+  "native_matlab_parity": false,
+  "scope": {
+    "participants": 9,
+    "electrodes": 433,
+    "conditions": 8,
+    "cases": 3464,
+    "parameter_vectors": 10392,
+    "fresh_contexts": 27,
+    "roles": [
+      "full",
+      "train_first",
+      "train_second"
+    ],
+    "training_indices": {
+      "full": "0..74",
+      "train_first": "0..37",
+      "train_second": "38..74"
+    }
+  },
+  "runtime": {
+    "python": "3.11.6",
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "optimizer": "scipy.optimize.least_squares",
+    "method": "trf",
+    "jac": "2-point",
+    "ftol": 1e-08,
+    "xtol": 1e-08,
+    "gtol": 1e-08,
+    "max_nfev_per_start": 500,
+    "max_residual_calls_including_jacobian_and_final_check_per_start": 3000,
+    "x_scale": 1.0,
+    "loss": "linear",
+    "f_scale": 1.0,
+    "diff_step": null,
+    "tr_solver": "exact",
+    "randomness": "none; no stochastic seeds"
+  },
+  "domain": {
+    "row_column": [
+      -49,
+      150
+    ],
+    "S": [
+      1e-06,
+      "positive_infinity"
+    ],
+    "GR": [
+      0,
+      "nextafter(1,0)"
+    ],
+    "G": "training analytic signed gain for sign-free branches, max(0,g) otherwise",
+    "OG_GR": 0,
+    "candidate_domain": "unchanged original source domain including unsupported S=0 and GR=1"
+  },
+  "grid": {
+    "eccentricities": [
+      0,
+      0.00551,
+      0.014,
+      0.0269,
+      0.0459,
+      0.0731,
+      0.112,
+      0.166,
+      0.242,
+      0.348,
+      0.498,
+      0.707,
+      1
+    ],
+    "angles": "2*pi*i/16, i=0..15; only i=0 at eccentricity=0",
+    "sigma_base": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "sigma_multiplier": "sqrt(e) for e in [.5,.25,.125]; exponent in forward is fixed1",
+    "center": "row=50.5-sin(angle)*100*ecc, column=50.5+cos(angle)*100*ecc",
+    "loop_order": [
+      "eccentricity",
+      "angle",
+      "sigma_base",
+      "sigma_multiplier"
+    ],
+    "raw_count": 4053,
+    "fixed_out_of_bounds_rejections": 84,
+    "evaluated_count": 3969,
+    "exact_float_distinct_geometry_count": 2835,
+    "duplicate_policy": "Preserve all grid order and duplicates for scoring. Best selections discard only exact tuple duplicates in stable SSE,index order. No tolerance merging.",
+    "GS": "Best four distinct OG geometries, each with all18 ratios 10**(-8+i*7.9/17), i=0..17;72 predictions",
+    "generic_starts": "center50.5, S25 and S2.5; GR.1 for GS and0 for OG",
+    "selected_starts": "mandatory two generic starts followed by best two exact-distinct grid/refinedGS starts excluding generic tuple duplicates; exactlyfour starts",
+    "factorization": "Fixed blocks of16 OG kernels projected by design@kernels; same source equation, changed BLAS summation order disclosed. Cache complete3969 projections per exact aperture SHA+role; reject unequal arrays reusing one identity. No response-driven state shared between contexts."
+  },
+  "objective": {
+    "support": "all finite responses in the provided training role; all original source NaN and +/-Inf retained as missing support; no held response access",
+    "gain": "hc=h-mean(h); yc=y-mean(y); g=dot(hc,yc)/dot(hc,hc), or0 if denominator0; positive branches max(0,g)",
+    "residual": "g*hc-yc",
+    "selection": "minimum sum(residual**2); stable original order for ties",
+    "intercept": "no output intercept; DC is training nuisance projection only",
+    "evaluation_distinction": "Evaluator separately centers each held test fold for source-formula CoD; literal uncentered Eq6 remains a separate endpoint.",
+    "numerical_evaluation": "Normalize centered h/y before dot products; frexp/ldexp gain rescaling avoids false zero denominator on finite nonconstant tails. SSE uses normalized residual and frexp/ldexp scaling. Nonrepresentable gain/SSE, including nonzero SSE underflow, is typed refusal of whole context; no grid seed omission."
+  },
+  "failures": {
+    "all_four_starts": "must complete, including evaluation-limit finite terminations; an exception or cap failure aborts whole context with audit, never drops a start",
+    "unsupported_trial": "source forward unsupported during solver search fails whole context; no arbitrary penalty substitution",
+    "bound_projection": "Only SciPy strict-feasible initialization inside declared portable bounds; candidate source domain is never repaired.",
+    "all_nonfinite_training": "retain case with [50.5,50.5,0,0,0] and unsupported_no_training_support audit; no finite score claim"
+  },
+  "provenance": {
+    "candidate_controlled_baseline": false,
+    "native_noneggain": "Never inferred from filename; unknown native branch means native same-formula baseline/gain null",
+    "fixed_input": "released Stage2 timecourses, never candidate Stage1 fits",
+    "execution": "external trusted controller must seal operator outputs and isolate all27 contexts; this library alone cannot prove custody"
+  },
+  "evidence": [
+    {
+      "source": "visual-alpha-paper/private/author_reference.m",
+      "lines": "85-87",
+      "fact": "maxpolydeg0, linear, forcebounds2 and noneggain source recipe"
+    },
+    {
+      "source": "visual-alpha-paper/source/ecog-utils/functions/analyzePRF/analyzePRFdog.m",
+      "lines": "423-430,484 onward",
+      "fact": "source bounds, large/small generic starts, GSratio.1; original seed ordering precedes CV split"
+    },
+    {
+      "source": "visual-alpha-paper/source/analyzeprf/analyzePRFcomputesupergridseeds.m",
+      "lines": "34-69,99-111",
+      "fact": "grid and DC projection"
+    },
+    {
+      "source": "visual-alpha-paper/source/ecog-utils/functions/analyzePRF/subfunctions/analyzePRFgscomputesupergridseeds.m",
+      "fact": "18GS ratios10^linspace(-8,-.1,18)"
+    }
+  ],
+  "limitations": [
+    "Portable source-shaped comparator not identical author optimizer: training-only seed construction, analytic gain variable projection, four deterministic starts and SciPy TRF.",
+    "Runtime/competence unmeasured. Exact runtime availability and full native author re-fit remain unqualified.",
+    "Original historical366 QC mask, whole-paper preprocessing, permutation thresholds and native MATLAB gain parity remain unresolved."
+  ],
+  "resources": {
+    "time_memory_defaults": null,
+    "operator_selection": "Freeze finite identical candidate/operator context envelopes before numeric exposure; neither81-day default nor empirical speed claim.",
+    "derivation_function": "baseline.prospective_resources(person,role,distinct_apertures=metadata_count)",
+    "dynamic_calls": "Four TRF starts per case; all residual/Jacobian/final checks count. Dynamic geometries depend on training responses and are not shared across roles.",
+    "audit": "8192+3072*case_count byte conservative compact JSON bound; max1088 cases gives3350528B, so parent4MiB cap preserves complete audit. One terminal error string capped512characters with explicit truncation flag; original exception is re-raised."
+  }
+}
