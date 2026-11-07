@@ -18,7 +18,55 @@
     "routes": [
       "https://dataverse.harvard.edu/api/access/datafile/7609512"
     ],
-    "exact_asset_records": [],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data/latestVersion/files/137",
+        "recorded_fields": {
+          "path": "rat_hippocampus/rat_data.pkl",
+          "url": "https://dataverse.harvard.edu/api/access/datafile/7609512",
+          "bytes": 22055089,
+          "byte_count_kind": "publisher_dataFile.filesize; prior_acquisition_receipt_matches",
+          "immutable_identity": {
+            "provider": "Harvard Dataverse",
+            "datafile_id": 7609512,
+            "dataset_id": 6962324,
+            "dataset_doi": "10.7910/DVN/KTE4PC",
+            "dataset_version": "12.0",
+            "dataset_version_id": 420908,
+            "file_metadata_version": 1
+          }
+        },
+        "checksum_fields_as_recorded": [
+          {
+            "algorithm": "MD5",
+            "value": "c94ab6ce283030f215a75e4919eef37c",
+            "domain": "publisher_declared_raw_file",
+            "evidence_id": "marble_dataset",
+            "verified_from_payload_by_this_wave": false
+          },
+          {
+            "algorithm": "SHA256",
+            "value": "29dffd951853a98615827e7b8f3507907f9e0f0ef67e875410778ab4aadd42ab",
+            "domain": "prior_local_acquired_raw_file",
+            "evidence_id": "marble_acquisition",
+            "verified_from_payload_by_this_wave": false
+          }
+        ],
+        "content_sha256_explicit": "29dffd951853a98615827e7b8f3507907f9e0f0ef67e875410778ab4aadd42ab",
+        "content_sha256_provenance": "prior_local_acquisition_receipt_not_reverified",
+        "evidence": {
+          "primary": "marble_dataset",
+          "supporting": [
+            "marble_acquisition",
+            "marble_contract"
+          ],
+          "pointer": "/data/latestVersion/files/137"
+        },
+        "role": "task_selected_rat_hippocampus_observation_file; notebook local alias rat_data.pkl",
+        "payload_read_or_hash_recomputed_by_this_wave": false,
+        "schema_or_scientific_readiness_promoted": false
+      }
+    ],
     "lineage_and_loader_evidence": {
       "assessment": "Official rat_hippocampus notebook directly downloads rat_data.pkl from immutable Dataversefile7609512 and refits MARBLE/CEBRA; decoding notebook documents training-only preprocessing.",
       "official_code": {
@@ -50,7 +98,27 @@
     ],
     "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
     "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
-    "acquired_or_schema_validated_by_this_generator": false
+    "acquired_or_schema_validated_by_this_generator": false,
+    "inventory_followup": {
+      "id": "PAPER-paper-method-034",
+      "file_count": 1,
+      "declared_file_bytes": 22055089,
+      "scope": "complete_existing_task_selected_file_metadata_not_whole_paper_or_dataset_coverage",
+      "availability": "held_repository_or_prior_acquisition_evidence; current_remote_availability_not_requeried",
+      "gaps": [
+        "Only the canonical rat hippocampus Figure5 scope is inventoried; all other Dataverse dataset-version files and macaque/RNN/synthetic paper experiments are separate.",
+        "Version12.0 is the held dataset metadata observation, not a fresh latest-version claim. File ID7609512 and file version1 remain explicit.",
+        "Publisher MD5 and prior local SHA256 are separate evidence; no current pickle body, schema, fit, native environment or historical solver/parameter equivalence is checked."
+      ],
+      "evidence": {
+        "path": "authoring/delivery-20261105/common/paper-inventory-wave15-immutable-metadata/INVENTORY.json",
+        "bytes": 268985,
+        "sha256": "66505dc3887256f88565ba6a1de7d6c3e02d87675513c7b9d1123799ca5cb027"
+      },
+      "normalization_only": true,
+      "new_payload_or_schema_validation": false,
+      "readiness_promotion": false
+    }
   },
   "official_code": {
     "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE",
@@ -308,7 +376,86 @@
       }
     ],
     "historical_pin_exceptions": [],
-    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise.",
+    "inventory_metadata_followups": [
+      {
+        "checked_on": "2026-11-07",
+        "evidence": {
+          "path": "authoring/delivery-20261105/common/paper-inventory-wave15-immutable-metadata/INVENTORY.json",
+          "bytes": 268985,
+          "sha256": "66505dc3887256f88565ba6a1de7d6c3e02d87675513c7b9d1123799ca5cb027"
+        },
+        "source_receipts": {
+          "marble_dataset": {
+            "path": "authoring/delivery-20261105/marble/source-evidence/DATAVERSE_DATASET.json",
+            "bytes": 117194,
+            "sha256": "fc3bc3f04810e29b2195648634e160166f253a1db4c84011f5ad0d5e1b327c96"
+          },
+          "marble_acquisition": {
+            "path": "authoring/delivery-20261105/marble/source-evidence/ACQUISITION.json",
+            "bytes": 1808,
+            "sha256": "39ca1aba3e0ff36796ffae3b57f09f1cb74ba9671ee2620aac30237597bc8459"
+          },
+          "marble_contract": {
+            "path": "authoring/delivery-20261105/marble/source-evidence/SOURCE_CONTRACT.json",
+            "bytes": 5358,
+            "sha256": "36fad31b7324952b1fabeb7b4ae1f88c2d8f03b4661b766fb4819c8ce6cccec3"
+          },
+          "cascade_inventory": {
+            "path": "authoring/gcamp8-spike-inference/preflight-v1/data_manifest.json",
+            "bytes": 84013,
+            "sha256": "b41e9eaa6896f06b058c5402fefdc55dc8097bbe7a87e778456194e1ccecca18"
+          },
+          "cascade_tree": {
+            "path": "authoring/gcamp8-spike-inference/preflight-v1/source/Cascade_tree.json",
+            "bytes": 262228,
+            "sha256": "086344aa6317afc9f0288d65529e90b31e850e201e764360face270f84865f34"
+          },
+          "cascade_receipts": {
+            "path": "authoring/gcamp8-spike-inference/preflight-v1/source_receipts.json",
+            "bytes": 28350,
+            "sha256": "7fd8a65fe15903f278264bb3273e786374700343b0b335037ffe814685a946c7"
+          },
+          "cascade_scope": {
+            "path": "authoring/gcamp8-spike-inference/preflight-v1/PASS_GATE_MATRIX.md",
+            "bytes": 11384,
+            "sha256": "37d0d464ddb9cad9747bc15670251dbe9b5bc79b08ecda177ad100d001b702d6"
+          },
+          "pfc_listing": {
+            "path": "authoring/next-complete-task-source-scope-20261104/pfc007-complete-source-v1/ASSET_METADATA.json",
+            "bytes": 18457,
+            "sha256": "a6700a5cba59c30e2aedb11e18a6bf7878a0c3ccfcb6c083cfab1c3350da299e"
+          },
+          "pfc_head": {
+            "path": "authoring/next-complete-task-source-scope-20261104/pfc007-complete-source-v1/ROOT_HEAD_METADATA_001.json",
+            "bytes": 12631,
+            "sha256": "20ff87883b6b9d1e2f6a701777daeaa48064b269b9b7ee077c02a63ca82da98a"
+          },
+          "pfc_inventory": {
+            "path": "authoring/delivery-20261105/pfc-replay/public/ASSET_INVENTORY.json",
+            "bytes": 9549,
+            "sha256": "cd21b97159952b6bd3c9269d565a276691939026d80382364a251b9030c5c34f"
+          },
+          "pfc_binding": {
+            "path": "authoring/delivery-20261105/pfc-replay/ORIGINAL_INPUT_BINDING.source-002.json",
+            "bytes": 10350,
+            "sha256": "45895ec24d4950fffd258a0bd725876186ce333728fc4b4b1be84cdc53cff69c"
+          },
+          "pfc_acquisition": {
+            "path": "authoring/delivery-20261105/pfc-replay/originals-001/RECEIPT.002.json",
+            "bytes": 18600,
+            "sha256": "42972974f150013c9d2f20bb35f316deb37ade496c12cf76a319f639081b9a84"
+          }
+        },
+        "previous_manifest": {
+          "path": "benchmarks/manifests/paper/PAPER-paper-method-034.json",
+          "bytes": 17006,
+          "sha256": "321d8108f47b589e967191a8ded5bd6fb2231ea8eab327be2d145daf954388b8"
+        },
+        "scope_change": false,
+        "readiness_promotion": false
+      }
+    ]
   },
   "admission": {
     "runnable": false,

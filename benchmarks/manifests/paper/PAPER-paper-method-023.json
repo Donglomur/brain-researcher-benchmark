@@ -18,7 +18,32 @@
     "routes": [
       "https://physionet.org/content/erpbci/1.0.0/"
     ],
-    "exact_asset_records": [],
+    "exact_asset_records": [
+      {
+        "record_type": "external_exact_file_inventory",
+        "name": "EEGPT_PhysioP300_component original file descriptors",
+        "dataset": "erpbci",
+        "version": "1.0.0",
+        "file_inventory": {
+          "path": "authoring/delivery-20261105/common/paper-inventory-wave16-physionet/INVENTORY.json",
+          "bytes": 463680,
+          "sha256": "c1dc44e95d64dbda325d36a9293a7dec0fecade394b83455cc122b6a829bceb7"
+        },
+        "file_rows_selector": {
+          "json_pointer": "/files",
+          "dataset_equals": "erpbci"
+        },
+        "recording_count": 184,
+        "annotation_companion_count": 184,
+        "declared_recording_bytes": 1756220896,
+        "declared_companion_bytes": 258198,
+        "publisher_checksum_algorithm": "sha256",
+        "publisher_checksums_location": "publisher_sha256 in each selected inventory row",
+        "content_sha256_explicit": null,
+        "payload_verified": false,
+        "role": "complete_versioned_PhysioNet_component_metadata_not_whole_program_inventory"
+      }
+    ],
     "lineage_and_loader_evidence": {
       "paper_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/4540d267eeec4e5dbd9dae9448f0b739-Abstract-Conference.html",
       "data_urls": [
@@ -72,7 +97,23 @@
     ],
     "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
     "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
-    "acquired_or_schema_validated_by_this_generator": false
+    "acquired_or_schema_validated_by_this_generator": false,
+    "inventory_followup": {
+      "checked_on": "2026-11-07",
+      "inventory_metadata_present": true,
+      "component_file_inventory_complete": true,
+      "source_selection_fully_reconciled": false,
+      "full_selected_program_inventory_complete": false,
+      "protocol_joins": {
+        "path": "authoring/delivery-20261105/common/paper-inventory-wave16-physionet/PROTOCOL_JOINS.json",
+        "bytes": 28866,
+        "sha256": "5cc7af6f7e6fc38b83670be91e34f565ba9dac3a4a5868d63ff693dcaf196a15"
+      },
+      "protocol_json_pointer": "/protocols/PAPER-paper-method-023",
+      "full_program_coverage_json_pointer": "/full_program_coverage/PAPER-paper-method-023",
+      "source_selection_caveat": "Inventory retains the union including all20 s01 recordings omitted by the preprocessing loop. Nine-subject scientific preparation is not closed. Source saves i.subN without recording identity, permitting overwrites across recordings; no corrected converter is executed or selected here. Source64 EEG channel picks and embedded EDF annotations do not retain EOG channels. Provider12 directory tokens are not proof of12 distinct people.",
+      "limit": "Exact PhysioNet component descriptors do not close the later selected multi-dataset program inventory, selected preparation, payload integrity, native-reader qualification, benchmark readiness or scientific evaluation."
+    }
   },
   "official_code": {
     "url": "https://github.com/BINE022/EEGPT",
@@ -299,7 +340,27 @@
         "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
       }
     ],
-    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise.",
+    "physionet_inventory_followup": {
+      "prior_manifest": {
+        "path": "benchmarks/manifests/paper/PAPER-paper-method-023.json",
+        "bytes": 16009,
+        "sha256": "d2f212183b81fa7576e7658fa004fe39c12f988890fa9a8ff06938840a0ab6c9"
+      },
+      "inventory": {
+        "path": "authoring/delivery-20261105/common/paper-inventory-wave16-physionet/INVENTORY.json",
+        "bytes": 463680,
+        "sha256": "c1dc44e95d64dbda325d36a9293a7dec0fecade394b83455cc122b6a829bceb7"
+      },
+      "protocol_joins": {
+        "path": "authoring/delivery-20261105/common/paper-inventory-wave16-physionet/PROTOCOL_JOINS.json",
+        "bytes": 28866,
+        "sha256": "5cc7af6f7e6fc38b83670be91e34f565ba9dac3a4a5868d63ff693dcaf196a15"
+      },
+      "checked_on": "2026-11-07",
+      "historical_pins_preserved": true,
+      "new_scientific_runs": 0
+    }
   },
   "admission": {
     "runnable": false,

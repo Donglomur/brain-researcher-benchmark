@@ -57,7 +57,84 @@
     ],
     "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
     "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
-    "acquired_or_schema_validated_by_this_generator": false
+    "acquired_or_schema_validated_by_this_generator": false,
+    "inventory_followup": {
+      "id": "PAPER-paper-method-replacement-005",
+      "selected_scope": "All74 source training sessions plus10 source test sessions; no cohort reduction",
+      "selected_file_membership_complete": false,
+      "immutable_content_identity_complete": false,
+      "file_count": 0,
+      "declared_file_bytes": null,
+      "session_membership_complete": true,
+      "source_commit": "61d2ef65556dbbc2b828d542f19bd4e7134c92f3",
+      "counts": {
+        "training_sessions": 74,
+        "training_animals_paper_report": 73,
+        "heldout_sessions": 10,
+        "heldout_animals_paper_report": 10
+      },
+      "count_resolution": {
+        "paper_description": "Methods3.1 says one training animal has two insertions:74 sessions from73 animals, plus10 heldout animals. Exact source EID/PID/subject relationship still requires provenance join.",
+        "identity_join_status": "required_not_resolved_by_UUIDs",
+        "limit": "Reported73training animals versus74session entries is explained in held paper evidence; independent full EID/PID/animal join remains incomplete."
+      },
+      "provider_candidate_catalogue": {
+        "evidence": {
+          "path": "authoring/delivery-20261105/common/paper-inventory-wave16-allen-ibl/provider-metadata/IBL_DATASETS.tsv",
+          "bytes": 3068884,
+          "sha256": "45bcbc8c217f5c27aacb8484238d7f1244dcccd0e9c0a4ad302f07bd534528af"
+        },
+        "summary_evidence": {
+          "path": "authoring/delivery-20261105/common/paper-inventory-wave16-allen-ibl/provider-metadata/IBL_CATALOGUE_SUMMARY.json",
+          "bytes": 5187,
+          "sha256": "ccf077cc16d42737d57de1e6ccfff14f99e1e3935fbf32381ad8d23c003360cd"
+        },
+        "candidate_dataset_objects": 7346,
+        "sessions": 84,
+        "declared_name_filter_regex": "^(_ibl_)?((spikes|clusters|channels|trials|wheel)\\.|(leftCamera|rightCamera|bodyCamera)\\.(times|ROIMotionEnergy)\\.)",
+        "pagination_complete": true,
+        "all_unfiltered_provider_objects": 17084,
+        "exact_loader_selection_complete": false,
+        "original_scope_unchanged": true,
+        "representations": "One existing public-repository file_record per dataset UUID, prefer IBL public S3; mirror copies omitted. All dataset objects matching declared metadata family regex across84sessions retained if pagination_complete; other families not queried.",
+        "identity_fields": "dataset UUID,collection,revision,provider name,representative repository/path,file-record UUID,file_size,hash,version,tags,default flags",
+        "hash_semantics": "Provider hash copied verbatim; no hash-algorithm inference from32hex characters; no local payload digest computed.",
+        "release_limit": "Live public API snapshot bound by response digests and normalized table SHA256; no global immutable release version is claimed.",
+        "candidate_total_publisher_file_bytes": 293526851376,
+        "candidate_byte_sum_is_not_selected_storage_requirement": true
+      },
+      "required_original_object_families": [
+        "per-probe spikes/clusters/channels via SpikeSortingLoader.load_spike_sorting and merge_clusters",
+        "trials via SessionLoader.load_trials",
+        "wheel via SessionLoader.load_wheel",
+        "camera motion-energy and time objects via SessionLoader; actual left/right behavior selection requires source/parity review"
+      ],
+      "optional_LFP": "--use_lfp is separate; no default LFP inclusion or file list invented",
+      "unresolved_fields": [
+        "dataset UUID",
+        "selected probe/collection membership",
+        "selected revision",
+        "selected repository paths",
+        "selected byte total",
+        "publisher checksum algorithm",
+        "complete loader dependency listing"
+      ],
+      "gaps": [
+        "Anonymous403 is preserved. Documented public-service authentication subsequently returned the complete7346-row candidate-family listing across all84source sessions; it is not the exact dependency-resolved loader selection.",
+        "All84membership entries remain; no BWM H5 files, HuggingFace derivatives, one-session default or processed caches replace ONE originals.",
+        "Official env.yaml lists ONE-api,iblatlas,ibllib without versions. The independently held ibllib2.34 source is a comparison reference, not a silently adopted NEDS dependency. Probe collection/revision defaults and channel-location fallback can require further metadata; candidate families alone are not an exact loader inventory.",
+        "Original object identities, full animal join, eligibility/masks, LFP scope and dependency/environment parity still need resolution."
+      ],
+      "evidence": {
+        "path": "authoring/delivery-20261105/common/paper-inventory-wave16-allen-ibl/INVENTORY.json",
+        "bytes": 95149,
+        "sha256": "010d113cf76bb6c499107c10ebc14523c5e65d009b4141ec7cd1ff2f0c4fd16b"
+      },
+      "metadata_only": true,
+      "scope_change": false,
+      "readiness_promotion": false,
+      "payload_validation_by_this_wave": false
+    }
   },
   "official_code": {
     "url": "https://github.com/yzhang511/NEDS",
@@ -370,7 +447,24 @@
       }
     ],
     "historical_pin_exceptions": [],
-    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise.",
+    "inventory_metadata_followups": [
+      {
+        "checked_on": "2026-11-07",
+        "evidence": {
+          "path": "authoring/delivery-20261105/common/paper-inventory-wave16-allen-ibl/INVENTORY.json",
+          "bytes": 95149,
+          "sha256": "010d113cf76bb6c499107c10ebc14523c5e65d009b4141ec7cd1ff2f0c4fd16b"
+        },
+        "previous_manifest": {
+          "path": "benchmarks/manifests/paper/PAPER-paper-method-replacement-005.json",
+          "bytes": 20392,
+          "sha256": "e32240a84506449b32df7ddc976b2e06c0c1f5f88b492b616ecb751f57095759"
+        },
+        "scope_change": false,
+        "readiness_promotion": false
+      }
+    ]
   },
   "admission": {
     "runnable": false,

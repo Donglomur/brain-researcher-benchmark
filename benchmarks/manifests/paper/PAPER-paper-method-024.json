@@ -18,7 +18,32 @@
     "routes": [
       "https://physionet.org/content/eegmmidb/1.0.0/"
     ],
-    "exact_asset_records": [],
+    "exact_asset_records": [
+      {
+        "record_type": "external_exact_file_inventory",
+        "name": "CBraMod_PhysioNet_MI_component original file descriptors",
+        "dataset": "eegmmidb",
+        "version": "1.0.0",
+        "file_inventory": {
+          "path": "authoring/delivery-20261105/common/paper-inventory-wave16-physionet/INVENTORY.json",
+          "bytes": 463680,
+          "sha256": "c1dc44e95d64dbda325d36a9293a7dec0fecade394b83455cc122b6a829bceb7"
+        },
+        "file_rows_selector": {
+          "json_pointer": "/files",
+          "dataset_equals": "eegmmidb"
+        },
+        "recording_count": 654,
+        "annotation_companion_count": 654,
+        "declared_recording_bytes": 1668148896,
+        "declared_companion_bytes": 412782,
+        "publisher_checksum_algorithm": "sha256",
+        "publisher_checksums_location": "publisher_sha256 in each selected inventory row",
+        "content_sha256_explicit": null,
+        "payload_verified": false,
+        "role": "complete_versioned_PhysioNet_component_metadata_not_whole_program_inventory"
+      }
+    ],
     "lineage_and_loader_evidence": {
       "assessment": "Raw EEGMMI1.0.0 EDF recordings; pinned preprocessing_physio.py identifies source, runs and allocation. Released pretraining checkpoint/version and exact subjects retained still need a run manifest.",
       "official_code": {
@@ -50,7 +75,23 @@
     ],
     "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
     "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
-    "acquired_or_schema_validated_by_this_generator": false
+    "acquired_or_schema_validated_by_this_generator": false,
+    "inventory_followup": {
+      "checked_on": "2026-11-07",
+      "inventory_metadata_present": true,
+      "component_file_inventory_complete": true,
+      "source_selection_fully_reconciled": false,
+      "full_selected_program_inventory_complete": false,
+      "protocol_joins": {
+        "path": "authoring/delivery-20261105/common/paper-inventory-wave16-physionet/PROTOCOL_JOINS.json",
+        "bytes": 28866,
+        "sha256": "5cc7af6f7e6fc38b83670be91e34f565ba9dac3a4a5868d63ff693dcaf196a15"
+      },
+      "protocol_json_pointer": "/protocols/PAPER-paper-method-024",
+      "full_program_coverage_json_pointer": "/full_program_coverage/PAPER-paper-method-024",
+      "source_selection_caveat": "All109 source subjects and six runs retained. Source does not filter root metadata entries or missing EDFs; full release root includes non-subject objects. Exact original staging root and resulting allocation remain unresolved. Do not silently correct source or truncate subjects.",
+      "limit": "Exact PhysioNet component descriptors do not close the later selected multi-dataset program inventory, selected preparation, payload integrity, native-reader qualification, benchmark readiness or scientific evaluation."
+    }
   },
   "official_code": {
     "url": "https://github.com/wjq-learning/CBraMod",
@@ -229,7 +270,27 @@
       }
     ],
     "historical_pin_exceptions": [],
-    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise.",
+    "physionet_inventory_followup": {
+      "prior_manifest": {
+        "path": "benchmarks/manifests/paper/PAPER-paper-method-024.json",
+        "bytes": 12616,
+        "sha256": "a2ff4fcf46d8f3935417d9eb890a8a6d886670e0f4ed4c42b58afe53137ef28e"
+      },
+      "inventory": {
+        "path": "authoring/delivery-20261105/common/paper-inventory-wave16-physionet/INVENTORY.json",
+        "bytes": 463680,
+        "sha256": "c1dc44e95d64dbda325d36a9293a7dec0fecade394b83455cc122b6a829bceb7"
+      },
+      "protocol_joins": {
+        "path": "authoring/delivery-20261105/common/paper-inventory-wave16-physionet/PROTOCOL_JOINS.json",
+        "bytes": 28866,
+        "sha256": "5cc7af6f7e6fc38b83670be91e34f565ba9dac3a4a5868d63ff693dcaf196a15"
+      },
+      "checked_on": "2026-11-07",
+      "historical_pins_preserved": true,
+      "new_scientific_runs": 0
+    }
   },
   "admission": {
     "runnable": false,
