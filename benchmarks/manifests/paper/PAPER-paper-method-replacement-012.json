@@ -1,0 +1,590 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-replacement-012",
+  "source_id": "paper-method-replacement-012",
+  "track": "paper",
+  "title": "Know Thyself by Knowing Others: Learning Neuron Identity from Population Context",
+  "status": "specification_only",
+  "canonical_position_one_based": 51,
+  "paper_identity": {
+    "url": "https://openreview.net/forum?id=zt3RKc6VBp",
+    "publication_year": 2025,
+    "venue": "NeurIPS"
+  },
+  "primary_outputs": [
+    "Cell-type classification accuracy and class-balanced evaluation for excitatory/inhibitory, subclass and11-class labels, using author-provided Bugeon split files.",
+    "Compare population-context representation with ablated context under held-out-animal and transductive conditions, reporting the distinct exposure policies."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://figshare.com/articles/dataset/19448531",
+      "https://ik.imagekit.io/7tkfmw7hc/nuclr/neuron_metadata.zip?updatedAt=1747970653540",
+      "https://ik.imagekit.io/7tkfmw7hc/nuclr/splits.zip"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/license",
+        "recorded_fields": {
+          "name": "CC BY 4.0",
+          "url": "https://creativecommons.org/licenses/by/4.0/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-012"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": "Bugeon et al 2022 v2.zip",
+          "bytes": 946468709,
+          "url": "https://ndownloader.figshare.com/files/38046633",
+          "checksum": "md5:4556ed80ce98ca13f909129e25f60f3a"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:4556ed80ce98ca13f909129e25f60f3a"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-012"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/1",
+        "recorded_fields": {
+          "name": "DatasetTypesV2.xlsx",
+          "bytes": 11917,
+          "url": "https://ndownloader.figshare.com/files/38046648",
+          "checksum": "md5:0d367c2fbc8f3e64e510247eea57dd7d"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:0d367c2fbc8f3e64e510247eea57dd7d"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-012"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/0",
+        "recorded_fields": {
+          "name": "neuron_metadata/bugeon.csv",
+          "bytes": 1560082
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-012"
+      },
+      {
+        "json_pointer": "/data_inputs/2/files/0",
+        "recorded_fields": {
+          "name": "splits/bugeon/subclass_inductive_zs.pkl",
+          "bytes": 64815
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-012"
+      },
+      {
+        "json_pointer": "/data_inputs/2/files/1",
+        "recorded_fields": {
+          "name": "splits/bugeon/subclass_transductive.pkl",
+          "bytes": 47855
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-012"
+      },
+      {
+        "json_pointer": "/data_inputs/2/files/2",
+        "recorded_fields": {
+          "name": "splits/bugeon/11class_transductive_zs.pkl",
+          "bytes": 128536
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-012"
+      },
+      {
+        "json_pointer": "/data_inputs/2/files/3",
+        "recorded_fields": {
+          "name": "splits/bugeon/ei_transductive.pkl",
+          "bytes": 323170
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-012"
+      },
+      {
+        "json_pointer": "/data_inputs/2/files/4",
+        "recorded_fields": {
+          "name": "splits/bugeon/ei_inductive_zs.pkl",
+          "bytes": 469693
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-012"
+      },
+      {
+        "json_pointer": "/data_inputs/2/files/5",
+        "recorded_fields": {
+          "name": "splits/bugeon/11class_transductive.pkl",
+          "bytes": 47639
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-012"
+      },
+      {
+        "json_pointer": "/data_inputs/2/files/6",
+        "recorded_fields": {
+          "name": "splits/bugeon/11class_inductive_zs.pkl",
+          "bytes": 64494
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-012"
+      },
+      {
+        "json_pointer": "/data_inputs/2/files/7",
+        "recorded_fields": {
+          "name": "splits/bugeon/ei_transductive_zs.pkl",
+          "bytes": 915592
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-012"
+      },
+      {
+        "json_pointer": "/data_inputs/2/files/8",
+        "recorded_fields": {
+          "name": "splits/bugeon/subclass_transductive_zs.pkl",
+          "bytes": 129282
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-012"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_routes/0/license",
+        "recorded_fields": {
+          "name": "CC BY 4.0",
+          "url": "https://creativecommons.org/licenses/by/4.0/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-replacement-012"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "assessment": "Figshare19448531v2 calcium/transcriptomic inputs, plus author neuron_metadata.zip and splits.zip. Source names frame.neuralActivity/frame.times/neuron.ttype; nuclr commit0fa409… is pinned.",
+      "official_code": {
+        "url": "https://github.com/nerdslab/nuclr",
+        "commit": "0fa409b304147ace00507063d44f03155691af62",
+        "license": [
+          "Code Apache-2.0; original Bugeon Figshare archive CC BY4.0. Author metadata/split archive license must be resolved for repackaging.",
+          "Public direct archives; HEAD returned200 and ZIP central-directory members were inspected."
+        ]
+      },
+      "input_routes": [
+        {
+          "metadata_url": "https://api.figshare.com/v2/articles/19448531",
+          "version": 2,
+          "license": {
+            "value": 1,
+            "name": "CC BY 4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "role": "Actual calcium activity, transcriptomic cell-type annotations and behavioral/stimulus metadata; author prepare_data.py names frame.neuralActivity.npy, frame.times.npy, neuron.ttype.txt and related inputs."
+        },
+        {
+          "metadata_url": "https://ik.imagekit.io/7tkfmw7hc/nuclr/neuron_metadata.zip?updatedAt=1747970653540",
+          "version": {
+            "url": "https://ik.imagekit.io/7tkfmw7hc/nuclr/neuron_metadata.zip?updatedAt=1747970653540",
+            "http_status": 200,
+            "bytes": "20487304",
+            "etag": "\"cbded560fefc12776de5098150493052-4\"",
+            "last_modified": "Fri, 23 May 2025 03:24:13 GMT"
+          }
+        },
+        {
+          "metadata_url": "https://ik.imagekit.io/7tkfmw7hc/nuclr/splits.zip",
+          "version": {
+            "url": "https://ik.imagekit.io/7tkfmw7hc/nuclr/splits.zip",
+            "http_status": 200,
+            "bytes": "8725949",
+            "etag": "\"9b287ea8b5606dfb2270fba0f5061a3f-2\"",
+            "last_modified": "Sun, 14 Dec 2025 05:52:41 GMT"
+          }
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-replacement-012",
+        "versions_and_loader_contract": {
+          "scope_description": "Reproduce the Bugeon calcium/transcriptomic neuron-identity project: population-context embeddings, cell-type classification and inductive versus transductive evaluation. Excludes the other three paper datasets.",
+          "unresolved_coverage": [
+            "Author Bugeon inductive configuration separates SB028 sessions from training; exact neuron identities, repeated-cell linkage and split contents require acquisition validation.",
+            "The supplied splits were updated December2025 after the conference; paper-era equivalence requires a frozen split version and comparison to the published protocol.",
+            "Transductive evaluation includes neural observations from the test population and cannot be called unseen-animal transfer.",
+            "The repository explicitly changes the IBL evaluation in a newer script; this bounded Bugeon scope does not silently substitute that improved IBL evaluator."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/nerdslab/nuclr",
+    "revision_or_archive_version": "0fa409b304147ace00507063d44f03155691af62",
+    "entrypoints": [
+      {
+        "path": "train.py",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/train.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "preprocess/bugeon/download.py",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/preprocess/bugeon/download.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "preprocess/bugeon/prepare_data.py",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/preprocess/bugeon/prepare_data.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": true,
+        "tree_verified": true
+      },
+      {
+        "path": "preprocess/bugeon/experiments.txt",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/preprocess/bugeon/experiments.txt",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "configs/data/bugeon_inductive.yaml",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/configs/data/bugeon_inductive.yaml",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": true,
+        "tree_verified": true
+      },
+      {
+        "path": "configs/data/bugeon_transductive.yaml",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/configs/data/bugeon_transductive.yaml",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "eval_scripts/multi_split_eval.py",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/multi_split_eval.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "eval_scripts/single_split_eval.py",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/single_split_eval.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "src/evaluators/bugeon.py",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/src/evaluators/bugeon.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-replacement-012",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/nerdslab/nuclr",
+            "commit": "0fa409b304147ace00507063d44f03155691af62",
+            "author_linkage": [
+              "https://openreview.net/forum?id=zt3RKc6VBp",
+              "https://github.com/nerdslab/nuclr"
+            ],
+            "license": [
+              "Code Apache-2.0; original Bugeon Figshare archive CC BY4.0. Author metadata/split archive license must be resolved for repackaging.",
+              "Public direct archives; HEAD returned200 and ZIP central-directory members were inspected."
+            ],
+            "snapshot_evidence": "GitHub commit and recursive tree metadata inspected; author README and selected source files read as text.",
+            "file_tree": {
+              "paths": [
+                "train.py",
+                "preprocess/bugeon/download.py",
+                "preprocess/bugeon/prepare_data.py",
+                "preprocess/bugeon/experiments.txt",
+                "configs/data/bugeon_inductive.yaml",
+                "configs/data/bugeon_transductive.yaml",
+                "eval_scripts/multi_split_eval.py",
+                "eval_scripts/single_split_eval.py",
+                "src/evaluators/bugeon.py"
+              ]
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "train.py",
+              "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/train.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "preprocess/bugeon/download.py",
+              "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/preprocess/bugeon/download.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "preprocess/bugeon/prepare_data.py",
+              "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/preprocess/bugeon/prepare_data.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": true,
+              "tree_verified": true
+            },
+            {
+              "path": "preprocess/bugeon/experiments.txt",
+              "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/preprocess/bugeon/experiments.txt",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "configs/data/bugeon_inductive.yaml",
+              "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/configs/data/bugeon_inductive.yaml",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": true,
+              "tree_verified": true
+            },
+            {
+              "path": "configs/data/bugeon_transductive.yaml",
+              "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/configs/data/bugeon_transductive.yaml",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "eval_scripts/multi_split_eval.py",
+              "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/multi_split_eval.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "eval_scripts/single_split_eval.py",
+              "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/single_split_eval.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "src/evaluators/bugeon.py",
+              "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/src/evaluators/bugeon.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            }
+          ],
+          "dependencies": [
+            "Python",
+            "PyTorch",
+            "Hydra",
+            "temporaldata",
+            "brainsets",
+            "h5py",
+            "scikit-learn"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": [
+        "Code Apache-2.0; original Bugeon Figshare archive CC BY4.0. Author metadata/split archive license must be resolved for repackaging.",
+        "Public direct archives; HEAD returned200 and ZIP central-directory members were inspected."
+      ],
+      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "recorded_central_outputs": [
+        "Cell-type classification accuracy and class-balanced evaluation for excitatory/inhibitory, subclass and11-class labels, using author-provided Bugeon split files.",
+        "Compare population-context representation with ablated context under held-out-animal and transductive conditions, reporting the distinct exposure policies."
+      ],
+      "assessment": "Bugeon context-based cell-type prediction is identified; exact paper-era split equivalence and repeated-cell identity remain unresolved.",
+      "status": "documented_scoped_proposal_not_numeric_qualification",
+      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "December2025 supplied-split update may differ from conference protocol; do not silently use newer splits or call transductive test-population observations unseen-animal transfer.",
+      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Author Bugeon inductive configuration separates SB028 sessions from training; exact neuron identities, repeated-cell linkage and split contents require acquisition validation.",
+        "The supplied splits were updated December2025 after the conference; paper-era equivalence requires a frozen split version and comparison to the published protocol.",
+        "Transductive evaluation includes neural observations from the test population and cannot be called unseen-animal transfer.",
+        "The repository explicitly changes the IBL evaluation in a newer script; this bounded Bugeon scope does not silently substitute that improved IBL evaluator.",
+        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_project_reference_run_evidence_found",
+      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve minority-cell-type classification or calibration with the same labeled neurons, animal partitions and context availability; compare label-efficiency curves."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_frozen_or_run",
+      "proposed_panel": "Inductive animal/session holdout and transductive access are separate panels. Minority-class calibration/label-efficiency requires matched neurons and context observations.",
+      "retained_roster_proposal": [
+        "Improve minority-cell-type classification or calibration with the same labeled neurons, animal partitions and context availability; compare label-efficiency curves."
+      ],
+      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_resource_statement": "GPU training; original archive946.5MB plus metadata20.5MB and splits8.7MB compressed; runtime unmeasured.",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Unmeasured planning estimate unless an author-reported figure is separately stated."
+  },
+  "holds": {
+    "task_specific": [
+      "Author Bugeon inductive configuration separates SB028 sessions from training; exact neuron identities, repeated-cell linkage and split contents require acquisition validation.",
+      "The supplied splits were updated December2025 after the conference; paper-era equivalence requires a frozen split version and comparison to the published protocol.",
+      "Transductive evaluation includes neural observations from the test population and cannot be called unseen-animal transfer.",
+      "The repository explicitly changes the IBL evaluation in a newer script; this bounded Bugeon scope does not silently substitute that improved IBL evaluator.",
+      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Inspect split/metadata manifests against original subject/neuron identifiers, freeze paper-era and current variants, and qualify the calcium/transcriptomic joining path before any representation fit.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Inspect split/metadata manifests against original subject/neuron identifiers, freeze paper-era and current variants, and qualify the calcium/transcriptomic joining path before any representation fit.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "f1eae8dc8696ba535dbfb7296bf4c667f7aadc4aa127eef13a00f015575c9a48",
+    "audit_record_sha256": "adf7393874c328541848ac50f04e473d8a78dd361e7963213622d18da0ad2e7d",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-replacement-012",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 75,
+        "record_sha256": "928bc34098baac6824262c688541cf5088a18130deccc524f84d88576f14eecd"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-paper-method-replacement-012",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

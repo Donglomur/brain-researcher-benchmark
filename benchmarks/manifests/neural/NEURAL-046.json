@@ -1,0 +1,252 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-046",
+  "track": "neural",
+  "title": "Elapsed time versus count in dopamine adaptation",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-P006"
+    ],
+    "titles": [
+      "Burke reward-spacing behavioral and dopamine-recording collection"
+    ],
+    "overlap_groups": [
+      "burke-reward-spacing-dandi-001632"
+    ],
+    "task_family": "reward_learning"
+  },
+  "scientific_question": "Are changes in measured cue/reward dopamine better explained by elapsed time or reward count after licking and condition are controlled?",
+  "task_type": "investigation",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Competing neural-response model contrasts with animal-level uncertainty."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://dandiarchive.org/dandiset/001632",
+      "https://www.nature.com/articles/s41593-026-02206-2",
+      "https://github.com/namboodirilab/duration_between_rewards_controls_learning_rate",
+      "https://doi.org/10.1038/s41593-026-02425-7",
+      "https://raw.githubusercontent.com/namboodirilab/duration_between_rewards_controls_learning_rate/b7687eba02128049eb50f8a13a7201443e180a21/CODE_figures_and_experimental_analysis/functions/load_preprocess.py",
+      "https://raw.githubusercontent.com/namboodirilab/duration_between_rewards_controls_learning_rate/b7687eba02128049eb50f8a13a7201443e180a21/CODE_figures_and_experimental_analysis/LoadAllData.py",
+      "https://api.dandiarchive.org/api/assets/ccc33d96-6d78-44d8-aa14-7678e3bdb693/"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-P006",
+        "ledger": "readiness/signals_readiness.json",
+        "record_sha256": "d0aa217288e422a0cc982a9706a65bf5173babd777d8d2f482fa3dba266268cb",
+        "data_manifest": {
+          "version": "draft (mutable; inspected 2026-10-29)",
+          "number_of_files": 1222,
+          "number_of_subjects": 126,
+          "total_bytes": 4106891054,
+          "example_asset": {
+            "path": "sub-3600sD-F1/sub-3600sD-F1_ses-day01.nwb",
+            "asset_id": "ccc33d96-6d78-44d8-aa14-7678e3bdb693",
+            "bytes": 13049510,
+            "sha256": "d36fc8e145b9847e65db2b6ddbdc9ccf5d55ef137d5e92ff1e760eb703fb5364"
+          },
+          "manifest_url": "https://api.dandiarchive.org/api/dandisets/001632/versions/draft/assets/",
+          "neural_designated_subset": {
+            "files": 657,
+            "animal_ids": 57,
+            "method": "Full1222assetmanifest filtered by condition suffixD as in authorloader; actualphotometry moduleQCstillrequired."
+          }
+        },
+        "recording_contract": {
+          "neural": [
+            "processing/photometry/photometry_dff data and timestamps"
+          ],
+          "labels": [
+            "acquisition/eventLog event_code,timestamp,event_flag",
+            "acquisition/task_parameters",
+            "cue code15; reward code10; lick codes5/6 in reference loader"
+          ],
+          "time_alignment": "Photometry timestamps and event log timestamps; loader truncates events past last photometry sample and aligns per-trial windows.",
+          "biological_ids": "animal directory + day/session; 126 animals includes behavioral-only groups",
+          "evidence": "Data archive explicitly contains behavior + dopamine; pinned loader selects actual photometry and defines trial assembly"
+        },
+        "status": "artifact_ready"
+      }
+    ],
+    "exact_asset_records": [
+      {
+        "source_id": "D-P006",
+        "ledger": "readiness/signals_readiness.json",
+        "source_json_pointer": "/data_manifest/example_asset",
+        "record": {
+          "path": "sub-3600sD-F1/sub-3600sD-F1_ses-day01.nwb",
+          "asset_id": "ccc33d96-6d78-44d8-aa14-7678e3bdb693",
+          "bytes": 13049510,
+          "sha256": "d36fc8e145b9847e65db2b6ddbdc9ccf5d55ef137d5e92ff1e760eb703fb5364"
+        },
+        "local_payload_verified_by_this_builder": false
+      }
+    ],
+    "missing_or_unverified": [
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "neural_measurements": [
+      "processing/photometry/photometry_dff data and timestamps"
+    ],
+    "allowed_context": [
+      "acquisition/eventLog event_code,timestamp,event_flag",
+      "acquisition/task_parameters",
+      "cue code15; reward code10; lick codes5/6 in reference loader"
+    ],
+    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
+    "time_alignment": "Photometry timestamps and event log timestamps; loader truncates events past last photometry sample and aligns per-trial windows.",
+    "source_contract_evidence": "Data archive explicitly contains behavior + dopamine; pinned loader selects actual photometry and defines trial assembly"
+  },
+  "biological_unit": "animal directory + day/session; 126 animals includes behavioral-only groups",
+  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "split": {
+    "policy": "All photometry sessions by animal; hold out spacing conditions and complete trials; exclude behavior-only groups from neural tasks.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/namboodirilab/duration_between_rewards_controls_learning_rate",
+    "commit_or_archive_version": "b7687eba02128049eb50f8a13a7201443e180a21",
+    "entrypoints": [
+      "CODE_figures_and_experimental_analysis/functions/load_preprocess.py",
+      "CODE_figures_and_experimental_analysis/LoadAllData.py"
+    ],
+    "role": "Author preprocessing and experimental analysis; a neural prediction reference for the proposed task is still to be qualified.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://www.nature.com/articles/s41593-026-02206-2",
+    "data_url": "https://dandiarchive.org/dandiset/001632"
+  },
+  "controls": [
+    "Equal flexibility",
+    "baseline licking/activity",
+    "leave-animal-out evaluation",
+    "collinearity and design support checks."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Recomputed held-out neural loss difference between time and count models.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    },
+    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+      },
+      {
+        "id": "reference",
+        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+      },
+      {
+        "id": "scorer",
+        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      },
+      {
+        "id": "replication",
+        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "workstation_or_single_GPU_after_bounded_intake",
+    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+    "source_storage_evidence": null
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Establish distinguishable time/count support and trial assembly; exclude behavior-only animal groups."
+    },
+    {
+      "id": "source_1",
+      "requirement": "Draft dataset mutable: freeze full selected asset IDs/digests before download."
+    },
+    {
+      "id": "source_2",
+      "requirement": "Code license not found; redistribution or broader reuse permission unresolved."
+    },
+    {
+      "id": "source_3",
+      "requirement": "57animals/657files are photometry-designated by author naming, not a payload-QC pass; select files with actual photometry module."
+    },
+    {
+      "id": "packet",
+      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+    },
+    {
+      "id": "reference",
+      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+    },
+    {
+      "id": "scorer",
+      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+    },
+    {
+      "id": "replication",
+      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+    }
+  ],
+  "next_implementation_action": [
+    "Establish distinguishable time/count support and trial assembly; exclude behavior-only animal groups."
+  ],
+  "construction_review": null,
+  "source_audit_overlays": [],
+  "provenance": {
+    "canonical_record_sha256": "c74176ee82eaf074ad46d8babbb880931852d72abfd04a4afc7248a83d13f6b0",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/readiness/signals_readiness.json",
+        "bytes": 67125,
+        "sha256": "a1f767fe5f088b27c6b80a2068699838becdbf96457d15530f77e4a89f7616b6"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

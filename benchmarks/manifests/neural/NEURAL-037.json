@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-037",
+  "track": "neural",
+  "title": "Visual-opto sequence response generalization",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "SIGNAL-EXT-C006"
+    ],
+    "titles": [
+      "Visual cortical sequence filtering with holographic perturbation and matched sensory context"
+    ],
+    "overlap_groups": [
+      "sequence-filtering-zenodo-18726362"
+    ],
+    "task_family": "circuit_perturbation"
+  },
+  "scientific_question": "Can a response model predict held-out stimulation order and visual/opto combinations from training conditions?",
+  "task_type": "prediction",
+  "neural_role": "target",
+  "primary_outputs": [
+    "Cell-level response trajectories for withheld trial conditions."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://zenodo.org/records/18726362",
+      "https://doi.org/10.1016/j.neuron.2025.12.024",
+      "https://zenodo.org/api/records/18726362/files/sequenceFiltering.zip/content",
+      "https://zenodo.org/api/records/18726362"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "SIGNAL-EXT-C006",
+        "ledger": "readiness/signals_extension_c.json",
+        "record_sha256": "7b7cc728023b67a7a96193bf979c2c8e1c085cacce9a824939cf6266a7f55d89",
+        "data_manifest": {
+          "version": "Zenodo18726362",
+          "number_of_files": 1,
+          "total_bytes": 7365221563,
+          "manifest_url": "https://zenodo.org/api/records/18726362",
+          "example_assets": [
+            {
+              "path": "sequenceFiltering.zip",
+              "bytes": 7365221563,
+              "checksum": "md5:35b86a22f10b600dbd98f23db3f9343d",
+              "url": "https://zenodo.org/api/records/18726362/files/sequenceFiltering.zip/content"
+            }
+          ],
+          "file_count_scope": "Top-level published assets, including code/docs where packaged together; not a participant count.",
+          "archive_directories": [
+            {
+              "url": "https://zenodo.org/api/records/18726362/files/sequenceFiltering.zip/content",
+              "archive_size": 7365221563,
+              "directory_entries": 14,
+              "inventory_sha256": "9f5a35c350613be504378c2a97631dc702b96761313730860205402b009b0939",
+              "manifest": null
+            }
+          ]
+        },
+        "recording_contract": {
+          "neural": "figure2_data.npz includes panelBC_F_abc and F_cba documented as 257 cells × 50 trials × 200 frames, plus six-experiment traces for other panels. Figure3 includes full traces and also cell × time condition summaries; those summaries are not independent trials.",
+          "labels": "Stimulated/nonstimulated indices, spatial patterns, trial-order keys and ABC/CBA order. Figure3 sources distinguish visual-only, opto-only and matched/unmatched visual-plus-opto conditions.",
+          "time_alignment": "Known frame indices and analysis windows in source; exact per-experiment frame-time/stimulation-onset contract has not been verified. Do not convert arbitrary frame indices into milliseconds or infer cross-experiment synchronization.",
+          "biological_ids": "Archive keys expose experiment IDs, including expt1–6, but inspected manifest/README/source did not establish a complete experiment→mouse→session map or whether panel examples repeat an acquisition. Neuron/cell and panel counts are not animal counts.",
+          "evidence": "7.37 GB archive central directory (14 entries), full README, Figure2/3 notebook source and helper inspected by small ranges. Input arrays were not downloaded."
+        },
+        "status": "needs_adapter"
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "neural_measurements": "figure2_data.npz includes panelBC_F_abc and F_cba documented as 257 cells × 50 trials × 200 frames, plus six-experiment traces for other panels. Figure3 includes full traces and also cell × time condition summaries; those summaries are not independent trials.",
+    "allowed_context": "Stimulated/nonstimulated indices, spatial patterns, trial-order keys and ABC/CBA order. Figure3 sources distinguish visual-only, opto-only and matched/unmatched visual-plus-opto conditions.",
+    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
+    "time_alignment": "Known frame indices and analysis windows in source; exact per-experiment frame-time/stimulation-onset contract has not been verified. Do not convert arbitrary frame indices into milliseconds or infer cross-experiment synchronization.",
+    "source_contract_evidence": "7.37 GB archive central directory (14 entries), full README, Figure2/3 notebook source and helper inspected by small ranges. Input arrays were not downloaded."
+  },
+  "biological_unit": "Archive keys expose experiment IDs, including expt1–6, but inspected manifest/README/source did not establish a complete experiment→mouse→session map or whether panel examples repeat an acquisition. Neuron/cell and panel counts are not animal counts.",
+  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "split": {
+    "policy": "No valid biological split until experiment-to-mouse/session mapping closes; then group all panels from the same acquisition and hold out full conditions/trials.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+  },
+  "reference": {
+    "source_code_url": "https://zenodo.org/api/records/18726362/files/sequenceFiltering.zip/content",
+    "commit_or_archive_version": "Zenodo18726362 sequenceFiltering.zip md5:35b86a22f10b600dbd98f23db3f9343d",
+    "entrypoints": [
+      "code/Figure2_panelBC.ipynb",
+      "code/Figure3_panelGI.ipynb",
+      "src/sequence_paper_functions.py",
+      "code/RNN_seqmodel.ipynb"
+    ],
+    "role": "Selected central-panel and model source only; no approved grouped neural benchmark reference until biological/timing adapter is resolved.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://doi.org/10.1016/j.neuron.2025.12.024",
+    "data_url": "https://zenodo.org/records/18726362"
+  },
+  "controls": [
+    "Additive stimulus/history baseline",
+    "equal optical power/timing",
+    "no averaged test response as input."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Normalized response RMSE, grouped by verified acquisition and animal.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": null
+    },
+    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+      },
+      {
+        "id": "reference",
+        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+      },
+      {
+        "id": "scorer",
+        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      },
+      {
+        "id": "replication",
+        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "workstation_or_single_GPU_after_bounded_intake",
+    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+    "source_storage_evidence": {
+      "estimate": "7.37 GB archive; workstation with approximately 16–32 GB RAM, hours for empirical contrasts; optional GPU for RNN training, estimated.",
+      "basis": "Static source and archive metadata inspection; estimate, not measured."
+    }
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Resolve experiment-to-mouse map and frame/onset timing; distinguish trial arrays from condition summaries."
+    },
+    {
+      "id": "source_1",
+      "requirement": "Missing verified experiment→animal/session map; potential repeated panel acquisitions must be resolved before split construction."
+    },
+    {
+      "id": "source_2",
+      "requirement": "Frame timing and stimulus onset schema needs an explicit adapter."
+    },
+    {
+      "id": "source_3",
+      "requirement": "Notebook data paths mismatch the archive layout; source dependencies include separately installed CaImAn/pytoolsMH."
+    },
+    {
+      "id": "source_4",
+      "requirement": "Selected condition arrays are averages; trial-level and per-cell summaries must not be mixed when computing uncertainty."
+    },
+    {
+      "id": "packet",
+      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+    },
+    {
+      "id": "reference",
+      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+    },
+    {
+      "id": "scorer",
+      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+    },
+    {
+      "id": "replication",
+      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+    }
+  ],
+  "next_implementation_action": [
+    "Resolve experiment-to-mouse map and frame/onset timing; distinguish trial arrays from condition summaries."
+  ],
+  "construction_review": null,
+  "source_audit_overlays": [],
+  "provenance": {
+    "canonical_record_sha256": "1e7ff0ad0f37f0b402c796df77af7846456cb9e78b66c5818ea91662802eca0a",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/readiness/signals_extension_c.json",
+        "bytes": 86959,
+        "sha256": "a336df0ce8813ee77de75c5c93503a8615dca0387c47bd2867bec51f55707c13"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

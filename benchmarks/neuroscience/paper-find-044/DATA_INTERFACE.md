@@ -1,0 +1,15 @@
+# Common data and runtime interface
+
+The exact `source_manifest.json` contains 309 object IDs, original DANDI paths, mouse/session identities, lengths and full-object SHA256 hashes. The published collection was captured as DANDI 001632's **draft** release; the fixed per-object identities govern this local task, not whichever files the live draft contains later.
+
+Each file is available at `/input/data/<asset_id>.nwb`. This is an exact read-only reference to the already acquired object; no second copy of the 762,191,835 bytes is needed. Both views must resolve the same object ID to the same bytes. The original DANDI path is metadata, not a promise that the original figure script's Windows-style relative directory exists. A candidate may map the supplied paths in its own implementation.
+
+The behavioral source fields are under `/acquisition/eventLog/{event_code,timestamp,event_flag}` and `/acquisition/task_parameters/{param_name,param_value}`. Parameters include `CS_t_fxd`, `CSdur` and `CSfreq`; parse integer lists safely rather than executing strings. Event timestamps are seconds. Relevant task-parameter durations are milliseconds as specified in the task. For the D recording cutoff only, the final timestamp under `/processing/photometry/photometry_dff/timestamps` may be needed. Photometry signal values are outside the requested calculation.
+
+The current reference used a bounded HDF5 reader and the existing immutable Python scientific image. The paired candidate program profile has not yet been qualified. Its final environment inventory, command, wall/CPU/memory caps and feedback allowance must be identical and recorded for both views before an actual comparison. No network, package download or external model service is part of this local design.
+
+The official files import additional packages including pandas, pynwb, natsort, scikit-learn, matplotlib and pingouin. This design does not claim that their entire original import graph is installed or that the figure script runs unchanged. Both views may implement the declared calculation using the same available libraries. The code supplement preserves original bytes; any candidate adaptations must be part of the submitted program, not silent operator edits. Published source uses modern Python syntax; a host Python 3.11 source parse is not evidence of incompatibility with the pinned Python 3.12 runtime.
+
+The paper and correction are supplied as exact cached XML with text and figure legends. External figure images are not bundled or fetched. This is a numerical task, not an assessment of visual figure reconstruction.
+
+Paper and correction XML report CC BY 4.0; cached DANDI metadata reports CC BY 4.0. Retain their attribution and source links. The inspected complete repository tree has no explicit code-license file. The current scope is local internal use of already cached official code; redistribution terms for a public bundle remain unresolved. This is not a declaration that public GitHub code has a permissive license, nor a reason to stop the already authorized local design.

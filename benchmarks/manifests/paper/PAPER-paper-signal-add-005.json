@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-signal-add-005",
+  "source_id": "paper-signal-add-005",
+  "track": "paper",
+  "title": "Tracking the neurodevelopmental trajectory of beta band oscillations with optically pumped magnetometer-based magnetoencephalography",
+  "status": "specification_only",
+  "canonical_position_one_based": 99,
+  "paper_identity": {
+    "url": "https://elifesciences.org/articles/94561",
+    "publication_year": 2024,
+    "venue": "eLife"
+  },
+  "primary_outputs": [
+    "Beta suppression/rebound age relationship and robustness to trial-count/head-size covariates."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://zenodo.org/records/11126593"
+    ],
+    "exact_asset_records": [],
+    "lineage_and_loader_evidence": {
+      "paper_url": "https://elifesciences.org/articles/94561",
+      "data_urls": [
+        "https://zenodo.org/records/11126593"
+      ],
+      "input_scope": "Real child/adult OPM-MEG big-endian .dat plus sampled events/channels/transforms/acquisition sidecars; author cohort27children/26adults, not all raw members inspected.",
+      "saved_metadata": [
+        {
+          "manifest_url": "https://zenodo.org/api/records/11126593",
+          "version": "1.0.0",
+          "license": "CC BY 4.0",
+          "participants": 53,
+          "cohort_mapping": "27 Children sub-001–027; 26 Adults sub-101–126. ZIP directories independently inspected.",
+          "structural_audit": "Children ZIP 656 entries, Adults 613; actual event and acquisition sidecars read for child sub-001. Raw .dat members not read.",
+          "manifest_file_count": 2,
+          "file_metadata_examples": [
+            {
+              "file": "Adults.zip",
+              "bytes": 12241764838,
+              "checksum": "md5:da41623be57bc63ab02bc28b9f27c941",
+              "url": "https://zenodo.org/api/records/11126593/files/Adults.zip/content"
+            },
+            {
+              "file": "Children.zip",
+              "bytes": 12667484530,
+              "checksum": "md5:91965460b16d7a0ecd30d9efef8113cd",
+              "url": "https://zenodo.org/api/records/11126593/files/Children.zip/content"
+            }
+          ],
+          "examples_are_not_selected_transfer_manifest": true
+        }
+      ],
+      "code_url": "https://github.com/LukasRier/RierRhodes_2024_Neurodevelopmental_OPMMEG",
+      "revision_or_archive_version": "0eb3a56af3d0e3a44b0f65c364e999f69cd4563f",
+      "entrypoints": [
+        "Run_analyses.m",
+        "Run_analyses_adults.m",
+        "index_pinky_Tstat_func.m",
+        "index_pinky_peak_TFS_func.m",
+        "RESULTS_Plots_Beta_modulation_diff.m"
+      ],
+      "array_payloads_read_in_this_audit": false
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-005",
+        "versions_and_loader_contract": {
+          "data_contract": {
+            "neural": "Actual sub-001 read-info declares 189 channels × 396000 samples, double precision, big-endian .dat; matching *_meg.json, channels and sensor transforms present in ZIP index.",
+            "labels": "Actual events.tsv columns onset,duration,sample,type,value; author loader uses Start_index/Start_pinky. Subject metadata sub_info.mat and sub_info_adults.mat provided in code.",
+            "time_alignment": "Sample-indexed triggers; acquisition JSON supplies SamplingFrequency. Use index/pinky same preprocessing and equal trial counts.",
+            "split": "Reproduction uses original cohort; extension participant-held-out, age-stratified, no windows from one child across splits.",
+            "controls": "Motion/head-size/retained-trial covariates, matched trial counts, event-shift surrogate preserving autocorrelation; subject-level uncertainty."
+          },
+          "scope_description": "Recompute age-dependent sensorimotor beta modulation from real child/adult OPM-MEG, preserving author event timing and artifact exclusions; connectivity/HMM are optional extensions after dependency checks."
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-signal-add-005",
+        "versions_and_loader_contract": {
+          "declared_scope": "Recompute age-dependent sensorimotor beta modulation from real child/adult OPM-MEG, preserving author event timing and artifact exclusions; connectivity/HMM are optional extensions after dependency checks."
+        },
+        "data_section_locators": []
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/LukasRier/RierRhodes_2024_Neurodevelopmental_OPMMEG",
+    "revision_or_archive_version": "0eb3a56af3d0e3a44b0f65c364e999f69cd4563f",
+    "entrypoints": [
+      "Run_analyses.m",
+      "Run_analyses_adults.m",
+      "index_pinky_Tstat_func.m",
+      "index_pinky_peak_TFS_func.m",
+      "RESULTS_Plots_Beta_modulation_diff.m"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-005",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/LukasRier/RierRhodes_2024_Neurodevelopmental_OPMMEG",
+            "commit": "0eb3a56af3d0e3a44b0f65c364e999f69cd4563f",
+            "license": "MIT",
+            "entrypoints": [
+              "Run_analyses.m",
+              "Run_analyses_adults.m",
+              "index_pinky_Tstat_func.m",
+              "index_pinky_peak_TFS_func.m",
+              "RESULTS_Plots_Beta_modulation_diff.m"
+            ]
+          }
+        }
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-signal-add-005",
+        "recorded": {
+          "code_url": "https://github.com/LukasRier/RierRhodes_2024_Neurodevelopmental_OPMMEG",
+          "code_revision_or_archive_version": "0eb3a56af3d0e3a44b0f65c364e999f69cd4563f",
+          "entrypoints": [
+            "Run_analyses.m",
+            "Run_analyses_adults.m",
+            "index_pinky_Tstat_func.m",
+            "index_pinky_peak_TFS_func.m",
+            "RESULTS_Plots_Beta_modulation_diff.m"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": {
+        "data": "CC BY 4.0",
+        "code": "MIT",
+        "credentials_required": false
+      },
+      "declared_overlap_group": null,
+      "existing_graph_evidence_leads": [],
+      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
+      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "documented_outputs": [
+        "Beta suppression/rebound age relationship and robustness to trial-count/head-size covariates."
+      ],
+      "construction_specificity": "Beta suppression/rebound age relationship documented; exact band, event windows, artifact/ICA decisions, spatial selection and group statistic need freezing.",
+      "exact_published_numeric_target_verified_by_this_audit": false
+    },
+    "source_recorded_metrics": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-005",
+        "recorded_metrics": [
+          "Participant beta modulation and age effect R²/interval",
+          "Spatial and spectral reproducibility"
+        ]
+      }
+    ],
+    "comparability": [
+      "Use released artifact masks or prospectively fixed automatic policy, never select cleaning for the desired age effect.",
+      "Exclude missing evoked-helper branch explicitly; individualized-band sensitivity cannot replace a failed primary analysis."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Beta suppression/rebound age relationship documented; exact band, event windows, artifact/ICA decisions, spatial selection and group statistic need freezing.",
+        "Whole age-stratified participant, with all windows/trials together; trial-count/head-size/motion controls required.",
+        "Missing index_pinky_4mm_evoked_func blocks that branch, not all beta analysis. TwoZIPmetadata totals are roughly25GB; no runtime measured. MATLAB/FieldTrip/beamformer qualification remains.",
+        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_and_metadata_only_for_this_project",
+      "runnable_reference_demonstrated": false,
+      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Test sensitivity to individualized beta bands, artifact policy and participant grouping, with all recipes frozen before held-out analysis."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_executed_or_independently_qualified",
+      "proposed_question": [
+        "Test sensitivity to individualized beta bands, artifact policy and participant grouping, with all recipes frozen before held-out analysis."
+      ],
+      "independent_panel_gate": "Whole age-stratified participant, with all windows/trials together; trial-count/head-size/motion controls required.",
+      "published_targets_are_historically_exposed": true,
+      "prospective_frontier_claim_supported": false
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_statement": "unmeasured",
+    "source_resource_evidence": null,
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "holds": {
+    "task_specific": [
+      "Beta suppression/rebound age relationship documented; exact band, event windows, artifact/ICA decisions, spatial selection and group statistic need freezing.",
+      "Whole age-stratified participant, with all windows/trials together; trial-count/head-size/motion controls required.",
+      "Missing index_pinky_4mm_evoked_func blocks that branch, not all beta analysis. TwoZIPmetadata totals are roughly25GB; no runtime measured. MATLAB/FieldTrip/beamformer qualification remains.",
+      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Resolve artifact-mask availability and child/adult file-to-script paths, then specify one beta-modulation endpoint and age covariate model with a dependency-complete branch.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Resolve artifact-mask availability and child/adult file-to-script paths, then specify one beta-modulation endpoint and age covariate model with a dependency-complete branch.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "ceb34cea387346b8af59ecf4e3b7e4592c6663ae1dc430bafe3f0b71c69b7df9",
+    "audit_record_sha256": "ffe19b1a3e8b1822f0e7efa98ab8e49ce01c25ec288d0c187aa995ce3a98d0de",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+          "bytes": 127035,
+          "sha256": "49a22e4974c8ed6c213582386153fff1fdf7b00755481b032ba865a57030ea06"
+        },
+        "record_id": "paper-signal-add-005",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 4,
+        "record_sha256": "f0edd6b959beec37608d4223011c6d9f897e70b9bcc29fb7a59ffff3e6f7f4a8"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+          "bytes": 500587,
+          "sha256": "8893618f482d8301b723a57e2758fef66ab560b84c95650f8ea92f4b37375c3a"
+        },
+        "record_id": "paper-signal-add-005",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 194,
+        "record_sha256": "9c20a9e47428d2cd96f14cd713b737e94d0afae83f9a043517075473e01993b4"
+      }
+    ],
+    "historical_pin_exceptions": [
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+          "bytes": 3519,
+          "sha256": "d9862c468c3ece0d0e0cfca975f8980cea6a9dfbb7abfe5d3b4b96ca76045ac7"
+        },
+        "current_pin": {
+          "bytes": 4544,
+          "sha256": "963f9e1b6d528573c1c321629a0ab2ba6e1fb25b3e0404e3882b483ea7207c5f"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      },
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+          "bytes": 163669,
+          "sha256": "96c826360af4b8858cb33406e95242d27d7806e5896b98c211ccd3478a76661d"
+        },
+        "current_pin": {
+          "bytes": 166909,
+          "sha256": "974e56e839620059345f5b8ae1f5893e1d404c007864159dc84e6b330f49edca"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      }
+    ],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

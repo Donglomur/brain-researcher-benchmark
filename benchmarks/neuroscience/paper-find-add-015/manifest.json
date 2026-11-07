@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-FIND-ADD-015",
+  "track": "paper",
+  "title": "Cellular-resolution optogenetics reveals attenuation-by-suppression in visual cortical neurons",
+  "status": "local_scoring_adapter_verified",
+  "scope": "Executed processed-trace Fig2/3 numerical reconstruction plus deterministic Fig4 subset; continuous submitted-NPZ scoring. Separate open paper reproduction/code-access prompt remains unqualified.",
+  "entrypoints": {
+    "score": {
+      "argv": [
+        "python3",
+        "benchmarks/neuroscience/paper-find-add-015/score.py",
+        "--submission",
+        "{submission}",
+        "--output",
+        "{output}"
+      ],
+      "working_directory": ".",
+      "sha256": "3a8d8a6e3a7f2a7e173b1136a2df3c6e384b7173ceb3769d3c8595db6a131097",
+      "wall_seconds": 18,
+      "isolation": "fresh offline nonroot read-only Docker;2CPUs4GiB; no candidate code execution"
+    }
+  },
+  "assets": {
+    "public": {
+      "path": "benchmarks/neuroscience/paper-find-add-015/public_assets.json",
+      "bytes": 5677,
+      "sha256": "d166702d13214aeb5284cfdc2966aeeda1ae4152085378efc9a5ec1ba63236da"
+    },
+    "private": {
+      "path": "benchmarks/neuroscience/paper-find-add-015/operator_assets.json",
+      "bytes": 992,
+      "sha256": "3b7407297b5776d36f2c5b9106c8222d5d6b831b66c6dee30626f14faa460465"
+    },
+    "local_workspace_dependencies": true,
+    "self_contained_portable": false,
+    "candidate_must_not_mount_operator_package_or_parent_directories": true
+  },
+  "instructions": "instructions.md",
+  "primary_open_paper_prompt": "paper_task.md",
+  "submission": {
+    "type": "arbitrary_numeric_npz",
+    "schema": "submission_schema.json",
+    "max_bytes": 2000000
+  },
+  "grading": {
+    "primary_metric": "fig2_equal_experiment_delta_rmse",
+    "direction": "lower",
+    "continuous_score": true,
+    "separate_secondary_metrics": [
+      "multiopto high-power",
+      "multiopto low-power",
+      "multiopto high-minus-low contrast",
+      "multivis cell-condition delta",
+      "Fig4 normalized integral"
+    ],
+    "binary_scientific_success_threshold": null,
+    "invalid_submission_score": null,
+    "gold_values_reconstruct_current_released_processed_inputs": true
+  },
+  "verification": {
+    "status": "passed",
+    "receipt_path": "authoring/opto-attenuation-v1/package-verification-v1/execution-001/receipt.json",
+    "receipt_sha256": "6f9479308c2e14d2b2583abd7b9a8162c2ba748cf4e95f4133de1187ba092aa9"
+  },
+  "admission": {
+    "runnable": true,
+    "research_qualified": false,
+    "full_candidate_contract_complete": false,
+    "submission_ready": false
+  },
+  "limitations": [
+    "Two publishedp-values remain numerically unmatched under currentSciPy1.15.3; cause unresolved.",
+    "Sourceprovided optical preprocessing/selection notrerun;12releasedFig2cells have reconstructedopto\u22645% despite documented upstreamthreshold.",
+    "Experiment/cell nesting preserved; filename suffix animalmapping unresolved. Noindependent-animal CI.",
+    "Fig4 omitsbootstrap,Ricciardi fit,deconvolutioncontrols andexactauthorenvironment.",
+    "No blind agent attempt, paired code-access study or hidden improvement panel.",
+    "ArticleXMLwithoutfigure/supplementbinaries; localinternalrightsstatus only; LOESSsource notredistributed."
+  ],
+  "program_execution": {
+    "status": "local_program_runner_verified",
+    "entrypoint": {
+      "argv": [
+        "python3",
+        "authoring/opto-attenuation-v1/program-completion-v1/run_program.py",
+        "--program",
+        "{program}",
+        "--output",
+        "{output}",
+        "--review",
+        "{review}",
+        "--other-reserve-bytes",
+        "{other_reserve_bytes}"
+      ],
+      "working_directory": ".",
+      "sha256": "7cc0a06362c54f70cacf5693fc865e0db796926f05e45c13bfffbb64eb24111f",
+      "required_operator_arguments": [
+        "review",
+        "other_reserve_bytes"
+      ]
+    },
+    "source_freeze": {
+      "path": "authoring/opto-attenuation-v1/program-completion-v1/FREEZE.json",
+      "sha256": "9157789a56536510f4648c991eb084c1115e3f3daf9b88cd42dbce805dcc08e1"
+    },
+    "verification": {
+      "status": "passed",
+      "receipt_path": "authoring/opto-attenuation-v1/program-completion-v1/registration/receipt.final.json",
+      "receipt_sha256": "1f6b884a6caedf805c4279582a2eb4447230a6ba4428ff8860edecf5e55fe59e",
+      "qualification_path": "authoring/opto-attenuation-v1/program-completion-v1/registration/qualification.final.json",
+      "qualification_sha256": "5fd0cb00de08c12a18d63ec63b0c307316e220943f7ed935cdd968f1208c45d1",
+      "source_binding_path": "authoring/opto-attenuation-v1/program-completion-v1/registration/source_binding.final.json",
+      "source_binding_sha256": "0e4f93ef5d773577d3b747dd7bb79688da6f14ece18f47c449cf2a7ea8b01484"
+    },
+    "instructions_path": "authoring/opto-attenuation-v1/program-completion-v1/public/TASK.md",
+    "operator_instructions_path": "authoring/opto-attenuation-v1/program-completion-v1/registration/README.md",
+    "public_packet": {
+      "path": "authoring/opto-attenuation-v1/program-completion-v1/registration/program_assets.json",
+      "bytes": 5374,
+      "sha256": "e8e59f01978bfa5353ad2276f4dbd272a7db79b02b066f78a788335f9cf8c460"
+    },
+    "scope": {
+      "mode": "local_noncommercial_source_assisted_processed_trace_reconstruction",
+      "numeric_fields": 37,
+      "identity_fields": 5,
+      "fig2_cells": 364,
+      "multiopto_cells": 52,
+      "multivis_cells": 6,
+      "source_committed_before_input_release": true,
+      "producer_absent_output_committed_before_private_grading": true,
+      "candidate_schema_before_private_numeric_decode": true,
+      "public_exact_files": 18,
+      "raw_optical_input": false,
+      "exposed_development_inputs": true,
+      "paper_only_comparison_qualified": false,
+      "Ricciardi_fit_or_full_Figure4": false,
+      "arbitrary_program_performance_floor": null,
+      "independent_animal_inference": false,
+      "research_qualified": false,
+      "full_candidate_contract_complete": false,
+      "submission_ready": false,
+      "LLM_attempts": 0
+    },
+    "runtime": {
+      "whole_attempt_seconds": 150,
+      "work_interval_seconds": 120,
+      "cleanup_seconds": 30,
+      "candidate_work_seconds": 60,
+      "candidate_memory_bytes": 3221225472,
+      "candidate_cpus": 1.75,
+      "candidate_numeric_threads": 2,
+      "candidate_pids": 64,
+      "program_bytes": 131072,
+      "output_bytes": 2000000,
+      "artifact_reserve_bytes": 8000000,
+      "network": "none",
+      "future_attempt_needs_new_operator_allocation": true,
+      "requires_same_freeze_passed_qualification_and_latest_cost_receipts": true
+    },
+    "qualification_accounting": {
+      "status": "four_controls_and_actual_common_cli_passed",
+      "planned_four_attempt_charge_seconds": 600,
+      "planned_distinct_commonCLI_charge_seconds": 150,
+      "known_prior_seconds": 840,
+      "known_family_seconds_after": 1590,
+      "no_new_model_calls": true,
+      "future_compute_grant": false,
+      "actual_program_invocations": 5,
+      "actual_charge_seconds": 750
+    },
+    "historical_manifest_scope": "Four qualified controls plus distinct ordinary zero program executed through actual shared CLI. Continuous numerical scoring, not full scientific contract or paper reproduction.",
+    "ordinary_common_cli": {
+      "path": "authoring/opto-attenuation-v1/program-completion-v1/registration/ACTUAL_COMMON_CLI_EVIDENCE.json",
+      "bytes": 1191,
+      "sha256": "e3bc92ded1b527b832181d09a5636fcf35cc6db1416ba690168dacdf35dabe56"
+    }
+  }
+}

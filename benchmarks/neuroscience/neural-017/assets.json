@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "NEURAL-017",
+  "policy": "Operator-only lazy references. Supply candidates only the public packet and declared public documents; do not expose this complete operator package. No payload duplication.",
+  "public": {
+    "packet": {
+      "path": "artifacts-build/nlb-reference-001/public_input.npz",
+      "bytes": 113599728,
+      "sha256": "6c4ae66d25a3727fa00927cfee847f60bc84a55de41d5898ad6d4f3c9e48f884",
+      "candidate_mount": "/input/public.npz",
+      "fields": [
+        "train_counts_heldin",
+        "train_counts_heldout",
+        "eval_counts_heldin",
+        "train_trial_ids",
+        "eval_trial_ids",
+        "heldin_unit_ids",
+        "heldout_unit_ids",
+        "train_condition_ids",
+        "eval_condition_ids",
+        "bin_left_edges_ms",
+        "eval_valid_mask",
+        "source_manifest_sha256",
+        "panel_fingerprint"
+      ]
+    }
+  },
+  "private": {
+    "targets": {
+      "path": "artifacts-build/nlb-reference-001/operator_targets.npz",
+      "bytes": 10900754,
+      "sha256": "c2ddd3449bb65522cda2e98101a2f5fb357411c7f61f0c08f7106ba6d51df7c4",
+      "candidate_access": false
+    },
+    "comparator": {
+      "path": "artifacts-build/nlb-reference-001/predict/rates.npz",
+      "bytes": 115772862,
+      "sha256": "a2f76cb3a6f043795ceb680178ba22199b7ec3946dec28033e84b1e84a12a1d4",
+      "candidate_access": false,
+      "comparator_key": "rates_condition_psth",
+      "verification_reference_key": "rates_glm"
+    }
+  },
+  "panel_fingerprint": "ba1b50199d8a326e1292b7e36bc6bb694ea8d3d6fa31df7bc910b45268924825",
+  "source_pins": {
+    "metrics.py": {
+      "source_path": "authoring/nlb-cosmoothing/metrics.py",
+      "bytes": 5135,
+      "sha256": "f3552f46e7a684da0f9b7e49c0b28d22734c43a87d5f1151a305086c76c182b8",
+      "copy_policy": "byte-identical"
+    },
+    "grade.py": {
+      "source_path": "authoring/nlb-cosmoothing/investigation-v1/grade.py",
+      "bytes": 15268,
+      "sha256": "68d44651fee45d9eeb2632d8b94b9807f95faf40303c0bf73c260097adf63021",
+      "copy_policy": "byte-identical"
+    }
+  },
+  "copied_source_lineage": {
+    "engine/investigation/grade.py": {
+      "source_path": "authoring/nlb-cosmoothing/investigation-v1/grade.py",
+      "bytes": 15268,
+      "sha256": "68d44651fee45d9eeb2632d8b94b9807f95faf40303c0bf73c260097adf63021",
+      "copy_policy": "byte-identical"
+    },
+    "engine/metrics.py": {
+      "source_path": "authoring/nlb-cosmoothing/metrics.py",
+      "bytes": 5135,
+      "sha256": "f3552f46e7a684da0f9b7e49c0b28d22734c43a87d5f1151a305086c76c182b8",
+      "copy_policy": "byte-identical"
+    },
+    "public/schema.json": {
+      "source_path": "authoring/nlb-cosmoothing/investigation-v1/attempt-v1/public-docs/schema.json",
+      "bytes": 4788,
+      "sha256": "5012ac464c2304a1d4b106a963f849bae6bd65ca1c351341fb5f3bf2287a4e73",
+      "copy_policy": "byte-identical"
+    },
+    "public/LICENSES.md": {
+      "source_path": "authoring/nlb-cosmoothing/investigation-v1/attempt-v1/public-docs/LICENSES.md",
+      "bytes": 1184,
+      "sha256": "05ea2f7721c46369ec90d1aa63f0d0894e8d5359ab3c7df1e97471893ebf9695",
+      "copy_policy": "byte-identical"
+    },
+    "public/NLB_LICENSE": {
+      "source_path": "authoring/nlb-cosmoothing/source/LICENSE",
+      "bytes": 1071,
+      "sha256": "6b79a9e581f330f2ec31a227b162f5b7950021fd9152203729ec7ad5bc2d9f7f",
+      "copy_policy": "byte-identical"
+    },
+    "absence.py": {
+      "source_path": "authoring/sleep-eog/candidate-controller-v3/runtime_contract.py",
+      "source_sha256": "45a4606c124978914a918ea40472d527884a69042eee59efbe90ca97efdaf407",
+      "function": "absence",
+      "function_sha256": "64a3eee8370bb02cb54b5be9bb92326ba3fda7832c942fe31f0aea4ba25de5fb",
+      "copy_policy": "unchanged function, import-only wrapper"
+    }
+  },
+  "verification_expected": {
+    "glm_co_bps": 0.2122428078418739,
+    "condition_co_bps": 0.26000008329109686,
+    "glm_minus_condition_co_bps": -0.04775727544922295,
+    "absolute_tolerance": 1e-10
+  },
+  "prior_evidence": [
+    "authoring/nlb-cosmoothing/investigation-v1/evaluation_lock.json",
+    "authoring/nlb-cosmoothing/investigation-v1/full-scale-qualification/RESULTS.md",
+    "authoring/nlb-cosmoothing/reference-v1/review/completed_reference_audit.json"
+  ],
+  "limitations": [
+    "single exposed Jenkins session",
+    "one biological animal",
+    "no new model fit",
+    "numeric scorer does not authenticate candidate program or training-only selection"
+  ]
+}

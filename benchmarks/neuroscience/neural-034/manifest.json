@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-034",
+  "track": "neural",
+  "title": "Recall-context identification from glial calcium",
+  "status": "local_scoring_adapter_verified",
+  "scope": "Static probability-file scoring for140windows from7pairedmice with leave-one-mouse-out reference. Two co-primary metrics remain separate; no candidate program replay or full research admission.",
+  "entrypoints": {
+    "score": {
+      "argv": [
+        "{python}",
+        "benchmarks/neuroscience/neural-034/score.py",
+        "--submission",
+        "{submission}",
+        "--output",
+        "{output}"
+      ],
+      "working_directory": ".",
+      "sha256": "19eb3a8a011910644820cfe2206fa9b4e2d7c6ba486d556a1f6c5f6ee987fea2"
+    }
+  },
+  "assets": {
+    "public": [
+      {
+        "path": "benchmarks/neuroscience/neural-034/public/cases.json",
+        "bytes": 10543,
+        "sha256": "0434344482bf833d27cd1c385daea0449032e6c62920557ffa2b7c665294e0c2"
+      }
+    ],
+    "private": [
+      {
+        "path": "artifacts-build/glial-context-002/private.json",
+        "bytes": 29653,
+        "sha256": "650b1fcdc2410090b93817e4ed54b1ab4ee9218eb8d75e74d7e763b79d570e86"
+      },
+      {
+        "path": "authoring/glial-context-v1/grade-execution-001/output/grade.json",
+        "bytes": 8186,
+        "sha256": "8443152e58e0e56b12d4396cd6aff632d28a4d66650b18518fc81862b20de064"
+      }
+    ],
+    "local_dependency": "Seven isolated publicfold packets exist under artifacts-build/glial-context-002; mount only onefold per predictor. Existing pinnedDockerimage required."
+  },
+  "verification": {
+    "status": "passed",
+    "receipt_path": "authoring/glial-context-v1/scoring-execution-001/receipt.json",
+    "receipt_sha256": "4fa7c5745385f25f90e2fed3cc5ee3137fb6be45424ee9de7474909a0bb2bb1a",
+    "scope": "Six actual scorer controls, reference and constant parity, malformed rejection before private labels; allcontainers absent."
+  },
+  "admission": {
+    "runnable": true,
+    "full_candidate_contract_complete": false,
+    "research_qualified": false,
+    "submission_ready": false
+  },
+  "metrics": {
+    "primary": "two co-primary metrics; no combined scalar",
+    "co_primary": [
+      "equal_mouse_balanced_accuracy",
+      "equal_mouse_log_loss"
+    ],
+    "directions": {
+      "balanced_accuracy": "higher",
+      "log_loss": "lower"
+    },
+    "scientific_success_floor": null,
+    "signed_reference_comparisons": [
+      "constant",
+      "amplitude",
+      "glial",
+      "behavior",
+      "combined",
+      "time_scrambled"
+    ]
+  },
+  "candidate_fold_isolation_enforced_by_this_entrypoint": false,
+  "submission_schema": {
+    "schema_version": 1,
+    "probabilities": [
+      {
+        "fold": "integer0..6",
+        "query_id": "exact24-character publicID",
+        "probability": "finite numberin[0,1]"
+      }
+    ]
+  },
+  "evaluation_note": "Each query appears exactlyonce; entry order irrelevant. Exact140 IDs required. Probability0.5 predictsB. Loglossclips only forlog calculation at1e-15. Windows averagewithineachmouse, then7mouse scores averageequally.",
+  "program_execution": {
+    "status": "local_program_runner_verified",
+    "entrypoint": {
+      "argv": [
+        "python3",
+        "authoring/shared-program-runner-v2/execute_program.py",
+        "--program",
+        "{program}",
+        "--out",
+        "{output}",
+        "--other-reserve-bytes",
+        "146000000"
+      ],
+      "working_directory": ".",
+      "sha256": "52d1cbd200dcfb5a14d639bb953c7bdd7018bf2ac33b836624cfcc4e2fde007b"
+    },
+    "source_freeze": {
+      "path": "authoring/shared-program-runner-v2/FREEZE.json",
+      "sha256": "14a59359f56dc5c18fecae41e739bb63f5f94b1831d81a58a22ab670a4eef737"
+    },
+    "verification": {
+      "status": "passed",
+      "receipt_path": "authoring/shared-program-runner-v2/receipt.json",
+      "receipt_sha256": "0e57924d2bb500c00e925c214b6179d3facb67d5bb302ef75f84144b3c804756",
+      "qualification_path": "authoring/shared-program-runner-v2/verification.json",
+      "qualification_sha256": "0504ed6bc7321ebf4564239f6c7bc7a8d5a7b5fef469bb1a84427f117438ec0f",
+      "source_binding_path": "authoring/shared-program-runner-v2/outer_started.json",
+      "source_binding_sha256": "a60501d5b5141dbf9dbfa5e55bb816c25b11c08dc57b5abc0a6fb8f2a6404438",
+      "planned_controls": [
+        "reference",
+        "malformed_linger",
+        "private_probe"
+      ],
+      "generated_runtime_tests": 21,
+      "actual_interrupted_wrapper_fixture_passed": true,
+      "per_mouse_parity_checks": 14,
+      "macro_parity_checks": 2
+    },
+    "instructions_path": "authoring/shared-program-runner-v2/PUBLIC_INSTRUCTIONS.md",
+    "scope": {
+      "mode": "offline_fixed_python_program_seven_fresh_mouse_folds",
+      "public_files_per_unit": [
+        "public.npz"
+      ],
+      "program_committed_before_first_fold": true,
+      "previous_fold_resources_absent_and_prediction_committed_before_next_fold": true,
+      "private_grade_after_all_seven_folds_committed": true,
+      "biological_units": 7,
+      "query_windows": 140,
+      "development_exposed": true,
+      "LLM_attempts": 0,
+      "paired_investigation_mode_qualified": false,
+      "full_candidate_contract_complete": false,
+      "research_qualified": false,
+      "submission_ready": false
+    },
+    "runtime": {
+      "default_whole_attempt_seconds": 150,
+      "candidate_work_wall_seconds_per_unit_from_start_request": 20,
+      "termination_latency_separately_measured": true,
+      "whole_cap_can_prevent_completion_of_seven_full_twenty_second_units": true,
+      "candidate_cpus": 1.75,
+      "holder_cpus": 0.25,
+      "candidate_memory_bytes": 3221225472,
+      "holder_memory_bytes": 134217728,
+      "aggregate_memory_cap_bytes": 4294967296,
+      "output_tmpfs_bytes": 8388608,
+      "single_program_cap_bytes": 65536,
+      "single_unit_submission_cap_bytes": 100000,
+      "network": "none",
+      "pull": "never",
+      "no_external_model_or_service": true,
+      "all_candidate_resources_absent_before_private_scoring": true,
+      "future_attempt_needs_new_operator_allocation": true,
+      "registered_other_reserve_bytes": 146000000,
+      "future_complete_reservation_must_be_rechecked": true
+    },
+    "qualification_accounting": {
+      "actual_elapsed_before_final_receipt_seconds": 24.642053166986443,
+      "full_stage_charge_seconds": 180,
+      "prior_known_seconds": 690,
+      "known_charged_seconds": 870,
+      "operator_construction_ceiling_seconds": 900,
+      "remaining_unassigned_seconds": 30,
+      "future_compute_grant": false
+    },
+    "preserved_previous_manifest": {
+      "path": "authoring/shared-program-runner-v2/registration/manifest.before-program-execution.json",
+      "sha256": "e9ecfcfaf2934e357c575105fde565eac9b5b58bd8d7427a4d3d8ba386c00250"
+    }
+  }
+}

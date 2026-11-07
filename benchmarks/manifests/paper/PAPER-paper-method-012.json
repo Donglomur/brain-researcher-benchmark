@@ -1,0 +1,603 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-012",
+  "source_id": "paper-method-012",
+  "track": "paper",
+  "title": "MINT: A toolbox for the analysis of multivariate neural information coding and transmission",
+  "status": "specification_only",
+  "canonical_position_one_based": 55,
+  "paper_identity": {
+    "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012934",
+    "publication_year": 2025,
+    "venue": "PLOS Computational Biology"
+  },
+  "primary_outputs": [
+    "Recover empirical neural/behavior mutual information estimates with the author estimators and bias corrections.",
+    "Compare finite-sample behavior and null calibration across trial subsampling with shuffled-label controls and identical bins."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://doi.org/10.1371/journal.pcbi.1012934.s002"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0",
+        "recorded_fields": {
+          "url": "https://doi.org/10.1371/journal.pcbi.1012934.s002",
+          "filename": "pcbi.1012934.s002.gz",
+          "version": "Published2025-04-15 article supplementary S1Data",
+          "role": "Actual CA1 calcium-imaging observations used for part of Fig.2, per primary article; not figure-summary data"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-012"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "assessment": "Published S1Data supplement plus official MINT MATLAB toolbox/MI examples; no all-paper empirical automation. Small supplement is an input pointer, not proof of easy/full reproduction.",
+      "official_code": {
+        "url": "https://github.com/panzerilab/MINT",
+        "commit": "f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb"
+      },
+      "input_routes": [
+        {
+          "url": "https://doi.org/10.1371/journal.pcbi.1012934.s002",
+          "version": "Published2025-04-15 article supplementary S1Data",
+          "role": "Actual CA1 calcium-imaging observations used for part of Fig.2, per primary article; not figure-summary data"
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-012",
+        "versions_and_loader_contract": {
+          "scope_description": "MINT empirical CA1 calcium information-coding analysis underlying part of Fig.2: reproduce information estimates and limited-sample bias corrections from the deposited observations.",
+          "unresolved_coverage": [
+            "Exact CA1 variable schema and relevant Fig.2 subpanels still need load-time validation; only metadata and author methods inspected.",
+            "The public core toolbox is available; no all-paper figure automation is claimed.",
+            "Leave other electrophysiology examples, simulations and directed-information claims outside this bounded scope."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/panzerilab/MINT",
+    "revision_or_archive_version": "f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb",
+    "entrypoints": [
+      {
+        "path": "BuildMINT.m",
+        "url": "https://github.com/panzerilab/MINT/blob/f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb/BuildMINT.m",
+        "role": "Build official toolbox/dependencies",
+        "inspected_as_text": true
+      },
+      {
+        "path": "How_to_use_MINT/How_to_compute_MI.m",
+        "url": "https://github.com/panzerilab/MINT/blob/f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb/How_to_use_MINT/How_to_compute_MI.m",
+        "role": "Official mutual-information calculation and correction workflow",
+        "inspected_as_text": true
+      },
+      {
+        "path": "How_to_use_MINT/How_to_compute_non_discrete.m",
+        "url": "https://github.com/panzerilab/MINT/blob/f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb/How_to_use_MINT/How_to_compute_non_discrete.m",
+        "role": "Continuous-variable estimator route when appropriate to declared analysis",
+        "inspected_as_text": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-012",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/panzerilab/MINT",
+            "commit": "f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb",
+            "author_linkage": [
+              "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012934",
+              "https://zenodo.org/records/13998526",
+              "https://github.com/panzerilab/MINT"
+            ],
+            "default_branch": "main",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/panzerilab/MINT/f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb/README.md",
+            "license_source": null,
+            "file_tree": {
+              "source": "https://api.github.com/repos/panzerilab/MINT/git/trees/f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb?recursive=1",
+              "truncated": false,
+              "paths": [
+                "BuildMINT.m",
+                "How_to_use_MINT/How_to_compute_FIT.m",
+                "How_to_use_MINT/How_to_compute_MI.m",
+                "How_to_use_MINT/How_to_compute_MI_in_Python.py",
+                "How_to_use_MINT/How_to_compute_PID_in_Python.py",
+                "How_to_use_MINT/How_to_compute_non_discrete.m",
+                "README.md",
+                "config/startup_MI_TEMPLATE.m",
+                "config/startup_PID_TEMPLATE.m",
+                "config/startup_tools_TEMPLATE.m",
+                "extern/ContinuousMIEstimation/ExampleScripts/NFkappaBData.mat",
+                "extern/ContinuousMIEstimation/ExampleScripts/NFkappaBDataExample.m",
+                "extern/ContinuousMIEstimation/ExampleScripts/finchData.mat",
+                "extern/ContinuousMIEstimation/ExampleScripts/finchDataExample.m",
+                "extern/ContinuousMIEstimation/ExampleScripts/gaussianExample.m",
+                "extern/ContinuousMIEstimation/ExampleScripts/heavyTailExample.m",
+                "extern/ContinuousMIEstimation/MIxnyn_matlab.m",
+                "extern/ContinuousMIEstimation/MIxnyn_matlab_mint.m",
+                "extern/ContinuousMIEstimation/README.txt",
+                "extern/ContinuousMIEstimation/findMI_KSG_bias_kN.m",
+                "extern/ContinuousMIEstimation/findMI_KSG_stddev.m",
+                "extern/ContinuousMIEstimation/findMI_KSG_subsampling.m",
+                "extern/ContinuousMIEstimation/kraskovStoegbauerGrassberger/ICAtests.m",
+                "extern/ContinuousMIEstimation/kraskovStoegbauerGrassberger/MIClustering.m",
+                "extern/ContinuousMIEstimation/kraskovStoegbauerGrassberger/MIhigherdim.m",
+                "extern/ContinuousMIEstimation/kraskovStoegbauerGrassberger/MIxnyn.m",
+                "extern/ContinuousMIEstimation/kraskovStoegbauerGrassberger/Tutorial.m",
+                "extern/ContinuousMIEstimation/kraskovStoegbauerGrassberger/amari.m",
+                "extern/ContinuousMIEstimation/kraskovStoegbauerGrassberger/milca.m",
+                "extern/ContinuousMIEstimation/kraskovStoegbauerGrassberger/milcaECG8ch.mat",
+                "extern/ContinuousMIEstimation/kraskovStoegbauerGrassberger/milcadelay.m",
+                "extern/ContinuousMIEstimation/reparameterize_data.m",
+                "extern/ecos-matlab-master/README.md",
+                "extern/ecos-matlab-master/bin/cvx_solver_shim.m",
+                "extern/ecos-matlab-master/bin/ecos.m",
+                "extern/ecos-matlab-master/bin/ecos_license.m",
+                "extern/ecos-matlab-master/bin/ecosoptimset.m",
+                "extern/ecos-matlab-master/bin/ecosqp.m",
+                "extern/ecos-matlab-master/bin/makemex.m",
+                "extern/ecos-matlab-master/conelp/conelp.m",
+                "extern/ecos-matlab-master/conelp/conelp_KKTmatrix.m",
+                "extern/ecos-matlab-master/conelp/conelp_backwardsub.m",
+                "extern/ecos-matlab-master/conelp/conelp_buildlowrankmatrices.m",
+                "extern/ecos-matlab-master/conelp/conelp_byDiag.m",
+                "extern/ecos-matlab-master/conelp/conelp_byW.m",
+                "extern/ecos-matlab-master/conelp/conelp_e.m",
+                "extern/ecos-matlab-master/conelp/conelp_factor.m",
+                "extern/ecos-matlab-master/conelp/conelp_forwardsub.m",
+                "extern/ecos-matlab-master/conelp/conelp_forwardsub_bydiag_backwardsub_r1.m",
+                "extern/ecos-matlab-master/conelp/conelp_forwardsub_bydiag_r1.m",
+                "extern/ecos-matlab-master/conelp/conelp_forwardsub_r1.m",
+                "extern/ecos-matlab-master/conelp/conelp_getPerm.m",
+                "extern/ecos-matlab-master/conelp/conelp_init.m",
+                "extern/ecos-matlab-master/conelp/conelp_kringel.m",
+                "extern/ecos-matlab-master/conelp/conelp_ldl.m",
+                "extern/ecos-matlab-master/conelp/conelp_linesearch.m",
+                "extern/ecos-matlab-master/conelp/conelp_linesearch_soc.m",
+                "extern/ecos-matlab-master/conelp/conelp_lowrankL.m",
+                "extern/ecos-matlab-master/conelp/conelp_lowrankbackwardsub.m",
+                "extern/ecos-matlab-master/conelp/conelp_lowrankfactor.m",
+                "extern/ecos-matlab-master/conelp/conelp_lowrankforwardsub.m",
+                "extern/ecos-matlab-master/conelp/conelp_lowranksolve.m",
+                "extern/ecos-matlab-master/conelp/conelp_plot_kkt.m",
+                "extern/ecos-matlab-master/conelp/conelp_print.m",
+                "extern/ecos-matlab-master/conelp/conelp_raute.m",
+                "extern/ecos-matlab-master/conelp/conelp_scaling.m",
+                "extern/ecos-matlab-master/conelp/conelp_socscaling.m",
+                "extern/ecos-matlab-master/conelp/conelp_solve.m",
+                "extern/ecos-matlab-master/conelp/conelp_stepsize.m",
+                "extern/ecos-matlab-master/conelp/conelp_stretch.m",
+                "extern/ecos-matlab-master/conelp/conelp_timesW.m",
+                "extern/ecos-matlab-master/conelp/conelp_timesWsquare.m",
+                "extern/ecos-matlab-master/conelp/conelp_unstretch.m",
+                "extern/ecos-matlab-master/ecos/.travis.yml",
+                "extern/ecos-matlab-master/ecos/README.md",
+                "extern/ecos-matlab-master/ecos/README.pdf",
+                "extern/ecos-matlab-master/ecos/external/amd/README.txt",
+                "extern/ecos-matlab-master/ecos/external/ldl/README.txt",
+                "extern/ecos-matlab-master/ecos/test/README.md",
+                "extern/ecos-matlab-master/ecos/test/matlab/RUN_ALL_TESTS.m",
+                "extern/ecos-matlab-master/ecos/test/matlab/lp_netlib_lp_tests.m",
+                "extern/ecos-matlab-master/ecos/test/matlab/test_box_volume.m",
+                "extern/ecos-matlab-master/ecos/test/matlab/test_inv_pos.m",
+                "extern/ecos-matlab-master/ecos/test/matlab/test_portfolio.m",
+                "extern/ecos-matlab-master/ecos/test/qcml/README.md",
+                "extern/ecos-matlab-master/ecos/test/qcml/simple_tests.py",
+                "extern/ecos-matlab-master/test/batchtest.m",
+                "extern/ecos-matlab-master/test/cg_dump_conelpproblem.m",
+                "extern/ecos-matlab-master/test/cg_dump_spmat.m",
+                "extern/ecos-matlab-master/test/cg_dumpfile.m",
+                "extern/ecos-matlab-master/test/cg_dumpmat.m",
+                "extern/ecos-matlab-master/test/cg_mat2c.m",
+                "extern/ecos-matlab-master/test/chebyshev/chebyshev.m",
+                "extern/ecos-matlab-master/test/chebyshev/chebyshev/makemex.m",
+                "extern/ecos-matlab-master/test/chebyshev/chebyshev/solver.m",
+                "extern/ecos-matlab-master/test/chebyshev/conelp_solver.m",
+                "extern/ecos-matlab-master/test/chebyshev/cvxsocp_solver.m",
+                "extern/ecos-matlab-master/test/chebyshev/data.m",
+                "extern/ecos-matlab-master/test/chebyshev/ecos_solver.m",
+                "extern/ecos-matlab-master/test/dimacs_errors.m",
+                "extern/ecos-matlab-master/test/ecos_mpc/conelp_solver.m",
+                "extern/ecos-matlab-master/test/ecos_mpc/cvxsocp_solver.m",
+                "extern/ecos-matlab-master/test/ecos_mpc/data.m",
+                "extern/ecos-matlab-master/test/ecos_mpc/ecos_mpc.m",
+                "extern/ecos-matlab-master/test/ecos_mpc/ecos_mpc/makemex.m",
+                "extern/ecos-matlab-master/test/ecos_mpc/ecos_mpc/solver.m",
+                "extern/ecos-matlab-master/test/ecos_mpc/ecos_solver.m",
+                "extern/ecos-matlab-master/test/generateTest.m",
+                "extern/ecos-matlab-master/test/geometric_mean/conelp_solver.m",
+                "extern/ecos-matlab-master/test/geometric_mean/cvxsocp_solver.m",
+                "extern/ecos-matlab-master/test/geometric_mean/data.m",
+                "extern/ecos-matlab-master/test/geometric_mean/ecos_solver.m",
+                "extern/ecos-matlab-master/test/geometric_mean/geometric_mean.m",
+                "extern/ecos-matlab-master/test/geometric_mean/geometric_mean/makemex.m",
+                "extern/ecos-matlab-master/test/geometric_mean/geometric_mean/solver.m",
+                "extern/ecos-matlab-master/test/inv_prob/conelp_solver.m",
+                "extern/ecos-matlab-master/test/inv_prob/cvxsocp_solver.m",
+                "extern/ecos-matlab-master/test/inv_prob/data.m",
+                "extern/ecos-matlab-master/test/inv_prob/ecos_solver.m",
+                "extern/ecos-matlab-master/test/inv_prob/inv_prob.m",
+                "extern/ecos-matlab-master/test/inv_prob/inv_prob/makemex.m",
+                "extern/ecos-matlab-master/test/inv_prob/inv_prob/solver.m",
+                "extern/ecos-matlab-master/test/lasso/conelp_solver.m",
+                "extern/ecos-matlab-master/test/lasso/cvxsocp_solver.m",
+                "extern/ecos-matlab-master/test/lasso/data.m",
+                "extern/ecos-matlab-master/test/lasso/ecos_solver.m",
+                "extern/ecos-matlab-master/test/lasso/lasso.m",
+                "extern/ecos-matlab-master/test/lasso/lasso/makemex.m",
+                "extern/ecos-matlab-master/test/lasso/lasso/solver.m",
+                "extern/ecos-matlab-master/test/least_squares/@CodeGen/CodeGen.m",
+                "extern/ecos-matlab-master/test/least_squares/@CodeGen/display.m",
+                "extern/ecos-matlab-master/test/least_squares/@CodeGen/generateCodeFromMatlab.m",
+                "extern/ecos-matlab-master/test/least_squares/compare2cvx.m",
+                "extern/ecos-matlab-master/test/least_squares/conelp_solver.m",
+                "extern/ecos-matlab-master/test/least_squares/cvxsocp_solver.m",
+                "extern/ecos-matlab-master/test/least_squares/data.m",
+                "extern/ecos-matlab-master/test/least_squares/ecos_ls.m",
+                "extern/ecos-matlab-master/test/least_squares/ecos_solver.m",
+                "extern/ecos-matlab-master/test/least_squares/least_squares.m",
+                "extern/ecos-matlab-master/test/least_squares/least_squares/makemex.m",
+                "extern/ecos-matlab-master/test/least_squares/least_squares/solver.m",
+                "extern/ecos-matlab-master/test/least_squares/myMPC.m",
+                "extern/ecos-matlab-master/test/least_squares/myMPC/interface/forces_license.m",
+                "extern/ecos-matlab-master/test/least_squares/myMPC/interface/makemex.m",
+                "extern/ecos-matlab-master/test/least_squares/myMPC/interface/myMPC.m",
+                "extern/ecos-matlab-master/test/least_squares/myMPC/myMPC.m",
+                "extern/ecos-matlab-master/test/lp/conelp_solver.m",
+                "extern/ecos-matlab-master/test/lp/cvxsocp_solver.m",
+                "extern/ecos-matlab-master/test/lp/data.m",
+                "extern/ecos-matlab-master/test/lp/ecos_solver.m",
+                "extern/ecos-matlab-master/test/lp/generateData.m",
+                "extern/ecos-matlab-master/test/lp/lp.m",
+                "extern/ecos-matlab-master/test/lp/lp/makemex.m",
+                "extern/ecos-matlab-master/test/lp/lp/solver.m",
+                "extern/ecos-matlab-master/test/min_max/conelp_solver.m",
+                "extern/ecos-matlab-master/test/min_max/cvxsocp_solver.m",
+                "extern/ecos-matlab-master/test/min_max/data.m",
+                "extern/ecos-matlab-master/test/min_max/ecos_solver.m",
+                "extern/ecos-matlab-master/test/min_max/min_max.m",
+                "extern/ecos-matlab-master/test/min_max/min_max/makemex.m",
+                "extern/ecos-matlab-master/test/min_max/min_max/solver.m",
+                "extern/ecos-matlab-master/test/pathological_lp/conelp_solver.m",
+                "extern/ecos-matlab-master/test/pathological_lp/cvxsocp_solver.m",
+                "extern/ecos-matlab-master/test/pathological_lp/data.m",
+                "extern/ecos-matlab-master/test/pathological_lp/ecos_solver.m",
+                "extern/ecos-matlab-master/test/pathological_lp/pathological_lp.m",
+                "extern/ecos-matlab-master/test/pathological_lp/pathological_lp/makemex.m",
+                "extern/ecos-matlab-master/test/pathological_lp/pathological_lp/solver.m",
+                "extern/ecos-matlab-master/test/portfolio/MversusC.m",
+                "extern/ecos-matlab-master/test/portfolio/compareMatrices.m",
+                "extern/ecos-matlab-master/test/portfolio/conelp_solver.m",
+                "extern/ecos-matlab-master/test/portfolio/cvxsocp_solver.m",
+                "extern/ecos-matlab-master/test/portfolio/data.m",
+                "extern/ecos-matlab-master/test/portfolio/ecos_solver.m",
+                "extern/ecos-matlab-master/test/portfolio/inertia.m",
+                "extern/ecos-matlab-master/test/portfolio/portfolio.m",
+                "extern/ecos-matlab-master/test/portfolio/portfolio/makemex.m",
+                "extern/ecos-matlab-master/test/portfolio/portfolio/solver.m",
+                "extern/ecos-matlab-master/test/quadratic_over_linear/conelp_solver.m",
+                "extern/ecos-matlab-master/test/quadratic_over_linear/cvxsocp_solver.m",
+                "extern/ecos-matlab-master/test/quadratic_over_linear/data.m",
+                "extern/ecos-matlab-master/test/quadratic_over_linear/ecos_solver.m",
+                "extern/ecos-matlab-master/test/quadratic_over_linear/quadratic_over_linear.m",
+                "extern/ecos-matlab-master/test/quadratic_over_linear/quadratic_over_linear/makemex.m",
+                "extern/ecos-matlab-master/test/quadratic_over_linear/quadratic_over_linear/solver.m",
+                "extern/ecos-matlab-master/test/robust_ls/conelp_solver.m",
+                "extern/ecos-matlab-master/test/robust_ls/cvxsocp_solver.m",
+                "extern/ecos-matlab-master/test/robust_ls/data.m",
+                "extern/ecos-matlab-master/test/robust_ls/ecos_solver.m",
+                "extern/ecos-matlab-master/test/robust_ls/robust_ls.m",
+                "extern/ecos-matlab-master/test/robust_ls/robust_ls/makemex.m",
+                "extern/ecos-matlab-master/test/robust_ls/robust_ls/solver.m",
+                "extern/ecos-matlab-master/test/run_dimacs_test.m",
+                "extern/ecos-matlab-master/test/svm/conelp_solver.m",
+                "extern/ecos-matlab-master/test/svm/cvxsocp_solver.m",
+                "extern/ecos-matlab-master/test/svm/data.m",
+                "extern/ecos-matlab-master/test/svm/ecos_solver.m",
+                "extern/ecos-matlab-master/test/svm/svm.m",
+                "extern/ecos-matlab-master/test/svm/svm/makemex.m",
+                "extern/ecos-matlab-master/test/svm/svm/solver.m",
+                "extern/nsb-entropy-oct_1.13/B_xiK.m",
+                "extern/nsb-entropy-oct_1.13/README",
+                "extern/nsb-entropy-oct_1.13/asymp_val.m",
+                "extern/nsb-entropy-oct_1.13/b_coeffs.m",
+                "extern/nsb-entropy-oct_1.13/dxi_KB.m",
+                "extern/nsb-entropy-oct_1.13/entropyN.m",
+                "extern/nsb-entropy-oct_1.13/find_nsb_entropy.m",
+                "extern/nsb-entropy-oct_1.13/gausslege.m",
+                "extern/nsb-entropy-oct_1.13/gaussq.m",
+                "extern/nsb-entropy-oct_1.13/integrand_1.m",
+                "extern/nsb-entropy-oct_1.13/integrand_S.m",
+                "extern/nsb-entropy-oct_1.13/integrand_S2.m",
+                "extern/nsb-entropy-oct_1.13/integrand_S2L.m",
+                "extern/nsb-entropy-oct_1.13/integrand_S2R.m",
+                "extern/nsb-entropy-oct_1.13/intest.m",
+                "extern/nsb-entropy-oct_1.13/is_vector.m",
+                "extern/nsb-entropy-oct_1.13/k_coeffs.m",
+                "extern/nsb-entropy-oct_1.13/lookup.m",
+                "extern/nsb-entropy-oct_1.13/lpoch.m",
+                "extern/nsb-entropy-oct_1.13/max_evidence.m",
+                "extern/nsb-entropy-oct_1.13/meanS.m",
+                "extern/nsb-entropy-oct_1.13/meanS2.m",
+                "extern/nsb-entropy-oct_1.13/mlog_evidence.m",
+                "extern/nsb-entropy-oct_1.13/other_orders_K.m",
+                "extern/nsb-entropy-oct_1.13/polygamma.m",
+                "extern/nsb-entropy-oct_1.13/prior_xi.m",
+                "extern/nsb-entropy-oct_1.13/psi_asymp.m",
+                "extern/nsb-entropy-oct_1.13/psi_nsb.m",
+                "extern/nsb-entropy-oct_1.13/xi_KB.m",
+                "src/FIT.m",
+                "src/H.m",
+                "src/II.m",
+                "src/MI.m",
+                "src/PID.m",
+                "src/TE.m",
+                "src/cFIT.m",
+                "src/cMI.m",
+                "src/cTE.m",
+                "src/core_functions/BiasCorrection/bub.m",
+                "src/core_functions/BiasCorrection/extrapolation.m",
+                "src/core_functions/BiasCorrection/extrapolation2.m",
+                "src/core_functions/BiasCorrection/ksg_correction.m",
+                "src/core_functions/BiasCorrection/nsb_correction.m",
+                "src/core_functions/BiasCorrection/pt.m",
+                "src/core_functions/BiasCorrection/resampling_correction.m",
+                "src/core_functions/BiasCorrection/shuffSub_extrapolation.m",
+                "src/core_functions/BiasCorrection/shuffle_correction.m",
+                "src/core_functions/BiasCorrection/shuffle_subtraction.m",
+                "src/core_functions/PIDTools/Solve_w_ECOSarrays.m",
+                "src/core_functions/PIDTools/build_p.m",
+                "src/core_functions/PIDTools/calculate_pid.m",
+                "src/core_functions/PIDTools/create_prob_ts.m",
+                "src/core_functions/PIDTools/iiBROJA.m",
+                "src/core_functions/PIDTools/lat2sources.mat",
+                "src/core_functions/PIDTools/lat3sources.mat",
+                "src/core_functions/PIDTools/lat4sources.mat",
+                "src/core_functions/PIDTools/pidBROJA.m",
+                "src/core_functions/PIDTools/pid_lattice.m",
+                "src/core_functions/PIDTools/pidimin.m",
+                "src/core_functions/PIDTools/pidimmi.m",
+                "src/core_functions/PIDTools/pidimmiksg.m",
+                "src/core_functions/PIDTools/pidimminsb.m",
+                "src/core_functions/add_pvalue.m",
+                "src/core_functions/cfit_core.m",
+                "src/core_functions/check_inputs.m",
+                "src/core_functions/createClusters.m",
+                "src/core_functions/fit_core.m",
+                "src/core_functions/freedmanDiaconisRule.m",
+                "src/core_functions/ii_core.m",
+                "src/core_functions/mean_SEM.m",
+                "src/core_functions/nan_method.m",
+                "src/core_functions/pid_core.m",
+                "src/core_functions/poisson_spike_gen.m",
+                "src/core_functions/scottsRule.m",
+                "src/core_functions/shuffle_core.m",
+                "src/function_wrapper/glm_wrapper.m",
+                "src/function_wrapper/nmf_wrapper.m",
+                "src/function_wrapper/pca_wrapper.m",
+                "src/function_wrapper/svm_wrapper.m",
+                "src/tools/binning.m",
+                "src/tools/check_stability.m",
+                "src/tools/clusterStatistics.m",
+                "src/tools/correction.m",
+                "src/tools/create_nullDist.m",
+                "src/tools/create_nullDist_groupLevel.m",
+                "src/tools/generate_poisson_spikes.m",
+                "src/tools/hShuffle.m",
+                "src/tools/iiBoundaries.m",
+                "src/tools/non_poisson_spike_gen.m",
+                "src/tools/partition.m",
+                "src/tools/prob_estimator.m",
+                "src/tools/reduce_dim.m",
+                "tests/core_functions/test_PidLattice.m",
+                "tests/core_functions/test_Solve_w_ECOSarrays.m",
+                "tests/core_functions/test_tools_PID.m",
+                "tests/test_FIT.m",
+                "tests/test_H.m",
+                "tests/test_II.m",
+                "tests/test_MI.m",
+                "tests/test_PID.m",
+                "tests/test_TE.m",
+                "tests/test_cFIT.m",
+                "tests/test_cMI.m",
+                "tests/test_cTE.m",
+                "tests/tools/test_BiasCorrection.m",
+                "tests/tools/test_Binning.m",
+                "tests/tools/test_tools.m"
+              ],
+              "all_file_count": 709,
+              "rate_remaining": "53"
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "BuildMINT.m",
+              "url": "https://github.com/panzerilab/MINT/blob/f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb/BuildMINT.m",
+              "role": "Build official toolbox/dependencies",
+              "inspected_as_text": true
+            },
+            {
+              "path": "How_to_use_MINT/How_to_compute_MI.m",
+              "url": "https://github.com/panzerilab/MINT/blob/f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb/How_to_use_MINT/How_to_compute_MI.m",
+              "role": "Official mutual-information calculation and correction workflow",
+              "inspected_as_text": true
+            },
+            {
+              "path": "How_to_use_MINT/How_to_compute_non_discrete.m",
+              "url": "https://github.com/panzerilab/MINT/blob/f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb/How_to_use_MINT/How_to_compute_non_discrete.m",
+              "role": "Continuous-variable estimator route when appropriate to declared analysis",
+              "inspected_as_text": true
+            }
+          ],
+          "dependencies": [
+            "MATLAB2018b+",
+            "four author-listed MATLABtoolboxes",
+            "C/C++ compiler for some redundancy estimators"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": [
+        "Primary article supplies actual CA1 data as164.1KB GZ supplement.",
+        "MINT code GPLv3; preserve article/supplement attribution.",
+        "No request-only data required for declared CA1 subset."
+      ],
+      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "recorded_central_outputs": [
+        "Recover empirical neural/behavior mutual information estimates with the author estimators and bias corrections.",
+        "Compare finite-sample behavior and null calibration across trial subsampling with shuffled-label controls and identical bins."
+      ],
+      "assessment": "Actual CA1 observations support part of Fig2 mutual-information/bias-correction results; exact variable schema/subpanels and figure wrapper are still missing.",
+      "status": "documented_scoped_proposal_not_numeric_qualification",
+      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Use identical discretization, bias estimator and sample definition; known-truth recovery belongs to synthetic controls, while real-data stability cannot establish true MI.",
+      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Exact CA1 variable schema and relevant Fig.2 subpanels still need load-time validation; only metadata and author methods inspected.",
+        "The public core toolbox is available; no all-paper figure automation is claimed.",
+        "Leave other electrophysiology examples, simulations and directed-information claims outside this bounded scope.",
+        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_project_reference_run_evidence_found",
+      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve finite-sample calibration or sensitivity of information transfer while preserving false-positive control under autocorrelated nulls and held-out participants."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_frozen_or_run",
+      "proposed_panel": "Finite-sample bias/null calibration with fixed bins and autocorrelated label shuffles; no currently demonstrated held-out-participant panel in this CA1 subset.",
+      "retained_roster_proposal": [
+        "Improve finite-sample calibration or sensitivity of information transfer while preserving false-positive control under autocorrelated nulls and held-out participants."
+      ],
+      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_resource_statement": "CPU/light; proprietary MATLAB/toolbox availability must be established",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Inspection estimate; no measured runtime."
+  },
+  "holds": {
+    "task_specific": [
+      "Exact CA1 variable schema and relevant Fig.2 subpanels still need load-time validation; only metadata and author methods inspected.",
+      "The public core toolbox is available; no all-paper figure automation is claimed.",
+      "Leave other electrophysiology examples, simulations and directed-information claims outside this bounded scope.",
+      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Inspect supplement schema and map a specific Fig2 empirical estimate to author toolbox options, then write a frozen estimator/null/limited-sample contract before builds or fitting.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Inspect supplement schema and map a specific Fig2 empirical estimate to author toolbox options, then write a frozen estimator/null/limited-sample contract before builds or fitting.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "72e4a47efb6ed575e78e008fc575000e1ee9c9904a57156535c32a2850b057c7",
+    "audit_record_sha256": "587c38916f97080ce2b3892b5ff7fe1e137cddc9cd82d8118581ef0dcbd2c19a",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-012",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 11,
+        "record_sha256": "fdcdeaf9a41b6bcb3c60f5d8223911ab154fd3f4a10a46f534ac27339fbad327"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-paper-method-012",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

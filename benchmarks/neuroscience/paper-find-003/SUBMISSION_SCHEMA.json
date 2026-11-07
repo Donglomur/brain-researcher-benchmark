@@ -1,0 +1,496 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "PAPER-FIND-003-standardized-model-artifact-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "input_sha256",
+    "submission_status",
+    "models"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "type": "integer"
+    },
+    "task_id": {
+      "const": "PAPER-FIND-003"
+    },
+    "input_sha256": {
+      "const": "44e6fafdbc784dfd4a1d28fa65d1a9d46486c44b5dcdc923eabc47228e9ba911"
+    },
+    "submission_status": {
+      "enum": [
+        "complete",
+        "partial",
+        "abstained"
+      ]
+    },
+    "models": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "phase",
+          "status",
+          "reason",
+          "fit"
+        ],
+        "properties": {
+          "phase": {
+            "enum": [
+              "stimulus",
+              "feedback",
+              "interval"
+            ]
+          },
+          "status": {
+            "enum": [
+              "reported",
+              "abstained"
+            ]
+          },
+          "reason": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              }
+            ]
+          },
+          "fit": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "coefficients",
+                  "covariance",
+                  "variance_components",
+                  "support",
+                  "method",
+                  "reml_diagnostic"
+                ],
+                "properties": {
+                  "coefficients": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "(Intercept)",
+                      "ACC",
+                      "trial",
+                      "ACC:trial"
+                    ],
+                    "properties": {
+                      "(Intercept)": {
+                        "type": "number"
+                      },
+                      "ACC": {
+                        "type": "number"
+                      },
+                      "trial": {
+                        "type": "number"
+                      },
+                      "ACC:trial": {
+                        "type": "number"
+                      }
+                    }
+                  },
+                  "covariance": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "axes",
+                      "values"
+                    ],
+                    "properties": {
+                      "axes": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "uniqueItems": true,
+                        "items": {
+                          "enum": [
+                            "(Intercept)",
+                            "ACC",
+                            "trial",
+                            "ACC:trial"
+                          ]
+                        }
+                      },
+                      "values": {
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                          "type": "array",
+                          "minItems": 4,
+                          "maxItems": 4,
+                          "items": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "variance_components": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "subject",
+                      "nested_contact",
+                      "residual"
+                    ],
+                    "properties": {
+                      "subject": {
+                        "type": "number"
+                      },
+                      "nested_contact": {
+                        "type": "number"
+                      },
+                      "residual": {
+                        "type": "number"
+                      }
+                    }
+                  },
+                  "support": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "n_obs",
+                      "n_subjects",
+                      "n_nested_contacts",
+                      "row_ids_sha256"
+                    ],
+                    "properties": {
+                      "n_obs": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 8082
+                      },
+                      "n_subjects": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 8082
+                      },
+                      "n_nested_contacts": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 8082
+                      },
+                      "row_ids_sha256": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{64}$"
+                      }
+                    }
+                  },
+                  "method": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "estimator",
+                      "random_effects",
+                      "weights",
+                      "offset"
+                    ],
+                    "properties": {
+                      "estimator": {
+                        "enum": [
+                          "REML",
+                          "ML",
+                          "other"
+                        ]
+                      },
+                      "random_effects": {
+                        "enum": [
+                          "subject_plus_nested_contact",
+                          "subject_only",
+                          "contact_only",
+                          "pooled_contact",
+                          "other"
+                        ]
+                      },
+                      "weights": {
+                        "enum": [
+                          "unit",
+                          "other"
+                        ]
+                      },
+                      "offset": {
+                        "enum": [
+                          "zero",
+                          "other"
+                        ]
+                      }
+                    }
+                  },
+                  "reml_diagnostic": {
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "criterion",
+                          "convention"
+                        ],
+                        "properties": {
+                          "criterion": {
+                            "type": "number"
+                          },
+                          "convention": {
+                            "enum": [
+                              "lme4_profiled_REML_original_design_including_constants",
+                              "other"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "abstained"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                },
+                "fit": {
+                  "type": "null"
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "reason": {
+                  "type": "null"
+                },
+                "fit": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "coefficients",
+                    "covariance",
+                    "variance_components",
+                    "support",
+                    "method",
+                    "reml_diagnostic"
+                  ],
+                  "properties": {
+                    "coefficients": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "(Intercept)",
+                        "ACC",
+                        "trial",
+                        "ACC:trial"
+                      ],
+                      "properties": {
+                        "(Intercept)": {
+                          "type": "number"
+                        },
+                        "ACC": {
+                          "type": "number"
+                        },
+                        "trial": {
+                          "type": "number"
+                        },
+                        "ACC:trial": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "covariance": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "axes",
+                        "values"
+                      ],
+                      "properties": {
+                        "axes": {
+                          "type": "array",
+                          "minItems": 4,
+                          "maxItems": 4,
+                          "uniqueItems": true,
+                          "items": {
+                            "enum": [
+                              "(Intercept)",
+                              "ACC",
+                              "trial",
+                              "ACC:trial"
+                            ]
+                          }
+                        },
+                        "values": {
+                          "type": "array",
+                          "minItems": 4,
+                          "maxItems": 4,
+                          "items": {
+                            "type": "array",
+                            "minItems": 4,
+                            "maxItems": 4,
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "variance_components": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "subject",
+                        "nested_contact",
+                        "residual"
+                      ],
+                      "properties": {
+                        "subject": {
+                          "type": "number"
+                        },
+                        "nested_contact": {
+                          "type": "number"
+                        },
+                        "residual": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "support": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "n_obs",
+                        "n_subjects",
+                        "n_nested_contacts",
+                        "row_ids_sha256"
+                      ],
+                      "properties": {
+                        "n_obs": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 8082
+                        },
+                        "n_subjects": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 8082
+                        },
+                        "n_nested_contacts": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 8082
+                        },
+                        "row_ids_sha256": {
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{64}$"
+                        }
+                      }
+                    },
+                    "method": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "estimator",
+                        "random_effects",
+                        "weights",
+                        "offset"
+                      ],
+                      "properties": {
+                        "estimator": {
+                          "enum": [
+                            "REML",
+                            "ML",
+                            "other"
+                          ]
+                        },
+                        "random_effects": {
+                          "enum": [
+                            "subject_plus_nested_contact",
+                            "subject_only",
+                            "contact_only",
+                            "pooled_contact",
+                            "other"
+                          ]
+                        },
+                        "weights": {
+                          "enum": [
+                            "unit",
+                            "other"
+                          ]
+                        },
+                        "offset": {
+                          "enum": [
+                            "zero",
+                            "other"
+                          ]
+                        }
+                      }
+                    },
+                    "reml_diagnostic": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "criterion",
+                            "convention"
+                          ],
+                          "properties": {
+                            "criterion": {
+                              "type": "number"
+                            },
+                            "convention": {
+                              "enum": [
+                                "lme4_profiled_REML_original_design_including_constants",
+                                "other"
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "$comment": "Canonical scorer additionally enforces exactly one entry per phase and overall status equal to reported-phase count. Strict UTF8 <=32768 bytes; duplicate keys, nonfinite values, numeric booleans, destructive nonzero literal underflow, integers >18 token characters and depth>12 are rejected."
+}

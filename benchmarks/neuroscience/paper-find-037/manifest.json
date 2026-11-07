@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-FIND-037",
+  "track": "paper",
+  "title": "FreeEnergyEEG: supplied behavioral fits and forward conformance",
+  "status": "local_scoring_adapter_verified",
+  "entrypoints": {
+    "score": {
+      "argv": [
+        "python3",
+        "benchmarks/neuroscience/paper-find-037/score.py",
+        "--submission",
+        "{submission}",
+        "--output",
+        "{output}",
+        "--review",
+        "{review}",
+        "--other-reserve-bytes",
+        "{other_reserve_bytes}"
+      ],
+      "sha256": "6867f109fb4d644921ea6cbad50319cac94179c772b780f7be33493dbd9147b2",
+      "working_directory": ".",
+      "required_operator_arguments": [
+        "review",
+        "other_reserve_bytes"
+      ]
+    }
+  },
+  "submission": {
+    "kind": "canonical_operator_manifest_file",
+    "max_bytes": 16384,
+    "preparation_entrypoint": "authoring/freeenergy-eeg-v1/submission-scoring-v2/score.py",
+    "preparation_action": "prepare",
+    "required_preexisting_artifacts": {
+      "solution.py": 262144,
+      "fits.json": 131072,
+      "findings.md": 16384
+    },
+    "host_content_handling": "Opaque bounded hashing only; fit JSON and report interpretation occur in trusted isolated preparation; candidate Python import occurs only in isolated candidate phase.",
+    "condition_ids": [
+      "paper_data_disambiguated",
+      "paper_data_disambiguated_official_code"
+    ]
+  },
+  "evaluation": {
+    "component": "25-participant three-model supplied behavioral-fit and forward scoring",
+    "fit_slots": 75,
+    "conformance_slots": 25,
+    "candidate_source_invoked": true,
+    "standalone_preexisting_artifact_scoring": true,
+    "orchestrated_fitting_jobs": 0,
+    "candidate_internal_fitting_extent": null,
+    "fresh_optimization_provenance_established": false,
+    "model_service_calls_authorized": false,
+    "findings_scientific_reasoning_automatically_scored": false,
+    "numerical_contract": "Unchanged held per-fit forward/likelihood discrepancies, complete-cohort model summaries and explicit undefined/rejected outcomes.",
+    "complete_grading_is_not_scientific_success": true
+  },
+  "resources": {
+    "whole_seconds": 420,
+    "work_seconds": 360,
+    "cleanup_seconds": 60,
+    "retained_file_bytes": 40000000,
+    "filesystem_rounding_reserve_bytes": 16777216,
+    "directory_metadata_planning_margin_bytes": 10000000,
+    "candidate_seconds": 20,
+    "cpus": 1.75,
+    "memory_bytes": 3221225472,
+    "numeric_threads": 2,
+    "network": "none",
+    "separate_root_review_and_allocation_required_per_attempt": true
+  },
+  "source_provenance": {
+    "reviewed_successor_runtime_freeze": {
+      "path": "authoring/freeenergy-eeg-v1/submission-scoring-v2/FREEZE.json",
+      "bytes": 70770,
+      "sha256": "3976253d6b74b7bb996091573f350ca95c66c354667ca53642df6ce4428b6956"
+    },
+    "held_scoring_facade": {
+      "path": "authoring/freeenergy-eeg-v1/submission-scoring-v2/score.py",
+      "bytes": 1254,
+      "sha256": "2bedc09a2d0704bc264b7cd708edae968acf3888ae05143be6b5baab231ec0c1"
+    },
+    "proposed_registration_bridge": {
+      "path": "authoring/freeenergy-eeg-v1/submission-scoring-registration-proposal-v2/package/score.py",
+      "bytes": 4260,
+      "sha256": "6867f109fb4d644921ea6cbad50319cac94179c772b780f7be33493dbd9147b2"
+    },
+    "original_executed_runtime_freeze": {
+      "path": "authoring/freeenergy-eeg-v1/submission-scoring-v1/FREEZE.json",
+      "bytes": 69441,
+      "sha256": "e323392d90cadb2211063092fb72dfaf9160ccbfb12fa61489ec5e924251795e"
+    },
+    "successor_source_review": {
+      "path": "authoring/quality-probes/freeenergy-submission-scoring-v2-operational-review.json",
+      "bytes": 8432,
+      "sha256": "50514eecabcd8257cdf4850cdffba595a9ec61164fccb426cc8f16c9ce41ae08"
+    },
+    "v2_launcher_live_run_observed": false,
+    "registration_bridge_live_dispatch_observed": false,
+    "registration_bridge_is_metadata_only_addition": true
+  },
+  "verification": {
+    "status": "passed",
+    "receipt_path": "authoring/quality-probes/freeenergy-submission-saved-admission-001-verification.json",
+    "receipt_sha256": "c0f4e08ddd9e8004b749130c4e560d497a1056aaeff2bfe6005df2981422f46c",
+    "accepted_metadata_audit": {
+      "path": "artifacts-build/freeenergy-submission-saved-admission-001/AUDIT_RECEIPT.json",
+      "bytes": 3154,
+      "sha256": "396f1d76bde7778b3edf316065905c0b6f964d4f7756a6f4e0bd1a18f57e22a6"
+    },
+    "accepted_final_assessment": {
+      "path": "artifacts-build/freeenergy-submission-saved-admission-001/FINAL_ASSESSMENT.json",
+      "bytes": 3577,
+      "sha256": "90239ddacb3992226e729c0131f3619b999b7c1674ac86faf75d98c0780879d1"
+    },
+    "original_failed_outer_receipt": {
+      "path": "artifacts-build/freeenergy-submission-scoring-001/outer_receipt.json",
+      "bytes": 3797,
+      "sha256": "af01fae33b1f93013110480dab060e6f537af75d6def560aff0b478dec4bc961"
+    },
+    "scope": "Actual developer supplied-artifact fixture science and controls independently accepted from unchanged saved evidence after the raw-interface identity fix. Original outer attempt remains failed; reviewed v2 launcher and registration facade have no new live execution.",
+    "qualification_cases": [
+      "complete_75_fit_25_conformance_fixture",
+      "one_declared_failed_fit_scalar_regrade",
+      "inconsistent_individual_and_summary_claims_scalar_regrade",
+      "missing_75th_record_parser_rejection",
+      "boolean_complete_parameter_parser_rejection",
+      "duplicate_top_level_JSON_key_parser_rejection"
+    ],
+    "original_attempt_status_preserved": "failed_preserved_no_retry",
+    "actual_qualification_mode": "developer_fixture_controls",
+    "new_fits_or_model_trials_for_registration": 0,
+    "receipt_kind": "independent_saved_evidence_admission_verification"
+  },
+  "admission": {
+    "runnable": true,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "submission_ready": false,
+    "existing_bounded_reference_preserved": true,
+    "program_execution_registered": false
+  },
+  "scope_limits": [
+    "Only the exposed behavioral component; EEG and full-paper reproduction are outside this adapter.",
+    "Submitted solutions can execute in the forward phase; this alone is not a separately qualified ordinary-program interface.",
+    "No fresh-fitting, independent agent authorship, condition-effect, held-out prediction or frontier claim.",
+    "All future failures and successes retain separately allocated costs; registration does not reset the family history.",
+    "The original outer identity-join failure remains recorded; accepted saved evidence is a separate assessment, not a replacement successful outer receipt.",
+    "V2 has source review and exact inherited executed science/lifecycle; no new live v2 or common-CLI dispatch has been claimed."
+  ],
+  "qualification_accounting": {
+    "original_full_charge_seconds": 420,
+    "known_scientific_charge_seconds": 11945.56668650196,
+    "metadata_audit_actual_seconds": 0.13091308299772209,
+    "registration_new_scientific_runs": 0,
+    "registration_new_scientific_charge_seconds": 0,
+    "complete_lifetime_cost_claimed": false,
+    "next_attempt_requires_new_v2_root_review_policy_and_allocation": true
+  }
+}

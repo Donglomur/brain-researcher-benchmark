@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-075",
+  "track": "neural",
+  "title": "Perception-to-imagery object decoding",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-H021"
+    ],
+    "titles": [
+      "Generic Object Decoding"
+    ],
+    "overlap_groups": [
+      "GOD-Horikawa2017"
+    ],
+    "task_family": "mental_imagery"
+  },
+  "scientific_question": "Can a perception-trained decoder identify the instructed imagery category within the same participant for categories excluded from decoder training?",
+  "task_type": "prediction",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Candidate category scores from imagery fMRI."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://github.com/KamitaniLab/GenericObjectDecoding",
+      "https://www.nature.com/articles/ncomms15037"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-H021",
+        "ledger": "catalog/datasets_fmri_eeg.json",
+        "record_sha256": "99d02c411ca46ab569901c4a87b066122118568928b26bcf46388be8730a5e63",
+        "data_manifest": null,
+        "recording_contract": null,
+        "status": null
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "proposed_scope": "Expected source-specific input: perceived/imagined-object fMRI samples and fixed candidate image features; actual processed array conventions and cue timing require inspection.",
+    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
+    "schema_verified": false
+  },
+  "biological_unit": "participant; sessions/trials nested within participant",
+  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "split": {
+    "policy": "Per-person perception support followed by blinded imagery trials. Keep repeats/categories/runs grouped; perform any label-based averaging only in the trusted grader after prediction freeze. New-person transfer requires explicit support/alignment. Disclose category-name cue carryover and pretrained-feature exposure.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/KamitaniLab/GenericObjectDecoding",
+    "commit_or_archive_version": null,
+    "entrypoints": [],
+    "role": "Pinned perception-to-feature/category analysis source. Python100-unit OLS and MATLAB200-iteration defaults differ from the paper recipe; no implementation is execution-qualified here.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://www.nature.com/articles/ncomms15037",
+    "data_url": "https://github.com/KamitaniLab/GenericObjectDecoding"
+  },
+  "controls": [
+    "Language/category-prior baseline",
+    "no cue labels in query",
+    "unseen-category grouping",
+    "fixed candidate panel."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Freeze one candidate panel and robust finite/tie policy; report participant-macro multiclass identification accuracy and rank separately from the historical pairwise/rank-fraction statistic.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": null
+    },
+    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
+    "basis": "Unmeasured estimate. Use bounded existing derivatives/reference features; full-source procurement and model training are not implied."
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Verify imagery trial labels, cue/imagery timing, image-access restrictions and processed-data schema."
+    },
+    {
+      "id": "catalog_limit",
+      "requirement": "Author repo links raw and processed data; exact accession still to map. Stimulus images require request; code MIT does not cover images."
+    },
+    {
+      "id": "source_inventory",
+      "requirement": "Retrieve bounded versioned manifests/schema and verify actual recording inputs, labels, alignment and biological identity; catalog identity alone is insufficient."
+    },
+    {
+      "id": "code_lock",
+      "requirement": "Pin exact official code revision/entrypoint and license, inspect loader-to-data compatibility, and select a meaningful signal-derived reference."
+    },
+    {
+      "id": "terms",
+      "requirement": "Audit data, stimulus, code and checkpoint access/redistribution terms before packet distribution."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+    },
+    {
+      "id": "execution",
+      "requirement": "Implement and run data adapter/evaluator/reference, matched controls and malformed-output tests; independently reproduce results before any validation claim."
+    },
+    {
+      "source_id": "D-H021",
+      "construction_gates": {
+        "phase": "choose_processing_and_freeze_safe_schema_qualification",
+        "required": [
+          "Resolve exact reader/dependency pins and third-party license terms",
+          "Approve storage/acquisition for original Subject1.h5 + ImageFeatures.h5 or independently supplied verified compact export",
+          "Validate actual schema/axis/row IDs/ROI units and category joins under bounded operator-only ingestion",
+          "Build public opaque-trial interface excluding cue/category truth and private label-based aggregation",
+          "Freeze candidate panel, finite/tie/scoring policy and within-person support protocol before any model fit"
+        ],
+        "potential_schema_only_file_ids": [
+          24080120,
+          15015971
+        ],
+        "potential_schema_only_bytes": 1537048279,
+        "payload_authorized": false
+      }
+    }
+  ],
+  "next_implementation_action": [
+    "Separate private category aggregation from prediction; resolve preprocessing version, legacy scorer and feature exposure."
+  ],
+  "construction_review": {
+    "checked_on": "2026-10-30",
+    "disposition": "reframe",
+    "reason": "Native voxels and the published transfer are within-person; categories are held out from decoder fitting, not necessarily model pretraining.",
+    "remaining_gates": [
+      "Choose corrected native SPM5 versus another processing branch.",
+      "Verify HDF5 category, ROI, feature and support-label joins.",
+      "Distinguish the 100-unit OLS demo and 200-iteration MATLAB default from the paper recipe.",
+      "Resolve VBSR, external-toolbox and stimulus rights."
+    ],
+    "proposal": "authoring/neural-source-audits/contract-corrections-v2.json",
+    "proposal_sha256": "fe743219d97e5b428f828918bd8be294766dfe8f679f74fd60399eef3028d247",
+    "source_evidence": [
+      {
+        "path": "authoring/neural-source-audits/generic-object-decoding-v1/audit.md",
+        "sha256": "5299d495c2212b774d31de7e004a8ca2641cdf5766251c1d5f430ee550e4ae42"
+      }
+    ],
+    "readiness_promoted": false
+  },
+  "source_audit_overlays": [
+    {
+      "source_id": "D-H021",
+      "name": "Generic Object Decoding",
+      "assignment_ids": [
+        "NEURAL-075",
+        "NEURAL-076"
+      ],
+      "checked_on": "2026-10-30",
+      "audit_path": "authoring/neural-source-audits/generic-object-decoding-v1/audit.json",
+      "narrative_path": "authoring/neural-source-audits/generic-object-decoding-v1/audit.md",
+      "audit_scope": "Source, archive metadata and code inspection only; no recording or model payload and no scientific execution.",
+      "construction_implication": "Separate private category aggregation from prediction; resolve preprocessing version, legacy scorer and feature exposure.",
+      "remaining_gates": {
+        "phase": "choose_processing_and_freeze_safe_schema_qualification",
+        "required": [
+          "Resolve exact reader/dependency pins and third-party license terms",
+          "Approve storage/acquisition for original Subject1.h5 + ImageFeatures.h5 or independently supplied verified compact export",
+          "Validate actual schema/axis/row IDs/ROI units and category joins under bounded operator-only ingestion",
+          "Build public opaque-trial interface excluding cue/category truth and private label-based aggregation",
+          "Freeze candidate panel, finite/tie/scoring policy and within-person support protocol before any model fit"
+        ],
+        "potential_schema_only_file_ids": [
+          24080120,
+          15015971
+        ],
+        "potential_schema_only_bytes": 1537048279,
+        "payload_authorized": false
+      },
+      "explicit_response_body_bytes": 244381,
+      "request_attempts": 29,
+      "request_wall_seconds_sum": 7.11115004401654,
+      "independent_source_cap_bytes": 2000000,
+      "roster_status_changed": false,
+      "reference_executed": false,
+      "scientific_admission": false
+    }
+  ],
+  "provenance": {
+    "canonical_record_sha256": "12c93edce4d637ef2c9e826cec8d95bc8585943518dd6e4651ca591763c3c0f4",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/catalog/datasets_fmri_eeg.json",
+        "bytes": 51328,
+        "sha256": "a326738f2752b9ed44eb88d5e056725adf9a08a23a4e96ccb855c851c47a4dd9"
+      },
+      {
+        "path": "authoring/neural-source-audits/generic-object-decoding-v1/audit.json",
+        "bytes": 5105,
+        "sha256": "7a3b991144fcd2b43d318319565a3b5f062162fe60105e972a9285fc26a3614c"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

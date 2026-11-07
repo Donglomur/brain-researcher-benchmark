@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-019",
+  "track": "neural",
+  "title": "Movement information in neural latent representations",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-N063"
+    ],
+    "titles": [
+      "Churchland–Kaufman MC_Maze motor-cortex reaching recordings"
+    ],
+    "overlap_groups": [
+      "churchland-kaufman-mc-maze"
+    ],
+    "task_family": "population_dynamics"
+  },
+  "scientific_question": "Do inferred latent representations preserve velocity information for held-out reach conditions?",
+  "task_type": "investigation",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Training-only readout predictions plus condition-stratified latent-versus-observed comparisons."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://dandiarchive.org/dandiset/000128/0.220113.0400",
+      "https://doi.org/10.1038/nature11129",
+      "https://github.com/neurallatents/nlb_tools",
+      "https://api.dandiarchive.org/api/dandisets/000128/versions/0.220113.0400/",
+      "https://api.dandiarchive.org/api/dandisets/000128/versions/0.220113.0400/assets/?page_size=100",
+      "https://api.dandiarchive.org/api/assets/26e85f09-39b7-480f-b337-278a8f034007/",
+      "https://raw.githubusercontent.com/neurallatents/nlb_tools/main/README.md",
+      "https://raw.githubusercontent.com/neurallatents/nlb_tools/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/nwb_interface.py",
+      "https://raw.githubusercontent.com/neurallatents/nlb_tools/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/make_tensors.py",
+      "https://raw.githubusercontent.com/neurallatents/nlb_tools/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/evaluation.py"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-N063",
+        "ledger": "readiness/signals_extension_b.json",
+        "record_sha256": "27ae9b349e70a78acf42e4603822b29a1a9da59a3c19045ae682f23f2809dafe",
+        "data_manifest": {
+          "version": "0.220113.0400",
+          "manifest_url": "https://api.dandiarchive.org/api/dandisets/000128/versions/0.220113.0400/assets/?page_size=100",
+          "number_of_files": 2,
+          "number_of_subjects": 1,
+          "total_bytes": 694004935,
+          "files": [
+            {
+              "asset_id": "1bd112a4-5ec5-4033-ac30-d88e70e993d9",
+              "blob": "faf1f307-a06d-464c-8700-a659ab94ce2a",
+              "zarr": null,
+              "path": "sub-Jenkins/sub-Jenkins_ses-full_desc-test_ecephys.nwb",
+              "size": 3392688,
+              "created": "2021-09-02T05:04:24.640348Z",
+              "modified": "2021-09-02T05:04:24.866192Z",
+              "download_url": "https://api.dandiarchive.org/api/assets/1bd112a4-5ec5-4033-ac30-d88e70e993d9/download/"
+            },
+            {
+              "asset_id": "26e85f09-39b7-480f-b337-278a8f034007",
+              "blob": "df3e3f73-50ab-42b4-8827-82664ddd474a",
+              "zarr": null,
+              "path": "sub-Jenkins/sub-Jenkins_ses-full_desc-train_behavior+ecephys.nwb",
+              "size": 690612247,
+              "created": "2021-09-02T05:04:41.515766Z",
+              "modified": "2021-09-02T05:04:55.563735Z",
+              "download_url": "https://api.dandiarchive.org/api/assets/26e85f09-39b7-480f-b337-278a8f034007/download/",
+              "sha256": "a27f84f9c31f077011062fd99a6ced199fdf19e656151f056c3c6244a408a3c4"
+            }
+          ],
+          "prepared_split_warning": "Train/test NWBs and MC_Maze Large/Medium/Small variants are derived releases of a source acquisition, not independent datasets."
+        },
+        "recording_contract": {
+          "neural": "Actual NWB header confirms units/spike_times with ragged spike_times_index, heldout-unit flags and observation intervals;182units in the inspected training file. Unit labels are not persistent identities across other sessions.",
+          "labels": "Actual training NWB contains2295trial-table rows and columns active_target, barrier_pos, barrier_pos_index, delay, go_cue_time, id, maze_id, move_onset_time, num_barriers, num_targets, rt, split, start_time, stop_time, success, target_on_time, target_pos, target_pos_index, trial_type, trial_version. Hand position/velocity are timestamped behavioral arrays. Additional labels must be masked when they are prediction targets.",
+          "time_alignment": "Sorted spike timestamps and trial/event times are aligned in the NWB time base. Official NWBDataset bins spikes on a1ms grid and resamples for5ms/20ms benchmarks; MC_Maze behavior uses timestamps, Area2 uses starting_time/rate. Rate values and unit conversion still need acquisition qualification.",
+          "biological_ids": {
+            "session_start_time": "2009-09-25T00:00:00-07:00",
+            "general/subject/subject_id": "Jenkins",
+            "general/subject/species": "Macaca mulatta",
+            "session_description": "Data from monkey Jenkins performing center-out delayed reaching task. This file contains trials from the full session on 2009-09-25 that can be used for training models for the Neural Latents Benchmark."
+          },
+          "evidence": "Direct published asset URL inspected with bounded HTTP ranges; HDF5 names/shapes and identity metadata only, not neural/behavior values."
+        },
+        "status": "artifact_ready"
+      }
+    ],
+    "exact_asset_records": [
+      {
+        "source_id": "D-N063",
+        "ledger": "readiness/signals_extension_b.json",
+        "source_json_pointer": "/data_manifest/files/0",
+        "record": {
+          "asset_id": "1bd112a4-5ec5-4033-ac30-d88e70e993d9",
+          "blob": "faf1f307-a06d-464c-8700-a659ab94ce2a",
+          "zarr": null,
+          "path": "sub-Jenkins/sub-Jenkins_ses-full_desc-test_ecephys.nwb",
+          "size": 3392688,
+          "created": "2021-09-02T05:04:24.640348Z",
+          "modified": "2021-09-02T05:04:24.866192Z",
+          "download_url": "https://api.dandiarchive.org/api/assets/1bd112a4-5ec5-4033-ac30-d88e70e993d9/download/"
+        },
+        "local_payload_verified_by_this_builder": false
+      },
+      {
+        "source_id": "D-N063",
+        "ledger": "readiness/signals_extension_b.json",
+        "source_json_pointer": "/data_manifest/files/1",
+        "record": {
+          "asset_id": "26e85f09-39b7-480f-b337-278a8f034007",
+          "blob": "df3e3f73-50ab-42b4-8827-82664ddd474a",
+          "zarr": null,
+          "path": "sub-Jenkins/sub-Jenkins_ses-full_desc-train_behavior+ecephys.nwb",
+          "size": 690612247,
+          "created": "2021-09-02T05:04:41.515766Z",
+          "modified": "2021-09-02T05:04:55.563735Z",
+          "download_url": "https://api.dandiarchive.org/api/assets/26e85f09-39b7-480f-b337-278a8f034007/download/",
+          "sha256": "a27f84f9c31f077011062fd99a6ced199fdf19e656151f056c3c6244a408a3c4"
+        },
+        "local_payload_verified_by_this_builder": false
+      }
+    ],
+    "missing_or_unverified": [
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "neural_measurements": "Actual NWB header confirms units/spike_times with ragged spike_times_index, heldout-unit flags and observation intervals;182units in the inspected training file. Unit labels are not persistent identities across other sessions.",
+    "allowed_context": "Actual training NWB contains2295trial-table rows and columns active_target, barrier_pos, barrier_pos_index, delay, go_cue_time, id, maze_id, move_onset_time, num_barriers, num_targets, rt, split, start_time, stop_time, success, target_on_time, target_pos, target_pos_index, trial_type, trial_version. Hand position/velocity are timestamped behavioral arrays. Additional labels must be masked when they are prediction targets.",
+    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
+    "time_alignment": "Sorted spike timestamps and trial/event times are aligned in the NWB time base. Official NWBDataset bins spikes on a1ms grid and resamples for5ms/20ms benchmarks; MC_Maze behavior uses timestamps, Area2 uses starting_time/rate. Rate values and unit conversion still need acquisition qualification.",
+    "source_contract_evidence": "Direct published asset URL inspected with bounded HTTP ranges; HDF5 names/shapes and identity metadata only, not neural/behavior values."
+  },
+  "biological_unit": {
+    "session_start_time": "2009-09-25T00:00:00-07:00",
+    "general/subject/subject_id": "Jenkins",
+    "general/subject/species": "Macaca mulatta",
+    "session_description": "Data from monkey Jenkins performing center-out delayed reaching task. This file contains trials from the full session on 2009-09-25 that can be used for training models for the Neural Latents Benchmark."
+  },
+  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "split": {
+    "policy": "One Jenkins session; group whole reach trials/maze conditions; use official unit masks; no between-animal generalization.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/neurallatents/nlb_tools",
+    "commit_or_archive_version": "42f8410b88e12db136910fa2f888b025ea0aa2ae",
+    "entrypoints": [
+      "nlb_tools/nwb_interface.py",
+      "nlb_tools/make_tensors.py",
+      "nlb_tools/evaluation.py",
+      "examples/baselines/smoothing/run_smoothing.py",
+      "examples/baselines/gpfa/run_gpfa.py"
+    ],
+    "role": "Official Neural Latents Benchmark organizer code for loading, masking, evaluation and supplied baselines on these prepared recordings; distinguish this from the original Churchland/Chowdhury acquisition analysis code.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://doi.org/10.1038/nature11129",
+    "data_url": "https://dandiarchive.org/dandiset/000128/0.220113.0400"
+  },
+  "controls": [
+    "Equal readout capacity",
+    "whole trajectory-condition holdout",
+    "no velocity in latent fitting",
+    "within-animal inference."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Held-out velocity R-squared and recomputed matched-readout difference.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    },
+    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+      },
+      {
+        "id": "reference",
+        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+      },
+      {
+        "id": "scorer",
+        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      },
+      {
+        "id": "replication",
+        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "CPU_workstation_bounded",
+    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+    "source_storage_evidence": {
+      "data_bytes": 694004935,
+      "reference_options": "CPU smoothing/Poisson-regression or GPFA reference; GPU optional for latent dynamical models. Actual runtime/memory unmeasured."
+    }
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Freeze maze/trajectory grouping and latent fit/readout separation; one animal/session limits scope."
+    },
+    {
+      "id": "source_1",
+      "requirement": "Former test targets are public; this source is suitable for transparent reproduction/development, not a contamination-resistant final leaderboard without a new independent holdout."
+    },
+    {
+      "id": "source_2",
+      "requirement": "No neural values, preprocessing output, metric values or baseline execution were checked; rates/units, trial mask and missingness behavior require numerical qualification."
+    },
+    {
+      "id": "source_3",
+      "requirement": "Source data has one biological subject and one recording session. Bootstrap uncertainty over trials or blocks is not between-animal uncertainty."
+    },
+    {
+      "id": "source_4",
+      "requirement": "The source supports observed-spike predictive evaluation, not direct knowledge of true latent firing rates or causal circuit dynamics."
+    },
+    {
+      "id": "packet",
+      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+    },
+    {
+      "id": "reference",
+      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+    },
+    {
+      "id": "scorer",
+      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+    },
+    {
+      "id": "replication",
+      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+    }
+  ],
+  "next_implementation_action": [
+    "Freeze maze/trajectory grouping and latent fit/readout separation; one animal/session limits scope."
+  ],
+  "construction_review": null,
+  "source_audit_overlays": [],
+  "provenance": {
+    "canonical_record_sha256": "accf110f0a10f5b954c9cd7b25e6da4cade16f681cc75dfa251d5edf2e777dfa",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/readiness/signals_extension_b.json",
+        "bytes": 138169,
+        "sha256": "f811d51966f5717bf0a042bd37ac22a1a6e4430265fd78633d1dbe49be49543d"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

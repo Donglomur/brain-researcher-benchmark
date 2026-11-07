@@ -1,0 +1,386 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-008",
+  "track": "neural",
+  "title": "EOG information beyond EEG and sleep timing",
+  "status": "local_scoring_adapter_verified",
+  "scope": "Paired finished-file numerical investigation component on two exposed Sleep-EDF development people; both absolute performances and signed contrasts retained. Training and modality-access provenance remains unverified.",
+  "entrypoints": {
+    "score": {
+      "argv": [
+        "python3",
+        "benchmarks/neuroscience/neural-008-eog-investigation/score.py",
+        "--submission",
+        "{submission}",
+        "--review",
+        "{review}",
+        "--output",
+        "{output}",
+        "--other-reserve-bytes",
+        "{other_reserve_bytes}"
+      ],
+      "working_directory": ".",
+      "sha256": "11fd5549a208a592cd64ac7535e313a014d95d7e5fc0f0a64379c358baa5371d",
+      "wall_seconds": 30,
+      "required_operator_arguments": [
+        "review",
+        "other_reserve_bytes"
+      ],
+      "isolation": "One fresh offline nonroot readonly Docker worker; unchanged 007 guard, 2 CPU, 4 GiB, twelve exact readonly file binds; shared owned-process recovery."
+    }
+  },
+  "assets": {
+    "public": {
+      "path": "benchmarks/neuroscience/neural-008-eog-investigation/public_assets.json",
+      "bytes": 12339,
+      "sha256": "def513b0a61ae226112fefd73173319f194c96947be8d3b20126c27dea270a11"
+    },
+    "private": {
+      "path": "benchmarks/neuroscience/neural-008-eog-investigation/operator_assets.json",
+      "bytes": 2854,
+      "sha256": "a795088570d5086a21ea3047a4b8bc851c2a37ca9df26609915237013a8986b8"
+    },
+    "local_workspace_dependencies": true,
+    "self_contained_portable": false,
+    "candidate_must_not_mount_operator_package_or_parent_directories": true,
+    "no_new_payload_copies": true
+  },
+  "instructions": "instructions.md",
+  "submission": {
+    "type": "directory_two_arbitrary_probability_npz_and_optional_claim_json",
+    "schema": "instructions.md",
+    "files": [
+      "EEG_clock.npz",
+      "EEG_EOG_clock.npz",
+      "claims.json"
+    ],
+    "probability_file_max_bytes_each": 4000000,
+    "claims_max_bytes": 16384
+  },
+  "grading": {
+    "primary_numeric_contrast": "paired_contrast.person_mean_macro_f1_delta",
+    "secondary_numeric_contrast": "paired_contrast.person_mean_rem_recall_delta",
+    "direction": "EEG_EOG_clock minus EEG_clock; descriptive, not a maximization objective",
+    "continuous_metric_output": true,
+    "scalar_score": null,
+    "optimization_direction": null,
+    "absolute_both_arms_required": true,
+    "claim_consistency_separate": true,
+    "binary_scientific_success_threshold": null,
+    "scientific_improvement_verified": false,
+    "paired_training_and_information_access_provenance": "unverified_from_finished_files",
+    "invalid_submission_score": null
+  },
+  "verification": {
+    "status": "passed",
+    "receipt_path": "authoring/sleep-eog/investigation-scorer-v2/evidence/attempt-002/outer_receipt.json",
+    "receipt_sha256": "d1446935296dc6af214d1cf37d8e97f0723d43bae704931b9c0428eea1658010",
+    "result": {
+      "path": "authoring/sleep-eog/investigation-scorer-v2/evidence/attempt-002/result.json",
+      "bytes": 1398,
+      "sha256": "41315e0071c6149058e7f9376eaab840293cef70e80cf32dbf3155477068668c"
+    },
+    "source_freeze": {
+      "path": "authoring/sleep-eog/investigation-scorer-v2/FREEZE.json",
+      "bytes": 7896,
+      "sha256": "55c8e0a7cb3361844c9eeb2585d9abf553aedf46a88735b8cfb1ed275674c56e"
+    },
+    "actual_reference_and_negative_controls": 6,
+    "generated_checks": 22,
+    "same_source_shim_was_executed": true,
+    "qualification_means_engineering_checks_only": true
+  },
+  "admission": {
+    "runnable": true,
+    "research_qualified": false,
+    "full_candidate_contract_complete": false,
+    "submission_ready": false
+  },
+  "limitations": [
+    "Two historical exposed development participants; same biological source as NEURAL-007, not an independent collection.",
+    "Finished probability files cannot establish EEG-only access, comparable training, or a physiological explanation.",
+    "A deliberately weakened EEG arm increases the numerical difference; no scalar reward or scientific pass floor is returned.",
+    "The original finished-file component did not execute candidate programs; the separate paired program interface now has actual developer controls and one ordinary shared-CLI proof. No language-model attempt or native-understanding claim.",
+    "No population confidence interval or p-value from two participants; four reserved people untouched.",
+    "Every ordinary score requires a new same-freeze/current-cost review and fresh storage reservation."
+  ],
+  "cost_history": {
+    "latest_known_seconds": 1310.025864832016,
+    "operator_ceiling_seconds": 1350,
+    "historical_operator_ceilings": [
+      900,
+      1200
+    ],
+    "v1_import_failure_charged_seconds": 60,
+    "v2_qualification_charged_seconds": 60,
+    "lifetime_complete": false,
+    "future_execution_granted": false
+  },
+  "program_execution": {
+    "entrypoint": {
+      "argv": [
+        "python3",
+        "authoring/task-capacity-successors-20261102/sleep008/bridge.py",
+        "--program",
+        "{program}",
+        "--review",
+        "{review}",
+        "--output",
+        "{output}",
+        "--other-reserve-bytes",
+        "{other_reserve_bytes}"
+      ],
+      "working_directory": ".",
+      "sha256": "6ffb019eb1d4c68bcee2af3b50e3cc67dd7b31a58172f8019c3519e954bab755",
+      "wall_seconds": 150
+    },
+    "source_freeze": {
+      "path": "authoring/task-capacity-successors-20261102/sleep008/registration/REGISTRATION_SOURCE_CLOSURE.json",
+      "sha256": "32a4700cc7acda6616c70e8f55c6c71ea24c42f68c7b9344efb6b1ef4d04690f"
+    },
+    "verification": {
+      "status": "passed",
+      "receipt_path": "authoring/task-capacity-successors-20261102/sleep008/registration/receipt.json",
+      "receipt_sha256": "d84f0488a761a071f8ee1afc622b0f5f7cec64e16d3b69e90cb5994ffc38c37c",
+      "qualification_path": "authoring/task-capacity-successors-20261102/sleep008/registration/verification.json",
+      "qualification_sha256": "be43802f1088abccd8fb9fd353e8f3769412bc540da41784b851eac951882b03",
+      "source_binding_path": "authoring/task-capacity-successors-20261102/sleep008/registration/source_binding.json",
+      "source_binding_sha256": "4affa0d4f5280bdff36514f19f5f82723386c3e98a1d94e2f36c319adb5f9e01",
+      "evidence_kind": "metadata_source_extension_reusing_historical_actual_qualification",
+      "new_outer_candidate_execution_observed": false,
+      "new_outer_common_CLI_execution_observed": false,
+      "independent_source_review_status": "passed",
+      "independent_source_review": {
+        "path": "authoring/task-capacity-successors-20261102/sleep008/INDEPENDENT_SOURCE_REVIEW.json",
+        "bytes": 3016,
+        "sha256": "33cd252b405f39413c437c365bf89fa3c06391c710775a063675fc7b3ca52329"
+      }
+    },
+    "instructions_path": "authoring/task-capacity-successors-20261102/sleep008/TASK.md",
+    "operator_instructions_path": "authoring/task-capacity-successors-20261102/sleep008/HANDOFF.md",
+    "scope": {
+      "mode": "same_committed_fixed_program_in_two_physically_separated_feature_views",
+      "training_people": 6,
+      "development_people": 2,
+      "information_ablation": "EEG+clock15 versus EEG+EOG+clock21",
+      "common_training_labels": true,
+      "YASA_or_other_model_caches_mounted": false,
+      "raw_recordings_mounted": false,
+      "matched_source_and_access_enforced": true,
+      "matched_arbitrary_training_recipe_proven": false,
+      "private_feedback_after_both_committed_outputs": true,
+      "ordinary_accuracy_floor": null,
+      "additional_dataset_or_task_id": false,
+      "development_first_available_nights": 2,
+      "development_epochs_by_person": [
+        2780,
+        2670
+      ],
+      "training_first_available_nights": 6,
+      "complete_clock_not_stage_cropped": true,
+      "within_arm_two_person_batch_visible": true,
+      "reserved_people_accessed": 0,
+      "all_archive_nights_evaluated": false,
+      "arbitrary_valid_programs_accepted": true,
+      "arbitrary_matching_training_semantics_require_review": true,
+      "scientific_reasoning_automatically_graded": false,
+      "physiological_or_causal_effect_verified": false,
+      "ordinary_CLI_candidate": "uniform probabilities, zero contrast",
+      "independently_authored_learned_ordinary_candidate_observed": false,
+      "original_full_contract_complete": false,
+      "public_release_complete": false
+    },
+    "runtime": {
+      "whole_attempt_seconds": 150,
+      "work_interval_seconds": 110,
+      "cleanup_seconds": 40,
+      "candidate_wall_seconds_per_arm": 20,
+      "candidate_calls": 2,
+      "artifact_reserve_bytes": 18000000,
+      "read_only_candidate_binds_each": 16,
+      "output_volume_each": 1
+    },
+    "qualification_accounting": {
+      "full_actual_control_charge_seconds": 600,
+      "latest_known_shared_family_seconds": 4340.025864832016,
+      "RF_outer_predicate_failure_preserved": true,
+      "saved_RF_numeric_qualification_repaired_without_refit": true,
+      "new_candidate_fits_in_four_actual_controls": 2,
+      "new_reference_fits": 0,
+      "model_API_calls": 0,
+      "actual_common_CLI_proof_pending": false,
+      "future_compute_grant": false,
+      "actual_common_CLI_receipt": {
+        "path": "artifacts-build/sleep-eog-paired-cli-001/outer_receipt.json",
+        "bytes": 3406,
+        "sha256": "97568fbba17539d2dc64da010b50016ccfc364cbcb3d0a9f98ea1a4b3d23ac3c"
+      },
+      "actual_common_CLI_wall_seconds": 5.613004042010289,
+      "full_actual_control_and_CLI_charge_seconds": 750
+    },
+    "caller_method_and_claim_paths": "Root review must contain method_path/claims_path plus exact method/claims pins; bridge forwards caller paths.",
+    "historical_program_execution": {
+      "entrypoint": {
+        "argv": [
+          "python3",
+          "authoring/sleep-eog/eog-program-completion-v2/bridge.py",
+          "--program",
+          "{program}",
+          "--review",
+          "{review}",
+          "--output",
+          "{output}",
+          "--other-reserve-bytes",
+          "{other_reserve_bytes}"
+        ],
+        "working_directory": ".",
+        "sha256": "58f757d9564d96f74c234309581007a0608181ec161469aae5aae8ae2551f632",
+        "wall_seconds": 150
+      },
+      "source_freeze": {
+        "path": "authoring/sleep-eog/eog-program-completion-v2/FREEZE.json",
+        "sha256": "e94e40d57d0ea3849ba1fa913ec3d59f8bc258fb1f75c0ddc7a4af2c02d3358c"
+      },
+      "verification": {
+        "status": "passed",
+        "receipt_path": "authoring/sleep-eog/eog-program-completion-v2/accepted-cli-v1/receipt.json",
+        "receipt_sha256": "b5d3585a4d1dbefd5bb20a4cad5dfaa284b3be666cef714e20ac5a904f678304",
+        "qualification_path": "authoring/sleep-eog/eog-program-completion-v2/accepted-cli-v1/verification.json",
+        "qualification_sha256": "cbf5f1b5ef4853330f741b8be94b33ed9a29792b4acc5683b004871fff60d41d",
+        "source_binding_path": "authoring/sleep-eog/eog-program-completion-v2/accepted-cli-v1/source_binding.json",
+        "source_binding_sha256": "be572831b5821ae0303da50b3b4c0e576e20601a1ca5f2e9752e53d7289b8ba8"
+      },
+      "instructions_path": "authoring/sleep-eog/eog-program-completion-v1/README.md",
+      "operator_instructions_path": "authoring/sleep-eog/eog-program-completion-v2/accepted-cli-v1/OPERATOR_USAGE.md",
+      "scope": {
+        "mode": "same_committed_fixed_program_in_two_physically_separated_feature_views",
+        "training_people": 6,
+        "development_people": 2,
+        "information_ablation": "EEG+clock15 versus EEG+EOG+clock21",
+        "common_training_labels": true,
+        "YASA_or_other_model_caches_mounted": false,
+        "raw_recordings_mounted": false,
+        "matched_source_and_access_enforced": true,
+        "matched_arbitrary_training_recipe_proven": false,
+        "private_feedback_after_both_committed_outputs": true,
+        "ordinary_accuracy_floor": null,
+        "additional_dataset_or_task_id": false
+      },
+      "runtime": {
+        "whole_attempt_seconds": 150,
+        "work_interval_seconds": 110,
+        "cleanup_seconds": 40,
+        "candidate_wall_seconds_per_arm": 20,
+        "candidate_calls": 2,
+        "artifact_reserve_bytes": 18000000,
+        "read_only_candidate_binds_each": 16,
+        "output_volume_each": 1
+      },
+      "qualification_accounting": {
+        "full_actual_control_charge_seconds": 600,
+        "latest_known_shared_family_seconds": 4340.025864832016,
+        "RF_outer_predicate_failure_preserved": true,
+        "saved_RF_numeric_qualification_repaired_without_refit": true,
+        "new_candidate_fits_in_four_actual_controls": 2,
+        "new_reference_fits": 0,
+        "model_API_calls": 0,
+        "actual_common_CLI_proof_pending": false,
+        "future_compute_grant": false,
+        "actual_common_CLI_receipt": {
+          "path": "artifacts-build/sleep-eog-paired-cli-001/outer_receipt.json",
+          "bytes": 3406,
+          "sha256": "97568fbba17539d2dc64da010b50016ccfc364cbcb3d0a9f98ea1a4b3d23ac3c"
+        },
+        "actual_common_CLI_wall_seconds": 5.613004042010289,
+        "full_actual_control_and_CLI_charge_seconds": 750
+      },
+      "caller_method_and_claim_paths": "Root review must contain method_path/claims_path plus exact method/claims pins; bridge forwards caller paths."
+    },
+    "status": "source_reviewed_capacity_successor_metadata_linked_pending_root_installation",
+    "original_instructions_path": "authoring/sleep-eog/eog-program-completion-v1/README.md",
+    "scope_disclosure": {
+      "path": "authoring/task-capacity-successors-20261102/sleep008/TASK_SCOPE.md",
+      "bytes": 2711,
+      "sha256": "6c01823dbaa6c3828a6b335e067283b50dcd075cd8c0af05c81c1af4785cd2d3"
+    },
+    "finite_task_audit": {
+      "path": "authoring/quality-probes/bounded-task-admissions-next-20261102/neural008/FINITE_TASK_SCOPE.json",
+      "bytes": 8555,
+      "sha256": "a2f31a2f576c6cab481490978a06ebf219b929b709afc22d0521393fe0ce9c79"
+    },
+    "capacity_successor": {
+      "status": "source_reviewed_pending_root_installation",
+      "runtime_source_hold": {
+        "path": "authoring/task-capacity-successors-20261102/sleep008/CAPACITY_FREEZE.json",
+        "bytes": 1249,
+        "sha256": "4674af15a78b6c17642610f9ab4b94f7134a6a97163ac7d9e9228a129f1e8068"
+      },
+      "source_proposal": {
+        "path": "authoring/task-capacity-successors-20261102/sleep008/SOURCE_CLOSURE_PROPOSAL.json",
+        "bytes": 27679,
+        "sha256": "9bb7f96bdd70d13f42d9a83a939984c283add8999a5c73d18f07bea66c7e8216"
+      },
+      "source_metadata_validation": {
+        "path": "authoring/task-capacity-successors-20261102/sleep008/SOURCE_CHECK_REPORT.json",
+        "bytes": 34991,
+        "sha256": "9de82382d3601b23a05556d3d7713fd200037189b04a1b78f5b66f6586fc4a09"
+      },
+      "independent_source_review": {
+        "path": "authoring/task-capacity-successors-20261102/sleep008/INDEPENDENT_SOURCE_REVIEW.json",
+        "bytes": 3016,
+        "sha256": "33cd252b405f39413c437c365bf89fa3c06391c710775a063675fc7b3ca52329"
+      },
+      "capacity_policy": {
+        "path": "authoring/task-capacity-successors-20261102/ROOT_CAPACITY_POLICY.wave3.json",
+        "bytes": 1922,
+        "sha256": "3cf42f4431493918ac4c6277a3c74b696e09d48a6f3c277dfd2e7fa3a484c637"
+      },
+      "operator_review_template": {
+        "path": "authoring/task-capacity-successors-20261102/sleep008/ROOT_REVIEW.template.json",
+        "bytes": 2429,
+        "sha256": "10e0987db244878eed03db2ce15aac309f1dac633291d61471f6d34e547b1aed"
+      },
+      "capacity_schema": "task_capacity_accounting_v1",
+      "aggregate_capacity_bytes": 22000000000,
+      "free_floor_bytes": 15000000000,
+      "retained_image_metadata_bytes": 2517190392,
+      "minimum_other_reserve_bytes": 352000000,
+      "own_reserve_bytes": 18000000,
+      "historical_runtime_freeze_used_by_qualification": {
+        "path": "authoring/sleep-eog/eog-program-completion-v1/FREEZE.json",
+        "bytes": 17545,
+        "sha256": "cc5dde51f83105773df6f9b61b7c1f1940142965e95d2f69e5049b76273590f6"
+      },
+      "historical_registered_freeze": {
+        "path": "authoring/sleep-eog/eog-program-completion-v2/FREEZE.json",
+        "bytes": 22295,
+        "sha256": "e94e40d57d0ea3849ba1fa913ec3d59f8bc258fb1f75c0ddc7a4af2c02d3358c"
+      },
+      "unchanged_inner_qualification_explicitly_inherited": true,
+      "new_outer_execution_observed": false,
+      "execution_authority": false
+    },
+    "latest_shared_family_accounting": {
+      "cost_family_id": "shared_sleep_eog",
+      "shared_candidate_ids": [
+        "NEURAL-007",
+        "NEURAL-008"
+      ],
+      "latest_closed_receipt": {
+        "path": "artifacts-build/sleep-eog-paired-cli-001/outer_receipt.json",
+        "bytes": 3406,
+        "sha256": "97568fbba17539d2dc64da010b50016ccfc364cbcb3d0a9f98ea1a4b3d23ac3c"
+      },
+      "baseline_and_observed_inventory": {
+        "path": "authoring/task-capacity-successors-20261102/sleep008/COST_FAMILY_BASELINE.json",
+        "bytes": 10913,
+        "sha256": "4eadd984660de105ec5c0cb841a88a8b3dfb0075b3e3985a0b508576dacf9add"
+      },
+      "known_additive_seconds": 4340.025864832016,
+      "next_full150_if_separately_granted": 4490.025864832016,
+      "historical_lifetime_complete": false,
+      "requires_fresh_current_confirmation_each_attempt": true,
+      "later_other_route_charge_requires_root_reconciliation": true
+    }
+  }
+}

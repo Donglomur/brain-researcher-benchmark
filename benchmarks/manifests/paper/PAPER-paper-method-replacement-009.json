@@ -1,0 +1,539 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-replacement-009",
+  "source_id": "paper-method-replacement-009",
+  "track": "paper",
+  "title": "Exploiting correlations across trials and behavioral sessions to improve neural decoding",
+  "status": "specification_only",
+  "canonical_position_one_based": 11,
+  "paper_identity": {
+    "url": "https://doi.org/10.1016/j.neuron.2025.10.026",
+    "publication_year": 2026,
+    "venue": "Neuron"
+  },
+  "primary_outputs": [
+    "Per-session choice AUC and continuous behavior R² for single-session versus multi-session reduced-rank models; select rank/regularization only on validation data.",
+    "Separate trial-averaged predictions from trial-specific residual predictions; test whether gains reflect shared task structure or neural information."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://openalyx.internationalbrainlab.org",
+      "https://zenodo.org/records/17317498"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/1/files/0",
+        "recorded_fields": {
+          "id": "12f7c413-e85e-436b-ad75-31663f704927",
+          "key": "yzhang511/neural_decoding-NEURON.zip",
+          "size": 5679211,
+          "checksum": "md5:380c2bc37681e80741ab4b3f85a1fc14",
+          "links": {
+            "self": "https://zenodo.org/api/records/17317498/files/yzhang511/neural_decoding-NEURON.zip/content"
+          }
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:380c2bc37681e80741ab4b3f85a1fc14"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-009"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/1/files/representative_files/0",
+        "recorded_fields": {
+          "id": "12f7c413-e85e-436b-ad75-31663f704927",
+          "key": "yzhang511/neural_decoding-NEURON.zip",
+          "size": 5679211,
+          "checksum": "md5:380c2bc37681e80741ab4b3f85a1fc14",
+          "links": {
+            "self": "https://zenodo.org/api/records/17317498/files/yzhang511/neural_decoding-NEURON.zip/content"
+          }
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:380c2bc37681e80741ab4b3f85a1fc14"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-replacement-009"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "IBL sorted spikes and behavior from pinned release selectors, with per-session neural spaces.",
+      "data_urls": [
+        "https://openalyx.internationalbrainlab.org",
+        "https://zenodo.org/records/17317498"
+      ],
+      "input_version": null,
+      "input_inventory_or_loader_evidence": [
+        {
+          "metadata_url": "https://openalyx.internationalbrainlab.org",
+          "version": "Exact session membership fixed by author data/repro_ephys_release.txt and bwm_release.csv at pinned code revision; ONE file revisions remain to freeze at acquisition.",
+          "session_ids_summary": {
+            "items": 40,
+            "evidence_retained_in_source_record": true
+          },
+          "declared_initial_scope_session_ids": [
+            "5dcee0eb-b34d-4652-acc3-d10afc6eae68",
+            "c7bf2d49-4937-4597-b307-9f39cb1c7b16",
+            "03d9a098-07bf-4765-88b7-85f8d8f620cc",
+            "d57df551-6dcb-4242-9c72-b806cff5613a",
+            "824cf03d-4012-4ab1-b499-c83a92c5589e",
+            "c51f34d8-42f6-4c9c-bb5b-669fd9c42cd9",
+            "f140a2ec-fd49-4814-994a-fe3476f14e66",
+            "d2832a38-27f6-452d-91d6-af72d794136c",
+            "88224abb-5746-431f-9c17-17d7ef806e6a",
+            "d0ea3148-948d-4817-94f8-dcaf2342bbbe"
+          ],
+          "precise_author_loader": "src/0_data_caching.py --datasets reproducible-ephys --n_sessions10; loads real spikes and trial/wheel/whisker observations through src/utils/ibl_data_utils.py, caches70/10/20train/validation/test partitions.",
+          "input_types": [
+            "spike trains",
+            "unit/atlas metadata",
+            "trial choice and stimulus variables",
+            "wheel speed",
+            "whisker motion energy"
+          ],
+          "files_downloaded": false
+        },
+        {
+          "metadata_url": "https://zenodo.org/api/records/17317498",
+          "version": "NEURON",
+          "role": "Paper-specific official code release, not a neural data archive.",
+          "files": {
+            "listed_file_count": 1,
+            "representative_files": [
+              {
+                "id": "12f7c413-e85e-436b-ad75-31663f704927",
+                "key": "yzhang511/neural_decoding-NEURON.zip",
+                "size": 5679211,
+                "checksum": "md5:380c2bc37681e80741ab4b3f85a1fc14",
+                "links": {
+                  "self": "https://zenodo.org/api/records/17317498/files/yzhang511/neural_decoding-NEURON.zip/content"
+                }
+              }
+            ],
+            "limit": "Inventory examples; not payload/schema qualification."
+          }
+        }
+      ],
+      "source_bridge": "Reproduce the central multi-session reduced-rank decoding advantage and trial-specific behavioral prediction on the paper’s real IBL repeated-site recordings, with single-session linear and reduced-rank controls.",
+      "code_url": "https://github.com/yzhang511/neural_decoding",
+      "code_revision_or_archive_version": "1508b1ac5a95af2f8627f0c304ee0a750cb36e77",
+      "entrypoints": [
+        {
+          "path": "src/0_data_caching.py",
+          "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/0_data_caching.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "src/1_decode_single_session.py",
+          "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/1_decode_single_session.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "src/2_decode_multi_session.py",
+          "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/2_decode_multi_session.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "src/3_decode_multi_region.py",
+          "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/3_decode_multi_region.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "src/utils/ibl_data_utils.py",
+          "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/utils/ibl_data_utils.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "src/models/decoders.py",
+          "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/models/decoders.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "data/repro_ephys_release.txt",
+          "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/data/repro_ephys_release.txt",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "env.yaml",
+          "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/env.yaml",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        }
+      ],
+      "missing_core_inputs_as_recorded": [
+        "Whole433-session brain-wide atlas and state-space-model extensions are not claimed by this bounded scope.",
+        "Paper online2025-11-26; final issue2026-02-04; first preprint2024. This is a2024public contribution, not contamination-free2026novelty.",
+        "Author trial randomization is not evidence of cross-session or chronological generalization; preserve reproduction split and add separately labeled stricter splits.",
+        "Temporal behavioral priors can improve decoding without stronger neural encoding; include behavior-only and imposter-session controls."
+      ],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-replacement-009",
+        "versions_and_loader_contract": {
+          "scope_description": "Reproduce the central multi-session reduced-rank decoding advantage and trial-specific behavioral prediction on the paper’s real IBL repeated-site recordings, with single-session linear and reduced-rank controls.",
+          "unresolved_coverage": [
+            "Whole433-session brain-wide atlas and state-space-model extensions are not claimed by this bounded scope.",
+            "Paper online2025-11-26; final issue2026-02-04; first preprint2024. This is a2024public contribution, not contamination-free2026novelty.",
+            "Author trial randomization is not evidence of cross-session or chronological generalization; preserve reproduction split and add separately labeled stricter splits.",
+            "Temporal behavioral priors can improve decoding without stronger neural encoding; include behavior-only and imposter-session controls."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/yzhang511/neural_decoding",
+    "revision_or_archive_version": "1508b1ac5a95af2f8627f0c304ee0a750cb36e77",
+    "entrypoints": [
+      {
+        "path": "src/0_data_caching.py",
+        "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/0_data_caching.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "src/1_decode_single_session.py",
+        "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/1_decode_single_session.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "src/2_decode_multi_session.py",
+        "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/2_decode_multi_session.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "src/3_decode_multi_region.py",
+        "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/3_decode_multi_region.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "src/utils/ibl_data_utils.py",
+        "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/utils/ibl_data_utils.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "src/models/decoders.py",
+        "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/models/decoders.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "data/repro_ephys_release.txt",
+        "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/data/repro_ephys_release.txt",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "env.yaml",
+        "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/env.yaml",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-replacement-009",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/yzhang511/neural_decoding",
+            "commit": "1508b1ac5a95af2f8627f0c304ee0a750cb36e77",
+            "author_linkage": [
+              "https://doi.org/10.1016/j.neuron.2025.10.026",
+              "https://github.com/yzhang511/neural_decoding"
+            ],
+            "license": [
+              "Code MIT, including paper-linked NEURON release.",
+              "IBL public data release terms apply; freeze each input revision and retain its license at acquisition."
+            ],
+            "snapshot_evidence": "GitHub commit and recursive tree metadata inspected; author README and selected source files read as text.",
+            "file_tree": {
+              "paths": [
+                "src/0_data_caching.py",
+                "src/1_decode_single_session.py",
+                "src/2_decode_multi_session.py",
+                "src/3_decode_multi_region.py",
+                "src/utils/ibl_data_utils.py",
+                "src/models/decoders.py",
+                "data/repro_ephys_release.txt",
+                "env.yaml"
+              ]
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "src/0_data_caching.py",
+              "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/0_data_caching.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "src/1_decode_single_session.py",
+              "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/1_decode_single_session.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "src/2_decode_multi_session.py",
+              "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/2_decode_multi_session.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "src/3_decode_multi_region.py",
+              "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/3_decode_multi_region.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "src/utils/ibl_data_utils.py",
+              "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/utils/ibl_data_utils.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "src/models/decoders.py",
+              "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/models/decoders.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "data/repro_ephys_release.txt",
+              "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/data/repro_ephys_release.txt",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "env.yaml",
+              "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/env.yaml",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            }
+          ],
+          "dependencies": [
+            "Python3.11.7",
+            "PyTorch2.2.1",
+            "Lightning2.2.0",
+            "Ray2.9.3",
+            "ONE-api",
+            "ibllib2.34.0",
+            "datasets2.17.1"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "recorded_terms": [
+        "Code MIT, including paper-linked NEURON release.",
+        "IBL public data release terms apply; freeze each input revision and retain its license at acquisition."
+      ],
+      "record_conflicts": [],
+      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
+      "overlap_group": "ibl-public-recordings-session-overlap-pending"
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "central_outputs_in_saved_source_contract": [
+        "Per-session choice AUC and continuous behavior R² for single-session versus multi-session reduced-rank models; select rank/regularization only on validation data.",
+        "Separate trial-averaged predictions from trial-specific residual predictions; test whether gains reflect shared task structure or neural information."
+      ],
+      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
+      "missing_or_unfrozen_endpoint_details": "Known-session multi-session RRR is the supported bounded claim; exact objects, trial coverage and full cohort/animal identity remain open. Generated source checks are not a real decoding run."
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Source normalization ignores passed training statistics; generated masks/counts exposed edge cases. Keep literal-source and train-only adapted branches separate, identical scored trial IDs and drop_last coverage; practical effects on recordings are unknown."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Known-session multi-session RRR is the supported bounded claim; exact objects, trial coverage and full cohort/animal identity remain open. Generated source checks are not a real decoding run.",
+        "Source normalization ignores passed training statistics; generated masks/counts exposed edge cases. Keep literal-source and train-only adapted branches separate, identical scored trial IDs and drop_last coverage; practical effects on recordings are unknown.",
+        "Whole433-session brain-wide atlas and state-space-model extensions are not claimed by this bounded scope.",
+        "Paper online2025-11-26; final issue2026-02-04; first preprint2024. This is a2024public contribution, not contamination-free2026novelty.",
+        "Author trial randomization is not evidence of cross-session or chronological generalization; preserve reproduction split and add separately labeled stricter splits.",
+        "Temporal behavioral priors can improve decoding without stronger neural encoding; include behavior-only and imposter-session controls.",
+        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+        "Execute and independently audit references, controls, grading and measured resources.",
+        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "generated_source_behavior_only",
+      "scope": "Six generated diagnostic groups completed in a declared modern runtime; no real model fits, no demonstrated real-data bug incidence or score inflation."
+    },
+    "historical_integration_classification": "generated_source_diagnostics_only",
+    "current_classification": "generated_diagnostics_only",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve cross-session transfer or rank selection with matched training sessions, or improve trial-specific prediction while preserving calibration and null-session controls."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "independent_panel_not_established_in_inspected_evidence",
+      "proposed_improvement": [
+        "Improve cross-session transfer or rank selection with matched training sessions, or improve trial-specific prediction while preserving calibration and null-session controls."
+      ],
+      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
+      "special_gate": "No completed independent improvement result is established here."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": "GPU for author model sweeps; CPU feasible for smaller linear baselines. Storage scales with selected public spike/behavior sessions; unmeasured.",
+    "measured_or_static_facts_from_existing_authoring": [
+      "Saved source-behavior attempts actual outer0.555513s and0.818864s; conservative cumulative55.30189087399049/900s including failed AST-binding attempt and source requests. No real fit runtime."
+    ],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "holds": {
+    "task_specific": [
+      "Known-session multi-session RRR is the supported bounded claim; exact objects, trial coverage and full cohort/animal identity remain open. Generated source checks are not a real decoding run.",
+      "Source normalization ignores passed training statistics; generated masks/counts exposed edge cases. Keep literal-source and train-only adapted branches separate, identical scored trial IDs and drop_last coverage; practical effects on recordings are unknown.",
+      "Whole433-session brain-wide atlas and state-space-model extensions are not claimed by this bounded scope.",
+      "Paper online2025-11-26; final issue2026-02-04; first preprint2024. This is a2024public contribution, not contamination-free2026novelty.",
+      "Author trial randomization is not evidence of cross-session or chronological generalization; preserve reproduction split and add separately labeled stricter splits.",
+      "Temporal behavioral priors can improve decoding without stronger neural encoding; include behavior-only and imposter-session controls.",
+      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+      "Execute and independently audit references, controls, grading and measured resources.",
+      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Resolve object/animal overlap and freeze one matched single-session versus multi-session regression experiment, then inspect actual count ranges/missingness and qualify evaluation coverage before fitting.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Resolve object/animal overlap and freeze one matched single-session versus multi-session regression experiment, then inspect actual count ranges/missingness and qualify evaluation coverage before fitting.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "5d8bb8b4fb4267bbd0c7940fbc59091d34ce8bb6263169d62ca4e47fabad1f94",
+    "audit_record_sha256": "31a707f979628cf352dede65809dc654f70dcfbce4779691aea05b51b527a2e1",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-replacement-009",
+        "declared_record_sha256": "44c2cb7d32595c70ed723c65ddd879ddcd9991ed95eba01d07fd3d5fa0aa2f1e",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 72,
+        "record_sha256": "44c2cb7d32595c70ed723c65ddd879ddcd9991ed95eba01d07fd3d5fa0aa2f1e"
+      },
+      {
+        "file": {
+          "path": "authoring/multisession-rrr/preflight-v1/PASS_GATE_MATRIX.md",
+          "bytes": 10209,
+          "sha256": "429ffa456fea4a4b88f3c0e0b53b13ade21c924424b4ec03eea5cfa3d5419be6"
+        },
+        "record_id": null,
+        "declared_record_sha256": null,
+        "role": "Static normalization, trial batching, cohort and source gates."
+      },
+      {
+        "file": {
+          "path": "authoring/multisession-rrr/source-behavior-v2/RESULTS.md",
+          "bytes": 2523,
+          "sha256": "d5f77f4be72e79efc9fae9ced44bc9aeee28942e1cbecb2dfe0c78d88f4022de"
+        },
+        "record_id": null,
+        "declared_record_sha256": null,
+        "role": "Generated-input diagnostics only; no real incidence or metric impact established."
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

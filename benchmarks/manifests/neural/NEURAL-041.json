@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-041",
+  "track": "neural",
+  "title": "Working-memory load decoding",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-P001"
+    ],
+    "titles": [
+      "Human hippocampal/frontal working-memory LFP and single-unit recordings"
+    ],
+    "overlap_groups": [
+      "human-working-memory-dandi-000673"
+    ],
+    "task_family": "working_memory"
+  },
+  "scientific_question": "Do equal-duration maintenance LFP/spike windows distinguish low and high memory load across patients?",
+  "task_type": "prediction",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Memory-load probabilities per eligible maintenance interval."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://dandiarchive.org/dandiset/000673/0.240118.2135",
+      "https://www.nature.com/articles/s41586-024-07309-z",
+      "https://github.com/rutishauserlab/SBCAT-release-NWB",
+      "https://api.dandiarchive.org/api/assets/9a0b7309-0322-4fee-bd81-1f24da41960b/",
+      "https://raw.githubusercontent.com/rutishauserlab/SBCAT-release-NWB/a25e8cc3f61630a428f190381745257d4506f148/README.md",
+      "https://raw.githubusercontent.com/rutishauserlab/SBCAT-release-NWB/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/NWB_SBCAT_analysis_main.m",
+      "https://raw.githubusercontent.com/rutishauserlab/SBCAT-release-NWB/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_LFP.m",
+      "https://raw.githubusercontent.com/rutishauserlab/SBCAT-release-NWB/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_SU.m"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-P001",
+        "ledger": "readiness/signals_readiness.json",
+        "record_sha256": "a6714c89580f7660c78eb432c1e2f5000d9ff7ccfb8924344c80d153fa001f8c",
+        "data_manifest": {
+          "version": "0.240118.2135",
+          "number_of_files": 44,
+          "number_of_subjects": 36,
+          "total_bytes": 23447043476,
+          "example_asset": {
+            "path": "sub-4/sub-4_ses-1_ecephys+image.nwb",
+            "asset_id": "9a0b7309-0322-4fee-bd81-1f24da41960b",
+            "bytes": 1089980788,
+            "sha256": "3156dc7fc6dd19f402f88743c7d266627ee2ca7ec70cb80511a78e2d6fb015fa"
+          },
+          "manifest_url": "https://api.dandiarchive.org/api/dandisets/000673/versions/0.240118.2135/assets/"
+        },
+        "recording_contract": {
+          "neural": "Actual HDF5 structural metadata confirms acquisition/LFPs/data shape547700×69,float64;units/spike_times and spike_times_index",
+          "labels": "Actual intervals/trials keys:loads,response_accuracy,probe_in_out,PicIDs_Encoding1/2/3,PicIDs_Probe,timestamps_Maintenance,timestamps_Probe,timestamps_Response and encoding timestamps.",
+          "time_alignment": "acquisition/LFPs/starting_time and rate in NWB; trial timestamps in seconds; original PAC helper aligns maintenance windows. No neural values read in this audit.",
+          "biological_ids": "general/subject/subject_id present; sub4ses1 inspected;36biological participants from archivemetadata,44sessionfiles",
+          "evidence": "HTTP range inspection of structural metadata on one asset from each of2024and2025published snapshots; originalMATLABhelpers match bothLFP/trialschemas."
+        },
+        "status": "artifact_ready"
+      }
+    ],
+    "exact_asset_records": [
+      {
+        "source_id": "D-P001",
+        "ledger": "readiness/signals_readiness.json",
+        "source_json_pointer": "/data_manifest/example_asset",
+        "record": {
+          "path": "sub-4/sub-4_ses-1_ecephys+image.nwb",
+          "asset_id": "9a0b7309-0322-4fee-bd81-1f24da41960b",
+          "bytes": 1089980788,
+          "sha256": "3156dc7fc6dd19f402f88743c7d266627ee2ca7ec70cb80511a78e2d6fb015fa"
+        },
+        "local_payload_verified_by_this_builder": false
+      }
+    ],
+    "missing_or_unverified": [
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "neural_measurements": "Actual HDF5 structural metadata confirms acquisition/LFPs/data shape547700×69,float64;units/spike_times and spike_times_index",
+    "allowed_context": "Actual intervals/trials keys:loads,response_accuracy,probe_in_out,PicIDs_Encoding1/2/3,PicIDs_Probe,timestamps_Maintenance,timestamps_Probe,timestamps_Response and encoding timestamps.",
+    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
+    "time_alignment": "acquisition/LFPs/starting_time and rate in NWB; trial timestamps in seconds; original PAC helper aligns maintenance windows. No neural values read in this audit.",
+    "source_contract_evidence": "HTTP range inspection of structural metadata on one asset from each of2024and2025published snapshots; originalMATLABhelpers match bothLFP/trialschemas."
+  },
+  "biological_unit": "general/subject/subject_id present; sub4ses1 inspected;36biological participants from archivemetadata,44sessionfiles",
+  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "split": {
+    "policy": "Group all sessions by patient; fixed equal-duration maintenance intervals and artifact masks; image/condition grouping according to target.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/rutishauserlab/SBCAT-release-NWB",
+    "commit_or_archive_version": "a25e8cc3f61630a428f190381745257d4506f148",
+    "entrypoints": [
+      "NWB_SBCAT_analysis/NWB_SBCAT_analysis_main.m",
+      "NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_LFP.m",
+      "NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_SU.m"
+    ],
+    "role": "Official PAC/working-memory scientific analyses. The proposed memory-load decoder still needs its own predictive baseline.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://www.nature.com/articles/s41586-024-07309-z",
+    "data_url": "https://dandiarchive.org/dandiset/000673/0.240118.2135"
+  },
+  "controls": [
+    "Mask event-count/PicID/phase cues",
+    "equal windows",
+    "no target-coded file names",
+    "rate/power nuisance references."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Patient-macro balanced accuracy and log loss.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": null
+    },
+    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+      },
+      {
+        "id": "reference",
+        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+      },
+      {
+        "id": "scorer",
+        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      },
+      {
+        "id": "replication",
+        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "CPU_workstation_bounded",
+    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+    "source_storage_evidence": null
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Pin compatible NWB snapshot and artifact masks; verify patient grouping and maintenance alignment."
+    },
+    {
+      "id": "source_1",
+      "requirement": "No neural samples or analysis results validated; memory-load decoding reference still needs its own scientific qualification."
+    },
+    {
+      "id": "source_2",
+      "requirement": "Use2024snapshot for the original MATLAB baseline because2025snapshot removes mean/SD waveform fields; exact helper compatibility outside inspectedPACparts needs runtime check."
+    },
+    {
+      "id": "source_3",
+      "requirement": "2026ripple preprocess_LFP_units.ipynb at bd3b0c70 expects processing/ecephys/LFP_micro/ElectricalSeries,stim_phase and electrode_id; inspected officialfiles instead have acquisition/LFPs,no processing,loads and units/electrodes. FIND-001 requires an explicit adapter; do not assume it runs directly."
+    },
+    {
+      "id": "packet",
+      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+    },
+    {
+      "id": "reference",
+      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+    },
+    {
+      "id": "scorer",
+      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+    },
+    {
+      "id": "replication",
+      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+    }
+  ],
+  "next_implementation_action": [
+    "Pin compatible NWB snapshot and artifact masks; verify patient grouping and maintenance alignment."
+  ],
+  "construction_review": null,
+  "source_audit_overlays": [],
+  "provenance": {
+    "canonical_record_sha256": "e67009a6d02b07a5d809caf3b6a8fa7f296f1bab35cc9ddffc020d868649c5c4",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/readiness/signals_readiness.json",
+        "bytes": 67125,
+        "sha256": "a1f767fe5f088b27c6b80a2068699838becdbf96457d15530f77e4a89f7616b6"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

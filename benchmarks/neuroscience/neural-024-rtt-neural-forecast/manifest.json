@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-024",
+  "track": "neural",
+  "title": "Stable population dynamics across days \u2014 bounded causal count forecasting",
+  "status": "local_program_runner_verified",
+  "scope": "One exposed RTT development pair; source counts plus first60s calibration,10 required warm-up and22090scored next20ms bins across96channels. The original broader investigation remains open.",
+  "verification": {
+    "status": "not_applicable_no_standalone_score_route"
+  },
+  "admission": {
+    "runnable": false,
+    "program_execution_runnable": true,
+    "standalone_scorer_runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "submission_ready": false
+  },
+  "program_execution": {
+    "status": "local_program_runner_verified",
+    "entrypoint": {
+      "argv": [
+        "{python}",
+        "authoring/rtt-neural-forecast-v1/causal-registration-v1/bridge.py",
+        "--program",
+        "{program}",
+        "--output",
+        "{output}",
+        "--review",
+        "{review}",
+        "--other-reserve-bytes",
+        "{other_reserve_bytes}"
+      ],
+      "working_directory": ".",
+      "sha256": "1b4a9b38bff588b4162a23e598556123f3bc83b3bf42e09f8419524ea5ab064a",
+      "required_operator_arguments": [
+        "review",
+        "other_reserve_bytes"
+      ]
+    },
+    "source_freeze": {
+      "path": "authoring/rtt-neural-forecast-v1/causal-registration-v1/REGISTRATION_SOURCE_CLOSURE.json",
+      "sha256": "1039f64afbd91f2e0bcf06baf57d70743e8091203493f8a66f455299aaecb368"
+    },
+    "executed_runtime_freeze": {
+      "path": "authoring/rtt-neural-forecast-v1/causal-runtime-v1/FREEZE.json",
+      "bytes": 13717,
+      "sha256": "48ef3ea8f5dbfac57a4e0633d8245da59ff061a61cc5830d0b0c3e7e653e2299"
+    },
+    "verification": {
+      "status": "passed",
+      "receipt_path": "authoring/rtt-neural-forecast-v1/causal-registration-v1/receipt.json",
+      "receipt_sha256": "f774ef5186352607d5b3d8eea47b324831797533dc438b617a2e8ceac4f34d47",
+      "qualification_path": "authoring/rtt-neural-forecast-v1/causal-registration-v1/verification.json",
+      "qualification_sha256": "73ec5e6f08c135d9aa80cc0fb5c40f16e69aaafcd65bd82e2ea72be8f8bdbaa4",
+      "source_binding_path": "authoring/rtt-neural-forecast-v1/causal-registration-v1/source_binding.json",
+      "source_binding_sha256": "ef04485e01bd5c39e0eb40919f1f2b8e3ff0a546c104e78c7d8e220440e2c266"
+    },
+    "instructions_path": "authoring/rtt-neural-forecast-v1/causal-runtime-v1/TASK.md",
+    "protocol_path": "authoring/rtt-neural-forecast-v1/causal-runtime-v1/PROTOCOL.json",
+    "operator_instructions_path": "authoring/rtt-neural-forecast-v1/causal-registration-v1/README.md",
+    "method_path_policy": "Explicit canonical absolute root-contained method_path in a fresh ordinary grant; strict five-field schema and exact program/method hashes. No default method.",
+    "scope": {
+      "source_rows": 18700,
+      "calibration_rows": 3000,
+      "protocol_rounds": 22100,
+      "unscored_warmup_rounds": 10,
+      "scored_rows": 22090,
+      "neural_channels": 96,
+      "scored_cells": 2120640,
+      "bin_seconds": 0.02,
+      "mean_unit": "count_per_bin",
+      "candidate_public_files": 5,
+      "lawful_prefix_online_learning_allowed": true,
+      "all96_predictions_committed_before_current_counts_reveal": true,
+      "fixed_weights_for_arbitrary_code_enforced": false,
+      "current_or_future_counts_mounted": false,
+      "behavior_or_velocity_mounted": false,
+      "protected_test": false,
+      "exposed_development_pair": true,
+      "adaptive_vs_fixed_reference_comparison": "descriptive; not matched-policy or matched-compute"
+    },
+    "grading": {
+      "primary_metric": "bits_per_spike_vs_calibration_rate",
+      "direction": "higher",
+      "secondary": [
+        "mean_nll",
+        "full_Poisson_log_likelihood"
+      ],
+      "comparators": [
+        "source_rate",
+        "calibration_rate",
+        "self_history_frozen",
+        "self_history_adapted",
+        "self_population_history_frozen",
+        "self_population_history_adapted"
+      ],
+      "all_signed_comparisons": true,
+      "all_scored_cells_retained": true,
+      "warmup_excluded_from_every_metric": true,
+      "ordinary_performance_floor": null,
+      "private_scorer_embedded_not_standalone": true,
+      "offline_journal_causal_provenance_established": false
+    },
+    "runtime": {
+      "whole_seconds": 780,
+      "work_seconds": 720,
+      "candidate_wall_seconds": 600,
+      "cleanup_seconds": 60,
+      "artifact_reserve_bytes": 176000000,
+      "candidate_cpus": 1.75,
+      "candidate_memory_bytes": 3221225472,
+      "pids": 32,
+      "threads": 1,
+      "tmpfs_bytes": 16777216,
+      "network": "none",
+      "new_exact_root_grant_and_allocation_required": true,
+      "capacity_aggregate_bytes": 22000000000,
+      "free_after_reserves_floor_bytes": 15000000000,
+      "retained_image_metadata_bytes": 2517190392,
+      "native_controller_separate_CPU_memory_cgroup": false
+    },
+    "qualification_accounting": {
+      "actual_candidate_controls": 1,
+      "executed_generated_controls": 50,
+      "generated_control_breakdown": {
+        "runtime": 22,
+        "packet": 8,
+        "candidate": 12,
+        "score": 8
+      },
+      "actual_control_charge_seconds": 780,
+      "known_family_seconds_after": 2800,
+      "historical_lifetime_complete": false,
+      "ordinary_common_CLI_execution_observed": false,
+      "new_runs_for_registration": 0,
+      "malformed_or_private_probe_empirical_programs_claimed": false
+    },
+    "claims": {
+      "new_ID": false,
+      "new_reference_ID": false,
+      "new_standalone_score_adapter": false,
+      "research_qualified": false,
+      "submission_ready": false,
+      "full_contract_complete": false,
+      "independent_LLM_trial": false
+    }
+  }
+}

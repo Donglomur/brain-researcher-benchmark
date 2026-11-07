@@ -1,9 +1,9 @@
 # Neuroscience benchmark source construction
 
-This branch is the public source integration branch for the neuroscience benchmark project. The target is 100 paper projects and 100 neural-data tasks. This first snapshot contains one independently reviewed OFC tensor-input builder, its invented correctness controls, and the exact MIT-licensed author source used by its oracle. It is not a release of 200 ready benchmarks.
+This is the public source integration branch for a project targeting 100 paper-research assignments and 100 neural-data tasks. It currently includes the 200 task manifests, reviewed source contracts and construction tools, plus an independently reviewed OFC tensor-input component. These are construction assets, not 200 finished benchmarks.
 
-The component preserves the declared full-cohort input transformations. It does not include recordings, derived arrays, held-out answers, participant rosters, or operator predictions. It does not establish native numerical parity, complete TCA reproduction, scientific qualification, or model performance. Historical references in the source evidence may point to local material absent from this branch.
+The broader overlay contains 505 exact reviewed source/contract/notice files, alongside the eight-file OFC component. The source manifests identify every included file and its provenance. Some execution paths refer to authoring dependencies or operator inputs that are deliberately absent here. The branch is therefore not a dependency-complete runnable benchmark release.
 
-Further reviewed source changes will be integrated here. Local development retains the full working history; this branch starts from the public fork base and includes only reviewed publication allowlists. Each new source snapshot needs its own review. No local history containing signed acquisition URLs or benchmark answers is merged into this branch.
+Actual recordings, derived arrays, held-out answers, operator predictions, participant rosters, acquisition request ledgers and local execution artifacts are omitted. No scientific qualification or model-performance result follows from this publication. See PUBLICATION_SCOPE.md for the limitations.
 
-The OFC source manifest in this directory identifies the exact included files. Author licensing notices are preserved with the component and its upstream source dependency.
+Subsequent reviewed source changes will be integrated here. The full local development history stays local; this branch starts from the existing public fork base and receives only reviewed source overlays. Licensing notices included in the reviewed sources are retained.

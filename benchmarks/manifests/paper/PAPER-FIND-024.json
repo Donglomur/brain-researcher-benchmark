@@ -1,0 +1,365 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-FIND-024",
+  "source_id": "FIND-024",
+  "track": "paper",
+  "title": "Temporal integration in human auditory cortex is predominantly yoked to absolute time",
+  "status": "specification_only",
+  "canonical_position_one_based": 72,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41593-025-02060-8",
+    "publication_year": 2025,
+    "venue": "Nature Neuroscience"
+  },
+  "primary_outputs": [
+    "Recompute cross-context neural correlations and noise ceilings from electrode response timecourses across speech rates.",
+    "Refit integration windows and assess absolute-time versus structure-yoked integration with participant/electrode hierarchy."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://drive.google.com/drive/folders/1r7E4fQatSBvd5eGYgdr3s8E72dTuL568"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/inventory/0",
+        "recorded_fields": {
+          "path": "electrode_timecourses.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-024"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/inventory/1",
+        "recorded_fields": {
+          "path": "cross_context_correlation.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-024"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/inventory/2",
+        "recorded_fields": {
+          "path": "model_fits.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-024"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/inventory/3",
+        "recorded_fields": {
+          "path": "anatomical.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-024"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "paper_url": "https://www.nature.com/articles/s41593-025-02060-8",
+      "data_urls": [
+        "https://drive.google.com/drive/folders/1r7E4fQatSBvd5eGYgdr3s8E72dTuL568"
+      ],
+      "input_scope": "Processed electrode_timecourses.mat plus anatomical metadata; cross_context_correlation.mat and model_fits.mat are derived results and must not substitute for recomputation.",
+      "saved_metadata": {
+        "input_version": "Public author Drive folder, observed 2026-10-29; unversioned",
+        "input_code_bridge": "The public author Drive folder exposes electrode_timecourses.mat, cross_context_correlation.mat, model_fits.mat, anatomical.mat. Inspected loaders define D as time × stimulus × electrode × repetition and call cross_context_corr/modelfit_cross_context_corr on these empirical inputs. Cohort loops must replace the example subject selection.",
+        "inventory": [
+          {
+            "path": "electrode_timecourses.mat",
+            "evidence": "Observed public folder filename and author loader"
+          },
+          {
+            "path": "cross_context_correlation.mat",
+            "evidence": "Observed public folder filename and author loader"
+          },
+          {
+            "path": "model_fits.mat",
+            "evidence": "Observed public folder filename and author loader"
+          },
+          {
+            "path": "anatomical.mat",
+            "evidence": "Observed public folder filename and author loader"
+          }
+        ]
+      },
+      "code_url": "https://github.com/snormanhaignere/time-vs-structure",
+      "revision_or_archive_version": "08f2319a99a047ab2d1f631e0bffcfcea8a5bc08",
+      "entrypoints": [
+        "matlab-code/demo_cross_context_correlation.m",
+        "matlab-code/demo_model_fits.m",
+        "matlab-code/demo_rescaling.m",
+        "STAN/bayesian_LME_stan.ipynb"
+      ],
+      "array_payloads_read_in_this_audit": false
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-024",
+        "versions_and_loader_contract": {
+          "input_version": "Public author Drive folder, observed 2026-10-29; unversioned",
+          "input_code_bridge": "The public author Drive folder exposes electrode_timecourses.mat, cross_context_correlation.mat, model_fits.mat, anatomical.mat. Inspected loaders define D as time × stimulus × electrode × repetition and call cross_context_corr/modelfit_cross_context_corr on these empirical inputs. Cohort loops must replace the example subject selection.",
+          "readiness_scope": "Only the listed substantial empirical analyses are artifact-ready for an attempt. This is not whole-paper reproduction, environment qualification, or scientific validation.",
+          "missing_core_inputs": []
+        },
+        "data_section_locators": [
+          "input_inventory",
+          "input_version",
+          "input_code_bridge"
+        ]
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "FIND-024",
+        "versions_and_loader_contract": {
+          "declared_scope": "Recompute cross-context neural correlations and noise ceilings from electrode response timecourses across speech rates; Refit integration windows and assess absolute-time versus structure-yoked integration with participant/electrode hierarchy."
+        },
+        "data_section_locators": []
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/snormanhaignere/time-vs-structure",
+    "revision_or_archive_version": "08f2319a99a047ab2d1f631e0bffcfcea8a5bc08",
+    "entrypoints": [
+      "matlab-code/demo_cross_context_correlation.m",
+      "matlab-code/demo_model_fits.m",
+      "matlab-code/demo_rescaling.m",
+      "STAN/bayesian_LME_stan.ipynb"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-024",
+        "recorded": {
+          "code_url": "https://github.com/snormanhaignere/time-vs-structure",
+          "code_revision": "08f2319a99a047ab2d1f631e0bffcfcea8a5bc08",
+          "entrypoints": [
+            "matlab-code/demo_cross_context_correlation.m",
+            "matlab-code/demo_model_fits.m",
+            "matlab-code/demo_rescaling.m",
+            "STAN/bayesian_LME_stan.ipynb"
+          ],
+          "dependencies": [
+            "MATLAB 2024b; bundled TCI code",
+            "Python/Stan for hierarchical model"
+          ]
+        }
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "FIND-024",
+        "recorded": {
+          "code_url": "https://github.com/snormanhaignere/time-vs-structure",
+          "code_revision_or_archive_version": "08f2319a99a047ab2d1f631e0bffcfcea8a5bc08",
+          "entrypoints": [
+            "matlab-code/demo_cross_context_correlation.m",
+            "matlab-code/demo_model_fits.m",
+            "matlab-code/demo_rescaling.m",
+            "STAN/bayesian_LME_stan.ipynb"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": {
+        "access": "Public author Drive folder viewed; empirical filenames exposed without sign-in.",
+        "license": "Explicit data/code reuse license not identified; redistribution rights unresolved."
+      },
+      "declared_overlap_group": null,
+      "existing_graph_evidence_leads": [],
+      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
+      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "documented_outputs": [
+        "Recompute cross-context neural correlations and noise ceilings from electrode response timecourses across speech rates.",
+        "Refit integration windows and assess absolute-time versus structure-yoked integration with participant/electrode hierarchy."
+      ],
+      "construction_specificity": "The absolute-time versus structure-yoked contrast is documented, but figure/condition selection, rescaling definition, noise-ceiling adjustment and acceptance tolerance are not frozen.",
+      "exact_published_numeric_target_verified_by_this_audit": false
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Fit both hypotheses under equal model complexity and reliability correction.",
+      "Replace demo-subject selection with a prospectively fixed cohort; no electrode selection from assessment effects."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "The absolute-time versus structure-yoked contrast is documented, but figure/condition selection, rescaling definition, noise-ceiling adjustment and acceptance tolerance are not frozen.",
+        "Participant/electrode hierarchy with held-out stimuli; exact participant/story identities and enough independent units for any proposed split remain to verify.",
+        "Public access does not settle redistribution; no explicit data/code reuse license is recorded. Raw iEEG preprocessing is outside scope.",
+        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_and_metadata_only_for_this_project",
+      "runnable_reference_demonstrated": false,
+      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Proposed: evaluate held-out stimuli/participants and alternative response models with equal complexity and reliability-adjusted comparisons."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_executed_or_independently_qualified",
+      "proposed_question": [
+        "Proposed: evaluate held-out stimuli/participants and alternative response models with equal complexity and reliability-adjusted comparisons."
+      ],
+      "independent_panel_gate": "Participant/electrode hierarchy with held-out stimuli; exact participant/story identities and enough independent units for any proposed split remain to verify.",
+      "published_targets_are_historically_exposed": true,
+      "prospective_frontier_claim_supported": false
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_statement": {
+      "estimate": "CPU workstation; hours for cohort correlation/model refits, estimated.",
+      "basis": "Static source and archive metadata inspection; estimate, not measured."
+    },
+    "source_resource_evidence": null,
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "holds": {
+    "task_specific": [
+      "The absolute-time versus structure-yoked contrast is documented, but figure/condition selection, rescaling definition, noise-ceiling adjustment and acceptance tolerance are not frozen.",
+      "Participant/electrode hierarchy with held-out stimuli; exact participant/story identities and enough independent units for any proposed split remain to verify.",
+      "Public access does not settle redistribution; no explicit data/code reuse license is recorded. Raw iEEG preprocessing is outside scope.",
+      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Pin each unversioned Drive input and map empirical timecourses to the correlation/model-fit loaders and participant IDs before acquisition or cohort fitting.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Pin each unversioned Drive input and map empirical timecourses to the correlation/model-fit loaders and participant IDs before acquisition or cohort fitting.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "3a5382c70005097016826caa3702dc1fcdd1ae2ad1874cb1cca39de4945e43ee",
+    "audit_record_sha256": "f8e4a98f8880cf2d7333e2d2cdd2582d0d9e8be23710dc23b2ba1dbec1992a05",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+          "bytes": 1654641,
+          "sha256": "3782e843842fd2848b653253a23db84053308427ce3b3246a918644f2e25fe3a"
+        },
+        "record_id": "FIND-024",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 23,
+        "record_sha256": "4f55e39a94d6ca1848b68b894c8a7bfe7a699f748aa053ced06acf21499147c1"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+          "bytes": 500587,
+          "sha256": "8893618f482d8301b723a57e2758fef66ab560b84c95650f8ea92f4b37375c3a"
+        },
+        "record_id": "FIND-024",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 23,
+        "record_sha256": "6b3185ea6719622956caf995b6870a97dade0b184b5dd27ecfb59b69692af9e9"
+      }
+    ],
+    "historical_pin_exceptions": [
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+          "bytes": 3519,
+          "sha256": "d9862c468c3ece0d0e0cfca975f8980cea6a9dfbb7abfe5d3b4b96ca76045ac7"
+        },
+        "current_pin": {
+          "bytes": 4544,
+          "sha256": "963f9e1b6d528573c1c321629a0ab2ba6e1fb25b3e0404e3882b483ea7207c5f"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      },
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+          "bytes": 163669,
+          "sha256": "96c826360af4b8858cb33406e95242d27d7806e5896b98c211ccd3478a76661d"
+        },
+        "current_pin": {
+          "bytes": 166909,
+          "sha256": "974e56e839620059345f5b8ae1f5893e1d404c007864159dc84e6b330f49edca"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      }
+    ],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

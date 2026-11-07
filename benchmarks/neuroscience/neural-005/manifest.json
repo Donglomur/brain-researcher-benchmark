@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-005",
+  "track": "neural",
+  "title": "Next-choice prediction from behavioral history and processed ERP",
+  "status": "local_program_runner_verified",
+  "scope": "Probability-file scoring and streamed program execution on 816 development queries from seven people; offline processed ERP and conditional positional trial linkage. No full research-contract admission.",
+  "entrypoints": {
+    "score": {
+      "argv": [
+        "{python}",
+        "benchmarks/neuroscience/neural-005/score.py",
+        "--submission",
+        "{submission}",
+        "--output",
+        "{output}"
+      ],
+      "working_directory": ".",
+      "sha256": "70e65f575d5aa433a8513d63208d1dd77bc036ce9d036003856f0404f19b7b79"
+    }
+  },
+  "assets": {
+    "public": [
+      {
+        "path": "benchmarks/neuroscience/neural-005/public/cases.json",
+        "bytes": 56301,
+        "sha256": "c52d582938ad60b3edbedb6312a9e0296be9036608b98a4a868683e42521799f"
+      }
+    ],
+    "private": [
+      {
+        "path": "authoring/erp-neural-prediction-v1/reference-v1/execution-001/conversion/development_private.json",
+        "bytes": 890937,
+        "sha256": "9745925a7d6bc62503a5eba5c38b12a2155d50240d2b8527f5df2bb9d9770008"
+      },
+      {
+        "path": "authoring/erp-neural-prediction-v1/reference-v1/execution-001/predictions.jsonl",
+        "bytes": 314563,
+        "sha256": "e19d4551219a507c3d5589f945f71cbb85bd8157e8e7efd01fbc58f5301c6c45"
+      }
+    ],
+    "local_dependency": "Existing private savedreference files and immutableDockerimage; lazy paths, no new data copies"
+  },
+  "verification": {
+    "status": "passed",
+    "receipt_path": "authoring/erp-neural-prediction-v1/adapter-v1/execution-001/receipt.json",
+    "receipt_sha256": "3a8dbf38393e83255ce7ad0ef5c146346ea95d1eb473101cf3c8e926400ab89a",
+    "scope": "Independent168savedmetricchecks plus6reference/alternative/invalid controls; no chronology or fullcontract admission"
+  },
+  "admission": {
+    "runnable": true,
+    "research_qualified": false,
+    "full_candidate_contract_complete": false,
+    "submission_ready": false
+  },
+  "metrics": {
+    "primary": "equal_participant_log_loss",
+    "direction": "lower",
+    "scientific_success_floor": null,
+    "signed_reference_comparisons": [
+      "history",
+      "prestimulus",
+      "all_erp"
+    ]
+  },
+  "candidate_chronology_enforced_by_this_entrypoint": false,
+  "program_execution": {
+    "entrypoint": {
+      "argv": [
+        "python3",
+        "authoring/erp-neural-prediction-v1/program-completion-v3/registration-staging-v3/bridge.py",
+        "--program",
+        "{program}",
+        "--review",
+        "{review}",
+        "--output",
+        "{output}",
+        "--other-reserve-bytes",
+        "{other_reserve_bytes}"
+      ],
+      "working_directory": ".",
+      "sha256": "f8aadd295e8adc0f8a79992749cf187726dbe4d4cb858a95fd73386f99daf870",
+      "wall_seconds": 330
+    },
+    "source_freeze": {
+      "path": "authoring/erp-neural-prediction-v1/program-completion-v3/FREEZE.json",
+      "sha256": "28bd369134efaedcadbb5e7b5cf466ca238dbb93897b9c9bf5c79d2073a11feb"
+    },
+    "verification": {
+      "status": "passed",
+      "receipt_path": "authoring/erp-neural-prediction-v1/program-completion-v3/registration-accepted-v1/receipt.json",
+      "receipt_sha256": "25e5055cb45801879c027971285807820f1350821adf05538e5fdb563e40c933",
+      "qualification_path": "authoring/erp-neural-prediction-v1/program-completion-v3/registration-accepted-v1/ACCEPTED_QUALIFICATION.json",
+      "qualification_sha256": "7d002accb60c2ad7cdced9c1d912ddcf06951a8a33bb8d92d4b01bf21e87fda5",
+      "source_binding_path": "authoring/erp-neural-prediction-v1/program-completion-v3/registration-accepted-v1/source_binding.json",
+      "source_binding_sha256": "13ccc757214f71a46803517131a0201ea1227b1ef1ff5722d8a1b11096702ae1"
+    },
+    "instructions_path": "authoring/erp-neural-prediction-v1/program-completion-v1/TASK.md",
+    "operator_instructions_path": "authoring/erp-neural-prediction-v1/program-completion-v3/registration-accepted-v1/OPERATOR_USAGE.md",
+    "scope": {
+      "mode": "same_committed_program_fresh_person_sequential_prefix",
+      "training_people": 26,
+      "training_examples": 3254,
+      "development_people": 7,
+      "development_queries": 816,
+      "future_prefix_mounts": 0,
+      "probability_commit_before_next_reveal": true,
+      "participant_state_reset": "fresh container",
+      "no_development_model_fitting": "declared/source-review obligation, not mechanically proven",
+      "source_conditional_positional_ERP_join": true,
+      "causal_ERP_increment_claim": false,
+      "ordinary_accuracy_floor": null
+    },
+    "runtime": {
+      "whole_seconds": 330,
+      "work_seconds": 290,
+      "cleanup_seconds": 40,
+      "candidate_seconds_per_person": 25,
+      "candidate_calls": 7,
+      "artifact_reserve_bytes": 12000000,
+      "read_only_candidate_binds": 4,
+      "writeable_candidate_host_mounts": 0
+    },
+    "qualification_accounting": {
+      "status": "four_v3_controls_passed",
+      "latest_known_family_seconds": 2750,
+      "controls_planned": [
+        "hgb",
+        "uniform",
+        "malformed",
+        "private_probe"
+      ],
+      "actual_controls": 4,
+      "candidate_model_fits_per_HGB_panel": 7,
+      "new_reference_fits": 0,
+      "model_API_calls": 0,
+      "ordinary_CLI_proof_pending": true,
+      "future_compute_grant": false,
+      "failed_v1_attempt": {
+        "path": "artifacts-build/erp-neural-program-hgb-001/outer_receipt.json",
+        "bytes": 1712,
+        "sha256": "5f69f902f4e7e74d63998a1caf05562401845d08d8552e3f6e63af487c485eaf"
+      },
+      "verified_postfailure_cleanup": {
+        "path": "authoring/erp-neural-prediction-v1/postfailure-cleanup-v1/receipt.json",
+        "bytes": 16448,
+        "sha256": "5c970a807c4fa79a82b8bcda1cf85db40c16316f2f6fdc47508bd68189e384bd"
+      },
+      "failed_v2_attempt": {
+        "path": "artifacts-build/erp-neural-program-hgb-002/outer_receipt.json",
+        "bytes": 2371,
+        "sha256": "2c300bb0bc413c2cbece4ef71bc2fca93ae629952951e992de5fb15df413e246"
+      },
+      "verified_postfailure_cleanup_v2": {
+        "path": "authoring/erp-neural-prediction-v1/postfailure-cleanup-v2/receipt.json",
+        "bytes": 14745,
+        "sha256": "8b1d7ce99b94774e016cb1d16b1e96a54a094a01ccb096c038626409ac254d83"
+      },
+      "historical_failed_allowance_and_cleanup_seconds": 720
+    },
+    "method_path_policy": "Explicit absolute method_path and exact method pin from the reviewed caller grant; bridge supplies no default."
+  }
+}

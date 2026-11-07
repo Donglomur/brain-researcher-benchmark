@@ -1,0 +1,420 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-096",
+  "track": "neural",
+  "title": "DMFC timing-prior population contrasts from selected spike counts",
+  "status": "historical_scoring_registration_with_unqualified_current_program_proposal",
+  "scope": {
+    "observation_condition": "selected_counts",
+    "animal_sessions": 1,
+    "development_exposed": true,
+    "trials": 177,
+    "training_trials": 129,
+    "validation_trials": 48,
+    "units": 40,
+    "bins": 15,
+    "target": "Fixed raw and training-clock-adjusted, oriented short-minus-long population analyses",
+    "historical_GPFA_reproduction": false,
+    "candidate_program_executed": false,
+    "producer_access_history_verified": false
+  },
+  "entrypoints": {
+    "score": {
+      "argv": [
+        "python3",
+        "benchmarks/neuroscience/neural-096/score.py",
+        "--submission",
+        "{submission}",
+        "--output",
+        "{output}",
+        "--review",
+        "{review}",
+        "--other-reserve-bytes",
+        "{other_reserve_bytes}"
+      ],
+      "working_directory": ".",
+      "sha256": "1dfaa60d42ddbde2eb5402dd5f9390542fc3bf825dd8337611d0c5cd629fc574"
+    }
+  },
+  "assets": {
+    "manifest_path": "benchmarks/neuroscience/neural-096/assets.json",
+    "manifest_sha256": "a506e5c0622b37cb446617bcc8c92ea74a07577da05cc422ea2b770177a44a3c",
+    "operator_manifest_path": "benchmarks/neuroscience/neural-096/operator_assets.json",
+    "operator_manifest_sha256": "f1dbf9ecffbf91249a9797ec108ad8b7e0da1589264cfe98fe6084db20caf88a",
+    "public": {
+      "manifest.json": {
+        "path": "artifacts-build/dmfc096-scoring-materialize-002/packet/manifest.json",
+        "bytes": 2008,
+        "sha256": "47139f683693432b0059ac1d692c43062527b0fcccebf7c79cd1dfe55162132e"
+      },
+      "cue_metadata.json": {
+        "path": "artifacts-build/dmfc096-scoring-materialize-002/packet/cue_metadata.json",
+        "bytes": 20737,
+        "sha256": "212e1e7d072669c649e7409fded5fac4cc69be60a4605e1a4e5b118aa7826e90"
+      },
+      "TASK.md": {
+        "path": "artifacts-build/dmfc096-scoring-materialize-002/packet/TASK.md",
+        "bytes": 6234,
+        "sha256": "f6b34caab8222d682afe7168c41ee3180d0374d06f6637d48c17f1738481e54a"
+      },
+      "PUBLIC_CONTRACT.json": {
+        "path": "artifacts-build/dmfc096-scoring-materialize-002/packet/PUBLIC_CONTRACT.json",
+        "bytes": 6281,
+        "sha256": "64c411fd3550c4534c75a447524c5e8cd9a01ef18bb22f6d90d3be25f5fa2f32"
+      },
+      "counts.npz": {
+        "bytes": 427678,
+        "path": "artifacts-build/dmfc096-trajectory-reference-001/reference/counts.npz",
+        "sha256": "a15177f63d9767bc047ef5faafa1be294fa2e62f25f1bd55b9006fed79566d66"
+      }
+    },
+    "private": {
+      "derived.npz": {
+        "path": "artifacts-build/dmfc096-trajectory-reference-001/reference/derived.npz",
+        "bytes": 2027420,
+        "sha256": "79117c93a2214dcf6c845b7d5b5f18cd4f944f34e20d7908c3d9debb28d3fac2"
+      },
+      "reference.json": {
+        "path": "artifacts-build/dmfc096-trajectory-reference-001/reference/reference.json",
+        "bytes": 8523,
+        "sha256": "eb2f26a2c519adf0544a11e745078b3487477125684c5e8fe82a1d4791e7cbc4"
+      }
+    }
+  },
+  "verification": {
+    "status": "passed",
+    "receipt_path": "authoring/dmfc-timing/context-trajectory-v1/scoring-cli-v1/RESULTS.json",
+    "receipt_sha256": "769a51e769ec6322f7314e20c31f680e5a1cc23dc8d36eb1b083e806309d7c61",
+    "qualified_numerical_component": {
+      "path": "artifacts-build/dmfc096-scorer-qualification-001/outer_receipt.json",
+      "bytes": 6570,
+      "sha256": "01df77ab33b03589931968f90e7273e0561bb2d4bb04b6184c582da948293a08"
+    },
+    "planned_ordinary_controls": [
+      "double_prior_reversal_direct",
+      "whole_abstention_common_CLI"
+    ],
+    "ordinary_A_completed": true,
+    "ordinary_B_common_CLI_completed": true,
+    "generated_filesystem_checks_in_A": 7,
+    "independent_completion_review": {
+      "path": "authoring/quality-probes/dmfc096-ordinary-AB-completion-review-v1.json",
+      "bytes": 6199,
+      "sha256": "9cb611875828b6241c7a47ca4f94881cebe61bc2b407b4c6f13dff5e0cae25fd"
+    }
+  },
+  "admission": {
+    "runnable": true,
+    "full_candidate_contract_complete": false,
+    "research_qualified": false,
+    "submission_ready": false
+  },
+  "evaluation": {
+    "primary": [
+      "raw_scalar_absolute_error",
+      "adjusted_scalar_absolute_error"
+    ],
+    "required_alongside_primary": [
+      "All11 oriented block RMSE/max absolute/signed mean errors",
+      "Public arithmetic and training-normal-equation consistency",
+      "Whole coverage and explicit unsupported states"
+    ],
+    "higher_error_is_better": false,
+    "scalar_only_ranking_supported": false,
+    "scientific_success_threshold": null,
+    "scientific_success_reward": null,
+    "negative_effects_valid": true,
+    "abstention_coverage": 0
+  },
+  "runtime": {
+    "whole_seconds": 30,
+    "cpus": 2,
+    "memory_bytes": 4294967296,
+    "own_reserve_bytes": 6000000,
+    "network": "none",
+    "candidate_program_execution": false,
+    "existing_image": "sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156",
+    "future_attempt_requires_new_root_allocation": true
+  },
+  "source_freeze_path": "authoring/dmfc-timing/context-trajectory-v1/scoring-cli-v1/FREEZE.json",
+  "source_freeze_sha256": "578f678ea80f654b7f35b40e299c90ea22284660d16ff722725d2295620e7ecd",
+  "input_contract": "benchmarks/neuroscience/neural-096/README.md",
+  "local_workspace_dependency": true,
+  "portable_general_host_claim": false,
+  "public_redistribution_rights_claim": false,
+  "registration_applied": true,
+  "ordinary_CLI_integration": {
+    "status": "passed",
+    "actual_invocation": {
+      "path": "authoring/dmfc-timing/context-trajectory-v1/scoring-cli-v1/registration-applied-v1/ACTUAL_COMMON_CLI_INVOCATION.json",
+      "bytes": 1621,
+      "sha256": "daf6a6bd8e2598a219a2c005d895b54454ecef2d73e02010586c087cf4527cf3"
+    },
+    "score_byte_parity": true
+  },
+  "program_execution": {
+    "status": "not_run",
+    "preferred_source_interface": {
+      "path": "authoring/delivery-20261105/common/next-three-registrations-v1/neural096/portable-reserve-v2",
+      "source": {
+        "path": "authoring/delivery-20261105/common/next-three-registrations-v1/neural096/portable-reserve-v2/SOURCE_MANIFEST.json",
+        "bytes": 3583,
+        "sha256": "7f87b9b79bad8d913c32bb007dc64ed5131138a1e643953f3cf0f0814a00966b"
+      }
+    },
+    "entrypoint": {
+      "argv": [
+        "python3",
+        "-I",
+        "-S",
+        "-B",
+        "-X",
+        "pycache_prefix=/Users/nicholas/Documents/Codex/neuroscience-benchmark-planning/artifacts-build/.disabled-neural096-central-v2-pycache",
+        "authoring/delivery-20261105/common/next-three-registrations-v1/neural096/portable-reserve-v2/run_program.py",
+        "run",
+        "--package",
+        "authoring/delivery-20261105/common/exports/NEURAL-096-v2",
+        "--source-sha256",
+        "7f87b9b79bad8d913c32bb007dc64ed5131138a1e643953f3cf0f0814a00966b",
+        "--program",
+        "{program}",
+        "--output",
+        "{output}",
+        "--other-reserve-bytes",
+        "{other_reserve_bytes}"
+      ],
+      "working_directory": ".",
+      "sha256": "e407384f33aea04e3fc756ca9a282af2f61078beb4f29a15c97ebb96d29e07a6"
+    },
+    "source_freeze": {
+      "path": "authoring/delivery-20261105/common/next-three-registrations-v1/neural096/QUALIFICATION_SOURCE_FREEZE.json",
+      "bytes": 5418,
+      "sha256": "2d3ec74ccfcfe87691da4cc80fc04f69b6973e3273b9c36014602291960c00f2"
+    },
+    "verification": {
+      "status": "not_run",
+      "reason": "New current-reserve/original-deadline source lacks separate runtime qualification. Historical program and score verification are not transferred."
+    },
+    "scope": {
+      "trials": 177,
+      "units": 40,
+      "bins": 15,
+      "oriented_output_blocks": 11,
+      "public_files": 6,
+      "producer_invocations": 1,
+      "combined_producer_and_trusted_private_grader": true,
+      "private_grader_requires_all_producer_holder_volume_absent": true,
+      "original_packet_and_numerical_methods_unchanged": true,
+      "held_out_generalization_or_native_LLM_claim": false
+    },
+    "runtime": {
+      "schema": "neural096_portable_program_resource_proposal_v2",
+      "source_construction_selected": true,
+      "authentic_runtime_selected": false,
+      "source_new_bytes_cap": 2000000,
+      "source_other_future_bytes": "required fresh --other-reserve-bytes; no hardcoded current authority",
+      "floor_bytes": 21474836480,
+      "future_attempt_retained_bytes": 16000000,
+      "future_attempt_managed_write_bytes": 32000000,
+      "future_outer_seconds": 120,
+      "preflight_seconds_max": 15,
+      "producer_seconds": 20,
+      "unit_phase_seconds": 50,
+      "postunit_absence_seconds_max": 10,
+      "grade_worker_seconds": 15,
+      "grade_phase_seconds": 30,
+      "final_cleanup_seconds_reserved": 15,
+      "producer_memory_bytes": 3221225472,
+      "producer_cpus": 1.75,
+      "holder_memory_bytes": 268435456,
+      "holder_cpus": 0.25,
+      "inherited_tmpfs_output_volume_bytes": 41943040,
+      "candidate_scratch_bytes": 67108864,
+      "trusted_grade_memory_bytes": 4294967296,
+      "trusted_grade_cpus": 2,
+      "extra_swap_bytes": 0,
+      "producer_and_private_grader_overlap_permitted": false,
+      "network_permitted": false,
+      "image_pull_permitted": false,
+      "actual_image_presence_verified": false,
+      "actual_runtime_verified": false,
+      "scientific_executions_during_source_build": 0,
+      "candidate_executions_during_source_build": 0,
+      "whole_clock": "original first-user-code origin; external selection also bounds interpreter/startup/natural exit",
+      "retention_limit_scope": "Inherited16MB logical host-file ceiling, not an empirically qualified allocated-block/RSS or Docker-memory guarantee"
+    },
+    "instructions_path": "authoring/delivery-20261105/common/next-three-registrations-v1/neural096/portable-reserve-v2/README.md",
+    "operator_environment": {
+      "DOCKER_HOST": "Explicit existing local unix:/// endpoint, inherited or original optional CLI; not selected or inspected by registration",
+      "DOCKER_CONFIG": "Inherited existing configuration or original explicit CLI; no contents read",
+      "existing_image_only": true,
+      "host_no_site_compatibility": "Independent authenticated source/import-only -I -S -B audit passed; no actual native runtime, image or scientific qualification"
+    },
+    "execution_selected": false,
+    "runtime_qualified": false,
+    "scientific_qualification": false,
+    "private_grader_execution_performed": false,
+    "source_review": {
+      "path": "authoring/delivery-20261105/common/next-three-registrations-v1/neural096/peer/REVIEW.json",
+      "bytes": 7893,
+      "sha256": "d8d22a459f5c2e40d65a5645180b2edda25705be4a828cc4a95c7cb164138640"
+    }
+  },
+  "program_conditions": {
+    "complete_11_block_program_and_grade": "default"
+  },
+  "historical_program_registration": {
+    "manifest": {
+      "path": "benchmarks/neuroscience/neural-096/manifest.json",
+      "bytes": 12696,
+      "sha256": "616560900b59f6373363d9f51c24e42948098884454f60b0162576df5a32f11b"
+    },
+    "program_execution": {
+      "status": "successor_direct_positive_validated_root_registered",
+      "scope": "One captured arbitrary Python program on the original selected-counts public packet. Six input files; output envelope decoded after producer removal, then full eleven-block grading. Exposed one-session numerical task, without native-LLM, hidden-case or generalization claims.",
+      "entrypoint": {
+        "argv": [
+          "python3",
+          "authoring/next-finite-completions-20261103/dmfc096-successor-v2/run_program.py",
+          "--program",
+          "{program}",
+          "--output",
+          "{output}",
+          "--review",
+          "{review}",
+          "--other-reserve-bytes",
+          "{other_reserve_bytes}"
+        ],
+        "working_directory": ".",
+        "sha256": "5623144577edbc98128603ae7c67016f3de778ac8dc872495ededcedee90e69a",
+        "wall_seconds": 60
+      },
+      "verification": {
+        "status": "passed",
+        "receipt_path": "artifacts-build/neural096-successor-positive-001/outer_receipt.json",
+        "receipt_sha256": "d1b2f53bf571a3f5474c992deec5c5846562b6f6a51bfc45c2dc26cc620ddd42",
+        "qualification_path": "artifacts-build/neural096-successor-positive-001/verification.json",
+        "qualification_sha256": "277d2d67def9edd1938f342781d117497ab8b1cc6e52c4a76eb06dbd2dfc5524",
+        "source_binding_path": "artifacts-build/neural096-successor-positive-001/validated_start.json",
+        "source_binding_sha256": "41bdb2f535e2ae450dd18269f6a324e19024095cb0cbf6d758254314c697aa38"
+      },
+      "source_freeze": {
+        "path": "authoring/next-finite-completions-20261103/dmfc096-successor-v2/SOURCE_FREEZE.json",
+        "sha256": "ac456b105c296cec3f8c2eec38a4296bcd18baffbdaba98a6c983338944f6aa6"
+      },
+      "scientific_success_floor": null,
+      "research_qualified": false,
+      "ordinary_program_hash_allowlist": false,
+      "arbitrary_program_grade_requires_developer_parity": false,
+      "fixed_controls": {
+        "path": "authoring/dmfc-timing/context-trajectory-v1/program-runtime-v1/RESULTS.json",
+        "bytes": 5227,
+        "sha256": "5d60310dac8ba15ac6d7a6f41b01e14c780955c7e08ac8f01a6dbe5718c4c396"
+      },
+      "anti_contamination_or_unseen_input_generalization_qualified": false,
+      "historical_route_evidence": {
+        "status": "verified_direct_and_common_CLI",
+        "entrypoint": {
+          "argv": [
+            "python3",
+            "authoring/dmfc-timing/context-trajectory-v1/program-cli-v1/run_program.py",
+            "--program",
+            "{program}",
+            "--output",
+            "{output}",
+            "--review",
+            "{review}",
+            "--other-reserve-bytes",
+            "{other_reserve_bytes}"
+          ],
+          "working_directory": ".",
+          "sha256": "5a124f3c8829483516cd7c77662ad42867c9bc5ba88cd4f0815a6162c2573de2",
+          "wall_seconds": 60
+        },
+        "source_freeze": {
+          "path": "authoring/dmfc-timing/context-trajectory-v1/program-cli-v1/FREEZE.json",
+          "sha256": "b0f52b0f57dad22d6321e9e3c9228cca9c383bb719f993843ebd83d531f64a19"
+        },
+        "verification": {
+          "status": "passed",
+          "receipt_path": "artifacts-build/dmfc096-program-ordinary-001/outer_receipt.json",
+          "receipt_sha256": "6b6bc5c3b588550efc6275ffdace34c1917e1f99489dd00fa6fa6cc307375ee6",
+          "qualification_path": "artifacts-build/dmfc096-program-ordinary-001/verification.json",
+          "qualification_sha256": "18edced625b08b8b8b8428696e2c53dbbe0557c85fe3ea3a3a58b7ba0200a346",
+          "source_binding_path": "artifacts-build/dmfc096-program-ordinary-001/validated_start.json",
+          "source_binding_sha256": "31d191bc3b01247ce2245ec64efd98db531ff68afa68931ad5327670ccce7ff4"
+        },
+        "common_CLI_integration": {
+          "path": "authoring/dmfc-timing/context-trajectory-v1/program-cli-v1/registration/CLI_INTEGRATION.json",
+          "bytes": 2566,
+          "sha256": "60b81ab559058a3380f640bb9e62a8b7db5d3bec64495966d581d01195821d47"
+        },
+        "scope": "Historical old-wrapper direct/common-CLI execution and unchanged scientific/control evidence; not execution of the successor strict barrier."
+      },
+      "successor_validation": {
+        "outer_receipt": {
+          "path": "artifacts-build/neural096-successor-positive-001/outer_receipt.json",
+          "bytes": 7383,
+          "sha256": "d1b2f53bf571a3f5474c992deec5c5846562b6f6a51bfc45c2dc26cc620ddd42"
+        },
+        "verification": {
+          "path": "artifacts-build/neural096-successor-positive-001/verification.json",
+          "bytes": 889,
+          "sha256": "277d2d67def9edd1938f342781d117497ab8b1cc6e52c4a76eb06dbd2dfc5524"
+        },
+        "validated_start": {
+          "path": "artifacts-build/neural096-successor-positive-001/validated_start.json",
+          "bytes": 637,
+          "sha256": "41bdb2f535e2ae450dd18269f6a324e19024095cb0cbf6d758254314c697aa38"
+        },
+        "root_observer": {
+          "path": "authoring/next-finite-completions-20261103/dmfc096-successor-v2/root-positive001/ROOT_OBSERVED_PROCESS.json",
+          "bytes": 1944,
+          "sha256": "6b1df1ef7748ff3e8c829ce7d51edb5814db9d2b5fb2f99e54c0c60a34c0a9e7"
+        },
+        "independent_source_review": {
+          "path": "authoring/next-finite-completions-20261103/dmfc096-successor-v2-independent-review-v1/SOURCE_REVIEW.json",
+          "bytes": 6633,
+          "sha256": "2d16d2811a91f75736328ff5d71216fd8c47d270a0a83981705135a54cb3cdb8"
+        },
+        "independent_operational_review": {
+          "path": "authoring/next-finite-completions-20261103/dmfc096-successor-v2/closed-positive001-review-v1/OPERATIONAL_REVIEW.json",
+          "bytes": 17822,
+          "sha256": "eef77a1aa7809b80a8e0c64ea0f954a14415cc2fb0b5bd38c5378495fe6fe482"
+        },
+        "independent_scalar_review": {
+          "path": "authoring/next-finite-completions-20261103/dmfc096-registration-v2/SCALAR_REVIEW.json",
+          "bytes": 7347,
+          "sha256": "929770dac3fadc7fc603fbe464cb5a7d35e345299058823ec792fef16fdf7a10"
+        },
+        "actual_direct_wrapper_execution": true,
+        "actual_common_CLI_execution": false,
+        "new_strict_pregrade_barrier_actually_exercised": true,
+        "full_score_byte_parity": true,
+        "complete_blocks": 11,
+        "full_stage_charge_seconds": 60,
+        "latest_saved_family_seconds": 2769.0706189560005,
+        "scientific_methods_changed": false,
+        "new_cohort": false
+      },
+      "current_dispatch": {
+        "status": "ready_under_fresh_grant",
+        "execution_authority": false,
+        "ready_to_run_unchanged": true,
+        "route_scope": "Successor ordinary program route and its in-process trusted grader only. Standalone artifact scorer is unchanged and is not granted current-capacity or ownership readiness by this proposal.",
+        "future_attempt_requires_fresh_root_grant_and_capacity": true
+      }
+    }
+  },
+  "registration_notes": {
+    "proposed_only": true,
+    "installed": false,
+    "requires_new_program_source_preference_selection": true,
+    "current_V6_does_not_select_this_task": true,
+    "new_task_count": 0,
+    "existing_score_fields_preserved_without_recomputation": true,
+    "historical_runtime_qualification_not_transferred": true,
+    "execution_authority": false,
+    "current_V7_does_not_select_this_task": true
+  }
+}

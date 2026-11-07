@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-068",
+  "track": "neural",
+  "title": "Recalibration benefit under intracortical drift",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "S-NEW-FALCON-H1"
+    ],
+    "titles": [
+      "FALCON H1 human7DoF reach/grasp intracortical recordings"
+    ],
+    "overlap_groups": [
+      "falcon-h1-humanpitt"
+    ],
+    "task_family": "intracortical_motor"
+  },
+  "scientific_question": "Does recalibration restore motor decoding after session drift beyond an unchanged decoder and timing prior?",
+  "task_type": "investigation",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Paired later-session predictions and calibration-data cost curve."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://dandiarchive.org/dandiset/000954/draft",
+      "https://snel-repo.github.io/falcon/",
+      "https://github.com/snel-repo/falcon-challenge",
+      "https://api.dandiarchive.org/api/dandisets/000954/versions/draft/",
+      "https://raw.githubusercontent.com/snel-repo/falcon-challenge/770c9b9597b8f58bf67b5a9ec6401ef705a2cb0f/README.md",
+      "https://raw.githubusercontent.com/snel-repo/falcon-challenge/770c9b9597b8f58bf67b5a9ec6401ef705a2cb0f/falcon_challenge/dataloaders.py"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "S-NEW-FALCON-H1",
+        "ledger": "readiness/signals_readiness.json",
+        "record_sha256": "5edfecea8500314fe7651ffc9f51df24475b66aa3208c5bd2a0741d29288ce78",
+        "data_manifest": {
+          "version": "draft,modified2024-08-27; no published version; archive validation statusInvalid",
+          "manifest_url": "https://api.dandiarchive.org/api/dandisets/000954/versions/draft/assets/",
+          "number_of_files": 40,
+          "total_bytes": 102258934,
+          "biological_participants": 1,
+          "archive_subject_count": 3,
+          "count_warning": "Three archive subject labels are calibration/minival split labels, not three people.",
+          "example_asset": {
+            "path": "sub-HumanPitt-held-in-calib/sub-HumanPitt-held-in-calib_ses-19250101T111740.nwb",
+            "asset_id": "dd1bdcf3-5430-4037-ad4a-1727004d38d2",
+            "bytes": 5158319
+          }
+        },
+        "recording_contract": {
+          "neural": "NWB units multiunit spike times from two96channel arrays; reference bins20ms",
+          "labels": "OpenLoopKinematicsVelocity,OpenLoopKinematics,TrialNum,eval_mask/Blacklist;7DoFattempted reach/grasp",
+          "time_alignment": "Reference loader derives kinematic timestamps from rate/offset and bins unit spikes to matching endpoints; trial transitions indicate trial boundaries.",
+          "biological_ids": "ONEHumanPitt person across sessions; held-in/out refers sessions",
+          "evidence": "DANDI description spells out cohort, split labels and DUA; actualcalibration assets; pinned loader and sklearn decoder"
+        },
+        "status": "needs_terms_and_schema_resolution"
+      }
+    ],
+    "exact_asset_records": [
+      {
+        "source_id": "S-NEW-FALCON-H1",
+        "ledger": "readiness/signals_readiness.json",
+        "source_json_pointer": "/data_manifest/example_asset",
+        "record": {
+          "path": "sub-HumanPitt-held-in-calib/sub-HumanPitt-held-in-calib_ses-19250101T111740.nwb",
+          "asset_id": "dd1bdcf3-5430-4037-ad4a-1727004d38d2",
+          "bytes": 5158319
+        },
+        "local_payload_verified_by_this_builder": false
+      }
+    ],
+    "missing_or_unverified": [
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "neural_measurements": "NWB units multiunit spike times from two96channel arrays; reference bins20ms",
+    "allowed_context": "OpenLoopKinematicsVelocity,OpenLoopKinematics,TrialNum,eval_mask/Blacklist;7DoFattempted reach/grasp",
+    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
+    "time_alignment": "Reference loader derives kinematic timestamps from rate/offset and bins unit spikes to matching endpoints; trial transitions indicate trial boundaries.",
+    "source_contract_evidence": "DANDI description spells out cohort, split labels and DUA; actualcalibration assets; pinned loader and sklearn decoder"
+  },
+  "biological_unit": "ONEHumanPitt person across sessions; held-in/out refers sessions",
+  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "split": {
+    "policy": "One participant; official session/held-in-out definitions and eval mask; calibration prefix separated from assessed future sessions.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/snel-repo/falcon-challenge",
+    "commit_or_archive_version": "770c9b9597b8f58bf67b5a9ec6401ef705a2cb0f",
+    "entrypoints": [
+      "falcon_challenge/dataloaders.py",
+      "decoder_demos/sklearn_decoder.py",
+      "decoder_demos/sklearn_sample.py"
+    ],
+    "role": "Official dataset loader, example sklearn decoder and metric interface; terms/schema still block source promotion.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://snel-repo.github.io/falcon/",
+    "data_url": "https://dandiarchive.org/dandiset/000954/draft"
+  },
+  "controls": [
+    "Identical later sessions",
+    "fixed calibration prefix",
+    "time-only reference",
+    "no assessment feedback."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Recomputed session-level R-squared improvement at fixed budget.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    },
+    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+      },
+      {
+        "id": "reference",
+        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+      },
+      {
+        "id": "scorer",
+        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      },
+      {
+        "id": "replication",
+        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "workstation_or_single_GPU_after_bounded_intake",
+    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+    "source_storage_evidence": null
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Single biological participant; qualify temporal split and terms before data distribution."
+    },
+    {
+      "id": "source_1",
+      "requirement": "Archive license fieldCC BY4.0 conflicts with description DUA prohibiting redistribution: resolve before distributing packets."
+    },
+    {
+      "id": "source_2",
+      "requirement": "Draft validationstatusInvalid requires payload/schema and provenance check before qualification."
+    },
+    {
+      "id": "source_3",
+      "requirement": "Only one participant; session intervals cannot support population-level person-generalization."
+    },
+    {
+      "id": "packet",
+      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+    },
+    {
+      "id": "reference",
+      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+    },
+    {
+      "id": "scorer",
+      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+    },
+    {
+      "id": "replication",
+      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+    }
+  ],
+  "next_implementation_action": [
+    "Single biological participant; qualify temporal split and terms before data distribution."
+  ],
+  "construction_review": null,
+  "source_audit_overlays": [],
+  "provenance": {
+    "canonical_record_sha256": "4e0e1e108d92f73e5066fa297bf1bf0257d57368ac71cb7654f3f5ebf0ec2e6c",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/readiness/signals_readiness.json",
+        "bytes": 67125,
+        "sha256": "a1f767fe5f088b27c6b80a2068699838becdbf96457d15530f77e4a89f7616b6"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

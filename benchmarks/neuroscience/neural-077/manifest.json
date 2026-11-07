@@ -1,0 +1,355 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-077",
+  "track": "neural",
+  "title": "Visual oddball target detection from EEG",
+  "status": "local_scoring_adapter_verified",
+  "scope": {
+    "development_exposed": true,
+    "training_people": 6,
+    "development_people": 2,
+    "training_trials": 1200,
+    "development_trials": 400,
+    "task": "Target probability for every released-marker-relative EEG trial",
+    "raw_sample_rate_hz": 1024,
+    "raw_channels": 33,
+    "marker_shift_samples": 0,
+    "primary_unit": "participant",
+    "poststimulus_response_activity_possible": true,
+    "complete_agent_contract": false
+  },
+  "entrypoints": {
+    "score": {
+      "argv": [
+        "python3",
+        "benchmarks/neuroscience/neural-077/score.py",
+        "score",
+        "--submission",
+        "{submission}",
+        "--output",
+        "{output}"
+      ],
+      "working_directory": ".",
+      "sha256": "5b3c7dea6ce1f701603d1cb13d317a73e6292d632c82d0b3d6b684d7257fbfc4"
+    }
+  },
+  "assets": {
+    "manifest_path": "benchmarks/neuroscience/neural-077/assets.json",
+    "manifest_sha256": "1204a0ebffbede10db2071c7e58837b5190726470d9db125072a455d6629f387",
+    "public": {
+      "cases": {
+        "development-001": {
+          "features": {
+            "bytes": 1257014,
+            "sha256": "026a231e93add6f195ba2aea150e9d924e2df78cee129c0b35929503a9d91b9e",
+            "path": "artifacts-build/erp-core-target-pilot-002/rest/development-001/features.npz"
+          },
+          "signal": {
+            "bytes": 27033728,
+            "sha256": "f12a61cb0d8c71bb6ae40b003bd2c3a2d296af362883e307b687fc361c8f83dc",
+            "path": "artifacts-build/erp-core-target-pilot-002/rest/development-001/signal.npy"
+          }
+        },
+        "development-002": {
+          "features": {
+            "bytes": 1257014,
+            "sha256": "0a0e6069d4d371189fb11d0b739ce216946fed747e67ea05e8730c4f30f1d7c3",
+            "path": "artifacts-build/erp-core-target-pilot-002/rest/development-002/features.npz"
+          },
+          "signal": {
+            "bytes": 27033728,
+            "sha256": "ba815fd70377cad47780740acb6b94c6bd28d1eb6d9a1dd323a71d314ed7d717",
+            "path": "artifacts-build/erp-core-target-pilot-002/rest/development-002/signal.npy"
+          }
+        }
+      },
+      "manifest": {
+        "path": "artifacts-build/erp-core-target-pilot-002/public_manifest.json",
+        "bytes": 2604,
+        "sha256": "ea50e5f7943273fd7bc0e8cc92d12eb4be2107dff32968f409a3984627cea2e9"
+      }
+    },
+    "private": {
+      "targets": {
+        "development-001": {
+          "bytes": 39422,
+          "sha256": "8af103a414408567e44eb05f92ef481345d6e8a421ea4b8da1b28eccb3ab06c7",
+          "path": "artifacts-build/erp-core-target-pilot-002/rest/development-001/targets.npz"
+        },
+        "development-002": {
+          "bytes": 39422,
+          "sha256": "abb7c6d86cc423f5b9d0b597d374c9519c48359b5a563abacd197114db42ed14",
+          "path": "artifacts-build/erp-core-target-pilot-002/rest/development-002/targets.npz"
+        }
+      },
+      "reference_grade": {
+        "path": "artifacts-build/erp-core-target-pilot-002/grade.json",
+        "bytes": 31063,
+        "sha256": "0fe512dd65366608d22839e7cfae83f19abe09a559c6d27e5e44808d7e0bc07a"
+      },
+      "reference_commit": {
+        "path": "artifacts-build/erp-core-target-pilot-002/prediction_commit.json",
+        "bytes": 726,
+        "sha256": "f0b02bea5df3717fca94833ef5caa11e0ead25ebdab9b9f2cd3b15af3e9e1dc8"
+      }
+    },
+    "training_lazy": {
+      "training-001": {
+        "features": {
+          "bytes": 1257446,
+          "sha256": "1131e77879cb73f11aefe5d97167d4fc78a9f7bc33f5e31d7a3f10940c1c72c3",
+          "path": "artifacts-build/erp-core-target-pilot-002/first/training-001/features.npz"
+        },
+        "signal": {
+          "bytes": 27033728,
+          "sha256": "02e8d882d30bbe065a087944801d8c622255c47cb9abc09748f0c07986dce574",
+          "path": "artifacts-build/erp-core-target-pilot-002/first/training-001/signal.npy"
+        }
+      },
+      "training-002": {
+        "features": {
+          "bytes": 1257446,
+          "sha256": "dc31af0f3505ae346a129c4d0aae506e195beade66dc6cd1e487767e2c1a2e78",
+          "path": "artifacts-build/erp-core-target-pilot-002/rest/training-002/features.npz"
+        },
+        "signal": {
+          "bytes": 27033728,
+          "sha256": "8c12ad4c89f0533bfe0d593828b2613d62d565e5d034f73930b802368d6016c8",
+          "path": "artifacts-build/erp-core-target-pilot-002/rest/training-002/signal.npy"
+        }
+      },
+      "training-003": {
+        "features": {
+          "bytes": 1257446,
+          "sha256": "a014c87a0c8d00181616c1eda3986c4ae17ed4f55178077a09fbbdef1cbd8d6b",
+          "path": "artifacts-build/erp-core-target-pilot-002/rest/training-003/features.npz"
+        },
+        "signal": {
+          "bytes": 27033728,
+          "sha256": "10987c1fd8c1ff4e4392ee7f485ed6715982de798078bfcd90185979db5b4b6f",
+          "path": "artifacts-build/erp-core-target-pilot-002/rest/training-003/signal.npy"
+        }
+      },
+      "training-004": {
+        "features": {
+          "bytes": 1257446,
+          "sha256": "5e9404c426feb6b8aef8eab5f960bcf8f83a6915be82377411d580abee073177",
+          "path": "artifacts-build/erp-core-target-pilot-002/rest/training-004/features.npz"
+        },
+        "signal": {
+          "bytes": 27033728,
+          "sha256": "ff5863818763e8a38d2b85f167ce0fb71b1e0881392ddc4c71f62fe8eb2d51f4",
+          "path": "artifacts-build/erp-core-target-pilot-002/rest/training-004/signal.npy"
+        }
+      },
+      "training-005": {
+        "features": {
+          "bytes": 1257446,
+          "sha256": "929c30016d20a7e386ff5a88644e61d8562b7e861958ac36f5df74ed73a558d3",
+          "path": "artifacts-build/erp-core-target-pilot-002/rest/training-005/features.npz"
+        },
+        "signal": {
+          "bytes": 27033728,
+          "sha256": "97b45fa33fac7562d1cec9be259e92299051da8aa8c23ff80f008d8a413e8e03",
+          "path": "artifacts-build/erp-core-target-pilot-002/rest/training-005/signal.npy"
+        }
+      },
+      "training-006": {
+        "features": {
+          "bytes": 1257446,
+          "sha256": "069986adaa0ed1e28183c68daebe7745d92e0c4455b04cd9d79d08be7d5b6c1b",
+          "path": "artifacts-build/erp-core-target-pilot-002/rest/training-006/features.npz"
+        },
+        "signal": {
+          "bytes": 27033728,
+          "sha256": "47799864adebd111f71e2b0362112984afda23d4f47758f0c8966904ed5e1530",
+          "path": "artifacts-build/erp-core-target-pilot-002/rest/training-006/signal.npy"
+        }
+      }
+    }
+  },
+  "input_contract": "benchmarks/neuroscience/neural-077/README.md",
+  "source_freeze_path": "benchmarks/neuroscience/neural-077/SOURCE_FREEZE.json",
+  "source_freeze_sha256": "2e5229e534d9efaee31c408bc0079e1cf8c90b722e5e536bd385815bee9d0839",
+  "verification": {
+    "status": "passed",
+    "receipt_path": "authoring/erp-core-target-v1/adapter-v1/receipt.json",
+    "receipt_sha256": "2e0c2518a66f4e2df11a945aa3cab50366d5cf39546ac6b5d504215532be7059",
+    "planned_controls": [
+      "valid_eeg",
+      "valid_prior",
+      "empty",
+      "wrong_shape",
+      "missing_case"
+    ],
+    "generated_tests": 14,
+    "verification_details_path": "authoring/erp-core-target-v1/adapter-v1/verification.json",
+    "verification_details_sha256": "f568e8bf0ee32f87231f7319c7e7ab7786443d78a41ffd287164bae21f60e485"
+  },
+  "admission": {
+    "runnable": true,
+    "full_candidate_contract_complete": false,
+    "research_qualified": false,
+    "submission_ready": false
+  },
+  "evaluation": {
+    "primary": "participant_macro_balanced_accuracy",
+    "secondary": "participant_macro_log_loss",
+    "higher_primary_is_better": true,
+    "scientific_success_threshold": null,
+    "signed_against_all_six_references": true
+  },
+  "runtime": {
+    "hard_whole_verification_seconds": 90,
+    "standalone_scorer_seconds": 60,
+    "cpus": 2,
+    "memory_bytes": 4294967296,
+    "threads": 2,
+    "maximum_active_containers": 1,
+    "network": "none",
+    "new_fits": 0,
+    "artifact_cap_bytes": 2000000,
+    "image": "sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156"
+  },
+  "reference_outcome": "EEG balancedaccuracy .5640625 vsprior .5, but logloss .5902177467 vs .5004024235. Fullcontrolsandallmixedsignsretained; no SOTA/nativeLLM/physicalP3claim.",
+  "reference_results": "authoring/erp-core-target-v1/combined-v2/RESULTS.md",
+  "cost_accounting": {
+    "prior_seconds": 1260,
+    "pending_qualification_seconds": 0,
+    "after_if_dispatched_seconds": 1350,
+    "original_ceiling_seconds": 900,
+    "amended_ceiling_seconds": 1500,
+    "old_failure_preserved": true,
+    "qualification_charged_seconds": 90,
+    "known_charged_seconds": 1350,
+    "remaining_unassigned_seconds": 150
+  },
+  "program_execution": {
+    "status": "local_program_runner_verified",
+    "entrypoint": {
+      "argv": [
+        "python3",
+        "authoring/erp-core-target-v1/program-runner-v1/execute_program.py",
+        "--program",
+        "{program}",
+        "--out",
+        "{output}",
+        "--other-reserve-bytes",
+        "119000000"
+      ],
+      "working_directory": ".",
+      "sha256": "8cf36134221fe008cf9d97ec9eda41ea4614fe45e458efc378d50eb313d24675"
+    },
+    "source_freeze": {
+      "path": "authoring/erp-core-target-v1/program-runner-v1/FREEZE.json",
+      "sha256": "b0a04e58d5f9b0914db18262728859b857be896b5c761e16e1411a969d821f6d"
+    },
+    "verification": {
+      "status": "passed",
+      "receipt_path": "authoring/erp-core-target-v1/program-runner-v1/receipt.json",
+      "receipt_sha256": "2946d12ad0dc6026e7548f4bedd800cf740f6ae895459ed98c6c92f2cefb87c0",
+      "qualification_path": "authoring/erp-core-target-v1/program-runner-v1/verification.json",
+      "qualification_sha256": "22af8e480641779c5a19519aea705f7b39d4ddd7471adc8f0b3477e1beee8319",
+      "source_binding_path": "authoring/erp-core-target-v1/program-runner-v1/outer_started.json",
+      "source_binding_sha256": "2c790d2acaa24d8a8feca77e5db21fa91ad316a2035378939276d74708de2dc9",
+      "planned_controls": [
+        "reference",
+        "malformed_linger",
+        "private_probe"
+      ],
+      "generated_runtime_tests": 12,
+      "actual_interrupted_wrapper_fixture_passed": true,
+      "per_person_metric_parity_checks": 4,
+      "macro_metric_parity_checks": 2,
+      "both_confusion_matrices_matched": true
+    },
+    "instructions_path": "authoring/erp-core-target-v1/program-runner-v1/PUBLIC_INSTRUCTIONS.md",
+    "scope": {
+      "mode": "offline_fixed_python_program_feature_only_single_batch",
+      "public_feature_files": 8,
+      "training_people": 6,
+      "training_trials": 1200,
+      "development_people": 2,
+      "development_trials": 400,
+      "development_exposed": true,
+      "raw_signals_supplied": false,
+      "raw_observation_condition_qualified": false,
+      "paired_investigation_mode_qualified": false,
+      "program_committed_before_any_public_release": true,
+      "producer_holder_volume_absent_before_private_grading": true,
+      "public_prediction_validation_before_private_targets": true,
+      "opaque_commit_is_not_prediction_contract_validation": true,
+      "LLM_attempts": 0,
+      "full_candidate_contract_complete": false,
+      "research_qualified": false,
+      "submission_ready": false
+    },
+    "runtime": {
+      "default_whole_attempt_seconds": 110,
+      "candidate_work_wall_seconds_from_start_request": 20,
+      "termination_latency_separately_measured": true,
+      "candidate_cpus": 1.75,
+      "holder_cpus": 0.25,
+      "candidate_memory_bytes": 3221225472,
+      "holder_memory_bytes": 134217728,
+      "aggregate_memory_cap_bytes": 4294967296,
+      "output_tmpfs_bytes": 8388608,
+      "single_program_cap_bytes": 65536,
+      "single_submission_cap_bytes": 1048576,
+      "network": "none",
+      "pull": "never",
+      "no_external_model_or_service": true,
+      "future_attempt_needs_new_operator_allocation": true,
+      "registered_other_reserve_bytes": 119000000,
+      "future_complete_reservation_must_be_rechecked": true
+    },
+    "qualification_accounting": {
+      "actual_elapsed_before_final_receipt_seconds": 11.585184665978886,
+      "full_stage_charge_seconds": 150,
+      "prior_known_seconds": 1350,
+      "known_charged_seconds": 1500,
+      "operator_construction_ceiling_seconds": 1500,
+      "remaining_unassigned_seconds": 0,
+      "future_compute_grant": false
+    },
+    "preserved_previous_manifest": {
+      "path": "authoring/erp-core-target-v1/program-runner-v1/registration/manifest.before-program-execution.json",
+      "sha256": "af7a5c3a3b0e3becd8060eba90234ab5493258ee66a1d7a5b2cd711b6987ea56"
+    }
+  },
+  "direct_signal_condition": {
+    "status": "local_packet_and_classical_controls_checked_inference_not_executed",
+    "documentation": "benchmarks/neuroscience/neural-077/DIRECT_SIGNAL.md",
+    "public_packet": "artifacts-build/erp-direct-signal-packet-002/packet/public",
+    "results": "authoring/erp-core-target-v1/direct-pilot-execution-v1/RESULTS.json",
+    "sample_representation": "full_resolution_processed_Cz_Pz_epochs",
+    "fixed_training_demonstrations": 4,
+    "development_queries": 400,
+    "tool_free_inference_enforced": false,
+    "model_calls": 0,
+    "new_benchmark_ids": 0,
+    "known_allocation_seconds_after_context_check": 1740,
+    "arbitrary_json_response_collection": "prepared; strict parser generated checks passed; complete-model-output bridge has not run",
+    "existing_file_scorer_unchanged": true,
+    "known_allocation_seconds_latest": 1860,
+    "saved_prediction_ranking_diagnostic": {
+      "path": "artifacts-build/erp-direct-ranking-001/diagnostic/ranking.json",
+      "bytes": 10678,
+      "sha256": "4025fce428200a52db58326e3914e3eccab77b11ef6c2a37cf7ef7c6ea1078d6"
+    },
+    "api_transport_preparation": {
+      "status": "source_and_mock_qualified_no_external_inference",
+      "mock_tests": 16,
+      "model_calls": 0,
+      "results": "authoring/erp-core-target-v1/direct-inference-preparation-v1/RESULT_SUMMARY.json",
+      "no_tools_service_execution_qualified": false
+    },
+    "external_inference_user_decision": "local_only_no_api_execution",
+    "shared_prior_local_variant": {
+      "status": "failed_preserved_no_empirical_scores",
+      "results": "authoring/erp-core-target-v1/direct-shared-prior-v2/RESULT.json",
+      "failure": "Full-training fit did not satisfy frozen convergence gate; no target scoring or changed tolerance.",
+      "external_calls": 0
+    }
+  }
+}

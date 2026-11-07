@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-011",
+  "source_id": "paper-method-011",
+  "track": "paper",
+  "title": "An emerging view of neural geometry in motor cortex supports high-performance decoding",
+  "status": "specification_only",
+  "canonical_position_one_based": 30,
+  "paper_identity": {
+    "url": "https://elifesciences.org/articles/89421",
+    "publication_year": 2025,
+    "venue": "eLife"
+  },
+  "primary_outputs": [
+    "Held-out behavior reconstruction and per-dimension R2; matched baseline comparison using the same trials."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://www.dropbox.com/s/qjxemfn3ekmpyxh/area2_bump.mat?dl=0"
+    ],
+    "exact_asset_records": [],
+    "lineage_and_loader_evidence": {
+      "input_level": "Author processed Area2_Bump neural/behavior trials via MATLAB loader; optional Maze/RTT files are other scopes.",
+      "data_urls": [
+        "https://www.dropbox.com/s/qjxemfn3ekmpyxh/area2_bump.mat?dl=0"
+      ],
+      "input_version": null,
+      "input_inventory_or_loader_evidence": [
+        {
+          "url": "https://www.dropbox.com/s/qjxemfn3ekmpyxh/area2_bump.mat?dl=0",
+          "version": "author download_data.m pinned with code commit",
+          "files": [
+            "area2_bump.mat"
+          ],
+          "kind": "processed real neural/behavior trial inputs",
+          "loader_source": "data/download_data.m"
+        }
+      ],
+      "source_bridge": "Reproduce the basic MINT Area2_Bump motor-decoding result and its fixed-configuration comparison.",
+      "code_url": "https://github.com/seanmperkins/mint",
+      "code_revision_or_archive_version": "347206a402ac71ea528752365eebea17e3c770da",
+      "entrypoints": [
+        {
+          "path": "data/download_data.m",
+          "url": "https://github.com/seanmperkins/mint/blob/347206a402ac71ea528752365eebea17e3c770da/data/download_data.m",
+          "role": "Author script identifies area2_bump.mat, mc_maze.mat and mc_rtt.mat inputs.",
+          "inspected_as_text": true
+        },
+        "run/run_decoder.m",
+        "run/+config/area2_bump.m",
+        "task-related/+area2_bump/get_trial_data.m"
+      ],
+      "missing_core_inputs_as_recorded": [
+        "This covers basic MINT and one task; some paper variants and hyperparameter-search automation are absent. Alternative decoder implementations are a separate pinned dependency."
+      ],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-011",
+        "versions_and_loader_contract": {
+          "scope_description": "Reproduce the basic MINT Area2_Bump motor-decoding result and its fixed-configuration comparison.",
+          "unresolved_coverage": [
+            "This covers basic MINT and one task; some paper variants and hyperparameter-search automation are absent. Alternative decoder implementations are a separate pinned dependency."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/seanmperkins/mint",
+    "revision_or_archive_version": "347206a402ac71ea528752365eebea17e3c770da",
+    "entrypoints": [
+      {
+        "path": "data/download_data.m",
+        "url": "https://github.com/seanmperkins/mint/blob/347206a402ac71ea528752365eebea17e3c770da/data/download_data.m",
+        "role": "Author script identifies area2_bump.mat, mc_maze.mat and mc_rtt.mat inputs.",
+        "inspected_as_text": true
+      },
+      "run/run_decoder.m",
+      "run/+config/area2_bump.m",
+      "task-related/+area2_bump/get_trial_data.m"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-011",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/seanmperkins/mint",
+            "commit": "347206a402ac71ea528752365eebea17e3c770da",
+            "author_linkage": [
+              "https://elifesciences.org/articles/89421",
+              "https://github.com/seanmperkins/mint"
+            ],
+            "default_branch": "main",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/seanmperkins/mint/347206a402ac71ea528752365eebea17e3c770da/README.md",
+            "license_source": "https://raw.githubusercontent.com/seanmperkins/mint/347206a402ac71ea528752365eebea17e3c770da/LICENSE",
+            "file_tree": {
+              "source": "https://api.github.com/repos/seanmperkins/mint/git/trees/347206a402ac71ea528752365eebea17e3c770da?recursive=1",
+              "truncated": false,
+              "paths": [
+                "README.md",
+                "core/@MINT/MINT.m",
+                "core/@MINT/fit.m",
+                "core/@MINT/predict.m",
+                "core/estimation/estimate_states.m",
+                "core/estimation/fit_poisson_interp.m",
+                "core/estimation/maximum_likelihood.m",
+                "core/estimation/use_best_interp.m",
+                "core/recursion/generate_mex.m",
+                "core/recursion/recursion.m",
+                "core/utils/bin_data.m",
+                "core/utils/ck2ind.m",
+                "core/utils/get_rate_indices.m",
+                "core/utils/get_state_indices.m",
+                "core/utils/get_time_indices.m",
+                "core/utils/ind2ck.m",
+                "data/download_data.m",
+                "run/+config/area2_bump.m",
+                "run/+config/generic.m",
+                "run/+config/mc_maze.m",
+                "run/+config/mc_rtt.m",
+                "run/run_decoder.m",
+                "run/utils/evaluate_and_save.m",
+                "run/utils/test.m",
+                "run/utils/train.m",
+                "task-related/+area2_bump/fit_trajectories.m",
+                "task-related/+area2_bump/get_trial_data.m",
+                "task-related/+area2_bump/preprocess_behavior.m",
+                "task-related/+mc_maze/fit_trajectories.m",
+                "task-related/+mc_maze/get_trial_data.m",
+                "task-related/+mc_maze/preprocess_behavior.m",
+                "task-related/+mc_rtt/fit_trajectories.m",
+                "task-related/+mc_rtt/get_trial_data.m",
+                "task-related/+mc_rtt/preprocess_behavior.m",
+                "task-related/utils/gauss_filt.m",
+                "task-related/utils/smooth_average.m"
+              ],
+              "all_file_count": 38,
+              "rate_remaining": "54"
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "data/download_data.m",
+              "url": "https://github.com/seanmperkins/mint/blob/347206a402ac71ea528752365eebea17e3c770da/data/download_data.m",
+              "role": "Author script identifies area2_bump.mat, mc_maze.mat and mc_rtt.mat inputs.",
+              "inspected_as_text": true
+            },
+            "run/run_decoder.m",
+            "run/+config/area2_bump.m",
+            "task-related/+area2_bump/get_trial_data.m"
+          ],
+          "dependencies": [
+            "MATLAB R2021b",
+            "Statistics and Machine Learning Toolbox",
+            "Optimization Toolbox",
+            "Signal Processing Toolbox"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "recorded_terms": [
+        "NLB underlying recordings CC BY4.0",
+        "Official MINT license restricts use; research use must follow its terms"
+      ],
+      "record_conflicts": [],
+      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
+      "overlap_group": null
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "central_outputs_in_saved_source_contract": [
+        "Held-out behavior reconstruction and per-dimension R2; matched baseline comparison using the same trials."
+      ],
+      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
+      "missing_or_unfrozen_endpoint_details": "Basic fixed-config MINT only; some paper variants and hyperparameter-search automation absent, baseline implementations are separate dependencies."
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Match behavior dimensions, smoothing, timing, trials and training observations across MINT and Kalman/Wiener/neural alternatives. Cross-session improvement needs a separately specified session/calibration interface."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Basic fixed-config MINT only; some paper variants and hyperparameter-search automation absent, baseline implementations are separate dependencies.",
+        "Match behavior dimensions, smoothing, timing, trials and training observations across MINT and Kalman/Wiener/neural alternatives. Cross-session improvement needs a separately specified session/calibration interface.",
+        "This covers basic MINT and one task; some paper variants and hyperparameter-search automation are absent. Alternative decoder implementations are a separate pinned dependency.",
+        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+        "Execute and independently audit references, controls, grading and measured resources.",
+        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
+      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve cross-session or limited-data decoding against MINT, Kalman/Wiener, feedforward and recurrent baselines under equal training observations."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "independent_panel_not_established_in_inspected_evidence",
+      "proposed_improvement": [
+        "Improve cross-session or limited-data decoding against MINT, Kalman/Wiener, feedforward and recurrent baselines under equal training observations."
+      ],
+      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
+      "special_gate": "No completed independent improvement result is established here."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": "CPU MATLAB workstation",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "holds": {
+    "task_specific": [
+      "Basic fixed-config MINT only; some paper variants and hyperparameter-search automation absent, baseline implementations are separate dependencies.",
+      "Match behavior dimensions, smoothing, timing, trials and training observations across MINT and Kalman/Wiener/neural alternatives. Cross-session improvement needs a separately specified session/calibration interface.",
+      "This covers basic MINT and one task; some paper variants and hyperparameter-search automation are absent. Alternative decoder implementations are a separate pinned dependency.",
+      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+      "Execute and independently audit references, controls, grading and measured resources.",
+      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Pin the actual processed MAT content and alternative-decoder versions, then qualify one source MINT evaluation with an independent per-dimension R2 calculation.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Pin the actual processed MAT content and alternative-decoder versions, then qualify one source MINT evaluation with an independent per-dimension R2 calculation.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "3159d2fce9c244b28a97827e3eda11d71b7ce830b4ca2587309419e386f2f034",
+    "audit_record_sha256": "e461d475940058a6b69f1284fa236acf4d96089b8daca857361b64eeaf9c61d2",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-011",
+        "declared_record_sha256": "28977561bd935084ec15357328ae9469975ae1936166ed1e8051f189fd562cba",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 10,
+        "record_sha256": "28977561bd935084ec15357328ae9469975ae1936166ed1e8051f189fd562cba"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

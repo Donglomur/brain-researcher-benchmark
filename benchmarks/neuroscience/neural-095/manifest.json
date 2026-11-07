@@ -1,0 +1,565 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-095",
+  "track": "neural",
+  "title": "Produced-interval prediction from DMFC spikes",
+  "status": "historical_scoring_registration_with_source_preferred_unqualified_program",
+  "scope": {
+    "development_exposed": true,
+    "training_trials": 748,
+    "development_trials": 258,
+    "animal_sessions": 1,
+    "animal": "Haydn",
+    "session": "20161211",
+    "observation": "[Set-0.2s,Set) four50ms bins40held-inunits",
+    "prediction_time": "ATSet",
+    "target": "released behavioral tp milliseconds, not Go-minus-Set",
+    "target_based_filtering": false,
+    "complete_agent_contract": false
+  },
+  "entrypoints": {
+    "score": {
+      "argv": [
+        "python3",
+        "benchmarks/neuroscience/neural-095/score.py",
+        "score",
+        "--submission",
+        "{submission}",
+        "--output",
+        "{output}"
+      ],
+      "working_directory": ".",
+      "sha256": "eee034abdba6a96cf79f776930fdebc811b25a85df7f74e9e6577b2732766874"
+    }
+  },
+  "assets": {
+    "manifest_path": "benchmarks/neuroscience/neural-095/assets.json",
+    "manifest_sha256": "d5b1a22f3ae21202fe608d11ffd9d8312b6262964b8e3aeb8c32b27328f1a965",
+    "public": {
+      "identity": {
+        "path": "artifacts-build/dmfc-preset-pilot-001/conversion_output/packet/public_identity.json",
+        "bytes": 4947,
+        "sha256": "0b1c30e2e753891b480607b0061ac76f225403ac01ff718325a84d44d84c91f1"
+      },
+      "train.npz": {
+        "path": "artifacts-build/dmfc-preset-pilot-001/conversion_output/packet/public/train.npz",
+        "bytes": 549542,
+        "sha256": "179444d27110427b84920f07aecddcf2d58e90addbc787dc68b8e58a7f0cdd4a"
+      },
+      "query.npz": {
+        "path": "artifacts-build/dmfc-preset-pilot-001/conversion_output/packet/public/query.npz",
+        "bytes": 186252,
+        "sha256": "6f9af185ddeef4e3c2f120ac530152667097f3383bc9293e8c7e7684932108f1"
+      },
+      "schema.json": {
+        "path": "artifacts-build/dmfc-preset-pilot-001/conversion_output/packet/public/schema.json",
+        "bytes": 1066,
+        "sha256": "5c4cfe827e36931599eb333eadd5bfe8d0913fd1220220305521a2a70674cf32"
+      },
+      "units.json": {
+        "path": "artifacts-build/dmfc-preset-pilot-001/conversion_output/packet/public/units.json",
+        "bytes": 487,
+        "sha256": "74e5bb5c49662db4e54466d0da06e9377d21f57233f5d474bb129d2486ade899"
+      }
+    },
+    "private": {
+      "targets": {
+        "path": "artifacts-build/dmfc-preset-pilot-001/conversion_output/packet/private/query_targets.npz",
+        "bytes": 18550,
+        "sha256": "473352256d5239c967b014910aa5134fc6a24bdd38ccaabb7d42b283b83c35dc"
+      },
+      "reference_grade": {
+        "path": "artifacts-build/dmfc-preset-pilot-001/grade_output/scores.json",
+        "bytes": 23286,
+        "sha256": "414e09845d11548e96c921b202491bc7680ad6ecec96a0433b2676feeec5d823"
+      },
+      "reference_commit": {
+        "path": "artifacts-build/dmfc-preset-pilot-001/prediction_commit.json",
+        "bytes": 473,
+        "sha256": "238d86371eccca7fe32635c63e36f004eab499f8f5d4781f17cb9ccb387a4dfe"
+      },
+      "reference_audit": {
+        "path": "artifacts-build/dmfc-preset-pilot-001/audit_output/independent_audit.json",
+        "bytes": 585,
+        "sha256": "eaf3ad0f754f8096dfdfd68a584f541ece0ea1190ad0b1a947a41900297c3272"
+      }
+    }
+  },
+  "input_contract": "benchmarks/neuroscience/neural-095/README.md",
+  "source_freeze_path": "benchmarks/neuroscience/neural-095/SOURCE_FREEZE.json",
+  "source_freeze_sha256": "81900e4d743bad4106c50a2fadb35919986d5b9a5e869254d7438f897e465d2f",
+  "verification": {
+    "status": "passed",
+    "receipt_path": "authoring/dmfc-timing/adapter-v1/receipt.json",
+    "receipt_sha256": "a56e101531e7c6ce67a7d14b35c1216429c63efd2c0a747447ecc06fdba593c1",
+    "planned_controls": [
+      "valid_total_spike",
+      "valid_temporal",
+      "empty",
+      "wrong_shape",
+      "wrong_ids"
+    ],
+    "generated_tests": 12,
+    "verification_details_path": "authoring/dmfc-timing/adapter-v1/verification.json",
+    "verification_details_sha256": "5884c7c21a7e84e1ada27789e527ef3ad19885a24b69664febc6f4f3e5c39470"
+  },
+  "admission": {
+    "runnable": true,
+    "full_candidate_contract_complete": false,
+    "research_qualified": false,
+    "submission_ready": false
+  },
+  "evaluation": {
+    "primary": "mae_ms",
+    "secondary": [
+      "rmse_ms",
+      "eight_context_macro_mae_ms",
+      "40conditiongroups",
+      "8contextgroups"
+    ],
+    "higher_primary_is_better": false,
+    "scientific_success_threshold": null,
+    "finite_negative_predictions_allowed": true,
+    "prediction_clipping": false,
+    "signed_against_all_five_references": true,
+    "difference_sign": "candidate error minus reference error; negative is better"
+  },
+  "runtime": {
+    "hard_whole_verification_seconds": 90,
+    "standalone_scorer_seconds": 60,
+    "cpus": 2,
+    "memory_bytes": 4294967296,
+    "threads": 2,
+    "maximum_active_containers": 1,
+    "network": "none",
+    "new_fits": 0,
+    "artifact_cap_bytes": 2000000,
+    "image": "sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156"
+  },
+  "reference_outcome": {
+    "mae_ms": {
+      "nominal_sample_interval": 90.8587441860465,
+      "exact_condition_training_median": 78.96403682170542,
+      "cue_clock_ridge": 80.23467034643997,
+      "cue_clock_total_spike_ridge": 77.01220774506326,
+      "cue_clock_temporal_spike_ridge": 83.02581141629344
+    },
+    "interpretation": "Fixed total-spike model beats condition median; temporal-bin model is worse. No SOTA, causal, native LLM or population claim."
+  },
+  "cost_accounting": {
+    "prior_seconds": 599.0706189560005,
+    "pending_qualification_seconds": 0,
+    "after_if_dispatched_seconds": 689.0706189560005,
+    "candidate_ceiling_seconds": 900,
+    "old_costs_preserved": true,
+    "qualification_charged_seconds": 90,
+    "known_charged_seconds": 689.0706189560005,
+    "remaining_unassigned_seconds": 210.92938104399946
+  },
+  "program_execution": {
+    "status": "not_run",
+    "preferred_source_interface": {
+      "path": "authoring/delivery-20261105/dmfc/NEURAL-095/program-adapter-deadline-v2",
+      "source": {
+        "path": "authoring/delivery-20261105/dmfc/NEURAL-095/program-adapter-deadline-v2/SOURCE_MANIFEST.json",
+        "bytes": 5515,
+        "sha256": "e40ccf429da7f8d846bd44c562cdc48be7575f170f249a86bb7cef2fd97d301e"
+      }
+    },
+    "entrypoint": {
+      "argv": [
+        "python3",
+        "-I",
+        "-S",
+        "-B",
+        "-X",
+        "pycache_prefix=/Users/nicholas/Documents/Codex/neuroscience-benchmark-planning/artifacts-build/.disabled-neural095-central-adapter-pycache",
+        "authoring/delivery-20261105/dmfc/NEURAL-095/program-adapter-deadline-v2/run_program.py",
+        "run",
+        "--package",
+        "authoring/delivery-20261105/common/exports/NEURAL-095-v2",
+        "--source-sha256",
+        "e40ccf429da7f8d846bd44c562cdc48be7575f170f249a86bb7cef2fd97d301e",
+        "--program",
+        "{program}",
+        "--output",
+        "{output}",
+        "--other-reserve-bytes",
+        "{other_reserve_bytes}"
+      ],
+      "working_directory": ".",
+      "sha256": "7728a6b0d8e8a413ffadd11f430a0f9c9ccbd013847ae8621138c54bd3d40535"
+    },
+    "source_freeze": {
+      "path": "authoring/delivery-20261105/common/remaining-program-registrations-v1/freezes/NEURAL-095.json",
+      "bytes": 4005,
+      "sha256": "5cfc5276e9d58efbe0f64074a65e904aabf0b7182314ed019a5b523ff33d79e8"
+    },
+    "verification": {
+      "status": "not_run",
+      "reason": "Preferred source has no separate passing central adapter/outer runtime qualification; prior paired program evidence is not transferred."
+    },
+    "instructions_path": "authoring/delivery-20261105/dmfc/NEURAL-095/program-adapter-deadline-v2/README.md",
+    "scope": {
+      "training_trials": 748,
+      "query_trials": 258,
+      "held_in_units": 40,
+      "pre_set_bins": 4,
+      "bin_width_ms": 50,
+      "public_files": 4,
+      "program_units": 1,
+      "output": "submission/submission.json and opaque submission.npz",
+      "candidate_runs": 0,
+      "paired_context_invocations": false,
+      "historical_paired_program_scope_preserved_separately": true
+    },
+    "runtime": {
+      "schema": "neural095_portable_resource_proposal_v1",
+      "actual_operation_selected": false,
+      "actual_runtime_verified": false,
+      "scientific_execution": false,
+      "image": "sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156",
+      "whole_seconds": 110,
+      "work_alarm_seconds": 95,
+      "unit_seconds_including_cleanup": 50,
+      "candidate_seconds_from_start_request": 20,
+      "candidate": {
+        "cpus": 1.75,
+        "memory_bytes": 3221225472,
+        "pids": 64,
+        "cpu_ulimit": [
+          20,
+          22
+        ],
+        "nofile": [
+          1024,
+          1024
+        ],
+        "fsize_bytes": 1048576,
+        "scratch_bytes": 67108864
+      },
+      "holder": {
+        "cpus": 0.25,
+        "memory_bytes": 134217728,
+        "pids": 16
+      },
+      "output_volume": {
+        "bytes": 8388608,
+        "inodes": 32
+      },
+      "program_bytes": 65536,
+      "prediction_bytes": 1048576,
+      "public_source_bytes": 737347,
+      "host_retained_bytes": 16000000,
+      "host_cumulative_managed_write_bytes": 32000000,
+      "closing_receipt_reserve_bytes": 2000000,
+      "initial_physical_floor_bytes": 21474836480,
+      "other_reserve": "explicit fresh --other-reserve-bytes operand",
+      "docker_stream_bytes_each": 1500000,
+      "docker_calls_per_engine": 160,
+      "native_os_host_cpu_or_rss_quota_claimed": false,
+      "separate_private_scoring_included": false,
+      "limits": [
+        "Startup reserves full16MB; every managed write/directory rechecks20GiB+OTHER+remaining physical allowance, with total owned allocated blocks capped16MB. No host-wide quota is claimed.",
+        "Uninterrupted system-call or process-reap wall time is not an operating-system hard guarantee; external bounded observation and absence are required.",
+        "Finite managed buffers include two capped CLI streams, base64 text/decoded1MiB output, captured public/source bytes and receipt serialization; peak RSS is not measured.",
+        "Unknown create identity, wrong immutable identity or failed cleanup refuses successful commitment and remains operator reconciliation work."
+      ],
+      "allocation_quantum_bytes": 65536,
+      "prospective_allocation": "ceil(write_bytes/65536)*65536+131072 for a file;131072 per directory, before mutation; observed st_blocks rechecked afterward."
+    },
+    "operator_environment": {
+      "DOCKER_HOST": "Operator must select an existing local unix:/// endpoint before any run; inherited env is accepted by frozen main().",
+      "DOCKER_CONFIG": "Existing operator config may be inherited; no endpoint/config inspection or selection occurred here.",
+      "new_no_site_startup_qualified": false,
+      "existing_image_only": true
+    },
+    "compatibility": {
+      "current_campaign_gate": "compatible_exact_cross_inventory_wrapper_join_after_root_cce3bf40",
+      "gate_sha256": "11723f00691ef58e7c96b29030c810c98969e0be8411ec48b5bbc56a7874f61d",
+      "historical_refusal": "Prior gate counted identical wrapper twice; root separately repaired and tested the exact-overlap rule.",
+      "current_legacy_cli": "unsupported_isolated_startup_and_reserve_only_form",
+      "target": "tools/neurobench_campaign.py and tools/neurobench_condition_campaign.py"
+    },
+    "execution_selected": false,
+    "runtime_qualified": false,
+    "scientific_qualification": false
+  },
+  "program_conditions": {
+    "complete_258_query_artifact": "default"
+  },
+  "historical_program_registration": {
+    "original_manifest": {
+      "path": "benchmarks/neuroscience/neural-095/manifest.json",
+      "bytes": 19104,
+      "sha256": "7055fcf202c0b7c6806ce2345600b95da613eb3caf8eedcf690084980bc0f055"
+    },
+    "program_execution": {
+      "status": "current_witness_source_successor_registered",
+      "entrypoint": {
+        "argv": [
+          "python3",
+          "authoring/next-finite-completions-20261103/neural095-current-witness-v1/execute_program.py",
+          "--program",
+          "{program}",
+          "--output",
+          "{output}",
+          "--review",
+          "{review}",
+          "--other-reserve-bytes",
+          "{other_reserve_bytes}"
+        ],
+        "working_directory": ".",
+        "sha256": "93d52dfadeed60c846199d8c005f2fbd7563118e0bf116a9ee24ab34e7de4cc6"
+      },
+      "source_freeze": {
+        "path": "authoring/next-finite-completions-20261103/neural095-current-witness-v1/SOURCE_FREEZE.json",
+        "sha256": "c3542def430fdf6d7d3c3e63ea3d85e812c53b021bfac50058f335da8000d038"
+      },
+      "verification": {
+        "status": "passed",
+        "receipt_path": "authoring/next-finite-completions-20261103/neural095-current-witness-registration-v1/receipt.json",
+        "receipt_sha256": "84b03343d2a10dd55a756b7e5ebf9b31189f209b0dcc5cd5d46734b123feba99",
+        "qualification_path": "authoring/next-finite-completions-20261103/neural095-current-witness-registration-v1/qualification.json",
+        "qualification_sha256": "b747f0d1cb6917a25a7101f32662c3fc6466ddbd8f265d5ac77908e3bd30aaa9",
+        "source_binding_path": "authoring/next-finite-completions-20261103/neural095-current-witness-registration-v1/source_binding.json",
+        "source_binding_sha256": "1f7ea8eeef2ccdfb529b9a9f00ce28c597345f7f9da3484e8e8c99d3ac09915f",
+        "evidence_kind": "metadata_adoption_of_accounting_only_source_change_preserving_historical_execution",
+        "new_runtime_observed": false,
+        "new_common_CLI_runtime_execution_observed": false,
+        "new_scientific_execution_observed": false,
+        "new_control_runs": 0
+      },
+      "instructions_path": "authoring/next-finite-completions-20261103/neural095-current-witness-v1/ROOT_HANDOFF.md",
+      "scope": {
+        "mode": "offline_ordinary_paired_cue_only_and_neural_fixed_python_program",
+        "training_trials": 748,
+        "query_trials_each_view": 258,
+        "view_count": 2,
+        "same_program_and_declared_method_committed_before_first_view": true,
+        "public_files_each_view": [
+          "train.npz",
+          "query.npz",
+          "schema.json",
+          "units.json",
+          "contract.json"
+        ],
+        "target": "released behavioral tp milliseconds predicted AT observed Set, not Go-minus-Set",
+        "neural_observation": "[Set-0.2s,Set), four50ms bins by40units",
+        "biological_unit": "one exposed historical Haydn20161211 session",
+        "development_exposed": true,
+        "paired_investigation_mode_qualified": true,
+        "matched_method_requires_source_procedure_review": true,
+        "zero_or_negative_increment_is_valid": true,
+        "scientific_accuracy_floor": null,
+        "standalone_score_route_remains_single_output": true,
+        "bounded_task_acceptance_proposal": {
+          "path": "authoring/dmfc-timing/paired-program-cli-v1/registration-v1/BOUNDED_TASK_ACCEPTANCE.json",
+          "bytes": 8942,
+          "sha256": "138457b197abf7607fa06cf79e0fc6df220767d4eb0986a820ac10c05b0d2fc8"
+        },
+        "full_candidate_contract_complete": false,
+        "research_qualified": false,
+        "submission_ready": false,
+        "LLM_attempts": 0
+      },
+      "evaluation": {
+        "paired_primary": "cue_only_MAE_ms_minus_neural_MAE_ms",
+        "paired_positive_means": "lower neural error on same258cases",
+        "absolute_scores_and_all_five_references_retained": true,
+        "paired_increment_standalone_RL_reward": false
+      },
+      "runtime": {
+        "default_whole_attempt_seconds": 300,
+        "work_seconds": 240,
+        "cleanup_seconds": 60,
+        "candidate_work_wall_seconds_from_start_request": 20,
+        "candidate_cpus": 1.75,
+        "holder_cpus": 0.25,
+        "candidate_memory_bytes": 3221225472,
+        "holder_memory_bytes": 134217728,
+        "planning_aggregate_cpus": 2,
+        "planning_aggregate_memory_bytes": 4294967296,
+        "native_parent_has_cgroup_memory_cpu_cap": false,
+        "single_program_cap_bytes": 65536,
+        "method_cap_bytes": 32768,
+        "single_submission_cap_bytes": 1048576,
+        "own_reserve_bytes": 8000000,
+        "managed_artifact_bytes": 7500000,
+        "other_reserve_minimum_bytes": 392000000,
+        "free_floor_bytes": 15000000000,
+        "image_metadata_is_physical_disk": false,
+        "network": "none",
+        "pull": "never",
+        "no_external_model_or_service": true,
+        "future_attempt_needs_new_operator_allocation": true,
+        "fresh_output_and_latest_closed_family_cost_required": true,
+        "method_path_from_review_when_direct_flag_omitted": true,
+        "all_candidate_resources_absent_before_private_scoring": true,
+        "dynamic_capacity_policy": {
+          "kind": "explicit_root_selected_ceiling_and_complete_current_image_census",
+          "minimum_free_bytes": 15000000000,
+          "fresh_inventory_max_age_seconds": 900,
+          "review_allocation_policy_capacity_objects_must_match": true,
+          "new_runtime_execution_observed": false,
+          "automatic_capacity_growth": false
+        }
+      },
+      "actual_ordinary_accounting": {
+        "prior_known_seconds": 2109.0706189560005,
+        "charged_seconds": 300,
+        "known_charged_seconds_after": 2409.0706189560005,
+        "elapsed_before_receipt_seconds": 6.528887042004499,
+        "historical_lifetime_complete": false
+      },
+      "actual_ordinary_result": {
+        "path": "artifacts-build/neural095-independent-paired-001/pairs/ordinary/grade/result.json",
+        "bytes": 59825,
+        "sha256": "ec35d4149ceba5b9cd77623c0fd41c74da33cbb5844f11eb47777546dfce2387"
+      },
+      "registration_scope": "Only program_execution replaces historical single-view route; standalone scorer and all other manifest fields remain byte-value identical. This does not add an ID or imply full original study completion.",
+      "preserved_previous_manifest": {
+        "path": "authoring/dmfc-timing/paired-program-cli-v1/MANIFEST.before.json",
+        "bytes": 9650,
+        "sha256": "7d078ff1ac4303af48ed8fbd326334d138ac9b5cac3e557c4cf48a56166f8183"
+      },
+      "historical_installed_program_verification": {
+        "status": "passed",
+        "receipt_path": "authoring/task-dynamic-capacity-20261103/dmfc095/registration-v1/receipt.json",
+        "receipt_sha256": "91d0f56b49432f73618ed3ed91b2826fbad7335d07234592a3b7b45bb30b732e",
+        "qualification_path": "authoring/task-dynamic-capacity-20261103/dmfc095/registration-v1/qualification.json",
+        "qualification_sha256": "f232f67181bd60452e8f1559861fd57c0a91ec830d5e2636b04a4ea91364cb31",
+        "source_binding_path": "authoring/task-dynamic-capacity-20261103/dmfc095/registration-v1/source_binding.json",
+        "source_binding_sha256": "7a5e0c61c919ab7d257939c0af78409e93534c234099cae4e5f9c41b03723be8",
+        "evidence_kind": "metadata_adoption_of_capacity_only_source_delta_preserving_exact_historical_runtime_evidence",
+        "historical_installed_verification": {
+          "path": "authoring/task-dynamic-capacity-20261103/dmfc095/registration-v1/HISTORICAL_PROGRAM_VERIFICATION.json",
+          "bytes": 1624,
+          "sha256": "543dc411f22439f7fdf1d1d8834401c301e05078576ae7e3860244658fd56265"
+        },
+        "new_runtime_observed": false,
+        "new_common_CLI_runtime_execution_observed": false,
+        "new_scientific_execution_observed": false,
+        "new_control_runs": 0
+      },
+      "historical_ownership_migration_registration": {
+        "status": "source_and_saved_actual_evidence_reviewed_proposal_pending_root_installation",
+        "source_evidence": {
+          "path": "authoring/task-ownership-successors-20261102/dmfc095-registration-v1/SOURCE_EVIDENCE.json",
+          "bytes": 4084,
+          "sha256": "23f2e4a0d919656c23128f8a74b7396bb5fb5713a5b5436c1f12b2c8c871b401"
+        },
+        "entrypoint": {
+          "path": "authoring/task-ownership-successors-20261102/dmfc095-recovery-capacity-v5/execute_program.py",
+          "bytes": 17818,
+          "sha256": "d7636f38932cf05e06040b1acbc8d2ca65a9f2b90368b55a7600fabcd74bfed6"
+        },
+        "runtime_ownership_source_freeze": {
+          "path": "authoring/task-ownership-successors-20261102/dmfc095-recovery-capacity-v5/SOURCE_FREEZE.json",
+          "bytes": 5728,
+          "sha256": "a7d6b8ac1dc147691764034ca9cb6953df5c570a2c774f303079231293f32287"
+        },
+        "source_adoption": {
+          "path": "authoring/task-ownership-successors-20261102/shared/ROOT_QUALIFICATION_ADOPTION.001.json",
+          "bytes": 2532,
+          "sha256": "077f2c61a52fc25e561eab8b14625ff57287d4a8fc27bcd2a795abea404d41ab"
+        },
+        "capacity_scope_policy": {
+          "path": "authoring/task-ownership-successors-20261102/shared/ROOT_CAPACITY_POLICY.026GB.json",
+          "bytes": 863,
+          "sha256": "d1352c4f9a9e094c10948f97cd6c1295369615f1c87dfc42a5e58f8b19a064e3"
+        },
+        "actual_operational_evidence": {
+          "path": "authoring/task-ownership-successors-20261102/dmfc095-registration-v1/ACTUAL_OPERATIONAL_EVIDENCE.json",
+          "bytes": 3553,
+          "sha256": "f40dd10155e56387b773a44c4b3bef2cc1cfc331c1101daf58639c81f6bf1290"
+        },
+        "independent_actual_completion_review": {
+          "path": "authoring/quality-probes/neural095-ownership-v4-sigterm-completion-review-v1.json",
+          "bytes": 10676,
+          "sha256": "e9f097da76c8fd809a70dafe7e02e10ca26c48fef3c694f013ef5fe1dbfd7eb2"
+        },
+        "current_accounting": {
+          "path": "authoring/task-ownership-successors-20261102/dmfc095-registration-v1/CURRENT_ACCOUNTING.json",
+          "bytes": 1763,
+          "sha256": "1059f6f84bc8d961a1dc66a8f7b7a0a885782f50594c4cf5d72bb8504cbbb5e8"
+        },
+        "historical_actual_ordinary_accounting_retained_verbatim": true,
+        "historical_actual_ordinary_accounting_meaning": "Prior ordinary001 completed matched258-query science and ended2409.0706189560005; current closed family cost is2709.0706189560005 after this interruption.",
+        "common_CLI_method_semantics": "Original argv retained except wrapper script; --method is optional on direct wrapper and otherwise comes from review.method_source. No new common CLI placeholder.",
+        "same_shared_thirteen_route_framework": true,
+        "other_route_readiness_not_inferred": true,
+        "time_memory_science_and_private_grading_unchanged": true,
+        "only_program_runtime_policy_fields_changed": [
+          "aggregate_capacity_bytes",
+          "other_reserve_minimum_bytes"
+        ],
+        "standalone_score_route_unchanged": true,
+        "installation_performed": false,
+        "execution_authority": false,
+        "current_instructions": {
+          "path": "authoring/task-ownership-successors-20261102/dmfc095-registration-v1/RUN_PAIRED_CURRENT.md",
+          "bytes": 3861,
+          "sha256": "9fb8c08b7fb583ce195b807b4e9a402f6fc2a477b5b37b5269fcf5531a109df7"
+        },
+        "preserved_prior_instructions": {
+          "path": "authoring/dmfc-timing/paired-program-cli-v1/registration-v1/RUN_PAIRED.md",
+          "bytes": 7989,
+          "sha256": "e4cf5987ff3185b4e7f6eb7b982a9efeb8bfe49ade65b7176714b73f9b7dfeb9"
+        }
+      },
+      "current_witness_successor": {
+        "source_freeze": {
+          "path": "authoring/next-finite-completions-20261103/neural095-current-witness-v1/SOURCE_FREEZE.json",
+          "bytes": 8423,
+          "sha256": "c3542def430fdf6d7d3c3e63ea3d85e812c53b021bfac50058f335da8000d038"
+        },
+        "independent_source_review": {
+          "path": "authoring/next-finite-completions-20261103/neural095-current-witness-independent-review-v1/SOURCE_REVIEW.json",
+          "bytes": 6745,
+          "sha256": "91f27a9b3627ced667623525cba276d0fc6a70bc3e7d11b3b3e37bd58002cca0"
+        },
+        "source_checks": {
+          "path": "authoring/next-finite-completions-20261103/neural095-current-witness-v1/SOURCE_CHECKS.json",
+          "bytes": 3346,
+          "sha256": "652847e3b09384955a725829dda4003fb8f60ec0d4993c1be797a45a1a6c6cd1"
+        },
+        "historical_dynamic_source": {
+          "path": "authoring/task-dynamic-capacity-20261103/dmfc095/SOURCE_FREEZE.json",
+          "bytes": 6197,
+          "sha256": "ea7cc6a83b22e824d8cd6d01bf7b12d4847682fd1d341d9745b0647d1900533a"
+        },
+        "latest_saved_family_seconds": 2769.0706189560005,
+        "latest_closed_receipt": {
+          "path": "artifacts-build/neural096-successor-positive-001/outer_receipt.json",
+          "bytes": 7383,
+          "sha256": "d1b2f53bf571a3f5474c992deec5c5846562b6f6a51bfc45c2dc26cc620ddd42"
+        },
+        "future_full300_after_if_root_confirms": 3069.0706189560005,
+        "future_charge_rule": "max(300, elapsed_before_receipt_seconds); exact full actual charge retained",
+        "receipt_provenance_delta": "current_cost_source_freeze is saved immediately after admission, including later pre-storage/owner failures. No lifecycle or scientific function changed.",
+        "currentness_for_future_attempt_confirmed": false,
+        "root_adoption_and_registration_required": true,
+        "new_runtime_execution_observed": false,
+        "new_scientific_execution_observed": false,
+        "new_native_starts": 0,
+        "new_charge_seconds": 0,
+        "standalone_scorer_current_readiness_asserted": false,
+        "execution_authority": false
+      }
+    },
+    "qualification_transferred": false,
+    "reason": "Current source preference is the full258-query portable one-unit artifact producer; it does not claim to preserve the separate old paired-program investigation mode."
+  },
+  "registration_notes": {
+    "proposed_only": true,
+    "installed": false,
+    "execution_authority": false,
+    "existing_score_fields_and_history_retained": true,
+    "scorer_source_and_assets_not_opened": true,
+    "existing_score_verification_recomputed": false,
+    "new_program_qualified": false,
+    "new_task_count": 0,
+    "prior_reference_summary_preserved_without_use_or_recomputation": true
+  }
+}

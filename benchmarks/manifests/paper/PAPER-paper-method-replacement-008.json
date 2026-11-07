@@ -1,0 +1,870 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-replacement-008",
+  "source_id": "paper-method-replacement-008",
+  "track": "paper",
+  "title": "BaRISTA: Brain Scale Informed Spatiotemporal Representation of Human Intracranial Neural Activity",
+  "status": "specification_only",
+  "canonical_position_one_based": 32,
+  "paper_identity": {
+    "url": "https://openreview.net/forum?id=LDjBDk3Czb",
+    "publication_year": 2025,
+    "venue": "NeurIPS"
+  },
+  "primary_outputs": [
+    "Per-subject ROC-AUC and multi-seed aggregate for channel-, parcel- and lobe-level models under the same nonoverlapping train/validation/test windows.",
+    "Reproduce chronological-fold sensitivity for speech/sentence tasks and distinguish it from random-split performance."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://braintreebank.dev/",
+      "https://api.github.com/repos/ShanechiLab/BaRISTA/git/trees/83b27375eba60e9eba9da4e7dd8fb283baace376?recursive=1",
+      "https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/electrode_selections/clean_laplacian.json"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": "quickstart.ipynb",
+          "url": "https://braintreebank.dev/data/quickstart.ipynb",
+          "bytes": "1377029",
+          "etag": "\"150305-62d58becde2d0\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"150305-62d58becde2d0\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/1",
+        "recorded_fields": {
+          "name": "localization.zip",
+          "url": "https://braintreebank.dev/data/localization.zip",
+          "bytes": "453364",
+          "etag": "\"6eaf4-61aa3486b3361\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"6eaf4-61aa3486b3361\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/2",
+        "recorded_fields": {
+          "name": "subject_timings.zip",
+          "url": "https://braintreebank.dev/data/subject_timings.zip",
+          "bytes": "36636034",
+          "etag": "\"22f0582-61a91152993ed\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"22f0582-61a91152993ed\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/3",
+        "recorded_fields": {
+          "name": "subject_metadata.zip",
+          "url": "https://braintreebank.dev/data/subject_metadata.zip",
+          "bytes": "7944",
+          "etag": "\"1f08-61f4a4653557c\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"1f08-61f4a4653557c\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/4",
+        "recorded_fields": {
+          "name": "electrode_labels.zip",
+          "url": "https://braintreebank.dev/data/electrode_labels.zip",
+          "bytes": "7917",
+          "etag": "\"1eed-61a478c40d894\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"1eed-61a478c40d894\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/5",
+        "recorded_fields": {
+          "name": "speaker_annotations.zip",
+          "url": "https://braintreebank.dev/data/speaker_annotations.zip",
+          "bytes": "839348",
+          "etag": "\"cceb4-61a7d81599bef\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"cceb4-61a7d81599bef\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/6",
+        "recorded_fields": {
+          "name": "scene_annotations.zip",
+          "url": "https://braintreebank.dev/data/scene_annotations.zip",
+          "bytes": "3864630",
+          "etag": "\"3af836-61aa482882806\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"3af836-61aa482882806\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/7",
+        "recorded_fields": {
+          "name": "transcripts.zip",
+          "url": "https://braintreebank.dev/data/transcripts.zip",
+          "bytes": "480207996",
+          "etag": "\"1c9f647c-627b5b6e716bb\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"1c9f647c-627b5b6e716bb\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/8",
+        "recorded_fields": {
+          "name": "trees.zip",
+          "url": "https://braintreebank.dev/data/trees.zip",
+          "bytes": "3732468",
+          "etag": "\"38f3f4-61aaa44d903d0\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"38f3f4-61aaa44d903d0\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/9",
+        "recorded_fields": {
+          "name": "sub_1_trial000.h5.zip",
+          "url": "https://braintreebank.dev/data/subject_data/sub_1/trial000/sub_1_trial000.h5.zip",
+          "bytes": "4710171255",
+          "etag": "\"118bf8277-61a6e7bd12ec9\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"118bf8277-61a6e7bd12ec9\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/10",
+        "recorded_fields": {
+          "name": "sub_1_trial001.h5.zip",
+          "url": "https://braintreebank.dev/data/subject_data/sub_1/trial001/sub_1_trial001.h5.zip",
+          "bytes": "6993438576",
+          "etag": "\"1a0d76770-61a6e84250a37\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"1a0d76770-61a6e84250a37\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/11",
+        "recorded_fields": {
+          "name": "sub_1_trial002.h5.zip",
+          "url": "https://braintreebank.dev/data/subject_data/sub_1/trial002/sub_1_trial002.h5.zip",
+          "bytes": "5045465387",
+          "etag": "\"12cbbb12b-61a6e8a166ad7\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"12cbbb12b-61a6e8a166ad7\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/12",
+        "recorded_fields": {
+          "name": "movie_frames.zip",
+          "url": "https://braintreebank.dev/data/movie_frames.zip",
+          "bytes": "168251769",
+          "etag": "\"a075179-62a9cedd46c6b\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"a075179-62a9cedd46c6b\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/13",
+        "recorded_fields": {
+          "name": "corrupted_elec.json",
+          "url": "https://braintreebank.dev/data/corrupted_elec.json",
+          "bytes": "1390",
+          "etag": "\"56e-62b9e0f6296b7\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"56e-62b9e0f6296b7\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/0",
+        "recorded_fields": {
+          "path": "pretrained_models/chans_chans.ckpt",
+          "sha": "51e89a0eedc5cfbd4413aafa0e155a6e39f39004",
+          "size": 3538414,
+          "url": "https://api.github.com/repos/ShanechiLab/BaRISTA/git/blobs/51e89a0eedc5cfbd4413aafa0e155a6e39f39004"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/1",
+        "recorded_fields": {
+          "path": "pretrained_models/lobes_chans.ckpt",
+          "sha": "022445918a1efd16a5898018d03de8c6f2f974c6",
+          "size": 3389478,
+          "url": "https://api.github.com/repos/ShanechiLab/BaRISTA/git/blobs/022445918a1efd16a5898018d03de8c6f2f974c6"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/2",
+        "recorded_fields": {
+          "path": "pretrained_models/parcels_chans.ckpt",
+          "sha": "0055bd4fe4d8655a648b97287ec90c38b0f99eba",
+          "size": 3415452,
+          "url": "https://api.github.com/repos/ShanechiLab/BaRISTA/git/blobs/0055bd4fe4d8655a648b97287ec90c38b0f99eba"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/0",
+        "recorded_fields": {
+          "name": "quickstart.ipynb",
+          "url": "https://braintreebank.dev/data/quickstart.ipynb",
+          "bytes": "1377029",
+          "etag": "\"150305-62d58becde2d0\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"150305-62d58becde2d0\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/1",
+        "recorded_fields": {
+          "name": "localization.zip",
+          "url": "https://braintreebank.dev/data/localization.zip",
+          "bytes": "453364",
+          "etag": "\"6eaf4-61aa3486b3361\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"6eaf4-61aa3486b3361\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/2",
+        "recorded_fields": {
+          "name": "subject_timings.zip",
+          "url": "https://braintreebank.dev/data/subject_timings.zip",
+          "bytes": "36636034",
+          "etag": "\"22f0582-61a91152993ed\""
+        },
+        "checksum_fields_as_recorded": {
+          "etag": "\"22f0582-61a91152993ed\""
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/1/files/representative_files/0",
+        "recorded_fields": {
+          "path": "pretrained_models/chans_chans.ckpt",
+          "sha": "51e89a0eedc5cfbd4413aafa0e155a6e39f39004",
+          "size": 3538414,
+          "url": "https://api.github.com/repos/ShanechiLab/BaRISTA/git/blobs/51e89a0eedc5cfbd4413aafa0e155a6e39f39004"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/1/files/representative_files/1",
+        "recorded_fields": {
+          "path": "pretrained_models/lobes_chans.ckpt",
+          "sha": "022445918a1efd16a5898018d03de8c6f2f974c6",
+          "size": 3389478,
+          "url": "https://api.github.com/repos/ShanechiLab/BaRISTA/git/blobs/022445918a1efd16a5898018d03de8c6f2f974c6"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-replacement-008"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/1/files/representative_files/2",
+        "recorded_fields": {
+          "path": "pretrained_models/parcels_chans.ckpt",
+          "sha": "0055bd4fe4d8655a648b97287ec90c38b0f99eba",
+          "size": 3415452,
+          "url": "https://api.github.com/repos/ShanechiLab/BaRISTA/git/blobs/0055bd4fe4d8655a648b97287ec90c38b0f99eba"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-replacement-008"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "BrainTreebank intracranial movie recordings with supplied channel/parcel/lobe checkpoints.",
+      "data_urls": [
+        "https://braintreebank.dev/",
+        "https://api.github.com/repos/ShanechiLab/BaRISTA/git/trees/83b27375eba60e9eba9da4e7dd8fb283baace376?recursive=1",
+        "https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/electrode_selections/clean_laplacian.json"
+      ],
+      "input_version": null,
+      "input_inventory_or_loader_evidence": [
+        {
+          "metadata_url": "https://braintreebank.dev/",
+          "version": "Unversioned author website; retrieved2026-10-29, HEAD Last-Modified and ETags recorded for sampled assets.",
+          "license": "CC BY4.0 on original author website; secondary mirror terms are not substituted.",
+          "files": {
+            "listed_file_count": 14,
+            "representative_files": [
+              {
+                "name": "quickstart.ipynb",
+                "url": "https://braintreebank.dev/data/quickstart.ipynb",
+                "http_status": 200,
+                "bytes": "1377029",
+                "etag": "\"150305-62d58becde2d0\"",
+                "last_modified": "Tue, 04 Feb 2025 22:44:01 GMT"
+              },
+              {
+                "name": "localization.zip",
+                "url": "https://braintreebank.dev/data/localization.zip",
+                "http_status": 200,
+                "bytes": "453364",
+                "etag": "\"6eaf4-61aa3486b3361\"",
+                "last_modified": "Tue, 11 Jun 2024 20:40:57 GMT"
+              },
+              {
+                "name": "subject_timings.zip",
+                "url": "https://braintreebank.dev/data/subject_timings.zip",
+                "http_status": 200,
+                "bytes": "36636034",
+                "etag": "\"22f0582-61a91152993ed\"",
+                "last_modified": "Mon, 10 Jun 2024 22:58:07 GMT"
+              }
+            ],
+            "limit": "Inventory examples; not payload/schema qualification."
+          },
+          "full_author_link_manifest": {
+            "detail_in_source_record": true,
+            "kind": "list"
+          },
+          "role": "Actual intracranial HDF5 movie recordings plus transcript features, timing, localization and electrode metadata; not plot outputs.",
+          "files_downloaded": false
+        },
+        {
+          "metadata_url": "https://api.github.com/repos/ShanechiLab/BaRISTA/git/trees/83b27375eba60e9eba9da4e7dd8fb283baace376?recursive=1",
+          "role": "Author pretrained model files stored as ordinary Git blobs; not downloaded.",
+          "files": {
+            "listed_file_count": 3,
+            "representative_files": [
+              {
+                "path": "pretrained_models/chans_chans.ckpt",
+                "mode": "100644",
+                "type": "blob",
+                "sha": "51e89a0eedc5cfbd4413aafa0e155a6e39f39004",
+                "size": 3538414,
+                "url": "https://api.github.com/repos/ShanechiLab/BaRISTA/git/blobs/51e89a0eedc5cfbd4413aafa0e155a6e39f39004"
+              },
+              {
+                "path": "pretrained_models/lobes_chans.ckpt",
+                "mode": "100644",
+                "type": "blob",
+                "sha": "022445918a1efd16a5898018d03de8c6f2f974c6",
+                "size": 3389478,
+                "url": "https://api.github.com/repos/ShanechiLab/BaRISTA/git/blobs/022445918a1efd16a5898018d03de8c6f2f974c6"
+              },
+              {
+                "path": "pretrained_models/parcels_chans.ckpt",
+                "mode": "100644",
+                "type": "blob",
+                "sha": "0055bd4fe4d8655a648b97287ec90c38b0f99eba",
+                "size": 3415452,
+                "url": "https://api.github.com/repos/ShanechiLab/BaRISTA/git/blobs/0055bd4fe4d8655a648b97287ec90c38b0f99eba"
+              }
+            ],
+            "limit": "Inventory examples; not payload/schema qualification."
+          }
+        },
+        {
+          "metadata_url": "https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/electrode_selections/clean_laplacian.json",
+          "role": "Required author electrode selection; pinned upstream dependency."
+        }
+      ],
+      "source_bridge": "Reproduce the paper’s spatial-scale comparison for speech/sentence decoding from human intracranial recordings, finetuning supplied channel/parcel/lobe pretrained checkpoints on public BrainTreebank data.",
+      "code_url": "https://github.com/ShanechiLab/BaRISTA",
+      "code_revision_or_archive_version": "83b27375eba60e9eba9da4e7dd8fb283baace376",
+      "entrypoints": [
+        {
+          "path": "barista/prepare_segments.py",
+          "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/prepare_segments.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "barista/train.py",
+          "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/train.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "barista/config/braintreebank.yaml",
+          "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/config/braintreebank.yaml",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "barista/config/model.yaml",
+          "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/config/model.yaml",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "barista/config/train.yaml",
+          "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/config/train.yaml",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "barista/utility_scripts/run_finetune_folds.sh",
+          "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/run_finetune_folds.sh",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "barista/utility_scripts/run_finetune_random_splits.sh",
+          "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/run_finetune_random_splits.sh",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "barista/utility_scripts/aggregate_runs.py",
+          "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/aggregate_runs.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        }
+      ],
+      "missing_core_inputs_as_recorded": [
+        "Published code primarily supports finetuning provided checkpoints, not a claim to retrain the whole pretraining process.",
+        "Random nonoverlap and chronological settings have distinct force_nonoverlap values; mixed settings can invalidate splits.",
+        "Source setup.py asks for README.md while actual file uses different case; case-sensitive installation may need a documented packaging repair.",
+        "BrainTreebank is also used by PopulationTransformer and other candidates; group overlapping subjects/movies across benchmark partitions.",
+        "Unversioned data endpoints require content hashes when acquired; HEAD metadata is an availability check, not integrity validation."
+      ],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-replacement-008",
+        "versions_and_loader_contract": {
+          "scope_description": "Reproduce the paper’s spatial-scale comparison for speech/sentence decoding from human intracranial recordings, finetuning supplied channel/parcel/lobe pretrained checkpoints on public BrainTreebank data.",
+          "unresolved_coverage": [
+            "Published code primarily supports finetuning provided checkpoints, not a claim to retrain the whole pretraining process.",
+            "Random nonoverlap and chronological settings have distinct force_nonoverlap values; mixed settings can invalidate splits.",
+            "Source setup.py asks for README.md while actual file uses different case; case-sensitive installation may need a documented packaging repair.",
+            "BrainTreebank is also used by PopulationTransformer and other candidates; group overlapping subjects/movies across benchmark partitions.",
+            "Unversioned data endpoints require content hashes when acquired; HEAD metadata is an availability check, not integrity validation."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/ShanechiLab/BaRISTA",
+    "revision_or_archive_version": "83b27375eba60e9eba9da4e7dd8fb283baace376",
+    "entrypoints": [
+      {
+        "path": "barista/prepare_segments.py",
+        "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/prepare_segments.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "barista/train.py",
+        "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/train.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "barista/config/braintreebank.yaml",
+        "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/config/braintreebank.yaml",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "barista/config/model.yaml",
+        "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/config/model.yaml",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "barista/config/train.yaml",
+        "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/config/train.yaml",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "barista/utility_scripts/run_finetune_folds.sh",
+        "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/run_finetune_folds.sh",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "barista/utility_scripts/run_finetune_random_splits.sh",
+        "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/run_finetune_random_splits.sh",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "barista/utility_scripts/aggregate_runs.py",
+        "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/aggregate_runs.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-replacement-008",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/ShanechiLab/BaRISTA",
+            "commit": "83b27375eba60e9eba9da4e7dd8fb283baace376",
+            "author_linkage": [
+              "https://openreview.net/forum?id=LDjBDk3Czb",
+              "https://github.com/ShanechiLab/BaRISTA"
+            ],
+            "license": [
+              "USC code license permits educational/research/nonprofit use, copying and modification; commercial use needs separate permission.",
+              "BrainTreebank original-site CC BY4.0; use appropriate recording privacy safeguards and release terms."
+            ],
+            "snapshot_evidence": "GitHub commit and recursive tree metadata inspected; author README and selected source files read as text.",
+            "file_tree": {
+              "paths": [
+                "barista/prepare_segments.py",
+                "barista/train.py",
+                "barista/config/braintreebank.yaml",
+                "barista/config/model.yaml",
+                "barista/config/train.yaml",
+                "barista/utility_scripts/run_finetune_folds.sh",
+                "barista/utility_scripts/run_finetune_random_splits.sh",
+                "barista/utility_scripts/aggregate_runs.py"
+              ]
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "barista/prepare_segments.py",
+              "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/prepare_segments.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "barista/train.py",
+              "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/train.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "barista/config/braintreebank.yaml",
+              "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/config/braintreebank.yaml",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "barista/config/model.yaml",
+              "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/config/model.yaml",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "barista/config/train.yaml",
+              "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/config/train.yaml",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "barista/utility_scripts/run_finetune_folds.sh",
+              "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/run_finetune_folds.sh",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "barista/utility_scripts/run_finetune_random_splits.sh",
+              "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/run_finetune_random_splits.sh",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "barista/utility_scripts/aggregate_runs.py",
+              "url": "https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/aggregate_runs.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            }
+          ],
+          "dependencies": [
+            "Python>=3.8",
+            "PyTorch",
+            "NumPy",
+            "OmegaConf",
+            "scikit-learn",
+            "h5py"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "recorded_terms": [
+        "USC code license permits educational/research/nonprofit use, copying and modification; commercial use needs separate permission.",
+        "BrainTreebank original-site CC BY4.0; use appropriate recording privacy safeguards and release terms."
+      ],
+      "record_conflicts": [],
+      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
+      "overlap_group": "braintreebank-human-movie-ieeg"
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "central_outputs_in_saved_source_contract": [
+        "Per-subject ROC-AUC and multi-seed aggregate for channel-, parcel- and lobe-level models under the same nonoverlapping train/validation/test windows.",
+        "Reproduce chronological-fold sensitivity for speech/sentence tasks and distinguish it from random-split performance."
+      ],
+      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
+      "missing_or_unfrozen_endpoint_details": "Finetuning spatial-scale comparison is supported; whole pretraining reconstruction is not. Source installation case mismatch and force_nonoverlap configurations need qualification."
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Hold source checkpoint exposure, windows, movie identities, labels and training budgets equal. Random nonoverlap and chronological folds are not interchangeable generalization claims."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Finetuning spatial-scale comparison is supported; whole pretraining reconstruction is not. Source installation case mismatch and force_nonoverlap configurations need qualification.",
+        "Hold source checkpoint exposure, windows, movie identities, labels and training budgets equal. Random nonoverlap and chronological folds are not interchangeable generalization claims.",
+        "Published code primarily supports finetuning provided checkpoints, not a claim to retrain the whole pretraining process.",
+        "Random nonoverlap and chronological settings have distinct force_nonoverlap values; mixed settings can invalidate splits.",
+        "Source setup.py asks for README.md while actual file uses different case; case-sensitive installation may need a documented packaging repair.",
+        "BrainTreebank is also used by PopulationTransformer and other candidates; group overlapping subjects/movies across benchmark partitions.",
+        "Unversioned data endpoints require content hashes when acquired; HEAD metadata is an availability check, not integrity validation.",
+        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+        "Execute and independently audit references, controls, grading and measured resources.",
+        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
+      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve spatial-scale pooling or cross-subject robustness with matched checkpoints, labels, folds and training budget; report chronological robustness."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "independent_panel_not_established_in_inspected_evidence",
+      "proposed_improvement": [
+        "Improve spatial-scale pooling or cross-subject robustness with matched checkpoints, labels, folds and training budget; report chronological robustness."
+      ],
+      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
+      "special_gate": "No completed independent improvement result is established here."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": "GPU finetuning; public corpus approximately130GB compressed; one subject’s three recordings16.75GB compressed. Checkpoints approximately3.4MB each.",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "holds": {
+    "task_specific": [
+      "Finetuning spatial-scale comparison is supported; whole pretraining reconstruction is not. Source installation case mismatch and force_nonoverlap configurations need qualification.",
+      "Hold source checkpoint exposure, windows, movie identities, labels and training budgets equal. Random nonoverlap and chronological folds are not interchangeable generalization claims.",
+      "Published code primarily supports finetuning provided checkpoints, not a claim to retrain the whole pretraining process.",
+      "Random nonoverlap and chronological settings have distinct force_nonoverlap values; mixed settings can invalidate splits.",
+      "Source setup.py asks for README.md while actual file uses different case; case-sensitive installation may need a documented packaging repair.",
+      "BrainTreebank is also used by PopulationTransformer and other candidates; group overlapping subjects/movies across benchmark partitions.",
+      "Unversioned data endpoints require content hashes when acquired; HEAD metadata is an availability check, not integrity validation.",
+      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+      "Execute and independently audit references, controls, grading and measured resources.",
+      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Freeze one complete spatial-scale/chronological contrast with explicit pretraining exposure and person/movie grouping, then resolve bounded recording access and packaging repair.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Freeze one complete spatial-scale/chronological contrast with explicit pretraining exposure and person/movie grouping, then resolve bounded recording access and packaging repair.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "24b8ba67dc38794a3aaf977554ccc4d83f440d7e6de4287fa5f6fafa86c82e1f",
+    "audit_record_sha256": "f68093fe290495c64110b4a59ac23a3208e3ba8ef232a8f92de46994019b5ec5",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-replacement-008",
+        "declared_record_sha256": "998e7429efaca48c8641fbc77e96621e3f88801cb5fa696dfd8dab9fd7187b77",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 70,
+        "record_sha256": "998e7429efaca48c8641fbc77e96621e3f88801cb5fa696dfd8dab9fd7187b77"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-FIND-ADD-005",
+  "source_id": "FIND-ADD-005",
+  "track": "paper",
+  "title": "Encoding of cerebellar dentate neuron activity during visual attention in rhesus macaques",
+  "status": "specification_only",
+  "canonical_position_one_based": 42,
+  "paper_identity": {
+    "url": "https://elifesciences.org/articles/99696",
+    "publication_year": 2025,
+    "venue": "eLife"
+  },
+  "primary_outputs": [
+    "Cerebellar dentate neuron encoding of attention/task variables with trial-level GLMs.",
+    "Neural prediction of behavioral outcomes and history effects, using alternative regularization and trial-block validation."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://datadryad.org/dataset/doi:10.5061/dryad.1rn8pk14s"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/input_inventory/0",
+        "recorded_fields": {
+          "path": "cells4.2.mat.zip",
+          "size": 3746767946,
+          "digest": "6d4cd404b065f78557d62314d7868d8068528e19df74417ed67e7e96262c064c",
+          "mimeType": "application/x-zip-compressed"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "6d4cd404b065f78557d62314d7868d8068528e19df74417ed67e7e96262c064c"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "source_record_id": "FIND-ADD-005"
+      },
+      {
+        "json_pointer": "/input_inventory/1",
+        "recorded_fields": {
+          "path": "README.md",
+          "size": 3570,
+          "digest": "58ea80f923564a68a8a01fdcf331755e835ae903eaa2cb6a366f662828092632",
+          "mimeType": "text/markdown"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "58ea80f923564a68a8a01fdcf331755e835ae903eaa2cb6a366f662828092632"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "source_record_id": "FIND-ADD-005"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "assessment": "Dryad340611 cells4.2.mat.zip holds units/trials/spikes/events/eye data from2macaques; convertToGLMData explicitly converts spike times to ms and bundled neuroGLM/matRegress serve the author fits.",
+      "official_code": {
+        "url": "https://github.com/sakoay/ErasmusAttn_2020",
+        "commit_or_version": "130f5e64f86bd63980f70bb839c02cd264782aef",
+        "additional_full_analysis_code": null
+      },
+      "input_routes": [
+        {
+          "url": "https://datadryad.org/dataset/doi:10.5061/dryad.1rn8pk14s",
+          "version": "340611"
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-ADD-005",
+        "versions_and_loader_contract": {
+          "input_version": "340611",
+          "input_code_bridge": "Dryad cells4.2.mat.zip is a trial/unit-level release with spikes, events and eye movements from two macaques. convertToGLMData maps these data into an experiment design, explicitly converting spike times to milliseconds; fitSingleCellGLM and behavioral fits consume that design. neuroGLM/matRegress are bundled in the pinned tree.",
+          "readiness_scope": "Only the listed substantial empirical analyses are artifact-ready for an attempt. This is not whole-paper reproduction, environment qualification, or scientific validation.",
+          "missing_core_inputs": []
+        },
+        "data_section_locators": [
+          "input_inventory",
+          "data_manifest",
+          "input_version",
+          "input_code_bridge"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/sakoay/ErasmusAttn_2020",
+    "revision_or_archive_version": "130f5e64f86bd63980f70bb839c02cd264782aef",
+    "entrypoints": [
+      "convertToGLMData.m",
+      "fitSingleCellGLM.m",
+      "fitBehaviorData.m",
+      "CategorizedModel.m"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-ADD-005",
+        "recorded": {
+          "code_url": "https://github.com/sakoay/ErasmusAttn_2020",
+          "code_revision": "130f5e64f86bd63980f70bb839c02cd264782aef",
+          "entrypoints": [
+            "convertToGLMData.m",
+            "fitSingleCellGLM.m",
+            "fitBehaviorData.m",
+            "CategorizedModel.m"
+          ],
+          "dependencies": [
+            "MATLAB",
+            "Bundled neuroGLM/matRegress; remaining toolbox versions need environment qualification"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": {
+        "data": "Dryad public release; CC0 per Dryad default terms (https://datadryad.org/terms), confirm any explicitly stated component restrictions.",
+        "code_license_observed_excerpt": "Attribution 4.0 International\n\n=======================================================================\n\nCreative Commons Corporation (\"Creative Commons\") is not a law firm and\ndoes"
+      },
+      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "recorded_central_outputs": [
+        "Cerebellar dentate neuron encoding of attention/task variables with trial-level GLMs.",
+        "Neural prediction of behavioral outcomes and history effects, using alternative regularization and trial-block validation."
+      ],
+      "assessment": "Trial-level dentate GLM attention/task encoding is supported; exact paper contrast, full coefficient table and direct behavioral-prediction scope need selection.",
+      "status": "documented_scoped_proposal_not_numeric_qualification",
+      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Match temporal bins, nuisance regressors, regularization and trial definitions. Attention-associated coefficients do not demonstrate causal attention control or exclude impending movement.",
+      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Two macaques; neurons/trials do not establish population-wide generalization.",
+        "Attention encoding is not causal attention control.",
+        "MATLAB path/toolbox setup and complete runtime dependencies remain unexecuted.",
+        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_project_reference_run_evidence_found",
+      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Proposed: Compare richer eye-movement/history nuisance models and cross-session validation; distinguish attention signals from impending movement."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_frozen_or_run",
+      "proposed_panel": "Session/trial-block assessment and richer eye/history nuisance models are feasible; two animals do not support strong population-generalization claims.",
+      "retained_roster_proposal": [
+        "Proposed: Compare richer eye-movement/history nuisance models and cross-session validation; distinguish attention signals from impending movement."
+      ],
+      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_resource_statement": {
+      "estimate": "3.75 GB inputs; CPU workstation, hours to days for GLM cross-validation, estimated.",
+      "basis": "Static source and archive metadata inspection; estimate, not measured."
+    },
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": {
+      "estimate": "3.75 GB inputs; CPU workstation, hours to days for GLM cross-validation, estimated.",
+      "basis": "Static source and archive metadata inspection; estimate, not measured."
+    }
+  },
+  "holds": {
+    "task_specific": [
+      "Two macaques; neurons/trials do not establish population-wide generalization.",
+      "Attention encoding is not causal attention control.",
+      "MATLAB path/toolbox setup and complete runtime dependencies remain unexecuted.",
+      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Bind one central attention contrast to trial/event/eye fields and freeze a block split and complete author GLM dependencies, then validate timestamp/design-matrix assembly before fitting.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Bind one central attention contrast to trial/event/eye fields and freeze a block split and complete author GLM dependencies, then validate timestamp/design-matrix assembly before fitting.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "513f7ba7839f73833fc23531fe6f2d13515216ed6b876113faf1c1d95212d7a0",
+    "audit_record_sha256": "062fa8e7d57f328ce56bb7dee48572b5fae8ad2b17e1f811a744d0831b53e968",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+          "bytes": 1654641,
+          "sha256": "3782e843842fd2848b653253a23db84053308427ce3b3246a918644f2e25fe3a"
+        },
+        "record_id": "FIND-ADD-005",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 54,
+        "record_sha256": "4ff8892a6c33b61c8b42e5c70ee3cf8a735119b6655b984ff67c6fb612ce48c6"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-FIND-ADD-005",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

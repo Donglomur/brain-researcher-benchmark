@@ -1,0 +1,382 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-replacement-005",
+  "source_id": "paper-method-replacement-005",
+  "track": "paper",
+  "title": "Neural Encoding and Decoding at Scale",
+  "status": "specification_only",
+  "canonical_position_one_based": 57,
+  "paper_identity": {
+    "url": "https://proceedings.mlr.press/v267/zhang25bw.html",
+    "publication_year": 2025,
+    "venue": "ICML"
+  },
+  "primary_outputs": [
+    "Neural prediction bits/spike and behavioral decoding R²/accuracy by session for author multitask model versus task-specific masking/training baselines.",
+    "Quantify held-out-session transfer and the trade-off between neural encoding and behavior decoding under explicit input masks."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://openalyx.internationalbrainlab.org"
+    ],
+    "exact_asset_records": [],
+    "lineage_and_loader_evidence": {
+      "assessment": "NEDS61d2ef… official ONE loader and train/test session lists identify IBL repeated-site recordings; exact recording revisions/hashes remain materialization gates.",
+      "official_code": {
+        "url": "https://github.com/yzhang511/NEDS",
+        "commit": "61d2ef65556dbbc2b828d542f19bd4e7134c92f3",
+        "license": [
+          "Code MIT; IBL public release terms apply to recording data; snapshot-specific licensing to be preserved at acquisition."
+        ]
+      },
+      "input_routes": [
+        {
+          "metadata_url": "https://openalyx.internationalbrainlab.org",
+          "version": "Session membership pinned to NEDS commit; dataset revision/hash still must be frozen at acquisition."
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-replacement-005",
+        "versions_and_loader_contract": {
+          "scope_description": "Reproduce multi-task neural/behavioral encoding and decoding on the paper’s public IBL repeated-site sessions, including multi-task versus single-task masking comparisons and held-out-session finetuning.",
+          "unresolved_coverage": [
+            "Exact ONE release hash/file manifest must be frozen before numerical reference qualification; author loader and exact session IDs are present.",
+            "README/cohort counts and paper totals differ; use versioned membership lists and document exclusions, not a guessed count.",
+            "Masked target neural or behavior information must not become visible via other variables; enforce task-specific masks and trial/session holdout.",
+            "Partial cohort experiments are declared bounded projects and cannot substitute for all aggregate paper claims."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/yzhang511/NEDS",
+    "revision_or_archive_version": "61d2ef65556dbbc2b828d542f19bd4e7134c92f3",
+    "entrypoints": [
+      {
+        "path": "src/prepare_data.py",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/prepare_data.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "src/utils/ibl_data_utils.py",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/utils/ibl_data_utils.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "script/prepare_data.sh",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/script/prepare_data.sh",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "script/train.sh",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/script/train.sh",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "script/eval.sh",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/script/eval.sh",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "src/train.py",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/train.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "src/eval.py",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/eval.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "data/train_eids.txt",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/data/train_eids.txt",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "data/test_eids.txt",
+        "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/data/test_eids.txt",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-replacement-005",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/yzhang511/NEDS",
+            "commit": "61d2ef65556dbbc2b828d542f19bd4e7134c92f3",
+            "author_linkage": [
+              "https://proceedings.mlr.press/v267/zhang25bw.html",
+              "https://github.com/yzhang511/NEDS"
+            ],
+            "license": [
+              "Code MIT; IBL public release terms apply to recording data; snapshot-specific licensing to be preserved at acquisition."
+            ],
+            "snapshot_evidence": "GitHub commit and recursive tree metadata inspected; author README and selected source files read as text.",
+            "file_tree": {
+              "paths": [
+                "src/prepare_data.py",
+                "src/utils/ibl_data_utils.py",
+                "script/prepare_data.sh",
+                "script/train.sh",
+                "script/eval.sh",
+                "src/train.py",
+                "src/eval.py",
+                "data/train_eids.txt",
+                "data/test_eids.txt"
+              ]
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "src/prepare_data.py",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/prepare_data.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "src/utils/ibl_data_utils.py",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/utils/ibl_data_utils.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "script/prepare_data.sh",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/script/prepare_data.sh",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "script/train.sh",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/script/train.sh",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "script/eval.sh",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/script/eval.sh",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "src/train.py",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/train.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "src/eval.py",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/eval.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "data/train_eids.txt",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/data/train_eids.txt",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "data/test_eids.txt",
+              "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/data/test_eids.txt",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            }
+          ],
+          "dependencies": [
+            "Python",
+            "PyTorch",
+            "ONE-api",
+            "ibllib",
+            "datasets",
+            "Hydra",
+            "accelerate"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": [
+        "Code MIT; IBL public release terms apply to recording data; snapshot-specific licensing to be preserved at acquisition."
+      ],
+      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "recorded_central_outputs": [
+        "Neural prediction bits/spike and behavioral decoding R²/accuracy by session for author multitask model versus task-specific masking/training baselines.",
+        "Quantify held-out-session transfer and the trade-off between neural encoding and behavior decoding under explicit input masks."
+      ],
+      "assessment": "Multitask versus task-specific masking/decoding and held-out-session finetuning are documented; full aggregate cohort totals differ across paper/README.",
+      "status": "documented_scoped_proposal_not_numeric_qualification",
+      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Behavior/neural targets may leak through another task input; task-specific mask auditing is central. RRR/BrainWide projects can share IBL sessions and are not independent cohorts.",
+      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Exact ONE release hash/file manifest must be frozen before numerical reference qualification; author loader and exact session IDs are present.",
+        "README/cohort counts and paper totals differ; use versioned membership lists and document exclusions, not a guessed count.",
+        "Masked target neural or behavior information must not become visible via other variables; enforce task-specific masks and trial/session holdout.",
+        "Partial cohort experiments are declared bounded projects and cannot substitute for all aggregate paper claims.",
+        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_project_reference_run_evidence_found",
+      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve cross-session generalization or Pareto performance across neural and behavioral tasks while matching inputs, session identities and training compute."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_frozen_or_run",
+      "proposed_panel": "Whole-session holdout with explicit task masks and matched supervised/finetuning budgets; compare Pareto neural/behavior metrics, not an average hiding trade-offs.",
+      "retained_roster_proposal": [
+        "Improve cross-session generalization or Pareto performance across neural and behavioral tasks while matching inputs, session identities and training compute."
+      ],
+      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_resource_statement": "GPU. Author paper reports16RTX8000(48GB)GPUs for full pretraining under2days and a singleA40 under2h for single-session training; these are author reports, not measurements.",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Unmeasured planning estimate unless an author-reported figure is separately stated."
+  },
+  "holds": {
+    "task_specific": [
+      "Exact ONE release hash/file manifest must be frozen before numerical reference qualification; author loader and exact session IDs are present.",
+      "README/cohort counts and paper totals differ; use versioned membership lists and document exclusions, not a guessed count.",
+      "Masked target neural or behavior information must not become visible via other variables; enforce task-specific masks and trial/session holdout.",
+      "Partial cohort experiments are declared bounded projects and cannot substitute for all aggregate paper claims.",
+      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Cross-check exact session lists/exclusions and field masks against the paper, select a declared cohort preserving central multitask comparisons, then freeze source assets and baseline compute before training.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Cross-check exact session lists/exclusions and field masks against the paper, select a declared cohort preserving central multitask comparisons, then freeze source assets and baseline compute before training.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "fd24b1dd39124c142c4e103e7fc0f3dbc46409afcc6fc2da3f20a6033a62ba80",
+    "audit_record_sha256": "1b3b9162436013dfba06ec30a0a9be83a87a9c123b6888b901b7679dec910818",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-replacement-005",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 69,
+        "record_sha256": "657b2481913233e1e5393bad4e0c90c15ff0060bce09af9f48d8e5fb47769dea"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-paper-method-replacement-005",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

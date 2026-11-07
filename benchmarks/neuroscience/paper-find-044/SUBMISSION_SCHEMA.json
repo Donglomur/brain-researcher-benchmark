@@ -1,0 +1,433 @@
+{
+  "schema_version": 1,
+  "candidate_id": "PAPER-FIND-044",
+  "method_profile": "source_compatible_eghk_v1",
+  "status": "candidate_schema_projection_proposal_not_materialized",
+  "header": [
+    "schema_version",
+    "candidate_id",
+    "input_manifest_sha256",
+    "method_profile"
+  ],
+  "tables": {
+    "session_audit": {
+      "columns": [
+        "asset_id",
+        "cutoff_applied",
+        "source_cue_count_before",
+        "cue_count_after_cutoff",
+        "removed_event_count",
+        "status"
+      ],
+      "identity_columns": [
+        "asset_id"
+      ],
+      "container": {
+        "columns": "exact listed columns",
+        "rows": "complete rows; arbitrary order"
+      }
+    },
+    "trials": {
+      "columns": [
+        "asset_id",
+        "source_cue_ordinal",
+        "state",
+        "baseline_licks",
+        "anticipatory_licks",
+        "consumption_licks",
+        "normalized_count",
+        "rate_hz",
+        "actual_duration_s",
+        "original_ITI_s",
+        "retained_index",
+        "cumulative_normalized_count"
+      ],
+      "identity_columns": [
+        "asset_id",
+        "source_cue_ordinal"
+      ],
+      "container": {
+        "columns": "exact listed columns",
+        "rows": "complete rows; arbitrary order"
+      }
+    },
+    "daily": {
+      "columns": [
+        "mouse_id",
+        "day",
+        "retained_trials",
+        "mean_rate_hz",
+        "meets_threshold",
+        "status"
+      ],
+      "identity_columns": [
+        "mouse_id",
+        "day"
+      ],
+      "container": {
+        "columns": "exact listed columns",
+        "rows": "complete rows; arbitrary order"
+      }
+    },
+    "mice": {
+      "columns": [
+        "mouse_id",
+        "mouse_status",
+        "raw_trials",
+        "retained_trials",
+        "capped_trials",
+        "first_consumption_ordinal",
+        "learner_status",
+        "is_learner",
+        "g_status",
+        "learned_trial",
+        "h_status",
+        "time_to_learn_s",
+        "h_selected_rows",
+        "h_next_trial_present",
+        "k_status",
+        "k_trial_count",
+        "k_mean_rate_hz"
+      ],
+      "identity_columns": [
+        "mouse_id"
+      ],
+      "container": {
+        "columns": "exact listed columns",
+        "rows": "complete rows; arbitrary order"
+      }
+    },
+    "group_e": {
+      "columns": [
+        "condition",
+        "trial_index",
+        "contributing_mice",
+        "mean_rate_hz",
+        "sample_sd_hz",
+        "sem_hz",
+        "status"
+      ],
+      "identity_columns": [
+        "condition",
+        "trial_index"
+      ],
+      "container": {
+        "columns": "exact listed columns",
+        "rows": "complete rows; arbitrary order"
+      }
+    },
+    "group_endpoints": {
+      "columns": [
+        "panel",
+        "condition",
+        "included_mouse_ids",
+        "undefined_or_ineligible_mouse_statuses",
+        "n",
+        "mean",
+        "sample_sd",
+        "sem",
+        "status"
+      ],
+      "identity_columns": [
+        "panel",
+        "condition"
+      ],
+      "container": {
+        "columns": "exact listed columns",
+        "rows": "complete rows; arbitrary order"
+      }
+    },
+    "comparisons": {
+      "columns": [
+        "panel",
+        "sign_order",
+        "welch_status",
+        "difference",
+        "standard_error",
+        "t",
+        "welch_df",
+        "p_two_sided",
+        "F_status",
+        "F",
+        "F_numerator_condition",
+        "F_df1",
+        "F_df2",
+        "F_source_p"
+      ],
+      "identity_columns": [
+        "panel"
+      ],
+      "container": {
+        "columns": "exact listed columns",
+        "rows": "complete rows; arbitrary order"
+      }
+    }
+  },
+  "production_identity_counts": {
+    "sessions": 309,
+    "mice": 38,
+    "pre_cutoff_cues": 8679,
+    "group_e": 440,
+    "group_endpoints": 6,
+    "comparisons": 3
+  },
+  "payload_cap_bytes": 2500000,
+  "numeric_policy": "Finite JSON scalars; nulls only as allowed by explicit status. Invalid schema is distinct from finite inaccurate scientific results.",
+  "authoritative_validator": "Same reviewed source_compatible_eghk_v1 scoring profile; implementation and private reference remain outside the candidate view.",
+  "public_projection_note": "Retains schema, source identities and caps; removes the operator-computed post-cutoff trial count. Outcome-dependent eligibility, cutoff results and numerical answers are not supplied.",
+  "header_values": {
+    "schema_version": 1,
+    "candidate_id": "PAPER-FIND-044",
+    "method_profile": "source_compatible_eghk_v1",
+    "input_manifest_sha256": "5702f21519be3d6cb015e6046a197b24a074448b3ac41e6c8eb55f704faaf8b0"
+  },
+  "container_rules": {
+    "root": "Exactly the four header fields and seven named tables; no extra fields. Each table has exactly columns and rows. Columns are exact and ordered; row order is arbitrary.",
+    "identities": "Exactly the public contract identities once each. Trials are one-based source cue ordinals before cutoff. Daily identities are mouse/day combinations with day <= 8; split sessions share a daily identity.",
+    "eligibility_inventory": "For each endpoint/condition, included_mouse_ids and undefined_or_ineligible_mouse_statuses must form a disjoint complete partition of that condition's mice.",
+    "finite_numeric": "JSON int or float, not Boolean/string, convertible to finite float. Incorrect finite values remain scoreable.",
+    "unsigned_integer": "JSON int, not Boolean, in [0,1000000000].",
+    "signed_integer": "JSON int, not Boolean, in [-1000000000,1000000000].",
+    "strings": "Strict UTF-8 identity/status strings of 1 to 128 encoded bytes.",
+    "parser": "No duplicate JSON keys, nonfinite literals or invalid Unicode; nesting depth <=12, float token length <=128, integer token length <=32."
+  },
+  "field_type_rules": {
+    "session_audit": {
+      "Boolean": [
+        "cutoff_applied"
+      ],
+      "unsigned_integer": [
+        "source_cue_count_before",
+        "cue_count_after_cutoff",
+        "removed_event_count"
+      ]
+    },
+    "trials": {
+      "unsigned_integer": [
+        "baseline_licks",
+        "anticipatory_licks",
+        "consumption_licks",
+        "retained_index"
+      ],
+      "signed_integer": [
+        "normalized_count",
+        "cumulative_normalized_count"
+      ],
+      "finite_numeric": [
+        "rate_hz",
+        "actual_duration_s",
+        "original_ITI_s"
+      ]
+    },
+    "daily": {
+      "unsigned_integer": [
+        "day",
+        "retained_trials"
+      ],
+      "finite_numeric": [
+        "mean_rate_hz"
+      ],
+      "Boolean": [
+        "meets_threshold"
+      ]
+    },
+    "mice": {
+      "unsigned_integer": [
+        "raw_trials",
+        "retained_trials",
+        "capped_trials",
+        "k_trial_count",
+        "learned_trial",
+        "h_selected_rows"
+      ],
+      "unsigned_integer_or_null": [
+        "first_consumption_ordinal"
+      ],
+      "finite_numeric": [
+        "time_to_learn_s",
+        "k_mean_rate_hz"
+      ],
+      "Boolean": [
+        "is_learner",
+        "h_next_trial_present"
+      ]
+    },
+    "group_e": {
+      "unsigned_integer": [
+        "trial_index",
+        "contributing_mice"
+      ],
+      "finite_numeric": [
+        "mean_rate_hz",
+        "sample_sd_hz",
+        "sem_hz"
+      ]
+    },
+    "group_endpoints": {
+      "unsigned_integer": [
+        "n"
+      ],
+      "finite_numeric": [
+        "mean",
+        "sample_sd",
+        "sem"
+      ],
+      "list_of_unique_mouse_ids": [
+        "included_mouse_ids"
+      ],
+      "mouse_to_endpoint_status_map": [
+        "undefined_or_ineligible_mouse_statuses"
+      ]
+    },
+    "comparisons": {
+      "sign_order": "60s_minus_600s",
+      "finite_numeric": [
+        "difference",
+        "standard_error",
+        "t",
+        "welch_df",
+        "p_two_sided",
+        "F",
+        "F_source_p"
+      ],
+      "unsigned_integer": [
+        "F_df1",
+        "F_df2"
+      ],
+      "F_numerator_condition": [
+        "60s",
+        "600s"
+      ]
+    }
+  },
+  "status_and_null_rules": {
+    "session_audit.status": {
+      "allowed": [
+        "defined",
+        "unresolved"
+      ],
+      "numeric_fields": "All count fields remain integers under either status; cutoff_applied remains Boolean."
+    },
+    "trials.state": {
+      "allowed": [
+        "retained",
+        "prefix_removed",
+        "recording_cutoff_removed",
+        "unresolved"
+      ],
+      "retained": "All numeric fields have their declared types.",
+      "prefix_removed": "retained_index and cumulative_normalized_count are null; all other numeric fields remain present.",
+      "recording_cutoff_removed_or_unresolved": "Every field after state is null."
+    },
+    "daily.status": {
+      "allowed": [
+        "defined",
+        "no_retained_observations",
+        "unresolved"
+      ],
+      "defined": "mean_rate_hz finite and meets_threshold Boolean.",
+      "otherwise": "mean_rate_hz and meets_threshold null; retained_trials remains an integer."
+    },
+    "mice.mouse_status": {
+      "allowed": [
+        "defined",
+        "no_consumption_or_no_trials",
+        "unresolved"
+      ]
+    },
+    "mice.learner_status": {
+      "allowed": [
+        "defined",
+        "no_consumption_or_no_trials",
+        "no_day_le8_observations",
+        "unresolved"
+      ],
+      "defined": "is_learner Boolean.",
+      "otherwise": "is_learner null."
+    },
+    "mice.g_status": {
+      "allowed": [
+        "defined",
+        "not_source_learner",
+        "no_consumption_or_no_trials",
+        "no_window_observations",
+        "source_fallback_failed",
+        "undefined_source_calculation",
+        "change_point_undefined",
+        "unresolved"
+      ],
+      "defined": "learned_trial unsigned integer.",
+      "otherwise": "learned_trial null."
+    },
+    "mice.h_status": {
+      "allowed": [
+        "defined",
+        "not_source_learner",
+        "no_consumption_or_no_trials",
+        "no_window_observations",
+        "source_fallback_failed",
+        "undefined_source_calculation",
+        "change_point_undefined",
+        "unresolved"
+      ],
+      "defined": "time_to_learn_s finite, h_selected_rows integer, h_next_trial_present Boolean.",
+      "otherwise": "All three fields null."
+    },
+    "mice.k_status": {
+      "allowed": [
+        "defined",
+        "not_source_learner",
+        "no_consumption_or_no_trials",
+        "no_window_observations",
+        "source_fallback_failed",
+        "undefined_source_calculation",
+        "change_point_undefined",
+        "unresolved"
+      ],
+      "defined": "k_mean_rate_hz finite.",
+      "otherwise": "k_mean_rate_hz null. k_trial_count remains an integer."
+    },
+    "group_e.status_and_group_endpoints.status": {
+      "allowed": [
+        "defined",
+        "mean_only_n1",
+        "no_defined_observations",
+        "unresolved"
+      ],
+      "defined": "Mean, sample SD and SEM finite.",
+      "mean_only_n1": "Mean finite; sample SD and SEM null.",
+      "otherwise": "Mean, sample SD and SEM null. Contributing count remains an integer under every status."
+    },
+    "comparisons.welch_status": {
+      "allowed": [
+        "defined",
+        "insufficient_n",
+        "zero_standard_error_undefined",
+        "unresolved"
+      ],
+      "defined": "difference, standard_error, t, welch_df and p_two_sided finite.",
+      "zero_standard_error_undefined": "difference and standard_error finite; t, welch_df and p_two_sided null.",
+      "otherwise": "All five Welch numeric fields null."
+    },
+    "comparisons.F_status": {
+      "allowed": [
+        "defined",
+        "source_equal_variances_branch",
+        "zero_denominator_variance_undefined",
+        "insufficient_n",
+        "source_formula_outside_probability_range",
+        "unresolved"
+      ],
+      "defined_or_source_formula_outside_probability_range": "F and F_source_p finite, F_df1/F_df2 integers, F_numerator_condition 60s or 600s.",
+      "source_equal_variances_branch": "F and F_source_p finite; numerator condition and both degrees of freedom null.",
+      "otherwise": "All five F fields null."
+    },
+    "group_endpoints.undefined_or_ineligible_mouse_statuses": "Every mapped value must be one of the endpoint status strings above."
+  },
+  "null_rule_priority": "Status-specific null rules override the nonnull field-type list. Preserve all declared identities even when values are null. Arbitrary extra nulls are invalid.",
+  "agreement_diagnostic": {
+    "absolute_tolerance": 1e-08,
+    "relative_tolerance": 1e-07,
+    "meaning": "Numerical agreement diagnostics only, not an effect-size, significance or scientific-success threshold."
+  }
+}

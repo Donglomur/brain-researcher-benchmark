@@ -1,0 +1,320 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-034",
+  "source_id": "paper-method-034",
+  "track": "paper",
+  "title": "MARBLE: interpretable representations of neural population dynamics using geometric deep learning",
+  "status": "specification_only",
+  "canonical_position_one_based": 54,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41592-024-02582-2",
+    "publication_year": 2025,
+    "venue": "Nature Methods"
+  },
+  "primary_outputs": [
+    "Held-out position MAE against CEBRA-time/behavior; cross-animal consistency and preprocessing-sensitivity outputs."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://dataverse.harvard.edu/api/access/datafile/7609512"
+    ],
+    "exact_asset_records": [],
+    "lineage_and_loader_evidence": {
+      "assessment": "Official rat_hippocampus notebook directly downloads rat_data.pkl from immutable Dataversefile7609512 and refits MARBLE/CEBRA; decoding notebook documents training-only preprocessing.",
+      "official_code": {
+        "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE",
+        "commit": "09491ec077bf153b7dece8518cc65ddaa20eb26d"
+      },
+      "input_routes": [
+        {
+          "url": "https://dataverse.harvard.edu/api/access/datafile/7609512",
+          "version": "Dataverse immutable file ID7609512"
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-034",
+        "versions_and_loader_contract": {
+          "scope_description": "Reproduce MARBLE Figure5 rat hippocampal position decoding and cross-animal representation consistency from real spike/position inputs.",
+          "unresolved_coverage": [
+            "The direct real-data file is in the author notebook despite the paper availability paragraph emphasizing simulations. Whole macaque/RNN/synthetic coverage is separate. Earlier contribution dates to2023."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE",
+    "revision_or_archive_version": "09491ec077bf153b7dece8518cc65ddaa20eb26d",
+    "entrypoints": [
+      {
+        "path": "examples/rat_hippocampus/run_marble_and_cebra.ipynb",
+        "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE/blob/09491ec077bf153b7dece8518cc65ddaa20eb26d/examples/rat_hippocampus/run_marble_and_cebra.ipynb",
+        "role": "Downloads rat_data.pkl and refits MARBLE/CEBRA.",
+        "inspected_as_text": true
+      },
+      {
+        "path": "examples/rat_hippocampus/decoding.ipynb",
+        "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE/blob/09491ec077bf153b7dece8518cc65ddaa20eb26d/examples/rat_hippocampus/decoding.ipynb",
+        "role": "Uses training-only preprocessing and evaluates position decoding.",
+        "inspected_as_text": true
+      },
+      "examples/rat_hippocampus/multianimal_consistency.ipynb"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-034",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE",
+            "commit": "09491ec077bf153b7dece8518cc65ddaa20eb26d",
+            "author_linkage": [
+              "https://www.nature.com/articles/s41592-024-02582-2",
+              "https://arxiv.org/abs/2304.03376",
+              "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE"
+            ],
+            "default_branch": "main",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/Dynamics-of-Neural-Systems-Lab/MARBLE/09491ec077bf153b7dece8518cc65ddaa20eb26d/README.md",
+            "license_source": "https://raw.githubusercontent.com/Dynamics-of-Neural-Systems-Lab/MARBLE/09491ec077bf153b7dece8518cc65ddaa20eb26d/LICENSE",
+            "file_tree": {
+              "source": "https://api.github.com/repos/Dynamics-of-Neural-Systems-Lab/MARBLE/git/trees/09491ec077bf153b7dece8518cc65ddaa20eb26d?recursive=1",
+              "truncated": false,
+              "paths": [
+                ".github/workflows/python-publish.yml",
+                ".github/workflows/run-tox.yml",
+                "MARBLE/__init__.py",
+                "MARBLE/dataloader.py",
+                "MARBLE/default_params.yaml",
+                "MARBLE/dynamics.py",
+                "MARBLE/geometry.py",
+                "MARBLE/layers.py",
+                "MARBLE/lib/__init__.py",
+                "MARBLE/lib/cknn.py",
+                "MARBLE/main.py",
+                "MARBLE/plotting.py",
+                "MARBLE/postprocessing.py",
+                "MARBLE/preprocessing.py",
+                "MARBLE/smoothing.py",
+                "MARBLE/utils.py",
+                "README.md",
+                "doc/README.md",
+                "doc/index_readme.md",
+                "doc/source/conf.py",
+                "environment.yml",
+                "environment_osx_arm.yml",
+                "environment_osx_intel.yml",
+                "environment_windows_native.yml",
+                "examples/RNN/RNN.ipynb",
+                "examples/RNN/RNN_scripts/__init__.py",
+                "examples/RNN/RNN_scripts/clustering.py",
+                "examples/RNN/RNN_scripts/dms.py",
+                "examples/RNN/RNN_scripts/helpers.py",
+                "examples/RNN/RNN_scripts/modules.py",
+                "examples/RNN/RNN_scripts/ranktwo.py",
+                "examples/macaque_reaching/README.md",
+                "examples/macaque_reaching/convert_spikes_to_firing_rates.py",
+                "examples/macaque_reaching/kinematic_decoding.ipynb",
+                "examples/macaque_reaching/macaque_reaching_helpers.py",
+                "examples/macaque_reaching/plot_MARBLE_representations.ipynb",
+                "examples/macaque_reaching/plot_vector_fields.ipynb",
+                "examples/macaque_reaching/run_cebra.py",
+                "examples/macaque_reaching/run_marble.py",
+                "examples/macaque_reaching/sensitivity_analysis.ipynb",
+                "examples/macaque_reaching/workflow_and_comparison_of_MARBLE_and_CEBRA.ipynb",
+                "examples/rat_hippocampus/README.md",
+                "examples/rat_hippocampus/decoding.ipynb",
+                "examples/rat_hippocampus/multianimal_consistency.ipynb",
+                "examples/rat_hippocampus/rat_utils.py",
+                "examples/rat_hippocampus/run_marble_and_cebra.ipynb",
+                "examples/rat_hippocampus/sensitivity_analysis.ipynb",
+                "examples/toy_examples/ex_scalar_field_flat_surface.py",
+                "examples/toy_examples/ex_vector_field_curved_surface.py",
+                "examples/toy_examples/ex_vector_field_flat_surface.py",
+                "examples/toy_examples/vanderpol.ipynb",
+                "install.sh",
+                "requirements_osx_arm.txt",
+                "setup.py",
+                "tests/__init__.py",
+                "tests/test_grad_kernel.py",
+                "tests/test_vector_diffusion.py"
+              ],
+              "all_file_count": 78,
+              "rate_remaining": "47"
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "examples/rat_hippocampus/run_marble_and_cebra.ipynb",
+              "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE/blob/09491ec077bf153b7dece8518cc65ddaa20eb26d/examples/rat_hippocampus/run_marble_and_cebra.ipynb",
+              "role": "Downloads rat_data.pkl and refits MARBLE/CEBRA.",
+              "inspected_as_text": true
+            },
+            {
+              "path": "examples/rat_hippocampus/decoding.ipynb",
+              "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE/blob/09491ec077bf153b7dece8518cc65ddaa20eb26d/examples/rat_hippocampus/decoding.ipynb",
+              "role": "Uses training-only preprocessing and evaluates position decoding.",
+              "inspected_as_text": true
+            },
+            "examples/rat_hippocampus/multianimal_consistency.ipynb"
+          ],
+          "dependencies": [
+            "PyTorch",
+            "PyG",
+            "CEBRA",
+            "scikit-learn",
+            "environment.yml"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": [
+        "MIT method code",
+        "Dataverse per-file/data-source terms must be retained"
+      ],
+      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "recorded_central_outputs": [
+        "Held-out position MAE against CEBRA-time/behavior; cross-animal consistency and preprocessing-sensitivity outputs."
+      ],
+      "assessment": "Fig5 rat hippocampal position MAE and cross-animal consistency are documented; full macaque/RNN/simulation claims are excluded.",
+      "status": "documented_scoped_proposal_not_numeric_qualification",
+      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "CEBRA-time and behavior-supervised CEBRA have different label access; report that explicitly and match preprocessing/decoding folds and temporal guards.",
+      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "The direct real-data file is in the author notebook despite the paper availability paragraph emphasizing simulations. Whole macaque/RNN/synthetic coverage is separate. Earlier contribution dates to2023.",
+        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_project_reference_run_evidence_found",
+      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve robustness to subsampling or cross-session observation changes while preserving dynamical comparisons and independent held-out behavior prediction."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_frozen_or_run",
+      "proposed_panel": "Predeclared animal/session/time-block generalization with subsampling/observation-shift controls; held-out behavior must remain excluded from unsupervised representation selection.",
+      "retained_roster_proposal": [
+        "Improve robustness to subsampling or cross-session observation changes while preserving dynamical comparisons and independent held-out behavior prediction."
+      ],
+      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_resource_statement": "single GPU recommended",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Resource class is an inspection-based estimate, not measured runtime."
+  },
+  "holds": {
+    "task_specific": [
+      "The direct real-data file is in the author notebook despite the paper availability paragraph emphasizing simulations. Whole macaque/RNN/synthetic coverage is separate. Earlier contribution dates to2023.",
+      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Inspect/pin the rat pickle schema in isolated intake, freeze the author Fig5 split and supervised-versus-unsupervised comparison, then lock Torch/PyG/CEBRA dependencies before reference execution.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Inspect/pin the rat pickle schema in isolated intake, freeze the author Fig5 split and supervised-versus-unsupervised comparison, then lock Torch/PyG/CEBRA dependencies before reference execution.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "a18455b7c89f5035ddcbee55e9a147316b172599aa31d8cc34e86e8abb210be5",
+    "audit_record_sha256": "5ae5df69e9901460f6e87162a7aca629c0985814ce4d0dca42c3954a1a46e4b8",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-034",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 33,
+        "record_sha256": "2f2ec306472d5b79581a86295f2aa2839f9c29e66f0115ed8ad380a6c90f9463"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-paper-method-034",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

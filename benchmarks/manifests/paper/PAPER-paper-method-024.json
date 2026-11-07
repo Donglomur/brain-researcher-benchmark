@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-024",
+  "source_id": "paper-method-024",
+  "track": "paper",
+  "title": "CBraMod: A Criss-Cross Brain Foundation Model for EEG Decoding",
+  "status": "specification_only",
+  "canonical_position_one_based": 35,
+  "paper_identity": {
+    "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/bbbd6d915cb90be21c1254a82d45cedd-Abstract-Conference.html",
+    "publication_year": 2025,
+    "venue": "ICLR"
+  },
+  "primary_outputs": [
+    "Participant-held-out decoding metrics and matched REVE/EEGPT or smaller baseline; adaptation data ablation."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://physionet.org/content/eegmmidb/1.0.0/"
+    ],
+    "exact_asset_records": [],
+    "lineage_and_loader_evidence": {
+      "assessment": "Raw EEGMMI1.0.0 EDF recordings; pinned preprocessing_physio.py identifies source, runs and allocation. Released pretraining checkpoint/version and exact subjects retained still need a run manifest.",
+      "official_code": {
+        "url": "https://github.com/wjq-learning/CBraMod",
+        "commit": "b9e961003214326972c567eff390e75b0287e32a"
+      },
+      "input_routes": [
+        {
+          "url": "https://physionet.org/content/eegmmidb/1.0.0/",
+          "version": "1.0.0"
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-024",
+        "versions_and_loader_contract": {
+          "scope_description": "Reproduce CBraMod motor-imagery transfer using PhysioNet EEGMMI and the author subject/run split.",
+          "unresolved_coverage": [
+            "TUAB/TUEV original score comparisons may use mismatched splits; excluded from this scope. Freeze actual included subjects/runs and compare all baselines anew."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/wjq-learning/CBraMod",
+    "revision_or_archive_version": "b9e961003214326972c567eff390e75b0287e32a",
+    "entrypoints": [
+      {
+        "path": "preprocessing/preprocessing_physio.py",
+        "url": "https://github.com/wjq-learning/CBraMod/blob/b9e961003214326972c567eff390e75b0287e32a/preprocessing/preprocessing_physio.py",
+        "role": "Exact real EEG source, run numbers and subject allocation.",
+        "inspected_as_text": true
+      },
+      "finetune_main.py"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-024",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/wjq-learning/CBraMod",
+            "commit": "b9e961003214326972c567eff390e75b0287e32a",
+            "author_linkage": [
+              "https://proceedings.iclr.cc/paper_files/paper/2025/hash/bbbd6d915cb90be21c1254a82d45cedd-Abstract-Conference.html",
+              "https://arxiv.org/abs/2412.07236",
+              "https://github.com/wjq-learning/CBraMod"
+            ],
+            "default_branch": "main",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/wjq-learning/CBraMod/b9e961003214326972c567eff390e75b0287e32a/README.md",
+            "license_source": "https://raw.githubusercontent.com/wjq-learning/CBraMod/b9e961003214326972c567eff390e75b0287e32a/LICENSE"
+          },
+          "entrypoints": [
+            {
+              "path": "preprocessing/preprocessing_physio.py",
+              "url": "https://github.com/wjq-learning/CBraMod/blob/b9e961003214326972c567eff390e75b0287e32a/preprocessing/preprocessing_physio.py",
+              "role": "Exact real EEG source, run numbers and subject allocation.",
+              "inspected_as_text": true
+            },
+            "finetune_main.py"
+          ],
+          "dependencies": [
+            "PyTorch",
+            "MNE",
+            "official requirements"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": [
+        "MIT code",
+        "EEGMMI1.0.0 ODC Attribution1.0, open"
+      ],
+      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "recorded_central_outputs": [
+        "Participant-held-out decoding metrics and matched REVE/EEGPT or smaller baseline; adaptation data ablation."
+      ],
+      "assessment": "One PhysioNet motor-imagery transfer endpoint is scoped; the whole multi-dataset foundation-model claim and exact paper score/configuration mapping are not established.",
+      "status": "documented_scoped_proposal_not_numeric_qualification",
+      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Use identical class definitions, excluded subjects/runs, epochs, calibration budget and scoring for CBraMod/REVE/EEGPT/supervised controls; a new common split is an extension rather than literal published-score reproduction.",
+      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "TUAB/TUEV original score comparisons may use mismatched splits; excluded from this scope. Freeze actual included subjects/runs and compare all baselines anew.",
+        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_project_reference_run_evidence_found",
+      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve montage shift or low-label adaptation under matched data and compute against CBraMod and independently tuned pretrained/supervised alternatives."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_frozen_or_run",
+      "proposed_panel": "Group whole participants and original trials/runs; compare montage/low-label transfer only on a prespecified untouched analysis partition, with shared EEGMMI exposure across REVE and neural tasks declared.",
+      "retained_roster_proposal": [
+        "Improve montage shift or low-label adaptation under matched data and compute against CBraMod and independently tuned pretrained/supervised alternatives."
+      ],
+      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_resource_statement": "single GPU",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Resource class is an inspection-based estimate, not measured runtime."
+  },
+  "holds": {
+    "task_specific": [
+      "TUAB/TUEV original score comparisons may use mismatched splits; excluded from this scope. Freeze actual included subjects/runs and compare all baselines anew.",
+      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Freeze the exact author PhysioNet cohort/run/class/split configuration and checkpoint hash, then design one subject-level reference comparison with no-neural and simple supervised controls.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Freeze the exact author PhysioNet cohort/run/class/split configuration and checkpoint hash, then design one subject-level reference comparison with no-neural and simple supervised controls.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "d2cb8fc8b2e1f3c2df8bb05c8a8256044db37bc14c11cc153aff8aede7126d36",
+    "audit_record_sha256": "043bbe600fef2810ae5a3e45da0a6072da2c3e2d17e62a83d7513c8cb8faa561",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-024",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 23,
+        "record_sha256": "23e80b23fb4f9baef1238724e5661378280cfb88c5d4818357913263f01e6627"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-paper-method-024",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

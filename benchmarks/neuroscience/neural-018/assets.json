@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "candidate_id": "NEURAL-018",
+  "public": {
+    "past": {
+      "path": "artifacts-build/nlb-reference-001/public_input.npz",
+      "bytes": 113599728,
+      "sha256": "6c4ae66d25a3727fa00927cfee847f60bc84a55de41d5898ad6d4f3c9e48f884",
+      "reuse_lazy": true,
+      "validation_heldout_past_not_present": true
+    },
+    "training_future": {
+      "path": "artifacts-build/nlb-forecast-conversion-001/data/training_future.npz",
+      "bytes": 25216296,
+      "sha256": "b85644a00953a6a745b6a6cebf127a54146948e6609d542dd6a5f74c9477706a"
+    },
+    "manifest": {
+      "path": "artifacts-build/nlb-forecast-conversion-001/data/public_manifest.json",
+      "bytes": 8500,
+      "sha256": "1fe467ade86a982f3f1fefe5d0dd80fa9045e7d6857da5ed4a536f1165bef0c7"
+    }
+  },
+  "private": {
+    "targets": {
+      "path": "artifacts-build/nlb-forecast-conversion-001/data/operator_future_targets.npz",
+      "bytes": 12603146,
+      "sha256": "ba91f7b1370add3026c78f5eedcb54a23918a462da6de80ed3e61b73bfb08ed9"
+    },
+    "comparator": {
+      "path": "artifacts-build/nlb-forecast-reference-001/predictions/condition_time.npz",
+      "bytes": 33496872,
+      "sha256": "e059172ac83b1101d5fa872a702dd071752c174b11e8140c21d1cc3b0fb5ea1a"
+    }
+  },
+  "panel_fingerprint": "70421d5753a1b76d3df93e4f7c65cc62c307d9f8a642ef4e9a68c3cfb0cc27b0",
+  "reference_panel": {
+    "global_rate": {
+      "fp_bps": -0.003219973976338411
+    },
+    "condition_time": {
+      "fp_bps": -0.36381109685480034
+    },
+    "past_activity_plus_condition": {
+      "fp_bps": -0.717818101449004
+    }
+  },
+  "reference_receipts": {
+    "grade": {
+      "path": "authoring/nlb-forecast-v1/reference-v1/grade.json",
+      "bytes": 7583,
+      "sha256": "2999b6122eb56f93be75986a794a52854aae4fdd06efafad7396173c904bd2d5"
+    },
+    "prediction_freeze": {
+      "path": "authoring/nlb-forecast-v1/reference-v1/prediction_freeze.json",
+      "bytes": 1586,
+      "sha256": "21df0ddd5cf465a819771776a147639b810d2ff7740cd48beaebad55e50c1cca"
+    },
+    "outer": {
+      "path": "authoring/nlb-forecast-v1/reference-v1/outer_execution.json",
+      "bytes": 2725,
+      "sha256": "2c08a87f44960a7206eb69e83c3e36268c2b36ed7eabb07aa15e9260a4071963"
+    }
+  },
+  "verification_reference": {
+    "path": "artifacts-build/nlb-forecast-reference-001/predictions/past_activity_plus_condition.npz",
+    "bytes": 33496872,
+    "sha256": "7e589d32c2d001c1611d47326d5f73b9979e035f763a70874ff42a280ea20d59"
+  },
+  "verification_expected": {
+    "fp_bps": -0.717818101449004,
+    "minus_condition": -0.3540070045942037,
+    "minus_global": -0.7145981274726656,
+    "absolute_tolerance": 1e-10
+  },
+  "no_public_evaluation_labels": true,
+  "candidate_mount_policy": "Only exactthreepublic files plus instructions; no whole operator package/workspace,NWB,referencepredictionarrays,private targets or past scores."
+}

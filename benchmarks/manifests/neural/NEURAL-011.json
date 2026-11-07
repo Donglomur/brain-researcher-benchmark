@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-011",
+  "track": "neural",
+  "title": "Adult clinical seizure-event detection",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-H025"
+    ],
+    "titles": [
+      "Siena Scalp EEG"
+    ],
+    "overlap_groups": [
+      "siena-scalp-eeg"
+    ],
+    "task_family": "seizure_detection"
+  },
+  "scientific_question": "Can a neural detector identify ictal intervals in new Siena patients despite heterogeneous channels and clock annotations?",
+  "task_type": "prediction",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Per-sample scores and event intervals for complete selected recordings."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://physionet.org/content/siena-scalp-eeg/1.0.0/",
+      "https://doi.org/10.3390/pr8070846",
+      "https://github.com/esl-epfl/epilepsy2bids",
+      "https://physionet.org/files/siena-scalp-eeg/1.0.0/RECORDS",
+      "https://physionet.org/files/siena-scalp-eeg/1.0.0/SHA256SUMS.txt",
+      "https://physionet.org/files/siena-scalp-eeg/1.0.0/PN00/PN00-1.edf",
+      "https://physionet.org/files/siena-scalp-eeg/1.0.0/PN00/Seizures-list-PN00.txt",
+      "https://physionet.org/files/siena-scalp-eeg/1.0.0/subject_info.csv",
+      "https://raw.githubusercontent.com/esl-epfl/epilepsy2bids/d3fb17526b8a483e292ae9ba2e51b02d5f9128ff/src/epilepsy2bids/bids/siena/convert2bids.py",
+      "https://raw.githubusercontent.com/esl-epfl/epilepsy2bids/d3fb17526b8a483e292ae9ba2e51b02d5f9128ff/src/epilepsy2bids/load_annotations/siena.py",
+      "https://raw.githubusercontent.com/esl-epfl/timescoring/426f8d2b77974641dc9db71884e0812b249ba93b/src/timescoring/scoring.py",
+      "https://raw.githubusercontent.com/esl-epfl/sz-validation-framework/aba5accc45598156cb178cf48a3203639bc23ff8/3-runSzDetection/docker-szDetection/algo/src/algo/sz_detection.py"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-H025",
+        "ledger": "readiness/signals_extension_a.json",
+        "record_sha256": "8660600aa506c3d08749715331877e1a4f7bf99c2ce5a5c651fa81543133f693",
+        "data_manifest": {
+          "url": "https://physionet.org/files/siena-scalp-eeg/1.0.0/RECORDS",
+          "version": "1.0.0",
+          "sha256": "9060fc62e09bafc67d8d74db8c39faf5ade531bcc2308c268de4291ea908db3c",
+          "recording_files": 41,
+          "publisher_hashes": "https://physionet.org/files/siena-scalp-eeg/1.0.0/SHA256SUMS.txt",
+          "biological_people": 14,
+          "annotated_seizures_from_subject_info": 47,
+          "publisher_recording_hours_approx": 128,
+          "example_input": {
+            "url": "https://physionet.org/files/siena-scalp-eeg/1.0.0/PN00/PN00-1.edf",
+            "bytes": 94089216,
+            "publisher_sha256": "d8b1fdbc7f71feb788e9cce4169c0637579ff1cc9f5d03aa88d3c4d708e72eed"
+          },
+          "example_labels": {
+            "url": "https://physionet.org/files/siena-scalp-eeg/1.0.0/PN00/Seizures-list-PN00.txt",
+            "record_start_clock": "19.39.33",
+            "seizure_start_clock": "19.58.36",
+            "seizure_end_clock": "19.59.46",
+            "onset_seconds": 1143,
+            "offset_seconds": 1213
+          },
+          "biological_identity_url": "https://physionet.org/files/siena-scalp-eeg/1.0.0/subject_info.csv"
+        },
+        "recording_contract": {
+          "neural": "Representative EDF header: 35 channels at 512 Hz, including 29 labeled EEG channels plus EKG/SPO2/HR/auxiliary/marker channels; 2,625 one-second records. Neural-only input must exclude auxiliary and MK channels.",
+          "labels": "14-row subject_info.csv records patient ID, age, sex, seizure type, localization/lateralization, EEG channel count and seizure count; event files give clock-based seizure starts/ends. Counts sum to 47 seizures.",
+          "time_alignment": "Subtract registration start from seizure clock, handling day wrap and known source corrections. Actual PN00-1 event is 1143–1213 s. PN00-3 source has an impossible one-hour-long end-time typo; official parser corrects end time to18.29.29 and handles other filename/spacing exceptions.",
+          "biological_ids": "14 independent PN patient identifiers, with multiple files per patient; all files remain grouped. This is a separate adult cohort from pediatric CHB-MIT, not a processed CHB subset.",
+          "evidence": "41-file manifest, 14-row subject table, actual event text, 9,216-byte EDF header and source correction/annotation parser inspected; no signal samples downloaded."
+        },
+        "status": "artifact_ready"
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "neural_measurements": "Representative EDF header: 35 channels at 512 Hz, including 29 labeled EEG channels plus EKG/SPO2/HR/auxiliary/marker channels; 2,625 one-second records. Neural-only input must exclude auxiliary and MK channels.",
+    "allowed_context": "14-row subject_info.csv records patient ID, age, sex, seizure type, localization/lateralization, EEG channel count and seizure count; event files give clock-based seizure starts/ends. Counts sum to 47 seizures.",
+    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
+    "time_alignment": "Subtract registration start from seizure clock, handling day wrap and known source corrections. Actual PN00-1 event is 1143–1213 s. PN00-3 source has an impossible one-hour-long end-time typo; official parser corrects end time to18.29.29 and handles other filename/spacing exceptions.",
+    "source_contract_evidence": "41-file manifest, 14-row subject table, actual event text, 9,216-byte EDF header and source correction/annotation parser inspected; no signal samples downloaded."
+  },
+  "biological_unit": "14 independent PN patient identifiers, with multiple files per patient; all files remain grouped. This is a separate adult cohort from pediatric CHB-MIT, not a processed CHB subset.",
+  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "split": {
+    "policy": "Group complete PN patient recordings; cross-cohort task uses CHB training and Siena confirmation with a locked channel/calibration policy.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/esl-epfl/epilepsy2bids",
+    "commit_or_archive_version": "d3fb17526b8a483e292ae9ba2e51b02d5f9128ff",
+    "entrypoints": [
+      "src/epilepsy2bids/bids/siena/convert2bids.py",
+      "src/epilepsy2bids/load_annotations/siena.py"
+    ],
+    "role": "recording_conversion_and_label_parser; separate_event_scorer; no_verified_positive_neural_detector",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://doi.org/10.3390/pr8070846",
+    "data_url": "https://physionet.org/content/siena-scalp-eeg/1.0.0/"
+  },
+  "controls": [
+    "Exclude EKG/SPO2/HR/marker inputs",
+    "preserve background",
+    "training-only threshold",
+    "timing-only baseline."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Patient-macro event F1; mandatory false alarms per 24 hours and sensitivity.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": null
+    },
+    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+      },
+      {
+        "id": "reference",
+        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+      },
+      {
+        "id": "scorer",
+        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      },
+      {
+        "id": "replication",
+        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "CPU_workstation_bounded",
+    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+    "source_storage_evidence": {
+      "publisher_total_uncompressed": "20.3 GB",
+      "example_record_bytes": 94089216,
+      "bounded_intake_plan": "Start with one event/background packet per selected patient for schema checks; retain full recordings for false alarms and include all sessions for a person in one partition.",
+      "compute_estimate": "CPU feature baseline and event scoring; runtime/RAM unmeasured. Cross-cohort training/evaluation adds the selected CHB-MIT storage."
+    }
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Validate documented clock corrections and onset bounds; qualify a signal-derived detector rather than random demo code."
+    },
+    {
+      "id": "source_1",
+      "requirement": "Public input and label/evaluator source are verified; a meaningful signal-derived reference predictor has not been selected or run."
+    },
+    {
+      "id": "source_2",
+      "requirement": "No packet, scorer, baseline or investigation grading has been executed. Source-supported status does not imply predictive support."
+    },
+    {
+      "id": "source_3",
+      "requirement": "Clinical cohort composition, medication changes, hardware, montage and monitoring context can confound transfer; a failed transfer is not proof of absent neural understanding."
+    },
+    {
+      "id": "packet",
+      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+    },
+    {
+      "id": "reference",
+      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+    },
+    {
+      "id": "scorer",
+      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+    },
+    {
+      "id": "replication",
+      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+    }
+  ],
+  "next_implementation_action": [
+    "Validate documented clock corrections and onset bounds; qualify a signal-derived detector rather than random demo code."
+  ],
+  "construction_review": null,
+  "source_audit_overlays": [],
+  "provenance": {
+    "canonical_record_sha256": "d27de6d3d8b5c8973de8eb7a61f382bd5d066dda546aad0037da5030b77c5211",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/readiness/signals_extension_a.json",
+        "bytes": 75510,
+        "sha256": "c8483ac7303756678974cca75dfb64a16064f68cec4a0ae407ae84d7976f41d6"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

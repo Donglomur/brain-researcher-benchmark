@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "candidate_id": "PAPER-paper-signal-add-021",
+  "component": "processed_table_figure2a_participant_summary_reconstruction",
+  "source_csv_sha256": "b677bede5c7c8c2806e2796ed58c783b07d2a73687d662b97ceb078916ade80a",
+  "source_csv_bytes": 4926544,
+  "source_url": "https://osf.io/download/jx82h/",
+  "source_path": "artifacts-build/tms-behavior-intake-002/behavioralData_allsubs.csv",
+  "submission_bytes": 200000,
+  "participant_ids": [
+    1,
+    3,
+    5,
+    6,
+    7,
+    10,
+    12,
+    14,
+    15,
+    17,
+    22,
+    23,
+    25,
+    26,
+    27
+  ],
+  "conditions": [
+    "no_tms",
+    "middle_in",
+    "middle_out",
+    "early_in",
+    "early_out",
+    "middle_repeat_in",
+    "middle_repeat_out",
+    "no_tms_in",
+    "no_tms_out"
+  ],
+  "spatial_contrasts": {
+    "middle_in_minus_no_tms_in": {
+      "middle_in": 1,
+      "no_tms_in": -1
+    },
+    "middle_out_minus_no_tms_out": {
+      "middle_out": 1,
+      "no_tms_out": -1
+    },
+    "middle_in_minus_middle_out": {
+      "middle_in": 1,
+      "middle_out": -1
+    },
+    "repeat_middle_in_minus_out": {
+      "middle_repeat_in": 1,
+      "middle_repeat_out": -1
+    },
+    "early_in_minus_out": {
+      "early_in": 1,
+      "early_out": -1
+    }
+  },
+  "provenance_contrasts": {
+    "middle_in_minus_no_tms": {
+      "middle_in": 1,
+      "no_tms": -1
+    },
+    "middle_out_minus_no_tms": {
+      "middle_out": 1,
+      "no_tms": -1
+    },
+    "early_in_minus_repeat_middle_in": {
+      "early_in": 1,
+      "middle_repeat_in": -1
+    },
+    "early_minus_repeat_spatial_contrast": {
+      "early_in": 1,
+      "early_out": -1,
+      "middle_repeat_in": -1,
+      "middle_repeat_out": 1
+    },
+    "early_in_minus_first_middle_in": {
+      "early_in": 1,
+      "middle_in": -1
+    },
+    "early_minus_first_middle_spatial": {
+      "early_in": 1,
+      "early_out": -1,
+      "middle_in": -1,
+      "middle_out": 1
+    }
+  },
+  "condition_rules": {
+    "no_tms": "day in1,2,3; TMS_condition No TMS; pool instimVF within each person",
+    "no_tms_in": "same No TMS with instimVF1",
+    "no_tms_out": "same No TMS with instimVF0",
+    "middle_in": "day in1,2,3; TMS intoVF",
+    "middle_out": "day in1,2,3; TMS outVF",
+    "early_in": "day4; TMS intoVF",
+    "early_out": "day4; TMS outVF",
+    "middle_repeat_in": "day5; TMS intoVF",
+    "middle_repeat_out": "day5; TMS outVF"
+  },
+  "endpoint": "Arithmetic mean(abs(ierr)) in each declared participant/condition, native released degrees of visual angle. Current released ierr is nonnegative; no new trial filters or imputation. trials is exact number of rows in that cell.",
+  "group_summary": "Unweighted mean, sample SD (ddof1) and SD/sqrt15 of the15 participant means; participants15. Split No TMS cells are additional views, not extra observations.",
+  "paired": "Compute the declared linear combination for each of15people; n15, df14, mean difference, sample SD, SE=SD/sqrt15, t=mean/SE, dz=mean/SD, two-sided conventional Student t survival probability, unadjusted mean±t(.975,14)×SE. Equal exact differences imply zero variance: t/dz/p/CI null with undefined_zero_difference_variance. No replacement zeros/infinities.",
+  "field_names": {
+    "root": [
+      "schema_version",
+      "candidate_id",
+      "source_csv_sha256",
+      "cells",
+      "groups",
+      "spatial_contrasts",
+      "provenance_contrasts"
+    ],
+    "cell": [
+      "participant_id",
+      "condition",
+      "trials",
+      "mean_abs_ierr"
+    ],
+    "group": [
+      "condition",
+      "participants",
+      "mean",
+      "sd_across_participant_means",
+      "se_across_participant_means"
+    ],
+    "contrast": [
+      "name",
+      "n",
+      "df",
+      "mean_difference",
+      "sample_sd_difference",
+      "se_difference",
+      "paired_t",
+      "paired_dz",
+      "two_sided_t_p",
+      "paired_t_95_ci",
+      "test_status"
+    ]
+  },
+  "ordering": "Arbitrary order for cells, groups, contrast objects and JSON keys; identities complete and unique. CI endpoint order is lower,upper. Wrong finite numeric values are scored, not rejected for disagreement.",
+  "numeric_interface": "JSON finite real scalars only; no Boolean, strings, NaN or infinity. Counts integer0..1000000; correct counts assessed numerically. All135cells,9groups,5spatial,6provenance comparisons required.",
+  "continuous_metrics": "Participant×condition mean MAE in degrees (primary); count, group aggregation and each paired field MAE separately; explicit null/status mismatch counts. Lower numeric error is better; no threshold, significance reward or blended scientific success.",
+  "public_agreement_tolerance": {
+    "atol": 1e-08,
+    "rtol": 1e-07,
+    "meaning": "Diagnostic arithmetic agreement only, not admission, scientific success or suppression of continuous errors."
+  },
+  "finite_extremes": "Unrepresentable derived arithmetic returns explicit unsupported_derived_numerics, never clipping/nonfinite JSON; own consistency failures do not erase computable reference comparisons.",
+  "scope_limits": [
+    "Processed public derivative; raw gaze preprocessing/export lineage incomplete.",
+    "Same15participants across phases; no independent replication or population causal certification.",
+    "Historical permutation p-values and published d are not conventional-t/dz targets.",
+    "No historical requirement to reproduce paper t1.248; archived timing shows1.348/.095.",
+    "Summary-file scoring does not demonstrate candidate code execution/input dependence or semantic reasoning.",
+    "No new benchmark ID, no full-paper completion or research qualification."
+  ]
+}

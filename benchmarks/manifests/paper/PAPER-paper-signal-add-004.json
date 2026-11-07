@@ -1,0 +1,312 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-signal-add-004",
+  "source_id": "paper-signal-add-004",
+  "track": "paper",
+  "title": "osl-dynamics, a toolbox for modeling fast dynamic brain activity",
+  "status": "specification_only",
+  "canonical_position_one_based": 92,
+  "paper_identity": {
+    "url": "https://elifesciences.org/articles/91949",
+    "publication_year": 2024,
+    "venue": "eLife"
+  },
+  "primary_outputs": [
+    "State spectral/spatial maps, occupancy/lifetime/switching summaries and model stability across matched seeds."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://osf.io/download/7qv9r/"
+    ],
+    "exact_asset_records": [],
+    "lineage_and_loader_evidence": {
+      "paper_url": "https://elifesciences.org/articles/91949",
+      "data_urls": [
+        "https://osf.io/download/7qv9r/"
+      ],
+      "input_scope": "65-participant source-reconstructed resting MEG network NPYs plus demographics from OSF ZIP; raw sensor preprocessing/source reconstruction excluded.",
+      "saved_metadata": [
+        {
+          "url": "https://osf.io/download/7qv9r/",
+          "manifest_url": "https://api.osf.io/v2/nodes/by2tc/files/osfstorage/6411e0e728e5c50bf8937c50/",
+          "file": "notts_meguk_giles.zip",
+          "bytes": 684320829,
+          "subjects": 65,
+          "license": "CC BY 4.0",
+          "archive_entries": 133,
+          "structural_audit": "ZIP central directory read: 65 networks/subjectXX.npy plus 65 bursts/subjectXX.npy and demographics.csv; actual demographic CSV inspected (1,317 bytes). No signal members read."
+        }
+      ],
+      "code_url": "https://github.com/OHBA-analysis/osl-dynamics",
+      "revision_or_archive_version": "064104d74d96e26ee37cd3d13fa6ed693b483894",
+      "entrypoints": [
+        "examples/toolbox_paper/ctf_rest/get_data.py",
+        "examples/toolbox_paper/ctf_rest/tde_hmm_networks.py",
+        "examples/toolbox_paper/ctf_rest/tde_dynemo_networks.py"
+      ],
+      "array_payloads_read_in_this_audit": false
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-004",
+        "versions_and_loader_contract": {
+          "data_contract": {
+            "neural": "Per-participant multichannel source time series in networks/subjectXX.npy; separate single-channel bursts series. Author recipe: 250 Hz, 38-parcel Giles atlas.",
+            "labels": "demographics.csv actual columns name, age, gender, handedness; subject00 etc match signal filenames. Resting task has no trial labels.",
+            "split": "Reproduction uses author cohort. Extension freezes participant splits before fitting PCA/state models; repeated seeds assessed without choosing on held-out age effects.",
+            "controls": "Stationary surrogate preserving spectra; matched static covariance baseline; participant-level permutation and resampling; separate state label matching from substantive neural interpretation."
+          },
+          "scope_description": "Re-fit the paper TDE-HMM and TDE-DyNeMo network analyses from released 65-participant source-reconstructed resting MEG; start after source reconstruction, not raw-scanner preprocessing."
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-signal-add-004",
+        "versions_and_loader_contract": {
+          "declared_scope": "Re-fit the paper TDE-HMM and TDE-DyNeMo network analyses from released 65-participant source-reconstructed resting MEG; start after source reconstruction, not raw-scanner preprocessing."
+        },
+        "data_section_locators": []
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/OHBA-analysis/osl-dynamics",
+    "revision_or_archive_version": "064104d74d96e26ee37cd3d13fa6ed693b483894",
+    "entrypoints": [
+      "examples/toolbox_paper/ctf_rest/get_data.py",
+      "examples/toolbox_paper/ctf_rest/tde_hmm_networks.py",
+      "examples/toolbox_paper/ctf_rest/tde_dynemo_networks.py"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-004",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/OHBA-analysis/osl-dynamics",
+            "commit": "064104d74d96e26ee37cd3d13fa6ed693b483894",
+            "license": "Apache-2.0",
+            "entrypoints": [
+              "examples/toolbox_paper/ctf_rest/get_data.py",
+              "examples/toolbox_paper/ctf_rest/tde_hmm_networks.py",
+              "examples/toolbox_paper/ctf_rest/tde_dynemo_networks.py"
+            ]
+          }
+        }
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-signal-add-004",
+        "recorded": {
+          "code_url": "https://github.com/OHBA-analysis/osl-dynamics",
+          "code_revision_or_archive_version": "064104d74d96e26ee37cd3d13fa6ed693b483894",
+          "entrypoints": [
+            "examples/toolbox_paper/ctf_rest/get_data.py",
+            "examples/toolbox_paper/ctf_rest/tde_hmm_networks.py",
+            "examples/toolbox_paper/ctf_rest/tde_dynemo_networks.py"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": {
+        "code": "Apache-2.0",
+        "data": [
+          "CC BY 4.0"
+        ]
+      },
+      "declared_overlap_group": null,
+      "existing_graph_evidence_leads": [],
+      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
+      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "documented_outputs": [
+        "State spectral/spatial maps, occupancy/lifetime/switching summaries and model stability across matched seeds."
+      ],
+      "construction_specificity": "HMM/DyNeMo maps, occupancy/lifetime/switching and likelihood endpoints are documented; paper-era runtime, state matching, seed policy and primary aggregation remain to freeze.",
+      "exact_published_numeric_target_verified_by_this_audit": false
+    },
+    "source_recorded_metrics": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-004",
+        "recorded_metrics": [
+          "Variational free energy/held-out log likelihood",
+          "Aligned-state map similarity and participant summary statistics"
+        ]
+      }
+    ],
+    "comparability": [
+      "Equal seeds/compute and state capacity against static covariance and autocorrelation-preserving surrogates.",
+      "Do not interpret age direction until the apparent reversed plot labels are resolved; no seed selection on held-out age effects."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "HMM/DyNeMo maps, occupancy/lifetime/switching and likelihood endpoints are documented; paper-era runtime, state matching, seed policy and primary aggregation remain to freeze.",
+        "Whole participant; held-out likelihood and stable state matching require training-only PCA/embedding/state selection.",
+        "684,320,829B and65participants are inspected archive/demographic metadata; fitting cost and memory unknown. Apache2/CCBY4 terms recorded.",
+        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_and_metadata_only_for_this_project",
+      "runnable_reference_demonstrated": false,
+      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Compare stability and held-out likelihood against static covariance and phase-randomized inputs, using equal computation."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_executed_or_independently_qualified",
+      "proposed_question": [
+        "Compare stability and held-out likelihood against static covariance and phase-randomized inputs, using equal computation."
+      ],
+      "independent_panel_gate": "Whole participant; held-out likelihood and stable state matching require training-only PCA/embedding/state selection.",
+      "published_targets_are_historically_exposed": true,
+      "prospective_frontier_claim_supported": false
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_statement": "unmeasured",
+    "source_resource_evidence": null,
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "holds": {
+    "task_specific": [
+      "HMM/DyNeMo maps, occupancy/lifetime/switching and likelihood endpoints are documented; paper-era runtime, state matching, seed policy and primary aggregation remain to freeze.",
+      "Whole participant; held-out likelihood and stable state matching require training-only PCA/embedding/state selection.",
+      "684,320,829B and65participants are inspected archive/demographic metadata; fitting cost and memory unknown. Apache2/CCBY4 terms recorded.",
+      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Pin the historical paper recipe and fix/record age-label semantics, then freeze participant split and state-matching/seed aggregation with one primary likelihood endpoint.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Pin the historical paper recipe and fix/record age-label semantics, then freeze participant split and state-matching/seed aggregation with one primary likelihood endpoint.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "a715b7fe3a9df255088df8ec67408a59fe852d98b42306398f3cd67657ea531e",
+    "audit_record_sha256": "9a97d6d5fc883d4b536e0b9f28e9a1e8fe7b571ae084cae124be39b4cc3ebe6b",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+          "bytes": 127035,
+          "sha256": "49a22e4974c8ed6c213582386153fff1fdf7b00755481b032ba865a57030ea06"
+        },
+        "record_id": "paper-signal-add-004",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 3,
+        "record_sha256": "09e25e8d8878c3f3e7e72c95449f6786b8f962870379e85bfe9ce05f681e8ec9"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+          "bytes": 500587,
+          "sha256": "8893618f482d8301b723a57e2758fef66ab560b84c95650f8ea92f4b37375c3a"
+        },
+        "record_id": "paper-signal-add-004",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 193,
+        "record_sha256": "89ca99c232e14a4d0e1077c04087811e3c1d901e6b78686c1b8ffead9361c241"
+      }
+    ],
+    "historical_pin_exceptions": [
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+          "bytes": 3519,
+          "sha256": "d9862c468c3ece0d0e0cfca975f8980cea6a9dfbb7abfe5d3b4b96ca76045ac7"
+        },
+        "current_pin": {
+          "bytes": 4544,
+          "sha256": "963f9e1b6d528573c1c321629a0ab2ba6e1fb25b3e0404e3882b483ea7207c5f"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      },
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+          "bytes": 163669,
+          "sha256": "96c826360af4b8858cb33406e95242d27d7806e5896b98c211ccd3478a76661d"
+        },
+        "current_pin": {
+          "bytes": 166909,
+          "sha256": "974e56e839620059345f5b8ae1f5893e1d404c007864159dc84e6b330f49edca"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      }
+    ],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

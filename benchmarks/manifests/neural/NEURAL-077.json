@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-077",
+  "track": "neural",
+  "title": "Visual oddball target detection from EEG",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-H028"
+    ],
+    "titles": [
+      "ERP CORE"
+    ],
+    "overlap_groups": [
+      "ERP-CORE"
+    ],
+    "task_family": "erp_target_detection"
+  },
+  "scientific_question": "Can EEG distinguish rare visual targets from standards beyond event timing and repetition history?",
+  "task_type": "prediction",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Target probability for fixed stimulus-locked EEG epochs after verified one-based event conversion and verified physical display timing. Establish from the selected input's provenance whether the 26 ms monitor offset is already applied; apply it only if absent, never twice. Withhold target/response event codes."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://www.nemar.org/dataset/nm000132?v=v1.0.0",
+      "https://doi.org/10.1016/j.neuroimage.2020.117465",
+      "https://github.com/lucklab/ERP_CORE",
+      "https://www.emilykappenman.org/wp-content/uploads/2021/07/Kappenman-et-al_2021_NeuroImage_ERP-CORE-An-open-resource-for-human-event-related-potential-research.pdf"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-H028",
+        "ledger": "catalog/datasets_fmri_eeg.json",
+        "record_sha256": "69cfa571c8a141b1d1064cc0e5d6fb8cc84677367366721cc7a4044e0d228d1a",
+        "data_manifest": null,
+        "recording_contract": null,
+        "status": null
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "proposed_scope": "Expected source-specific input: active visual oddball or flankers EEG, event and response tables; paradigms are separate assignments within one collection, not new cohorts.",
+    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
+    "schema_verified": false
+  },
+  "biological_unit": "participant; sessions/trials nested within participant",
+  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "split": {
+    "policy": "Group all recordings from one biological person/animal; for single-subject collections use labeled within-subject whole-trial/session/condition blocks. Also group repeated stimulus identities and apply temporal guard bands covering every feature lag. Task-specific held-out condition follows the scientific question. Exact IDs/manifests pending source audit.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/lucklab/ERP_CORE",
+    "commit_or_archive_version": null,
+    "entrypoints": [],
+    "role": "Pinned author ERP preprocessing and epoch definitions, plus inspected event/header evidence. Filename/timing/pairing adaptation and the task-specific classifier or contrast scorer remain unqualified.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://doi.org/10.1016/j.neuroimage.2020.117465",
+    "data_url": "https://www.nemar.org/dataset/nm000132?v=v1.0.0"
+  },
+  "controls": [
+    "Timing/repetition and stimulus-identity controls.",
+    "Declared response-period inclusion or exclusion.",
+    "Fixed artifact and epoch policies; raw marker counts are not trial counts.",
+    "Verify the selected raw/derivative representation and its event-transform history before applying any 26 ms display offset; unresolved timing provenance blocks epoch qualification."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Participant-macro balanced accuracy and log loss.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": null
+    },
+    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
+    "basis": "Unmeasured estimate. Use bounded existing derivatives/reference features; full-source procurement and model training are not implied."
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Verify active-oddball codes and trial counts; author optimized windows must be frozen before evaluation."
+    },
+    {
+      "id": "catalog_limit",
+      "requirement": "Six paradigms are one collection. NEMAR conversion date is not the original recording/publication date; analysis code route pending."
+    },
+    {
+      "id": "source_inventory",
+      "requirement": "Retrieve bounded versioned manifests/schema and verify actual recording inputs, labels, alignment and biological identity; catalog identity alone is insufficient."
+    },
+    {
+      "id": "code_lock",
+      "requirement": "Pin exact official code revision/entrypoint and license, inspect loader-to-data compatibility, and select a meaningful signal-derived reference."
+    },
+    {
+      "id": "terms",
+      "requirement": "Audit data, stimulus, code and checkpoint access/redistribution terms before packet distribution."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+    },
+    {
+      "id": "execution",
+      "requirement": "Implement and run data adapter/evaluator/reference, matched controls and malformed-output tests; independently reproduce results before any validation claim."
+    },
+    {
+      "source_id": "D-H028",
+      "construction_gates": [
+        "Acquire and checksum selected .fdt files; test actual EEG decoding, dimensions and channels",
+        "Resolve event latency convention and +26 ms correction once, then validate stimulus-response matching and exclusions across all chosen participants",
+        "Pin preprocessing dependencies and adapt NEMAR layout; author ICA/artifact stages have not been reproduced",
+        "Freeze participant groups, windows and matching rules using development data; assess error-trial support per participant",
+        "Create sanitized query packets without event values, response correctness, answer-bearing trial metadata or unrestricted source lookups"
+      ]
+    }
+  ],
+  "next_implementation_action": [
+    "Verify active-oddball codes and trial counts; author optimized windows must be frozen before evaluation."
+  ],
+  "construction_review": {
+    "checked_on": "2026-10-30",
+    "disposition": "keep",
+    "reason": "Target/standard detection remains viable, but timing, event pairing and response information must be explicit.",
+    "remaining_gates": [
+      "Determine whether the chosen event representation already incorporates the 26 ms monitor delay and bind that decision to input version and preprocessing provenance; the source script alone does not establish a selected derivative's correction state.",
+      "Validate external FDT samples and stimulus-response pairing.",
+      "Freeze participant splits and outcome-dependent exclusions.",
+      "Do not treat noncausal source filtering as prospective pre-response validation."
+    ],
+    "proposal": "authoring/neural-source-audits/contract-corrections-v2.json",
+    "proposal_sha256": "fe743219d97e5b428f828918bd8be294766dfe8f679f74fd60399eef3028d247",
+    "source_evidence": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/DISCOVERY_AUDIT_FOUR.md",
+        "sha256": "0f72b37b9423a32e28cfade15961dfc8f6cdfcc6174bf02617aa83980b38c289"
+      }
+    ],
+    "readiness_promoted": false
+  },
+  "source_audit_overlays": [
+    {
+      "source_id": "D-H028",
+      "name": "ERP CORE",
+      "assignment_ids": [
+        "NEURAL-077",
+        "NEURAL-078"
+      ],
+      "checked_on": "2026-10-29",
+      "audit_path": "docs/neuroscience-benchmarks/build/discovery_audit_four.json",
+      "narrative_path": "docs/neuroscience-benchmarks/build/DISCOVERY_AUDIT_FOUR.md",
+      "audit_scope": "Versioned inventory, one continuous EEG header, and two task event tables verified; recording loading and author-pipeline compatibility remain unexecuted.",
+      "remaining_gates": [
+        "Acquire and checksum selected .fdt files; test actual EEG decoding, dimensions and channels",
+        "Resolve event latency convention and +26 ms correction once, then validate stimulus-response matching and exclusions across all chosen participants",
+        "Pin preprocessing dependencies and adapt NEMAR layout; author ICA/artifact stages have not been reproduced",
+        "Freeze participant groups, windows and matching rules using development data; assess error-trial support per participant",
+        "Create sanitized query packets without event values, response correctness, answer-bearing trial metadata or unrestricted source lookups"
+      ],
+      "roster_status_changed": false,
+      "reference_executed": false,
+      "scientific_admission": false
+    }
+  ],
+  "provenance": {
+    "canonical_record_sha256": "cbe1c6b433d65df68e25da47d4b7d079b06704ccfedf9f01e0304adf7483f3c0",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/catalog/datasets_fmri_eeg.json",
+        "bytes": 51328,
+        "sha256": "a326738f2752b9ed44eb88d5e056725adf9a08a23a4e96ccb855c851c47a4dd9"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/discovery_audit_four.json",
+        "bytes": 52985,
+        "sha256": "14a31537248b3013a3a6587df2986f7bb28e8e95358d78b0aab6f169fad54b4f"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

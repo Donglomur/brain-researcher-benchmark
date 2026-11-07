@@ -1,0 +1,263 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-019",
+  "track": "neural",
+  "title": "Movement information in neural representations",
+  "status": "local_scoring_adapter_verified",
+  "scope": {
+    "development_exposed": true,
+    "biological_units": 1,
+    "training_trials": 1340,
+    "assessment_trials": 126,
+    "training_maze_groups": 28,
+    "assessment_maze_groups": 8,
+    "neural_units": 137,
+    "bins": 140,
+    "target": "x/y hand velocity in m/s",
+    "retrospective": true,
+    "shared_source_ids": [
+      "NEURAL-017",
+      "NEURAL-018"
+    ],
+    "complete_agent_contract": false
+  },
+  "entrypoints": {
+    "score": {
+      "argv": [
+        "python3",
+        "benchmarks/neuroscience/neural-019/score.py",
+        "score",
+        "--submission",
+        "{submission}",
+        "--output",
+        "{output}"
+      ],
+      "working_directory": ".",
+      "sha256": "b1926a164fcd9ad92b11e54024e8c33e8cb4ff3ab0cac18bf6c50c51f042de67"
+    }
+  },
+  "assets": {
+    "manifest_path": "benchmarks/neuroscience/neural-019/assets.json",
+    "manifest_sha256": "9ea00068637bd7a3fc18e28bb149c55863188bf6c1724d147cd1d1b683423b95",
+    "public": {
+      "packet": {
+        "path": "artifacts-build/nlb-movement-conversion-001/public.npz",
+        "bytes": 59347496,
+        "sha256": "98e9b00b9a641e3aa1117c2ea2d737956c3e0df5daa8e77105d34a3449ef02c2"
+      },
+      "manifest": {
+        "path": "artifacts-build/nlb-movement-conversion-001/public_manifest.json",
+        "bytes": 1743,
+        "sha256": "4a1be613477a49201f107e7066fd1b5e2c03d9bc81859999581507d1498dfc9c"
+      }
+    },
+    "private": {
+      "targets": {
+        "path": "artifacts-build/nlb-movement-conversion-001/private.npz",
+        "bytes": 294038,
+        "sha256": "5d6b6a0935af1eeaf3f54c0bc62d78a20d5b6b196d7192d654ae348b03cb16ad"
+      },
+      "reference_grade": {
+        "path": "artifacts-build/nlb-movement-reference-001/grade.json",
+        "bytes": 50655,
+        "sha256": "4614b1a36d6e84f46dd41a6a0e4fd188442623459279b49e29f9d30d17777dc0"
+      },
+      "reference_commit": {
+        "path": "artifacts-build/nlb-movement-reference-001/prediction_commit.json",
+        "bytes": 1396,
+        "sha256": "3ef605cb5302577775cc81d193b67b6a8fb9c6f62b01f95268e97e54a3bd8370"
+      }
+    }
+  },
+  "input_contract": "benchmarks/neuroscience/neural-019/README.md",
+  "source_freeze_path": "benchmarks/neuroscience/neural-019/SOURCE_FREEZE.json",
+  "source_freeze_sha256": "1135d75e4323ee514996027a351c10cf0fa3bbafc4a479d4671f028fdd89b97a",
+  "verification": {
+    "status": "passed",
+    "receipt_path": "authoring/nlb-movement-v1/adapter-v1/receipt.json",
+    "receipt_sha256": "5d43417a7239ffaf2f1dd3d9bf5cda75202a189f2c8d907437852b7a71d16228",
+    "planned_cases": [
+      "valid_pca10",
+      "valid_negative_random10",
+      "empty",
+      "wrong_shape",
+      "wrong_clock"
+    ],
+    "observed_cases": 5,
+    "positive_and_negative_reference_parity": true,
+    "all_four_signed_comparisons_verified": true,
+    "all_malformed_rejected_before_targets": true,
+    "all_owned_containers_absent": true
+  },
+  "admission": {
+    "runnable": true,
+    "full_candidate_contract_complete": false,
+    "research_qualified": false,
+    "submission_ready": false
+  },
+  "evaluation": {
+    "primary": "equal_group_macro_uniform_axis_r2",
+    "higher_is_better": true,
+    "scientific_success_threshold": null,
+    "all_signed_reference_comparisons": true,
+    "secondary": "pooled_uniform_axis_r2"
+  },
+  "runtime": {
+    "hard_whole_seconds": 90,
+    "aggregate_inner_work_seconds": 80,
+    "outer_child_watchdog_seconds": 82,
+    "cleanup_deadline_seconds": 89,
+    "standalone_score_hard_seconds": 60,
+    "cpus": 2,
+    "memory_bytes": 4294967296,
+    "threads": 2,
+    "maximum_active_containers": 1,
+    "new_artifact_cap_bytes": 2000000,
+    "source_receipt_cap_bytes": 1000000,
+    "candidate_total_new_durable_ceiling_bytes": 100000000,
+    "new_downloads": 0,
+    "installs": 0,
+    "automatic_retry": false,
+    "network": "none",
+    "image": "sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156"
+  },
+  "reference_outcome": "Fixed PCA10 outperformed one fixed random10 projection under a matched readout budget; raw137 performed better than PCA10. All group and negative outcomes are retained. One historical session; no SOTA, causal, latent-mechanism or native LLM claim.",
+  "cost_accounting": {
+    "candidate_cycle_ceiling_seconds": 900,
+    "charged_seconds": 510,
+    "allocated_pending_verification_seconds": 0,
+    "prior_other_candidate_cycles_unchanged": true,
+    "remaining_unassigned_seconds": 390
+  },
+  "reference_results": "authoring/nlb-movement-v1/reference-v1/RESULTS.md",
+  "program_execution": {
+    "status": "local_program_runner_verified",
+    "entrypoint": {
+      "argv": [
+        "python3",
+        "authoring/nlb-movement-v1/program-runner-v1/execute_program.py",
+        "--program",
+        "{program}",
+        "--out",
+        "{output}",
+        "--other-reserve-bytes",
+        "123000000"
+      ],
+      "working_directory": ".",
+      "sha256": "80770fb4fe73ca460f0d3bfb23f52d30f587785405d1513fce27095e9a332558"
+    },
+    "source_freeze": {
+      "path": "authoring/nlb-movement-v1/program-runner-v1/FREEZE.json",
+      "sha256": "d70f3cedba553a57d6a3323df89c1b2fd49746cf1eea72ff2d97adc2c10035ac"
+    },
+    "verification": {
+      "status": "passed",
+      "receipt_path": "authoring/nlb-movement-v1/program-runner-v1/receipt.json",
+      "receipt_sha256": "4d574606a26082d26bc2f8a1e84afcdf5cb0e0a234983d33900b9d252e90b911",
+      "qualification_path": "authoring/nlb-movement-v1/program-runner-v1/verification.json",
+      "qualification_sha256": "d242c1d0edf20940b4dee6281d59b6db876aaf07f00e6d5a6f010470f6b69f25",
+      "source_binding_path": "authoring/nlb-movement-v1/program-runner-v1/outer_started.json",
+      "source_binding_sha256": "3f5b8bbe37d138ec6111105ec965e18a5fc0fed3c580d1194778ec910197640f",
+      "planned_controls": [
+        "reference",
+        "malformed_linger",
+        "private_probe"
+      ],
+      "generated_runtime_tests": 24,
+      "actual_interrupted_wrapper_fixture_passed": true,
+      "scientific_metric_parity_checks": 10,
+      "complete_prediction_cells": 35280,
+      "original_51_ridge_solves_reexecuted": true
+    },
+    "instructions_path": "authoring/nlb-movement-v1/program-runner-v1/PUBLIC_INSTRUCTIONS.md",
+    "scope": {
+      "mode": "offline_fixed_python_program_retrospective_movement_prediction",
+      "public_packet_files": 2,
+      "training_trials": 1340,
+      "assessment_trials": 126,
+      "training_maze_groups": 28,
+      "assessment_maze_groups": 8,
+      "training_folds": 4,
+      "bins": 140,
+      "neural_units": 137,
+      "target": "x/y hand velocity in m/s",
+      "biological_animals": 1,
+      "biological_sessions": 1,
+      "development_exposed": true,
+      "shared_source_ids": [
+        "NEURAL-017",
+        "NEURAL-018"
+      ],
+      "paired_investigation_mode_qualified": false,
+      "program_committed_before_any_public_release": true,
+      "producer_holder_volume_absent_before_private_grading": true,
+      "public_prediction_validation_before_private_targets": true,
+      "opaque_commit_is_not_prediction_contract_validation": true,
+      "LLM_attempts_this_qualification": 0,
+      "full_candidate_contract_complete": false,
+      "research_qualified": false,
+      "submission_ready": false
+    },
+    "runtime": {
+      "default_whole_attempt_seconds": 110,
+      "candidate_work_wall_seconds_from_start_request": 20,
+      "termination_latency_separately_measured": true,
+      "candidate_cpus": 1.75,
+      "holder_cpus": 0.25,
+      "candidate_memory_bytes": 3221225472,
+      "holder_memory_bytes": 268435456,
+      "aggregate_container_memory_cap_bytes": 4294967296,
+      "output_tmpfs_bytes": 41943040,
+      "single_program_cap_bytes": 65536,
+      "single_submission_cap_bytes": 1048576,
+      "capture_response_cap_bytes": 45000000,
+      "artifact_cap_bytes": 5000000,
+      "source_receipt_cap_bytes": 1000000,
+      "network": "none",
+      "pull": "never",
+      "no_external_model_or_service": true,
+      "future_attempt_needs_new_operator_allocation": true,
+      "registered_other_reserve_bytes": 123000000,
+      "future_complete_reservation_must_be_rechecked": true
+    },
+    "qualification_accounting": {
+      "actual_elapsed_before_final_receipt_seconds": 15.766255458001979,
+      "full_stage_charge_seconds": 120,
+      "prior_known_seconds": 510,
+      "known_charged_seconds": 630,
+      "operator_construction_ceiling_seconds": 900,
+      "remaining_unassigned_seconds": 270,
+      "future_compute_grant": false,
+      "adapter_cost_accounting_retained_as_historical_snapshot": true
+    },
+    "qualification_outcome": {
+      "candidate_macro_uniform_axis_r2": 0.37434152620216105,
+      "candidate_pooled_uniform_axis_r2": 0.5090378475769995,
+      "signed_differences": {
+        "candidate_minus_phase_only": {
+          "macro_r2": 0.6558489753360606,
+          "pooled_uniform_axis_r2": 0.5151966351739046
+        },
+        "candidate_minus_raw137": {
+          "macro_r2": 0.0,
+          "pooled_uniform_axis_r2": 0.0
+        },
+        "candidate_minus_pca10": {
+          "macro_r2": 0.2325558401536756,
+          "pooled_uniform_axis_r2": 0.1778356202716816
+        },
+        "candidate_minus_random10": {
+          "macro_r2": 0.5651978729874781,
+          "pooled_uniform_axis_r2": 0.4361167259670341
+        }
+      },
+      "private_target_loader_calls_positive": 1,
+      "private_target_loader_calls_malformed": 0,
+      "private_probe_grader_dispatched": false,
+      "all11resources_absent": true,
+      "all4activated_groups_absent": true,
+      "new_scientific_claim": false
+    },
+    "result_summary_path": "authoring/nlb-movement-v1/program-runner-v1/RESULT_SUMMARY.json"
+  }
+}

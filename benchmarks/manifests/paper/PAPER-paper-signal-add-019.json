@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-signal-add-019",
+  "source_id": "paper-signal-add-019",
+  "track": "paper",
+  "title": "Decision-making components and times revealed by the single-trial electroencephalogram",
+  "status": "specification_only",
+  "canonical_position_one_based": 37,
+  "paper_identity": {
+    "url": "https://elifesciences.org/articles/108049",
+    "publication_year": 2025,
+    "venue": "eLife"
+  },
+  "primary_outputs": [
+    "Five-event inference and the contrast effects on inter-event latencies, plus original ERP/decision accuracy relationships."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://osf.io/j6xuv/"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/example",
+        "recorded_fields": {
+          "name": "0_epo.fif",
+          "bytes": 270885198,
+          "version": 1
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "source_record_id": "paper-signal-add-019"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "assessment": "26 cleaned512Hz MNE epoch FIF files with source-written event_name/rt/condition/side/stimulus/response metadata; preprocessing and photodiode corrections are upstream fixed inputs.",
+      "official_code": {
+        "url": "https://github.com/GWeindel/decision-times",
+        "commit": "76464a9ca15564897e58256081af4b99d08ae8db",
+        "license": "BSD-3-Clause",
+        "entrypoints": [
+          "1-HMP_analyses.ipynb",
+          "2-ERP_analyses.ipynb",
+          "utils.py",
+          "models.py",
+          "data/preprocessing.py"
+        ]
+      },
+      "input_routes": [
+        {
+          "url": "https://osf.io/j6xuv/",
+          "manifest": "https://api.osf.io/v2/nodes/j6xuv/files/osfstorage/?page[size]=100",
+          "version": "Each observed file version 1; example SHA256 edd10eab6ecbae73d26a19c17f9e8d0838d77e99c7756da7d53bc1f616531535.",
+          "license": "Public read access; node_license is null. An explicit data redistribution license was not observed."
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-019",
+        "versions_and_loader_contract": {
+          "data_contract": {
+            "neural": "26 files 0_epo.fif through 25_epo.fif, each about 271 MB; publisher and official loader identify cleaned MNE EEG epochs at 512 Hz.",
+            "labels": "Source preprocessing writes epoch metadata event_name, rt, condition, side, stimulus and response, from stimulus/condition/side/response triggers; notebook reads those fields directly for contrast, speed/accuracy and correct-response analyses.",
+            "time_alignment": "Photodiode correction is in the preprocessing source; epochs retain sample rate and events. The initial contract starts after those corrections.",
+            "split": "Freeze participant groups and complete trials for extensions; trial PCA/scaling and HMP model estimation must be training-only if claiming held-out prediction. Original full-data event discovery is a descriptive reproduction.",
+            "controls": "Behavior-only reaction time, response/motor preparation, contrast intensity, and alternative event widths/numbers; test that HMP interval interpretations survive participant-held-out estimation.",
+            "biological_unit": "Participant, not the number of fitted EEG samples or event-probability points."
+          },
+          "scope_description": "Refit hidden multivariate pattern events on released participant EEG epochs, then compare sensory/decision interval laws and ERP evidence. Scope starts from cleaned epochs and does not recreate manual acquisition/preprocessing decisions."
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/GWeindel/decision-times",
+    "revision_or_archive_version": "76464a9ca15564897e58256081af4b99d08ae8db",
+    "entrypoints": [
+      "1-HMP_analyses.ipynb",
+      "2-ERP_analyses.ipynb",
+      "utils.py",
+      "models.py",
+      "data/preprocessing.py"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-019",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/GWeindel/decision-times",
+            "commit": "76464a9ca15564897e58256081af4b99d08ae8db",
+            "license": "BSD-3-Clause",
+            "entrypoints": [
+              "1-HMP_analyses.ipynb",
+              "2-ERP_analyses.ipynb",
+              "utils.py",
+              "models.py",
+              "data/preprocessing.py"
+            ]
+          }
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": {
+        "official_code_license": "BSD-3-Clause",
+        "data_route_licenses": [
+          {
+            "url": "https://osf.io/j6xuv/",
+            "license": "Public read access; node_license is null. An explicit data redistribution license was not observed."
+          }
+        ]
+      },
+      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "recorded_central_outputs": [
+        "Five-event inference and the contrast effects on inter-event latencies, plus original ERP/decision accuracy relationships."
+      ],
+      "assessment": "Five-event EEG inference and contrast-related inter-event latency laws are identified; no numerical central-effect contract or validated event-number selection is present.",
+      "status": "documented_scoped_proposal_not_numeric_qualification",
+      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
+    },
+    "source_recorded_metrics": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-019",
+        "recorded_metrics": [
+          "Held-out likelihood/model selection",
+          "Participant-level latency effects and intervals",
+          "Original psychophysical-law error measures"
+        ]
+      }
+    ],
+    "comparability": [
+      "100Hz laptop processing differs from the author512Hz recipe. Preserve correct-response selection and distinguish held-out likelihood from explanatory psychophysical-law fits.",
+      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "The OSF data license is not specified; artifact access is verified, but redistribution terms must be resolved before bundling data.",
+        "Author estimates about 64 GB RAM for the 512 Hz analysis; recommended 100 Hz laptop setting changes the recipe and must be reported as such.",
+        "Source imports hmp and uses newer API; README pins hmp 1.0.0-b2, but environment compatibility was not executed.",
+        "No neural payload was downloaded; observed format/schema is supported by filenames, archive metadata and the matching official writer/reader.",
+        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_project_reference_run_evidence_found",
+      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Compare held-out prediction and reliability of event models against simpler ERP/behavior-only decompositions."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_frozen_or_run",
+      "proposed_panel": "Fit PCA/scaling/event model on development participants only for predictive claims; original whole-data discovery is descriptive. Compare simpler ERP/RT models, event widths and numbers.",
+      "retained_roster_proposal": [
+        "Compare held-out prediction and reliability of event models against simpler ERP/behavior-only decompositions."
+      ],
+      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_resource_statement": "unmeasured",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": null
+  },
+  "holds": {
+    "task_specific": [
+      "The OSF data license is not specified; artifact access is verified, but redistribution terms must be resolved before bundling data.",
+      "Author estimates about 64 GB RAM for the 512 Hz analysis; recommended 100 Hz laptop setting changes the recipe and must be reported as such.",
+      "Source imports hmp and uses newer API; README pins hmp 1.0.0-b2, but environment compatibility was not executed.",
+      "No neural payload was downloaded; observed format/schema is supported by filenames, archive metadata and the matching official writer/reader.",
+      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Pin hmp1.0.0-b2/API compatibility and exact central event/latency contrasts, then inspect one epoch header/metadata and define participant-held-out evaluation without fitting on held-out event patterns.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Pin hmp1.0.0-b2/API compatibility and exact central event/latency contrasts, then inspect one epoch header/metadata and define participant-held-out evaluation without fitting on held-out event patterns.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "ef08406b7d15ae2ef10a2f6562bcc9955be6a10a327ea14f58f867c2be787def",
+    "audit_record_sha256": "350a711c3737341b49a8f34071ee480e6b130dcb4ca2e7e438b790383cd968d1",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+          "bytes": 127035,
+          "sha256": "49a22e4974c8ed6c213582386153fff1fdf7b00755481b032ba865a57030ea06"
+        },
+        "record_id": "paper-signal-add-019",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 18,
+        "record_sha256": "3ec9300f2c940b2c735e60bd93fc37177a9769398bbc8567af57a61e159aff30"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-paper-signal-add-019",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

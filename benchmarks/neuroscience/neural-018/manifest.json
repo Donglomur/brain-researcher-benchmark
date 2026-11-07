@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-018",
+  "track": "neural",
+  "title": "Motor-population forecasting from strictly past neural observations",
+  "status": "local_scoring_adapter_verified",
+  "scope": {
+    "development_exposed": true,
+    "biological_units": 1,
+    "training_trials": 1721,
+    "assessment_trials": 574,
+    "past_bins": 140,
+    "future_bins": 40,
+    "future_units": 182,
+    "condition_context_permitted": true,
+    "causal_intervention_claim": false,
+    "complete_agent_contract": false
+  },
+  "entrypoints": {
+    "score": {
+      "argv": [
+        "python3",
+        "benchmarks/neuroscience/neural-018/scoring-v2/score.py",
+        "score",
+        "--submission",
+        "{submission}",
+        "--output",
+        "{output}"
+      ],
+      "working_directory": ".",
+      "sha256": "0994915e5eae71963ca4f02f5a269bbf061ab5751580bd9e6ad4a13ae62a7fa2"
+    }
+  },
+  "assets": {
+    "manifest_path": "benchmarks/neuroscience/neural-018/scoring-v2/assets.json",
+    "manifest_sha256": "078afe7729f1af50c16e3eaac75c5358108e078abd13ca4bf7493d1a519a08f9",
+    "public": {
+      "past": {
+        "path": "artifacts-build/nlb-reference-001/public_input.npz",
+        "bytes": 113599728,
+        "sha256": "6c4ae66d25a3727fa00927cfee847f60bc84a55de41d5898ad6d4f3c9e48f884",
+        "reuse_lazy": true,
+        "validation_heldout_past_not_present": true
+      },
+      "training_future": {
+        "path": "artifacts-build/nlb-forecast-conversion-001/data/training_future.npz",
+        "bytes": 25216296,
+        "sha256": "b85644a00953a6a745b6a6cebf127a54146948e6609d542dd6a5f74c9477706a"
+      },
+      "manifest": {
+        "path": "artifacts-build/nlb-forecast-conversion-001/data/public_manifest.json",
+        "bytes": 8500,
+        "sha256": "1fe467ade86a982f3f1fefe5d0dd80fa9045e7d6857da5ed4a536f1165bef0c7"
+      }
+    },
+    "private": {
+      "targets": {
+        "path": "artifacts-build/nlb-forecast-conversion-001/data/operator_future_targets.npz",
+        "bytes": 12603146,
+        "sha256": "ba91f7b1370add3026c78f5eedcb54a23918a462da6de80ed3e61b73bfb08ed9"
+      },
+      "comparator": {
+        "path": "artifacts-build/nlb-forecast-reference-001/predictions/condition_time.npz",
+        "bytes": 33496872,
+        "sha256": "e059172ac83b1101d5fa872a702dd071752c174b11e8140c21d1cc3b0fb5ea1a"
+      },
+      "followup_grade": {
+        "path": "authoring/nlb-forecast-v1/baseline-followup-v1/grade.json",
+        "bytes": 4051,
+        "sha256": "226055ace14f0675384557d65706b7645876cfaa3a9c29986e728aef8c933459"
+      },
+      "followup_prediction_freeze": {
+        "path": "authoring/nlb-forecast-v1/baseline-followup-v1/prediction_freeze.json",
+        "bytes": 1507,
+        "sha256": "49b5b6c9b71f05e428dc5444c997473c00fb275918a29b21de55ea5e9b6a37e6"
+      },
+      "followup_compact": {
+        "path": "artifacts-build/nlb-forecast-followup-001/compact.npz",
+        "bytes": 1740554,
+        "sha256": "e25d1f47749998a913f423f5c3afc3008d0024bafe59f723b57ef11cfb22bfc6"
+      }
+    }
+  },
+  "input_contract": "benchmarks/neuroscience/neural-018/INSTRUCTIONS.md",
+  "source_freeze_path": "benchmarks/neuroscience/neural-018/scoring-v2/SOURCE_FREEZE.json",
+  "source_freeze_sha256": "0301de0824d662fde630a00c86cfac43d6142c8f271f52faad15bbdf6ae45c75",
+  "verification": {
+    "status": "passed",
+    "receipt_path": "authoring/nlb-forecast-v1/adapter-v2/receipt.json",
+    "receipt_sha256": "11ca3d2741730197d659f7eac1836b4da1976cd7994146975880f3464ccbe760",
+    "planned_cases": [
+      "real_reference",
+      "empty",
+      "invalid_shape",
+      "future_boundary"
+    ],
+    "observed_cases": 4,
+    "real_reference_parity": true,
+    "all_five_signed_comparisons_verified": true,
+    "all_malformed_rejected_before_targets": true,
+    "all_owned_containers_absent": true
+  },
+  "admission": {
+    "runnable": true,
+    "full_candidate_contract_complete": false,
+    "research_qualified": false,
+    "submission_ready": false
+  },
+  "evaluation": {
+    "primary": "joint_fp_bps",
+    "higher_is_better": true,
+    "scientific_success_threshold": null,
+    "all_signed_reference_comparisons": true
+  },
+  "runtime": {
+    "image": "sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156",
+    "local_docker_access_required": true,
+    "cpus": 2,
+    "memory_bytes": 4294967296,
+    "network": "none",
+    "new_dependencies": false
+  },
+  "reference_outcome": "Original negative references are preserved. An outcome-informed training-only five-fold follow-up produced ridge0.11073911302568201 and pooled-condition0.15064826644621088 fp-bps; pooled condition is the stronger observed authored development comparator. Not published SOTA or evidence of matched incremental neural information; research qualification remains false.",
+  "cost_accounting": {
+    "candidate_cycle_ceiling_seconds": 900,
+    "charged_seconds": 790,
+    "remaining_unassigned_seconds": 110,
+    "prior_other_candidate_cycles_unchanged": true,
+    "allocated_pending_verification_seconds": 0
+  },
+  "reference_panel_version": 2,
+  "previous_verified_manifest": {
+    "path": "authoring/nlb-forecast-v1/adapter-v2/manifest-v1.json",
+    "bytes": 4079,
+    "sha256": "263772ccbced34b6668a81b18b729b72330f2a47275565bf45c229d237ae46bf"
+  },
+  "reference_panel_notes": "benchmarks/neuroscience/neural-018/scoring-v2/README.md",
+  "program_execution": {
+    "status": "local_program_runner_verified",
+    "entrypoint": {
+      "argv": [
+        "python3",
+        "authoring/nlb-forecast-v1/program-runner-v1/execute_program.py",
+        "--program",
+        "{program}",
+        "--out",
+        "{output}",
+        "--other-reserve-bytes",
+        "106000000"
+      ],
+      "working_directory": ".",
+      "sha256": "1472c86f462a977d87c51d3ca79b4c5f52827c0126baf54e161708b51a54dcfc"
+    },
+    "source_freeze": {
+      "path": "authoring/nlb-forecast-v1/program-runner-v1/FREEZE.json",
+      "sha256": "b7714b86d908bb059ebb67c926ce6e859035aab299bb73f8738cb4f07539b829"
+    },
+    "verification": {
+      "status": "passed",
+      "receipt_path": "authoring/nlb-forecast-v1/program-runner-v1/receipt.json",
+      "receipt_sha256": "5bf874a14de5ddf859077e2360e6be43ab40bc6a40d99b8a8070fb5d513d70f6",
+      "qualification_path": "authoring/nlb-forecast-v1/program-runner-v1/verification.json",
+      "qualification_sha256": "c98ff95d983a2b95c1afd884edac9c8fad22d859e52a9b31e68d867cc994cb4d",
+      "source_binding_path": "authoring/nlb-forecast-v1/program-runner-v1/outer_started.json",
+      "source_binding_sha256": "4ec17d4ae723334e031c2da8caad018e6a9fcc0f1ee8049907f97bb590cb8712",
+      "planned_controls": [
+        "reference",
+        "malformed_linger",
+        "private_probe"
+      ],
+      "generated_runtime_tests": 16,
+      "actual_interrupted_wrapper_fixture_passed": true,
+      "scientific_metric_parity_checks": 6,
+      "complete_prediction_cells": 4178720,
+      "valid_archive_bytes": 33625560,
+      "valid_archive_exceeds_old_32MiB_cap": true
+    },
+    "instructions_path": "authoring/nlb-forecast-v1/program-runner-v1/PUBLIC_INSTRUCTIONS.md",
+    "scope": {
+      "mode": "offline_fixed_python_program_past_only_condition_assisted_forecasting",
+      "public_packet_files": 3,
+      "training_trials": 1721,
+      "development_trials": 574,
+      "observed_past_bins": 140,
+      "forecast_bins": 40,
+      "observed_units": 137,
+      "forecast_units": 182,
+      "past_relative_ms": [
+        -250,
+        450
+      ],
+      "future_relative_ms": [
+        450,
+        650
+      ],
+      "biological_animals": 1,
+      "biological_sessions": 1,
+      "development_exposed": true,
+      "shared_source_with_neural017_and019": true,
+      "paired_investigation_mode_qualified": false,
+      "program_committed_before_any_public_release": true,
+      "producer_holder_volume_absent_before_private_grading": true,
+      "public_prediction_validation_before_private_targets": true,
+      "opaque_commit_is_not_prediction_contract_validation": true,
+      "LLM_attempts_this_qualification": 0,
+      "positive_control_uses_query_neural_values": false,
+      "full_candidate_contract_complete": false,
+      "research_qualified": false,
+      "submission_ready": false
+    },
+    "runtime": {
+      "default_whole_attempt_seconds": 110,
+      "candidate_work_wall_seconds_from_start_request": 20,
+      "termination_latency_separately_measured": true,
+      "candidate_cpus": 1.75,
+      "holder_cpus": 0.25,
+      "candidate_memory_bytes": 3221225472,
+      "holder_memory_bytes": 268435456,
+      "aggregate_container_memory_cap_bytes": 4294967296,
+      "output_tmpfs_bytes": 41943040,
+      "single_program_cap_bytes": 65536,
+      "single_submission_cap_bytes": 35651584,
+      "capture_response_cap_bytes": 48000000,
+      "artifact_cap_bytes": 44000000,
+      "network": "none",
+      "pull": "never",
+      "no_external_model_or_service": true,
+      "future_attempt_needs_new_operator_allocation": true,
+      "registered_other_reserve_bytes": 106000000,
+      "future_complete_reservation_must_be_rechecked": true
+    },
+    "qualification_accounting": {
+      "actual_elapsed_before_final_receipt_seconds": 10.914410833007423,
+      "full_stage_charge_seconds": 120,
+      "prior_known_seconds": 790,
+      "known_charged_seconds": 910,
+      "operator_construction_ceiling_seconds": 1000,
+      "historical_ceiling_preserved_seconds": 900,
+      "preserved_previous_phase_charges_seconds": [
+        60,
+        120,
+        180,
+        90,
+        250,
+        90
+      ],
+      "remaining_unassigned_seconds": 90,
+      "future_compute_grant": false
+    },
+    "qualification_outcome": {
+      "candidate_fp_bps": 0.15064826644621088,
+      "signed_differences": {
+        "global_rate": 0.1538682404225493,
+        "condition_time": 0.5144593633010113,
+        "past_activity_plus_condition": 0.8684663678952149,
+        "pooled_condition": 0.0,
+        "selected_ridge": 0.039909153420528864
+      },
+      "valid_archive_bytes": 33625560,
+      "private_target_loader_calls_positive": 1,
+      "private_target_loader_calls_malformed": 0,
+      "private_probe_grader_dispatched": false,
+      "all11resources_absent": true,
+      "all4activated_groups_absent": true,
+      "new_scientific_claim": false
+    }
+  }
+}

@@ -1,0 +1,294 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-FIND-044",
+  "track": "paper",
+  "title": "Duration between rewards controls the rate of behavioral and dopaminergic learning",
+  "status": "local_scoring_adapter_verified",
+  "scope": "Behavioral Figure1 e/g/h/k source-compatible numerical reconstruction across38mice and309sessions; no dopamine or wholepaper qualification.",
+  "entrypoints": {
+    "score": {
+      "argv": [
+        "python3",
+        "benchmarks/neuroscience/paper-find-044/score.py",
+        "--submission",
+        "{submission}",
+        "--output",
+        "{output}",
+        "--review",
+        "{review}",
+        "--other-reserve-bytes",
+        "{other_reserve_bytes}"
+      ],
+      "working_directory": ".",
+      "sha256": "125ce1710d81a1af786b5a01e3fdddf65686093a87d9259563045990afe6ef48",
+      "wall_seconds": 30,
+      "isolation": "Existing offline nonroot readonly Docker1CPU256MiB; six exact readonly files; numerical JSON only, no candidate code."
+    }
+  },
+  "assets": {
+    "public": {
+      "path": "benchmarks/neuroscience/paper-find-044/public_assets.json",
+      "bytes": 1777,
+      "sha256": "4056fa2b8784392e0222215f0bd416d3e8c9acb495c857cff2c283038b5da49d"
+    },
+    "private": {
+      "path": "benchmarks/neuroscience/paper-find-044/operator_assets.json",
+      "bytes": 2274,
+      "sha256": "b01446bca6c625f38d04a53ab2cb61b071214062971d560ec9f6666a6fda959a"
+    },
+    "local_workspace_dependencies": true,
+    "self_contained_portable": false
+  },
+  "verification": {
+    "status": "passed",
+    "receipt_path": "authoring/reward-spacing-v1/scoring-runtime-v1/execution-evidence-001/outer_receipt.json",
+    "receipt_sha256": "128d6ac000d299e800f262194b2f7b210c23488fae8b78519ed25c562a57c55f"
+  },
+  "admission": {
+    "runnable": true,
+    "full_candidate_contract_complete": false,
+    "research_qualified": false,
+    "submission_ready": false
+  },
+  "grading": {
+    "primary_metric": "e normalized-rate MAE inHz, equalmouse thenequalcondition, fixedreferencecoverage",
+    "direction": "lower",
+    "continuous": true,
+    "scientific_pass_floor": null,
+    "composite_success": null,
+    "endpoint_count_eligibility_uncertainty_and_own_consistency_separate": true
+  },
+  "qualification_scope": "18actualisolatedcontrols,24priorgeneratedchecks,8boundarymutations,actualinterruption;18containers3groupsabsent. Newfits/models/rawreads0.",
+  "limitations": [
+    "Summary scoring does not demonstrate input-dependent program execution or scientific reasoning.",
+    "Zero primary error can coexist with wrong cutoffs, endpoints or uncertainty; all error families remain separate.",
+    "Missing required numeric values keep their reference denominator and produce incomplete/null family errors.",
+    "Originalexposedcohort; no new-animal generalization, protected improvement study or paper/code effect measured.",
+    "Publication and source-compatible conventions differ at documented points; common instructions disclose them to botharms.",
+    "Worker memory cap was enforced, not measured as peakRSS.",
+    "Self-contained portability and public distribution remain unqualified."
+  ],
+  "ordinary_CLI_integration": {
+    "status": "passed",
+    "receipt": {
+      "path": "authoring/reward-spacing-v1/scoring-runtime-v1/registration/CLI_INTEGRATION.json",
+      "bytes": 1988,
+      "sha256": "33c00b2ef891fbda1761db0062ebc6d1adc8f3a12db834f97e1df4aa76eb9657"
+    },
+    "source_freeze_unchanged": true,
+    "entire_score_exact_parity": true,
+    "not_a_candidate_attempt": true
+  },
+  "program_execution": {
+    "status": "local_program_runner_verified",
+    "entrypoint": {
+      "argv": [
+        "python3",
+        "authoring/reward-spacing-v1/program-cli-v1/run_program.py",
+        "--program",
+        "{program}",
+        "--output",
+        "{output}",
+        "--review",
+        "{review}",
+        "--other-reserve-bytes",
+        "{other_reserve_bytes}"
+      ],
+      "working_directory": ".",
+      "sha256": "3258097af637d7bafb8959e8be8b2c97888c15f035c900a86ffe292a0d023c8a"
+    },
+    "source_freeze": {
+      "path": "authoring/reward-spacing-v1/program-cli-v1/FREEZE.json",
+      "sha256": "db28d18fb5e428a56f236d10bdb4deed9afcecb2508f7b0a7c131570f6816dad"
+    },
+    "verification": {
+      "status": "passed",
+      "receipt_path": "authoring/reward-spacing-v1/program-cli-v1/registration/A_outer_receipt.json",
+      "receipt_sha256": "449b26aa71dd6c81e4e048035c0a8d3dd8dd1c1b0919f7785c7ba204fc4f26aa",
+      "qualification_path": "authoring/reward-spacing-v1/program-cli-v1/registration/A_verification.json",
+      "qualification_sha256": "3486dad91f656b8f39125ffe281f42d220d4a37fa2a73f970b8428d8fa6077b5",
+      "source_binding_path": "authoring/reward-spacing-v1/program-cli-v1/registration/A_validated_start.json",
+      "source_binding_sha256": "fe0a2641378b101ef438ed213d2a30d5d8e4390579081b962dc3273f6543ad8b"
+    },
+    "fixed_control_dependency": {
+      "source_freeze": {
+        "path": "authoring/reward-spacing-v1/program-runtime-v2/FREEZE.json",
+        "bytes": 17571,
+        "sha256": "70effd1d1da18815c2b4746f47bd3cb66d0a58e19b074154a09e7301fb7dae62"
+      },
+      "terminal_receipt": {
+        "path": "artifacts-build/reward-spacing-program-qualification-002/outer_receipt.json",
+        "bytes": 20887,
+        "sha256": "bfb5cb5569388affb84455cd938dda8e47225385c459e14e2d249403beefaa2f"
+      },
+      "control_results": {
+        "path": "artifacts-build/reward-spacing-program-qualification-002/controller_result.json",
+        "bytes": 4822,
+        "sha256": "079077269f3f278af2c44fa7e8da7b88cac866f9b9dfe8884a9810976bd50e00"
+      },
+      "status": "eight_controls_and_five_grades_passed_outer_cleanup_unverified_preserved",
+      "control_count": 8,
+      "private_grade_count": 5,
+      "not_the_new_wrapper_verification": true,
+      "later_exact_absence_reconciliation": {
+        "path": "authoring/reward-spacing-v1/program-cleanup-observation-v1/RECONCILIATION.json",
+        "bytes": 1041,
+        "sha256": "6abee9e8120ae893e07f13ed950283f12718c59b8a0aa8fcc4ebbe884ccb5d29"
+      },
+      "later_metadata_constructor_verifier": {
+        "path": "artifacts-build/reward-spacing-recovery-metadata-001/result.json",
+        "bytes": 7818,
+        "sha256": "e14e644c4fce8c2d8ef02600c26b2c0a9fc532c5dd7f8db9a93d0cf3bb43d99d"
+      },
+      "live_recovery_removal_exercised_by_metadata_verifier": false
+    },
+    "ordinary_CLI_integration": {
+      "status": "passed",
+      "receipt": {
+        "path": "authoring/reward-spacing-v1/program-cli-v1/registration/CLI_INTEGRATION.json",
+        "bytes": 1057,
+        "sha256": "c96ce4a343b084e3b6a45c3c6715e1ff56126096fa732b5a94e900da3f01d9c4"
+      },
+      "actual_common_CLI_executed": true,
+      "control": "common_CLI_valid_null",
+      "complete_score_equal_to_saved_control": true,
+      "scientific_success": null
+    },
+    "public_inputs": [
+      {
+        "inventory": {
+          "bytes": 209894,
+          "path": "authoring/reward-spacing-v1/source-preflight-v1/CORRECTED_ASSET_MANIFEST.json",
+          "sha256": "5702f21519be3d6cb015e6046a197b24a074448b3ac41e6c8eb55f704faaf8b0"
+        },
+        "kind": "nwb_directory",
+        "mount_destination": "/input/data",
+        "path": "artifacts-build/reward-spacing-intake-002/objects"
+      },
+      {
+        "bytes": 209894,
+        "kind": "file",
+        "mount_destination": "/input/source_manifest.json",
+        "path": "authoring/reward-spacing-v1/source-preflight-v1/CORRECTED_ASSET_MANIFEST.json",
+        "sha256": "5702f21519be3d6cb015e6046a197b24a074448b3ac41e6c8eb55f704faaf8b0"
+      },
+      {
+        "bytes": 41785,
+        "kind": "file",
+        "mount_destination": "/input/PUBLIC_CONTRACT.json",
+        "path": "artifacts-build/reward-spacing-scoring-export-001/export/public/PUBLIC_CONTRACT.json",
+        "sha256": "e52eb549321064a838d3186ec75efcae179f9b1bf4800c0673af60e0ac391950"
+      },
+      {
+        "bytes": 8032,
+        "kind": "file",
+        "mount_destination": "/input/TASK.md",
+        "path": "authoring/reward-spacing-v1/paired-packet-design-v1/TASK.md",
+        "sha256": "65e84d44facfc8ae711b94954db7d2141581f01b799245b590b51fb9203e63d0"
+      },
+      {
+        "bytes": 3074,
+        "kind": "file",
+        "mount_destination": "/input/DATA_INTERFACE.md",
+        "path": "authoring/reward-spacing-v1/paired-packet-design-v1/DATA_INTERFACE.md",
+        "sha256": "22f16a982584c6e4a705480584cfb969a5c859ac8bf148a5bd7d38d3a0082106"
+      },
+      {
+        "bytes": 12644,
+        "kind": "file",
+        "mount_destination": "/input/SUBMISSION_SCHEMA.json",
+        "path": "authoring/reward-spacing-v1/paired-packet-design-v1/SUBMISSION_SCHEMA_PUBLIC.json",
+        "sha256": "6f6b67281b8094feff0bb938e4fb93a89090b59ef68ed746553bb332ccf0f282"
+      },
+      {
+        "bytes": 333957,
+        "kind": "file",
+        "mount_destination": "/input/paper/paper.xml",
+        "path": "authoring/reward-spacing-v1/source-preflight-v1/cache/paper.xml",
+        "sha256": "5cad66324c7f9fe78ac1980739b28d733449ed9f7a9e0416dfa7288edecfaf26"
+      },
+      {
+        "bytes": 14496,
+        "kind": "file",
+        "mount_destination": "/input/paper/correction.xml",
+        "path": "authoring/reward-spacing-v1/source-preflight-v1/cache/correction.xml",
+        "sha256": "a28258471fb088450be4eca1f676f75a62def9e8ae29f463c237bf8bf128c663"
+      }
+    ],
+    "private_dependency": {
+      "bytes": 924144,
+      "path": "artifacts-build/reward-spacing-scoring-export-001/export/private/reference.json",
+      "sha256": "b6fa48f8349e25eedc1dbdb962e196d31f8b98e202c931672620d841d9781cf8"
+    },
+    "scope": {
+      "mode": "offline_original_paper_and_data_program_numerical_reconstruction",
+      "original_mice": 38,
+      "original_sessions": 309,
+      "original_NWB_bytes": 762191835,
+      "endpoint_families": [
+        "e",
+        "g",
+        "h",
+        "k"
+      ],
+      "same_exposed_cohort": true,
+      "public_mounts": 8,
+      "lazy_original_directory": true,
+      "original_inputs_only_for_ordinary_runs": true,
+      "stale_answer_privilege": false,
+      "producer_removed_before_private_grade_required": true,
+      "public_validation_before_worker_private_numeric_decode_required": true,
+      "host_integrity_hashing_may_read_private_bytes_after_candidate_removal": true,
+      "program_authorship_not_inferred": true,
+      "LLM_attempts_this_integration": 0,
+      "paper_plus_code_access_effect_measured": false,
+      "full_candidate_contract_complete": false,
+      "research_qualified": false,
+      "submission_ready": false,
+      "new_benchmark_id": false,
+      "new_reference_claim": false,
+      "scientific_success": null,
+      "all_error_families_required_for_interpretation": true,
+      "public_redistribution_rights_cleared": false,
+      "self_contained_portable": false
+    },
+    "runtime": {
+      "ordinary_whole_attempt_seconds": 60,
+      "work_window_seconds": 45,
+      "cleanup_and_receipt_seconds": 15,
+      "candidate_max_seconds_from_start_request": 20,
+      "whole_work_deadline_may_shorten_candidate_time": true,
+      "single_program_cap_bytes": 65536,
+      "single_submission_cap_bytes": 2500000,
+      "result_cap_bytes": 30001,
+      "per_attempt_reserve_bytes": 8000000,
+      "maximum_owned_resources": 4,
+      "future_attempt_requires_current_review": true,
+      "future_reserves_must_be_rechecked": true
+    },
+    "accounting": {
+      "known_before_seconds": 3210.8298457059427,
+      "A_allocated_full_charge_seconds": 60,
+      "A_prospective_after_seconds": 3270.8298457059427,
+      "A_actual_receipt": {
+        "path": "authoring/reward-spacing-v1/program-cli-v1/registration/A_outer_receipt.json",
+        "bytes": 3944,
+        "sha256": "449b26aa71dd6c81e4e048035c0a8d3dd8dd1c1b0919f7785c7ba204fc4f26aa"
+      },
+      "B_proposed_full_charge_seconds": 60,
+      "B_allocated": true,
+      "B_prospective_after_if_A_finishes_with_full60_only_seconds": 3330.8298457059427,
+      "B_actual_receipt": {
+        "path": "authoring/reward-spacing-v1/program-cli-v1/registration/B_outer_receipt.json",
+        "bytes": 3951,
+        "sha256": "8c0ed58c7c6462d76ef6759dfd6c1565032515c64455b21409708fa8d4af21cb"
+      },
+      "current_operator_ceiling_seconds": 3331,
+      "historical_lifetime_complete": false,
+      "automatic_retry": false,
+      "new_model_calls": 0,
+      "future_ordinary_attempt_authorized": false,
+      "known_total_after_seconds": 3330.8298457059427
+    }
+  }
+}

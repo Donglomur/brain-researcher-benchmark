@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-ROOT-ADD-002",
+  "source_id": "ROOT-ADD-002",
+  "track": "paper",
+  "title": "Non-invasive decoding of typed sentences from human brain activity",
+  "status": "specification_only",
+  "canonical_position_one_based": 20,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41593-026-02303-2",
+    "publication_year": 2026,
+    "venue": "Nature Neuroscience"
+  },
+  "primary_outputs": [
+    "Retrain/evaluate the V1 neural decoder on released EEG/MEG typing recordings and reproduce character/word error comparisons under a frozen subject/session and sentence split."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://huggingface.co/datasets/bcbl190626/SpanishBCBL"
+    ],
+    "exact_asset_records": [],
+    "lineage_and_loader_evidence": {
+      "input_level": "Raw EEG/MEG typing recordings and behavior logs with author trigger/keystroke alignment.",
+      "data_urls": [
+        "https://huggingface.co/datasets/bcbl190626/SpanishBCBL"
+      ],
+      "input_version": null,
+      "input_inventory_or_loader_evidence": [
+        {
+          "url": "https://huggingface.co/datasets/bcbl190626/SpanishBCBL",
+          "version": "88f9096c6ce3a3fb17cc7b8e3131ff7f96da5684",
+          "license": "CC BY-NC 4.0",
+          "access": "API private=false, gated=false on check; stale loader docstring calls dataset gated",
+          "manifest_files": 731,
+          "schema": "MEG FIF, EEG BrainVision, MATLAB behavior logs and participant metadata; author loader constructs keystroke/word/sentence events with trigger alignment",
+          "example": "EEG/EEG/001_DECOMEG_S1_10754_task1.vhdr"
+        }
+      ],
+      "source_bridge": "Retrain/evaluate the V1 neural decoder on released EEG/MEG typing recordings and reproduce character/word error comparisons under a frozen subject/session and sentence split.",
+      "code_url": "https://github.com/facebookresearch/brain2qwerty",
+      "code_revision_or_archive_version": "5f9889621d0df391c5aab37c996683d308e6e926",
+      "entrypoints": [
+        "brain2qwerty_v1/main.py",
+        "brain2qwerty_v1/studies/spanishbcbl.py",
+        "brain2qwerty_v1/config/xp_config.py",
+        "brain2qwerty_v1/scripts/extract_predictions.py"
+      ],
+      "missing_core_inputs_as_recorded": [],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+        "record_id": "ROOT-ADD-002",
+        "versions_and_loader_contract": {
+          "scope_description": "Retrain/evaluate the V1 neural decoder on released EEG/MEG typing recordings and reproduce character/word error comparisons under a frozen subject/session and sentence split.",
+          "missing_core_inputs": []
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/facebookresearch/brain2qwerty",
+    "revision_or_archive_version": "5f9889621d0df391c5aab37c996683d308e6e926",
+    "entrypoints": [
+      "brain2qwerty_v1/main.py",
+      "brain2qwerty_v1/studies/spanishbcbl.py",
+      "brain2qwerty_v1/config/xp_config.py",
+      "brain2qwerty_v1/scripts/extract_predictions.py"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+        "record_id": "ROOT-ADD-002",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/facebookresearch/brain2qwerty",
+            "commit": "5f9889621d0df391c5aab37c996683d308e6e926",
+            "entrypoints": [
+              "brain2qwerty_v1/main.py",
+              "brain2qwerty_v1/studies/spanishbcbl.py",
+              "brain2qwerty_v1/config/xp_config.py",
+              "brain2qwerty_v1/scripts/extract_predictions.py"
+            ],
+            "license": "CC BY-NC 4.0",
+            "environment": "Python3.12, requirements.lock, PyTorch/CUDA; default eight-GPU config needs an explicitly matched smaller evaluation budget",
+            "inspection": "Actual SpanishBCBL event loader, aliases and file exclusions read"
+          }
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "recorded_terms": {
+        "code": "CC BY-NC 4.0",
+        "data": [
+          "CC BY-NC 4.0"
+        ]
+      },
+      "record_conflicts": [],
+      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
+      "overlap_group": "spanishbcbl-typing-v1"
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "central_outputs_in_saved_source_contract": [
+        "Retrain/evaluate the V1 neural decoder on released EEG/MEG typing recordings and reproduce character/word error comparisons under a frozen subject/session and sentence split."
+      ],
+      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
+      "missing_or_unfrozen_endpoint_details": "Bound to V1 neural decoder; V2 embargo and final language-model rescoring/corpus are separate. Multiple recording participant IDs can belong to one person."
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Keep CER/WER vocabulary, normalization and sentence/session folds fixed; neural-only versus language-model-assisted outputs are separate endpoints. Cross-session adaptation consumes a declared calibration budget."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Bound to V1 neural decoder; V2 embargo and final language-model rescoring/corpus are separate. Multiple recording participant IDs can belong to one person.",
+        "Keep CER/WER vocabulary, normalization and sentence/session folds fixed; neural-only versus language-model-assisted outputs are separate endpoints. Cross-session adaptation consumes a declared calibration budget.",
+        "Author source and archive metadata were inspected; scientific code was not executed. Readiness applies only to the declared central project.",
+        "Local dependency installation, bounded payload validation, baseline result agreement, runtime measurement, and benchmark packet/grader validation remain before execution qualification.",
+        "V2 embargo excluded. Published final language-model rescoring needs separate corpus/artifact verification; this project is the central V1 neural decoder.",
+        "Resolve multiple participant IDs belonging to one person before splitting; decoder source includes explicit aliases/log fixes.",
+        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+        "Execute and independently audit references, controls, grading and measured resources.",
+        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
+      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve neural-only decoding with calibration or cross-session adaptation at matched training and inference budgets; evaluate CER/WER and participant-level intervals."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "independent_panel_not_established_in_inspected_evidence",
+      "proposed_improvement": [
+        "Improve neural-only decoding with calibration or cross-session adaptation at matched training and inference budgets; evaluate CER/WER and participant-level intervals."
+      ],
+      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
+      "special_gate": "No completed independent improvement result is established here."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": "unmeasured",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "holds": {
+    "task_specific": [
+      "Bound to V1 neural decoder; V2 embargo and final language-model rescoring/corpus are separate. Multiple recording participant IDs can belong to one person.",
+      "Keep CER/WER vocabulary, normalization and sentence/session folds fixed; neural-only versus language-model-assisted outputs are separate endpoints. Cross-session adaptation consumes a declared calibration budget.",
+      "Author source and archive metadata were inspected; scientific code was not executed. Readiness applies only to the declared central project.",
+      "Local dependency installation, bounded payload validation, baseline result agreement, runtime measurement, and benchmark packet/grader validation remain before execution qualification.",
+      "V2 embargo excluded. Published final language-model rescoring needs separate corpus/artifact verification; this project is the central V1 neural decoder.",
+      "Resolve multiple participant IDs belonging to one person before splitting; decoder source includes explicit aliases/log fixes.",
+      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+      "Execute and independently audit references, controls, grading and measured resources.",
+      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Resolve alias/person and sentence identities in the pinned manifest, freeze the V1-only checkpoint/training and CER/WER contract, and size a lawful bounded recording panel.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Resolve alias/person and sentence identities in the pinned manifest, freeze the V1-only checkpoint/training and CER/WER contract, and size a lawful bounded recording panel.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "ea807e2d71f8ae7a35fdf9a9fda6dda74fa7de422007d3b81a5eed790d55b5b0",
+    "audit_record_sha256": "d0c06f25c9825d5c0b3559ec8e0f9443d35c3b89d8cf841a029bd939e98d1b97",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+          "bytes": 140656,
+          "sha256": "0cf7be08fe06c0b83492908e1ebb2c18eb5b9dd7a78fbd7ed8b10b2fb677bcb1"
+        },
+        "record_id": "ROOT-ADD-002",
+        "declared_record_sha256": "be515a2ad8390b3edaebdba0c23f8d5e9096c2ddf3e1ed05126d333f37067c68",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 1,
+        "record_sha256": "be515a2ad8390b3edaebdba0c23f8d5e9096c2ddf3e1ed05126d333f37067c68"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

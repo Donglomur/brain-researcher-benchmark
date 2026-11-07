@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-009",
+  "track": "neural",
+  "title": "Pediatric continuous seizure-event detection",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-H024"
+    ],
+    "titles": [
+      "CHB-MIT Scalp EEG"
+    ],
+    "overlap_groups": [
+      "chbmit"
+    ],
+    "task_family": "seizure_detection"
+  },
+  "scientific_question": "Can a neural detector find annotated seizures while maintaining low false alarms across full held-out-patient recordings?",
+  "task_type": "prediction",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Sample scores and merged predicted seizure intervals, with fixed threshold and context policy."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://physionet.org/content/chbmit/1.0.0/",
+      "https://github.com/esl-epfl/epilepsy2bids",
+      "https://physionet.org/files/chbmit/1.0.0/RECORDS",
+      "https://physionet.org/files/chbmit/1.0.0/SHA256SUMS.txt",
+      "https://physionet.org/files/chbmit/1.0.0/chb01/chb01_03.edf",
+      "https://physionet.org/files/chbmit/1.0.0/chb01/chb01-summary.txt",
+      "https://physionet.org/files/chbmit/1.0.0/SUBJECT-INFO",
+      "https://raw.githubusercontent.com/esl-epfl/epilepsy2bids/d3fb17526b8a483e292ae9ba2e51b02d5f9128ff/src/epilepsy2bids/bids/chbmit/convert2bids.py",
+      "https://raw.githubusercontent.com/esl-epfl/epilepsy2bids/d3fb17526b8a483e292ae9ba2e51b02d5f9128ff/src/epilepsy2bids/load_annotations/chbmit.py",
+      "https://raw.githubusercontent.com/esl-epfl/timescoring/426f8d2b77974641dc9db71884e0812b249ba93b/src/timescoring/scoring.py",
+      "https://raw.githubusercontent.com/esl-epfl/sz-validation-framework/aba5accc45598156cb178cf48a3203639bc23ff8/3-runSzDetection/docker-szDetection/algo/src/algo/sz_detection.py"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-H024",
+        "ledger": "readiness/signals_extension_a.json",
+        "record_sha256": "c0c3d821f1471cd7b084a376bd4f9ab05f27c0e5d4f89ee4a2ff37e7feae09c7",
+        "data_manifest": {
+          "url": "https://physionet.org/files/chbmit/1.0.0/RECORDS",
+          "version": "1.0.0",
+          "sha256": "72b640d6a3fef4b40de255933d1403823d1655c56f93d69761105a653798fc08",
+          "recording_files": 686,
+          "publisher_hashes": "https://physionet.org/files/chbmit/1.0.0/SHA256SUMS.txt",
+          "case_folders": 24,
+          "biological_people": 23,
+          "count_caveat": "Live RECORDS contains 686 EDF paths, while publisher descriptive prose still says 664. Use the pinned actual manifest; chb24 was added later.",
+          "example_input": {
+            "url": "https://physionet.org/files/chbmit/1.0.0/chb01/chb01_03.edf",
+            "bytes": 42399744,
+            "publisher_sha256": "4c4a95a9b4331aeaadadd538763eb2e735950d9aa615b85ee6246c784be8ae90"
+          },
+          "example_labels": {
+            "url": "https://physionet.org/files/chbmit/1.0.0/chb01/chb01-summary.txt",
+            "event_onset_seconds": 2996,
+            "event_offset_seconds": 3036
+          },
+          "biological_identity_url": "https://physionet.org/files/chbmit/1.0.0/SUBJECT-INFO"
+        },
+        "recording_contract": {
+          "neural": "Actual representative EDF header has 23 bipolar EEG channels at 256 Hz, microvolt units, and 3,600 one-second records. Montage and duplicate labels vary across files; never infer all channels are distinct electrodes.",
+          "labels": "Per-case summary files give seizure starts/ends in recording-relative seconds; companion .edf.seizures files also exist. Actual chb01_03 event is 2996–3036 s.",
+          "time_alignment": "Summary onset/offset is relative to the EDF recording. Gaps between files must not be treated as observed background. Pinned parser matches the exact EDF filename and reads its event interval.",
+          "biological_ids": "chb01 and chb21 are the same biological person approximately 1.5 years apart; official converter maps chb21 to subject01/session02. Split 23 people, not 24 folder names. chb24 age/sex missing in SUBJECT-INFO.",
+          "evidence": "686-path manifest, SUBJECT-INFO, actual summary, 6,144-byte EDF header, source alias mapping and label parser inspected; no signal samples downloaded."
+        },
+        "status": "artifact_ready"
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "neural_measurements": "Actual representative EDF header has 23 bipolar EEG channels at 256 Hz, microvolt units, and 3,600 one-second records. Montage and duplicate labels vary across files; never infer all channels are distinct electrodes.",
+    "allowed_context": "Per-case summary files give seizure starts/ends in recording-relative seconds; companion .edf.seizures files also exist. Actual chb01_03 event is 2996–3036 s.",
+    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
+    "time_alignment": "Summary onset/offset is relative to the EDF recording. Gaps between files must not be treated as observed background. Pinned parser matches the exact EDF filename and reads its event interval.",
+    "source_contract_evidence": "686-path manifest, SUBJECT-INFO, actual summary, 6,144-byte EDF header, source alias mapping and label parser inspected; no signal samples downloaded."
+  },
+  "biological_unit": "chb01 and chb21 are the same biological person approximately 1.5 years apart; official converter maps chb21 to subject01/session02. Split 23 people, not 24 folder names. chb24 age/sex missing in SUBJECT-INFO.",
+  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "split": {
+    "policy": "Group by biological patient, explicitly chb01=chb21; split complete recordings; keep complete eligible background and file gaps.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/esl-epfl/epilepsy2bids",
+    "commit_or_archive_version": "d3fb17526b8a483e292ae9ba2e51b02d5f9128ff",
+    "entrypoints": [
+      "src/epilepsy2bids/bids/chbmit/convert2bids.py",
+      "src/epilepsy2bids/load_annotations/chbmit.py"
+    ],
+    "role": "recording_conversion_and_label_parser; separate_event_scorer; no_verified_positive_neural_detector",
+    "reference_executed_for_this_contract": false,
+    "source_paper": null,
+    "data_url": "https://physionet.org/content/chbmit/1.0.0/"
+  },
+  "controls": [
+    "Merge chb01/chb21 identity",
+    "keep nonseizure background",
+    "timing/montage-only baseline",
+    "remove annotation channels."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Patient-macro event F1; mandatory event sensitivity and false alarms per 24 observed hours.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": null
+    },
+    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+      },
+      {
+        "id": "reference",
+        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+      },
+      {
+        "id": "scorer",
+        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      },
+      {
+        "id": "replication",
+        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "CPU_workstation_bounded",
+    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+    "source_storage_evidence": {
+      "publisher_total_uncompressed": "42.6 GB",
+      "example_record_bytes": 42399744,
+      "bounded_intake_plan": "One seizure-bearing and one background record per selected person for schema/positive-control setup, then complete monitoring periods for an honest false-alarm assessment.",
+      "compute_estimate": "CPU feature-baseline scope is plausible; throughput and RAM unmeasured. Full monitoring is much larger than a balanced epoch demonstration."
+    }
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Qualify a real EEG-derived detector; freeze tolerance/merging; validate gaps and duplicate montage labels."
+    },
+    {
+      "id": "source_1",
+      "requirement": "Public input and label/evaluator source are verified; a meaningful signal-derived reference predictor has not been selected or run."
+    },
+    {
+      "id": "source_2",
+      "requirement": "No packet, scorer, baseline or investigation grading has been executed. Source-supported status does not imply predictive support."
+    },
+    {
+      "id": "source_3",
+      "requirement": "Clinical cohort composition, medication changes, hardware, montage and monitoring context can confound transfer; a failed transfer is not proof of absent neural understanding."
+    },
+    {
+      "id": "packet",
+      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+    },
+    {
+      "id": "reference",
+      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+    },
+    {
+      "id": "scorer",
+      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+    },
+    {
+      "id": "replication",
+      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+    }
+  ],
+  "next_implementation_action": [
+    "Qualify a real EEG-derived detector; freeze tolerance/merging; validate gaps and duplicate montage labels."
+  ],
+  "construction_review": null,
+  "source_audit_overlays": [],
+  "provenance": {
+    "canonical_record_sha256": "47b49daacc24aab217bd8ac1bfcb41582916867a0b3f8a722e5bdacf3ddb384c",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/readiness/signals_extension_a.json",
+        "bytes": 75510,
+        "sha256": "c8483ac7303756678974cca75dfb64a16064f68cec4a0ae407ae84d7976f41d6"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

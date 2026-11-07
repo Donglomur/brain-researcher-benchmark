@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-097",
+  "track": "neural",
+  "title": "Task-irrelevant stimulus-content decoding",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-P002"
+    ],
+    "titles": [
+      "COGITATE multimodal conscious-perception collection"
+    ],
+    "overlap_groups": [
+      "cogitate-family"
+    ],
+    "task_family": "conscious_perception"
+  },
+  "scientific_question": "Can a task-specific decoder identify content from individual or label-independently aggregated observations in one fixed COGITATE experiment1 modality, stratified by task relevance?",
+  "task_type": "prediction",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Content scores frozen before private label scoring. Category-specific test averaging belongs only to a separately named source-reproduction diagnostic, not candidate preprocessing."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://www.arc-cogitate.com/data-bundles",
+      "https://www.nature.com/articles/s41586-025-08888-1",
+      "https://github.com/Cogitate-consortium/cogitate-msp1",
+      "https://doi.org/10.17617/1.6qpg-gz82",
+      "https://doi.org/10.17617/1.nzwp-7j89",
+      "https://doi.org/10.17617/1.8ax5-t263"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-P002",
+        "ledger": "catalog/datasets_paper_linked.json",
+        "record_sha256": "9281e3dbbb6c6f6f382e67599ee136379ee4fabaee4f86d56d30dd6d50ea5fe3",
+        "data_manifest": null,
+        "recording_contract": null,
+        "status": null
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "proposed_scope": "Expected source-specific input: one recording-bearing COGITATE experiment/modality plus content, duration, relevance/report labels; site/person linkage pending.",
+    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
+    "schema_verified": false
+  },
+  "biological_unit": "participant and acquisition site; modality cohorts must be mapped rather than presumed identical",
+  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "split": {
+    "policy": "Freeze modality, phase, participant/site and task-relevance splits. Source within-person transfer does not establish new-person/site transfer. Declare training-only versus label-free transductive covariance separately from label-aware averaging.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/Cogitate-consortium/cogitate-msp1",
+    "commit_or_archive_version": null,
+    "entrypoints": [],
+    "role": "Pinned experiment1 MEG analysis source. Category-aware test pseudo-trials and transductive covariance are distinct from hidden-label prediction; sample-bundle ROI compatibility and reference execution remain unresolved.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://www.nature.com/articles/s41586-025-08888-1",
+    "data_url": "https://www.arc-cogitate.com/data-bundles"
+  },
+  "controls": [
+    "No report/stimulus labels in query",
+    "matched duration and motor demands",
+    "cross-site/person grouping."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Participant-macro balanced accuracy with task-relevance strata.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": null
+    },
+    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
+    "basis": "Unmeasured estimate. Use bounded existing derivatives/reference features; full-source procurement and model training are not implied."
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Obtain permitted public bundle access; choose one compatible experiment/recording cohort and exact label schema."
+    },
+    {
+      "id": "catalog_limit",
+      "requirement": "Count this umbrella once, not per modality, format or experiment. Experiment 1 supports the 2025 paper and linked code; 2026 experiment 2 requires a separate compatibility audit. Decoding alone cannot adjudicate full consciousness theories. Source audit only; not execution-qualified."
+    },
+    {
+      "id": "source_inventory",
+      "requirement": "Retrieve bounded versioned manifests/schema and verify actual recording inputs, labels, alignment and biological identity; catalog identity alone is insufficient."
+    },
+    {
+      "id": "code_lock",
+      "requirement": "Pin exact official code revision/entrypoint and license, inspect loader-to-data compatibility, and select a meaningful signal-derived reference."
+    },
+    {
+      "id": "terms",
+      "requirement": "Audit data, stimulus, code and checkpoint access/redistribution terms before packet distribution."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+    },
+    {
+      "id": "execution",
+      "requirement": "Implement and run data adapter/evaluator/reference, matched controls and malformed-output tests; independently reproduce results before any validation claim."
+    },
+    {
+      "source_id": "D-P002",
+      "construction_gates": [
+        "Resolve approved source access and benchmark-use/redistribution conditions; no account or terms acceptance performed.",
+        "Select experiment1 and one modality/analysis; verify exact participant files, phase, source version, timing and inclusion before payload acquisition.",
+        "Acquire a bounded permitted recording/derivative sample and inspect actual schema, channels, events and calibrated measurements; declared FIF fields are code expectations only.",
+        "Build a category-hidden, single-trial or explicitly declared aggregate prediction reference. Do not group evaluation observations by hidden true labels; original pseudo-trial results are not a directly matched prediction baseline.",
+        "Freeze participant/site/stimulus grouping, any target-person calibration, source estimation/transductive access, seeds, metric, time windows and nuisance controls.",
+        "For temporal claims, distinguish source-space smoothing/filtering, stimulus duration/offset and task relevance; unsuccessful decoding does not establish absent conscious content.",
+        "Reconcile archived published-code version with current commit and intended inverse regularization; dependencies/preprocessing are not executed.",
+        "Treat the processed MEG alternative as overlapping evidence with PAPER-paper-method-add-010 and qualify its narrower input/target bridge separately."
+      ]
+    }
+  ],
+  "next_implementation_action": [
+    "Resolve access and a category-hidden prediction interface; true-label pseudo-trial averages are not a matched single-trial predictor."
+  ],
+  "construction_review": {
+    "checked_on": "2026-10-30",
+    "disposition": "reframe",
+    "reason": "The source decoder assembles evaluation pseudo-trials using their true categories; that is not unknown-label single-trial inference.",
+    "remaining_gates": [
+      "Resolve permitted access and a bounded usable derivative; source ROI analyses do not run on the sample bundle.",
+      "Verify trial metadata and modality/participant joins.",
+      "Qualify a matched hidden-label reference without silently changing source inverse-model expressions."
+    ],
+    "proposal": "authoring/neural-source-audits/contract-corrections-v2.json",
+    "proposal_sha256": "fe743219d97e5b428f828918bd8be294766dfe8f679f74fd60399eef3028d247",
+    "source_evidence": [
+      {
+        "path": "authoring/neural-source-audits/cogitate-v1/audit.md",
+        "sha256": "63c5ce224c7b292fabc58b53efa115f7f3fda26004687771063b3fef9f93b721"
+      }
+    ],
+    "readiness_promoted": false
+  },
+  "source_audit_overlays": [
+    {
+      "source_id": "D-P002",
+      "name": "COGITATE",
+      "assignment_ids": [
+        "NEURAL-097",
+        "NEURAL-098"
+      ],
+      "checked_on": "2026-10-30",
+      "audit_path": "authoring/neural-source-audits/cogitate-v1/audit.json",
+      "narrative_path": "authoring/neural-source-audits/cogitate-v1/audit.md",
+      "audit_scope": "Source, archive metadata and code inspection only; no recording or model payload and no scientific execution.",
+      "construction_implication": "Resolve access and a category-hidden prediction interface; true-label pseudo-trial averages are not a matched single-trial predictor.",
+      "remaining_gates": [
+        "Resolve approved source access and benchmark-use/redistribution conditions; no account or terms acceptance performed.",
+        "Select experiment1 and one modality/analysis; verify exact participant files, phase, source version, timing and inclusion before payload acquisition.",
+        "Acquire a bounded permitted recording/derivative sample and inspect actual schema, channels, events and calibrated measurements; declared FIF fields are code expectations only.",
+        "Build a category-hidden, single-trial or explicitly declared aggregate prediction reference. Do not group evaluation observations by hidden true labels; original pseudo-trial results are not a directly matched prediction baseline.",
+        "Freeze participant/site/stimulus grouping, any target-person calibration, source estimation/transductive access, seeds, metric, time windows and nuisance controls.",
+        "For temporal claims, distinguish source-space smoothing/filtering, stimulus duration/offset and task relevance; unsuccessful decoding does not establish absent conscious content.",
+        "Reconcile archived published-code version with current commit and intended inverse regularization; dependencies/preprocessing are not executed.",
+        "Treat the processed MEG alternative as overlapping evidence with PAPER-paper-method-add-010 and qualify its narrower input/target bridge separately."
+      ],
+      "explicit_response_body_bytes": 702641,
+      "request_attempts": 21,
+      "request_wall_seconds_sum": 6.235563293041196,
+      "independent_source_cap_bytes": 2000000,
+      "roster_status_changed": false,
+      "reference_executed": false,
+      "scientific_admission": false
+    }
+  ],
+  "provenance": {
+    "canonical_record_sha256": "495274aabbe8a82aa76bf30b932d874ae556b6c609229a052528577a91103f6e",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/catalog/datasets_paper_linked.json",
+        "bytes": 18236,
+        "sha256": "fe4d1e84af0ebdce74577e94b4dca4d143a7d070949ee15f71231e592b08edf0"
+      },
+      {
+        "path": "authoring/neural-source-audits/cogitate-v1/audit.json",
+        "bytes": 6093,
+        "sha256": "1fee0067ea30b4df9c146541c312c2e7195968757b5f83513b27b3729176a296"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

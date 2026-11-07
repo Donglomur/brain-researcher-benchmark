@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-007",
+  "track": "neural",
+  "title": "Whole-night five-stage sleep scoring",
+  "status": "local_scoring_adapter_verified",
+  "scope": "Executable development scoring adapter: engineered EEG/EOG/clock features plus common pretrained YASA outputs, six labeled training people, two exposed development people. Not the complete neural-investigation contract.",
+  "entrypoints": {
+    "score": {
+      "argv": [
+        "python3",
+        "benchmarks/neuroscience/neural-007-whole-night-sleep-scoring/score.py",
+        "--submission",
+        "{submission}",
+        "--output",
+        "{output}"
+      ],
+      "working_directory": ".",
+      "sha256": "aad0a778a46d7c13638e45c93e441fb0ee5e6a01e3f68a06300c48a01f5ca167",
+      "wall_seconds": 18,
+      "isolation": "fresh offline nonroot read-only Docker;2CPU/4GiB; no candidate code executed"
+    }
+  },
+  "assets": {
+    "public": {
+      "path": "benchmarks/neuroscience/neural-007-whole-night-sleep-scoring/public_assets.json",
+      "bytes": 11568,
+      "sha256": "d5ea2b631dc3c6f6776b99ae9b40d7a9b049ec6d12552476e84b3b504e4c8274"
+    },
+    "private": {
+      "path": "benchmarks/neuroscience/neural-007-whole-night-sleep-scoring/operator_assets.json",
+      "bytes": 4353,
+      "sha256": "20f22276191ece82dbffcb0ea5d80e47a6d9046b07c2a1cd55d63fd57da35d6b"
+    },
+    "local_workspace_dependencies": true,
+    "self_contained_portable": false,
+    "candidate_must_not_mount_operator_package_or_parent_directories": true
+  },
+  "instructions": "instructions.md",
+  "submission": {
+    "type": "arbitrary_probability_npz",
+    "schema": "instructions.md",
+    "max_bytes": 4000000
+  },
+  "grading": {
+    "primary_metric": "equal-participant fixed-five-class macro-F1",
+    "direction": "higher",
+    "continuous_score": true,
+    "comparators": [
+      "YASA",
+      "RF"
+    ],
+    "signed_difference": "candidate_minus_comparator",
+    "binary_scientific_success_threshold": null,
+    "invalid_submission_score": null
+  },
+  "verification": {
+    "status": "passed",
+    "receipt_path": "authoring/delivery-integration-sleep-v1/repair-v2/execution-001/receipt.json",
+    "receipt_sha256": "30e6e54518068c382750548a2b0f3f68f8c033596e813b0edd0c8182ef43d7ea"
+  },
+  "admission": {
+    "runnable": true,
+    "research_qualified": false,
+    "full_candidate_contract_complete": false,
+    "submission_ready": false
+  },
+  "limitations": [
+    "Two exposed development participants, not an unseen confirmation panel.",
+    "Features and common model outputs, not raw-signal/native-LLM investigation.",
+    "No candidate agent run, program-provenance enforcement or four-cell comparison in this adapter.",
+    "Pretraining/context differ between YASA and RF; signed comparison is descriptive.",
+    "Training observation caches qualified; broader joined agent-training interface remains a separate study gate.",
+    "Local existing artifacts and Docker image required; no hosted portability claim."
+  ],
+  "program_execution": {
+    "status": "local_program_runner_verified",
+    "entrypoint": {
+      "argv": [
+        "python3",
+        "authoring/sleep-eog/program-runner-v1/run_outer.py",
+        "--mode",
+        "submission",
+        "--program",
+        "{program}",
+        "--review",
+        "{review}",
+        "--output",
+        "{output}",
+        "--other-reserve-bytes",
+        "{other_reserve_bytes}"
+      ],
+      "working_directory": ".",
+      "sha256": "f5eec816a182d29c81c7fdcf3c0de4c53d4d1e4e689e81f353e861a1e4ff6b65",
+      "required_operator_arguments": [
+        "review",
+        "other_reserve_bytes"
+      ]
+    },
+    "source_freeze": {
+      "path": "authoring/sleep-eog/program-runner-v1/FREEZE.json",
+      "sha256": "7e2270db7008928daed208a051429c827f753fbb09249b02cb79b06a72296b6b"
+    },
+    "verification": {
+      "status": "passed",
+      "receipt_path": "authoring/sleep-eog/program-runner-v1/receipt.json",
+      "receipt_sha256": "12148bc7994521d649d00e5a2dbcee57007379b0de8b445cb27425dab0356f8e",
+      "qualification_path": "authoring/sleep-eog/program-runner-v1/verification.json",
+      "qualification_sha256": "1fa90b3b92fdf63d26cfeba37e501e12fd490d349fb2a9a1d2021fe5be25d6dd",
+      "source_binding_path": "authoring/sleep-eog/program-runner-v1/source_binding.json",
+      "source_binding_sha256": "364f0e5ba082fb22ab07d892b253fa56682d826377c90f572f3c1999c5a31818",
+      "planned_controls": [
+        "reference",
+        "constant",
+        "malformed",
+        "private_probe"
+      ],
+      "generated_runtime_tests": 12,
+      "actual_interrupted_wrapper_fixture_passed": true
+    },
+    "instructions_path": "authoring/sleep-eog/program-runner-v1/PUBLIC_CONTRACT.md",
+    "operator_instructions_path": "authoring/sleep-eog/program-runner-v1/OPERATOR_RUNBOOK.md",
+    "scope": {
+      "mode": "offline_whole_night_fixed_python_program_features_plus_common_model_outputs",
+      "training_people": 6,
+      "training_full_epochs": 16290,
+      "development_people": 2,
+      "development_full_epochs": 5450,
+      "development_exposed": true,
+      "same_training_files_each_fresh_case": true,
+      "same_program_frozen_before_all_cases": true,
+      "fresh_process_scratch_output_per_case": true,
+      "all_producers_absent_and_both_outputs_committed_before_private_grading": true,
+      "candidate_schema_before_worker_private_targets": true,
+      "arbitrary_final_probabilities": true,
+      "raw_observation_condition_qualified": false,
+      "paired_investigation_mode_qualified": false,
+      "LLM_attempts": 0,
+      "research_qualified": false,
+      "full_candidate_contract_complete": false,
+      "submission_ready": false
+    },
+    "runtime": {
+      "whole_attempt_seconds": 100,
+      "work_interval_seconds": 70,
+      "candidate_work_seconds_per_case": 20,
+      "candidate_memory_bytes": 3221225472,
+      "candidate_cpus": 1.75,
+      "candidate_numeric_threads": 2,
+      "candidate_pids": 64,
+      "holder_memory_bytes": 134217728,
+      "holder_cpus": 0.25,
+      "grader_memory_bytes": 4294967296,
+      "grader_cpus": 2,
+      "maximum_active_candidates": 1,
+      "output_tmpfs_bytes": 8388608,
+      "scratch_bytes": 67108864,
+      "program_bytes": 200000,
+      "per_case_output_bytes": 400000,
+      "artifact_cap_bytes": 12000000,
+      "network": "none",
+      "future_attempt_needs_new_operator_allocation": true,
+      "requires_current_complete_other_reserve": true,
+      "requires_same_freeze_passed_qualification_and_latest_cost_receipts": true
+    },
+    "qualification_accounting": {
+      "actual_wall_seconds": 12.956302332982887,
+      "full_stage_charge_seconds": 180,
+      "prior_known_seconds": 1010.0258648320159,
+      "known_charged_seconds": 1190.025864832016,
+      "operator_construction_ceiling_seconds": 1200,
+      "future_compute_grant": false,
+      "conservative_YASA_associated_allocation_seconds": 661.0099144170235,
+      "associated_ledger_is_not_new_model_inference_or_additional_global_budget": true,
+      "cpu_is_separate_from_wall": true,
+      "lifetime_complete": false
+    },
+    "preserved_previous_manifest": {
+      "path": "authoring/sleep-eog/program-runner-v1/registration/manifest.before-program-execution.json",
+      "bytes": 2997,
+      "sha256": "b24d085876317b8c3dd4234b9e4cdae0eacdbe8e20726b0ade90713c69d29ee5"
+    }
+  },
+  "program_conditions": {
+    "features": "default",
+    "raw": {
+      "status": "local_program_runner_verified",
+      "entrypoint": {
+        "argv": [
+          "python3",
+          "authoring/sleep-eog/raw-program-runner-v1/run_outer.py",
+          "--mode",
+          "submission",
+          "--program",
+          "{program}",
+          "--review",
+          "{review}",
+          "--output",
+          "{output}",
+          "--other-reserve-bytes",
+          "{other_reserve_bytes}"
+        ],
+        "working_directory": ".",
+        "sha256": "5054a5e599dfb5d137108d8d95fdaa4d1a4d07253d085a9fb530e32f00492a58",
+        "required_operator_arguments": [
+          "review",
+          "other_reserve_bytes"
+        ]
+      },
+      "source_freeze": {
+        "path": "authoring/sleep-eog/raw-program-runner-v1/FREEZE.json",
+        "sha256": "2f6efe17ef461d3b25482c375ee4f02c579b95d5e0120cbaf1d3956411426345"
+      },
+      "verification": {
+        "status": "passed",
+        "receipt_path": "authoring/sleep-eog/raw-program-cli-v1/receipt.json",
+        "receipt_sha256": "ab82b148fa2db1c793a90e8ac8df04118abfcbbedb87ca1bb4a467da2ce8a61b",
+        "qualification_path": "authoring/sleep-eog/raw-program-cli-v1/verification.json",
+        "qualification_sha256": "a2666cfabc8f9bcc5194691f57c60d7346086f76aa92c81aa083252a38abe14a",
+        "source_binding_path": "authoring/sleep-eog/raw-program-cli-v1/source_binding.json",
+        "source_binding_sha256": "d5eed64a622758a073bdd67d6b853725071d9a4d8340d2b8d5af193b21897c1d"
+      },
+      "instructions_path": "authoring/sleep-eog/raw-program-runner-v1/PUBLIC_CONTRACT.md",
+      "operator_instructions_path": "authoring/sleep-eog/raw-program-cli-v1/README.md",
+      "scope": {
+        "mode": "offline_whole_night_fixed_python_program_raw_plus_common_model_outputs",
+        "training_people": 6,
+        "training_full_epochs": 16290,
+        "development_people": 2,
+        "development_full_epochs": 5450,
+        "development_exposed": true,
+        "same_training_files_each_fresh_case": true,
+        "same_program_frozen_before_all_cases": true,
+        "fresh_process_scratch_output_per_case": true,
+        "all_producers_absent_and_both_outputs_committed_before_private_grading": true,
+        "candidate_schema_before_worker_private_targets": true,
+        "arbitrary_final_probabilities": true,
+        "raw_observation_condition_qualified": true,
+        "paired_investigation_mode_qualified": false,
+        "LLM_attempts": 0,
+        "research_qualified": false,
+        "full_candidate_contract_complete": false,
+        "submission_ready": false
+      },
+      "runtime": {
+        "whole_attempt_seconds": 120,
+        "work_interval_seconds": 90,
+        "candidate_work_seconds_per_case": 20,
+        "candidate_memory_bytes": 3221225472,
+        "candidate_cpus": 1.75,
+        "candidate_numeric_threads": 2,
+        "candidate_pids": 64,
+        "holder_memory_bytes": 134217728,
+        "holder_cpus": 0.25,
+        "grader_memory_bytes": 4294967296,
+        "grader_cpus": 2,
+        "maximum_active_candidates": 1,
+        "output_tmpfs_bytes": 8388608,
+        "scratch_bytes": 67108864,
+        "program_bytes": 200000,
+        "per_case_output_bytes": 400000,
+        "artifact_cap_bytes": 12000000,
+        "network": "none",
+        "future_attempt_needs_new_operator_allocation": true,
+        "requires_current_complete_other_reserve": true,
+        "requires_same_freeze_passed_qualification_and_latest_cost_receipts": true
+      },
+      "qualification_accounting": {
+        "actual_wall_seconds": 18.168122333998326,
+        "full_stage_charge_seconds": 240,
+        "known_charged_seconds_at_qualification": 2270.025864832016,
+        "latest_cost_required_for_future_execution": true,
+        "future_compute_grant": false
+      }
+    }
+  },
+  "program_condition_note": "One task with two qualified fixed-program information conditions. Conditions are not extra benchmarks. The existing default remains features.",
+  "investigation_workflow": {
+    "status": "four_developer_cells_executed_peer_reviewed",
+    "entrypoint": "authoring/sleep-eog/completion-v1/run.py",
+    "instructions": "authoring/sleep-eog/completion-v1/README.md",
+    "results": "authoring/sleep-eog/completion-v1/RESULTS.json",
+    "conditions": [
+      "features",
+      "raw"
+    ],
+    "workflows": [
+      "fixed",
+      "investigator"
+    ],
+    "external_model_interface": "file_exchange; caller_context_and_token_budget_obligations",
+    "research_qualified": false,
+    "additional_task_id": false
+  }
+}

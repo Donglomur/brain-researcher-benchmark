@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-003",
+  "source_id": "paper-method-003",
+  "track": "paper",
+  "title": "REVE: A Foundation Model for EEG – Adapting to Any Setup with Large-Scale Pretraining on 25,000 Subjects",
+  "status": "specification_only",
+  "canonical_position_one_based": 65,
+  "paper_identity": {
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/20a917f77773ac0fa8bea2bdd6606b66-Abstract-Conference.html",
+    "publication_year": 2025,
+    "venue": "NeurIPS"
+  },
+  "primary_outputs": [
+    "Subject-level balanced accuracy/kappa and comparison against a matched smaller/pretrained-baseline model; adaptation-budget curve."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://physionet.org/content/eegmmidb/1.0.0/"
+    ],
+    "exact_asset_records": [],
+    "lineage_and_loader_evidence": {
+      "assessment": "PhysioNetEEGMMI1.0.0 raw EDF inputs and reve_eeg06a705… source task/preprocessing; modelweights require exact released hash and separate Responsible Use License.",
+      "official_code": {
+        "url": "https://github.com/elouayas/reve_eeg",
+        "commit": "06a7059a07c3dabd80aee60c3dbc1eca4bdbe1c7"
+      },
+      "input_routes": [
+        {
+          "url": "https://physionet.org/content/eegmmidb/1.0.0/",
+          "version": "1.0.0"
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-003",
+        "versions_and_loader_contract": {
+          "scope_description": "Reproduce REVE downstream motor-imagery transfer on PhysioNet EEGMMI with the released model and specified subject split.",
+          "unresolved_coverage": [
+            "Whole pretraining corpus is partly restricted. Model-weight use terms must be honored. Exact released-model hash and training-history overlap belong in run manifests."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/elouayas/reve_eeg",
+    "revision_or_archive_version": "06a7059a07c3dabd80aee60c3dbc1eca4bdbe1c7",
+    "entrypoints": [
+      "preprocessing/preprocessing_physio.py",
+      "src/dt.py",
+      "src/eval_dt.py",
+      "src/configs/task/physio.yaml"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-003",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/elouayas/reve_eeg",
+            "commit": "06a7059a07c3dabd80aee60c3dbc1eca4bdbe1c7",
+            "author_linkage": [
+              "https://proceedings.neurips.cc/paper_files/paper/2025/hash/20a917f77773ac0fa8bea2bdd6606b66-Abstract-Conference.html",
+              "https://arxiv.org/abs/2510.21585",
+              "https://huggingface.co/brain-bzh/reve-base",
+              "https://physionet.org/content/eegmmidb/1.0.0/",
+              "https://github.com/elouayas/reve_eeg",
+              "https://huggingface.co/datasets/brain-bzh/reve-dataset"
+            ],
+            "default_branch": "main",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/elouayas/reve_eeg/06a7059a07c3dabd80aee60c3dbc1eca4bdbe1c7/README.md",
+            "license_source": "https://raw.githubusercontent.com/elouayas/reve_eeg/06a7059a07c3dabd80aee60c3dbc1eca4bdbe1c7/LICENSE"
+          },
+          "entrypoints": [
+            "preprocessing/preprocessing_physio.py",
+            "src/dt.py",
+            "src/eval_dt.py",
+            "src/configs/task/physio.yaml"
+          ],
+          "dependencies": [
+            "Python>=3.11",
+            "PyTorch",
+            "accelerate",
+            "Hydra",
+            "MNE"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": [
+        "EEGMMI1.0.0 ODC Attribution1.0, open",
+        "Code MIT; pretrained weights have separate Responsible Use License"
+      ],
+      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "recorded_central_outputs": [
+        "Subject-level balanced accuracy/kappa and comparison against a matched smaller/pretrained-baseline model; adaptation-budget curve."
+      ],
+      "assessment": "REVE downstream EEGMMI transfer is supported;25,000subject pretraining reproduction and all cross-setup claims are outside scope.",
+      "status": "documented_scoped_proposal_not_numeric_qualification",
+      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Match subjects/runs, class/epoch definitions, baseline access and compute across CBraMod/EEGNet/other pretrained models. Partial restricted pretraining history limits contamination claims.",
+      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Whole pretraining corpus is partly restricted. Model-weight use terms must be honored. Exact released-model hash and training-history overlap belong in run manifests.",
+        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_project_reference_run_evidence_found",
+      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve subject or electrode-layout transfer under matched labels and training budgets against REVE, EEGNet and other eligible pretrained baselines."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_frozen_or_run",
+      "proposed_panel": "Whole-participant/montage transfer and adaptation curves with matched labeled calibration; shared EEGMMI/pretraining exposure must be separated from genuinely unseen populations.",
+      "retained_roster_proposal": [
+        "Improve subject or electrode-layout transfer under matched labels and training budgets against REVE, EEGNet and other eligible pretrained baselines."
+      ],
+      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_resource_statement": "single GPU for fine-tuning",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Resource class is an inspection-based estimate, not measured runtime."
+  },
+  "holds": {
+    "task_specific": [
+      "Whole pretraining corpus is partly restricted. Model-weight use terms must be honored. Exact released-model hash and training-history overlap belong in run manifests.",
+      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Bind a permitted checkpoint hash to the exact PhysioNet config and baseline cohort, then prepare a common subject-level reference protocol; do not infer quality from pretrained availability.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Bind a permitted checkpoint hash to the exact PhysioNet config and baseline cohort, then prepare a common subject-level reference protocol; do not infer quality from pretrained availability.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "527639766f9c48299775a2876e3a7d57223ce843532455409047df29065c6d78",
+    "audit_record_sha256": "e3dbcb5739c663b841a418a19699dc448ae5a72ae7fa118d55fed79a15527d17",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-003",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 2,
+        "record_sha256": "e3397162fdbd3b9b1c656deaf4fae30cb821b9062d77a710075e1d0ee4f26f91"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-paper-method-003",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

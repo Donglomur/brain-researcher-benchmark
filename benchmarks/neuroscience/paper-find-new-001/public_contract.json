@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "status": "disclosed_recipe_scoring_component_prepared_not_qualified",
+  "scope": "Deterministic reconstruction of the declared source-prefix statistic on every supplied mouse/context. No figures, historical nulls, cohort inference or improvement assessment.",
+  "approved_policy": {
+    "schema_version": 1,
+    "event_policy": "round9_sort_unique_first_id_then_in_range",
+    "window_seconds": 28,
+    "grid_points": 420,
+    "normalization": "scipy1153_post_nonnegative_zscore_ddof0",
+    "peak_policy": "first_exact_max",
+    "order_policy": "numpy1264_int64_default",
+    "branch": "source_ordering",
+    "support": "source_common_prefix_3303"
+  },
+  "case_order": "exact cases.json list order; retain every case including explicit ineligible/undefined outcomes",
+  "input_schema": "schema_reader.py documents the five observation arrays. Full raw trace/timestamp vectors remain supplied; the declared policy determines support, with no padding or cell removal.",
+  "event_identity": "Select the case event_column from the context CSV after stripping header whitespace; physical 1-based CSV row includes header as row 1. Preserve every finite nonblank row before rounding/dedup. Identity is sha256:<exact CSV SHA256>|column:<stripped column name>|csv-row:<physical row>. Never truncate Unicode tokens. Nonblank nonnumeric/nonfinite fields fail as operator input errors.",
+  "required_files": [
+    "astroF3_cxta.report.json",
+    "astroF3_cxta.arrays.npz",
+    "astroF5_cxta.report.json",
+    "astroF5_cxta.arrays.npz",
+    "astroF6_cxta.report.json",
+    "astroF6_cxta.arrays.npz",
+    "astroF7_cxta.report.json",
+    "astroF7_cxta.arrays.npz",
+    "astroF9_cxta.report.json",
+    "astroF9_cxta.arrays.npz",
+    "astroF10_cxta.report.json",
+    "astroF10_cxta.arrays.npz",
+    "astroM3_cxta.report.json",
+    "astroM3_cxta.arrays.npz",
+    "astroM4_cxta.report.json",
+    "astroM4_cxta.arrays.npz",
+    "astroM5_cxta.report.json",
+    "astroM5_cxta.arrays.npz",
+    "astroM9_cxta.report.json",
+    "astroM9_cxta.arrays.npz",
+    "astroM10_cxta.report.json",
+    "astroM10_cxta.arrays.npz",
+    "astroF3_cxtb.report.json",
+    "astroF3_cxtb.arrays.npz",
+    "astroF5_cxtb.report.json",
+    "astroF5_cxtb.arrays.npz",
+    "astroF6_cxtb.report.json",
+    "astroF6_cxtb.arrays.npz",
+    "astroF7_cxtb.report.json",
+    "astroF7_cxtb.arrays.npz",
+    "astroF9_cxtb.report.json",
+    "astroF9_cxtb.arrays.npz",
+    "astroF10_cxtb.report.json",
+    "astroF10_cxtb.arrays.npz",
+    "astroM6_cxtb.report.json",
+    "astroM6_cxtb.arrays.npz",
+    "astroM7_cxtb.report.json",
+    "astroM7_cxtb.arrays.npz",
+    "astroM8_cxtb.report.json",
+    "astroM8_cxtb.arrays.npz",
+    "astroM10_cxtb.report.json",
+    "astroM10_cxtb.arrays.npz"
+  ],
+  "report_schema": {
+    "exact_root_keys": [
+      "schema_version",
+      "case_id",
+      "animal_id",
+      "context",
+      "input_fingerprint",
+      "approved_policy_hash",
+      "branch",
+      "status",
+      "rho",
+      "support",
+      "events",
+      "clipped_samples",
+      "undefined_cells",
+      "conditioning_review_cells",
+      "ties"
+    ],
+    "support": [
+      "original_trace_frames",
+      "original_timestamp_frames",
+      "used_frames",
+      "cell_count",
+      "length_mismatch",
+      "below_3303_frames",
+      "policy"
+    ],
+    "events": [
+      "raw_numeric_count",
+      "rounded_unique_count",
+      "in_range_count",
+      "outside_range_count"
+    ],
+    "clipped_samples": {
+      "odd": "nonnegative int",
+      "even": "nonnegative int"
+    },
+    "undefined_cells": {
+      "odd": "unique original cell ID list",
+      "even": "unique original cell ID list"
+    },
+    "conditioning_review_cells": {
+      "odd": "unique original cell ID list",
+      "even": "unique original cell ID list"
+    },
+    "ties": {
+      "odd_multiple_max_cells": "nonnegative int",
+      "even_multiple_max_cells": "nonnegative int",
+      "odd_peak_tied_cell_excess": "nonnegative int",
+      "even_peak_tied_cell_excess": "nonnegative int",
+      "even_order_degenerate": "bool"
+    },
+    "statuses": [
+      "computed",
+      "insufficient_cubic_support",
+      "insufficient_events",
+      "undefined_normalization",
+      "undefined_correlation",
+      "requires_numerical_review"
+    ],
+    "rho": "finite float in [-1,1] only for computed; null for every other status; no NaN/Infinity literals or duplicate JSON keys"
+  },
+  "array_schema": {
+    "base": [
+      "cell_ids",
+      "used_timestamps",
+      "all_event_times",
+      "all_event_ids",
+      "in_range_event_times",
+      "in_range_event_ids",
+      "odd_event_times",
+      "odd_event_ids",
+      "even_event_times",
+      "even_event_ids",
+      "relative_grid",
+      "post_grid"
+    ],
+    "defined_response_stage": [
+      "odd_eta",
+      "odd_zscore",
+      "even_eta",
+      "even_zscore"
+    ],
+    "computed_peak_tail": [
+      "odd_peak_indices",
+      "odd_peak_seconds",
+      "odd_order",
+      "even_peak_indices",
+      "even_peak_seconds",
+      "even_order",
+      "correlated_x",
+      "correlated_y"
+    ],
+    "encoding": "ZIP_STORED NPZ; exact members only, NPYv1/v2, no pickle/object arrays. Numeric values float64 except int64 peak indices/orders; IDs full Unicode. All arrays at most 2D. Extra/missing/duplicate arrays reject.",
+    "geometry": "ETA cell\u00d7420; zscore cell\u00d7280; peak/order/vector arrays cell-length; base arrays preserve full exact selected identities/times. Insufficient support/events have only base arrays. Undefined normalization includes response stage; computed/undefined correlation include peak tail. Numerical-review cases are retained for review with no automatic numerical pass."
+  },
+  "hash_contract": {
+    "policy": "SHA256 of exact approved_policy as JSON sort_keys=True,separators=(comma,colon),allow_nan=False, UTF-8.",
+    "input": "SHA256 beginning with JSON of case_id/animal_id/context (sorted compact UTF-8). Then traces,timestamps,cell_ids,events,event_ids in that order: 8-byte big-endian descriptor length, compact JSON [key,dtype.str,list(shape)], 8-byte big-endian C-order byte length, and exact C-order bytes. This is a binding token, not proof of calculation."
+  },
+  "numerical_checks": {
+    "float_atol": 1e-10,
+    "float_rtol": 1e-08,
+    "grid_and_latency_atol": 1e-12,
+    "rho_atol": 1e-08,
+    "near_flat_relative_guard": 1e-12,
+    "identities_times_indices_orders_NaN_patterns": "exact",
+    "guards": "Unchanged qualified verifier-v3. Rank/near-peak/near-flat discontinuities require interpretation review; never relax tolerance to force pass."
+  },
+  "capacity": {
+    "required_files_aggregate_bytes": 26000000,
+    "report_file_bytes": 64000,
+    "arrays_file_bytes": 4000000,
+    "whole_output_tmpfs_bytes": 33554432,
+    "whole_output_inodes": 128,
+    "diagnostics_policy": "Optional flat regular files are inventoried and counted but never copied/graded. No directories, links, sockets or devices."
+  },
+  "observed_expected_values_provided": false,
+  "source_specific_policy_is_disclosed": true,
+  "warning": "This explicitly supplied recipe is for replay infrastructure qualification. It is not a paper-only interpretation/reasoning experiment.",
+  "submission_interface": "One finished42filedirectory; the scoring adapter never executes candidate Python."
+}
