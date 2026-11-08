@@ -1,0 +1,26 @@
+{
+  "base_design_manifest": {
+    "bytes": 1028,
+    "sha256": "adcb613bac95495dd44e3e4f0e41ed12c9231b0d018fd34c71d7187d88607751"
+  },
+  "implementation_status": "awaiting_exact_sole_peer_amendment_ack",
+  "prior_unexecuted_caller_source": {
+    "bytes": 15537,
+    "sha256": "06c1523685a9e01a02089ec3c9be6a6cfa7fdb360b5cec015579027160b45a1f"
+  },
+  "reason": "Popen followed by pidfd_open and /proc birth-token capture is not atomic birth-bound acquisition under early death/autoreap/reuse. A pidfd keeps operations bound to the process identity acquired, despite later numeric PID reuse; it does not prove acquisition targeted the intended birth. Source qualification must not silently assume this property.",
+  "schema": "sleep_central_caller_design_amendment_v1",
+  "selected_policy": {
+    "failure_disposition": "Close gate and local pipe/selector descriptors; boundedly wait only on the original Popen child within the preselected emergency interval; read-only group absence observation. Do not TERM/KILL any PID, group or pidfd. Surviving, reused, unobservable or ambiguous child/group remains failed/unknown. No empty daemon inventory upgrades it. Preserve evidence and require separately selected external inspection/cleanup; no retry or renewal.",
+    "forced_cleanup_available": false,
+    "gated_launch": "Retain exact captured gate/exec source and durable pre-release observed /proc identity. This observational record is not independent proof of atomic birth identity and never authorizes signaling. Bind literal argv, original clocks, source and successful gate release. Gate close on failure may cause the still-gated source to self-exit; no foreign PID is acted upon.",
+    "mutating_process_signals": false,
+    "natural_success": "Require typed natural wait exit0, actual stdout/stderr EOF, reaping, absent process group, all source/identity/capture evidence and original production deadline. Declared runtime qualification must independently establish Popen/wait/SIGCHLD ownership semantics; source controls do not prove kernel lifecycle.",
+    "numeric_process_group_signals": false,
+    "pidfd_acquisition_required": false,
+    "pidfd_signals": false,
+    "tradeoff": "Loss of forced cleanup is explicit. A child or descendants may remain alive; a failure cannot claim complete resource retirement or release a storage/compute hold."
+  },
+  "supersedes_only": "DESIGN.md caller cleanup signaling policy; all scientific/clock/source/collection/API scope unchanged",
+  "tests_or_authentic_processes_run": false
+}

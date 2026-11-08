@@ -1,0 +1,35 @@
+# Whole-night sleep staging: complete programme source
+
+This snapshot develops the existing NEURAL-007 assignment. It includes the complete captured Sleep programme and its central collection interface: 31 parent members, 23 central members, the original manifests, all nine scientific design operands, the literal launcher and the unpruned 71-member qualification inventory. It adds no independent task, performance result or scientific qualification. The repository's dated V38 construction-status snapshot remains unchanged.
+
+## Scientific question and support
+
+The task asks how much neural information a tool-using language-model workflow can extract from full-night sleep recordings, beyond clock and training-label priors. The declared support is the complete Sleep Cassette release selection: 78 people, 153 nights and 306 original PSG/hypnogram objects. All nights belonging to one person stay together. Six outer folds each hold 13 people out; each fold supplies 52 people for fitting and 13 for validation, then all 65 nonheld people for final training. Prior finite 6+2 development exposure remains disclosed and does not establish fresh-target performance or full-cohort qualification.
+
+Every complete 30-second epoch remains in the query geometry. Query windows are independent of sleep-stage labels: there is no annotation-guided trimming around sleep. A private eligibility mask handles unsupported or ambiguous target intervals. The primary endpoint is the average, across all 78 people, of fixed five-class macro-F1 for W,N1,N2,N3 and REM; eligible epochs across all of each person's nights are combined before scoring. Full original header/epoch support and authentic preparation remain to be admitted.
+
+## Matched modes, views and controls
+
+Both modes receive the same permitted data, training support, tools and selected resource ceilings. A globally frozen prediction programme can implement legitimate current-person query-conditioned analysis. The case-adaptive workflow investigates the current person's full nights with concrete Python tools and an isolated local-model transport. These are tool/program workflow comparisons; this snapshot does not supply a direct no-tools native-LLM condition or isolate interactivity as a causal effect.
+
+Four views are required: clock only; two EEG channels plus clock; EOG plus clock; and all three signals plus clock. There are 936 candidate and 1,170 independent reference held-person inference outputs. The references include a training-only clock prior, Welch-feature random forests, and context/sequence methods. Training/validation selection and final training remain separate from held labels. The references have not yet demonstrated empirical competence for this full programme.
+
+The generic profile requires 312 frozen-program and 312 adaptive final fits: 624 candidate fits. An explicitly restricted training-only reuse profile seals 24 fixed fold/view models and retains 312 adaptive fits: 336 candidate fits. Both preserve every prediction. This restricted profile changes the allowed workflow; it is not an equivalent cost optimization for arbitrary query-conditioned programmes. Identical ceilings do not establish equal actual compute. Authoring costs and complete runtime feasibility remain unknown. One campaign is not evidence of stochastic robustness.
+
+EEG-shift controls for the two EEG views reuse the same fitted state and inference source. Epoch-local EEG data are rotated before context features are recomputed at each finite night boundary; EOG and clock stay unchanged. Whole-night investigation, centered context and forward–backward sequence inference are retrospective; permitted current-person analyses can be transductive. This is not prospective clinical monitoring or a causal intervention. Association controls and clock/signal comparisons have descriptive interpretations. They do not independently establish causal neural use, clinical validity, new biology or state-of-the-art performance.
+
+## Input boundaries and collection
+
+Fresh opaque aliases and dynamic paths remove explicit original-ID channels from producer-visible requests, mounts and logs. Private presentation permutations preserve all people/nights and are matched across candidate views and modes. Within-night chronology and the reference recipe's canonical order stay unchanged. Public waveforms, clocks, lengths and night structure can still support recognition or memorization; this is not an anonymity or decontamination guarantee.
+
+The central interface collects and checks the complete prediction declarations, source/model lineage, intermediate tool and validation exposures, transcripts, process records and resource closure. Parent collection authenticates original/prepared inputs, including operator-only held stages and masks. That authentication is distinct from candidate exposure and protected grading. Central readback does not open numerical prediction bodies, compute held scores, recompute reference grid argmax or certify scientific claim content. The parent's protected scorer remains a separate future operation.
+
+The central caller uses bounded waiting and observation without process-termination signals. Surviving or ambiguous children remain failed or unresolved. This does not alter the immutable parent transport's historical signaling behavior. Batched Docker inventories are sequential rather than atomic and cannot close uncertain creation obligations merely by returning empty lists. Actual process ownership, daemon identity, containment and cleanup semantics still require independent runtime qualification.
+
+## What is supplied and what remains external
+
+All 71 direct qualification-source members are selected unchanged, together with the qualification inventory itself. The complete common-contract source bodies and builder are also covered. The source includes a concrete local-model transport, but its exact model/template/tokenizer, render/debug/tokenization interfaces, installed binaries and numerical dependencies are not supplied or qualified.
+
+A complete runnable campaign still needs authentic recordings and prepared inputs, original support admission, qualified Linux/Docker/Python/NumPy/SciPy/scikit-learn and model environments, current registry/preferences, fresh campaign authority and independent method review. The common gate also requires a private exposure graph and fresh WORK/request-dependent declarations. The private graph, actual authority records, identity mappings, targets, predictions, model weights and scientific data are excluded. Unchanged manifests retain those requirements; no missing prerequisite was removed to make the package appear ready.
+
+Source review and invented engineering controls establish only their tested source properties. No authentic scientific run, model comparison, protected full-cohort score or submission-readiness claim accompanies this snapshot. Historical design and resource records remain provenance, not current execution authorization or measured costs.
