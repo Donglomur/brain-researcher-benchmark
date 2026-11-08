@@ -1,29 +1,19 @@
-# Benchmark construction status — V41
+# Benchmark construction status — local V48
 
-Snapshot: 8 November 2026 (UTC). V41 source registration is installed and independently verified. **There are 200 task definitions, 89 locally registered packages and 52 reviewed preferred program interfaces.** These are overlapping construction stages, not 200 finished benchmarks.
+Snapshot: 8 November 2026 (UTC). **The local build has 200 canonical assignments, 94 registered packages and 59 reviewed preferred program interfaces.** These overlapping stages do not count finished benchmarks or publicly runnable programs.
 
-| Construction stage | Paper research | Neural data | Total |
+| Local construction stage | Paper research | Neural data | Total |
 | --- | ---: | ---: | ---: |
-| Canonical task definitions | 100 | 100 | 200 |
-| Locally registered packages | 36 | 53 | 89 |
-| Reviewed preferred program interfaces | 18 | 34 | 52 |
+| Canonical assignments | 100 | 100 | 200 |
+| Registered packages | 38 | 56 | 94 |
+| Reviewed preferred interfaces | 21 | 38 | 59 |
 
-A definition describes an assignment. Registration connects it to a command interface. A preferred interface selects reviewed implementation source for future execution; it does not establish that the complete programme runs correctly or produces scientifically valid results.
+A task definition states the research question. Registration connects it to a command interface. A preferred interface identifies implementation source that has been reviewed. These stages do not establish complete input data, reliable comparison methods, correct execution of the full program or a valid scientific result. The **73 named conditions belong to 59 existing tasks**; conditions, cases, folds and versions add no canonical assignments.
 
-The 64 named conditions belong to 53 existing tasks. Conditions, folds, cases, versions, source commits and repeated datasets do not add independent benchmarks. The catalogue also does not establish 100 distinct neural datasets or 100 recent original scientific contributions; the [paper scope assessment](../scientific-scope/SCIENTIFIC_SCOPE.md) records those distinctions.
+**Scientifically verified across the original full task: 0. Submission-ready benchmarks: 0.** Scientific evaluation remains paused. The historical 42 finite validations overlap with these assignments and do not form a freshly established full-scope validation set. This status update reports no performance comparison, reproduction result or SOTA improvement.
 
-**New scientific qualifications: 0. Original-full-scope scientifically verified benchmarks: 0. Submission-ready benchmarks: 0.** The historical 42 finite validations overlap with these task definitions and have not been freshly re-established as a current, complete validation set. They are not additional finished benchmarks. This source installation produced no new model comparison, scientific score, reproduction result or SOTA improvement. Scientific evaluation remains paused.
+Public availability is tracked separately in the [source snapshot inventory](SOURCE_SNAPSHOT.md) and its per-publication manifests. For example, the verified [IT source publication at commit `68c6bb0`](https://github.com/Donglomur/brain-researcher-benchmark/blob/68c6bb07958176b42fad30d0642d50d4f0669698/docs/neuroscience-benchmarks/IT_COMPLETE_CENTRAL_V2_SOURCE_MANIFEST.json) supplies **133 selected source paths: 121 new and 12 already public**. Those are files for one existing assignment, not 133 benchmarks. This pinned example is not a total public inventory or a claim about later publications.
 
-Since V38, three existing assignments gained reviewed local routes:
+A supplied source file can still require external code, authentic data, operator inputs or a separately qualified environment. Check each manifest's supplied and missing dependencies; local registration does not prove that its full program is available or runnable from this public repository. Complete original support, independent references, access boundaries and feasible full-run resources must be admitted before separately authorized scientific comparisons. Reducing a cohort or endpoint does not qualify the original task.
 
-- **Hippocampal paper:** the selected programme retains 23 behavior animals, 11 imaging animals, 44 imaging sessions, four days, two variants and eight native analysis families, alongside its local-window prediction task.
-- **BrainWideBench:** all 29 sessions, 13 mice, seven labs, original units and official TS1 support remain selected, with both modes, three matched arms and three author replications.
-- **Cerebellar paper:** all 10 original MAT objects, nine native branches and 67 target roots remain selected, with 60 encoding and 27 native producers. Producer counts are not biological, query, process or model counts; the complete biological/query census remains to be admitted.
-
-These installations preserve the selected scientific scope. Authentic input coverage, method and reference fidelity, exposure boundaries, complete-workload feasibility and runtime/scientific qualification remain separate requirements. They do not establish whole-paper reproduction or an improvement result.
-
-Public source availability is a separate measure. The [source snapshot inventory](SOURCE_SNAPSHOT.md) describes the audited public exports, including the hippocampal, BrainWideBench, cerebellar and complete Sleep programme sources. Sleep retains 78 people, 153 nights, both candidate modes and four signal views; its source publication does not establish a V42 installation or add another task.
-
-Published source can still depend on material outside the public repository. Hippocampal author/reference bodies remain external. The cerebellar qualification inventory retains 55 external code, derivative, helper or article dependencies plus the excluded private exposure graph. BrainWideBench and Sleep supply their direct qualification-source members, but the private graph, fresh campaign authority and qualified environments remain external. Recordings, private targets and model weights are not supplied by these source releases. Collection, protected grading and scientific qualification remain distinct, with programme-specific requirements.
-
-The next work is to admit complete original support, resolve code/data and method gaps, qualify the full runtime and independent references, and then perform separately authorized scientific comparisons. Cohorts or conditions must not be reduced to turn an incomplete programme into a claimed finished benchmark.
+[Machine-readable counts and evidence](CONSTRUCTION_STATUS_COUNTS.json) distinguish the local V48 snapshot from the pinned public source example. No pending publication outcome is included.
