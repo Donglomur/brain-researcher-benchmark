@@ -1,0 +1,31 @@
+# NEURAL-060: neural contribution beyond phase, stimulus and movement history
+
+Investigate whether simultaneous neural observations improve prediction of absolute wheel-speed trajectories after jointly controlling trial phase, current stimulus/block context and processed movement history. The selected outcome is **wheel speed**. Choice is not implemented in this package and must not be combined with wheel error.
+
+This is the complete publisher evaluation panel:29 sessions,13 mice and7 laboratories from `ibl_brain_wide_bench_2026/all_units/eval`. Source metadata are joined to the exact official evaluation IDs and laboratory/animal table. All29 sessions are required. The existing NEURAL058/059 single-session packets and the two-animal range pilot cannot substitute for this cohort. These tasks share a study; this delivery does not create an independent dataset.
+
+The evaluation is retrospective prediction in the official within-session training, validation and test domains, summarized across laboratories. It is **not unseen-laboratory or held-animal generalization**. Session-specific models are permitted. Variable unit axes do not imply corresponding neurons across sessions, animals or laboratories.
+
+For each valid movement interval, the complete context is `[onset−1,onset+1)`:two seconds. The target is the50 actual global50 Hz absolute wheel-speed samples in `[onset,onset+1)`, preserving their relative offsets without interpolation. The neural view contains all declared units' spike counts in50 left-closed/right-open20 ms bins over the same target second. This is simultaneous, movement-aligned decoding. Movement alignment is privileged context.
+
+The nuisance view contains50 pre-onset speed samples,50 pre-onset positions translated by the last history position, their actual offsets, target offsets, the9-way signed-contrast encoding, the3-way experimenter block-prior encoding, and stimulus-to-movement latency. The current stimulus must precede movement. No current choice, reward, feedback, future target samples or saved reference predictions enter the nuisance view. The published wheel pipeline interpolates and uses zero-phase FIR decimation. Consequently, a pre-onset timestamp does not certify past-only processing. No online forecasting or causal-history claim follows; no exclusion gap is guessed.
+
+Every two-second context must fit inside exactly one official split domain and declared wheel/spike support. All movement intervals receive a retained inclusion/exclusion disposition. No outcome-dependent eligibility, biological-unit dropping, unit-response filtering, score-based case selection or replacement of missing sessions is permitted. A session without an eligible training, validation or test set makes full-panel preparation incomplete. Public training and validation targets may be used for fitting and selection. Test targets stay private. The source is publicly reconstructible and earlier related development exposures are disclosed.
+
+Submit three complete arms for the identical test cases:
+
+- `nuisance`:the permitted nuisance inputs only.
+- `joint`:the same nuisance inputs plus within-window neural counts.
+- `neural_shift200ms`:the same frozen joint method applied with neural counts cyclically shifted by exactly10 of 50 bins within each window; nuisance inputs and targets stay fixed.
+
+The shifted arm is a descriptive alignment perturbation. It is not a randomization null, conditional-independence test or causal intervention. It must eventually be produced by actual restricted-input replay of the same joint program, not by permuting predictions. Until that replay and matching of method/selection budgets are independently verified, all paired-arm scientific contrasts are explicitly unqualified. A candidate's `same_method_claim` is a declaration, not proof.
+
+The rankable predictive metric is **joint-arm MSE**, averaged across50 samples, then eligible test cases in a session, then sessions within an animal, then equally across all13 animals. Lower is better. The scorer also retains MSE/MAE for every arm, every29 session, every13 animal and every7 lab. Lab summaries average their animals equally; no extra weighting or pooling changes the primary metric.
+
+The scorer reports candidate nuisance-minus-joint MSE and shifted-minus-joint MSE as descriptive contrasts. Deliberately weakening the nuisance arm can enlarge the first number, but it cannot change the joint-error ranking. `qualified_neural_contribution` remains `null`, `eligible_for_contribution_ranking` remains `false`, and common-method provenance remains `unverified`. An optional complete operator-owned common-nuisance panel is separately pinned and compared; it is currently missing. Its numeric presence alone cannot promote a neural-contribution claim. Historical single-session references are not valid substitutes for the new complete-cohort phase/stimulus/history contract.
+
+All50 predictions in every arm must be finite binary64 numbers; signed predictions, null effects and poor predictions are permitted. IDs must exactly cover the public query index; order is immaterial. Unknown, duplicate or missing cases, missing arms, booleans, NaN and Infinity are rejected before private targets are captured. The scorer uses80-digit decimal arithmetic after binary64 admission. Ordinary metrics serialize as numbers; unrepresentable overflow/underflow endpoints serialize as decimal strings. A favorable biological story or positive gain is never an admission condition.
+
+No models, fits, scientific scores or candidate replays were run for this delivery. Fourteen invented-only source checks passed. The full data packet and trusted reference panel are absent, so this is a **partial source package**, not a locally gradeable full benchmark, empirical qualification, paper reproduction or submission-ready result.
+
+Primary sources: [IBL BrainWideBench pinned repository](https://github.com/brainbench-org/ibl-bwb/tree/6fbd666fe8170a2165f5198c1f490911424a654d), [paper](https://doi.org/10.1038/s41586-025-09235-0), and [public dataset registry](https://registry.opendata.aws/ibl-brain-wide-bench/). Exact retained source and metadata hashes are in `SOURCE_PROVENANCE.json` and `REQUIRED_SOURCES.json`.

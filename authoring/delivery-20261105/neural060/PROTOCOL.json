@@ -1,0 +1,47 @@
+{
+  "schema": "neural060_protocol_v1",
+  "task_id": "NEURAL-060",
+  "question": "Which incremental wheel-speed prediction gains remain after joint phase, stimulus/block and movement-history controls across the complete7-lab evaluation panel?",
+  "outcome": "wheel_speed only; choice is not implemented and never mixed into this endpoint",
+  "cohort": "Every29officialevalsession/13animal/7lab; no convenience-session or probe/unit-response filtering",
+  "evaluation": "Within-session officialTS1train/val/testdomains, then multi-laboratory replication summaries; no unseen-lab or held-animal generalization claim",
+  "window": {
+    "context": "[movement onset-1,movement onset+1),2s total",
+    "target": "50 actualglobal50Hzwheel_speed samples in[onset,onset+1); nointerpolation",
+    "history": "50actual speed/position samples in[onset-1,onset); position translated bylast historysample",
+    "neural": "50within-target20ms bins, allsourceunits; simultaneous retrospective decoding",
+    "support": "Entire2scontext insideexactlyone officialsplitdomain, wheelandspikedomains; splitdomainsmustnotintersect. Allmovementwindowsretainedinthe dispositiontable, unsupportedwindows explicitlyexcludedwithoutscorebasedselection. Everyrequiredsession mustretain nonemptytrain/val/test orfullpanelconstructionfails."
+  },
+  "nuisance_features": [
+    "actualtarget/historyoffsets relative toprivilegedmovementonset",
+    "sourcecurrentstimulus9-way signedcontrast",
+    "experimenterblockprior3-way encoding, privilegedcontext",
+    "stimulusonsetlatencyknownbeforemovement",
+    "retrospectiveprocessedpre-onsetabsolute speed50andtranslatedposition50"
+  ],
+  "arms": [
+    "nuisance",
+    "joint",
+    "neural_shift200ms"
+  ],
+  "neural_control": "Cyclic shift exactly10of50neuralbins within eachwindow; nuisance/targets fixed. Requires actualsamemethodrestrictedinputreplay before anyinformation-useclaim; descriptive perturbation, notcausal/randomizationnull.",
+  "access": "SamefrozencompletecaseIDs/sourceaxis within eachsession. Everyarm fit/selectedusingpublictrain+validation only; noquerylabels. Eacharmmountseparate nuisance/neuralinputs. Noassumptionofunitcorrespondenceacrosssessions. Alltestinputsmayarrivetogether; nochoice/rewardhistory isexposed.",
+  "primary_ranking": "JointarmMSE,50samplesmean then casesmean then sessionsmean peranimal then13animals equal; lowerbetter. Candidate nuisancepredictions cannot affectranking.",
+  "investigation_contrasts": [
+    "candidate nuisanceMSE minus jointMSE, explicitlyunverifieddescriptivepairedcontrast",
+    "neural_shift200msMSE minusjointMSE, explicitlyunverifieddescriptivesensitivity",
+    "operator-fixedcommon-nuisanceMSE minusjointMSE onlyif separatelypinned completecommonpanel supplied; otherwiseunavailable"
+  ],
+  "qualification": "qualified_neural_contribution isalwaysnull and common_method_provenance unverified inthisconstruction. Candidateassertions/weaknuisanceoutput cannotpromoteit. A futurequalifiedcontributionranking requires independentlyobservedrestrictedarmreplay, matchedmethod/selectionbudget and a credibletrustednuisancepanel.",
+  "secondary": "Allthree armsMAE andMSE; all29session,13animal and7labmetricsretained; animal-macro primarynotcasepooling. No p-values orfavoredbiologicalstory grading.",
+  "split_exposure": "Publicsource andpreviousdevelopmentexposure disclosed. Per-sessioncalibrationnotnewanimalgeneralization. Related058/059share source, notindependentdatasets.",
+  "preprocessing": "Publishedpipeline interpolatesandzero-phaseFIRdecimateswheel; negativeindexedhistorydoesnotprovepast-onlyprocessing. Noonlineforecastorcausalclaim; no guessedgap. Unitssource-convention rad/s, H5physicalunitattributeabsent inheldschema.",
+  "controls": [
+    "Allarmscompleteidenticaltestcase set; noabstention/subsetting",
+    "Exactjoint-onlyranking unchangedwhennuisanceweakened",
+    "Unknown/duplicate/missingIDs andnonfiniteoutputs rejectedbeforegold",
+    "Largefiniteerrors representedwithdecimalmetricsratherthanoverflow",
+    "Nohistoricalsaved058/059referencepredictions importedintothisnewjointstimulus/historycontract"
+  ],
+  "data_status": "Full29sessionpacket andtrustedcomparator absent; source-preparation implementation only. Existingonesessionorselectedtwoanimalpilot cannotclosefullcohortgap."
+}

@@ -1,0 +1,7 @@
+# Physical custody remains a qualification
+
+The grader's AdmissionCapture guard is lexical. It excludes the selected private parent and descendants and rejects the demonstrated direct, case/Unicode, double-leading-slash, redundant-separator and traversal spellings before body capture. Core file capture separately rejects symlink parents and multi-link files. These controls do not prove that every possible filesystem spelling denotes a different physical object: alternate mounts, firmlinks or operator remapping can present an additional alias.
+
+Actual operator qualification must therefore bind physically disjoint packet, private, attempt, observer and protected authority roots, verify their mount/namespace relationships, and preserve immutable path custody throughout production and protected grading. Neither a string-normalization check nor an artifact hash supplies that environmental proof. The daemon's bind-mount interpretation must agree with the qualified host namespace. These dependencies remain unqualified here; source and metadata controls do not authorize authentic target access or execution.
+
+The same distinction applies to resource enforcement: bounded stop source and inert race controls do not qualify actual host scheduling, daemon liveness, CFS quota semantics or stop latency. Unknown physical custody or resource state must refuse a scientific result rather than becoming an assumed successful boundary.
