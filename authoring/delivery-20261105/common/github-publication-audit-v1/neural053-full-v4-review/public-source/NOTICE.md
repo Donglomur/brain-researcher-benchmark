@@ -1,0 +1,11 @@
+# NEURAL-053 V4 source notice
+
+The project-owned benchmark source and documentation are distributed with the repository's unchanged MIT License, Copyright (c) 2026 Brain Researcher. The exact public root license is 1,073 bytes, SHA-256 `5e90f4aae29b549ac9009dc25f223e06c9a09a469fe8bedf981a00c23cc302e5`, Git blob `68590b25d21d33513ce74410222b1df8d687ef37`. Retain that license with copies of the source.
+
+This snapshot does not redistribute the THINGS-data article, captured article passages, original author toolbox, original neural/eye datasets, event/attribute tables, images, protected targets, trained weights or provider models. Their respective permissions and licenses remain external. The repository license does not grant rights to those materials or to installed third-party software. NumPy, pandas, MNE-Python, Python and provider/container software retain their own licenses and runtime requirements.
+
+The scientific source is Hebart et al., THINGS-data, eLife 12:e82580 (2023), DOI `10.7554/eLife.82580`. Dataset/code identifiers and public structural filenames in the source are provenance rather than private participant identities or task answers. The proposed benchmark uses a distinct held-person, unseen-image, known-class processed-summary endpoint, not the paper's native pairwise decoding analysis.
+
+All 38 V4 parent bodies are supplied: 25 production runtime files, nine explicitly invented engineering test files and four metadata/document files. The unchanged parent proposal, one earlier evaluator required by a comparison test, and eight original scientific/source documents are also supplied. Test fixtures embedded in source are invented engineering cases, not authentic observations or reported performance. Publishing them neither runs them nor certifies a complete test suite.
+
+The unchanged 17-entry historical provenance inventory retains 14 external bodies. Unfinished central/deployment source, actual qualification receipts, private keys/mappings and authentic inputs are absent. See PUBLIC_SOURCE_SCOPE.md and SOURCE_INVENTORY.json for exact boundaries. No new task, scientific result, legal certification, dataset-rights certification or runtime qualification is conferred.
