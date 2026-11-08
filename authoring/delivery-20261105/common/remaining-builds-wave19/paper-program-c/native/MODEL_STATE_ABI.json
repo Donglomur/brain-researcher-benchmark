@@ -1,0 +1,206 @@
+{
+  "schema": "osl19_full_numeric_model_state_abi_v2",
+  "revision": "cded3b2ea95efef7b6c089c5e111fd565b716922",
+  "actual_native_execution": false,
+  "source_pins": [
+    {
+      "path": "authoring/delivery-20261105/osl-dynamics-paper/public/author_paper_archive/osl_dynamics/config_api/wrappers.py",
+      "bytes": 74625,
+      "sha256": "5cc4ad9d93961c4246f5e3f27bcdeb7e6823456c27c9e2d5f8dd0e647403e936"
+    },
+    {
+      "path": "authoring/delivery-20261105/osl-dynamics-paper/public/author_paper_archive/osl_dynamics/models/mod_base.py",
+      "bytes": 21243,
+      "sha256": "689076aa14600d3fda0de9304bd869329249c42acad2f5d8fcc6e85db31d9df9"
+    },
+    {
+      "path": "authoring/delivery-20261105/osl-dynamics-paper/public/author_paper_archive/osl_dynamics/models/hmm.py",
+      "bytes": 56950,
+      "sha256": "cb652aac0c377533bd51ada47824b94830574d1358d4e8d7148bf1933495d8d9"
+    },
+    {
+      "path": "authoring/delivery-20261105/osl-dynamics-paper/public/author_paper_archive/osl_dynamics/models/inf_mod_base.py",
+      "bytes": 51623,
+      "sha256": "21a02d28f1661ad805213c5e9a8dc5c251fcdfd0ee49c9d4c65160c5a08434d7"
+    },
+    {
+      "path": "authoring/delivery-20261105/osl-dynamics-paper/public/author_paper_archive/osl_dynamics/models/dynemo.py",
+      "bytes": 26002,
+      "sha256": "7b6a14d4bace0c65a5f557c0e067e351f4fb598c92b08c7790d5fcd54f389e05"
+    },
+    {
+      "path": "authoring/delivery-20261105/osl-dynamics-paper/public/author_paper_archive/osl_dynamics/inference/layers.py",
+      "bytes": 63212,
+      "sha256": "b0fc324798ed2a01f305883d54ac1114f473220e521e2b97d823d6820da02b43"
+    }
+  ],
+  "capture": {
+    "keras_numeric_weights": "model.model.get_weights() paired in exact order with model.model.weights names/shapes/dtypes/trainability",
+    "hmm_extra": [
+      "model.state_probs_t0",
+      "model.get_trans_prob()"
+    ],
+    "nonweight_layer_state": [
+      "static_loss_scaling_factor.n_batches"
+    ],
+    "native_config": "config dictionary including runtime object type descriptors",
+    "constructor_config": "same historical save_config policy: strategy and regularizer fields replaced by None",
+    "training_history": "complete live init_history/history primitive tree, never pickle bodies"
+  },
+  "reconstruction": {
+    "api": "native.assemble.restore_model_state(approved_native_model,literal,read_bytes,max_input_bytes=...)",
+    "caller_obligations": [
+      "Construct exact approved historical Config/Model from constructor config in isolated private runtime",
+      "Authenticate complete runtime/environment/model-architecture identity separately",
+      "Reconstruct data-derived regularizers from authenticated identical training data if needed; no historical training-state equivalence claim",
+      "Never import candidate model code or trust a claimed baseline",
+      "No scientific execution authorized by the source build"
+    ],
+    "architecture_check": "exact ordered variable names, shapes and trainability; all primitive body pins",
+    "optimizer_state_exported": false,
+    "training_rng_trajectory_exported": false,
+    "runtime_compatibility_verified": false,
+    "role_scope": "Historical exact-network state is mandatory for trusted B/reference capture and optional for A operator diagnostics; framework-neutral A HMM evaluation does not require it."
+  },
+  "comparison": {
+    "weights": "auxiliary=true comparison=false; internal-network gauges are not resolved by one state permutation",
+    "training_history_and_free_energy": "provenance/cost/native selection only, not an additional outcome panel",
+    "means_covariances_initial_transition_alpha": "literal observable schema with declared state axes"
+  },
+  "selector": {
+    "hmm": "wrappers152: history.free_energy=model.free_energy(data)",
+    "dynemo_original": "wrappers294: history.free_energy=history.loss[-1]",
+    "dynemo_postfit": "inf_mod_base762-784: free_energy uses posterior means during evaluation, unlike training posterior samples; KL can be significantly smaller",
+    "postfit_substitution_allowed": false,
+    "independent_A_original_training_selector_reconstructed": false,
+    "trusted_B_operator_original_training_attestation": "requires external trusted original process/history capture; no candidate scalar substitutes"
+  },
+  "source_claims": [
+    {
+      "path": "models/mod_base.py",
+      "lines": [
+        76,
+        80
+      ],
+      "claim": "Config strategy is a runtime distribution object"
+    },
+    {
+      "path": "models/mod_base.py",
+      "lines": [
+        124,
+        126
+      ],
+      "claim": "ModelBase delegates attributes to underlying Keras model"
+    },
+    {
+      "path": "models/mod_base.py",
+      "lines": [
+        449,
+        470
+      ],
+      "claim": "save_config nulls strategy/regularizer fields"
+    },
+    {
+      "path": "models/mod_base.py",
+      "lines": [
+        489,
+        506
+      ],
+      "claim": "Static loss scaling n_batches is Python layer attribute"
+    },
+    {
+      "path": "models/hmm.py",
+      "lines": [
+        986,
+        997
+      ],
+      "claim": "Literal HMM initial probability setter"
+    },
+    {
+      "path": "models/hmm.py",
+      "lines": [
+        1530,
+        1553
+      ],
+      "claim": "HMM get/set weights separate Keras weights and transitions"
+    },
+    {
+      "path": "models/inf_mod_base.py",
+      "lines": [
+        733,
+        784
+      ],
+      "claim": "Postfit loss/free energy differs from training sampling"
+    },
+    {
+      "path": "models/dynemo.py",
+      "lines": [
+        332,
+        359
+      ],
+      "claim": "Data-derived regularizers set on model after construction"
+    },
+    {
+      "path": "inference/layers.py",
+      "lines": [
+        296,
+        326
+      ],
+      "claim": "Normal posterior layer samples only in training; returns posterior mean at inference"
+    },
+    {
+      "path": "inference/layers.py",
+      "lines": [
+        1129,
+        1162
+      ],
+      "claim": "KL annealing factor is a nontrainable TensorFlow variable, expected among tracked model weights; runtime closure remains unvalidated"
+    },
+    {
+      "path": "inference/layers.py",
+      "lines": [
+        1636,
+        1657
+      ],
+      "claim": "Nonweight n_batches participates in static loss scaling"
+    }
+  ],
+  "original_scope_binding": {
+    "path": "authoring/delivery-20261105/osl-dynamics-paper/public/reference_hmm.py",
+    "bytes": 3527,
+    "sha256": "8c99240b291413a8e5d8aca4cfa04dc21cd1d55f69eda31f587941abe9873734",
+    "lines": [
+      15,
+      21
+    ],
+    "claim": "Exact original65 CTF or19 Elekta people and complete per-person runs; source input order additionally authenticated by explicit bijection if needed"
+  },
+  "role_policy": {
+    "A": {
+      "original_scientific_observables": "mandatory_complete",
+      "coordinate_and_run_identity": "mandatory_unchanged",
+      "historical_keras_names_config_training_history": "optional_not_a_submission_requirement",
+      "self_reported_free_energy": "optional_auxiliary_never_selection_authority",
+      "supplied_optional_auxiliaries": "complete_typed_validation_and_primitive_pin_admission",
+      "hmm_operator_evaluation_route": "selection.native_hmm_parameters",
+      "hmm_evaluation_parameters": [
+        "model.means",
+        "model.covs",
+        "model.transition",
+        "model.initial"
+      ],
+      "dynemo_observable_admission": true,
+      "dynemo_original_training_trajectory_selector_reconstructed": false
+    },
+    "B_and_reference": {
+      "original_scientific_observables": "mandatory_complete",
+      "native_model_training_auxiliaries": "mandatory_full",
+      "native_capture_process_attestation": "required_separately"
+    },
+    "roles": [
+      "A",
+      "B",
+      "reference"
+    ]
+  }
+}
