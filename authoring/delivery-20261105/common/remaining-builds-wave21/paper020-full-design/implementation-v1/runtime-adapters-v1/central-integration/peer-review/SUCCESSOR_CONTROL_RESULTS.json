@@ -1,0 +1,97 @@
+{
+  "canonical_serialization_bytes": 39978,
+  "full_graph_scientific_or_real_process_or_credential_calls": 0,
+  "groups": [
+    {
+      "actions": [
+        "mkdir",
+        "stage",
+        "import",
+        "credential",
+        "journal_open",
+        "final_gate",
+        "fd_close",
+        "journal_close"
+      ],
+      "group": "last_gate_after_preparation_and_all_cleanup"
+    },
+    {
+      "actions": [
+        "mkdir",
+        "stage",
+        "import",
+        "credential",
+        "journal_open",
+        "final_gate",
+        "actual_parent_boundary",
+        "fd_close",
+        "journal_close"
+      ],
+      "group": "dispatch_original_primary_retained"
+    },
+    {
+      "actions": [
+        "fd_close"
+      ],
+      "group": "journal_all_cleanup_no_unknown_fd_retry"
+    },
+    {
+      "group": "trace_primary_and_ordered_secondary_failure",
+      "notes": {
+        "failures": [
+          {
+            "completion_unknown": true,
+            "error_type": "Producer",
+            "stage": "actual_producer"
+          },
+          {
+            "completion_unknown": true,
+            "error_type": "Observer",
+            "stage": "actual_observer"
+          },
+          {
+            "completion_unknown": true,
+            "error_type": "Cleanup",
+            "stage": "phase_journal_append"
+          }
+        ],
+        "known": {
+          "known_actual_evidence_retained": true,
+          "known_observation_retained": false,
+          "phase_id": "inert",
+          "trace_bytes_attempted": 0
+        },
+        "primary_type": "Producer",
+        "schema": "paper020_ordered_failures_v1",
+        "success": false,
+        "truncated": false
+      }
+    },
+    {
+      "group": "independent_raw_phase_and_commitment_refusals",
+      "positive": true,
+      "refused": [
+        "compact_amount",
+        "host_commitment",
+        "missing_raw_command",
+        "failed_measurement",
+        "different_host",
+        "regressed_counter"
+      ]
+    },
+    {
+      "changed_commitment_refused": true,
+      "group": "raw_worker_counter_partition",
+      "positive": true
+    }
+  ],
+  "largest_canonical_encoding_bytes": 7714,
+  "physical_fixtures": 0,
+  "precharged_canonical_ceiling": 1048576,
+  "retained_fixture_bytes_after_run": 0,
+  "schema": "paper020_central_successor_independent_controls_v1",
+  "scoped_tracemalloc_peak_bytes": 78196,
+  "source_import_cache_excluded": true,
+  "source_reads": 58886,
+  "status": "PASS_FOCUSED_SOURCE_ONLY"
+}
