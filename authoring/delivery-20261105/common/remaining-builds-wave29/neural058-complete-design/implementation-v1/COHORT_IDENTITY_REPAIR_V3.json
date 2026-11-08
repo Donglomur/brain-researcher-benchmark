@@ -1,0 +1,30 @@
+{
+  "canonical_content": {
+    "bytes": 102157,
+    "sha256": "0e9b7d314a6e7e8e0fd366e9c7d76ed2b7d3570b4c0217675a454a7e39ed33d7"
+  },
+  "diff": "--- preserved-V2/preparation.py\n+++ V3/preparation.py\n@@ -2,7 +2,7 @@\n from pathlib import Path\n import secrets\n from core import need, finite, integer, fresh, disjoint, capture, parse, encoded, pin\n-from contracts import TASK, LIBRARIES, cohort\n+from contracts import TASK, LIBRARIES, cohort, COHORT_PIN\n from arrays import write_array, write_json\n from native_reader import original, iter_windows, versions\n \n@@ -118,7 +118,8 @@\n                      'evaluation_order':[r['session_alias'] for r in outcomes if r['role']=='evaluation'],\n                      'source_animal_order':[aliases[a] for a in roster['source_animals']],\n                      'evaluation_animal_order':[aliases[a] for a in roster['eval_animals']],\n-                     'cohort':pin(encoded(cohort_document)), 'authority':pin(encoded(authority)),\n+                     'cohort':dict(COHORT_PIN), 'cohort_canonical_content':pin(encoded(cohort_document)),\n+                     'authority':pin(encoded(authority)),\n                      'conditional_history':False,'all_original_support_retained':True}\n         private_body={'schema':'neural058_private_preparation_v1','task':TASK,'sessions':private_rows,\n                       'animal_aliases':aliases,'outcomes':outcomes,'authority':public_body['authority']}\n",
+  "finding": "Canonical re-encoding was incorrectly used as the raw cohort-file descriptor, so authentic prepared output would always fail the exact downstream source join.",
+  "independent_V2_controls": {
+    "do_not_relabel_as_V3_execution": true,
+    "groups": 8,
+    "natural_exit": 0,
+    "tool": "0f949e"
+  },
+  "original_captured_cohort": {
+    "bytes": 146662,
+    "sha256": "f61c86a32bf6d6a46f516061fa527cf8538c5e3f0f05ba359addcdc9b3257db5"
+  },
+  "owner_discovery_tool": "4d06fa",
+  "preservation": {
+    "bytes": 32833,
+    "path": "authoring/delivery-20261105/common/remaining-builds-wave29/neural058-complete-design/implementation-v1/COMPLETE_V2_PRESERVATION.json",
+    "sha256": "e59a74b42a61c6f546a0d3fec426efeab53a5146e9d29674d5ac62e2eff8964b"
+  },
+  "repair": "Publish already authenticated COHORT_PIN; retain canonical content as a separately named field. prepare_entry raw custody and all existing full biological/source joins remain mandatory.",
+  "runtime_changed": [
+    "program/preparation.py"
+  ],
+  "schema": "neural058_cohort_identity_repair_v3",
+  "scientific_or_fixture_execution": false
+}

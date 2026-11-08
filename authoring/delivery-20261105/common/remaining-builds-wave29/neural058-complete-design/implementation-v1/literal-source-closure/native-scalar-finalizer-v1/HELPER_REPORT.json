@@ -1,0 +1,47 @@
+{
+  "schema": "neural058_native_scalar_finalizer_handoff_v1",
+  "decision": "EXACT_IDENTIFIED_SCALAR_FINALIZER_SOURCE_RECOVERED",
+  "source": {
+    "path": "authoring/delivery-20261105/common/remaining-builds-wave29/neural058-complete-design/implementation-v1/literal-source-closure/native-scalar-finalizer-v1/ibl-bwb__src__ibl_bwb_eval__metrics____init__.py",
+    "bytes": 1197,
+    "sha256": "e19936914e52c046be658ce9d386433d01fecb3cd0121e72bc963cc3ba97d07e"
+  },
+  "original_commit": "6fbd666fe8170a2165f5198c1f490911424a654d",
+  "git_blob_sha1": "6389da498499e1b095b221836cdcd32b75c58b6b",
+  "prior_frozen_additive_proposal": {
+    "path": "authoring/delivery-20261105/common/remaining-builds-wave29/neural058-complete-design/implementation-v1/literal-source-closure/native-scoring-source-v1/ADDITIVE_SOURCE_PROPOSAL.json",
+    "bytes": 3076,
+    "sha256": "9b4bf4cc7419a7f1e3d6eec558f79c169120307ec8c150fb0bc62ee227d5b1a6"
+  },
+  "prior_reports_unchanged": true,
+  "authorization": "One exact file explicitly selected beyond prior three-new-file cap; no other retrieval.",
+  "source_findings": [
+    {
+      "lines": "24-26",
+      "finding": "aggregate_metrics constructs a dictionary by calling compute() once on each supplied metric."
+    },
+    {
+      "lines": "27-36",
+      "finding": "If a computed value is a Torch tensor with ndim>0, it returns v.mean().item(); a scalar Torch tensor returns v.item(); a nontensor value passes through unchanged."
+    },
+    {
+      "lines": "24-36",
+      "finding": "There is no explicit dtype conversion, float64 recomputation, score clipping, target masking, ID deduplication, session/animal pooling, metric reset or coverage validation here."
+    },
+    {
+      "lines": "24-36",
+      "finding": "The name aggregate_metrics means reducing/serializing each already-computed metric output, not the recording/seed aggregation in scoring/aggregation.py."
+    }
+  ],
+  "effect_on_existing_conclusions": "No change to native float32-default serialization, loaded-dtype metric accumulation, ID-intersection/flattening/mask behavior, or separate raw versus clipped session/seed summaries. For the held wheel dim=1 default TorchMetrics R2Score, the functional uniform_average produces a scalar tensor and this helper extracts its Python value. Python scalar extraction does not restore lost precision or perform a canonical float64 R2 calculation. Other vector metric outputs are averaged at this finalization layer.",
+  "resolved_boundary": "The previously named 1197-byte aggregate_metrics body and scalar-extraction source dependency is now exact and locally available. Earlier report remains a truthful frozen record of its prior boundary.",
+  "remaining_boundaries": [
+    "Actual ground-truth exporter and serialized tensor/header identity/dtype are not acquired.",
+    "Complete installed-package and Torch/NumPy/safetensors numerical parity, global dtype/autocast and distributed behavior remain unqualified.",
+    "This module imports BPS, classification and PoissonD2 implementations; their runtime import/dependency closure is not established by merely reading this function.",
+    "No genuine trial identity/coverage/timestamp alignment, finite-value or numerical agreement claim is established."
+  ],
+  "syntax_only": true,
+  "natural_recovery_observation": "2a7981 natural exit0, one HTTP200,1938 response bytes,1197 exact decoded source bytes",
+  "scientific_readiness_increase": false
+}

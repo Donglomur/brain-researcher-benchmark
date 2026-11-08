@@ -1,0 +1,25 @@
+# Exact source semantics for the NEURAL-058 implementation
+
+This additive interpretation binds the literal helper proposal (21,269 bytes, SHA256 167f67edb617404fad5859e6dadad64a6d978a0dfaea673d5dd9e53b37eed58c) and its SEMANTIC_FINDINGS.md (10,923 bytes, fbb80d6c73cfe460ac6b9ee660060cf801d669dbbd176d85aabf72544143cc9f). The adopted V3 design and all earlier source representations remain unchanged. These recovered sources establish methods, not original-data admission, installed compatibility or numerical parity.
+
+## Coordinates and complete support
+
+Let A0 be the original loaded Data.absolute_start, m the stored movement onset and [a,b) the exact original intersection/sampler interval. Strict context length is one. The first native slice starts at a. Let q be the actual sliced Data.domain.end[-1] minus one; the native target path takes a second slice only when q > 1e-6. Each Data.slice accumulates its start in absolute_start. Consequently the physical coordinate of a returned target timestamp t is the actual target Data.absolute_start + t, and the task-relative coordinate subtracts A0+m. A0 is admitted from each original object; it is not assumed zero. No operation restores time by simply adding m to native target timestamps.
+
+Use the pinned torch-brain Data/Interval/RegularTimeSeries and TrialSampler semantics. Intersection emits start/end and loses trial_index. Resolve every emitted interval back to a unique original movement row using its full contained support; ambiguity, point support, unsorted/overlapping intervals or nonfinite boundaries prevents completion and retains a disposition. No such case is silently removed. RegularTimeSeries uses its exact half-open slice, near-grid rounding, upward snapping and gap-edge behavior. Keep every original returned target membership and repeated occurrence. The strict one-second subset proof is in exact arithmetic; actual floating-point support and coordinates still require parity qualification.
+
+Preserve the complete allowed spike interval without extending history. Fixed 20 ms bins are aligned to A0+m, with actual neural-domain exposure intersected with the emitted support. Exposure unavailable to C remains J-only. Common task/wheel support is separate and carries no activity-derived absence information. Zero spike count under positive exposure is not an unavailable bin.
+
+## History and units
+
+The original context-length-greater-than-one route can change a clipped target panel because its trailing-one-second transformation can start before a. Conditional-history must retain the strict C=1 target panel and independently construct any history; changing C is not a valid implementation shortcut.
+
+The pinned preprocessing declaration uses ibllib 4.0.0, whose SessionLoader applies forward/reverse recursive SOS filtering before differentiation. Reflection padding and later decimation do not remove that dependency. Under the selected conservative structural rule, processed history from the continuous filter pass containing any scored target is unavailable. No finite lag establishes disjoint primitive support. Conditional-history remains blocked unless separately admitted independent reset/producer provenance proves support separation. This does not block the strict primary, which exposes no evaluation-animal wheel values at all.
+
+Current extractors document radians and viewpoint-specific signs, and also document legacy centimeter extraction. SessionLoader does not normalize these conventions. Every selected original record therefore requires independently admitted units/sign/extraction lineage. The implementation preserves the stored signed derivative; it neither flips signs nor silently converts units. All records must satisfy the selected common physical-unit/sign interpretation before whole-panel qualification. Signed velocity is the new strict-transfer primary; wheel_speed=abs(velocity) is the separate official-readout secondary. The native torchmetrics finite near-constant special cases are not substituted for the design's exact animal-centered undefined-denominator rule.
+
+## Numerical determinism and qualification
+
+`program/numeric_recipe.py` fixes source-only weighted objectives, initialization and epoch-permutation seeds independently of traversal order. For a logical batch, accumulate M times the sum of already normalized animal/session/window/timestamp weights times equal-head squared error across all windows, then clip the accumulated gradient once and perform one AdamW step. Do not divide again by window count or final batch size. The full-unit and full-window axes are unchanged.
+
+The training declarations and preprocessing declarations are distinct environments. Flat literal captures retain their original paths in the source inventory and are not themselves an installed package. Source/environment parity, original headers/domains/A0, physical input custody, actual units/sign, deterministic device operations, reference competence and all external resource/closure evidence remain required. No authentic input, model, provider, scorer or scientific operation has run in this source phase.
