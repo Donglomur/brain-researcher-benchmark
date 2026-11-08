@@ -1,0 +1,13 @@
+# Attribution and distribution boundary
+
+This update contains benchmark-authored orchestration, numerical interface and evaluator source, mathematical/task specifications, source descriptors and explanatory prose. Existing repository `LICENSE` remains unchanged. It does not grant rights to omitted third-party code, scientific papers, recordings, answer arrays, model assets or private identity evidence.
+
+The scientific task attributes Dorian et al., *Hippocampal sequences represent working memory and implicit timing*, Cell Reports (2025), DOI `10.1016/j.celrep.2025.116383`. Its inherited provenance refers to `ccdorian/dDNMS2025` revision `5e74479bbf97d47c14133cab5fea40a496ec7d94` and Dryad DOI `10.5061/dryad.vdncjsz7p`, version 400039. These are source metadata, not a new verification of redistribution permission or payload identity. No original paper or dataset body is included.
+
+The retained author-index evidence reports no top-level license in that exact author tree and explicitly withholds public redistribution authority. The nineteen original author files and six projected reference/exporter bodies therefore remain external. The optional source-correspondence audit is also omitted as a whole because it contains adapted source expressions. Publishing its path and hash does not publish its contents or authorize recovery of those contents.
+
+The included `native/h_*` files are the new benchmark's preparation, transport, fitting and reference-orchestration interfaces; the omitted original numerical implementations are not embedded as a substitute public reference. The historical prose source audit describes method facts and limitations, and its pin table identifies inspected sources without supplying the omitted bodies. Source comparison does not establish numerical parity or author-code licensing.
+
+The transport source retains exact provenance bindings to the previously published OSL benchmark transport. This is reuse of benchmark-authored transport, not an export of the OSL author's archive or a transfer of its runtime qualification. The repository license is not a license to MATLAB, NumPy, Docker, original paper/code/data or any other external dependency.
+
+The public protocol includes fixed nonhuman experimental animal codes, cohort dimensions and mathematical output element labels. They are task specifications, not human identities, observed target values or a newly authenticated biological identity map. No actual identity document, private seed, operation authority, credentials or signed access URL is included. This bounded source-content review is not a universal authorship, privacy or rights certification.
