@@ -1,0 +1,31 @@
+# Campaign dependency source: public scope
+
+This update supplies seventeen exact benchmark source documents and metadata dependencies referenced by the OSL central adapter. It adds no task, scientific result, runtime qualification or selected campaign. The frozen OSL and campaign manifests are unchanged.
+
+## Included source and remaining gap
+
+The additions comprise all nine files in the campaign-exposure contract package, four selected delivery descriptors, and four corresponding task briefs. The campaign package's eight manifest-listed members and its manifest are complete. Its validator implements an operator claim check; it does not execute tasks, authorize a mount union, create an RL split or attest a model's actual history. The included test source describes invented controls and was not imported or executed in this publication audit.
+
+The public OSL source anchor `ca987095180df47c20c90ce1a18f4d25e2056035` contains 52 exact entries of the unchanged 70-file qualification freeze. These seventeen additions would make 69 present. The required `docs/neuroscience-benchmarks/build/exposure_audit.json` remains absent. Its frozen metadata contains three participant-label relationships whose exact accepted public primary provenance was not established in this bounded review. The entire file is withheld; the labels are not reproduced here. This is an unresolved provenance decision, not a claim that the labels are private, public-pseudonymous or verified biological matches.
+
+The missing file's path and expected hash remain in the original closure. No field is removed, graph sanitized, digest substituted or requirement weakened to make the source look complete. The campaign validator unconditionally expects that exact audit, so these additions do not make its CLI or the OSL programme ready to run. Authentic runtime/environment/source qualifications, fresh operator state and requests, scientific inputs and actual process-closure evidence are also absent.
+
+Sixteen added files are copied from exact committed benchmark source. The fixed NEURAL-096 task brief is an unchanged 6,234-byte source document at the required public path `artifacts-build/dmfc096-scoring-materialize-002/packet/TASK.md`. Its original local artifact path was absent from the reviewed build tree, despite matching the frozen descriptor. A reviewed source copy provides the committed export bytes; publication does not imply that the original artifact or neighboring scientific packet was committed or exported. No other artifact-path member is added.
+
+## Exposure meaning
+
+The contracts preserve a directional exposure warning: NEURAL-023 public assessment counts are NEURAL-024's future observations. The latter cannot claim hidden targets after such access, and concurrent union of those packets is forbidden. No reverse velocity-target disclosure is inferred. NEURAL-095 and NEURAL-096 share an exposed animal recording; that contradicts a new-animal/new-session comparison but does not establish direct exposure of produced-interval behavioral targets. This publication adds only source descriptions and file descriptors, never those recordings, counts, target arrays or results.
+
+The declared task scopes remain distinct: trailing hand-velocity reconstruction, causal next-count forecasting, at-Set produced-interval prediction and fixed selected-count contrast reconstruction. Fixed mathematical signs, complete cohorts, splits and source-specific limitations remain unchanged. The contrast reconstruction rewards numerical agreement rather than a positive effect. Neither source packaging nor a file score establishes independent authoring, causal observation order, native signal understanding or population generalization.
+
+An exposure graph's relation, matching locator or absent edge cannot establish biological independence. Operator-declared histories are inputs, not proof of human/model/checkpoint exposure. The source refuses contradictory or unresolved affirmative freshness/generalization claims and permits only its limited development interpretation where applicable. The historical README's statements about inspected dispatchers describe that construction snapshot; they are not a claim about every later central integration.
+
+## Metadata is not its payload
+
+Delivery manifests include relative paths, sizes and hashes for public inputs, private targets, reference assets and historical source. Those are descriptors, not the described values, bodies or permission to fetch them. No referenced scientific, key, identity, score, model or author archive body was opened for this audit or added to the publication. Candidate access must still use its independently reviewed task-specific view; a repository-wide checkout is not that view.
+
+Some unchanged descriptors record earlier component-complete or runnable declarations, alongside non-revalidation, scientific/submission limits and redistribution-unapproved flags. Their presence does not recertify a historical run, establish current readiness or distribute a complete data package. Likewise, `CHECKS.json` retains historical engineering-control receipts, source-guard numbers and a historical WORK digest explicitly labelled non-authoritative for runtime. No WORK body, current selection, actual execution authority or current reservation is published. Examples are illustrative requests, not selected operations.
+
+This audit performed exact source/blob and syntax/content checks only. No programme import, test run, input acquisition, fixture, model fit, reference/scorer/native execution, state installation or scientific qualification occurred. The source presence counts above refer to the stated public tree and these exact additions; they are not mutable installation or benchmark-readiness counts.
+
+The [OSL central scope](../osl-central-wave20-review/PUBLIC_SOURCE_SCOPE.md) and [parent OSL scope](../osl-wave19-review/PUBLIC_SOURCE_SCOPE.md) retain the unresolved original-data/environment, HMM parameter/native parity, DyNeMo training-trajectory selector, empirical comparator competence and whole-paper limits. Filling source dependencies does not resolve those scientific issues. See [NOTICE.md](NOTICE.md) for the preserved distribution boundary.
