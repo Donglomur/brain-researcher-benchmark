@@ -1,0 +1,202 @@
+{
+  "schema": "osl_native_recipe_v1",
+  "historical_revision": "cded3b2ea95efef7b6c089c5e111fd565b716922",
+  "branches": {
+    "ctf_bursts": {
+      "entrypoint": "public/author_paper_archive/examples/toolbox_paper/ctf_rest/tde_hmm_bursts.py",
+      "sha256": "82b3edc55fecd0e5685c7c9042e078864ac2af913fa404ecd6cbab7b69a00a53",
+      "working_directory": "isolated branch workspace with same full paper input data",
+      "positional_run_id": true,
+      "preparation": [
+        "TDE21",
+        "per-person native standardization"
+      ],
+      "states": 3,
+      "learn_means": false,
+      "outputs": [
+        "summary_stats/{lt,intv,bc,amp}.npy:65x3",
+        "spectra/f.npy + spectra/psd.npy: all65/all3 states/frequency support",
+        "inf_params/covs.npy:3x21x21",
+        "capture corr:3bands x3states; beta13\u201330,alpha7\u201313,delta/theta1\u20137Hz"
+      ],
+      "unit": "65 people; native pooled illustrative envelope correlations are not65 independent replicates"
+    },
+    "ctf_tde": {
+      "entrypoint": "public/author_paper_archive/examples/toolbox_paper/ctf_rest/tde_hmm_networks.py",
+      "sha256": "4666a86a07664c0de3c8c5e802c538ed0bd5870dd8779a6b941edff66cd875dc",
+      "working_directory": "isolated branch workspace with same full paper input data",
+      "positional_run_id": true,
+      "preparation": [
+        "TDE15/PCA80",
+        "native per-person standardization"
+      ],
+      "states": 8,
+      "learn_means": false,
+      "outputs": [
+        "summary_stats/{fo,lt,intv,sr}.npy:65x8",
+        "spectra/{f,psd,coh,nnmf_2}.npy: all native frequency/component supports",
+        "captures:65x4x8 summary;65x8x38 power;65x8x703 upper-triangle coherence; unmasked group effects/pvalues"
+      ],
+      "unit": "65 people"
+    },
+    "ctf_dynemo": {
+      "entrypoint": "public/author_paper_archive/examples/toolbox_paper/ctf_rest/tde_dynemo_networks.py",
+      "sha256": "c07846748d4652086e345b1068a335208cdad113c9f699c7025be07644c30da4",
+      "working_directory": "isolated branch workspace with same full paper input data",
+      "positional_run_id": true,
+      "preparation": [
+        "TDE15/PCA80",
+        "native per-person standardization"
+      ],
+      "modes": 7,
+      "learn_means": false,
+      "outputs": [
+        "summary_stats/{alp_mean,alp_std}.npy:65x7 trace-normalized continuous mode weights",
+        "spectra/{f,psd,coh}.npy: original regression coefficient/intercept support",
+        "capture sum_stats:65x2x7 + original group pvalues"
+      ],
+      "unit": "65 people; continuous coactivation, never argmax into8states"
+    },
+    "ctf_static": {
+      "entrypoint": "public/author_paper_archive/examples/toolbox_paper/ctf_rest/static_networks.py",
+      "sha256": "63d56a6e50c57b4fdcbc0ae88ee2072f3b482855b4a07a6b058a778deb1c8016",
+      "working_directory": "isolated branch workspace with same full paper input data",
+      "positional_run_id": false,
+      "preparation": [
+        "Welch500 samples, standardize=True",
+        "AEC bandpass/amplitude envelope/standardize"
+      ],
+      "bands_hz": [
+        [
+          1,
+          4
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          7,
+          13
+        ],
+        [
+          13,
+          30
+        ]
+      ],
+      "outputs": [
+        "capture pow_map:65x4x38",
+        "capture coh_net/aec:65x4x38x38; use703 upper-triangle edges for numerical comparison",
+        "capture unmasked power/AEC group effects and pvalues"
+      ],
+      "unit": "65 people, one deterministic pipeline, not30 fits"
+    },
+    "elekta_ae": {
+      "entrypoint": "public/author_paper_archive/examples/toolbox_paper/elekta_task/ae_hmm.py",
+      "sha256": "62496ab5a1431bc8724969a7d426f72409950f725f3e627c8a4ffdb2aad3c3bf",
+      "working_directory": "isolated branch workspace with same full paper input data",
+      "positional_run_id": true,
+      "preparation": [
+        "Hilbert envelope",
+        "moving_average5",
+        "standardize"
+      ],
+      "states": 8,
+      "learn_means": true,
+      "outputs": [
+        "summary_stats/{fo,lt,intv,sr}.npy:114x8, paired to19personx6run identities",
+        "capture t/epochs:114x401x8 native inclusive -0.1..1.5s, time shifted -0.034s",
+        "capture pvalues:401x8; original114-run permutation axis retained",
+        "inf_params/means.npy/covs.npy AE spatial parameters"
+      ],
+      "unit": "native114 run outputs; corrected inference uses19people"
+    },
+    "elekta_tde": {
+      "entrypoint": "public/author_paper_archive/examples/toolbox_paper/elekta_task/tde_hmm.py",
+      "sha256": "18f957533b21a3a7dbea204898ecbb0d1d52ff699f1d9e01ae6a9ae0299f3c82",
+      "working_directory": "isolated branch workspace with same full paper input data",
+      "positional_run_id": true,
+      "preparation": [
+        "TDE15/PCA80",
+        "standardize"
+      ],
+      "states": 8,
+      "learn_means": false,
+      "outputs": [
+        "summary_stats/{fo,lt,intv,sr}.npy:114x8, paired to19personx6run identities",
+        "capture t/epochs:114x401x8 native inclusive -0.1..1.5s, time shifted -0.034s",
+        "capture pvalues:401x8; original114-run permutation axis retained",
+        "spectra/{f,psd,coh,nnmf_2}.npy full native spectral support"
+      ],
+      "unit": "native114 run outputs; corrected inference uses19people"
+    }
+  },
+  "training_defaults": {
+    "hmm": {
+      "sequence_length": 2000,
+      "batch_size": 32,
+      "learning_rate": 0.01,
+      "epochs": 20,
+      "initializations": 3,
+      "initialization_epochs": 1
+    },
+    "dynemo": {
+      "sequence_length": 200,
+      "inference_RNN_units": 64,
+      "model_RNN_units": 64,
+      "normalization": "layer",
+      "learn_alpha_temperature": true,
+      "kl_annealing": "tanh",
+      "kl_sharpness": 10,
+      "kl_epochs": 20,
+      "batch_size": 128,
+      "learning_rate": 0.01,
+      "lr_decay": 0.1,
+      "epochs": 40,
+      "initializations": 5,
+      "initialization_epochs": 2,
+      "initialization_take": 1
+    }
+  },
+  "selection": {
+    "fit_sets": 3,
+    "fits_per_set": 10,
+    "selection": "minimum training free energy within each set",
+    "original_seeds_recovered": false
+  },
+  "events": {
+    "codes": [
+      5,
+      6,
+      7,
+      13,
+      14,
+      15,
+      17,
+      18,
+      19
+    ],
+    "min_event_duration_s": 0.005,
+    "epoch_s": [
+      -0.1,
+      1.5
+    ],
+    "trigger_delay_s": 0.034,
+    "native_baseline_first_samples": 25,
+    "event_types_pooled_as_in_original": true
+  },
+  "spectral": {
+    "TDE_HMM": "native multitaper1\u201345Hz,2NNMF components for network branches",
+    "DyNeMo": "native regression1\u201345Hz,window1000samples,step20,8subwindows,coefficient+intercept",
+    "static": "native Welch2s and four explicit bands"
+  },
+  "run_manifest_required_before_execution": true,
+  "native_capture_source_only": true,
+  "missing_before_grade": [
+    "complete original Elekta38parcel data and CTF historical filename-lineage",
+    "native output reference capture and finite/undefined support",
+    "predeclared state/component matching and numerical scales/calibration",
+    "training-only held-representation generation and baseline models",
+    "independent executor/runtime and dependency lock validation"
+  ]
+}

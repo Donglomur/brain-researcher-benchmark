@@ -1,0 +1,45 @@
+{
+  "schema": "osl_full_paper_contract_v1",
+  "task_id": "PAPER-paper-signal-add-004",
+  "scope_file": "SCOPE.json",
+  "native_recipe": "NATIVE_RECIPE.json",
+  "access": [
+    "A",
+    "B"
+  ],
+  "scientific_primary": "All six full-paper empirical branches; no single endpoint substitutes for reproduction",
+  "implemented_numeric_routes": [
+    "fixed-fit central artifact audit, not independent-fit reproduction",
+    "exact four-branch Gaussian-HMM held-person represented-run marginal likelihood"
+  ],
+  "mode_names": [
+    "native_artifact_audit",
+    "held_hmm"
+  ],
+  "prospective_split": {
+    "ctf_people": 65,
+    "elekta_people": 19,
+    "elekta_runs_per_person": 6,
+    "folds": 5,
+    "rule": "SHA256-ranked persons round-robin5; exact original IDs; every run stays within person"
+  },
+  "scoring": {
+    "native": "abs(c-r)/(scale+abs(r)); entry/item/person/panel means; mismatch-null, no fabricated equivalence",
+    "held_hmm": "sum native run log marginal / sum represented samples within person, then equal people; subtract same frozen staticGaussian; reset per run",
+    "numeric_roles": "GaussianHMM exact marginal, native free-energy and DyNeMo ELBO are distinct",
+    "scalar_across_branches": false,
+    "binary_science_pass": false
+  },
+  "native_gates": [
+    "Full spectra/axes and exact output reference mapping",
+    "Training-only state/mode alignment and stochastic variation/calibration",
+    "Actual full inputs/model captures"
+  ],
+  "qualification": {
+    "package_built": false,
+    "native_runtime_verified": false,
+    "authentic_scoring_performed": false,
+    "scientific_qualification": false,
+    "submission_ready": false
+  }
+}
