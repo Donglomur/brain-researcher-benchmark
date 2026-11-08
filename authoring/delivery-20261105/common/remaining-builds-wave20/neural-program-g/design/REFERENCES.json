@@ -1,0 +1,127 @@
+{
+  "R0": {
+    "clock_bin_width_seconds": 1800,
+    "clock_bins_wall": 48,
+    "elapsed_bins": "floor(elapsedhours), clip to0..maximum trainingfloor",
+    "empty_cell": "globalprior",
+    "fit_people": 52,
+    "global_prior": "validtraining5classfrequencies, zerocountclasshas0prior; no teststatistics",
+    "pseudocount_alpha_grid": [
+      1,
+      10,
+      100
+    ],
+    "refit_people": 65,
+    "selection": "equalvalidationpersonmacroF1; first grid index tie",
+    "validation_people": 13
+  },
+  "R1": {
+    "class_mapping": "Exactly five output columns; missing trained class gets zero probability, unsupported/all-invalidtrainingfailsreferenceadmission; no query-derived completion",
+    "family": "adapted epoch-local RF",
+    "final_fit_people": 65,
+    "parameter_donor": {
+      "bytes": 6036,
+      "path": "authoring/sleep-eog/paired-program-replay-v1/fixed_rf.py",
+      "sha256": "e6558cae4b20adcccd25ffaaae6021b98422457f8dda7b7fca82b407bb9cf25f"
+    },
+    "parameters": {
+      "bootstrap": true,
+      "ccp_alpha": 0.0,
+      "class_weight": "balanced",
+      "criterion": "gini",
+      "max_depth": null,
+      "max_features": 1.0,
+      "max_leaf_nodes": null,
+      "max_samples": null,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 5,
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 100,
+      "n_jobs": 2,
+      "oob_score": false,
+      "random_state": 241,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "views": [
+      "C",
+      "EC",
+      "OC",
+      "EOC"
+    ]
+  },
+  "R2": {
+    "controls": [
+      "EC andEOC inference EEGshift withidenticalstate",
+      "C andEC associationcontrol: originalselectedgrid, fulltrainingnightlabel+mask rotation, refit65, inferoriginalquery; no reselect"
+    ],
+    "emission": "max(RFprobability/max(trainingprior,1e-12),1e-12)",
+    "family": "contextRF plus whole-night sequence posterior",
+    "features": "originaladaptedfeatures plus centered+-5epoch within-night mean and populationstd ofeachfeature; boundarytruncate; nocrossnight",
+    "inference": "Scaledforwardbackward independently on everywholequerynight; row-normalizefinalposteriors; noquerymask",
+    "parameters": {
+      "bootstrap": true,
+      "ccp_alpha": 0.0,
+      "class_weight": null,
+      "criterion": "gini",
+      "max_depth": null,
+      "max_features": "sqrt",
+      "max_leaf_nodes": 4096,
+      "max_samples": null,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": "grid1or5",
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 300,
+      "n_jobs": 2,
+      "oob_score": false,
+      "random_state": 241,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "selection": "equal13personmacroF1, firstlexicalgrid pair tie; refit65",
+    "shifted_context_features": "Rotate EEG epoch-local base features first, then recompute truncated within-night centered+-5 means/std. Do not rotate original contextual columns. EOG/clock features unchanged; transformed-cache lineage bound, recomputation charged inside shifted reference-inference allowance.",
+    "state_prior": "trainingglobalstagefrequency",
+    "transition_counts": "Validadjacent30secondepochpairs withbothtrainlabels valid; add1each5x5cell androw-normalize. No bridging unknownlabels or nightboundaries.",
+    "transition_tempering": "Elementwisepowerlambda, thenrow-normalize; lambda0givesuniformrows, not a claim ofexactR1 posterior equivalence.",
+    "validation_grid_order": [
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        0.5
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        5,
+        0.5
+      ],
+      [
+        5,
+        1
+      ]
+    ]
+  },
+  "baseline_claims": "Training-only source recipes with deterministic selection; empirical competence, calibration, whole-workload feasibility and SOTA remain unestablished.",
+  "deterministic_reference_cache": "153 original-night source/version-bound per-channel caches, no labels/fittedstats; candidates never receive them. Shift-dependent context computation is separate within shift phase.",
+  "fixed_environment_versions": {
+    "numpy": "2.2.6",
+    "python": "3.12.8 donor image lineage; actual fullprogramme image not yet admitted",
+    "scikit_learn": "1.6.1",
+    "scipy": "1.15.3"
+  },
+  "not_run": true,
+  "schema": "neural007_full153_references_v1"
+}

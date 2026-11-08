@@ -1,0 +1,19 @@
+{
+  "schema": "neural007_literal_launcher_v1",
+  "python_flags": [
+    "-I",
+    "-S",
+    "-B",
+    "-c"
+  ],
+  "literal_python": "import os,sys,time,hashlib,stat\npath,size,sha,deadline=sys.argv[1],int(sys.argv[2]),sys.argv[3],float(sys.argv[4])\nassert os.path.isabs(path) and time.monotonic()<deadline\nfd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW)\ntry:\n before=os.fstat(fd);assert stat.S_ISREG(before.st_mode) and before.st_nlink==1 and before.st_size==size and 0<size<=1048576\n parts=[];remaining=size+1\n while remaining:\n  assert time.monotonic()<deadline\n  block=os.read(fd,min(65536,remaining))\n  if not block:break\n  parts.append(block);remaining-=len(block)\n body=b''.join(parts);after=os.fstat(fd)\n assert (before.st_dev,before.st_ino,before.st_size,before.st_mtime_ns)==(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns)\n assert len(body)==size and hashlib.sha256(body).hexdigest()==sha\nfinally:os.close(fd)\nsys._neural007_bootstrap_pin={'bytes':size,'sha256':sha}\nsys._neural007_literal_deadline=deadline\nsys._neural007_literal_pin=hashlib.sha256(sys.orig_argv[sys.orig_argv.index('-c')+1].encode()).hexdigest()\nsys.argv=[path,*sys.argv[5:]]\nexec(compile(body,'<captured-bootstrap>','exec'),{'__name__':'__main__','__file__':path})\n",
+  "positional_after_literal": [
+    "absolute_bootstrap_path",
+    "expected_bootstrap_bytes",
+    "expected_bootstrap_sha256",
+    "original_launch_deadline",
+    "bootstrap_args"
+  ],
+  "external_TCB": "Exact independently selected literal argv, trusted Python/interpreter startup and qualified standard-library image; this file is a launch specification, not self-authorizing execution",
+  "actual_execution_selected": false
+}

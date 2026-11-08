@@ -1,0 +1,45 @@
+{
+  "budgets": "Web retrieval source charge conservatively reserved within author22MB; no data/model/native network action.",
+  "copyright": "Links and short original summaries only; no external source bodies are copied into runtime.",
+  "official_sources": [
+    {
+      "supports": "All states require --all; --no-trunc retains complete identifiers. Explicit custom formatting can select ID, Names and a named Label.",
+      "url": "https://docs.docker.com/reference/cli/docker/container/ls/"
+    },
+    {
+      "supports": "Volume listing covers known volumes; name and a named label are format fields. Multiple label filters are AND, so no presumed OR batching.",
+      "url": "https://docs.docker.com/reference/cli/docker/volume/ls/"
+    },
+    {
+      "supports": "Go templates provide JSON encoding; this is not proof of daemon inventory completeness.",
+      "url": "https://docs.docker.com/engine/cli/formatting/"
+    },
+    {
+      "supports": "ID is complete without truncation. Names joins slash-stripped names; named Label returns the selected value or empty string.",
+      "url": "https://raw.githubusercontent.com/docker/cli/v28.5.1/cli/command/formatter/container.go"
+    },
+    {
+      "supports": "All and Limit flow to ContainerList; default last is -1, while latest would impose one. Custom output walks returned summaries.",
+      "url": "https://raw.githubusercontent.com/docker/cli/v28.5.1/cli/command/container/list.go"
+    },
+    {
+      "supports": "Name and selected Label derive from each volume; no extra projection data is necessary.",
+      "url": "https://raw.githubusercontent.com/docker/cli/v28.5.1/cli/command/formatter/volume.go"
+    },
+    {
+      "supports": "Calls VolumeList and formats Volumes; does not check Warnings. This disqualifies exit0 CLI listing alone as complete-volume evidence.",
+      "url": "https://raw.githubusercontent.com/docker/cli/v28.5.1/cli/command/volume/list.go"
+    },
+    {
+      "supports": "List response includes both Volumes and Warnings; selected API reader must require empty/no warnings, not silently discard them.",
+      "url": "https://raw.githubusercontent.com/moby/moby/v28.5.1/api/types/volume/list_response.go"
+    },
+    {
+      "supports": "Official Engine API schema basis; implementation must use exact version-qualified GET container-list and volume-list contracts.",
+      "url": "https://raw.githubusercontent.com/moby/moby/v28.5.1/api/swagger.yaml"
+    }
+  ],
+  "qualification": "Documentation supports source design, not installed CLI/daemon compatibility. Exact API version, namespace, socket identity and HTTP behavior require independent qualification.",
+  "schema": "neural007_custody_api_source_notes_v1",
+  "selected_implementation": "Bounded standard-library read-only local Engine API, with minimal retained identity projection and nonempty-warning refusal. No daemon operation has occurred."
+}
