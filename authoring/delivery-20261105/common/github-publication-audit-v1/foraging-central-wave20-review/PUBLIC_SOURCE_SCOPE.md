@@ -1,0 +1,43 @@
+# Foraging central interface: public source boundary
+
+This update provides the central source interface for the existing `PAPER-FIND-036` assignment and DOI `10.7554/eLife.93994.4`. It adds no benchmark ID, scientific result or qualification. It is source for inspection, not an executable public scientific release, a complete paper reproduction or evidence of better performance.
+
+## Exact contents and incomplete dependency closure
+
+Eleven original central files are copied unchanged from source commit `10ae1c74d4a83d054f8278b893d02fb0697c3b00`: `BINDINGS.json`, `CAMPAIGN_SOURCE_CLOSURE.json`, `entry.py`, `receipt_check.py`, `SOURCE_MANIFEST.json`, `QUALIFICATION_SOURCE_FREEZE.json`, `manifest.proposed.json`, `RESOURCE_DERIVATION.json`, `BUNDLE.template.json`, `RUNTIME_PROFILE.template.json` and `FUTURE_GRADE_ADMISSION.json`. Together they are67,960 bytes. The original central manifest still contains all four exact members; the full65-file qualification freeze is also unchanged. This scope note and `NOTICE.md` are the only new public documents.
+
+The parent source snapshot already contains all37 production members and its manifest, including the original permitted author files and license. The new central layer authenticates that source, commits the four-program context, calls the unchanged parent observer/controller and checks complete returned metadata. It does not replace the scientific method, reduce the cohort or supply a new numeric answer.
+
+The bounded dependency join uses the earlier audited parent/campaign allowlists and root's report that their reviewed additions are present at public parent `8247ba87a42306685eaaaebba33d4f38460ef1f5`. It accounts for38 parent entries including their manifest,21 shared campaign entries and five newly published central entries: **64 of65 required frozen files**. Root must independently rejoin the exact current public tree and source commit blobs before publishing. This audit itself made no Git tree read.
+
+The remaining required member is `docs/neuroscience-benchmarks/build/exposure_audit.json`,199,521 bytes, SHA256 `1fb6a27f54db6fd66177a4e26f139faee999fb92aed92b9df92286fdf7a00b66`. Its private exposure metadata remains wholly withheld under the earlier campaign publication audit. No body was reopened here. Its descriptor in the immutable freeze is not permission to retrieve it. The65-member freeze is not pruned, sanitized or rehashed to hide that missing dependency. Consequently the published source is not a complete independently qualifiable runtime. Dynamic operation authorities, current WORK state, qualified environments and scientific inputs are additional absent requirements.
+
+This publication neither installs the proposed manifest nor supplies an execution certificate. The public construction-status snapshot is historical V36; this source addition does not make that snapshot current or certify a local installation. Mutable local registry counts and private installation receipts are deliberately not exported. The proposed route keeps all execution, runtime, research and submission flags false.
+
+## Scientific and access conditions
+
+The selected endpoint retains40 complete recording sessions, the Figure6B head-withdrawal window[-1,+1]seconds with40 time bins,200 outer folds and100 seeded training-label controls. The1,320 producer phases are120 native,600 fit and600 prediction phases of one assignment. They are not1,320 separate benchmarks. This is retrospective discrimination from processed features, not the six-second anticipation result, a complete Figure6 or whole-paper replication, chronological/new-animal generalization or a new SOTA result.
+
+Four programs—A/native, B/native, A/improvement and B/improvement—must be independently authored and globally frozen before numerical views. A and B receive the identical admitted five-file same-edition static paper package and interface. B additionally receives the exact16 relevant released author files. Native phases have their original permitted full-label view; improvement fit/predict phases retain the training-label/held-label boundary. Native output cannot feed back into the improvement program. Distinct context IDs and matching file hashes enforce declared interfaces, not proof of uncontaminated training history or actual independent authorship.
+
+The parent native BNB reconstruction, held-fold BNB, mandatory nested balanced logistic reference and constant0.5 comparator remain unchanged. Their actual numerical parity and competence are not established by this publication. Whole-session zscore preprocessing and symmetric Gaussian filtering remain transductive; later train-only scaling cannot undo them. Historical72.71% balanced accuracy and51.62% shuffled performance are paper reports, not benchmark results or an exact hidden-answer oracle. See the [parent scientific scope](../find036-wave20-review/PUBLIC_SOURCE_SCOPE.md) for full units, metrics, unsupported-support handling and remaining biological identity limits.
+
+The public source union includes operator mathematics and author implementation for review. **The complete public checkout is not a candidate input view.** Mounting it for paper-only A would expose materials the comparison forbids. Future execution must stage only the exact access-specific materials and authenticate isolation, context history and all permitted data. Public availability cannot prove a model has never encountered a paper, result or implementation.
+
+## Dispatch, clocks and protected grading
+
+The supported routes use the pinned campaign and named-condition constructors with the declared isolated Python launch. The legacy plain-argv interface is not supported. The generic qualification check precedes candidate/bundle/operation access. The null bundle and runtime-profile templates are disabled examples, not selected authorities or an invitation to bypass qualification.
+
+The entry carries its original monotonic origin through the existing `adapter.dispatch('run',...)` API. Two source captures relocate only source paths and corresponding descriptors; scientific operation fields and limits stay exact. All startup, source admission, parent dispatch, metadata checks and final cleanup belong to the original deadline. OS scheduling and signal delivery are not hard real-time guarantees.
+
+The route runs the observer/controller only; it does not call protected grading. `ADAPTER_RESULT.json` is written before the entry's final cleanup and can survive a later failure. It remains provisional until a separately trusted external observer admits exact source/command/selection/origin, durable output, natural exit0 and owned-resource closure after final return. An inner controller receipt or JSON marker is insufficient. Forced-stop host groups and daemon state can remain unknown, and no automatic retry follows.
+
+`FUTURE_GRADE_ADMISSION.json` is an unselected contract for a separate later authority. It requires original full preparation, paper-material, method-exposure and reference-competence admissions as well as independent final central closure. No data/model/scorer execution or protected evaluation was authorized by this publication audit.
+
+## Resources and omissions
+
+Resource formulas preserve the full operation: original controller and observer budgets plus256MiB wrapper reads, a separately derived128MiB generic-gate ceiling, separately qualified full receipt reads and an8MiB wrapper metadata partition. The complete1,320-phase receipt is not compressed into that8MiB partition. All four source programs retain their original8MiB domains. Cross-role retained reservations and the repeated paper/material traffic remain explicit in the unchanged derivation. These are prospective managed ceilings and algebraic traffic amounts, not measured whole-host memory, disk, throughput or native I/O guarantees.
+
+No original data, paper/PDF/figure/supplement body, new author-code body, model, prediction, hidden answer, current WORK, private graph, selected authority, source-install transaction, root tool observation, acquisition record or installer is exported here. Runtime/site/image/environment qualification and actual independent baseline performance are absent. The original root-oriented README/review template, installation tools and engineering control history are excluded; this public note supplies the bounded explanation without altering their historical local sources.
+
+Only allowlisted ordinary source blobs may be copied onto clean public history. Private build/agent ancestry must not be pushed. Existing source, licenses and parent notices remain unchanged. See [NOTICE.md](NOTICE.md) for attribution and reuse limits.
