@@ -1,0 +1,763 @@
+--- preserved-v1/program/admission.py
++++ v2/program/admission.py
+@@ -2,6 +2,19 @@
+ from core import need,encoded,pin,finite,integer
+ from schedule import panels,author_contexts,candidate_sessions,reference_selection,final_models,final_reference_sessions,required_counts
+ from journal import closure
++from ordering import sessions
++
++
++def authenticate_product(product):
++    members=product['derived']['members']
++    names=[r['path'] for r in members]
++    need(len(names)==len(set(names)) and names.count('RESULT.json')==1,'unique complete derived RESULT.json')
++    result=next(r['pin'] for r in members if r['path']=='RESULT.json')
++    need(result==product['result_pin']==pin(encoded(product['result'])), 'embedded result exact canonical closed bytes')
++    need(product['native']['artifacts']['TERMINAL.json']==pin(encoded(product['terminal'])),
++         'embedded terminal exact canonical closed bytes')
++    need(product['terminal']['result']=={'path':'RESULT.json','pin':result},'terminal result belongs to unique closed member')
++    return True
+ 
+ 
+ def admit(complete,events,selection,source):
+@@ -10,6 +23,7 @@
+          and complete['prepared']==selection['prepared'],'exact source/selection/packet chain')
+     need(complete['protected_targets_read'] is False and complete['scientifically_qualified'] is False,
+          'production is public-only and not self-qualified science')
++    for product in complete['products'].values():authenticate_product(product)
+     roster=complete['roster'];choices=complete['reference_selection']['choices']
+     counts=required_counts(roster,choices);need(complete['counts']==counts,'actual full task counts')
+     expected_panels={p['id'] for p in panels()}
+@@ -25,7 +39,7 @@
+     products=complete['products'];need(products and all(p['status']=='complete' for p in products.values()),'no failed/unknown producer hidden')
+     # Reuse the proven event-chain checks, supplying actual donor phase/episode
+     # sets as empty because task-specific graph membership is checked here.
+-    closure(events,[],[],selection['origin'],selection['deadline'])
++    closed=closure(events,[],[],selection['origin'],selection['deadline'])
+     intents={};finished={};task_products={};method_events={};scopes={};panel_finishes={};source_selection=[]
+     for i,e in enumerate(events):
+         k=e['kind']
+@@ -84,13 +98,16 @@
+     for key,spec in models.items():
+         op=complete['reference_models'][key];p=products[op];r=p['envelope']['request']
+         need(op==spec['id'] and r['operation']=='fit' and r['fold']=='full' and r['config']==spec['config']
+-             and r['role']==spec['role'] and [x['session'] for x in r['training']]==sorted(roster['source']), 'complete selected full-source refit')
++             and r['role']==spec['role'] and [x['session'] for x in r['training']]==sessions(roster,'source'), 'complete selected full-source refit')
+         need(source_selection[0][0]<intents[op][0],'source selection precedes final fit')
+     for key,spec in reference_outputs.items():
+         op=complete['reference_predictions'][key];p=products[op];r=p['envelope']['request'];model_key=spec['role']+'/'+spec['model'].split('/')[-1]
+         model=products[complete['reference_models'][model_key]]
+         need(op==spec['id'] and r['operation']=='predict' and r['model']==model['result']['model']
+              and r['role']==spec['role'] and [x['session'] for x in r['evaluation']]==[spec['session']], 'exact independently trained reference prediction')
++    from optional_admission import treatment,analysis as admit_analysis,features as admit_features,numeric_bridge
++    numeric_keys=[]
++    need(set(complete['numeric_slots'])=={r['id'] for r in outputs.values()},'every inference has an explicit numeric-slot ledger')
+     for identity,spec in methods.items():
+         record=complete['methods'][identity];event=method_events[identity][1]
+         need(all(event[k]==v for k,v in record.items()),'sealed method body and transcript binding')
+@@ -101,8 +118,10 @@
+              and r['panel']==spec['panel'] and r['animal']==spec['animal']
+              and r['mode']==spec['panel'].split('/')[0] and r['role']==spec['panel'].split('/')[1]
+              and r['tool']==spec['panel'].split('/')[2],'own actual sealed-method fit')
++        treatment(r,spec['panel'],spec['animal'])
++        need(r['recipe']==record['recipe'],'actual own sealed fit recipe')
+         need(method_events[identity][0]<intents[op][0],'seal precedes final fit')
+-        need([x['session'] for x in r['training']]==sorted(roster['source']),'all candidate source training sessions')
++        need([x['session'] for x in r['training']]==sessions(roster,'source'),'all candidate source training sessions')
+         expected=[] if spec['animal']=='global' else spec['evaluation_sessions']
+         need([x['session'] for x in r['evaluation']]==expected,'author-specific held-input boundary')
+     for key,spec in outputs.items():
+@@ -114,11 +133,20 @@
+              and r['tool']==spec['panel'].split('/')[2],'complete candidate output schedule')
+         need(r['program']['pin']==method['program']['pin'] and r['state']==fit['result']['state']
+              and not r['training'],'sealed own-context state, retired training mount')
+-        expected=sorted(s for s,x in roster['evaluation'].items() if x['animal']==spec['animal'])
++        expected=sessions(roster,'evaluation',spec['animal'])
+         need([x['session'] for x in r['evaluation']]==expected,'all and only current-animal views')
+         need(task_products[fit['operation']][0]<intents[op][0],'own fit before inference')
+         need(len(r['provider_values'])==len(method['recipe']['numeric_slots']),'exact frozen numerical provider slots')
+-        if method['recipe']['numeric_slots']:need(op+'/features' in products,'mandatory actual numeric feature producer')
++        need(r['recipe']==method['recipe'],'same sealed inference recipe')
++        if method['recipe']['numeric_slots']:
++            need(op+'/features' in products,'mandatory actual numeric feature producer')
++            feature=products[op+'/features']
++            numeric_keys.extend(numeric_bridge(op,feature,r,complete['numeric_slots'][op],method,closed['providers'],selection))
++            for bridge in complete['numeric_slots'][op]:
++                matching=[(i,e) for i,e in enumerate(events) if e['kind']=='numeric_slot_completed' and e.get('operation')==op and e.get('slot')==bridge['slot']]
++                need(len(matching)==1 and all(matching[0][1][k]==v for k,v in bridge.items())
++                     and task_products[op+'/features'][0]<matching[0][0]<intents[op][0],'exact feature/provider/inference event order')
++        else:need(complete['numeric_slots'][op]==[] and r['provider_values']==[],'no undeclared numeric provider inputs')
+     mandatory=set(complete['reference_cv'].values())|set(complete['reference_models'].values())|set(complete['reference_predictions'].values())
+     mandatory|=set(complete['candidate_fits'].values())|set(complete['candidate_outputs'].values())
+     for op in set(products)-mandatory:
+@@ -127,20 +155,27 @@
+             identity,ordinal=op.rsplit('/analysis/',1)
+             need(identity in methods and ordinal.isdigit() and int(ordinal)>0 and r['stage']=='analysis','only actual declared author analyses')
+             spec=methods[identity]
++            admit_analysis(r,spec,roster)
+             need(r['panel']==spec['panel'] and r['animal']==spec['animal']
+-                 and [x['session'] for x in r['training']]==sorted(roster['source']), 'full own-context analysis inputs')
++                 and [x['session'] for x in r['training']]==sessions(roster,'source'), 'full own-context analysis inputs')
+             need([x['session'] for x in r['evaluation']]==([] if spec['animal']=='global' else spec['evaluation_sessions']), 'no cross-condition/query-before-F-seal analysis')
+             need(task_products[op][0]<method_events[identity][0], 'analysis finishes before its method seal')
+         elif op.endswith('/features'):
+             inference=op[:-9];matching=[s for s in outputs.values() if s['id']==inference]
+             need(len(matching)==1 and r['stage']=='numeric_features','only one declared prediction feature stage')
+             spec=matching[0];method=complete['methods'][spec['author']];fit=products[complete['candidate_fits'][spec['author']]]
++            admit_features(r,spec,roster,method,fit)
+             need(method['recipe']['numeric_slots'] and r['program']['pin']==method['program']['pin']
+                  and r['state']==fit['result']['state'] and r['current_session']==spec['session'], 'frozen own-method numeric feature producer')
+             need(method_events[spec['author']][0]<intents[op][0]<task_products[op][0]<intents[inference][0], 'features between method seal and its final inference')
+         else:raise ValueError('undeclared native producer cannot enter complete graph')
++    actual_numeric={k for k,row in closed['providers'].items() if set(row['complete']['action'])=={'values'}}
++    need(len(numeric_keys)==len(set(numeric_keys)) and set(numeric_keys)==actual_numeric,'every numeric reply has exactly one declared consumer')
++    need(sum(e['kind']=='numeric_slot_completed' for e in events)==len(numeric_keys),'no extra numeric bridges')
+     for panel in panels():
+         scope=scopes[panel['id']];end=panel_finishes[panel['id']]['accounting'];profile=selection['panel_limits'][panel['id']]
++        need(end['final_event_encoding_and_publication_reservation_included']==2*selection['limits']['journal_event_bytes'],
++             'final panel encoding/publication reservation included before original-clock close')
+         need(end['closed'] is True and end['read_reserved_bytes']<=profile['read_bytes']
+              and end['write_reserved_bytes']<=profile['write_bytes'] and end['provider_tokens_observed']<=profile['tokens']
+              and end['provider_calls']<=profile['provider_calls'] and end['provider_money_reserved']<=profile['money'], 'one complete matched panel ledger')
+--- preserved-v1/program/authors.py
++++ v2/program/authors.py
+@@ -40,10 +40,10 @@
+ class Authors:
+     def __init__(self,runtime,views,references,selection,budget,emit):
+         self.runtime=runtime;self.views=views;self.references=references;self.selection=selection;self.budget=budget;self.emit=emit
+-        self.methods={};self.fits={};self.outputs={};self.transcripts={}
++        self.methods={};self.fits={};self.outputs={};self.transcripts={};self.numeric_slots={}
+ 
+     def base(self,panel,animal,stage,program,recipe_value):
+-        source=sorted(self.views.roster['source']) if stage in ('analysis','fit') else []
++        source=self.views.roster['source_order'] if stage in ('analysis','fit') else []
+         evaluation=[] if panel['mode']=='F' and stage in ('analysis','fit') else self.views.animal_sessions(animal)
+         tools,tool_mounts=self.references.tools(panel['role'],panel['tool'])
+         req={'schema':'neural058_candidate_request_v1','task':'NEURAL-058','stage':stage,'panel':panel['id'],
+@@ -114,16 +114,23 @@
+         request,mounts=self.base(panel,animal,'infer',method['program'],method['recipe'])
+         request.update(current_session=session,state_root='/inputs/state',state=fit['result']['state'],provider_values=[])
+         mounts+=self.state_mounts(fit);operation=panel['id']+'/predict/'+session
++        self.numeric_slots[operation]=[]
+         if method['recipe']['numeric_slots']:
+             features_request=dict(request);features_request['stage']='numeric_features'
+             profile=self.selection['native_profiles']['candidate_features'];end=min(cutoff,panel_budget.tick()+finite(profile['wall_seconds']))
+             product=self.runtime.run(operation+'/features','candidate',features_request,mounts,end,profile,panel_budget)
+             features=product['result']['features'];need(len(features)==len(method['recipe']['numeric_slots']),'fixed numerical feature slots')
+             values=[]
+-            for slot,numbers in zip(method['recipe']['numeric_slots'],features,strict=True):
++            for ordinal,(slot,numbers) in enumerate(zip(method['recipe']['numeric_slots'],features,strict=True)):
+                 messages=[{'role':'system','content':'Return exactly JSON {"values": [finite numbers]}. '+slot['prompt']},
+                           {'role':'user','content':encoded(numbers).decode()}]
+-                action,_,_=panel_budget.provider.complete(messages,(panel['id'],animal),cutoff,'fixed_numeric')
++                action,_,response=panel_budget.provider.complete(messages,(panel['id'],animal),cutoff,'fixed_numeric')
++                bridge={'operation':operation,'slot':ordinal,'feature_result':product['result_pin'],
++                        'episode':[panel['id'],animal],'ordinal':panel_budget.provider.calls,
++                        'request':panel_budget.provider.attempted[-1]['request'],'response':pin(response),
++                        'response_text':response.decode('utf8'),'values':action['values']}
++                self.numeric_slots[operation].append(bridge)
++                self.emit({'kind':'numeric_slot_completed','task':'NEURAL-058',**bridge})
+                 values.append(action['values'])
+             request['provider_values']=values
+         profile=self.selection['native_profiles']['candidate_infer'];end=min(cutoff,panel_budget.tick()+finite(profile['wall_seconds']))
+--- preserved-v1/program/contracts.py
++++ v2/program/contracts.py
+@@ -43,7 +43,8 @@
+     need([list(folds.values()).count(i) for i in range(5)] == [26,25,25,25,25], 'fixed full source folds')
+     return {'source': by_role['source_sessions'], 'evaluation': by_role['evaluation_sessions'],
+             'excluded': by_role['excluded_extra_sessions'], 'source_animals': sorted(animals['source_sessions']),
+-            'eval_animals': sorted(animals['evaluation_sessions']), 'folds': dict(folds)}
++            'eval_animals': sorted(animals['evaluation_sessions']), 'folds': dict(folds),
++            'source_order':sorted(by_role['source_sessions']), 'evaluation_order':sorted(by_role['evaluation_sessions'])}
+ 
+ 
+ def load_cohort(path, budget):
+@@ -53,8 +54,10 @@
+ 
+ def source_animal_split(roster, fold):
+     need(fold == 'full' or type(fold) is int and 0 <= fold < 5, 'source fold or full refit')
+-    train = sorted(e for e,r in roster['source'].items() if fold == 'full' or roster['folds'][r['animal']] != fold)
+-    val = [] if fold == 'full' else sorted(e for e,r in roster['source'].items() if roster['folds'][r['animal']] == fold)
++    from ordering import sessions
++    order=sessions(roster,'source')
++    train = [e for e in order if fold == 'full' or roster['folds'][roster['source'][e]['animal']] != fold]
++    val = [] if fold == 'full' else [e for e in order if roster['folds'][roster['source'][e]['animal']] == fold]
+     ta = {roster['source'][e]['animal'] for e in train}; va = {roster['source'][e]['animal'] for e in val}
+     need(not ta & va and ta | va == set(roster['source_animals']), 'whole-animal source partition')
+     need(not (ta | va) & set(roster['eval_animals']), 'no evaluation-animal fitting or selection')
+@@ -68,7 +71,8 @@
+          'same task role and source fold')
+     need(record.get('training_sessions') == train and record.get('validation_sessions') == val,
+          'exact complete source session lineage')
+-    need(record.get('training_animals') == sorted({roster['source'][e]['animal'] for e in train}),
++    from ordering import subset_animals
++    need(record.get('training_animals') == subset_animals(roster,train),
+          'exact training animal lineage')
+     need(record.get('external_neural_pretraining') == [] and record.get('evaluation_wheel_access') is False,
+          'strict source-only reference training, no hidden checkpoint')
+--- preserved-v1/program/controller.py
++++ v2/program/controller.py
+@@ -16,7 +16,7 @@
+     qualification=validate(selection,frozen['pin'],budget)
+     root=fresh(selection['roots']['output'],budget)
+     journal=None;runtime=None;references=None;authors=None;panel_budget=None;completed_panels=[]
+-    primary=None;later=[]
++    primary=None;later=[];failed_panel=None
+     try:
+         journal=Journal(root/'JOURNAL.jsonl',budget,selection['limits']['journal_bytes'],selection['limits']['journal_event_bytes'])
+         emit=journal.append
+@@ -37,7 +37,7 @@
+         authors=Authors(runtime,views,references,selection,budget,emit)
+         for panel in panels():
+             profile=selection['panel_limits'][panel['id']]
+-            panel_budget=PanelBudget(budget,profile,panel['id'],engine,selection['provider'],emit)
++            panel_budget=PanelBudget(budget,profile,panel['id'],engine,selection['provider'],emit,journal)
+             emit({'kind':'panel_started','task':'NEURAL-058','panel':panel,'profile':profile,'scope':panel_budget.snapshot()})
+             if panel['mode']=='F':
+                 # One global method is sealed/fitted before any held animal is
+@@ -52,9 +52,8 @@
+                     authors.construct(panel,animal,panel_budget,cutoff)
+                     for sid in views.animal_sessions(animal):
+                         authors.infer_session(panel,animal,sid,panel_budget,cutoff)
+-            ending=panel_budget.finish();panel_budget=None
++            ending=panel_budget.finish(panel);panel_budget=None
+             completed_panels.append(panel['id'])
+-            emit({'kind':'panel_completed','task':'NEURAL-058','panel':panel,'accounting':ending})
+         need(len(authors.methods)==168 and len(authors.fits)==168 and len(authors.outputs)==696,'complete24 panels/168 contexts/696 session outputs')
+         payload={'schema':'neural058_production_complete_v1','task':'NEURAL-058',
+                  'selection':pin(encoded(selection)),'source':frozen['pin'],'prepared':selection['prepared'],
+@@ -63,7 +62,7 @@
+                  'reference_cv':{r+'/'+c+'/'+str(f):p['operation'] for (r,c,f),p in references.cv.items()},
+                  'reference_models':{r+'/'+c:p['operation'] for (r,c),p in references.models.items()},
+                  'reference_predictions':{r+'/'+c+'/'+s:p['operation'] for (r,c,s),p in references.predictions.items()},
+-                 'methods':authors.methods,'author_transcripts':authors.transcripts,
++                 'methods':authors.methods,'author_transcripts':authors.transcripts,'numeric_slots':authors.numeric_slots,
+                  'candidate_fits':{k:p['operation'] for k,p in authors.fits.items()},
+                  'candidate_outputs':{p+'/'+s:v['operation'] for (p,s),v in authors.outputs.items()},
+                  'products':runtime.results,'semantic_qualification_pending':True,
+@@ -79,10 +78,13 @@
+     except BaseException as error:
+         primary=error
+         if panel_budget is not None:
+-            try:panel_budget.fail()
+-            except BaseException as cleanup:later.append(cleanup)
++            failed_panel=panel_budget.snapshot()
++            try:failed_panel=panel_budget.fail()
++            except BaseException as cleanup:
++                failed_panel=panel_budget.snapshot();failed_panel['failure_publication_or_scope_closure_unknown']=True
++                later.append(cleanup)
+         failure={'task':'NEURAL-058','complete':False,'first_failure_type':type(error).__name__,
+-                 'completed_panels':completed_panels,'attempted_native_operations':0 if runtime is None else len(runtime.results),
++                 'completed_panels':completed_panels,'failed_panel_accounting':failed_panel,'attempted_native_operations':0 if runtime is None else len(runtime.results),
+                  'completed_candidate_predictions':0 if authors is None else len(authors.outputs),
+                  'completed_reference_selection_fits':0 if references is None else len(references.cv),
+                  'read_reserved_bytes':budget.read_bytes,'write_reserved_bytes':budget.write_bytes,
+--- preserved-v1/program/corpus.py
++++ v2/program/corpus.py
+@@ -15,6 +15,7 @@
+     return {'schema':'neural058_role_session_v1','task':'NEURAL-058','access':role,
+             'corpus_role':original['role'],'session':original['session'],'animal':original['animal'],
+             'windows':original['windows'],'regions':original['regions'],'fold':original['fold'],
++            'session_ordinal':original['session_ordinal'],'animal_ordinal':original['animal_ordinal'],
+             'arrays':dict(original['common']) | (dict(original['neural']) if role=='J' else {})
+                      | ({'labels':original['labels']} if training else {})}
+ 
+@@ -48,6 +49,7 @@
+         offsets(arrays['domain_offsets'],len(arrays['neural_domain']),len(windows))
+         need(arrays['spike_units'].shape==arrays['spike_times'].shape and arrays['neural_domain'].shape[1:]==(2,), 'complete neural axes')
+     result={'session':doc['session'],'animal':doc['animal'],'fold':doc['fold'],'regions':doc['regions'],
++            'session_ordinal':doc['session_ordinal'],'animal_ordinal':doc['animal_ordinal'],
+             'locations':arrays['locations'],'location_missing':arrays['location_missing'],'windows':[],
+             'source_view':item,'role':role}
+     for i,w in enumerate(windows):
+@@ -66,6 +68,7 @@
+ 
+ def weights_and_membership(sessions,expected_sessions,expected_animals):
+     need([s['session'] for s in sessions]==expected_sessions,'full ordered session membership')
+-    need(sorted({s['animal'] for s in sessions})==expected_animals,'full animal membership')
++    from ordering import animals
++    need(animals(sessions)==expected_animals,'full stable animal membership')
+     need(all(s['windows'] for s in sessions),'no empty session')
+     return sum(len(s['windows']) for s in sessions)
+--- preserved-v1/program/grading.py
++++ v2/program/grading.py
+@@ -6,6 +6,7 @@
+ from admission import admit
+ from scores import animal_score,macro,paired_contrast
+ from schedule import panels
++from ordering import sessions as ordered_sessions
+ 
+ 
+ def predictions(product,row,view,root,budget,limits):
+@@ -25,7 +26,7 @@
+     animals={}
+     for animal in roster['eval_animals']:
+         sessions=[]
+-        for sid in sorted(s for s,r in roster['evaluation'].items() if r['animal']==animal):
++        for sid in ordered_sessions(roster,'evaluation',animal):
+             y,offset=targets[sid];p=values[sid];windows=[]
+             for a,b in zip(offset[:-1],offset[1:]):windows.append((y[a:b],p[a:b]))
+             sessions.append(windows)
+@@ -93,7 +94,7 @@
+     versions({'numpy':'2.2.6','torch':'2.10.0','torchmetrics':'1.9.0'})
+     # This is the sole target-entry boundary. No target body was read above.
+     budget.tick();targets={};private_joins={};need(set(request['target_joins'])==set(views),'all29 protected target joins')
+-    for sid in sorted(views):
++    for sid in complete['roster']['evaluation_order']:
+         join=read_json(request['private_root'],request['target_joins'][sid],budget,limits['metadata_bytes'])
+         need(join['opaque_session']==sid and join['opaque_animal']==views[sid]['animal']
+              and join['label_root_role']=='private' and [r['query'] for r in join['joins']]==[w['query'] for w in views[sid]['windows']],
+@@ -117,7 +118,7 @@
+         for role in ('C','J'):
+             for tool in ('T0','T1'):
+                 key='/'.join((mode,role,tool))
+-                native_aggregates[key]=seed_aggregate([native_scores[key+'/r'+str(r)] for r in (1,2,3)],sorted(views))
++                native_aggregates[key]=seed_aggregate([native_scores[key+'/r'+str(r)] for r in (1,2,3)],complete['roster']['evaluation_order'])
+     reference_scores={};native_reference_scores={};selected=complete['reference_selection']
+     for role in ('C','J'):
+         for family in ('ridge','forest','set','strongest'):
+--- preserved-v1/program/journal.py
++++ v2/program/journal.py
+@@ -13,18 +13,34 @@
+             sync_dir(self.path.parent)
+         except BaseException:
+             fd=self.fd;self.fd=None;close_preserving(fd);raise
+-        self.sequence=0;self.total=0;self.chain='0'*64
+-    def append(self,event):
++        self.sequence=0;self.total=0;self.chain='0'*64;self.pending=None
++    def reserve_event(self):
++        need(self.pending is None,'no outstanding event reservation')
++        # Both encoding and file publication are reserved before serialization.
++        # Conservative unused reservation is retained, never refunded/relabelled
++        # actual physical I/O. Panel-owned events use the panel budget itself.
++        self.budget.reserve_write(2*self.event_cap)
++        token=object();self.pending=(token,self.budget,self.sequence)
++        return token
++    def append_reserved(self,event,token):
++        need(self.pending is not None and self.pending[0] is token
++             and self.pending[1] is self.budget and self.pending[2]==self.sequence,
++             'exact single-use source-owned prepaid event')
++        charged_budget=self.pending[1];self.pending=None
++        charged_budget.tick()
+         need(type(event) is dict and 'kind' in event,'typed journal event')
+         body=encoded({'sequence':self.sequence,'previous':self.chain,'event':event})
+-        need(len(body)<=self.event_cap and self.total+len(body)+1<=self.cap,'journal reservation ceiling')
+-        self.budget.reserve_write(len(body)+1)
++        need(len(body)+1<=self.event_cap and self.total+len(body)+1<=self.cap,'journal reservation ceiling')
+         data=memoryview(body+b'\n')
+         while data:
++            charged_budget.tick()
+             n=os.write(self.fd,data);need(n>0,'short durable event write');data=data[n:]
+         os.fsync(self.fd)
+         self.chain=hashlib.sha256(body).hexdigest();self.total+=len(body)+1;self.sequence+=1
+-        return {'sequence':self.sequence-1,'chain':self.chain}
++        charged_budget.tick()
++        return {'sequence':self.sequence-1,'chain':self.chain,'reserved_encoding_and_publication_bytes':2*self.event_cap}
++    def append(self,event):
++        return self.append_reserved(event,self.reserve_event())
+     def close(self):
+         fd=self.fd;self.fd=None
+         try:
+--- preserved-v1/program/native_diagnostic.py
++++ v2/program/native_diagnostic.py
+@@ -29,7 +29,10 @@
+     metric=R2Score()
+     metric.update(torch.from_numpy(pred[i].reshape(-1,1)),torch.from_numpy(truth[j].reshape(-1,1)))
+     value=metric.compute()
+-    need(bool(torch.isfinite(value).item()),'finite native convention diagnostic')
++    if not bool(torch.isfinite(value).item()):
++        return {'status':'not_comparable','reason':'native float32 metric reduction is nonfinite',
++                'trial_count':len(trial),'timestamp_count':len(target),
++                'dependency_or_physical_exception_suppressed':False}
+     return {'status':'computed_convention_diagnostic','r2':float(value.item()),
+             'trial_count':len(trial),'timestamp_count':len(target),'dtype':'float32',
+             'negative_r2_clipped':False,'source_GT_serialization_and_aggregation_parity_not_established':True,
+--- preserved-v1/program/optional_admission.py
++++ v2/program/optional_admission.py
+@@ -0,0 +1,60 @@
++"""Complete optional-stage treatment and provider-value lineage admission."""
++from core import need,pin,encoded,parse
++from ordering import sessions
++from provider import action
++
++
++def treatment(request,panel,animal):
++    mode,role,tool,_=panel.split('/')
++    need(request['panel']==panel and request['mode']==mode and request['role']==role
++         and request['tool']==tool and request['animal']==animal,'exact optional-stage treatment and animal')
++    return True
++
++
++def analysis(request,spec,roster):
++    treatment(request,spec['panel'],spec['animal'])
++    need(request['stage']=='analysis' and request['recipe']=={'numeric_slots':[]},'analysis has no frozen inference slots')
++    need([x['session'] for x in request['training']]==sessions(roster,'source'),'complete optional source training')
++    expected=[] if spec['animal']=='global' else sessions(roster,'evaluation',spec['animal'])
++    need([x['session'] for x in request['evaluation']]==expected
++         and request['animal_sessions']==expected,'all and only own author context views')
++    return True
++
++
++def features(request,spec,roster,method,fit):
++    treatment(request,spec['panel'],spec['animal'])
++    expected=sessions(roster,'evaluation',spec['animal'])
++    need(request['stage']=='numeric_features' and request['current_session']==spec['session']
++         and not request['training'] and request['animal_sessions']==expected
++         and [x['session'] for x in request['evaluation']]==expected,'exact frozen current-animal feature views')
++    need(request['recipe']==method['recipe'] and request['recipe']['numeric_slots']
++         and request['program']['pin']==method['program']['pin'] and request['state']==fit['result']['state']
++         and request['provider_values']==[],'exact own sealed feature method/state/recipe')
++    return True
++
++
++def numeric_bridge(operation,product,following,rows,method,provider_events,selection):
++    features=product['result']['features'];slots=method['recipe']['numeric_slots']
++    need(len(features)==len(slots)==len(rows),'every declared numeric feature/provider slot')
++    values=[];keys=[]
++    for i,(numbers,slot,row) in enumerate(zip(features,slots,rows,strict=True)):
++        episode=[following['panel'],following['animal']]
++        need(row['operation']==operation and row['slot']==i and row['episode']==episode
++             and row['feature_result']==product['result_pin'],'exact numeric feature producer/slot/consumer')
++        key=(tuple(episode),row['ordinal']);need(key in provider_events,'actual provider request for this panel/animal/ordinal')
++        evidence=provider_events[key];attempt=evidence['attempt'];done=evidence['complete']
++        messages=[{'role':'system','content':'Return exactly JSON {"values": [finite numbers]}. '+slot['prompt']},
++                  {'role':'user','content':encoded(numbers).decode()}]
++        payload={'model':selection['provider']['model'],'messages':messages,'stream':False,
++                 'max_tokens':attempt['output_token_ceiling'],'temperature':selection['provider']['temperature']}
++        if selection['provider']['seed_supported']:payload['seed']=attempt['request_seed']
++        need(attempt['request']==row['request']==pin(encoded(payload)),'exact fixed prompt and feature request bytes')
++        raw=row['response_text'].encode('utf8');need(pin(raw)==row['response']==done['response'],'actual numeric response body pin')
++        body=parse(raw);choices=body['choices'];need(len(choices)==1 and choices[0]['finish_reason']=='stop'
++            and choices[0]['message']['role']=='assistant' and not choices[0]['message'].get('tool_calls')
++            and body['model']==selection['provider']['response_model'],'one complete exact model numeric reply')
++        selected=action(choices[0]['message']['content'].encode(),'fixed_numeric')
++        need(selected==done['action'] and selected['values']==row['values'],'actual typed provider values')
++        values.append(row['values']);keys.append(key)
++    need(following['provider_values']==values,'the exact numeric replies enter only the following inference')
++    return keys
+--- preserved-v1/program/ordering.py
++++ v2/program/ordering.py
+@@ -0,0 +1,45 @@
++"""Stable original-roster ordinals; opaque aliases never determine traversal."""
++from core import need
++
++
++def animals(sessions):
++    rows={}
++    for s in sessions:
++        a=s['animal'];ordinal=s['animal_ordinal']
++        need(type(ordinal)is int and ordinal>=0,'source-owned ordinary animal ordinal')
++        need(a not in rows or rows[a]==ordinal,'one ordinal per biological animal')
++        rows[a]=ordinal
++    need(len(set(rows.values()))==len(rows),'unique biological animal ordinals')
++    return sorted(rows,key=lambda a:rows[a])
++
++
++def roster(rows):
++    result={}
++    for role,count,animal_count in (('source',423,126),('evaluation',29,13)):
++        group={s:r for s,r in rows.items() if r['role']==role}
++        need(len(group)==count,'complete ordered source corpus')
++        need(all(type(r['session_ordinal'])is int for r in group.values()) and
++             sorted(r['session_ordinal'] for r in group.values())==list(range(count)),'exact stable session ordinal bijection')
++        ordered=sorted(group,key=lambda s:group[s]['session_ordinal'])
++        people=animals([group[s] for s in ordered])
++        need(len(people)==animal_count and sorted({r['animal_ordinal'] for r in group.values()})==list(range(animal_count)),
++             'complete source-owned animal ordinal bijection')
++        result[role]=group;result[role+'_order']=ordered
++        result['source_animals' if role=='source' else 'eval_animals']=people
++    need(not set(result['source_animals'])&set(result['eval_animals']),'full disjoint biological roster')
++    folds={}
++    for r in result['source'].values():
++        a=r['animal'];f=r['fold'];need(type(f)is int and 0<=f<5,'ordinary full source fold')
++        need(a not in folds or folds[a]==f,'one fold per animal');folds[a]=f
++    need([list(folds.values()).count(i) for i in range(5)]==[26,25,25,25,25],'exact biological fold sizes')
++    result['folds']=folds;return result
++
++
++def sessions(roster,role,animal=None):
++    order=roster[role+'_order'];need(len(order)==len(set(order)) and set(order)==set(roster[role]),'complete explicit session order')
++    return [s for s in order if animal is None or roster[role][s]['animal']==animal]
++
++
++def subset_animals(roster,session_ids):
++    present={roster['source'][s]['animal'] for s in session_ids}
++    return [a for a in roster['source_animals'] if a in present]
+--- preserved-v1/program/panel_budget.py
++++ v2/program/panel_budget.py
+@@ -3,7 +3,7 @@
+ 
+ 
+ class PanelBudget:
+-    def __init__(self,parent,profile,identity,engine,provider_selection,record):
++    def __init__(self,parent,profile,identity,engine,provider_selection,record,journal):
+         self.parent=parent;self.profile=profile;self.identity=identity;self.engine=engine;self.emit=record
+         self.origin=parent.origin;self.panel_start=parent.tick()
+         self.deadline=min(parent.deadline,self.panel_start+finite(profile['wall_seconds']))
+@@ -12,11 +12,12 @@
+         from provider import Provider
+         self.provider=Provider(provider_selection,self,record,profile)
+         self.previous_engine_budget=engine.budget;engine.budget=self
++        self.journal=journal;self.previous_journal_budget=journal.budget;journal.budget=self
+         try:
+             engine.begin_scope(identity,self.deadline,{'native_cpu_ns':profile['native_cpu_ns'],
+                                                      'gpu_device_seconds':profile['gpu_device_seconds']})
+         except BaseException:
+-            engine.budget=self.previous_engine_budget
++            engine.budget=self.previous_engine_budget;journal.budget=self.previous_journal_budget
+             raise
+ 
+     def tick(self,cutoff=None):
+@@ -47,14 +48,19 @@
+     def record(self):
+         return self.snapshot()
+ 
+-    def finish(self):
+-        self.tick();scope=self.engine.end_scope(self.identity);self.closed=True
+-        self.engine.budget=self.previous_engine_budget
+-        value=self.snapshot();value['native_scope']=scope;return value
++    def finish(self,panel):
++        self.tick();scope=self.engine.end_scope(self.identity)
++        token=self.journal.reserve_event()
++        value=self.snapshot();value['closed']=True;value['native_scope']=scope
++        value['final_event_encoding_and_publication_reservation_included']=2*self.journal.event_cap
++        self.journal.append_reserved({'kind':'panel_completed','task':'NEURAL-058','panel':panel,'accounting':value},token)
++        self.tick() # original panel clock still applies after write/fsync.
++        self.closed=True;self.engine.budget=self.previous_engine_budget;self.journal.budget=self.previous_journal_budget
++        return value
+ 
+     def fail(self):
+         value=self.snapshot()
+         try: value['native_scope']=self.engine.abort_scope()
+         finally:
+-            self.closed=True;self.engine.budget=self.previous_engine_budget
++            self.closed=True;self.engine.budget=self.previous_engine_budget;self.journal.budget=self.previous_journal_budget
+         value['failed']=True;return value
+--- preserved-v1/program/preparation.py
++++ v2/program/preparation.py
+@@ -77,8 +77,10 @@
+     outcomes = []; private_rows = []; stage = None
+     try:
+         for role in ('source','evaluation'):
+-            for eid in sorted(roster[role]):
+-                stage = {'session': eid, 'role': role, 'status':'attempted'}; outcomes.append(stage)
++            people=roster['source_animals' if role=='source' else 'eval_animals']
++            for ordinal,eid in enumerate(roster[role+'_order']):
++                animal_ordinal=people.index(roster[role][eid]['animal'])
++                stage = {'session': eid, 'role': role, 'status':'attempted','session_ordinal':ordinal,'animal_ordinal':animal_ordinal}; outcomes.append(stage)
+                 row = inputs[eid]; opaque = secrets.token_hex(16)
+                 out = fresh(public/opaque, budget); hidden = fresh(private_root/opaque, budget)
+                 original_path = Path(authority['roots']['original']) / __import__('core').relative(row['path'])
+@@ -95,7 +97,8 @@
+                 label_root = out if role == 'source' else hidden
+                 label = write_array(label_root,'labels.npy',arrays['labels'],budget,limits['export_array_bytes'])
+                 body = {'schema':'neural058_session_view_v1','task':TASK,'role':role,'session':opaque,
+-                        'animal':aliases[row['animal']], 'windows':windows,'regions':regions,
++                        'animal':aliases[row['animal']], 'session_ordinal':ordinal,'animal_ordinal':animal_ordinal,
++                        'windows':windows,'regions':regions,
+                         'common':common,'neural':neural,'labels':label if role == 'source' else None,
+                         'fold':roster['folds'].get(row['animal'])}
+                 view = write_json(out,'VIEW.json',body,budget,limits['session_metadata_bytes'])
+@@ -111,6 +114,10 @@
+         public_body={'schema':'neural058_full_prepared_corpus_v1','task':TASK,
+                      'source':[r['view'] for r in outcomes if r['role']=='source'],
+                      'evaluation':[r['view'] for r in outcomes if r['role']=='evaluation'],
++                     'source_order':[r['session_alias'] for r in outcomes if r['role']=='source'],
++                     'evaluation_order':[r['session_alias'] for r in outcomes if r['role']=='evaluation'],
++                     'source_animal_order':[aliases[a] for a in roster['source_animals']],
++                     'evaluation_animal_order':[aliases[a] for a in roster['eval_animals']],
+                      'cohort':pin(encoded(cohort_document)), 'authority':pin(encoded(authority)),
+                      'conditional_history':False,'all_original_support_retained':True}
+         private_body={'schema':'neural058_private_preparation_v1','task':TASK,'sessions':private_rows,
+--- preserved-v1/program/projection_admission.py
++++ v2/program/projection_admission.py
+@@ -11,7 +11,7 @@
+     top=read_json(root,selection['prepared'],budget,limits['metadata_bytes'])
+     from contracts import COHORT_PIN
+     need(top['cohort']==COHORT_PIN and top['authority']==selection['prepared_authority'],'independent canonical prepared chain')
+-    docs={};projections={}
++    docs={};projections={};ordinal_rows={}
+     for role in ('source','evaluation'):
+         need(len(top[role])==(423 if role=='source' else 29),'complete projection corpus')
+         for item in top[role]:
+@@ -19,8 +19,15 @@
+             need(sid not in docs and doc['role']==role,'unique source-side session roles')
+             row=complete['roster'][role][sid]
+             need(row['animal']==doc['animal'] and row['fold']==doc['fold'],'exact source-side biological/fold view')
++            ordinal_rows[sid]={'eid':sid,'animal':doc['animal'],'role':role,'fold':doc['fold'],
++                               'session_ordinal':doc['session_ordinal'],'animal_ordinal':doc['animal_ordinal']}
+             docs[sid]=doc
+             for access in ('C','J'): projections[(access,sid)]=projected_document(doc,access,role=='source')
++    from ordering import roster as ordered_roster
++    need(ordered_roster(ordinal_rows)==complete['roster'],'independent full stable source/animal order')
++    need(complete['roster']['source_order']==top['source_order'] and complete['roster']['evaluation_order']==top['evaluation_order']
++         and complete['roster']['source_animals']==top['source_animal_order']
++         and complete['roster']['eval_animals']==top['evaluation_animal_order'],'exact authenticated preparation order arrays')
+     native_intents={e['operation']:e for e in events if e['kind']=='native_intent'}
+     scopes={e['identity']:e for e in events if e['kind']=='scope_started'}
+     checked=[]
+--- preserved-v1/program/reference_models.py
++++ v2/program/reference_models.py
+@@ -12,7 +12,8 @@
+ def training_rows(sessions, role, budget):
+     import numpy as np
+     need(sessions and len({s['session'] for s in sessions})==len(sessions), 'complete unique training sessions')
+-    animals=sorted({s['animal'] for s in sessions})
++    from ordering import animals as ordered_animals
++    animals=ordered_animals(sessions)
+     counts={a:sum(s['animal']==a for s in sessions) for a in animals}
+     representation=fit_representation(sessions)
+     windows=[]; ys=[]; weights=[]; xs=[]
+@@ -63,7 +64,7 @@
+     state={'schema':'neural058_reference_state_v1','role':role,'fold':fold,'config':dict(config),
+            'recipe':RECIPE,'representation':representation,'xscale':xscale,'yscale':yscale,
+            'training_sessions':[s['session'] for s in sessions],
+-           'training_animals':sorted({s['animal'] for s in sessions})}
++           'training_animals':__import__('ordering').animals(sessions)}
+     family=config['family']; budget.tick()
+     if family=='ridge':
+         gram=Z.T@(W[:,None]*Z)
+--- preserved-v1/program/reference_worker.py
++++ v2/program/reference_worker.py
+@@ -47,7 +47,7 @@
+     output=fresh(request['output_root'],budget); operation=request['operation']; device=request['device']
+     if operation=='fit':
+         training=sessions(request,'training',budget)
+-        train_animals=sorted({s['animal'] for s in training})
++        train_animals=__import__('ordering').animals(training)
+         need(train_animals==request['training_animals'],'complete selected training animals')
+         need(not set(train_animals)&set(request['forbidden_animals']),'no target/held-fold animal fits')
+         if request['fold']=='full': need(len(training)==423 and len(train_animals)==126,'full423/126 refit')
+--- preserved-v1/program/references.py
++++ v2/program/references.py
+@@ -1,6 +1,7 @@
+ """Concrete full160-fold reference campaign, source selection and all final models."""
+ from pathlib import Path
+ from core import need,finite
++from ordering import sessions,subset_animals
+ from schedule import reference_selection,final_models,final_reference_sessions
+ from reference_selection import choose
+ 
+@@ -38,8 +39,8 @@
+             train=spec['training_sessions'];val=spec['validation_sessions']
+             request=self.base(spec)|{'operation':'fit','training':self.views.input_rows(spec['role'],train),
+                      'validation':self.views.input_rows(spec['role'],val),
+-                     'training_animals':sorted({roster['source'][s]['animal'] for s in train}),
+-                     'forbidden_animals':sorted(set(roster['eval_animals'])|{roster['source'][s]['animal'] for s in val})}
++                     'training_animals':subset_animals(roster,train),
++                     'forbidden_animals':roster['eval_animals']+subset_animals(roster,val)}
+             profile=self.profile(spec['config'])
+             product=self.runtime.run(spec['id'],'reference',request,self.views.mounts(spec['role'],train+val),
+                                      self.cutoff(profile),profile)
+@@ -54,7 +55,7 @@
+         self.emit({'kind':'source_reference_selection','task':'NEURAL-058','selection':self.selected,
+                    'actual_cv_producers':[p['operation'] for p in self.cv.values()]})
+         for spec in final_models(self.selected['choices']):
+-            train=sorted(roster['source']);request=self.base(spec)|{'operation':'fit',
++            train=sessions(roster,'source');request=self.base(spec)|{'operation':'fit',
+                 'training':self.views.input_rows(spec['role'],train),'validation':[],
+                 'training_animals':roster['source_animals'],'forbidden_animals':roster['eval_animals']}
+             profile=self.profile(spec['config'])
+--- preserved-v1/program/schedule.py
++++ v2/program/schedule.py
+@@ -1,5 +1,6 @@
+ """Full animal-transfer work graph; dynamic reference reuse is identity-based."""
+ from core import need
++from ordering import sessions
+ from contracts import MODES, ROLES, TOOLS, REPLICATES, HEADS, source_animal_split
+ 
+ 
+@@ -14,11 +15,12 @@
+ def author_contexts(roster, panel):
+     for animal in (['global'] if panel['mode'] == 'F' else roster['eval_animals']):
+         yield {'id': panel['id']+'/author/'+animal, 'panel':panel['id'], 'animal':animal,
+-               'evaluation_sessions': [] if animal == 'global' else sorted(e for e,r in roster['evaluation'].items() if r['animal'] == animal)}
++               'evaluation_sessions': [] if animal == 'global' else sessions(roster,'evaluation',animal)}
+ 
+ 
+ def candidate_sessions(roster, panel):
+-    for eid, row in sorted(roster['evaluation'].items()):
++    for eid in sessions(roster,'evaluation'):
++        row=roster['evaluation'][eid]
+         context = 'global' if panel['mode'] == 'F' else row['animal']
+         yield {'id': panel['id']+'/predict/'+eid, 'panel':panel['id'], 'animal':row['animal'],
+                'session':eid, 'author':panel['id']+'/author/'+context, 'heads':list(HEADS)}
+@@ -62,7 +64,8 @@
+ 
+ def final_reference_sessions(roster, selection):
+     for model in final_models(selection):
+-        for eid, row in sorted(roster['evaluation'].items()):
++        for eid in sessions(roster,'evaluation'):
++            row=roster['evaluation'][eid]
+             yield {'id':model['id']+'/predict/'+eid,'model':model['id'],'role':model['role'],
+                    'session':eid,'animal':row['animal'],'selected_heads':model['selected_heads']}
+ 
+--- preserved-v1/program/scores.py
++++ v2/program/scores.py
+@@ -17,13 +17,20 @@
+             w=1.0/(len(sessions)*len(session)*len(y))
+             mu += w*y.sum(axis=0,dtype=np.float64); records.append((y,pred,w))
+     mu[constant]=first[constant]
+-    sse=np.zeros(2,dtype=np.float64); sst=sse.copy()
++    sse=np.zeros(2,dtype=np.float64); sst=sse.copy();mae=sse.copy()
+     for y,p,w in records:
+         sse += w*((y-p)**2).sum(axis=0,dtype=np.float64)
+         sst += w*((y-mu)**2).sum(axis=0,dtype=np.float64)
++        mae += w*np.abs(y-p).sum(axis=0,dtype=np.float64)
+     sst[constant]=0
+     need(bool(np.all(sst[~constant]>0)), 'nonconstant denominator underflow requires explicit failed admission')
+-    return {'mean':mu.tolist(),'sse':sse.tolist(),'sst':sst.tolist(),
++    need(bool(np.isfinite(sse).all() and np.isfinite(sst).all() and np.isfinite(mae).all()),'finite canonical diagnostic arithmetic')
++    return {'mean':mu.tolist(),'sse':sse.tolist(),'sst':sst.tolist(),'mse':sse.tolist(),'mae':mae.tolist(),
++            'support':{'sessions':len(sessions),'windows':sum(len(s) for s in sessions),
++                       'timestamps':sum(len(y) for s in sessions for y,_ in s),
++                       'per_session':[{'windows':len(s),'timestamps':sum(len(y) for y,_ in s)} for s in sessions]},
++            'weight_rule':'1/(animal sessions * session windows * window timestamps); normalized mass1',
++            'undefined_reason':['exact constant target' if d==0 else None for d in sst],
+             'r2':[None if d==0 else float(1-n/d) for n,d in zip(sse,sst)]}
+ 
+ 
+--- preserved-v1/program/views.py
++++ v2/program/views.py
+@@ -20,7 +20,8 @@
+             for item in top[corpus]:
+                 doc=read_json(root,item,budget,limits['metadata_bytes']);sid=doc['session']
+                 need(sid not in self.rows and doc['role']==corpus,'unique full packet session role')
+-                self.rows[sid]={'eid':sid,'animal':doc['animal'],'role':corpus,'fold':doc['fold']}
++                self.rows[sid]={'eid':sid,'animal':doc['animal'],'role':corpus,'fold':doc['fold'],
++                                'session_ordinal':doc['session_ordinal'],'animal_ordinal':doc['animal_ordinal']}
+                 self.documents[sid]=doc
+                 for role in ('C','J'):
+                     directory=fresh(self.directory/role/sid,budget)
+@@ -28,16 +29,11 @@
+                     written=write_json(directory,'VIEW.json',projected,budget,limits['metadata_bytes'])
+                     self.sources[(role,sid)]={'path':str(directory/'VIEW.json'),'pin':written['pin'],
+                                               'projected':projected,'prepared_source':item}
+-        source={s:r for s,r in self.rows.items() if r['role']=='source'}
+-        evaluation={s:r for s,r in self.rows.items() if r['role']=='evaluation'}
+-        sa=sorted({r['animal'] for r in source.values()});ea=sorted({r['animal'] for r in evaluation.values()})
+-        need(len(sa)==126 and len(ea)==13 and not set(sa)&set(ea),'full disjoint projected animals')
+-        folds={}
+-        for row in source.values():
+-            a=row['animal'];f=row['fold'];need(type(f)is int and 0<=f<5,'ordinary fixed source fold')
+-            need(a not in folds or folds[a]==f,'whole animal fold identity');folds[a]=f
+-        need([list(folds.values()).count(i) for i in range(5)]==[26,25,25,25,25],'exact full biological fold sizes')
+-        self.roster={'source':source,'evaluation':evaluation,'source_animals':sa,'eval_animals':ea,'folds':folds}
++        from ordering import roster as ordered_roster
++        self.roster=ordered_roster(self.rows)
++        need(self.roster['source_order']==top['source_order'] and self.roster['evaluation_order']==top['evaluation_order']
++             and self.roster['source_animals']==top['source_animal_order'] and self.roster['eval_animals']==top['evaluation_animal_order'],
++             'exact stable original-source ordering, opaque labels only')
+ 
+     def input_rows(self,role,session_ids):
+         return [{'session':s,'animal':self.rows[s]['animal'],
+@@ -57,7 +53,8 @@
+         return result
+ 
+     def animal_sessions(self,animal):
+-        return sorted(s for s,r in self.roster['evaluation'].items() if r['animal']==animal)
++        from ordering import sessions
++        return sessions(self.roster,'evaluation',animal)
+ 
+     def lineage(self,role,session_ids):
+         return [{'session':s,'animal':self.rows[s]['animal'],'role':role,

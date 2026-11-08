@@ -1,0 +1,78 @@
+{
+  "consistent_source_choices": [
+    "Normalized ridge weights fix the regularization convention; the intercept is recovered through source-only centering and inverse target scaling.",
+    "The set-network loss implements M times the sum of normalized timestamp weights and equal-head squared error, with full-window gradient accumulation, one global clip and one AdamW step.",
+    "Initialization and epoch permutation seeds now have explicit canonical SHA256 keys and integer mapping, independent of grid traversal and shared across configuration prefixes.",
+    "All three reference producers, primitive fitted-state export/restore, full160 OOF selection entries and6-12 endpoint-specific final refits are concrete scientific source, not completed-output callbacks.",
+    "The new literal A0/slice reconciliation and strict C=1 support preserve the intended alignment; raw historical offsets cannot be assumed zero.",
+    "Upstream bidirectional IIR dependence makes same-filter-pass history structurally unavailable; the source does not weaken that gate or infer causal processing.",
+    "All423/29 sessions,126/13 animals and full candidate/reference panels remain required; physical resource feasibility and native numerical parity are unqualified."
+  ],
+  "findings": [
+    {
+      "evidence": "Literal original ts1_dataset.py145-148 converts a float64 target to float32 before target extraction. DESIGN applies the same conversion policy to both selected heads and only then uses float64 protected scoring.",
+      "finding": "Native float64 wheel velocity and speed are exported directly as float64, omitting the adopted source float64-to-float32 target conversion.",
+      "id": "N058-I1",
+      "required_change": "Apply the admitted source conversion at the equivalent dataset-transform stage for both heads; retain exact timestamps and no evaluation normalization. Protect and score the resulting values, not unconverted originals.",
+      "severity": "required_scientific_target_identity",
+      "source": "native_reader.py198-203; preparation.py44,59",
+      "status_at_freeze": "owner accepted; awaiting preserved coherent successor"
+    },
+    {
+      "evidence": "Literal IrregularTimeSeries.slice selects events by the requested interval and intersects domain independently; its constructor/slice do not establish every selected event belongs to the declared domain.",
+      "finding": "Exposure uses the intersection with neural_domain, but counts include every spike in [a,b). An event outside neural_domain in a partially exposed bin can be counted. The existing zero-exposure assertion only catches completely unexposed bins.",
+      "id": "N058-I2",
+      "required_change": "Explicitly admit disjoint finite neural domain and every event membership in it. Refuse inconsistent original support rather than silently dropping an event. Preserve complete target/interval membership.",
+      "severity": "required_scientific_support_identity",
+      "source": "features.py38-56",
+      "status_at_freeze": "owner accepted; awaiting preserved coherent successor"
+    },
+    {
+      "finding": "Requested-time lag features zero out invalid bin indices but omit the explicit per-lag availability masks in accepted REFERENCES. A static50-bin mask plus time is not the same linear feature map.",
+      "id": "N058-I3",
+      "required_change": "Append explicit per-requested-time/per-lag availability from valid index and admitted exposure, keeping partial-exposure metadata and J-only masks. Preserve complete lag offsets and original timestamp support.",
+      "severity": "required_reference_hypothesis_correspondence",
+      "source": "features.py93-100",
+      "status_at_freeze": "owner accepted; awaiting preserved coherent successor"
+    },
+    {
+      "finding": "The qualification callback return is ignored; a False result continues to environment checks, namespace creation and original-input preparation.",
+      "id": "N058-I4",
+      "required_change": "Bind the concrete source-owned verifier and require literal True before effects, with explicit refusal on False, None or merely truthy substitutes. This does not itself establish authentic qualification.",
+      "severity": "required_pre_effect_admission",
+      "source": "preparation.py63-73",
+      "status_at_freeze": "owner accepted literal-True verifier; awaiting preserved coherent successor"
+    },
+    {
+      "finding": "Exact constancy is inferred solely from centered squared differences around an accumulated floating-point weighted mean. The mean can round away from an exactly constant positive input, yielding small positive variance/SST and defeating undefined-target or zero-feature behavior.",
+      "future_narrow_control": "Positive constant values over ragged unequal session/window/timestamp weights, contrasted with genuinely nonconstant near-equal values. No such fixture has run in this review.",
+      "id": "N058-I5",
+      "required_change": "Detect structural constancy by exact value equality across full relevant support (or a rigorously equivalent exact check), without epsilon; keep truly near-constant data distinct. Preserve undefined endpoint aggregate for constant target and exact zero centered columns for constant feature.",
+      "severity": "required_exact_constancy_semantics",
+      "source": "scores.py9-22; features.py107-114",
+      "status_at_freeze": "sent to owner; awaiting exact successor"
+    }
+  ],
+  "fixture_bytes": 0,
+  "known_logical_read_bytes_through_this_freeze": 382008,
+  "known_prior_metadata_write_bytes_this_phase": 0,
+  "measurement_limits": "Known direct source-byte reads only; no physical OS I/O/RSS certification. Prior closed design and packaging phases remain separate. Subsequent coherent source review/controls will have separate additive observations within the implementation grant.",
+  "qualification": {
+    "accepted_runtime_source": false,
+    "actual_input_admitted": false,
+    "new_ids": 0,
+    "reference_competence": false,
+    "scientific_qualified": false
+  },
+  "reviewer": "/root/wave21_neural001_design",
+  "schema": "neural058_scientific_slice_independent_findings_v1",
+  "scope": "Static source review only of thirteen scientific modules plus semantic reconciliation. Full controller/authority/observer/protected-grade composition is not frozen or accepted. Zero imports, fixtures or authentic execution.",
+  "source_slice": {
+    "authentication_tool": "e60d77",
+    "bytes": 4074,
+    "member_bytes": 78625,
+    "members": 14,
+    "path": "SCIENTIFIC_SOURCE_SLICE_V1.json",
+    "sha256": "cc5fc7935ef55132334f844e0533850735bde2f87d7ec705b1b5813ebb116152"
+  }
+}

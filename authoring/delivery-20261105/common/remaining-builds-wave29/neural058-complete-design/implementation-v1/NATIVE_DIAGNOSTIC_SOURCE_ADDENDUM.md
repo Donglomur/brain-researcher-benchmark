@@ -1,0 +1,15 @@
+# Original readout and native-convention diagnostic
+
+This additive source reconciliation preserves the accepted scientific V3 design and frozen scientific-source V2. It does not replace either canonical animal-macro endpoint. `program/native_diagnostic.py` supplies the separately labeled absolute-speed convention diagnostic; `program/grading.py` invokes it only after the complete public producer/array admission and late protected-target boundary.
+
+The original repository commit is `6fbd666fe8170a2165f5198c1f490911424a654d`. The exact helper proposals under `literal-source-closure/native-scoring-source-v1` and `native-scalar-finalizer-v1`, joined by `LITERAL_HELPER_DEPENDENCY_JOIN.json`, bind the following facts:
+
+- The original dataset readout selects `wheel_speed`, the absolute value of signed `wheel_vel`, and converts float64 targets to float32. Signed velocity is this benchmark's explicit primary estimand, not a claim about that original readout.
+- The original writer casts floating fields to float32 by default; the test mixin also explicitly calls `pred.cpu().float()`.
+- The scorer loads serialized dtypes, aligns trial IDs using `np.intersect1d(..., return_indices=True)`, and flattens rectangular `(N,T,D)` arrays to `(N*T,D)`. Speed has no mask. That source does not by itself establish complete trial or timestamp coverage.
+- `aggregate_metrics` invokes `metric.compute()` and extracts scalar tensors with `.item()`; nonscalar tensors are averaged first. It does not itself cast, clip, reset metrics or pool animals/sessions.
+- A separate original session/seed aggregator clips each session/seed R² below zero, then averages sessions within a seed and finally seeds. Ranking is a different operation. These are not our unmodified, animal-centered canonical scores.
+
+The implementation requires every original occurrence and timestamp. It can reconstruct the original unique-trial sorting convention only where the complete session is rectangular and IDs are unique. If the original intersection would discard a duplicate or fail to represent ragged support, the diagnostic records `not_comparable`; it does not drop cases or collapse occurrences. Successful rows use the pinned torchmetrics1.9.0 R2Score with float32 inputs and scalar extraction. The environment versions are checked before any target body is opened. All three actual candidate realizations and all29 sessions are required by the separately reported clipping/seed convention; missing/non-comparable sessions make that whole diagnostic unavailable. Independent references receive the same per-session diagnostic.
+
+Literal source correspondence is not authentic numerical parity. The native ground-truth serializer, actual package implementations/environment, dtype and physical unit/sign evidence, actual target support and metric output remain independently admitted dependencies. This code is neither a calibrated original TS1 run nor a SOTA comparison. No metric function, dataset, header, checkpoint or target was executed/read in this construction phase.
