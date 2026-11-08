@@ -1,0 +1,134 @@
+{
+  "descriptors": {
+    "fields": [
+      "path",
+      "bytes",
+      "sha256"
+    ],
+    "path": "owned basename only; independent verifier must refuse traversal/symlink/duplicate/inventory mismatch",
+    "sha256": "64 lowercase hexadecimal digits; producer report must be independently authenticated"
+  },
+  "external_acceptance_gates": [
+    "exact generated and unchanged source closure",
+    "qualified MATLAB/toolbox/Java serialization environment",
+    "protected full role/input membership and no candidate exposure to capture",
+    "source anchors/sequence/root return and dispositions",
+    "independent raw leaf bytes/hash/type/shape/body validation",
+    "separate native saved-product MAT body schema when present",
+    "all output file inventory/identity and parent-directory durability",
+    "original phase clock and independent natural-zero closure after all cleanup",
+    "all unresolved helpers, data/identity/producers and ED obligations retained"
+  ],
+  "footer": {
+    "bytes_reserved_before_footer": "raw and metadata write reservations plus maximum native cache reservation; no refund",
+    "files_before_footer": "all successfully reserved output names before footer; expected closed inventory adds footer, but this producer count is not independent evidence",
+    "native_cache": "present false, or original_native_save_MAT with path/bytes/SHA and body_schema_admitted false",
+    "path": "CAPTURE_INDEX.json",
+    "required_false_flags": [
+      "native_qualified",
+      "outer_natural_zero_established",
+      "directory_durability_established"
+    ],
+    "schema_value": "ach_native_capture_index_v1",
+    "snapshots": "ordered descriptor list, sequence1..N includes workspace snapshots and value taps",
+    "source_fields": [
+      "root_id",
+      "mode",
+      "context_id",
+      "capture_spec_sha256",
+      "original_source_sha256"
+    ],
+    "status_value": "root_returned_provisional"
+  },
+  "leaf": {
+    "byte_order": "little",
+    "char_wire": "uint16 code units, little endian",
+    "empty": "zero bytes and exact empty hash allowed",
+    "extent_equation": "bytes == product(shape) * primitive_bytes_per_element[class], using bounded exact integer arithmetic",
+    "fields": [
+      "path",
+      "bytes",
+      "sha256",
+      "class",
+      "shape",
+      "byte_order",
+      "layout",
+      "NaN_Inf_policy"
+    ],
+    "floating_nonfinite": "preserved in raw payload; never literal nonfinite JSON numbers",
+    "layout": "MATLAB_column_major",
+    "logical_wire": "uint8 0/1; body validity separate from extent",
+    "path_regex": "leaf-[0-9]{9,16}\\.bin",
+    "primitive_bytes_per_element": {
+      "char": 2,
+      "double": 8,
+      "int16": 2,
+      "int32": 4,
+      "int64": 8,
+      "int8": 1,
+      "logical": 1,
+      "single": 4,
+      "uint16": 2,
+      "uint32": 4,
+      "uint64": 8,
+      "uint8": 1
+    },
+    "shape": "exact nonnegative integer dimensions; scalar MATLAB shape is[1,1]; unknown until authenticated capture"
+  },
+  "limits": [
+    "max_snapshots",
+    "max_nodes",
+    "max_depth",
+    "max_files",
+    "max_total_bytes",
+    "max_leaf_bytes",
+    "max_snapshot_bytes",
+    "max_workspace_bytes",
+    "max_cache_bytes"
+  ],
+  "node_types": {
+    "categorical_codes_and_categories": "typed double codes/categories and ordinal flag; undefined codes remain raw NaN",
+    "cell_column_major": "class/originalshape, flat row-vector values in MATLAB linear element order",
+    "complex_separate_planes_column_major": "class/shape/real/imaginary leaves, same original shape",
+    "declared_native_model_property_projection": "fixed public property list with explicit absent-property statuses; not private model serialization",
+    "graphics_handle_explicitly_excluded": "class/shape only; separate fixed graphic property projection at root return",
+    "little_endian_column_major": "class/shape/leaf",
+    "native_model_array_column_major": "originalshape plus flat elementwise supported model projections",
+    "source_bound_function_handle_description": "expression and exposed closure workspace; executable handle not serialized",
+    "sparse_triplets_column_major": "class/originalshape plus typed row,column,values; complete matrix-value/schema validation needs body admission",
+    "string_elements_UTF8_with_missing_mask": "class/originalshape, typed missing logical mask, flat UTF8 leaves or explicit missing_string; no fabricated replacement value",
+    "struct_column_major": "class/originalshape, field_order, flat values with element-major then field-order grouping",
+    "table_columns": "typed columns in variable_order plus row/dimension names, units, descriptions, user_data and all enumerated custom properties; timetable row_time classes may be unsupported"
+  },
+  "per_root_schema_gate": "Parent must admit actual full numerical outputs/support and scientific role classification before run; static assigned_names are not mandatory-presence/shape proof",
+  "record_types": {
+    "ach_native_snapshot_v1": {
+      "common": [
+        "anchor",
+        "kind",
+        "sequence",
+        "context_id",
+        "root_id",
+        "mode",
+        "capture_spec_sha256"
+      ],
+      "graphics_numeric": "only root_return; fixed property projection of fresh-worker graphics, not rendering parity",
+      "workspace": "map of actual original variable names to typed nodes; workspace_variable_order records actual whos order",
+      "workspace_whos_bytes": "reported logical extent only, not process memory"
+    },
+    "ach_native_value_tap_v1": {
+      "common": [
+        "anchor",
+        "sequence",
+        "context_id",
+        "root_id",
+        "mode",
+        "capture_spec_sha256"
+      ],
+      "value": "typed node of one original evaluation, returned unchanged to its caller"
+    }
+  },
+  "schema": "ach_native_typed_capture_schema_v1",
+  "status": "SOURCE_ONLY_UNQUALIFIED",
+  "unsupported_class": "Raises achcapture:unsupported_class, prevents accepted capture; no silent omission"
+}
