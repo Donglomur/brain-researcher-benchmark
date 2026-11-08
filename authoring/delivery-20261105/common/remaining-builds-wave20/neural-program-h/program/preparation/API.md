@@ -1,0 +1,37 @@
+# Full NEURAL-060 preparation interface
+
+Source-only construction. No authentic source, array, key or model has been opened and no preparation has run. Parent owns runtime qualification; this adapter is a future data-only producer, not a candidate or scorer.
+
+`prepare.py` exposes `prepare(sources_path, raw_root, output, limits, original_origin)` and a CLI. It requires the exact original `REQUIRED_SOURCES.json` (17,391 bytes, SHA256 `c62ba1c5161287d1915d7dd49165be79ca93632dee686be0ea29f0929c1791cf`), all29 ordinary raw files, a fresh disjoint output root, a selected monotonic deadline derived from `original_origin`, and explicit input-read/output-byte limits. All three paths must use canonical absolute POSIX spelling, without `.`/`..`, repeated separators or a double leading slash; lexical ambiguity is rejected before original/output access. No acquisition, fitting or scoring is performed. Initial directory creation or first marker publication can fail before a valid `ATTEMPT.json` exists; partial directories or bytes may remain. The caller must preserve an independent external intent/observation and inspect such state. After initial marker success, later failures attempt a bounded failure marker, whose own write may also fail. No marker is guaranteed under arbitrary I/O failure, and no automatic retry or cleanup pretends success.
+
+The packet layout is:
+
+- `public/QUERY_INDEX.json`: schema `neural060_query_v2`, keys `schema`, `cases`, `sessions`; cases are ordered `{case_id,session_id}`, sessions are the29 opaque32hex IDs in source-eid sorted order.
+- `public/<session>/<train|val|test>/context.json`: schema `neural060_context_v2`, keys `schema`, `split`, `session_id`, `unit_count`, `unit_axis_sha256`, `rows`. Rows retain the donor's exact213-scalar nuisance fields and opaque32hex IDs. Train/val additionally have50 `wheel_speed` labels; test never has labels.
+- `public/<session>/<split>/neural.h5`: exactly datasets `case_ids` (`S32`, ordered) and `counts` (`<u4`, shape `[N,50,U]`), plus attributes `schema`, `session_id`, `split`, `unit_axis_sha256`. All native units remain in the exact native axis order. There is no transform/replay-arm attribute.
+- `public/<session>/test/neural_shift10.h5`: same IDs/axis/attributes and exact `np.roll(original,10,axis=0)` per window. The operator projection records the transform; candidate-visible attributes are identical to the original TEST file. Runtime mounts either at the same internal `test/neural.h5` path. No train/val shifted file exists.
+- `operator/PROJECTION.json`: schema `neural060_projection_v2`, label-free full source/prepared membership receipt. Exact schema below. This is the only membership/provenance body runtime needs; no private target/provenance body may be opened to construct a view.
+- `operator/DISPOSITIONS.json`: all original movements, original interval/trial joins, inclusion/exclusion and overlap/boundary diagnostics, with no wheel target values. It is operator-only and not mounted to candidates.
+- `private/gold.json`: unchanged original `neural060_gold_v1` envelope with target rows and session→animal→lab hierarchy. Targets remain evaluator-only.
+- `private/BINDING.json`: schema `neural060_binding_v2`, exact `query`, `gold`, `projection` descriptors, each `{path,bytes,sha256}`. The binding is written after projection; it does not create a hash cycle.
+- `private/OPERATOR_ID_KEY.hex`: generated once, mode0600; never read back, hashed, logged or exported. Preparation receives its random bytes in memory only.
+- `operator/PREPARATION.json`: final complete source/packet receipt; when its initial publication succeeds, `operator/ATTEMPT.json` records attempted/completed/failed status subject to later I/O-failure uncertainty. An absent, partial or stale marker requires external inspection rather than an inferred outcome. Source-level counters are not physical I/O or RSS measurements.
+
+`projection.py` is a stdlib-only metadata module. `admit_sources(raw_bytes)` returns the exact pinned roster; `admit_projection(value, sources)` validates exact structure, all29 original source identities, ordinal/session/global case uniqueness, all3 nonempty splits, every split's ordered case IDs, complete file set and dimension/transform joins, and returns the same admitted object. It reads no paths and cannot open targets. `admit_query(value, projection)` checks complete ordered query membership. `public_file_map(projection)` returns exactly the candidate-view public file descriptors, never protected paths.
+
+Projection schema keys are exactly:
+
+```text
+schema, task_id, source_manifest, producer_sources, query, sessions,
+dispositions, protected_gold, totals, shift
+```
+
+`source_manifest` is the original roster's `{bytes,sha256}`. `producer_sources` maps `prepare.py`, `native.py`, `projection.py` to their exact `{bytes,sha256}`. `query`, `dispositions` and `protected_gold` are `{path,bytes,sha256}` descriptors. The `protected_gold` descriptor commits target identity only; runtime never opens it. All paths are packet-root-relative. `shift` is exactly `{split:"test",bins:10,axis:1,window_bins:50,operation:"cyclic_positive"}` (axis1 in the full `[N,50,U]` array).
+
+Each session has exactly `ordinal`, `session_id`, `source`, `unit_count`, `unit_axis_sha256`, `splits`, `disposition_summary`, `overlap`. `source` is `{eid,bytes,etag,sha256}`. `splits` has exactly train/val/test; each split has `case_ids`, `context`, `neural`, plus `neural_shift10` only for test. File descriptors carry only path/bytes/hash; array geometry follows the complete ordered IDs,50bins and unit_count. `disposition_summary` is `{movements,included,excluded,reasons}` with exact sum closure; `overlap` is `{train,val,test}` counting overlapping included context pairs within each split. Detailed boundary distances and every disposition are retained in DISPOSITIONS.
+
+`totals` has exactly `sessions:29`, `mice:13`, `labs:7`, `source_bytes:49113902269`, `train_cases`, `val_cases`, `test_cases`, `movements`, `included`, `excluded`, and `uncompressed_count_bytes`. Its case totals derive from the exact session rows. `uncompressed_count_bytes` includes original train/val/test and one extra test roll only; it is not measured output size.
+
+Preparation independently verifies every output context/HDF5 schema, ordered IDs, unit-axis attributes, finite context/labels, complete support and exact shifted-test equality before emitting a complete projection. HDF5 files have only hard links, no VDS/external storage. Full original byte authentication and final file pins precede completion. The host's later packet qualification must bind these actual receipts and source hashes independently; a structurally valid invented receipt is not authentic data qualification.
+
+After successful admission, public context/count/query files and the operator projection are mode0444, public directories0555; private key/gold/binding stay0600 inside0700 private storage. These permissions do not replace runtime readonly bind mounts and independent hash/stamp custody. The primary interface's `limits` keys are exactly `max_read_bytes`, `max_write_bytes`, `max_output_bytes`, `max_seconds`, `max_session_cases`, `max_units`, `max_count_window_bytes`, all positive integers. Retained and cumulative-write limits each reserve16KiB for failure metadata. Reservations/logical transfers are distinct from measured physical I/O and RAM; the independent outer execution envelope must supply actual memory/process qualification.
