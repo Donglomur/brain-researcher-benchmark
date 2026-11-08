@@ -1,0 +1,114 @@
+{
+  "schema": "neural053_full_scientific_design_v1",
+  "status": "design_pending_root_and_independent_peer_acceptance",
+  "task_id": "NEURAL-053",
+  "new_canonical_ids": 0,
+  "representation": "fixed100<=t<300msauthorprocessedsummary",
+  "persons": 4,
+  "sessions": 48,
+  "runs": 480,
+  "experimental_rows": 88992,
+  "classes": 1854,
+  "outer_folds": 4,
+  "training_rows_per_fold": 55620,
+  "query_rows_per_fold": 3708,
+  "training_images_per_class": 10,
+  "query_images_per_class": 2,
+  "canonical_arms": {
+    "neural": 542,
+    "ocular": 6,
+    "joint": 548
+  },
+  "diagnostic_arms": {
+    "neural_availability": 271
+  },
+  "study_modes": [
+    "fixed_program",
+    "training_investigation"
+  ],
+  "case_unit": "outer_person_fold_x_arm",
+  "root_selected_case_and_mode_policy": true,
+  "independent_author_replications": 3,
+  "author_contexts": {
+    "fixed_program": 48,
+    "training_investigation": 48,
+    "total": 96
+  },
+  "query_rows_are_not_independent_authorings": true,
+  "training_group_interface": {
+    "current_public_interface_has_groups": false,
+    "prospective_equal_access_amendment": true,
+    "fields": [
+      "training_id",
+      "opaque_person_group",
+      "opaque_image_group",
+      "image_block"
+    ],
+    "training_rows": 55620,
+    "person_groups": 3,
+    "image_groups": 18540,
+    "copies_per_image_group": 3,
+    "image_blocks": 5,
+    "images_per_class_per_block": 2,
+    "query_groups_or_identities_exposed": false
+  },
+  "inner_validation": {
+    "splits": 15,
+    "held_persons_per_split": 1,
+    "held_image_blocks_per_split": 1,
+    "fit_rows": 29664,
+    "validation_rows": 3708,
+    "all_class_support_required": true,
+    "all_outer_training_rows_validated_once": true,
+    "all_transforms_fit_inside_inner_training": true
+  },
+  "query_semantics": {
+    "pipeline_sealed_before_query_admission": true,
+    "row_separable": true,
+    "vectorization_allowed": true,
+    "query_tuning_or_distribution_fit": false,
+    "balance_assignment_constraints": false,
+    "semantic_qualification_established": false
+  },
+  "references": {
+    "base_settings": {
+      "ridge": 4,
+      "shrinkage_lda": 3,
+      "fourier_ridge": 9
+    },
+    "inner_fits_per_case": 240,
+    "final_family_refits_per_case": 3,
+    "historical_centroid_fits_per_case": 1,
+    "total_fits_per_case": 244,
+    "total_fits_all16cases": 3904,
+    "softmax_temperatures": [
+      0.1,
+      1,
+      10
+    ],
+    "temperature_scoring_is_not_model_fit": true,
+    "selection_order": [
+      "inner_equal_person_class_balanced_top1",
+      "inner_natural_log_loss",
+      "frozen_configuration_order"
+    ],
+    "primary_family_selected_before_queries": true,
+    "competence_demonstrated": false
+  },
+  "primary": "equal_person_class_balanced_neural_top1",
+  "secondary": [
+    "top5",
+    "natural_log_loss",
+    "paired_mode_difference",
+    "training_selected_reference_difference",
+    "neural_minus_ocular",
+    "joint_minus_ocular",
+    "neural_minus_availability"
+  ],
+  "counts_are_design_not_observed_execution": true,
+  "source_payloads_read": false,
+  "fixture_runs": 0,
+  "source_implementation": false,
+  "scientific_runs": 0,
+  "qualified_benchmarks_increment": 0
+}

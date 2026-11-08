@@ -1,0 +1,69 @@
+{
+  "D": {
+    "joint": 548,
+    "neural": 542,
+    "ocular": 6
+  },
+  "feature_order": {
+    "joint": "neural then ocular",
+    "neural": "271 channel means then271 finite fractions, exact public protocol sensor order",
+    "ocular": "x,y,pupil means then their finite fractions"
+  },
+  "files": {
+    "contract.json": {
+      "classes": "1..1854",
+      "fold": {
+        "enum": [
+          "BIGMEG1",
+          "BIGMEG2",
+          "BIGMEG3",
+          "BIGMEG4"
+        ]
+      },
+      "query_ids": "3708 opaque sorted IDs",
+      "schema": "neural053_fold_v1",
+      "training_ids": "55620 opaque sorted IDs"
+    },
+    "queries.npz": {
+      "features": {
+        "dtype": "float32",
+        "shape": [
+          "3708",
+          "D"
+        ]
+      },
+      "labels": "ABSENT"
+    },
+    "training.npz": {
+      "features": {
+        "dtype": "float32",
+        "shape": [
+          "55620",
+          "D"
+        ]
+      },
+      "labels": {
+        "dtype": "int32",
+        "range": [
+          1,
+          1854
+        ],
+        "shape": [
+          55620
+        ]
+      }
+    }
+  },
+  "forbidden_query_fields": [
+    "class/category IDs",
+    "image identity or path",
+    "original epoch/run/session ordering",
+    "event codes or corrected samples",
+    "stimulus labels",
+    "response/RT/key/outcome columns",
+    "other folds or other arm inputs",
+    "private target/provenance files"
+  ],
+  "schema": "neural053_program_view_v1",
+  "scope": "Exactly one fold and one arm per isolated invocation"
+}
