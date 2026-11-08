@@ -1,0 +1,398 @@
+{
+  "schema": "neural001_complete_scientific_design_v2",
+  "status": "additive correction awaiting root and sole-peer rereview",
+  "task_id": "NEURAL-001",
+  "design_file": "correction-v2/DESIGN.md",
+  "source_only": true,
+  "counts": {
+    "canonical_tasks": 1,
+    "new_tasks": 0,
+    "people": 24,
+    "released_training_runs": 94,
+    "training_runs_by_person_rule": "sub-01:2; sub-02 through sub-24:4",
+    "query_trials_per_person": 120,
+    "total_query_trials": 2880,
+    "unique_shared_sentence_identity_groups": 70,
+    "candidate_modes": 2,
+    "candidate_arms_per_mode": 3,
+    "reference_panels": 5,
+    "candidate_person_arm_outputs_per_replicate": 144,
+    "reference_person_arm_outputs_per_replicate": 120,
+    "adaptive_llm_query_contexts_per_replicate": 8640,
+    "frozen_numerical_query_processes_per_replicate": 8640,
+    "reference_query_predictions_per_replicate": 14400,
+    "all_query_predictions_per_replicate": 31680,
+    "predata_candidate_authoring_contexts_minimum": 4,
+    "person_training_candidate_contexts": 96
+  },
+  "scientific_unit": {
+    "primary": "participant",
+    "within_person": "120 original trial intervals",
+    "dependence_groups": [
+      "participant",
+      "original training run",
+      "70 shared sentence identities and all repetitions",
+      "model seed replicate"
+    ],
+    "no_count_inflation": [
+      "run",
+      "fold",
+      "epoch",
+      "query",
+      "control",
+      "mode",
+      "seed",
+      "reference"
+    ]
+  },
+  "original_sources": {
+    "dataset_snapshot": "ds006468/1.1.1",
+    "dataset_git": "5c1d52d66c6bfe4c1c908d496df8a2ecbe3fece1",
+    "author_git": "32bfc690e28e7591b45d96615c59b2d53b6a7165",
+    "final_paper_doi": "10.1038/s41597-025-06397-4",
+    "final_paper_date": "2025-12-09",
+    "mtrf_v2_7_git": "d4fa6e2ebfbad75619e01011cf2a5042f9236ea3"
+  },
+  "input": {
+    "channels": 306,
+    "magnetometers": 102,
+    "gradiometers": 204,
+    "fs_hz": 64,
+    "raw_clock_hz": 1000,
+    "audio_latency_raw_samples": 3,
+    "meg_dtype": "<f8",
+    "train_envelope_dtype": "<f8",
+    "public_training_fields": [
+      "meg[N,306]",
+      "envelope[N]",
+      "epoch_offsets[E+1]",
+      "opaque_epoch_ids[E]",
+      "opaque_run_ids[E]",
+      "channel_labels[306]",
+      "channel_kinds[306]",
+      "fs_hz"
+    ],
+    "current_query_fields": [
+      "meg[L,306]",
+      "opaque_query_id",
+      "L",
+      "channel_labels[306]",
+      "channel_kinds[306]",
+      "fs_hz"
+    ],
+    "candidate_visible_queries_at_once": 1,
+    "training_row_cap_provisional": 250000,
+    "query_row_cap_per_person_provisional": 61440,
+    "caps_are_not_crop_authority": true,
+    "private_fields_not_read_here": [
+      "source-to-opaque keys",
+      "query targets",
+      "70-identity trial mapping",
+      "SNR",
+      "intelligibility",
+      "event clocks and source order"
+    ],
+    "all_original_training_runs_required": true
+  },
+  "native_preprocessing": {
+    "meg_filter": "continuous FieldTrip FIRWS 0.5\u20134 Hz",
+    "audio_filterbank": "AMT flow50/fhigh5000 per pinned author code; paper flow5 discrepancy preserved",
+    "training_epoch_seconds": 120,
+    "training_epoch_min_fraction": 0.99,
+    "native_training_common_trim": true,
+    "query_poststimulus_seconds": 0.5,
+    "query_max_native_length_mismatch_samples": 1,
+    "query_trim": "shorter paired length; score every retained sample",
+    "pad_query_observations": false,
+    "filter_causality": "retrospective",
+    "source_to_view_loss_ledger_required": true
+  },
+  "source_conflict": {
+    "sub02_audiobook2_run01": "standard-stimulus intended mapping supported; final root adjudication and authentic clock/waveform validation still required",
+    "sub01_withheld_audiobook2": "absent original release, never fabricate",
+    "changelog_conflict_preserved": true,
+    "auto_omit_participant_or_run": false
+  },
+  "candidate_modes": {
+    "frozen_program": {
+      "global_program_sealed_before_values": true,
+      "person_training_only_fitting": true,
+      "llm_sees_numeric_values": false,
+      "query_processes_per_person": 120,
+      "mutable_state_between_queries": false,
+      "automatic_current_case_diagnostics_and_synthesis_allowed": true
+    },
+    "adaptive_case": {
+      "global_recipe_sealed_before_values": true,
+      "person_training_investigation_before_queries": true,
+      "person_tools_frozen_before_queries": true,
+      "llm_sees_current_unlabeled_query_and_allowed_person_training": true,
+      "fresh_llm_contexts_per_person_per_arm": 120,
+      "score_feedback": false,
+      "cross_query_adaptation": false,
+      "post_query_supervised_fitting_or_learned_tool_preprocessing_updates": false,
+      "ephemeral_current_case_prediction_synthesis": true,
+      "query_conditioned_combination_coefficients": true,
+      "new_case_prediction_program_may_differ_from_all_tools": true,
+      "finite_bank_routing_restriction": false,
+      "learned_parameter_fitting_against_training_labels_during_query": false,
+      "frozen_tool_assets_mutable": false,
+      "single_query_diagnostic_statistics_for_synthesis": true
+    },
+    "contrast_estimand": "compound training-stage investigation plus current-case investigation; not isolated query-time reasoning"
+  },
+  "arms": {
+    "neural": {
+      "same_person_training": true,
+      "current_query_meg": true
+    },
+    "no_neural": {
+      "training_envelope_and_structure": true,
+      "current_length_and_fs": true,
+      "meg_or_neural_model_output": false
+    },
+    "within_query_half_shift": {
+      "shift_samples": "floor(L/2)",
+      "operation": "joint circular roll across all306 channels within this query only",
+      "target_and_support_shifted": false,
+      "same_neural_frozen_person_training_state": true,
+      "refit": false,
+      "adaptive_contexts": "independent, matched-seed whole-workflow arm",
+      "extra_source_run_or_query_access": false,
+      "limitations": [
+        "artificial wrap",
+        "short sentences",
+        "filter autocorrelation",
+        "not complete destruction of neural information"
+      ]
+    }
+  },
+  "reference_panel": {
+    "independent_from_candidates": true,
+    "R1": {
+      "family": "mTRF2.7 backward lagged ridge",
+      "lags_samples": [
+        -16,
+        -15,
+        -14,
+        -13,
+        -12,
+        -11,
+        -10,
+        -9,
+        -8,
+        -7,
+        -6,
+        -5,
+        -4,
+        -3,
+        -2,
+        -1,
+        0
+      ],
+      "design_columns_with_bias": 5203,
+      "lambda_grid": [
+        1e-06,
+        0.0001,
+        0.01,
+        1,
+        100.0,
+        10000.0,
+        1000000.0
+      ],
+      "effective_summed_loss_penalty": "64*lambda, unpenalized bias",
+      "normalization": "training-only pooled magnetometer/pooled gradiometer/target; ddof0",
+      "whole_run_validation": true,
+      "ridge_fit_count": 682,
+      "arms": [
+        "neural",
+        "within_query_half_shift"
+      ],
+      "prediction_target_scale": "inverse training target transform"
+    },
+    "R2": {
+      "family": "prospective spatial PCA + Gaussian RFF ridge",
+      "pca_ranks": [
+        32,
+        64
+      ],
+      "rff_dimension": 512,
+      "scale_grid": [
+        0.5,
+        1,
+        2
+      ],
+      "alpha_mean_loss_grid": [
+        0.001,
+        0.1,
+        10,
+        1000
+      ],
+      "rng": "NumPy2.2.6 PCG64",
+      "ridge_fit_count": 2280,
+      "maximum_reused_pca_fit_count": 236,
+      "whole_run_validation": true,
+      "arms": [
+        "neural",
+        "within_query_half_shift"
+      ],
+      "target_normalization": "training-only mean/std ddof0, inverse at prediction",
+      "spatial_transform": "T(x)=(((x-mu)/s)-zbar) V_k diag(1/q); all estimates training-only",
+      "effective_pca_component_whitening": true,
+      "channel_std_ddof": 0,
+      "component_std_ddof": 0,
+      "pca_centering": "training zbar after channel standardization",
+      "component_sign": "largest-absolute loading positive; tie by original channel order",
+      "invalid_transform": "nonfinite/zero required s/q/target std fails configuration and reference qualification; no component/configuration/person drop",
+      "lag_feature_order": "-16..0, component ascending inside lag; zero features at interval edge",
+      "base_seed": 20261107,
+      "rank_seed_rule": "20261107+k",
+      "random_draw_order": "fresh Generator(PCG64(20261107+k)); G=standard_normal((17*k,512),dtype=float64) in C order; then u=random(512,dtype=float64); b=2*pi*u",
+      "random_feature_weight_formula": "W=G/(h*sqrt(17*k))",
+      "random_map_reuse": "identical G/b for same rank across persons/folds/refits/alphas/arms; h only deterministic rescaling; no traversal-dependent generator advance",
+      "generated_map_identity_and_resource_binding_required": true
+    },
+    "R0": {
+      "family": "constant training-envelope mean",
+      "means": 24,
+      "arms": [
+        "no_neural"
+      ],
+      "competent_neural_reference": false
+    },
+    "validation_estimator": "equal original-run mean of equal retained-epoch Fisher-z Spearman",
+    "actual_competence_established": false,
+    "native_parity_established": false,
+    "competence_selection_scope": "predeclared whole-run training validation only; no final OLSA target-based method selection"
+  },
+  "output": {
+    "query_prediction": "finite <f8 [L]",
+    "trusted_person_assembly": {
+      "members": {
+        "prediction": "<f8 [total_query_samples]",
+        "interval_ids": "<U32 [120]",
+        "offsets": "<i8 [121]"
+      },
+      "max_npz_bytes": 1048576,
+      "npy_version": 1,
+      "order": "C",
+      "npz_compression": [
+        "stored",
+        "deflated"
+      ]
+    },
+    "canonical_person_files": 24,
+    "complete_validation_before_targets": true,
+    "partial_coverage_score": false
+  },
+  "metric": {
+    "formula": "mean_24_people(mean_120_trials(atanh(clip(signed_Spearman(pred,target), +/-nextafter(1,0)))))",
+    "unique_identity_reweighting": false,
+    "raw_signed_spearman_and_pearson_preserved": true,
+    "spearman_ties": "average ranks",
+    "constant_prediction": "zero correlation with flag",
+    "constant_target": "invalid operator packet; no omission",
+    "backtransformed_statistic": "tanh(primary); not arithmetic mean correlation",
+    "existing_scorer_sha256": "e2834aa57431ff2481a578768923db522e87f0876852418477ecb45e30a942f2"
+  },
+  "uncertainty": {
+    "draws": 10000,
+    "rng": "NumPy2.2.6 PCG64",
+    "seed": 20261108,
+    "primary_interval": "participant cluster conditional on fixed stimulus set",
+    "sensitivity": "crossed shared identity/participant cluster with original trial multiplicity",
+    "same_paired_draws_across_comparisons": true,
+    "protected_group_mapping_required": true,
+    "not_yet_computed": true
+  },
+  "dependencies": {
+    "python": "3.12.8",
+    "numpy": "2.2.6",
+    "h5py": "3.13.0",
+    "MATLAB": "R2023a licensed",
+    "Signal_Processing_Toolbox": "matching licensed release",
+    "FieldTrip": "20250523",
+    "AMT": "1.6.0",
+    "mTRF": "2.7 source commit above",
+    "BLAS_platform_container_digests": "unresolved execution gate",
+    "provider_identity_context_and_token_semantics": "unresolved execution gate",
+    "complete_native_dependency_closure": "unresolved execution gate",
+    "installed_or_executed_here": false
+  },
+  "resource_profile": {
+    "status": "not_selected_or_qualified",
+    "legacy_1200s_4cpu_16GiB_feasibility": false,
+    "required_numeric_limits": [
+      "global and per-person original monotonic deadlines",
+      "CPU seconds",
+      "accelerator seconds",
+      "RAM",
+      "peak and retained disk",
+      "logical read/write bytes",
+      "provider requests",
+      "input/output/reasoning tokens and context",
+      "retry count and failed-attempt charging"
+    ],
+    "full_workload_measurement_required": true,
+    "allocation_basis": "equal full-person budgets across candidate modes/arms, allocated global authoring included; shared actual training once with explicit attribution",
+    "known_array_extents_bytes": {
+      "full_R1_lag_design_upper": 10406000000,
+      "R1_gram": 216569672,
+      "R1_block_4096": 170491904,
+      "person_MEG_upper_given_provisional_caps": 762405120
+    },
+    "historical_source_descriptor_bytes": 190554944092,
+    "historical_source_descriptor_count": 597,
+    "source_bytes_are_minimum_or_acquired": false
+  },
+  "gates": [
+    "root and sole peer exact design acceptance",
+    "explicit source conflict adjudication",
+    "authentic complete source/payload/clock/support preparation",
+    "private alias and target custody",
+    "complete run-group train-only exposure",
+    "exact environment/dependency/native port parity",
+    "independent reference competence under separate scientific authority",
+    "provider/reset/access and resource accounting",
+    "full workload profile fixed before scored outcomes",
+    "external natural-zero completion and protected scoring authority",
+    "bounded source/method conformance review of arbitrary current-case synthesis; exact R2 transform/RNG implementation qualification"
+  ],
+  "claims_forbidden": [
+    "native neural understanding",
+    "causal/online prediction",
+    "new-person generalization",
+    "zero-shot transfer",
+    "whole-paper reproduction",
+    "SOTA or improved score without qualified actual runs",
+    "200 ready benchmarks from source counts"
+  ],
+  "execution": {
+    "implementation_authorized": false,
+    "acquisition_authorized_by_this_design": false,
+    "model_reference_or_science_runs": 0,
+    "authentic_numeric_or_target_bodies_read": 0,
+    "private_key_bodies_read_or_hashed": 0,
+    "new_scientifically_qualified_benchmarks": 0,
+    "new_submission_ready_benchmarks": 0
+  },
+  "candidate_authored_program_max_bytes": 65536,
+  "supersedes_only_design": "candidate1 remains immutable; no change to source evidence, full scope, primary metric or reference panel count",
+  "method_conformance": {
+    "mechanically_enforceable": [
+      "one current query/person",
+      "read-only frozen trained/preprocessing assets",
+      "no targets/network/feedback",
+      "fresh case processes",
+      "complete resource/log recording"
+    ],
+    "requires_bounded_semantic_review": [
+      "no new supervised training after query exposure",
+      "no model fit on query pseudo-labels",
+      "distinguish ephemeral current-case calculation from a new trained parameter update"
+    ],
+    "universal_arbitrary_program_semantic_certification": false,
+    "unresolved_conformance": "blocks unqualified scientific comparison claim; disclose or resolve, not silently substitute routing",
+    "fixed_and_adaptive_allowed_computational_classes_equal": true
+  }
+}

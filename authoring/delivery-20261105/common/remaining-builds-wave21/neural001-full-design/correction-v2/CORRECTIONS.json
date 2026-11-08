@@ -1,0 +1,44 @@
+{
+  "schema": "neural001_design_v2_corrections_v1",
+  "reviewer": "/root/paper_program_d_peer",
+  "original_exact_proposal": {
+    "path": "authoring/delivery-20261105/common/remaining-builds-wave21/neural001-full-design/SOURCE_PROPOSAL.json",
+    "bytes": 9366,
+    "sha256": "cb93f31ca0a55719068fefddb8ae630c3848d5b5a7ab2c1ed6bc5159cc23d36b"
+  },
+  "original_34_payloads_reauthenticated_unchanged": true,
+  "resolutions": [
+    {
+      "id": "R2_TRANSFORM",
+      "finding": "PCA no-whitening language conflicted with subsequent score scaling",
+      "resolution": "Explicit population-standardized channels, centered PCA, and component-standard-deviation division; effective transform includes component whitening. Zero/nonfinite required scales fail qualification, never drop components/configurations/people."
+    },
+    {
+      "id": "R2_RNG",
+      "finding": "Base PCG64 seed did not identify reset/advance/reuse semantics",
+      "resolution": "Fresh rank-keyed PCG64(20261107+k), C-order standard-normal matrix then phase uniforms, deterministic scale rescaling and identical base draws reused across all people/folds/refits/alphas/arms; no traversal-dependent generator advance."
+    },
+    {
+      "id": "ADAPTIVE_BOUNDARY",
+      "finding": "Current-case choices conflicted with a blanket query-hyperparameter-search ban",
+      "resolution": "Keep broad ephemeral current-case diagnostic code and prediction synthesis; allow query-conditioned combinations and outputs different from every tool. Prohibit new supervised fitting, query pseudo-label fitting, learned model/preprocessor updates, cross-query state/batch statistics and target feedback. Source/process method review is bounded, not universal semantic certification. A finite-bank-only substitute was explicitly rejected by root."
+    },
+    {
+      "id": "COMPOUND_MODE_CONTRAST",
+      "finding": "Training-stage numeric exposure also differs across modes",
+      "resolution": "Label primary comparison combined training-stage investigation plus current-case investigation; do not interpret as isolated query-time reasoning."
+    }
+  ],
+  "unchanged_contract_fields_verified": [
+    "counts",
+    "metric",
+    "original_sources",
+    "native_preprocessing",
+    "source_conflict",
+    "output",
+    "input",
+    "arms",
+    "uncertainty"
+  ],
+  "no_implementation_numeric_fixtures_or_runs": true
+}

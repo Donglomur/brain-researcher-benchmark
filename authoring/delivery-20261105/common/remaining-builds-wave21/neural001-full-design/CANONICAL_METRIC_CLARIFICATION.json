@@ -1,0 +1,28 @@
+{
+  "schema": "neural001_canonical_metric_clarification_v1",
+  "source_only": true,
+  "scorer_source": {
+    "path": "authoring/delivery-20261105/neural001/utf8-successor-v1/private/score_core.py",
+    "bytes": 3294,
+    "sha256": "e2834aa57431ff2481a578768923db522e87f0876852418477ecb45e30a942f2"
+  },
+  "public_task": {
+    "path": "authoring/delivery-20261105/neural001/public/TASK.md",
+    "bytes": 4761,
+    "sha256": "73516f5aef93e9b2ca8982b1be53cd3cd91f8c1c14faaaa9d973fb3e8b68f96f"
+  },
+  "canonical_primary": "(1/24) sum_person [(1/120) sum_sentence_trial atanh(clip(spearman(prediction,target), -nextafter(1,0), nextafter(1,0)))]",
+  "sentence_means_interval_trial_not_unique_stimulus_identity": true,
+  "source_observation": "score_people builds one row per supplied interval ID/boundary pair, computes the arithmetic mean of row fisher_z_spearman within each person, then the arithmetic mean across people. No stimulus-identity grouping is present. All120 intervals/person are required by operator/public contract.",
+  "scientific_dependence": "The70 unique source sentence identities and repeated presentations are dependence groups for later uncertainty analysis, not a replacement weighting for the canonical primary.",
+  "retained_semantics": [
+    "Average ranks for ties; signed raw Spearman and Pearson remain reported.",
+    "Exactly +/-1 is clipped only for finite Fisher transform; raw endpoint coefficients remain.",
+    "Constant prediction is valid with correlation0 and explicit flag; constant target invalidates the operator packet, never dropped.",
+    "Full24person and2880interval coverage required; source/source-code checks are not numerical qualification."
+  ],
+  "separate_preparation_clarification": "Original audiobook preprocessing uses all source-declared available runs, removes author-defined short epochs (<99% of120s), and trims retained audio/neuro epochs to global retained minimum length. The future preparation ledger must record these source-defined exclusions rather than claim all raw samples. OLSA source retains duration+0.5s and at most one-sample shorter-length matching.",
+  "separate_presentation_clarification": "Existing source produces sub-XX:sentence-NNN labels in source order; a future privately randomized alias/order view must preserve all original intervals/sample boundaries and matched views. It is not contamination proof.",
+  "no_array_or_target_or_model_access": true,
+  "no_runtime_or_scientific_execution": true
+}
