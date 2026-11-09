@@ -1,0 +1,7 @@
+# Source-only context correction
+
+Owner review after V2 identified that the global provider message did not name its selected C/N/NC and T0/T1 setting and did not spell out six context columns, exact epoch/mask semantics or actual admitted software inventory. The generic method could inspect a case later, but that did not implement the documented competent source-only setup disclosure. V2 is preserved in history/runtime-v2.
+
+V3 supplies an identical frozen source-owned task body and independently selected software-only inventory to matched F/I before values, plus the selected access setting. It adds no data, model or fitted-tool value. Source-only I policy and case-local I also receive that same contract. D uses its original NC setting, source policy, context pin and paired seed; it has no arm cue or new global realization. The complete550 contexts,8 author realizations, all reference models/consumers and all endpoints are unchanged.
+
+The actual disclosed context is reconstructed from source and the exact active authority during public admission. Its pin is mandatory in the protected method/global-policy review and retained policy. It is not an arbitrary provider narrative or unjoined documentation callback. The sole peer explicitly agreed this is a disclosure of existing selected scope, not a scientific scope expansion. All actual qualifications remain open. No controls or scientific calls are replayed by this correction.

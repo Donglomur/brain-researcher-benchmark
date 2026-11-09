@@ -1,0 +1,10 @@
+{
+  "basis": "Accepted float64 training target transforms and float64 loss reductions; clarifies previously underspecified cast point and feature concatenation without selecting a numerical run.",
+  "labels": "A single selected-endpoint float64 NPY descriptor per fit part, labels absent for predict/features.",
+  "loss": "Training target standardization remains float64. Cast float32 network prediction to float64 before subtraction from the float64 standardized target; square residual in float64; sum/mean in float64 over the complete batch. Backpropagation through the cast yields float32 parameter gradients. Do not quantize standardized targets or square in float32 before the reduction.",
+  "other_precision": "Activations, weights, gradients, moments and parameter updates remain float32. Gradient norm squares and reductions are float64, as prescribed. No mixed precision, TF32 or hidden framework RNG.",
+  "scalar_feature_order": "First timing6; then channel-major neural features: for each channel 12 ordered windows times9 ordered bands followed by9 early-minus-baseline contrasts; then channel-major/window-major four mask summaries. All columns retained with unavailable view blocks zero.",
+  "schema": "neural049_numerical_order_precision_v1",
+  "status": "Written common operator contract only; each author implements independently without the other scientific implementation or results.",
+  "temporal_readout_order": "Bin-major: bin0 mean(all W channels), max(all W channels), then bin1 through bin9 in that order; then timing6; then channel-major/window-major four mask summaries."
+}

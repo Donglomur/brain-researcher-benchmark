@@ -1,0 +1,26 @@
+"""Frozen source-only task disclosure, identical for matched F/I and paired NC/D."""
+from core import need
+
+RULES = '''The selected assignment is complete curated event-cued retrospective reach decoding, not movement detection, continuous confidence-qualified forecasting, pre-event causality or held-person population transfer. Twelve source people and all55 day dispositions are required. Each case is one person's entire held-day label-free batch; training contains that person's other complete released days. Original day ordinals may have gaps. All three outputs and every row, including empty-day dispositions and fully masked rows, are mandatory. There is one source-only policy realization per selected setting.
+
+The oracle cue is intervals/reaches.start_time from the SAME source row as its three target columns; it is not a separately detected onset. Angle is folded vertical angle in degrees in[-90,90]; magnitude is pixels; onset speed is pixels/second. The full epoch is[e-5,e+5),500Hz,5000 grid positions. Start index is ceil(500*(e-5-recording_start)); offsets preserve fractional alignment in[0,.002). No interpolation, recentering, neighbouring-day substitution or row exclusion is permitted. The original released neural whole-day preprocessing and original all-day pose-model development exposures remain inherited limitations; this is explicitly retrospective association on selected reaches.
+
+The complete person channel union and order are fixed. mask[n,C,5000] is boolean availability; x[n,C,5000] is float64. Unavailable channel, edge padding and nonfinite source sample are zero with mask=false. Finite source zero is valid. A mask is technical availability, not calibrated confidence. All views receive the same declared technical support/masks/fractional offsets. C receives six context columns and no x; N receives x and no context; NC receives both. Context columns in order are original positive day ordinal, sin(2*pi*event_seconds/86400), cos(2*pi*event_seconds/86400), and three one-hot8-hour time-of-day blocks. No query pose, behavior, reach duration, confidence, R2, source-noise summary, target-derived channel flag, private original day/person map or held label is supplied.
+
+fit may inspect the entire permitted training and label-free query batch, fit supervised models and perform label-free transduction or a predeclared numerical TTA rule. All such state remains case-local. Query labels and any other outer fold's fitted state/prompts/outputs are forbidden. No study values are available during global authorship. F authors a general method before values and retains its source/dependency/provider grammar; I may author a query-local method in a fresh context. Both have the same full-batch operators and resource ceilings. Later F provider replies are only typed numeric matrices under a frozen prompt/shape contract; they cannot become code or an unrestricted executable plan.
+
+When T1 is selected, tool.train and tool.query provide float64[n,3] predictions from the exact case's training-selected strongest R1 NC reference. They cover angle,magnitude,speed in that order. Training predictions are explicitly IN-SAMPLE and are not valid held-out validation feedback. Tool model/source/private search state is not exposed. No new target query or other-fold tool is available.
+
+Raw finite float64[n_query,3] predictions are retained and commonly projected: angle clipped to[-90,90], magnitude/speed floored at0. Selection and final scores use that same projection. The primary endpoint is angle. Within each person, concatenate every held-day OOF row, compute SSE over all events and SST around that person's all-event target mean, then R2=1-SSE/SST. Macro score is the equal mean over all12 person R2 values; negative values stay negative. No average of day R2 values and no surviving-person/row subset is accepted. Empty/constant person support makes the complete endpoint undefined. Magnitude/speed are required secondary point tables.
+
+Strong independent matched references include full-coordinate train-only ridge, deterministic gradient-boosted trees and the declared temporal convolutional family, with all25 configurations, nested other-day validation, all three family final fits and a training-selected strongest family. A lower outer-training-mean baseline is reported. Reference predictions/results, private parameters, query labels and actual source values are not included in this source-only disclosure. Model/library/source compatibility and scientific competence remain separately qualified. The same rules and selected software inventory are offered to matched F/I; source access does not establish actual understanding or novelty.'''
+
+
+def setup(a, view, tool):
+    need(view in ('C','N','NC') and type(tool) is bool and (not tool or view == 'NC'), 'exact positive source-only setting')
+    inventory = a['actor_environment_inventory']
+    need(inventory['schema'] == 'neural049_actor_software_inventory_v1'
+         and inventory['image_id'] == a['native_public']['image_id']
+         and inventory['study_values_included'] is False, 'selected qualified software-only inventory')
+    return {'schema':'neural049_actor_source_context_v1','rules':RULES,'view':view,'tool_access':tool,
+            'software_inventory':inventory,'study_values':None,'private_reference_source_or_states':None}
