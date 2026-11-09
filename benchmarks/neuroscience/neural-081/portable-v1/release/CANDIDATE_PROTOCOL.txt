@@ -1,0 +1,309 @@
+NEURAL-081: complete instructed-excerpt EEG prediction, protocol V4
+
+This is the public candidate contract, not a run authorization, an assessment
+answer, or a claim of demonstrated model competence. Predict the instructed
+excerpt class of exactly one current EEG window. The complete experiment uses
+all ten original participants and every admitted condition-4 trial, all twelve
+classes, two views EEG and ZERO, and replications r0, r1, r2. Training excludes
+the held participant entirely. No authentic result or participant identifier is
+provided by this text. Cohort membership can be statistically inferable from
+permitted signals; opaque administrative aliases do not guarantee anonymity.
+
+Task and full support
+The fixed crop is the full four seconds starting 0.5 seconds after the source
+onset: source samples [onset+256,onset+2304) at 512 Hz, resampled to 128 Hz.
+For each source sample, preparation subtracts the mean of all 64 channels in
+binary64, then averages each nonoverlapping four-sample block and casts once
+to finite float32. No outside-window padding, ICA, interpolation, adaptive
+filtering, mastoid referencing or whole-session fitting is added. Four-point
+averaging is the chosen representation, not ideal antialias filtering. Missing
+channels, active projections, nonfinite samples or unrepresentable float32
+values refuse complete preparation. Candidates receive these complete windows,
+with no trial selection by outcome,
+self-report, apparent cleanliness, model success or convenience. Genuine
+physical boundary ambiguity or incomplete support fails preparation. Synthetic
+feedback pseudo-times are not physical interruption times and do not select
+trials. No artifact-based channel/trial removal or authentic self-report label
+is a candidate decision. Original bad-channel flags are privately preserved and
+their aggregate prevalence is reported only after complete closure.
+
+Each current query is [64,512], float32, in volts, 128 samples per second.
+The complete channel order is:
+Fp1, AF7, AF3, F1, F3, F5, F7, FT7, FC5, FC3, FC1, C1, C3, C5, T7, TP7,
+CP5, CP3, CP1, P1, P3, P5, P7, P9, PO7, PO3, O1, Iz, Oz, POz, Pz, CPz,
+Fpz, Fp2, AF8, AF4, AFz, Fz, F2, F4, F6, F8, FT8, FC6, FC4, FC2, FCz, Cz,
+C2, C4, C6, T8, TP8, CP6, CP4, CP2, P2, P4, P6, P8, P10, PO8, PO4, O2.
+Probability coordinates have the exact class order
+[1,2,3,4,11,12,13,14,21,22,23,24]. These are class identifiers, not positions
+to be replaced by the consecutive integers 1 through 12.
+
+EEG uses the admitted voltage windows. ZERO replaces the complete training and
+query waveform inputs with positive binary32 zeros while retaining the same support, permitted
+training labels, group structure, protocols, budgets and independently fitted
+view-specific reference procedures. It is a mandatory waveform-information
+diagnostic. ZERO cannot mount EEG inputs, EEG-fitted models, EEG outputs or EEG
+transcripts. All trials and both views remain; candidates cannot omit a view or
+return a shorter support panel. The current context explicitly identifies its
+view. Neither view gives held-query targets, source filenames or event timing.
+
+Matched information and single-query adaptation
+Both F and I receive all permitted labelled training windows from the other
+nine participants, their opaque grouping relation, the same frozen numerical
+tools and four sealed model states for that fold/view, and exactly one unlabeled
+query. Original training order and participant names are absent. There are nine
+opaque group aliases; use them for any legitimate training-only validation.
+
+Both modes may use arbitrary supported Python analyses and extra scratch fits
+within their fixed budgets, including adaptation fitted jointly on all allowed
+labelled training observations and this one unlabeled query. Joint normalization,
+covariance, self-supervised adaptation, pseudo-labels and private adapted copies
+of a frozen model are permitted. A pseudo-label is your inference, never a true
+assessment target. The original models and source remain read-only. Temporary
+adaptation cannot survive the current context or mutate a shared tool/model.
+There is no statistical-semantic reviewer and no restriction to a classifier
+menu. A physical execution capability, not a narrative claim, bounds available
+files, processes, network, memory and time. Internal statistical intent is not
+universally observable or separately certified.
+
+Forbidden inputs/capabilities in every mode: held-person labelled calibration,
+any other query or query batch, assessment targets/correctness, other folds'
+state or predictions, previous query conversations, cross-query writable state,
+external retrieval, new data, unselected remote models, child processes, native
+provider calls and network. The host's authority, identity key, original paths,
+clock controls, full private transcripts and complete reference assessment
+tables are not candidate inputs. No action requests feedback or changes these
+capabilities. Candidate-created files persist only within the same episode.
+
+F: data-free source author and fixed query execution
+There are three independent F source-author episodes, one per replication.
+Authoring sees this public protocol and public method/tool schemas, but no
+authentic training/query arrays, realized trained models or selected data-derived
+configurations/results. Seal the complete source before any such exposure.
+At query time the sealed program receives the same permitted numerical context
+as I, may adapt using that current input, and must return its prediction in one
+native invocation. It has no query-time provider and no source edit after seeing
+a query. Its algorithm can automate every permitted numerical operation class.
+
+The author replies with exactly one JSON object, no Markdown wrapping:
+  {"action":"python","code":"...","requested_seconds":1}
+or
+  {"action":"seal_program","entrypoint":"program.py","files":[{"relative_path":"program.py","source":"..."}]}
+Python requested_seconds is an exact integer 1..60 and must fit the remaining
+480 cumulative native seconds. At most eight Python actions and nine provider
+requests. Each action source is at most 65,536 UTF-8 bytes. A final bundle has
+1..16 unique ordinary relative .py files, includes program.py, and contains at
+most 524,288 UTF-8 source bytes total. No executable/data dependency is silently
+downloaded. program.py must define predict(context), returning a plain Python
+list of twelve probabilities in the declared order. Source is sealed once.
+Author Python receives context with schema neural081_author_context_v1,
+replication and public_protocol only. Author native memory is 4 GiB; total
+author scratch is 256 MiB. Authoring ends within its original 2,400-second
+endpoint including validation/sealing, not a timer restarted after tool use.
+
+I: fresh current-query investigation
+Every query/view/replication has a fresh provider conversation. Investigate the
+current EEG with its allowed training evidence, frozen tools and broad Python,
+then predict. Reply with exactly one JSON object:
+  {"action":"python","code":"...","requested_seconds":1}
+or
+  {"action":"predict","probabilities":[12 numbers in class order]}
+No other action schema exists. A Python action source is at most 65,536 UTF-8
+bytes; requested_seconds is an exact positive integer within the remaining
+480-second cumulative native reservation. There are at most eight such actions
+and nine provider requests. Each action starts a new native process; the private
+/workspace files persist inside this episode only. The Python global variable
+context contains the admitted candidate context. Python must report evidence
+through bounded stdout/stderr or candidate-created files; assigning a Python
+variable does not submit the final I prediction. Use the final predict action.
+
+Candidate context and paths
+The exact public schema neural081_candidate_context_v4 has fields schema,
+task_id, access_policy, mode, replication, view, context_alias, class_ids,
+representation, query, training, models, tools and remaining. access_policy is
+single_query_transductive_v4. context_alias and row/group aliases are opaque
+32-hex values, not original names or source order. Query is exactly
+{path:'/input/query.npy',row_alias:context_alias}. Training supplies eeg_path
+/input/train.npy, labels_path /input/train_labels.npy, rows_path
+/input/train_rows.json, and shape [n_train,64,512]. Its ordered row metadata has
+only {row_alias,group_alias}; the labels and windows have the matching order.
+These include every allowed row, not a sampled convenience set. No canonical
+held identity, held-person row count, source event index or timestamp is exposed.
+
+Models, in order, are BP_LDA, TM_LDA, RBF_KRR, HISTORICAL_BP_LDA, at
+/models/<handle>/model.json. Public model metadata contains their actual
+training-selected configuration and temperature, sanitized numeric state,
+strongest_family, uniform_probabilities and laplace_probabilities. It contains
+no private authority/source/producer paths. Numeric state is ordinary validated
+NPY arrays, never pickle or arbitrary executable state. All original model
+states and their role order were fixed before queries; the same original states
+are offered to F and I. A private adapted copy is candidate state, not a newly
+qualified reference or an update of the original source.
+
+The immutable generic tool module is reference_tools, source
+/tools/reference_tools.py, API neural081_tools_v2. It supplies:
+  configurations()
+  load_model(handle, *, limits=None, n_train=None)
+  features(windows, family='BP_LDA', *, limits=None)
+  predict_scores(handle, windows, *, limits=None, n_train=None)
+  predict_proba(handle, windows, *, limits=None, n_train=None)
+windows must be a primitive NumPy float32/float64 ndarray of shape [n,64,512].
+To infer one current query, present that window as a one-row batch. Pass the
+actual context['training']['shape'][0] as n_train when carrying full support
+counts. The functions validate full state and bounds; they perform no fitting.
+limits, when supplied, is exactly max_array_bytes, max_workspace_bytes,
+max_output_bytes (positive integer bytes), still bounded by the native episode.
+Defaults are 256 MiB individual arrays, 1 GiB workspace, 256 MiB output; these
+are preventive helper bounds, not a promise that every full model fits them.
+The permitted image contains the selected standard-library/NumPy/SciPy/sklearn
+environment. Tool use or successful decoding is not empirical competence.
+
+Reference definitions and interpretation
+The fixed references stay inductive: fit on permitted training data only, never
+the current query. BP_LDA and TM_LDA each select shrinkage from .01,.1,.5,AUTO;
+RBF_KRR selects absolute alpha from .01,.1,1,10 and gamma from 1/1280,1/320,4/320.
+HISTORICAL_BP_LDA retains its literal historical feature/scaler/AUTO-LDA recipe
+on the prospectively role-ordered inputs; no historical numerical parity is
+claimed. The complete inner person-held-out grid chooses configurations and
+calibration on training folds only. Temperature grid is 1,.25,4,.0625,16,
+.015625,64; the historical comparator uses 1. Selection uses actual emitted
+binary64 calibrated probabilities, including rounded ties, not a claim that
+temperature cannot affect finite-precision argmax. Mathematical definitions,
+constant/singular conventions, exact reductions and no-epsilon tie rules are
+source-owned and remain unchanged. No reduced grid/subsample/jitter/approximate
+kernel is silently substituted for a complete reference.
+
+Reference mathematical conventions
+BP: demean each 512-sample channel, multiply by the symmetric Hann weights
+(1-cos(2*pi*t/511))/2, use unnormalized forward rFFT and power |a_k|^2/512.
+At frequencies k/4 Hz, average power over k=4..15,16..31,32..51,52..79,80..119,
+then ln(max(mean_power,1e-24)). The 320 features are channel-major/band-minor.
+TM: use the same demeaned channel and sixteen consecutive means of 32 samples,
+1,024 features in channel-major/bin-minor order. All learned arithmetic is
+finite binary64. No padding, deletion, imputation or new signal filter is added.
+Global training scaler uses each row with weight1/n, population mean/variance.
+With eps=2^-52 and b=n*eps*v+(n*mu*eps)^2, scale is1 if v<=b, else sqrt(v).
+Validation/query rows reuse that saved scaler; ZERO is not a separate shortcut.
+
+LDA uses class means a_k and class-population covariance S_k. Fixed shrinkage is
+(1-lambda)*S_k+lambda*trace(S_k)/d*I; the final covariance is the equally weighted
+mean across twelve classes, not class-frequency weighting. AUTO independently
+population-standardizes each class, applies the specified classwise Ledoit-Wolf
+formula, then restores the class feature scales before that uniform mean.
+It is not pooled Ledoit-Wolf or OAS. If V is the recentered standardized class,
+E=V^T*V/n_k, a_j=sum_i(V_ij^2)/n_k, mu=sum_j(a_j)/d,
+D=sum_jl(E_jl^2), B=sum_jli(V_ij^2*V_il^2), then
+beta0=(B/n_k-D)/(d*n_k), delta=(D-2*mu*sum_j(a_j)+d*mu^2)/d,
+beta=min(beta0,delta), lambda=0 if beta==0 else beta/delta.
+L=(1-lambda)*E+lambda*mu*I is restored by the two saved class-scale diagonals.
+Nonfinite or out-of-range shrinkage fails; no extra clipping/fallback is added.
+Solve W=Sigma^+*A^T with minimum-norm SVD, keeping singular values strictly
+greater than eps*s_max (zero threshold if all zero). Scores are
+z^T*W_k-.5*a_k^T*W_k+log(1/12). Singular models use this rule, never jitter or
+a nearest-centroid substitute. Numerical residual/rank checks can refuse them.
+
+KRR uses BP features and saved scaling, exp(-gamma*sum((z_i-z_j)^2)) with direct
+finite squared differences. Center K and one-hot Y using H=I-11^T/n. Solve
+(Kc+alpha*I)*B=Yc: alpha is absolute, not multiplied by n; intercept is unpenalized.
+For one query k_i=K(z_i,z), scores are mean(Y)+(k-r-mean(k)+grand_mean(K))^T*B,
+where r is the training row-kernel mean. No clipping of raw scores. The dense
+kernel/full support is exact; no subsampling, random features or approximate
+kernel. The selected SPD residual check refuses inaccurate solves without jitter.
+
+Softmax subtracts the largest finite raw score, divides by positive temperature,
+exponentiates and normalizes; underflow to zero is allowed. Selection enumerates
+all twenty settings on all nine inner held participants (fit the other eight).
+Rank each family's configurations by (-mean_person_BA_at_T1,mean_person_NLL_at_T1,
+grid_index). Each selected family's temperature minimizes mean-person OOF NLL,
+ties first in its declared list. Recompute BA at that temperature. Strongest
+family ranks (-calibrated_BA,calibrated_NLL,family_order). Historical is a separate
+AUTO BP fit at T=1. No failed setting can be dropped to select surviving recipes.
+Uniform is1/12; Laplace prior is (training_class_count+1)/(n_train+12).
+
+For metrics, success/total counts are exact integers, each recall is correct/total;
+BA uses math.fsum in class order divided by12 and then math.fsum of participant
+scores divided by participant count. NLL uses -log(max(p_true,1e-12)); the floor
+applies only inside the log. Row terms and participant terms use math.fsum in
+source-owned fixed order. Configuration/temperature/family ties use the exact
+computed finite floats, no epsilon tie band. Replication means use r0,r1,r2
+math.fsum/3; paired contrasts subtract paired participant scores before macro
+reduction. Library transcendentals/linear algebra are not claimed correctly
+rounded or bitwise identical across platforms. The historical package contract
+is NumPy2.2.6/SciPy1.15.3/scikit-learn1.6.1, with separately qualified exact
+interpreter/image/BLAS and one numerical thread.
+
+Resource and observation rules
+For each F or I current query: one numerical CPU, 8 GiB memory, 480 cumulative
+native seconds, 16 GiB scratch writes/retention, original 2,400-second episode
+endpoint. F has one native invocation; I has at most eight. Every requested
+native interval is reserved before launch and is not refunded after an early
+finish or failure. Native child deadlines cannot exceed the original episode
+endpoint. Managed logical reads have the matched source-owned bound
+8*(131072*n_train + M +16 MiB), where M is the exact admitted model/source size.
+Full source/import/model/input authentication, copies and rereads are charged.
+That helper count is not proof of complete physical-I/O observation for arbitrary
+Python; the independently qualified runtime must enforce/observe that boundary.
+No GPU, extra numerical service or child process is available.
+
+remaining reports native_seconds, native_actions, provider_requests,
+scratch_write_bytes, managed_read_bytes, source_bytes and
+normal_seconds_remaining. These are host-stamped remaining caps, never writable
+timer or resource controls. Normal endpoint includes source/metadata/transport
+and final result work. A failure-closeout interval cannot produce a valid late
+prediction. Unknown process or provider closure aborts rather than retrying.
+
+Each provider request has at most 32,768 admitted input tokens, 4,096 output
+tokens, 2 MiB raw response bytes and 120 seconds, within the original episode.
+The full ordered conversation is counted with the qualified tokenizer/framing;
+overflow refuses before transmission. There is no automatic summarization,
+history deletion, prefix-as-complete response, retry or model upgrade. Replication
+identities and selected provider seeds are recorded; unsupported seed behavior
+does not become a determinism claim. No native action can call the provider.
+
+Each native stdout and stderr has its own 262,144-byte raw cap with observed
+EOF. Full original streams are retained privately. After a fully closed action,
+strict UTF-8 stdout's first 8,192 codepoints and stderr's first 2,048 may be
+projected, carrying projection_truncated, original_bytes and original_sha256.
+An invalid encoding is a closed tool error, not replacement-character evidence.
+A private host path or unprojectable error refuses delivery. The projected
+tool result contains action_index,status,stdout,stderr,files,remaining. Files
+list only admitted candidate-created ordinary /workspace paths by relative path,
+bytes and hash. Completed, closed_analytical_error and closed_encoding_error are
+distinct; a closed ordinary error may consume another remaining I/author action,
+but uncertain custody/process closure cannot. Complete episode trace cap is
+16 MiB. Every attempt, failure, artifact and original observation is retained
+and charged; a candidate report is not an independent completion certificate.
+
+Prediction and assessment
+Return exactly twelve finite nonboolean numeric probabilities in [0,1], as a
+plain list, in the original class order. math.fsum must differ from 1 by at most
+1e-6. No scorer renormalization, NaN, infinity, shortened list or extra output
+field is accepted. For F, return this list from predict(context). For I, emit
+it in the final predict JSON. Numerical ties choose the first canonical class.
+The primary score is participant-macro balanced accuracy (mean of twelve class
+recalls per participant, then equal participant weighting), with paired F/I
+and EEG/ZERO contrasts. NLL, complete confusion/recall rows, participant omission
+sensitivity and replication range/sample SD are descriptive reports. Trials
+are not independent biological replications. Predictions always score from
+their admitted probabilities, including finite-precision ties.
+
+All source preparation and fixed reference selection close before query work.
+Every one of 6N F and 6N I predictions must close; all 12N closures and complete
+240 assessment panels are admitted before the protected assessment labels are
+opened for grading. No candidate sees those labels or grading feedback. There
+are 3,680 fixed reference fits and 3,680 fixed reference inferences, plus twenty
+training-only selection workers; candidate scratch fits are separate charged
+work, not extra reference fits. N is the actual complete trial census, never
+silently replaced by an illustrative or truncated count.
+
+This is retrospective, closed-set instructed-excerpt prediction; training has
+all twelve classes, so it is not unseen-excerpt generalization. Lyrics and
+non-lyrics variants are distinct classes, not twelve distinct melodies. Labels
+are instructions, not verified introspective contents. Cue memory, preceding
+perception, ocular/movement signals and upstream processing remain possible
+sources of predictive information; ZERO does not selectively remove those.
+EEG/ZERO differences and
+comparisons to the four inductive references do not alone establish causal
+mechanisms, unrestricted neural understanding or reasoning-only gains. Candidate
+single-query transduction has broader access than those fixed references;
+performance differences must disclose that comparison. Failure, incomplete
+support, missing qualification and unavailable resources remain explicit.
