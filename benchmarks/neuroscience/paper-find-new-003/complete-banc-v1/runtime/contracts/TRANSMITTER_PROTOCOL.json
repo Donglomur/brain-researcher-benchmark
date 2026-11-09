@@ -1,0 +1,32 @@
+{
+  "schema": "banc_transmitter_original_evaluation_design_v2",
+  "paper": {
+    "path": "authoring/delivery-20261105/banc-control/paper-body-v2/public/PAPER.xml",
+    "bytes": 579239,
+    "sha256": "770a7de4a63a55c9eedb43b3da07ccb1edaa041473cfbf1b50b349fa1430e321"
+  },
+  "primary_anchors": [
+    "Methods Sec21 Neurotransmitter prediction",
+    "Fig9 / Extended Data Fig3b"
+  ],
+  "original_split": "Neuron-level80/20 training/testing split; cell types represented in both partitions. Not a held-cell-type protocol.",
+  "original_sampling": "For acetylcholine,GABA,glutamate,at most10 presynaptic sites sampled per neuron; all sites for other transmitter classes, as described in Methods.",
+  "original_model_selection": "Train1060000 iterations,batch16; final checkpoint selected for highest classification accuracy on the testing set.",
+  "reported_output": "Whole-neuron confusion matrix on that model-selection-used testing set, after summing predicted class probabilities across each neurons presynaptic detections.",
+  "interpretation": "Training/testing neuron separation does not make the reported selected-test result an untouched final evaluation or a held-cell-type generalization estimate.",
+  "required_provenance": [
+    "Exact neuron split and cell-type overlap policy",
+    "Presynaptic sampling and aggregation support",
+    "Candidate checkpoint/iteration schedule",
+    "Testing accuracy used for checkpoint selection and selected-checkpoint identity",
+    "Any tie-breaking/selection detail actually used; missing details remain a gap",
+    "Reported confusion-matrix cohort and original source/model versions"
+  ],
+  "missing_history_disposition": "required_unscorable_original_selection_provenance; do not silently fix the historical procedure or rename its testing set an independent final holdout",
+  "future_predictive_improvement": {
+    "selected": false,
+    "requires": "Separately selected evaluation protocol with final outcomes isolated from checkpoint,hyperparameter and method selection; do not reuse the original selection-used test as untouched assessment. A new untouched final evaluation is a future qualification requirement,not a dataset/model/run selected here."
+  },
+  "data_or_model_read": false,
+  "scientific_execution": false
+}

@@ -1,0 +1,130 @@
+{
+  "branches": [
+    {
+      "col_order": null,
+      "col_quantile": null,
+      "diagonal": true,
+      "level_filter": null,
+      "metric": "influence_log",
+      "name": "sensory_to_cns",
+      "recalculate": true,
+      "reverse_display": false,
+      "row_order": "cns_network_order",
+      "source_lines": "1041-1075"
+    },
+    {
+      "col_order": "cns_network_order",
+      "col_quantile": null,
+      "diagonal": true,
+      "level_filter": [
+        "cns_network"
+      ],
+      "metric": "influence_log",
+      "name": "cns_to_effector_supercluster",
+      "recalculate": true,
+      "reverse_display": false,
+      "row_order": "eff_super_order",
+      "source_lines": "1078-1110"
+    },
+    {
+      "col_order": "cns_network_order",
+      "col_quantile": null,
+      "diagonal": false,
+      "level_filter": [
+        "cns_network"
+      ],
+      "metric": "influence_log",
+      "name": "cns_to_cns",
+      "recalculate": true,
+      "reverse_display": false,
+      "row_order": "cns_network_order",
+      "source_lines": "1275-1307"
+    },
+    {
+      "col_order": "cns_network_order",
+      "col_quantile": null,
+      "diagonal": true,
+      "level_filter": [
+        "cns_network"
+      ],
+      "metric": "drop",
+      "name": "cns_to_cns_no_neck_drop",
+      "recalculate": false,
+      "reverse_display": false,
+      "row_order": "cns_network_order",
+      "source_lines": "1310-1338"
+    },
+    {
+      "col_order": null,
+      "col_quantile": null,
+      "diagonal": true,
+      "level_filter": null,
+      "metric": "influence_norm_log",
+      "name": "mb_cx_control_to_cns",
+      "recalculate": true,
+      "reverse_display": false,
+      "row_order": "cns_network_order",
+      "source_lines": "1341-1371"
+    },
+    {
+      "col_order": "super_cluster_order",
+      "col_quantile": null,
+      "diagonal": true,
+      "level_filter": [
+        "super_cluster"
+      ],
+      "metric": "influence_log",
+      "name": "supercluster_to_cns",
+      "recalculate": true,
+      "reverse_display": false,
+      "row_order": "cns_network_order",
+      "source_lines": "1374-1410"
+    },
+    {
+      "col_order": null,
+      "col_quantile": 0.5,
+      "diagonal": true,
+      "level_filter": [
+        "seed_07"
+      ],
+      "metric": "influence_log",
+      "name": "mb_cx_to_neck_supercluster",
+      "recalculate": true,
+      "reverse_display": false,
+      "row_order": "super_cluster_order",
+      "source_lines": "1413-1449"
+    },
+    {
+      "col_order": "super_cluster_order",
+      "col_quantile": null,
+      "diagonal": true,
+      "level_filter": [
+        "super_cluster"
+      ],
+      "metric": "influence_log",
+      "name": "neck_supercluster_to_mb_cx",
+      "recalculate": true,
+      "reverse_display": true,
+      "row_order": null,
+      "source_lines": "1452-1489"
+    }
+  ],
+  "full_no_neck_drop": "overwrite every no-neck level to cns_network before default normalization; full level remains first retained level; right join target,seed,level",
+  "helper_cast": "first seed,target; mean singleton; missing/nonfinite to0; transpose target x seed",
+  "helper_quantile": null,
+  "native_execution_selected": false,
+  "primary_sources": [
+    {
+      "bytes": 66605,
+      "path": "_primary/panels_cns_network_analyses.R",
+      "sha256": "6d2a253fd674c8c7d777142b396f70eb89ceb0ded41d7316e2d22e07ce3f60cb"
+    },
+    {
+      "bytes": 155000,
+      "path": "_primary/banc-functions.R",
+      "sha256": "311eb92e1d20ce6119aae8fe2a1fa379dd7340a56dd69f38c2b25389ecaab1bd"
+    }
+  ],
+  "schema": "banc_cns_eight_literal_panel_contract_v2",
+  "source_revision": "2e78ce38e946ab80e120a42f504a019b3a567fef"
+}

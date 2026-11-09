@@ -1,0 +1,100 @@
+{
+  "schema": "banc_scientific_native_branch_map_design_v2",
+  "source_only": true,
+  "native_execution": false,
+  "historical_reference_selected": false,
+  "source_pins": {
+    "R": {
+      "path": "authoring/delivery-20261105/common/remaining-builds-wave38/banc-complete-design/native-source/natverse_influencer/R/influence-calculator-r.R",
+      "bytes": 19472,
+      "sha256": "8c8e468b3576110c11d24221e968cc586f6aa0bb98e583f420ad6419f9932583"
+    },
+    "Python": {
+      "path": "authoring/delivery-20261105/common/remaining-builds-wave38/banc-complete-design/native-source/DrugowitschLab_ConnectomeInfluenceCalculator/InfluenceCalculator/InfluenceCalculator.py",
+      "bytes": 14594,
+      "sha256": "cdfefac56797355d2ff8aeec8d587ee5841d87904a12321618c613bd9697121d"
+    },
+    "R_to_Python_wrapper": {
+      "path": "authoring/delivery-20261105/common/remaining-builds-wave38/banc-complete-design/native-source/natverse_influencer/R/python-wrapper.R",
+      "bytes": 11207,
+      "sha256": "00e38f9f1a328cdf9bd1907aa17ac5b6cbf0a7f7cfc3416cfc0ce06c6be2cda0"
+    },
+    "paper": {
+      "path": "authoring/delivery-20261105/banc-control/paper-body-v2/public/PAPER.xml",
+      "bytes": 579239,
+      "sha256": "770a7de4a63a55c9eedb43b3da07ccb1edaa041473cfbf1b50b349fa1430e321"
+    }
+  },
+  "rows": [
+    {
+      "id": "paper_unsigned_equation",
+      "weight": "postsynaptic input-normalized nonnegative synapse weights",
+      "scaling": "Methods specifies largest real eigenvalue 0.99; zero/nonpositive and convergence boundaries require explicit admissibility, not an invented rescaling",
+      "metadata": "original complete graph/source/target identities still require provenance",
+      "response": "linear steady-state response for the stated unsigned operator",
+      "evidence": "Paper Sec33 equations2-4",
+      "disposition": "scientific specification; no captured implementation certified equivalent"
+    },
+    {
+      "id": "captured_Python_unsigned_literal",
+      "weight": "syn_weight_measure defaults to count; explicit norm is a separate parameter setting",
+      "scaling": "For every positive largest real eigenvalue lambda, multiply W by lambda_max/lambda (default lambda_max=0.99), then subtract I; no rescale when lambda<=0",
+      "metadata": "Preserve native SQLite/meta/graph ID contracts and genuine failure modes; no supplied successful adapter",
+      "response": "abs(real(response)) in unsigned mode",
+      "evidence": "Python lines10-25,89-183,219-238,288-298",
+      "disposition": "literal captured source; not established as historical paper run or paper-equation reference"
+    },
+    {
+      "id": "captured_Python_signed_literal",
+      "weight": "Uses explicitly selected count or norm field and negates that chosen field for explicitly supplied inhibitory_nts; signed=True without inhibitory_nts raises ValueError",
+      "scaling": "Same positive-eigenvalue rescaling condition as unsigned; no inference of a qualified signed biological model",
+      "metadata": "Requires source top_nt convention and exact source identity; wrapper provides no inhibitory set",
+      "response": "real(response) retains sign in signed mode",
+      "evidence": "Python lines27-65,139-183,219-238,288-298;wrapper122-124",
+      "disposition": "literal signed branch and missing-parameter refusal retained; no automatic inhibitory convention or successful wrapper claim"
+    },
+    {
+      "id": "captured_R_unsigned_literal",
+      "weight": "create_sparse_W defaults to norm, irrespective of Python default count",
+      "scaling": "Rescale by0.99/lambda only if largest real eigenvalue lambda>0.99; leave operator scale unchanged otherwise; then subtract I",
+      "metadata": "Public input validation requires root_id and checks graph IDs against root_id; retain original mapping/cast rules",
+      "response": "abs(Re(response))",
+      "evidence": "R218-241,289-315,318-346,370-403",
+      "disposition": "different from Python positive-eigenvalue rule when0<lambda<0.99 even with the same input-normalized weights; not a drop-in equivalent reference"
+    },
+    {
+      "id": "captured_R_signed_labelled_literal",
+      "weight": "Signed block obtains inhibitory IDs from meta$id and negates count, but create_sparse_W default assembles norm; the sign edit therefore does not alter that default norm field",
+      "scaling": "Same conditional lambda>0.99 rule as literal R unsigned",
+      "metadata": "Public admission requires root_id, not id; signed lookup nevertheless uses meta$id. Missing/mismatched id must retain its genuine native behavior and may not be silently rewritten to root_id or asserted to have failed in an unrun case",
+      "response": "abs(Re(response)) also used in signed-labelled output; a signed column name does not establish signed values",
+      "evidence": "R227-241,289-315,334-339,370-403",
+      "disposition": "literal operator/output semantics; no silent sign-column,identifier or output-transform repair"
+    },
+    {
+      "id": "R_to_Python_literal_wrapper",
+      "weight": "Passes filename,signed,count_thresh only; does not pass syn_weight_measure,so capturedPythondefaultcount applies",
+      "scaling": "Delegates to selected imported Python version; actual version/environment must be bound",
+      "metadata": "Original temporarySQLite and source IDs retained; no automatic root_id/id or other compatibility bridge selected",
+      "response": "Delegates to nativePython output; signed=True missing inhibitory_nts fails at captured Python constructor",
+      "evidence": "wrapper72-124;Python10-65",
+      "disposition": "captured wrapper compatibility gap,not an already runnable historical reference"
+    },
+    {
+      "id": "explicit_paper_equation_correction_future",
+      "weight": "Must explicitly bind scientific weight column,normalization,graph cohort and source/target counts",
+      "scaling": "Must explicitly bind target-eigenvalue condition,admissible domain and failure behavior",
+      "metadata": "Any identifier adapter must be explicit and evidenced; preserve originals",
+      "response": "Must explicitly bind signed/unsigned operator and whether sign or magnitude is the estimand",
+      "evidence": "Future independently reviewed source/parameter correction only",
+      "disposition": "not selected or implemented; keep separate from all literal branches and qualify a competent corrected baseline before any improvement claim"
+    }
+  ],
+  "comparison_rules": [
+    "No speed or memory improvement across different weights,scaling,ID joins,sign transformations or complete scientific support.",
+    "Repairing a literal bug is not improvement over a competent corrected fixed-quantity baseline.",
+    "Static source differences establish neither authentic native outputs nor which captured branch produced the paper.",
+    "Missing/nonconvergent source behavior is preserved explicitly; no fallback to another library or synthetic success.",
+    "G02/G03/G08/G10 remain open reference-definition and parity gates."
+  ]
+}
