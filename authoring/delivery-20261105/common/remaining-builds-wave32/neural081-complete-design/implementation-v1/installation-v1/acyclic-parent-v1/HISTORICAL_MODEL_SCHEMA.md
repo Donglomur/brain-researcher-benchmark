@@ -1,0 +1,3 @@
+# Historical model configuration schema
+
+The exact historical configuration object is {"id":"HISTORICAL_BP_LDA","family":"HISTORICAL_BP_LDA","shrinkage":"AUTO","alpha":null,"gamma":null}. This is the separate historical model identifier, not a twenty-first tuned configuration. Its model family/handle is HISTORICAL_BP_LDA and feature definition is BP. R1 uses the literal selected sklearn recipe; R2 independently realizes its written mathematical comparator without claiming library execution. Numerical diagnostic classwise scales have twelve d-dimensional vectors, not per-training-row scales. All retained diagnostics count toward output/workspace admission. Written schema is shared identically; no author source/results are transferred.
