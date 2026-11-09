@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NEURAL042 numerical report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "patients",
+    "groups",
+    "claim_scope"
+  ],
+  "properties": {
+    "schema": {
+      "const": "neural042_report_v1"
+    },
+    "patients": {
+      "type": "array",
+      "minItems": 144,
+      "maxItems": 144,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "patient",
+          "design",
+          "contrast",
+          "n_sessions",
+          "n_channels",
+          "metrics"
+        ],
+        "properties": {
+          "patient": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{24}$",
+            "minLength": 24,
+            "maxLength": 24
+          },
+          "design": {
+            "enum": [
+              "count_only",
+              "nuisance_matched"
+            ]
+          },
+          "contrast": {
+            "enum": [
+              "load3_minus_load1_correct",
+              "correct_minus_incorrect_within_load"
+            ]
+          },
+          "n_sessions": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 44
+          },
+          "n_channels": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4096
+          },
+          "metrics": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "corrected_mi",
+                  "mi",
+                  "trial_null",
+                  "shift_null",
+                  "early_mi",
+                  "late_mi",
+                  "theta_power",
+                  "gamma_power",
+                  "firing_rate",
+                  "harmonic_plv",
+                  "waveform_asymmetry"
+                ],
+                "properties": {
+                  "corrected_mi": {
+                    "type": "number"
+                  },
+                  "mi": {
+                    "type": "number"
+                  },
+                  "trial_null": {
+                    "type": "number"
+                  },
+                  "shift_null": {
+                    "type": "number"
+                  },
+                  "early_mi": {
+                    "type": "number"
+                  },
+                  "late_mi": {
+                    "type": "number"
+                  },
+                  "theta_power": {
+                    "type": "number"
+                  },
+                  "gamma_power": {
+                    "type": "number"
+                  },
+                  "firing_rate": {
+                    "type": "number"
+                  },
+                  "harmonic_plv": {
+                    "type": "number"
+                  },
+                  "waveform_asymmetry": {
+                    "type": "number"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "groups": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "design",
+          "contrast",
+          "n_patients",
+          "mean",
+          "ci95",
+          "sign_flip_p"
+        ],
+        "properties": {
+          "design": {
+            "enum": [
+              "count_only",
+              "nuisance_matched"
+            ]
+          },
+          "contrast": {
+            "enum": [
+              "load3_minus_load1_correct",
+              "correct_minus_incorrect_within_load"
+            ]
+          },
+          "n_patients": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 36
+          },
+          "mean": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "ci95": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              }
+            ]
+          },
+          "sign_flip_p": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "claim_scope": {
+      "const": "descriptive_patient_associations_not_causal_or_crossoscillator_proof"
+    }
+  },
+  "$comment": "Semantic validation additionally enforces exact identities/order, finite nonboolean values, analytic ranges, support relationships and group-mean consistency. UTF8/no duplicate keys."
+}
