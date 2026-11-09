@@ -1,0 +1,28 @@
+{
+  "schema": "neural042_public_input_v1",
+  "packet.json": {
+    "schema": "neural042_packet_v1",
+    "patients": "36 sorted opaque24hex patient IDs",
+    "source_sessions": 44,
+    "channels": "sorted selected-channel rows: id,patient,session,path,bytes,sha256,n_trials. Each session belongs to one patient."
+  },
+  "channels/{id}.npz": {
+    "lfp": "float64[n_trials,1000] volts,400Hz,event-relative[0,2.5)s",
+    "rates": "float64[n_trials], mean co-located sorted-unit Hz from exact event-relative[0,2.5)s",
+    "loads": "int8[n_trials] in{1,3}",
+    "correct": "int8[n_trials] in{0,1}, permitted retrospective grouping variable",
+    "probe": "int8[n_trials] in{0,1}",
+    "order": "int16[n_trials], unique original0..139 row; declared drift covariate",
+    "ids": "Unicode24[n_trials], unique opaque trial ID"
+  },
+  "forbidden": [
+    "whole_NWB",
+    "pictures",
+    "post_probe_signal",
+    "private_gold",
+    "clinical_review",
+    "operator_exclusions",
+    "original_ID_key"
+  ],
+  "actual_payloads_present": false
+}

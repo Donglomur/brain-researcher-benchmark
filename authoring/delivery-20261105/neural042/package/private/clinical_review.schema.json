@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "sessions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "neural042_clinical_review_v1"
+    },
+    "sessions": {
+      "type": "array",
+      "minItems": 44,
+      "maxItems": 44,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "asset_id",
+          "source_sha256",
+          "preprocessing",
+          "evidence",
+          "channels"
+        ],
+        "properties": {
+          "asset_id": {
+            "type": "string",
+            "minLength": 36,
+            "maxLength": 36
+          },
+          "source_sha256": {
+            "type": "string",
+            "minLength": 64,
+            "maxLength": 64,
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "preprocessing": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "local_reference_verified",
+              "spike_interpolation_before_downsampling_verified",
+              "lowpass_175hz_and_400hz_verified",
+              "notch_60_120hz_verified"
+            ],
+            "properties": {
+              "local_reference_verified": {
+                "const": true
+              },
+              "spike_interpolation_before_downsampling_verified": {
+                "const": true
+              },
+              "lowpass_175hz_and_400hz_verified": {
+                "const": true
+              },
+              "notch_60_120hz_verified": {
+                "const": true
+              }
+            }
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 4000
+          },
+          "channels": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 512,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "row0",
+                "exclude_channel",
+                "reason",
+                "bad_trial_rows0"
+              ],
+              "properties": {
+                "row0": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 511
+                },
+                "exclude_channel": {
+                  "type": "boolean"
+                },
+                "reason": {
+                  "type": "string",
+                  "maxLength": 4000
+                },
+                "bad_trial_rows0": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "maxItems": 140,
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 139
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$comment": "Requires independently verified clinical evidence; never populate with inferred True values. Runtime additionally joins every asset/channel row and requires nonempty reason for an excluded channel."
+}
