@@ -1,14 +1,14 @@
-# Benchmark construction status — local V56
+# Benchmark construction status — local V57
 
-Snapshot: 9 November 2026. **The local build has 200 canonical assignments, 100 registered packages and 67 reviewed preferred interfaces. These are construction stages, not 200 finished benchmarks.**
+Snapshot: 9 November 2026. **The local build has 200 canonical assignments, 101 registered packages and 68 reviewed preferred interfaces. These are construction stages, not 200 finished benchmarks.**
 
 | Local construction stage | Paper research | Neural data | Total |
 | --- | ---: | ---: | ---: |
 | Canonical assignments | 100 | 100 | 200 |
-| Registered packages | 39 | 61 | 100 |
-| Reviewed preferred interfaces | 23 | 44 | 67 |
+| Registered packages | 40 | 61 | 101 |
+| Reviewed preferred interfaces | 24 | 44 | 68 |
 
-A definition specifies a research question and evaluation plan. A registered package connects a task to its command interface. A preferred interface selects reviewed implementation source for future execution. These stages overlap and must not be added together. **The 81 named conditions cover 67 canonical tasks**; conditions, cases, folds, source files and versions do not add benchmarks.
+A definition specifies a research question and evaluation plan. A registered package connects a task to its command interface. A preferred interface selects reviewed implementation source for future execution. These stages overlap and must not be added together. **The 83 named conditions cover 68 canonical tasks**; conditions, cases, folds, source files and versions do not add benchmarks.
 
 **Scientifically verified across the original full task: 0. Submission-ready benchmarks: 0.** Scientific and model evaluation remain paused under the build-only instruction. Historical finite validations are not a current full-scope completion count. No new performance comparison, reproduction result or SOTA improvement is claimed.
 
@@ -16,4 +16,4 @@ Public source availability is tracked separately in the [source snapshot invento
 
 Current work implements and reviews source and integrates selected interfaces. Full scientific qualification still requires complete original support and provenance, qualified environments and access boundaries, competent independent references, protected assessment and actual full-scope evaluation. Source or design commits alone do not change the task counts or establish scientific readiness.
 
-[Machine-readable counts](CONSTRUCTION_STATUS_COUNTS.json) describe the same local V56 snapshot. They are not a count of publicly runnable programs.
+[Machine-readable counts](CONSTRUCTION_STATUS_COUNTS.json) describe the same local V57 snapshot. They are not a count of publicly runnable programs.
