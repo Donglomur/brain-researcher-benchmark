@@ -1,0 +1,98 @@
+{
+  "schema": "neural047_full_source_protocol_v2",
+  "canonical_task": "NEURAL-047",
+  "animals": "unknown; all verified eligible animals, minimum3",
+  "arms": [
+    "N",
+    "B",
+    "NB"
+  ],
+  "modes": [
+    "F",
+    "I",
+    "R0",
+    "R1",
+    "R2"
+  ],
+  "contexts": "15*n",
+  "candidate_contexts": "6*n",
+  "reference_final_fits": "9*n",
+  "reference_inner_fits": "27*n*(n-1)",
+  "reference_grids": {
+    "R0": {
+      "family": "logistic",
+      "C": [
+        1
+      ]
+    },
+    "R1": {
+      "family": "logistic",
+      "C": [
+        0.01,
+        0.1,
+        1,
+        10,
+        100
+      ]
+    },
+    "R2": {
+      "family": "HistGradientBoostingClassifier",
+      "max_leaf_nodes": [
+        7,
+        15
+      ],
+      "l2_regularization": [
+        0,
+        1
+      ],
+      "max_iter": 200,
+      "learning_rate": 0.05,
+      "early_stopping": false
+    }
+  },
+  "family_matching": "Same admitted program or agent policy and prespecified family/grid across arms; no claim that self-declared metadata proves semantics.",
+  "score": {
+    "primary": "N animal-macro balanced accuracy",
+    "co_primary": "N animal-macro binary log loss",
+    "threshold": 0.5,
+    "probability_floor": 1e-15,
+    "single_class": "whole-panel BA undefined; retain animal and all log losses",
+    "bootstrap": "10000 whole-animal draws seed47047; descriptive"
+  },
+  "source_entrypoints": [
+    "run.py inspect",
+    "run.py launch --request ROOT_OUTER_SPEC --request-bytes N --request-sha256 SHA",
+    "run.py prepare --request QUALIFIED_PREPARATION --request-bytes N --request-sha256 SHA",
+    "run.py operate --request QUALIFIED_OPERATION --request-bytes N --request-sha256 SHA"
+  ],
+  "native_environment": {
+    "python": "3.11",
+    "numpy": "2.2.6",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.6.1",
+    "joblib": "1.4.2",
+    "threadpoolctl": "3.6.0"
+  },
+  "deployment_configured": false,
+  "method_budget_scopes": {
+    "per_context": "Each source snapshot or original isolated candidate context; exact integer caps; native CPU is owned worker/provider subtree CPU, observer CPU is globally counted.",
+    "all_contexts": "One method across source snapshot and every N/B/NB outer-animal context. Failed and rejected reservations are retained; no refunds.",
+    "programme": "Original global byte/provider reservations and selected outer CPU/memory/process/wall controls, including observer CPU.",
+    "matched": "F and I have identical ordinary limits; F provider requests/tokens zero and I positive explicit admitted maxima. Same per-context caps across all arms.",
+    "family_semantics": "Qualified independent admission required; unchanged broad I, not a restricted estimator menu."
+  },
+  "failure_evidence": {
+    "request_member": "failure_evidence",
+    "exact_positive_integer_fields": [
+      "write_bytes",
+      "wall_seconds",
+      "terminal_bytes",
+      "job_receipt_bytes",
+      "provider_receipt_bytes"
+    ],
+    "scope": "Pre-debited from original total writes; original total lifetime ends unchanged, ordinary work stops earlier. Native/provider streams and original receipts allocate within reserve.",
+    "known_observations": "Returned read/write counts and original-prefix hashes survive ordinary budget/deadline failures. Unknown provider usage and failed final resource observations remain explicit.",
+    "terminal": "Original private receipt or bounded original outer stderr fallback; incomplete persistence cannot count as successful closure."
+  },
+  "final_acceptance": "Final native counters before output adoption and after capture; final outer counters plus observer CPU before result acceptance, after result recapture, and after observation publication. Original external command completion required."
+}
