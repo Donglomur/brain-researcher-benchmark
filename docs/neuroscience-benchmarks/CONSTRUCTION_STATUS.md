@@ -1,19 +1,19 @@
-# Benchmark construction status — local V48
+# Benchmark construction status — local V54
 
-Snapshot: 8 November 2026 (UTC). **The local build has 200 canonical assignments, 94 registered packages and 59 reviewed preferred program interfaces.** These overlapping stages do not count finished benchmarks or publicly runnable programs.
+Snapshot: 8 November 2026. **The local build has 200 canonical assignments, 98 registered packages and 65 reviewed preferred interfaces. These are construction stages, not 200 finished benchmarks.**
 
 | Local construction stage | Paper research | Neural data | Total |
 | --- | ---: | ---: | ---: |
 | Canonical assignments | 100 | 100 | 200 |
-| Registered packages | 38 | 56 | 94 |
-| Reviewed preferred interfaces | 21 | 38 | 59 |
+| Registered packages | 39 | 59 | 98 |
+| Reviewed preferred interfaces | 23 | 42 | 65 |
 
-A task definition states the research question. Registration connects it to a command interface. A preferred interface identifies implementation source that has been reviewed. These stages do not establish complete input data, reliable comparison methods, correct execution of the full program or a valid scientific result. The **73 named conditions belong to 59 existing tasks**; conditions, cases, folds and versions add no canonical assignments.
+A definition specifies a research question and evaluation plan. A registered package connects a task to its command interface. A preferred interface selects reviewed implementation source for future execution. These stages overlap and must not be added together. **The 79 named conditions cover 65 canonical tasks**; conditions, cases, folds, source files and versions do not add benchmarks.
 
-**Scientifically verified across the original full task: 0. Submission-ready benchmarks: 0.** Scientific evaluation remains paused. The historical 42 finite validations overlap with these assignments and do not form a freshly established full-scope validation set. This status update reports no performance comparison, reproduction result or SOTA improvement.
+**Scientifically verified across the original full task: 0. Submission-ready benchmarks: 0.** Scientific and model evaluation remain paused under the build-only instruction. Historical finite validations are not a current full-scope completion count. No new performance comparison, reproduction result or SOTA improvement is claimed.
 
-Public availability is tracked separately in the [source snapshot inventory](SOURCE_SNAPSHOT.md) and its per-publication manifests. For example, the verified [IT source publication at commit `68c6bb0`](https://github.com/Donglomur/brain-researcher-benchmark/blob/68c6bb07958176b42fad30d0642d50d4f0669698/docs/neuroscience-benchmarks/IT_COMPLETE_CENTRAL_V2_SOURCE_MANIFEST.json) supplies **133 selected source paths: 121 new and 12 already public**. Those are files for one existing assignment, not 133 benchmarks. This pinned example is not a total public inventory or a claim about later publications.
+Public source availability is tracked separately in the [source snapshot inventory](SOURCE_SNAPSHOT.md) and package-specific manifests and notices. Local registration does not establish that a complete program is publicly supplied or independently runnable. Published source packages retain their own missing-dependency, data, environment and execution limitations; this status update does not clear those requirements.
 
-A supplied source file can still require external code, authentic data, operator inputs or a separately qualified environment. Check each manifest's supplied and missing dependencies; local registration does not prove that its full program is available or runnable from this public repository. Complete original support, independent references, access boundaries and feasible full-run resources must be admitted before separately authorized scientific comparisons. Reducing a cohort or endpoint does not qualify the original task.
+Current work implements and reviews source and integrates selected interfaces. Full scientific qualification still requires complete original support and provenance, qualified environments and access boundaries, competent independent references, protected assessment and actual full-scope evaluation. Source or design commits alone do not change the task counts or establish scientific readiness.
 
-[Machine-readable counts and evidence](CONSTRUCTION_STATUS_COUNTS.json) distinguish the local V48 snapshot from the pinned public source example. No pending publication outcome is included.
+[Machine-readable counts](CONSTRUCTION_STATUS_COUNTS.json) describe the same local V54 snapshot. They are not a count of publicly runnable programs.
