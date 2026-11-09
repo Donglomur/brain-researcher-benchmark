@@ -1,0 +1,1083 @@
+{
+  "schema": "neural049_public_static_schema_index_v1",
+  "task_id": "NEURAL-049",
+  "profile": "curated_retrospective_full_v1",
+  "status": "documentation_only_not_a_validator_or_qualification",
+  "source_interface": "boundary-successor-v2/operative/neural049_instance.py",
+  "installed_interface": "constructor/neural049_instance.py",
+  "scope": {
+    "people": 12,
+    "days": 55,
+    "parent_members": 70,
+    "archive_members": 137,
+    "active_members": 109,
+    "ordered_contexts": 22,
+    "build_missing_requirements": 27,
+    "original_execution_gates": 20,
+    "portable_operation_requirements": 7,
+    "cli_actions": 17,
+    "metadata_stage_actions": 14
+  },
+  "primitive_records": {
+    "pin": {
+      "exact_fields": [
+        "bytes",
+        "sha256"
+      ],
+      "constraints": [
+        "bytes: ordinary integer >=0, Boolean excluded",
+        "sha256: 64 lowercase hexadecimal characters"
+      ]
+    },
+    "descriptor": {
+      "exact_fields": [
+        "path",
+        "pin"
+      ],
+      "constraints": [
+        "Path domain is specified at each use; no inferred rebasing.",
+        "Stage metadata descriptors: canonical absolute .json path and pin. Original evidence can be explicitly relative."
+      ]
+    },
+    "unresolved_slot": {
+      "exact_fields": [
+        "name",
+        "status",
+        "reason",
+        "role"
+      ],
+      "constraints": [
+        "status=missing",
+        "Nonempty literal reason; no successful evidence placeholder."
+      ]
+    },
+    "constructor_io": {
+      "exact_fields": [
+        "origin",
+        "deadline",
+        "read_cap",
+        "write_cap",
+        "live_cap"
+      ],
+      "constraints": [
+        "Finite original origin < deadline; positive ordinary integer caps; no budget reset."
+      ]
+    },
+    "construction_limits": {
+      "exact_fields": [
+        "read_cap",
+        "write_cap",
+        "live_cap"
+      ],
+      "constraints": [
+        "Exactly equal to constructor IO selected caps."
+      ]
+    },
+    "original_clock": {
+      "exact_fields": [
+        "origin",
+        "production_end",
+        "observation_end",
+        "readback_end"
+      ],
+      "constraints": [
+        "Strictly increasing finite ordinary numbers; inherited origin."
+      ]
+    },
+    "roots": {
+      "exact_fields": [
+        "source",
+        "packet",
+        "targets",
+        "reference",
+        "output",
+        "operator",
+        "observation",
+        "secrets",
+        "store"
+      ],
+      "constraints": [
+        "source=instance/parent",
+        "targets=packet/private",
+        "Other roots pairwise disjoint and outside instance",
+        "P is strictly under operator"
+      ]
+    },
+    "launcher": {
+      "exact_fields": [
+        "python",
+        "context",
+        "operation_live_bytes"
+      ],
+      "constraints": [
+        "Canonical absolute selected interpreter; exact prior observer selection.",
+        "operation_live_bytes=null for prepare; selected positive integer for bank."
+      ]
+    },
+    "bootstrap_context": {
+      "exact_fields": [
+        "origin",
+        "deadline",
+        "read_cap",
+        "read_reserved",
+        "read_observed",
+        "attempted_paths"
+      ],
+      "constraints": [
+        "Same outer clocks.",
+        "read_cap=source_read_cap-bootstrap_bytes-parent_manifest_bytes-2 EOF bytes.",
+        "Initial counters=0 and paths=[] within the separately reserved bootstrap subcontext; prior outer capture charges retained."
+      ]
+    },
+    "preparation_operation_context": {
+      "exact_fields": [
+        "origin",
+        "deadline",
+        "limits"
+      ]
+    },
+    "bank_operation_context": {
+      "exact_fields": [
+        "origin",
+        "deadline",
+        "read_cap",
+        "write_cap"
+      ]
+    },
+    "preparation_limits": {
+      "exact_fields": [
+        "read_bytes",
+        "write_bytes",
+        "array_bytes",
+        "metadata_bytes",
+        "files",
+        "array_elements",
+        "live_bytes",
+        "rows",
+        "channels",
+        "source_files",
+        "output_files"
+      ],
+      "constraints": [
+        "Positive ordinary integers; files=output_files."
+      ]
+    },
+    "central_limits": {
+      "exact_fields": [
+        "read_bytes",
+        "write_bytes",
+        "host_memory_bytes",
+        "parent_retained_storage_bytes",
+        "free_floor_bytes",
+        "qualification_read_bytes",
+        "validation_read_bytes",
+        "validation_cpu_ns",
+        "validation_numeric"
+      ]
+    },
+    "validation_numeric": {
+      "exact_fields": [
+        "allocation_bytes",
+        "elements",
+        "serialized_bytes",
+        "files",
+        "work"
+      ],
+      "constraints": [
+        "Positive ordinary integers."
+      ]
+    },
+    "packet_operand": {
+      "exact_fields": [
+        "root",
+        "complete"
+      ],
+      "constraints": [
+        "root is the fixed packet root; complete descriptor uses relative path COMPLETE.json and actual pin."
+      ]
+    },
+    "bank_operand": {
+      "exact_fields": [
+        "manifest",
+        "manifest_kernel",
+        "qualification"
+      ],
+      "constraints": [
+        "manifest path=STORE.json and actual pin; manifest_kernel is actual nonempty measurement map.",
+        "qualification path is the preselected absolute operator JSON slot.",
+        "Only request-execution base payload admits qualification.pin=null; never executable."
+      ]
+    },
+    "bank_resource_selection": {
+      "exact_fields": [
+        "context",
+        "evidence_cap",
+        "copy_bytes",
+        "kernel_read_per_file",
+        "kernel_write_per_file",
+        "array_cap",
+        "manifest_cap",
+        "kernel_read_manifest",
+        "kernel_write_manifest"
+      ]
+    },
+    "execution_resource_selection": {
+      "exact_fields": [
+        "resources",
+        "profiles",
+        "provider_profiles",
+        "episode_limits",
+        "preparation_context"
+      ]
+    },
+    "resource_selection": {
+      "exact_fields": [
+        "preparation",
+        "bank",
+        "execution"
+      ],
+      "constraints": [
+        "Exact typed copies of preparation limits, bank resource selection, and execution resource selection."
+      ]
+    },
+    "observer_selection": {
+      "exact_fields": [
+        "host_python",
+        "host_environment",
+        "native_public",
+        "native_private",
+        "central",
+        "prepare_launcher",
+        "bank_launcher",
+        "execution_bank_qualification_path"
+      ],
+      "constraints": [
+        "First four equal execution fields; central exact selected deadlines/limits/other reserve.",
+        "Fixed bank proof slot under operator; no speculative proof bytes."
+      ]
+    },
+    "central_observer_selection": {
+      "exact_fields": [
+        "central_observation_deadline",
+        "central_validation_deadline",
+        "limits",
+        "other_reserve_bytes"
+      ]
+    },
+    "central_action_selection": {
+      "exact_fields": [
+        "operation",
+        "condition",
+        "output",
+        "review_slot",
+        "central_observation_deadline",
+        "central_validation_deadline",
+        "limits",
+        "other_reserve_bytes",
+        "collection",
+        "collection_completion",
+        "grading_selection"
+      ]
+    },
+    "route_verification": {
+      "exact_fields": [
+        "status",
+        "receipt_path",
+        "receipt_sha256",
+        "qualification_path",
+        "qualification_sha256",
+        "source_binding_path",
+        "source_binding_sha256"
+      ],
+      "constraints": [
+        "Genuine passed evidence, each exact direct Q file."
+      ]
+    },
+    "bank_build_qualification": {
+      "exact_fields": [
+        "qualified",
+        "realm",
+        "selection",
+        "source_manifest",
+        "issuer",
+        "evidence",
+        "backend",
+        "exclusive_namespace",
+        "source_completion",
+        "full_resource_plan",
+        "external_observer"
+      ],
+      "constraints": [
+        "No schema field in this original exact record.",
+        "Independent actual external evidence; five genuine findings."
+      ]
+    }
+  },
+  "schemas": [
+    {
+      "schema_literal": "neural049_portable_build_profile_v1",
+      "exact_fields": [
+        "schema",
+        "instance_name",
+        "root",
+        "external_operator_metadata_root",
+        "selected_profile",
+        "requested_modules",
+        "cache_preference",
+        "unresolved",
+        "construction_limits"
+      ],
+      "constraints": [
+        "selected_profile=curated_retrospective_full_v1",
+        "Exactly all27 release requirement names, status=missing",
+        "Modules: core; core,T1; core,D; core,T1,D in that order."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_bind_route_v1",
+      "exact_fields": [
+        "schema",
+        "registry_state",
+        "name",
+        "routes",
+        "evidence"
+      ],
+      "constraints": [
+        "routes={default,named,grade}; grade=null or {program,scoring}",
+        "evidence is a 1..32 map of named JSON copies to actual external absolute descriptors."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_activate_route_v1",
+      "exact_fields": [
+        "schema",
+        "registry_state",
+        "transaction"
+      ],
+      "constraints": [
+        "Exact prepared transaction in V; no automatic recovery/retry."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_stage_input_v1",
+      "exact_fields": [
+        "schema",
+        "action",
+        "registry_state",
+        "name",
+        "parameters"
+      ],
+      "constraints": [
+        "Exactly the selected action and action parameter set.",
+        "name regex [A-Za-z0-9_-]{1,64}; fresh P/action--name."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_run_profile_v1",
+      "exact_fields": [
+        "schema",
+        "original_clock",
+        "modules",
+        "cache",
+        "roots",
+        "execution_fields",
+        "preparation_fields",
+        "bank_fields",
+        "resource_selection",
+        "observer_selection",
+        "operator_identity",
+        "unresolved"
+      ],
+      "constraints": [
+        "Resolved selection fixes all stable maps; unresolved selection may retain maps/null and cannot bind authorities."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_run_selection_v1",
+      "exact_fields": [
+        "schema",
+        "task_id",
+        "profile",
+        "instance",
+        "original_clock",
+        "modules",
+        "cache",
+        "roots",
+        "execution_fields",
+        "preparation_fields",
+        "bank_fields",
+        "resource_selection",
+        "observer_selection",
+        "operator_identity",
+        "unresolved",
+        "status"
+      ],
+      "constraints": [
+        "Generated from run profile; status=selected_not_qualified."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_authority_request_v1",
+      "exact_fields": [
+        "schema",
+        "kind",
+        "run",
+        "source",
+        "payload",
+        "payload_pin"
+      ],
+      "constraints": [
+        "kind=prepare|bank|execution",
+        "payload excludes only the proper proof field; original no-newline hash.",
+        "Request itself is not executable."
+      ]
+    },
+    {
+      "schema_literal": "neural049_prepare_authority_v1",
+      "exact_fields": [
+        "schema",
+        "status",
+        "origin",
+        "deadline",
+        "limits",
+        "source_root",
+        "output_root",
+        "metadata_root",
+        "protected_roots",
+        "source_closure",
+        "roster",
+        "sources",
+        "axes",
+        "environment",
+        "module_D",
+        "qualifications"
+      ],
+      "constraints": [
+        "Request/run preparation_fields omit qualifications.",
+        "Original source/roster/evidence descriptors relative to P.",
+        "Complete55-source roster and all12 channel unions.",
+        "Bound authority published only at fresh P/prepare-authority-name.json."
+      ]
+    },
+    {
+      "schema_literal": "neural049_independent_qualification_v1",
+      "exact_fields": [
+        "schema",
+        "status",
+        "check",
+        "selection",
+        "independent_producer",
+        "evidence",
+        "external_completion"
+      ],
+      "constraints": [
+        "Preparation proof: genuine independently qualified check; evidence1..32 and completion relative to P."
+      ]
+    },
+    {
+      "schema_literal": "neural049_bank_build_authority_v1",
+      "exact_fields": [
+        "schema",
+        "active",
+        "source_manifest",
+        "backend",
+        "context",
+        "operator_identity",
+        "evidence_cap",
+        "preparation_context",
+        "packet",
+        "copy_bytes",
+        "root",
+        "packet_root",
+        "source_root",
+        "output_root",
+        "operator_root",
+        "secrets_root",
+        "kernel_read_per_file",
+        "kernel_write_per_file",
+        "array_cap",
+        "manifest_cap",
+        "kernel_read_manifest",
+        "kernel_write_manifest",
+        "qualification"
+      ],
+      "constraints": [
+        "Request omits qualification; run bank_fields additionally omit packet.",
+        "backend=linux-x86_64-fsverity-sha256-4096-v1; no backend substitution."
+      ]
+    },
+    {
+      "schema_literal": "neural049_execution_authority_v1",
+      "exact_fields": [
+        "schema",
+        "active",
+        "task_id",
+        "profile",
+        "source_manifest",
+        "modules",
+        "cache",
+        "roots",
+        "clock",
+        "resources",
+        "profiles",
+        "provider_profiles",
+        "episode_limits",
+        "native_public",
+        "native_private",
+        "grading",
+        "method_admissions",
+        "operator_identity",
+        "packet",
+        "bank",
+        "preparation_context",
+        "provider",
+        "host_python",
+        "host_environment",
+        "actor_environment_inventory",
+        "reference_tolerance",
+        "seed_contract",
+        "numerical_contract",
+        "base_generation",
+        "numerical_environments",
+        "qualifications"
+      ],
+      "constraints": [
+        "Request omits qualifications; run execution_fields additionally omit packet and bank.",
+        "grading={selected:false} before late grading; all original configuration predicates remain required."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_bank_qualification_request_v1",
+      "exact_fields": [
+        "schema",
+        "run",
+        "source",
+        "base_payload",
+        "bank_selection",
+        "bank",
+        "proof_path",
+        "required_proof_schema",
+        "status",
+        "executable_authority",
+        "general_qualification_requests_emitted"
+      ],
+      "constraints": [
+        "First pass only; status=bank_prequalification_only_not_executable; both flags false."
+      ]
+    },
+    {
+      "schema_literal": "neural049_bank_qualification_v2",
+      "exact_fields": [
+        "schema",
+        "qualified",
+        "realm",
+        "issuer",
+        "selection",
+        "bank",
+        "evidence",
+        "natural_build_closure",
+        "kernel_enforcement",
+        "physical_namespace",
+        "individual_mount_custody",
+        "complete_packet_join"
+      ],
+      "constraints": [
+        "Separately issued actual bank-consumption proof; selection is the bank-domain pin, not full main selection.",
+        "Evidence uses original relative paths below operator."
+      ]
+    },
+    {
+      "schema_literal": "neural049_actual_qualification_v1",
+      "exact_fields": [
+        "schema",
+        "qualified",
+        "realm",
+        "issuer",
+        "kind",
+        "task_id",
+        "profile",
+        "selection",
+        "source_manifest",
+        "evidence"
+      ],
+      "constraints": [
+        "Actual independently issued general execution proof; evidence relative to operator; exact full main selection."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_stage_context_v1",
+      "exact_fields": [
+        "schema",
+        "operation",
+        "origin",
+        "deadline",
+        "source_read_cap",
+        "request_read_cap",
+        "outer_read_cap",
+        "outer_write_cap",
+        "outer_live_cap",
+        "failure_write_reserve",
+        "operation_context"
+      ],
+      "constraints": [
+        "operation=prepare|bank; unchanged origin/readback_end; current16*S write/80*S live formulas."
+      ]
+    },
+    {
+      "schema_literal": "neural049_preparation_worker_request_v1",
+      "exact_fields": [
+        "schema",
+        "operation",
+        "authority_path",
+        "authority_pin"
+      ],
+      "constraints": [
+        "operation=prepare; original worker request."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_bank_stage_request_v1",
+      "exact_fields": [
+        "schema",
+        "authority",
+        "source_manifest",
+        "operation_live_bytes"
+      ],
+      "constraints": [
+        "Separate launcher-only positive bank live bound, not an original bank-context field."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_stage_command_v1",
+      "exact_fields": [
+        "schema",
+        "instance",
+        "operation",
+        "argv",
+        "cwd",
+        "launcher",
+        "request",
+        "context",
+        "status",
+        "own_future_exit_not_self_certified"
+      ],
+      "constraints": [
+        "Generated command only; external launch/exit observation required."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_external_operation_completion_v1",
+      "exact_fields": [
+        "schema",
+        "issuer",
+        "realm",
+        "instance",
+        "source_manifest",
+        "run",
+        "kind",
+        "result",
+        "natural_exit",
+        "exit_code",
+        "streams_complete",
+        "capture_completed",
+        "provisional",
+        "original_origin",
+        "evidence"
+      ],
+      "constraints": [
+        "Independently issued after actual prepare/bank process closure; fixed result COMPLETE.json; no constructor-issued witness."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_request_v1",
+      "exact_fields": [
+        "schema",
+        "task_id",
+        "profile",
+        "instance_declaration",
+        "central_source",
+        "parent_source",
+        "source_freeze",
+        "registry",
+        "run",
+        "authority",
+        "operation",
+        "condition",
+        "program",
+        "output",
+        "review_slot",
+        "original_origin",
+        "parent_clock",
+        "central_observation_deadline",
+        "central_validation_deadline",
+        "selected_modules",
+        "cache",
+        "limits",
+        "other_reserve_bytes"
+      ],
+      "constraints": [
+        "Three portable clocks must already be finite floats before this record is identified; preserve parent_clock separately."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_request_approval_v1",
+      "exact_fields": [
+        "schema",
+        "issuer",
+        "realm",
+        "approved",
+        "instance",
+        "request",
+        "source_freeze",
+        "evidence"
+      ],
+      "constraints": [
+        "Actual protected issuer approval of the exact request; not synthesized by bind-request."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_review_plan_v1",
+      "exact_fields": [
+        "schema",
+        "request",
+        "review",
+        "status",
+        "request_approval_and_central_qualification_absent"
+      ],
+      "constraints": [
+        "Generated selected_not_qualified plan; review has instance_request=null until exact request/approval pair is joined."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_request_bundle_v1",
+      "exact_fields": [
+        "schema",
+        "request",
+        "approval"
+      ],
+      "constraints": []
+    },
+    {
+      "schema_literal": "neural049_portable_central_review_v1",
+      "exact_fields": [
+        "schema",
+        "task_id",
+        "selected",
+        "operation",
+        "panel",
+        "condition",
+        "selected_modules",
+        "cache",
+        "central_source",
+        "parent_source",
+        "registry",
+        "authority",
+        "instance_request",
+        "instance_declaration",
+        "original_origin",
+        "central_observation_deadline",
+        "central_validation_deadline",
+        "other_reserve_bytes",
+        "limits",
+        "collection",
+        "collection_completion",
+        "grading_selection",
+        "roots",
+        "qualification"
+      ],
+      "constraints": [
+        "Final record only at the previously selected direct R slot; <=32768 B.",
+        "Plan review omits qualification; issuer hashes full review without qualification using portable newline encoding."
+      ]
+    },
+    {
+      "schema_literal": "neural049_actual_central_qualification_v1",
+      "exact_fields": [
+        "schema",
+        "realm",
+        "qualified",
+        "issuer",
+        "task_id",
+        "central_source",
+        "parent_source",
+        "selection",
+        "authority",
+        "original_origin",
+        "findings",
+        "evidence"
+      ],
+      "constraints": [
+        "Eight actual findings; independent issuer and authentic evidence required."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_review_approvals_v1",
+      "exact_fields": [
+        "schema",
+        "instance",
+        "issuer",
+        "source_freeze",
+        "entries",
+        "evidence_set"
+      ],
+      "constraints": [
+        "Fixed R/APPROVAL_REGISTRY.json; 1..32 entries, exactly one selected match."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_approval_evidence_set_v1",
+      "exact_fields": [
+        "schema",
+        "instance",
+        "issuer",
+        "realm",
+        "approved_entries_pin",
+        "evidence",
+        "independent_producer"
+      ],
+      "constraints": [
+        "Binds complete entries using portable newline encoding; not just matching entry."
+      ]
+    },
+    {
+      "schema_literal": "neural049_external_central_completion_v1",
+      "exact_fields": [
+        "schema",
+        "realm",
+        "issuer",
+        "central_source",
+        "parent_source",
+        "authority",
+        "collection",
+        "review",
+        "provisional",
+        "exit_code",
+        "natural_exit",
+        "streams_complete",
+        "observed_after_central_return",
+        "completed_at",
+        "argv",
+        "cwd",
+        "capture_artifacts"
+      ],
+      "constraints": [
+        "Genuine external natural-zero process closure after return, before original readback_end; exact intent joins."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_collection_completion_bundle_v1",
+      "exact_fields": [
+        "schema",
+        "instance",
+        "run",
+        "authority",
+        "collection",
+        "completion",
+        "observation",
+        "nested_caller",
+        "original_origin",
+        "observed_completion_at",
+        "status"
+      ],
+      "constraints": []
+    },
+    {
+      "schema_literal": "neural049_late_grading_authority_v1",
+      "exact_fields": [
+        "schema",
+        "active",
+        "issuer",
+        "selection",
+        "source_manifest",
+        "original_origin",
+        "observation",
+        "external_completion",
+        "output"
+      ],
+      "constraints": [
+        "Independently issued original declaration; actual outer-completion evidence required; score output direct leaf of observation root."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_late_grade_request_v1",
+      "exact_fields": [
+        "schema",
+        "run",
+        "authority",
+        "collection_bundle",
+        "payload",
+        "payload_pin",
+        "status"
+      ],
+      "constraints": [
+        "Request pin uses portable newline encoding; underlying main selection preserves original no-newline encoding."
+      ]
+    },
+    {
+      "schema_literal": "neural049_portable_stage_result_v1",
+      "exact_fields": [
+        "schema",
+        "action",
+        "status",
+        "instance",
+        "registry_state",
+        "outputs",
+        "costs",
+        "automatic_retry"
+      ],
+      "constraints": [
+        "Metadata result only; external observed CLI exit still required."
+      ]
+    }
+  ],
+  "stage_parameters": {
+    "select-run": [
+      "profile"
+    ],
+    "request-prepare": [
+      "run",
+      "payload"
+    ],
+    "bind-prepare": [
+      "request",
+      "qualifications",
+      "launcher"
+    ],
+    "request-bank": [
+      "run",
+      "payload",
+      "preparation_completion"
+    ],
+    "bind-bank": [
+      "request",
+      "qualification",
+      "launcher"
+    ],
+    "request-execution": [
+      "run",
+      "payload",
+      "preparation_completion",
+      "bank_completion",
+      "bank_qualification"
+    ],
+    "bind-execution": [
+      "request",
+      "qualifications"
+    ],
+    "request-review": [
+      "run",
+      "authority",
+      "selection"
+    ],
+    "bind-request": [
+      "request",
+      "approval"
+    ],
+    "bind-review": [
+      "review_plan",
+      "request_bundle",
+      "qualification"
+    ],
+    "admit-approved-review": [
+      "review",
+      "approval_registry"
+    ],
+    "bind-collection-completion": [
+      "run",
+      "authority",
+      "collection",
+      "completion"
+    ],
+    "request-late-grade": [
+      "run",
+      "authority",
+      "collection_bundle",
+      "payload"
+    ],
+    "bind-late-grade": [
+      "request",
+      "declaration"
+    ]
+  },
+  "preparation_qualification_names": [
+    "source_membership",
+    "cue_target_provenance",
+    "clock_grid",
+    "channel_axis",
+    "availability",
+    "upstream_retrospective",
+    "license_privacy",
+    "environment",
+    "physical_roots",
+    "resources"
+  ],
+  "original_execution_gate_names": [
+    "source_membership",
+    "event_census",
+    "cue_target_provenance",
+    "clock",
+    "channel_identity",
+    "mask_semantics",
+    "upstream_exposure",
+    "licensing_privacy",
+    "mathematics",
+    "independent_reference_agreement",
+    "reference_competence",
+    "resource_feasibility",
+    "mode_semantics",
+    "physical_isolation",
+    "runtime_completion",
+    "target_last_scoring",
+    "tool_custody",
+    "assignment_feasibility",
+    "reference_cache_custody",
+    "root_selection"
+  ],
+  "portable_operation_requirement_names": [
+    "external_bootstrap_trust",
+    "runtime_source_route",
+    "protected_issuer_custody",
+    "preparation_completion",
+    "reference_bank_completion",
+    "operator_environment",
+    "final_external_scoring_completion"
+  ],
+  "central_findings": [
+    "complete_panel",
+    "inherited_clock",
+    "central_resources",
+    "public_array_validation_resources",
+    "actual_caller_observation",
+    "physical_root_custody",
+    "interpreter_environment",
+    "protected_scoring_boundary"
+  ],
+  "final_approval_entry": {
+    "exact_fields": [
+      "review",
+      "request",
+      "registry",
+      "actual_argv",
+      "cwd",
+      "environment_pin",
+      "approved",
+      "evidence"
+    ]
+  },
+  "source_clauses": {
+    "build_profile": "constructor/neural049_instance.py:_profile",
+    "stable_run": "constructor/neural049_instance.py:_S_RUN_FIELDS,_s_selected_fields,_s_stable",
+    "stages": "constructor/neural049_instance.py:_S_ACTIONS,_s_assemble_stage",
+    "bank_chronology": "constructor/neural049_instance.py:_s_execution_request_payload; parent/program/authority.py:bank_selection_pin",
+    "clock_projection": "constructor/neural049_instance.py:_s_portable_clock_projection,_s_require_portable_clocks",
+    "original_preparation": "parent/preparation/contracts.py; parent/preparation/authority.py",
+    "original_execution": "parent/program/contracts.py; parent/program/configuration.py",
+    "launcher": "shared/stage_launcher.py:admit_context,execute; constructor/neural049_instance.py:_s_launch_bounds",
+    "reference_scope": "context/21-REFERENCE_SPEC.md; context/20-NUMERICAL_CONTRACTS.md; context/22-RESOURCE_CONTRACT.md"
+  },
+  "limits": [
+    "Static index only; not a complete JSON Schema or execution validator.",
+    "Original nested numerical/provider/source/method/environment schemas are not weakened or replaced by this index.",
+    "No actual data, source admission, operator independence, runtime portability, reference competence, external process closure, or scientific qualification is supplied."
+  ]
+}
