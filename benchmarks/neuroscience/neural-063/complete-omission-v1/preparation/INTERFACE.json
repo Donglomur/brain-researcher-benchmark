@@ -1,0 +1,470 @@
+{
+  "schema": "neural063_preparation_interface_v2",
+  "entrypoint": "preparation.stages.run",
+  "stage_input_keys": {
+    "S00": [
+      "source_roster",
+      "provider_manifest",
+      "source_provenance",
+      "experiment_metadata",
+      "roi_metadata"
+    ],
+    "S01": [
+      "source_selection"
+    ],
+    "S02": [
+      "source_selection",
+      "source_sizes"
+    ],
+    "S03": [
+      "source_selection",
+      "source_inventory"
+    ],
+    "S04": [
+      "source_selection",
+      "native_metadata"
+    ],
+    "S05": [
+      "source_selection",
+      "source_inventory",
+      "schedule_bank"
+    ],
+    "S06": [
+      "source_selection",
+      "projected_rows",
+      "projection_census"
+    ]
+  },
+  "input_roles": {
+    "source_roster": "source_roster",
+    "provider_manifest": "provider_manifest",
+    "source_provenance": "source_provenance",
+    "experiment_metadata": "experiment_metadata",
+    "roi_metadata": "roi_metadata",
+    "source_selection": "source_selection",
+    "source_sizes": "source_sizes",
+    "source_inventory": "source_inventory",
+    "native_metadata": "native_metadata",
+    "schedule_bank": "schedule_bank",
+    "projected_rows": "projected_rows",
+    "projection_census": "projection_census"
+  },
+  "principal_output_keys": {
+    "S00": [
+      "source_selection"
+    ],
+    "S01": [
+      "source_sizes"
+    ],
+    "S02": [
+      "source_inventory"
+    ],
+    "S03": [
+      "native_metadata"
+    ],
+    "S04": [
+      "schedule_bank"
+    ],
+    "S05": [
+      "projected_rows",
+      "projection_census"
+    ],
+    "S06": [
+      "fit_rows",
+      "validation_rows",
+      "fit_T",
+      "fit_N",
+      "validation_T",
+      "validation_N",
+      "query_T",
+      "query_N",
+      "query_index",
+      "query_targets",
+      "fit_scale",
+      "support_census",
+      "private_lineage",
+      "packet_binding"
+    ]
+  },
+  "stage_outputs": {
+    "S00": [
+      {
+        "key": "source_selection",
+        "role": "source_selection",
+        "schema": "neural063_source_selection_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "preparation_failure",
+        "role": "preparation_failure",
+        "schema": "neural063_preparation_failure_v2",
+        "condition": "failed stage only"
+      }
+    ],
+    "S01": [
+      {
+        "key": "source_sizes",
+        "role": "source_sizes",
+        "schema": "neural063_source_sizes_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key_pattern": "head_{experiment}_{attempt}.json",
+        "role": "source_transport_attempt",
+        "schema": "neural063_transport_attempt_v2",
+        "condition": "each attempted object or produced intermediate"
+      },
+      {
+        "key": "preparation_failure",
+        "role": "preparation_failure",
+        "schema": "neural063_preparation_failure_v2",
+        "condition": "failed stage only"
+      }
+    ],
+    "S02": [
+      {
+        "key": "source_inventory",
+        "role": "source_inventory",
+        "schema": "neural063_source_inventory_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key_pattern": "get_{experiment}_{attempt}.json",
+        "role": "source_transport_attempt",
+        "schema": "neural063_transport_attempt_v2",
+        "condition": "each attempted object or produced intermediate"
+      },
+      {
+        "key_pattern": "source_{experiment}_attempt_{attempt}.nwb",
+        "role": "native_source",
+        "schema": "NWB native binary",
+        "condition": "each attempted object or produced intermediate"
+      },
+      {
+        "key": "preparation_failure",
+        "role": "preparation_failure",
+        "schema": "neural063_preparation_failure_v2",
+        "condition": "failed stage only"
+      },
+      {
+        "key_pattern": "source_{experiment}_attempt_{attempt}.nwb",
+        "role": "source_partial",
+        "schema": "retained incomplete NWB binary",
+        "condition": "failed GET with known streamed partial identity only"
+      }
+    ],
+    "S03": [
+      {
+        "key": "native_metadata",
+        "role": "native_metadata",
+        "schema": "neural063_native_metadata_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key_pattern": "native_{experiment}.json",
+        "role": "native_experiment_metadata",
+        "schema": "neural063_native_experiment_v2",
+        "condition": "each attempted object or produced intermediate"
+      },
+      {
+        "key": "preparation_failure",
+        "role": "preparation_failure",
+        "schema": "neural063_preparation_failure_v2",
+        "condition": "failed stage only"
+      }
+    ],
+    "S04": [
+      {
+        "key": "schedule_bank",
+        "role": "schedule_bank",
+        "schema": "neural063_schedule_bank_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key_pattern": "session_{session}.json",
+        "role": "session_schedule",
+        "schema": "neural063_session_schedule_v2",
+        "condition": "each attempted object or produced intermediate"
+      },
+      {
+        "key_pattern": "support_{experiment}.json",
+        "role": "experiment_support",
+        "schema": "neural063_experiment_support_v2",
+        "condition": "each attempted object or produced intermediate"
+      },
+      {
+        "key": "preparation_failure",
+        "role": "preparation_failure",
+        "schema": "neural063_preparation_failure_v2",
+        "condition": "failed stage only"
+      }
+    ],
+    "S05": [
+      {
+        "key": "projected_rows",
+        "role": "projected_rows",
+        "schema": "neural063_projected_rows_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "projection_census",
+        "role": "projection_census",
+        "schema": "neural063_projection_census_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key_pattern": "projection_{experiment}.json",
+        "role": "projection_experiment",
+        "schema": "neural063_projection_experiment_v2",
+        "condition": "each attempted object or produced intermediate"
+      },
+      {
+        "key": "preparation_failure",
+        "role": "preparation_failure",
+        "schema": "neural063_preparation_failure_v2",
+        "condition": "failed stage only"
+      }
+    ],
+    "S06": [
+      {
+        "key": "fit_rows",
+        "role": "fit_rows",
+        "schema": "neural063_rows_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "validation_rows",
+        "role": "validation_rows",
+        "schema": "neural063_rows_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "fit_T",
+        "role": "fit_T",
+        "schema": "neural063_rows_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "fit_N",
+        "role": "fit_N",
+        "schema": "neural063_rows_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "validation_T",
+        "role": "validation_T",
+        "schema": "neural063_rows_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "validation_N",
+        "role": "validation_N",
+        "schema": "neural063_rows_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "query_T",
+        "role": "query_T",
+        "schema": "neural063_rows_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "query_N",
+        "role": "query_N",
+        "schema": "neural063_rows_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "query_index",
+        "role": "query_index",
+        "schema": "neural063_query_index_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "query_targets",
+        "role": "query_targets",
+        "schema": "neural063_query_targets_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "fit_scale",
+        "role": "fit_scale",
+        "schema": "neural063_fit_scale_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "support_census",
+        "role": "support_census",
+        "schema": "neural063_support_census_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "private_lineage",
+        "role": "private_lineage",
+        "schema": "neural063_private_lineage_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "packet_binding",
+        "role": "packet_binding",
+        "schema": "neural063_packet_binding_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "preparation_failure",
+        "role": "preparation_failure",
+        "schema": "neural063_preparation_failure_v2",
+        "condition": "failed stage only"
+      }
+    ]
+  },
+  "stage_output_descriptors": {
+    "S00": {
+      "source_selection": {
+        "role": "source_selection",
+        "schema": "neural063_source_selection_v2"
+      }
+    },
+    "S01": {
+      "source_sizes": {
+        "role": "source_sizes",
+        "schema": "neural063_source_sizes_v2"
+      }
+    },
+    "S02": {
+      "source_inventory": {
+        "role": "source_inventory",
+        "schema": "neural063_source_inventory_v2"
+      }
+    },
+    "S03": {
+      "native_metadata": {
+        "role": "native_metadata",
+        "schema": "neural063_native_metadata_v2"
+      }
+    },
+    "S04": {
+      "schedule_bank": {
+        "role": "schedule_bank",
+        "schema": "neural063_schedule_bank_v2"
+      }
+    },
+    "S05": {
+      "projected_rows": {
+        "role": "projected_rows",
+        "schema": "neural063_projected_rows_v2"
+      },
+      "projection_census": {
+        "role": "projection_census",
+        "schema": "neural063_projection_census_v2"
+      }
+    },
+    "S06": {
+      "fit_rows": {
+        "role": "fit_rows",
+        "schema": "neural063_rows_v2"
+      },
+      "validation_rows": {
+        "role": "validation_rows",
+        "schema": "neural063_rows_v2"
+      },
+      "fit_T": {
+        "role": "fit_T",
+        "schema": "neural063_rows_v2"
+      },
+      "fit_N": {
+        "role": "fit_N",
+        "schema": "neural063_rows_v2"
+      },
+      "validation_T": {
+        "role": "validation_T",
+        "schema": "neural063_rows_v2"
+      },
+      "validation_N": {
+        "role": "validation_N",
+        "schema": "neural063_rows_v2"
+      },
+      "query_T": {
+        "role": "query_T",
+        "schema": "neural063_rows_v2"
+      },
+      "query_N": {
+        "role": "query_N",
+        "schema": "neural063_rows_v2"
+      },
+      "query_index": {
+        "role": "query_index",
+        "schema": "neural063_query_index_v2"
+      },
+      "query_targets": {
+        "role": "query_targets",
+        "schema": "neural063_query_targets_v2"
+      },
+      "fit_scale": {
+        "role": "fit_scale",
+        "schema": "neural063_fit_scale_v2"
+      },
+      "support_census": {
+        "role": "support_census",
+        "schema": "neural063_support_census_v2"
+      },
+      "private_lineage": {
+        "role": "private_lineage",
+        "schema": "neural063_private_lineage_v2"
+      },
+      "packet_binding": {
+        "role": "packet_binding",
+        "schema": "neural063_packet_binding_v2"
+      }
+    }
+  },
+  "construction_status": "source implemented; authentic/native/source/empirical gates unexecuted",
+  "unknown_actuals": {
+    "source_bytes": null,
+    "events": null,
+    "native_objects_opened": 0,
+    "source_requests": 0
+  },
+  "parameters": {
+    "S00": {
+      "reuse_sources": "optional exact operator native_source Artifact descriptors keyed by fixed source experiment; no body opened in S00"
+    },
+    "S01": {
+      "header_transport_bytes": "positive signed bound; conservative 7000000-byte reservation per HEAD attempt",
+      "working_reserve_bytes": "positive full-panel working allocation",
+      "receipt_reserve_bytes": "positive complete receipt allocation",
+      "retained_storage_bytes": "positive total ceiling including existing files and retained failures"
+    },
+    "S02": {
+      "body_transport_bytes": "positive bound at least3*B",
+      "header_transport_bytes": "positive bound at least1936*3*7000000",
+      "working_reserve_bytes": "positive complete allocation",
+      "receipt_reserve_bytes": "positive complete allocation",
+      "retained_storage_bytes": "positive full-panel total ceiling"
+    }
+  },
+  "native_schema": "Exact declared captured adapter schema only. Unsupported authentic provider/native metadata fails; no coercion/fallback/source substitution.",
+  "candidate_data_access": "Whole query banks and source census operator-only. Runtime must project one event into fresh capsule. FIT/VAL T/N independently serialized with opaque grouping; no source ID or baseline.",
+  "stage_parameters": {
+    "S00": {
+      "reuse_sources": "optional exact operator native_source Artifact descriptors keyed by fixed source experiment; no body opened in S00"
+    },
+    "S01": {
+      "header_transport_bytes": "positive signed bound; conservative 7000000-byte reservation per HEAD attempt",
+      "working_reserve_bytes": "positive full-panel working allocation",
+      "receipt_reserve_bytes": "positive complete receipt allocation",
+      "retained_storage_bytes": "positive total ceiling including existing files and retained failures"
+    },
+    "S02": {
+      "body_transport_bytes": "positive bound at least3*B",
+      "header_transport_bytes": "positive bound at least1936*3*7000000",
+      "working_reserve_bytes": "positive complete allocation",
+      "receipt_reserve_bytes": "positive complete allocation",
+      "retained_storage_bytes": "positive full-panel total ceiling"
+    },
+    "S03": {},
+    "S04": {},
+    "S05": {},
+    "S06": {}
+  }
+}

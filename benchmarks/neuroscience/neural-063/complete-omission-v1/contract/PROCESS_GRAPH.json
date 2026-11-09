@@ -1,0 +1,1693 @@
+{
+  "schema": "neural063_complete_process_graph_v2",
+  "status": "design_only",
+  "node_count": 28,
+  "nodes": [
+    {
+      "id": "S00",
+      "depends_on": [],
+      "multiplicity": 1,
+      "actor": "trusted source custodian",
+      "inputs": [
+        "selected manifest, roster, metadata and pinned source receipts"
+      ],
+      "outputs": [
+        "source selection lock",
+        "all 1936 exact version/object/digest identities",
+        "107/703/1936/133066 metadata reconciliation"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "EXT_AUTH_S00",
+        "EXT_ALLOC_S00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {},
+      "completion_evidence_id": "DONE_S00",
+      "completion_gate_id": "G01",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "S01",
+      "depends_on": [
+        "S00"
+      ],
+      "multiplicity": 1936,
+      "actor": "trusted size planner",
+      "inputs": [
+        "exact versioned object identities"
+      ],
+      "outputs": [
+        "full version-specific byte census B=sum B_e",
+        "transport/failed-attempt receipts",
+        "complete source+working+receipt storage admission"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_S00",
+        "EXT_AUTH_S01",
+        "EXT_ALLOC_S01",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_S00": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_S01",
+      "completion_gate_id": "G02",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "S02",
+      "depends_on": [
+        "S01"
+      ],
+      "multiplicity": 1936,
+      "actor": "trusted acquirer",
+      "inputs": [
+        "versioned objects, approved byte census and retry policy"
+      ],
+      "outputs": [
+        "all 1936 complete immutable ordinary source objects",
+        "size/BLAKE2b/SHA256 and provenance receipts"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_S01",
+        "EXT_AUTH_S02",
+        "EXT_ALLOC_S02",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_S01": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_S02",
+      "completion_gate_id": "G03",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "S03",
+      "depends_on": [
+        "S02"
+      ],
+      "multiplicity": 1936,
+      "actor": "trusted native metadata reader",
+      "inputs": [
+        "authenticated same-open-FD sources",
+        "published ROI joins"
+      ],
+      "outputs": [
+        "complete native clocks, ROI table/region mapping, lineage/unit/schema census",
+        "canonical presentation table per experiment",
+        "native metadata failure dispositions"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_S02",
+        "EXT_AUTH_S03",
+        "EXT_ALLOC_S03",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_S02": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_S03",
+      "completion_gate_id": "G04",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "S04",
+      "depends_on": [
+        "S03"
+      ],
+      "multiplicity": 703,
+      "actor": "trusted schedule builder",
+      "inputs": [
+        "every plane presentation table in each session"
+      ],
+      "outputs": [
+        "pre-response session consensus and schedule",
+        "timing/thinning dispositions and counts",
+        "all native-bin support intervals"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_S03",
+        "EXT_AUTH_S04",
+        "EXT_ALLOC_S04",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_S03": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_S04",
+      "completion_gate_id": "G05",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "S05",
+      "depends_on": [
+        "S04"
+      ],
+      "multiplicity": 1936,
+      "actor": "trusted projector",
+      "inputs": [
+        "same authenticated sources, full published ROI columns, schedules/native support"
+      ],
+      "outputs": [
+        "12-bin history and 3-bin targets for every supported event",
+        "1936 source support dispositions",
+        "nonfinite/identity failure records"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_S04",
+        "EXT_AUTH_S05",
+        "EXT_ALLOC_S05",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_S04": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_S05",
+      "completion_gate_id": "G06",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "S06",
+      "depends_on": [
+        "S05"
+      ],
+      "multiplicity": 1,
+      "actor": "trusted packet builder",
+      "inputs": [
+        "full projected support and fixed mouse split"
+      ],
+      "outputs": [
+        "FIT-only hierarchical scale",
+        "public FIT/VAL grouped development views T/N",
+        "private query targets and hierarchy",
+        "query event views T/N",
+        "all-query interval/duplicate/privacy audit",
+        "immutable packet receipts"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_S05",
+        "EXT_AUTH_S06",
+        "EXT_ALLOC_S06",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_S05": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_S06",
+      "completion_gate_id": "G07",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "R00",
+      "depends_on": [
+        "S06"
+      ],
+      "multiplicity": 2,
+      "actor": "trusted reference builder",
+      "inputs": [
+        "FIT data in T/N view"
+      ],
+      "outputs": [
+        "FIT dictionaries, feature definitions/means/scales/weights for L/Q",
+        "exact dimensions and numerical resource admission"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_S06",
+        "EXT_AUTH_R00",
+        "EXT_ALLOC_R00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_S06": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_R00",
+      "completion_gate_id": "G08",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "R01",
+      "depends_on": [
+        "R00"
+      ],
+      "multiplicity": 28,
+      "actor": "trusted reference fitter",
+      "inputs": [
+        "FIT targets, scale, features, two bases x seven lambdas x two views"
+      ],
+      "outputs": [
+        "28 3-output coefficient bundles",
+        "28 fitting/resource/failure receipts"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_R00",
+        "EXT_AUTH_R01",
+        "EXT_ALLOC_R01",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_R00": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_R01",
+      "completion_gate_id": "G09",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "R02",
+      "depends_on": [
+        "R01"
+      ],
+      "multiplicity": 28,
+      "actor": "trusted validation evaluator",
+      "inputs": [
+        "all 28 fits and full 15-mouse validation packet"
+      ],
+      "outputs": [
+        "28 validation prediction/error tables",
+        "two selected FIT-only models",
+        "unchanged complete grid log"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_R01",
+        "EXT_AUTH_R02",
+        "EXT_ALLOC_R02",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_R01": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_R02",
+      "completion_gate_id": "G10",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "C00",
+      "depends_on": [
+        "S06"
+      ],
+      "multiplicity": 3,
+      "actor": "trusted control builder",
+      "inputs": [
+        "FIT mean weights/targets; T/N inputs"
+      ],
+      "outputs": [
+        "zero table (persistence alias)",
+        "FIT-mean table",
+        "N-only trend table"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_S06",
+        "EXT_AUTH_C00",
+        "EXT_ALLOC_C00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_S06": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_C00",
+      "completion_gate_id": "G11",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "R03",
+      "depends_on": [
+        "R02",
+        "C00"
+      ],
+      "multiplicity": 2,
+      "actor": "independent reference team/runtime",
+      "inputs": [
+        "selected definitions and complete FIT/validation packets",
+        "zero/FIT-mean/trend validation controls",
+        "COMPARISON_OUTCOMES.json"
+      ],
+      "outputs": [
+        "two independent selected SVD FIT/validation reconstructions",
+        "development-only numerical equivalence receipts",
+        "unchanged T/N validation empirical status records",
+        "pure view-matched reference tool boundary receipt; no query prediction/equivalence obligation"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_R02",
+        "DONE_C00",
+        "EXT_AUTH_R03",
+        "EXT_ALLOC_R03",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_R02": "required_prerequisite_complete",
+        "DONE_C00": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_R03",
+      "completion_gate_id": "G12D",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "C01",
+      "depends_on": [
+        "R02"
+      ],
+      "multiplicity": 5,
+      "actor": "trusted control fitter",
+      "inputs": [
+        "selected N basis/lambda, FIT histories/targets, five frozen permutations"
+      ],
+      "outputs": [
+        "five perturbed-fit bundles and complete validation predictions",
+        "all permutation and changed-weight/mouse support receipts, including unsupported statuses",
+        "all five technical job receipts"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_R02",
+        "EXT_AUTH_C01",
+        "EXT_ALLOC_C01",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_R02": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_C01",
+      "completion_gate_id": "G13D",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "RC00",
+      "depends_on": [
+        "R03",
+        "C01"
+      ],
+      "multiplicity": 1,
+      "actor": "trusted pre-query decision registrar",
+      "inputs": [
+        "all 28+2+5 completed development fit receipts and T/N empirical statuses"
+      ],
+      "outputs": [
+        "eligible_for_full_programme OR terminated_before_query_reference_unqualified; original statuses and costs retained"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_R03",
+        "DONE_C01",
+        "EXT_AUTH_RC00",
+        "EXT_ALLOC_RC00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_R03": "required_prerequisite_complete",
+        "DONE_C01": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_RC00",
+      "completion_gate_id": "G12_ROUTE",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "R04",
+      "depends_on": [
+        "RC00"
+      ],
+      "multiplicity": 2,
+      "actor": "trusted sealed reference predictor",
+      "inputs": [
+        "selected original references",
+        "query event inputs in T/N views"
+      ],
+      "outputs": [
+        "two complete sealed query prediction tables",
+        "reference exposure surface audit"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_RC00",
+        "EXT_AUTH_R04",
+        "EXT_ALLOC_R04",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_RC00": "eligible_for_full_programme"
+      },
+      "completion_evidence_id": "DONE_R04",
+      "completion_gate_id": "G14",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "R05",
+      "depends_on": [
+        "RC00"
+      ],
+      "multiplicity": 2,
+      "actor": "independent reference predictor",
+      "inputs": [
+        "independent selected reconstructions",
+        "query inputs"
+      ],
+      "outputs": [
+        "two independent complete sealed query prediction tables for later R06 comparison only"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_RC00",
+        "EXT_AUTH_R05",
+        "EXT_ALLOC_R05",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_RC00": "eligible_for_full_programme"
+      },
+      "completion_evidence_id": "DONE_R05",
+      "completion_gate_id": "G12_REPLAY",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "R06",
+      "depends_on": [
+        "R04",
+        "R05"
+      ],
+      "multiplicity": 1,
+      "actor": "independent numerical equivalence auditor",
+      "inputs": [
+        "two selected and two independently reconstructed sealed query prediction tables",
+        "frozen comparison tolerance and FIT normalization"
+      ],
+      "outputs": [
+        "query prediction equivalence receipt; no query targets read"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_R04",
+        "DONE_R05",
+        "EXT_AUTH_R06",
+        "EXT_ALLOC_R06",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_R04": "required_prerequisite_complete",
+        "DONE_R05": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_R06",
+      "completion_gate_id": "G12Q",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "C02",
+      "depends_on": [
+        "RC00",
+        "C01",
+        "C00"
+      ],
+      "multiplicity": 8,
+      "actor": "trusted control predictor",
+      "inputs": [
+        "five perturbed fits and three distinct direct controls",
+        "query inputs"
+      ],
+      "outputs": [
+        "eight complete sealed control prediction tables; persistence alias not ninth"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_RC00",
+        "DONE_C01",
+        "DONE_C00",
+        "EXT_AUTH_C02",
+        "EXT_ALLOC_C02",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_RC00": "eligible_for_full_programme",
+        "DONE_C01": "required_prerequisite_complete",
+        "DONE_C00": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_C02",
+      "completion_gate_id": "G13Q",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "D00",
+      "depends_on": [
+        "RC00",
+        "S06"
+      ],
+      "multiplicity": 8,
+      "actor": "matched development runner",
+      "inputs": [
+        "same checkpoint/toolchain, appropriate FIT/validation view, R references only where assigned"
+      ],
+      "outputs": [
+        "eight sealed F programs or I libraries",
+        "complete development costs and failures"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_RC00",
+        "DONE_S06",
+        "EXT_AUTH_D00",
+        "EXT_ALLOC_D00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_RC00": "eligible_for_full_programme",
+        "DONE_S06": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_D00",
+      "completion_gate_id": "G15",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "D01",
+      "depends_on": [
+        "D00",
+        "R06"
+      ],
+      "multiplicity": 8,
+      "actor": "independent admission auditor",
+      "inputs": [
+        "eight sealed artifacts and runtime manifests"
+      ],
+      "outputs": [
+        "F static/runtime controller admissibility audits",
+        "matched resource/input/tool contracts",
+        "closed query readiness decisions"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_D00",
+        "DONE_R06",
+        "EXT_AUTH_D01",
+        "EXT_ALLOC_D01",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_D00": "required_prerequisite_complete",
+        "DONE_R06": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_D01",
+      "completion_gate_id": "G16",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "Q00",
+      "depends_on": [
+        "D01"
+      ],
+      "multiplicity": 152,
+      "actor": "trusted case dispatcher",
+      "inputs": [
+        "8 conditions x 19 query mouse panels; common fixed schedule"
+      ],
+      "outputs": [
+        "152 case-run manifests",
+        "fresh per-event capsule definitions"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_D01",
+        "EXT_AUTH_Q00",
+        "EXT_ALLOC_Q00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_D01": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_Q00",
+      "completion_gate_id": "G17",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "Q01",
+      "depends_on": [
+        "Q00"
+      ],
+      "multiplicity": "8*C_query",
+      "actor": "isolated F/I capsule",
+      "inputs": [
+        "one event input, sealed training assets, matched tools/budget"
+      ],
+      "outputs": [
+        "one three-number prediction per condition-event",
+        "all tool/model/code/resource/isolation transcripts"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_Q00",
+        "EXT_AUTH_Q01",
+        "EXT_ALLOC_Q01",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_Q00": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_Q01",
+      "completion_gate_id": "G18",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "Q02",
+      "depends_on": [
+        "Q01"
+      ],
+      "multiplicity": 152,
+      "actor": "trusted collector",
+      "inputs": [
+        "sealed event outputs, captured termination/writer quiescence"
+      ],
+      "outputs": [
+        "152 complete mouse prediction bundles or explicit failure records"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_Q01",
+        "EXT_AUTH_Q02",
+        "EXT_ALLOC_Q02",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_Q01": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_Q02",
+      "completion_gate_id": "G19M",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "Q03",
+      "depends_on": [
+        "Q02"
+      ],
+      "multiplicity": 8,
+      "actor": "trusted complete-output admission",
+      "inputs": [
+        "all 19 mouse outputs per arm"
+      ],
+      "outputs": [
+        "eight whole-arm immutable prediction captures and admission results"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_Q02",
+        "EXT_AUTH_Q03",
+        "EXT_ALLOC_Q03",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_Q02": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_Q03",
+      "completion_gate_id": "G19A",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "N00",
+      "depends_on": [
+        "Q03"
+      ],
+      "multiplicity": 8,
+      "actor": "isolated condition-specific post-capture report generator; same pinned reporting checkpoint/recipe for F and I",
+      "inputs": [
+        "own immutable full-arm predictions",
+        "own sealed training and per-event transcripts in the original information/tool view",
+        "allowed source design documentation; no scores, targets or sibling condition artifacts"
+      ],
+      "outputs": [
+        "eight candidate narrative artifacts OR eight indexed terminal outcome records including failures",
+        "eight actual-cost and writer-quiescence receipts"
+      ],
+      "execution_now": false,
+      "custody": "New report identity has read-only allowed mounts and its own new output/scratch only. Original predictors and captured predictions are immutable and not writable or invocable. Network, query labels, scores, sibling artifacts and predictive mutation are denied. All report descendants terminate before trusted target opening.",
+      "failure": "No retry or alternative checkpoint. Every job has terminal status and actual cost; a failed report is not silently absent and does not revise captured predictions.",
+      "entry_evidence_ids": [
+        "DONE_Q03",
+        "EXT_AUTH_N00",
+        "EXT_ALLOC_N00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_Q03": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_N00",
+      "completion_gate_id": "G23",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "E00",
+      "depends_on": [
+        "Q03",
+        "N00",
+        "R06",
+        "C02"
+      ],
+      "multiplicity": 1,
+      "actor": "trusted target-last scorer",
+      "inputs": [
+        "all sealed outputs and private bindings after every candidate writer is closed"
+      ],
+      "outputs": [
+        "absolute full hierarchical scores",
+        "per-mouse/bin/stratum errors",
+        "qualified reference gain or null reasons",
+        "all failures and missingness"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_Q03",
+        "DONE_N00",
+        "DONE_R06",
+        "DONE_C02",
+        "EXT_AUTH_E00",
+        "EXT_ALLOC_E00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_Q03": "required_prerequisite_complete",
+        "DONE_N00": "all_8_jobs_terminal_and_writers_closed; success not required",
+        "DONE_R06": "required_prerequisite_complete",
+        "DONE_C02": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_E00",
+      "completion_gate_id": "G20",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "E01",
+      "depends_on": [
+        "E00"
+      ],
+      "multiplicity": 1,
+      "actor": "trusted paired analyst",
+      "inputs": [
+        "complete paired per-mouse scores and frozen contrasts"
+      ],
+      "outputs": [
+        "primary F/I contrast",
+        "eight descriptive secondary contrasts",
+        "reference/perturbation diagnostics",
+        "10000-draw paired bootstrap records"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_E00",
+        "EXT_AUTH_E01",
+        "EXT_ALLOC_E01",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_E00": "required_prerequisite_complete"
+      },
+      "completion_evidence_id": "DONE_E01",
+      "completion_gate_id": "G21",
+      "completion_is_not_entry_requirement": true
+    },
+    {
+      "id": "E02",
+      "depends_on": [
+        "E01",
+        "N00"
+      ],
+      "multiplicity": 1,
+      "actor": "independent scientific auditor",
+      "inputs": [
+        "all source, support, reference, candidate, custody, score and cost artifacts",
+        "eight candidate narrative terminal records and actual costs, distinct from independent audit"
+      ],
+      "outputs": [
+        "reproduced scoring verification",
+        "full report with scope/exposure/causal limitations",
+        "explicit research qualification decision"
+      ],
+      "execution_now": false,
+      "entry_evidence_ids": [
+        "DONE_E01",
+        "DONE_N00",
+        "EXT_AUTH_E02",
+        "EXT_ALLOC_E02",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "entry_outcome_requirements": {
+        "DONE_E01": "required_prerequisite_complete",
+        "DONE_N00": "all_8_jobs_terminal_and_writers_closed; inspect failure statuses"
+      },
+      "completion_evidence_id": "DONE_E02",
+      "completion_gate_id": "G22",
+      "completion_is_not_entry_requirement": true
+    }
+  ],
+  "symbols": {
+    "C_fit": "Total supported experiment-event observations across fixed 73 FIT mice; unknown.",
+    "C_validation": "Total supported experiment-event observations across fixed 15 validation mice; unknown.",
+    "C_query": "Total supported experiment-event observations across fixed 19 query mice; unknown.",
+    "B": "Sum of exact bytes of all 1936 version-pinned raw source bodies; unknown.",
+    "P": "Actual retained projected packet bytes; unknown."
+  },
+  "finite_rules": [
+    "All 1936 objects and 703 sessions have explicit entries, even if no supported events.",
+    "Per-object acquisition attempts capped at three; a failed object blocks complete preparation. No shortened cohort.",
+    "Per-condition scientific candidate run occurs once; no best-of selection or target-feedback retries.",
+    "The graph has no unspecified helper, implicit model fit, hidden query adaptation or target-returning reference API.",
+    "S03/S04 operate only after future native access authorization; they do not describe any operations done by this proposal.",
+    "Lifecycle jobs and statistical observations are different counts: 152 mouse-condition case records, 8*C_query fresh inference capsules, and still 19 query mice.",
+    "28 stages include one pre-query reference disposition, one query-equivalence comparison, and eight post-capture narrative jobs. Narratives are distinct from the trusted paired analysis and independent audit.",
+    "A stage failing its technical contract does not produce successful DONE evidence; later jobs stay explicitly unexecuted. Typed diagnostic statuses do not grant reference competence."
+  ],
+  "source_product_lineage": "Source object -> native identity/clock -> shared schedule/support -> full population projection -> FIT scale and separated packets -> references/controls/development -> sealed isolated candidate predictions -> target-last score -> paired report. Every edge has content identity and role-specific custody.",
+  "completion_evidence_registry": [
+    {
+      "id": "DONE_S00",
+      "producer_node": "S00",
+      "gate_id": "G01",
+      "evidence": [
+        "source selection lock",
+        "all 1936 exact version/object/digest identities",
+        "107/703/1936/133066 metadata reconciliation"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_S01",
+      "producer_node": "S01",
+      "gate_id": "G02",
+      "evidence": [
+        "full version-specific byte census B=sum B_e",
+        "transport/failed-attempt receipts",
+        "complete source+working+receipt storage admission"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_S02",
+      "producer_node": "S02",
+      "gate_id": "G03",
+      "evidence": [
+        "all 1936 complete immutable ordinary source objects",
+        "size/BLAKE2b/SHA256 and provenance receipts"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_S03",
+      "producer_node": "S03",
+      "gate_id": "G04",
+      "evidence": [
+        "complete native clocks, ROI table/region mapping, lineage/unit/schema census",
+        "canonical presentation table per experiment",
+        "native metadata failure dispositions"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_S04",
+      "producer_node": "S04",
+      "gate_id": "G05",
+      "evidence": [
+        "pre-response session consensus and schedule",
+        "timing/thinning dispositions and counts",
+        "all native-bin support intervals"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_S05",
+      "producer_node": "S05",
+      "gate_id": "G06",
+      "evidence": [
+        "12-bin history and 3-bin targets for every supported event",
+        "1936 source support dispositions",
+        "nonfinite/identity failure records"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_S06",
+      "producer_node": "S06",
+      "gate_id": "G07",
+      "evidence": [
+        "FIT-only hierarchical scale",
+        "public FIT/VAL grouped development views T/N",
+        "private query targets and hierarchy",
+        "query event views T/N",
+        "all-query interval/duplicate/privacy audit",
+        "immutable packet receipts"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_R00",
+      "producer_node": "R00",
+      "gate_id": "G08",
+      "evidence": [
+        "FIT dictionaries, feature definitions/means/scales/weights for L/Q",
+        "exact dimensions and numerical resource admission"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_R01",
+      "producer_node": "R01",
+      "gate_id": "G09",
+      "evidence": [
+        "28 3-output coefficient bundles",
+        "28 fitting/resource/failure receipts"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_R02",
+      "producer_node": "R02",
+      "gate_id": "G10",
+      "evidence": [
+        "28 validation prediction/error tables",
+        "two selected FIT-only models",
+        "unchanged complete grid log"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_C00",
+      "producer_node": "C00",
+      "gate_id": "G11",
+      "evidence": [
+        "zero table (persistence alias)",
+        "FIT-mean table",
+        "N-only trend table"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_R03",
+      "producer_node": "R03",
+      "gate_id": "G12D",
+      "evidence": [
+        "two independent selected SVD FIT/validation reconstructions",
+        "development-only numerical equivalence receipts",
+        "unchanged T/N validation empirical status records",
+        "pure view-matched reference tool boundary receipt; no query prediction/equivalence obligation"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_C01",
+      "producer_node": "C01",
+      "gate_id": "G13D",
+      "evidence": [
+        "five perturbed-fit bundles and complete validation predictions",
+        "all permutation and changed-weight/mouse support receipts, including unsupported statuses",
+        "all five technical job receipts"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_RC00",
+      "producer_node": "RC00",
+      "gate_id": "G12_ROUTE",
+      "evidence": [
+        "eligible_for_full_programme OR terminated_before_query_reference_unqualified; original statuses and costs retained"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_R04",
+      "producer_node": "R04",
+      "gate_id": "G14",
+      "evidence": [
+        "two complete sealed query prediction tables",
+        "reference exposure surface audit"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_R05",
+      "producer_node": "R05",
+      "gate_id": "G12_REPLAY",
+      "evidence": [
+        "two independent complete sealed query prediction tables for later R06 comparison only"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_R06",
+      "producer_node": "R06",
+      "gate_id": "G12Q",
+      "evidence": [
+        "query prediction equivalence receipt; no query targets read"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_C02",
+      "producer_node": "C02",
+      "gate_id": "G13Q",
+      "evidence": [
+        "eight complete sealed control prediction tables; persistence alias not ninth"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_D00",
+      "producer_node": "D00",
+      "gate_id": "G15",
+      "evidence": [
+        "eight sealed F programs or I libraries",
+        "complete development costs and failures"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_D01",
+      "producer_node": "D01",
+      "gate_id": "G16",
+      "evidence": [
+        "F static/runtime controller admissibility audits",
+        "matched resource/input/tool contracts",
+        "closed query readiness decisions"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_Q00",
+      "producer_node": "Q00",
+      "gate_id": "G17",
+      "evidence": [
+        "152 case-run manifests",
+        "fresh per-event capsule definitions"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_Q01",
+      "producer_node": "Q01",
+      "gate_id": "G18",
+      "evidence": [
+        "one three-number prediction per condition-event",
+        "all tool/model/code/resource/isolation transcripts"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_Q02",
+      "producer_node": "Q02",
+      "gate_id": "G19M",
+      "evidence": [
+        "152 complete mouse prediction bundles or explicit failure records"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_Q03",
+      "producer_node": "Q03",
+      "gate_id": "G19A",
+      "evidence": [
+        "eight whole-arm immutable prediction captures and admission results"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_N00",
+      "producer_node": "N00",
+      "gate_id": "G23",
+      "evidence": [
+        "eight candidate narrative artifacts OR eight indexed terminal outcome records including failures",
+        "eight actual-cost and writer-quiescence receipts"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_E00",
+      "producer_node": "E00",
+      "gate_id": "G20",
+      "evidence": [
+        "absolute full hierarchical scores",
+        "per-mouse/bin/stratum errors",
+        "qualified reference gain or null reasons",
+        "all failures and missingness"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_E01",
+      "producer_node": "E01",
+      "gate_id": "G21",
+      "evidence": [
+        "primary F/I contrast",
+        "eight descriptive secondary contrasts",
+        "reference/perturbation diagnostics",
+        "10000-draw paired bootstrap records"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    },
+    {
+      "id": "DONE_E02",
+      "producer_node": "E02",
+      "gate_id": "G22",
+      "evidence": [
+        "reproduced scoring verification",
+        "full report with scope/exposure/causal limitations",
+        "explicit research qualification decision"
+      ],
+      "outcome_semantics": "Typed terminal disposition under EXECUTION_DISPOSITIONS.json; normal dependents require technical completion; RC00 eligibility and N00 terminal-report exceptions are explicit."
+    }
+  ],
+  "external_entry_evidence": [
+    {
+      "id": "EXT_AUTH_S00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_S00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_S01",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_S01",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_S02",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S01"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_S02",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S01"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_S03",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S02"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_S03",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S02"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_S04",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S03"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_S04",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S03"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_S05",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S04"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_S05",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S04"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_S06",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S05"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_S06",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S05"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_R00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S06"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_R00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S06"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_R01",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_R00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_R01",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_R00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_R02",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_R01"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_R02",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_R01"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_C00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S06"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_C00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S06"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_R03",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_R02",
+        "DONE_C00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_R03",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_R02",
+        "DONE_C00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_C01",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_R02"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_C01",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_R02"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_RC00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_R03",
+        "DONE_C01"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_RC00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_R03",
+        "DONE_C01"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_R04",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_RC00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_R04",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_RC00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_R05",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_RC00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_R05",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_RC00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_R06",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_R04",
+        "DONE_R05"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_R06",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_R04",
+        "DONE_R05"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_C02",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_RC00",
+        "DONE_C01",
+        "DONE_C00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_C02",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_RC00",
+        "DONE_C01",
+        "DONE_C00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_D00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_RC00",
+        "DONE_S06"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_D00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_RC00",
+        "DONE_S06"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_D01",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_D00",
+        "DONE_R06"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_D01",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_D00",
+        "DONE_R06"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_Q00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_D01"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_Q00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_D01"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_Q01",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_Q00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_Q01",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_Q00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_Q02",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_Q01"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_Q02",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_Q01"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_Q03",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_Q02"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_Q03",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_Q02"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_N00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_Q03"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_N00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_Q03"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_E00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_Q03",
+        "DONE_N00",
+        "DONE_R06",
+        "DONE_C02"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_E00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_Q03",
+        "DONE_N00",
+        "DONE_R06",
+        "DONE_C02"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_E01",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_E00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_E01",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_E00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_E02",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_E01",
+        "DONE_N00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_E02",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_E01",
+        "DONE_N00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_IMPLEMENTATION_RUNTIME",
+      "producer": "independent source/runtime qualification authority, outside this proposed study",
+      "requires_graph_evidence": [],
+      "content": "Accepted complete implementation, environment/checkpoint identity and authorized invented-control isolation evidence, before authentic study. This design performed no such tests or checkpoint access.",
+      "available_now": false
+    }
+  ],
+  "entry_semantics": "Check only listed entry evidence and typed dependency outcomes before starting. Stage completion evidence is produced after work and is never its own entry requirement. External authorization/allocation receipts may depend only on explicit completed ancestors. Real capsule/report setup is executed inside its stage before any untrusted launch; failed prelaunch isolation checks terminate without launching untrusted code.",
+  "dispositions": "EXECUTION_DISPOSITIONS.json",
+  "comparison_policy": "COMPARISON_OUTCOMES.json"
+}

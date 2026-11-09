@@ -1,0 +1,472 @@
+{
+  "schema": "neural063_reference_interface_v1",
+  "entrypoint": "references.stages.run(stage,ctx)",
+  "guard": "ctx.require_scientific before any stage input read",
+  "row_envelope": {
+    "schema": "neural063_rows_v2",
+    "fields": [
+      "schema",
+      "split",
+      "rows"
+    ],
+    "FIT_mice": 73,
+    "validation_mice": 15,
+    "query_mice": 19,
+    "order": "strict ascending opaque id"
+  },
+  "scale": {
+    "schema": "neural063_fit_scale_v2",
+    "required": [
+      "training_target_sd",
+      "fit_mice=73",
+      "fit_rows_sha256"
+    ]
+  },
+  "query_index": {
+    "schema": "neural063_query_index_v2",
+    "required": [
+      "ids",
+      "target_shape=[3]",
+      "heldout_mouse_count=19"
+    ]
+  },
+  "input_roles": {
+    "fit_rows": "fit_rows",
+    "validation_rows": "validation_rows",
+    "fit_scale": "fit_scale",
+    "feature_bank": "reference_feature_bank",
+    "model_bank": "reference_model_bank",
+    "selection": "reference_selection",
+    "direct_controls": "reference_direct_controls",
+    "independent_models": "reference_independent_models",
+    "qualification": "reference_qualification",
+    "perturbation_bank": "reference_perturbation_bank",
+    "query_T": "query_T",
+    "query_N": "query_N",
+    "query_index": "query_index",
+    "reference_predictions": "reference_predictions",
+    "independent_predictions": "reference_independent_predictions"
+  },
+  "prediction_schemas": {
+    "reference_predictions": "neural063_reference_predictions_v2",
+    "independent_predictions": "neural063_independent_predictions_v2",
+    "control_predictions": "neural063_control_predictions_v2",
+    "query_equivalence": "neural063_query_equivalence_v2"
+  },
+  "output_prediction_contract": "query_index_sha256 and fit_scale_sha256 plus complete views T/N or controls zero,fit_mean,trend,perturb_63001..63005; all records {id,values[3]} in query order",
+  "qualification_schema": "neural063_reference_qualification_v2; views.T/N.empirical_status; full actual diagnostics and development equivalence",
+  "per_fit_parameters": "fit_allocations dict: R00 requires all28 primary and independent-T-L,independent-T-Q,independent-N-L,independent-N-Q prospective n/d profiles; R01 exact28 IDs; R03 independent-T and independent-N selected dimensions; C01 perturb_63001..63005. Profile fields defined in jobs.validate_allocation. No fit allocation is a new fit job.",
+  "pure_tool": "references.tool.predict_one(model,{view,event}) returns only {id,values}; no I/O. Runtime authenticates and supplies matched eligible model with candidate isolation.",
+  "independent_source": "independent.py never imports primary.py or features.py; only shared schema constants",
+  "construction_status": "Source only. Controls-v1 42 checks and controls-v2 48 checks passed using tiny invented schema/arithmetic metadata. All fitter/stage/model-predictor/bootstrap/native-worker functions remain unexecuted.",
+  "stage_input_keys": {
+    "R00": [
+      "fit_rows",
+      "fit_scale"
+    ],
+    "R01": [
+      "feature_bank",
+      "fit_rows",
+      "fit_scale"
+    ],
+    "R02": [
+      "fit_scale",
+      "model_bank",
+      "validation_rows"
+    ],
+    "C00": [
+      "fit_rows",
+      "fit_scale",
+      "validation_rows"
+    ],
+    "R03": [
+      "direct_controls",
+      "fit_rows",
+      "fit_scale",
+      "model_bank",
+      "selection",
+      "validation_rows"
+    ],
+    "C01": [
+      "fit_rows",
+      "fit_scale",
+      "selection",
+      "validation_rows"
+    ],
+    "RC00": [
+      "independent_models",
+      "model_bank",
+      "perturbation_bank",
+      "qualification",
+      "selection"
+    ],
+    "R04": [
+      "query_N",
+      "query_T",
+      "query_index",
+      "selection"
+    ],
+    "R05": [
+      "independent_models",
+      "query_N",
+      "query_T",
+      "query_index"
+    ],
+    "R06": [
+      "fit_scale",
+      "independent_predictions",
+      "query_index",
+      "reference_predictions"
+    ],
+    "C02": [
+      "direct_controls",
+      "perturbation_bank",
+      "query_N",
+      "query_T",
+      "query_index"
+    ]
+  },
+  "stage_parameters": {
+    "R00": {
+      "fit_allocations": "exact concrete per-fit allocation map"
+    },
+    "R01": {
+      "fit_allocations": "exact concrete per-fit allocation map"
+    },
+    "R02": {},
+    "C00": {},
+    "R03": {
+      "fit_allocations": "exact concrete per-fit allocation map"
+    },
+    "C01": {
+      "fit_allocations": "exact concrete per-fit allocation map"
+    },
+    "RC00": {},
+    "R04": {},
+    "R05": {},
+    "R06": {},
+    "C02": {}
+  },
+  "principal_output_keys": {
+    "R00": [
+      "feature_bank"
+    ],
+    "R01": [
+      "model_bank"
+    ],
+    "R02": [
+      "selection"
+    ],
+    "C00": [
+      "direct_controls"
+    ],
+    "R03": [
+      "independent_models",
+      "qualification"
+    ],
+    "C01": [
+      "perturbation_bank"
+    ],
+    "RC00": [
+      "reference_decision"
+    ],
+    "R04": [
+      "reference_predictions"
+    ],
+    "R05": [
+      "independent_predictions"
+    ],
+    "R06": [
+      "query_equivalence"
+    ],
+    "C02": [
+      "control_predictions"
+    ]
+  },
+  "stage_outputs": {
+    "R00": [
+      {
+        "key_pattern": "features_{T|N}-{L|Q}",
+        "role": "reference_feature_state",
+        "schema": "neural063_feature_state_v1",
+        "condition": "successful stage"
+      },
+      {
+        "key": "feature_bank",
+        "role": "reference_feature_bank",
+        "schema": "neural063_feature_bank_v2",
+        "condition": "successful stage"
+      }
+    ],
+    "R01": [
+      {
+        "key_pattern": "model_{grid_id}",
+        "role": "reference_primary_model",
+        "schema": "neural063_primary_ridge_v1",
+        "condition": "each worker retaining a model, including a subsequently failed resource disposition"
+      },
+      {
+        "key_pattern": "job_{grid_id}",
+        "role": "reference_fit_job",
+        "schema": "neural063_fit_job_v1",
+        "condition": "each attempted worker"
+      },
+      {
+        "key": "model_bank",
+        "role": "reference_model_bank",
+        "schema": "neural063_model_bank_v2",
+        "condition": "success or partial handled failure"
+      },
+      {
+        "key": "failure",
+        "role": "reference_failure",
+        "schema": "neural063_reference_failure_v1",
+        "condition": "handled numerical/control failure"
+      }
+    ],
+    "R02": [
+      {
+        "key_pattern": "validation_{grid_id}",
+        "role": "reference_validation_predictions",
+        "schema": "neural063_reference_validation_predictions_v2",
+        "condition": "each completed grid prediction"
+      },
+      {
+        "key": "selection",
+        "role": "reference_selection",
+        "schema": "neural063_reference_selection_v2",
+        "condition": "all 28 predictions, even no finite winner"
+      },
+      {
+        "key": "partial_validation_grid",
+        "role": "reference_partial_grid",
+        "schema": "neural063_reference_partial_grid_v1",
+        "condition": "handled prediction failure"
+      },
+      {
+        "key": "failure",
+        "role": "reference_failure",
+        "schema": "neural063_reference_failure_v1",
+        "condition": "handled numerical/control failure"
+      }
+    ],
+    "C00": [
+      {
+        "key": "direct_controls",
+        "role": "reference_direct_controls",
+        "schema": "neural063_direct_controls_v2",
+        "condition": "successful stage"
+      }
+    ],
+    "R03": [
+      {
+        "key_pattern": "model_independent-{T|N}",
+        "role": "reference_independent_model",
+        "schema": "neural063_independent_svd_v1",
+        "condition": "each worker retaining a model, including a subsequently failed resource disposition"
+      },
+      {
+        "key_pattern": "job_independent-{T|N}",
+        "role": "reference_fit_job",
+        "schema": "neural063_fit_job_v1",
+        "condition": "each attempted worker"
+      },
+      {
+        "key_pattern": "{T|N}_{fit|validation}_independent_comparison",
+        "role": "reference_independent_comparison",
+        "schema": "neural063_independent_comparison_v1",
+        "condition": "each computed comparison"
+      },
+      {
+        "key": "independent_models",
+        "role": "reference_independent_models",
+        "schema": "neural063_independent_models_v2",
+        "condition": "success or handled reconstruction failure"
+      },
+      {
+        "key": "qualification",
+        "role": "reference_qualification",
+        "schema": "neural063_reference_qualification_v2",
+        "condition": "successful stage"
+      },
+      {
+        "key": "failure",
+        "role": "reference_failure",
+        "schema": "neural063_reference_failure_v1",
+        "condition": "handled numerical/control failure"
+      }
+    ],
+    "C01": [
+      {
+        "key_pattern": "perturb_{seed}_permutation",
+        "role": "reference_history_permutation",
+        "schema": "neural063_history_permutation_v1",
+        "condition": "each attempted perturbation"
+      },
+      {
+        "key_pattern": "model_perturb_{seed}",
+        "role": "reference_primary_model",
+        "schema": "neural063_primary_ridge_v1",
+        "condition": "each worker retaining a model, including a subsequently failed resource disposition"
+      },
+      {
+        "key_pattern": "job_perturb_{seed}",
+        "role": "reference_fit_job",
+        "schema": "neural063_fit_job_v1",
+        "condition": "each attempted worker"
+      },
+      {
+        "key_pattern": "perturb_{seed}_validation",
+        "role": "reference_perturbation_validation",
+        "schema": "neural063_perturbation_validation_v1",
+        "condition": "each completed perturbation prediction"
+      },
+      {
+        "key": "perturbation_bank",
+        "role": "reference_perturbation_bank",
+        "schema": "neural063_perturbation_bank_v2",
+        "condition": "success or partial handled failure"
+      },
+      {
+        "key": "failure",
+        "role": "reference_failure",
+        "schema": "neural063_reference_failure_v1",
+        "condition": "handled numerical/control failure"
+      }
+    ],
+    "RC00": [
+      {
+        "key": "reference_decision",
+        "role": "reference_decision",
+        "schema": "neural063_reference_decision_v2",
+        "condition": "all 35 technical jobs complete; eligible or empirical-terminal route"
+      }
+    ],
+    "R04": [
+      {
+        "key": "reference_predictions",
+        "role": "reference_predictions",
+        "schema": "neural063_reference_predictions_v2",
+        "condition": "successful stage"
+      }
+    ],
+    "R05": [
+      {
+        "key": "independent_predictions",
+        "role": "reference_independent_predictions",
+        "schema": "neural063_independent_predictions_v2",
+        "condition": "successful stage"
+      }
+    ],
+    "R06": [
+      {
+        "key": "query_equivalence",
+        "role": "reference_query_equivalence",
+        "schema": "neural063_query_equivalence_v2",
+        "condition": "complete measured comparison; equivalent or failed"
+      }
+    ],
+    "C02": [
+      {
+        "key": "control_predictions",
+        "role": "control_predictions",
+        "schema": "neural063_control_predictions_v2",
+        "condition": "successful stage"
+      }
+    ]
+  },
+  "pattern_vocabulary": {
+    "grid_id": "{view}-{basis}-{lambda:g}; view T,N; basis L,Q; lambda .0001,.001,.01,.1,1,10,100 (28 exact IDs)",
+    "seed": [
+      63001,
+      63002,
+      63003,
+      63004,
+      63005
+    ],
+    "filename": "Every output key is written as key + .json through ctx.write_json; all outputs operator visibility."
+  },
+  "nested_artifact_reads": {
+    "R00": [],
+    "R01": [
+      {
+        "from": "feature_bank.states[T-L,T-Q,N-L,N-Q]",
+        "role": "reference_feature_state"
+      }
+    ],
+    "R02": [
+      {
+        "from": "model_bank.models[all 28].job_receipt",
+        "role": "reference_fit_job"
+      },
+      {
+        "from": "model_bank.models[all 28].model",
+        "role": "reference_primary_model"
+      }
+    ],
+    "C00": [],
+    "R03": [
+      {
+        "from": "selection.selected[T,N].model_record, required equal to model_bank.models[model_id]",
+        "roles": [
+          "reference_fit_job",
+          "reference_primary_model"
+        ]
+      }
+    ],
+    "C01": [],
+    "RC00": [
+      {
+        "from": "model_bank.models[all 28]",
+        "roles": [
+          "reference_fit_job",
+          "reference_primary_model"
+        ]
+      },
+      {
+        "from": "independent_models.models[T,N]",
+        "roles": [
+          "reference_fit_job",
+          "reference_independent_model"
+        ]
+      },
+      {
+        "from": "perturbation_bank.models[all 5]",
+        "roles": [
+          "reference_fit_job",
+          "reference_primary_model"
+        ]
+      }
+    ],
+    "R04": [
+      {
+        "from": "selection.selected[T,N].model_record",
+        "roles": [
+          "reference_fit_job",
+          "reference_primary_model"
+        ]
+      }
+    ],
+    "R05": [
+      {
+        "from": "independent_models.models[T,N]",
+        "roles": [
+          "reference_fit_job",
+          "reference_independent_model"
+        ]
+      }
+    ],
+    "R06": [],
+    "C02": [
+      {
+        "from": "perturbation_bank.models[all 5]",
+        "roles": [
+          "reference_fit_job",
+          "reference_primary_model"
+        ]
+      }
+    ]
+  },
+  "input_read_contract": "stage_input_keys is the exact set enforced by run; includes indirect _rows, _query and _scale reads. Nested artifacts must be exact immutable descendants of these input artifacts; no source-name substitution or broader ancestor target body reads. R04,R05,C02 carry fitted scale hash without directly reading fit_scale; R06 directly reads fit_scale.",
+  "completion_route_contract": "R02 may terminate before query for no finite winner; R03 reports measured competence without deciding candidate route; RC00 requires all 28+2+5 technical receipts then returns eligible_for_full_programme or terminated_before_query_reference_unqualified. Outer owner gate engine must enforce stage-entry evidence and physical isolation."
+}

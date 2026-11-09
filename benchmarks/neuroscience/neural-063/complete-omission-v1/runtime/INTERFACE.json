@@ -1,0 +1,322 @@
+{
+  "schema": "neural063_runtime_interface_v1",
+  "entrypoint": "runtime.stages.run(stage,ctx)",
+  "stage_input_keys": {
+    "D00": [
+      "fit_T",
+      "fit_N",
+      "validation_T",
+      "validation_N",
+      "fit_scale",
+      "selection",
+      "reference_decision",
+      "query_index",
+      "checkpoint",
+      "tokenizer",
+      "model_runtime",
+      "candidate_development_recipe"
+    ],
+    "D01": [
+      "development_bundle",
+      "runtime_assets",
+      "query_equivalence"
+    ],
+    "Q00": [
+      "development_admission",
+      "development_bundle",
+      "query_T",
+      "query_N",
+      "query_index",
+      "runtime_assets"
+    ],
+    "Q01": [
+      "case_plan",
+      "development_bundle",
+      "runtime_assets",
+      "fit_T",
+      "fit_N",
+      "validation_T",
+      "validation_N",
+      "fit_scale",
+      "selection"
+    ],
+    "Q02": [
+      "event_runs",
+      "case_plan",
+      "query_index"
+    ],
+    "Q03": [
+      "mouse_predictions",
+      "case_plan",
+      "query_index",
+      "fit_scale"
+    ],
+    "N00": [
+      "candidate_predictions",
+      "prediction_capture",
+      "event_runs",
+      "development_bundle",
+      "runtime_assets",
+      "checkpoint",
+      "tokenizer",
+      "model_runtime",
+      "report_recipe"
+    ]
+  },
+  "input_roles": {
+    "fit_T": "fit_T",
+    "fit_N": "fit_N",
+    "validation_T": "validation_T",
+    "validation_N": "validation_N",
+    "fit_scale": "fit_scale",
+    "selection": "reference_selection",
+    "reference_decision": "reference_decision",
+    "query_index": "query_index",
+    "checkpoint": "checkpoint",
+    "tokenizer": "tokenizer",
+    "model_runtime": "model_runtime",
+    "candidate_development_recipe": "candidate_development_recipe",
+    "development_bundle": "development_bundle",
+    "runtime_assets": "runtime_assets",
+    "query_equivalence": "reference_query_equivalence",
+    "development_admission": "development_admission",
+    "query_T": "query_T",
+    "query_N": "query_N",
+    "case_plan": "case_plan",
+    "event_runs": "event_runs",
+    "mouse_predictions": "mouse_predictions",
+    "candidate_predictions": "candidate_predictions",
+    "prediction_capture": "prediction_capture",
+    "report_recipe": "report_recipe"
+  },
+  "principal_output_keys": {
+    "D00": [
+      "runtime_assets",
+      "development_bundle"
+    ],
+    "D01": [
+      "development_admission"
+    ],
+    "Q00": [
+      "case_plan"
+    ],
+    "Q01": [
+      "event_runs"
+    ],
+    "Q02": [
+      "mouse_predictions"
+    ],
+    "Q03": [
+      "candidate_predictions",
+      "prediction_capture"
+    ],
+    "N00": [
+      "narrative_receipts",
+      "lifecycle_custody"
+    ]
+  },
+  "stage_outputs": {
+    "D00": [
+      {
+        "key": "runtime_assets",
+        "role": "runtime_assets",
+        "schema": "neural063_runtime_assets_v1",
+        "condition": "all fixed principal computations complete; development/event bundles preserve handled failures"
+      },
+      {
+        "key": "development_bundle",
+        "role": "development_bundle",
+        "schema": "neural063_development_bundle_v1",
+        "condition": "all fixed principal computations complete; development/event bundles preserve handled failures"
+      },
+      {
+        "key_pattern": "development-{identity}_controller",
+        "role": "controller_receipt",
+        "schema": "neural063_controller_receipt_v1",
+        "condition": "each controller terminal outcome including handled failures"
+      },
+      {
+        "key_pattern": "development-{identity}_transcript",
+        "role": "controller_transcript",
+        "schema": "neural063_controller_transcript_v1",
+        "condition": "each controller terminal outcome including handled failures"
+      },
+      {
+        "key_pattern": "development-{condition}_program",
+        "role": "candidate_program",
+        "schema": "neural063_fixed_graph_v1 or neural063_investigation_library_v1",
+        "condition": "successful development controller"
+      },
+      {
+        "key": "runtime_storage_admission",
+        "role": "runtime_storage_admission",
+        "schema": "neural063_runtime_storage_admission_v1",
+        "condition": "actual statvfs capacity/availability admission before any candidate job"
+      }
+    ],
+    "D01": [
+      {
+        "key": "development_admission",
+        "role": "development_admission",
+        "schema": "neural063_development_admission_v1",
+        "condition": "all fixed principal computations complete; development/event bundles preserve handled failures"
+      }
+    ],
+    "Q00": [
+      {
+        "key": "case_plan",
+        "role": "case_plan",
+        "schema": "neural063_case_plan_v1",
+        "condition": "all fixed principal computations complete; development/event bundles preserve handled failures"
+      }
+    ],
+    "Q01": [
+      {
+        "key": "event_runs",
+        "role": "event_runs",
+        "schema": "neural063_event_runs_v1",
+        "condition": "all fixed principal computations complete; development/event bundles preserve handled failures"
+      },
+      {
+        "key_pattern": "event-{identity}_controller",
+        "role": "controller_receipt",
+        "schema": "neural063_controller_receipt_v1",
+        "condition": "each controller terminal outcome including handled failures"
+      },
+      {
+        "key_pattern": "event-{identity}_transcript",
+        "role": "controller_transcript",
+        "schema": "neural063_controller_transcript_v1",
+        "condition": "each controller terminal outcome including handled failures"
+      }
+    ],
+    "Q02": [
+      {
+        "key": "mouse_predictions",
+        "role": "mouse_predictions",
+        "schema": "neural063_mouse_predictions_v1",
+        "condition": "all fixed principal computations complete; development/event bundles preserve handled failures"
+      }
+    ],
+    "Q03": [
+      {
+        "key": "candidate_predictions",
+        "role": "candidate_predictions",
+        "schema": "neural063_candidate_predictions_v2",
+        "condition": "all fixed principal computations complete; development/event bundles preserve handled failures"
+      },
+      {
+        "key": "prediction_capture",
+        "role": "prediction_capture",
+        "schema": "neural063_prediction_capture_v1",
+        "condition": "all fixed principal computations complete; development/event bundles preserve handled failures"
+      }
+    ],
+    "N00": [
+      {
+        "key": "narrative_receipts",
+        "role": "narrative_receipts",
+        "schema": "neural063_narrative_receipts_v1",
+        "condition": "all fixed principal computations complete; development/event bundles preserve handled failures"
+      },
+      {
+        "key": "lifecycle_custody",
+        "role": "lifecycle_custody",
+        "schema": "neural063_lifecycle_custody_v1",
+        "condition": "all fixed principal computations complete; development/event bundles preserve handled failures"
+      },
+      {
+        "key_pattern": "report-{identity}_controller",
+        "role": "controller_receipt",
+        "schema": "neural063_controller_receipt_v1",
+        "condition": "each controller terminal outcome including handled failures"
+      },
+      {
+        "key_pattern": "report-{identity}_transcript",
+        "role": "controller_transcript",
+        "schema": "neural063_controller_transcript_v1",
+        "condition": "each controller terminal outcome including handled failures"
+      },
+      {
+        "key_pattern": "report-{condition}_narrative",
+        "role": "candidate_narrative",
+        "schema": "neural063_candidate_narrative_v1",
+        "condition": "successful independently isolated mandatory report"
+      }
+    ]
+  },
+  "stage_parameters": {
+    "D00": {
+      "runtime_profile": "exact neural063_runtime_profile_v1; same hash across entire attempt and E00/E02"
+    },
+    "D01": {
+      "runtime_profile": "exact neural063_runtime_profile_v1; same hash across entire attempt and E00/E02"
+    },
+    "Q00": {
+      "runtime_profile": "exact neural063_runtime_profile_v1; same hash across entire attempt and E00/E02"
+    },
+    "Q01": {
+      "runtime_profile": "exact neural063_runtime_profile_v1; same hash across entire attempt and E00/E02"
+    },
+    "Q02": {
+      "runtime_profile": "exact neural063_runtime_profile_v1; same hash across entire attempt and E00/E02"
+    },
+    "Q03": {
+      "runtime_profile": "exact neural063_runtime_profile_v1; same hash across entire attempt and E00/E02"
+    },
+    "N00": {
+      "runtime_profile": "exact neural063_runtime_profile_v1; same hash across entire attempt and E00/E02"
+    }
+  },
+  "nested_artifact_reads": {
+    "D00": [
+      "checkpoint/tokenizer exact local asset manifests and immutable files",
+      "selection.selected[T/N].model_record.model reference_primary_model"
+    ],
+    "D01": [
+      "development program/controller/transcript artifacts",
+      "actual own Docker claims and container inspections"
+    ],
+    "Q00": [],
+    "Q01": [
+      "development program and selected reference model artifacts",
+      "model checkpoint files only in separate model capsules"
+    ],
+    "Q02": [
+      "actual event controller receipts and registered writer inspections"
+    ],
+    "Q03": [
+      "actual complete mouse outputs and registered writer inspections"
+    ],
+    "N00": [
+      "own development/event transcripts and immutable predictions; exact same model asset manifests; each report gets only its own material"
+    ]
+  },
+  "durable_nested_outputs": {
+    "root": "<output_root>/runtime-jobs/<stage>/<controller>/<ordinal>/",
+    "before_create": "claim.json exact deterministic container name and labels, runtime profile/request/budget",
+    "others": [
+      "config.json",
+      "request.json",
+      "capsule.py",
+      "safe_python.py",
+      "created.json",
+      "stdout.bin",
+      "stderr.bin",
+      "receipt.json",
+      "owner/*.py and references/*.py exact trusted reference/validation source copies"
+    ],
+    "parent_cleanup": "<output_root>/runtime-parent-cleanup/<stage>.json; actual observation, resource debit; raises if any writer remains"
+  },
+  "parent_cleanup_api": "runtime.custody.cleanup_stage(spec,admitted) called on successful or failed trusted stage before signed completion. Reserved profile cleanup_read_bytes/cleanup_write_bytes/cleanup_wall_seconds must be subtracted from trusted worker allocation. Never stops unregistered jobs. Raises on unresolved state; never returns a success boolean in lieu of engine observations.",
+  "target_last_api": "runtime.custody.verify_scoring_barrier(ctx) requires prediction_capture,lifecycle_custody,narrative_receipts,candidate_predictions and exact same runtime_profile; reauthenticates immutable captures and actually inspects all registered writers before any target read.",
+  "independent_expiry": "Private container PID1 trusted supervisor drops supervisor and worker to distinct unprivileged identities, enforces monotonic deadline, exits kernel private PID namespace on expiry regardless of host controller; no-network, read-only root, default-deny seccomp, no engine socket/checkpoint in numerical capsules. Actual bootstrap/UID/syscall/expiry behavior remains mandatory external runtime qualification.",
+  "unknown_actuals": {
+    "query_events": null,
+    "checkpoint_identity": null,
+    "physical_host_feasibility": null,
+    "scientific_qualification": null
+  },
+  "source_status": "Build source in progress; no actual backend, capsule, model, predictor or stage invocation.",
+  "runtime_profile_contract": "runtime.contracts.profile/full_allocation validates exact profile fields, same supervisor/worker UID separation, exact source/tool source descriptors, all original budgets plus finite internal capsule count. No authentic profile/checkpoint/backend exists by source construction."
+}

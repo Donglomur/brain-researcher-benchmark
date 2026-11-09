@@ -1,0 +1,1725 @@
+{
+  "schema": "neural063_repaired_public_source_dependencies_v1",
+  "source_only": true,
+  "deployment": "unconfigured",
+  "scope": {
+    "mice": 107,
+    "sessions": 703,
+    "experiments": 1936,
+    "ROI_rows": 133066,
+    "split_mice": [
+      73,
+      15,
+      19
+    ],
+    "history_target_bins": [
+      12,
+      3
+    ],
+    "conditions": 8,
+    "reference_fits": [
+      28,
+      2,
+      5
+    ],
+    "stages": 28,
+    "entry_predicates": 122,
+    "narrative_jobs": 8
+  },
+  "routes": {
+    "prepare": [
+      "S00",
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S06"
+    ],
+    "reference": [
+      "R00",
+      "R01",
+      "R02",
+      "C00",
+      "R03",
+      "C01",
+      "RC00",
+      "R04",
+      "R05",
+      "R06",
+      "C02"
+    ],
+    "candidate": [
+      "D00",
+      "D01",
+      "Q00",
+      "Q01"
+    ],
+    "collect": [
+      "Q02",
+      "Q03"
+    ],
+    "grade": [
+      "E00",
+      "E01"
+    ],
+    "report": [
+      "N00",
+      "E02"
+    ]
+  },
+  "stage_bindings": [
+    {
+      "stage": "S00",
+      "component": "preparation",
+      "source": "complete-omission-v1/preparation/stages.py",
+      "depends_on": [],
+      "entry_evidence_ids": [
+        "EXT_AUTH_S00",
+        "EXT_ALLOC_S00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_S00",
+      "input_keys": [
+        "source_roster",
+        "provider_manifest",
+        "source_provenance",
+        "experiment_metadata",
+        "roi_metadata"
+      ],
+      "stage_parameters": {
+        "reuse_sources": "optional exact operator native_source Artifact descriptors keyed by fixed source experiment; no body opened in S00"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "S01",
+      "component": "preparation",
+      "source": "complete-omission-v1/preparation/stages.py",
+      "depends_on": [
+        "S00"
+      ],
+      "entry_evidence_ids": [
+        "DONE_S00",
+        "EXT_AUTH_S01",
+        "EXT_ALLOC_S01",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_S01",
+      "input_keys": [
+        "source_selection"
+      ],
+      "stage_parameters": {
+        "header_transport_bytes": "positive signed bound; conservative 7000000-byte reservation per HEAD attempt",
+        "working_reserve_bytes": "positive full-panel working allocation",
+        "receipt_reserve_bytes": "positive complete receipt allocation",
+        "retained_storage_bytes": "positive total ceiling including existing files and retained failures"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "S02",
+      "component": "preparation",
+      "source": "complete-omission-v1/preparation/stages.py",
+      "depends_on": [
+        "S01"
+      ],
+      "entry_evidence_ids": [
+        "DONE_S01",
+        "EXT_AUTH_S02",
+        "EXT_ALLOC_S02",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_S02",
+      "input_keys": [
+        "source_selection",
+        "source_sizes"
+      ],
+      "stage_parameters": {
+        "body_transport_bytes": "positive bound at least3*B",
+        "header_transport_bytes": "positive bound at least1936*3*7000000",
+        "working_reserve_bytes": "positive complete allocation",
+        "receipt_reserve_bytes": "positive complete allocation",
+        "retained_storage_bytes": "positive full-panel total ceiling"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "S03",
+      "component": "preparation",
+      "source": "complete-omission-v1/preparation/stages.py",
+      "depends_on": [
+        "S02"
+      ],
+      "entry_evidence_ids": [
+        "DONE_S02",
+        "EXT_AUTH_S03",
+        "EXT_ALLOC_S03",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_S03",
+      "input_keys": [
+        "source_selection",
+        "source_inventory"
+      ],
+      "stage_parameters": {},
+      "execution_performed": false
+    },
+    {
+      "stage": "S04",
+      "component": "preparation",
+      "source": "complete-omission-v1/preparation/stages.py",
+      "depends_on": [
+        "S03"
+      ],
+      "entry_evidence_ids": [
+        "DONE_S03",
+        "EXT_AUTH_S04",
+        "EXT_ALLOC_S04",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_S04",
+      "input_keys": [
+        "source_selection",
+        "native_metadata"
+      ],
+      "stage_parameters": {},
+      "execution_performed": false
+    },
+    {
+      "stage": "S05",
+      "component": "preparation",
+      "source": "complete-omission-v1/preparation/stages.py",
+      "depends_on": [
+        "S04"
+      ],
+      "entry_evidence_ids": [
+        "DONE_S04",
+        "EXT_AUTH_S05",
+        "EXT_ALLOC_S05",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_S05",
+      "input_keys": [
+        "source_selection",
+        "source_inventory",
+        "schedule_bank"
+      ],
+      "stage_parameters": {},
+      "execution_performed": false
+    },
+    {
+      "stage": "S06",
+      "component": "preparation",
+      "source": "complete-omission-v1/preparation/stages.py",
+      "depends_on": [
+        "S05"
+      ],
+      "entry_evidence_ids": [
+        "DONE_S05",
+        "EXT_AUTH_S06",
+        "EXT_ALLOC_S06",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_S06",
+      "input_keys": [
+        "source_selection",
+        "projected_rows",
+        "projection_census"
+      ],
+      "stage_parameters": {},
+      "execution_performed": false
+    },
+    {
+      "stage": "R00",
+      "component": "references",
+      "source": "complete-omission-v1/references/stages.py",
+      "depends_on": [
+        "S06"
+      ],
+      "entry_evidence_ids": [
+        "DONE_S06",
+        "EXT_AUTH_R00",
+        "EXT_ALLOC_R00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_R00",
+      "input_keys": [
+        "fit_rows",
+        "fit_scale"
+      ],
+      "stage_parameters": {
+        "fit_allocations": "exact concrete per-fit allocation map"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "R01",
+      "component": "references",
+      "source": "complete-omission-v1/references/stages.py",
+      "depends_on": [
+        "R00"
+      ],
+      "entry_evidence_ids": [
+        "DONE_R00",
+        "EXT_AUTH_R01",
+        "EXT_ALLOC_R01",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_R01",
+      "input_keys": [
+        "feature_bank",
+        "fit_rows",
+        "fit_scale"
+      ],
+      "stage_parameters": {
+        "fit_allocations": "exact concrete per-fit allocation map"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "R02",
+      "component": "references",
+      "source": "complete-omission-v1/references/stages.py",
+      "depends_on": [
+        "R01"
+      ],
+      "entry_evidence_ids": [
+        "DONE_R01",
+        "EXT_AUTH_R02",
+        "EXT_ALLOC_R02",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_R02",
+      "input_keys": [
+        "fit_scale",
+        "model_bank",
+        "validation_rows"
+      ],
+      "stage_parameters": {},
+      "execution_performed": false
+    },
+    {
+      "stage": "C00",
+      "component": "references",
+      "source": "complete-omission-v1/references/stages.py",
+      "depends_on": [
+        "S06"
+      ],
+      "entry_evidence_ids": [
+        "DONE_S06",
+        "EXT_AUTH_C00",
+        "EXT_ALLOC_C00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_C00",
+      "input_keys": [
+        "fit_rows",
+        "fit_scale",
+        "validation_rows"
+      ],
+      "stage_parameters": {},
+      "execution_performed": false
+    },
+    {
+      "stage": "R03",
+      "component": "references",
+      "source": "complete-omission-v1/references/stages.py",
+      "depends_on": [
+        "R02",
+        "C00"
+      ],
+      "entry_evidence_ids": [
+        "DONE_R02",
+        "DONE_C00",
+        "EXT_AUTH_R03",
+        "EXT_ALLOC_R03",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_R03",
+      "input_keys": [
+        "direct_controls",
+        "fit_rows",
+        "fit_scale",
+        "model_bank",
+        "selection",
+        "validation_rows"
+      ],
+      "stage_parameters": {
+        "fit_allocations": "exact concrete per-fit allocation map"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "C01",
+      "component": "references",
+      "source": "complete-omission-v1/references/stages.py",
+      "depends_on": [
+        "R02"
+      ],
+      "entry_evidence_ids": [
+        "DONE_R02",
+        "EXT_AUTH_C01",
+        "EXT_ALLOC_C01",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_C01",
+      "input_keys": [
+        "fit_rows",
+        "fit_scale",
+        "selection",
+        "validation_rows"
+      ],
+      "stage_parameters": {
+        "fit_allocations": "exact concrete per-fit allocation map"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "RC00",
+      "component": "references",
+      "source": "complete-omission-v1/references/stages.py",
+      "depends_on": [
+        "R03",
+        "C01"
+      ],
+      "entry_evidence_ids": [
+        "DONE_R03",
+        "DONE_C01",
+        "EXT_AUTH_RC00",
+        "EXT_ALLOC_RC00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_RC00",
+      "input_keys": [
+        "independent_models",
+        "model_bank",
+        "perturbation_bank",
+        "qualification",
+        "selection"
+      ],
+      "stage_parameters": {},
+      "execution_performed": false
+    },
+    {
+      "stage": "R04",
+      "component": "references",
+      "source": "complete-omission-v1/references/stages.py",
+      "depends_on": [
+        "RC00"
+      ],
+      "entry_evidence_ids": [
+        "DONE_RC00",
+        "EXT_AUTH_R04",
+        "EXT_ALLOC_R04",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_R04",
+      "input_keys": [
+        "query_N",
+        "query_T",
+        "query_index",
+        "selection"
+      ],
+      "stage_parameters": {},
+      "execution_performed": false
+    },
+    {
+      "stage": "R05",
+      "component": "references",
+      "source": "complete-omission-v1/references/stages.py",
+      "depends_on": [
+        "RC00"
+      ],
+      "entry_evidence_ids": [
+        "DONE_RC00",
+        "EXT_AUTH_R05",
+        "EXT_ALLOC_R05",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_R05",
+      "input_keys": [
+        "independent_models",
+        "query_N",
+        "query_T",
+        "query_index"
+      ],
+      "stage_parameters": {},
+      "execution_performed": false
+    },
+    {
+      "stage": "R06",
+      "component": "references",
+      "source": "complete-omission-v1/references/stages.py",
+      "depends_on": [
+        "R04",
+        "R05"
+      ],
+      "entry_evidence_ids": [
+        "DONE_R04",
+        "DONE_R05",
+        "EXT_AUTH_R06",
+        "EXT_ALLOC_R06",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_R06",
+      "input_keys": [
+        "fit_scale",
+        "independent_predictions",
+        "query_index",
+        "reference_predictions"
+      ],
+      "stage_parameters": {},
+      "execution_performed": false
+    },
+    {
+      "stage": "C02",
+      "component": "references",
+      "source": "complete-omission-v1/references/stages.py",
+      "depends_on": [
+        "RC00",
+        "C01",
+        "C00"
+      ],
+      "entry_evidence_ids": [
+        "DONE_RC00",
+        "DONE_C01",
+        "DONE_C00",
+        "EXT_AUTH_C02",
+        "EXT_ALLOC_C02",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_C02",
+      "input_keys": [
+        "direct_controls",
+        "perturbation_bank",
+        "query_N",
+        "query_T",
+        "query_index"
+      ],
+      "stage_parameters": {},
+      "execution_performed": false
+    },
+    {
+      "stage": "D00",
+      "component": "runtime",
+      "source": "complete-omission-v1/runtime/stages.py",
+      "depends_on": [
+        "RC00",
+        "S06"
+      ],
+      "entry_evidence_ids": [
+        "DONE_RC00",
+        "DONE_S06",
+        "EXT_AUTH_D00",
+        "EXT_ALLOC_D00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_D00",
+      "input_keys": [
+        "fit_T",
+        "fit_N",
+        "validation_T",
+        "validation_N",
+        "fit_scale",
+        "selection",
+        "reference_decision",
+        "query_index",
+        "checkpoint",
+        "tokenizer",
+        "model_runtime",
+        "candidate_development_recipe"
+      ],
+      "stage_parameters": {
+        "runtime_profile": "exact neural063_runtime_profile_v1; same hash across entire attempt and E00/E02"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "D01",
+      "component": "runtime",
+      "source": "complete-omission-v1/runtime/stages.py",
+      "depends_on": [
+        "D00",
+        "R06"
+      ],
+      "entry_evidence_ids": [
+        "DONE_D00",
+        "DONE_R06",
+        "EXT_AUTH_D01",
+        "EXT_ALLOC_D01",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_D01",
+      "input_keys": [
+        "development_bundle",
+        "runtime_assets",
+        "query_equivalence"
+      ],
+      "stage_parameters": {
+        "runtime_profile": "exact neural063_runtime_profile_v1; same hash across entire attempt and E00/E02"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "Q00",
+      "component": "runtime",
+      "source": "complete-omission-v1/runtime/stages.py",
+      "depends_on": [
+        "D01"
+      ],
+      "entry_evidence_ids": [
+        "DONE_D01",
+        "EXT_AUTH_Q00",
+        "EXT_ALLOC_Q00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_Q00",
+      "input_keys": [
+        "development_admission",
+        "development_bundle",
+        "query_T",
+        "query_N",
+        "query_index",
+        "runtime_assets"
+      ],
+      "stage_parameters": {
+        "runtime_profile": "exact neural063_runtime_profile_v1; same hash across entire attempt and E00/E02"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "Q01",
+      "component": "runtime",
+      "source": "complete-omission-v1/runtime/stages.py",
+      "depends_on": [
+        "Q00"
+      ],
+      "entry_evidence_ids": [
+        "DONE_Q00",
+        "EXT_AUTH_Q01",
+        "EXT_ALLOC_Q01",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_Q01",
+      "input_keys": [
+        "case_plan",
+        "development_bundle",
+        "runtime_assets",
+        "fit_T",
+        "fit_N",
+        "validation_T",
+        "validation_N",
+        "fit_scale",
+        "selection"
+      ],
+      "stage_parameters": {
+        "runtime_profile": "exact neural063_runtime_profile_v1; same hash across entire attempt and E00/E02"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "Q02",
+      "component": "runtime",
+      "source": "complete-omission-v1/runtime/stages.py",
+      "depends_on": [
+        "Q01"
+      ],
+      "entry_evidence_ids": [
+        "DONE_Q01",
+        "EXT_AUTH_Q02",
+        "EXT_ALLOC_Q02",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_Q02",
+      "input_keys": [
+        "event_runs",
+        "case_plan",
+        "query_index"
+      ],
+      "stage_parameters": {
+        "runtime_profile": "exact neural063_runtime_profile_v1; same hash across entire attempt and E00/E02"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "Q03",
+      "component": "runtime",
+      "source": "complete-omission-v1/runtime/stages.py",
+      "depends_on": [
+        "Q02"
+      ],
+      "entry_evidence_ids": [
+        "DONE_Q02",
+        "EXT_AUTH_Q03",
+        "EXT_ALLOC_Q03",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_Q03",
+      "input_keys": [
+        "mouse_predictions",
+        "case_plan",
+        "query_index",
+        "fit_scale"
+      ],
+      "stage_parameters": {
+        "runtime_profile": "exact neural063_runtime_profile_v1; same hash across entire attempt and E00/E02"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "N00",
+      "component": "runtime",
+      "source": "complete-omission-v1/runtime/stages.py",
+      "depends_on": [
+        "Q03"
+      ],
+      "entry_evidence_ids": [
+        "DONE_Q03",
+        "EXT_AUTH_N00",
+        "EXT_ALLOC_N00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_N00",
+      "input_keys": [
+        "candidate_predictions",
+        "prediction_capture",
+        "event_runs",
+        "development_bundle",
+        "runtime_assets",
+        "checkpoint",
+        "tokenizer",
+        "model_runtime",
+        "report_recipe"
+      ],
+      "stage_parameters": {
+        "runtime_profile": "exact neural063_runtime_profile_v1; same hash across entire attempt and E00/E02"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "E00",
+      "component": "owner",
+      "source": "complete-omission-v1/owner/stages.py",
+      "depends_on": [
+        "Q03",
+        "N00",
+        "R06",
+        "C02"
+      ],
+      "entry_evidence_ids": [
+        "DONE_Q03",
+        "DONE_N00",
+        "DONE_R06",
+        "DONE_C02",
+        "EXT_AUTH_E00",
+        "EXT_ALLOC_E00",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_E00",
+      "input_keys": [
+        "candidate_predictions",
+        "reference_predictions",
+        "control_predictions",
+        "query_index",
+        "query_targets",
+        "fit_scale",
+        "support_census",
+        "qualification",
+        "query_equivalence",
+        "narrative_receipts",
+        "prediction_capture",
+        "lifecycle_custody",
+        "fit_rows",
+        "validation_rows"
+      ],
+      "stage_parameters": {
+        "runtime_profile": "exact same bound runtime profile; actual scoring-barrier interrogation"
+      },
+      "execution_performed": false
+    },
+    {
+      "stage": "E01",
+      "component": "owner",
+      "source": "complete-omission-v1/owner/stages.py",
+      "depends_on": [
+        "E00"
+      ],
+      "entry_evidence_ids": [
+        "DONE_E00",
+        "EXT_AUTH_E01",
+        "EXT_ALLOC_E01",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_E01",
+      "input_keys": [
+        "scores"
+      ],
+      "stage_parameters": {},
+      "execution_performed": false
+    },
+    {
+      "stage": "E02",
+      "component": "owner",
+      "source": "complete-omission-v1/owner/stages.py",
+      "depends_on": [
+        "E01",
+        "N00"
+      ],
+      "entry_evidence_ids": [
+        "DONE_E01",
+        "DONE_N00",
+        "EXT_AUTH_E02",
+        "EXT_ALLOC_E02",
+        "EXT_IMPLEMENTATION_RUNTIME"
+      ],
+      "completion_evidence_id": "DONE_E02",
+      "input_keys": [
+        "candidate_predictions",
+        "reference_predictions",
+        "control_predictions",
+        "query_index",
+        "query_targets",
+        "fit_scale",
+        "support_census",
+        "scores",
+        "paired_report",
+        "narrative_receipts",
+        "scientific_review",
+        "source_sizes",
+        "source_inventory",
+        "native_metadata",
+        "projection_census",
+        "prediction_capture",
+        "lifecycle_custody",
+        "development_bundle",
+        "event_runs"
+      ],
+      "stage_parameters": {
+        "runtime_profile": "same bound runtime profile; independent writer/capture recheck"
+      },
+      "execution_performed": false
+    }
+  ],
+  "all_admission_gates": [
+    {
+      "id": "G01",
+      "name": "Full metadata source identity",
+      "status": "partially_satisfied_metadata_only",
+      "required_evidence": "Selected delivery and provider manifest pins, 1936 experiment identity set, 133066 ROI/lineage tuples, fixed 73/15/19 hash split, all containers/sessions/lineages assigned to one mouse. Source/export transport consistency remains a future release gate.",
+      "current_evidence_limit": "SOURCE_CENSUS.json and METADATA_RECONCILIATION.json; no native inference.",
+      "producer_node": "S00",
+      "evidence_id": "DONE_S00",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G02",
+      "name": "Complete byte and storage budget",
+      "status": "open",
+      "required_evidence": "All 1936 exact version-specific positive byte sizes, failed-request ledger, complete B and working/receipt capacity. No extrapolated single-file estimate.",
+      "current_evidence_limit": "No authentic headers requested.",
+      "producer_node": "S01",
+      "evidence_id": "DONE_S01",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G03",
+      "name": "Full immutable source custody",
+      "status": "open",
+      "required_evidence": "Every version-specific body complete with provider BLAKE2b-512 and recorded SHA256; same open ordinary-file descriptor validated, no changed source. Duplicate and alias census cannot violate fixed mouse split.",
+      "current_evidence_limit": "No bodies opened.",
+      "producer_node": "S02",
+      "evidence_id": "DONE_S02",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G04",
+      "name": "Full native ROI/clock/schema lineage",
+      "status": "open",
+      "required_evidence": "Time-by-ROI shape, native seconds, finite strictly increasing entire timestamp vector, dF/F unit/conversion/offset, exact DynamicTableRegion table reference and row indices, every published valid ROI and specimen join. No undocumented replacement or dropped valid cell.",
+      "current_evidence_limit": "Old sample/header claims are not full-panel validation; not re-read here.",
+      "producer_node": "S03",
+      "evidence_id": "DONE_S03",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G05",
+      "name": "Shared schedule frozen before responses",
+      "status": "open",
+      "required_evidence": "All planes in all 703 sessions have identical canonical presentation table; metadata-only schedule locked before calcium projection. Exact timing/thinning dispositions, numeric edges and frame-index privacy prove no target/history overlap.",
+      "current_evidence_limit": "Current implementation checks session digest after some projection; complete design requires earlier consensus.",
+      "producer_node": "S04",
+      "evidence_id": "DONE_S04",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G06",
+      "name": "Full support census and finite projection",
+      "status": "open",
+      "required_evidence": "Every original experiment disposed; omission equations reconcile; all source-valid ROI values finite in required bins; every mouse supported; clock failures never replaced; no response-based exclusions.",
+      "current_evidence_limit": "Counts of omissions/scheduled/supported events remain unknown.",
+      "producer_node": "S05",
+      "evidence_id": "DONE_S05",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G07",
+      "name": "Separated packets and FIT scale",
+      "status": "open",
+      "required_evidence": "Exact FIT-only hierarchical scale; 73 FIT/15 VAL/19 QUERY support; every history and target row bound; all candidate packet fields allowed; opaque grouping preserves hierarchy; current experiment-number filenames removed from future candidate surface; public query arrays target-free.",
+      "current_evidence_limit": "No packets or scale computed.",
+      "producer_node": "S06",
+      "evidence_id": "DONE_S06",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G08",
+      "name": "Reference feature and allocation readiness",
+      "status": "open",
+      "required_evidence": "Exact FIT-only dictionaries, q/d dimensions, constructed columns, weights/scales and full unpruned 28-model allocation plus independent SVD resources.",
+      "current_evidence_limit": "No references/fit data accessed.",
+      "producer_node": "R00",
+      "evidence_id": "DONE_R00",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G09",
+      "name": "All finite reference fits",
+      "status": "open",
+      "required_evidence": "Every one of 28 fits completes exact objective and residual gate; all failures logged; no hidden tuning.",
+      "current_evidence_limit": "No fit performed.",
+      "producer_node": "R01",
+      "evidence_id": "DONE_R01",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G10",
+      "name": "Validation-only finite selection",
+      "status": "open",
+      "required_evidence": "All 28 validation predictions, exact macro metrics, deterministic selected family models, no validation/query refit or target-statistic influence.",
+      "current_evidence_limit": "No validation scoring performed.",
+      "producer_node": "R02",
+      "evidence_id": "DONE_R02",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G11",
+      "name": "Honest distinct direct controls",
+      "status": "open",
+      "required_evidence": "Zero and last-bin persistence proven same; FIT mean uses full hierarchy; trend formula and N-only access respected; complete outputs.",
+      "current_evidence_limit": "Mathematical equivalence is source-derived; no numerical performance result.",
+      "producer_node": "C00",
+      "evidence_id": "DONE_C00",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G12D",
+      "name": "Independent development reconstruction and empirical status",
+      "status": "open",
+      "required_evidence": "Two independent selected FIT/validation reconstructions; complete development numerical agreement; pure view-matched tool boundary; typed T/N empirical competence statuses under unchanged thresholds. No query predictions or query equivalence required here.",
+      "current_evidence_limit": "reference_gain must remain null.",
+      "producer_node": "R03",
+      "evidence_id": "DONE_R03",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G13D",
+      "name": "Five complete perturbation development jobs",
+      "status": "open",
+      "required_evidence": "All five selected-N perturbation fits and validation predictions; exact donor permutations; full retained support; supported or explicitly unsupported matching status. No query predictions required here.",
+      "current_evidence_limit": "No shuffle, fit or control run performed.",
+      "producer_node": "C01",
+      "evidence_id": "DONE_C01",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G12_ROUTE",
+      "name": "Frozen pre-query reference disposition",
+      "status": "open",
+      "required_evidence": "All 35 original development regression fit jobs technically complete; both unchanged empirical criteria met to emit eligibility. Otherwise emit terminal unqualified status before candidate/query work. Unsupported perturbation matching alone remains diagnostic.",
+      "current_evidence_limit": "reference_gain must remain null.",
+      "producer_node": "RC00",
+      "evidence_id": "DONE_RC00",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G14",
+      "name": "Trusted decoder tool binding",
+      "status": "open",
+      "required_evidence": "Pure inference only, allowed information view, no label/target/error endpoints, trained weights/version/environment pinned, all query predictions sealed before score exposure.",
+      "current_evidence_limit": "No inference tool exists by this proposal.",
+      "producer_node": "R04",
+      "evidence_id": "DONE_R04",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G12_REPLAY",
+      "name": "Independent query predictions produced",
+      "status": "open",
+      "required_evidence": "Two independent complete sealed query prediction tables after RC00 eligibility, without query targets. Equivalence is not required to begin or complete prediction generation; R06 evaluates it next.",
+      "current_evidence_limit": "reference_gain must remain null.",
+      "producer_node": "R05",
+      "evidence_id": "DONE_R05",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G12Q",
+      "name": "Query prediction equivalence",
+      "status": "open",
+      "required_evidence": "R06 compares R04 and R05 tables with frozen tolerance and records pass/failure before D01 or target opening. No reference refit or query target access.",
+      "current_evidence_limit": "reference_gain must remain null.",
+      "producer_node": "R06",
+      "evidence_id": "DONE_R06",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G13Q",
+      "name": "Complete control query predictions",
+      "status": "open",
+      "required_evidence": "All five perturbation query tables plus three distinct direct controls sealed after RC00 eligibility. Unsupported matching stays labeled; zero/persistence remain one vector.",
+      "current_evidence_limit": "No shuffle, fit or control run performed.",
+      "producer_node": "C02",
+      "evidence_id": "DONE_C02",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G15",
+      "name": "Matched actual development",
+      "status": "open",
+      "required_evidence": "Eight same-checkpoint development runs with exact allowed information/tool views and identical budgets; all physical/shared/amortized costs and training exposure declared.",
+      "current_evidence_limit": "Checkpoint identity currently null; no model loaded.",
+      "producer_node": "D00",
+      "evidence_id": "DONE_D00",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G16",
+      "name": "Genuine frozen/investigator distinction",
+      "status": "open",
+      "required_evidence": "Pre-query source and accepted implementation/runtime audits establish frozen F controller, fixed prompts/call positions, allowed automatic recipe and event-local I scope. Actual scientific query traces are later completion evidence at G18, not an entry precondition for D01.",
+      "current_evidence_limit": "Source/runtime implementation missing.",
+      "producer_node": "D01",
+      "evidence_id": "DONE_D01",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G17",
+      "name": "Real query data isolation",
+      "status": "open",
+      "required_evidence": "Trusted dispatcher creates exact mouse/event launch definitions and configured isolation policy using accepted external runtime evidence. Within Q01 each actual capsule is provisioned and checked before untrusted code launches; actual scientific trace belongs to G18.",
+      "current_evidence_limit": "No runtime/container/backend controls executed now; fixture allowance is zero.",
+      "producer_node": "Q00",
+      "evidence_id": "DONE_Q00",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G18",
+      "name": "Matched complete per-event execution",
+      "status": "open",
+      "required_evidence": "8*C_query fresh capsules, identical own-event information and ceilings, same schedule, actual time/tokens/memory/IO counters, no cross-event state, all failures retained.",
+      "current_evidence_limit": "No candidate trial performed.",
+      "producer_node": "Q01",
+      "evidence_id": "DONE_Q01",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G19M",
+      "name": "Mouse-level immutable output collection",
+      "status": "open",
+      "required_evidence": "152 mouse-condition output collections or failure records, every required event, writer shutdown, identity/shape/admission and immutable custody; no whole-arm future output required.",
+      "current_evidence_limit": "No candidate output exists.",
+      "producer_node": "Q02",
+      "evidence_id": "DONE_Q02",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G19A",
+      "name": "Whole-arm immutable complete output admission",
+      "status": "open",
+      "required_evidence": "Eight full 19-mouse prediction captures admitted from Q02 outputs; all candidate descendants closed and captured bytes immutable before N00 and any target access.",
+      "current_evidence_limit": "No candidate output exists.",
+      "producer_node": "Q03",
+      "evidence_id": "DONE_Q03",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "status": "open",
+      "current_evidence_limit": "No narrative/model work performed.",
+      "id": "G23",
+      "producer_node": "N00",
+      "evidence_id": "DONE_N00",
+      "kind": "stage_completion_predicate_not_entry_authorization",
+      "name": "Eight post-capture narrative terminal records",
+      "required_evidence": "Exactly eight mandatory report jobs reach terminal success/failure; finite prescribed resources and permitted read-only inputs; immutable predictions preserved; all report descendants/writers closed. E00 requires terminal records, not successful prose. Report failure prevents full programme certification at E02."
+    },
+    {
+      "id": "G20",
+      "name": "Target-last exact hierarchical scoring",
+      "status": "open",
+      "required_evidence": "Score complete frozen captures only, actual timestamp/order custody evidence, mathematically stable exact hierarchy/FIT scale, no clipping or row omission, gains gated on qualified sealed T. COMPARISON_OUTCOMES.json governs typed +infinity absolute scores; complete narrative terminal/writer-close records precede target opening.",
+      "current_evidence_limit": "No scientific scores computed.",
+      "producer_node": "E00",
+      "evidence_id": "DONE_E00",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G21",
+      "name": "Paired uncertainty and honest comparisons",
+      "status": "open",
+      "required_evidence": "19-mouse paired primary delta; fixed 10000-draw PCG64 bootstrap; all secondary estimates descriptive; unsupported strata and failures included; no extra IDs or pseudo-replication. Nonfinite affected contrasts and intervals are explicitly unavailable; no finite-subset inference or NaN defaults.",
+      "current_evidence_limit": "No uncertainty samples drawn from data.",
+      "producer_node": "E01",
+      "evidence_id": "DONE_E01",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    },
+    {
+      "id": "G22",
+      "name": "Independent complete scientific report",
+      "status": "open",
+      "required_evidence": "Peer reproduces source support, key native joins, selected references, candidate isolation, scoring and costs; records preprocessing, public-exposure, biological-composition and causal/online limits.",
+      "current_evidence_limit": "Approval of design/source alone cannot mark benchmark research qualified.",
+      "producer_node": "E02",
+      "evidence_id": "DONE_E02",
+      "kind": "stage_completion_predicate_not_entry_authorization"
+    }
+  ],
+  "external_evidence_records": [
+    {
+      "id": "EXT_AUTH_S00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_S00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_S01",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_S01",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_S02",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S01"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_S02",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S01"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_S03",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S02"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_S03",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S02"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_S04",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S03"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_S04",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S03"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_S05",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S04"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_S05",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S04"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_S06",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S05"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_S06",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S05"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_R00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S06"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_R00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S06"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_R01",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_R00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_R01",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_R00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_R02",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_R01"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_R02",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_R01"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_C00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_S06"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_C00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_S06"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_R03",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_R02",
+        "DONE_C00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_R03",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_R02",
+        "DONE_C00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_C01",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_R02"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_C01",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_R02"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_RC00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_R03",
+        "DONE_C01"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_RC00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_R03",
+        "DONE_C01"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_R04",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_RC00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_R04",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_RC00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_R05",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_RC00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_R05",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_RC00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_R06",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_R04",
+        "DONE_R05"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_R06",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_R04",
+        "DONE_R05"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_C02",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_RC00",
+        "DONE_C01",
+        "DONE_C00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_C02",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_RC00",
+        "DONE_C01",
+        "DONE_C00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_D00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_RC00",
+        "DONE_S06"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_D00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_RC00",
+        "DONE_S06"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_D01",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_D00",
+        "DONE_R06"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_D01",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_D00",
+        "DONE_R06"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_Q00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_D01"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_Q00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_D01"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_Q01",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_Q00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_Q01",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_Q00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_Q02",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_Q01"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_Q02",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_Q01"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_Q03",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_Q02"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_Q03",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_Q02"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_N00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_Q03"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_N00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_Q03"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_E00",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_Q03",
+        "DONE_N00",
+        "DONE_R06",
+        "DONE_C02"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_E00",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_Q03",
+        "DONE_N00",
+        "DONE_R06",
+        "DONE_C02"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_E01",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_E00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_E01",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_E00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_AUTH_E02",
+      "producer": "external trusted authority",
+      "requires_graph_evidence": [
+        "DONE_E01",
+        "DONE_N00"
+      ],
+      "content": "Explicit authorization for this stage only; no authority currently exists.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_ALLOC_E02",
+      "producer": "external trusted resource/custody admission officer",
+      "requires_graph_evidence": [
+        "DONE_E01",
+        "DONE_N00"
+      ],
+      "content": "Finite stage allocation and permitted surfaces calculated only from fixed design and prerequisite outputs. No own/descendant evidence, scientific computation or hidden fitting. Refuse unknown/unaffordable full allocation; no scope reduction.",
+      "available_now": false
+    },
+    {
+      "id": "EXT_IMPLEMENTATION_RUNTIME",
+      "producer": "independent source/runtime qualification authority, outside this proposed study",
+      "requires_graph_evidence": [],
+      "content": "Accepted complete implementation, environment/checkpoint identity and authorized invented-control isolation evidence, before authentic study. This design performed no such tests or checkpoint access.",
+      "available_now": false
+    }
+  ],
+  "static_internal_imports": {
+    "modules": 54,
+    "unresolved": [],
+    "package_import_or_runtime_probe_performed": false
+  },
+  "external_python_dependencies": {
+    "h5py": {
+      "selected_version": null,
+      "distribution_included": false,
+      "runtime_and_license_qualification": "required separately"
+    },
+    "matplotlib": {
+      "selected_version": null,
+      "distribution_included": false,
+      "runtime_and_license_qualification": "required separately"
+    },
+    "numpy": {
+      "selected_version": null,
+      "distribution_included": false,
+      "runtime_and_license_qualification": "required separately"
+    },
+    "pynvml": {
+      "selected_version": null,
+      "distribution_included": false,
+      "runtime_and_license_qualification": "required separately"
+    },
+    "scipy": {
+      "selected_version": null,
+      "distribution_included": false,
+      "runtime_and_license_qualification": "required separately"
+    },
+    "torch": {
+      "selected_version": null,
+      "distribution_included": false,
+      "runtime_and_license_qualification": "required separately"
+    },
+    "transformers": {
+      "selected_version": null,
+      "distribution_included": false,
+      "runtime_and_license_qualification": "required separately"
+    }
+  },
+  "dynamic_source_bindings": {
+    "stage_modules": [
+      "preparation.stages",
+      "references.stages",
+      "runtime.stages",
+      "owner.stages"
+    ],
+    "capsule_code": "runtime/capsule.py",
+    "numeric_validator": "runtime/safe_python.py",
+    "mount_binding": "Exact frozen source paths authenticated before later authorized mounting; generic /code paths are container destinations."
+  },
+  "conditional_private_dependencies": {
+    "count": 10,
+    "bodies_opened": 0,
+    "included": false,
+    "source_archive_does_not_supply_them": true
+  },
+  "fixed_source_metadata_descriptors": {
+    "source_provenance": {
+      "bytes": 3171,
+      "sha256": "b982512cd9884dd4155315b822757c49dde84fe718de227b1049fd429ad05800",
+      "body_opened": false,
+      "body_included": false
+    },
+    "source_roster": {
+      "bytes": 15010418,
+      "sha256": "dbdf5abd501ff4bb46cee790e2bc2c1ad32ba15db2dd35bb6ba1dd1dc529fd65",
+      "body_opened": false,
+      "body_included": false
+    },
+    "provider_manifest": {
+      "bytes": 2455839,
+      "sha256": "8cb641fb26da107334b99d9521e12add1b33015316cb80d5df4559987315222a",
+      "body_opened": false,
+      "body_included": false
+    },
+    "experiment_metadata": {
+      "bytes": 656768,
+      "sha256": "7cc11662572df3e2711bcd056c0e7ec07da03d7cacb86e24ec833a06e464dcf8",
+      "body_opened": false,
+      "body_included": false
+    },
+    "roi_metadata": {
+      "bytes": 4284681,
+      "sha256": "539f64843962625151a4b14f576b24682bb9f1f695e81c4c640300825f59f97c",
+      "body_opened": false,
+      "body_included": false
+    }
+  },
+  "additional_external_requirements": [
+    "Qualified Python and standard library",
+    "Qualified HDF5 and authentic native schema",
+    "Local qualified rootless Linux Docker/OCI image and containment",
+    "Qualified CUDA/NVML/GPU driver if selected",
+    "Exact checkpoint, tokenizer and model runtime with rights",
+    "Independent signing issuers and private output/deployment configuration",
+    "Full authentic input/identity/support reconciliation and access rights",
+    "Independent physical resource, clock, filesystem and scientific evidence"
+  ],
+  "unknown_actuals": {
+    "events": null,
+    "raw_source_bytes": null,
+    "reference_gain": null,
+    "full_compute_storage": null
+  },
+  "source_dependency_fixes": "references.controls supplied; engine imports shared guard_namespace; complete output paths guarded before effects. No import execution or installed update claimed."
+}

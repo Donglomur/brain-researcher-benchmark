@@ -1,0 +1,133 @@
+{
+  "schema": "neural063_reference_design_v2",
+  "status": "frozen_proposal_not_fitted",
+  "target_shape": [
+    3
+  ],
+  "fit_mice": 73,
+  "validation_mice": 15,
+  "query_mice": 19,
+  "information_views": {
+    "T": "Only 3 preceding (image,omitted) tokens, 3 relative starts, seven context fields. No history, neural summaries or scale as feature.",
+    "N": "All T features plus H_0,...,H_10. H_11 is exactly zero and logged as structural constant; it supplies no extra feature."
+  },
+  "raw_features": {
+    "numeric_T": [
+      "d1=relative_start_2-relative_start_1 (chronological slots)",
+      "d2=relative_start_3-relative_start_2",
+      "d3=0-relative_start_3",
+      "imaging_depth"
+    ],
+    "numeric_N_addition": [
+      "H_0",
+      "H_1",
+      "H_2",
+      "H_3",
+      "H_4",
+      "H_5",
+      "H_6",
+      "H_7",
+      "H_8",
+      "H_9",
+      "H_10"
+    ],
+    "categorical": [
+      "cre_line",
+      "targeted_structure",
+      "image_set",
+      "passive",
+      "experience_level",
+      "session_number",
+      "(image_1,omitted_1)",
+      "(image_2,omitted_2)",
+      "(image_3,omitted_3)"
+    ],
+    "dictionaries": "FIT observed levels only; canonical UTF-8 tuple serialization then bytewise sort; one column per observed level plus explicit unknown. Validation/query unseen levels map to unknown whose coefficient is fixed zero. No ordinal encoding of image or Cre.",
+    "numeric_missingness": "No silent imputation. Required context/cadence missing or nonfinite is an input/schema gate failure; admit a correction before any target/model execution if publisher metadata cannot supply the contract."
+  },
+  "bases": [
+    {
+      "id": "L",
+      "features": "intercept + all numeric raw features + all categorical one-hot columns"
+    },
+    {
+      "id": "Q",
+      "features": "L plus all numeric products x_i*x_j for i<=j; every numeric times every one-hot; and every pair of distinct categorical fields, all products of their one-hot levels. No three-way products, frequency threshold, feature selection or hashing.",
+      "dimension_formula": "1+q+L+q*(q+1)/2+q*L+sum_{a<b}(levels_a*levels_b); L=sum levels_a. Level counts are FIT-only and unknown until authorized projection."
+    }
+  ],
+  "fit_preprocessing": {
+    "rows": "Every supported FIT experiment-event in deterministic opaque event order, all 73 mice.",
+    "weights": "w_event = 1/(73*S_m*E_ms*O_mse), using supported hierarchy only.",
+    "columns": "For every non-intercept constructed column, weighted FIT mean and population SD using w_event; standardize with those frozen values. If SD=0, retain a declared constant column with coefficient forced zero; no epsilon. At validation/query that column remains zero. All finite arithmetic required.",
+    "target": "Divide all three output columns by the single frozen FIT target SD; preserve separate weighted intercept per output. Multiply predictions by that SD to restore released target units. Never normalize by validation/query."
+  },
+  "objective": "For each output k independently minimize sum_i w_i*(Y_ik/sigma_FIT - a_k - X_i beta_k)^2 + lambda*sum_j beta_jk^2. The intercept a is unpenalized; all nonconstant nonintercept columns receive the same ridge penalty. No output-specific hyperparameter selection.",
+  "lambda_grid": [
+    0.0001,
+    0.001,
+    0.01,
+    0.1,
+    1.0,
+    10.0,
+    100.0
+  ],
+  "finite_training_count": {
+    "views": 2,
+    "bases_per_view": 2,
+    "lambdas_per_basis": 7,
+    "primary_regression_fits": 28,
+    "outputs_per_fit": 3,
+    "validation_prediction_tables": 28,
+    "selected_references": 2,
+    "query_prediction_tables": 2,
+    "independent_selected_reconstructions": 2,
+    "history_perturbed_selected_N_fits": 5
+  },
+  "numerics": {
+    "primary": "Float64 compensated accumulation of weighted centered Gram/cross-product matrices; solve positive-definite ridge systems by Cholesky in pinned numerical environment. Sort input rows/columns deterministically. Verify finite coefficients and relative normal-equation residual <=1e-10; no ad-hoc solver fallback.",
+    "independent": "Separate implementation builds weighted centered design and solves by SVD ridge formula, using same frozen features/weights/lambda without importing the primary fitting function. Full selected FIT and validation rows, then sealed query inputs.",
+    "equivalence": "Maximum absolute discrepancy <=1e-8*max(1,max_abs_primary_prediction) in normalized target units on FIT, validation and query predictions; matching selected feature/weight/categorical receipts. Gate failure preserves both outputs and forbids qualification.",
+    "resource": "Exact d/n dimensions and memory/time plan must be bound before reference execution. A resource refusal never prunes features, rows or grid members."
+  },
+  "selection": {
+    "data": "VALIDATION 15 only, after every required FIT candidate is sealed.",
+    "objective": "Frozen mouse-macro NRMSE over all supported validation rows, same FIT scale.",
+    "rule": "Retain all 28 validation outcomes; finite scores precede +infinity. Choose smallest finite score separately for T and N; exact ties choose L before Q, then larger lambda. If a view has no finite candidate, selection unavailable and stop before query; no finite subset of mice.",
+    "refit": "None; selected FIT-trained coefficients stay unchanged.",
+    "failure": "Incomplete/nonfinite prediction vectors or missing/failed fits block technical completion. Genuine +infinity score from complete finite predictions follows COMPARISON_OUTCOMES.json and is not a missing-model failure. No grid member is discarded."
+  },
+  "controls": {
+    "zero": "[0,0,0] for every event.",
+    "last_bin_persistence": "[H_11,H_11,H_11]=[0,0,0]. Same independent prediction vector as zero, never counted twice.",
+    "fit_mean": "For each output k, sum_FIT w_i*Y_ik. Three constants from FIT only. One shared fit artifact, applicable to T and N.",
+    "trend": "OLS slope of H_8,H_9,H_10,H_11 at [-0.7,-0.5,-0.3,-0.1] seconds, with an unconstrained intercept for slope estimation; final extrapolation is anchored to H_11=0: slope*[0.2,0.4,0.6]. No fitted target coefficients, clipping or selected horizon. N only.",
+    "perturbation": {
+      "count": 5,
+      "seeds": [
+        63001,
+        63002,
+        63003,
+        63004,
+        63005
+      ],
+      "stratum": "Exact tuple(cre_line,targeted_structure,image_set,passive,experience_level,session_number,all three (image,omitted) tokens,floor(imaging_depth/25),floor(d1/0.025),floor(d2/0.025),floor(d3/0.025)). Binning boundaries use IEEE float64 floor with specified numeric unit; timing remains unmodified.",
+      "assignment": "Within each stratum sort FIT event IDs by SHA256(canonical seed + colon + event ID). Select the smallest positive cyclic rotation offset that maps every recipient to a donor from a different FIT mouse. If no such offset exists, preserve all histories in that stratum and mark it undisturbable. Whole 12-bin histories move together, preserving last-bin zero; no target/context/timing or ID is moved.",
+      "fitting": "Use the already selected original N basis/lambda. Recompute feature scaling from the perturbed FIT data only, fit five complete models. No hyperparameter re-selection. Genuine unperturbed validation/query histories are used for prediction.",
+      "required_reports": "Rows and hierarchical FIT weight changed, unchanged strata and reasons, distinct donor/recipient mouse counts, preceding-sequence/context support, actual seed permutation identity; all rows remain.",
+      "interpretation_gate": "Report control as supported only if at least 50% of hierarchical FIT event weight changes and every FIT mouse has at least one changed event. Otherwise retain outcomes as unsupported perturbation diagnostics; do not relax strata or delete observations. Threshold is a prospective control adequacy gate, not evidence of causal exchangeability."
+    }
+  },
+  "qualification": {
+    "T_empirical": "On the 15 validation mice compare selected T against zero and FIT-mean separately. For each comparator, selected T minus comparator must have mean NRMSE difference <= -0.001 and a 95% paired mouse bootstrap upper endpoint <0. Both must pass. This is a deliberately prospective minimal competence gate; failure leaves reference_gain null, without changing endpoint/cohort or declaring no neural predictability.",
+    "N_empirical": "Require technical qualification and mean validation NRMSE no more than 0.001 above selected T. Report separate comparisons with zero, FIT-mean and trend; superiority is not required for a valid null finding. Label empirical superiority only if its paired interval and predeclared 0.001 mean criterion pass for the named comparator. N need not improve T.",
+    "gain_release": "Only the unchanged T qualification plus R06 query equivalence and complete sealed query predictions can enable gain. Require finite candidate and finite strictly positive reference aggregate score; any infinite operand, zero denominator or nonrepresentable ratio yields null/unavailable with reason under COMPARISON_OUTCOMES.json. Until actual qualification all gains remain null.",
+    "bootstrap": "10,000 paired mouse resamples, PCG64 initialized with seed 63015 for validation and 63019 for query; retain exact draw-index artifact. Percentile endpoints use linear interpolation equivalent to quantile method linear; resample whole mice, preserve pairs/nested values. Bootstrap is descriptive; no p-values or causal inference. Finite paired prerequisites and all typed unavailable outcomes are mandatory under COMPARISON_OUTCOMES.json.",
+    "technical_development": "Complete full support; FIT-only feature/target statistics; all grid members finite and correct; independent selected reconstruction; actual isolated tool boundary; no query-directed development; every resource receipt present. Development numerical agreement concerns FIT/validation only and is produced by R03. Actual query prediction equivalence is later R06 evidence before D01/scoring.",
+    "nonfinite_policy": "COMPARISON_OUTCOMES.json applies to every threshold and interval. Unavailable required analysis yields not_demonstrated_numeric_unavailable, never pass. Original T and N empirical thresholds remain unchanged.",
+    "continuation": "RC00 uses EXECUTION_DISPOSITIONS.json: finish all technically possible required 28+2+5 development jobs; both empirical criteria must be met before any candidate/query stage. Technical failures or no finite selected winner stop dependent jobs with explicit unexecuted status. Unsupported perturbation matching alone does not stop the full roster."
+  },
+  "selected_fit_artifacts_now": null,
+  "reference_scores_now": null,
+  "reference_gain_now": null
+}

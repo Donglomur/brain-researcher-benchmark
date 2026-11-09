@@ -1,0 +1,142 @@
+{
+  "schema": "neural063_owner_interface_v1",
+  "entrypoint": "owner.stages.run(stage,ctx)",
+  "stage_input_keys": {
+    "E00": [
+      "candidate_predictions",
+      "reference_predictions",
+      "control_predictions",
+      "query_index",
+      "query_targets",
+      "fit_scale",
+      "support_census",
+      "qualification",
+      "query_equivalence",
+      "narrative_receipts",
+      "prediction_capture",
+      "lifecycle_custody",
+      "fit_rows",
+      "validation_rows"
+    ],
+    "E01": [
+      "scores"
+    ],
+    "E02": [
+      "candidate_predictions",
+      "reference_predictions",
+      "control_predictions",
+      "query_index",
+      "query_targets",
+      "fit_scale",
+      "support_census",
+      "scores",
+      "paired_report",
+      "narrative_receipts",
+      "scientific_review",
+      "source_sizes",
+      "source_inventory",
+      "native_metadata",
+      "projection_census",
+      "prediction_capture",
+      "lifecycle_custody",
+      "development_bundle",
+      "event_runs"
+    ]
+  },
+  "input_roles": {
+    "candidate_predictions": "candidate_predictions",
+    "reference_predictions": "reference_predictions",
+    "control_predictions": "control_predictions",
+    "query_index": "query_index",
+    "query_targets": "query_targets",
+    "fit_scale": "fit_scale",
+    "support_census": "support_census",
+    "qualification": "reference_qualification",
+    "query_equivalence": "reference_query_equivalence",
+    "narrative_receipts": "narrative_receipts",
+    "prediction_capture": "prediction_capture",
+    "lifecycle_custody": "lifecycle_custody",
+    "scores": "score_bundle",
+    "paired_report": "paired_report",
+    "scientific_review": "independent_scientific_review",
+    "source_sizes": "source_sizes",
+    "source_inventory": "source_inventory",
+    "native_metadata": "native_metadata",
+    "projection_census": "projection_census",
+    "fit_rows": "fit_rows",
+    "validation_rows": "validation_rows",
+    "development_bundle": "development_bundle",
+    "event_runs": "event_runs"
+  },
+  "principal_output_keys": {
+    "E00": [
+      "scores",
+      "support_diagnostics"
+    ],
+    "E01": [
+      "paired_report"
+    ],
+    "E02": [
+      "independent_audit",
+      "resource_report"
+    ]
+  },
+  "stage_outputs": {
+    "E00": [
+      {
+        "key": "scores",
+        "role": "score_bundle",
+        "schema": "neural063_score_bundle_v2",
+        "condition": "all predictions admitted, actual writers closed, private targets read after admission, full arithmetic computed"
+      },
+      {
+        "key": "support_diagnostics",
+        "role": "support_diagnostics",
+        "schema": "neural063_descriptive_support_diagnostics_v1",
+        "condition": "complete fixed metadata and exact preceding-sequence denominators/errors, including empty query cells; primary unchanged"
+      }
+    ],
+    "E01": [
+      {
+        "key": "paired_report",
+        "role": "paired_report",
+        "schema": "neural063_paired_report_v2",
+        "condition": "all fixed contrasts computed as finite or typed unavailable with whole-mouse uncertainty"
+      }
+    ],
+    "E02": [
+      {
+        "key": "independent_audit",
+        "role": "independent_audit",
+        "schema": "neural063_independent_audit_v2",
+        "condition": "independent arithmetic and all complete scientific obligations assessed, including explicit open disposition"
+      },
+      {
+        "key": "resource_report",
+        "role": "resource_report",
+        "schema": "neural063_actual_resource_report_v1",
+        "condition": "all16+8*query_events controller receipts and nested job observations retained; unknown failed counters explicit"
+      }
+    ]
+  },
+  "stage_parameters": {
+    "E00": {
+      "runtime_profile": "exact same bound runtime profile; actual scoring-barrier interrogation"
+    },
+    "E01": {},
+    "E02": {
+      "runtime_profile": "same bound runtime profile; independent writer/capture recheck"
+    }
+  },
+  "nested_artifact_reads": {
+    "E00": [
+      "runtime custody exact job/exit/closure/capture descriptors; no target opened by receipt verification"
+    ],
+    "E01": [],
+    "E02": [
+      "actual signed ancestor completion inventories and runtime custody descriptors; no unauthenticated resource summary"
+    ]
+  },
+  "external_review": "scientific_review must bind complete actual ancestor inventory digest, paired report, exact obligation evidence descriptors and reviewer identity. A verified assertion alone is insufficient.",
+  "remaining_interfaces": "runtime prediction_capture/lifecycle_custody names are reserved concrete coordination contract; source_sizes is S01, source_inventory S02, native_metadata S03, projection_census S05; freeze only after all exact interfaces join."
+}

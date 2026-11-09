@@ -1,0 +1,169 @@
+{
+  "schema": "neural063_lifecycle_design_v2",
+  "status": "proposed_unexecuted",
+  "conditions": [
+    {
+      "id": "F-T-G",
+      "mode": "F",
+      "information": "T",
+      "tools": "G",
+      "query_mice": 19,
+      "training_access": "T FIT+VALIDATION",
+      "reference_access": null
+    },
+    {
+      "id": "F-T-R",
+      "mode": "F",
+      "information": "T",
+      "tools": "R",
+      "query_mice": 19,
+      "training_access": "T FIT+VALIDATION",
+      "reference_access": "T"
+    },
+    {
+      "id": "F-N-G",
+      "mode": "F",
+      "information": "N",
+      "tools": "G",
+      "query_mice": 19,
+      "training_access": "N FIT+VALIDATION",
+      "reference_access": null
+    },
+    {
+      "id": "F-N-R",
+      "mode": "F",
+      "information": "N",
+      "tools": "R",
+      "query_mice": 19,
+      "training_access": "N FIT+VALIDATION",
+      "reference_access": "N"
+    },
+    {
+      "id": "I-T-G",
+      "mode": "I",
+      "information": "T",
+      "tools": "G",
+      "query_mice": 19,
+      "training_access": "T FIT+VALIDATION",
+      "reference_access": null
+    },
+    {
+      "id": "I-T-R",
+      "mode": "I",
+      "information": "T",
+      "tools": "R",
+      "query_mice": 19,
+      "training_access": "T FIT+VALIDATION",
+      "reference_access": "T"
+    },
+    {
+      "id": "I-N-G",
+      "mode": "I",
+      "information": "N",
+      "tools": "G",
+      "query_mice": 19,
+      "training_access": "N FIT+VALIDATION",
+      "reference_access": null
+    },
+    {
+      "id": "I-N-R",
+      "mode": "I",
+      "information": "N",
+      "tools": "R",
+      "query_mice": 19,
+      "training_access": "N FIT+VALIDATION",
+      "reference_access": "N"
+    }
+  ],
+  "case_unit": "whole query mouse; event-local isolated inference nested within mouse; no event treated as biological replication",
+  "common_tool_contract": {
+    "G": [
+      "pinned Python/NumPy/SciPy environment",
+      "bounded filesystem reads of allowed training assets and current event",
+      "bounded numerical scripts and plotting to local scratch",
+      "same exact local reasoning checkpoint and tokenizer when used, subject to F/I controller rule"
+    ],
+    "R": "G plus pure sealed selected-reference predictor matched to information view; no target/error API.",
+    "not_available": [
+      "network",
+      "external services",
+      "raw NWB",
+      "source ROI/clock/lineage tables",
+      "operator targets or binding",
+      "other query events",
+      "peer artifacts",
+      "unbudgeted helpers",
+      "online model downloads"
+    ]
+  },
+  "mode_contract": {
+    "F": "Entire predictor graph, trained parameters, automatic branches, fixed checkpoint prompts/parsers and fixed call positions frozen before query. No general investigator delegation. Static and runtime audit required.",
+    "I": "Equally developed sealed library; may choose per-event analyses, tools and local code changes inside same budget. Capture all changes and calls; reset after each event. No query label or feedback."
+  },
+  "development": [
+    {
+      "stage": "D0",
+      "action": "Assign same initial checkpoint/environment/training packet identity and numerical resource envelope per matched condition."
+    },
+    {
+      "stage": "D1",
+      "action": "Run 8 separately accounted development jobs. FIT/validation information view matches query view; references exposed only to R. Record every target access, model fit, prompt/tool call, failure and usage."
+    },
+    {
+      "stage": "D2",
+      "action": "Freeze 8 predictor/library artifacts, executable entrypoints, adaptation rules, training receipts and dependency closures. Independent F audit rules out general investigator calls or mutable dependencies."
+    },
+    {
+      "stage": "D3",
+      "action": "Freeze reference/candidate output schemas, actual checkpoint identity, local inference implementation and actual per-arm equal device mapping before any query input."
+    }
+  ],
+  "query": [
+    {
+      "stage": "Q0",
+      "action": "Verify fixed schedule/interval privacy and support census; all eight arms consume exact same query identity sequence."
+    },
+    {
+      "stage": "Q1",
+      "action": "For each condition and query mouse, trusted dispatcher creates fresh read-only event packet mount plus sealed training artifacts and new scratch, denies all sibling surfaces."
+    },
+    {
+      "stage": "Q2",
+      "action": "Run one fresh capsule per supported experiment-event under condition rules and identical per-event budgets; record actual tools, processes, mounts, resource counters and exit."
+    },
+    {
+      "stage": "Q3",
+      "action": "Seal each complete event prediction, reap descendants, revoke writers; trusted collector joins into complete mouse and complete-arm outputs. Missing/failed event makes arm incomplete; no favorable subset score."
+    },
+    {
+      "stage": "Q3N",
+      "action": "After Q03 admits all immutable whole-arm predictions, N00 runs exactly eight mandatory condition-specific report jobs (both F and I), using the same frozen reporting recipe/checkpoint. Only own sealed training/event transcripts and predictions are readable; scores/targets/sibling artifacts are denied. Keep every terminal outcome and actual cost; close report writers before E00."
+    },
+    {
+      "stage": "Q4",
+      "action": "After all eight immutable candidate captures, reference/control tables and all eight narrative terminal/writer-close records exist, separately confirm complete-output admission before opening target bindings. Query prediction equivalence is already established at R06."
+    },
+    {
+      "stage": "Q5",
+      "action": "Score once with target-only scorer identity; produce paired hierarchical reports and total costs. Release all scores only after entire attempt closes."
+    }
+  ],
+  "story_artifact": "Both F and I produce one mandatory post-capture report in N00, with equal explicit resource bounds. Separate report identities cannot invoke/change predictors or captured outputs. Reports discuss estimand, method/features, uncertainty limitations, alternatives and executable evidence from their own sealed transcripts, without query labels/scores. Exactly eight terminal job receipts are required. Failure leaves numerical predictions immutable and prevents complete interpretation certification, while admitted numerical scoring may proceed after writer shutdown. These are candidate narratives, not E01 trusted analysis or E02 independent audit.",
+  "candidate_seed_policy": "One preregistered run per condition, seeded 632026 in the pinned generator/checkpoint runtime when supported; coupled seed configuration across matched arms. Stochastic nondeterminism is logged, not hidden with best-of retries. Conclusions are for this checkpoint/run, not universal agent ability.",
+  "receipt_requirements": [
+    "condition and attempt identity",
+    "checkpoint bytes/hash, training/exposure declaration, tokenizer and inference version",
+    "training packet hashes and every access class",
+    "source/code/weights/interface/environment hashes",
+    "F static call graph and actual query trace, or I complete action/code transcript",
+    "device IDs, CPU/GPU time, wall time, RAM/VRAM peak, token counts, tool calls, read/write bytes",
+    "mount namespace/credential/FD/process/network isolation evidence",
+    "event packet identity and prediction bytes/hash",
+    "candidate termination and output quiescence",
+    "admission before target-open ordering",
+    "all failures and incomplete allocations"
+  ],
+  "supervised_fitting_policy": "Candidate and reference parameter fits use FIT targets only. VALIDATION labels support recorded development diagnostics and method/hyperparameter selection; no final FIT+VALIDATION refit and no query-time supervised fitting on validation targets. Query capsules can fit/adapt from FIT data only under the sealed F recipe or event-local I actions. Exact allowed target accesses and fitting row identities are audited.",
+  "prequery_reference_route": "RC00 terminates before any development/query job unless both unchanged T/N empirical competence criteria pass with required finite comparisons, after the original 35 development fits technically complete. Unsupported perturbation matching is retained diagnostic. See EXECUTION_DISPOSITIONS.json.",
+  "outcome_policy": "COMPARISON_OUTCOMES.json and EXECUTION_DISPOSITIONS.json"
+}

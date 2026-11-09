@@ -1,0 +1,56 @@
+{
+  "schema": "neural063_comparison_outcomes_v2",
+  "scope": "All primary, secondary, reference, validation-qualification and perturbation comparisons; no fitting/scoring performed by authoring this schema.",
+  "absolute_scores": {
+    "finite": {
+      "value": "finite nonnegative binary64 number",
+      "status": "finite"
+    },
+    "overflow": {
+      "value": null,
+      "status": "positive_infinity",
+      "reason": "true nonrepresentable positive absolute error after stable arithmetic"
+    },
+    "rule": "Retain all admitted absolute per-mouse and aggregate scores, including positive_infinity. NaN, signed Infinity JSON literals, clipping and substitution are forbidden. Complete finite predictions are distinct from finite error metrics."
+  },
+  "derived_record": {
+    "value": "finite number or null only",
+    "status": [
+      "finite",
+      "unavailable"
+    ],
+    "reason_codes": [
+      "absolute_positive_infinity_operand",
+      "indeterminate_infinity_minus_infinity",
+      "derived_arithmetic_overflow",
+      "undefined_zero_reference",
+      "reference_unqualified",
+      "required_comparison_unavailable",
+      "missing_output",
+      "scientific_isolation_failure"
+    ],
+    "optional_arithmetic_class": [
+      "finite",
+      "positive_infinity",
+      "negative_infinity",
+      "undefined"
+    ],
+    "rule": "Signed infinities or undefined mathematical outcomes are classified in metadata only; they never become numeric values or usable finite evidence."
+  },
+  "per_mouse_difference": "For A minus B, if both absolute scores are finite and stable subtraction is finite, emit the finite difference. If A=+infinity and B finite, emit unavailable/absolute_positive_infinity_operand with arithmetic_class positive_infinity; reverse gives negative_infinity. If both are +infinity, emit unavailable/indeterminate_infinity_minus_infinity with arithmetic_class undefined. Finite operands whose difference cannot be represented give unavailable/derived_arithmetic_overflow and its sign class. Keep every original mouse record.",
+  "aggregate_contrast": "Require all expected paired mice (19 query or 15 validation) and every per-mouse difference finite. Otherwise the whole contrast is unavailable, with the complete affected-mouse reason list; no subset average or resampling. If all differences are finite, calculate their stable equally weighted mean; any nonrepresentable result makes the whole contrast unavailable/derived_arithmetic_overflow. No dropping, clipping or score replacement.",
+  "gain": "Require technically and empirically qualified T, query equivalence, complete sealed predictions, and finite aggregate candidate and timing-reference scores with R_T>0. Otherwise gain=null/status unavailable with reference_unqualified, absolute_positive_infinity_operand or undefined_zero_reference as applicable. Compute 1-R_candidate/R_T with stable arithmetic only after these checks; nonrepresentable ratio/gain yields unavailable/derived_arithmetic_overflow (normally negative_infinity class). A positive-infinity candidate never receives numeric negative infinity gain. All absolute scores remain unchanged.",
+  "bootstrap": {
+    "prerequisite": "All expected per-mouse differences and aggregate contrast finite. If not, interval=null/status unavailable/required_comparison_unavailable, draw_indices=null, resamples_executed=0. Record planned seed and 10000 planned resamples without claiming execution.",
+    "finite_route": "Use the fixed PCG64 seed and 10000 whole-mouse paired draws from V1. Each resample uses a stable finite mean. Percentile linear interpolation uses a stable convex combination of finite bracketing endpoints, never an overflowing high-low shortcut.",
+    "arithmetic_failure": "Any nonfinite resample or endpoint despite finite prerequisites makes the entire interval unavailable/derived_arithmetic_overflow. Retain every generated draw and the failed operation; no redraw, finite-only subset, default endpoint or NaN library fallback.",
+    "record": "Complete interval record contains status, endpoints or null, reasons, planned/actual draw counts and draw-index binding. Per-mouse absolute and finite difference records remain available."
+  },
+  "validation_selection": "All 28 fitted-model prediction vectors must remain complete and finite. Each validation absolute score may be finite or positive_infinity; retain all 28 results. Within a 14-model view, finite scores rank before +infinity; exact finite ties retain V1 L-before-Q/larger-lambda rule. If a view has no finite score, selection is unavailable and the attempt terminates before dependent selected-model/query/candidate work; this is numeric selection unavailability, not a missing-output or isolation failure. Infinity-scored models are retained as ranked outcomes, not omitted members.",
+  "qualification": "The exact V1 T and N thresholds are unchanged. A required difference, mean or interval unavailable under this policy yields empirical_status not_demonstrated_numeric_unavailable, never pass or a favorable subset. Finite criterion failure yields not_met; finite pass yields met. RC00 requires both T and N empirical_status met. Diagnostic unsupported perturbation matching is separate from these statuses.",
+  "distinct_failures": {
+    "missing_output": "Incomplete/nonfinite prediction values or absent required identities fail admission; no absolute score is manufactured. Whole intended cohort stays in failure record.",
+    "scientific_isolation_failure": "Invalid custody or forbidden access invalidates scientific interpretation and blocks trusted target opening/scoring; it is not a poor model performance.",
+    "nonfinite_metric": "Complete finite admitted predictions can yield a genuine +infinity absolute score; retain it, suppress unsupported derived comparisons, and do not recast this as missing output or an isolation breach."
+  }
+}

@@ -1,0 +1,9 @@
+# Attribution and licensing
+
+Project-authored implementation and documentation use the repository MIT license, copied unchanged to `LICENSE`, including its existing Brain Researcher copyright notice. The 70 portable files contain no vendored dependency or SDK implementation, full paper, dataset, model weight or private identity/answer/key body. The named input schemas, aggregate scientific scope and source digest descriptors are provenance/contracts rather than distributed input bodies.
+
+The intended external data source is Allen Visual Behavior optical physiology. Existing source attribution points to [AllenSDK documentation](https://allensdk.readthedocs.io/en/latest/visual_behavior_optical_physiology.html), [AllenInstitute/AllenSDK](https://github.com/AllenInstitute/AllenSDK), and the provider's [terms page](https://alleninstitute.org/legal/terms-use/). The implementation retains upstream public SDK revision `a56bd8ea7613a812334602b64746cdd30c325a96` as a source check. This audit did not fetch those sites or verify current external terms. SDK/data rights must be established separately; this project license does not grant them.
+
+NumPy, SciPy, matplotlib, h5py, PyTorch, Transformers and pynvml are source-level dependencies. No selected distributions or their transitive libraries are bundled. Exact versions, dependency licenses, HDF5, CUDA/NVML/driver, Linux containment, local rootless Docker/OCI image, checkpoint/tokenizer rights and actual runtime compatibility remain future qualification obligations. The archive neither installs nor downloads them.
+
+No candidate public release includes the private audit packet, predecessor build/agent histories, installed registry, authentic arrays/headers/targets, private communications, signing material or conditional private dependencies. Public content clearance applies to these exact authored source/doc bytes; it is not clearance to release future inputs or scientific outputs.
