@@ -1,0 +1,193 @@
+{
+  "capacity": {
+    "canonical_limits": "{total_read_bytes,per_file_bytes,cache_bytes,max_array_elements,max_workspace_bytes} explicitfinite; allrereads andmaterializations charged",
+    "fields": [
+      "metadata_limits",
+      "canonical_limits",
+      "reference_capacity",
+      "preparation_numeric_limits",
+      "storage",
+      "whole_wall_seconds"
+    ],
+    "metadata_limits": "{file_bytes,total_bytes} positivefinite boundsexplicit; actual reads counted before allocation",
+    "preparation_numeric_limits": "ExactNumericLimitsfields",
+    "reference_capacity": "ExactReferenceCapacityfields",
+    "schema": "n073_capacity_section_v1",
+    "storage": "{root,minimum_free_bytes,owned_reservation_bytes,other_reserve_minimum_bytes}; actualstatvfsavailable beforeauthenticdata; otherreserveCLI mustmatchI andbe>=declaredminimum; no candidatecap substitution",
+    "whole_wall_seconds": "finite selected invocationwall; operational timeouts invalidateinfra, never downscopegrid/cohort"
+  },
+  "corpus": {
+    "adjudications": "Exact Adjudication fields and requiredindependent dispositions; fullsourceids only",
+    "canonical": "{path,bytes,sha256} belowexplicitcanonical_root; pathsrelative;8D exactlittleendianf64; no shape/headerguessing",
+    "fields": [
+      "inventory_pin",
+      "canonical_root",
+      "geometry",
+      "identity_conflicts",
+      "adjudications"
+    ],
+    "gate": "All9532records, geometryvalidation, completeobservations, crosspersonscreen/adjudications, actual C105 production; authenticbodyoperationsonlyfutureseparatelyadmittedrun.",
+    "identity_conflicts": "Exact IdentityConflict records bound to independentgateevidence",
+    "inventory_fields": [
+      "records"
+    ],
+    "inventory_schema": "n073_canonical_inventory_v1",
+    "original_receipt": "Exact OriginalReceipt fields from acceptedparent; no inventedconverterfidelityproof",
+    "record_fields": [
+      "record_id",
+      "canonical",
+      "original_receipt"
+    ],
+    "schema": "n073_corpus_section_v1"
+  },
+  "host": {
+    "fields": [
+      "host_specs_pin",
+      "tool_specs_pin"
+    ],
+    "host_specs_fields": [
+      "hosts"
+    ],
+    "host_specs_schema": "n073_expanded_host_specs_v1",
+    "hosts": "Exact234 map=context_id->HostPreparation JSON fields, nestedclasses viafixedactiveallowlist; allactualcontextIDs checkedafteractualplan; no genericconstructor names.",
+    "schema": "n073_host_section_v1",
+    "tool_specs_fields": [
+      "tools"
+    ],
+    "tool_specs_schema": "n073_expanded_tool_specs_v1",
+    "tools": "Exact39 list each {person,condition,preparation}; preparationexactToolPreparation fields exceptpublic_sources is fixed3sourceidentifiers, ownerreadsactualpinnedcodebodies."
+  },
+  "intent": {
+    "binding": "Hraw intent equals E.binding_constraints.invocation_intent_digest; alllowerpins matchdeclaredpackage; policyexactrawpinandruntimeobjectdigestchecked; freshrootallowedonlyselectedoutput_parent.",
+    "fields": [
+      "invocation_id",
+      "selection_id",
+      "output_path",
+      "policy_pin",
+      "runtime_policy_digest",
+      "accepted_parent_closure_digest",
+      "code_closure_digest",
+      "task_design_digest",
+      "deployment_digest",
+      "source_freeze_digest",
+      "other_reserve_bytes"
+    ],
+    "output_convention": "output_path is exact grading submission JSON file immediately under private_output.output_parent; private run root is sibling run-<invocation_id>. Both selected before effects. Separate consumed attempt-<invocation_id> sibling is metadata custody, not the scientific store.",
+    "schema": "n073_invocation_intent_v1"
+  },
+  "numerical": {
+    "contract": "Exact existing n073_native_numpy_runtime_v1 fields; body references earlier native API/host proof, no D/F/Q backreference cycle; actualactivate separately gated.",
+    "fields": [
+      "contract",
+      "native_qualification_digest"
+    ],
+    "schema": "n073_numerical_section_v1"
+  },
+  "private_output": {
+    "attempt_limits": {
+      "fields": [
+        "file_bytes",
+        "total_write_bytes",
+        "max_records",
+        "max_json_nodes",
+        "workspace_bytes",
+        "wall_seconds",
+        "failure_write_reserve_bytes",
+        "failure_record_reserve",
+        "failure_wall_seconds"
+      ],
+      "meaning": "All explicit finite positive independently selected capacities. Atomic attempt-<invocation_id> mkdir plus fsync and original claim file precede capacity/catalogue/native/corpus/preparation. Private parent0700. Failed/incomplete claims never reopened as a new invocation. Separate >=2 record and >=2 file byte emergency reserves; operational wall not reset, finite failure-capture grace only.",
+      "wall_bound": "At least the selected whole invocation wall cap; cooperative filesystem checkpoints, no kernel I/O cancellation claim.",
+      "workspace_bound": "At least128*file_bytes+8192, no measured RSS claim."
+    },
+    "evidence_limits": "Exact graderEvidenceLimits fields sharedfromhelper, finite explicitbounded reads/writes/capture; no defaultunboundedoutput",
+    "fields": [
+      "output_parent",
+      "store_template",
+      "evidence_limits",
+      "terminal_write_bytes",
+      "usage_extraction_limits",
+      "usage_extraction_budget",
+      "attempt_limits"
+    ],
+    "schema": "n073_private_output_section_v3",
+    "store_template": "{single_artifact_bytes,total_write_bytes,journal_record_bytes,store_contract_digest}; run_id/outputrootfromauthenticatedI, public_mount_rootsfromactual234hosts39tools",
+    "terminal_write_bytes": "Positive complete cumulative original metadata-write cap after store.close; no refunds for failed or partial writes",
+    "usage_extraction_budget": {
+      "fields": [
+        "max_total_capture_bytes",
+        "max_total_projection_bytes",
+        "max_workspace_bytes",
+        "wall_seconds",
+        "max_contexts"
+      ],
+      "max_contexts": 234,
+      "type": "positive integers; one full original invocation budget, reserve all failures/no retry"
+    },
+    "usage_extraction_limits": {
+      "fields": [
+        "max_capture_bytes",
+        "max_frame_bytes",
+        "max_projection_bytes",
+        "max_workspace_bytes",
+        "max_frames",
+        "wall_seconds"
+      ],
+      "type": "positive integers; complete per-context source capture ceilings, no stderr body read"
+    }
+  },
+  "provider": {
+    "common_profile": "ExactFullStudy provider_fields profile; source/model/stateless/tokenizer/usage/environment/protocol/capacity evidence andwirecaps. All234 actualadmissions equalthisprofile andsamefixedInferencePolicy; policy.model_profile_idmatches. No source/model overrides frompolicyinput.",
+    "fields": [
+      "model_profile_id",
+      "inference_policy",
+      "common_profile"
+    ],
+    "schema": "n073_provider_section_v1"
+  },
+  "qualification": {
+    "fields": [
+      "gate",
+      "status",
+      "accepted_parent_closure_digest",
+      "code_closure_digest",
+      "task_design_digest",
+      "deployment_digest",
+      "source_freeze_digest",
+      "control_receipts",
+      "claim_scope"
+    ],
+    "gate_names": [
+      "original_body_source_authority",
+      "converter_fidelity",
+      "rights_redistribution",
+      "cross_person_identity_adjudication",
+      "geometry_full_support",
+      "native_runtime_and_isolation",
+      "privileged_oom_witness",
+      "fixed_provider_and_inference",
+      "complete_capacity_and_storage",
+      "private_output_custody"
+    ],
+    "optional_root_constraints": "assessment_digest and plan_digest are independently enforced if present. They are computed by original production CorpusAssessment/ReferenceData, not invented as preknown requirements; final terminal requires actual complete ReferenceEngine and same closed PrivateRunStore.",
+    "schema": "n073_gate_qualification_v1",
+    "source_semantics": "Exact root-signedE evidence list must independently admit eachgatebody and its actual controlprovenance. Hashes/nonempty strings alone not qualification. No passinggatebody fabricated bybuilder orengineeringcontrols."
+  },
+  "schema": "n073_owner_section_contracts_v3",
+  "status": "operative source schema; initial deployment unconfigured; no actual external section instantiated",
+  "trust_anchor": {
+    "evidence_resolution": "After actual rootMAC check, each root-selection evidence pin resolves only evidence_root/<sha256>.json; exactdeclaredbodyhash/bytes. No metadata discovery/callback. Q may bind D/F because D containsonlyevidence_root, notQhash.",
+    "fields": [
+      "root_id",
+      "issuer_id",
+      "keys",
+      "evidence_root",
+      "intent_root",
+      "metadata_limits"
+    ],
+    "intent_resolution": "After rootMAC, canonical safe selection_id resolves only intent_root/<selection_id>.json; raw intenthash equals selectedbinding. D hasdirectory, not I hash. NoD/I cycle.",
+    "keys": "exactroot/issuer/context/permutation/export dictionary; each {path,max_bytes,owner_uid,mode}; absolute canonical selected private file,no symlinks/singlelink,mode0400or0600,32..4096B; no publickeybody/hash",
+    "metadata_limits": "{file_bytes,total_bytes}; positive finite bootstrapbounds; metadata only",
+    "schema": "n073_trust_anchor_v1"
+  }
+}
