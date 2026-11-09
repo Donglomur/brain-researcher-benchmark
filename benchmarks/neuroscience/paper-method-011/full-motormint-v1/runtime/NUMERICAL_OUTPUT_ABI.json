@@ -1,0 +1,64 @@
+{
+  "schema": "motormint_numerical_output_abi_v1",
+  "keys": {
+    "behavior": [
+      "per_dimension_r2",
+      "groups"
+    ],
+    "neural_state": [
+      "bits_per_spike"
+    ],
+    "psth": [
+      "per_neuron_r2",
+      "mean_r2"
+    ],
+    "geometry": [
+      "pair_count",
+      "mean_distance",
+      "mean_comparison_distance",
+      "pearson",
+      "mean_absolute_normalized_difference"
+    ],
+    "nearest_library": [
+      "distances",
+      "normalized_distances",
+      "library_mean_pair_distance"
+    ],
+    "contrasts": [
+      "signed_gain",
+      "mean_gain",
+      "mean_absolute_difference",
+      "worst_gain"
+    ],
+    "neuron_loss_curve": [
+      "counts",
+      "means",
+      "sample_sd",
+      "interpolated_counts",
+      "interpolated_means",
+      "threshold",
+      "first_count_at_or_above_threshold"
+    ],
+    "cost": [
+      "attempt_count",
+      "totals",
+      "peak_rss_bytes"
+    ]
+  },
+  "cost_totals": [
+    "wall_seconds",
+    "cpu_seconds",
+    "gpu_seconds",
+    "token_count",
+    "bytes_written"
+  ],
+  "neuron_threshold": "fraction * max observed means; smallest qualifying interpolated count if endpoints1/max present, otherwise smallest qualifying observed count; null if none; nonmonotone allowed. Nonpositive maxima deny percentage-retention interpretation.",
+  "geometry_undefined": "Pearson with zero variance/fewer than3rows raises ValueError",
+  "historical_policy_note": "Circular metric/NLB formula and threshold summaries remain prospective engineering conventions until original evaluator/native qualification.",
+  "clarifications": {
+    "circular_resultant_undefined_at_or_below": 1e-12,
+    "dense_loss_interpolation_max_neurons": 4096,
+    "actual_paper_max_neurons": 162,
+    "resource_counts": "All fixture/source costs are separate from authentic scientific costs."
+  }
+}

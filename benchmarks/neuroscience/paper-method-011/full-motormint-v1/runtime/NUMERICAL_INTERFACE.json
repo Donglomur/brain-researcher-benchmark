@@ -1,0 +1,74 @@
+{
+  "schema": "motormint_dual_bank_interface_v1",
+  "python": "stdlib only; no numpy installs, scientific packages, data/model inputs or numerical execution outside tiny invented controls",
+  "file": "bank.py",
+  "input_format": "JSON-compatible Python values; unknown/malformed fields rejected by dispatch; all finite scalar arrays except semantically documented missing metrics are explicit errors",
+  "dispatch_API": "evaluate(kind: str, payload: dict) -> dict; deterministic pure source numerical primitives with finite checks, not clinical/scientific qualification",
+  "kinds": {
+    "behavior": {
+      "payload": [
+        "truth: nonempty rows x dimensions",
+        "prediction: identical shape",
+        "groups: dict[str,list[int]], disjoint cover of columns",
+        "circular_columns:list[int]",
+        "phase_period: positive float only when circular columns; otherwise null"
+      ],
+      "output": "per_dimension_r2 list; groups dict of unweighted dimension mean; circular metric use minimal signed modular residual and circular mean resultant; degenerate SST or resultant => explicit ValueError, never silently skip; this is named prospective benchmark convention, not native historical Cycle parity"
+    },
+    "neural_state": {
+      "payload": [
+        "spikes: rows x neurons, nonnegative integers",
+        "rates: same shape, strictly positive spikes/second",
+        "mean_rates: positive training-baseline per-neuron rates (spikes/second)",
+        "bin_seconds: finite positive"
+      ],
+      "output": "bits_per_spike = sum(spikes*log(rate/mean_rate) - bin_seconds*(rate-mean_rate))/(log(2)*sum(spikes)); no total spikes => error. Original NLB historical evaluator remains separately gated."
+    },
+    "psth": {
+      "payload": [
+        "truth: samples x neurons",
+        "prediction: same shape"
+      ],
+      "output": "per-neuron R2 and mean; this compares already authenticated operator-constructed PSTHs, not public test targets"
+    },
+    "geometry": {
+      "payload": [
+        "states: finite nonempty matrix",
+        "comparison_states: equal row count finite matrix, independent dimensionality",
+        "block_size: positive integer metadata upper bound"
+      ],
+      "output": "stream all unique unordered point pairs, Euclidean distances normalized separately by own pairwise mean; return count, pairwise mean distances, Pearson of paired distances, mean absolute normalized-distance discrepancy; optional unknown histogram edges never invented; no dense pair matrix"
+    },
+    "nearest_library": {
+      "payload": [
+        "states: finite matrix",
+        "library: same-width finite matrix"
+      ],
+      "output": "nearest Euclidean distance each state, normalized by mean unique library-pair distance; no covariance Gaussian generator inferred"
+    },
+    "contrasts": {
+      "payload": [
+        "candidate: finite vector",
+        "reference: same shape finite vector"
+      ],
+      "output": "signed_gain vector, mean_gain, mean_absolute_difference, worst_gain; no seed/sample statistical independence claim"
+    },
+    "neuron_loss_curve": {
+      "payload": [
+        "counts: exact sorted positive integer vector",
+        "scores: each count x fixed repetitions, finite",
+        "max_neurons:int",
+        "threshold_fraction: finite positive <=1"
+      ],
+      "output": "per-count mean and sample SD with n>=2; linear interpolation to1..max only when endpoints present; threshold crossing summaries explicitly defined in docs; never label interpolated points measured"
+    },
+    "cost": {
+      "payload": [
+        "attempts: nonempty list of exact rows {id,role,status,wall_seconds,cpu_seconds,gpu_seconds,token_count,bytes_written,peak_rss_bytes}"
+      ],
+      "output": "sums of all attempts including failures and peak RSS; ids unique, counts nonnegative ints (bool rejected), times finite nonnegative; no success-only filtering"
+    }
+  },
+  "scope": "Bank numerical operations form shared assessment ingredients for all17scope modules; original per-module support/config/native/simulation/evaluator definitions require owner admission mapping. Do not implement invented missing source policies.",
+  "tests": "Independent meaningful tiny controls with preserved failure/cost evidence; pin source before controls; no helper; no Git; cap individual invented data to a few KiB and report conservative cumulative/retained/live envelopes."
+}

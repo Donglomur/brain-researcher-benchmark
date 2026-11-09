@@ -1,0 +1,61 @@
+{
+  "schema": "motormint_additive_numerical_interface_v2",
+  "api": "evaluate(kind, payload) -> JSON-compatible dict; pure stdlib, no imports of original bank or other author's implementation",
+  "kinds": {
+    "cycle_geometry": {
+      "payload": [
+        "neural_a: rows x units",
+        "neural_b: rows x units; rows correspond to same condition/time after protected joins",
+        "muscle: aligned rows x 7",
+        "phase: aligned physical-unit vector",
+        "velocity: aligned vector",
+        "scales: {muscle_sd:[7 positive],phase_sd:positive,phase_period:positive,velocity_sd:positive}",
+        "pair_policy: unique_offdiagonal or full_ordered_with_diagonal; original policy is separately authenticated, never inferred",
+        "edges: {neural:list,muscle:list,kinematic:list,partition:list}, strictly increasing fixed normalized-distance bins",
+        "ordering_draws:list of four-index rows [a,b,c,d]",
+        "ordering_min_neural_difference: nonnegative, supplied original threshold",
+        "ordering_tie_policy: include_as_disagreement or exclude; original policy remains evidence gate"
+      ],
+      "output": "{pair_count, means:{neural,muscle,kinematic,partition}, histograms:{muscle,kinematic,partition}:{counts: rows y-neural bins x x-comparison bins,outside,total}, ordering:{muscle,kinematic,partition}:{draw_count,eligible,concordant,discordant,ties,neural_excluded,concordance:null if no eligible}}",
+      "formula": "Neural/full-dimensional and partition Euclidean. Muscle Euclidean after supplied per-channel SD scaling. Phase shortest modular distance divided by supplied circular SD; velocity absolute difference divided by supplied SD; kinematic hypot of these two. Normalize each pair distance by its own all-pair mean before histograms and ordering differences. Original 10ms bins, 50ms muscle and150ms kinematic source-clock joins are validated by owner consumer. A/B neural partitions are matched; only partition A drives behavior comparisons. Original100000draws required by authentic module binding; tiny controls use fewer. Projections/variance source remain separately required documentary or independently checked outputs, not supplied by this primitive."
+    },
+    "paired_test": {
+      "payload": [
+        "left: finite vector",
+        "right:same-length finite vector",
+        "unit_ids: unique original paired unit IDs"
+      ],
+      "output": "{n,mean_difference,sample_sd,standard_error,t_statistic:null for zero SE,degrees_of_freedom,two_sided_p:null for undefined t,undefined_reason:null or string}",
+      "formula": "d=left-right; sample SD denominator n-1; SE=SD/sqrt(n); paired Student t mean/SE, df=n-1; two-sided p from Student t distribution. Preserve undefined zero-SE values; do not invent significance. Original exact pair membership is bound by owner aggregate consumer and historical dependence caveat retained."
+    },
+    "draw_interval": {
+      "payload": [
+        "draws:list of finite numbers or null for undefined draw",
+        "alpha: 0<alpha<1"
+      ],
+      "output": "{draw_count,undefined_count,interval:null if any undefined else [linear_interpolated_lower,upper],status:complete or undefined_draws}",
+      "formula": "Sorted linear empirical quantiles at alpha/2 and1-alpha/2, index(n-1)*q. All undefined draws retained. Historical percentile convention not specified in source remains a gate, separate from this named prospective convention."
+    }
+  },
+  "independence": "Shared ABI describes inputs/formulas/output structure, not either implementation. Both new authors work independently. Old banks remain unchanged.",
+  "source_paths": [
+    "authoring/delivery-20261105/mint-motor/public/paper.txt lines125,131,470-473",
+    "authoring/delivery-20261105/mint-motor/source/paper.html math id inf454 confirms square root missing from plaintext extraction",
+    "authoring/delivery-20261105/common/remaining-builds-wave37/motormint-complete-design/publisher-figures.txt lines110-116"
+  ],
+  "unresolved_originals": [
+    "Exact SD fit scope/convention; original joins, partitions, draws, meaningful-difference threshold, tie policy, bin edges and projection bases",
+    "Original paired-test aggregation and SE memberships; exact original bootstrap draws/percentile convention"
+  ],
+  "conventions": {
+    "histogram": "left-closed/right-open; final edge included; outside counts either out-of-range axis",
+    "neural_ordering": "exclude abs(normalized difference)<=supplied threshold, hence exact neural ties excluded",
+    "behavior_ordering_ties": "ties counted separately, not discordant; include_as_disagreement includes tie in eligible denominator; exclude removes it from eligible denominator",
+    "geometry_validity": "matched nonempty A/B same row count and unit width; aligned behavior rows; reject any nonfinite intermediate or nonpositive pair mean",
+    "ordering_pairs": "unique_offdiagonal requires different endpoints within each pair, either orientation allowed; full_ordered_with_diagonal permits same endpoint",
+    "paired_test": "n>=2; unit_ids unique nonempty strings",
+    "interval": "nonempty draw list; null draws are explicit undefined outcomes",
+    "policy_status": "These named conventions implement explicit supplied policies; undisclosed historical bin-edge/tie/threshold/normalization policy remains unresolved.",
+    "paired_test_undefined_reason": "zero_standard_error (canonical status code; after independent derivations, text-only interface alignment)"
+  }
+}
