@@ -3,6 +3,8 @@ from pathlib import Path
 from .io import need, read_json, read, identity
 
 ROOT = Path(__file__).resolve().parents[1]
+PIN_INDEX = {'bytes': 4302, 'sha256': 'a425e6ee3dc1335044cb96aa85c0840ab6fd8af4a5debada7aa594c4048a7be6'}
+PIN_NAMES = ('AUTHOR_SOURCE_JOINS.json', 'DESIGN.md', 'ESTIMAND_REPORTING_CONTRACT.json', 'EVIDENCE.json', 'GATES.json', 'INTERFACES.json', 'PROGRAMME.json', 'RESOURCE_MODEL.json', 'SCIENTIFIC_CONTRACT.json', 'SOURCE_ROLE_MAP.json', 'VALIDATION_PLAN.json')
 ARMS = ("SIGNAL", "PRE", "NUISANCE", "SIGNAL_NUISANCE", "PRE_NUISANCE")
 ACCESS = ("A", "B")
 MODES = ("F", "I")
@@ -58,9 +60,16 @@ FEATURE_PAIRS = (("SIGNAL","PRE"),("SIGNAL","NUISANCE"),("SIGNAL_NUISANCE","NUIS
 DEPLOYMENT_ENABLED = False
 
 def load():
-    pins = read_json(ROOT / "contracts/PINS.json", 100_000)
+    pins = read_json(ROOT / "contracts/PINS.json", 100_000, PIN_INDEX)
+    need(type(pins) is dict and tuple(sorted(pins)) == PIN_NAMES, "Complete fixed public contract set")
     out = {}
     for name, row in pins.items():
+        need(type(row) is dict and set(row) == {"portable", "original", "source_identity"}, "Closed public pin row")
+        need(type(row["original"]) is dict and set(row["original"]) == {"path", "bytes", "sha256"}, "Closed portable identity")
+        need(row["original"]["path"] == row["portable"], "Exact portable path identity")
+        need(type(row["source_identity"]) is dict and set(row["source_identity"]) == {"bytes", "sha256"}, "Closed original source identity")
+        for p in (row["original"], row["source_identity"]):
+            need(type(p["bytes"]) is int and 0 <= p["bytes"] <= 2_000_000 and type(p["sha256"]) is str and len(p["sha256"]) == 64 and set(p["sha256"]) <= set("0123456789abcdef"), "Exact bounded source identity")
         need(row["portable"] == "contracts/" + name, "Selected portable contract path")
         body = read(ROOT / row["portable"], 2_000_000, row["original"])
         if name.endswith(".json"):

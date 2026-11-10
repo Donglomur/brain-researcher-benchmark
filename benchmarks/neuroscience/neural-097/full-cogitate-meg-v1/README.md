@@ -37,6 +37,8 @@ The selected roster is an **unpublished protected dependency**, not a freely cho
 
 This candidate makes two explicit publication amendments: private provenance locators become opaque unbundled-source identifiers with coherent portable contract pins; the embedded roster becomes a fail-closed protected source dependency. All 41 accepted runtime roles remain present. [Source provenance](SOURCE_PROVENANCE.json) distinguishes each exact copy from each proposed amendment. An independent content and amendment review is required before publication. No private build history is part of the public allowlist.
 
-The retained `PINS.json` schema calls its selected descriptor `original`; in this public candidate that field pins the current portable body. It is not a claim that an amended body equals its earlier private version. Earlier body identities and the exact-copy flags are recorded separately in `SOURCE_PROVENANCE.json`.
+The retained `PINS.json` schema calls its selected descriptor `original`; in this public candidate that field pins the current portable body. It is not a claim that an amended body equals its earlier private version. Each PINS row also retains `source_identity` for the immutable pre-projection source bytes, while `original` is the exact current portable body. Earlier body identities and exact-copy flags are recorded separately in `SOURCE_PROVENANCE.json`. The loader authenticates the complete fixed PINS index before any contract body.
 
 The included project software is under [MIT](LICENSE). Paper, data, author code, Python packages, container images and future candidate submissions are separate dependencies with their own terms; see [third-party scope](THIRD_PARTY.md).
+
+The canonical central package is the parent directory. Its source-only run/score/operator adapters authenticate this complete 41-role runtime before entering the existing disabled programme. Public source metadata carries no private build history.
