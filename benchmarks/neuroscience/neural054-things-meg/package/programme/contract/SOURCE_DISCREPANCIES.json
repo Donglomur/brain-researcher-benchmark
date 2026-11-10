@@ -1,0 +1,190 @@
+{
+  "schema": "neural054_source_discrepancies_and_limits_v1",
+  "rows": [
+    {
+      "id": "SD01",
+      "name": "Release mismatch",
+      "evidence": [
+        "P:s7",
+        "Srcmap"
+      ],
+      "observation": "Paper citesOpenNeurov2.0.0; currenttaskpinv2.0.1. Exact releasechanges andderivativegenerationnotauthenticated.",
+      "gate": "G02",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    },
+    {
+      "id": "SD02",
+      "name": "Publishedeye channel suffix",
+      "evidence": [
+        "P:s9",
+        "Ceye:L48",
+        "Srcmap"
+      ],
+      "observation": "Paper y-channel suffix2101 versuspinnedcode2104. Do notderive actualcolumns frompaperprose alone; actualnativequalificationunperformed.",
+      "gate": "G07",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    },
+    {
+      "id": "SD03",
+      "name": "Eye crop/origin join",
+      "evidence": [
+        "Ceye:L334-L339",
+        "Ceye:L369-L382",
+        "Extract:L41-L60"
+      ],
+      "observation": "Adjustedphotodiodesamples andcroppedvalues placedinoriginalrawcopy; relativeclock/IDchecks do notproveabsolutealignment.",
+      "gate": "G07",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    },
+    {
+      "id": "SD04",
+      "name": "Pupil threshold uninitialized invalid positions",
+      "evidence": [
+        "Ceye:L225-L235"
+      ],
+      "observation": "np.empty_like(dia) assignedonly atis_valid, thenwholearray nanmedian/MAD. Staticpotentialundefinedinvalidcontents; noclaimit changedobservedderivatives.",
+      "gate": "G08",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    },
+    {
+      "id": "SD05",
+      "name": "Eye all-invalid/isolated-sample behavior",
+      "evidence": [
+        "Ceye:L203-L211",
+        "Ceye:L137-L158"
+      ],
+      "observation": "All-invalidbranch callsremove_loners withvalid_idx indexing; separationexpression mixesstoredsampleindices with40/1200. Exactnativeimpact andhistoricalexecutionlineage unresolved; noauthorcodeeditselected.",
+      "gate": "G08",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    },
+    {
+      "id": "SD06",
+      "name": "Same metadata geometry versusactual headgeometry",
+      "evidence": [
+        "Cpre:L86-L106",
+        "P:fig2s4"
+      ],
+      "observation": "Authorassignsfirstdev_head_t acrossruns/sessions. M4coilplacementcautions; sensornamehomology notanatomicalregistration.",
+      "gate": "G06",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    },
+    {
+      "id": "SD07",
+      "name": "Physical sensorhardware versusMNEkind",
+      "evidence": [
+        "P:s4-5-1",
+        "Extract:L30"
+      ],
+      "observation": "CTF radial1stordergradiometers andMNEsoftwaremag labels differ inmeaning; processedbaselinezscore unitsnotrawtesla.",
+      "gate": "G06",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    },
+    {
+      "id": "SD08",
+      "name": "Original andprospective environment",
+      "evidence": [
+        "Deps:L3-L5"
+      ],
+      "observation": "Documented author mixedMNE1.0.0/1.2.1 versusprospectiveMNE1.9.0; no nativeequivalence ortransitiveenvironmentqualification.",
+      "gate": "G09",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    },
+    {
+      "id": "SD09",
+      "name": "Dropout interventions andzero-based runindex",
+      "evidence": [
+        "Cpre:L62-L70",
+        "Cpre:L116-L117",
+        "P:s4-5-2"
+      ],
+      "observation": "Exactparticipant/session/run sourcebranches requirezero-based enumerate interpretation andfullartifact mapping. Do notsilentlyexclude affectedtrials orchangefillrule.",
+      "gate": "G10",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    },
+    {
+      "id": "SD10",
+      "name": "Published analyses differfromN054target",
+      "evidence": [
+        "P:s4-10",
+        "P:s4-12",
+        "Clda:L38-L40",
+        "Cols:L42-L55"
+      ],
+      "observation": "Originalpairwiseconcept LDA/continuousOLSnot27multilabelhiddenconcept prediction. Theirnumbersnotbaseline/SOTA forthistask.",
+      "gate": "G01",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    },
+    {
+      "id": "SD11",
+      "name": "Eight-total-PC reference tradesfamilycapacity",
+      "evidence": [
+        "Ref:L19-L23",
+        "T"
+      ],
+      "observation": "Jointaddingneuralreallocates8totalcoordinates; nominalfamilyscalingnot equalcapacityorconditionalinformation.",
+      "gate": "G22",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    },
+    {
+      "id": "SD12",
+      "name": "Legacy nuisance denominator candidate controlled",
+      "evidence": [
+        "T",
+        "Score:L78-L85"
+      ],
+      "observation": "CandidatecoulddegradeNUISANCEandinflateownJOINTdifference. Existingprimarynull isappropriate; proposedindependentbankneeded.",
+      "gate": "G14",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    },
+    {
+      "id": "SD13",
+      "name": "Legacy training groups mergeperson/session",
+      "evidence": [
+        "Prep:L64"
+      ],
+      "observation": "Doesnotprovideconcept/imagegroups orseparateglobal sessionidentity requiredfor properinnertransferselection; newopaque trainingmetadata isexplicitamendment.",
+      "gate": "G13",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    },
+    {
+      "id": "SD14",
+      "name": "Early features are offline",
+      "evidence": [
+        "P:s4-5-2",
+        "P:s10",
+        "Ceye:L283-L288"
+      ],
+      "observation": "Sourcefilter/normalization/whole-run cleaningmaydependonlater samples. EARLY/PRE and20msperturbation do notestablishcausalavailability.",
+      "gate": "G21",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    },
+    {
+      "id": "SD15",
+      "name": "Finitefeatures and deterministic labels",
+      "evidence": [
+        "P:s4-2",
+        "Srcmap"
+      ],
+      "observation": "Annotations determinedbyconcept/image; boundedimagefeatures canbeweak. Positiveincrementnotirreducibleinformation givencompleteimage.",
+      "gate": "G22",
+      "scientific_impact_observed": false,
+      "original_source_unchanged": true
+    }
+  ],
+  "count": 15,
+  "policy": "Staticobservations/provenancegaps, not measureddataerrors. Exactauthorsource retained; anyrepair/reprocessingneedsnewsourceversion/nativequalification and fullsupport."
+}

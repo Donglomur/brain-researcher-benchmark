@@ -1,0 +1,86 @@
+{
+  "schema": "neural054_full_exposure_and_split_design_v1",
+  "physical_family": "things-meg",
+  "same_cohort_tasks": [
+    "NEURAL-053",
+    "NEURAL-054"
+  ],
+  "otherfamilyconsumers": "Futureoperator must enumerate anyotherpaper/neural tasks and pretrainedtools using this physicalcorpus; familyidentity includesoriginalsourcehashes,notjustversionlabel.",
+  "new_independent_cohorts": 0,
+  "outer": {
+    "people": 4,
+    "session_ordinals": 12,
+    "concept_groups": 5,
+    "cases": 240,
+    "concept_rule": "first8 bytes SHA256('NEURAL054-concept-v1:'+decimal(source_concept_nr)), unsigned big-endian modulo5",
+    "query": "person == held_person AND session == held_session AND concept_group == held_group",
+    "train": "person != held_person AND session != held_session AND concept_group != held_group",
+    "all_other_rows": "excluded from invocation",
+    "source_concept_identifier_operator_private": true,
+    "case_names_public": "Fresh opaque episode IDs; original named source cases remain private.",
+    "row_query_multiplicity_per_mode_window_arm": 1,
+    "base_artifacts_per_mode_replicate": 6000,
+    "all_core_probability_values_per_mode_replicate": 60069600
+  },
+  "inner": {
+    "version": "N054-inner-full27-v1",
+    "outer_training_people": 3,
+    "session_buckets": 3,
+    "concept_buckets": 3,
+    "cases_per_outer": 27,
+    "session_bucket": "first8 SHA256('NEURAL054-inner-session-v1:'+source_session_ordinal) modulo3, excludingouterheldsession; mapping fixed before anyoutcome",
+    "concept_bucket": "first8 SHA256('NEURAL054-inner-concept-v1:'+source_concept_nr) modulo3, excludingouterheldgroup",
+    "validation": "innerheldperson ANDinnersessionbucket ANDinnerconceptbucket; training excludes all three identities; otheroutertrainrows unused in this innerfit",
+    "pooled_validation": "All27 combinations cover each eligible outer-training row exactlyonce. Poolconceptbuckets perperson/session before class-balancedmetric; incomplete/emptyrequiredgroups blockqualification,notrerandomization.",
+    "selection_metric": "Mean class-balanced natural-log loss overall27labels, allouter-training sessions andthree trainingpeople, same scoreorder asouter.",
+    "tie_rule": "Absolute loss tie tolerance1e-12; lower declared complexity then lexicographic configuration ID. Numeric tolerance must be qualified before run; never changed usingtest outcomes.",
+    "candidate_access": "Same group/innerpartition metadata, only training rows. Participants may use own allowedtraining strategy; declared same aggregate budget applies.",
+    "no_test_selection": true
+  },
+  "private_rosters": [
+    "Originalparticipant/session/run/image/concept/event/epoch-to-source join",
+    "Original27sourceannotationsandallheldtargets",
+    "Private32byte opaque-ID secret",
+    "Exactsourcecontentandphysicalexposureledger",
+    "Cross-mode pairedsupportandtarget-bank commitment"
+  ],
+  "public_training_groups": [
+    "Opaque person_id pertrainingrow",
+    "Opaque session_ordinal_id sharedacrosspersonsonlywithininvocation",
+    "Opaque concept_id sharedacrossexemplars/persons withininvocation",
+    "Opaque image_id forsameimage withininvocation",
+    "Explicitsupervisorinnerpartitionmasks referencingonlytrainingrowtokens"
+  ],
+  "public_query_metadata": [
+    "Episode/queryopaqueIDs",
+    "Allowedarm/windowandfeatureschema",
+    "Permittednumericvalues/availabilitywithinarm",
+    "Immutabletrainedstatehandle/allowedtoolcatalog"
+  ],
+  "forbidden_query_metadata": [
+    "Sourceperson/session/runlabel",
+    "Concept/imageIDorfilenames/directorynames",
+    "Roworder/trigger/onset/response/targetvalues",
+    "Originalsourceprefixorhashusableaslookupkey",
+    "Crossfold/crossmodecache orsharedmodelstate",
+    "Privatequality/null/mutation/exposure tags"
+  ],
+  "support_barrier": {
+    "all_core_required": 6000,
+    "meaning": "Everycase/window/armartifact ofevery selectedmode/toolcondition/replicate plusrequiredreferences sealed beforetargetbankaccess.",
+    "agreement": "Commit exactorderedopaquequery support andprivateactualtargets before scoring; notjust equalityofdeclaredcounts/schema.",
+    "partial": "Failure/abstention/incompletecountsfreezeallproducedartifactsandcosts; primarynull, no targetcallbacks.",
+    "mode_required_banks": "P/I full-core30000 logical control artifacts, D same-summary12000, mixedboth. Every selected bank/candidate must seal before targets; inactive kind NOT_REQUIRED. StandaloneR only admitted prior tagged report."
+  },
+  "campaign_custody": [
+    "Freeze allcandidate code beforeany benchmarktrainingview",
+    "Freshindependentcontext/filesystem/networknamespace peroutercase/window/arm/mode/replicate",
+    "Fitstate frozenbeforequery",
+    "Freshqueryprocess/snapshot orindependentlyprovedstateless rowboundary withnomutablecrossquerycandidate memory; P/I bothsame",
+    "No target orscore feedback untilwholecampaignbarrier",
+    "PostscoreRreports taggedexposed; no reuseasunknown-data campaign",
+    "Bind D candidate and both controls to exactly the same serialized summary/query payload; keep richer preparation state private. Preserve all cross-mode/family exposure and post-reportR limits."
+  ],
+  "shift_and_missingness": "Onset-shift identities, PRE/negative-control labels andmissingness-quality labels remainprivate exceptdeclaredscientificwindow. Candidate cannotreceivebranch-specific private nullflags.",
+  "test_status": "EntirepublicTHINGS corpus mayhavepretraining exposure; protected evaluation is notguaranteedunseenindependenttest. Unknownexposure reported,notassertedabsent."
+}

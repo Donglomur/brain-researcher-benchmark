@@ -1,0 +1,313 @@
+{
+  "schema": "neural054_complete_scientific_design_v1",
+  "task_id": "NEURAL-054",
+  "status": "DESIGN_PENDING_INDEPENDENT_REVIEW",
+  "implementation_selected": false,
+  "scientific_execution_selected": false,
+  "canonical_count_delta": 0,
+  "scope": {
+    "source_family": "THINGS-MEG / D-N049 / ds004212",
+    "participants": [
+      "BIGMEG1",
+      "BIGMEG2",
+      "BIGMEG3",
+      "BIGMEG4"
+    ],
+    "main_sessions_per_person": 12,
+    "runs_per_session": 10,
+    "recorded_trials_per_person": 27048,
+    "experimental_trials_per_person": 22248,
+    "experimental_trials_total": 88992,
+    "repeat_presentations_total": 9600,
+    "catch_presentations_total": 9600,
+    "recorded_trials_total": 108192,
+    "concepts": 1854,
+    "experimental_exemplars_per_concept_per_person": 12,
+    "labels": [
+      "animal",
+      "bird",
+      "body part",
+      "clothing",
+      "clothing accessory",
+      "container",
+      "dessert",
+      "drink",
+      "electronic device",
+      "food",
+      "fruit",
+      "furniture",
+      "home decor",
+      "insect",
+      "kitchen appliance",
+      "kitchen tool",
+      "medical equipment",
+      "musical instrument",
+      "office supply",
+      "part of car",
+      "plant",
+      "sports equipment",
+      "tool",
+      "toy",
+      "vegetable",
+      "vehicle",
+      "weapon"
+    ],
+    "labels_are_independent_binary_not_simplex": true,
+    "whole_original_scope_required": true,
+    "additional_two_MEG_sessions_not_in_selected_release": true
+  },
+  "source": {
+    "paper_doi": "10.7554/eLife.82580",
+    "paper_year": 2023,
+    "paper_publisher_version": 4,
+    "paper_meg_dataset_version": "2.0.0",
+    "task_meg_dataset_version": "2.0.1",
+    "task_dataset_commit": "5405e3ef6478cd55da62d14c9340b4f95f620b03",
+    "author_revision": "5e0eccac51eac78b57045f5b90b4f53814f56c32",
+    "release_bridge_verified": false,
+    "original_derivative_execution_lineage_verified": false,
+    "source_figures_are_not_this_task_answer_key": true
+  },
+  "views": {
+    "profile": "SOURCE_OFFLINE_CORE_V2_DESIGN",
+    "windows": [
+      {
+        "name": "PRE",
+        "start_ms": -100,
+        "end_ms": -20,
+        "half_open": true,
+        "bins": 4,
+        "bin_ms": 20
+      },
+      {
+        "name": "EARLY_MINUS",
+        "start_ms": 60,
+        "end_ms": 140,
+        "half_open": true,
+        "bins": 4,
+        "bin_ms": 20
+      },
+      {
+        "name": "EARLY",
+        "start_ms": 80,
+        "end_ms": 160,
+        "half_open": true,
+        "bins": 4,
+        "bin_ms": 20
+      },
+      {
+        "name": "EARLY_PLUS",
+        "start_ms": 100,
+        "end_ms": 180,
+        "half_open": true,
+        "bins": 4,
+        "bin_ms": 20
+      },
+      {
+        "name": "LATE",
+        "start_ms": 200,
+        "end_ms": 280,
+        "half_open": true,
+        "bins": 4,
+        "bin_ms": 20
+      }
+    ],
+    "arms": {
+      "VISUAL": [
+        "visual"
+      ],
+      "OCULAR": [
+        "ocular"
+      ],
+      "NUISANCE": [
+        "visual",
+        "ocular"
+      ],
+      "NEURAL": [
+        "neural"
+      ],
+      "JOINT": [
+        "visual",
+        "ocular",
+        "neural"
+      ]
+    },
+    "family_dimensions": {
+      "visual": 103,
+      "ocular": 24,
+      "neural": 1084
+    },
+    "neural": {
+      "channels": 271,
+      "source_samples_per_bin": 4,
+      "rate_hz": 200,
+      "source_epoch_samples": 281,
+      "source_epoch_ms": [
+        -100,
+        1300
+      ],
+      "values": "Source epoch-baseline z-scores; MNE software kind mag does not restate physical CTF sensor hardware."
+    },
+    "ocular": {
+      "channels": 3,
+      "source_samples_per_bin": 24,
+      "rate_hz": 1200,
+      "source_epoch_samples": 1681,
+      "features": "Four-bin x/y/pupil means and separate finite fractions; training-only imputation; no sample/trial deletion."
+    },
+    "visual": {
+      "features": "Exact legacy103 fixed features from authentic source images. No image-name/EXIF/category directory or pretrained embedding in core view.",
+      "rendering_claim": "File-pixel summaries, not verified projector/display image reconstruction."
+    },
+    "causal_or_online_interpretation": false,
+    "absolute_cross_modal_origin_qualified": false
+  },
+  "outer_split": {
+    "people": 4,
+    "session_ordinals": 12,
+    "concept_groups": 5,
+    "cases": 240,
+    "concept_rule": "first8 bytes SHA256('NEURAL054-concept-v1:'+decimal(source_concept_nr)), unsigned big-endian modulo5",
+    "query": "person == held_person AND session == held_session AND concept_group == held_group",
+    "train": "person != held_person AND session != held_session AND concept_group != held_group",
+    "all_other_rows": "excluded from invocation",
+    "source_concept_identifier_operator_private": true,
+    "case_names_public": "Fresh opaque episode IDs; original named source cases remain private.",
+    "row_query_multiplicity_per_mode_window_arm": 1,
+    "base_artifacts_per_mode_replicate": 6000,
+    "all_core_probability_values_per_mode_replicate": 60069600
+  },
+  "information_contract": {
+    "training": "Every eligible training row, permitted families and27 labels; separate opaque person/session/concept/image equality groups and optional inner partition views. No cross-outer-case state. Mandatory references use fixed configurations; participants may train/tune inside their own permitted view.",
+    "query": "Exactly one permitted query row at a time plus frozen training state and permitted tools. No query-label or other-query access, hidden-score feedback, target-batch fitting or query-conditioned state updates.",
+    "allowed_source_knowledge": "Same fixed offline paper/method documentation and tool catalog in P/I; no source annotation tables, original source IDs or private author workspace. User's scientific knowledge access is explicit and logged.",
+    "frozen_before_query": [
+      "candidate source/config/tool policy",
+      "training/inner-selection plan",
+      "fitted state and training artifacts",
+      "reference model source/state",
+      "original process/cost receipts"
+    ],
+    "no_tools_diagnostic": "Separate trusted train-only PCA8 summaries, same full outer support; never pooled with full-core P/I.",
+    "whole_campaign_score_barrier": true
+  },
+  "estimands": [
+    {
+      "id": "E01",
+      "name": "Candidate predictive value against independent core nuisance",
+      "primary": true,
+      "definition": "At EARLY: balanced_loss(trusted_fixed_R1_NUISANCE) - balanced_loss(candidate_JOINT), averaged within label/class then sessions then people.",
+      "scope": "Operational comparative predictive value. Different methods and information sets; not conditional mutual information or causal neural effect."
+    },
+    {
+      "id": "E02",
+      "name": "Candidate method gain against independent joint comparator",
+      "primary": false,
+      "definition": "EARLY balanced_loss(trusted_fixed_R1_JOINT) - balanced_loss(candidate_JOINT)",
+      "scope": "Model/agent performance given the same core families."
+    },
+    {
+      "id": "E03",
+      "name": "Trusted family matched neural augmentation",
+      "primary": false,
+      "definition": "For each fixed trustedR0/R1/R2 family and every window, balanced_loss(R_NUISANCE)-balanced_loss(R_JOINT), with no reference tuning search.",
+      "scope": "Bounded family predictive diagnostic; finite representation and effective capacity remain alternatives."
+    },
+    {
+      "id": "E04",
+      "name": "Candidate-controlled arm differences",
+      "primary": false,
+      "definition": "All candidate JOINT-versus-NUISANCE differences and EARLY-PRE/LATE contrasts retained.",
+      "scope": "Descriptive only; cannot enter primary denominator or establish control competence."
+    },
+    {
+      "id": "E05",
+      "name": "Tool and investigator contribution",
+      "primary": false,
+      "definition": "Paired P/I and generic-tool/decoder-assisted differences at exact same query/support/info/profile and prospectively matched accounted limits.",
+      "scope": "Conditional performance contrast, not pure causal decomposition of latent reasoning ability."
+    },
+    {
+      "id": "E06",
+      "name": "Direct compressed numerical representation diagnostic",
+      "primary": false,
+      "definition": "D against both fixed same-serialized-summary DG/DC controls from the independently observed typed D_SUMMARY_REFERENCE_V1 bank; balanced loss/accuracy and full-support window/arm/person outputs, after the whole selected-campaign target-last seal.",
+      "scope": "Train-only8D representation, not raw neural-data comprehension or equal input to P/I."
+    },
+    {
+      "id": "E07",
+      "name": "Scientific interpretation",
+      "primary": false,
+      "definition": "Frozen post-prediction report consistency, admissible claims and explicit alternatives/gaps; no numeric composite until rubric qualified.",
+      "scope": "Arithmetic consistency separately reported from independently reviewed scientific reasoning. Current or admitted prior tagged report only; no new scientific execution or target access by standaloneR."
+    }
+  ],
+  "metrics": {
+    "primary": "E01 at predeclared EARLY only if all complete/ranking gates close",
+    "probability_semantics": "27 finite independent Bernoulli predictions. Primary loss evaluates a class-balanced pseudo-population; raw source-prevalence calibration is not implied.",
+    "threshold": 0.5,
+    "log_floor": 1e-15,
+    "log_base": "natural",
+    "pool_order": [
+      "Pool all5 concept-fold predictions within each person/session/window/arm",
+      "Within eachlabel,mean losses/accuracy separately overpositive andnegative,thenweight0.5each",
+      "Mean all27 labels",
+      "Mean12 sessions withinperson",
+      "Mean4 personmeans"
+    ],
+    "mandatory_outputs": [
+      "All raw arm metrics bylabel/session/person/window",
+      "All independent comparator metrics and effects",
+      "E01/E02/E03/E04/E05 as applicable",
+      "Exact0/1 counts and clipped-loss counts",
+      "Unweighted loss as distinct calibration context",
+      "Failures/support/costs/readiness",
+      "All4 individual-person effects",
+      "E06 versus both same-summary controls whenD selected; separate taggedprofile, not full-core primary"
+    ],
+    "absent_class": "unscorable required metric; never drop label/session/person",
+    "abstention": "explicit empty numeric artifact; full primary incomplete",
+    "uncertainty": {
+      "legacy_descriptive_t_multiplier": 3.182446,
+      "df": 3,
+      "calibrated_population_interval": false,
+      "independent_trials_claim": false,
+      "formal_null_pvalue_selected": false
+    },
+    "selection_policy": "CAMPAIGN_CONDITIONS.json selects applicable estimands and required bank kinds. D-only produces E06 and has E01-E05 NOT_SELECTED, not missing-full-core failures; mixed reports separate profiles after one global seal."
+  },
+  "complete_means": "Full selected mode/tool/replicate manifest plus every required source/reference/scoring gate. A partial D or I episode is not a complete mode; no surrogate subset promotion.",
+  "counts_are_not_results": true,
+  "independent_reference_output_contract": {
+    "lifecycle": "REFERENCE_LIFECYCLE.json",
+    "families": [
+      "R0",
+      "R1",
+      "R2",
+      "R4",
+      "R5"
+    ],
+    "logical_artifacts_per_family": 6000,
+    "logical_artifacts_per_bank": 30000,
+    "mandatory_for": [
+      "NUM",
+      "NUM_REF"
+    ],
+    "independent_of_candidate_calls_and_abstention": true,
+    "source_state_query_probability_completion_resource_binding": true,
+    "full_core_scope": "Existing30000-output bank required whenP/I selected. For D-only it is inactive, not missing.",
+    "summary_bank": {
+      "definition": "D_REFERENCE_LIFECYCLE.json",
+      "kind": "D_SUMMARY_REFERENCE_V1",
+      "families": [
+        "DG_DIAGONAL_GAUSSIAN",
+        "DC_NEAREST_CENTROID"
+      ],
+      "artifacts_per_family": 6000,
+      "total": 12000,
+      "required_when": "D selected",
+      "E06_only": true
+    }
+  },
+  "campaign_condition_contract": "CAMPAIGN_CONDITIONS.json"
+}

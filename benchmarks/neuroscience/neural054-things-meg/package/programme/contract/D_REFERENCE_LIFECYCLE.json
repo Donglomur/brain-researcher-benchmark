@@ -1,0 +1,270 @@
+{
+  "schema": "neural054_D_summary_reference_lifecycle_s3",
+  "status": "PROPOSED_NOT_IMPLEMENTED",
+  "information_profile": "D_PCA8_SUMMARY_V1",
+  "bank_kind": "D_SUMMARY_REFERENCE_V1",
+  "graph_stage": "S18",
+  "scope": {
+    "outer_cases": 240,
+    "windows": 5,
+    "arms": 5,
+    "labels": 27,
+    "experimental_trials": 88992,
+    "logical_candidate_artifacts": 6000,
+    "control_families": [
+      "DG_DIAGONAL_GAUSSIAN",
+      "DC_NEAREST_CENTROID"
+    ],
+    "logical_case_artifacts_per_control": 6000,
+    "logical_control_case_artifacts": 12000,
+    "query_rows_per_control": 2224800,
+    "probability_values_per_control": 60069600,
+    "query_rows_both_controls": 4449600,
+    "probability_values_both_controls": 120139200,
+    "full_core_bank_required_for_D_only": false,
+    "independent_of_D_candidate_calls_success_or_abstention": true
+  },
+  "fixed_methods": {
+    "projection": "Unchanged trusted R0-style training-only family weighting/fullSVD PCA8 and strict rank guard; class summaries derived only from eligible outer training. No logistic model or full-core reference bank is needed to prepare D.",
+    "serialization": "Unchanged canonical label/class/coordinate order,17-significant-digit roundtrippable floats. 872floats=27*2*8*2+8 and54counts. Positive/negative class means and population variances in same8 coordinates; exactly the same serialized numerical payload and declared schema supplied to candidate and both controls.",
+    "DG_DIAGONAL_GAUSSIAN": "Unchanged diagonal-Gaussian decoder with balanced/equal class priors and declared per-coordinate variance floor1e-8, applied to the serialized per-class means/population variances and query coordinates;27 independent binary probabilities. No fitted calibration or hidden covariance.",
+    "DC_NEAREST_CENTROID": "Unchanged nearest-class-centroid Euclidean-distance softmax at fixed temperature1, applied to the same serialized class means and query coordinates;27 independent binary probabilities. No hidden learned distance metric.",
+    "no_algorithm_change": true,
+    "same_information": "Controls never receive raw MEG/core arrays, extra training rows/labels, private PCA coefficients, unrounded class statistics, other queries, source IDs or evaluator targets. Their parameter cache may contain only fixed recipe metadata and exact serialized training summary values. The trusted projection preparer alone holds its protected PCA state."
+  },
+  "phases": [
+    {
+      "id": "DC01",
+      "name": "Admit complete D candidate/control census",
+      "actor": "trusted_D_controller",
+      "depends_on": [],
+      "inputs": [
+        "CampaignRequirementsManifest",
+        "Outer240Views",
+        "PairedSupportCommitment",
+        "DProjectionAndSerializationContract",
+        "DResourcePlan"
+      ],
+      "outputs": [
+        "RequiredSummaryControlJobCensus",
+        "DSummaryInputAdmission",
+        "OriginalDSummaryCensusReceipts"
+      ],
+      "requirement": "Declare6000 candidate slots and6000 slots for each ofDG/DC over full support. No P/I full-core bank requirement. Required controls exist independently of candidate calls/success/abstention."
+    },
+    {
+      "id": "DC02",
+      "name": "Execute and seal trusted training-only projection and summaries",
+      "actor": "trusted_D_preparer_and_external_observer",
+      "depends_on": [
+        "DC01"
+      ],
+      "inputs": [
+        "DSummaryInputAdmission",
+        "PermittedOuterTrainingView",
+        "DProjectionAndSerializationContract",
+        "QualifiedEnvironment",
+        "DPreparationLimits"
+      ],
+      "outputs": [
+        "SummaryPreparationSeal",
+        "SerializedTrainingSummaries",
+        "OriginalSummaryPreparationReceipts"
+      ],
+      "requirement": "Actually fit only the declared training-only PCA8 and compute class counts/means/population variances, serialize without truncation and seal original source/environment/training/state/summary bytes and completion/cost. No query or held target is used. No full-core reference fit is implicitly selected."
+    },
+    {
+      "id": "DC03",
+      "name": "Seal the two fixed same-summary control recipes",
+      "actor": "trusted_summary_control_preparer",
+      "depends_on": [
+        "DC02"
+      ],
+      "inputs": [
+        "SerializedTrainingSummaries",
+        "SummaryPreparationSeal",
+        "FixedDGDCSourceConfigEnvironment"
+      ],
+      "outputs": [
+        "SummaryControlStateSeals",
+        "OriginalSummaryControlPreparationReceipts"
+      ],
+      "requirement": "Actually prepare fixedDG/DC state from exactly the serialized class summary bytes and fixed method constants; no richer data/state access or target fitting. Bind source/config/environment and permitted input profile. Record no additional learned calibration and real original preparation costs."
+    },
+    {
+      "id": "DC04",
+      "name": "Produce exact shared D query payload",
+      "actor": "trusted_D_query_preparer",
+      "depends_on": [
+        "DC02",
+        "DC03"
+      ],
+      "inputs": [
+        "SummaryPreparationSeal",
+        "SerializedTrainingSummaries",
+        "PermittedOneRowQueryFeatures",
+        "PairedSupportCommitment",
+        "DSerializationAndContextLimits"
+      ],
+      "outputs": [
+        "DirectQueryViews",
+        "DSharedQueryPayloads",
+        "OriginalDSummaryQueryReceipts"
+      ],
+      "requirement": "Use frozen projection state to transform the permitted one query, append exactly the sealed same summaries and produce complete872-float/54-count payload with bound opaque query ID/profile/arm/window. Serve the exact payload to candidate and both controls; no test labels or truncation. DirectQueryViews is only the current opaque-query/profile/schema/payload descriptor, not another richer input; the shared numeric payload is byte-identical across candidate and both controls."
+    },
+    {
+      "id": "DC05",
+      "name": "Execute independent trusted DG/DC inference",
+      "actor": "trusted_summary_reference_process",
+      "depends_on": [
+        "DC03",
+        "DC04"
+      ],
+      "inputs": [
+        "SummaryControlStateSeals",
+        "DSharedQueryPayloads",
+        "FixedDGDCSourceConfigEnvironment",
+        "DControlInferenceLimits"
+      ],
+      "outputs": [
+        "SummaryControlQueryProbabilityArtifacts",
+        "OriginalSummaryControlInferenceReceipts"
+      ],
+      "requirement": "Actually invoke both fixed methods on only the exact shared serialized input. Produce27 bounded independent probabilities for every query; bind method/state/input/output bytes and independently observed original launch/completion/streams/resources. No candidate output/call or full-core model substitutes. Check that serialized class-summary bytes, ordering and digests exactly match the admitted SummaryControlStateSeals; no extra precision or unqualified state is read."
+    },
+    {
+      "id": "DC06",
+      "name": "Materialize identity-qualified logical D control outputs",
+      "actor": "trusted_summary_reference_controller",
+      "depends_on": [
+        "DC05"
+      ],
+      "inputs": [
+        "SummaryControlQueryProbabilityArtifacts",
+        "OriginalSummaryControlInferenceReceipts",
+        "RequiredSummaryControlJobCensus",
+        "OriginalDSummaryQueryReceipts"
+      ],
+      "outputs": [
+        "SummaryControlLogicalQueryOutputs",
+        "SummaryReferenceReuseMap",
+        "OriginalSummaryControlMaterializationReceipts"
+      ],
+      "requirement": "Reuse only proved exact numeric-input and pure-control procedure equality. Materialize all bound logical destinations and opaque query mappings from actual original probability bytes. Candidate D responses cannot inherit pure-control reuse."
+    },
+    {
+      "id": "DC07",
+      "name": "Collect complete same-summary control case artifacts",
+      "actor": "trusted_summary_reference_collector",
+      "depends_on": [
+        "DC06"
+      ],
+      "inputs": [
+        "SummaryControlLogicalQueryOutputs",
+        "SummaryReferenceReuseMap",
+        "RequiredSummaryControlJobCensus",
+        "OriginalSummaryControlPreparationReceipts",
+        "OriginalSummaryControlInferenceReceipts",
+        "OriginalSummaryControlMaterializationReceipts"
+      ],
+      "outputs": [
+        "CompleteSummaryReferenceCaseArtifacts",
+        "SummaryControlCaseCompletenessReceipts",
+        "OriginalSummaryControlCollectionReceipts"
+      ],
+      "requirement": "Collect every12000 mandatory control artifact with exact query membership,class order,27 finite probabilities and original lineage. Reject either missing control, query or original receipt; collection never passes through candidate-onlyS13/A06."
+    },
+    {
+      "id": "DC08",
+      "name": "Seal complete D summary reference bank and resource observations",
+      "actor": "trusted_summary_reference_controller_and_external_observer",
+      "depends_on": [
+        "DC07"
+      ],
+      "inputs": [
+        "CompleteSummaryReferenceCaseArtifacts",
+        "SummaryControlCaseCompletenessReceipts",
+        "OriginalDSummaryCensusReceipts",
+        "OriginalSummaryPreparationReceipts",
+        "OriginalSummaryControlPreparationReceipts",
+        "OriginalDSummaryQueryReceipts",
+        "OriginalSummaryControlInferenceReceipts",
+        "OriginalSummaryControlMaterializationReceipts",
+        "OriginalSummaryControlCollectionReceipts",
+        "DResourcePlan"
+      ],
+      "outputs": [
+        "CompleteSummaryReferenceBank",
+        "SummaryReferenceBankCompletenessReceipt",
+        "SummaryReferenceExecutionReceiptSet",
+        "SummaryReferenceResourceLedger",
+        "SummaryReferenceInformationSeal",
+        "OriginalSummaryBankSealReceipt"
+      ],
+      "requirement": "Freeze actual typedD probability artifacts and exact same-summary/training/query/source/method/state/receipt/cost bindings. An external observer records original bank-seal completion. Send the complete tagged bank directly toS14/A07 and all original resources toS19; E06 consumes it only after global target-last seal."
+    }
+  ],
+  "candidate_phase": {
+    "id": "DA01",
+    "name": "Execute original no-tools D candidate inference",
+    "actor": "candidate_model_process",
+    "depends_on": [
+      "DC04"
+    ],
+    "inputs": [
+      "DirectQueryViews",
+      "DSharedQueryPayloads",
+      "FrozenNoToolsModelPolicy",
+      "DModelContextAndTokenLimits"
+    ],
+    "outputs": [
+      "DModeOutputs",
+      "DCandidateExecutionReceiptSet"
+    ],
+    "requirement": "Fresh independent query context and exact same complete summary payload; no tools/network/other-query/hidden controls or targets. Observe original model completion/output/tokens/cost. Only these candidate outputs route toS13/A06; candidate abstention does not waive the independently scheduledDC05\u2013DC08 controls."
+  },
+  "receipt_bindings": [
+    "source release/core feature generation/outer membership",
+    "training-only projection/source/environment/state seal",
+    "exact serialized training summary and query payload bytes/order",
+    "fixed control source/configuration/equal priors/floor or temperature",
+    "actual permitted control state and per-query probability bytes",
+    "original producer launch/completion/streams and real resources",
+    "full12000-slot census and every collection/reuse destination",
+    "distinct D bank kind and same-summary information seal"
+  ],
+  "handoffs": {
+    "S13_A06": [
+      "DModeOutputs",
+      "DCandidateExecutionReceiptSet"
+    ],
+    "S14_A07": [
+      "CompleteSummaryReferenceBank",
+      "SummaryReferenceBankCompletenessReceipt",
+      "CompleteSummaryReferenceCaseArtifacts",
+      "SummaryReferenceInformationSeal"
+    ],
+    "S19": [
+      "SummaryReferenceExecutionReceiptSet",
+      "SummaryReferenceResourceLedger",
+      "SummaryReferenceReuseMap",
+      "OriginalSummaryBankSealReceipt",
+      "DCandidateExecutionReceiptSet"
+    ],
+    "S15_A08": "E06 consumes actual DG/DC probability artifacts and D candidate outputs with identical summary/input/support binding; no full-core replacement."
+  },
+  "reuse_and_costs": "Retain all6000 logical artifacts per control. Exact identity-qualified projection/control reuse is optional and does not remove required destinations, original completion or collection costs. Candidate inference, trusted projection, both control inference paths, all failures/materialization/serving/storage/token costs remain separate. D-only pays no inactive R0/R1/R2 full-core fits; mixed reuse of compatible preprocessing requires exact provenance and cannot expose extra information to D controls.",
+  "exposure": "Same physical THINGS family, shared-stimulus/finite-N and retrospective preprocessing limits remain. The source paper/model exposure is logged. No tools for D candidate; post-scoreR/report exposure cannot flow back into its frozen queries.",
+  "execution_selected": false,
+  "numerical_operations": 0,
+  "fixed_constants": {
+    "gaussian_variance_floor": 1e-08,
+    "gaussian_class_priors": [
+      0.5,
+      0.5
+    ],
+    "centroid_temperature": 1,
+    "centroid_distance": "Euclidean"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "schema": "n054_complete_S4_custody_contract_v1",
+  "scientifically_qualified": false,
+  "controller": {
+    "first_cause": "Controller.primary_exception is set before any secondary failure event. The exact launcher exception object, original_error and original_observation are retained, with full original receipt prefix, observed totals, pending jobs and unresolved custody in failure_context.",
+    "secondary_writers": [
+      "original_process_failed",
+      "failed interpretation event/file",
+      "failed campaign event",
+      "qualification event",
+      "provisional disposition",
+      "terminal resource event/file",
+      "FINAL_DISPOSITION",
+      "reserved terminal hold writer"
+    ],
+    "reserve": "Before any process, require 2*launcher.records.entry_cap+1MiB logical byte reservation and8 file slots within original aggregate write/retained/file allowances. Initial immutable TERMINAL_HOLD.json must persist before admission. Ordinary writes and resource admission retain this reservation. This does not promise OS/disk success.",
+    "canonical_outcome": "A successfully written FINAL_DISPOSITION.json is admitted. On final writer failure it is explicitly unadmitted and may be partial; TERMINAL_HOLD_FINAL is a reserved incomplete record. If both writer paths fail, the original primary is raised with controller_terminal_disposition and controller_failure_context; the initial durable hold remains INCOMPLETE. No persisted complete result is invented.",
+    "terminal_hold_file": "TERMINAL_HOLD_FINAL.json",
+    "no_retry": "run_started and terminal_stop prevent retry or further invocation. Partial/failing terminal writes do not release custody.",
+    "all_storage_failure_limit": "Full original observation/costs remain owned in the outward original exception and in-memory terminal disposition, with existing original journal files. Persistent physical storage failure may prevent new durable detail; the pre-existing hold is not relabelled a fully persisted closure."
+  },
+  "leader_and_descendants": {
+    "original_leader": "wait4 preserves the original direct child exit/signal/CPU/RSS/IO and observation time. forced_wait_completed is true only when a kill was requested; natural waits are false.",
+    "group_identity": "Verify the selected PGID equals the direct child PID while the child is still unreaped. No group signal is sent after original wait or original-wait identity loss.",
+    "quiescence": "A separate killpg(signal0) ProcessLookupError establishes absence of the original group. A present/permission-denied/unknown group retains an unresolved hold. This is not a descendant wait, descendant CPU receipt, or qualification of arbitrary escaped-group actors.",
+    "terminal_original_hold": "Once original group containment is unresolved, later absence/cleanup cannot rewrite the original. External recovery requires separate explicit evidence/selection. No automatic recovery is implemented.",
+    "admission": "No stable output inventory or stream pins, custody release, or next invocation while any owned group/container/actor custody remains unresolved. Actual directories/streams remain retained for recovery; empty admitted inventory is not an observed zero extent.",
+    "shared_paths": [
+      "inert actor",
+      "host control",
+      "archive process",
+      "trusted container supervisor helper"
+    ]
+  },
+  "native_container_composition": {
+    "source_only": true,
+    "sequence": [
+      "original supervisor wait/group receipt",
+      "owned-container pause command",
+      "State.Paused true",
+      "same-host cgroup.events bounded read with frozen=1",
+      "trusted observations and streams copied",
+      "work output copied",
+      "separate forced removal disposition"
+    ],
+    "purpose": "Whole cgroup freeze contains processes which changed groups before any copies; original group absence alone is not an arbitrary-descendant isolation claim.",
+    "supervisor_cleanup": "Separate /proc kill requests and host removal do not become original actor/descendant waits. An unresolved original actor/group receipt stays unadmitted.",
+    "qualification": "Actual Linux Docker/cgroup/isolation behavior is unexecuted and remains subject to the original29 gates."
+  },
+  "scientific_scope_unchanged": {
+    "stages": 20,
+    "obligations": 42,
+    "folds": 240,
+    "mode_graphs": 15,
+    "full_core_artifacts": 30000,
+    "summary_artifacts": 12000,
+    "open_gates": 29,
+    "future_scientific_groups_unexecuted": 37
+  }
+}

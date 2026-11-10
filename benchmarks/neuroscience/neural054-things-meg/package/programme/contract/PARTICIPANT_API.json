@@ -1,0 +1,1447 @@
+{
+  "schema": "neural054_complete_participant_api_design_s3",
+  "status": "PROPOSED_NO_RUNTIME_IMPLEMENTED",
+  "modes": [
+    "P",
+    "I",
+    "D",
+    "R"
+  ],
+  "P": {
+    "name": "frozen_prediction_program",
+    "source": "Arbitrary submitted ordinary learning/analysis source inqualifiedofflineenvironment; nofixedreferenceconstructor substitution.",
+    "freeze": "Before allbenchmarktrainingviews; onefrozenprogram/config hash forselectedcampaign, deliberatearm/windowbranching allowedandlogged.",
+    "training": "Buildthenfit withpermittedfulltrainingview, innergroups andallowedtools; outputtypedtrainedstate+fitreport. Noquerymounted.",
+    "inference": "Frozenstate andonequeryrow; complete27independentprobabilities. Rowoutputs collectedintoexactcaseartifact; nootherquery/label access."
+  },
+  "I": {
+    "name": "case_adaptive_investigator",
+    "same_information_as_P": true,
+    "source": "Frozenaccesspolicy/modelidentity/prompt/allowedtoolcatalog; arbitrarytraininganalysiscodeandqueryspecificanalysisdecisions capturedasactualsource/processrecords.",
+    "training": "Fullisolatedtraininginvestigation usingonlycase traininginputs; frozencommoncheckpoint beforequeries.",
+    "inference": "Freshcontextfrompermittedcheckpoint perquery; sameone-rowfamilies andsametools/budget asP. Canchooseanalysiscalls, but cannotmutatetrainingstatewithqueries orseeotherqueryresults.",
+    "reported_contrast": "Wholematchedmodeoutcome,costsandtooltrace; nodirectclaimofisolatedlatentanalyticalability."
+  },
+  "D": {
+    "name": "no_tools_PCA8_numeric_diagnostic",
+    "separate_information_profile": true,
+    "primary_ranking_pool": false,
+    "scope": "Allsame240cases5windows5arms/querysupport; nopartialchosenexemplars.",
+    "preparer": "TrustedR0-styletrain-onlyfamilyweighting/fullPCA8, thenperlabelpositive/negative count,8means,8populationvariances. Query8values. Exact17-significant-digitroundtrippablefloats, canonicalorder, fixedfeature/labelschema; no rawsourceIDs.",
+    "floats_per_prompt": 872,
+    "counts_per_prompt": 54,
+    "formula": "27*2*8*2 summaryfloats +8queryfloats;54classcounts. SourcePCAdefinitionandunitsemanticsprovided.",
+    "runtime": "Modelnoexecution/tools/network/caches; context-size/tokenizerqualification mandatory forcompleteprompt. No truncation/serializationroundingfallback.",
+    "references": "Exactsame-serializedinput diagonal-Gaussian balancedprior decoder withtrainingdeclaredvariance floor1e-8 andnearestclasscentroidEuclideandistance softmax atfixedtemperature1; theseareproposeddecoders needingnumericalqualification, notauthorresults.",
+    "limitations": "Compressed learnedrepresentation contains trustedtraininganalysis; neither rawsignalunderstandingnor equalinformationtoP/I.",
+    "reference_lifecycle": "D_REFERENCE_LIFECYCLE.json",
+    "reference_bank_kind": "D_SUMMARY_REFERENCE_V1",
+    "trusted_control_scope": "Both same-summary controls independently produce6000 logical artifacts each throughDC01\u2013DC08. No P/I full-core bank requirement for D-only."
+  },
+  "R": {
+    "name": "post_prediction_scientific_interpretation",
+    "input": "Deterministicadmittedfullmetricsbywindow/arm/person,allmissingness/failures,costs,exactsource/limitationsandallowedcitations; noeditablepredictionhandle.",
+    "output": "Typedclaims containingestimand,evidenceIDs,pointvalue/units/uncertainty,comparison,alternativeexplanations,limitationsandfalsificationneeded.",
+    "scores": "Machinearithmetic/evidencesupport separatefromblindedscientificrubric; nonumericalreasoningaggregateuntilrubricqualified; null/negative/inconclusiveallvalid.",
+    "cannot_change_any_prediction": true
+  },
+  "tool_conditions": [
+    {
+      "id": "NUM",
+      "tools": "QualifiedofflinePython/numericalpackagesandfileaccesswithinview; no pretrainedtaskdecoder.",
+      "mandatory_evaluator_bank": "AllR0/R1/R2/R4/R5 independent outputs still required; no decoder-tool access is given to NUM candidate."
+    },
+    {
+      "id": "NUM_REF",
+      "tools": "NUM plus exact trustedtraining-fitted reference inference tools on permitted queryfamilies. Decoder-alone baseline retained; preparation andallcalls charged.",
+      "mandatory_evaluator_bank": "Same complete independent bank required before candidate tool serving. Calls return already-produced same-query sealed reference outputs and cannot count as production/collection of missing bank artifacts."
+    }
+  ],
+  "actual_stages": [
+    {
+      "id": "A01",
+      "name": "register_source",
+      "input": [
+        "sourcearchive_descriptor",
+        "entrypoint",
+        "dependencyrequest",
+        "mode/tool/profile/replicate",
+        "prospectiveresourceplan"
+      ],
+      "output": [
+        "validatedsourcegraph",
+        "immutableprogram_id"
+      ],
+      "actor": true
+    },
+    {
+      "id": "A02",
+      "name": "build",
+      "input": [
+        "program_id",
+        "qualifiedenvironment",
+        "read-onlysource"
+      ],
+      "output": [
+        "buildartifact",
+        "actualbuildcompletion",
+        "resourceledger"
+      ],
+      "actor": true
+    },
+    {
+      "id": "A03",
+      "name": "fit_or_investigate",
+      "input": [
+        "buildartifact",
+        "trainingview",
+        "groups/innerpartitions",
+        "allowedtools",
+        "fitlimits"
+      ],
+      "output": [
+        "frozenstate",
+        "fitreport",
+        "allselectedconfigs",
+        "originalprocess/toolreceipts"
+      ],
+      "actor": true,
+      "applies_when": "P/I candidate training only; D trusted preparation is DC02, not candidate raw-data training."
+    },
+    {
+      "id": "A04",
+      "name": "seal_training",
+      "input": [
+        "allfitoutputs",
+        "program/environment/trainingpins",
+        "observedcompletion/cost"
+      ],
+      "output": [
+        "immutabletrainingseal"
+      ],
+      "actor": false,
+      "applies_when": "P/I candidate fitted-state seal; D uses frozen candidate policy plus independent SummaryPreparationSeal and control seals."
+    },
+    {
+      "id": "A05",
+      "name": "predict_one",
+      "input": [
+        "ModeTaggedCandidateQueryInvocation"
+      ],
+      "output": [
+        "27probabilities_or_explicitabstention",
+        "actualtraceandcost"
+      ],
+      "actor": true,
+      "input_variants": [
+        {
+          "when": "P/I selected",
+          "producer": "S12",
+          "input": [
+            "TrainingSeal",
+            "one permitted full-core query",
+            "mode/tool access",
+            "per-query limits"
+          ]
+        },
+        {
+          "when": "D selected",
+          "producer": "S18.DA01",
+          "input": [
+            "DSharedQueryPayloads",
+            "FrozenNoToolsModelPolicy",
+            "DModelContextAndTokenLimits"
+          ],
+          "tools": "NONE"
+        }
+      ],
+      "applies_when": "A predictive candidate P/I/D is selected."
+    },
+    {
+      "id": "A06",
+      "name": "collect_case",
+      "input": [
+        "Tagged P/I candidate outputs and/or DModeOutputs",
+        "exact candidate query support",
+        "original candidate receipt bindings"
+      ],
+      "output": [
+        "completecasepredictionartifact",
+        "source/state/query/outputjoin"
+      ],
+      "actor": false,
+      "scope": "Candidate only. Trusted full-core collection is R07; trusted D summary collection is DC07. No comparator output can substitute as candidate input."
+    },
+    {
+      "id": "A07",
+      "name": "seal_campaign",
+      "input": [
+        "CampaignRequirementsManifest",
+        "all selected candidate case artifacts/status",
+        "RequiredTypedReferenceBankUnion",
+        "CampaignCostClosure",
+        "original selected producer/collector receipts"
+      ],
+      "output": [
+        "immutableclosedbank",
+        "barrierstatus"
+      ],
+      "actor": false,
+      "rule": {
+        "predictive": "S14/A07 admits all selected candidate slots and every required typed bank with original probability/collection receipts; S19 closes all original pre-target resources. Only one complete global campaign seal permits S15/A08 target access.",
+        "mixed": "Both independent bank kinds and every selected candidate condition must complete before any protected target callback or partial E01/E06 score. Full-core completeness cannot mask missing D controls, or vice versa.",
+        "abstention": "Explicit candidate abstention remains unscorable/null and permits no target callback for the selected campaign. Missing required reference output/receipt is still INCOMPLETE; completed banks do not waive abstention.",
+        "failures_preserved": "Retain all cancelled/missing jobs, produced partial bytes, original failures/costs and exposed information. Never silently reduce selected modes/families/windows/arms to salvage a score."
+      },
+      "input_variants": [
+        {
+          "when": "P or I selected",
+          "bank_kind": "FULL_CORE_REFERENCE_V1",
+          "required_products": [
+            "CompleteIndependentReferenceBank",
+            "ReferenceBankCompletenessReceipt",
+            "CompleteReferenceCaseArtifacts"
+          ],
+          "activation_guard": "PI"
+        },
+        {
+          "when": "D selected",
+          "bank_kind": "D_SUMMARY_REFERENCE_V1",
+          "required_products": [
+            "CompleteSummaryReferenceBank",
+            "SummaryReferenceBankCompletenessReceipt",
+            "CompleteSummaryReferenceCaseArtifacts",
+            "SummaryReferenceInformationSeal"
+          ],
+          "activation_guard": "D"
+        }
+      ],
+      "applies_when": "Any predictive mode P/I/D selected; no new bank seal during standaloneR."
+    },
+    {
+      "id": "A08",
+      "name": "grade",
+      "input": [
+        "S14 globally closed mode-tagged bank",
+        "protected actual target bank",
+        "exact paired support",
+        "CampaignRequirementsManifest"
+      ],
+      "output": [
+        "allmetrics/contrasts/failure/costreadiness"
+      ],
+      "actor": false,
+      "input_variants": [
+        {
+          "estimands": [
+            "E01",
+            "E02",
+            "E03",
+            "E04"
+          ],
+          "when": "P/I selected",
+          "bank_kind": "FULL_CORE_REFERENCE_V1",
+          "rule": "Preserve all exact existing fixed-R1/R0/R2 full-core definitions. These estimands are NOT_SELECTED for D-only; no inactive full-core requirement."
+        },
+        {
+          "estimands": [
+            "E05"
+          ],
+          "when": "A predeclared matched P/I or NUM/NUM_REF comparison exists",
+          "bank_kind": "FULL_CORE_REFERENCE_V1",
+          "rule": "Same full-core information/support and accounted budgets; never treat D-versus-P/I as an equal-input E05 contrast."
+        },
+        {
+          "estimands": [
+            "E06"
+          ],
+          "when": "D selected",
+          "bank_kind": "D_SUMMARY_REFERENCE_V1",
+          "rule": "Pair every D candidate with both exact-summary DG/DC controls on the same support. Report balanced loss/accuracy, same weighting/uncertainty and all five windows/arms separately. Never pool into E01 full-core primary."
+        },
+        {
+          "estimands": [
+            "E07"
+          ],
+          "when": "R selected",
+          "bank_kind": "REPORT_ONLY_NO_NEW_REFERENCE_TYPE",
+          "rule": "Interpret a deterministic tagged current/previous admitted report; arithmetic and qualified reasoning rubric remain separate, no prediction edits or new target access."
+        }
+      ],
+      "applies_when": "All current predictive candidate/bank/receipt/resource obligations are complete and score-eligible."
+    },
+    {
+      "id": "A09",
+      "name": "interpret",
+      "input": [
+        "Current ConditionTaggedReportBundle OR AdmittedPriorReportBundle",
+        "SourceLimits",
+        "InterpretationBudget"
+      ],
+      "output": [
+        "typedscientificclaims",
+        "claimcheckandlaterblindedrubric"
+      ],
+      "actor": true,
+      "applies_when": "R selected; report-only, no target or prediction editing."
+    }
+  ],
+  "artifact": {
+    "training_view": "P/I candidate training view only: existing full eligible training features/labels and opaque groups. Trusted D preparation independently receives its operator training view; D candidate/control processes receive only the declared serialized summaries, never this richer view.",
+    "query_view": "Mode-tagged query: P/I gets one allowed full-core arm/query with frozen state and permitted tools; D gets only DirectQueryViews/DSharedQueryPayloads with the fixed serialized summary profile and no tools. R gets an admitted tagged report, not a neural query.",
+    "prediction": "schema;episode/query;program/state/profile/version/mode/replicate/arm/window binding; status complete|abstain;27finite[0,1]independentprobabilities orno numerics forabstain; no unknownfields.",
+    "private_receipt": "Exactoriginalproducer/build/fit/querycompletion,argv/cwd/executable/source/inputs/outputdescriptors,integerexitstatus,allstreams,CPUwallmemoryIOtoken/callcounts and failures; notcandidateassertedcompletion.",
+    "path_rules": "No parenttraversal,symlink/alias/socket/specialfile,case-insensitive.git orprivateevaluationnamespace. Canonicalordinarysource; trainedbinaryartifacts treatedasdata andneverpublishedwithsource.",
+    "reference_prediction": {
+      "common": "Actual27 finite independent probabilities and exact source/method/config/environment, permitted state/input/query/support/class-order/probability-byte and original producer receipt identities.",
+      "variants": [
+        {
+          "bank_kind": "FULL_CORE_REFERENCE_V1",
+          "state": "ReferenceTrainingSeals",
+          "input": "ReferenceQueryInputs for selected P/I permitted families",
+          "producer": "S08/R05/R06"
+        },
+        {
+          "bank_kind": "D_SUMMARY_REFERENCE_V1",
+          "state": "SummaryControlStateSeals linked to exact serialized training summary",
+          "input": "Exact same DSharedQueryPayloads delivered to candidate; no richer preparation data",
+          "producer": "S18/DC05/DC06"
+        }
+      ]
+    },
+    "reference_collection": {
+      "common": "Complete typed bank census, every logical probability artifact/support binding, original preparation/inference/materialization/collection/seal completion/resource evidence and qualified reuse mapping. Apply selected mode guard first.",
+      "variants": [
+        {
+          "bank_kind": "FULL_CORE_REFERENCE_V1",
+          "activation_guard": "PI",
+          "case_artifacts": 30000,
+          "collector": "S08/R07",
+          "seal": "S08/R08",
+          "families": [
+            "R0",
+            "R1",
+            "R2",
+            "R4",
+            "R5"
+          ]
+        },
+        {
+          "bank_kind": "D_SUMMARY_REFERENCE_V1",
+          "activation_guard": "D",
+          "case_artifacts": 12000,
+          "collector": "S18/DC07",
+          "seal": "S18/DC08",
+          "families": [
+            "DG_DIAGONAL_GAUSSIAN",
+            "DC_NEAREST_CENTROID"
+          ]
+        }
+      ]
+    },
+    "reference_bank_union": {
+      "tag": "bank_kind",
+      "allowed": [
+        "FULL_CORE_REFERENCE_V1",
+        "D_SUMMARY_REFERENCE_V1"
+      ],
+      "required_fields": [
+        "bank_kind",
+        "information_profile_id",
+        "source_release_feature_generation",
+        "training_summary_or_reference_state_seals",
+        "permitted_query_payload_schema_and_digests",
+        "exact_query_support_and_class_order",
+        "actual_probability_artifact_descriptors",
+        "original_producer_and_collector_completion_receipts",
+        "resource_and_failure_ledger",
+        "reuse_mapping_and_original_costs",
+        "whole_bank_completeness_receipt"
+      ],
+      "rules": "Require exactly every selected kind/profile. A complete bank of the wrong kind never satisfies another kind. Absent inactive kinds are NOT_REQUIRED, not missing outputs. A changed information profile requires separately admitted complete bank."
+    },
+    "report": {
+      "prediction_condition_fields": [
+        "condition_id",
+        "mode",
+        "tool_condition",
+        "replicate",
+        "information_profile_id",
+        "selected_bank_kind_and_seal",
+        "actual_candidate_reference_support_binding",
+        "completion_status",
+        "applicable_estimand_ids",
+        "raw_window_arm_person_metrics_or_null",
+        "costs_and_failure_provenance",
+        "exposure_state"
+      ],
+      "inactive": "Use NOT_SELECTED with null metric values for unselected E01-E07 conditions; distinguish from missing required control or failed selected condition.",
+      "D": "Tag all E06 outputs D_PCA8_SUMMARY_V1 and both control family identities. Preserve compressed-representation/no-tools limitations and all individual-person effects.",
+      "mixed": "Keep separate full-core and D sections; overall readiness requires both while no unlike-score composite is introduced.",
+      "R": "Tagged report source/campaign and original selected profiles, missingness, source limitations, uncertainty and costs; no reference outputs or raw targets are editable."
+    },
+    "failure": [
+      {
+        "code": "MISSING_REQUIRED_FULL_CORE_BANK",
+        "when": "P/I selected and full-core artifacts/receipts incomplete",
+        "targets": false
+      },
+      {
+        "code": "MISSING_REQUIRED_SUMMARY_BANK",
+        "when": "D selected and either summary-control artifact/receipt incomplete",
+        "targets": false
+      },
+      {
+        "code": "REFERENCE_PROFILE_MISMATCH",
+        "when": "Bank kind/input/projection/query/support differs from required profile",
+        "targets": false
+      },
+      {
+        "code": "CANDIDATE_ABSTENTION",
+        "when": "Any selected predictive candidate abstains",
+        "targets": false
+      },
+      {
+        "code": "ORIGINAL_RESOURCE_OR_COMPLETION_MISSING",
+        "when": "Required producer/collector/observer or resource evidence missing",
+        "targets": false
+      },
+      {
+        "code": "MISSING_PRIOR_REPORT",
+        "when": "R-only lacks admitted frozen original report bundle",
+        "targets": false
+      },
+      {
+        "code": "NOT_SELECTED",
+        "when": "Mode/bank/estimand not selected; no work requirement, not an execution failure",
+        "targets": false
+      }
+    ]
+  },
+  "score_boundary": "Noimportor executionofparticipant code intrustedgrader; onlyadmittedtypedoutputbytes fromoriginalclosedproducerprocess.",
+  "resource_binding": "Actualperprocess andaggregate limitsjoinallstagepermissionsandterminalobservations. Unknownor missing counters/unobservedcompletion cannotproducequalifiedscore.",
+  "trusted_reference_lifecycle": {
+    "definition": "REFERENCE_LIFECYCLE.json",
+    "producer": "S08/R01-R08",
+    "independent_of_candidate_calls": true,
+    "mandatory_families": [
+      "R0",
+      "R1",
+      "R2",
+      "R4",
+      "R5"
+    ],
+    "logical_artifacts_per_family": 6000,
+    "logical_artifacts_per_bank": 30000,
+    "phases": [
+      {
+        "id": "R01",
+        "name": "Admit full independent reference job census",
+        "actor": "trusted_reference_controller",
+        "depends_on": [],
+        "inputs": [
+          "ScientificContract",
+          "FixedReferenceBank",
+          "Outer240Views",
+          "PairedSupportCommitment",
+          "QualifiedEnvironment",
+          "ReferenceResourcePlan"
+        ],
+        "outputs": [
+          "RequiredReferenceJobCensus",
+          "ReferenceInputAdmission",
+          "OriginalReferenceCensusReceipts"
+        ],
+        "requirement": "Enumerate all five families times240 cases times5 windows times5 arms and all expected query IDs before any execution. Required jobs exist regardless of candidate mode, calls, success or abstention. Only training labels are admitted; held target bank remains unavailable."
+      },
+      {
+        "id": "R02",
+        "name": "Execute reference fitting or explicit no-fit preparation",
+        "actor": "trusted_reference_process",
+        "depends_on": [
+          "R01"
+        ],
+        "inputs": [
+          "ReferenceInputAdmission",
+          "PermittedOuterTrainingView",
+          "FixedReferenceSourceConfigEnvironment",
+          "TrainingPhaseLimits"
+        ],
+        "outputs": [
+          "UnsealedReferenceState",
+          "OriginalReferencePreparationReceipts"
+        ],
+        "requirement": "Actually execute R0/R1/R2 fixed training under the unchanged bank/algebra. R4 emits an explicit constant-recipe state with no learned parameters; R5 computes its permitted training-label counts/prior. Record their real preparation rather than claiming artificial model fits. All original completion, outputs, failures and costs observed independently."
+      },
+      {
+        "id": "R03",
+        "name": "Seal independently observed reference state",
+        "actor": "trusted_reference_controller",
+        "depends_on": [
+          "R02"
+        ],
+        "inputs": [
+          "UnsealedReferenceState",
+          "OriginalReferencePreparationReceipts",
+          "ReferenceInputAdmission"
+        ],
+        "outputs": [
+          "ReferenceTrainingSeals",
+          "ReferenceStateRegistry",
+          "OriginalReferenceSealReceipts"
+        ],
+        "requirement": "Bind reference source/config/environment, preparation kind, eligible training membership/features/labels, serialized state and original terminal observations. Seal before query input is admitted. Missing output or completion produces no valid seal."
+      },
+      {
+        "id": "R04",
+        "name": "Admit exact permitted reference queries",
+        "actor": "trusted_query_provider",
+        "depends_on": [
+          "R03"
+        ],
+        "inputs": [
+          "ReferenceTrainingSeals",
+          "Outer240Views",
+          "PairedSupportCommitment",
+          "RequiredReferenceJobCensus"
+        ],
+        "outputs": [
+          "ReferenceQueryInputs",
+          "ReferenceQueryAdmissionReceipts"
+        ],
+        "requirement": "Serve only the same allowed family values and query support as the corresponding candidate arm. No held labels, other-fold information, source IDs, query-dependent fitting or source workspace. R4/R5 legitimately ignore feature values but still bind every served query identity/support."
+      },
+      {
+        "id": "R05",
+        "name": "Execute original trusted reference inference",
+        "actor": "trusted_reference_process",
+        "depends_on": [
+          "R04"
+        ],
+        "inputs": [
+          "ReferenceTrainingSeals",
+          "ReferenceQueryInputs",
+          "FixedReferenceSourceConfigEnvironment",
+          "InferencePhaseLimits"
+        ],
+        "outputs": [
+          "ReferenceQueryProbabilityArtifacts",
+          "OriginalReferenceInferenceReceipts"
+        ],
+        "requirement": "Actually invoke the sealed fixed reference prediction procedure for every admitted original inference job, producing 27 finite independent probabilities for each query. Bind original source/state/query and exact probability bytes; independently observe launch, completion, streams and resources. Neither a training seal nor candidate tool-call receipt is a reference prediction."
+      },
+      {
+        "id": "R06",
+        "name": "Materialize identity-qualified logical reference outputs",
+        "actor": "trusted_reference_controller",
+        "depends_on": [
+          "R05"
+        ],
+        "inputs": [
+          "ReferenceQueryProbabilityArtifacts",
+          "OriginalReferenceInferenceReceipts",
+          "RequiredReferenceJobCensus",
+          "ReferenceQueryAdmissionReceipts"
+        ],
+        "outputs": [
+          "ReferenceLogicalQueryOutputs",
+          "ReferenceReuseMap",
+          "OriginalReferenceMaterializationReceipts"
+        ],
+        "requirement": "Only proved same-input pure-reference outputs may be reused. Emit separately bound logical destinations, including current opaque IDs and class order, from actual original probability bytes. Record source/destination query mapping, exact numeric payload identity and independent allowed-information proof; label/window aliases or candidate calls alone never authorize reuse."
+      },
+      {
+        "id": "R07",
+        "name": "Collect and verify complete independent case artifacts",
+        "actor": "trusted_reference_collector",
+        "depends_on": [
+          "R06"
+        ],
+        "inputs": [
+          "ReferenceLogicalQueryOutputs",
+          "ReferenceReuseMap",
+          "RequiredReferenceJobCensus",
+          "OriginalReferencePreparationReceipts",
+          "OriginalReferenceInferenceReceipts",
+          "OriginalReferenceMaterializationReceipts"
+        ],
+        "outputs": [
+          "CompleteReferenceCaseArtifacts",
+          "ReferenceCaseCompletenessReceipts",
+          "OriginalReferenceCollectionReceipts"
+        ],
+        "requirement": "Every one of30,000 family/case/window/arm artifacts has all expected opaque query IDs exactly once and exactly27 bounded probabilities per row. Bind source/config/environment/training seal/query/probability/receipt identities. Reject missing, extra, malformed or receiptless outputs; no withheld reference family, abstention or chosen support subset."
+      },
+      {
+        "id": "R08",
+        "name": "Seal full independent reference bank and original resource closure",
+        "actor": "trusted_reference_controller",
+        "depends_on": [
+          "R07"
+        ],
+        "inputs": [
+          "CompleteReferenceCaseArtifacts",
+          "ReferenceCaseCompletenessReceipts",
+          "OriginalReferenceCensusReceipts",
+          "OriginalReferencePreparationReceipts",
+          "OriginalReferenceSealReceipts",
+          "ReferenceQueryAdmissionReceipts",
+          "OriginalReferenceInferenceReceipts",
+          "OriginalReferenceMaterializationReceipts",
+          "OriginalReferenceCollectionReceipts",
+          "ReferenceResourcePlan",
+          "ComparatorCompetenceEvidence"
+        ],
+        "outputs": [
+          "CompleteIndependentReferenceBank",
+          "ReferenceBankCompletenessReceipt",
+          "ReferenceExecutionReceiptSet",
+          "ReferenceResourceLedger",
+          "ComparatorCompetence",
+          "ReferenceToolAccessRegistry",
+          "OriginalReferenceBankSealReceipt"
+        ],
+        "requirement": "Freeze all actual output bytes and original preparation/inference/materialization/collection observations. Supply the complete bank to S14/A07 and every original resource/failure record to S19; never supply training seals in place of predictions. Expose only a separately access-controlled NUM_REF tool handle, not the bank directory. The external observer records this final bank-seal process completion and exact output identities; the bank cannot certify its own original completion."
+      }
+    ],
+    "handoffs": {
+      "S14_A07": [
+        "CompleteIndependentReferenceBank",
+        "ReferenceBankCompletenessReceipt",
+        "CompleteReferenceCaseArtifacts"
+      ],
+      "S19": [
+        "ReferenceExecutionReceiptSet",
+        "ReferenceResourceLedger",
+        "ReferenceReuseMap",
+        "OriginalReferenceBankSealReceipt"
+      ],
+      "S15_A08": "Consumes actual fixedR1 nuisance/joint probabilities and all mandatory diagnostic/reference probabilities from the S14-closed bank against exactly the same protected targets/support; training or competence metadata never stand in for values.",
+      "S12_A05": "Optional NUM_REF serving uses ReferenceToolAccessRegistry; it cannot create, excuse, replace or establish completeness of the independent bank."
+    },
+    "candidate_tool_policy": {
+      "NUM": "Independent bank is mandatory and evaluator-private. Candidate has no reference-tool access. Its zero reference calls cannot waive R01\u2013R08.",
+      "NUM_REF": "Candidate may call an admitted read-only reference handle only after the candidate training seal and grant for that one query. Service returns the exact already-produced sealed reference output for the permitted arm/query/family and separately logs the original serving call/cost. No bank listing, other-query output or held label is exposed.",
+      "training_probe": "If the predeclared tool catalog allows training-row probes, accept only its admitted training inputs and record their independent original execution/cost. Training probes never read the evaluator query bank, satisfy required held-query jobs or replace R01\u2013R08.",
+      "candidate_none_or_abstain": "The full reference census remains required. If execution stops early, preserve missing/cancelled jobs and actual costs as incomplete; do not claim a complete bank. With a full bank but an abstaining candidate, candidate primary remains null and no target access is authorized for that unscorable comparison."
+    },
+    "status_rules": {
+      "missing_reference_or_receipt": "INCOMPLETE_NO_TARGET_ACCESS, even if candidate supplied all required predictions and made zero reference calls.",
+      "candidate_abstention_with_complete_reference": "CLOSED_UNSCORABLE_NO_TARGET_ACCESS; primary null, full missingness/disposition/cost retained.",
+      "complete_valid_candidate_and_reference": "Eligible for S19 resource closure and S14/A07 campaign seal, then protected S15/A08 target access only after every other mandatory gate.",
+      "no_observed_execution": "Design status only. No states, queries, probabilities, processes or costs in this contract are claimed to exist."
+    },
+    "activation_guard": "PI",
+    "bank_kind": "FULL_CORE_REFERENCE_V1"
+  },
+  "campaign_condition_contract": {
+    "schema": "neural054_mode_condition_bank_contract_s3",
+    "status": "DESIGN_ONLY",
+    "mode_set": [
+      "P",
+      "I",
+      "D",
+      "R"
+    ],
+    "selection": "Freeze selected modes, tool conditions, replicates, information profiles, expected source/support, required bank kinds and resource limits before any benchmark training. Empty mode selection is invalid.",
+    "tools_by_mode": {
+      "P": [
+        "NUM",
+        "NUM_REF"
+      ],
+      "I": [
+        "NUM",
+        "NUM_REF"
+      ],
+      "D": [
+        "NONE"
+      ],
+      "R": [
+        "REPORT_ONLY"
+      ]
+    },
+    "matrix": [
+      {
+        "modes": [
+          "P"
+        ],
+        "predictive_campaign": true,
+        "full_core_bank_required": true,
+        "summary_bank_required": false,
+        "reference_bank_types": [
+          "FULL_CORE_REFERENCE_V1"
+        ],
+        "new_reference_case_artifacts_per_distinct_profile": 30000,
+        "interpretation_required": false,
+        "prior_report_required": false,
+        "protected_target_access_route": "Only after complete current all-selected-bank/candidate global seal",
+        "active_reference_producers": [
+          "S08"
+        ],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "NOT_SELECTED"
+      },
+      {
+        "modes": [
+          "I"
+        ],
+        "predictive_campaign": true,
+        "full_core_bank_required": true,
+        "summary_bank_required": false,
+        "reference_bank_types": [
+          "FULL_CORE_REFERENCE_V1"
+        ],
+        "new_reference_case_artifacts_per_distinct_profile": 30000,
+        "interpretation_required": false,
+        "prior_report_required": false,
+        "protected_target_access_route": "Only after complete current all-selected-bank/candidate global seal",
+        "active_reference_producers": [
+          "S08"
+        ],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "NOT_SELECTED"
+      },
+      {
+        "modes": [
+          "P",
+          "I"
+        ],
+        "predictive_campaign": true,
+        "full_core_bank_required": true,
+        "summary_bank_required": false,
+        "reference_bank_types": [
+          "FULL_CORE_REFERENCE_V1"
+        ],
+        "new_reference_case_artifacts_per_distinct_profile": 30000,
+        "interpretation_required": false,
+        "prior_report_required": false,
+        "protected_target_access_route": "Only after complete current all-selected-bank/candidate global seal",
+        "active_reference_producers": [
+          "S08"
+        ],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "NOT_SELECTED"
+      },
+      {
+        "modes": [
+          "D"
+        ],
+        "predictive_campaign": true,
+        "full_core_bank_required": false,
+        "summary_bank_required": true,
+        "reference_bank_types": [
+          "D_SUMMARY_REFERENCE_V1"
+        ],
+        "new_reference_case_artifacts_per_distinct_profile": 12000,
+        "interpretation_required": false,
+        "prior_report_required": false,
+        "protected_target_access_route": "Only after complete current all-selected-bank/candidate global seal",
+        "active_reference_producers": [
+          "S18.DC01-DC08"
+        ],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "NOT_SELECTED"
+      },
+      {
+        "modes": [
+          "P",
+          "D"
+        ],
+        "predictive_campaign": true,
+        "full_core_bank_required": true,
+        "summary_bank_required": true,
+        "reference_bank_types": [
+          "FULL_CORE_REFERENCE_V1",
+          "D_SUMMARY_REFERENCE_V1"
+        ],
+        "new_reference_case_artifacts_per_distinct_profile": 42000,
+        "interpretation_required": false,
+        "prior_report_required": false,
+        "protected_target_access_route": "Only after complete current all-selected-bank/candidate global seal",
+        "active_reference_producers": [
+          "S08",
+          "S18.DC01-DC08"
+        ],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "NOT_SELECTED"
+      },
+      {
+        "modes": [
+          "I",
+          "D"
+        ],
+        "predictive_campaign": true,
+        "full_core_bank_required": true,
+        "summary_bank_required": true,
+        "reference_bank_types": [
+          "FULL_CORE_REFERENCE_V1",
+          "D_SUMMARY_REFERENCE_V1"
+        ],
+        "new_reference_case_artifacts_per_distinct_profile": 42000,
+        "interpretation_required": false,
+        "prior_report_required": false,
+        "protected_target_access_route": "Only after complete current all-selected-bank/candidate global seal",
+        "active_reference_producers": [
+          "S08",
+          "S18.DC01-DC08"
+        ],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "NOT_SELECTED"
+      },
+      {
+        "modes": [
+          "P",
+          "I",
+          "D"
+        ],
+        "predictive_campaign": true,
+        "full_core_bank_required": true,
+        "summary_bank_required": true,
+        "reference_bank_types": [
+          "FULL_CORE_REFERENCE_V1",
+          "D_SUMMARY_REFERENCE_V1"
+        ],
+        "new_reference_case_artifacts_per_distinct_profile": 42000,
+        "interpretation_required": false,
+        "prior_report_required": false,
+        "protected_target_access_route": "Only after complete current all-selected-bank/candidate global seal",
+        "active_reference_producers": [
+          "S08",
+          "S18.DC01-DC08"
+        ],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "NOT_SELECTED"
+      },
+      {
+        "modes": [
+          "R"
+        ],
+        "predictive_campaign": false,
+        "full_core_bank_required": false,
+        "summary_bank_required": false,
+        "reference_bank_types": [],
+        "new_reference_case_artifacts_per_distinct_profile": 0,
+        "interpretation_required": true,
+        "prior_report_required": true,
+        "protected_target_access_route": "NONE_READONLY_PRIOR_REPORT",
+        "active_reference_producers": [],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "AdmittedPriorReportBundle ->S17"
+      },
+      {
+        "modes": [
+          "P",
+          "R"
+        ],
+        "predictive_campaign": true,
+        "full_core_bank_required": true,
+        "summary_bank_required": false,
+        "reference_bank_types": [
+          "FULL_CORE_REFERENCE_V1"
+        ],
+        "new_reference_case_artifacts_per_distinct_profile": 30000,
+        "interpretation_required": true,
+        "prior_report_required": false,
+        "protected_target_access_route": "Only after complete current all-selected-bank/candidate global seal",
+        "active_reference_producers": [
+          "S08"
+        ],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "S16 current tagged report ->S17"
+      },
+      {
+        "modes": [
+          "I",
+          "R"
+        ],
+        "predictive_campaign": true,
+        "full_core_bank_required": true,
+        "summary_bank_required": false,
+        "reference_bank_types": [
+          "FULL_CORE_REFERENCE_V1"
+        ],
+        "new_reference_case_artifacts_per_distinct_profile": 30000,
+        "interpretation_required": true,
+        "prior_report_required": false,
+        "protected_target_access_route": "Only after complete current all-selected-bank/candidate global seal",
+        "active_reference_producers": [
+          "S08"
+        ],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "S16 current tagged report ->S17"
+      },
+      {
+        "modes": [
+          "P",
+          "I",
+          "R"
+        ],
+        "predictive_campaign": true,
+        "full_core_bank_required": true,
+        "summary_bank_required": false,
+        "reference_bank_types": [
+          "FULL_CORE_REFERENCE_V1"
+        ],
+        "new_reference_case_artifacts_per_distinct_profile": 30000,
+        "interpretation_required": true,
+        "prior_report_required": false,
+        "protected_target_access_route": "Only after complete current all-selected-bank/candidate global seal",
+        "active_reference_producers": [
+          "S08"
+        ],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "S16 current tagged report ->S17"
+      },
+      {
+        "modes": [
+          "D",
+          "R"
+        ],
+        "predictive_campaign": true,
+        "full_core_bank_required": false,
+        "summary_bank_required": true,
+        "reference_bank_types": [
+          "D_SUMMARY_REFERENCE_V1"
+        ],
+        "new_reference_case_artifacts_per_distinct_profile": 12000,
+        "interpretation_required": true,
+        "prior_report_required": false,
+        "protected_target_access_route": "Only after complete current all-selected-bank/candidate global seal",
+        "active_reference_producers": [
+          "S18.DC01-DC08"
+        ],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "S16 current tagged report ->S17"
+      },
+      {
+        "modes": [
+          "P",
+          "D",
+          "R"
+        ],
+        "predictive_campaign": true,
+        "full_core_bank_required": true,
+        "summary_bank_required": true,
+        "reference_bank_types": [
+          "FULL_CORE_REFERENCE_V1",
+          "D_SUMMARY_REFERENCE_V1"
+        ],
+        "new_reference_case_artifacts_per_distinct_profile": 42000,
+        "interpretation_required": true,
+        "prior_report_required": false,
+        "protected_target_access_route": "Only after complete current all-selected-bank/candidate global seal",
+        "active_reference_producers": [
+          "S08",
+          "S18.DC01-DC08"
+        ],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "S16 current tagged report ->S17"
+      },
+      {
+        "modes": [
+          "I",
+          "D",
+          "R"
+        ],
+        "predictive_campaign": true,
+        "full_core_bank_required": true,
+        "summary_bank_required": true,
+        "reference_bank_types": [
+          "FULL_CORE_REFERENCE_V1",
+          "D_SUMMARY_REFERENCE_V1"
+        ],
+        "new_reference_case_artifacts_per_distinct_profile": 42000,
+        "interpretation_required": true,
+        "prior_report_required": false,
+        "protected_target_access_route": "Only after complete current all-selected-bank/candidate global seal",
+        "active_reference_producers": [
+          "S08",
+          "S18.DC01-DC08"
+        ],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "S16 current tagged report ->S17"
+      },
+      {
+        "modes": [
+          "P",
+          "I",
+          "D",
+          "R"
+        ],
+        "predictive_campaign": true,
+        "full_core_bank_required": true,
+        "summary_bank_required": true,
+        "reference_bank_types": [
+          "FULL_CORE_REFERENCE_V1",
+          "D_SUMMARY_REFERENCE_V1"
+        ],
+        "new_reference_case_artifacts_per_distinct_profile": 42000,
+        "interpretation_required": true,
+        "prior_report_required": false,
+        "protected_target_access_route": "Only after complete current all-selected-bank/candidate global seal",
+        "active_reference_producers": [
+          "S08",
+          "S18.DC01-DC08"
+        ],
+        "candidate_collection": "S13 only selected P/I and/or D candidate outputs; never trusted reference outputs",
+        "R_report_route": "S16 current tagged report ->S17"
+      }
+    ],
+    "bank_variants": [
+      {
+        "kind": "FULL_CORE_REFERENCE_V1",
+        "when": "P or I selected",
+        "producer": "S08/R01-R08",
+        "definition": "REFERENCE_LIFECYCLE.json",
+        "profile": "SOURCE_OFFLINE_CORE_V2_DESIGN",
+        "families": [
+          "R0",
+          "R1",
+          "R2",
+          "R4",
+          "R5"
+        ],
+        "case_artifacts_per_family": 6000,
+        "logical_case_artifacts": 30000,
+        "consumer_metrics": [
+          "E01",
+          "E02",
+          "E03",
+          "E04 context",
+          "E05 matched P/I/tool contrasts"
+        ],
+        "required_products": [
+          "CompleteIndependentReferenceBank",
+          "ReferenceBankCompletenessReceipt",
+          "CompleteReferenceCaseArtifacts"
+        ],
+        "resource_products": [
+          "ReferenceExecutionReceiptSet",
+          "ReferenceResourceLedger",
+          "ReferenceReuseMap",
+          "OriginalReferenceBankSealReceipt"
+        ],
+        "activation_guard": "PI"
+      },
+      {
+        "kind": "D_SUMMARY_REFERENCE_V1",
+        "when": "D selected",
+        "producer": "S18/DC01-DC08",
+        "definition": "D_REFERENCE_LIFECYCLE.json",
+        "profile": "D_PCA8_SUMMARY_V1",
+        "families": [
+          "DG_DIAGONAL_GAUSSIAN",
+          "DC_NEAREST_CENTROID"
+        ],
+        "case_artifacts_per_family": 6000,
+        "logical_case_artifacts": 12000,
+        "consumer_metrics": [
+          "E06"
+        ],
+        "required_products": [
+          "CompleteSummaryReferenceBank",
+          "SummaryReferenceBankCompletenessReceipt",
+          "CompleteSummaryReferenceCaseArtifacts",
+          "SummaryReferenceInformationSeal"
+        ],
+        "resource_products": [
+          "SummaryReferenceExecutionReceiptSet",
+          "SummaryReferenceResourceLedger",
+          "SummaryReferenceReuseMap",
+          "OriginalSummaryBankSealReceipt"
+        ],
+        "activation_guard": "D"
+      }
+    ],
+    "bank_union_type": {
+      "tag": "bank_kind",
+      "allowed": [
+        "FULL_CORE_REFERENCE_V1",
+        "D_SUMMARY_REFERENCE_V1"
+      ],
+      "required_fields": [
+        "bank_kind",
+        "information_profile_id",
+        "source_release_feature_generation",
+        "training_summary_or_reference_state_seals",
+        "permitted_query_payload_schema_and_digests",
+        "exact_query_support_and_class_order",
+        "actual_probability_artifact_descriptors",
+        "original_producer_and_collector_completion_receipts",
+        "resource_and_failure_ledger",
+        "reuse_mapping_and_original_costs",
+        "whole_bank_completeness_receipt"
+      ],
+      "rules": "Require exactly every selected kind/profile. A complete bank of the wrong kind never satisfies another kind. Absent inactive kinds are NOT_REQUIRED, not missing outputs. A changed information profile requires separately admitted complete bank."
+    },
+    "candidate_output_variants": [
+      {
+        "tag": "P_I_FULL_CORE_CANDIDATE",
+        "when": "P/I selected",
+        "producer": "S12",
+        "collector": "S13/A06",
+        "paired_bank_kind": "FULL_CORE_REFERENCE_V1"
+      },
+      {
+        "tag": "D_SUMMARY_CANDIDATE",
+        "when": "D selected",
+        "producer": "S18.DA01",
+        "collector": "S13/A06",
+        "paired_bank_kind": "D_SUMMARY_REFERENCE_V1"
+      }
+    ],
+    "global_barrier": {
+      "predictive": "S14/A07 admits all selected candidate slots and every required typed bank with original probability/collection receipts; S19 closes all original pre-target resources. Only one complete global campaign seal permits S15/A08 target access.",
+      "mixed": "Both independent bank kinds and every selected candidate condition must complete before any protected target callback or partial E01/E06 score. Full-core completeness cannot mask missing D controls, or vice versa.",
+      "abstention": "Explicit candidate abstention remains unscorable/null and permits no target callback for the selected campaign. Missing required reference output/receipt is still INCOMPLETE; completed banks do not waive abstention.",
+      "failures_preserved": "Retain all cancelled/missing jobs, produced partial bytes, original failures/costs and exposed information. Never silently reduce selected modes/families/windows/arms to salvage a score."
+    },
+    "metric_bindings": [
+      {
+        "estimands": [
+          "E01",
+          "E02",
+          "E03",
+          "E04"
+        ],
+        "when": "P/I selected",
+        "bank_kind": "FULL_CORE_REFERENCE_V1",
+        "rule": "Preserve all exact existing fixed-R1/R0/R2 full-core definitions. These estimands are NOT_SELECTED for D-only; no inactive full-core requirement."
+      },
+      {
+        "estimands": [
+          "E05"
+        ],
+        "when": "A predeclared matched P/I or NUM/NUM_REF comparison exists",
+        "bank_kind": "FULL_CORE_REFERENCE_V1",
+        "rule": "Same full-core information/support and accounted budgets; never treat D-versus-P/I as an equal-input E05 contrast."
+      },
+      {
+        "estimands": [
+          "E06"
+        ],
+        "when": "D selected",
+        "bank_kind": "D_SUMMARY_REFERENCE_V1",
+        "rule": "Pair every D candidate with both exact-summary DG/DC controls on the same support. Report balanced loss/accuracy, same weighting/uncertainty and all five windows/arms separately. Never pool into E01 full-core primary."
+      },
+      {
+        "estimands": [
+          "E07"
+        ],
+        "when": "R selected",
+        "bank_kind": "REPORT_ONLY_NO_NEW_REFERENCE_TYPE",
+        "rule": "Interpret a deterministic tagged current/previous admitted report; arithmetic and qualified reasoning rubric remain separate, no prediction edits or new target access."
+      }
+    ],
+    "report_schema": {
+      "prediction_condition_fields": [
+        "condition_id",
+        "mode",
+        "tool_condition",
+        "replicate",
+        "information_profile_id",
+        "selected_bank_kind_and_seal",
+        "actual_candidate_reference_support_binding",
+        "completion_status",
+        "applicable_estimand_ids",
+        "raw_window_arm_person_metrics_or_null",
+        "costs_and_failure_provenance",
+        "exposure_state"
+      ],
+      "inactive": "Use NOT_SELECTED with null metric values for unselected E01-E07 conditions; distinguish from missing required control or failed selected condition.",
+      "D": "Tag all E06 outputs D_PCA8_SUMMARY_V1 and both control family identities. Preserve compressed-representation/no-tools limitations and all individual-person effects.",
+      "mixed": "Keep separate full-core and D sections; overall readiness requires both while no unlike-score composite is introduced.",
+      "R": "Tagged report source/campaign and original selected profiles, missingness, source limitations, uncertainty and costs; no reference outputs or raw targets are editable."
+    },
+    "failure_variants": [
+      {
+        "code": "MISSING_REQUIRED_FULL_CORE_BANK",
+        "when": "P/I selected and full-core artifacts/receipts incomplete",
+        "targets": false
+      },
+      {
+        "code": "MISSING_REQUIRED_SUMMARY_BANK",
+        "when": "D selected and either summary-control artifact/receipt incomplete",
+        "targets": false
+      },
+      {
+        "code": "REFERENCE_PROFILE_MISMATCH",
+        "when": "Bank kind/input/projection/query/support differs from required profile",
+        "targets": false
+      },
+      {
+        "code": "CANDIDATE_ABSTENTION",
+        "when": "Any selected predictive candidate abstains",
+        "targets": false
+      },
+      {
+        "code": "ORIGINAL_RESOURCE_OR_COMPLETION_MISSING",
+        "when": "Required producer/collector/observer or resource evidence missing",
+        "targets": false
+      },
+      {
+        "code": "MISSING_PRIOR_REPORT",
+        "when": "R-only lacks admitted frozen original report bundle",
+        "targets": false
+      },
+      {
+        "code": "NOT_SELECTED",
+        "when": "Mode/bank/estimand not selected; no work requirement, not an execution failure",
+        "targets": false
+      }
+    ],
+    "standalone_R": {
+      "entry": "AdmittedPriorReportBundle with exact original selected-mode manifest, tagged report bytes, original closure/status/metric provenance, source/exposure and prior costs.",
+      "execution": "S01/S09 admit the R policy/source, prior report and budget; S17 interprets it and records InterpretationCostClosure; S20 checks reasoning disposition. Do not reactivate S02-S16/S18/S19 scientific producers or open targets.",
+      "incomplete_prior_report": "May explicitly discuss an authenticated failed/inconclusive report, but absent numerical results remain null and no new prediction or reference completion is claimed.",
+      "current_R": "When R accompanies new predictions, S17 waits for S16's globally sealed tagged report; S17's post-report costs are separate from S19's pre-target closure."
+    },
+    "gate_applicability": "All29 gate records remain open. Their clauses apply to the selected mode/profile: G14 full-core LDA clauses only for P/I, and summary-control competence/coverage for D together with G23; G19 matched P/I, G24 selected R. No inactive bank is demanded, no scientific gate is closed by this source design.",
+    "R_report_tool_policy": "Freeze any allowed report-analysis tool catalog with the R policy; inputs limited to the admitted report and source knowledge. No raw scientific inputs, decoder handles, target access or new fitting.",
+    "guard_definitions": {
+      "ALWAYS": "At least one selected mode",
+      "PI": "P in modes OR I in modes",
+      "D": "D in modes",
+      "PREDICTION": "PI OR D",
+      "R": "R in modes",
+      "R_WITH_PREDICTION": "R AND PREDICTION"
+    }
+  },
+  "summary_reference_lifecycle": {
+    "definition": "D_REFERENCE_LIFECYCLE.json",
+    "phases": [
+      {
+        "id": "DC01",
+        "name": "Admit complete D candidate/control census",
+        "actor": "trusted_D_controller",
+        "depends_on": [],
+        "inputs": [
+          "CampaignRequirementsManifest",
+          "Outer240Views",
+          "PairedSupportCommitment",
+          "DProjectionAndSerializationContract",
+          "DResourcePlan"
+        ],
+        "outputs": [
+          "RequiredSummaryControlJobCensus",
+          "DSummaryInputAdmission",
+          "OriginalDSummaryCensusReceipts"
+        ],
+        "requirement": "Declare6000 candidate slots and6000 slots for each ofDG/DC over full support. No P/I full-core bank requirement. Required controls exist independently of candidate calls/success/abstention."
+      },
+      {
+        "id": "DC02",
+        "name": "Execute and seal trusted training-only projection and summaries",
+        "actor": "trusted_D_preparer_and_external_observer",
+        "depends_on": [
+          "DC01"
+        ],
+        "inputs": [
+          "DSummaryInputAdmission",
+          "PermittedOuterTrainingView",
+          "DProjectionAndSerializationContract",
+          "QualifiedEnvironment",
+          "DPreparationLimits"
+        ],
+        "outputs": [
+          "SummaryPreparationSeal",
+          "SerializedTrainingSummaries",
+          "OriginalSummaryPreparationReceipts"
+        ],
+        "requirement": "Actually fit only the declared training-only PCA8 and compute class counts/means/population variances, serialize without truncation and seal original source/environment/training/state/summary bytes and completion/cost. No query or held target is used. No full-core reference fit is implicitly selected."
+      },
+      {
+        "id": "DC03",
+        "name": "Seal the two fixed same-summary control recipes",
+        "actor": "trusted_summary_control_preparer",
+        "depends_on": [
+          "DC02"
+        ],
+        "inputs": [
+          "SerializedTrainingSummaries",
+          "SummaryPreparationSeal",
+          "FixedDGDCSourceConfigEnvironment"
+        ],
+        "outputs": [
+          "SummaryControlStateSeals",
+          "OriginalSummaryControlPreparationReceipts"
+        ],
+        "requirement": "Actually prepare fixedDG/DC state from exactly the serialized class summary bytes and fixed method constants; no richer data/state access or target fitting. Bind source/config/environment and permitted input profile. Record no additional learned calibration and real original preparation costs."
+      },
+      {
+        "id": "DC04",
+        "name": "Produce exact shared D query payload",
+        "actor": "trusted_D_query_preparer",
+        "depends_on": [
+          "DC02",
+          "DC03"
+        ],
+        "inputs": [
+          "SummaryPreparationSeal",
+          "SerializedTrainingSummaries",
+          "PermittedOneRowQueryFeatures",
+          "PairedSupportCommitment",
+          "DSerializationAndContextLimits"
+        ],
+        "outputs": [
+          "DirectQueryViews",
+          "DSharedQueryPayloads",
+          "OriginalDSummaryQueryReceipts"
+        ],
+        "requirement": "Use frozen projection state to transform the permitted one query, append exactly the sealed same summaries and produce complete872-float/54-count payload with bound opaque query ID/profile/arm/window. Serve the exact payload to candidate and both controls; no test labels or truncation. DirectQueryViews is only the current opaque-query/profile/schema/payload descriptor, not another richer input; the shared numeric payload is byte-identical across candidate and both controls."
+      },
+      {
+        "id": "DC05",
+        "name": "Execute independent trusted DG/DC inference",
+        "actor": "trusted_summary_reference_process",
+        "depends_on": [
+          "DC03",
+          "DC04"
+        ],
+        "inputs": [
+          "SummaryControlStateSeals",
+          "DSharedQueryPayloads",
+          "FixedDGDCSourceConfigEnvironment",
+          "DControlInferenceLimits"
+        ],
+        "outputs": [
+          "SummaryControlQueryProbabilityArtifacts",
+          "OriginalSummaryControlInferenceReceipts"
+        ],
+        "requirement": "Actually invoke both fixed methods on only the exact shared serialized input. Produce27 bounded independent probabilities for every query; bind method/state/input/output bytes and independently observed original launch/completion/streams/resources. No candidate output/call or full-core model substitutes. Check that serialized class-summary bytes, ordering and digests exactly match the admitted SummaryControlStateSeals; no extra precision or unqualified state is read."
+      },
+      {
+        "id": "DC06",
+        "name": "Materialize identity-qualified logical D control outputs",
+        "actor": "trusted_summary_reference_controller",
+        "depends_on": [
+          "DC05"
+        ],
+        "inputs": [
+          "SummaryControlQueryProbabilityArtifacts",
+          "OriginalSummaryControlInferenceReceipts",
+          "RequiredSummaryControlJobCensus",
+          "OriginalDSummaryQueryReceipts"
+        ],
+        "outputs": [
+          "SummaryControlLogicalQueryOutputs",
+          "SummaryReferenceReuseMap",
+          "OriginalSummaryControlMaterializationReceipts"
+        ],
+        "requirement": "Reuse only proved exact numeric-input and pure-control procedure equality. Materialize all bound logical destinations and opaque query mappings from actual original probability bytes. Candidate D responses cannot inherit pure-control reuse."
+      },
+      {
+        "id": "DC07",
+        "name": "Collect complete same-summary control case artifacts",
+        "actor": "trusted_summary_reference_collector",
+        "depends_on": [
+          "DC06"
+        ],
+        "inputs": [
+          "SummaryControlLogicalQueryOutputs",
+          "SummaryReferenceReuseMap",
+          "RequiredSummaryControlJobCensus",
+          "OriginalSummaryControlPreparationReceipts",
+          "OriginalSummaryControlInferenceReceipts",
+          "OriginalSummaryControlMaterializationReceipts"
+        ],
+        "outputs": [
+          "CompleteSummaryReferenceCaseArtifacts",
+          "SummaryControlCaseCompletenessReceipts",
+          "OriginalSummaryControlCollectionReceipts"
+        ],
+        "requirement": "Collect every12000 mandatory control artifact with exact query membership,class order,27 finite probabilities and original lineage. Reject either missing control, query or original receipt; collection never passes through candidate-onlyS13/A06."
+      },
+      {
+        "id": "DC08",
+        "name": "Seal complete D summary reference bank and resource observations",
+        "actor": "trusted_summary_reference_controller_and_external_observer",
+        "depends_on": [
+          "DC07"
+        ],
+        "inputs": [
+          "CompleteSummaryReferenceCaseArtifacts",
+          "SummaryControlCaseCompletenessReceipts",
+          "OriginalDSummaryCensusReceipts",
+          "OriginalSummaryPreparationReceipts",
+          "OriginalSummaryControlPreparationReceipts",
+          "OriginalDSummaryQueryReceipts",
+          "OriginalSummaryControlInferenceReceipts",
+          "OriginalSummaryControlMaterializationReceipts",
+          "OriginalSummaryControlCollectionReceipts",
+          "DResourcePlan"
+        ],
+        "outputs": [
+          "CompleteSummaryReferenceBank",
+          "SummaryReferenceBankCompletenessReceipt",
+          "SummaryReferenceExecutionReceiptSet",
+          "SummaryReferenceResourceLedger",
+          "SummaryReferenceInformationSeal",
+          "OriginalSummaryBankSealReceipt"
+        ],
+        "requirement": "Freeze actual typedD probability artifacts and exact same-summary/training/query/source/method/state/receipt/cost bindings. An external observer records original bank-seal completion. Send the complete tagged bank directly toS14/A07 and all original resources toS19; E06 consumes it only after global target-last seal."
+      }
+    ],
+    "candidate_phase": {
+      "id": "DA01",
+      "name": "Execute original no-tools D candidate inference",
+      "actor": "candidate_model_process",
+      "depends_on": [
+        "DC04"
+      ],
+      "inputs": [
+        "DirectQueryViews",
+        "DSharedQueryPayloads",
+        "FrozenNoToolsModelPolicy",
+        "DModelContextAndTokenLimits"
+      ],
+      "outputs": [
+        "DModeOutputs",
+        "DCandidateExecutionReceiptSet"
+      ],
+      "requirement": "Fresh independent query context and exact same complete summary payload; no tools/network/other-query/hidden controls or targets. Observe original model completion/output/tokens/cost. Only these candidate outputs route toS13/A06; candidate abstention does not waive the independently scheduledDC05\u2013DC08 controls."
+    },
+    "handoffs": {
+      "S13_A06": [
+        "DModeOutputs",
+        "DCandidateExecutionReceiptSet"
+      ],
+      "S14_A07": [
+        "CompleteSummaryReferenceBank",
+        "SummaryReferenceBankCompletenessReceipt",
+        "CompleteSummaryReferenceCaseArtifacts",
+        "SummaryReferenceInformationSeal"
+      ],
+      "S19": [
+        "SummaryReferenceExecutionReceiptSet",
+        "SummaryReferenceResourceLedger",
+        "SummaryReferenceReuseMap",
+        "OriginalSummaryBankSealReceipt",
+        "DCandidateExecutionReceiptSet"
+      ],
+      "S15_A08": "E06 consumes actual DG/DC probability artifacts and D candidate outputs with identical summary/input/support binding; no full-core replacement."
+    },
+    "scope": {
+      "outer_cases": 240,
+      "windows": 5,
+      "arms": 5,
+      "labels": 27,
+      "experimental_trials": 88992,
+      "logical_candidate_artifacts": 6000,
+      "control_families": [
+        "DG_DIAGONAL_GAUSSIAN",
+        "DC_NEAREST_CENTROID"
+      ],
+      "logical_case_artifacts_per_control": 6000,
+      "logical_control_case_artifacts": 12000,
+      "query_rows_per_control": 2224800,
+      "probability_values_per_control": 60069600,
+      "query_rows_both_controls": 4449600,
+      "probability_values_both_controls": 120139200,
+      "full_core_bank_required_for_D_only": false,
+      "independent_of_D_candidate_calls_success_or_abstention": true
+    },
+    "activation_guard": "D",
+    "bank_kind": "D_SUMMARY_REFERENCE_V1"
+  }
+}
