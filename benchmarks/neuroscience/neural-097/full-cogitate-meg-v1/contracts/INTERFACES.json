@@ -1,0 +1,710 @@
+{
+  "schema": "neural097_scientific_api_design_v2",
+  "status": "DESIGN_ONLY_NO_INTERFACE_IMPLEMENTED",
+  "shared_contract": "SCIENTIFIC_CONTRACT.json",
+  "principles": [
+    "No original sourceidentityorquerytarget in candidate projection",
+    "Controller ownscompletemanifest/joins;candidate ownslearner andpredictions",
+    "Inputs immutablewith exactversions andprivateparentidentityjoins",
+    "No crossfold/arm/access/mode/seed orcrossquerycandidate state",
+    "No scientificscore beforecompleteadmissionandallcandidate descendantsclosed",
+    "Every future public/private programme record binds exact scientific and estimand/reporting contract versions; disagreement refuses admission before target access.",
+    "Report finite-procedure performance only; hierarchy fixed, all settings/seeds/controls mandatory and no composite score."
+  ],
+  "objects": [
+    {
+      "id": "SOURCE_MEMBER",
+      "owner": "trusted_custodian",
+      "candidate_visible": false,
+      "required": [
+        "source_family",
+        "release_version",
+        "member_logical_role",
+        "lawful_access_basis",
+        "content_byte_count",
+        "sha256",
+        "BIDS_person_visit_task_run",
+        "split_file_relations",
+        "producer_commit",
+        "producer_environment",
+        "producer_original_completion"
+      ],
+      "forbidden_assumptions": [
+        "URIaloneprovespossession",
+        "sourcefilebasenamegloballyuniquetrial",
+        "smallfileprefixrepresentsfullfile"
+      ],
+      "current_value": "unobserved"
+    },
+    {
+      "id": "COHORT_RECONCILIATION",
+      "owner": "trusted_custodian",
+      "candidate_visible": false,
+      "required": [
+        "published102_collected_97included_32optimization_65replication_5excludedaggregatepins",
+        "source100claimprovenance_orcorrection",
+        "all33selectedidentityrecords",
+        "source-phase-listversionmembership",
+        "paperreplication-membershiprelation",
+        "site/systemassociation",
+        "visitV1_taskdur",
+        "eligibility/exclusiondispositions",
+        "allrequiredderivatives"
+      ],
+      "invariants": [
+        "exact33ordereduniquemembersmatchingselectedprotocol",
+        "no memberreplacementoraccessible-subsetfallback",
+        "allmappingedgesmusthaveordinaryprovenanceorqualifiedcustodianrecord"
+      ],
+      "current_value": "unobserved"
+    },
+    {
+      "id": "EPOCH_LINEAGE",
+      "owner": "trusted_preparer",
+      "candidate_visible": false,
+      "required": [
+        "member_identity",
+        "originalrunandrawclock",
+        "rawsampleandonsetevents",
+        "P04sourceversion",
+        "event_onset_to_metadata_rowjoin",
+        "P07sourceversion",
+        "concatenationoffsets",
+        "selectionanddroplog",
+        "projectionandunits",
+        "allchannels/types/bads",
+        "source_times",
+        "recordinggaps",
+        "trialidentitygroup",
+        "relevance_duration_orientation_response",
+        "completeeligibilityledger"
+      ],
+      "invariants": [
+        "P04full-eventarrayandV1metadataarenotassumedequallength",
+        "sameepochsingleonsetandmetadataagreement",
+        "Trial_IDnotglobalidentifier",
+        "alloriginalrunsretainedorjustifiedbeforetaskfilter",
+        "allsourcepartsavailable",
+        "nohiddenoutcome-basedcleaning"
+      ]
+    },
+    {
+      "id": "PROTECTED_OBSERVATIONS",
+      "owner": "trusted_preparer",
+      "candidate_visible": false,
+      "required": [
+        "privateobservationID",
+        "person/visit/run/imagegroup",
+        "sourceepochlineage",
+        "yface",
+        "privategradedstratum",
+        "SIGNAL60",
+        "PRE60",
+        "NUISANCE8",
+        "eligibilityreason"
+      ],
+      "invariants": [
+        "trigger1..20face1,21..40object0",
+        "all5viewsidenticalretainedrowunion",
+        "immutabletargetmapheldseparately",
+        "everyeligibleobservationincludedonce",
+        "noauthenticeventsmanufactured"
+      ]
+    },
+    {
+      "id": "FOLD_PLAN",
+      "owner": "trusted_split_builder",
+      "candidate_visible": "Onlyepisode-localcapability/versionandarmshape;originalperson/half/globalfoldmappingprivate",
+      "required": [
+        "privatefoldID",
+        "heldperson",
+        "heldhalf",
+        "fulltrain/queryobservationIDs",
+        "proofpersonandimagegroupdisjoint",
+        "inner4personx2imagegroups",
+        "expectedqueryset",
+        "sourceprojectionversions"
+      ],
+      "invariants": [
+        "66exactouterfolds",
+        "eachquerycaseexactlyonceacrosstwohalves",
+        "sameprivatecaseuniverseallfeaturearms",
+        "nootherfolddatamounted",
+        "noheld-querysupportusedfortuning"
+      ]
+    },
+    {
+      "id": "TRAIN_VIEW",
+      "owner": "trusted_stager",
+      "candidate_visible": true,
+      "envelope": [
+        "schema=neural097-train-view-v2",
+        "opaque_episode_nonce",
+        "contract_version",
+        "access_arm",
+        "feature_arm",
+        "feature_columns",
+        "feature_units",
+        "features_member",
+        "training_rows_member",
+        "inner_validation_plan_member"
+      ],
+      "features": "Exact-EOFNPYv1 little-endianfloat64 C-order [Ntrain,D], D60/8/68; finiteonly;nopickle/objectarrays/archives/implicitfiles",
+      "row_fields": [
+        "opaque_case",
+        "opaque_person_group",
+        "opaque_image_group",
+        "opaque_session_group",
+        "opaque_run_block_group",
+        "yface_integer0or1",
+        "duration/orientation/relevance_fortraining_validation_only"
+      ],
+      "row_rules": [
+        "sidecarscanconstructsplit/weights/validationbutcannotbeadditionalpredictionfeaturesforS/P",
+        "allsidecarsderivedfromobservedlineage;unknownrun/blocknotinvented",
+        "sameformatandmetadataallmethods/references",
+        "trainingrowsorderindependentquerylabels",
+        "nooriginalperson,image,trigger,filename,sample/chronologyorprivategenerationhash"
+      ],
+      "inner_plan": "Onlytrainingindicesandopaquegroups;noqueryidentitiesorclasscounts",
+      "contract_binding": {
+        "scientific_contract": {
+          "path": "contracts/SCIENTIFIC_CONTRACT.json",
+          "bytes": 19033,
+          "sha256": "675cea83ede4129c424b9ae3e4691bc2af2d598c9172098ed0def43d7ba995e2"
+        },
+        "estimand_reporting_contract": {
+          "path": "contracts/ESTIMAND_REPORTING_CONTRACT.json",
+          "bytes": 19516,
+          "sha256": "a65ae36c60f203129412424e01fea30513c4a17c2f066bed53c474efc9d98454"
+        },
+        "future_admission": "Validate exact selected descriptor and source/condition/procedure joins; candidate supplied hashes are not trusted evidence."
+      }
+    },
+    {
+      "id": "LEARNER_SEAL",
+      "owner": "trusted_controller_captures_candidate_source",
+      "candidate_visible": "Ownselectedsourceonly",
+      "required": [
+        "candidatefamilyID",
+        "wholelearnerbyteshash",
+        "declaredhyperparameter/search/calibrationpolicy",
+        "allowedinputs/tools",
+        "access/mode/seed",
+        "sourceanddependencyclosure",
+        "entrypointABI",
+        "hardresourceclass",
+        "Fseal-before-packet-observationevidence"
+      ],
+      "limits": "Candidate-self-authoredmanifestnottrustedclosure;controllercapturesactualbytesandlaunchesexactsource",
+      "mode_timing": {
+        "F": "Full learner/query code and policy sealed before any evaluation training or query view",
+        "I": "Model-family/search/query-policy sealed before condition data; complete actually executed training source captured with final TRAINED_STATE before first query; query-specific analysis code captured separately"
+      },
+      "contract_binding": {
+        "scientific_contract": {
+          "path": "contracts/SCIENTIFIC_CONTRACT.json",
+          "bytes": 19033,
+          "sha256": "675cea83ede4129c424b9ae3e4691bc2af2d598c9172098ed0def43d7ba995e2"
+        },
+        "estimand_reporting_contract": {
+          "path": "contracts/ESTIMAND_REPORTING_CONTRACT.json",
+          "bytes": 19516,
+          "sha256": "a65ae36c60f203129412424e01fea30513c4a17c2f066bed53c474efc9d98454"
+        },
+        "future_admission": "Validate exact selected descriptor and source/condition/procedure joins; candidate supplied hashes are not trusted evidence."
+      },
+      "policy_conformity": "Bind full fixed_procedure identity; same actual candidate family/search/query policy across five data arms within a setting/seed, independently qualified rather than trusting identical policy strings."
+    },
+    {
+      "id": "TRAINED_STATE",
+      "owner": "candidate_training_operation_captured_by_controller",
+      "candidate_visible": "Ownouterfoldarmonly",
+      "required": [
+        "learnersealjoin",
+        "allowedtrainviewidentity",
+        "fit/tune/calibrationprovenance",
+        "allfitattempts/convergence/failures",
+        "selectedparameters",
+        "modelstatebyteidentity",
+        "sourceclosure",
+        "fullresource/processcompletion"
+      ],
+      "invariants": [
+        "statecreatedbeforefirstquery",
+        "noqueryobservationsorlabelsused",
+        "noN098/otherfoldpretraineddescendant",
+        "frozenread-onlyforqueryclones"
+      ],
+      "serialization": "Boundednon-executablemodelstateformatwithdeclaredarchitecture; nooperatorunpicklingofcandidateobjects. Candidateenclavecanreadownstateunderqualifiedpolicy.",
+      "contract_binding": {
+        "scientific_contract": {
+          "path": "contracts/SCIENTIFIC_CONTRACT.json",
+          "bytes": 19033,
+          "sha256": "675cea83ede4129c424b9ae3e4691bc2af2d598c9172098ed0def43d7ba995e2"
+        },
+        "estimand_reporting_contract": {
+          "path": "contracts/ESTIMAND_REPORTING_CONTRACT.json",
+          "bytes": 19516,
+          "sha256": "a65ae36c60f203129412424e01fea30513c4a17c2f066bed53c474efc9d98454"
+        },
+        "future_admission": "Validate exact selected descriptor and source/condition/procedure joins; candidate supplied hashes are not trusted evidence."
+      }
+    },
+    {
+      "id": "QUERY_VIEW",
+      "owner": "trusted_query_broker",
+      "candidate_visible": true,
+      "fields": [
+        "schema=neural097-query-v2",
+        "opaque_episode_nonce",
+        "opaque_query_nonce",
+        "x_numeric_vector"
+      ],
+      "invariants": [
+        "onequeryperfreshclone",
+        "dimensionmatchesarm;finiteonly",
+        "noquerytarget/identity/group/stratumunlessalreadyencodedinthepermittednuisancevector",
+        "noco-querybatchstatisticsordevicecache",
+        "freshopaqueIDsnotderivedfromclassororiginalordering",
+        "FprogramandIagentreceiveidenticalpermittedvector"
+      ],
+      "I_state": "Freshcloneofsamesealedtrainingstateandallowedtraininganalysiscontext;querycontextdiscardedafteroneanswer",
+      "F_state": "Freshprogramread-onlytrainingstate;nomodelintervention",
+      "contract_binding": {
+        "scientific_contract": {
+          "path": "contracts/SCIENTIFIC_CONTRACT.json",
+          "bytes": 19033,
+          "sha256": "675cea83ede4129c424b9ae3e4691bc2af2d598c9172098ed0def43d7ba995e2"
+        },
+        "estimand_reporting_contract": {
+          "path": "contracts/ESTIMAND_REPORTING_CONTRACT.json",
+          "bytes": 19516,
+          "sha256": "a65ae36c60f203129412424e01fea30513c4a17c2f066bed53c474efc9d98454"
+        },
+        "future_admission": "Validate exact selected descriptor and source/condition/procedure joins; candidate supplied hashes are not trusted evidence."
+      }
+    },
+    {
+      "id": "QUERY_EXECUTION_RECORD",
+      "owner": "trusted_query_controller",
+      "candidate_visible": false,
+      "required": [
+        "episode/query capability join",
+        "sealed training-state identity",
+        "actual query-analysis source bytes/hash",
+        "tool/program/dependency/source identity",
+        "all original processes and descendants",
+        "all observation capabilities used",
+        "all resource consumption and bounded outputs",
+        "termination and cleanup"
+      ],
+      "F": "Actual query source must equal pre-data learner closure",
+      "I": "Query-specific analysis may be authored after seeing this one vector; only sealed training-derived states may be probed/selected; no new fitting/normalization/calibration after query exposure",
+      "trust": "Actual controlled launches and file/capability admission, not candidate self-report; mechanism qualification remains open",
+      "contract_binding": {
+        "scientific_contract": {
+          "path": "contracts/SCIENTIFIC_CONTRACT.json",
+          "bytes": 19033,
+          "sha256": "675cea83ede4129c424b9ae3e4691bc2af2d598c9172098ed0def43d7ba995e2"
+        },
+        "estimand_reporting_contract": {
+          "path": "contracts/ESTIMAND_REPORTING_CONTRACT.json",
+          "bytes": 19516,
+          "sha256": "a65ae36c60f203129412424e01fea30513c4a17c2f066bed53c474efc9d98454"
+        },
+        "future_admission": "Validate exact selected descriptor and source/condition/procedure joins; candidate supplied hashes are not trusted evidence."
+      }
+    },
+    {
+      "id": "QUERY_OUTCOME",
+      "owner": "candidate",
+      "candidate_visible": true,
+      "fields": [
+        "schema=neural097-query-prediction-v2",
+        "opaque_episode_nonce",
+        "opaque_query_nonce",
+        "status",
+        "p_face OR reason"
+      ],
+      "complete": "Exactlyonefiniteplainnumber0<=p<=1;noboolean/NaN/Inf/duplicateJSONkeys/extrafields",
+      "abstain": "Boundednonemptyreason;novalue;wholecomplete-panelmetricunavailable",
+      "prohibited": "Candidatecannotreturnmetric/truth/referencesuccessasitsanswer;reasoningtraceisnotrequiredasprivatethought"
+    },
+    {
+      "id": "FOLD_COLLECTION",
+      "owner": "trusted_collector",
+      "candidate_visible": false,
+      "required": [
+        "foldplanidentity",
+        "completeexpectedqueryidentityset",
+        "all5armoutcomes",
+        "source/trainedstatelaunchjoins",
+        "originalprocessclosureanddescendantcleanup",
+        "input/outputbytecaps",
+        "actualCPUwallRSSI/Omodeltoken/costobservations",
+        "failedandabstainedattempts"
+      ],
+      "invariants": [
+        "nocandidatewrittenreceiptacceptedastrust",
+        "noextra/missing/duplicatecases",
+        "queryorderdoesnotdefineidentity",
+        "boundedstdoutstderrretainedbeforetermination",
+        "noautomaticretryerasesfailure"
+      ],
+      "contract_binding": {
+        "scientific_contract": {
+          "path": "contracts/SCIENTIFIC_CONTRACT.json",
+          "bytes": 19033,
+          "sha256": "675cea83ede4129c424b9ae3e4691bc2af2d598c9172098ed0def43d7ba995e2"
+        },
+        "estimand_reporting_contract": {
+          "path": "contracts/ESTIMAND_REPORTING_CONTRACT.json",
+          "bytes": 19516,
+          "sha256": "a65ae36c60f203129412424e01fea30513c4a17c2f066bed53c474efc9d98454"
+        },
+        "future_admission": "Validate exact selected descriptor and source/condition/procedure joins; candidate supplied hashes are not trusted evidence."
+      }
+    },
+    {
+      "id": "REFERENCE_PANEL",
+      "owner": "separate_trusted_reference_runtime",
+      "candidate_visible": false,
+      "required": [
+        "allR0-R4recipesandversions",
+        "all66foldsx5arms",
+        "everyselectedfitandconvergence",
+        "predictionprobabilitiesandprivatecasejoins",
+        "independentpipeline/numericalchecks",
+        "source/process/resourceclosures"
+      ],
+      "invariants": [
+        "samepermittedtrainingviewsandqueryvectors",
+        "noquerylabelfit/selection/calibration",
+        "fixedR2referencerelativeprimary",
+        "cannotreusepaperlabel-awarepseudotrials"
+      ],
+      "contract_binding": {
+        "scientific_contract": {
+          "path": "contracts/SCIENTIFIC_CONTRACT.json",
+          "bytes": 19033,
+          "sha256": "675cea83ede4129c424b9ae3e4691bc2af2d598c9172098ed0def43d7ba995e2"
+        },
+        "estimand_reporting_contract": {
+          "path": "contracts/ESTIMAND_REPORTING_CONTRACT.json",
+          "bytes": 19516,
+          "sha256": "a65ae36c60f203129412424e01fea30513c4a17c2f066bed53c474efc9d98454"
+        },
+        "future_admission": "Validate exact selected descriptor and source/condition/procedure joins; candidate supplied hashes are not trusted evidence."
+      },
+      "comparison_context": "R0-R4 are fixed reference algorithms under identical allowed numerical observations; no fictitious A/B/F/I or three-seed runs. R2 identified explicitly; every comparison reuses exact qualified panel identity and seed97097."
+    },
+    {
+      "id": "GRADE_PANEL",
+      "owner": "private_scorer_after_admission",
+      "candidate_visible": "Aggregateprojectiononlyafterallpredictionssealed;nofeedbackduringevaluation",
+      "required": [
+        "wholeconditionadmission",
+        "privateconditionaltargetcapability",
+        "all594stratumcellsperarm",
+        "all1188classsupportcountsperarm",
+        "primaryandsecondarymetrics",
+        "signed_feature_performance_and_reference_comparisons",
+        "null-supportdetails",
+        "allprocessfailuresandresourceaccounting"
+      ],
+      "read_order": [
+        "authenticateexactoutcomes/identities/rangesandfullcompleteness",
+        "confirmallcandidateprocess/descendantclosureandnocandidateaccess",
+        "onlythenopenprivatey/strataandreferences",
+        "computeallprespecifiedmetricswithoutselection",
+        "publishboundedaggregateprojection"
+      ],
+      "contract_binding": {
+        "scientific_contract": {
+          "path": "contracts/SCIENTIFIC_CONTRACT.json",
+          "bytes": 19033,
+          "sha256": "675cea83ede4129c424b9ae3e4691bc2af2d598c9172098ed0def43d7ba995e2"
+        },
+        "estimand_reporting_contract": {
+          "path": "contracts/ESTIMAND_REPORTING_CONTRACT.json",
+          "bytes": 19516,
+          "sha256": "a65ae36c60f203129412424e01fea30513c4a17c2f066bed53c474efc9d98454"
+        },
+        "future_admission": "Validate exact selected descriptor and source/condition/procedure joins; candidate supplied hashes are not trusted evidence."
+      },
+      "report_contract": {
+        "identity_fields": [
+          "task_version",
+          "scientific_contract_identity",
+          "estimand_reporting_contract_identity",
+          "private_panel_identity",
+          "projection/split/version",
+          "candidate_agent_and_actual_policy/source_closures",
+          "reference_panel_identity",
+          "access",
+          "mode",
+          "seed",
+          "arm_or_left_right_arms",
+          "relevance",
+          "metric",
+          "direction",
+          "units"
+        ],
+        "value_fields": [
+          "per_person_per_cell_value_or_null",
+          "all594cells_and1188_class_supports_per_arm",
+          "all33_person_values_or_null",
+          "panel_value_or_null",
+          "left_and_right_operands_or_null",
+          "paired_person_and_panel_delta_or_null",
+          "three_seed_mean_min_max_or_null",
+          "component_and_full_completion_status",
+          "unavailable_reasons",
+          "all_attempt_resource_and_process_records"
+        ],
+        "order": [
+          "H01_PRIMARY_PREDICTION",
+          "H02_R2_COMPARISON",
+          "H03_FEATURE_AUGMENTATION",
+          "H04_FEATURE_CONTROL",
+          "H05_MANDATORY_SECONDARY"
+        ],
+        "seed_summary": {
+          "candidate_seeds": [
+            97097,
+            97098,
+            97099
+          ],
+          "underlying_source_outer_inner_splits_fixed": true,
+          "inner_split_and_reference_seed": 97097,
+          "reference_reuse": "Same authenticated deterministic recipe panel across candidate settings and seeds; repeated comparator appearances are not new observations.",
+          "individual_reporting": "Always all three seed records including failed/unavailable status; fixed seed order. No best seed, retry, setting, arm, metric or relevance selection.",
+          "descriptive_summary": "For an otherwise identical report cell, mean=(v97097+v97098+v97099)/3 and min/max require all three complete finite values, identical cohort/projection/splits/metrics/access/mode/budgets, and the same prospectively fixed campaign-level agent/model/prompt/code-authoring procedure. Realized authored learners, chosen family/search policy and fitted parameters may vary across seeds as intended agent variation and must be reported separately; they are not required to have byte-identical source. Within each setting/seed, the same sealed family/search/query policy remains required across all five feature arms. Apply the summary separately to scores and paired differences; never average predictions into an ensemble.",
+          "incomplete_summary": "If any required seed value missing/unqualified/invalid, three-seed summary null with all original reasons; available individual values remain explicitly incomplete diagnostics, no mean over survivors.",
+          "interpretation": "Three seeds quantify these realized algorithm/agent outputs descriptively. Not population biological replicates, independent trial/fold evidence, calibrated uncertainty or an expectation over an unobserved seed distribution."
+        },
+        "mandatory_projection": "Prespecified bounded aggregate map contains complete hierarchy and every H05 macro/reference/feature/access/mode score and failure status; fixed anonymized person summaries and support counts may be included, no query target joins. If complete projection cannot fit existing4MB cap, fail that report; never silently omit unfavorable rows.",
+        "admission_unit": "One candidate access/mode/seed condition includes all66 folds x5arms=330 required fold/arm closures and all expected query outcomes.",
+        "target_last": "After all campaign attempts are closed and prediction/outcome manifests immutable, grade a complete condition only after source/view/candidate-state/process/resource/output admission. Malformed, absent, abstained or unclosed condition does not open target/reference callbacks and has no official condition metric.",
+        "missing": {
+          "unit": "One candidate access/mode/seed condition includes all66 folds x5arms=330 required fold/arm closures and all expected query outcomes.",
+          "target_last": "After all campaign attempts are closed and prediction/outcome manifests immutable, grade a complete condition only after source/view/candidate-state/process/resource/output admission. Malformed, absent, abstained or unclosed condition does not open target/reference callbacks and has no official condition metric.",
+          "references": "Reference closure must be qualified independently before a reference-relative value. Missing R2 yields unavailable H02; no replacement by another reference. A candidate absolute descriptive score can be retained if its own admission/support complete, but reference/full-benchmark qualification remains false.",
+          "support": "After valid admission, retain exact nulls and class counts. Any missing class nulls relevant BA/CBLL/Brier panel; empty cells also null legacy LL. Never reduce33 people/nine cells or substitute values.",
+          "contrasts": "If either operand unavailable or scope/policy/access comparison invalid, contrast null with both statuses; preserve supported descriptive components, never convert null to zero or fabricate a sign.",
+          "full_completion": "All4settings x3seeds x5arms, all mandated metrics/controls/references and gates remain required. A numerical H01 with another unavailable setting is not a completed benchmark.",
+          "historical_failures": "All old source-discovery deviations/display limits and all later attempts retained; new phase does not reset costs."
+        }
+      }
+    },
+    {
+      "id": "INTERPRETATION_REPORT",
+      "owner": "separate_onepass_candidate_interpretation",
+      "candidate_visible": true,
+      "fields": [
+        "estimand",
+        "cohort_and_source_limits",
+        "metric_comparisons",
+        "uncertainty",
+        "alternative_explanations",
+        "falsifying_followup",
+        "evidence_refs",
+        "report_hierarchy_and_seed_completeness",
+        "procedure_and_projection_identity",
+        "contrast_sign_and_metric_units"
+      ],
+      "evidence_refs": "PublicpaperparagraphIDsandaggregategradecells;neverprivatequerylabeljoins",
+      "grading": "Separateblindedexpert0-2x6rubric;noautomaticpositive-resultreward;noeffectsbackonpredictions",
+      "contract_binding": {
+        "scientific_contract": {
+          "path": "contracts/SCIENTIFIC_CONTRACT.json",
+          "bytes": 19033,
+          "sha256": "675cea83ede4129c424b9ae3e4691bc2af2d598c9172098ed0def43d7ba995e2"
+        },
+        "estimand_reporting_contract": {
+          "path": "contracts/ESTIMAND_REPORTING_CONTRACT.json",
+          "bytes": 19516,
+          "sha256": "a65ae36c60f203129412424e01fea30513c4a17c2f066bed53c474efc9d98454"
+        },
+        "future_admission": "Validate exact selected descriptor and source/condition/procedure joins; candidate supplied hashes are not trusted evidence."
+      },
+      "claim_checks": {
+        "permitted_statement": "On this admitted fixed panel, the specified procedure using the left projection obtained a signed difference of delta in named metric relative to the specified right procedure/projection under this setting and seed.",
+        "positive_BA": "Supports only greater realized held-out balanced accuracy for these bounded procedures/cases. Does not establish conditional information, neural source, confound elimination, population generalization or a theory.",
+        "zero_or_negative_BA": "Does not establish absence of information or conditional independence. Function class, optimization, regularization, feature dimension, noise, finite sample, thresholding and seed effects can limit or reverse this comparison.",
+        "loss_disagreement": "BA/loss/control signs may disagree because they measure different properties; report all without choosing the favorable metric.",
+        "independence": "H03 and H04 share inputs/left predictions and cohort; they are not independent replications. N098 reuses the corpus and cannot be independent replication either.",
+        "multiplicity": "Hierarchy is a fixed reporting order, not a sequential statistical-testing or alpha-spending scheme. No p-value, population CI, significance/pass threshold or posthoc claim selection is defined."
+      }
+    }
+  ],
+  "operations": [
+    {
+      "id": "admit_source_and_cohort",
+      "producer": "trustedcustodian",
+      "consumes": [
+        "SOURCE_MEMBER",
+        "COHORT_RECONCILIATION"
+      ],
+      "produces": [
+        "EPOCH_LINEAGE"
+      ],
+      "actual_scientific_execution": "futurequalifiedonly"
+    },
+    {
+      "id": "project_and_split",
+      "producer": "trustedpreparer/splitbuilder",
+      "consumes": [
+        "EPOCH_LINEAGE"
+      ],
+      "produces": [
+        "PROTECTED_OBSERVATIONS",
+        "FOLD_PLAN",
+        "TRAIN_VIEW"
+      ],
+      "scope": "No fitting; deterministicdeclaredgeometry; no source data openednow"
+    },
+    {
+      "id": "author_and_seal_F",
+      "producer": "candidate+trustedcontroller",
+      "consumes": [
+        "publiccontract/knowledgeonly"
+      ],
+      "produces": [
+        "LEARNER_SEAL"
+      ],
+      "order": "Beforeevaluationtrain/queryviewexposure"
+    },
+    {
+      "id": "train",
+      "producer": "sealedFprogramorIagent",
+      "consumes": [
+        "LEARNER_SEAL",
+        "TRAIN_VIEW"
+      ],
+      "produces": [
+        "TRAINED_STATE"
+      ],
+      "order": "Beforequery;everyattemptcharged",
+      "contract_binding": "Exact selected SCIENTIFIC_CONTRACT and ESTIMAND_REPORTING_CONTRACT identities; same policy/scope/seed/metric semantics from source to report."
+    },
+    {
+      "id": "predict_one",
+      "producer": "FprogramorIqueryagentfreshclone",
+      "consumes": [
+        "TRAINED_STATE",
+        "QUERY_VIEW"
+      ],
+      "produces": [
+        "QUERY_OUTCOME",
+        "QUERY_EXECUTION_RECORD"
+      ],
+      "order": "Noquerytoquerypersistence",
+      "contract_binding": "Exact selected SCIENTIFIC_CONTRACT and ESTIMAND_REPORTING_CONTRACT identities; same policy/scope/seed/metric semantics from source to report."
+    },
+    {
+      "id": "close_collect",
+      "producer": "trustedcollector",
+      "consumes": [
+        "QUERY_OUTCOME",
+        "FOLD_PLAN",
+        "QUERY_EXECUTION_RECORD"
+      ],
+      "produces": [
+        "FOLD_COLLECTION"
+      ],
+      "order": "Waitoriginalworkersanddescendants,sealboundedfiles"
+    },
+    {
+      "id": "build_reference",
+      "producer": "separatetrustedreferenceimplementations",
+      "consumes": [
+        "TRAIN_VIEW",
+        "QUERY_VIEW",
+        "FOLD_PLAN"
+      ],
+      "produces": [
+        "REFERENCE_PANEL"
+      ],
+      "order": "Noquerylabeltraining;protectedreferenceabsentfromcandidate",
+      "contract_binding": "Exact selected SCIENTIFIC_CONTRACT and ESTIMAND_REPORTING_CONTRACT identities; same policy/scope/seed/metric semantics from source to report."
+    },
+    {
+      "id": "grade",
+      "producer": "privatescorer",
+      "consumes": [
+        "FOLD_COLLECTION",
+        "REFERENCE_PANEL",
+        "PROTECTED_OBSERVATIONS"
+      ],
+      "produces": [
+        "GRADE_PANEL"
+      ],
+      "order": "Fulladmissionbeforeprivateread",
+      "contract_binding": "Exact selected SCIENTIFIC_CONTRACT and ESTIMAND_REPORTING_CONTRACT identities; same policy/scope/seed/metric semantics from source to report.",
+      "report_rules": "Emit H01-H05 in fixed order; all required secondary records/statuses and all three seeds; paired deltas only for matched complete operands; no statistical information test."
+    },
+    {
+      "id": "interpret",
+      "producer": "separatecandidateandblindedassessors",
+      "consumes": [
+        "safeGRADE_PANELprojection",
+        "publiccontract/primary"
+      ],
+      "produces": [
+        "INTERPRETATION_REPORT"
+      ],
+      "order": "Predictionfrozen;onepass;nodownstreamre-evaluation",
+      "contract_binding": "Exact selected SCIENTIFIC_CONTRACT and ESTIMAND_REPORTING_CONTRACT identities; same policy/scope/seed/metric semantics from source to report."
+    }
+  ],
+  "statuses": [
+    "SOURCE_UNAVAILABLE",
+    "COHORT_UNRESOLVED",
+    "PREPARATION_INVALID",
+    "REFERENCE_UNAVAILABLE",
+    "CANDIDATE_ABSTAIN",
+    "RESOURCE_EXCEEDED",
+    "PROCESS_UNCLOSED",
+    "INVALID_SUBMISSION",
+    "UNAVAILABLE_SUPPORT",
+    "COMPLETE_DESCRIPTIVE_SCORE"
+  ],
+  "legacy_migration": {
+    "retain": [
+      "taskID/cohortselection",
+      "eventfilters",
+      "sixsensors/windows/binning",
+      "outerperson+imagehalves",
+      "primarymetricandthreeoriginalarms",
+      "fixedunexecutedR1"
+    ],
+    "add": [
+      "training-onlygroup/stratumsidecars",
+      "two_feature_augmentation_control_arms",
+      "freshper-querymodeandstatecontroller",
+      "strongcompletereferences",
+      "source/cohort/runreconciliation",
+      "exposurefamilyledger",
+      "interpretationcontract"
+    ],
+    "do_not_claim_existing": [
+      "runner/isolation",
+      "modefairness",
+      "completeinput/participantcoverage",
+      "originalpaperreplication",
+      "scientificreadiness"
+    ]
+  },
+  "shared_contract_identity": {
+    "path": "contracts/SCIENTIFIC_CONTRACT.json",
+    "bytes": 19033,
+    "sha256": "675cea83ede4129c424b9ae3e4691bc2af2d598c9172098ed0def43d7ba995e2"
+  },
+  "estimand_reporting_contract": {
+    "path": "contracts/ESTIMAND_REPORTING_CONTRACT.json",
+    "bytes": 19516,
+    "sha256": "a65ae36c60f203129412424e01fea30513c4a17c2f066bed53c474efc9d98454"
+  }
+}

@@ -1,0 +1,395 @@
+{
+  "schema": "neural097_complete_scientific_contract_design_v2",
+  "task_id": "NEURAL-097",
+  "status": "DESIGN_ONLY_NOT_IMPLEMENTED_OR_QUALIFIED",
+  "estimand": {
+    "population": "Fixed complete declared33-person SA-prefix V1/task-dur panel; each person held out in turn, with the fixed40face/object identity universe split into2halves",
+    "target": "Face=1,object=0 on single eligible trials; category of presented image, not a per-trial consciousness label",
+    "primary_setting": "B/F/SIGNAL",
+    "primary": "Equal-person, equal-duration/orientation-cell balanced accuracy on task-irrelevant trials after pooling2disjoint held image halves",
+    "scope_not_claimed": [
+      "source-space original-paper numerical replication",
+      "population/cross-site generalization",
+      "online causal-time decoding",
+      "raw-signal innate understanding",
+      "consciousness theory adjudication",
+      "conditional mutual-information estimation",
+      "conditional-independence test",
+      "source-specific neural information or absence of confounding",
+      "population-optimal risk difference"
+    ],
+    "definition": "Descriptive prediction scores and signed paired predictive-performance contrasts on a fixed finite panel for prospectively fixed complete learning/search/query procedures. Neither a conditional-information estimator nor a validated conditional-independence test.",
+    "measurement_contract": {
+      "path": "contracts/ESTIMAND_REPORTING_CONTRACT.json",
+      "bytes": 19516,
+      "sha256": "a65ae36c60f203129412424e01fea30513c4a17c2f066bed53c474efc9d98454"
+    },
+    "reporting_order": [
+      "H01_PRIMARY_PREDICTION",
+      "H02_R2_COMPARISON",
+      "H03_FEATURE_AUGMENTATION",
+      "H04_FEATURE_CONTROL",
+      "H05_MANDATORY_SECONDARY"
+    ]
+  },
+  "cohort": {
+    "selected_person_count": 33,
+    "membership_source": "Existing unbundled-source:5dfd2d19c94e924a73282d7b099eccccc8437ea74cd1d304a59ac109731ac5f1 literalROSTER, source-map inclusion-list descriptor; actual complete eligible derivative join unverified",
+    "published_collected_MEG": 102,
+    "published_included_MEG": 97,
+    "published_optimization": 32,
+    "published_replication": 65,
+    "published_exclusions": 5,
+    "older_catalogue_collected_claim": 100,
+    "reconciliation": "102explicitmain=97included+5excluded;100conflicts; selected33membership/site/system/phase bridge is open, not guessed",
+    "actual_participant_manifest": null,
+    "standalone_person_list_read_this_phase": false,
+    "retained_cohort_shrink_allowed": false
+  },
+  "trial_contract": {
+    "visit": "V1",
+    "task": "dur",
+    "included_categories": [
+      "face",
+      "object"
+    ],
+    "stimulus_triggers": {
+      "face": [
+        1,
+        20
+      ],
+      "object": [
+        21,
+        40
+      ]
+    },
+    "category_trigger_agreement_required": true,
+    "relevance": [
+      "Irrelevant",
+      "Relevant non-target"
+    ],
+    "duration_ms": [
+      500,
+      1000,
+      1500
+    ],
+    "orientation": [
+      "Center",
+      "Left",
+      "Right"
+    ],
+    "response": "literalfalse; record all exclusions; no claim of causalabsenceofmotorprocessing",
+    "excluded_features": [
+      "Response_time(s)",
+      "originaltrigger",
+      "Category",
+      "Trial_ID",
+      "rawstimchannel",
+      "rawsampleindex",
+      "image/sourcefilename",
+      "originalpersonidentity"
+    ],
+    "primary_eligibility_changes_from_legacy": false,
+    "event_join": "Composite person/visit/run/source sample/onset/retained-epoch lineage; no ordinal-only orgloballyuniqueTrial_ID assumption"
+  },
+  "feature_arms": {
+    "SIGNAL": {
+      "dim": 60,
+      "window_s": [
+        0.1,
+        0.3
+      ],
+      "bin_width_s": 0.02,
+      "bins": 10
+    },
+    "PRE": {
+      "dim": 60,
+      "window_s": [
+        -0.3,
+        -0.1
+      ],
+      "bin_width_s": 0.02,
+      "bins": 10
+    },
+    "NUISANCE": {
+      "dim": 8,
+      "order": [
+        "duration500",
+        "duration1000",
+        "duration1500",
+        "Irrelevant",
+        "Relevant non-target",
+        "Center",
+        "Left",
+        "Right"
+      ]
+    },
+    "SIGNAL_NUISANCE": {
+      "dim": 68,
+      "concat": [
+        "SIGNAL",
+        "NUISANCE"
+      ]
+    },
+    "PRE_NUISANCE": {
+      "dim": 68,
+      "concat": [
+        "PRE",
+        "NUISANCE"
+      ]
+    }
+  },
+  "features": {
+    "channels": [
+      "MEG1931",
+      "MEG2121",
+      "MEG2331",
+      "MEG1921",
+      "MEG2111",
+      "MEG2341"
+    ],
+    "channel_source_role": "Authorplottingconfiguration, not source-ROI decoder",
+    "baseline_s": [
+      -0.5,
+      -0.3
+    ],
+    "flatten": "channel_major_then_bin",
+    "endpoint_policy": "lo-1e-9 <= timestamp < hi-1e-9, matchesexistingprotocol",
+    "new_resampling_filtering_smoothing_covariance_inverse": false,
+    "same_retained_rows_all_arms": true,
+    "finite_and_all_channels_good_and_every_bin_nonempty": true,
+    "query_label_aware_averaging": false,
+    "upstream_limit": "Frozenauthorpreprocessingcanincludeall-epochdetrending/filtering/rejection; notqualifiedtraining-onlyrawpreprocessing"
+  },
+  "outer_split": {
+    "persons": 33,
+    "halves": 2,
+    "folds": 66,
+    "held_image_rule": "((Stim_trigger-1)%20)%2",
+    "train": "person!=held_person AND image_half!=held_half",
+    "query": "person==held_person AND image_half==held_half",
+    "repeated_oriented_images_grouped": true,
+    "sameperson_aliases_prohibited": true,
+    "query_halves_pooled_once": true,
+    "public_image_ids": false,
+    "image_identity_bridge": "Physical stimulus-identity provenance across people/versions and aliases must be authenticated. The fixed trigger-parity rule cannot substitute for that proof; crossing aliases invalidate this version."
+  },
+  "inner_split": {
+    "training_person_groups": 4,
+    "training_image_groups": 2,
+    "crossed_folds": 8,
+    "group_formation": "Prospectively seeded training-onlyopaque person/imagegroups; imagegroupsstratifiedbytrainingy, allviewsgrouped; no outerparity reused inside already-single-halftraining",
+    "pooling": "Pooltwoimagehalvesperheldtrainingpersonbeforeselectionmetric",
+    "selection": "Maxequal-personIrrelevantBA; tie lowerbalancedlogloss thenlowercomplexity in declaredgridorder",
+    "validity": "Allheldtrainingpeopleandbothclassesrequired afterpool; noqueryinfo/supportused; no trial-randomCV",
+    "purpose": "Trainingselectioncriterion; does not silently redefine finalnine-cellmetric",
+    "seed": 97097,
+    "exact_group_rule": "Within outer training only: sort person groups by SHA256(contract_seed||canonical_person_group) and round-robin into4groups; within each training category sort image groups by SHA256(contract_seed||canonical_image_group) and round-robin into2groups. Keep private identifiers behind opaque row sidecars. No candidate or query-outcome-dependent regrouping."
+  },
+  "metrics": {
+    "prediction": "Finitefloatp_face[0,1], boolrejected, hardclassfaceifp>=.5",
+    "primary_formula": "mean_p mean_(d,o) [recall_face(p,Irrelevant,d,o)+recall_object(p,Irrelevant,d,o)]/2",
+    "relevant_nontarget": "Same formula separately; nevermixedintoprimary",
+    "legacy_logloss": "mean_p mean_(d,o) trialmean[-log(max(1e-15,p_y))] separatelybyrelevance",
+    "balanced_logloss": "mean_p mean_(d,o) mean_y classmean[-log(max(1e-15,p_y))]",
+    "balanced_brier": "mean_p mean_(d,o) mean_y classmean[(p_face-y)^2]",
+    "missing_class": "AffectedcellBA/CBLL/Brier andcompletecorrespondingpanelmetric null; noomit/renormalize/replace",
+    "missing_empty_cell": "Legacyloglossalso null",
+    "per_arm_person_stratum_cells": 594,
+    "per_arm_class_support_counts": 1188,
+    "half_stratum_support": "Diagnosticandtrainingvaliditychecks; preservelegacypooled1188requirement, donotimportN0982376withoutnewdecision",
+    "reference_relative_primary": "H02: candidate B/F/SIGNAL Irrelevant BA minus fixed qualified R2 SIGNAL Irrelevant BA at each candidate seed; descriptive and secondary to H01; no best-reference selection.",
+    "automatic_p_value": null,
+    "population_CI": null,
+    "scientific_pass_threshold": null,
+    "uncertainty": "Descriptivepairedpersondifferencesand3complete-seedvariation; noindependenttrial/fold/binomialorSD/sqrt33populationCI",
+    "feature_performance_pairs": [
+      [
+        "SIGNAL",
+        "PRE"
+      ],
+      [
+        "SIGNAL",
+        "NUISANCE"
+      ],
+      [
+        "SIGNAL_NUISANCE",
+        "NUISANCE"
+      ],
+      [
+        "SIGNAL_NUISANCE",
+        "PRE_NUISANCE"
+      ]
+    ],
+    "prespecified_feature_comparison_pairs": [
+      [
+        "SIGNAL_NUISANCE",
+        "NUISANCE"
+      ],
+      [
+        "SIGNAL_NUISANCE",
+        "PRE_NUISANCE"
+      ]
+    ],
+    "feature_comparison_scope": "H03/H04 are secondary prespecified B/F/Irrelevant balanced-accuracy comparisons at each fixed seed. All pairs/settings/relevances/metrics remain mandatory H05. See exact normative reporting contract; no information-test interpretation.",
+    "contrast_sign": "Literal left-minus-right for every metric; BA higher is better, LL/CBLL/Brier lower is better. No common combined score."
+  },
+  "conditions": {
+    "access": [
+      "A",
+      "B"
+    ],
+    "mode": [
+      "F",
+      "I"
+    ],
+    "seeds": [
+      97097,
+      97098,
+      97099
+    ],
+    "arms": [
+      "SIGNAL",
+      "PRE",
+      "NUISANCE",
+      "SIGNAL_NUISANCE",
+      "PRE_NUISANCE"
+    ],
+    "fold_arm_outputs_per_setting": 330,
+    "fold_arm_access_mode_outputs_per_seed": 1320,
+    "full_three_seed_outputs": 3960,
+    "independent_benchmark_count": 1,
+    "A": "Task/spec/safeprimarynarrative/sameobservationsandreference recipes",
+    "B": "A+auditedordinaryauthorsource; excludeindividualrosters,stimulusdictionary,fittedresults,referencepredictions",
+    "F": "Learnersealedbeforeevaluationdataview; programalonefitsallowedtrainingandpredictsonequeryatatime",
+    "I": "Adaptiveallowedtraininginvestigation; sealtrainingstate; eachqueryfreshclonewithonevector; noquery-queryadaptation orpooledquerycovariance",
+    "fixed_stimulus_access": "Noimagesorsemanticstimulusidentitydictionaries",
+    "method_comparability": "Sameprespecifiedcandidatefamily/searchpolicyacrossdataarms; hyperparametersmayvaryunderidenticaltraining-onlyselectionrule; independentcontext/toolstateeverycondition",
+    "query_transductive_condition": "Notselected; wouldrequireseparateestimand/version",
+    "reference_split_seed": 97097,
+    "seed_policy": {
+      "candidate_seeds": [
+        97097,
+        97098,
+        97099
+      ],
+      "underlying_source_outer_inner_splits_fixed": true,
+      "inner_split_and_reference_seed": 97097,
+      "reference_reuse": "Same authenticated deterministic recipe panel across candidate settings and seeds; repeated comparator appearances are not new observations.",
+      "individual_reporting": "Always all three seed records including failed/unavailable status; fixed seed order. No best seed, retry, setting, arm, metric or relevance selection.",
+      "descriptive_summary": "For an otherwise identical report cell, mean=(v97097+v97098+v97099)/3 and min/max require all three complete finite values, identical cohort/projection/splits/metrics/access/mode/budgets, and the same prospectively fixed campaign-level agent/model/prompt/code-authoring procedure. Realized authored learners, chosen family/search policy and fitted parameters may vary across seeds as intended agent variation and must be reported separately; they are not required to have byte-identical source. Within each setting/seed, the same sealed family/search/query policy remains required across all five feature arms. Apply the summary separately to scores and paired differences; never average predictions into an ensemble.",
+      "incomplete_summary": "If any required seed value missing/unqualified/invalid, three-seed summary null with all original reasons; available individual values remain explicitly incomplete diagnostics, no mean over survivors.",
+      "interpretation": "Three seeds quantify these realized algorithm/agent outputs descriptively. Not population biological replicates, independent trial/fold evidence, calibrated uncertainty or an expectation over an unobserved seed distribution."
+    },
+    "I_after_query": "May write/run bounded query-specific analysis and select among frozen training-derived model states. No new statistical fit/normalization/calibration after query exposure; no cross-query state. Actual query source and operations are captured by controller."
+  },
+  "references": [
+    {
+      "id": "R0",
+      "recipe": "Constantp_face=.5",
+      "fit": false,
+      "source_status": "Designarithmeticfloor; notauthenticrun"
+    },
+    {
+      "id": "R1",
+      "recipe": "PreservelegacyLogisticRegressionC1liblinearL2fit_interceptTrueintercept_scaling1tol1e-4maxiter1000seed97097class_weightNone; unweightedtrainingmean/popSD,zeroSD1; sampleweightsequallyweightpersonandwithinpersonclass,mean1",
+      "convergence": "Warningorreachedcapinvalidatesreference; nofallback",
+      "source": "unbundled-source:ad7fdc0474475b01411614bacc5b96cf6933caf058b19e5e4a6f22caa436f813"
+    },
+    {
+      "id": "R2",
+      "recipe": "Groupedtraining-selectedLR, same R1moments/weights/explicitdefaults;Cgrid[.0001,.01,.1,1,10,100],tol1e-6,max_iter5000;8innerfolds;refitselectedConalloutertrain",
+      "grid": [
+        0.0001,
+        0.01,
+        0.1,
+        1,
+        10,
+        100
+      ],
+      "minimum_fits_per_fold_arm": 49,
+      "selection": "Declaredinnercriterion",
+      "source_status": "Unimplementedreferenceobligation",
+      "ties": "Higher inner BA; then lower inner balanced log loss; then smaller C",
+      "invalid": "Any convergence warning, reached5000iterationcap, nonfinite state or incomplete inner-fold output invalidates configuration. If no valid configuration, reference unavailable."
+    },
+    {
+      "id": "R3",
+      "recipe": "Independent weighted shrinkage linear discriminant; sameoutertrain-onlyunweightedmean/popSDnormalizationandperson/classweightsasR1",
+      "class_means": "mu_c=sum_(i:y=c)w_i*x_i /sum_(i:y=c)w_i",
+      "pooled_covariance": "S=sum_i w_i*(x_i-mu_yi)*(x_i-mu_yi)^T /sum_i w_i",
+      "regularization": "S_lambda=(1-lambda)*S+lambda*diag(diag(S))+1e-8*I in standardizedfeatureunits",
+      "lambda_grid": [
+        0.1,
+        0.5,
+        1.0
+      ],
+      "prediction": "v=solve(S_lambda,mu_1-mu_0);z=x^Tv-.5*(mu_1+mu_0)^Tv; p_face=stable_sigmoid(z); classpriors=.5/.5",
+      "selection": "Same8training-onlycrossedinnerfoldcriterion;tie largerlambda; refit onalloutertrain",
+      "failure": "Nonfiniteinputs/parameters/outputs ormatrixconditionnumber>1e12 =>configurationinvalid;noqueryfit/pseudoinversefallback",
+      "minimum_fits_per_fold_arm": 25,
+      "numerical_status": "Formulafullyspecified;independentimplementationandnumericalagreementsremainqualificationgates",
+      "source_status": "Unimplementedreferenceobligation"
+    },
+    {
+      "id": "R4",
+      "recipe": "HistGradientBoostingClassifierlosslog_loss,max_iter200,early_stoppingFalse,max_depthNone,min_samples_leaf20,max_bins255; gridmax_leaf_nodes[7,31]xlearning_rate[.05,.1]xl2_regularization[0,1];seed97097; sameperson/classweights;8innerfolds, thenrefitselectedgrid",
+      "minimum_fits_per_fold_arm": 65,
+      "selection": "Declaredinnercriterion",
+      "source_status": "Unimplementedreferenceobligation",
+      "ties": "Higher inner BA; then lower inner balanced log loss; then fewer leaves, larger L2, smaller learning rate",
+      "invalid": "Training exception, nonfinite state/output or incomplete folds invalidates configuration. Completing the prescribed200boostingiterations is expected, not a convergence failure."
+    }
+  ],
+  "reference_admission": "All5armsand66foldsrequired; no unqualifiedreference numericaloutput; independentprediction/metricreconstructionandconvergencechecks; no referencecontainsquerylabelsforfit",
+  "family_exposure": {
+    "family": "cogitate-experiment1-MEG",
+    "related": [
+      "NEURAL-098",
+      "PAPER-paper-method-add-010"
+    ],
+    "clean_lineage": "Model/parentcheckpoint/prompt/cache/workspace/training/runlineage checked acrossfamily,versions,participants,images; unknown=>unclean/unavailable",
+    "prohibition": "N098 labeledpackets/reference/logs/traineddescendants cannotprecedeunseen-labelN097campaign in sharedlineage",
+    "reuse_allowed": "Authenticatedsource-onlyutilitiesorraw-dataidentitycataloguewithseparateprivateprojections; neverreuse labeledN098candidatepacket, fittedmodel, scoreroutputs orcontext"
+  },
+  "interpretation": {
+    "timing": "Afterallpredictionssealed; onepassseparatestage; nofeedbackloop",
+    "input": "Publicsource+fixedaggregate resultprojection, noquerytargetmapororiginalidentities",
+    "dimensions": [
+      "faithfulestimand",
+      "cohort/source reconciliation",
+      "validcomparisons",
+      "calibrateduncertainty",
+      "alternativeexplanations",
+      "evidence-linkedfalsifiability"
+    ],
+    "levels": [
+      0,
+      1,
+      2
+    ],
+    "max_score": 12,
+    "raters": "Twoindependentblindedexpertswithadjudication;notcontactedorselectedinthisphase",
+    "validation": "Rubricpilot/inter-rateragreementandconstructvalidityopengate",
+    "separate_from_prediction_score": true,
+    "claim_boundary": {
+      "permitted_statement": "On this admitted fixed panel, the specified procedure using the left projection obtained a signed difference of delta in named metric relative to the specified right procedure/projection under this setting and seed.",
+      "positive_BA": "Supports only greater realized held-out balanced accuracy for these bounded procedures/cases. Does not establish conditional information, neural source, confound elimination, population generalization or a theory.",
+      "zero_or_negative_BA": "Does not establish absence of information or conditional independence. Function class, optimization, regularization, feature dimension, noise, finite sample, thresholding and seed effects can limit or reverse this comparison.",
+      "loss_disagreement": "BA/loss/control signs may disagree because they measure different properties; report all without choosing the favorable metric.",
+      "independence": "H03 and H04 share inputs/left predictions and cohort; they are not independent replications. N098 reuses the corpus and cannot be independent replication either.",
+      "multiplicity": "Hierarchy is a fixed reporting order, not a sequential statistical-testing or alpha-spending scheme. No p-value, population CI, significance/pass threshold or posthoc claim selection is defined."
+    },
+    "normative_report_projection": "ESTIMAND_REPORTING_CONTRACT.json reporting_hierarchy and mandatory_secondary; same ordered fields and statuses passed after all outcomes sealed."
+  },
+  "build_only": {
+    "implementation": false,
+    "network": 0,
+    "helper_agents": 0,
+    "fixtures": 0,
+    "authentic_inputs": 0,
+    "native_fits": 0,
+    "scientific_results": 0,
+    "count_change": 0
+  }
+}

@@ -1,0 +1,288 @@
+{
+  "schema": "neural097_fixed_panel_estimand_reporting_contract_v2",
+  "task_id": "NEURAL-097",
+  "status": "NORMATIVE_DESIGN_ONLY_NO_IMPLEMENTATION_OR_SCIENTIFIC_QUALIFICATION",
+  "repair": "N097-D01",
+  "definition": "Descriptive prediction scores and signed paired predictive-performance contrasts on a fixed finite panel for prospectively fixed complete learning/search/query procedures. Neither a conditional-information estimator nor a validated conditional-independence test.",
+  "inherited_scope": {
+    "persons": 33,
+    "outer_folds": 66,
+    "feature_arms": [
+      "SIGNAL",
+      "PRE",
+      "NUISANCE",
+      "SIGNAL_NUISANCE",
+      "PRE_NUISANCE"
+    ],
+    "settings": [
+      {
+        "access": "A",
+        "mode": "F"
+      },
+      {
+        "access": "A",
+        "mode": "I"
+      },
+      {
+        "access": "B",
+        "mode": "F"
+      },
+      {
+        "access": "B",
+        "mode": "I"
+      }
+    ],
+    "candidate_seeds": [
+      97097,
+      97098,
+      97099
+    ],
+    "candidate_outputs": 3960,
+    "pooled_person_relevance_duration_orientation_cells_per_arm": 594,
+    "pooled_class_support_counts_per_arm": 1188,
+    "open_gates": 22,
+    "independent_benchmarks": 1
+  },
+  "finite_panel": {
+    "persons": "Exact selected 33-person source-code roster; empirical eligibility/membership/site bridge remains unverified, no replacement or shrinkage.",
+    "images": "Fixed 40 face/object image identities, two parity halves after authentic physical-identity/alias reconciliation; all views/repeats stay grouped.",
+    "trials": "All eligible V1/task-dur trials meeting unchanged trigger/category, relevance and literal false response rules; no outcome-based exclusions.",
+    "query_unit": "One eligible trial; opaque candidate nonce is not a biological sampling unit.",
+    "aggregation_unit": "Each of the 33 people after pooling both disjoint query halves once; shared images and overlapping training sets create dependence.",
+    "relevances": [
+      "Irrelevant",
+      "Relevant non-target"
+    ],
+    "durations_ms": [
+      500,
+      1000,
+      1500
+    ],
+    "orientations": [
+      "Center",
+      "Left",
+      "Right"
+    ],
+    "class_coding": {
+      "face": 1,
+      "object": 0
+    },
+    "no_population_sampling_estimand": true,
+    "not_new_data_collected_or_qualified": true
+  },
+  "fixed_procedure": {
+    "notation": "L denotes the prespecified complete candidate procedure, including its agent/model/prompt/code-authoring policy and the family/search/query policy sealed for each access/mode/seed condition. Its realized sources/states/selected parameters are captured. a is one of five feature arms; z=(access,mode); s is one of three candidate seeds. Rj is a fixed qualified reference procedure.",
+    "identity_fields": [
+      "candidate/model/checkpoint and exposure lineage",
+      "whole programme and dependencies",
+      "prospectively sealed learner-family/search/query-policy",
+      "training-only split/selection/calibration policy",
+      "source projection and cohort version",
+      "outer/inner split versions",
+      "feature-arm column definition",
+      "access/mode/seed",
+      "tools and hard aggregate resource class",
+      "actual training/query operation/state/source/output closures"
+    ],
+    "training": "For query person p and image half h, train only on other persons and opposite image half; eight training-only crossed inner folds under fixed split seed97097; same existing inner criterion and tie rules.",
+    "inner_objective": "Equal-training-person Irrelevant balanced accuracy after pooling both inner image groups, ties balanced log loss then declared complexity. It is not the final nine-cell macro metric.",
+    "feature_policy": "Exact SIGNAL60/PRE60/NUISANCE8 and concatenated68 columns in SCIENTIFIC_CONTRACT; identical retained observation universe in every arm.",
+    "family_matching": "Within each candidate access/mode/seed condition, the same predeclared learner-family and search/query policy must be used across all five feature arms. Independent fitting and selected hyperparameters may differ through that unchanged training-only rule. Capture actual full sources/states; policy-label equality alone is not conformity evidence.",
+    "model_authoring": "F full learner/query source sealed before evaluation views. I family/search/query-policy sealed before condition data; actual training source/state sealed before query; each query probes/selects only frozen training-derived states in a fresh isolated clone. Existing G15/G16 qualification remains mandatory.",
+    "conditioning": "Report the realized output of the entire admitted learning/search procedure, including optimization/regularization/capacity/dimension/finite training sample/seed effects. Never identify its contrast with a population-optimal or Bayes-risk contrast.",
+    "budgets": "Exact retained N097-CPU-SMALL-v1 hard budgets; no hidden extra search, best-attempt replacement, or budget reset for a clone.",
+    "preprocessing": "Already authored derivatives may contain whole-recording/epoch adaptation. The claim is inductive prediction under the fixed derivative, not causal-time or fully training-only raw preprocessing."
+  },
+  "metric_definitions": {
+    "notation": "p indexes all33 people; r relevance; d duration; o orientation; y in{0,1}; Q(p,r,d,o,y) pools both disjoint image-half query sets once; n is its count. q_i is p(face).",
+    "hard_class": "hat_y_i=1 if q_i>=0.5 else0",
+    "balanced_accuracy": {
+      "cell": "BA(p,r,d,o)=0.5*sum_y [sum_(i in Q(p,r,d,o,y))1(hat_y_i=y)/n(p,r,d,o,y)]",
+      "person": "BA(p,r)=(1/9)*sum_(d,o) BA(p,r,d,o)",
+      "panel": "BA(r)=(1/33)*sum_p BA(p,r)",
+      "direction": "higher",
+      "units": "fraction, never silently percent",
+      "support": "Every required cell has both classes; any missing class makes affected cell/person/full relevance panel BA null."
+    },
+    "legacy_logloss": {
+      "cell": "LL(p,r,d,o)=mean_(all trials in cell)[-ln(max(1e-15, q_i if y_i=1 else 1-q_i))]",
+      "person": "(1/9)*sum_(d,o) LL(p,r,d,o)",
+      "panel": "(1/33)*sum_p LL(p,r)",
+      "direction": "lower",
+      "units": "natural-log nats per trial",
+      "weighting": "Within-cell observed prevalence, unlike class-balanced loss. Preserve original arithmetic.",
+      "support": "Empty required cell makes full relevance LL null; a nonempty one-class cell can retain legacy LL but cannot rescue BA/CBLL/Brier or full scientific support."
+    },
+    "balanced_logloss": {
+      "cell": "CBLL(p,r,d,o)=0.5*sum_y mean_(i in Q(p,r,d,o,y))[-ln(max(1e-15, q_i if y_i=1 else 1-q_i))]",
+      "person": "(1/9)*sum_(d,o) CBLL(p,r,d,o)",
+      "panel": "(1/33)*sum_p CBLL(p,r)",
+      "direction": "lower",
+      "units": "natural-log nats, class reweighted",
+      "support": "Both classes in every cell; missing support yields null without renormalization."
+    },
+    "balanced_brier": {
+      "cell": "BB(p,r,d,o)=0.5*sum_y mean_(i in Q(p,r,d,o,y))[(q_i-y)^2]",
+      "person": "(1/9)*sum_(d,o) BB(p,r,d,o)",
+      "panel": "(1/33)*sum_p BB(p,r)",
+      "direction": "lower",
+      "units": "squared probability",
+      "support": "Both classes in every cell; missing support yields null without renormalization."
+    },
+    "all_scores": "Per-case probabilities are admitted before targets; all metric values are prospective and currently unobserved."
+  },
+  "contrast_definitions": {
+    "generic": "For a fixed z,s,r,m and matched complete case universe, delta_m(L_a,L_b)=M_m(L,a,z,s,r)-M_m(L,b,z,s,r). Compute each person difference on the same nine cells; panel difference is equal mean of all33 person differences. Publish both operands, difference, units, direction, procedure identities and support.",
+    "reference": "delta_m(L_a,Rj_a)=M_m(L,a,z,s,r)-M_m(Rj,a,r), same arm/source/observations/splits/metric. Rj is separately qualified fixed algorithm with recipe seed97097, not an agent with A/B/F/I intervention. Record candidate setting z as comparison context, never fabricate Rj mode/access provenance.",
+    "same_case_requirement": "Both operands must contain every identical admitted query case and stratum; no intersection-only pairing, omitted person, changed denominator or matched-success subset.",
+    "sign": "Always literal left minus right in named metric units. Positive BA favors left predictive accuracy; negative LL/CBLL/Brier favors left loss. Zero is equality of this measured score, not evidence of independence. Do not invert losses silently or synthesize a composite.",
+    "feature_augmentation": {
+      "id": "C_AUGMENT",
+      "left_arm": "SIGNAL_NUISANCE",
+      "right_arm": "NUISANCE",
+      "meaning": "Change in predictive performance when the same bounded policy is supplied SIGNAL plus NUISANCE rather than NUISANCE alone. Different input dimension and fitted model are part of the contrast."
+    },
+    "feature_control": {
+      "id": "C_TIME_CONTROL",
+      "left_arm": "SIGNAL_NUISANCE",
+      "right_arm": "PRE_NUISANCE",
+      "meaning": "Change in predictive performance between the SIGNAL-plus-design and PRE-plus-design projections for the same bounded policy. Equal68 dimensions do not establish equal noise, causal timing, neural origin or confound removal."
+    },
+    "other_feature_pairs": [
+      [
+        "SIGNAL",
+        "PRE"
+      ],
+      [
+        "SIGNAL",
+        "NUISANCE"
+      ]
+    ],
+    "not_estimated": [
+      "conditional mutual information",
+      "conditional independence",
+      "conditional Bayes-risk advantage",
+      "amount of neural information",
+      "neural/cortical/ocular/muscle source attribution",
+      "removal or absence of measured or unmeasured confounding",
+      "population or external-cohort performance",
+      "IIT/GNWT or any consciousness theory verdict"
+    ]
+  },
+  "reporting_hierarchy": [
+    {
+      "rank": 1,
+      "id": "H01_PRIMARY_PREDICTION",
+      "quantity": "candidate balanced_accuracy",
+      "access": "B",
+      "mode": "F",
+      "arm": "SIGNAL",
+      "relevance": "Irrelevant",
+      "seeds": [
+        97097,
+        97098,
+        97099
+      ],
+      "seed_presentation": "All three individual primary scores, fixed ascending seed order; descriptive three-seed mean/min/max only under seed_policy. Mean is not a replacement primary, ensemble prediction or population expectation.",
+      "priority": "Sole primary prediction setting/metric; retained legacy within-panel BA unchanged."
+    },
+    {
+      "rank": 2,
+      "id": "H02_R2_COMPARISON",
+      "quantity": "candidate SIGNAL BA minus R2 SIGNAL BA",
+      "access": "B",
+      "mode": "F",
+      "relevance": "Irrelevant",
+      "seeds": [
+        97097,
+        97098,
+        97099
+      ],
+      "reference": "One complete fixed R2 panel at seed97097 reused transparently; no best-reference or seed selection.",
+      "priority": "Prespecified reference-relative comparison; does not supplant primary score or establish SOTA."
+    },
+    {
+      "rank": 3,
+      "id": "H03_FEATURE_AUGMENTATION",
+      "contrast": "C_AUGMENT",
+      "access": "B",
+      "mode": "F",
+      "relevance": "Irrelevant",
+      "metric": "balanced_accuracy",
+      "seeds": [
+        97097,
+        97098,
+        97099
+      ],
+      "priority": "Prespecified key feature comparison, secondary to primary prediction and R2 comparison; not a co-primary or information hypothesis test."
+    },
+    {
+      "rank": 4,
+      "id": "H04_FEATURE_CONTROL",
+      "contrast": "C_TIME_CONTROL",
+      "access": "B",
+      "mode": "F",
+      "relevance": "Irrelevant",
+      "metric": "balanced_accuracy",
+      "seeds": [
+        97097,
+        97098,
+        97099
+      ],
+      "priority": "Prespecified key temporal-feature control comparison; not a co-primary or independent confirmation of H03."
+    },
+    {
+      "rank": 5,
+      "id": "H05_MANDATORY_SECONDARY",
+      "specification": "mandatory_secondary below",
+      "priority": "Mandatory regardless of H01-H04 sign or availability; no result-dependent suppression and no promotion to primary."
+    }
+  ],
+  "mandatory_secondary": {
+    "candidate_absolute": "All5 arms x4 access/mode settings x3 seeds x2 relevance groups x4 metrics, with full person/cell/class support. H01 is the sole designated primary subset; other values remain required.",
+    "candidate_feature_contrasts": "All4 declared pairs (SIGNAL-PRE, SIGNAL-NUISANCE, SIGNAL_NUISANCE-NUISANCE, SIGNAL_NUISANCE-PRE_NUISANCE) x4 settings x3 seeds x2 relevances x4 metrics. H03/H04 are prespecified subsets, not additional copies or extra benchmarks.",
+    "references": "Absolute R0-R4 scores for all5 arms x2 relevances x4 metrics under one fixed qualified reference panel per recipe; all actual fits/parameters/resources/failures reported. Do not invent seed replicates.",
+    "reference_relative": "Candidate-minus-each-R0-R4 for all5 arms x4 settings x3 seeds x2 relevances x4 metrics. H02 is the designated R2 subset; no oracle-best comparison.",
+    "access_comparison": "B minus A for same candidate agent/version, mode, seed, arm, relevance and metric, same source/inputs/tools/budgets. Actual learner choices may differ as part of code-access intervention; no attribution if access equivalence/exposure unqualified.",
+    "mode_comparison": "I minus F for same candidate agent/version, access, seed, arm, relevance and metric. Report distinct cognitive exposure/timing and qualified immutable-state enforcement; otherwise comparison unqualified, never a pure reasoning score.",
+    "support_and_failure": "All required594 cells and1188 class counts per arm, half-level coverage, every attempt/abstention/resource/process/exposure/ref/support failure, no successful-run selection.",
+    "controls": "All31 existing planned control groups and their full support/failures; not executed or authorized here.",
+    "interpretation": "12 separate setting/seed interpretation reports after campaign predictions/outcomes sealed; fixed aggregate projection; separate six-domain0-2 expert rubric, no combined prediction/interpretation score."
+  },
+  "seed_policy": {
+    "candidate_seeds": [
+      97097,
+      97098,
+      97099
+    ],
+    "underlying_source_outer_inner_splits_fixed": true,
+    "inner_split_and_reference_seed": 97097,
+    "reference_reuse": "Same authenticated deterministic recipe panel across candidate settings and seeds; repeated comparator appearances are not new observations.",
+    "individual_reporting": "Always all three seed records including failed/unavailable status; fixed seed order. No best seed, retry, setting, arm, metric or relevance selection.",
+    "descriptive_summary": "For an otherwise identical report cell, mean=(v97097+v97098+v97099)/3 and min/max require all three complete finite values, identical cohort/projection/splits/metrics/access/mode/budgets, and the same prospectively fixed campaign-level agent/model/prompt/code-authoring procedure. Realized authored learners, chosen family/search policy and fitted parameters may vary across seeds as intended agent variation and must be reported separately; they are not required to have byte-identical source. Within each setting/seed, the same sealed family/search/query policy remains required across all five feature arms. Apply the summary separately to scores and paired differences; never average predictions into an ensemble.",
+    "incomplete_summary": "If any required seed value missing/unqualified/invalid, three-seed summary null with all original reasons; available individual values remain explicitly incomplete diagnostics, no mean over survivors.",
+    "interpretation": "Three seeds quantify these realized algorithm/agent outputs descriptively. Not population biological replicates, independent trial/fold evidence, calibrated uncertainty or an expectation over an unobserved seed distribution."
+  },
+  "admission_failure_semantics": {
+    "unit": "One candidate access/mode/seed condition includes all66 folds x5arms=330 required fold/arm closures and all expected query outcomes.",
+    "target_last": "After all campaign attempts are closed and prediction/outcome manifests immutable, grade a complete condition only after source/view/candidate-state/process/resource/output admission. Malformed, absent, abstained or unclosed condition does not open target/reference callbacks and has no official condition metric.",
+    "references": "Reference closure must be qualified independently before a reference-relative value. Missing R2 yields unavailable H02; no replacement by another reference. A candidate absolute descriptive score can be retained if its own admission/support complete, but reference/full-benchmark qualification remains false.",
+    "support": "After valid admission, retain exact nulls and class counts. Any missing class nulls relevant BA/CBLL/Brier panel; empty cells also null legacy LL. Never reduce33 people/nine cells or substitute values.",
+    "contrasts": "If either operand unavailable or scope/policy/access comparison invalid, contrast null with both statuses; preserve supported descriptive components, never convert null to zero or fabricate a sign.",
+    "full_completion": "All4settings x3seeds x5arms, all mandated metrics/controls/references and gates remain required. A numerical H01 with another unavailable setting is not a completed benchmark.",
+    "historical_failures": "All old source-discovery deviations/display limits and all later attempts retained; new phase does not reset costs."
+  },
+  "interpretation_contract": {
+    "permitted_statement": "On this admitted fixed panel, the specified procedure using the left projection obtained a signed difference of delta in named metric relative to the specified right procedure/projection under this setting and seed.",
+    "positive_BA": "Supports only greater realized held-out balanced accuracy for these bounded procedures/cases. Does not establish conditional information, neural source, confound elimination, population generalization or a theory.",
+    "zero_or_negative_BA": "Does not establish absence of information or conditional independence. Function class, optimization, regularization, feature dimension, noise, finite sample, thresholding and seed effects can limit or reverse this comparison.",
+    "loss_disagreement": "BA/loss/control signs may disagree because they measure different properties; report all without choosing the favorable metric.",
+    "independence": "H03 and H04 share inputs/left predictions and cohort; they are not independent replications. N098 reuses the corpus and cannot be independent replication either.",
+    "multiplicity": "Hierarchy is a fixed reporting order, not a sequential statistical-testing or alpha-spending scheme. No p-value, population CI, significance/pass threshold or posthoc claim selection is defined."
+  },
+  "normative_binding": {
+    "representation": "Exact UTF-8 file bytes including final newline; raw path/bytes/SHA256 descriptor in SCIENTIFIC_CONTRACT, INTERFACES and PROGRAMME. No canonical-object/file-byte hash ambiguity.",
+    "future_records": "All future learner seals, views, reference panels, collections, grade/aggregate/interpretation records bind the same contract identity and full scientific contract version. Mismatch refuses admission before private reads.",
+    "cycle_avoidance": "This contract specifies inherited scientific fields by named source/section; scientific contract pins this body, and downstream files pin both. No self-hash or circular descriptor."
+  }
+}
