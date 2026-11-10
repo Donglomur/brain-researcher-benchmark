@@ -1,0 +1,94 @@
+{
+  "R0": {
+    "absent_classes": "existing1e-12 fill for missing class logits, present-class predict_proba, normalize29probabilities; preserve exact class order",
+    "arms": [
+      "TIMING",
+      "EOG",
+      "NEURAL_PRE",
+      "NEURAL",
+      "NEURAL_POST",
+      "SHUFFLE"
+    ],
+    "cells": 468,
+    "classifier_state": [
+      "classes",
+      "coef",
+      "intercept",
+      "n_iter"
+    ],
+    "dimensions": "3 TIMING; C_eog*25 EOG;306*25 MEG or61*25 EEG neural arms",
+    "failure": "<2 training classes, bad shape/nonfinite, missing support, max n_iter>=2000, worker/cost/custody unknown -> incomplete; no alternate solver/restart/skip",
+    "fit": "exact existing066 weighted StandardScaler followed by sklearn LogisticRegression(C=1,solver=lbfgs,max_iter=2000,tol=1e-6,random_state=65) on all features; no feature selection, grid or validation selection added",
+    "fit_infer_split": "fit writes immutable primitive state and complete original RESULT; inference reconstructs same exact versioned scaler/classifier from those values. No fitted object pickle or fit repeated inside inference.",
+    "qualification": "fixed interpretable baseline, not SOTA or an adequacy guarantee",
+    "scaler_state": [
+      "mean",
+      "scale",
+      "variance"
+    ],
+    "weights": "original Ntrain/(P*S_person*L_sentence), sum Ntrain; do not normalize to1 and silently change effective regularization"
+  },
+  "R1": {
+    "count_builds": 78,
+    "fit": "independent Laplace1 initial29 and29x29 adjacent counts from every allowed training sentence; excludes all query-person/query-fold transcripts",
+    "infer": "known-length Viterbi with uniform1/29 emissions and LM weight1; no neural/query features or targets; same deterministic class-index tie order as legacy metrics",
+    "infer_jobs": 78,
+    "reuse": "one original own state per case, private reusable across arms/modes; charged once plus every consumption read/decode cost, never reminted as newly trained perarm",
+    "state": "immutable counts + training/support/source/environment/originalreceipt pins"
+  },
+  "R2": {
+    "absent_class": "all29 logits retained; absent class still gets negative-example softmax gradients, not an untrained-at-initialization claim",
+    "architecture": "exact accepted065 SOURCE_MANIFEST_V4 reference/model.py and SOURCE_LOCK.json family; held SimpleConvTimeAgg2048/Transformer depth4heads2/29readout; merger.per_subject=False AND subject_layers_config=None; no subject-conditioned parameters",
+    "arms": [
+      "NEURAL_PRE",
+      "NEURAL",
+      "NEURAL_POST",
+      "SHUFFLE"
+    ],
+    "case_arm_cells": 312,
+    "checkpoint": "earliest strict lowest validation person-CER; ties earlier. Aggregate nine cell out-of-fold predictions across complete training support into person-macro CER before choosing grid; first grid on exacttie",
+    "complete_fit_total": 5928,
+    "final": "exact18 successful inner-result/validation joins; lower median of9bestepochs of chosen grid; fresh initialization/scaler/weights on all outertraining, selected fixedepoch count, no query feedback/earlystop or innerstate reuse",
+    "fresh_final_fits": 312,
+    "geometry": "full authentic306/61 actual source override/MNE layout/order/type/loc normalization, including EEG M1/M2; unknown/unmatched/sentinel/nonfinite -> unsupported; never invent EOG or timing positions",
+    "grid": [
+      5e-05,
+      0.0001
+    ],
+    "inference": "recursive eval/no_grad, all full sentences, dropout off, BN frozen, exact pre/post full state identity; no query updates",
+    "inference_jobs": 312,
+    "inner_fits": 5616,
+    "inner_plan": "same accepted065 label-independent3person x3template buckets from canonical private identity SHA256 domain NEURAL065-inner-v1; preserve literal domain for matched accepted recipe, exact source-private assignments kept out of public view; nine disjoint validation intersections",
+    "inner_train": "neither validation-person bucket NOR validation-template bucket; recompute scaler,weights and A05shuffle using only fitting subset",
+    "inner_validation": "onepersonbucket AND onetemplatebucket; unmodified heldout neural arm values; complete whole sentence support, no inner training-fitted observation from this support",
+    "max_epochs": 300,
+    "optimizer": "AdamW weight_decay1e-4; OneCycleLR pct_start0.1; fixed finite complete steps from full fit. One complete sentence per microbatch; accumulate64sentences or final remainder; (S/B)*sum(w_key*CE) objective, not perbatch-weight normalization.",
+    "outer_support": "same066 person/template train/query split and arm transform, complete original inputs; SHUFFLE A05 inner vs original outer-final distinction",
+    "patience": 30,
+    "preprocessing": "accepted065 fit-local normalized person/sentence/key weights; float64 weighted per-channel mean and population variance over25bins; zero variance scale1; float32 transformed values; all channels retained",
+    "qualification": "prospective source adaptation, not untouched native paper reproduction, not empirical compatibility or competence",
+    "seed": 65,
+    "seed_policy": "each fit deterministic prospective65, no seed search/retry; exact interpreter/backend/environment pinned before execution; source design performs no RNG",
+    "state": "complete float32/int64 primitive model arrays, all persistent and nonpersistent buffers, normalization; accepted inert Ua zero convention and fixed256 ALiBi positional buffer; no hidden mutable cache",
+    "transport": "accepted065 current route CPU-only; no cuda execution inferred from lower-level ABI. A GPU route requires separately selected complete runtime/environment amendment.",
+    "unsupported_arms": {
+      "EOG": "no source-approved full spatial/type geometry route",
+      "TIMING": "no source-approved native3scalar adapter"
+    }
+  },
+  "environment": "exact source/wheel/image/interpreter/native/transitive lock and separately authentic qualification receipt mandatory before data processing; accepted065 source lock alone is not a qualified runtime",
+  "independence": "source-owned separate operator realms; own training, model state and predictions; no callback trainer/candidate state or target-conditioned rescue",
+  "language_decode": {
+    "emission_floor": 1e-12,
+    "fixed_length": true,
+    "no_tuning": true,
+    "same_counts_for_every_arm_of_case": true,
+    "ties": "lowest class predecessor and final index in existing29alphabet",
+    "weights": {
+      "language_only": 1,
+      "signal_plus_fixed_LM": 0.5
+    }
+  },
+  "no_optional_rescue": "R2 required for proposed fullprogramme; its failure leaves full programme incomplete. R0 result remains labelled diagnostic, never substituted for R2. EOG/TIMING native scope exclusion is structural, not a failed-cell exclusion.",
+  "schema": "neural066_complete_reference_design_v1"
+}
