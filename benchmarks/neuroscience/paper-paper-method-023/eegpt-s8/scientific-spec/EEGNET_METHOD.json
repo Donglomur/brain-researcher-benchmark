@@ -1,0 +1,87 @@
+{
+  "schema": "eegpt_s5_fixed_eegnet_scientific_specification_v1",
+  "status": "source_grounded_implementation_specification_before_coding",
+  "method": "EEGNet-8,2 fixed prospective control; original ARL Keras architecture",
+  "source": {
+    "repository": "https://github.com/vlawhern/arl-eegmodels",
+    "commit": "4a512e503198db2010848813ead9afbf8cd54c97",
+    "path": "EEGModels.py",
+    "bytes": 18033,
+    "sha256": "604c7399a2a0e6c90cd8b4cbbc0f78550a3fb5c64b23f311d9c7db44dac94b02",
+    "license": "Upstream CC0 with patent grant and Apache2 notices retained verbatim in ordinary LICENSE.txt"
+  },
+  "architecture": {
+    "constructor": "EEGNet",
+    "F1": 8,
+    "D": 2,
+    "F2": 16,
+    "kernLength": 64,
+    "dropoutRate": 0.5,
+    "norm_rate": 0.25,
+    "dropoutType": "Dropout",
+    "input": "batch, complete ordered channels, full resampled epoch time, singleton channel-last feature",
+    "classes": "Fixed semantic dataset K; no binary four-logit convention for this prospective control",
+    "source_unchanged": true
+  },
+  "datasets": {
+    "BCIC-2A": 4,
+    "BCIC-2B": 2,
+    "Sleep-EDFx": 5,
+    "KaggleERN": 2,
+    "PhysioP300": 2,
+    "TUAB": 2,
+    "TUEV": 6
+  },
+  "input_adaptation": {
+    "target_hz": 128,
+    "reason": "ARL source explicitly defines the architecture for128Hz. Use one fixed deterministic method-local rational resampling to its documented rate; preserve complete supplied epochs and original row/channel order.",
+    "source_rate": "Exact rational from public row sampling_hz; no data/header inference",
+    "resampling": "scipy.signal.resample_poly with reduced positive integer up/down, window=('kaiser',5.0), padtype='constant', no trim/pad/crop after full transform",
+    "output_samples": "ceil(original_samples*up/down), common complete source epoch shape within the selected episode",
+    "units": "Physical mV using exact declared V:1000,mV:1,uV/µV/μV:0.001; unknown units refused. This is fixed physical scaling, not fit normalization.",
+    "channels": "All original supplied channel IDs retained in order; no requested channel discarded or invented.",
+    "input_type": "finite float32, no learned preprocessing/query fit",
+    "qualification": "Resampler/environment and source numerical equivalence remain external native qualification; source policy is explicitly prospective, not an EEGPT-paper EEGNet run."
+  },
+  "training": {
+    "epochs": 300,
+    "batch_size": 16,
+    "optimizer": {
+      "name": "Adam",
+      "learning_rate": 0.001,
+      "beta_1": 0.9,
+      "beta_2": 0.999,
+      "epsilon": 1e-7,
+      "amsgrad": false
+    },
+    "loss": "Sparse categorical crossentropy on semantic labels, mathematically equivalent to original one-hot categorical crossentropy; model returns K-column softmax",
+    "schedule": "fixed constant learning rate; shuffle training rows using request-declared RNG; no omitted remainder batch",
+    "basis": "ARL example uses Adam,categorical crossentropy,batch16,300epochs. The benchmark fixes this competent single recipe before exposure; it does not claim optimal hyperparameters.",
+    "selection": "Actual full validation monitor specified by existing benchmark per dataset after every epoch; earliest strict best finite epoch. All epoch metrics/model artifacts retained; no query labels or global fold pooling.",
+    "state": "Original .keras model checkpoints including optimizer state; actual parameter census and fixed source/adapter identities; same selected checkpoint loaded under trusted reference source only.",
+    "prediction": "Exact selected model on full ordered query; no adaptation or refit; semantic probability columns0..K-1."
+  },
+  "runtime_source_versions": {
+    "tensorflow": "2.15.1",
+    "keras": "2.15.0",
+    "numpy": "1.26.4",
+    "scipy": "1.10.1"
+  },
+  "source_changes_needed": [
+    "Concrete lazy reference module with7explicit dataset admissions, fixed adapter, full fitting and selected-state prediction",
+    "Closed worker FIT/PREDICT dispatch; fixed method identity and request seed",
+    "Frozen reference-source closure and source/runtime version declaration",
+    "Source/AST/inert actual dispatch controls; no model or array execution"
+  ],
+  "scope_retained": {
+    "references": 258,
+    "selectors": 86,
+    "canonical_tasks": 1
+  },
+  "remaining_external_gates": [
+    "full authentic data/cohort and rights",
+    "qualified exact library/native behavior",
+    "original resource/isolation execution",
+    "full reference scientific execution and performance"
+  ]
+}

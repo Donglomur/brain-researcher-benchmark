@@ -1,0 +1,114 @@
+{
+  "schema": "eegpt_full_model_recipe_design_v1",
+  "variants": [
+    {
+      "id": "tiny1",
+      "embedding_dim": 64,
+      "depth_encoder_predictor_reconstructor": [
+        2,
+        2,
+        4
+      ],
+      "summary_tokens": 1,
+      "heads": 4,
+      "paper_full_pretraining_parameter_count_rounded": "0.4M"
+    },
+    {
+      "id": "tiny2",
+      "embedding_dim": 64,
+      "depth_encoder_predictor_reconstructor": [
+        2,
+        2,
+        4
+      ],
+      "summary_tokens": 4,
+      "heads": 4,
+      "paper_full_pretraining_parameter_count_rounded": "0.5M"
+    },
+    {
+      "id": "tiny3",
+      "embedding_dim": 64,
+      "depth_encoder_predictor_reconstructor": [
+        8,
+        8,
+        8
+      ],
+      "summary_tokens": 4,
+      "heads": 4,
+      "paper_full_pretraining_parameter_count_rounded": "1.6M"
+    },
+    {
+      "id": "little",
+      "embedding_dim": 128,
+      "depth_encoder_predictor_reconstructor": [
+        8,
+        8,
+        8
+      ],
+      "summary_tokens": 4,
+      "heads": 4,
+      "paper_full_pretraining_parameter_count_rounded": "6.4M"
+    },
+    {
+      "id": "base1",
+      "embedding_dim": 256,
+      "depth_encoder_predictor_reconstructor": [
+        6,
+        6,
+        6
+      ],
+      "summary_tokens": 1,
+      "heads": 4,
+      "paper_full_pretraining_parameter_count_rounded": "19M"
+    },
+    {
+      "id": "base2",
+      "embedding_dim": 256,
+      "depth_encoder_predictor_reconstructor": [
+        8,
+        8,
+        8
+      ],
+      "summary_tokens": 4,
+      "heads": 4,
+      "paper_full_pretraining_parameter_count_rounded": "25M"
+    },
+    {
+      "id": "base3",
+      "embedding_dim": 512,
+      "depth_encoder_predictor_reconstructor": [
+        6,
+        6,
+        6
+      ],
+      "summary_tokens": 1,
+      "heads": 8,
+      "paper_full_pretraining_parameter_count_rounded": "76M"
+    },
+    {
+      "id": "large",
+      "embedding_dim": 512,
+      "depth_encoder_predictor_reconstructor": [
+        8,
+        8,
+        8
+      ],
+      "summary_tokens": 4,
+      "heads": 8,
+      "paper_full_pretraining_parameter_count_rounded": "101M"
+    }
+  ],
+  "exact_maths": "DESIGN.md Source-grounded mathematical contract; allsource-index/normalization/mask/EMA discrepanciesG09.",
+  "heads": {
+    "BCIC-2A": "Source22→19ASF,2048→16tokenprobe,16×16→4head; paperMSConvNetfusion andbatch72/lr1e−3 differ fromsourcebatch64/lr4e−4.",
+    "BCIC-2B": "Source3→7ASF,4logits and4classonehotCEwithbinarytargets; native binary score issoftmax(logits4)[:,1]. To preservebinaryassessmentdefinep=[1−p1,p1]andretain4rawlogits/argmaxtrainingdiagnosticsasauxiliaryartifact. A2-logit correctedmethodisdistinct andcannotreplaceauthenticHsource.",
+    "Sleep-EDFx": "Source2→13ASF,2048→64per-tokenfeatures,4-layerTransformerDecoder(h,h),CLS+positionalembeddingand5classes; all120timepatchesper30s. Paperencoder/linearprobewordingdoesnoterase nonlinearhead.",
+    "KaggleERN": "Source19selectedchannels→19ASF,64samplepatch/32stride,15timepatches,2048→16→240→2; paper56→19ASF isdistinctrecipe.",
+    "PhysioP300": "58channelscaling, sourceint(2.1×256)input/64patch32stride,15tokens and240→2head; paper2s−0.7..1.3windowdiffersfromsourceconverter−0.1..2.",
+    "TUAB": "Paper23→20conv1,BN/GELU,depthwise15pad7groups20,dropout0.25,64strideencoder,31×4×512flatten,onebinaryoutput; source200Hz/2000samples andmicrovolts÷100 scalecontradictprose256Hz/mV.",
+    "TUEV": "23→20conv1,BN/GELU,depthwise55pad27groups20,dropout0.5,64strideencoder,15×4×512flatten,6classes; sourcebatch400versuspaper500."
+  },
+  "legacy_probability_dtype": "float32/float64 bothretained; independentmetricsfloat64; nofourlogittruncationwithoutdeclaredmapping.",
+  "H_P_differences": "Eachmodel/preprocess/selectionpolicyhasitsownidentity. Fulloriginalrunstate/sourcecovariatesareopenG02/G10/G11, notguessed.",
+  "S2_cross_cutting_information_policy": "ADAPTIVE_INFORMATION_CONTRACT.json and REFERENCE_SELECTION_CONTRACT.json apply to all protected producers, analyses, claims and refs. Scientific families/claim rows/architecture/recipes remain unchanged. An old source path is a scientific provenance anchor, not authority to bypass current G0/E isolation. Common A/B requirements never include undisclosed source-only quirks."
+}

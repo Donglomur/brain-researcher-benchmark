@@ -1,0 +1,47 @@
+{
+  "schema": "eegpt_fold_local_reference_selection_estimand_v2",
+  "status": "Prespecified mathematical design; no scores, validation results or tests executed.",
+  "id": "S_df",
+  "methods": [
+    "EEGPT_linear_probe",
+    "EEGPT_full_finetune",
+    "EEGNet",
+    "fixed_spectral_ridge"
+  ],
+  "selector_inputs": "Exactly the four independently produced controls, each with three complete run validation predictions on the same frozen validation_df support. Each control uses its frozen within-fold hyperparameter/epoch policy; no outer assessment inputs or other-fold records. Evaluation of final selected hyperparameters on the same development set is permitted selection work, not an unbiased performance estimate.",
+  "rule": "For each control c compute V_dfc=(1/3) sum_r monitor_d(y_val_df,p_val_dfcr) on the complete validation support, using the existing metric definitions. Choose c*(d,f)=argmax_c V_dfc; ties use listed method order. One c* for that fold across all three assessment repetitions. No pooled cross-fold or cross-dataset development score is an input.",
+  "completion": "All12 validation summaries must have valid metric support, successful original producer/metric receipts and exact same-fold ancestry. Undefined/missing/failed input makes S_df unavailable; no best-of-available, substitute metric, assessment fallback or dropped repetition. G12/G13/G19 apply. Optional refit follows the pre-G0 matched policy after c* freezes; predictions come from each selected control run own eligible sealed state.",
+  "selected_outputs": "Reference S_df is a composite fold-local selection procedure, not one dataset-wide named model. For each (d,f,r), its assessment predictions alias the already-required output of control c*(d,f), with both logical IDs, selection receipt and full producer ancestry retained. All516 fixed outputs remain required; no extra canonical assignment or hidden additional fit is created.",
+  "statistic": "Let q_df r be the existing full-query monitor in fold f, run r. Delta_d^S = (1/(3F_d)) sum_r sum_f [q_df r(candidate) - q_df r(c*(d,f))]. No pooled predictions or averaging probabilities replaces the frozen equal-fold/run statistic. This compares the two complete local learning/selection procedures on fixed support.",
+  "reporting_hierarchy": [
+    {
+      "id": "H01",
+      "role": "primary descriptive",
+      "report": "Seven signed Delta_d^S with all selected names c*(d,f), all three run means, complete support/failure counts and paired person-cluster intervals; no cross-dataset scalar."
+    },
+    {
+      "id": "H02",
+      "role": "conditional confirmatory only when assumptions qualified",
+      "report": "Seven one-sided comparisons to S_df using original person-cluster method-label swap procedure, Holm across all seven. Unavailable hypotheses retain their planned place with no rejection (p=1 only as explicit multiplicity bookkeeping, never fabricated measured p). State conditional exchangeability and dependence limits."
+    },
+    {
+      "id": "H03",
+      "role": "mandatory descriptive",
+      "report": "All28 candidate-minus-fixed-control effects and paired intervals on the identical complete cases; all positive/negative/undefined outcomes."
+    },
+    {
+      "id": "H04",
+      "role": "separate stricter all-four claim",
+      "report": "Any claim beating all four named controls is assessed using Holm across all28 planned comparisons, each with qualified assumptions. It cannot borrow H02 approval. Both planned families reported regardless of which supports a favorable conclusion."
+    },
+    {
+      "id": "H05",
+      "role": "full scientific and access reporting",
+      "report": "All original metrics/families, all A/B paired access effects under matched G0 procedure/resources, full H/P/I completeness, public-exposure caveat, measured resources and24 gate states. Other metrics and A/B effects are descriptive unless an additional confirmatory family was frozen before G0."
+    }
+  ],
+  "uncertainty": "Keep selected c*(d,f), learned states and source-generation outcomes fixed when bootstrapping assessment people or swapping method prediction blocks; do not reselect from assessment. Thus intervals/randomization are conditional diagnostics for retained predictions under explicit assumptions, not full repeated training/selector uncertainty. Overlapping outer training sets and repeated Kaggle/Sleep assessment people do not become independent samples. If the stated block-exchangeability assumption is untenable, withhold confirmatory p/superiority and report effects/conditional intervals with limits.",
+  "A_B": "S_df is operator-private and candidate-independent. A/B may share the exact same qualified reference selection and bank only under identical G0/mode/policy/support/seeds/resources. No candidate-specific strongest reference, candidate metric inputs or cross-arm participant decisions. Code access remains the only intended A/B difference.",
+  "historical": "H original source/evaluation/aggregation stays nonblind historical replay. S_df is prospective I policy only, not claimed to reproduce the paper historical comparator choice or original scores. P reconstructs every requested original method, no strongest-control selection removes a row.",
+  "no_empirical_claim": true
+}

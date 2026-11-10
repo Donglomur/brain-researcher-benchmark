@@ -1,0 +1,95 @@
+{
+  "schema": "eegpt_independent_reference_design_v2",
+  "mandatory_lifecycle": "G0 freeze trusted source/search/meta-algorithm and S_df -> independent eligible corpus parent -> fresh private same-fold/control E -> A02–A05 local prepare/pretrain/fit/validate with original context/source/feedback ancestry -> seal local selections and S_df from12same-fold summaries -> optional fixed-policy refit -> O09 state seal -> A06 exact query -> complete products/original receipts -> all branch closure -> private metrics. No candidate inputs, pooled development or another-fold selected source; candidate no-tools/abstention never bypasses any production.",
+  "banks": [
+    {
+      "id": "REF_H",
+      "active": "Historical reconstruction",
+      "methods": "All original method rows and all original scientific variants/diagnostic producers; nonblind original-source exposure explicitly recorded.",
+      "outputs": "All principal558 matrices and every full-family product; original-run/reference gaps block historical parity.",
+      "reuse": "Never reused as P/I bank if any corpus, support, selection exposure or algorithm differs.",
+      "adaptive_boundary": "H remains designated nonblind reconstruction and cannot seed P/I. All P/I source/development/state decisions require G0/E ancestry; any A/B alias includes the same original S_df/source/support/seed/resource roots. No cross-fold selected-state alias."
+    },
+    {
+      "id": "REF_P",
+      "active": "Protected reconstruction",
+      "methods": "Same full original method family union, each reconstructed under the exact protected source/paper policy.",
+      "outputs": "558 principal matrices plus every ablation/scaling/diagnostic product; separate reference state/query receipts.",
+      "reuse": "Can share across A/B only with identical reference information/resources; never shares participant-derived state.",
+      "adaptive_boundary": "H remains designated nonblind reconstruction and cannot seed P/I. All P/I source/development/state decisions require G0/E ancestry; any A/B alias includes the same original S_df/source/support/seed/resource roots. No cross-fold selected-state alias."
+    },
+    {
+      "id": "REF_I",
+      "active": "Improvement",
+      "methods": [
+        "EEGPT_linear_probe",
+        "EEGPT_full_finetune",
+        "EEGNet",
+        "fixed_spectral_ridge"
+      ],
+      "outputs": "All516 matrices, 43folds×3runs×4controls, complete for every I campaign even if candidate produces zero matrices.",
+      "reuse": "May alias a P reference output only when exact source, train/validation/query support, weights, preprocessing, method config, seeds, selection and information policy match; preserve both logical output IDs and source receipt.",
+      "adaptive_boundary": "H remains designated nonblind reconstruction and cannot seed P/I. All P/I source/development/state decisions require G0/E ancestry; any A/B alias includes the same original S_df/source/support/seed/resource roots. No cross-fold selected-state alias."
+    }
+  ],
+  "original_method_sources": [
+    {
+      "method": "EEGPT",
+      "source": "All seven exact NATIVE_ENTRYPOINTS retained; architecture/pretrain/source heads and training/development callback discrepancies separately adjudicated.",
+      "gap": "No original raw corpus, weights, original run receipts or native qualification."
+    },
+    {
+      "method": "BENDR",
+      "source": "downstream/finetune_BENDR_{BCIC2A,BCIC2B,KaggleERN,PhysioP300,SleepEDF}.py; retained dn3 modules and model/checkpoint declarations.",
+      "gap": "Checkpoint version/hash/license, true original provenance and independent complete training/reference runs missing."
+    },
+    {
+      "method": "BIOT",
+      "source": "downstream/linear_probe_BIOT_{BCIC2A,BCIC2B,KaggleERN,PhysioP300}.py; finetune_BIOT_SleepEDF.py; Modules/BIOT/biot.py.",
+      "gap": "Temple original BIOT and other baseline source/data/run provenance not supplied merely by copied summary rows."
+    },
+    {
+      "method": "LaBraM",
+      "source": "downstream/linear_probe_LaBraM_{BCIC2A,BCIC2B,KaggleERN,PhysioP300}.py; finetune_LaBraM_SleepEDF.py; Modules/LaBraM/modeling_finetune.py.",
+      "gap": "Temple Base/Large/Huge are all preserved predecessor method IDs, but exact identity relative to AppendixA.6's single5.8M row is unqualified. Do not delete any slot or invent original scores."
+    },
+    {
+      "method": "SPaRCNet,ContraWR,CNN-T,FFCL,ST-T,Temple-BIOT",
+      "source": "Primary Tables2/3 copied baseline row union; author code references upstream BIOT.",
+      "gap": "Actual complete model/checkpoint/source/train/reference producer not present in the81-file EEGPT tree. Must provision/authenticate independently before full-family scientific qualification; no downloading in this phase."
+    },
+    {
+      "method": "EEGPT-Tiny",
+      "source": "Table2/3 4.7M downstream model and Table6 tiny variants retained as distinct labels.",
+      "gap": "Map exact full-pretrain/encoder/head parameter identity; do not assume tiny1 from a name or share its state until proven."
+    }
+  ],
+  "prospective_recipes": [
+    {
+      "method": "EEGPT_linear_probe",
+      "recipe": "Qualified large encoder initialized from the common authenticated allowed corpus checkpoint. Freeze encoder parameters and normalization state; fit the full dataset-specific adaptive filter/head with development-only epoch selection. Source exceptions such as sleep nonlinear temporal head and MI fusion are named, never called a pure linear classifier.",
+      "source": "Retained seven native entrypoints plus explicit protected modifications; all7datasets; no native test-validation."
+    },
+    {
+      "method": "EEGPT_full_finetune",
+      "recipe": "Same initialization, complete input support and source-qualified head as LP; all selected encoder and head parameters trainable. Optimizer/learning-rate budget and early-stopping search frozen before assessment; parameter/state census attests actual updates.",
+      "source": "Original Table8 FT family; missing exact seven-dataset FT recipe must be independently qualified, not fabricated from the existence of LP code."
+    },
+    {
+      "method": "EEGNet",
+      "recipe": "A fixed published EEGNet-family signal decoder on the same complete epochs and classes. Exact implementation revision, temporal kernels, depth multipliers, dropout, optimizer, class loss, epoch selection and all7input adapters must be registered before use; strong reference and method support audited.",
+      "source": "Existing required prospective control; no EEGNet implementation/source-parity is supplied by the current packet. G12 remains blocking, not replaced by a convenient weaker surrogate."
+    },
+    {
+      "method": "fixed_spectral_ridge",
+      "recipe": "Use retained reference_linear.py: per-channel whole-epoch centering, Hann-window rFFT power divided by fs*sum(window²), band means[1,4),[4,8),[8,13),[13,30),[30,45), log1p; training-only stable standardization; intercept unpenalized. Solve (XᵀX/n+αD)B=XᵀY/n for one-hotY, α∈{0.001,0.01,0.1,1,10}; softmax logits; validation AUROC ifbinary elsekappa, strict> update gives first-penalty tie. Null validation cannot fall back to assessment.",
+      "source": "Benchmark spectral reference source lineage; actual fit unperformed. This is a prospective benchmark-defined baseline, not a published EEGPT method."
+    }
+  ],
+  "spectral_reuse": "One factorization per fixed α and exact normalized design X can solve all class columns together; reuse RHS and Gram only where training inputs/weights/normalization and penalty are identical. Different α requires a different matrix (an eigendecomposition of a qualified equivalent formulation may permit a solver reuse, but not asserted here). Deterministic ridge runs may share an actual state when run seed has no effect and support identical, while retaining all3logical output slots/receipts. Native numerical parity and conditioning require later qualification.",
+  "provenance": "Every model resource has source/corpus/rights/state/fit identity. A callback model tool, scalar gold score or published SD is not an independent reference. Missing producer is operator/reference unavailable and blocks whole qualification. Include trusted source-generation/selection operator context and exact E ancestry; operator privileges do not permit cross-fold adaptive control search. Missing/malformed original selection provenance is reference unavailable, not candidate zero.",
+  "costs": "Reference fits, inherited checkpoint/pretraining cost and candidate tool calls have separate ledgers; fair candidate comparisons use matched input and declared resources, not concealed bank computation. Finite trusted selection/development overhead and independent context/cache/corpus cost are explicit under G20, with no data-driven pooling to save work.",
+  "adaptive_contract": "ADAPTIVE_INFORMATION_CONTRACT.json",
+  "selection_contract": "REFERENCE_SELECTION_CONTRACT.json",
+  "strongest_control": "Exactly S_df: one choice per dataset/fold from four controls times three complete development summaries; choices can differ by fold, identical across A/B with eligible same reference bank. All516 outputs required and reported. H/P retain every original method; selected-rule does not replace any original row."
+}

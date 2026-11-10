@@ -1,0 +1,157 @@
+{
+  "coefficients_apply_to_raw_named_metric": "Every signed difference uses these exact coefficients even for log_loss/Brier; lower-is-better metrics are labeled, not silently sign-flipped. Every original cell remains reported.",
+  "contracts": [
+    {
+      "coefficients": {
+        "A_no_LA": -1,
+        "D_full": 1
+      },
+      "datasets": [
+        "BCIC-2A",
+        "BCIC-2B",
+        "KaggleERN"
+      ],
+      "family": "EG-04",
+      "id": "full_minus_A_no_LA",
+      "parent_policy": "matched_ablation_recipe_parents"
+    },
+    {
+      "coefficients": {
+        "B_no_waveform_LN": -1,
+        "D_full": 1
+      },
+      "datasets": [
+        "BCIC-2A",
+        "BCIC-2B",
+        "KaggleERN"
+      ],
+      "family": "EG-04",
+      "id": "full_minus_B_no_waveform_LN",
+      "parent_policy": "matched_ablation_recipe_parents"
+    },
+    {
+      "coefficients": {
+        "C_no_skip": -1,
+        "D_full": 1
+      },
+      "datasets": [
+        "BCIC-2A",
+        "BCIC-2B",
+        "KaggleERN"
+      ],
+      "family": "EG-04",
+      "id": "full_minus_C_no_skip",
+      "parent_policy": "matched_ablation_recipe_parents"
+    },
+    {
+      "coefficients": {
+        "ASF_LP": 1,
+        "noASF_LP": -1
+      },
+      "datasets": [
+        "BCIC-2A",
+        "BCIC-2B",
+        "KaggleERN"
+      ],
+      "family": "EG-05",
+      "id": "ASF_within_LP",
+      "parent_policy": "same_pretrained_parent"
+    },
+    {
+      "coefficients": {
+        "ASF_FT": 1,
+        "noASF_FT": -1
+      },
+      "datasets": [
+        "BCIC-2A",
+        "BCIC-2B",
+        "KaggleERN"
+      ],
+      "family": "EG-05",
+      "id": "ASF_within_FT",
+      "parent_policy": "same_pretrained_parent"
+    },
+    {
+      "coefficients": {
+        "ASF_FT": -1,
+        "ASF_LP": 1
+      },
+      "datasets": [
+        "BCIC-2A",
+        "BCIC-2B",
+        "KaggleERN"
+      ],
+      "family": "EG-05",
+      "id": "LP_minus_FT_with_ASF",
+      "parent_policy": "same_pretrained_parent"
+    },
+    {
+      "coefficients": {
+        "noASF_FT": -1,
+        "noASF_LP": 1
+      },
+      "datasets": [
+        "BCIC-2A",
+        "BCIC-2B",
+        "KaggleERN"
+      ],
+      "family": "EG-05",
+      "id": "LP_minus_FT_without_ASF",
+      "parent_policy": "same_pretrained_parent"
+    },
+    {
+      "coefficients": {
+        "ASF_FT": -1,
+        "ASF_LP": 1,
+        "noASF_FT": 1,
+        "noASF_LP": -1
+      },
+      "datasets": [
+        "BCIC-2A",
+        "BCIC-2B",
+        "KaggleERN"
+      ],
+      "family": "EG-05",
+      "id": "ASF_by_LP_minus_FT_interaction",
+      "parent_policy": "same_pretrained_parent"
+    },
+    {
+      "coefficients": {
+        "pretrained": 1,
+        "random_initialized_trained": -1
+      },
+      "datasets": [
+        "TUAB"
+      ],
+      "family": "EG-08",
+      "id": "pretrained_minus_random_initialized_trained",
+      "parent_policy": "qualified_pretrained_vs_trained_random_initialization"
+    }
+  ],
+  "metric_records": 1200,
+  "metrics": [
+    "balanced_accuracy",
+    "cohen_kappa",
+    "weighted_f1",
+    "auroc",
+    "log_loss",
+    "brier"
+  ],
+  "mode_access_actor_blocks": {
+    "access": [
+      "A",
+      "B"
+    ],
+    "actor_role": [
+      "participant",
+      "reference"
+    ],
+    "mode": [
+      "H",
+      "P"
+    ]
+  },
+  "per_block_dataset_contrasts": 25,
+  "schema": "eegpt_required_within_family_contrasts_v1",
+  "whole_dataset_contrasts": 200
+}

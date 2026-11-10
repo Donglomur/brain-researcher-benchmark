@@ -1,0 +1,211 @@
+{
+  "schema": "eegpt_paper_panel_v1",
+  "task_id": "PAPER-paper-method-023",
+  "datasets": [
+    {
+      "id": "BCIC-2A",
+      "classes": 4,
+      "folds": 9,
+      "channels": 22,
+      "epoch_seconds": 4,
+      "sampling_hz": 256,
+      "units": "nine provider people; paper incorrectly says10",
+      "split": "LOSO; 2sessions/person; EA eachsession is transductive",
+      "methods": [
+        "BENDR",
+        "BIOT",
+        "LaBraM",
+        "EEGPT"
+      ],
+      "metrics": [
+        "balanced_accuracy",
+        "cohen_kappa",
+        "weighted_f1"
+      ],
+      "monitor": "cohen_kappa",
+      "actual_source_qualified": false,
+      "paper_head": "EEGPT encoder + adaptivefilter + MSConvNet fusion inC2.1; exact published result/available source mapping unresolved"
+    },
+    {
+      "id": "BCIC-2B",
+      "classes": 2,
+      "folds": 9,
+      "channels": 3,
+      "epoch_seconds": 4,
+      "sampling_hz": 256,
+      "units": "nine provider people; paper says10",
+      "split": "LOSO; paper describes2screening sessions of5released; exactselectedsource unqualified",
+      "methods": [
+        "BENDR",
+        "BIOT",
+        "LaBraM",
+        "EEGPT"
+      ],
+      "metrics": [
+        "balanced_accuracy",
+        "cohen_kappa",
+        "auroc"
+      ],
+      "monitor": "auroc",
+      "actual_source_qualified": false
+    },
+    {
+      "id": "Sleep-EDFx",
+      "classes": 5,
+      "folds": 10,
+      "channels": 2,
+      "epoch_seconds": 30,
+      "sampling_hz": 256,
+      "units": "paper197recordings/78healthy people; exactrecording/person membership unqualified",
+      "split": "10fold60/20/20person split;4layer sequence classifier; actualfoldIDs unqualified",
+      "methods": [
+        "BENDR",
+        "BIOT",
+        "LaBraM",
+        "EEGPT"
+      ],
+      "metrics": [
+        "balanced_accuracy",
+        "cohen_kappa",
+        "weighted_f1"
+      ],
+      "monitor": "cohen_kappa",
+      "actual_source_qualified": false,
+      "native_preparation_gap": "onlyrange39..82 minus5missing, one randomsplit; output.pt names incompatible with downstream.sNextensions; no fullfold packet",
+      "sampling_stage": "paper/model input target; retained raw converter outputs100Hz and model interpolation provenance remains unqualified"
+    },
+    {
+      "id": "KaggleERN",
+      "classes": 2,
+      "folds": 4,
+      "channels": 56,
+      "epoch_seconds": 2,
+      "sampling_hz": 256,
+      "units": "26declaredpeople,10fixedtest",
+      "split": "4foldremaining16train/val; fixed10person test; four predictions pertestevent are not independent biologicalsamples",
+      "methods": [
+        "BENDR",
+        "BIOT",
+        "LaBraM",
+        "EEGPT"
+      ],
+      "metrics": [
+        "balanced_accuracy",
+        "cohen_kappa",
+        "auroc"
+      ],
+      "monitor": "auroc",
+      "actual_source_qualified": false
+    },
+    {
+      "id": "PhysioP300",
+      "classes": 2,
+      "folds": 9,
+      "channels": 58,
+      "epoch_seconds": 2,
+      "sampling_hz": 256,
+      "units": "paper9people from sourceindices1..12 excluding8/10/12;providertext10people",
+      "split": "LOSO; exactsourceperson/session identity qualification required",
+      "methods": [
+        "BENDR",
+        "BIOT",
+        "LaBraM",
+        "EEGPT"
+      ],
+      "metrics": [
+        "balanced_accuracy",
+        "cohen_kappa",
+        "auroc"
+      ],
+      "monitor": "auroc",
+      "actual_source_qualified": false,
+      "native_preparation_gap": "converter8people excludes1; nineperson trainingloop; converter\u22120.1..2s differs paper\u22120.7..1.3s; perrecordIDs collide; wrong outputmkdir"
+    },
+    {
+      "id": "TUAB",
+      "classes": 2,
+      "folds": 1,
+      "channels": 23,
+      "epoch_seconds": 10,
+      "sampling_hz": 200,
+      "units": "paper2383people/409455samples",
+      "split": "originalBIOTpartition; papertext256Hz versus modeltable2000samples/10s unresolved",
+      "methods": [
+        "SPaRCNet",
+        "ContraWR",
+        "CNN-T",
+        "FFCL",
+        "ST-T",
+        "BIOT",
+        "EEGPT-Tiny",
+        "EEGPT",
+        "LaBraM-Base",
+        "LaBraM-Large",
+        "LaBraM-Huge"
+      ],
+      "metrics": [
+        "balanced_accuracy",
+        "auroc"
+      ],
+      "monitor": "auroc",
+      "actual_source_qualified": false,
+      "native_unit_normalization": "converteruV, engine divide100; distinct from papertextmV/256Hz"
+    },
+    {
+      "id": "TUEV",
+      "classes": 6,
+      "folds": 1,
+      "channels": 23,
+      "epoch_seconds": 5,
+      "sampling_hz": 200,
+      "units": "paper288people/112491samples",
+      "split": "originalBIOTpartition; papertext256Hz versus modeltable1000samples/5s unresolved",
+      "methods": [
+        "SPaRCNet",
+        "ContraWR",
+        "CNN-T",
+        "FFCL",
+        "ST-T",
+        "BIOT",
+        "EEGPT-Tiny",
+        "EEGPT",
+        "LaBraM-Base",
+        "LaBraM-Large",
+        "LaBraM-Huge"
+      ],
+      "metrics": [
+        "balanced_accuracy",
+        "cohen_kappa",
+        "weighted_f1"
+      ],
+      "monitor": "cohen_kappa",
+      "actual_source_qualified": false,
+      "native_unit_normalization": "converteruV, engine divide100; distinct from papertextmV/256Hz"
+    }
+  ],
+  "repetitions": 3,
+  "seed_ids": null,
+  "scope_history": "Canonical historicalrecordP300only; rootfullspecifieddownstreamscope allseven plus furtherpaper families. No canonicalcountchange.",
+  "prospective_controls": [
+    "EEGPT_linear_probe",
+    "EEGPT_full_finetune",
+    "EEGNet",
+    "fixed_spectral_ridge"
+  ],
+  "additional_required_families": [
+    "Pretrainingalignment/reconstruction/normalization/predictor ablations",
+    "Adaptive spatial filter x linear probe/fullfine-tune2x2 comparison onBCIC2A/2B/KaggleERN",
+    "Eight modelsize/summarytoken variants and pretraining-datasize scaling",
+    "TUABself-supervisedlearning ablation",
+    "Channel relationships,BCIC2A andP300 representation visualizations"
+  ],
+  "source_limitations": [
+    "Sourceconditioned9foldBCIC follows originalprovider9; paper10 discrepancy remainsunqualified.",
+    "Per-run references cannot be synthesized from published mean/SD.",
+    "Mixed7datasets,folds/seeds/biologicalpeople have distinctunits; no pooledcrossdatasetmetric.",
+    "Nativeoriginalsplits, checkpointselection, normalizationexposure, sourcefoldaggregation andseedSD remainunqualified."
+  ],
+  "scientific_runs": 0,
+  "native_source_commit": "ea7282f698c406cd423ccbedbe9960853761144c",
+  "source_body_files_retained": 81
+}

@@ -1,0 +1,589 @@
+{
+  "schema": "eegpt_complete_scientific_obligations_v1",
+  "families": [
+    {
+      "id": "EG-01",
+      "source_panels": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "T12",
+        "T13"
+      ],
+      "source": "Methods2.1–2.4,3.2 and AppendixC.2",
+      "claim": "Dual objective, decoupled spatial/temporal transformer and channel-adaptive downstream architecture implement the stated representation method.",
+      "operators": [
+        "O03",
+        "O07",
+        "O08",
+        "O09",
+        "O12",
+        "O14",
+        "O27"
+      ],
+      "products": [
+        "T01",
+        "T02",
+        "T05",
+        "T12"
+      ],
+      "support": "All58 pretraining channels; all8size variants; all7dataset heads; all specified summary tokens/patches/positions.",
+      "estimand": "Module/tensor/optimizer membership and parameter-count identity; exact objective/mask/EMA mathematical behavior under each declared source/paper recipe. Runtime complexity is measured only after qualification.",
+      "reference": "Independent exact architecture and source/paper implementation throughREF_H/REF_P; trusted parameter and forward/gradient audit, not a candidate supplied graph alone.",
+      "uncertainty": "Structural identity exact; numerical precision/tolerances qualified separately; no sample CI on a schematic.",
+      "gates": [
+        "G01",
+        "G02",
+        "G04",
+        "G09",
+        "G10",
+        "G15",
+        "G18"
+      ],
+      "producer_sources": [
+        "pretrain/modeling_pretraining.py",
+        "pretrain/engine_pretraining.py",
+        "pretrain/configs.py",
+        "downstream/Modules/models/EEGPT_mcae.py",
+        "downstream_tueg/Modules/models/*",
+        "seven downstream entrypoints"
+      ],
+      "missing": "Paper/source negative-loss/mask/EMA, BCIC fusion, binary four-logit head and sleep TransformerDecoder discrepancies unresolved; diagnostic/no-predictor producers not inferred from labels."
+    },
+    {
+      "id": "EG-02",
+      "source_panels": [
+        "T1"
+      ],
+      "source": "Methods3.1–3.2; AppendixC.1.1–C.1.5",
+      "claim": "Complete mixed five-source pretraining produces the representation and training-loss evidence.",
+      "operators": [
+        "O01",
+        "O02",
+        "O03",
+        "O04",
+        "O06",
+        "O07",
+        "O08",
+        "O09",
+        "O16",
+        "O20",
+        "O30"
+      ],
+      "products": [
+        "T01",
+        "T02",
+        "T04",
+        "T05",
+        "T12"
+      ],
+      "support": "PhysioMI109,HGD14,TSU35×6×40,SEED15×3sessions,M3CV106×2sessions×6paradigms; exact eligible original source samples rather than asserted sum of independent persons.",
+      "estimand": "Per-source eligible and excluded counts, overlap, all scheduled LA/LR/total training-validation curves, final checkpoint identities and actual resource usage.",
+      "reference": "Independent original/protected pretraining FIT→seal→held-out mask query→loss/reconstruction products→complete receipts; checkpoint-only condition cannot dischargefull pretraining.",
+      "uncertainty": "Per-corpus/recording exposure and stochastic crop/mask/run lineage; conditional-on-state loss uncertainty. Original pretrain run multiplicity remains explicitly gated.",
+      "gates": [
+        "G03",
+        "G04",
+        "G05",
+        "G06",
+        "G07",
+        "G08",
+        "G09",
+        "G11",
+        "G13",
+        "G20"
+      ],
+      "producer_sources": [
+        "datasets/pretrain/prepare_pretrain_dataset.py",
+        "datasets/pretrain/readme.md",
+        "pretrain/configs.py:load_fn",
+        "pretrain/run_pretraining.py",
+        "pretrain/engine_pretraining.py"
+      ],
+      "missing": "Complete raw corpus access/version/rights, original random10%sample partition and exact environment/checkpoint/run receipts absent. Source torcheeg/MNE conversion and reshape semantics unqualified."
+    },
+    {
+      "id": "EG-03",
+      "source_panels": [
+        "T2",
+        "T3",
+        "T4",
+        "T9",
+        "T10"
+      ],
+      "source": "Methods3.2–3.3; AppendixC.2,D,E,A.6",
+      "claim": "Reconstruct the complete original comparative downstream results across seven paradigms/datasets.",
+      "operators": [
+        "O02",
+        "O03",
+        "O04",
+        "O05",
+        "O09",
+        "O10",
+        "O11",
+        "O12",
+        "O13",
+        "O14",
+        "O15",
+        "O16",
+        "O17",
+        "O18",
+        "O19",
+        "O27",
+        "O29"
+      ],
+      "products": [
+        "T01",
+        "T02",
+        "T03",
+        "T11",
+        "T12",
+        "T13"
+      ],
+      "support": "All558 principal original matrices:43folds×3runs with dataset-specific full method union; preserve all11Temple method IDs even where original source identity unqualified.",
+      "estimand": "Every declared BAC/kappa/weightedF1/AUROC endpoint, equal-fold/run means and separate seed SD; all paired method deltas/support/uncertainty. Original copied baseline support remainsdistinct.",
+      "reference": "REF_H andREF_P independently generate all original method outputs, not aliases of candidate outputs or published means.",
+      "uncertainty": "Person-cluster paired intervals and run SD; shared Kaggle assessment events and sleep repeated folds kept correlated.",
+      "gates": [
+        "G03",
+        "G05",
+        "G06",
+        "G07",
+        "G11",
+        "G12",
+        "G13",
+        "G14",
+        "G15",
+        "G18",
+        "G19",
+        "G21"
+      ],
+      "producer_sources": [
+        "external operator native-entrypoint qualification (not included)",
+        "all BENDR/BIOT/LaBraM dataset wrappers",
+        "downstream/utils.py",
+        "downstream/utils_eval.py",
+        "downstream_tueg/engine_for_finetuning_EEGPT.py"
+      ],
+      "missing": "Historical3seeds/fold IDs/epoch selection, Temple copied comparators and all authentic reference matrices missing; native source test-validation cannot become protected performance."
+    },
+    {
+      "id": "EG-04",
+      "source_panels": [
+        "T5",
+        "T7",
+        "F6"
+      ],
+      "source": "Methods3.4; AppendixA.1–A.2",
+      "claim": "Alignment objective, target normalization, observed-token skip and predictor support representation learning; predictor removal may fail to learn.",
+      "operators": [
+        "O06",
+        "O07",
+        "O08",
+        "O09",
+        "O12",
+        "O14",
+        "O15",
+        "O16",
+        "O20",
+        "O18",
+        "O19",
+        "O27",
+        "O29"
+      ],
+      "products": [
+        "T02",
+        "T03",
+        "T04",
+        "T05",
+        "T11",
+        "T12",
+        "T13"
+      ],
+      "support": "VariantsA(noLA),B(no waveform-targetLN),C(no skip),D(full) onBCIC2A/2B/KaggleERN:22folds×3runs×4variants=264matrix slots; baseline/no-predictor completevalidationLRcurves. Tables5/7 same study, not duplicate fits.",
+      "estimand": "LA/LR and three source primary ablation metrics; full-minus-ablated paired differences, predictor-loss curve comparison; fail-to-learn versus formal collapse distinguished.",
+      "reference": "Independent full pretraining variant states and downstream fits; no-predictor producer mandatory even if absent from releasedflags.",
+      "uncertainty": "Paired person/run downstream uncertainty; losscurve checkpoint/crop/mask dependence; conditional-on-pretrainstate limits.",
+      "gates": [
+        "G02",
+        "G09",
+        "G10",
+        "G11",
+        "G12",
+        "G13",
+        "G14",
+        "G18",
+        "G20",
+        "G23"
+      ],
+      "producer_sources": [
+        "pretrain/run_pretraining.py:USE_LOSS_A,USE_LN,USE_SKIP",
+        "pretrain/engine_pretraining.py",
+        "missing explicit no-predictor branch"
+      ],
+      "missing": "Original no-predictor architecture/training recipe, loss collection and exact original repetitions remain gating; do not synthetically assert collapse."
+    },
+    {
+      "id": "EG-05",
+      "source_panels": [
+        "T8"
+      ],
+      "source": "AppendixA.3",
+      "claim": "Assess all ASF on/off×LP/FT contrasts, including adverse effects.",
+      "operators": [
+        "O07",
+        "O09",
+        "O10",
+        "O11",
+        "O12",
+        "O14",
+        "O15",
+        "O16",
+        "O18",
+        "O19",
+        "O27",
+        "O29"
+      ],
+      "products": [
+        "T02",
+        "T03",
+        "T05",
+        "T11",
+        "T12",
+        "T13"
+      ],
+      "support": "Four cells (noASF,FT),(ASF,FT),(noASF,LP),(ASF,LP) onBCIC2A/2B/KaggleERN:264matrix slots, same outer support and3runs.",
+      "estimand": "Fourcell means, ASF effect withinLP/FT, LP−FT withinASF status and interaction; original reportedBAC/AUROC plus full support metrics. Source qualitative claim cannot override unfavorable tablecell.",
+      "reference": "Independent reference adaptations with actual optimizer/trainability/ASF bypass receipts; frozen parent checkpoint matched where justified.",
+      "uncertainty": "Paired within-person/run differences; family multiplicity declared; no selective omission of fullFT deterioration.",
+      "gates": [
+        "G02",
+        "G07",
+        "G10",
+        "G11",
+        "G12",
+        "G13",
+        "G18",
+        "G19",
+        "G23"
+      ],
+      "producer_sources": [
+        "downstream EEGPT wrappers",
+        "Table8 missing explicit fullfactorial source variants"
+      ],
+      "missing": "Exact source noASF andFT branches/configs require construction/qualification; current LP code is not sufficient."
+    },
+    {
+      "id": "EG-06",
+      "source_panels": [
+        "T6",
+        "F5",
+        "F7",
+        "F8"
+      ],
+      "source": "Methods3.5; AppendixA.4",
+      "claim": "Eight architecture/summary-token variants change representation losses and downstream performance; evaluate claimed size scaling.",
+      "operators": [
+        "O06",
+        "O07",
+        "O08",
+        "O09",
+        "O12",
+        "O14",
+        "O15",
+        "O16",
+        "O18",
+        "O19",
+        "O20",
+        "O21",
+        "O27"
+      ],
+      "products": [
+        "T02",
+        "T03",
+        "T04",
+        "T05",
+        "T06",
+        "T11",
+        "T12",
+        "T13"
+      ],
+      "support": "All8Table6variants; each BCIC2A(9),BCIC2B(9),TUAB(1) fold×3run outputs=456matrix slots; LA/LR and exact total/encoder parameter census.",
+      "estimand": "All model-size points, raw losses and per-dataset monitor, source printed power laws and independently fitted declared curve/residuals; effects of size andsummarytokens not falselyfactorially identified.",
+      "reference": "Independent pretraining for everydistinct architecture then matched downstream fits; large baseline aliases only withexact lineage.",
+      "uncertainty": "All underlying person/run metrics; fituncertainty andn=8 modelpointlimitations; no extrapolatedSOTA.",
+      "gates": [
+        "G02",
+        "G09",
+        "G10",
+        "G11",
+        "G13",
+        "G14",
+        "G18",
+        "G19",
+        "G20"
+      ],
+      "producer_sources": [
+        "pretrain/configs.py:MODELS_CONFIGS",
+        "pretrain/run_pretraining.py",
+        "downstream model constructors"
+      ],
+      "missing": "Per-variant original checkpoint/seed/parameter convention; Figure7/8 axes andfitformula units; all size-specific downstream producer joins unqualified."
+    },
+    {
+      "id": "EG-07",
+      "source_panels": [
+        "F9",
+        "F10"
+      ],
+      "source": "AppendixA.5",
+      "claim": "Increasing pretraining data fraction changes BCIC2A/2B performance.",
+      "operators": [
+        "O02",
+        "O04",
+        "O06",
+        "O07",
+        "O08",
+        "O09",
+        "O12",
+        "O14",
+        "O15",
+        "O16",
+        "O18",
+        "O19",
+        "O21",
+        "O27"
+      ],
+      "products": [
+        "T01",
+        "T02",
+        "T03",
+        "T04",
+        "T06",
+        "T11",
+        "T12",
+        "T13"
+      ],
+      "support": "100%,50%,25%,12.5% source-selected data; BCIC2A/2B all18folds×3runs×4fractions=216matrix slots; full five-source eligibility retained.",
+      "estimand": "All fractions with exact integer counts and corpus/source composition; BAC andAUROC versusfraction andreportedpowerlaw; distinguish amount effect fromsource-composition shift.",
+      "reference": "Independent fraction selection/pretrain states; same data-selection seed/support where source permits; no inference that100% shares model/seed until qualified.",
+      "uncertainty": "Downstream person/run uncertainty conditional on one selected subset; between-subset uncertainty requires declared extra study, notinventedreplicates.",
+      "gates": [
+        "G03",
+        "G06",
+        "G07",
+        "G08",
+        "G10",
+        "G11",
+        "G13",
+        "G14",
+        "G20"
+      ],
+      "producer_sources": [
+        "pretrain/configs.py corpus loaders",
+        "missing exact fraction-selection study producer"
+      ],
+      "missing": "Original modelchoice, subset nesting, source stratification, integer rounding and seeds unknown. Proposed stratified/grouped alternative mustbe labeledprospective, neverhistorical."
+    },
+    {
+      "id": "EG-08",
+      "source_panels": [
+        "T11"
+      ],
+      "source": "AppendixA.7",
+      "claim": "Test the contribution of pretraining onTUAB against trained random initialization.",
+      "operators": [
+        "O07",
+        "O09",
+        "O12",
+        "O14",
+        "O15",
+        "O16",
+        "O18",
+        "O19",
+        "O27"
+      ],
+      "products": [
+        "T02",
+        "T03",
+        "T05",
+        "T11",
+        "T12",
+        "T13"
+      ],
+      "support": "TUAB fullfold×3runs×pretrained/randominit=6logical matrices plusBIOT comparative row alreadyprincipal.",
+      "estimand": "BAC/AUROC differences under matchedarchitecture/data/adaptation andcompleteoriginalinitialization/selectionpolicy; random-init is trained, notpriorprediction.",
+      "reference": "Independent random-init andpretrainedfit lifecycles; pretrain baseline aliasesprincipalonlyunderexact identity.",
+      "uncertainty": "Paired person/run differences; initialseed hierarchyretained.",
+      "gates": [
+        "G02",
+        "G07",
+        "G10",
+        "G11",
+        "G12",
+        "G13",
+        "G18"
+      ],
+      "producer_sources": [
+        "downstream_tueg/run_class_finetuning_EEGPT_change.py",
+        "missing qualified no-checkpoint flag/initialization lineage"
+      ],
+      "missing": "Must establish whether source random-init comparatortrainswholeencoder orfrozenrandomfeatures; do not inferfromTable11label."
+    },
+    {
+      "id": "EG-09",
+      "source_panels": [
+        "F11",
+        "F12"
+      ],
+      "source": "AppendixG.1",
+      "claim": "Learned channel embeddings show spatial relationships.",
+      "operators": [
+        "O09",
+        "O16",
+        "O22",
+        "O15",
+        "O26",
+        "O27",
+        "O29"
+      ],
+      "products": [
+        "T02",
+        "T07",
+        "T11",
+        "T12",
+        "T13"
+      ],
+      "support": "All58channelembeddings, actualelectrodecoordinateprovenance, thresholds0.5/0.4 and0.3/0.1; parentcheckpoint/run identity.",
+      "estimand": "Full orderedcosine similarity andthresholdedge sets; spatialdescription, notfunctionalconnectivity orcausalbrain topology.",
+      "reference": "Independent channel-extraction andcosineproducer fromreferencefitstate, nooptionalmodelcall shortcut.",
+      "uncertainty": "Conditional deterministicstate diagnostic; between-trained-statevariability onlywhenactualdistinctstatesexist.",
+      "gates": [
+        "G04",
+        "G10",
+        "G11",
+        "G13",
+        "G15",
+        "G18",
+        "G23"
+      ],
+      "producer_sources": [
+        "pretrain/modeling_pretraining.py:chan_embed",
+        "missing original figure numerical producer"
+      ],
+      "missing": "Original checkpoint, coordinate source, plotting threshold equality andselectedhead/embeddingdefinition require qualification."
+    },
+    {
+      "id": "EG-10",
+      "source_panels": [
+        "F13",
+        "F14",
+        "F15"
+      ],
+      "source": "AppendixG.2",
+      "claim": "BCIC2A model channel perturbation, representation and confusion diagnostics.",
+      "operators": [
+        "O09",
+        "O13",
+        "O16",
+        "O23",
+        "O24",
+        "O14",
+        "O15",
+        "O17",
+        "O18",
+        "O26",
+        "O27",
+        "O29"
+      ],
+      "products": [
+        "T02",
+        "T03",
+        "T08",
+        "T09",
+        "T11",
+        "T12",
+        "T13"
+      ],
+      "support": "Every plannedBCIC2Afold/runquery row/class/channel; paperselecteddisplay subset retainedonlyifidentityknown,fullsupportdiagnosticcompanionrequired.",
+      "estimand": "Noiseintensity versusclasslogitdelta Pearsonmatrix, fullfeature/t-SNEcoordinates andprivatelyreconstructedconfusion; no causal/linearseparability inferencefromplot.",
+      "reference": "Independent reference perturbation/feature paths fromsealedstate plusprivate confusionreduction; nofixedexpectedheatmap.",
+      "uncertainty": "Fixed perturbationdraw recipe andMonteCarlo uncertainty; personclusters for confusion; t-SNEseed/selectionreported, nopixelCI.",
+      "gates": [
+        "G04",
+        "G07",
+        "G10",
+        "G11",
+        "G13",
+        "G14",
+        "G15",
+        "G18",
+        "G19",
+        "G23"
+      ],
+      "producer_sources": [
+        "downstream/linear_probe_EEGPT_BCIC2A.py",
+        "missing exact perturbation/t-SNE plot generators"
+      ],
+      "missing": "Originalnoisevariance/drawcount,featurelayer,fitpopulation,t-SNEsettings anddisplayselection; no guessedhistoricalfidelity."
+    },
+    {
+      "id": "EG-11",
+      "source_panels": [
+        "F16",
+        "F17",
+        "F18"
+      ],
+      "source": "AppendixG.3,H andAppendixF reasoning",
+      "claim": "P300 temporal/spatial attention and representation support task-specificperformance andqualifiedERP interpretation.",
+      "operators": [
+        "O09",
+        "O13",
+        "O16",
+        "O25",
+        "O24",
+        "O14",
+        "O15",
+        "O17",
+        "O18",
+        "O26",
+        "O27",
+        "O29"
+      ],
+      "products": [
+        "T02",
+        "T03",
+        "T09",
+        "T10",
+        "T11",
+        "T12",
+        "T13"
+      ],
+      "support": "AllPhysioP3009folds×3runs withcompleteeligibleevents/channels/time origin; originaldisplay subset onlywithprovenance.",
+      "estimand": "Declaredtime/head/channel attention summaries,fullfeatureprojection andconfusion; compare reported−0.1..1s focus andF1/FZ/F2/FCZ interest descriptively. ERPphase mechanism remains hypothesisunlessseparatelytested.",
+      "reference": "Independent reference attention/featureextraction andprivate confusion; no reference products inferredfrompaperimage.",
+      "uncertainty": "Person/runpairedclassification andsummaryvariability; attention conditionalonfit, notcausalconfidence; allsourcewindowdiscrepanciespreserved.",
+      "gates": [
+        "G04",
+        "G05",
+        "G06",
+        "G10",
+        "G11",
+        "G13",
+        "G14",
+        "G18",
+        "G19",
+        "G23"
+      ],
+      "producer_sources": [
+        "downstream/linear_probe_EEGPT_PhysioP300.py",
+        "attention-return support inEEGPTmodelsource",
+        "missing exact originalattention/t-SNEreducers"
+      ],
+      "missing": "Paper−0.7..1.3 versusconverter−0.1..2; model2.1s andoriginalattention aggregation/featurelayer/settings remainopen."
+    }
+  ],
+  "coverage": "All11 accepted families,18figures and13tables. Full original obligations remain mandatory; unresolved original producer details are blocking gates, not convenience replacements.",
+  "S2_cross_cutting_information_policy": "ADAPTIVE_INFORMATION_CONTRACT.json and REFERENCE_SELECTION_CONTRACT.json apply to all protected producers, analyses, claims and refs. Scientific families/claim rows/architecture/recipes remain unchanged. An old source path is a scientific provenance anchor, not authority to bypass current G0/E isolation. Common A/B requirements never include undisclosed source-only quirks."
+}

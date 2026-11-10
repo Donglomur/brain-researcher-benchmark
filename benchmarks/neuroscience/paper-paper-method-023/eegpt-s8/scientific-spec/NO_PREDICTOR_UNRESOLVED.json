@@ -1,0 +1,89 @@
+{
+  "additional_source_research": {
+    "alternate_branch_pretrain_paths": 0,
+    "current_branches": [
+      "main",
+      "feat/crisscross-transformer"
+    ],
+    "loss_issue19": "Question has no answer; no original no-predictor recipe recovered.",
+    "mask_comment_scope": "Discusses visible-channel target subsampling; does not specify no-predictor alignment/reconstruction. Commenter authorship not independently established; not used to invent the method.",
+    "pretrain_engine_history": [
+      "a0e0a8fad729e2ecf4eedb3a81548a6e6d48a705 first commit"
+    ],
+    "public_issues_examined": 25,
+    "relevant_mask_issue": "https://github.com/BINE022/EEGPT/issues/1",
+    "tags": []
+  },
+  "all_current_pretrain_files_equal_retained": [
+    {
+      "bytes": 2745,
+      "git_blob": "031340dced2a3c41c616dd09cc0c4f20d2b56b57",
+      "path": "pretrain/configs.py",
+      "sha256": "b8111ec1424ba706628bcca7780291bfb9d9265a02e04e62662b56f474bdc7b7"
+    },
+    {
+      "bytes": 11319,
+      "git_blob": "8b07cc9c628729bfe7f2bd0f1b62520ed8619718",
+      "path": "pretrain/engine_pretraining.py",
+      "sha256": "6ccab3afb8412c3689f30431751ee1526dca34bd5d8a9a3b370047023d2c82c8"
+    },
+    {
+      "bytes": 31361,
+      "git_blob": "989a02ed84c0b56c6070633373d7e20c9758f46c",
+      "path": "pretrain/modeling_pretraining.py",
+      "sha256": "4d40c2e5ce5de7a45e9a4ad7c93cab21d22a47d3e43228eb7699186706ae88c6"
+    },
+    {
+      "bytes": 872,
+      "git_blob": "6d7610a16ccef9cc6204d2b862dd6aa81e86070f",
+      "path": "pretrain/run_pretraining.py",
+      "sha256": "ae8cd9f8c4a77b0a4ee21d66e274ed4b042b5487abef6d8d94e4c11d816dc13f"
+    },
+    {
+      "bytes": 7852,
+      "git_blob": "bfa2c2739155ab5a18da6c60887335295d87ae07",
+      "path": "pretrain/utils.py",
+      "sha256": "443f0de1f065559e852d1c63c284fa6475ff5b4329bbdcb65a2cf6ee229f66c7"
+    }
+  ],
+  "established": "The reported ablation removes predictor and directly aligns online and momentum representations while observing the reconstruction curve. Current published entrypoint exposes only loss-A, normalization and skip switches, never a no-predictor switch.",
+  "exact_unresolved": [
+    "Online encoder under mask_x emits only visible time slots; momentum encoder normally emits all time slots. Original no-predictor alignment indexing and denominator are not specified.",
+    "Reconstructor API supports visible-only mask_x, but neither paper nor released run specifies whether this branch or full-time placeholder completion was used.",
+    "Original ablation variant/seed/parent multiplicity and recorded curve step support are not provided by Figure6."
+  ],
+  "implementation_decision": "Do not replace unconditional original-identity refusal with a guessed ablation or claim historical completeness. Continue all independent implementable EEGNet/Temple source operations.",
+  "operations": {
+    "model_imports": 0,
+    "native": 0,
+    "primary_history_alias_reads": 0,
+    "scientific": 0
+  },
+  "possible_reconstruction_not_selected": "Direct visible-time target gather and visible-only reconstructor input is mechanically supported by retained APIs, but not uniquely established as the original experiment. Other masked-slot completion choices alter the loss and gradient.",
+  "public_primary": {
+    "access": "Official primary read through web tool; no primary body copied into R or any proposal",
+    "article_body_in_source": false,
+    "sections": [
+      "2.1",
+      "2.2",
+      "AppendixA.1",
+      "Figure6"
+    ],
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/4540d267eeec4e5dbd9dae9448f0b739-Paper-Conference.pdf"
+  },
+  "schema": "eegpt_no_predictor_original_specification_research_v1",
+  "source_commit": "ea7282f698c406cd423ccbedbe9960853761144c",
+  "source_repo": "https://github.com/BINE022/EEGPT",
+  "alternate_branch_followup": {
+    "commit": "ab9c5047db15f272e6514dd53c8e87b558773716",
+    "ordinary_source": "https://github.com/BINE022/EEGPT/blob/ab9c5047db15f272e6514dd53c8e87b558773716/models/EEGPT_mcae_opt.py",
+    "lines_inspected": [
+      240,
+      440
+    ],
+    "observed_use_predictor_false": "retains learned PredictionHead on projected visible-token representation; momentum encoder sees same visible input, unlike predictor branch opposite view; reconstruction receives raw visible z through changed MAE decoder",
+    "scientific_conclusion": "different architecture and objectives cannot identify the original 2024 direct-alignment no-predictor ablation without inventing an undocumented substitution",
+    "original_gap_retained": true,
+    "model_or_signal_execution": false
+  }
+}

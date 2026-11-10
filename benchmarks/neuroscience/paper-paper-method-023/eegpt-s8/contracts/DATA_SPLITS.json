@@ -1,0 +1,441 @@
+{
+  "schema": "eegpt_complete_source_and_split_design_v2",
+  "downstream": [
+    {
+      "id": "BCIC-2A",
+      "full_legacy_panel": {
+        "id": "BCIC-2A",
+        "classes": 4,
+        "folds": 9,
+        "channels": 22,
+        "epoch_seconds": 4,
+        "sampling_hz": 256,
+        "units": "nine provider people; paper incorrectly says10",
+        "split": "LOSO; 2sessions/person; EA eachsession is transductive",
+        "methods": [
+          "BENDR",
+          "BIOT",
+          "LaBraM",
+          "EEGPT"
+        ],
+        "metrics": [
+          "balanced_accuracy",
+          "cohen_kappa",
+          "weighted_f1"
+        ],
+        "monitor": "cohen_kappa",
+        "actual_source_qualified": false,
+        "paper_head": "EEGPT encoder + adaptivefilter + MSConvNet fusion inC2.1; exact published result/available source mapping unresolved"
+      },
+      "provider_version": {
+        "id": "BCIC-2A",
+        "provider": "https://www.bbci.de/competition/iv/#datasets",
+        "source_release": null,
+        "scope": "nine provider people; paper incorrectly says10",
+        "folds": 9,
+        "immutable_file_inventory": null,
+        "full_original_bytes": null,
+        "payloads_retained": 0,
+        "targets_provisioned": false,
+        "qualification": false
+      },
+      "required_manifest": "Complete person/session/recording/event/epoch, rawsource digest, label provenance, source clock/unit/channel/preprocessing, all exclusion reasons and denominators before outcomes. No data body/header read here.",
+      "H_split": "LOSO; 2sessions/person; EA eachsession is transductive",
+      "P_I_split_policy": "DESIGN.md Data, folds, repetition and leakage; each policy creates an exact complete immutable manifest before scientific launch.",
+      "source_status": "Authentic data, exact original splits, source ABI and numerical/native agreement remain unqualified."
+    },
+    {
+      "id": "BCIC-2B",
+      "full_legacy_panel": {
+        "id": "BCIC-2B",
+        "classes": 2,
+        "folds": 9,
+        "channels": 3,
+        "epoch_seconds": 4,
+        "sampling_hz": 256,
+        "units": "nine provider people; paper says10",
+        "split": "LOSO; paper describes2screening sessions of5released; exactselectedsource unqualified",
+        "methods": [
+          "BENDR",
+          "BIOT",
+          "LaBraM",
+          "EEGPT"
+        ],
+        "metrics": [
+          "balanced_accuracy",
+          "cohen_kappa",
+          "auroc"
+        ],
+        "monitor": "auroc",
+        "actual_source_qualified": false
+      },
+      "provider_version": {
+        "id": "BCIC-2B",
+        "provider": "https://www.bbci.de/competition/iv/#datasets",
+        "source_release": null,
+        "scope": "nine provider people; paper says10",
+        "folds": 9,
+        "immutable_file_inventory": null,
+        "full_original_bytes": null,
+        "payloads_retained": 0,
+        "targets_provisioned": false,
+        "qualification": false
+      },
+      "required_manifest": "Complete person/session/recording/event/epoch, rawsource digest, label provenance, source clock/unit/channel/preprocessing, all exclusion reasons and denominators before outcomes. No data body/header read here.",
+      "H_split": "LOSO; paper describes2screening sessions of5released; exactselectedsource unqualified",
+      "P_I_split_policy": "DESIGN.md Data, folds, repetition and leakage; each policy creates an exact complete immutable manifest before scientific launch.",
+      "source_status": "Authentic data, exact original splits, source ABI and numerical/native agreement remain unqualified."
+    },
+    {
+      "id": "Sleep-EDFx",
+      "full_legacy_panel": {
+        "id": "Sleep-EDFx",
+        "classes": 5,
+        "folds": 10,
+        "channels": 2,
+        "epoch_seconds": 30,
+        "sampling_hz": 256,
+        "units": "paper197recordings/78healthy people; exactrecording/person membership unqualified",
+        "split": "10fold60/20/20person split;4layer sequence classifier; actualfoldIDs unqualified",
+        "methods": [
+          "BENDR",
+          "BIOT",
+          "LaBraM",
+          "EEGPT"
+        ],
+        "metrics": [
+          "balanced_accuracy",
+          "cohen_kappa",
+          "weighted_f1"
+        ],
+        "monitor": "cohen_kappa",
+        "actual_source_qualified": false,
+        "native_preparation_gap": "onlyrange39..82 minus5missing, one randomsplit; output.pt names incompatible with downstream.sNextensions; no fullfold packet",
+        "sampling_stage": "paper/model input target; retained raw converter outputs100Hz and model interpolation provenance remains unqualified"
+      },
+      "provider_version": {
+        "id": "Sleep-EDFx",
+        "provider": "https://physionet.org/content/sleep-edfx/1.0.0/",
+        "source_release": "1.0.0",
+        "scope": "paper197recordings/78healthy people; exactrecording/person membership unqualified",
+        "folds": 10,
+        "immutable_file_inventory": null,
+        "full_original_bytes": null,
+        "payloads_retained": 0,
+        "targets_provisioned": false,
+        "qualification": false
+      },
+      "required_manifest": "Complete person/session/recording/event/epoch, rawsource digest, label provenance, source clock/unit/channel/preprocessing, all exclusion reasons and denominators before outcomes. No data body/header read here.",
+      "H_split": "10fold60/20/20person split;4layer sequence classifier; actualfoldIDs unqualified",
+      "P_I_split_policy": "DESIGN.md Data, folds, repetition and leakage; each policy creates an exact complete immutable manifest before scientific launch.",
+      "source_status": "Authentic data, exact original splits, source ABI and numerical/native agreement remain unqualified."
+    },
+    {
+      "id": "KaggleERN",
+      "full_legacy_panel": {
+        "id": "KaggleERN",
+        "classes": 2,
+        "folds": 4,
+        "channels": 56,
+        "epoch_seconds": 2,
+        "sampling_hz": 256,
+        "units": "26declaredpeople,10fixedtest",
+        "split": "4foldremaining16train/val; fixed10person test; four predictions pertestevent are not independent biologicalsamples",
+        "methods": [
+          "BENDR",
+          "BIOT",
+          "LaBraM",
+          "EEGPT"
+        ],
+        "metrics": [
+          "balanced_accuracy",
+          "cohen_kappa",
+          "auroc"
+        ],
+        "monitor": "auroc",
+        "actual_source_qualified": false
+      },
+      "provider_version": {
+        "id": "KaggleERN",
+        "provider": "https://www.kaggle.com/c/inria-bci-challenge/data",
+        "source_release": null,
+        "scope": "26declaredpeople,10fixedtest",
+        "folds": 4,
+        "immutable_file_inventory": null,
+        "full_original_bytes": null,
+        "payloads_retained": 0,
+        "targets_provisioned": false,
+        "qualification": false
+      },
+      "required_manifest": "Complete person/session/recording/event/epoch, rawsource digest, label provenance, source clock/unit/channel/preprocessing, all exclusion reasons and denominators before outcomes. No data body/header read here.",
+      "H_split": "4foldremaining16train/val; fixed10person test; four predictions pertestevent are not independent biologicalsamples",
+      "P_I_split_policy": "DESIGN.md Data, folds, repetition and leakage; each policy creates an exact complete immutable manifest before scientific launch.",
+      "source_status": "Authentic data, exact original splits, source ABI and numerical/native agreement remain unqualified."
+    },
+    {
+      "id": "PhysioP300",
+      "full_legacy_panel": {
+        "id": "PhysioP300",
+        "classes": 2,
+        "folds": 9,
+        "channels": 58,
+        "epoch_seconds": 2,
+        "sampling_hz": 256,
+        "units": "paper9people from sourceindices1..12 excluding8/10/12;providertext10people",
+        "split": "LOSO; exactsourceperson/session identity qualification required",
+        "methods": [
+          "BENDR",
+          "BIOT",
+          "LaBraM",
+          "EEGPT"
+        ],
+        "metrics": [
+          "balanced_accuracy",
+          "cohen_kappa",
+          "auroc"
+        ],
+        "monitor": "auroc",
+        "actual_source_qualified": false,
+        "native_preparation_gap": "converter8people excludes1; nineperson trainingloop; converter−0.1..2s differs paper−0.7..1.3s; perrecordIDs collide; wrong outputmkdir"
+      },
+      "provider_version": {
+        "id": "PhysioP300",
+        "provider": "https://physionet.org/content/erpbci/1.0.0/",
+        "source_release": "1.0.0",
+        "scope": "paper9people from sourceindices1..12 excluding8/10/12;providertext10people",
+        "folds": 9,
+        "immutable_file_inventory": null,
+        "full_original_bytes": null,
+        "payloads_retained": 0,
+        "targets_provisioned": false,
+        "qualification": false
+      },
+      "required_manifest": "Complete person/session/recording/event/epoch, rawsource digest, label provenance, source clock/unit/channel/preprocessing, all exclusion reasons and denominators before outcomes. No data body/header read here.",
+      "H_split": "LOSO; exactsourceperson/session identity qualification required",
+      "P_I_split_policy": "DESIGN.md Data, folds, repetition and leakage; each policy creates an exact complete immutable manifest before scientific launch.",
+      "source_status": "Authentic data, exact original splits, source ABI and numerical/native agreement remain unqualified."
+    },
+    {
+      "id": "TUAB",
+      "full_legacy_panel": {
+        "id": "TUAB",
+        "classes": 2,
+        "folds": 1,
+        "channels": 23,
+        "epoch_seconds": 10,
+        "sampling_hz": 200,
+        "units": "paper2383people/409455samples",
+        "split": "originalBIOTpartition; papertext256Hz versus modeltable2000samples/10s unresolved",
+        "methods": [
+          "SPaRCNet",
+          "ContraWR",
+          "CNN-T",
+          "FFCL",
+          "ST-T",
+          "BIOT",
+          "EEGPT-Tiny",
+          "EEGPT",
+          "LaBraM-Base",
+          "LaBraM-Large",
+          "LaBraM-Huge"
+        ],
+        "metrics": [
+          "balanced_accuracy",
+          "auroc"
+        ],
+        "monitor": "auroc",
+        "actual_source_qualified": false,
+        "native_unit_normalization": "converteruV, engine divide100; distinct from papertextmV/256Hz"
+      },
+      "provider_version": {
+        "id": "TUAB",
+        "provider": "https://isip.piconepress.com/projects/nedc/html/tuh_eeg/",
+        "source_release": "3.0.1",
+        "scope": "paper2383people/409455samples",
+        "folds": 1,
+        "immutable_file_inventory": null,
+        "full_original_bytes": null,
+        "payloads_retained": 0,
+        "targets_provisioned": false,
+        "qualification": false
+      },
+      "required_manifest": "Complete person/session/recording/event/epoch, rawsource digest, label provenance, source clock/unit/channel/preprocessing, all exclusion reasons and denominators before outcomes. No data body/header read here.",
+      "H_split": "originalBIOTpartition; papertext256Hz versus modeltable2000samples/10s unresolved",
+      "P_I_split_policy": "DESIGN.md Data, folds, repetition and leakage; each policy creates an exact complete immutable manifest before scientific launch.",
+      "source_status": "Authentic data, exact original splits, source ABI and numerical/native agreement remain unqualified."
+    },
+    {
+      "id": "TUEV",
+      "full_legacy_panel": {
+        "id": "TUEV",
+        "classes": 6,
+        "folds": 1,
+        "channels": 23,
+        "epoch_seconds": 5,
+        "sampling_hz": 200,
+        "units": "paper288people/112491samples",
+        "split": "originalBIOTpartition; papertext256Hz versus modeltable1000samples/5s unresolved",
+        "methods": [
+          "SPaRCNet",
+          "ContraWR",
+          "CNN-T",
+          "FFCL",
+          "ST-T",
+          "BIOT",
+          "EEGPT-Tiny",
+          "EEGPT",
+          "LaBraM-Base",
+          "LaBraM-Large",
+          "LaBraM-Huge"
+        ],
+        "metrics": [
+          "balanced_accuracy",
+          "cohen_kappa",
+          "weighted_f1"
+        ],
+        "monitor": "cohen_kappa",
+        "actual_source_qualified": false,
+        "native_unit_normalization": "converteruV, engine divide100; distinct from papertextmV/256Hz"
+      },
+      "provider_version": {
+        "id": "TUEV",
+        "provider": "https://isip.piconepress.com/projects/nedc/html/tuh_eeg/",
+        "source_release": "2.0.1",
+        "scope": "paper288people/112491samples",
+        "folds": 1,
+        "immutable_file_inventory": null,
+        "full_original_bytes": null,
+        "payloads_retained": 0,
+        "targets_provisioned": false,
+        "qualification": false
+      },
+      "required_manifest": "Complete person/session/recording/event/epoch, rawsource digest, label provenance, source clock/unit/channel/preprocessing, all exclusion reasons and denominators before outcomes. No data body/header read here.",
+      "H_split": "originalBIOTpartition; papertext256Hz versus modeltable1000samples/5s unresolved",
+      "P_I_split_policy": "DESIGN.md Data, folds, repetition and leakage; each policy creates an exact complete immutable manifest before scientific launch.",
+      "source_status": "Authentic data, exact original splits, source ABI and numerical/native agreement remain unqualified."
+    }
+  ],
+  "pretraining": [
+    {
+      "id": "PhysioMI",
+      "provider": "https://physionet.org/content/eegmmidb/1.0.0/",
+      "version": "1.0.0",
+      "people": 109,
+      "source_runs": "3–14, four task families/eight motor execution or imagery event labels; preserve14provider recordings/person inventory including explicitly ineligiblebaseline runs1/2.",
+      "epoch": "0..6s minus1/fs inclusive endpoint convention, avg reference,58channels, source nearest interpolation to1536 thenrandom1024crop;paper generalizedresampling mustbe separate."
+    },
+    {
+      "id": "HGD",
+      "provider": "https://gin.g-node.org/robintibor/high-gamma-dataset",
+      "version": null,
+      "people": 14,
+      "source_runs": "Bothtrain/test named sourcephases;4movement classes;providerlast2runsoriginaltestbutusedwithinpretrainingcorpus.",
+      "epoch": "0..10s minus1/fs, selected58channels, resample256Hz, V×1000 source mV conversion andavg reference; do not claimuncorrelatedtrialwindows."
+    },
+    {
+      "id": "TSU",
+      "provider": "http://bci.med.tsinghua.edu.cn/",
+      "version": null,
+      "people": 35,
+      "source_runs": "6blocks×40characters withfrequency8..15.8Hz step0.2 andphase metadata.",
+      "epoch": "Native64channels250Hz, source58channel subset and4s chunks resampled/interpolated to1024; 250→256 isupsampling despitepaper downsampleword."
+    },
+    {
+      "id": "SEED",
+      "provider": "https://bcmi.sjtu.edu.cn/home/seed/",
+      "version": null,
+      "people": 15,
+      "source_runs": "3sessions/person,15movie clips; 45person-sessions arenot45people. Preprocessed_EEG exactsourcearchive required.",
+      "epoch": "62channels200Hz,58selected,10s sourcechunk2000→2560 thenrandom4s crop; emotionalabelunusedpretrainobjective butmovie/sessiondependence remains."
+    },
+    {
+      "id": "M3CV",
+      "provider": "https://aistudio.baidu.com/aistudio/datasetdetail/151025/0",
+      "version": null,
+      "people": 106,
+      "source_runs": "2sessions,6paradigms; Calibration/Enrollment/Testing partitionandmetadata identitiesrequired, exactselecteddefaultM3CVDatasetversion maynotmeanallthreepartitions.",
+      "epoch": "58selectedchannels,4s at256Hz; full task-stateoriginaleligibility, not just availablefolder."
+    }
+  ],
+  "full_pretrain_question": "All5source families; unionof actualpeople/events not inferredfrom279nominalcounts. Personoverlapwithdownstreamorothercorpora isG08.",
+  "kaggle_exact_source_folds": {
+    "test": [
+      1,
+      3,
+      4,
+      5,
+      8,
+      9,
+      10,
+      15,
+      19,
+      25
+    ],
+    "train": [
+      [
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        23,
+        24,
+        26
+      ],
+      [
+        2,
+        6,
+        7,
+        11,
+        17,
+        18,
+        20,
+        21,
+        22,
+        23,
+        24,
+        26
+      ],
+      [
+        2,
+        6,
+        7,
+        11,
+        12,
+        13,
+        14,
+        16,
+        22,
+        23,
+        24,
+        26
+      ],
+      [
+        2,
+        6,
+        7,
+        11,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21
+      ]
+    ],
+    "P_I_validation": "Complementofeach12trainpersonsinside16developmentpeople; sourceinsteadusespublictestvalidation. All5sessionsandfast/slowconditionsretainoriginaleventidentity."
+  },
+  "normalization": "PrimaryP/I learnednormalizers fittrainingonly; fixedper-epoch deterministic transforms recordedwithoutlearnedcrossqueryadaptation. Sourceper-sessionEA remainsseparatelynamedtransductiveH/P_source analysis; notstrictinductiveI.",
+  "future_historical_seed_ids": null,
+  "future_prospective_seed_policy": "Three distinct32-bit seeds derivedfromfrozenoperatorcommitment andr0,r1,r2; actual values fixedbeforelaunch; whole source3seed lineage remainsunqualified.",
+  "sequence": "Sleepepochs groupedbynight/person; no sequencecrossessplit,recordingorunscoredgap; sourceattention length30s doesnot authorizeusingfutureassessmentlabels.",
+  "metadata_only": true,
+  "adaptive_boundary": "For all43 prospective outer folds, G0 freezes the procedure before any downstream payload/feedback. Each E sees only its own train/development; overlapping people across folds are legitimate, cross-fold adaptive source/state/feedback transfer is forbidden. ADAPTIVE_INFORMATION_CONTRACT binds raw preparation ancestry and REFERENCE_SELECTION_CONTRACT binds same-fold control selection. No change to historical folds or missing roster gates.",
+  "prospective_reference_validation": "Use the existing P/I validation partition in each outer fold: MI/P300 inner rotated person, Kaggle complementary four development people, Sleep designated two blocks, Temple original/corrected qualified validation. All four controls and all three runs use exactly this support for S_df. No new global validation cohort or pooled fold metric."
+}

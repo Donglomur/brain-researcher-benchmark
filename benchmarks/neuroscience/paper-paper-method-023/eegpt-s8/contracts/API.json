@@ -1,0 +1,331 @@
+{
+  "schema": "eegpt_arbitrary_participant_scientific_api_design_v2",
+  "authority": "Declarative contract only. No protocol, harness, model or worker implemented or executed.",
+  "command_transport": {
+    "entrypoint": "One source-package entrypoint invoked as <declared runtime> <entrypoint> --request <ordinary request.json> --response <owned response.json>. Runtime argv is a parsed array, never shell-concatenated participant text.",
+    "request_envelope": [
+      "protocol=eegpt_science_v1",
+      "campaign_id",
+      "mode H|P|I",
+      "access A|B",
+      "policy_id",
+      "operator_issued_call_id",
+      "parent_receipt_ids",
+      "method_id",
+      "study_id",
+      "case_id or corpus_id",
+      "seed_commitment_id",
+      "input_capabilities[]",
+      "expected_output_schema",
+      "resource_capability",
+      "deadline",
+      "genesis_digest",
+      "dataset_id",
+      "outer_fold_id or explicit global/corpus/report scope",
+      "episode_id and actor_role",
+      "parent_information_root",
+      "source_generation_parent_ids",
+      "context_snapshot_digest",
+      "cache_namespace_id",
+      "feedback_record_ids",
+      "repetition/attempt identity",
+      "original issuer budget/completion ancestry"
+    ],
+    "response_envelope": [
+      "call_id",
+      "status ok|abstain|unsupported|failed",
+      "output_artifact_descriptors[]",
+      "candidate_diagnostics",
+      "scientific_method_declaration"
+    ],
+    "trust": "Response status and diagnostics are untrusted. Issuer completion, resources, mounts, source hash and output snapshot come from the supervisor. Request IDs monotone; replays denied and counted. No daemon or callback after completion."
+  },
+  "calls": [
+    {
+      "id": "A01",
+      "name": "DESCRIBE",
+      "operators": [
+        "O05",
+        "O07"
+      ],
+      "inputs": "Package and method policy only",
+      "outputs": "Architecture/module graph; declared fit/predict/analysis entrypoints; output shapes; trainable state; inherited models and dependencies.",
+      "mutation": "No data/model fitting; declarations later checked against actual produced state and provenance.",
+      "scope": "G0 or fresh E",
+      "information_boundary": "Initial global DESCRIBE is static pre-exposure only; local declared/generated implementation describes exact E ancestry and cannot modify G0."
+    },
+    {
+      "id": "A02",
+      "name": "PREPARE",
+      "operators": [
+        "O03",
+        "O06"
+      ],
+      "inputs": "Only approved training/development records and typed transform spec; H public support separately scoped.",
+      "outputs": "Derived training/development row manifests and transform state, complete exclusions/denominators.",
+      "mutation": "Query preprocessing may be per-query only under fixed policy; fitted transformations sealed before assessment.",
+      "scope": "E, or qualified G0/corpus-only nonadaptive preparation",
+      "information_boundary": "Every derived row/transform carries original raw support and selection ancestry. Fitted preprocessing sees only eligible E training/development support; no pooled cross-fold normalizer or feedback cache."
+    },
+    {
+      "id": "A03",
+      "name": "PRETRAIN",
+      "operators": [
+        "O07",
+        "O08"
+      ],
+      "inputs": "Five-source corpus training/validation capabilities, exact variant, fixed crop/mask/RNG schedule.",
+      "outputs": "State artifacts, LA/LR primitives and curve rows, module/trainability census and checkpoint history.",
+      "mutation": "Arbitrary participant pretraining implementation; no private downstream targets. Every required variant goes through actual fit.",
+      "scope": "qualified corpus-only parent or E",
+      "information_boundary": "Pretraining source/recipe chosen at G0 or generated inside E. Shared parent must be wholly independent of downstream observations and eligible for all children. E-adapted corpus/state cannot propagate to other folds."
+    },
+    {
+      "id": "A04",
+      "name": "FIT",
+      "operators": [
+        "O10",
+        "O12"
+      ],
+      "inputs": "Only case training labels, development split and eligible inherited sealed state.",
+      "outputs": "Fitted state, config/epoch proposal and train/development predictions for selected policy.",
+      "mutation": "Learning allowed during this phase; state must be sealed by O09, never by candidate assertion.",
+      "scope": "E per repetition/attempt",
+      "information_boundary": "Source generation, debug tools and fit run only under fixed M_a and E. They may use own development feedback but not another fold transcript/source/state. Original generator/fit completion receipts are mandatory."
+    },
+    {
+      "id": "A05",
+      "name": "VALIDATE",
+      "operators": [
+        "O10",
+        "O11",
+        "O14"
+      ],
+      "inputs": "Development-query capability and sealed proposed state.",
+      "outputs": "Full development probabilities/logits; operator computes permitted validation feedback.",
+      "mutation": "Finite count/compute budget; no assessment feedback. Source H historical metric access separately named and quarantined.",
+      "scope": "E per repetition/attempt",
+      "information_boundary": "Trusted development reducer releases only this E permitted feedback. Full target-bearing logs and errors stay in E/private evidence; no global dashboard or adaptive controller can use them to change another fold."
+    },
+    {
+      "id": "A06",
+      "name": "PREDICT",
+      "operators": [
+        "O13",
+        "O14"
+      ],
+      "inputs": "One exact case's target-free assessment query plus read-only sealed state.",
+      "outputs": "Complete probability/logit arrays and semantic-axis manifest or explicit abstention/failure.",
+      "mutation": "No supervised updates, global query-history state or write-back to model. Pure inference permitted; if a selected transductive method needs unsupervised query adaptation it must use A07 with explicit policy, not hide it inside PREDICT.",
+      "scope": "closed E per repetition/query",
+      "information_boundary": "Requires original E development closure, selected source/config and sealed state; no feedback/backedge to generation or training; output ancestry retained."
+    },
+    {
+      "id": "A07",
+      "name": "QUERY_TRANSFORM",
+      "operators": [
+        "O13"
+      ],
+      "inputs": "Only the explicitly selected case-local unlabeled query support and sealed training transform.",
+      "outputs": "Derived query plus immutable transform recipe/receipt; no labels or metrics.",
+      "mutation": "Disabled in strict inductive P/I. Enabled only for a separately labeled transductive EA/session-normalization condition; no cross-case accumulation. The primary strict P/I route uses training-fit common transforms and per-epoch deterministic normalization.",
+      "scope": "closed E per query in named transductive policy only",
+      "information_boundary": "Transformation is case-local under pre-frozen policy; output/state never becomes development or cross-fold parent. Strict inductive disabled."
+    },
+    {
+      "id": "A08",
+      "name": "DIAGNOSE",
+      "operators": [
+        "O20",
+        "O22",
+        "O23",
+        "O24",
+        "O25"
+      ],
+      "inputs": "Frozen state/query and exact diagnostic request; reference route uses independent state.",
+      "outputs": "Loss primitives or channel/perturbation/feature/attention products, all numerical semantic axes.",
+      "mutation": "Fixed diagnostic transforms; no refit or outcome-selected sample/channel/head choice. Label coloring is private operator work.",
+      "scope": "closed E or qualified corpus-only diagnostic",
+      "information_boundary": "Diagnostic state/query/head/perturbation choices frozen locally before query; content cannot tune any open episode or another fold. Private label coloring only after complete closure."
+    },
+    {
+      "id": "A09",
+      "name": "ANALYZE",
+      "operators": [
+        "O21",
+        "O29"
+      ],
+      "inputs": "Only public/development numerical products and frozen analysis specification.",
+      "outputs": "Candidate scientific hypothesis/report and analysis program; assessment reduction is independently applied to sealed products.",
+      "mutation": "Candidate cannot access private assessment scores and then submit revised predictions or select a favorable scaling subset.",
+      "scope": "G0 or E development only",
+      "information_boundary": "Frozen analysis plan or fold-local analysis using its own permitted products. No pooled development-driven algorithm/config/diagnostic selection. Global assessment reduction occurs only trusted after closure."
+    },
+    {
+      "id": "A10",
+      "name": "CLOSE",
+      "operators": [
+        "O09",
+        "O15",
+        "O17",
+        "O30"
+      ],
+      "inputs": "All expected outputs and issuer completion records.",
+      "outputs": "Closed whole collection with every required slot, explicit missingness and source/state/query joins.",
+      "mutation": "Controller-only finalization; participant cannot forge completion or append after seal.",
+      "scope": "local E then complete global collection",
+      "information_boundary": "Authenticate G0/E/source/context/cache/feedback/selector ancestry and original completion for every slot, then close all active branches. A local seal cannot certify a globally contaminated parent."
+    },
+    {
+      "id": "A11",
+      "name": "REFERENCE_BUILD",
+      "operators": [
+        "O16"
+      ],
+      "inputs": "Trusted G0-pinned reference source/config/search policy; exact same-fold training/development capabilities, eligible corpus parents and finite actor budgets; REFERENCE_SELECTION_CONTRACT S_df only.",
+      "outputs": "Complete independent banks through A02–A10, including original receipts/resources.",
+      "mutation": "Operator-only and mandatory. Candidate cannot substitute this route by uploading reference metrics.",
+      "scope": "private E per control plus same-fold S_df selector",
+      "information_boundary": "Every mandatory trusted producer uses the same boundary. Selector inputs exactly four controls times three same-fold development summaries; seal before query; preserve all516 outputs, no pooled search."
+    },
+    {
+      "id": "A12",
+      "name": "SCORE_AND_REPORT",
+      "operators": [
+        "O17",
+        "O18",
+        "O19",
+        "O20",
+        "O21",
+        "O26",
+        "O27",
+        "O28",
+        "O29",
+        "O31"
+      ],
+      "inputs": "All immutable admitted collections and operator-private targets/reference banks.",
+      "outputs": "Complete mode/dataset/family reports, uncertainty, evidence, source and availability gates.",
+      "mutation": "Operator-only; no untrusted code, hidden-target capabilities or private report inputs mounted in participant worker.",
+      "scope": "trusted global after all closed",
+      "information_boundary": "Revalidate all original local selections and chains before target join. Report S_df composite estimand and all28 fixed-control effects, exposure/failures/resources; no adaptive channel back to E."
+    },
+    {
+      "id": "A13",
+      "name": "INTERPRET",
+      "operators": [
+        "O29",
+        "O31"
+      ],
+      "inputs": "Only an operator-approved, immutable aggregate scientific result release after all candidate/reference predictions and private scores are final. AllA/B/H/P/I campaign prediction branches mustbeclosed. No row-level targets, privatekeys, modelstates, pendingqueries or hiddenfuturecases.",
+      "outputs": "Structured per-claim scientific interpretation with evidenceIDs, supported/contradicted/indeterminate status, uncertainty, alternatives andlimitations; separate fromnumericalpredictions.",
+      "mutation": "Fresh report-only worker, no training/query/tool/network capability andno writableprediction/state mounts. It cannot reopenA02–A09 orrevise anymodel/config/output. Reportonlydecisions do not affect numericalscore.",
+      "scope": "fresh global report-only after complete score closure",
+      "information_boundary": "No active prediction branch may remain. Identical aggregate releases; no per-fold memory reuse from prior learning contexts and no return edge to any future learning in this campaign."
+    }
+  ],
+  "products": [
+    {
+      "id": "T01",
+      "name": "cohort_and_split",
+      "schema": "Provider/version/license IDs; source digest; person/session/recording/event/epoch semantic IDs; interval [start,end); source rate/unit/channel order; inclusion/exclusion reason; exact train/dev/query/target role; aliases; parent/transform digests. No label-bearing query IDs.",
+      "adaptive_ancestry": "Mandatory G0/episode/actor/fold/repetition/attempt and original eligible-source/context/feedback/cache/state/issuer lineage whenever applicable; global products enumerate exact local parents. Scope is typed, never omitted or inferred from filename."
+    },
+    {
+      "id": "T02",
+      "name": "method_state",
+      "schema": "Opaque contained model files, initialization/inherited state identity, full train support/config/dependency/RNG/precision hashes, actual optimizer membership and state-change census. Loaded only in isolated participant/reference inference worker, never evaluator. Includes G0 and generated-source DAG, permitted raw/derived fit-selection support, local development closure and checkpoint selection; learned state is not an eligible cross-fold parent.",
+      "adaptive_ancestry": "Mandatory G0/episode/actor/fold/repetition/attempt and original eligible-source/context/feedback/cache/state/issuer lineage whenever applicable; global products enumerate exact local parents. Scope is typed, never omitted or inferred from filename."
+    },
+    {
+      "id": "T03",
+      "name": "classification",
+      "schema": "little-endian float32 or float64 C-order probabilities (legacy types retained; reducers use float64) N×K, finite each entry in[0,1], row sum within1e-6 of1; optional finite logits N×K or binary N×1 with explicit sigmoid mapping; exact row IDs and class order; case/method/state/query/source receipts. No duplicate/extra/missing rows. Undefined or abstaining status is an explicit separate record, not NaN probabilities.",
+      "source_auxiliary_logits": "An explicitlydeclared source-nativehead mayemitauxiliaryN×K_source logits separatefromlegacyN×Ksemantic probabilities. ForBCIC2BsourceK_source=4,K=2: p1=softmax(logits4)[:,1], p=[1−p1,p1]; no columntruncation/renormalization. Keep original4waytrainingargmax diagnostic separately. Source-logitmapping identitymustmatchreference. These source-specific diagnostics are not undisclosed A primary requirements: common paper-scientific class outputs use the common specification, and exact source replay is separately labeled when information is B-only.",
+      "adaptive_ancestry": "Mandatory G0/episode/actor/fold/repetition/attempt and original eligible-source/context/feedback/cache/state/issuer lineage whenever applicable; global products enumerate exact local parents. Scope is typed, never omitted or inferred from filename."
+    },
+    {
+      "id": "T04",
+      "name": "pretrain_curves",
+      "schema": "Every selected train/validation step or declared fixed epoch aggregation: step, epoch, corpus exposure count, LA/LR numerator+denominator, total objective, loss normalization ID, variant, checkpoint, crop/mask/RNG stream identity. Raw selected numerical primitives permit independent loss recomputation under later authorization.",
+      "adaptive_ancestry": "Mandatory G0/episode/actor/fold/repetition/attempt and original eligible-source/context/feedback/cache/state/issuer lineage whenever applicable; global products enumerate exact local parents. Scope is typed, never omitted or inferred from filename."
+    },
+    {
+      "id": "T05",
+      "name": "architecture",
+      "schema": "Module graph, dimensions, embedding/token/head counts, patch stride/order, trainability, parameter census, masks, normalization/epsilon, optimizer/scheduler/EMA. Scientific reproduction matches qualified structure/policy, not method name.",
+      "adaptive_ancestry": "Mandatory G0/episode/actor/fold/repetition/attempt and original eligible-source/context/feedback/cache/state/issuer lineage whenever applicable; global products enumerate exact local parents. Scope is typed, never omitted or inferred from filename."
+    },
+    {
+      "id": "T06",
+      "name": "scaling",
+      "schema": "All required model/data points, exact total-vs-encoder parameter count, fraction and integer training rows, corpus selection IDs, checkpoint/run IDs, per-dataset outcomes and curve losses, fixed transform/formula, regression parameters/residuals.",
+      "adaptive_ancestry": "Mandatory G0/episode/actor/fold/repetition/attempt and original eligible-source/context/feedback/cache/state/issuer lineage whenever applicable; global products enumerate exact local parents. Scope is typed, never omitted or inferred from filename."
+    },
+    {
+      "id": "T07",
+      "name": "channel_similarity",
+      "schema": "Ordered58 channel IDs; finite58×D learned embedding and58×58 cosine matrices, zero-norm support status, physical-layout provenance, threshold edge lists for>0.5,>0.4,>0.3,0.1<value<=0.3; equality rules reported because captions use≥ while prose uses>.",
+      "adaptive_ancestry": "Mandatory G0/episode/actor/fold/repetition/attempt and original eligible-source/context/feedback/cache/state/issuer lineage whenever applicable; global products enumerate exact local parents. Scope is typed, never omitted or inferred from filename."
+    },
+    {
+      "id": "T08",
+      "name": "perturbation",
+      "schema": "Exact complete planned query/channel/draw/class index; baseline logits, multiplicative-noise values, perturbed logits and delta; noise distribution/seed; Pearson sufficient sums and denominators. Zero variance yields null.",
+      "adaptive_ancestry": "Mandatory G0/episode/actor/fold/repetition/attempt and original eligible-source/context/feedback/cache/state/issuer lineage whenever applicable; global products enumerate exact local parents. Scope is typed, never omitted or inferred from filename."
+    },
+    {
+      "id": "T09",
+      "name": "representation",
+      "schema": "Sealed sample-aligned feature N×D, selected layer/pooling, t-SNE N×2 and fixed metric/perplexity/init/seed/iteration manifest. Protected labels absent. Operator later computes confusion and display colors.",
+      "adaptive_ancestry": "Mandatory G0/episode/actor/fold/repetition/attempt and original eligible-source/context/feedback/cache/state/issuer lineage whenever applicable; global products enumerate exact local parents. Scope is typed, never omitted or inferred from filename."
+    },
+    {
+      "id": "T10",
+      "name": "attention",
+      "schema": "Complete layer/head/query/key/time/channel axes, weights and valid-token mask, aggregation rule and state/query IDs. Output cannot be an unauditable selected heatmap or post-hoc preferred head.",
+      "adaptive_ancestry": "Mandatory G0/episode/actor/fold/repetition/attempt and original eligible-source/context/feedback/cache/state/issuer lineage whenever applicable; global products enumerate exact local parents. Scope is typed, never omitted or inferred from filename."
+    },
+    {
+      "id": "T11",
+      "name": "metrics_and_report",
+      "schema": "Private per-case and per-dataset metrics/intervals, all paired deltas, expected/valid/failed/abstained/undefined counts, complete source/method/exposure/claim links, unavailable historical parity statuses and qualifications. Includes all43 S_df choices, complete12-summary support per fold, seven selected-policy deltas, all28 fixed-control effects and H01–H05 reporting roles; undefined choices stay unavailable.",
+      "adaptive_ancestry": "Mandatory G0/episode/actor/fold/repetition/attempt and original eligible-source/context/feedback/cache/state/issuer lineage whenever applicable; global products enumerate exact local parents. Scope is typed, never omitted or inferred from filename."
+    },
+    {
+      "id": "T12",
+      "name": "issuer_receipt",
+      "schema": "Trusted campaign/call/parent IDs, monotone ordinal, unpredictable issuer token, exact source/mount/config and input/output digests, process identity, launch/start/end clocks, original exit/signal/timeout/forced-stop/reaped state, CPU/GPU/RAM/disk/output observations, errors, cumulative budget and reuse source receipt. Candidate output never substitutes for issuer records. Includes original source-generation/agent/tool request and completion, context/mount/cache parent roots and exact feedback releases; failure/resource status never authorizes semantic cross-fold reuse.",
+      "adaptive_ancestry": "Mandatory G0/episode/actor/fold/repetition/attempt and original eligible-source/context/feedback/cache/state/issuer lineage whenever applicable; global products enumerate exact local parents. Scope is typed, never omitted or inferred from filename."
+    },
+    {
+      "id": "T13",
+      "name": "closed_collection",
+      "schema": "Exact ordered expected logical product set, every member status/digest and source/state/query/inference receipt link, independent bank IDs, global seal; no post-close writes or target access before acceptance. Includes pre-exposure G0 seal, all local adaptation closures, every reference selection seal and zero pending prediction/selection episodes before target admission.",
+      "adaptive_ancestry": "Mandatory G0/episode/actor/fold/repetition/attempt and original eligible-source/context/feedback/cache/state/issuer lineage whenever applicable; global products enumerate exact local parents. Scope is typed, never omitted or inferred from filename."
+    },
+    {
+      "id": "T14",
+      "name": "scientific_reasoning_report",
+      "schema": "One record for eachCL01–CL24: claimID, supported|contradicted|indeterminate, exact releasedmetric/product/source evidence IDs, numericalstatement, uncertainty/scope, counterevidence/alternative, proposedfalsifier andinformation/costlimits. Originalpre-scorehypotheses andpostscoreinterpretation separatelytimestamped; no prediction updates.",
+      "adaptive_ancestry": "Mandatory G0/episode/actor/fold/repetition/attempt and original eligible-source/context/feedback/cache/state/issuer lineage whenever applicable; global products enumerate exact local parents. Scope is typed, never omitted or inferred from filename."
+    }
+  ],
+  "state_machine": "G0 PRE-EXPOSURE PROCEDURE SEALED -> eligible CORPUS PARENT SEALED -> separate E contexts DATA/SPLIT ADMITTED -> finite local GENERATE/PREPARE/PRETRAIN/FIT/VALIDATE -> local SOURCE/SELECTION/DEVELOPMENT CLOSED -> STATE SEALED -> QUERY/INFER/DIAGNOSE or ABSTAIN -> PROCESS REAPED -> COMPLETE COLLECTION/ALL SELECTORS/ALL BRANCHES CLOSED -> TARGET JOIN -> METRICS -> aggregate RELEASE -> fresh A13 REPORT. B01–B09 in ADAPTIVE_INFORMATION_CONTRACT specify chronological parent receipts. No cross-fold or score-to-learning backedge; failures preserve full required scope.",
+  "controls": "See GATES_CONTROLS.json for declarative positive, adversarial, no-tools and missing-reference traces. These have not been executed.",
+  "budget_requirements": "Before launch, gateG20 must bind numerical CPU/GPU/RAM/time/storage/output/search/call limits from qualified profiling and a scientific union schedule. No arbitrary hardcoded budget is claimed from paperwork. Identical per-method policy across A/B; failed attempts and inherited checkpoints counted; independent reference bank cost reported separately. G20 also freezes finite source-generation/agent/tool/validation/selector/retry overhead per E and whole campaign before G0; no donation of unused budget or successes to adapt a later fold. Cost-qualified schedules may share only eligible immutable parents.",
+  "arbitrary_method_limit": "Participant package implements the learning itself. Dataset/operator adapters authenticate and route data; they do not secretly train a fixed stand-in. Scientific method validity, unseen-target access and isolation require qualified audits beyond static source matching.",
+  "resource_capability_schema": {
+    "fields": [
+      "issuer/campaign/call identifiers",
+      "positive finitecpu_seconds,accelerator_seconds,wall_seconds,max_rss_bytes,gpu_memory_bytes,scratch_bytes,output_bytes",
+      "positive integermax_dev_requests,max_processes,max_threads",
+      "absolute monotonicdeadline_ns",
+      "alloweddevices anddependency/source digests",
+      "parentbudget andcumulative consumedresources"
+    ],
+    "validation": "Reject missing,negative,NaN,infiniteorunapprovedcapability beforelaunch; superviseactualuse. Checkdeadlineatadmission,immediatelybeforelaunch,duringpolling andatcompletion. Exhaustion/forcedwait/termination/reapingallretained. No defaultunboundedbudget. ExactcampaignvaluesrequireG20profiling/source-feasibilityauthorization."
+  },
+  "transport_safety": "Allrequest/response/artifactpaths ordinarycontainedfiles; rejectsymlinks/pathtraversal/hardlinkaliases wherecustodyunclear, oversizeheaders/shapeproducts,dtypes/objectarrays andduplicateentries beforeallocation. Immutableoutputsnapshot withoriginal issuerreceipt; stateopaqueanduntrusted, neverdeserialized inevaluator. Fulllegacyclassification8GBlimitretained; additionalproducts haveexplicitnewcapabilities underG20.",
+  "adaptive_contract": "ADAPTIVE_INFORMATION_CONTRACT.json",
+  "reference_selection_contract": "REFERENCE_SELECTION_CONTRACT.json"
+}
