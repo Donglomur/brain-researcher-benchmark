@@ -90,8 +90,8 @@ def main():
         if action=='validate':result.update(status='valid_prediction_contract',private_assets_read=False);return result,0
         stage='private_score';reference=references(assets)
         def private_loader(case):
-            p=pinned('/targets/'+case+'.npz',assets['private']['targets'][case],100000)
             result['target_loader_invocations']+=1
+            p=pinned('/targets/'+case+'.npz',assets['private']['targets'][case],100000)
             with np.load(p,allow_pickle=False)as z:values={k:z[k]for k in z.files}
             require(set(values)=={'trial_ids','labels','case_id'}and str(values['case_id'])==case and np.array_equal(values['trial_ids'],ids[case]),'Exact private target/public ID join')
             return values['labels']
