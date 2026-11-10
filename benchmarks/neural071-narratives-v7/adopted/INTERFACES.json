@@ -1,0 +1,182 @@
+{
+  "common_fields": [
+    "protocol",
+    "version",
+    "generation",
+    "context_id",
+    "stage_id",
+    "method_id",
+    "caller_source",
+    "operative_source_manifest",
+    "parent_request",
+    "original_receipt",
+    "input_descriptors",
+    "output_reservations",
+    "resource_profile",
+    "monotonic_start",
+    "utc_start",
+    "method_prior_identity",
+    "clock_conventions_identity",
+    "historical_layer8_direct_consumer",
+    "evaluation_label"
+  ],
+  "design_evidence": {
+    "clock_conventions_identity": "37ad4e48f44987f2acc029e08ad750d85ca383a076cf76ab9f9166172ff90876",
+    "evaluation_label": "exploratory_public_corpus_with_shared_corpus_prior",
+    "method_prior_identity": "61a88dea57636c784e240611ff456cbf46e50de3aee331df8834c3f8987e5566"
+  },
+  "entries": [
+    {
+      "effect_before_reservation": "reject",
+      "inputs": [
+        "fit_word_occurrences",
+        "fit_support",
+        "method_source"
+      ],
+      "name": "FeatureFit",
+      "outputs": [
+        "frequency_state"
+      ],
+      "status": "DESIGN_ONLY",
+      "unknown_fields": "reject"
+    },
+    {
+      "effect_before_reservation": "reject",
+      "inputs": [
+        "frequency_state",
+        "allowed_primitives",
+        "ordered_support"
+      ],
+      "name": "FeatureTransform",
+      "outputs": [
+        "arm_legacy_and_strong_features"
+      ],
+      "status": "DESIGN_ONLY",
+      "unknown_fields": "reject"
+    },
+    {
+      "effect_before_reservation": "reject",
+      "inputs": [
+        "mode_allowed_view",
+        "matched_profile",
+        "public_methods"
+      ],
+      "name": "CandidateAuthor",
+      "outputs": [
+        "actual_transcript",
+        "sealed_program",
+        "pre_score_policy"
+      ],
+      "status": "DESIGN_ONLY",
+      "unknown_fields": "reject"
+    },
+    {
+      "effect_before_reservation": "reject",
+      "inputs": [
+        "sealed_program",
+        "allowed_train",
+        "matched_profile"
+      ],
+      "name": "CandidateFit",
+      "outputs": [
+        "actual_state",
+        "original_receipt"
+      ],
+      "status": "DESIGN_ONLY",
+      "unknown_fields": "reject"
+    },
+    {
+      "effect_before_reservation": "reject",
+      "inputs": [
+        "sealed_program",
+        "actual_state",
+        "allowed_queryX"
+      ],
+      "name": "CandidateInfer",
+      "outputs": [
+        "prediction",
+        "original_receipt"
+      ],
+      "status": "DESIGN_ONLY",
+      "unknown_fields": "reject"
+    },
+    {
+      "effect_before_reservation": "reject",
+      "inputs": [
+        "private_train",
+        "method",
+        "inner_support_and_parameters"
+      ],
+      "name": "ReferenceFit",
+      "outputs": [
+        "complete_state",
+        "all_actual_fit_receipts"
+      ],
+      "status": "DESIGN_ONLY",
+      "unknown_fields": "reject"
+    },
+    {
+      "effect_before_reservation": "reject",
+      "inputs": [
+        "complete_state",
+        "allowed_queryX",
+        "same_method_and_support"
+      ],
+      "name": "ReferenceInfer",
+      "outputs": [
+        "prediction",
+        "actual_receipt"
+      ],
+      "status": "DESIGN_ONLY",
+      "unknown_fields": "reject"
+    },
+    {
+      "effect_before_reservation": "reject",
+      "inputs": [
+        "all10206captures",
+        "all_nested_states",
+        "all_cost_closures",
+        "all_declarations"
+      ],
+      "name": "Barrier",
+      "outputs": [
+        "scoped_target_grant_or_target_free_failure"
+      ],
+      "status": "DESIGN_ONLY",
+      "unknown_fields": "reject"
+    },
+    {
+      "effect_before_reservation": "reject",
+      "inputs": [
+        "scoped_target_grant",
+        "full_targets",
+        "fixed_family"
+      ],
+      "name": "ScoreReport",
+      "outputs": [
+        "full_metrics",
+        "original_report_request",
+        "closed_report"
+      ],
+      "status": "DESIGN_ONLY",
+      "unknown_fields": "reject"
+    },
+    {
+      "effect_before_reservation": "reject",
+      "inputs": [
+        "blinded_sealed_analysis",
+        "fixed_full_metrics",
+        "rubric"
+      ],
+      "name": "InterpretationReview",
+      "outputs": [
+        "two_original_reviews",
+        "adjudication_if_needed"
+      ],
+      "status": "DESIGN_ONLY",
+      "unknown_fields": "reject"
+    }
+  ],
+  "join_rule": "Exact identities and applicability must follow current generation through source/features/state/capture/barrier/report; false global-independence and untouched-test claims refuse admission.",
+  "schema": "prospective_exact_interfaces_v1"
+}
