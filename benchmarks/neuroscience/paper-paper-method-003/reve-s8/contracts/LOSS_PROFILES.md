@@ -1,0 +1,39 @@
+# Reconstruction objective profiles and exact denominators
+
+This is the normative S2 repair for REVE-D02. Paper Methods 2.4 Eq.1 visibly averages L1 norms of patch vectors. Retained src/models/mae.py uses F.l1_loss without a reduction override on the primary and secondary masked tensors. The former sums absolute errors within a vector; the latter averages elements. They must not share an unqualified scalar name.
+
+## Definitions
+
+For component j in {primary, secondary}, example b, masked patch m, and sample t, let a[j,b,m,t] be the absolute reconstruction error in the declared signal units. Define E[j,b] = sum_m sum_t a[j,b,m,t], M[j,b] = number of distinct included masked patch vectors, and N[j,b] = sum_m w[j,b,m] valid scalar samples. Padding is never a valid sample. Record batch size B, all per-example sums/counts, and E[j] = sum_b E[j,b], M[j] = sum_b M[j,b], N[j] = sum_b N[j,b]. The specified REVE patch width is w=200. An empty mask or zero denominator is an invalid objective, not a zero loss.
+
+The literal per-example patch objective is E[j,b]/M[j,b]. The sample-mean counterpart is E[j,b]/N[j,b]. For a common fixed w with the SAME patches, weighting, signal scale and batch reduction, L_patch[j] = w L_sample[j], hence factor 200 at width 200. The identity does not remove the underlying mask, ordering, layer or train/eval discrepancies.
+
+## Named profiles
+
+* R-paper.patch_L1: use the vector L1 sum within each patch and an arithmetic mean over the masked patch set in Eq.1, separately for primary and secondary. The paper does not fully identify batch/rank/accumulation aggregation. The design's explicit operational extension is pooled_mask_v1: E[j]/M[j] within an optimizer-call microbatch. This matches the literal per-input formula when all M[j,b] agree. Its ragged-batch weighting is a prospective extension, not recovered historical intent. Retain per-example_patch_mean = (1/B) sum_b E[j,b]/M[j,b] as a separately named diagnostic; it cannot replace pooled_mask_v1 when M varies. Historical batch qualification stays open.
+* R-native.sample_L1: retain the exact ordinary source F.l1_loss mean over all elements of the actual selected rectangular masked tensor for each call: E[j]/N[j]. Neither explicit padding inclusion nor a ragged-tensor reconstruction is silently introduced into this native profile. Actual returned tensor shape, mask identity, source revision and resolved configuration bind this convention. Native defaults are not asserted to recover the authors' training history.
+* P-sample_mean: a prospective sample-mean objective can be deliberately selected under the protected improvement protocol and made public identically to A/B. It is labeled prospective, with the complete pooling/accumulation recipe fixed before execution. It is not a silent correction of R-paper and not an extra canonical assignment.
+
+For the declared pooled-mask versus element-mean pair with identical fixed-width support, L_patch[j] = 200 L_sample[j] also holds for a batch because N[j]=200 M[j]. If an equal-example reduction is compared to a pooled reduction with unequal M[j,b], the relation is not generally a single factor; the per-example and pooled terms must both be retained. Epoch-level displayed loss is formed from the chosen raw numerator/denominator aggregation, and its weighting is named. A rolling EMA, equal-batch average and ratio of corpus-wide sums are different displays.
+
+## Two losses, coefficients and optimization
+
+The dual-loss recipe uses L_total = alpha (L_primary + lambda L_secondary), with alpha=1 and lambda=0.1 for the stated dual-loss condition; the primary-only ablation uses lambda=0. Source token_avg_lambda is separately bound to its resolved native configuration. Both components reconstruct the same admitted masked patch/sample support unless a separately named changed objective says otherwise. Component profile, coefficient and denominator must be independent fields, not inferred from the word L1.
+
+When both components change from sample mean to patch sum on identical fixed-width support, the complete scalar objective and its gradient are scaled by w at alpha fixed. This is NOT proof of identical finite training: clipping, optimizer epsilon, adaptive update conventions, weight decay, precision, loss scaling, accumulated gradients, schedule and stopping/selection criteria can respond differently. Do not reuse a trained state across these profiles merely because unconstrained minimizers may coincide. A report-only multiplication by 200 does not retroactively change the training objective or producer receipt.
+
+A mixed profile is also not the same dual-loss ablation. Scaling only the primary component changes the secondary's relative coefficient from lambda to lambda/w when expressed in sample-mean primary units; scaling only the secondary changes it to lambda*w. If a prospective experiment deliberately uses alpha=1/w to compensate a common scaling, name and freeze that experiment and all optimizer conventions. It is not permission to declare existing states numerically equivalent. No compensating LR or lambda change is made implicitly.
+
+Native secondary reconstruction runs only in training with the enabled pooled-context path; evaluation of primary-only loss is not a measured dual-loss value. The layer list, input-embedding inclusion, gradients and mask order remain distinct unresolved source issues. An absent secondary term is recorded absent with reason and phase, not fabricated as observed zero.
+
+## ReconstructionOutput / LossCountTrace
+
+Required fields are objective_profile_id; profile/source/config pins; width and exact mask/tensor identity; signal units/normalization; component IDs; E[j,b], M[j,b], N[j,b], B and their pooled sums; valid/padded/omitted sample disposition; within-patch, patch, example, batch, rank and accumulation reductions; alpha/lambda and secondary enabled/observed status; primary, secondary and total values with phase; backpropagated scalar identity; gradient scaling/clipping policy; optimizer/scheduler update identity; checkpoint/producer/context/exposure receipts. An epoch summary retains raw sums and denominators plus its weighting. Displayed total, unweighted components and an unqualified source-reported scalar are separate fields.
+
+A future independent formula oracle consumes admitted reconstructed/target patch objects and exact support to derive both conventions from absolute-error sums, independent of the participant/native loss implementation. It checks missing/duplicated patches, width, nonempty denominators, weights, component coefficients and reduction order. It does not accept a caller's loss scalar or reproduce only the same F.l1_loss call. Raw reconstruction arrays stay private; this design creates none.
+
+## Fair reproduction and references
+
+R-paper is judged against the paper-literal profile with its explicit operational aggregation and historical-intent limitations. A paper-only actor is never penalized for not discovering native sample normalization. R-native remains an operator/source audit; its sample-mean recipe and source-only details are not leaked into A through the operator discrepancy report. Both A/B receive the common declared paper objective and public denominator/output definitions. If P-sample_mean is selected, its convention is explicitly common to both and scored in its own condition.
+
+Independent reference banks have separate recipe/state/trace identities for paper-literal and native profiles. Existing source downstream case IDs and all original ablation products remain; profile qualification does not create new tasks or invent author runs. Same-support scalar conversion is a diagnostic, not substitution of one profile's learned checkpoint for another. G08/G09/G22 remain open for formula, training and scoring qualification, including unresolved original batch aggregation and historical intention.

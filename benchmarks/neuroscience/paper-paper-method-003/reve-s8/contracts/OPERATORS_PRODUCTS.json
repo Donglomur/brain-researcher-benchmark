@@ -1,0 +1,546 @@
+{
+  "S2_contracts": [
+    "EXPOSURE_CONTRACT.json",
+    "EXPOSURE_DOMAINS.md",
+    "LOSS_PROFILES.md",
+    "SCHEDULE_AND_MULTIPLICITY.md"
+  ],
+  "additional_legacy_case_ids_created": 0,
+  "complete_legacy_case_count": 2144,
+  "confirmatory_contrasts": {
+    "arms": 2,
+    "direct_A_B_exploratory": 20,
+    "logical_reference_families": 80,
+    "per_arm": 80,
+    "union": 160
+  },
+  "default_product_binding_fields": [
+    "programme_identity",
+    "family_condition_role",
+    "source_environment_identity",
+    "complete_support_identity",
+    "upstream_state_identities",
+    "fitted_data_dependencies",
+    "parameter_and_unit_schema",
+    "recipe_and_randomness",
+    "original_process_receipt",
+    "resource_receipt",
+    "status_and_missingness",
+    "object_manifest",
+    "domain_id",
+    "context_admission_receipt",
+    "source_exposure_receipt",
+    "operation_exposure_receipts",
+    "applicable_reuse_admission_receipt",
+    "objective_profile_if_applicable",
+    "schedule_profile_if_applicable"
+  ],
+  "fixed_reference_families_before_run_multiplicity": 80,
+  "nonfewshot_historical_run_count": null,
+  "principal_source_scientific_rows": 113,
+  "prospective_cells": 20,
+  "schema": "reve_full_scientific_operator_graph_v1",
+  "scientific_execution_performed": false,
+  "scope": "Logical type graph; conditionalfewshot/soup branches areexpandedfromcompletefrozenfamilyroster,notignoredasoptionalfeatures. Support_roster isoperatorprivate; participantsreceiveonlythedeclaredprojection at eachcall. Allrequiredscientificproductsare joinedbeforeglobalbarrier. LogicalDAGorder differsfromstageidentifierorder: S22 followsS06 andprecedesS08; S03 isphysicalingest,notparticipantscientificpreprocessing.",
+  "stage_count": 22,
+  "stages": [
+    {
+      "actor": "operator",
+      "id": "S01",
+      "implemented": false,
+      "operation": "source_and_rights",
+      "produced_types": [
+        "source_profile",
+        "rights_inventory",
+        "history_closure"
+      ],
+      "required_upstream_types": [],
+      "semantics": "Ordinary primary/source identities and complete asset terms; no authentic acquisition yet."
+    },
+    {
+      "actor": "operator",
+      "id": "S02",
+      "implemented": false,
+      "operation": "corpus_identity",
+      "produced_types": [
+        "corpus_manifest",
+        "alias_exclusion_map"
+      ],
+      "required_upstream_types": [
+        "source_profile",
+        "rights_inventory"
+      ],
+      "semantics": "Full92sources, ten downstream datasets and five XFT sources; privatealiases; originalcount discrepancies retained."
+    },
+    {
+      "actor": "operator",
+      "id": "S03",
+      "implemented": false,
+      "operation": "physical_ingest_and_identity",
+      "produced_types": [
+        "raw_physical_views",
+        "physical_mv_views",
+        "geometry_clock",
+        "ingest_receipt"
+      ],
+      "required_upstream_types": [
+        "corpus_manifest",
+        "alias_exclusion_map"
+      ],
+      "semantics": "Operator establishes objectidentity, sourceclock, physicalunits, permittedobservations and raw/physicalprojections only. Scientificfiltering/referencing/resampling/normalization remain participant/reference prepare_signal products; operator canonical profiles are independent references, not hidden participant methods."
+    },
+    {
+      "actor": "operator",
+      "id": "S04",
+      "implemented": false,
+      "operation": "seal_support",
+      "produced_types": [
+        "support_roster",
+        "private_calibration_map",
+        "private_targets",
+        "public_output_index",
+        "exposure_domain_roster",
+        "private_alias_overlap_graph",
+        "permitted_label_grants"
+      ],
+      "required_upstream_types": [
+        "raw_physical_views",
+        "geometry_clock",
+        "alias_exclusion_map"
+      ],
+      "semantics": "Original2144slots plus separately selected missingISRUCproducts; all runs/conditions/families; split feasibility before learnerlaunch. Before any overlapping development labels, resolve the complete all-family/profile overlap graph and opaque-domain grants. No population changes."
+    },
+    {
+      "actor": "participant_or_reference",
+      "id": "S05",
+      "implemented": false,
+      "operation": "register_build",
+      "produced_types": [
+        "registered_source",
+        "executable",
+        "build_receipts",
+        "context_admission_receipt",
+        "source_exposure_receipt"
+      ],
+      "required_upstream_types": [
+        "source_profile",
+        "public_output_index",
+        "exposure_domain_roster",
+        "private_alias_overlap_graph",
+        "permitted_label_grants"
+      ],
+      "semantics": "Actual arbitrary participant source or separate fixed reference source; independentA/Bactors. Admit clean developer/source-generation context before label release; independently version local source/builds; no exposed transcript cloning."
+    },
+    {
+      "actor": "participant_or_reference",
+      "id": "S06",
+      "implemented": false,
+      "operation": "plan_programme",
+      "produced_types": [
+        "method_graph",
+        "budget_allocation",
+        "search_policy",
+        "domain_method_plan",
+        "exposure_propagation_policy",
+        "reuse_policy",
+        "A_B_confirmatory_manifest"
+      ],
+      "required_upstream_types": [
+        "registered_source",
+        "executable",
+        "support_roster",
+        "context_admission_receipt",
+        "source_exposure_receipt",
+        "exposure_domain_roster"
+      ],
+      "semantics": "Only actor-visible support projection; completevariant/state reusegraph; no private map or targets exposed. Domain-local source/search only; no feedback joins across conflicting contexts; fixed160contrast union before relevant outcomes."
+    },
+    {
+      "actor": "participant_or_reference",
+      "id": "S22",
+      "implemented": false,
+      "operation": "prepare_signal",
+      "produced_types": [
+        "prepared_training_views",
+        "preprocessing_state",
+        "preprocess_mapping_receipts",
+        "operation_exposure_receipts",
+        "reuse_admission_receipts"
+      ],
+      "required_upstream_types": [
+        "executable",
+        "method_graph",
+        "raw_physical_views",
+        "geometry_clock",
+        "support_roster",
+        "context_admission_receipt",
+        "source_exposure_receipt",
+        "domain_method_plan"
+      ],
+      "semantics": "Registeredsource implements scientificfilter/reference/resampling/window/normalization withapprovedtrain/validationdependencies. Operatoringest is notparticipantmethod. Frozenpreprocessingstate isapplied insidepredict toonepermittedqueryobservation. Full source/developer/fit ancestry admitted against consumer domain; grants and failed reuse costs retained."
+    },
+    {
+      "actor": "participant_or_reference",
+      "id": "S07",
+      "implemented": false,
+      "operation": "construct_architecture",
+      "produced_types": [
+        "architecture_manifest",
+        "parameter_schema",
+        "mask_loss_recipe",
+        "operation_exposure_receipts",
+        "reuse_admission_receipts",
+        "objective_profile",
+        "schedule_profile"
+      ],
+      "required_upstream_types": [
+        "method_graph",
+        "context_admission_receipt",
+        "source_exposure_receipt",
+        "domain_method_plan"
+      ],
+      "semantics": "Small/Base/Large and all source variant graphs; source-intended/native differences explicit. Full source/developer/fit ancestry admitted against consumer domain; grants and failed reuse costs retained. LOSS_PROFILES.md separates vector patch L1 from native sample mean; complete coefficients/batch convention and exact cyclic schedule profile."
+    },
+    {
+      "actor": "participant_or_reference",
+      "id": "S08",
+      "implemented": false,
+      "operation": "pretrain",
+      "produced_types": [
+        "pretrain_states",
+        "loss_count_traces",
+        "training_receipts",
+        "operation_exposure_receipts",
+        "reuse_admission_receipts",
+        "step_exposure_trace"
+      ],
+      "required_upstream_types": [
+        "executable",
+        "method_graph",
+        "prepared_training_views",
+        "geometry_clock",
+        "architecture_manifest",
+        "mask_loss_recipe",
+        "preprocessing_state",
+        "preprocess_mapping_receipts",
+        "context_admission_receipt",
+        "source_exposure_receipt",
+        "domain_method_plan",
+        "objective_profile",
+        "schedule_profile"
+      ],
+      "semantics": "Trainingonlyfullcorpus orsource-separateprofiles; completeallvariantstates andcosts. Full source/developer/fit ancestry admitted against consumer domain; grants and failed reuse costs retained. Raw per-component/per-example sums, patch/sample counts, alpha/lambda, backprop scalar, accumulation and optimizer/scheduler trace; no checkpoint equivalence by scalar rescaling."
+    },
+    {
+      "actor": "participant_or_reference",
+      "id": "S09",
+      "implemented": false,
+      "operation": "adapt_search",
+      "produced_types": [
+        "adapted_states",
+        "search_receipts",
+        "selected_state_receipt",
+        "operation_exposure_receipts",
+        "reuse_admission_receipts"
+      ],
+      "required_upstream_types": [
+        "executable",
+        "pretrain_states",
+        "prepared_training_views",
+        "support_roster",
+        "search_policy",
+        "preprocessing_state",
+        "preprocess_mapping_receipts",
+        "context_admission_receipt",
+        "source_exposure_receipt",
+        "domain_method_plan"
+      ],
+      "semantics": "Approvedtraining/validation projections only; sourceprofiles andprotectedvalidation-only policies separated. Full source/developer/fit ancestry admitted against consumer domain; grants and failed reuse costs retained."
+    },
+    {
+      "actor": "participant_or_reference",
+      "id": "S10",
+      "implemented": false,
+      "operation": "cross_finetune",
+      "produced_types": [
+        "xft_states",
+        "xft_receipts",
+        "operation_exposure_receipts",
+        "reuse_admission_receipts"
+      ],
+      "required_upstream_types": [
+        "executable",
+        "pretrain_states",
+        "prepared_training_views",
+        "alias_exclusion_map",
+        "preprocessing_state",
+        "preprocess_mapping_receipts",
+        "context_admission_receipt",
+        "source_exposure_receipt",
+        "domain_method_plan"
+      ],
+      "semantics": "ExactlyfiveXFTsources; no protectedperson/recording contamination. Full source/developer/fit ancestry admitted against consumer domain; grants and failed reuse costs retained."
+    },
+    {
+      "actor": "participant_or_reference",
+      "id": "S11",
+      "implemented": false,
+      "operation": "soup_members",
+      "produced_types": [
+        "member_states",
+        "member_selection_receipts",
+        "operation_exposure_receipts",
+        "reuse_admission_receipts"
+      ],
+      "required_upstream_types": [
+        "executable",
+        "adapted_states",
+        "search_policy",
+        "context_admission_receipt",
+        "source_exposure_receipt",
+        "domain_method_plan"
+      ],
+      "semantics": "Allrequiredindependentseeds/members, noqueryselection; allfitcosts retained. Full source/developer/fit ancestry admitted against consumer domain; grants and failed reuse costs retained."
+    },
+    {
+      "actor": "participant_or_reference",
+      "id": "S12",
+      "implemented": false,
+      "operation": "weight_soup",
+      "produced_types": [
+        "soup_states",
+        "soup_compatibility_receipt",
+        "operation_exposure_receipts",
+        "reuse_admission_receipts"
+      ],
+      "required_upstream_types": [
+        "executable",
+        "member_states",
+        "member_selection_receipts",
+        "context_admission_receipt",
+        "source_exposure_receipt",
+        "domain_method_plan"
+      ],
+      "semantics": "Actualarithmeticcompatibleparameteraveraging; noaccuracyaverage substitution. Full source/developer/fit ancestry admitted against consumer domain; grants and failed reuse costs retained."
+    },
+    {
+      "actor": "operator",
+      "exposure_receipt_phase_constraint": "Only all complete pre-query S05-S12/S22 producer receipts; S15/S17 child receipts are checked later by S18, never required here before they exist.",
+      "id": "S13",
+      "implemented": false,
+      "operation": "freeze_programme",
+      "produced_types": [
+        "frozen_programme"
+      ],
+      "required_upstream_types": [
+        "registered_source",
+        "method_graph",
+        "pretrain_states",
+        "adapted_states",
+        "xft_states",
+        "soup_states",
+        "selected_state_receipt",
+        "preprocessing_state",
+        "preprocess_mapping_receipts",
+        "exposure_domain_roster",
+        "private_alias_overlap_graph",
+        "context_admission_receipt",
+        "source_exposure_receipt",
+        "operation_exposure_receipts",
+        "reuse_admission_receipts",
+        "objective_profile",
+        "schedule_profile",
+        "step_exposure_trace"
+      ],
+      "semantics": "Completeglobalmethod/state/policy freezebeforequery; unusedfamilystate nodes explicitnotomitted. Audit early context isolation and all local source revisions; do not treat this late freeze as cleansing previous exposure."
+    },
+    {
+      "actor": "operator",
+      "id": "S14",
+      "implemented": false,
+      "operation": "issue_calibration",
+      "produced_types": [
+        "one_case_calibration_view"
+      ],
+      "required_upstream_types": [
+        "frozen_programme",
+        "private_calibration_map",
+        "support_roster",
+        "exposure_domain_roster",
+        "private_alias_overlap_graph",
+        "permitted_label_grants"
+      ],
+      "semantics": "Freshactorowns onlyits2Nlabels; fullmapneverparticipantvisible. Fresh case child of label-clean RV-11 common method; own2N calibration exception only, no source/method feedback to parents or siblings."
+    },
+    {
+      "actor": "participant_or_reference",
+      "id": "S15",
+      "implemented": false,
+      "operation": "calibrate_case",
+      "produced_types": [
+        "case_state",
+        "calibration_receipt",
+        "operation_exposure_receipts",
+        "reuse_admission_receipts"
+      ],
+      "required_upstream_types": [
+        "executable",
+        "frozen_programme",
+        "one_case_calibration_view",
+        "context_admission_receipt",
+        "source_exposure_receipt",
+        "domain_method_plan"
+      ],
+      "semantics": "Case-onlyNCM/EA/learner fitting beforequeryinput; nootherdrawstate. Full source/developer/fit ancestry admitted against consumer domain; grants and failed reuse costs retained."
+    },
+    {
+      "actor": "operator",
+      "id": "S16",
+      "implemented": false,
+      "operation": "issue_query",
+      "produced_types": [
+        "one_query_view"
+      ],
+      "required_upstream_types": [
+        "frozen_programme",
+        "support_roster",
+        "raw_physical_views",
+        "geometry_clock",
+        "case_state"
+      ],
+      "semantics": "OneepochorISRUC20epochsequence; case_state onlywherecalibrationneeded; allotherrolesusefrozenadaptedstate."
+    },
+    {
+      "actor": "participant_or_reference",
+      "id": "S17",
+      "implemented": false,
+      "operation": "predict",
+      "produced_types": [
+        "prediction_objects",
+        "prediction_receipts",
+        "operation_exposure_receipts",
+        "reuse_admission_receipts"
+      ],
+      "required_upstream_types": [
+        "executable",
+        "frozen_programme",
+        "case_state",
+        "one_query_view",
+        "preprocessing_state",
+        "context_admission_receipt",
+        "source_exposure_receipt",
+        "domain_method_plan"
+      ],
+      "semantics": "Actualregisteredsource inference; optionalcase_state onlydeclaredfewshot roles; noqueryfit orcrossquerymutablecache. Full source/developer/fit ancestry admitted against consumer domain; grants and failed reuse costs retained."
+    },
+    {
+      "actor": "collector",
+      "id": "S18",
+      "implemented": false,
+      "operation": "collect_closed",
+      "produced_types": [
+        "candidate_bank",
+        "reference_bank",
+        "product_bank",
+        "terminal_resource_ledger"
+      ],
+      "required_upstream_types": [
+        "public_output_index",
+        "prediction_objects",
+        "prediction_receipts",
+        "training_receipts",
+        "calibration_receipt",
+        "soup_compatibility_receipt",
+        "source_profile",
+        "corpus_manifest",
+        "alias_exclusion_map",
+        "architecture_manifest",
+        "parameter_schema",
+        "mask_loss_recipe",
+        "loss_count_traces",
+        "preprocess_mapping_receipts",
+        "pretrain_states",
+        "adapted_states",
+        "xft_states",
+        "member_states",
+        "soup_states",
+        "exposure_domain_roster",
+        "private_alias_overlap_graph",
+        "context_admission_receipt",
+        "source_exposure_receipt",
+        "operation_exposure_receipts",
+        "reuse_admission_receipts",
+        "objective_profile",
+        "schedule_profile",
+        "step_exposure_trace",
+        "A_B_confirmatory_manifest"
+      ],
+      "semantics": "Completecondition-specificrequiredproducts; originalprocess/byte/provenance admission; no targets. Check complete source-generation/preprocessing/search/calibration lineage, not only final query input; invalid exposure does not remove mandatory cases."
+    },
+    {
+      "actor": "operator",
+      "id": "S19",
+      "implemented": false,
+      "operation": "global_barrier",
+      "produced_types": [
+        "closed_programme_receipt"
+      ],
+      "required_upstream_types": [
+        "candidate_bank",
+        "reference_bank",
+        "product_bank",
+        "terminal_resource_ledger"
+      ],
+      "semantics": "Botharms/purposes/allfamilies/draws andmandatorybanksclosed; failedproductsstillcountagainstcoverage."
+    },
+    {
+      "actor": "grader",
+      "id": "S20",
+      "implemented": false,
+      "operation": "protected_grade",
+      "produced_types": [
+        "case_metrics",
+        "family_metrics",
+        "paired_differences",
+        "uncertainty",
+        "coverage_report"
+      ],
+      "required_upstream_types": [
+        "closed_programme_receipt",
+        "candidate_bank",
+        "reference_bank",
+        "private_targets",
+        "support_roster",
+        "objective_profile",
+        "A_B_confirmatory_manifest"
+      ],
+      "semantics": "Independentmetricsfromactualpredictions; nolearning/imports; exactsupport/estimands. Independent patch/sample formula references and160slot A/B Holm union; direct20 A/B effects exploratory; unknown historic batching remains unqualified."
+    },
+    {
+      "actor": "grader_and_participant_report",
+      "id": "S21",
+      "implemented": false,
+      "operation": "scientific_report",
+      "produced_types": [
+        "full_paper_report"
+      ],
+      "required_upstream_types": [
+        "architecture_manifest",
+        "corpus_manifest",
+        "loss_count_traces",
+        "family_metrics",
+        "paired_differences",
+        "uncertainty",
+        "coverage_report",
+        "terminal_resource_ledger",
+        "exposure_domain_roster",
+        "objective_profile",
+        "schedule_profile",
+        "step_exposure_trace",
+        "A_B_confirmatory_manifest"
+      ],
+      "semantics": "Allsourceclaims/tables/negative/nulls/limitations; noSOTAorreadinesswithoutqualifiedevidence. Report all exposure refusals, normalization/schedule profile distinctions, both complete arms and failures; no scientific readiness."
+    }
+  ],
+  "versioned_local_development": "S05/S06/S22/S08-S12 may repeat locally before S13 using immutable version/attempt edges. No backward sharing across conflicting domains; physical implementation and exact unrolled job budget remain gated."
+}

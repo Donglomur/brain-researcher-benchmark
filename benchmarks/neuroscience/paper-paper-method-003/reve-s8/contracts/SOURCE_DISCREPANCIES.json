@@ -1,0 +1,351 @@
+{
+  "S2_repairs": [
+    "REVE-D01",
+    "REVE-D02",
+    "N01",
+    "N02"
+  ],
+  "all_static": true,
+  "findings": [
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Fullversion/name/alias reconciliation before fullcorpus qualification.",
+      "id": "D01",
+      "observation": "25 namedMOABB +55namedOpenNeuro +2PhysioNet+6Other+TUH =89literalnames versus92declared; platformcounts27MOABB/56OpenNeuro. No omitteddatasetidentity invented.",
+      "source": "Appendix B/Table7",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Corpus enumeration"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Reconcile raw counts with source records and retain originaltable values.",
+      "id": "D02",
+      "observation": "Platformsubjects24260 versus24274total; platformhours61382 versus61415; categoryhours61414 andchannelhours61413. Rounding/exclusions/duplicateperson handling unresolved.",
+      "source": "Table7",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Corpus accounting"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Full92-source authenticated originalorregeneratedcorpusproducer, no subsetsubstitution.",
+      "id": "D03",
+      "observation": "Loader needs big/corrected/stats CSVs andmemmaps; completeoriginal rawproducer/recording/person/coordinateinventory absent. Publicredistributable release ispartial.",
+      "source": "src/utils/data_loading.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Corpus production"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Authenticateindex/clock/statisticjoins andexactexcludedwindows/channels; sourcepaperparityopen.",
+      "id": "D04",
+      "observation": "Strictduration>window, exclusiveendwindowrange, filtered-sessionenumeration usedasstatsindex, trainingchannels>6 anddroppedbatches canaltereligiblepopulation/exposure.",
+      "source": "src/utils/data_loading.py:compute_group_segments,_make_window_keys,GroupedSampler",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Native window/eligibility"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Visualequation/source-clock qualification; retainseparate adapters.",
+      "id": "D05",
+      "observation": "Nativeunfold200/stride180;nativezero-basedpatchtime\u00d7.1 versuspaper-literalone-basedexplicit scale. Paper countnotation/nonoverlap wordingambiguous.",
+      "source": "Methods2;src/models/encoder.py;public/adapter.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Patch/time conventions"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Qualifiedsourceprofile andreviewedrepairifneeded; nohiddenhybrid orclaimofnativeexecution.",
+      "id": "D06",
+      "observation": "Paperwidth1250 vsnative1216; native5-frequencyFourier625phasefeatures truncated608. Setting1250makesdiff0 andslice:-0 inretainedsource, apparentlyemptyencoding.",
+      "source": "Table6;src/configs/encoder/large.yaml;src/models/encoder.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Large architecture"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Bindtensor schemas/counts andcomputeassumptions perprofile.",
+      "id": "D07",
+      "observation": "Paper parameter/computeapproximation andnative4-layerdecoder versusFcomputeL23 needconsistentexactarchitectureandtrainableparameter census.",
+      "source": "Tables5\u20136;AppendixF;configs/decoder/base.yaml",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Parameter/decoder count"
+    },
+    {
+      "S2_addendum": "N01: Primary page6 explicitly describes cyclic trapezoidal WSD. Audit exact LR/update/restart/exposure traces, not cyclicity as a categorical mismatch; SCHEDULE_AND_MULTIPLICITY.md.",
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Freeze originalornewrecipe withoutcombining settings; effectiveglobalbatch/DDP andglobalstep traces required.",
+      "id": "D08",
+      "observation": "Paperbeta(.9,.95),LR2.4e-4,batch4096 and17epochcomputeexample versusretainedbeta(.92,.999),LR.001,batch300,epochs200. Nativecyclicschedule receivesepochiterationcount.",
+      "source": "Table5;config_train.yaml;optimizer/stable_adamw.yaml;utils/optim.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Optimizer/schedule"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Authenticate intendedmaskfraction; retainlossdenominator andliteralnativebehavior.",
+      "id": "D09",
+      "observation": "Papertext count(1\u2212Mr)\u00d7Cp versusnativefloor(Mr\u00d7Cp).",
+      "source": "Methods2;mae.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Mask count"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Explicitindexbijection/physicalclock controls beforeclaimingblockmask geometry.",
+      "id": "D10",
+      "observation": "Maskflattenformula usesnchannels\u00d7patchindex+channel whileMAEtokenflatten ischannelmajor(c h);temporalradius3 repeatedpatches isnotautomatically3swithoverlap.",
+      "source": "utils/data_loading.py:create_block_masks;models/mae.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Mask index/clock"
+    },
+    {
+      "S2_addendum": "REVE-D02: printed Eq1 averages vectorL1 patch norms, source mae.py calls element-mean F.l1_loss for each component. Same-support fixed-width loss ratio is w=200; batch weighting, coefficients and historical intent remain distinct; LOSS_PROFILES.md.",
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Separatelosscomponents andincludedlayeridentity; qualificationcannotuseprimary-onlyvalidationtotal.",
+      "id": "D11",
+      "observation": "Layerlistincludesinputembedding;secondaryloss onlytraining, notvalidation. PaperdescribespostFFNconcat andtotalloss.",
+      "source": "Methods2;models/backbone.py,mae.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Secondary loss/layer pooling"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Immutableinput geometry andtrain/eval/sourceprofile lineage, noaccumulatingnoise acrosscases.",
+      "id": "D12",
+      "observation": "Encoderforward mutatespositionsinplace duringtraining;MAEusesout-of-place noise;HFforwarddoesnotaddnoise. Sourceunitmustbemetersfor.0025= .25cm.",
+      "source": "encoder.py;mae.py;hf/reve-base/modeling_reve.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Coordinate noise"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Exactfeatureandtrainableparameter identities forTable4, noarithmeticmean substitution.",
+      "id": "D13",
+      "observation": "Native no pooling prepends learnedattentioncontextthenflattens; LPquerytokentrainable; last_avg/last/all aredifferent.",
+      "source": "models/classifier.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Pooling/head"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Preserve route-specificstaticconcern; donotclaimmain dt.py reinitializesencoder orruntimefailureobserved.",
+      "id": "D14",
+      "observation": "Legacyget_classifierdoesnot supplyrequireddropout;init_cls hastruthyconstantconditionthat wouldinitializeallLinear modules. dt.py usesdirectconstructor anddoesnotcallthislegacyinit.",
+      "source": "models/classifier.py:get_classifier;utils/initialization.py:init_cls",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Legacy classifier route"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Reportactuallyexecuted trainablemask/route; configlabelinsufficient.",
+      "id": "D15",
+      "observation": "LoRAconfiguredtrue butdt.pynevercalls get_lora_model;legacytrain_coredoes.",
+      "source": "config_dt.yaml;lora.py;dt.py;downstream_tasks/train_core.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "LoRA"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Quarantine historicalexposure; prospectivevalidation-onlyselection andglobalquerybarrier.",
+      "id": "D16",
+      "observation": "Native evaluates/printsquerytest atvalidationimprovements;Optuna objective returnsoverall_best_test.",
+      "source": "dt.py:train_stage;dt_opt.py:evaluate_trial,main",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Test-exposed selection"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Bind exactselectedstateandstagewarmstart; no assumedbestcheckpoint reload.",
+      "id": "D17",
+      "observation": "Beststate savedbuttrain_stage returnsfinalinmemorystate;LP\u2192FT mayuselaststate;standaloneevaldefaultsmodel_best.",
+      "source": "dt.py:train_stage;eval_dt.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Best versus finalstate"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Nozerosasempiricalmetric; qualifyrawlogits/probabilityrankABI andoriginalAUC-PR.",
+      "id": "D18",
+      "observation": "Maincalls binary=False,returnszeroAUROC/APplaceholders;helper usesrawlogitcolumn1 andaverageprecision.",
+      "source": "dt.py:test;eval_dt.py;eval_core.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Binary metric ABI"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Exactoriginalrun/SDprovenance orseparatelynamedprospectivevariance.",
+      "id": "D19",
+      "observation": "n_runs10controlsOptunatrials; maindt no repeatloop. Originalseeds/runN/SDddof notheld. \u00b1SDnotCI ofmean;Table22one-shot1.45/1.12ambiguous.",
+      "source": "config_dt.yaml;dt_opt.py;paperchecklist7",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Run/uncertainty ABI"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "All109IDs\u00d76runs/eventontology andfilterparity; no silentpopulationloss.",
+      "id": "D20",
+      "observation": "Paper128Hz/lowpass route versusnative highpass.3/notch60/200Hz, presentfolder slicing andmissingEDFskip.",
+      "source": "AppendixC.5;preprocessing_physio.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Physio preprocessing/support"
+    },
+    {
+      "S2_addendum": "Principal labels for BCICpeople1-7 overlap RV-11 query events; no claim of a full target barrier without early developer/source isolation.",
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "OriginalElabeljoin,timelock,EAfitting scope andpreprocess qualification.",
+      "id": "D21",
+      "observation": "NativeGDFclasscodeevents omitunjoinedElabels; cue-to-cue slicingthen2\u20136s,0.3\u201350Hz/CAR differspaper0.5\u201399.5/EA;MOABBroutealso noEA.",
+      "source": "AppendixC.5;preprocessing_bciciv2a.py;dataloader_moabb.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "BCIC EA/labels/time"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Exactmontage/person/version inventory andsource-specificsplitreport.",
+      "id": "D22",
+      "observation": "16/23/21channelconflict;epoch-indexshuffle80/20developmentnotpersonisolation;rawconverterabsent.",
+      "source": "Table1;AppendixC.8;dataloader_tuh.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "TUAB layout/split"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Biologicalaliases/rawconversion/targetclassalignment beforeprospectivequalification.",
+      "id": "D23",
+      "observation": "Nativeevent-file80/20splitcan shareperson/recording;pairmidpointgeometry mustmatchsignedderivation; sourcepreprocessingexternal.",
+      "source": "AppendixC.7;dataloader_tuh.py;position_utils.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "TUEV split/geometry"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Explicitannotation/clock/supportjoins, personaliases andbipolargeometry; nozerorowsasrealepochs.",
+      "id": "D24",
+      "observation": "Producerwrites evalbutloaderexpectsval;151nightsnotverifiedpersons;BuildEventsallocates numEvents\u22122 andcanleaveunusedrows;sourcecoords configusesactivepoleonly.",
+      "source": "preprocessing_hmc.py;configs/task/hmc.yaml",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "HMC source route"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "ActualsixEEGchannel/headerqualification, completeidentityjoin andsequenceshape adapter; unavailableuntilresolved.",
+      "id": "D25",
+      "observation": "Producerdirectories0\u201399 vsloader1\u2013100; unsortedsequence/labelzip; rawfixedcolumnselection andassumed200Hz;20epochaxisnotconsumedbyordinary3Dencoder/classifier.",
+      "source": "prepare_ISRUC.py;dataloader_isruc.py;configs/task/isruc.yaml",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "ISRUC route"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Keep2144IDs andaddmissing scientificproducts; selectedfuturecaseextension andmatched-input comparators.",
+      "id": "D26",
+      "observation": "SourceDeepSleepNet/USleepmissingfrom111principalroster;otherbaselinechinchannelcorrectionconfounds comparison.",
+      "source": "Table13;public/PANEL.json",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "ISRUC comparator omissions"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Correctlayout/sourcepath andmovie/classjoin withoutchangingbiologicalsupport.",
+      "id": "D27",
+      "observation": "Producerwritesprocessed_cbramodandC\u00d710\u00d7200layoutwhileREVEexpectsC\u00d7T andconfiguredprocessedpath; labelsderive28movieorder.",
+      "source": "preprocessing_faced.py;dataloaders.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "FACED tensor route"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Exactperson/filealiases andfilterrecipe; nofilecount=personcount.",
+      "id": "D28",
+      "observation": "Paper24MDD19controltraining versusnative42/40fileslices;0.3\u201375Hz vs0.3\u201330Hz; EO/ECmustgroupbyrealperson.",
+      "source": "AppendixC.2;preprocessing_mumtaz.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Mumtaz parity"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Explicitphysicalreference/units/filter andopaquequeryIDs; retainconditionnotclinicalstress.",
+      "id": "D29",
+      "observation": "Paper0.5\u201345filter notinconverter; A2-A1signalpositionmapsA2; sortedpairedfilesandfilenameclasssuffix.",
+      "source": "AppendixC.3;preprocessing_stress.py;configs/task/stress.yaml",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Arithmetic parity"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Privateexactperson/trial/classjoin; withinpersonsource claim distinctfromprotectedheldperson.",
+      "id": "D30",
+      "observation": "Excelcolumnsjoinedbysortedtestfiles, allsamepeopleintrain/val/test.",
+      "source": "AppendixC.4;preprocessing_speech.py",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Speech label/transfer"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Exactnames/geometry/trainqueryselectorandpairedfullsupport.",
+      "id": "D31",
+      "observation": "Countsareknown, actualselectedchannelsets and whetheradaptationtrainedonfullorsubset unresolved.",
+      "source": "Table21",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Sparse subset identity"
+    },
+    {
+      "S2_addendum": "REVE-D01: Fresh calibration/predictor processes do not cleanse principal-label-exposed developer/source/configuration ancestry. EXPOSURE_DOMAINS.md requires clean RV-11 parent context and full all-profile overlap graph before first label release; all9people/1800cases retained.",
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "OriginalABIqualification andfreshpercaseactor; prospectiveNCMexplicitseparaterecipe.",
+      "id": "D32",
+      "observation": "OriginalNCMdistance/normalization/sessiondraw/EA/XFTstatehistorynotqualified; globalcalibrationviews leakacrossdrawsifcombined.",
+      "source": "AppendixE.2;Table22",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Few-shot/XFT"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Preserveallrows andambiguities; nofavoriteconclusionreward orunsupportedgold.",
+      "id": "D33",
+      "observation": "Table18random.55numericallybeats.25 despiteprose;Table19LearnablePEalternative/MLP4Dsemanticsunclear;negativeeffectsrequired. MainTable13 REVE balancedaccuracy isbelowCBraMod whileothermetrics differ; preserve endpoint-specificnegativecomparisons.",
+      "source": "Tables17\u201320",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Ablation source semantics"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Trueindependentmemberfits, compatiblefrozenweights andvalidationselection; noaverageaccuracyproxy.",
+      "id": "D34",
+      "observation": "Nooriginalmember/weight/selectionstatesheld;helpermutatesfirstmodelandaveragesallstate_dictkeyswithoutcompatibilityreview.",
+      "source": "Results4;eval_core.py:soup_model",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Soup lineage"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Exactofflineenvironment/backend/sourceprofile andrights; noimportorfitthisphase.",
+      "id": "D35",
+      "observation": "Torch/Flash/SDPA/HF/native andoptionalbranches notqualified; oldNotImplementedErrorbranches preserved;sourceMITdoesnotlicenseweights.",
+      "source": "pyproject.toml;uv.lock;HFsource;nativebackbone",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Native environment/parity"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "Realregisteredsource execution\u2192closedoutputs\u2192independentbank\u2192protectedmetrics API required.",
+      "id": "D36",
+      "observation": "Nulloperatorandexternalreference_metrics/provenancehashrequirements donotproduceauthenticinputs/references orphysicalisolation.",
+      "source": "private/prepare.py,score.py,OPERATOR.json",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Predecessor target trust"
+    },
+    {
+      "basis": "Primary text / static ordinary source inspection; not a numerical or authentic execution result",
+      "disposition": "No relabelingorposthocsubset; infeasiblecells staymandatoryunavailableunlessrootselectsnewscientificcondition.",
+      "id": "D37",
+      "observation": "Alltenprospectivecells requireactuallydisjointlayouts; manydatasetsonefixedmontage.",
+      "source": "public/contract.py:strict_person_and_montage",
+      "status": "open_for_source_native_or_empirical_qualification",
+      "title": "Fixed montage feasibility"
+    }
+  ],
+  "no_cherry_picked_conclusion": true,
+  "schema": "reve_source_discrepancies_v1",
+  "source_fixes_performed": false
+}
