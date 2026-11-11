@@ -1,0 +1,13 @@
+# Inspecting and routing the full N080 source
+
+Run python -I -B operator.py --inspect from this folder to verify the complete58 scientific source identities, published API identity, full six-person scope and nine open qualification groups. This imports no scientific programme and reads no study data.
+
+Load this operator.py by its explicit path under a distinct module name (for example n080_source_operator with importlib.util); a plain import operator selects Python's standard-library module. The exec_phase Python API is a source-only integration route for one future prepare, stage, execute or compare phase. It accepts explicit interpreter identity, complete environment, config identity, logical limits and output path. Preparation additionally requires all five original roots. The adapter verifies the selected source and executable descriptor, records bootstrap reads, then replaces its process with the original neural080.py CLI. That fresh CLI constructs its actual logical Owner and captures its own config. The internal reference worker remains a campaign operation.
+
+The future route requires Linux descriptor-exec support and an independently provisioned immutable source/runtime environment. Source hashes and isolated startup flags do not attest startup hooks, numerical libraries, aggregate process-tree resources, GPU provision or complete physical costs. Bootstrap costs are separate from the original Owner counters. No native execution or scientific result is established by this release.
+
+SOURCE_INTEGRATION.json describes this nested inactive source adapter. It is deliberately not another manifest.json: the existing canonical assignment and earlier public pilot are unchanged. Generic run, score and program_execution remain null and all readiness flags remain false. The58 scientific roles and all original source APIs are unchanged; this adapter points directly at their already-published paths. Private authoring origins and unused authoring caller maps are excluded. The exact public SOURCE_API projection is retained.
+
+Full programme support remains six people,1102 videos,96 recordings,45144 joined trials,30 outer cases,20 inner cells per case,127 channels and150 bins. Seven reference arms and four candidate improvements remain distinct. The original within-person900/100/102 diagnostic remains separate. Historical public crossvalidation is developmental and cannot establish fresh frontier improvement.
+
+Read PUBLICATION_SCOPE.md, THIRD_PARTY_NOTICES.md and docs/REMAINING_EMPIRICAL_GATES.md. Authentic input/rights, target history, clock interpretation, numerical/native compatibility, reference competence, isolation, aggregate resources and genuinely fresh improvement remain unresolved.
