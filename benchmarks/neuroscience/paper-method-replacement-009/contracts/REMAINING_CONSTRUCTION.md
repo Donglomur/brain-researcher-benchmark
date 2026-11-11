@@ -1,0 +1,16 @@
+# Required construction and qualification joins
+
+These are explicit blockers to a complete runnable full-paper source package, not optional improvements.
+
+1. Recover an exact433-session/270-region source roster and session-region incidence, historical animal identities, eligibility, clock/unit mapping, folds/splits and panel cohorts. The seed's40 RE list and a BWM table with a different population are not substitutes.
+2. Recover the fitted behavioral-prior producer, its inputs/training domain and actual original target mapping. Preserve source-version, sorter, probe and sampling-clock joins, including incomplete core/camera cases.
+3. Select historical preprocessing semantics versus the released normalization/mask behavior; the newly named prospective repair is separate. Resolve zero-spike unit handling and exact sequence treatment after mask failures without compressing time.
+4. Recover TableS2 and the actual original finite tuning/training/checkpoint route. The written prospective driver intentionally does not establish equivalence to the released or paper training procedure.
+5. Build the original empirical HMM/BMM prior producer and resolve its objective sign, state-label orientation and convergence/resource bounds. The supplied concentration/rate dictionary alternative is rejected. Resolve LG latent-state versus observation prediction and the multi-region singleton squeeze issue explicitly.
+6. Implement complete multi-session full-rank/MLP comparators from selected original methods and exact common read-in dimensions. Implement Allen stimulus/running/lick and primate RTT source-to-interchange producers, and the actual unaligned snippet selection. No data-format or clock defaults are inferred.
+7. Recover original region-basis sign/gauge/90%-width conventions, imposter-session null producer, spectral/scaling/rank panel memberships and full quantitative output/export maps. Build one complete post-capture panel dispatcher; the current functions and census are not that dispatcher.
+8. Build genuine earlier source/native admission, same-resource isolated A/B process ownership, source views, target barrier enforcement, complete stop/descendant/stream/cleanup custody and measured resource enforcement. The current candidate call planner is not a launcher and accepts no fake qualified receipt.
+9. Complete source-selected prediction/model/interchange reconstruction for every full-paper method and task, and actual end-to-end preparation→fit→capture→private score→panel→report orchestration. Current concrete prospective reference joins and state wrappers are component construction only.
+10. Independently review complete source, then separately establish authentic input rights/coverage, pinned environments, numerical parity, competent references, full scientific units/splits, feasible budgets, protected evaluation and predeclared meaningful improvement. No execution is authorized by this packet.
+
+The primary release's immediate source tree contains the four released scripts and configs/models/utils. Its immediate notebook index lists examples, but no notebook body was opened because saved outputs are outside the current scope. The absence statements above mean absent from the positively selected finite ordinary source closure, not proof that no such source exists anywhere.
