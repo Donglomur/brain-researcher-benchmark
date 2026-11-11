@@ -1,0 +1,230 @@
+{
+  "all_code_cells_preserved_in_order": true,
+  "code_cells": [
+    {
+      "joined_source_sha256": "a829cab352a6a1f7c35502b6894bed13b277306538c11653f5b6df51ef675f16",
+      "joined_utf8_bytes": 131,
+      "original_cell_index": 0,
+      "source": [
+        "import torch, os\n",
+        "import numpy as np\n",
+        "import fig5\n",
+        "import matplotlib.pyplot as plt\n",
+        "from fig5 import zscore\n",
+        "device=torch.device(\"cuda\")"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "e0e6e87edcf746751a5cfc748de7c4f58fd2dfcf649b089d52cf3192c120d2a5",
+      "joined_utf8_bytes": 362,
+      "original_cell_index": 1,
+      "source": [
+        "dt = 2\n",
+        "config = {'gains':  [1, 1, 1.35], \n",
+        "          'nonsym' : [0, 1, 1], \n",
+        "          'relu' : [0, 0, 1], \n",
+        "          'distribution' : ['uniform', 'uniform', 'sparse'],\n",
+        "          'names': ['symm', 'non-symm', 'echo-state network']}\n",
+        "\n",
+        "# the simulations take a while even on a good GPU, so we save the results to disk\n",
+        "local_path = '/media/carsen/disk1/random_matrix'\n"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "07e1d26b1488b63c543e6df30789358e01a8b76d1a9eaf6518752589359471ee",
+      "joined_utf8_bytes": 812,
+      "original_cell_index": 2,
+      "source": [
+        "nstim = 50\n",
+        "tisi = 3000//dt\n",
+        "wm_isi = np.linspace(60, tisi,51)[:-1].astype('int32')\n",
+        "acc, acc_shuff = fig5.run_multishot(config, nstim, tisi, wm_isi, niter = 20)\n",
+        "\n",
+        "np.savez(os.path.join(local_path, 'acc_multi.npz') , acc = acc, wm_isi = wm_isi, acc_shuff = acc_shuff)\n",
+        "\n",
+        "nstim = 50\n",
+        "tisi = 3000//dt\n",
+        "wm_isi = np.linspace(60, tisi,51)[:-1].astype('int32')\n",
+        "acc, acc_shuff = fig5.run_zeroshot(config, nstim, tisi, wm_isi, niter = 20)\n",
+        "\n",
+        "np.savez(os.path.join(local_path, 'acc_zero.npz'), acc = acc, wm_isi = wm_isi, acc_shuff = acc_shuff)\n",
+        "\n",
+        "nstim = 15\n",
+        "tisi = 9000//dt\n",
+        "wm_isi = np.linspace(60, tisi,51)[:-1].astype('int32')\n",
+        "acc, acc_shuff = fig5.run_zeroshot(config, nstim, tisi, wm_isi, niter = 20, mode = 'aligned')\n",
+        "np.savez(os.path.join(local_path, 'acc_zero_aligned.npz'), acc = acc, wm_isi = wm_isi, acc_shuff = acc_shuff)"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "502e483879d1b8e33eff3d6027955ce09c3e4682c4a9161751911ba81d103660",
+      "joined_utf8_bytes": 246,
+      "original_cell_index": 3,
+      "source": [
+        "data1 = np.load(os.path.join(local_path, 'acc_multi2.npz'),allow_pickle = True)\n",
+        "data2 = np.load(os.path.join(local_path, 'acc_zero2.npz'),allow_pickle = True)\n",
+        "data3 = np.load(os.path.join(local_path, 'acc_zero_aligned2.npz'),allow_pickle = True)\n"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "8d9777f94d70fb2ceb2b2cb63a209090ba861254a58f17c8793ba995517685d0",
+      "joined_utf8_bytes": 163,
+      "original_cell_index": 4,
+      "source": [
+        "# example raster periods are saved directly to disk\n",
+        "dat1 = np.load('fig5_raster1.npz', allow_pickle = True)\n",
+        "dat2 = np.load('fig5_raster2.npz', allow_pickle = True)"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "636b6a4e90aba4a4785517b213a60c45256e634114c8eaa97568646a75e2bba7",
+      "joined_utf8_bytes": 145,
+      "original_cell_index": 5,
+      "source": [
+        "# pngs for schematics\n",
+        "im = plt.imread('fig5_1.png')\n",
+        "im1 = plt.imread('fig5_2.png')\n",
+        "im2 = plt.imread('fig5_3.png')\n",
+        "im3 = plt.imread('fig5_4.png')\n"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "ba2433c8f821daed91911f0a9127232a94dec3480bca1278baeb971821eb7b53",
+      "joined_utf8_bytes": 3525,
+      "original_cell_index": 6,
+      "source": [
+        "import matplotlib\n",
+        "import string\n",
+        "import matplotlib.transforms as mtransforms\n",
+        "from matplotlib import rcParams\n",
+        "\n",
+        "default_font = 12\n",
+        "rcParams[\"font.family\"] = \"Arial\"\n",
+        "rcParams[\"savefig.dpi\"] = 300\n",
+        "rcParams[\"axes.spines.top\"] = False\n",
+        "rcParams[\"axes.spines.right\"] = False\n",
+        "rcParams[\"axes.titlelocation\"] = \"left\"\n",
+        "rcParams[\"axes.titleweight\"] = \"normal\"\n",
+        "rcParams[\"font.size\"] = default_font\n",
+        "ltr = string.ascii_lowercase\n",
+        "def plot_label(ltr, il, ax, trans, fs_title=20):\n",
+        "    ax.text(\n",
+        "        0.0,\n",
+        "        1.0,\n",
+        "        ltr[il],\n",
+        "        transform=ax.transAxes + trans,\n",
+        "        va=\"bottom\",\n",
+        "        fontsize=fs_title,\n",
+        "        fontweight=\"bold\",\n",
+        "    )\n",
+        "    il += 1\n",
+        "    return il\n",
+        "il = 0\n",
+        "cmap = plt.get_cmap(\"Dark2\")\n",
+        "\n",
+        "fig = plt.figure(figsize=(14,6))\n",
+        "\n",
+        "grid = plt.GridSpec(5,6, figure=fig, left=0.02, right=0.98, top=0.98, bottom=0.02, wspace = 0.35, hspace = 0.5)\n",
+        "\n",
+        "ax = plt.subplot(grid[:2,:2])\n",
+        "plt.imshow(im)\n",
+        "plt.axis('off')\n",
+        "plt.title('persistent activity model', loc = 'center')\n",
+        "transl = mtransforms.ScaledTranslation(-20 / 72, 0 / 72, fig.dpi_scale_trans)\n",
+        "il = plot_label(ltr, il, ax, transl)\n",
+        "\n",
+        "grid2 = matplotlib.gridspec.GridSpecFromSubplotSpec(6,2, subplot_spec=grid[:2,2:], wspace=0.1, hspace=0.2)\n",
+        "\n",
+        "ax = plt.subplot(grid2[:5,0])\n",
+        "plt.imshow(zscore(dat1['Xsort'], axis=-1), vmax = .5, vmin = 0, aspect = 'auto', cmap = 'grey_r')\n",
+        "plt.xlim([0, dat1['Xsort'].shape[-1]])\n",
+        "plt.axis('off')\n",
+        "plt.title('symmetric dynamics', color = cmap(0))\n",
+        "transl = mtransforms.ScaledTranslation(-20 / 72, 0 / 72, fig.dpi_scale_trans)\n",
+        "il = plot_label(ltr, il, ax, transl)\n",
+        "\n",
+        "ax = plt.subplot(grid2[5,0])\n",
+        "plt.plot(dat1['xx'], lw = 1, color = 'k')\n",
+        "plt.xlim([0, len(dat1['xx'])])\n",
+        "plt.axis('off')\n",
+        "plt.text(-.02, .5, 'inputs', ha = 'right', va = 'center', transform= ax.transAxes)\n",
+        "\n",
+        "\n",
+        "ax = plt.subplot(grid2[:5,1])\n",
+        "plt.imshow(zscore(dat2['Xsort'], axis=-1), vmax = .5, vmin = 0, aspect = 'auto', cmap = 'grey_r')\n",
+        "plt.xlim([0, dat2['Xsort'].shape[-1]])\n",
+        "plt.axis('off')\n",
+        "plt.title('non-symmetric dynamics', color = cmap(1))\n",
+        "transl = mtransforms.ScaledTranslation(-20 / 72, 0 / 72, fig.dpi_scale_trans)\n",
+        "il = plot_label(ltr, il, ax, transl)\n",
+        "\n",
+        "ax = plt.subplot(grid2[5,1])\n",
+        "plt.plot(dat2['xx'], lw = 1, color = 'k')\n",
+        "plt.xlim([0, len(dat2['xx'])])\n",
+        "plt.axis('off');\n",
+        "\n",
+        "#grid2 = matplotlib.gridspec.GridSpecFromSubplotSpec(3,2, subplot_spec=grid[2:,:2], wspace=0.3, hspace=0.3)\n",
+        "\n",
+        "ax = plt.subplot(grid[2,:2])\n",
+        "plt.imshow(im1)#, aspect = 'auto')\n",
+        "plt.title('trained working memory (binary)')\n",
+        "plt.axis('off')\n",
+        "transl = mtransforms.ScaledTranslation(-20 / 72, 0 / 72, fig.dpi_scale_trans)\n",
+        "il = plot_label(ltr, il, ax, transl)\n",
+        "\n",
+        "fig5.plot_with_time(cmap, config, data1, grid, k = 0, label = True)\n",
+        "\n",
+        "#grid3 = matplotlib.gridspec.GridSpecFromSubplotSpec(3,2, subplot_spec=grid[2:,2:4], wspace=0.3, hspace=0.3)\n",
+        "ax = plt.subplot(grid[2,2:4])\n",
+        "plt.imshow(im2)#, aspect = 'auto')\n",
+        "plt.title('zero-shot working memory')\n",
+        "plt.axis('off')\n",
+        "transl = mtransforms.ScaledTranslation(-20 / 72, 0 / 72, fig.dpi_scale_trans)\n",
+        "il = plot_label(ltr, il, ax, transl)\n",
+        "\n",
+        "fig5.plot_with_time(cmap, config, data2, grid, k = 2)\n",
+        "\n",
+        "#grid4 = matplotlib.gridspec.GridSpecFromSubplotSpec(3,2, subplot_spec=grid[2:,4:6], wspace=0.3, hspace=0.3)\n",
+        "ax = plt.subplot(grid[2,4:6])\n",
+        "plt.imshow(im3)#, aspect = 'auto')\n",
+        "plt.title('zero-shot w/ subspace-aligned inputs')\n",
+        "plt.axis('off')\n",
+        "transl = mtransforms.ScaledTranslation(-20 / 72, 0 / 72, fig.dpi_scale_trans)\n",
+        "il = plot_label(ltr, il, ax, transl)\n",
+        "\n",
+        "fig5.plot_with_time(cmap, config, data3, grid, k = 4)\n",
+        "\n",
+        "#fig.savefig(\"/mnt/disk1/code/random_matrix/fig5.pdf\", dpi=300, bbox_inches = 'tight')"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    }
+  ],
+  "executed": false,
+  "notebook_outputs_markdown_attachments_not_retained": true,
+  "original_blob_bytes": 8128,
+  "original_blob_sha256": "7d8070f5897e5c8ce73a63bbece1372a1970d4a6c5e849dedcb089b0e6ab2254",
+  "original_cell_count": 7,
+  "original_git_blob": "1c9cee64ee0b0fac245e53b23921627a85114944",
+  "original_repository_path": "fig5/fig5.ipynb",
+  "schema": "exact_notebook_code_cell_projection_v1"
+}

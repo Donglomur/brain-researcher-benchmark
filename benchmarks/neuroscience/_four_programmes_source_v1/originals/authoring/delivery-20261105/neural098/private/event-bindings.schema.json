@@ -1,0 +1,122 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "participant",
+    "sfreq",
+    "rows"
+  ],
+  "properties": {
+    "schema": {
+      "const": "neural098-event-bindings-v1"
+    },
+    "participant": {
+      "enum": [
+        "SA102",
+        "SA103",
+        "SA104",
+        "SA111",
+        "SA114",
+        "SA118",
+        "SA121",
+        "SA123",
+        "SA125",
+        "SA132",
+        "SA133",
+        "SA134",
+        "SA136",
+        "SA138",
+        "SA139",
+        "SA140",
+        "SA144",
+        "SA145",
+        "SA146",
+        "SA147",
+        "SA148",
+        "SA150",
+        "SA151",
+        "SA154",
+        "SA158",
+        "SA163",
+        "SA166",
+        "SA167",
+        "SA169",
+        "SA170",
+        "SA173",
+        "SA174",
+        "SA176"
+      ]
+    },
+    "sfreq": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "rows": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "selection_index",
+          "run",
+          "event_sample",
+          "epoch_event_sample",
+          "offset_sample",
+          "next_onset_sample",
+          "stim_trigger",
+          "button_samples"
+        ],
+        "properties": {
+          "selection_index": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000000
+          },
+          "run": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000000
+          },
+          "event_sample": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000000
+          },
+          "epoch_event_sample": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000000
+          },
+          "offset_sample": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000000
+          },
+          "next_onset_sample": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000000
+          },
+          "stim_trigger": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000000
+          },
+          "button_samples": {
+            "type": "array",
+            "maxItems": 100,
+            "uniqueItems": true,
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000000000
+            }
+          }
+        }
+      }
+    }
+  }
+}

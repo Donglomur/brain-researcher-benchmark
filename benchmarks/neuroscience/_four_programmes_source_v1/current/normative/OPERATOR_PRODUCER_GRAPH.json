@@ -1,0 +1,112 @@
+{
+  "composition_edges": [
+    [
+      "O07",
+      "C00P"
+    ],
+    [
+      "O07",
+      "C00"
+    ],
+    [
+      "C00P",
+      "C00T"
+    ],
+    [
+      "C02",
+      "O08"
+    ],
+    [
+      "C00T",
+      "O08"
+    ],
+    [
+      "O08",
+      "O09"
+    ]
+  ],
+  "failure": "O05 closes original inherited occurrence independently of any failure; source/proc/executable occurrences each close independently before the next. Original failure custody blocks root admission.",
+  "inherited_native_nodes": 33,
+  "new_nodes": [
+    {
+      "fixed_caller": "operator_entry.installed_operator_entry_v1",
+      "id": "O00",
+      "produces": "InstalledOperatorInvocation/BootstrapIntakeCustodian before effects",
+      "requires": "external trusted installed profile and original launch"
+    },
+    {
+      "fixed_caller": "BootstrapIntakeCustodian.read_once: pre-body descriptor observation",
+      "id": "O01",
+      "produces": "actual fd identity/flags/seals/offset/extent; no body before complete bound",
+      "requires": "O00"
+    },
+    {
+      "fixed_caller": "BootstrapIntakeCustodian.read_once: bounded body/EOF/parser",
+      "id": "O02",
+      "produces": "full raw prefixes + positive EOF + strict canonical body",
+      "requires": "O01"
+    },
+    {
+      "fixed_caller": "operator_entry.observe_installed_entry_v1",
+      "id": "O03",
+      "produces": "complete actual installed source/environment/process projection",
+      "requires": "successful O05; one bounded source/proc/executable occurrence at a time"
+    },
+    {
+      "fixed_caller": "operator_qualification.verify_operator_evidence_v1",
+      "id": "O04",
+      "produces": "all six exact domain reports/twelve case rosters and source/domain/subject/actual observation joins",
+      "requires": "O03"
+    },
+    {
+      "fixed_caller": "BootstrapIntakeCustodian.close_once",
+      "id": "O05",
+      "produces": "actual once-only FD close; failure retains owner, no successful admission",
+      "requires": "O02 success or any original entered failure; no source-file open before successful close"
+    },
+    {
+      "fixed_caller": "operator_bootstrap_owner.transfer_original_bootstrap_v1",
+      "id": "O06",
+      "produces": "same original Share/ParentCustody; ordinary RootResources only for three ordinary programmes; N098 retains earlier projection for its sole later StagedN098Resources",
+      "requires": "successful O04 and original closed intake"
+    },
+    {
+      "fixed_caller": "same transfer_original_bootstrap_v1 fixed private issuer, after O06 completes",
+      "id": "O07",
+      "produces": "PriorStaticAdmission and actual RootBootstrapAdmission in verified_root phase before any static or canonical publication",
+      "requires": "O06"
+    },
+    {
+      "fixed_caller": "operator_native_static.bind_native_static_completion_v1 then early_issuer.prepare_static_issuer_inputs_v1",
+      "id": "O08",
+      "produces": "actual subject/policy/profile/plan from completed current policy/profile selections under original parent",
+      "requires": "O07+C00P+C00T+C02"
+    },
+    {
+      "fixed_caller": "RootBootstrapAdmission.bind_static_chain_once_v1",
+      "id": "O09",
+      "produces": "same RootBootstrapAdmission advances once to static_bound for original runtime issuer; native C00 already used verified_root",
+      "requires": "O08"
+    }
+  ],
+  "schema": "four_operator_producer_graph_v1",
+  "source_order": [
+    "O00",
+    "O01",
+    "O02",
+    "O05",
+    "O03",
+    "O04",
+    "O06",
+    "O07",
+    "C00P",
+    "C00T",
+    "C00",
+    "C01",
+    "C01H",
+    "C02",
+    "O08",
+    "O09"
+  ],
+  "superseded_edge": "C00P has an explicit O07 earlier prerequisite; no earlier node requires RootBootstrapAdmission/static capture/own Pin"
+}

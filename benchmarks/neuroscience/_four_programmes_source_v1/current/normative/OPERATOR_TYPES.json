@@ -1,0 +1,882 @@
+{
+  "encoding": "existing strict canonical UTF8 sorted-key compact JSON with one LF; complete-body equality, duplicate/nonfinite/NUL/surrogate refusal; max depth64 plus stricter original bound",
+  "inherited_records": "All171 unchanged; existing exact type definitions and all original qualification domains remain mandatory.",
+  "new_record_count": 20,
+  "new_records": {
+    "BootstrapOriginalReservationV1": {
+      "additional_fields": false,
+      "fields": {
+        "component": {
+          "literal": "installed_operator_bootstrap"
+        },
+        "limits": {
+          "cpu_ns": "UInt",
+          "process_starts": "UInt",
+          "read_bytes": "UInt",
+          "retained_bytes": "UInt",
+          "wall_ns": "UInt",
+          "work_units": "UInt",
+          "write_bytes": "UInt"
+        },
+        "original_counter_identity": "Pin",
+        "original_deadline_ns": "PositiveUInt",
+        "original_envelope": "Pin",
+        "original_origin_ns": "UInt",
+        "owner_role": {
+          "literal": "H"
+        },
+        "pre_entry_observer_source": "Pin",
+        "reservation_id": "Text",
+        "schema": {
+          "literal": "four_bootstrap_original_reservation_v1"
+        },
+        "stage": "Text",
+        "terminal_reserve": {
+          "cpu_ns": "UInt",
+          "process_starts": "UInt",
+          "read_bytes": "UInt",
+          "retained_bytes": "UInt",
+          "wall_ns": "UInt",
+          "work_units": "UInt",
+          "write_bytes": "UInt"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_bootstrap_original_reservation_v1"
+    },
+    "BootstrapPrefixTransferV1": {
+      "additional_fields": false,
+      "fields": {
+        "before": "NativePreEntryPrefixV1",
+        "fd_close_observed": {
+          "literal": true
+        },
+        "intake_completed": {
+          "cpu_ns": "UInt",
+          "process_starts": "UInt",
+          "read_bytes": "UInt",
+          "retained_bytes": "UInt",
+          "wall_ns": "UInt",
+          "work_units": "UInt",
+          "write_bytes": "UInt"
+        },
+        "intake_reserved": {
+          "cpu_ns": "UInt",
+          "process_starts": "UInt",
+          "read_bytes": "UInt",
+          "retained_bytes": "UInt",
+          "wall_ns": "UInt",
+          "work_units": "UInt",
+          "write_bytes": "UInt"
+        },
+        "operator_selection": "Pin",
+        "original_attempt": "Text",
+        "original_counter_identity": "Pin",
+        "original_deadline_ns": "PositiveUInt",
+        "original_origin_ns": "UInt",
+        "reservation_id": "Text",
+        "same_active_span": {
+          "literal": true
+        },
+        "same_counter_storage": {
+          "literal": true
+        },
+        "schema": {
+          "literal": "four_bootstrap_prefix_transfer_v1"
+        },
+        "unknown_dimensions": {
+          "max": 7,
+          "ordered_unique_list": {
+            "enum": [
+              "read_bytes",
+              "write_bytes",
+              "work_units",
+              "retained_bytes",
+              "cpu_ns",
+              "wall_ns",
+              "process_starts"
+            ]
+          }
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_bootstrap_prefix_transfer_v1"
+    },
+    "InstalledOperatorLaunchAnchorV1": {
+      "additional_fields": false,
+      "fields": {
+        "entry_mode": {
+          "literal": "installed_operator_entry_v1"
+        },
+        "entry_source": "Pin",
+        "installed_profile": "Pin",
+        "intake_fd": {
+          "literal": 197
+        },
+        "launch_nonce": "Text",
+        "native_preentry_reserved": "Dimensions",
+        "operator_selection_bytes": {
+          "integer": {
+            "max": 1048576,
+            "min": 1
+          }
+        },
+        "operator_selection_path": "Text",
+        "operator_selection_sha256": "SHA256",
+        "original_attempt": "Text",
+        "original_launch": "Pin",
+        "original_launcher": "OriginalProcessIdentity",
+        "original_reservation": "BootstrapOriginalReservationV1",
+        "schema": {
+          "literal": "four_installed_operator_launch_anchor_v1"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_installed_operator_launch_anchor_v1"
+    },
+    "InstalledOperatorProfileV1": {
+      "additional_fields": false,
+      "fields": {
+        "attempt_cap": "PositiveUInt",
+        "body_cap": {
+          "integer": {
+            "max": 1048576,
+            "min": 1
+          }
+        },
+        "dependency_closure": "Pin",
+        "deployment_id": "Text",
+        "descriptor_slots": {
+          "literal": 1
+        },
+        "entry_gid": "UInt",
+        "entry_mount_namespace": "KernelIdentity",
+        "entry_source": "Pin",
+        "entry_uid": "UInt",
+        "entry_user_namespace": "KernelIdentity",
+        "environment": "Pin",
+        "installed_closure": "Pin",
+        "launcher_source": "Pin",
+        "maximum_bootstrap_limits": {
+          "cpu_ns": "UInt",
+          "process_starts": "UInt",
+          "read_bytes": "UInt",
+          "retained_bytes": "UInt",
+          "wall_ns": "UInt",
+          "work_units": "UInt",
+          "write_bytes": "UInt"
+        },
+        "qualification_issuers": {
+          "exact_domains": [
+            "installed_source",
+            "dependency_environment",
+            "protected_operator_entry",
+            "original_parent_identity",
+            "original_resource_accounting",
+            "programme_tool_commands"
+          ],
+          "ordered_list": {
+            "domain": {
+              "enum": [
+                "installed_source",
+                "dependency_environment",
+                "protected_operator_entry",
+                "original_parent_identity",
+                "original_resource_accounting",
+                "programme_tool_commands"
+              ]
+            },
+            "environment": "Pin",
+            "source": "Pin"
+          }
+        },
+        "qualification_policy": "Pin",
+        "reader_source": "Pin",
+        "required_fd_seals": {
+          "literal": 15
+        },
+        "schema": {
+          "literal": "four_installed_operator_profile_v1"
+        },
+        "selection_fd": {
+          "literal": 197
+        },
+        "verifier_source": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_installed_operator_profile_v1"
+    },
+    "NativePreEntryPrefixV1": {
+      "additional_fields": false,
+      "fields": {
+        "clock": "OriginalClock",
+        "completed": {
+          "cpu_ns": "UInt",
+          "process_starts": "UInt",
+          "read_bytes": "UInt",
+          "retained_bytes": "UInt",
+          "wall_ns": "UInt",
+          "work_units": "UInt",
+          "write_bytes": "UInt"
+        },
+        "conservative_allocated": {
+          "cpu_ns": "UInt",
+          "process_starts": "UInt",
+          "read_bytes": "UInt",
+          "retained_bytes": "UInt",
+          "wall_ns": "UInt",
+          "work_units": "UInt",
+          "write_bytes": "UInt"
+        },
+        "observed_through_ns": "UInt",
+        "observer_source": "Pin",
+        "original_attempt": "Text",
+        "original_counter_identity": "Pin",
+        "original_terminal_reserve": {
+          "cpu_ns": "UInt",
+          "process_starts": "UInt",
+          "read_bytes": "UInt",
+          "retained_bytes": "UInt",
+          "wall_ns": "UInt",
+          "work_units": "UInt",
+          "write_bytes": "UInt"
+        },
+        "process": "OriginalProcessIdentity",
+        "reservation": "Pin",
+        "schema": {
+          "literal": "four_native_preentry_prefix_v1"
+        },
+        "unknown_dimensions": {
+          "max": 7,
+          "ordered_unique_list": {
+            "enum": [
+              "read_bytes",
+              "write_bytes",
+              "work_units",
+              "retained_bytes",
+              "cpu_ns",
+              "wall_ns",
+              "process_starts"
+            ]
+          }
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_native_preentry_prefix_v1"
+    },
+    "OperatorEntrySelectionV1": {
+      "additional_fields": false,
+      "fields": {
+        "attempt_id": "Text",
+        "clock": "OriginalClock",
+        "clock_mapping": "ClockMapping",
+        "dependencies": "OperatorSourceClosureV1",
+        "deployment_id": "Text",
+        "earlier_resource_input": "OperatorResourceInputV1",
+        "entry_identity": "OriginalProcessIdentity",
+        "environment": "OperatorEnvironmentV1",
+        "installed_closure": "OperatorSourceClosureV1",
+        "intake_occurrence": "OperatorIntakeOccurrenceV1",
+        "launcher_identity": "OriginalProcessIdentity",
+        "matched_schedule": "MatchedSchedule",
+        "nonce": "Text",
+        "original_launch": "Pin",
+        "original_reservation": "BootstrapOriginalReservationV1",
+        "pre_entry_prefix": "NativePreEntryPrefixV1",
+        "profile": "Pin",
+        "qualification_evidence": {
+          "record": {
+            "completions": {
+              "max": 6,
+              "ordered_list": {
+                "record": {
+                  "body": "OriginalOperatorQualificationCompletionV1",
+                  "descriptor": "Pin"
+                }
+              }
+            },
+            "invocations": {
+              "max": 12,
+              "ordered_list": {
+                "record": {
+                  "body": "OriginalOperatorQualificationInvocationV1",
+                  "descriptor": "Pin"
+                }
+              }
+            },
+            "observations": {
+              "max": 12,
+              "ordered_list": {
+                "record": {
+                  "body": "OriginalOperatorQualificationObservationV1",
+                  "descriptor": "Pin"
+                }
+              }
+            }
+          }
+        },
+        "qualification_reports": {
+          "exact_domains": [
+            "installed_source",
+            "dependency_environment",
+            "protected_operator_entry",
+            "original_parent_identity",
+            "original_resource_accounting",
+            "programme_tool_commands"
+          ],
+          "ordered_list": {
+            "record": {
+              "body": "OperatorQualificationReportV1",
+              "descriptor": "Pin"
+            }
+          }
+        },
+        "qualification_set": {
+          "record": {
+            "body": "OperatorQualificationSetV1",
+            "descriptor": "Pin"
+          }
+        },
+        "schema": {
+          "literal": "four_operator_entry_selection_v1"
+        },
+        "static_values": "OperatorStaticSelectionV1",
+        "tool_evidence": {
+          "max": 8192,
+          "ordered_list": {
+            "record": {
+              "completion": {
+                "record": {
+                  "body": "OriginalOperatorToolCompletionV1",
+                  "descriptor": "Pin"
+                }
+              },
+              "invocation": {
+                "record": {
+                  "body": "OriginalOperatorToolInvocationV1",
+                  "descriptor": "Pin"
+                }
+              },
+              "qualification": {
+                "record": {
+                  "body": "OriginalOperatorToolQualificationV1",
+                  "descriptor": "Pin"
+                }
+              }
+            }
+          }
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_operator_entry_selection_v1"
+    },
+    "OperatorEnvironmentV1": {
+      "additional_fields": false,
+      "fields": {
+        "clock_ticks_per_second": "PositiveUInt",
+        "environment": {
+          "max": 256,
+          "ordered_unique_list": {
+            "name": "Text",
+            "value": "Text"
+          }
+        },
+        "interpreter": "Descriptor",
+        "interpreter_absolute": "AbsolutePath",
+        "interpreter_identity": "KernelIdentity",
+        "machine": "Text",
+        "monotonic_clock": {
+          "literal": "CLOCK_MONOTONIC"
+        },
+        "mount_namespace": "KernelIdentity",
+        "pid_namespace": "KernelIdentity",
+        "platform": {
+          "literal": "linux"
+        },
+        "schema": {
+          "literal": "four_operator_environment_v1"
+        },
+        "source": "Pin",
+        "user_namespace": "KernelIdentity"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_operator_environment_v1"
+    },
+    "OperatorIntakeOccurrenceV1": {
+      "additional_fields": false,
+      "fields": {
+        "access_mode": {
+          "literal": 0
+        },
+        "creator_process": "OriginalProcessIdentity",
+        "fd": {
+          "literal": 197
+        },
+        "initial_offset": {
+          "literal": 0
+        },
+        "launch_id": "Text",
+        "object_identity": "KernelIdentity",
+        "protected_channel_qualification": "Pin",
+        "schema": {
+          "literal": "four_operator_intake_occurrence_v1"
+        },
+        "seals": {
+          "literal": 15
+        },
+        "size": "PositiveUInt"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_operator_intake_occurrence_v1"
+    },
+    "OperatorQualificationCaseV1": {
+      "additional_fields": false,
+      "fields": {
+        "case": {
+          "enum": [
+            "source_closure_complete",
+            "source_loaded_identity",
+            "dependency_complete",
+            "environment_exact",
+            "entry_fd_readonly_sealed",
+            "entry_not_participant_accessible",
+            "original_process_anchor",
+            "monotonic_clock_mapping",
+            "seven_dim_original_prefix",
+            "reservation_transfer_continuity",
+            "tool_complete_roster",
+            "tool_original_invocation"
+          ]
+        },
+        "completed_ns": "PositiveUInt",
+        "observation": {
+          "closed_case_variant": "QUALIFICATION_DOMAIN_RULES.json; exact twelve source-owned variants"
+        },
+        "observer_source": "Pin",
+        "original_invocation": "Pin",
+        "original_observation": "Pin",
+        "schema": {
+          "literal": "four_operator_qualification_case_v1"
+        },
+        "started_ns": "UInt"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_operator_qualification_case_v1"
+    },
+    "OperatorQualificationReportV1": {
+      "additional_fields": false,
+      "fields": {
+        "cases": {
+          "domain_case_roster": {
+            "dependency_environment": [
+              "dependency_complete",
+              "environment_exact"
+            ],
+            "installed_source": [
+              "source_closure_complete",
+              "source_loaded_identity"
+            ],
+            "original_parent_identity": [
+              "original_process_anchor",
+              "monotonic_clock_mapping"
+            ],
+            "original_resource_accounting": [
+              "seven_dim_original_prefix",
+              "reservation_transfer_continuity"
+            ],
+            "programme_tool_commands": [
+              "tool_complete_roster",
+              "tool_original_invocation"
+            ],
+            "protected_operator_entry": [
+              "entry_fd_readonly_sealed",
+              "entry_not_participant_accessible"
+            ]
+          },
+          "ordered_list": "OperatorQualificationCaseV1"
+        },
+        "completed_ns": "PositiveUInt",
+        "deployment": "Text",
+        "domain": {
+          "enum": [
+            "installed_source",
+            "dependency_environment",
+            "protected_operator_entry",
+            "original_parent_identity",
+            "original_resource_accounting",
+            "programme_tool_commands"
+          ]
+        },
+        "original_attempt": "Text",
+        "original_completion": "Pin",
+        "original_cost": "NativePreEntryPrefixV1",
+        "original_process": "OriginalProcessIdentity",
+        "policy": "Pin",
+        "qualifier_environment": "Pin",
+        "qualifier_source": "Pin",
+        "schema": {
+          "literal": "four_operator_qualification_report_v1"
+        },
+        "started_ns": "UInt",
+        "subject": "Pin",
+        "terminal": {
+          "record": {
+            "original_wait_completed": {
+              "literal": true
+            },
+            "returncode": {
+              "literal": 0
+            },
+            "unknown_dimensions": {
+              "literal": []
+            },
+            "unresolved_handles": {
+              "literal": []
+            }
+          }
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_operator_qualification_report_v1"
+    },
+    "OperatorQualificationSetV1": {
+      "additional_fields": false,
+      "fields": {
+        "completed_ns": "PositiveUInt",
+        "dependency_closure": "Pin",
+        "deployment": "Text",
+        "environment": "Pin",
+        "installed_closure": "Pin",
+        "qualification_policy": "Pin",
+        "reports": {
+          "max": 6,
+          "ordered_unique_list": "Pin"
+        },
+        "schema": {
+          "literal": "four_operator_qualification_set_v1"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_operator_qualification_set_v1"
+    },
+    "OperatorQualifiedCommandV1": {
+      "additional_fields": false,
+      "fields": {
+        "command": "AbsoluteCommandElement",
+        "environment": "Pin",
+        "original_argv0": "AbsoluteCommandElement",
+        "original_completion": "Pin",
+        "original_invocation": "Pin",
+        "original_process": "OriginalProcessIdentity",
+        "qualification_report": "Pin",
+        "qualified_executable": "Descriptor",
+        "qualifier_source": "Pin",
+        "schema": {
+          "literal": "four_operator_qualified_command_v1"
+        },
+        "tool": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_operator_qualified_command_v1"
+    },
+    "OperatorSourceClosureV1": {
+      "additional_fields": false,
+      "fields": {
+        "members": {
+          "max": 2048,
+          "ordered_unique_list": {
+            "descriptor": "Descriptor",
+            "installed_path": "AbsolutePath",
+            "loaded_code_sha256": "SHA256",
+            "loaded_module": "Text",
+            "role": "Text"
+          }
+        },
+        "qualification_subject": "Pin",
+        "schema": {
+          "literal": "four_operator_source_closure_v1"
+        },
+        "source_environment": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_operator_source_closure_v1"
+    },
+    "OperatorStaticSelectionV1": {
+      "additional_fields": false,
+      "fields": {
+        "artifact_configuration": "ExactEarlierArtifactRootConfigurationWithoutFutureRootPolicy",
+        "base_agent_policy": "ExactEarlierBaseAgentPolicyBodyAndDescriptor",
+        "base_artifact_selection": {
+          "record": {
+            "body": "LocalArtifactSelection",
+            "descriptor": "Pin"
+          }
+        },
+        "base_development_profile": "ExactEarlierBaseDevelopmentProfileBodyAndDescriptor",
+        "base_local_backend_profile": {
+          "record": {
+            "body": "LocalBackendProfile",
+            "descriptor": "Pin"
+          }
+        },
+        "entry_configuration": "ExactEarlierBootstrapEntryConfigurationWithoutFutureSourceRootPolicyPin",
+        "native_root_configuration": "ExactEarlierNativeRootConfigurationWithoutFutureCapturePins",
+        "original_tool_roster": {
+          "max": 8192,
+          "ordered_unique_list": "Pin"
+        },
+        "plan_constants": "ExactEarlyConstructionSubjectFieldsMinusSchemaAgentPolicyDevelopmentProfile",
+        "policy_constants": "ExactEarlyIssuerBootstrapPolicyFieldsMinusSchemaSubjectRootStaticSelection",
+        "qualified_command_pairs": {
+          "max": 8192,
+          "ordered_list": "OperatorQualifiedCommandV1"
+        },
+        "schema": {
+          "literal": "four_operator_static_selection_v1"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_operator_static_selection_v1"
+    },
+    "OriginalOperatorQualificationCompletionV1": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Text",
+        "completed_ns": "PositiveUInt",
+        "cost": "NativePreEntryPrefixV1",
+        "domain": {
+          "enum": [
+            "installed_source",
+            "dependency_environment",
+            "protected_operator_entry",
+            "original_parent_identity",
+            "original_resource_accounting",
+            "programme_tool_commands"
+          ]
+        },
+        "environment": "Pin",
+        "invocations": {
+          "max": 2,
+          "ordered_unique_list": "Pin"
+        },
+        "observations": {
+          "max": 2,
+          "ordered_unique_list": "Pin"
+        },
+        "process": "OriginalProcessIdentity",
+        "qualifier_source": "Pin",
+        "remaining_descriptors": {
+          "literal": []
+        },
+        "remaining_processes": {
+          "literal": []
+        },
+        "schema": {
+          "literal": "four_original_operator_qualification_completion_v1"
+        },
+        "started_ns": "UInt",
+        "stderr_eof_offset": "UInt",
+        "stdout_eof_offset": "UInt",
+        "subject": "Pin",
+        "unknown_dimensions": {
+          "literal": []
+        },
+        "waited_pid": "PositiveUInt",
+        "waited_returncode": {
+          "literal": 0
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_original_operator_qualification_completion_v1"
+    },
+    "OriginalOperatorQualificationInvocationV1": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Text",
+        "case": {
+          "enum": [
+            "source_closure_complete",
+            "source_loaded_identity",
+            "dependency_complete",
+            "environment_exact",
+            "entry_fd_readonly_sealed",
+            "entry_not_participant_accessible",
+            "original_process_anchor",
+            "monotonic_clock_mapping",
+            "seven_dim_original_prefix",
+            "reservation_transfer_continuity",
+            "tool_complete_roster",
+            "tool_original_invocation"
+          ]
+        },
+        "domain": {
+          "enum": [
+            "installed_source",
+            "dependency_environment",
+            "protected_operator_entry",
+            "original_parent_identity",
+            "original_resource_accounting",
+            "programme_tool_commands"
+          ]
+        },
+        "environment": "Pin",
+        "fixed_procedure_source": "Pin",
+        "process": "OriginalProcessIdentity",
+        "qualifier_source": "Pin",
+        "schema": {
+          "literal": "four_original_operator_qualification_invocation_v1"
+        },
+        "started_ns": "UInt",
+        "subject": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_original_operator_qualification_invocation_v1"
+    },
+    "OriginalOperatorQualificationObservationV1": {
+      "additional_fields": false,
+      "fields": {
+        "case": {
+          "enum": [
+            "source_closure_complete",
+            "source_loaded_identity",
+            "dependency_complete",
+            "environment_exact",
+            "entry_fd_readonly_sealed",
+            "entry_not_participant_accessible",
+            "original_process_anchor",
+            "monotonic_clock_mapping",
+            "seven_dim_original_prefix",
+            "reservation_transfer_continuity",
+            "tool_complete_roster",
+            "tool_original_invocation"
+          ]
+        },
+        "completed_ns": "PositiveUInt",
+        "domain": {
+          "enum": [
+            "installed_source",
+            "dependency_environment",
+            "protected_operator_entry",
+            "original_parent_identity",
+            "original_resource_accounting",
+            "programme_tool_commands"
+          ]
+        },
+        "invocation": "Pin",
+        "observation": {
+          "closed_case_variant": "exact QUALIFICATION_DOMAIN_RULES case observation"
+        },
+        "observer_source": "Pin",
+        "process": "OriginalProcessIdentity",
+        "schema": {
+          "literal": "four_original_operator_qualification_observation_v1"
+        },
+        "started_ns": "UInt"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_original_operator_qualification_observation_v1"
+    },
+    "OriginalOperatorToolCompletionV1": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Text",
+        "completed_ns": "PositiveUInt",
+        "cost": "NativePreEntryPrefixV1",
+        "invocation": "Pin",
+        "process": "OriginalProcessIdentity",
+        "remaining_descriptors": {
+          "literal": []
+        },
+        "remaining_processes": {
+          "literal": []
+        },
+        "schema": {
+          "literal": "four_original_operator_tool_completion_v1"
+        },
+        "started_ns": "UInt",
+        "stderr_eof_offset": "UInt",
+        "stdout_eof_offset": "UInt",
+        "unknown_dimensions": {
+          "literal": []
+        },
+        "waited_pid": "PositiveUInt",
+        "waited_returncode": {
+          "literal": 0
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_original_operator_tool_completion_v1"
+    },
+    "OriginalOperatorToolInvocationV1": {
+      "additional_fields": false,
+      "fields": {
+        "argv": "Text[1:128]",
+        "attempt": "Text",
+        "environment": "Pin",
+        "executable": "Descriptor",
+        "process": "OriginalProcessIdentity",
+        "qualifier_source": "Pin",
+        "schema": {
+          "literal": "four_original_operator_tool_invocation_v1"
+        },
+        "started_ns": "UInt",
+        "tool": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_original_operator_tool_invocation_v1"
+    },
+    "OriginalOperatorToolQualificationV1": {
+      "additional_fields": false,
+      "fields": {
+        "command": "AbsoluteCommandElement",
+        "completed_ns": "PositiveUInt",
+        "environment": "Pin",
+        "original_completion": "Pin",
+        "original_invocation": "Pin",
+        "qualified_executable": "Descriptor",
+        "qualifier_source": "Pin",
+        "schema": {
+          "literal": "four_original_operator_tool_qualification_v1"
+        },
+        "tool": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "four_original_operator_tool_qualification_v1"
+    }
+  },
+  "primitive_rules": {
+    "AbsoluteCommandElement": "one absolute source-qualified argv element, no NUL/shell/PATH splitting",
+    "KernelIdentity": {
+      "closed_fields": {
+        "device": "UInt",
+        "inode": "UInt",
+        "mode": "UInt"
+      }
+    },
+    "Pin": "existing exact bytes/sha256/path Pin type, no authority by equality",
+    "PositiveUInt": "1..2^53-1",
+    "Text": "existing finite UTF8/noNUL/no surrogate Text",
+    "UInt": "exact builtin int, bool excluded,0..2^53-1"
+  },
+  "schema": "four_operator_types_v1"
+}

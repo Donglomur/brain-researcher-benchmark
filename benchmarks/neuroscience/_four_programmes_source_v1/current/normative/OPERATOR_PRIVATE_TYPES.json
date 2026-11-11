@@ -1,0 +1,188 @@
+{
+  "authority": "exact source-private registered live objects only; wire values/serialized observations are not constructors; caller equal-value clones rejected",
+  "classes": {
+    "BootstrapIntakeCustodian": {
+      "fields": [
+        "active_span",
+        "body",
+        "close_entered",
+        "close_known",
+        "completed",
+        "deadline",
+        "fd",
+        "first_cpu",
+        "first_wall",
+        "invocation",
+        "last_cpu",
+        "last_wall",
+        "launch_anchor",
+        "limits",
+        "logical_counters",
+        "native_prefix",
+        "observation",
+        "origin",
+        "profile",
+        "raw",
+        "raw_first",
+        "read_attempts",
+        "read_entered",
+        "read_prefixes",
+        "requested_read_bytes",
+        "reservation",
+        "secondaries",
+        "spent",
+        "terminal",
+        "transfer_attempted",
+        "transferred",
+        "unknown"
+      ],
+      "issuer": "installed entry before first descriptor/clock/read/parse effect",
+      "methods": [
+        "__init__",
+        "retain",
+        "reserve",
+        "observe_clock",
+        "read_once",
+        "close_once",
+        "require_transfer_ready"
+      ],
+      "source": "proposed/operator_intake.py"
+    },
+    "BootstrapLogicalCounterView": {
+      "fields": [
+        "owner",
+        "protected_owner",
+        "storage"
+      ],
+      "issuer": "same BootstrapIntakeCustodian before its first effect",
+      "methods": [
+        "__init__",
+        "__getitem__",
+        "__setitem__",
+        "bind_partition_owner",
+        "terminal_entered",
+        "__delitem__",
+        "__iter__",
+        "__len__"
+      ],
+      "semantics": "The same four-key view retains exact original storage and original terminal guard. protected_owner is issued only by complete actual EarlyResources attachment with identical terminal vector; no wire/callback/boolean owner. Terminal spending requires actual registered owner terminal phase.",
+      "source": "proposed/operator_intake.py"
+    },
+    "BootstrapTransferAttempt": {
+      "conditional_fields": [
+        "n098_projection",
+        "n098_projection_pin"
+      ],
+      "fields": [
+        "complete",
+        "custodian",
+        "entered",
+        "invocation",
+        "observation",
+        "parent",
+        "raw_first",
+        "resources",
+        "secondaries",
+        "share"
+      ],
+      "issuer": "fixed once-only original custodian\u2192RootResources/Share/ParentCustody interposition",
+      "methods": [
+        "__init__",
+        "retain"
+      ],
+      "source": "proposed/operator_bootstrap_owner.py"
+    },
+    "InstalledOperatorInvocation": {
+      "fields": [
+        "evidence_verified",
+        "file_occurrences",
+        "intake",
+        "launch_anchor",
+        "loaded_source_map",
+        "observe_attempted",
+        "observed",
+        "pending_fd",
+        "prior_static",
+        "profile",
+        "raw_first",
+        "root_admission",
+        "secondaries",
+        "source_schedule_reserved",
+        "started_cpu",
+        "started_wall",
+        "transfer",
+        "verified_reports"
+      ],
+      "issuer": "fixed protected operator-entry route; actual qualified external launch and installed profile",
+      "methods": [
+        "__init__",
+        "retain",
+        "require_observed_entry",
+        "close_unadopted_fd_once"
+      ],
+      "source": "proposed/operator_entry.py"
+    },
+    "PriorStaticAdmission": {
+      "continuation_fields": [
+        "publisher_binding_attempted",
+        "native_selection_input",
+        "native_static_captures",
+        "native_static_anchor"
+      ],
+      "fields": [
+        "canonical_publisher_binding",
+        "configuration",
+        "invocation",
+        "native_context_anchor_attempts",
+        "native_selection_attempted",
+        "parent",
+        "plan_values",
+        "policy_values",
+        "resources",
+        "root_admission",
+        "static_selection",
+        "tool_owner",
+        "transfer"
+      ],
+      "issuer": "successful fixed closed evidence verification and same original prefix transfer",
+      "methods": [
+        "__init__",
+        "require_original"
+      ],
+      "source": "proposed/operator_bootstrap_owner.py"
+    },
+    "RootBootstrapAdmission": {
+      "fields": [
+        "chain",
+        "hard_envelope",
+        "n098_continuation",
+        "native_context_anchor_attempts",
+        "parent",
+        "phase",
+        "prior_static",
+        "schedule",
+        "static_bind_attempted"
+      ],
+      "issuer": "O07 actual verified root admission before native C00; O09 binds same object to completed StaticInputChain; no wire constructor",
+      "methods": [
+        "__init__",
+        "require_verified_root_v1",
+        "require_original_parent_v1",
+        "require_canonical_publisher_binding_v3",
+        "native_configuration_v1",
+        "bind_static_chain_once_v1",
+        "require_same_source_policy"
+      ],
+      "phase_rules": "verified_root authorizes only original native source/selection and earlier static preparation under the same parent; bind_early_issuer requires static_bound. No future chain is required by C00, and no task seed/worker effect is enabled before O09.",
+      "phases": [
+        "verified_root",
+        "static_bound"
+      ],
+      "source": "proposed/operator_bootstrap_owner.py"
+    }
+  },
+  "field_semantics": "Exact current source storage/method census; continuation fields are assigned only by named original producers. Fields are not wire constructors. Existing inherited source binding/tool owner classes do not count as six new classes.",
+  "inherited": 17,
+  "new_classes": 6,
+  "schema": "four_operator_private_types_v2"
+}

@@ -1,0 +1,157 @@
+{
+  "all_code_cells_preserved_in_order": true,
+  "code_cells": [
+    {
+      "joined_source_sha256": "45662a8dbff623b7be42db1ff682a75c8c36ffe1b75eb0a3be35654da60a7cd5",
+      "joined_utf8_bytes": 285,
+      "original_cell_index": 1,
+      "source": [
+        "import numpy as np \n",
+        "import torch\n",
+        "from rastermap import Rastermap\n",
+        "from tqdm import trange \n",
+        "import sys, os\n",
+        "sys.path.insert(0, \"../\")\n",
+        "from powerlaw import fit_powerlaw_exp, zscore_and_compute_evals\n",
+        "import simulations\n",
+        "\n",
+        "device = torch.device(\"cuda\" if torch.cuda.is_available() else \"cpu\")\n"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "b086d1be5fb18f758bb1b7cdfcd93ca37742e673f190507b62b69fc43be0b379",
+      "joined_utf8_bytes": 1721,
+      "original_cell_index": 3,
+      "source": [
+        "print(\"simulating symmetric random connectivity dynamics\")\n",
+        "simulations.set_seed(0, device)\n",
+        "# run w/ more timepoints per sim for continuous rastermap segment\n",
+        "Asym_ex, Xsym_ex, esym_ex = simulations.simulate_random(nn=10000, nonsym=0, nd=40, T=100000)\n",
+        "Xt = Xsym_ex[:, :1000].cpu().numpy()\n",
+        "# compute eigenvalues of covariance\n",
+        "evals_sym, evecs = zscore_and_compute_evals(Xsym_ex)\n",
+        "alpha, yp = fit_powerlaw_exp(evals_sym, np.arange(10, 500))\n",
+        "print(fr\"symmetric; alpha = {alpha:.3f}\")\n",
+        "model = Rastermap(n_clusters=100, n_PCs=128, mean_time=False,\n",
+        "                            normalize=False, bin_size=20, time_bin=7).fit(Xsym_ex.cpu().numpy())\n",
+        "Xemb_sym = model.X_embedding.copy()\n",
+        "\n",
+        "print(\"simulating nonsymmetric random connectivity dynamics\")\n",
+        "simulations.set_seed(4, device)\n",
+        "Anonsym_ex, Xnonsym_ex, enonsym_ex = simulations.simulate_random(nn=10000, nonsym=1, nd=40, T=100000)\n",
+        "evals_nonsym, evecs = zscore_and_compute_evals(Xnonsym_ex)\n",
+        "alpha, yp = fit_powerlaw_exp(evals_nonsym, np.arange(10, 200))\n",
+        "print(fr\"nonsymmetric; alpha = {alpha:.3f}\")\n",
+        "\n",
+        "model = Rastermap(n_clusters=100, n_PCs=128, mean_time=False,\n",
+        "                            normalize=False, bin_size=20, time_bin=7).fit(Xnonsym_ex.cpu().numpy())\n",
+        "Xemb_nonsym = model.X_embedding.copy()\n",
+        "\n",
+        "\n",
+        "os.makedirs(\"../results\", exist_ok=True)\n",
+        "np.save(\"../results/ex_fig1.npy\", {\"esym_ex\": esym_ex.cpu().numpy(), \"enonsym_ex\": enonsym_ex.cpu().numpy(),\n",
+        "                                   \"evals_sym\": evals_sym, \"evals_nonsym\": evals_nonsym,\n",
+        "                                   \"Asym_ex\": Asym_ex.cpu().numpy(), \"Xt\": Xt,\n",
+        "                                   \"Anonsym_ex\": Anonsym_ex.cpu().numpy(),\n",
+        "                                   \"Xemb_sym\": Xemb_sym, \"Xemb_nonsym\": Xemb_nonsym,})\n"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "b57cd35d301811d164eda83d86c9d7a42b23e4a23fdb27e06918a933c02ef1ee",
+      "joined_utf8_bytes": 174,
+      "original_cell_index": 5,
+      "source": [
+        "import fig1\n",
+        "dat = np.load(\"../results/ex_fig1.npy\", allow_pickle=True).item()\n",
+        "fig = fig1.fig1(dat)\n",
+        "os.makedirs(\"../figures\", exist_ok=True)\n",
+        "fig.savefig(\"../figures/fig1.pdf\")"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "7a345e674a71d906c07f5c136208c24b4031bdc1ba95a7991d606066df0ced41",
+      "joined_utf8_bytes": 249,
+      "original_cell_index": 8,
+      "source": [
+        "out = simulations.random_probs_sim(n_sim=10, nn=10000, device=device)\n",
+        "evals_all, Aexs, distributions = out\n",
+        "np.save(\"../results/evals_probs.npy\", {\"evals_all\": evals_all, \"Aexs\": Aexs, \n",
+        "                                \"distributions\": distributions})"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "5fc3036e967fbb015f77cba2691100fc6960334ee0d1ddef34e446994807fe07",
+      "joined_utf8_bytes": 151,
+      "original_cell_index": 10,
+      "source": [
+        "nonsyms, evals_bin_all, tbins = simulations.tbin_analysis(n_sim=10)\n",
+        "np.save(\"../results/evals_tbins.npy\", {\"evals_all\": evals_bin_all, \"tbins\": tbins})"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "045e9bb49ad1165e92d9afff3e00d29116ac0c9bc7b8a72d44fed48d700edcd7",
+      "joined_utf8_bytes": 599,
+      "original_cell_index": 12,
+      "source": [
+        "out = simulations.random_uniform_sim_sizes(n_sim=10, nonsyms=[0, 1./3, 2./3, 1])\n",
+        "alphas, evals_gt_all, evals_all, evals_svca_all, evals_svca2_all, nonsyms, nneurons, ntimes, noise_levels = out\n",
+        "\n",
+        "np.save(\"../results/evals_sizes_shot_noise.npy\", {\"alphas\": alphas, \"evals_gt_all\": evals_gt_all, \"evals_all\": evals_all, \n",
+        "                                       \"evals_svca_all\": evals_svca_all, \"evals_svca2_all\": evals_svca2_all,\n",
+        "                                         \"nonsyms\": nonsyms, \"nneurons\": nneurons, \"ntimes\": ntimes, \n",
+        "                                         \"noise_levels\": noise_levels})"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "e3b6087420547707fc2493375a34f4f984f7b77ea5d197ccbc1a1c83d8471747",
+      "joined_utf8_bytes": 591,
+      "original_cell_index": 14,
+      "source": [
+        "dat = np.load(\"../results/evals_probs.npy\", allow_pickle=True).item()\n",
+        "fig = fig1.suppfig_probs(dat)\n",
+        "fig.savefig(\"../figures/suppfig_probs.pdf\")\n",
+        "\n",
+        "dat = np.load(\"../results/ex_fig1.npy\", allow_pickle=True).item()\n",
+        "dat2 = np.load(\"../results/evals_sizes_shot_noise.npy\", allow_pickle=True).item()\n",
+        "fig = fig1.suppfig_sim(dat, dat2)\n",
+        "fig.savefig(\"../figures/suppfig_sim.pdf\")\n",
+        "\n",
+        "dat = np.load(\"../results/evals_tbins.npy\", allow_pickle=True).item()\n",
+        "fig = fig1.suppfig_tbin(dat)\n",
+        "fig.savefig(\"../figures/suppfig_tbin.pdf\")\n",
+        "\n",
+        "fig = fig1.suppfig_poisson(dat2)\n",
+        "fig.savefig(\"../figures/suppfig_poisson.pdf\")"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    }
+  ],
+  "executed": false,
+  "notebook_outputs_markdown_attachments_not_retained": true,
+  "original_blob_bytes": 7032,
+  "original_blob_sha256": "4ff5e15f0827947c168e01896410570046f54f5c6f06d6d6a03c824ab6c9f928",
+  "original_cell_count": 15,
+  "original_git_blob": "897b736aa6f721684807f00822fb96dfc58b2e3d",
+  "original_repository_path": "fig1/fig1.ipynb",
+  "schema": "exact_notebook_code_cell_projection_v1"
+}
