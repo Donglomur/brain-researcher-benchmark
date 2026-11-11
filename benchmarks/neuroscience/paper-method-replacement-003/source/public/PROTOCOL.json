@@ -1,0 +1,110 @@
+{
+  "task_id": "PAPER-paper-method-replacement-003",
+  "paper_doi": "10.1016/j.cell.2025.01.041",
+  "source_revision": "703a10fb43fc7fe0076c9c331e6b52d3195b5e60",
+  "scope": "central C4 five-output mouse LOO and full selected monkey transfer; no auxiliary whole-paper equivalence",
+  "classes": [
+    "GoC",
+    "MLI",
+    "MFB",
+    "PkC_ss",
+    "PkC_cs"
+  ],
+  "mouse_units_published": 202,
+  "repeats": 10,
+  "deep_transfer_members": 2020,
+  "methods": [
+    "logistic_regression",
+    "random_forest",
+    "gaussian_process",
+    "deep",
+    "improved"
+  ],
+  "ratio_thresholds": [
+    1,
+    2,
+    3,
+    5,
+    10
+  ],
+  "source_max_probability_thresholds": {
+    "baseline": [
+      0,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9
+    ],
+    "deep": [
+      0,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9
+    ],
+    "improved": "prospective deep mean/grid"
+  },
+  "matched_coverage": [
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "matched_coverage_ties": "fractional whole boundary confidence group, no target-dependent or ID-based tie breaks",
+  "target_truth_separate": true,
+  "binary_reward": null,
+  "scientific_execution_performed": false,
+  "production_complete": false,
+  "missing": [
+    "full original observations",
+    "source QC/202 and complete monkey cohort reconciliation",
+    "animal/session identity map",
+    "VAE pretraining exposure and permitted weights",
+    "original figure/config correspondence",
+    "normalized features and private targets",
+    "platform dependency lock and execution isolation"
+  ],
+  "baseline_features": [
+    "mfr",
+    "mifr",
+    "med_isi",
+    "mode_isi",
+    "prct5ISI",
+    "entropy",
+    "CV2_mean",
+    "CV2_median",
+    "CV",
+    "IR",
+    "Lv",
+    "LvR",
+    "LcV",
+    "SI",
+    "SKW",
+    "std_isi",
+    "burst_idx",
+    "acg_burst_vs_mfr",
+    "acg_oscill_vs_mfr",
+    "trough_voltage",
+    "trough_t",
+    "peak_voltage",
+    "peak_t",
+    "repolarisation_t",
+    "depolarisation_t",
+    "peak_50_width",
+    "trough_50_width",
+    "onset_t",
+    "onset_amp",
+    "wvf_width",
+    "peak_trough_ratio",
+    "tau_recovery",
+    "multiplicative_a_recovery",
+    "repolarisation_slope",
+    "depolarisation_slope",
+    "spatial_decay_24um",
+    "dendritic_comp_amp"
+  ],
+  "baseline_feature_rule": "npyx.feat.FEATURES minus label/dataset/unit/relevant_channel/any_somatic/max_peaks"
+}
