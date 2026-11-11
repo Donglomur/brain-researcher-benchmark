@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "input_sha256",
+    "report"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "task_id": {
+      "const": "NEURAL-012"
+    },
+    "input_sha256": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64,
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "report": {
+      "type": "object",
+      "required": [
+        "patients",
+        "cohort_macros",
+        "target_paired_contrasts",
+        "unpaired_cohort_shifts",
+        "target_false_alarm_localization",
+        "recordings",
+        "biological_patients",
+        "observed_seconds",
+        "causal_or_clinical_utility_established"
+      ],
+      "additionalProperties": true
+    }
+  },
+  "$comment": "Exact recursive report fields/numeric/null/support contracts are enforced by analysis.reconstruct and grade; schema is envelope only."
+}
