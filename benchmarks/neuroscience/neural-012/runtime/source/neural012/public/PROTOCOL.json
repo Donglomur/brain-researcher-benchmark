@@ -1,0 +1,132 @@
+{
+  "all_qualification_flags": false,
+  "arms": [
+    "native",
+    "harmonized",
+    "normalized",
+    "timing"
+  ],
+  "case_exposure": "schema3 train-only fit then query-only predict; exact captured state; full96logicaljobs192invocations; timing has no physical operands",
+  "cohorts": {
+    "CHB": {
+      "files": 686,
+      "people": 23
+    },
+    "Siena": {
+      "files": 41,
+      "people": 14
+    }
+  },
+  "comparison_policy": {
+    "all_signal_programmes_reference": "controlled_reference_preprocessing",
+    "otherwise": "bundled_candidate_method",
+    "source_equality_qualifies_runtime": false,
+    "timing": "exact seven-file source-audited reference"
+  },
+  "event_policy": {
+    "matching": "many_to_many_overlap",
+    "merge_gap_strictly_less_seconds": 90,
+    "rate_denominator": "all_observed_seconds_including_ictal",
+    "reference_tolerance_before_after": [
+      30,
+      60
+    ],
+    "split_max_seconds": 300,
+    "threshold": 0.5
+  },
+  "harmonization": {
+    "bandpass_hz": [
+      1,
+      30
+    ],
+    "butterworth_order": 4,
+    "edges": 18,
+    "filter": "sosfiltfilt whole-recording odd padding",
+    "normalization": "whole-recording channel median/IQR linear quantiles",
+    "physical_microvolts_before_rereference": true,
+    "resample": "512_to256 resample_poly Kaiser5 constant",
+    "unavailable_support": "fail fullpanel, no omit/zerofill"
+  },
+  "outcomes": {
+    "detector_primary": "Siena_equal_person_event_f1",
+    "detector_secondary": [
+      "event_sensitivity",
+      "false_alarms_per_24_observed_hours"
+    ],
+    "frontier_or_clinical_improvement_established": false,
+    "reconstruction": "maximum_scaled_reconstruction_error",
+    "reconstruction_tolerance": 1e-08,
+    "uncertainty": "descriptive_conditional_on_shared_fitted_models"
+  },
+  "phase_protocol": {
+    "commands_reserved": 960,
+    "fit_state_JSON_ceiling_bytes": 256000000,
+    "fit_state_representation": "bounded finite JSON with explicit selected runtime limits, not executable deserialization",
+    "invocations": 192,
+    "logical_jobs": 96,
+    "query_scope": "all current logical job records",
+    "same_original_deadline": true,
+    "semantic_learning_proven": false
+  },
+  "published_CHB_filename_census": {
+    "bytes": 13056,
+    "chb24": 22,
+    "content_or_grouping_authentication": false,
+    "other_folders": 664,
+    "records": 686,
+    "sha256": "72b640d6a3fef4b40de255933d1403823d1655c56f93d69761105a653798fc08",
+    "url": "https://physionet.org/files/chbmit/1.0.0/RECORDS"
+  },
+  "schema": "neural012_frozen_protocol_v5",
+  "scientific_policy": {
+    "C2_requires_authentic_resolution": true,
+    "common_reference_and_whitelist_authority": "unavailable",
+    "label_profiles": [
+      "C1_source_parser",
+      "C2_edf_aligned"
+    ],
+    "protected_target_authority": "unavailable",
+    "qualification_status": "unissued",
+    "selected": [
+      "E1",
+      "C2conditional_withC1",
+      "T1",
+      "M1",
+      "F2",
+      "Q1",
+      "O1"
+    ]
+  },
+  "source_sha256": {
+    "case_contract.py": "721be97ccbad6211bd55a04fee7800ba749ecda9d797c8136e9b088d5588f2c8",
+    "control_recipe.py": "ecb215f98d40d2a935b045e6790a30215afa8c32e3bad5244c735bdc6617405e",
+    "event_protocol.py": "462afe5bb002df77567bda53c232607b86552a658f99515c283774635956599c",
+    "io_contract.py": "2342e1a7f09164b6ca7cee8a7b851603dabb7c96dd0624c60180ae3a169f3b51",
+    "physical_io.py": "c47eb32cae15efdcb2c44aff3964bfcd0b3ac8e0db58d8d34662612d2a50e53d",
+    "reference.py": "86512a5f0bafa7604bb1cbc5eab3007626080453129fbda68449ba51aa961196",
+    "scientific_contract.py": "558db102d0d8ab0bba545c231fe8df92720e8e1b5c37195bef662ea3834b7e08"
+  },
+  "target_calibration": "Fixed reference normalized arm uses entire-file unlabeled median/IQR; arbitrary prediction programs may perform other transient/joint unlabeled query processing and are bundled method comparisons",
+  "task_id": "NEURAL-012",
+  "training": "CHB_LOPO_source_audit_and_full_CHB_target_fit_no_Siena_labels",
+  "trusted_supervisor": {
+    "candidate_excludes": [
+      "source-owner capability",
+      "target selector",
+      "issuer keys",
+      "protected target authority"
+    ],
+    "candidate_reader": "exact local staged bytes/shape/calibration consistency only, no serialized host authority",
+    "genuine_adjudication": "unavailable; observed consistency cannot issue authentic origin/reference/clock/biological-time truth",
+    "host_stage": "same original owner checks complete phase selection and genuine admission before read-only snapshots",
+    "postprediction_limits": [
+      "postprediction_read_bytes",
+      "postprediction_write_bytes"
+    ],
+    "protected_target": "same original source and completed campaign own retained read/close and single-use release",
+    "runtime_selection_schema": "neural012_container_runtime_selection_v4",
+    "selection_sha256": "61f3fe4f2c419cdee6d39afa40b190d1d302611bc35fd240d76fa286d3a8c197",
+    "source_owner": "original complete raw/header/document/annotation/projection validation owner, never a receipt",
+    "source_projection": "complete original int16 sample correspondence is future validation source, not executed qualification"
+  }
+}
