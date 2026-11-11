@@ -1,107 +1,315 @@
 {
-  "schema_version": 1,
-  "id": "NEURAL-092",
-  "track": "neural",
-  "title": "Behavioral-state modulation across visual areas",
-  "status": "specification_only",
-  "source_identity": {
-    "ids": [
-      "D-N059"
-    ],
-    "titles": [
-      "Allen Brain Observatory Visual Coding"
-    ],
-    "overlap_groups": [
-      "allen-visual-coding-family"
-    ],
-    "task_family": "regional_information"
-  },
-  "scientific_question": "Do stimulus-matched associations between running/pupil state and neural responses differ across verified areas or explicitly defined unit classes?",
-  "task_type": "investigation",
-  "neural_role": "input",
-  "primary_outputs": [
-    "Mouse-level state-by-area/class association contrasts and explanatory gains in one selected cohort; no causal arousal effect or genetic cell-type claim without appropriate evidence."
-  ],
-  "input_assets": {
-    "routes": [
-      "https://brain-map.org/our-research/circuits-behavior/visual-coding",
-      "https://github.com/AllenInstitute/AllenSDK"
-    ],
-    "readiness_records": [
-      {
-        "source_id": "D-N059",
-        "ledger": "catalog/datasets_nonfmri_noneeg.json",
-        "record_sha256": "9eb8cdad02781a763bb43ebd69b21f8481441d7c1dd17061bc04b0258dfdbdda",
-        "data_manifest": null,
-        "recording_contract": null,
-        "status": null
-      }
-    ],
-    "exact_asset_records": [],
-    "missing_or_unverified": [
-      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
-      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
-    ]
-  },
-  "allowed_inputs": {
-    "proposed_scope": "Expected source-specific input: one selected Visual Coding recording cohort, neural responses and SDK stimulus/state tables; spike and calcium metrics cannot be pooled.",
-    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
-    "schema_verified": false
-  },
-  "biological_unit": "mouse; sessions and repeated stimuli grouped",
-  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
-  "split": {
-    "policy": "Group all recordings from one biological person/animal; for single-subject collections use labeled within-subject whole-trial/session/condition blocks. Also group repeated stimulus identities and apply temporal guard bands covering every feature lag. Task-specific held-out condition follows the scientific question. Exact IDs/manifests pending source audit.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
-  },
-  "reference": {
-    "source_code_url": "https://github.com/AllenInstitute/AllenSDK",
-    "commit_or_archive_version": null,
-    "entrypoints": [],
-    "role": "Pinned Allen access/analysis SDK and actual session metadata; no qualified stimulus-transfer or state-modulation predictive baseline exists for these cases.",
-    "reference_executed_for_this_contract": false,
-    "source_paper": null,
-    "data_url": "https://brain-map.org/our-research/circuits-behavior/visual-coding"
-  },
-  "controls": [
-    "Identical stimulus conditions",
-    "rate/reliability matching",
-    "pupil/running controls",
-    "mouse grouping."
-  ],
   "access_conditions": {
     "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
+      "frozen_program_with_later_observed_investigation"
     ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
-    }
+    "historical_policy_retained": "Complete earlier aspirational two-mode/tool-comparison policy is retained without alteration in historical_specification.body.access_conditions.",
+    "implemented_source_route": "One fixed submitted participant with prediction and later observed argv, original five-model reference and complete protected-before-observed host programme.",
+    "unimplemented_comparisons": [
+      "Separate interactive case-adaptive agent implementation",
+      "Matched decoder/tool ablation panel",
+      "Model competence and any reference/candidate performance claim"
+    ]
   },
+  "admission": {
+    "full_contract_complete": false,
+    "reason": "Reviewed source construction is not a qualified executable benchmark. Generic executor and scorer remain null; all original scientific/native holds remain.",
+    "research_qualified": false,
+    "runnable": false,
+    "source_complete": false,
+    "submission_ready": false
+  },
+  "allowed_inputs": {
+    "observed_phase": "Only after protected scoring, release the separately constructed original observed view and actually run source/run.py reference and score in the independently selected interpreter. No observed investigation result may retune frozen predictions.",
+    "prediction_phase": "Candidate receives original metadata and FIT/VALIDATION neural responses through the actual projected view. QUERY counts, including legacy files named public/QUERY, remain protected until all32 candidate and fixed predictions, coefficients, selections and full manifest are frozen and read back.",
+    "proposed_scope": "One selected Neuropixels cohort only:32 sessions from32 distinct mice, six visual areas, full original eligible unit and trial axes. No optical cohort pooling, held-out mouse transfer or genetic cell-type inference.",
+    "schema_verified": false,
+    "source_contract": "programme/source/PROTOCOL.json"
+  },
+  "biological_unit": "32 distinct mice; one selected session per mouse; units and trials are dependent nested observations",
+  "case_definition": "One full32-mouse programme with complete-panel phase barriers; session descriptors are32 dependent cases within that one canonical assignment, not32 additional benchmarks. All six areas and15 pairs are preserved.",
+  "construction_review": {
+    "checked_on": "2026-10-30",
+    "disposition": "reframe",
+    "proposal": "authoring/neural-source-audits/contract-corrections-v2.json",
+    "proposal_sha256": "fe743219d97e5b428f828918bd8be294766dfe8f679f74fd60399eef3028d247",
+    "readiness_promoted": false,
+    "reason": "State associations are observational; mouse genotype or a putative spike class is not a definitive per-unit cell type.",
+    "remaining_gates": [
+      "Validate area/unit-class metadata and state clocks.",
+      "Freeze missing-pupil handling and rate/reliability matching.",
+      "Keep optical and spike cohorts and metrics separate."
+    ],
+    "source_evidence": [
+      {
+        "path": "authoring/neural-source-audits/allen-visual-coding-v1/audit.md",
+        "sha256": "f4a8f192c741aa56c5c6258cf07f33f415ff1c1dacdedfa9a23da073ee069484"
+      }
+    ]
+  },
+  "controls": [
+    "Exact FIT-defined twelve-field stimulus vocabulary, including explicit unknown FIT conditions.",
+    "Running states from original prewindow interval-weighted absolute speed: REST<=1cm/s, RUN>=5cm/s; transition/missing explicit.",
+    "Pupil uses positive area, bounded gaps/endpoint coverage and FIT-only terciles; six missing-pupil sessions retained as unavailable, not silently removed.",
+    "All16 joint-state indicators and selected marginal state controls; separate running/pupil conditional sensitivities.",
+    "All15 area pairs, original FIT-baseline/QC bin matching, SHA256+unit-ID ordering, equal-unit/area/session/mouse aggregation with undefined mice explicit.",
+    "Original full-recording unit QC and pupil metadata can be retrospective; source integration does not establish prospective deployability or causal effects."
+  ],
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed mouse-level modulation contrast and held-out explanatory gain.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "Score verified numerical claims, declared estimands and held-out contrasts; null/inconclusive conclusions remain valid."
-    },
     "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
+    "executor_ref": null,
+    "observable_endpoints": {
+      "definition": "Frozen QUERY Poisson deviance loss for five reference families and candidate; source-defined stimulus gain, state gain, running/pupil conditional sensitivities and candidate comparisons. Original observed association reconstruction is a separate later endpoint.",
+      "investigation_rule": "Actual original observed reference and score execute after protected endpoint closure. Numerical source-defined reconstruction is implemented; broad scientific reasoning/novelty grading is not established.",
+      "scoring_status": "complete_source_present_empirically_unqualified"
+    },
+    "scorer_ref": null,
     "unresolved_grading": [
       {
-        "id": "protocol",
-        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        "id": "empirical_qualification",
+        "requirement": "Original authentic support, reference competence, candidate calibration, isolation, malformed outputs, uncertainty and scientific validity remain unmeasured."
       }
-    ],
-    "executor_ref": null,
-    "scorer_ref": null
+    ]
   },
-  "resources": {
-    "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
-    "basis": "Unmeasured estimate. Use bounded existing derivatives/reference features; full-source procurement and model training are not implied."
+  "historical_specification": {
+    "body": {
+      "access_conditions": {
+        "agent_modes": [
+          "frozen_program",
+          "case_adaptive_equal_inputs_tools_compute"
+        ],
+        "common_policy": {
+          "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+          "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+          "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them.",
+          "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost."
+        }
+      },
+      "admission": {
+        "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately.",
+        "research_qualified": false,
+        "runnable": false,
+        "submission_ready": false
+      },
+      "allowed_inputs": {
+        "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
+        "proposed_scope": "Expected source-specific input: one selected Visual Coding recording cohort, neural responses and SDK stimulus/state tables; spike and calcium metrics cannot be pooled.",
+        "schema_verified": false
+      },
+      "biological_unit": "mouse; sessions and repeated stimuli grouped",
+      "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+      "construction_review": {
+        "checked_on": "2026-10-30",
+        "disposition": "reframe",
+        "proposal": "authoring/neural-source-audits/contract-corrections-v2.json",
+        "proposal_sha256": "fe743219d97e5b428f828918bd8be294766dfe8f679f74fd60399eef3028d247",
+        "readiness_promoted": false,
+        "reason": "State associations are observational; mouse genotype or a putative spike class is not a definitive per-unit cell type.",
+        "remaining_gates": [
+          "Validate area/unit-class metadata and state clocks.",
+          "Freeze missing-pupil handling and rate/reliability matching.",
+          "Keep optical and spike cohorts and metrics separate."
+        ],
+        "source_evidence": [
+          {
+            "path": "authoring/neural-source-audits/allen-visual-coding-v1/audit.md",
+            "sha256": "f4a8f192c741aa56c5c6258cf07f33f415ff1c1dacdedfa9a23da073ee069484"
+          }
+        ]
+      },
+      "controls": [
+        "Identical stimulus conditions",
+        "rate/reliability matching",
+        "pupil/running controls",
+        "mouse grouping."
+      ],
+      "evaluation": {
+        "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
+        "executor_ref": null,
+        "observable_endpoints": {
+          "definition": "Recomputed mouse-level modulation contrast and held-out explanatory gain.",
+          "investigation_rule": "Score verified numerical claims, declared estimands and held-out contrasts; null/inconclusive conclusions remain valid.",
+          "scoring_status": "not_implemented"
+        },
+        "scorer_ref": null,
+        "unresolved_grading": [
+          {
+            "id": "protocol",
+            "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+          }
+        ]
+      },
+      "holds": [
+        {
+          "id": "task_specific",
+          "requirement": "Verify shared state measures and QC/area/type labels; optical and spike cohorts are not paired animals by default."
+        },
+        {
+          "id": "catalog_limit",
+          "requirement": "One umbrella row conservatively combines distinct optical and Neuropixels cohorts. Approximately 63,000 calcium neurons and nearly 100,000 spike-recorded neurons are not independent animals. CRCNS pvc-7 excluded as possible overlap. Source audit only; not execution-qualified."
+        },
+        {
+          "id": "source_inventory",
+          "requirement": "Retrieve bounded versioned manifests/schema and verify actual recording inputs, labels, alignment and biological identity; catalog identity alone is insufficient."
+        },
+        {
+          "id": "code_lock",
+          "requirement": "Pin exact official code revision/entrypoint and license, inspect loader-to-data compatibility, and select a meaningful signal-derived reference."
+        },
+        {
+          "id": "terms",
+          "requirement": "Audit data, stimulus, code and checkpoint access/redistribution terms before packet distribution."
+        },
+        {
+          "id": "protocol",
+          "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        },
+        {
+          "id": "execution",
+          "requirement": "Implement and run data adapter/evaluator/reference, matched controls and malformed-output tests; independently reproduce results before any validation claim."
+        },
+        {
+          "construction_gates": [
+            "Pin actual recording bytes/size and environment for selected cases",
+            "Inspect real headers, timestamps, invalid intervals and stimulus IDs",
+            "Decide research/public distribution rights",
+            "Freeze estimand, grouping/calibration and baselines",
+            "Build/independently verify packet, metrics and nuisance/leakage tests"
+          ],
+          "source_id": "D-N059"
+        }
+      ],
+      "id": "NEURAL-092",
+      "input_assets": {
+        "exact_asset_records": [],
+        "missing_or_unverified": [
+          "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+          "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+        ],
+        "readiness_records": [
+          {
+            "data_manifest": null,
+            "ledger": "catalog/datasets_nonfmri_noneeg.json",
+            "record_sha256": "9eb8cdad02781a763bb43ebd69b21f8481441d7c1dd17061bc04b0258dfdbdda",
+            "recording_contract": null,
+            "source_id": "D-N059",
+            "status": null
+          }
+        ],
+        "routes": [
+          "https://brain-map.org/our-research/circuits-behavior/visual-coding",
+          "https://github.com/AllenInstitute/AllenSDK"
+        ]
+      },
+      "neural_role": "input",
+      "next_implementation_action": [
+        "Separate new-stimulus prediction in calibrated units from new-mouse prediction; resolve covariates and distribution terms."
+      ],
+      "primary_outputs": [
+        "Mouse-level state-by-area/class association contrasts and explanatory gains in one selected cohort; no causal arousal effect or genetic cell-type claim without appropriate evidence."
+      ],
+      "provenance": {
+        "builder": {
+          "bytes": 8015,
+          "path": "tools/build_neural_delivery_manifests.py",
+          "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+        },
+        "canonical_record_sha256": "62faab1f07c8a05551ddd740c6a64094f645ee634c43aa4a147c98e9df9c79ab",
+        "new_payload_reads": 0,
+        "scientific_execution": false,
+        "source_files": [
+          {
+            "bytes": 799654,
+            "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+            "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+          },
+          {
+            "bytes": 48504,
+            "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+            "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+          },
+          {
+            "bytes": 82580,
+            "path": "docs/neuroscience-benchmarks/catalog/datasets_nonfmri_noneeg.json",
+            "sha256": "3d2d6829998d6aa3e943ae442f2dfb5562a21b8f24767c364067e1007d0b8488"
+          },
+          {
+            "bytes": 6299,
+            "path": "authoring/neural-source-audits/allen-visual-coding-v1/audit.json",
+            "sha256": "e87968dd5e5029e1b8ee3efdc4aee4923d5b3f40f2b47c49f836e7ed7535e10c"
+          }
+        ]
+      },
+      "reference": {
+        "commit_or_archive_version": null,
+        "data_url": "https://brain-map.org/our-research/circuits-behavior/visual-coding",
+        "entrypoints": [],
+        "reference_executed_for_this_contract": false,
+        "role": "Pinned Allen access/analysis SDK and actual session metadata; no qualified stimulus-transfer or state-modulation predictive baseline exists for these cases.",
+        "source_code_url": "https://github.com/AllenInstitute/AllenSDK",
+        "source_paper": null
+      },
+      "resources": {
+        "basis": "Unmeasured estimate. Use bounded existing derivatives/reference features; full-source procurement and model training are not implied.",
+        "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake"
+      },
+      "schema_version": 1,
+      "scientific_question": "Do stimulus-matched associations between running/pupil state and neural responses differ across verified areas or explicitly defined unit classes?",
+      "source_audit_overlays": [
+        {
+          "assignment_ids": [
+            "NEURAL-091",
+            "NEURAL-092"
+          ],
+          "audit_path": "authoring/neural-source-audits/allen-visual-coding-v1/audit.json",
+          "audit_scope": "Source, archive metadata and code inspection only; no recording or model payload and no scientific execution.",
+          "checked_on": "2026-10-30",
+          "construction_implication": "Separate new-stimulus prediction in calibrated units from new-mouse prediction; resolve covariates and distribution terms.",
+          "explicit_response_body_bytes": 635502,
+          "independent_source_cap_bytes": 2000000,
+          "name": "Allen Visual Coding Neuropixels",
+          "narrative_path": "authoring/neural-source-audits/allen-visual-coding-v1/audit.md",
+          "reference_executed": false,
+          "remaining_gates": [
+            "Pin actual recording bytes/size and environment for selected cases",
+            "Inspect real headers, timestamps, invalid intervals and stimulus IDs",
+            "Decide research/public distribution rights",
+            "Freeze estimand, grouping/calibration and baselines",
+            "Build/independently verify packet, metrics and nuisance/leakage tests"
+          ],
+          "request_attempts": 15,
+          "request_wall_seconds_sum": 3.3873604999971576,
+          "roster_status_changed": false,
+          "scientific_admission": false,
+          "source_id": "D-N059"
+        }
+      ],
+      "source_identity": {
+        "ids": [
+          "D-N059"
+        ],
+        "overlap_groups": [
+          "allen-visual-coding-family"
+        ],
+        "task_family": "regional_information",
+        "titles": [
+          "Allen Brain Observatory Visual Coding"
+        ]
+      },
+      "split": {
+        "data_scope": "public_development_only",
+        "manifest_status": "not_created",
+        "policy": "Group all recordings from one biological person/animal; for single-subject collections use labeled within-subject whole-trial/session/condition blocks. Also group repeated stimulus identities and apply temporal guard bands covering every feature lag. Task-specific held-out condition follows the scientific question. Exact IDs/manifests pending source audit.",
+        "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+      },
+      "status": "specification_only",
+      "task_type": "investigation",
+      "title": "Behavioral-state modulation across visual areas",
+      "track": "neural"
+    },
+    "bytes": 11368,
+    "path": "benchmarks/manifests/neural/NEURAL-092.json",
+    "sha256": "38cdaa72ab4872786256f4f2e989073d2bebfecab57ad6782945e3d6e1d6d047"
   },
   "holds": [
     {
@@ -133,51 +341,120 @@
       "requirement": "Implement and run data adapter/evaluator/reference, matched controls and malformed-output tests; independently reproduce results before any validation claim."
     },
     {
-      "source_id": "D-N059",
       "construction_gates": [
         "Pin actual recording bytes/size and environment for selected cases",
         "Inspect real headers, timestamps, invalid intervals and stimulus IDs",
         "Decide research/public distribution rights",
         "Freeze estimand, grouping/calibration and baselines",
         "Build/independently verify packet, metrics and nuisance/leakage tests"
-      ]
+      ],
+      "source_id": "D-N059"
     }
   ],
-  "next_implementation_action": [
-    "Separate new-stimulus prediction in calibrated units from new-mouse prediction; resolve covariates and distribution terms."
-  ],
-  "construction_review": {
-    "checked_on": "2026-10-30",
-    "disposition": "reframe",
-    "reason": "State associations are observational; mouse genotype or a putative spike class is not a definitive per-unit cell type.",
-    "remaining_gates": [
-      "Validate area/unit-class metadata and state clocks.",
-      "Freeze missing-pupil handling and rate/reliability matching.",
-      "Keep optical and spike cohorts and metrics separate."
+  "id": "NEURAL-092",
+  "input_assets": {
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
     ],
-    "proposal": "authoring/neural-source-audits/contract-corrections-v2.json",
-    "proposal_sha256": "fe743219d97e5b428f828918bd8be294766dfe8f679f74fd60399eef3028d247",
-    "source_evidence": [
+    "readiness_records": [
       {
-        "path": "authoring/neural-source-audits/allen-visual-coding-v1/audit.md",
-        "sha256": "f4a8f192c741aa56c5c6258cf07f33f415ff1c1dacdedfa9a23da073ee069484"
+        "data_manifest": null,
+        "ledger": "catalog/datasets_nonfmri_noneeg.json",
+        "record_sha256": "9eb8cdad02781a763bb43ebd69b21f8481441d7c1dd17061bc04b0258dfdbdda",
+        "recording_contract": null,
+        "source_id": "D-N059",
+        "status": null
       }
     ],
-    "readiness_promoted": false
+    "routes": [
+      "https://brain-map.org/our-research/circuits-behavior/visual-coding",
+      "https://github.com/AllenInstitute/AllenSDK"
+    ]
   },
+  "neural_role": "input",
+  "next_implementation_action": [
+    "Independently review this whole inactive central composition and exact canonical/runtime pair before shared placement.",
+    "Separately select authentic full32 packet/source/rights, exact clean image/interpreter/participant/root profile, measured physical capacities and original invocation observer; conduct qualification only with future explicit execution authorization."
+  ],
+  "primary_outputs": [
+    "Full32-mouse protected prediction loss/gain programme, all five fixed model families and candidate, six areas and all15 matched/unmatched area pairs.",
+    "Separate later original observed-data investigation: full-running-panel association reconstruction error; pupil full-panel endpoint remains unavailable when required mice lack pupil support."
+  ],
+  "provenance": {
+    "builder": {
+      "bytes": 8015,
+      "path": "tools/build_neural_delivery_manifests.py",
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "canonical_record_sha256": "62faab1f07c8a05551ddd740c6a64094f645ee634c43aa4a147c98e9df9c79ab",
+    "new_payload_reads": 0,
+    "scientific_execution": false,
+    "source_files": [
+      {
+        "bytes": 799654,
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "bytes": 48504,
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "bytes": 82580,
+        "path": "docs/neuroscience-benchmarks/catalog/datasets_nonfmri_noneeg.json",
+        "sha256": "3d2d6829998d6aa3e943ae442f2dfb5562a21b8f24767c364067e1007d0b8488"
+      },
+      {
+        "bytes": 6299,
+        "path": "authoring/neural-source-audits/allen-visual-coding-v1/audit.json",
+        "sha256": "e87968dd5e5029e1b8ee3efdc4aee4923d5b3f40f2b47c49f836e7ed7535e10c"
+      }
+    ]
+  },
+  "reference": {
+    "accepted_source_manifest": {
+      "bytes": 9069,
+      "path": "authoring/delivery-20261105/common/remaining-builds-wave40/neural092-concrete-host-source-v4/SOURCE_MANIFEST.json",
+      "sha256": "efe8290189309efaf3760d0f191dc4ce57fbd3c2c168eb867ce6f8fa86ef4242"
+    },
+    "commit_or_archive_version": null,
+    "data_url": "https://brain-map.org/our-research/circuits-behavior/visual-coding",
+    "entrypoints": [
+      "programme/gain/programme.py:run_programme",
+      "programme/gain/reference.py",
+      "programme/gain/solver.py",
+      "programme/source/run.py reference",
+      "programme/source/run.py score"
+    ],
+    "reference_executed_for_this_contract": false,
+    "role": "Exact accepted five-model scalar float64 Poisson ridge programme: state_only, stimulus_only, stimulus_plus_state, stimulus_plus_running, stimulus_plus_pupil. Nine lambdas (0.0001 to10000), full45 grid fits and5 refits/unit; VALIDATION larger-lambda tie break, FIT+VALIDATION refit; all grid fits precede selection and all selections precede refits. Required fit failure makes the complete endpoint unavailable. The later observed-data reference/scorer remains its actual original subprocess.",
+    "source_code_url": "https://github.com/AllenInstitute/AllenSDK",
+    "source_paper": null
+  },
+  "resources": {
+    "basis": "49 exact selected source files;80,462,809,684 bytes of original recordings absent. Complete profile must bound all32 dimensional costs, candidate and original observed bridge, decoder/allocator/scalar/I/O/writer/error/journal overhead, rootfs/process/cgroup/descriptor lifecycles. Source formulas are not measured feasibility. No subsampling or smaller support is implied.",
+    "class": "full32_source_scope_CPU_Linux_root_native_custody_unqualified"
+  },
+  "schema_version": 1,
+  "scientific_question": "Within the same source-selected units and mice, how do frozen stimulus/state predictors and a candidate predict unseen QUERY responses, and what stimulus-matched observational state associations differ across six visual areas after protected predictions are sealed?",
   "source_audit_overlays": [
     {
-      "source_id": "D-N059",
-      "name": "Allen Visual Coding Neuropixels",
       "assignment_ids": [
         "NEURAL-091",
         "NEURAL-092"
       ],
-      "checked_on": "2026-10-30",
       "audit_path": "authoring/neural-source-audits/allen-visual-coding-v1/audit.json",
-      "narrative_path": "authoring/neural-source-audits/allen-visual-coding-v1/audit.md",
       "audit_scope": "Source, archive metadata and code inspection only; no recording or model payload and no scientific execution.",
+      "checked_on": "2026-10-30",
       "construction_implication": "Separate new-stimulus prediction in calibrated units from new-mouse prediction; resolve covariates and distribution terms.",
+      "explicit_response_body_bytes": 635502,
+      "independent_source_cap_bytes": 2000000,
+      "name": "Allen Visual Coding Neuropixels",
+      "narrative_path": "authoring/neural-source-audits/allen-visual-coding-v1/audit.md",
+      "reference_executed": false,
       "remaining_gates": [
         "Pin actual recording bytes/size and environment for selected cases",
         "Inspect real headers, timestamps, invalid intervals and stimulus IDs",
@@ -185,51 +462,68 @@
         "Freeze estimand, grouping/calibration and baselines",
         "Build/independently verify packet, metrics and nuisance/leakage tests"
       ],
-      "explicit_response_body_bytes": 635502,
       "request_attempts": 15,
       "request_wall_seconds_sum": 3.3873604999971576,
-      "independent_source_cap_bytes": 2000000,
       "roster_status_changed": false,
-      "reference_executed": false,
-      "scientific_admission": false
+      "scientific_admission": false,
+      "source_id": "D-N059"
     }
   ],
-  "provenance": {
-    "canonical_record_sha256": "62faab1f07c8a05551ddd740c6a64094f645ee634c43aa4a147c98e9df9c79ab",
-    "source_files": [
-      {
-        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
-        "bytes": 799654,
-        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
-      },
-      {
-        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
-        "bytes": 48504,
-        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
-      },
-      {
-        "path": "docs/neuroscience-benchmarks/catalog/datasets_nonfmri_noneeg.json",
-        "bytes": 82580,
-        "sha256": "3d2d6829998d6aa3e943ae442f2dfb5562a21b8f24767c364067e1007d0b8488"
-      },
-      {
-        "path": "authoring/neural-source-audits/allen-visual-coding-v1/audit.json",
-        "bytes": 6299,
-        "sha256": "e87968dd5e5029e1b8ee3efdc4aee4923d5b3f40f2b47c49f836e7ed7535e10c"
-      }
+  "source_identity": {
+    "ids": [
+      "D-N059"
     ],
-    "builder": {
-      "path": "tools/build_neural_delivery_manifests.py",
-      "bytes": 8015,
-      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
-    },
-    "new_payload_reads": 0,
-    "scientific_execution": false
+    "overlap_groups": [
+      "allen-visual-coding-family"
+    ],
+    "task_family": "regional_information",
+    "titles": [
+      "Allen Brain Observatory Visual Coding"
+    ]
   },
-  "admission": {
-    "runnable": false,
-    "research_qualified": false,
-    "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+  "source_integration": {
+    "actual_operator": "host092.operator.execute(selection, bootstrap=None)",
+    "actual_selection_issuer": "host092.admission.load_selection(path, expected_sha256)",
+    "all_historical_holds_preserved": true,
+    "api_modules": 38,
+    "authentic_profile_issued": false,
+    "central_operator": "operator.py",
+    "generic_interfaces_active": false,
+    "integration_directory_label": "v3",
+    "norms": 4,
+    "scope": {
+      "area_pairs": 15,
+      "areas": 6,
+      "fixed_models": 5,
+      "mice": 32,
+      "sessions": 32
+    },
+    "source_bytes": 250309,
+    "source_hold_families": [
+      "Authentic complete32 cohort/packet/source provenance and rights",
+      "Complete-unit observation and retrospective QC/pupil limitations",
+      "Independent clean image/interpreter/participant selection",
+      "Full-dimensional physical capacity and all raw-error/journal/I/O/writer overheads",
+      "Real Linux/runc/cgroup/namespace/clock/descriptor/terminal observation and retirement",
+      "Empirical reference/candidate/scientific validation",
+      "Whole successor review and root selection"
+    ],
+    "source_manifest": {
+      "bytes": 9069,
+      "path": "authoring/delivery-20261105/common/remaining-builds-wave40/neural092-concrete-host-source-v4/SOURCE_MANIFEST.json",
+      "sha256": "efe8290189309efaf3760d0f191dc4ce57fbd3c2c168eb867ce6f8fa86ef4242"
+    },
+    "source_roles": 49,
+    "source_version": "V4"
+  },
+  "split": {
+    "data_scope": "public_development_only",
+    "manifest_status": "source_contract_present_authentic_packet_unissued",
+    "policy": "Original within-session blocks FIT=2, VALIDATION=5, QUERY=7. Counts use half-open onset+0.05 to onset+1.95 seconds (1.9 seconds exposure), original selected unit/trial identities and complete observation requirements.",
+    "uncertainty": "Same-unit within-session prediction. No new-mouse or guaranteed unseen-stimulus transfer. Mouse-level aggregation retains undefined support, including missing pupil; no trial/neuron independence claims."
+  },
+  "status": "source_only_inactive",
+  "task_type": "prediction_then_observed_investigation",
+  "title": "Within-session neural prediction and behavioral-state investigation across visual areas",
+  "track": "neural"
 }

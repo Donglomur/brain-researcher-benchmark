@@ -1,0 +1,80 @@
+{
+  "source": "D-N059 Allen Brain Observatory Visual Coding Neuropixels",
+  "source_protocol": "brain_observatory_1.1",
+  "roster_sha256": "9afc2888bf5200c0362d5adbc951fc90cce2c5e120d58fe00bb83aa5926949fb",
+  "full_selected_sessions": 32,
+  "biological_units": {
+    "mice": 32,
+    "session_within_mouse_weight": "equal",
+    "mouse_weight": "equal",
+    "units": "distinct native sorted units; no correspondence across sessions or mice"
+  },
+  "other_protocol_dispositions": 26,
+  "required_anatomical_areas": [
+    "VISp",
+    "VISl",
+    "VISal",
+    "VISrl",
+    "VISam",
+    "VISpm"
+  ],
+  "unit_eligibility": {
+    "amplitude_cutoff_max": 0.1,
+    "presence_ratio_min": 0.95,
+    "isi_violations_max": 0.5,
+    "quality": "good",
+    "valid_peak_channel": true,
+    "native_join": "unit.peak_channel_id to unique electrode table.id; area=electrode.location",
+    "scope": "all eligible units in all required sessions; missing support fails complete preparation, never replaces mice"
+  },
+  "source_recording_bytes": 80462809684,
+  "source_hashes": "full object hashes absent; frozen size/URL/opaque ETag bound, full streamed SHA256 committed before projection",
+  "native_invalid_times": "union all tags conservatively; reject target or pre-state window overlap",
+  "observation_coverage": "unverified full-unit-observation assumption for all windows; no obs_intervals verified; zero released counts do not prove observed silence",
+  "state_features": {
+    "history_seconds": [
+      -0.5,
+      0
+    ],
+    "running": "native interval-weighted mean absolute cm/s, complete prewindow coverage",
+    "pupil": "native filtered pupil area Pixels ^ 2, finite positive prewindow sample mean, <=50ms gaps, endpoint support; absent/invalid explicitly missing",
+    "pupil_bins": "session FIT-only linear terciles; LOW<=q1, MID q1<x<=q2, HIGH>q2; equal cutpoints unavailable",
+    "running_bins": "REST<=1cm/s,RUN>=5cm/s,otherwise TRANSITION; missing distinct",
+    "full_panel_source_presence": "26 filtered gaze modules present;6 absent, independently of unreliable presence inference from fail-eye flag"
+  },
+  "baseline": "same-unit (FIT counts + .5)/(FIT trials * fixed exposure seconds); no query/validation counts",
+  "preprocessing_limitations": [
+    "Published spike sorting/QC use the full recording and are transductive.",
+    "Published filtered pupil preprocessing is not established causal.",
+    "Coarse state matching leaves residual confounding; running/pupil are observational.",
+    "Mouse genotype is not unit genetic cell type."
+  ],
+  "construction_only": true,
+  "actual_neural_arrays_read": false,
+  "scientific_scores_computed": 0,
+  "models_fitted": 0,
+  "task_id": "NEURAL-092",
+  "question": "Reconstruct stimulus-matched running/pupil associations and area contrasts from legitimately observed query responses.",
+  "input_role": "neural observations public in investigation phase; private scorer binds recomputation, not secret copyable query labels",
+  "stimulus_family": "drifting_gratings",
+  "native_blocks": {
+    "FIT": 2,
+    "VALIDATION": 5,
+    "QUERY_OBSERVED": 7
+  },
+  "block_census": "All32 metadata-only probes show blocks2/5/7:200/200/(228or230) native presentations; query count values never read.",
+  "target_window_seconds": [
+    0.05,
+    1.95
+  ],
+  "pairing": "Within QUERY block, exact all-native stimulus condition plus other-state bin; sort each side by(onset,id), chronological zip one-to-one, no reuse/replacement. Pairset determined before count use.",
+  "running_contrast": "RUN minus REST, match pupil LOW/MID/HIGH/MISSING; exclude running TRANSITION/MISSING.",
+  "pupil_contrast": "HIGH minus LOW, match running REST/RUN; exclude pupil MID/MISSING and running TRANSITION/MISSING.",
+  "unit_effect": "Mean paired(high rate -low rate)/positive same-unit FITbaseline.",
+  "area_effect": "Equal-unit signed effects for every fixed source-verified area. Absent area or no pairs =>null.",
+  "primary": "Running reconstruction absolute error: equal available fixed areas/session, then equal sessions/mouse and mice. Any required session without areas/pairs makes fullprimary unavailable.",
+  "pupil_endpoint": "Separate full32 reconstruction endpoint; missing session makes fullendpoint unavailable, no silent26-mouse promotion. All32 dispositions retained.",
+  "matched_area_control": "All15 area pairs separately; FITbaselinebins[1,2,4,8,16,32,64],publishedpresence[.97,.99],ISI[.1,.3],amplitude[.05]; bisect_right, SHA256(unit_id) thenid, min count eachstratum, no query-dependent selection. Equalselectedunitmeans perarea, subtract first area minus second. No universal matched cohort.",
+  "explanatory_gain": "No qualified explanatory/predictive gain without independent matched-method fitting and isolation evidence; always null in this construction. Candidate nuisance weakness cannot improve primary.",
+  "causal_scope": "Descriptive observed-data reconstruction, not causal state intervention. Distinct from091prediction; no biological direction/significance required."
+}
