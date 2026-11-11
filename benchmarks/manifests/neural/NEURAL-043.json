@@ -1,113 +1,134 @@
 {
-  "schema_version": 1,
-  "id": "NEURAL-043",
-  "track": "neural",
-  "title": "Tongue-reach direction decoding from ALM",
-  "status": "specification_only",
-  "source_identity": {
-    "ids": [
-      "D-P005"
+  "accepted_source_protocol": {
+    "limits": null,
+    "native_dependency_versions": null,
+    "perturbation": {
+      "artifact_guard": null,
+      "assignment_probabilities_verified": false,
+      "baseline_min_frames": 10,
+      "caliper_quantiles": [
+        0.25,
+        0.75
+      ],
+      "caliper_scale": 0.2,
+      "caliper_weighting": "equal training mouse mass; pair weight1/n_mouse",
+      "causal_class_contrast": false,
+      "distance_edges": [
+        25.0,
+        50.0,
+        100.0,
+        250.0
+      ],
+      "lag_edges": [
+        0.0,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9,
+        1.0
+      ],
+      "max_design_bytes": null,
+      "minimum_distance": 25.0,
+      "minimum_frames": 2,
+      "response_alpha": 1.0,
+      "ridge_alpha": 1.0,
+      "tuning_splits": {},
+      "tuning_window": [
+        0.0,
+        1.0
+      ],
+      "tuning_window_semantics": "contact-aligned [0,1) seconds; includes postcontact/reward activity, not pure motor tuning or causal mediator"
+    },
+    "prediction": {
+      "atlas_alignment_evidence": null,
+      "atlas_bins": [],
+      "class_spaces": [
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          5
+        ]
+      ],
+      "embargo_blocks_each_side": 1,
+      "fit_selection": "fixed reference, no evaluation tuning",
+      "logistic_c": 1.0,
+      "minimum_frames": 2,
+      "original_direction_cue_exposed": false,
+      "primary_track": "held_block",
+      "secondary_track": "held_mouse",
+      "window": [
+        -0.5,
+        -0.1
+      ],
+      "window_semantics": "retrospective tracking-movement-onset aligned; not online future-onset prediction"
+    },
+    "release": "001612/0.250927.1801",
+    "runnable": false,
+    "scientific_execution": false,
+    "selection": "root selected prospective benchmark; not recovered historical DataJoint method",
+    "tasks": [
+      "NEURAL-043",
+      "NEURAL-044"
     ],
-    "titles": [
-      "Finkelstein ALM calcium imaging and targeted optogenetics during tongue reaching"
-    ],
-    "overlap_groups": [
-      "finkelstein-2025-alm-connectivity"
-    ],
-    "task_family": "sensorimotor_readout"
-  },
-  "scientific_question": "Can ALM calcium predict upcoming tongue-reach direction before the movement on held-out trials/mice?",
-  "task_type": "prediction",
-  "neural_role": "input",
-  "primary_outputs": [
-    "Target-direction probabilities from a fixed premovement neural interval."
-  ],
-  "input_assets": {
-    "routes": [
-      "https://dandiarchive.org/dandiset/001612/0.250927.1801",
-      "https://www.nature.com/articles/s41586-025-09758-6",
-      "https://github.com/arsenyf/Finkelstein_et_al_Nature_2025",
-      "https://raw.githubusercontent.com/arsenyf/Finkelstein_et_al_Nature_2025/19fe755ce3b7e2b6d3c6c5f4afccda2829af303d/Figure1_v12.m",
-      "https://raw.githubusercontent.com/arsenyf/Finkelstein_et_al_Nature_2025/19fe755ce3b7e2b6d3c6c5f4afccda2829af303d/README.md"
-    ],
-    "readiness_records": [
-      {
-        "source_id": "D-P005",
-        "ledger": "readiness/signals_readiness.json",
-        "record_sha256": "89600c1b3e288417017a502b8fb2db22c6de13b14ccb2d74c1f25babe5175766",
-        "data_manifest": {
-          "version": "0.250927.1801",
-          "number_of_files": 61,
-          "number_of_subjects": 15,
-          "total_bytes": 44969345792,
-          "example_asset": {
-            "path": "sub-462455/sub-462455_ses-3_ophys.nwb",
-            "asset_id": "8b38e198-07e3-4e66-8744-8daa307f00d2",
-            "bytes": 1077065568
-          },
-          "manifest_url": "https://api.dandiarchive.org/api/dandisets/001612/versions/0.250927.1801/assets/"
-        },
-        "recording_contract": {
-          "neural": [
-            "NWB calcium imaging/ROI plane segmentation documented in DANDI"
-          ],
-          "labels": [
-            "multi-directional tongue-reaching and targeted optogenetic stimulation described; exact NWB table fields not yet inspected"
-          ],
-          "time_alignment": "Not verified at field level",
-          "biological_ids": "15 mouse IDs in sub-* filenames",
-          "evidence": "DANDI metadata and two actual assets; figure code uses DataJoint PAPER/LICK2D/IMG relations"
-        },
-        "status": "needs_adapter"
-      }
-    ],
-    "exact_asset_records": [
-      {
-        "source_id": "D-P005",
-        "ledger": "readiness/signals_readiness.json",
-        "source_json_pointer": "/data_manifest/example_asset",
-        "record": {
-          "path": "sub-462455/sub-462455_ses-3_ophys.nwb",
-          "asset_id": "8b38e198-07e3-4e66-8744-8daa307f00d2",
-          "bytes": 1077065568
-        },
-        "local_payload_verified_by_this_builder": false
-      }
-    ],
-    "missing_or_unverified": [
-      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    "unissued_fields": [
+      "per-asset NWB mapping",
+      "complete61-file identity/disposition",
+      "cross-epoch ROI/baseline identity",
+      "clock/exposure/processing support uncertainty",
+      "artifact mask source",
+      "non-test tuning block roster and analysis window",
+      "anatomical feature alignment for held-mouse043",
+      "design/memory/time/resource capacity",
+      "private identifier key and isolated target owner",
+      "genuine provider sandbox"
     ]
   },
-  "allowed_inputs": {
-    "neural_measurements": [
-      "NWB calcium imaging/ROI plane segmentation documented in DANDI"
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
     ],
+    "common_policy": {
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost."
+    }
+  },
+  "admission": {
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately.",
+    "research_qualified": false,
+    "runnable": false,
+    "submission_ready": false
+  },
+  "allowed_inputs": {
     "allowed_context": [
       "multi-directional tongue-reaching and targeted optogenetic stimulation described; exact NWB table fields not yet inspected"
     ],
     "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Not verified at field level",
-    "source_contract_evidence": "DANDI metadata and two actual assets; figure code uses DataJoint PAPER/LICK2D/IMG relations"
-  },
-  "biological_unit": "15 mouse IDs in sub-* filenames",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
-  "split": {
-    "policy": "All imaging/stimulation sessions by mouse; whole trials with matched pre-intervention context; explicit neuron alignment for new mice.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
-  },
-  "reference": {
-    "source_code_url": "https://github.com/arsenyf/Finkelstein_et_al_Nature_2025",
-    "commit_or_archive_version": "19fe755ce3b7e2b6d3c6c5f4afccda2829af303d",
-    "entrypoints": [
-      "Figure1_v12.m",
-      "README.md"
+    "neural_measurements": [
+      "NWB calcium imaging/ROI plane segmentation documented in DANDI"
     ],
-    "role": "Official perturbation/analysis source expects lab DataJoint tables; no public-input adapter verified.",
-    "reference_executed_for_this_contract": false,
-    "source_paper": "https://www.nature.com/articles/s41586-025-09758-6",
-    "data_url": "https://dandiarchive.org/dandiset/001612/0.250927.1801"
+    "source_contract_evidence": "DANDI metadata and two actual assets; figure code uses DataJoint PAPER/LICK2D/IMG relations",
+    "time_alignment": "Retrospective tracking movement onset [-0.5,-0.1]seconds, complete frame exposure and processing support inside window; not online future-onset prediction."
+  },
+  "biological_unit": "Mouse; complete reported61 behavior/imaging sessions15mice and52-stimulation-session13-mouse subset require genuine source identity/disposition. Trials/cells/folds/arms are nested, not extra cohorts.",
+  "case_definition": "Whole held repeated-target blocks with adjacent-block embargo; separate full held-mouse/anatomical claim; preserve every include/exclude disposition and distinct4x4/5x5 spaces.",
+  "construction_review": {
+    "gates_open": 22,
+    "operator_contract": "benchmarks/neuroscience/neural-043/OPERATOR_CONTRACT.json",
+    "research_qualified": false,
+    "runnable": false,
+    "source": "benchmarks/neuroscience/neural-043/SOURCE_MANIFEST.json",
+    "status": "source_only_proposal"
   },
   "controls": [
     "No direction-coded events",
@@ -115,25 +136,16 @@
     "movement-history/time baseline",
     "cell-selection on training only."
   ],
-  "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
-    }
-  },
   "evaluation": {
+    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "executor_ref": null,
     "observable_endpoints": {
       "definition": "Mouse-macro balanced accuracy and log loss.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+      "investigation_rule": null,
+      "scoring_status": "implemented_inactive_source; genuine inputs, native/reference/scorer qualification absent"
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "scorer_ref": null,
+    "source_api": "alm.operator.Operator; original target-last storage/grading and full scientific modules retained; not a verified central run/score route",
     "unresolved_grading": [
       {
         "id": "protocol",
@@ -151,85 +163,510 @@
         "id": "replication",
         "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
       }
-    ],
-    "executor_ref": null,
-    "scorer_ref": null
+    ]
   },
-  "resources": {
-    "class": "workstation_or_single_GPU_after_bounded_intake",
-    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
-    "source_storage_evidence": null
+  "historical_specification": {
+    "document": {
+      "access_conditions": {
+        "agent_modes": [
+          "frozen_program",
+          "case_adaptive_equal_inputs_tools_compute"
+        ],
+        "common_policy": {
+          "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+          "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+          "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them.",
+          "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost."
+        }
+      },
+      "admission": {
+        "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately.",
+        "research_qualified": false,
+        "runnable": false,
+        "submission_ready": false
+      },
+      "allowed_inputs": {
+        "allowed_context": [
+          "multi-directional tongue-reaching and targeted optogenetic stimulation described; exact NWB table fields not yet inspected"
+        ],
+        "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
+        "neural_measurements": [
+          "NWB calcium imaging/ROI plane segmentation documented in DANDI"
+        ],
+        "source_contract_evidence": "DANDI metadata and two actual assets; figure code uses DataJoint PAPER/LICK2D/IMG relations",
+        "time_alignment": "Not verified at field level"
+      },
+      "biological_unit": "15 mouse IDs in sub-* filenames",
+      "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+      "construction_review": null,
+      "controls": [
+        "No direction-coded events",
+        "equal windows",
+        "movement-history/time baseline",
+        "cell-selection on training only."
+      ],
+      "evaluation": {
+        "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+        "executor_ref": null,
+        "observable_endpoints": {
+          "definition": "Mouse-macro balanced accuracy and log loss.",
+          "investigation_rule": null,
+          "scoring_status": "not_implemented"
+        },
+        "scorer_ref": null,
+        "unresolved_grading": [
+          {
+            "id": "protocol",
+            "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+          },
+          {
+            "id": "reference",
+            "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+          },
+          {
+            "id": "scorer",
+            "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+          },
+          {
+            "id": "replication",
+            "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+          }
+        ]
+      },
+      "holds": [
+        {
+          "id": "task_specific",
+          "requirement": "Build NWB-to-author-DataJoint adapter; verify target labels, timing and mouse IDs before packet creation."
+        },
+        {
+          "id": "source_1",
+          "requirement": "Figure1 calls fetch1(PAPER.ConnectivityPaperFigure1datav7shuffle) and lab DataJoint tables; no verified NWB-to-table adapter."
+        },
+        {
+          "id": "source_2",
+          "requirement": "Code license not found in inspected repository metadata."
+        },
+        {
+          "id": "packet",
+          "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+        },
+        {
+          "id": "protocol",
+          "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        },
+        {
+          "id": "reference",
+          "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        },
+        {
+          "id": "scorer",
+          "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+        },
+        {
+          "id": "replication",
+          "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        }
+      ],
+      "id": "NEURAL-043",
+      "input_assets": {
+        "missing_or_unverified": [
+          "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+        ],
+        "readiness_records": [
+          {
+            "data_manifest": {
+              "number_of_files": 61,
+              "number_of_subjects": 15,
+              "total_bytes": 44969345792,
+              "version": "0.250927.1801"
+            },
+            "recording_contract": {
+              "biological_ids": "15 mouse IDs in sub-* filenames",
+              "evidence": "DANDI metadata and two actual assets; figure code uses DataJoint PAPER/LICK2D/IMG relations",
+              "labels": [
+                "multi-directional tongue-reaching and targeted optogenetic stimulation described; exact NWB table fields not yet inspected"
+              ],
+              "neural": [
+                "NWB calcium imaging/ROI plane segmentation documented in DANDI"
+              ],
+              "time_alignment": "Not verified at field level"
+            },
+            "source_id": "D-P005",
+            "status": "needs_adapter"
+          }
+        ],
+        "routes": [
+          "https://dandiarchive.org/dandiset/001612/0.250927.1801",
+          "https://www.nature.com/articles/s41586-025-09758-6",
+          "https://github.com/arsenyf/Finkelstein_et_al_Nature_2025",
+          "https://raw.githubusercontent.com/arsenyf/Finkelstein_et_al_Nature_2025/19fe755ce3b7e2b6d3c6c5f4afccda2829af303d/Figure1_v12.m",
+          "https://raw.githubusercontent.com/arsenyf/Finkelstein_et_al_Nature_2025/19fe755ce3b7e2b6d3c6c5f4afccda2829af303d/README.md"
+        ]
+      },
+      "neural_role": "input",
+      "next_implementation_action": [
+        "Build NWB-to-author-DataJoint adapter; verify target labels, timing and mouse IDs before packet creation."
+      ],
+      "primary_outputs": [
+        "Target-direction probabilities from a fixed premovement neural interval."
+      ],
+      "provenance": {
+        "canonical_record_sha256": "43eb665face0041968c8386ddfa468f526fd549fbe1c4a0aa4454264fcf00e3a",
+        "new_payload_reads": 0,
+        "scientific_execution": false
+      },
+      "reference": {
+        "commit_or_archive_version": "19fe755ce3b7e2b6d3c6c5f4afccda2829af303d",
+        "data_url": "https://dandiarchive.org/dandiset/001612/0.250927.1801",
+        "entrypoints": [
+          "Figure1_v12.m",
+          "README.md"
+        ],
+        "reference_executed_for_this_contract": false,
+        "role": "Official perturbation/analysis source expects lab DataJoint tables; no public-input adapter verified.",
+        "source_code_url": "https://github.com/arsenyf/Finkelstein_et_al_Nature_2025",
+        "source_paper": "https://www.nature.com/articles/s41586-025-09758-6"
+      },
+      "resources": {
+        "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+        "class": "workstation_or_single_GPU_after_bounded_intake",
+        "source_storage_evidence": null
+      },
+      "schema_version": 1,
+      "scientific_question": "Can ALM calcium predict upcoming tongue-reach direction before the movement on held-out trials/mice?",
+      "source_audit_overlays": [],
+      "source_identity": {
+        "ids": [
+          "D-P005"
+        ],
+        "overlap_groups": [
+          "finkelstein-2025-alm-connectivity"
+        ],
+        "task_family": "sensorimotor_readout",
+        "titles": [
+          "Finkelstein ALM calcium imaging and targeted optogenetics during tongue reaching"
+        ]
+      },
+      "split": {
+        "data_scope": "public_development_only",
+        "manifest_status": "not_created",
+        "policy": "All imaging/stimulation sessions by mouse; whole trials with matched pre-intervention context; explicit neuron alignment for new mice.",
+        "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+      },
+      "status": "specification_only",
+      "task_type": "prediction",
+      "title": "Tongue-reach direction decoding from ALM",
+      "track": "neural"
+    },
+    "interpretation": "Public metadata projection of the preceding planning contract. Scientific fields are unchanged; asset examples and private construction/readiness pointers are omitted. The retained pin identifies the original document, not this projection. Historical methods and holds are not current qualification.",
+    "pin": {
+      "bytes": 10615,
+      "sha256": "c39e66f13010d3c7a7a2fdf144e8ec808ba0e7d2a435e6d6c71623e59920c69e"
+    }
   },
   "holds": [
     {
-      "id": "task_specific",
-      "requirement": "Build NWB-to-author-DataJoint adapter; verify target labels, timing and mouse IDs before packet creation."
+      "id": "artifact_mask_and_power_units",
+      "requirement": "Open original accepted-source gate: artifact_mask_and_power_units",
+      "status": "open"
     },
     {
-      "id": "source_1",
-      "requirement": "Figure1 calls fetch1(PAPER.ConnectivityPaperFigure1datav7shuffle) and lab DataJoint tables; no verified NWB-to-table adapter."
+      "id": "calcium_processing_temporal_support",
+      "requirement": "Open original accepted-source gate: calcium_processing_temporal_support",
+      "status": "open"
     },
     {
-      "id": "source_2",
-      "requirement": "Code license not found in inspected repository metadata."
+      "id": "central_registration",
+      "requirement": "Open original accepted-source gate: central_registration",
+      "status": "open"
     },
     {
-      "id": "packet",
-      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+      "id": "code_license",
+      "requirement": "Open original accepted-source gate: code_license",
+      "status": "open"
     },
     {
-      "id": "protocol",
-      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+      "id": "complete_release_local_identity",
+      "requirement": "Open original accepted-source gate: complete_release_local_identity",
+      "status": "open"
     },
     {
-      "id": "reference",
-      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+      "id": "cross_epoch_roi_identity",
+      "requirement": "Open original accepted-source gate: cross_epoch_roi_identity",
+      "status": "open"
     },
     {
-      "id": "scorer",
-      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      "id": "exposure_and_clock_alignment",
+      "requirement": "Open original accepted-source gate: exposure_and_clock_alignment",
+      "status": "open"
     },
     {
-      "id": "replication",
-      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+      "id": "full_mouse_session_population",
+      "requirement": "Open original accepted-source gate: full_mouse_session_population",
+      "status": "open"
+    },
+    {
+      "id": "independent_tuning_split",
+      "requirement": "Open original accepted-source gate: independent_tuning_split",
+      "status": "open"
+    },
+    {
+      "id": "native_dependencies",
+      "requirement": "Open original accepted-source gate: native_dependencies",
+      "status": "open"
+    },
+    {
+      "id": "nwb_field_mapping",
+      "requirement": "Open original accepted-source gate: nwb_field_mapping",
+      "status": "open"
+    },
+    {
+      "id": "private_packet_separation",
+      "requirement": "Open original accepted-source gate: private_packet_separation",
+      "status": "open"
+    },
+    {
+      "id": "protocol_selection",
+      "requirement": "Open original accepted-source gate: protocol_selection",
+      "status": "open"
+    },
+    {
+      "id": "provider_sandbox_and_resource_owner",
+      "requirement": "Open original accepted-source gate: provider_sandbox_and_resource_owner",
+      "status": "open"
+    },
+    {
+      "id": "publication",
+      "requirement": "Open original accepted-source gate: publication",
+      "status": "open"
+    },
+    {
+      "id": "reference_and_controls",
+      "requirement": "Open original accepted-source gate: reference_and_controls",
+      "status": "open"
+    },
+    {
+      "id": "roi_region_table_identity",
+      "requirement": "Open original accepted-source gate: roi_region_table_identity",
+      "status": "open"
+    },
+    {
+      "id": "scientific_qualification",
+      "requirement": "Open original accepted-source gate: scientific_qualification",
+      "status": "open"
+    },
+    {
+      "id": "scorer_replication",
+      "requirement": "Open original accepted-source gate: scorer_replication",
+      "status": "open"
+    },
+    {
+      "id": "stimulation_assignment_schedule",
+      "requirement": "Open original accepted-source gate: stimulation_assignment_schedule",
+      "status": "open"
+    },
+    {
+      "id": "target_grid_identity",
+      "requirement": "Open original accepted-source gate: target_grid_identity",
+      "status": "open"
+    },
+    {
+      "id": "tracking_movement_onset",
+      "requirement": "Open original accepted-source gate: tracking_movement_onset",
+      "status": "open"
     }
   ],
-  "next_implementation_action": [
-    "Build NWB-to-author-DataJoint adapter; verify target labels, timing and mouse IDs before packet creation."
-  ],
-  "construction_review": null,
-  "source_audit_overlays": [],
-  "provenance": {
-    "canonical_record_sha256": "43eb665face0041968c8386ddfa468f526fd549fbe1c4a0aa4454264fcf00e3a",
-    "source_files": [
+  "id": "NEURAL-043",
+  "input_assets": {
+    "missing_or_unverified": [
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ],
+    "readiness_records": [
       {
-        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
-        "bytes": 799654,
-        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
-      },
-      {
-        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
-        "bytes": 48504,
-        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
-      },
-      {
-        "path": "docs/neuroscience-benchmarks/readiness/signals_readiness.json",
-        "bytes": 67125,
-        "sha256": "a1f767fe5f088b27c6b80a2068699838becdbf96457d15530f77e4a89f7616b6"
+        "data_manifest": {
+          "number_of_files": 61,
+          "number_of_subjects": 15,
+          "total_bytes": 44969345792,
+          "version": "0.250927.1801"
+        },
+        "recording_contract": {
+          "biological_ids": "15 mouse IDs in sub-* filenames",
+          "evidence": "DANDI metadata and two actual assets; figure code uses DataJoint PAPER/LICK2D/IMG relations",
+          "labels": [
+            "multi-directional tongue-reaching and targeted optogenetic stimulation described; exact NWB table fields not yet inspected"
+          ],
+          "neural": [
+            "NWB calcium imaging/ROI plane segmentation documented in DANDI"
+          ],
+          "time_alignment": "Not verified at field level"
+        },
+        "source_id": "D-P005",
+        "status": "needs_adapter"
       }
     ],
-    "builder": {
-      "path": "tools/build_neural_delivery_manifests.py",
-      "bytes": 8015,
-      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
-    },
+    "routes": [
+      "https://dandiarchive.org/dandiset/001612/0.250927.1801",
+      "https://www.nature.com/articles/s41586-025-09758-6",
+      "https://github.com/arsenyf/Finkelstein_et_al_Nature_2025",
+      "https://raw.githubusercontent.com/arsenyf/Finkelstein_et_al_Nature_2025/19fe755ce3b7e2b6d3c6c5f4afccda2829af303d/Figure1_v12.m",
+      "https://raw.githubusercontent.com/arsenyf/Finkelstein_et_al_Nature_2025/19fe755ce3b7e2b6d3c6c5f4afccda2829af303d/README.md"
+    ]
+  },
+  "neural_role": "input",
+  "next_implementation_action": [
+    "Review complete inactive canonical/operator/source placement composition; root selects each exact canonical and later source operation independently.",
+    "Issue and independently qualify original source/mapping/clock/target/native/provider/resource producers before scientific execution."
+  ],
+  "primary_outputs": [
+    "Separate full4x4 and5x5 target probabilities; within-mouse pooled held-out predictions before class recall; mouse-macro balanced accuracy/log loss by class space and claim."
+  ],
+  "prospective_references": [
+    "smoothed class prior",
+    "history/time fixed C=1 logistic",
+    "neural fixed C=1 logistic",
+    "neural+history/time fixed C=1 logistic",
+    "whole-block label-rotation diagnostic without randomization P claim"
+  ],
+  "provenance": {
+    "canonical_record_sha256": "43eb665face0041968c8386ddfa468f526fd549fbe1c4a0aa4454264fcf00e3a",
     "new_payload_reads": 0,
     "scientific_execution": false
   },
-  "admission": {
-    "runnable": false,
-    "research_qualified": false,
-    "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+  "public_source_projection": {
+    "assets_shipped": false,
+    "history_erasure_claim": false,
+    "metadata_changes": [
+      {
+        "action": "exclude",
+        "pointer": "/input_assets/exact_asset_records",
+        "reason": "Per-asset example metadata is not an operative source dependency; no roster or payload is shipped."
+      },
+      {
+        "action": "exclude",
+        "pointer": "/input_assets/readiness_records/0/ledger",
+        "reason": "Private readiness bookkeeping, not scientific contract."
+      },
+      {
+        "action": "exclude",
+        "pointer": "/input_assets/readiness_records/0/record_sha256",
+        "reason": "Private readiness bookkeeping, not scientific contract."
+      },
+      {
+        "action": "exclude",
+        "pointer": "/input_assets/readiness_records/0/data_manifest/example_asset",
+        "reason": "Omit copied asset example and enumeration endpoint; preserve exact release, aggregate counts, and public landing-page reference."
+      },
+      {
+        "action": "exclude",
+        "pointer": "/input_assets/readiness_records/0/data_manifest/manifest_url",
+        "reason": "Omit copied asset example and enumeration endpoint; preserve exact release, aggregate counts, and public landing-page reference."
+      },
+      {
+        "action": "exclude",
+        "pointer": "/provenance/builder",
+        "reason": "Private construction lineage is outside the public scientific-source union."
+      },
+      {
+        "action": "exclude",
+        "pointer": "/provenance/source_files",
+        "reason": "Private construction lineage is outside the public scientific-source union."
+      },
+      {
+        "action": "exclude",
+        "pointer": "/historical_specification/document/input_assets/exact_asset_records",
+        "reason": "Per-asset example metadata is not an operative source dependency; no roster or payload is shipped."
+      },
+      {
+        "action": "exclude",
+        "pointer": "/historical_specification/document/input_assets/readiness_records/0/ledger",
+        "reason": "Private readiness bookkeeping, not scientific contract."
+      },
+      {
+        "action": "exclude",
+        "pointer": "/historical_specification/document/input_assets/readiness_records/0/record_sha256",
+        "reason": "Private readiness bookkeeping, not scientific contract."
+      },
+      {
+        "action": "exclude",
+        "pointer": "/historical_specification/document/input_assets/readiness_records/0/data_manifest/example_asset",
+        "reason": "Omit copied asset example and enumeration endpoint; preserve exact release, aggregate counts, and public landing-page reference."
+      },
+      {
+        "action": "exclude",
+        "pointer": "/historical_specification/document/input_assets/readiness_records/0/data_manifest/manifest_url",
+        "reason": "Omit copied asset example and enumeration endpoint; preserve exact release, aggregate counts, and public landing-page reference."
+      },
+      {
+        "action": "exclude",
+        "pointer": "/historical_specification/document/provenance/builder",
+        "reason": "Private construction lineage is outside the public scientific-source union."
+      },
+      {
+        "action": "exclude",
+        "pointer": "/historical_specification/document/provenance/source_files",
+        "reason": "Private construction lineage is outside the public scientific-source union."
+      },
+      {
+        "action": "replace",
+        "pointer": "/construction_review/operator_contract",
+        "reason": "Resolve to the complete public contract/source map instead of private authoring evidence."
+      },
+      {
+        "action": "replace",
+        "pointer": "/construction_review/source",
+        "reason": "Resolve to the complete public contract/source map instead of private authoring evidence."
+      },
+      {
+        "action": "replace",
+        "pointer": "/historical_specification/interpretation",
+        "reason": "Truthfully distinguish semantic history preservation from byte-exact historical transport."
+      }
+    ],
+    "operative_source_changed": false,
+    "public_reference_policy": "Official paper, pinned author source and versioned dataset landing-page references are retained. Existing publication of identifiers is not reversed by this projection; no linked body is accessed or admitted.",
+    "scientific_fields_changed": false,
+    "version": 1
+  },
+  "reference": {
+    "commit_or_archive_version": "19fe755ce3b7e2b6d3c6c5f4afccda2829af303d",
+    "data_url": "https://dandiarchive.org/dandiset/001612/0.250927.1801",
+    "entrypoints": [
+      "Figure1_v12.m",
+      "README.md"
+    ],
+    "reference_executed_for_this_contract": false,
+    "role": "Historical original MATLAB/DataJoint evidence preserved; accepted prospective Python source implements fixed scientific references, not recovered missing original DataJoint methods. No reference has been executed for this contract.",
+    "source_code_url": "https://github.com/arsenyf/Finkelstein_et_al_Nature_2025",
+    "source_paper": "https://www.nature.com/articles/s41586-025-09758-6"
+  },
+  "resources": {
+    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+    "class": "workstation_or_single_GPU_after_bounded_intake",
+    "source_storage_evidence": null
+  },
+  "schema_version": 1,
+  "scientific_question": "Under retrospective tracking-movement-onset alignment, how well do ALM calcium and prespecified history/time features decode tongue-reach direction in whole held blocks and a separate anatomically aligned held-mouse track?",
+  "source_audit_overlays": [],
+  "source_identity": {
+    "ids": [
+      "D-P005"
+    ],
+    "overlap_groups": [
+      "finkelstein-2025-alm-connectivity"
+    ],
+    "task_family": "sensorimotor_readout",
+    "titles": [
+      "Finkelstein ALM calcium imaging and targeted optogenetics during tongue reaching"
+    ]
+  },
+  "split": {
+    "data_scope": "public_development_only",
+    "manifest_status": "source_implemented_genuine_input_producer_unissued",
+    "policy": "Whole held repeated-target blocks with adjacent-block embargo; separate full held-mouse/anatomical claim; preserve every include/exclude disposition and distinct4x4/5x5 spaces.",
+    "uncertainty": "Mouse-level approximate t summaries; no trial/cell pseudoreplication, no automatic small-sample or causal qualification."
+  },
+  "status": "specification_only",
+  "task_type": "prediction",
+  "title": "Tongue-reach direction decoding from ALM",
+  "track": "neural"
 }
