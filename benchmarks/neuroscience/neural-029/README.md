@@ -1,0 +1,13 @@
+# NEURAL-029 central source integration
+
+This source-only package preserves the adopted all-trial registered GrC1s-to-2s method. All24 inherited roles remain. Scientific implementation bodies are byte-identical to the reviewed successor; SOURCE_IDENTITY.json projects private provenance strings, and the central source owner authenticates the explicit public freeze. Its primary is the square root of pooled pair MSE divided by pooled public-training variance, followed by equal pairs within each mouse and equal mice. Fixed-warp and absolute-time comparators use the same inputs/support. Recurrent-cell and leave-one-mouse reporting do not change that estimand.
+
+central_operator.py provides actual trusted-operator inspect/plan/prepare/grade routes. Prepare and grade invoke the exact inherited scripts and argument names in separate -I -B Python processes. Inspect and command planning read ordinary source/request metadata only. They do not open any requested signal, header, key, binding, submission, target or model.
+
+No candidate executor or protected-target authority is supplied. program_execution is null and all admission is false. Genuine operator authority, authentic input identities, immutable native environment, complete resources/cleanup and independent scientific/numerical qualification remain open. Requestv2 requires explicit operation and cleanup wait allocations, with no defaults. Cleanup preserves the first raw error and retains secondary signal/reap errors; it never certifies group completion. A process observation is not a benchmark result.
+
+The unchanged participant contract is runtime/source/TASK.md. SOURCE_FREEZE.json names every inherited role; CURRENT_SPECIFICATION.json and OPERATOR_CONTRACT.json retain method and caller semantics. REQUEST_SCHEMAS.json describes closed operator requests. Full grade/support and command-plan artifacts are operator-private.
+
+This distribution is a source-only projection of the installed inactive package. Registration means installed source, not an executed or qualified benchmark. All16 qualification gates remain open; run, score and candidate execution are null. Historical origin records are identity references and are not bundled runtime dependencies.
+
+The upstream MainData.m and source/README.md are retained unchanged as scientific references under CC BY4.0; see THIRD_PARTY_NOTICES.md. The upstream README describes its full archive, including files not bundled here. This package contains all24 roles of this registered-cell transfer task, not a full nine-script paper-reproduction bundle. PUBLIC_PROVENANCE.json records the exact projection and unchanged source partition.

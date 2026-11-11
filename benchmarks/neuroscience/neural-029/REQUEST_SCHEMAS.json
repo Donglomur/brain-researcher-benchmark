@@ -1,0 +1,80 @@
+{
+  "path_rule": "Every path is a canonical absolute operator-selected path. Request/schema validation and complete source authentication precede process launch.",
+  "requests": {
+    "grade": {
+      "additionalProperties": false,
+      "properties": {
+        "binding": {
+          "type": "string"
+        },
+        "cleanup_wall_time_seconds": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "output": {
+          "type": "string"
+        },
+        "prepared_root": {
+          "type": "string"
+        },
+        "schema": {
+          "const": "neural029-central-grade-request-v2"
+        },
+        "submission": {
+          "type": "string"
+        },
+        "wall_time_seconds": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "schema",
+        "output",
+        "wall_time_seconds",
+        "cleanup_wall_time_seconds",
+        "prepared_root",
+        "binding",
+        "submission"
+      ],
+      "type": "object"
+    },
+    "prepare": {
+      "additionalProperties": false,
+      "properties": {
+        "cleanup_wall_time_seconds": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "index_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "output": {
+          "type": "string"
+        },
+        "schema": {
+          "const": "neural029-central-prepare-request-v2"
+        },
+        "source_root": {
+          "type": "string"
+        },
+        "wall_time_seconds": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "schema",
+        "output",
+        "wall_time_seconds",
+        "cleanup_wall_time_seconds",
+        "source_root",
+        "index_sha256"
+      ],
+      "type": "object"
+    }
+  },
+  "schema": "neural029_operator_request_schemas_v2",
+  "wall_time_rule": "Operation and cleanup waits require separate explicit positive finite allocations. Their finite sum is recorded; reserve both. No full-dispatch or benchmark-campaign physical bound is certified."
+}
