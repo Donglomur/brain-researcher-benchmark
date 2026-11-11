@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"NEURAL080 single isolated person/arm result",
+  "type":"object","additionalProperties":false,
+  "required":["schema","subject","arm","query_sha256","file","bytes","sha256"],
+  "properties":{
+    "schema":{"const":"neural080_arm_result_v1"},
+    "subject":{"enum":["sub-01","sub-02","sub-03","sub-04","sub-05","sub-06"]},
+    "arm":{"enum":["nuisance","nuisance_eye","nuisance_dynamic","full","full_shift500ms"]},
+    "query_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "file":{"const":"prediction.npy"},
+    "bytes":{"type":"integer","minimum":1,"maximum":20000000},
+    "sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"}
+  },
+  "$comment":"prediction.npy is a finite primitive C-order float32/float64 NPYv1/v2 of exact shape102×127×150. The collector requires all30 unique participant/arm identities and exact query SHA before any target is read."
+}
