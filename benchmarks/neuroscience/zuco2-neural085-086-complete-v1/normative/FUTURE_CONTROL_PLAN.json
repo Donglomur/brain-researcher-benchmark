@@ -1,0 +1,437 @@
+{
+  "schema": "zuco2_independent_future_control_plan_v1",
+  "groups": [
+    {
+      "id": "FC01",
+      "name": "Source identity and licence separation",
+      "independent_expected_behavior": "Reject original-versus-later dataset substitution, wrong v1 size/hash, paper/code/data licence conflation; preserve all36 expected source descriptors.",
+      "gates": [
+        "G01",
+        "G26"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC02",
+      "name": "People and logical containers",
+      "independent_expected_behavior": "18-person/18-session/36-container controls; YMH/19th record requires source disposition, not count-only exclusion.",
+      "gates": [
+        "G02",
+        "G03"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC03",
+      "name": "Complete event/part union",
+      "independent_expected_behavior": "Missing one source container, block, practice disposition, presentation or allmissing word object retains a failure and fixed13302 denominator.",
+      "gates": [
+        "G03"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC04",
+      "name": "63/56/58/59 support conflict",
+      "independent_expected_behavior": "Different exact items, presentation repeats and normalized groups never treated as interchangeable. Unresolved paper mapping remains primary qualification hold.",
+      "gates": [
+        "G04"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC05",
+      "name": "Word identity indexing",
+      "independent_expected_behavior": "Punctuation-only source slots, empty/missing SFD and nonword filtering cannot shift later EEG band entries or truncate other fields. Compare independent direct source positions.",
+      "gates": [
+        "G04",
+        "G06"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC06",
+      "name": "Channel/units/time ABI",
+      "independent_expected_behavior": "Permute channel order, alter Cz reference/units, change500Hz/sample axis or EEG-gaze offset; identical shape is insufficient and every fullsource binding must agree.",
+      "gates": [
+        "G05"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC07",
+      "name": "Original versus prospective preprocessing",
+      "independent_expected_behavior": "Taskwide source filters/ICA context must be labeled retrospective. Prospective local/training transforms cannot be substituted as native equivalence.",
+      "gates": [
+        "G07",
+        "G08",
+        "G13"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC08",
+      "name": "All80 word-band roles",
+      "independent_expected_behavior": "Cover5windows x8bands x mean/diff, including SFD defined but not concatenated by original helper; wrong units/pair signs/shapes fail before score.",
+      "gates": [
+        "G08"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC09",
+      "name": "All paper validation obligations",
+      "independent_expected_behavior": "Trace all9figures/3tables; preserve unknownFigure7 sign, FRP baseline andFigure9 smoothing rather than accepting convenientapproximation.",
+      "gates": [
+        "G09"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC10",
+      "name": "Matched/exclusive complete support",
+      "independent_expected_behavior": "N085 emits allpresentations and separatefull/shared/exclusive metrics; no selection based on model failures or validEEG.",
+      "gates": [
+        "G11"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC11",
+      "name": "Five word-window supports",
+      "independent_expected_behavior": "FFD/TRT/GD/GPT/SFD independent positive pairedwindow eligibility; unilateral/nonpositive/absent windows counted; secondarynull never silently becomesFFD.",
+      "gates": [
+        "G06",
+        "G12"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC12",
+      "name": "No EEG-based selection",
+      "independent_expected_behavior": "Nonfinite EEG can set mask/imputation but neverremove an otherwiseeligiblepairedword; commonnullmask available to base andplus.",
+      "gates": [
+        "G12",
+        "G21"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC13",
+      "name": "Grouped heldouts",
+      "independent_expected_behavior": "All18people heldout, wholeexact/repeated/normalizeditems excluded fromtraining acrossbothconditions; foldlabel/sourceorder aliases withheld.",
+      "gates": [
+        "G10",
+        "G17"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC14",
+      "name": "Nested selection and scaling",
+      "independent_expected_behavior": "Outerquery perturbation must not change FIT state/inner lambda choice. Same base scaler reused betweenbase/plus; perarmJOINTPCA is not a nested addition.",
+      "gates": [
+        "G10",
+        "G15"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC15",
+      "name": "Equal per-output information sets",
+      "independent_expected_behavior": "Everyrow prediction binds offline_case_local context batch and same allowed views; a fullcase method is not reported as isolatedword/onset inference.",
+      "gates": [
+        "G13",
+        "G17"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC16",
+      "name": "Independent reference provenance",
+      "independent_expected_behavior": "Candidate-supplied reference/degradedbase cannot change protectedR bank or primaryabsolute score. Source-owned originalFIT/INFER receipts independently verified.",
+      "gates": [
+        "G15",
+        "G18"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC17",
+      "name": "Reference objective and convergence",
+      "independent_expected_behavior": "Handderived weighted logistic objective/gradient and knownseparable/nonseparable finite controls; wrong regularization scaling/nonconvergence mustnotqualify. Tiny inventednumerics only in laterauthorizedimplementation.",
+      "gates": [
+        "G15",
+        "G20"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC18",
+      "name": "Reference waveform geometry",
+      "independent_expected_behavior": "Noncontiguous fixations cannot create spectralbridges; exactwindowperiodogram/PSD frequencies/covariance/bandempty/masks handled and comparedindependently.",
+      "gates": [
+        "G08",
+        "G15",
+        "G20"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC19",
+      "name": "Arbitrary learner participation",
+      "independent_expected_behavior": "Two distinct inert submitted programmes produce distinct capturedoutputs anddownstream numericreports throughactualentry, not fixedmethodrouting; no trustedcandidate import.",
+      "gates": [
+        "G16"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC20",
+      "name": "Current state/request closure",
+      "independent_expected_behavior": "Changed programme/view/arm/context/state/source/mode/seed afterseal rejected; samefilename isnotidentity.",
+      "gates": [
+        "G18",
+        "G19"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC21",
+      "name": "Launch and descendant custody",
+      "independent_expected_behavior": "Inject prelaunchserializationfailure, failedouterdriver with successfulinnerrecord, EOF-beforeexit, timeout/OOM/signal anddescendant survival; no scorequalifies.",
+      "gates": [
+        "G18"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC22",
+      "name": "Remaining deadline",
+      "independent_expected_behavior": "Everypoll/wait/streamEOF/cleanup boundedbyselectedremainingdeadline; timeoutwithoutoriginalcompletion staysfailed, allcostsretained.",
+      "gates": [
+        "G18",
+        "G25"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC23",
+      "name": "Collection coordinate join",
+      "independent_expected_behavior": "JobID saysonearm butartifactclaims another, omittedcase,duplicateoutput,extra/hardlinked/symlink/specialfile,wrongcontext orstalegeneration allrefused.",
+      "gates": [
+        "G19"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC24",
+      "name": "Actual isolation",
+      "independent_expected_behavior": "Deployment qualification probesotherfoldtarget,sourcefilename,hostHOME,network,toolcache,previousagenthistory,globalpanel,statewrite; structuralsource/mocks alonecannotpass.",
+      "gates": [
+        "G17",
+        "G23"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC25",
+      "name": "Model tool comparability",
+      "independent_expected_behavior": "Only exactqualifiedcheckpoint/tool requests; sameavailability/limits bothmodes, decoderalonecontrol andtrainingexposure/costcapture; unsourcedprovider hiddenchannel holdsqualification.",
+      "gates": [
+        "G23",
+        "G25"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC26",
+      "name": "Global target-last barrier",
+      "independent_expected_behavior": "Any invalidcandidateprocess/output preventsgraderquerytargetread. Validfulladmission followedbytargetopenfailure retainsoneattemptandnullscore; no successcache.",
+      "gates": [
+        "G19"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC27",
+      "name": "Proper weighting and signs",
+      "independent_expected_behavior": "Independent tiny unequal repeats/classes/items/people control distinguishespooledaccuracy fromequalperson/class/item metric; signedbase-minus-plus negative/zero retained.",
+      "gates": [
+        "G20"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC28",
+      "name": "No self-comparator ranking",
+      "independent_expected_behavior": "Candidate deliberatelyweakensNTG/COVARIATES: owncontrastmayincrease butN085primaryabsolute loss unchanged andN086reasoningnotrewardedforpositivity.",
+      "gates": [
+        "G15",
+        "G20"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC29",
+      "name": "Missing rectangle",
+      "independent_expected_behavior": "One missingperson-item wordcell nullscompleteFFDcontrast/interval; all18 people,expectedJ, observedmatrixandreasonsretained. Emptyqueryjobhas explicitartifact.",
+      "gates": [
+        "G12",
+        "G20"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC30",
+      "name": "Crossed uncertainty",
+      "independent_expected_behavior": "Constant,person-only,item-only andinteraction matrices independently checked forpairedcrossedresampling indices/seed/percentile; no independentfold/person inflation.",
+      "gates": [
+        "G20",
+        "G22"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC31",
+      "name": "Reference reports complete",
+      "independent_expected_behavior": "Full safeprojection includes Rbase/Rplus, candidates,all18pairedperson/item records, controls and originalfailurereasons; unavailablebank cannotlooklikeabsentnegativefinding.",
+      "gates": [
+        "G24"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC32",
+      "name": "Shuffle effectiveness",
+      "independent_expected_behavior": "No condition-stratifiedswap calledlabel-null. Countidentity/crosslabel/exchangeablebuckets; allsingletons=>ineffectivecontrol, notpass. Preservegeometry/masks.",
+      "gates": [
+        "G21"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC33",
+      "name": "Chronology and positivity",
+      "independent_expected_behavior": "Identical block/order alias detectable; nuisance-adjustment cannotclosecausalG14. Perfectchronologycontrol excludedfromprimaryranking.",
+      "gates": [
+        "G14",
+        "G21"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC34",
+      "name": "Ocular and screen alternatives",
+      "independent_expected_behavior": "ConcurrentTSRprompt andquestion-region gaze represented; pre-responseexclusionaloneinsufficient. AbsentEOG/sourceevents yieldexplicituncertainty.",
+      "gates": [
+        "G06",
+        "G21"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC35",
+      "name": "Finite probabilities and scalar precision",
+      "independent_expected_behavior": "Rejectbool/NaN/Inf/huge/outofrangeprobabilities,cliponlylogloss,tie0.5deterministic,exactcounts; numericalerror andunsupported remain distinct.",
+      "gates": [
+        "G20"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC36",
+      "name": "Interpretation finality",
+      "independent_expected_behavior": "No participantpredictor retry aftersafeaggregatefeedback; separateanalysisworker withreferencefailures preserved andno queryrowanswers.",
+      "gates": [
+        "G19",
+        "G24"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC37",
+      "name": "Executable scientific analysis",
+      "independent_expected_behavior": "Candidate wrongsign/denominator/bootstrapseed or inventedtable differsfromprotectedrecompute and failsnumericaladmission; null andnegative honestoutputs pass.",
+      "gates": [
+        "G20",
+        "G24"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC38",
+      "name": "Rubric and adjudication",
+      "independent_expected_behavior": "Two independentratings exactintegers0-2, disagreements thirdrater0-2 withrationale; bool/string/3/negativeadjudication refused. Preserveconflicts andcalibrationlimits.",
+      "gates": [
+        "G24"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC39",
+      "name": "Capability language",
+      "independent_expected_behavior": "Summaryfeature result cannotbe calledraw waveformunderstanding; rawinputperformance cannotprove neuralorigin,cognition,causality or conditionalindependence.",
+      "gates": [
+        "G13",
+        "G14",
+        "G23"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC40",
+      "name": "Cost/attempt denominators",
+      "independent_expected_behavior": "Originalfailedstarts,reference/toolsetup andallreads/writes retained; no budgetreset/relabel/hiddenpartialcohort. Equalceilings distinguishedfromactualcost.",
+      "gates": [
+        "G18",
+        "G25"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC41",
+      "name": "Default and named central routes",
+      "independent_expected_behavior": "Ordinary programmanifestfile accepted by centralrun andnamedconditionwrappers; folder,unsupportedplaceholder,unimplementednamedtier orfalsepassingreceipt refused.",
+      "gates": [
+        "G27"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC42",
+      "name": "Immutable science/source history",
+      "independent_expected_behavior": "Alloriginal source snapshots anddeclaredunreadheader/stimuluspins preserved; oldfailures/costs/truncations not erased, noPDF/text/figure enterssourceproposal.",
+      "gates": [
+        "G26"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC43",
+      "name": "Full second-task coverage",
+      "independent_expected_behavior": "N086all5contexts kept withFFDprimary/TRTlegacy; fourrepresentationroutes andlegacy46+8 basis retained separately. No summary-onlyport relabeledfull.",
+      "gates": [
+        "G06",
+        "G16"
+      ],
+      "execution_this_phase": false
+    },
+    {
+      "id": "FC44",
+      "name": "Empirical qualification boundary",
+      "independent_expected_behavior": "Tiny engineeringcontrols/staticchecks/sourceacceptance do notcloseauthenticreference/native/empiricalgates orraiseinstalled/research-readycount.",
+      "gates": [
+        "G28"
+      ],
+      "execution_this_phase": false
+    }
+  ],
+  "group_count": 44,
+  "current_controls": "Only static metadata consistency checks of this design may run now. No invented scientific arrays, fixtures, modelfits, native scientific functions or predecessor test imports executed.",
+  "future_phases": [
+    "After independent full design acceptance: separately select complete implementation with tiny inert structural/numerical controls and independent source review.",
+    "Authentic data/header/native/reference qualification only under separately granted authority; all28 scientific gates remain unresolved now."
+  ],
+  "numerical_independence": "Later tests must implement independent expected algebra or handverifiable values, not call the same implementation twice. Matched-query/source controls include negative cases; no mirror-onlysuccesssuite."
+}

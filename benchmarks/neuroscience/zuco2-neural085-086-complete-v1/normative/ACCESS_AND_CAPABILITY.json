@@ -1,0 +1,102 @@
+{
+  "schema": "zuco2_representation_and_access_v1",
+  "representations": [
+    {
+      "id": "released_summary",
+      "default": true,
+      "N085": "840 author-released sentence-band values(8x105) plus separate gaze/text/nuisance arms.",
+      "N086": "8 all105-scalp means per FFD/TRT/GD/GPT/SFD window, with same46 base covariates.",
+      "time": "Retrospective entire named sentence/window, source task-wide preprocessing; no within-window or onset-latency claims.",
+      "gate": "Full36 source mean/word ABI, units, preprocessing lineage and support still unknown."
+    },
+    {
+      "id": "band_spatial",
+      "default": false,
+      "N085": "Same840 original sentence-band values; explicit alias equality to released_summary EEG path. Do not count as independent result or extra benchmark.",
+      "N086": "840 word-window/channel-band values; no collapse across electrodes. Same gaze/control information and labels.",
+      "time": "Retrospective author-released band summaries.",
+      "gate": "Full channel labels/order and every named word-window ABI required."
+    },
+    {
+      "id": "cleaned_waveform",
+      "default": false,
+      "N085": "All qualified105-scalp cleaned samples from sentence onset through final sentence-display sample before response transition; boundaries explicitly selected from original events, no question-screen/postresponse samples.",
+      "N086": "All qualified cleaned105-scalp samples belonging to original named fixation-window intervals, with noncontiguous intervals separate.",
+      "time": "Offline complete allowed segment; retrospective original preprocessing may use context outside segment, so current segment release alone does not prove clean information support.",
+      "gate": "Original raw-to-cleaned, reference, clock, filter-support lineage and originalevent masks required. Some original figures lack exact operators; no guessed native reproduction."
+    },
+    {
+      "id": "raw_waveform",
+      "default": false,
+      "N085": "Original acquisition-stage scalp channels only after verified128-channel role map; independent pre-response segmentation.",
+      "N086": "Original acquisition-stage scalp samples for exact word/fixation interval support.",
+      "time": "No label/task-wise preprocessing; prospective segment-local and training-only transforms explicitly logged. No online claim. Unfiltered original artifacts may predict condition and must be diagnosed.",
+      "gate": "Actual raw artifact identity/units/channels/clock and response bounds; rawData field name is not proof of raw acquisition stage."
+    }
+  ],
+  "raw_EOG_rule": "9 EOG channels are protected diagnostic inputs or explicitly named ocular-control condition, not silently included in scalp-EEG arms. 14 discarded face/neck channels remain provenance dispositions; not reintroduced as neural sensors.",
+  "checkpoint_access_levels": [
+    "no_pretrained_scientific_decoder",
+    "specified_decoder_tool"
+  ],
+  "checkpoint_default": "no_pretrained_scientific_decoder",
+  "checkpoint_state": "No qualified checkpoint selected, read or downloaded. Tool condition remains unavailable until independently pinned provenance/terms/training-exposure and identical mode mounts are supplied. This is a planned named condition, not a qualified existing resource.",
+  "modes": [
+    {
+      "id": "frozen_program",
+      "definition": "Submit immutable source bundle/controller/entry before any evaluation queries. It autonomously fits permitted training data, seals state and emits all outputs using the prespecified offline-case policy. May invoke identical allowed scientific tools under same limits; original method source never changes after commit.",
+      "query_information": "Only current case and named arm/context/representation, same as adaptive mode."
+    },
+    {
+      "id": "case_adaptive",
+      "definition": "Freeze top-level controller, prompts/model versions, tool protocol and resource policy before evaluation. Within a fresh case it may inspect permitted training data/current unlabeled query, choose analyses and create case-local source. Every generated script/request/result is retained with its originating receipt. It cannot see another case, reuse prior chat/cache or receive scoring feedback.",
+      "query_information": "Exactly same released view/model tools/context batch and resource ceilings as frozen_program; case-local analysis is part of evaluated policy, not an extra data channel."
+    }
+  ],
+  "fit_and_query_policy": {
+    "FIT": "Only permitted outer-training inputs/labels and inner validation. Reference and participant FIT have fresh processes; complete state inventory sealed.",
+    "INFER": "Receives selected current-case unlabeled query plus readonly sealed state and permitted training partition. Arbitrary case-local reasoning/computation, including unsupervised adaptation to this current query batch, explicitly allowed. No output from another case or target label.",
+    "state": "Persistent base state immutable; adaptation scratch ephemeral, captured as analysis provenance and destroyed after complete collection. Readonly state does not prove absence of in-memory fitting.",
+    "claims": "Default offline_case_local endpoint is transductive at query batch and native released preprocessing levels. A future strictly inductive or causal-time condition would require a separate information-set design and enforcement qualification; not claimed here.",
+    "fixed_vs_adaptive": "Mode identifies submitted workflow policy; a general program can itself reason or synthesize computations. The benchmark does not infer mental reasoning type from which process made a call."
+  },
+  "heldout_protections": [
+    "Case-specific opaque IDs and independently shuffled row order; no filename, path, ordinal, condition, block or sourceperson alias.",
+    "Original material files, task screenshots/question text, relation-type instructions, comprehension/annotation responses and source tables remain outside candidate mounts.",
+    "All query feature data are mandatory-declared input, so duration/missingness and residual ocular/task context remain measured alternatives, not concealed as impossible cues.",
+    "Train labels legitimate only for current fold. Parent aggregate panels, all other folds and result histories never mounted; each person labels are training elsewhere, making cross-case histories dangerous.",
+    "No network or unspecified pretrained retrieval. Model pretraining may already contain public text/data/paper: declared exposure audit and contamination diagnostics required; target hashing is not proof of novelty."
+  ],
+  "matched_resource_envelope": {
+    "status": "Prospective same ceilings, not current execution authorization or measured cost guarantee.",
+    "per_FIT": {
+      "CPU_cores": 8,
+      "RAM_GiB": 16,
+      "wall_seconds": 1800,
+      "scratch_GiB": 2,
+      "scientific_model_training_trials": 64,
+      "tool_calls": 256,
+      "model_tokens_if_model_tool_selected": 262144
+    },
+    "per_INFER_case": {
+      "CPU_cores": 8,
+      "RAM_GiB": 16,
+      "wall_seconds": 600,
+      "scratch_MiB": 256,
+      "tool_calls": 64,
+      "model_tokens_if_model_tool_selected": 32768
+    },
+    "outer_wrapper": "Finite complete campaign deadline and total ceilings must be computed from full immutable job grid, reference/control/interpretation jobs and original failed attempts before execution. No per-job limit can be silently multiplied without a campaign reservation.",
+    "total_budget": "Parameter in externally approved BudgetSpec; must cover all required named-condition jobs or refuse before first launch. No partial execution relabeled full. Calibration may select larger equal ceilings only before any scored query under separate authorization; changes create a new version.",
+    "accounting": "Actual CPU/wall/RAM, bytes read/written, model tokens/provider calls, setup/checkpoint cost, reference work, failed jobs, kill/cleanup and final collection costs retained separately. Equal ceilings do not imply equal actual FLOPs or cost; report efficiency alongside quality.",
+    "storage": "Original declared67,336,279,353B can be shared readonly by trusted preparer only; derivative/view workspace estimates need later fullsource measurement. Never make a duplicate full corpus per task/mode."
+  },
+  "capability_measurement": {
+    "tool_use": "Tool/version/call correctness and effective access captured separately from performance. Decoder-only control establishes what an existing trained tool already supplies.",
+    "analytical_reasoning": "Executable submitted analyses, support choices and evidence-linked numeric claims; distinguish test success from scientific correctness.",
+    "neural_data_understanding": "Performance conditional on representation and controls; summary features cannot support native waveform-comprehension claims, and raw-input success still does not prove physiological specificity.",
+    "scientific_reasoning": "N086 independently rated evidence-supported estimand/uncertainty/confounds/null reasoning, with no required favorable effect sign."
+  },
+  "rights": "Paper CC-BY-NC, OSF project CC-BY4.0, original reader-specific code grant, stimulus rights and optional checkpoint rights separate. No public data/paper release or private source history push selected.",
+  "current_operations": "Design and ordinary-source metadata only; all candidate/scientific/native/model/header/data/fixture operations zero."
+}
