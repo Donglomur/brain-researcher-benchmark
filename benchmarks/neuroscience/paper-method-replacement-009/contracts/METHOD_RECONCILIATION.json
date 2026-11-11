@@ -1,0 +1,58 @@
+{
+  "no_numerical_agreement_claim": true,
+  "primary_paper": {
+    "doi": "10.1016/j.neuron.2025.10.026",
+    "outside_only": true
+  },
+  "rows": [
+    {
+      "disposition": "Prospective train-only per-time scalar normalization; released body unchanged.",
+      "id": "normalization",
+      "observation": "Passed training statistics are recomputed on the evaluated split.",
+      "source": "data_loader_utils.standardize_spike_data"
+    },
+    {
+      "disposition": "Prospective elementwise intersection and full retained trial inverse; released body unchanged.",
+      "id": "mask",
+      "observation": "Python list conjunction is not elementwise mask intersection.",
+      "source": "ibl_data_utils.align_spike_behavior"
+    },
+    {
+      "disposition": "New explicit prospective driver and fixed-validation selector are not paper/released equivalence.",
+      "id": "training",
+      "observation": "Epoch/batch/grid/scheduler and selection settings differ; TableS2 not recovered.",
+      "source": "released trainer/scripts versus article"
+    },
+    {
+      "disposition": "Prospective full-support mean is distinct; original source unchanged.",
+      "id": "multi-validation",
+      "observation": "Classification validation loss is overwritten during the per-session loop.",
+      "source": "BaselineMultiSessionDecoder.validation_step"
+    },
+    {
+      "disposition": "No sign correction selected; empirical branch requires original producer and scientific reconciliation.",
+      "id": "BMM-prior",
+      "observation": "Negative likelihood is combined with positive log-prior terms.",
+      "source": "Constrained_BMM_HMM.bmm_neg_loglike"
+    },
+    {
+      "disposition": "No silent equivalence to paper observation prediction.",
+      "id": "LG-readout",
+      "observation": "Released empirical readout is posterior latent-state mean.",
+      "source": "MultiSession_LG_AR1.forward"
+    },
+    {
+      "disposition": "New caller refuses singleton output/rank pending explicit source correction.",
+      "id": "multi-region",
+      "observation": "Unqualified squeeze removes singleton axes required by einsum.",
+      "source": "MultiRegionReducedRankDecoder.forward"
+    },
+    {
+      "disposition": "Original tail fraction may be reproduced descriptively; no significance claim.",
+      "id": "bootstrap",
+      "observation": "Uncentered empirical resampling is not an imposed zero-effect null.",
+      "source": "article original bootstrap description"
+    }
+  ],
+  "schema": "trial_session_method_reconciliation_v1"
+}
