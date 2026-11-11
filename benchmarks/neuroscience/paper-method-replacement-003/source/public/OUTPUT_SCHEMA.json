@@ -1,0 +1,440 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "task_id",
+    "query_sha256",
+    "information_arm",
+    "method_description",
+    "predictions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "c4_predictions_v1"
+    },
+    "task_id": {
+      "const": "PAPER-paper-method-replacement-003"
+    },
+    "query_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+    },
+    "information_arm": {
+      "enum": [
+        "paper_and_data",
+        "paper_data_official_code"
+      ]
+    },
+    "method_description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "predictions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "logistic_regression",
+        "random_forest",
+        "gaussian_process",
+        "deep",
+        "improved"
+      ],
+      "properties": {
+        "logistic_regression": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mouse_loo",
+            "monkey_transfer"
+          ],
+          "properties": {
+            "mouse_loo": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 20000,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "unit_id",
+                  "probabilities"
+                ],
+                "properties": {
+                  "unit_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,96}(?![\\s\\S])"
+                  },
+                  "probabilities": {
+                    "type": "array",
+                    "minItems": 10,
+                    "maxItems": 10,
+                    "items": {
+                      "type": "array",
+                      "minItems": 5,
+                      "maxItems": 5,
+                      "items": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "monkey_transfer": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 20000,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "unit_id",
+                  "probabilities"
+                ],
+                "properties": {
+                  "unit_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,96}(?![\\s\\S])"
+                  },
+                  "probabilities": {
+                    "type": "array",
+                    "minItems": 10,
+                    "maxItems": 10,
+                    "items": {
+                      "type": "array",
+                      "minItems": 5,
+                      "maxItems": 5,
+                      "items": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "random_forest": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mouse_loo",
+            "monkey_transfer"
+          ],
+          "properties": {
+            "mouse_loo": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 20000,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "unit_id",
+                  "probabilities"
+                ],
+                "properties": {
+                  "unit_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,96}(?![\\s\\S])"
+                  },
+                  "probabilities": {
+                    "type": "array",
+                    "minItems": 10,
+                    "maxItems": 10,
+                    "items": {
+                      "type": "array",
+                      "minItems": 5,
+                      "maxItems": 5,
+                      "items": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "monkey_transfer": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 20000,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "unit_id",
+                  "probabilities"
+                ],
+                "properties": {
+                  "unit_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,96}(?![\\s\\S])"
+                  },
+                  "probabilities": {
+                    "type": "array",
+                    "minItems": 10,
+                    "maxItems": 10,
+                    "items": {
+                      "type": "array",
+                      "minItems": 5,
+                      "maxItems": 5,
+                      "items": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "gaussian_process": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mouse_loo",
+            "monkey_transfer"
+          ],
+          "properties": {
+            "mouse_loo": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 20000,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "unit_id",
+                  "probabilities"
+                ],
+                "properties": {
+                  "unit_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,96}(?![\\s\\S])"
+                  },
+                  "probabilities": {
+                    "type": "array",
+                    "minItems": 10,
+                    "maxItems": 10,
+                    "items": {
+                      "type": "array",
+                      "minItems": 5,
+                      "maxItems": 5,
+                      "items": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "monkey_transfer": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 20000,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "unit_id",
+                  "probabilities"
+                ],
+                "properties": {
+                  "unit_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,96}(?![\\s\\S])"
+                  },
+                  "probabilities": {
+                    "type": "array",
+                    "minItems": 10,
+                    "maxItems": 10,
+                    "items": {
+                      "type": "array",
+                      "minItems": 5,
+                      "maxItems": 5,
+                      "items": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deep": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mouse_loo",
+            "monkey_transfer"
+          ],
+          "properties": {
+            "mouse_loo": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 20000,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "unit_id",
+                  "probabilities"
+                ],
+                "properties": {
+                  "unit_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,96}(?![\\s\\S])"
+                  },
+                  "probabilities": {
+                    "type": "array",
+                    "minItems": 10,
+                    "maxItems": 10,
+                    "items": {
+                      "type": "array",
+                      "minItems": 5,
+                      "maxItems": 5,
+                      "items": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "monkey_transfer": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 20000,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "unit_id",
+                  "probabilities"
+                ],
+                "properties": {
+                  "unit_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,96}(?![\\s\\S])"
+                  },
+                  "probabilities": {
+                    "type": "array",
+                    "minItems": 10,
+                    "maxItems": 10,
+                    "items": {
+                      "type": "array",
+                      "minItems": 5,
+                      "maxItems": 5,
+                      "items": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "improved": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mouse_loo",
+            "monkey_transfer"
+          ],
+          "properties": {
+            "mouse_loo": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 20000,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "unit_id",
+                  "probabilities"
+                ],
+                "properties": {
+                  "unit_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,96}(?![\\s\\S])"
+                  },
+                  "probabilities": {
+                    "type": "array",
+                    "minItems": 10,
+                    "maxItems": 10,
+                    "items": {
+                      "type": "array",
+                      "minItems": 5,
+                      "maxItems": 5,
+                      "items": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "monkey_transfer": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 20000,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "unit_id",
+                  "probabilities"
+                ],
+                "properties": {
+                  "unit_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,96}(?![\\s\\S])"
+                  },
+                  "probabilities": {
+                    "type": "array",
+                    "minItems": 10,
+                    "maxItems": 10,
+                    "items": {
+                      "type": "array",
+                      "minItems": 5,
+                      "maxItems": 5,
+                      "items": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$comment": "Executable contract additionally enforces finite numbers, exact public roster/order, normalized probability sums and query hash."
+}
