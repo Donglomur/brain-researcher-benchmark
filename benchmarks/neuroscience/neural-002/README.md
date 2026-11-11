@@ -2,7 +2,7 @@
 
 This is an **inactive, unqualified source package** for one replacement assignment. The scientific question is: **Does the first 500 ms of software-marker-locked EEG contain reproducible stimulus-ID information in an unseen participant beyond prespecified context and temporal controls?** It uses32 participants and six nested task/speed cells, not six benchmarks. The endpoint is retrospective stimulus decoding. It does not measure speech comprehension, recognition correctness, physical auditory-onset calibration or pre-response neural understanding.
 
-The prior MEG speech-intelligibility definition is retained byte-for-byte in the authoring history and inverse mapping. Root explicitly selected this different endpoint after source review showed the prior intelligibility labels were psychometric SNR-derived. PhyAAt measured-word alternatives remain documented but their listening-window/score clock join is unresolved.
+The prior MEG speech-intelligibility definition is retained byte-for-byte at history/NEURAL-002.prior.json; the complete private inverse remains unpublished. Root explicitly selected this different endpoint after source review showed the prior intelligibility labels were psychometric SNR-derived. PhyAAt measured-word alternatives remain documented but their listening-window/score clock join is unresolved.
 
 ## Fixed scientific contract
 
@@ -36,7 +36,7 @@ Before interpreting a positive result, compare prior/order/premarker/permutation
 - `reference_pipeline.run_reference`: full baseline composition, source only; no candidate or API model launch.
 - `task_operator.py inspect`: reads source metadata only. It is the only CLI operation.
 
-The Python functions are trusted operator code, not a hostile-process sandbox. A separate qualified worker runner, authentic intake, packet hashes, contamination/exposure audit, resource limits, native reference/control execution and independent scoring replication remain required. Generic execution and admission flags are false. No GPU/model/API study has run.
+The Python functions are trusted operator code, not a hostile-process sandbox. Concrete paired worker/broker/controller source is present, but a separately qualified and admitted worker route, authentic intake, packet hashes, contamination/exposure audit, resource enforcement, native reference/control execution and independent scoring replication remain required. Generic execution and admission flags are false. No GPU/model/API study has run.
 
 Inspection after root installation:
 
@@ -50,10 +50,22 @@ Nominal float32 window storage is745,285,632bytes (about0.694GiB), excluding raw
 
 ## Selected early-information interpretation
 
-Root explicitly selected this narrower information assay after the independent timing audit. All 32 folds, six nested cells, 26 raw ID labels, 301 samples and the balanced-accuracy metric remain unchanged. All ten Python modules are byte-identical to the engineering-reviewed predecessor. No scientific or numerical result is added.
+Root explicitly selected this narrower information assay after the independent timing audit. All 32 folds, six nested cells, 26 raw ID labels, 301 samples and the balanced-accuracy metric remain unchanged. The ten incumbent numerical/core Python modules remain byte-identical to the engineering-reviewed predecessor; the inactive package now contains twenty Python modules. No scientific or numerical result is added.
 
-Report raw scores **together with paired participant gains against prior-only, order-only, premarker EEG, training-label permutation and a validated competent EEG reference**. The supplied shrinkage/nuisance centroids are reference candidates; their adequacy is unqualified. Freeze and validate control capacity/reliability using training-only development, retain matching inputs/budgets, and establish authenticated response/duration nuisance controls before interpretation. The unchanged source provides per-arm composition and paired-interval helpers, not an executed all-control report. A null or inconclusive outcome is valid.
+Report raw scores **together with paired participant gains against prior-only, order-only, premarker EEG, training-label permutation and a validated competent EEG reference**. The supplied shrinkage/nuisance centroids are reference candidates; their adequacy is unqualified. Freeze and validate control capacity/reliability using training-only development, retain matching inputs/budgets, and establish authenticated response/duration nuisance controls before interpretation. The unchanged core provides per-arm composition and paired-interval helpers; added `morse_reports` source composes both candidate arms and all five references. No authentic all-control report has been executed or qualified. A null or inconclusive outcome is valid.
 
 The information-opportunity/reliability gate remains open. If source timing establishes that all relevant delivered prefixes are identical, reconsider primary use or keep this window only as a negative control. Do not guess a decoding ceiling from nominal CPM, assume standard Morse timing, or choose an arbitrary longer window. Distinct symbolic or physical prefixes also do not guarantee reliable EEG discriminability.
 
 This endpoint makes no complete-character, comprehension, physical acoustic-onset or pre-response claim. The independently reviewed 3,912-byte public stimulus dictionary is source metadata, not a participant target table. Its addendum and the timing audit are pinned in SOURCES.json; no audio, EEG, authentic event/header or behavioral target payload is included. Final scientific qualification requires the declared evidence even though the source definition has now been selected.
+
+## Paired candidate interface source
+
+See [PAIRED_EXECUTOR.md](PAIRED_EXECUTOR.md) for the accepted source interface. Both modes receive identical full held-person batches and little-endian float32 C-order values. P0 permits training-only fitting, tuning and learned normalization; query visibility does not authorize transductive fitting. The source defines 64 logical contexts and 128 fresh training/query stage launches, with sealed fit state between stages, private targets/inverses and no score feedback. These are subdivisions of this one assignment.
+
+The fixed `task_operator.py inspect` remains the only CLI and still reports its eleven original code gates. All thirteen canonical holds remain normative and open; the two additional behavioral/software holds are retained in `manifest.json` and the canonical. New Python APIs are source construction, not admitted entrypoints. No approving execution/storage/token registry is supplied. `program_execution` remains null, generic execution remains false and all admission flags remain false.
+
+The exact 29 non-self public runtime/history/notice body pins and explicit descriptors for unpublished source/review provenance are in `SOURCE_MANIFEST.json`. Original MATLAB remains external. Nominal cohort tensor arithmetic does not represent total candidate/reference storage or prove physical quotas. Source integration does not establish scientific results or change the canonical task.
+
+## Public representation identity
+
+This update contains twenty Python modules: ten unchanged numerical/core modules and ten paired-executor modules. The sole public code change substitutes the published canonical SHA-256 in `morse_selection.py`; all scientific decisions and thirteen holds are unchanged. The existing `PUBLICATION.md` and `PUBLIC_PROVENANCE.json` document the preceding ten-module release and remain exact historical release notices. Read `PAIRED_PUBLIC_PROVENANCE.json` for the current extent, the private/public canonical identities and the explicit unavailable provenance descriptors. The canonical and original history are unchanged.
