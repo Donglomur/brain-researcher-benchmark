@@ -1,0 +1,2164 @@
+{
+  "NativeHost_methods_implemented": [
+    "admit_full_resources",
+    "capture_complete_candidate_predictions",
+    "capture_original_index",
+    "describe_complete_panel",
+    "export_phase_claim",
+    "freeze_and_readback_all_predictions",
+    "freeze_design_and_issue_prediction_view",
+    "freeze_fit_grid",
+    "freeze_refit_models",
+    "open_private_query",
+    "open_training",
+    "publish_private_scores",
+    "record_validation_and_freeze_selection",
+    "release_observed_query_and_execute_original_investigation",
+    "retain_reference_dispositions",
+    "retain_terminal_attempt"
+  ],
+  "complete": true,
+  "modules": [
+    {
+      "definitions": [],
+      "imports": [],
+      "path": "gain/__init__.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 2,
+          "name": "ScientificAuthorityUnavailable",
+          "signature": null
+        },
+        {
+          "line": 5,
+          "name": "require_live",
+          "signature": "host, operation"
+        }
+      ],
+      "imports": [
+        "from host092.custody import require"
+      ],
+      "path": "gain/authority.py"
+    },
+    {
+      "definitions": [],
+      "imports": [],
+      "path": "gain/constants.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 4,
+          "name": "session_plan",
+          "signature": "nfit, nval, nquery, units, categories"
+        },
+        {
+          "line": 59,
+          "name": "Calls",
+          "signature": null
+        },
+        {
+          "line": 65,
+          "name": "Attempt",
+          "signature": null
+        },
+        {
+          "line": 61,
+          "name": "__init__",
+          "signature": "self"
+        },
+        {
+          "line": 62,
+          "name": "enter",
+          "signature": "self, name"
+        },
+        {
+          "line": 63,
+          "name": "failure",
+          "signature": "self, where, error"
+        },
+        {
+          "line": 67,
+          "name": "__init__",
+          "signature": "self"
+        },
+        {
+          "line": 68,
+          "name": "fail",
+          "signature": "self, where, error"
+        },
+        {
+          "line": 71,
+          "name": "cleanup",
+          "signature": "self, where, callback"
+        },
+        {
+          "line": 74,
+          "name": "finish",
+          "signature": "self"
+        }
+      ],
+      "imports": [
+        "from .constants import MODELS, MAX_UPDATES, LINE_ATTEMPTS"
+      ],
+      "path": "gain/cost.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 7,
+          "name": "inspect_metadata",
+          "signature": "meta"
+        },
+        {
+          "line": 37,
+          "name": "columns",
+          "signature": "model, k"
+        },
+        {
+          "line": 41,
+          "name": "design",
+          "signature": "meta_info, model, host, calls"
+        },
+        {
+          "line": 57,
+          "name": "validate_counts",
+          "signature": "values, nrows, units"
+        },
+        {
+          "line": 61,
+          "name": "verify_fit_offset",
+          "signature": "meta, fit_counts, nfit"
+        }
+      ],
+      "imports": [
+        "import json, math",
+        "from array import array",
+        "from .constants import AREAS, RUN, PUPIL, PHASES, BLOCKS, FIELDS, EXPOSURE, MODELS",
+        "from .authority import require_live"
+      ],
+      "path": "gain/features.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 10,
+          "name": "TrainingCapture",
+          "signature": null
+        },
+        {
+          "line": 23,
+          "name": "QueryCapture",
+          "signature": null
+        },
+        {
+          "line": 30,
+          "name": "FrozenPredictions",
+          "signature": null
+        },
+        {
+          "line": 38,
+          "name": "NativeHost",
+          "signature": null
+        },
+        {
+          "line": 13,
+          "name": "metadata",
+          "signature": "self"
+        },
+        {
+          "line": 16,
+          "name": "fit_counts",
+          "signature": "self"
+        },
+        {
+          "line": 19,
+          "name": "validation_counts",
+          "signature": "self"
+        },
+        {
+          "line": 21,
+          "name": "close",
+          "signature": "self"
+        },
+        {
+          "line": 26,
+          "name": "counts",
+          "signature": "self"
+        },
+        {
+          "line": 28,
+          "name": "close",
+          "signature": "self"
+        },
+        {
+          "line": 32,
+          "name": "read_reference",
+          "signature": "self, session_id"
+        },
+        {
+          "line": 34,
+          "name": "read_candidate",
+          "signature": "self, session_id"
+        },
+        {
+          "line": 36,
+          "name": "close",
+          "signature": "self"
+        },
+        {
+          "line": 48,
+          "name": "describe_complete_panel",
+          "signature": "self"
+        },
+        {
+          "line": 50,
+          "name": "admit_full_resources",
+          "signature": "self, plans"
+        },
+        {
+          "line": 52,
+          "name": "capture_original_index",
+          "signature": "self"
+        },
+        {
+          "line": 54,
+          "name": "freeze_design_and_issue_prediction_view",
+          "signature": "self, descriptor_projection"
+        },
+        {
+          "line": 56,
+          "name": "open_training",
+          "signature": "self, session_id"
+        },
+        {
+          "line": 58,
+          "name": "retain_reference_dispositions",
+          "signature": "self, session_id, reference, calls"
+        },
+        {
+          "line": 60,
+          "name": "freeze_fit_grid",
+          "signature": "self, references"
+        },
+        {
+          "line": 62,
+          "name": "record_validation_and_freeze_selection",
+          "signature": "self, references"
+        },
+        {
+          "line": 64,
+          "name": "freeze_refit_models",
+          "signature": "self, references"
+        },
+        {
+          "line": 66,
+          "name": "capture_complete_candidate_predictions",
+          "signature": "self, metadata"
+        },
+        {
+          "line": 68,
+          "name": "freeze_and_readback_all_predictions",
+          "signature": "self, references, candidates"
+        },
+        {
+          "line": 70,
+          "name": "open_private_query",
+          "signature": "self, frozen, session_id"
+        },
+        {
+          "line": 72,
+          "name": "publish_private_scores",
+          "signature": "self, frozen, result, attempt"
+        },
+        {
+          "line": 74,
+          "name": "release_observed_query_and_execute_original_investigation",
+          "signature": "self, frozen"
+        },
+        {
+          "line": 76,
+          "name": "export_phase_claim",
+          "signature": "self"
+        },
+        {
+          "line": 78,
+          "name": "retain_terminal_attempt",
+          "signature": "self, attempt"
+        }
+      ],
+      "imports": [
+        "from abc import ABC, abstractmethod"
+      ],
+      "path": "gain/host.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 12,
+          "name": "run_programme",
+          "signature": "host, attempt"
+        },
+        {
+          "line": 110,
+          "name": "main",
+          "signature": ""
+        }
+      ],
+      "imports": [
+        "from .authority import require_live",
+        "from .constants import MODELS",
+        "from .cost import Attempt, session_plan",
+        "from .features import inspect_metadata",
+        "from .host import NativeHost, TrainingCapture, QueryCapture, FrozenPredictions",
+        "from .reference import grid_session, validation_session, refit_session, predict_session, make_reference_record, ReferenceSession",
+        "from .scoring import admit_prediction, score_session, aggregate_panel",
+        "from prospective.phase_projection import project_prediction_index",
+        "from prospective.phase_order import validate_phase_claim"
+      ],
+      "path": "gain/programme.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 10,
+          "name": "ReferenceSession",
+          "signature": null
+        },
+        {
+          "line": 21,
+          "name": "make_reference_record",
+          "signature": "meta, info"
+        },
+        {
+          "line": 26,
+          "name": "prepare",
+          "signature": "meta, fit_counts, validation_counts, record"
+        },
+        {
+          "line": 33,
+          "name": "grid_session",
+          "signature": "meta, fit_counts, validation_counts, record, host, calls"
+        },
+        {
+          "line": 51,
+          "name": "validation_session",
+          "signature": "meta, fit_counts, validation_counts, record, host, calls"
+        },
+        {
+          "line": 75,
+          "name": "refit_session",
+          "signature": "meta, fit_counts, validation_counts, record, host, calls"
+        },
+        {
+          "line": 95,
+          "name": "predict_session",
+          "signature": "meta, record, host, calls"
+        },
+        {
+          "line": 89,
+          "name": "combined",
+          "signature": "i"
+        }
+      ],
+      "imports": [
+        "from dataclasses import dataclass",
+        "import math",
+        "from .authority import require_live",
+        "from .constants import MODELS, LAMBDAS, EXPOSURE",
+        "from .features import inspect_metadata, design, validate_counts, verify_fit_offset",
+        "from .solver import fit, prediction_deviance, predicted_mean, FitFailure, zeros"
+      ],
+      "path": "gain/reference.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 11,
+          "name": "admit_prediction",
+          "signature": "value, meta, info"
+        },
+        {
+          "line": 18,
+          "name": "matched_indices",
+          "signature": "meta, pair"
+        },
+        {
+          "line": 34,
+          "name": "mean",
+          "signature": "values"
+        },
+        {
+          "line": 40,
+          "name": "difference",
+          "signature": "left, right"
+        },
+        {
+          "line": 46,
+          "name": "score_session",
+          "signature": "meta, reference, candidate, query_counts, host, calls"
+        },
+        {
+          "line": 74,
+          "name": "aggregate_panel",
+          "signature": "sessions, expected_session_to_mouse"
+        }
+      ],
+      "imports": [
+        "from array import array",
+        "from bisect import bisect_right",
+        "from itertools import combinations",
+        "import hashlib, math",
+        "from .authority import require_live",
+        "from .constants import AREAS, MODELS, MATCH_BINS, CONTRASTS",
+        "from .features import validate_counts",
+        "from .solver import frozen_deviance"
+      ],
+      "path": "gain/scoring.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 13,
+          "name": "FitFailure",
+          "signature": null
+        },
+        {
+          "line": 16,
+          "name": "FitResult",
+          "signature": null
+        },
+        {
+          "line": 22,
+          "name": "zeros",
+          "signature": "n, calls"
+        },
+        {
+          "line": 28,
+          "name": "dot_row",
+          "signature": "x, row, p, beta, calls"
+        },
+        {
+          "line": 33,
+          "name": "objective",
+          "signature": "x, p, rows, y, offset, beta, lam, eta, mu, calls"
+        },
+        {
+          "line": 44,
+          "name": "derivatives",
+          "signature": "x, p, rows, y, beta, lam, mu, g, h, calls"
+        },
+        {
+          "line": 57,
+          "name": "cholesky_solve",
+          "signature": "h, g, p, lower, delta, calls"
+        },
+        {
+          "line": 79,
+          "name": "fit",
+          "signature": "x, p, rows, y, offset, lam, host, calls"
+        },
+        {
+          "line": 112,
+          "name": "predicted_mean",
+          "signature": "x, p, row, beta, offset, calls"
+        },
+        {
+          "line": 118,
+          "name": "deviance_term",
+          "signature": "y, mu, calls"
+        },
+        {
+          "line": 128,
+          "name": "prediction_deviance",
+          "signature": "x, p, rows, y, beta, offset, host, calls"
+        },
+        {
+          "line": 134,
+          "name": "frozen_deviance",
+          "signature": "counts, predictions, nrows, units, unit, host, calls"
+        }
+      ],
+      "imports": [
+        "from array import array",
+        "from dataclasses import dataclass",
+        "import math",
+        "from .authority import require_live",
+        "from .constants import MAX_UPDATES, LINE_ATTEMPTS, ARMIJO, GRADIENT_TOL"
+      ],
+      "path": "gain/solver.py"
+    },
+    {
+      "definitions": [],
+      "imports": [],
+      "path": "host092/__init__.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 9,
+          "name": "Selection",
+          "signature": null
+        },
+        {
+          "line": 13,
+          "name": "selected_profile",
+          "signature": "selection"
+        },
+        {
+          "line": 17,
+          "name": "validate_profile",
+          "signature": "p"
+        },
+        {
+          "line": 53,
+          "name": "root_owned",
+          "signature": "path, directory=False"
+        },
+        {
+          "line": 64,
+          "name": "load_selection",
+          "signature": "path, expected_sha256"
+        },
+        {
+          "line": 95,
+          "name": "full_plan",
+          "signature": "p"
+        },
+        {
+          "line": 68,
+          "name": "body",
+          "signature": ""
+        }
+      ],
+      "imports": [
+        "import os, stat, sys, weakref",
+        "from pathlib import Path",
+        "from .storage import Store, Ledger, ErrorOwner, digest, decode, encode",
+        "from gain.cost import session_plan",
+        "import re",
+        "from .source_lock import REQUIRED_SOURCE_FILES",
+        "from prospective.phase_order import BINDINGS"
+      ],
+      "path": "host092/admission.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 4,
+          "name": "issue",
+          "signature": "host, group_fd, supervisor_pid, selection, errors"
+        },
+        {
+          "line": 28,
+          "name": "require",
+          "signature": "host, operation"
+        },
+        {
+          "line": 36,
+          "name": "revoke",
+          "signature": "host"
+        },
+        {
+          "line": 17,
+          "name": "capture_membership",
+          "signature": ""
+        }
+      ],
+      "imports": [
+        "import os, weakref",
+        "from .admission import _SELECTIONS",
+        "from .storage import decode"
+      ],
+      "path": "host092/custody.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 11,
+          "name": "plain",
+          "signature": "value"
+        },
+        {
+          "line": 21,
+          "name": "restore",
+          "signature": "value"
+        },
+        {
+          "line": 30,
+          "name": "Frozen",
+          "signature": null
+        },
+        {
+          "line": 31,
+          "name": "__init__",
+          "signature": "self, store, metadata, infos, references, candidates"
+        },
+        {
+          "line": 49,
+          "name": "_shape",
+          "signature": "self, sid"
+        },
+        {
+          "line": 50,
+          "name": "read_reference",
+          "signature": "self, sid"
+        },
+        {
+          "line": 57,
+          "name": "read_candidate",
+          "signature": "self, sid"
+        },
+        {
+          "line": 61,
+          "name": "close",
+          "signature": "self"
+        }
+      ],
+      "imports": [
+        "from array import array",
+        "from dataclasses import asdict",
+        "from .storage import encode, decode, digest",
+        "from .packet import array_bytes, prediction_plane",
+        "from gain.constants import MODELS",
+        "from gain.host import FrozenPredictions",
+        "from gain.reference import ReferenceSession",
+        "from gain.scoring import admit_prediction"
+      ],
+      "path": "host092/frozen.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 13,
+          "name": "Training",
+          "signature": null
+        },
+        {
+          "line": 26,
+          "name": "Query",
+          "signature": null
+        },
+        {
+          "line": 32,
+          "name": "Host",
+          "signature": null
+        },
+        {
+          "line": 14,
+          "name": "__init__",
+          "signature": "self, packet, sid"
+        },
+        {
+          "line": 19,
+          "name": "metadata",
+          "signature": "self"
+        },
+        {
+          "line": 21,
+          "name": "fit_counts",
+          "signature": "self"
+        },
+        {
+          "line": 23,
+          "name": "validation_counts",
+          "signature": "self"
+        },
+        {
+          "line": 24,
+          "name": "close",
+          "signature": "self"
+        },
+        {
+          "line": 27,
+          "name": "__init__",
+          "signature": "self, counts"
+        },
+        {
+          "line": 29,
+          "name": "counts",
+          "signature": "self"
+        },
+        {
+          "line": 30,
+          "name": "close",
+          "signature": "self"
+        },
+        {
+          "line": 33,
+          "name": "__init__",
+          "signature": "self, profile, work, group, runtime, ledger, supervisor_pid, selection, errors"
+        },
+        {
+          "line": 59,
+          "name": "store",
+          "signature": "self, path, writable=False"
+        },
+        {
+          "line": 63,
+          "name": "need",
+          "signature": "self, stage"
+        },
+        {
+          "line": 66,
+          "name": "event",
+          "signature": "self, name"
+        },
+        {
+          "line": 73,
+          "name": "describe_complete_panel",
+          "signature": "self"
+        },
+        {
+          "line": 74,
+          "name": "admit_full_resources",
+          "signature": "self, plans"
+        },
+        {
+          "line": 78,
+          "name": "capture_original_index",
+          "signature": "self"
+        },
+        {
+          "line": 79,
+          "name": "freeze_design_and_issue_prediction_view",
+          "signature": "self, descriptor_projection"
+        },
+        {
+          "line": 87,
+          "name": "open_training",
+          "signature": "self, sid"
+        },
+        {
+          "line": 90,
+          "name": "retain_reference_dispositions",
+          "signature": "self, sid, reference, calls"
+        },
+        {
+          "line": 93,
+          "name": "_barrier",
+          "signature": "self, references, stage, events"
+        },
+        {
+          "line": 100,
+          "name": "freeze_fit_grid",
+          "signature": "self, references"
+        },
+        {
+          "line": 101,
+          "name": "record_validation_and_freeze_selection",
+          "signature": "self, references"
+        },
+        {
+          "line": 102,
+          "name": "freeze_refit_models",
+          "signature": "self, references"
+        },
+        {
+          "line": 103,
+          "name": "capture_complete_candidate_predictions",
+          "signature": "self, metadata"
+        },
+        {
+          "line": 117,
+          "name": "freeze_and_readback_all_predictions",
+          "signature": "self, references, candidates"
+        },
+        {
+          "line": 121,
+          "name": "open_private_query",
+          "signature": "self, frozen, sid"
+        },
+        {
+          "line": 125,
+          "name": "publish_private_scores",
+          "signature": "self, frozen, result, attempt"
+        },
+        {
+          "line": 129,
+          "name": "legacy",
+          "signature": "self, name, args"
+        },
+        {
+          "line": 147,
+          "name": "release_observed_query_and_execute_original_investigation",
+          "signature": "self, frozen"
+        },
+        {
+          "line": 164,
+          "name": "export_phase_claim",
+          "signature": "self"
+        },
+        {
+          "line": 166,
+          "name": "retain_terminal_attempt",
+          "signature": "self, attempt"
+        },
+        {
+          "line": 168,
+          "name": "close",
+          "signature": "self"
+        },
+        {
+          "line": 132,
+          "name": "body",
+          "signature": ""
+        },
+        {
+          "line": 137,
+          "name": "cap",
+          "signature": ""
+        }
+      ],
+      "imports": [
+        "import os, subprocess, signal, resource",
+        "from pathlib import Path",
+        "from .storage import Store, encode, decode, digest, seal_readonly_tree",
+        "from .packet import Packet, prediction_plane",
+        "from .linux import stop_process",
+        "from .admission import full_plan",
+        "from .frozen import Frozen, plain",
+        "from . import custody",
+        "from gain.host import NativeHost, TrainingCapture, QueryCapture",
+        "from prospective.phase_order import EVENTS",
+        "from prospective.phase_projection import project_prediction_index"
+      ],
+      "path": "host092/host.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 10,
+          "name": "write",
+          "signature": "path, value, errors=None"
+        },
+        {
+          "line": 21,
+          "name": "read",
+          "signature": "path, errors=None"
+        },
+        {
+          "line": 33,
+          "name": "populated",
+          "signature": "path, errors=None"
+        },
+        {
+          "line": 37,
+          "name": "metrics",
+          "signature": "path, errors=None"
+        },
+        {
+          "line": 41,
+          "name": "Cgroup",
+          "signature": null
+        },
+        {
+          "line": 70,
+          "name": "acquire_group",
+          "signature": "parent, name, limits, owner, errors"
+        },
+        {
+          "line": 74,
+          "name": "stop_process",
+          "signature": "proc, errors, where, seconds"
+        },
+        {
+          "line": 79,
+          "name": "control",
+          "signature": "profile, argv, log, control_leaf, ledger, errors"
+        },
+        {
+          "line": 98,
+          "name": "oci_config",
+          "signature": "p, leaf, view, code, out, argv"
+        },
+        {
+          "line": 103,
+          "name": "Runtime",
+          "signature": null
+        },
+        {
+          "line": 150,
+          "name": "delete_owned_runtimes",
+          "signature": "profile, work, ids, errors, control_leaf, ledger"
+        },
+        {
+          "line": 12,
+          "name": "body",
+          "signature": ""
+        },
+        {
+          "line": 23,
+          "name": "body",
+          "signature": ""
+        },
+        {
+          "line": 42,
+          "name": "__init__",
+          "signature": "self, parent, name, limits, errors"
+        },
+        {
+          "line": 50,
+          "name": "leaf",
+          "signature": "self, name"
+        },
+        {
+          "line": 52,
+          "name": "drain",
+          "signature": "self, seconds"
+        },
+        {
+          "line": 58,
+          "name": "remove_empty",
+          "signature": "self"
+        },
+        {
+          "line": 81,
+          "name": "body",
+          "signature": ""
+        },
+        {
+          "line": 104,
+          "name": "__init__",
+          "signature": "self, profile, work, group, ledger, errors"
+        },
+        {
+          "line": 107,
+          "name": "run",
+          "signature": "self, name, view, code, output, argv"
+        },
+        {
+          "line": 65,
+          "name": "remove_parent",
+          "signature": ""
+        },
+        {
+          "line": 85,
+          "name": "limits",
+          "signature": ""
+        },
+        {
+          "line": 114,
+          "name": "body",
+          "signature": ""
+        },
+        {
+          "line": 153,
+          "name": "retire",
+          "signature": "name=name"
+        },
+        {
+          "line": 62,
+          "name": "remove_child",
+          "signature": "p=p"
+        },
+        {
+          "line": 125,
+          "name": "fsize",
+          "signature": ""
+        },
+        {
+          "line": 136,
+          "name": "drain",
+          "signature": ""
+        }
+      ],
+      "imports": [
+        "import os, time, signal, subprocess, stat, resource",
+        "from pathlib import Path",
+        "from .storage import Store, ErrorOwner, encode, decode"
+      ],
+      "path": "host092/linux.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 8,
+          "name": "verify_image",
+          "signature": "profile, ledger, errors"
+        },
+        {
+          "line": 42,
+          "name": "mount_output",
+          "signature": "path, bytes_limit, inodes"
+        },
+        {
+          "line": 46,
+          "name": "unmount",
+          "signature": "path"
+        },
+        {
+          "line": 50,
+          "name": "verify_source",
+          "signature": "profile, ledger, errors"
+        },
+        {
+          "line": 64,
+          "name": "publish_final",
+          "signature": "work, ledger, name, value, errors"
+        },
+        {
+          "line": 77,
+          "name": "retire_gate",
+          "signature": "gate, index"
+        },
+        {
+          "line": 81,
+          "name": "wait_owned_child",
+          "signature": "pid, seconds, poll"
+        },
+        {
+          "line": 89,
+          "name": "coordinator",
+          "signature": "profile, work, group, supervisor_pid, selection"
+        },
+        {
+          "line": 119,
+          "name": "execute",
+          "signature": "selection, bootstrap=None"
+        },
+        {
+          "line": 228,
+          "name": "main",
+          "signature": ""
+        },
+        {
+          "line": 12,
+          "name": "body",
+          "signature": ""
+        },
+        {
+          "line": 52,
+          "name": "body",
+          "signature": ""
+        },
+        {
+          "line": 67,
+          "name": "body",
+          "signature": ""
+        },
+        {
+          "line": 200,
+          "name": "terminal_snapshot",
+          "signature": ""
+        },
+        {
+          "line": 217,
+          "name": "after_tail",
+          "signature": ""
+        },
+        {
+          "line": 177,
+          "name": "wait",
+          "signature": ""
+        },
+        {
+          "line": 169,
+          "name": "drain",
+          "signature": "g=g"
+        },
+        {
+          "line": 195,
+          "name": "final_drain",
+          "signature": "g=g"
+        }
+      ],
+      "imports": [
+        "import argparse, ctypes, os, resource, signal, time, traceback",
+        "from pathlib import Path",
+        "from .admission import load_selection, selected_profile, full_plan, root_owned",
+        "from .storage import Store, Ledger, ErrorOwner, encode, digest",
+        "from .linux import acquire_group, Runtime, write, metrics, delete_owned_runtimes",
+        "from .storage import parts",
+        "import stat",
+        "from gain.cost import Attempt",
+        "from gain.programme import run_programme",
+        "from .host import Host",
+        "from .frozen import plain"
+      ],
+      "path": "host092/operator.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 9,
+          "name": "count_plane",
+          "signature": "raw, rows, units, ledger"
+        },
+        {
+          "line": 36,
+          "name": "prediction_plane",
+          "signature": "raw, rows, units"
+        },
+        {
+          "line": 44,
+          "name": "array_bytes",
+          "signature": "a"
+        },
+        {
+          "line": 50,
+          "name": "Packet",
+          "signature": null
+        },
+        {
+          "line": 51,
+          "name": "__init__",
+          "signature": "self, source, selected, ledger"
+        },
+        {
+          "line": 78,
+          "name": "counts",
+          "signature": "self, sid, phase"
+        },
+        {
+          "line": 81,
+          "name": "view",
+          "signature": "self, store, observed=False"
+        }
+      ],
+      "imports": [
+        "import ast, io, math, struct, sys, zipfile",
+        "from array import array",
+        "from .storage import decode, digest",
+        "from gain.features import inspect_metadata",
+        "from prospective.phase_projection import project_prediction_index",
+        "from .storage import encode"
+      ],
+      "path": "host092/packet.py"
+    },
+    {
+      "definitions": [],
+      "imports": [],
+      "path": "host092/source_lock.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 5,
+          "name": "digest",
+          "signature": "b"
+        },
+        {
+          "line": 6,
+          "name": "encode",
+          "signature": "x"
+        },
+        {
+          "line": 7,
+          "name": "decode",
+          "signature": "b"
+        },
+        {
+          "line": 27,
+          "name": "ErrorOwner",
+          "signature": null
+        },
+        {
+          "line": 49,
+          "name": "parts",
+          "signature": "name"
+        },
+        {
+          "line": 55,
+          "name": "Ledger",
+          "signature": null
+        },
+        {
+          "line": 65,
+          "name": "identity",
+          "signature": "s"
+        },
+        {
+          "line": 67,
+          "name": "seal_readonly_tree",
+          "signature": "path"
+        },
+        {
+          "line": 75,
+          "name": "Store",
+          "signature": null
+        },
+        {
+          "line": 8,
+          "name": "pairs",
+          "signature": "items"
+        },
+        {
+          "line": 34,
+          "name": "__init__",
+          "signature": "self"
+        },
+        {
+          "line": 35,
+          "name": "fail",
+          "signature": "self, where, error"
+        },
+        {
+          "line": 36,
+          "name": "call",
+          "signature": "self, where, callback"
+        },
+        {
+          "line": 43,
+          "name": "cleanup",
+          "signature": "self, where, callback"
+        },
+        {
+          "line": 46,
+          "name": "finish",
+          "signature": "self, start=0"
+        },
+        {
+          "line": 57,
+          "name": "__init__",
+          "signature": "self, limits"
+        },
+        {
+          "line": 61,
+          "name": "take",
+          "signature": "self, kind, n"
+        },
+        {
+          "line": 76,
+          "name": "__init__",
+          "signature": "self, path, ledger, writable=False, errors=None"
+        },
+        {
+          "line": 98,
+          "name": "_parent",
+          "signature": "self, name, create=False"
+        },
+        {
+          "line": 120,
+          "name": "read",
+          "signature": "self, name, pin, cap"
+        },
+        {
+          "line": 144,
+          "name": "capture_untrusted",
+          "signature": "self, name, cap"
+        },
+        {
+          "line": 167,
+          "name": "put",
+          "signature": "self, name, b"
+        },
+        {
+          "line": 193,
+          "name": "json",
+          "signature": "self, name, pin, cap"
+        },
+        {
+          "line": 197,
+          "name": "close",
+          "signature": "self"
+        },
+        {
+          "line": 81,
+          "name": "body",
+          "signature": ""
+        },
+        {
+          "line": 100,
+          "name": "body",
+          "signature": ""
+        },
+        {
+          "line": 122,
+          "name": "body",
+          "signature": ""
+        },
+        {
+          "line": 147,
+          "name": "body",
+          "signature": ""
+        },
+        {
+          "line": 169,
+          "name": "body",
+          "signature": ""
+        },
+        {
+          "line": 189,
+          "name": "readback",
+          "signature": ""
+        },
+        {
+          "line": 194,
+          "name": "body",
+          "signature": ""
+        }
+      ],
+      "imports": [
+        "import os, stat, json, hashlib, time",
+        "from pathlib import PurePosixPath"
+      ],
+      "path": "host092/storage.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 19,
+          "name": "validate_phase_claim",
+          "signature": "transcript"
+        },
+        {
+          "line": 27,
+          "name": "digest",
+          "signature": "x"
+        }
+      ],
+      "imports": [],
+      "path": "prospective/phase_order.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 12,
+          "name": "descriptor",
+          "signature": "value, expected_path"
+        },
+        {
+          "line": 19,
+          "name": "project_prediction_index",
+          "signature": "index, expected_session_ids"
+        }
+      ],
+      "imports": [
+        "from copy import deepcopy",
+        "import re"
+      ],
+      "path": "prospective/phase_projection.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 7,
+          "name": "main",
+          "signature": ""
+        }
+      ],
+      "imports": [
+        "import argparse, hashlib, json, os, time, urllib.request",
+        "from pathlib import Path",
+        "from io_contract import frozen_roster",
+        "from packet_io import write_json"
+      ],
+      "path": "source/acquire.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 9,
+          "name": "query_rows",
+          "signature": "meta"
+        },
+        {
+          "line": 12,
+          "name": "reconstruct",
+          "signature": "meta, query_counts"
+        },
+        {
+          "line": 28,
+          "name": "numeric_report",
+          "signature": "reconstruction"
+        }
+      ],
+      "imports": [
+        "from fractions import Fraction",
+        "from itertools import combinations",
+        "import math",
+        "import numpy as np",
+        "from state_core import AREAS, deterministic_pairs, unit_effects, area_effects, matched_area_units"
+      ],
+      "path": "source/analysis.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 13,
+          "name": "component",
+          "signature": "status, targets, blockers=[]"
+        }
+      ],
+      "imports": [
+        "import hashlib, json",
+        "from pathlib import Path"
+      ],
+      "path": "source/build_delivery.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 12,
+          "name": "pairs",
+          "signature": "values"
+        },
+        {
+          "line": 21,
+          "name": "capture",
+          "signature": "path, limit=30000000"
+        },
+        {
+          "line": 40,
+          "name": "decode",
+          "signature": "body"
+        },
+        {
+          "line": 68,
+          "name": "load",
+          "signature": "path, limit=30000000"
+        },
+        {
+          "line": 72,
+          "name": "frozen_roster",
+          "signature": "path"
+        }
+      ],
+      "imports": [
+        "import json",
+        "import math",
+        "import os",
+        "from pathlib import Path",
+        "import re",
+        "import stat",
+        "import hashlib"
+      ],
+      "path": "source/io_contract.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 35,
+          "name": "InputError",
+          "signature": null
+        },
+        {
+          "line": 39,
+          "name": "UnsupportedSchema",
+          "signature": null
+        },
+        {
+          "line": 43,
+          "name": "_identity",
+          "signature": "s"
+        },
+        {
+          "line": 48,
+          "name": "_hash",
+          "signature": "handle, size"
+        },
+        {
+          "line": 63,
+          "name": "_safe_graph",
+          "signature": "f"
+        },
+        {
+          "line": 89,
+          "name": "opened",
+          "signature": "path, descriptor"
+        },
+        {
+          "line": 147,
+          "name": "_dataset",
+          "signature": "f, path, cap"
+        },
+        {
+          "line": 156,
+          "name": "_vector",
+          "signature": "f, path, cap, *, kind=None"
+        },
+        {
+          "line": 182,
+          "name": "_ids",
+          "signature": "f, path, cap"
+        },
+        {
+          "line": 189,
+          "name": "_primitive",
+          "signature": "value"
+        },
+        {
+          "line": 200,
+          "name": "select_units",
+          "signature": "f"
+        },
+        {
+          "line": 256,
+          "name": "_tags",
+          "signature": "f, root, n"
+        },
+        {
+          "line": 269,
+          "name": "_validate_times",
+          "signature": "start, stop"
+        },
+        {
+          "line": 276,
+          "name": "intervals",
+          "signature": "f, family"
+        },
+        {
+          "line": 299,
+          "name": "invalid_intervals",
+          "signature": "f"
+        },
+        {
+          "line": 323,
+          "name": "_windows",
+          "signature": "value"
+        },
+        {
+          "line": 334,
+          "name": "count_windows",
+          "signature": "f, units, windows"
+        },
+        {
+          "line": 355,
+          "name": "_unit_attr",
+          "signature": "dataset, expected"
+        },
+        {
+          "line": 363,
+          "name": "_pupil_covariates",
+          "signature": "f, windows"
+        },
+        {
+          "line": 410,
+          "name": "state_covariates",
+          "signature": "f, windows_pre"
+        }
+      ],
+      "imports": [
+        "from __future__ import annotations",
+        "from collections import Counter",
+        "from contextlib import contextmanager",
+        "from fractions import Fraction",
+        "import hashlib",
+        "import math",
+        "import os",
+        "from pathlib import Path",
+        "import re",
+        "import stat",
+        "import h5py",
+        "import numpy as np"
+      ],
+      "path": "source/nwb_input.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 9,
+          "name": "pinned",
+          "signature": "path, descriptor, cap=FILE_CAP"
+        },
+        {
+          "line": 16,
+          "name": "_npz",
+          "signature": "raw, names"
+        },
+        {
+          "line": 29,
+          "name": "npz",
+          "signature": "raw, names"
+        },
+        {
+          "line": 33,
+          "name": "safe_relative",
+          "signature": "path"
+        },
+        {
+          "line": 38,
+          "name": "get_json",
+          "signature": "root, desc"
+        },
+        {
+          "line": 39,
+          "name": "get_npz",
+          "signature": "root, desc, names"
+        },
+        {
+          "line": 41,
+          "name": "index",
+          "signature": "path, sha, task"
+        },
+        {
+          "line": 50,
+          "name": "validate_public",
+          "signature": "meta, sid, donor"
+        },
+        {
+          "line": 63,
+          "name": "counts",
+          "signature": "arr, shape"
+        },
+        {
+          "line": 67,
+          "name": "describe",
+          "signature": "path, root"
+        },
+        {
+          "line": 70,
+          "name": "write_json",
+          "signature": "path, value"
+        }
+      ],
+      "imports": [
+        "import hashlib, io, json, math, stat, zipfile",
+        "from pathlib import Path",
+        "import numpy as np",
+        "from io_contract import capture, decode",
+        "from io_contract import ROSTER_SHA256"
+      ],
+      "path": "source/packet_io.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 11,
+          "name": "same_identity",
+          "signature": "f, sid"
+        },
+        {
+          "line": 16,
+          "name": "build_one",
+          "signature": "path, record, row, task"
+        },
+        {
+          "line": 40,
+          "name": "main",
+          "signature": ""
+        },
+        {
+          "line": 55,
+          "name": "put",
+          "signature": "path, body"
+        },
+        {
+          "line": 60,
+          "name": "js",
+          "signature": "path, value"
+        }
+      ],
+      "imports": [
+        "import argparse, hashlib, io, json, os",
+        "from pathlib import Path",
+        "import numpy as np",
+        "from io_contract import capture, decode, frozen_roster, ROSTER_SHA256",
+        "from packet_io import write_json, describe, FILE_CAP",
+        "import nwb_input as native",
+        "from projection import FAMILIES, prediction_rows, state_rows, assign_states"
+      ],
+      "path": "source/prepare.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 9,
+          "name": "scalar",
+          "signature": "v"
+        },
+        {
+          "line": 24,
+          "name": "condition",
+          "signature": "row"
+        },
+        {
+          "line": 28,
+          "name": "overlap",
+          "signature": "a, b, invalid"
+        },
+        {
+          "line": 30,
+          "name": "prediction_rows",
+          "signature": "native, invalid"
+        },
+        {
+          "line": 53,
+          "name": "state_rows",
+          "signature": "native, invalid"
+        },
+        {
+          "line": 71,
+          "name": "assign_states",
+          "signature": "rows, running, pupil"
+        }
+      ],
+      "imports": [
+        "import hashlib, json, math",
+        "import numpy as np"
+      ],
+      "path": "source/projection.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 8,
+          "name": "main",
+          "signature": ""
+        }
+      ],
+      "imports": [
+        "import argparse",
+        "from pathlib import Path",
+        "from io_contract import load",
+        "from packet_io import get_json, get_npz, write_json",
+        "from analysis import reconstruct, numeric_report"
+      ],
+      "path": "source/reference.py"
+    },
+    {
+      "definitions": [],
+      "imports": [
+        "import runpy, sys",
+        "from pathlib import Path"
+      ],
+      "path": "source/run.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 10,
+          "name": "admit_candidate",
+          "signature": "path, session_ids"
+        },
+        {
+          "line": 21,
+          "name": "evaluate",
+          "signature": "candidate, metadata, gold_loader"
+        },
+        {
+          "line": 40,
+          "name": "main",
+          "signature": ""
+        }
+      ],
+      "imports": [
+        "import argparse, json, math",
+        "from fractions import Fraction",
+        "from pathlib import Path",
+        "from io_contract import capture, decode, frozen_roster",
+        "from packet_io import index, get_json, get_npz, validate_public",
+        "from state_core import AREAS, mean_absolute_error, aggregate_session_errors, _scalar",
+        "from analysis import PAIR_KEYS, reconstruct"
+      ],
+      "path": "source/score.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 30,
+          "name": "StateInputError",
+          "signature": null
+        },
+        {
+          "line": 34,
+          "name": "_real",
+          "signature": "value, name"
+        },
+        {
+          "line": 48,
+          "name": "_number",
+          "signature": "value, name"
+        },
+        {
+          "line": 55,
+          "name": "_ids",
+          "signature": "values, name"
+        },
+        {
+          "line": 64,
+          "name": "_scalar",
+          "signature": "value, reason='undefined_no_pairs'"
+        },
+        {
+          "line": 85,
+          "name": "PairingResult",
+          "signature": null
+        },
+        {
+          "line": 100,
+          "name": "deterministic_pairs",
+          "signature": "rows, mode='running'"
+        },
+        {
+          "line": 162,
+          "name": "EffectVector",
+          "signature": null
+        },
+        {
+          "line": 173,
+          "name": "unit_effects",
+          "signature": "rates, pairs: PairingResult, baseline_rates"
+        },
+        {
+          "line": 197,
+          "name": "AreaEffects",
+          "signature": null
+        },
+        {
+          "line": 209,
+          "name": "area_effects",
+          "signature": "effects: EffectVector, area_labels, required_areas=AREAS"
+        },
+        {
+          "line": 224,
+          "name": "SessionError",
+          "signature": null
+        },
+        {
+          "line": 236,
+          "name": "mean_absolute_error",
+          "signature": "candidate: Mapping[str, float | None], expected: AreaEffects"
+        },
+        {
+          "line": 258,
+          "name": "aggregate_session_errors",
+          "signature": "errors: Mapping[str, SessionError], session_to_mouse: Mapping[str, str]"
+        },
+        {
+          "line": 281,
+          "name": "matched_area_units",
+          "signature": "metadata, area_pair"
+        },
+        {
+          "line": 93,
+          "name": "report",
+          "signature": "self"
+        },
+        {
+          "line": 167,
+          "name": "report",
+          "signature": "self"
+        },
+        {
+          "line": 202,
+          "name": "report",
+          "signature": "self"
+        },
+        {
+          "line": 229,
+          "name": "report",
+          "signature": "self"
+        }
+      ],
+      "imports": [
+        "from __future__ import annotations",
+        "from bisect import bisect_right",
+        "from collections import defaultdict",
+        "from dataclasses import dataclass",
+        "from decimal import Decimal, localcontext",
+        "from fractions import Fraction",
+        "import hashlib",
+        "import math",
+        "from types import MappingProxyType",
+        "from typing import Mapping",
+        "import numpy as np"
+      ],
+      "path": "source/state_core.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 9,
+          "name": "fixture",
+          "signature": ""
+        },
+        {
+          "line": 15,
+          "name": "Contract",
+          "signature": null
+        },
+        {
+          "line": 16,
+          "name": "test_observed_reconstruction_not_hidden_prediction",
+          "signature": "self"
+        },
+        {
+          "line": 21,
+          "name": "test_target_sign_change_requires_changed_answer",
+          "signature": "self"
+        },
+        {
+          "line": 23,
+          "name": "test_no_selected_area_drop",
+          "signature": "self"
+        },
+        {
+          "line": 28,
+          "name": "test_unsupported_control_null_required",
+          "signature": "self"
+        },
+        {
+          "line": 31,
+          "name": "test_unit_counts_retained_separately",
+          "signature": "self"
+        }
+      ],
+      "imports": [
+        "import json, tempfile, unittest",
+        "from pathlib import Path",
+        "import numpy as np",
+        "from analysis import reconstruct, numeric_report, PAIR_KEYS",
+        "from score import admit_candidate, evaluate",
+        "from state_core import AREAS"
+      ],
+      "path": "source/test_contract.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 17,
+          "name": "descriptor",
+          "signature": "path"
+        },
+        {
+          "line": 21,
+          "name": "strings",
+          "signature": "g, name, values"
+        },
+        {
+          "line": 25,
+          "name": "fixture",
+          "signature": "path"
+        },
+        {
+          "line": 73,
+          "name": "NWBTests",
+          "signature": null
+        },
+        {
+          "line": 74,
+          "name": "setUp",
+          "signature": "self"
+        },
+        {
+          "line": 80,
+          "name": "tearDown",
+          "signature": "self"
+        },
+        {
+          "line": 83,
+          "name": "test_exact_hash_same_fd_and_channel_id_join",
+          "signature": "self"
+        },
+        {
+          "line": 93,
+          "name": "test_wrong_hash_and_symlink_paths_rejected",
+          "signature": "self"
+        },
+        {
+          "line": 113,
+          "name": "test_replaced_source_name_detected_after_use",
+          "signature": "self"
+        },
+        {
+          "line": 121,
+          "name": "test_soft_external_and_virtual_links_rejected",
+          "signature": "self"
+        },
+        {
+          "line": 138,
+          "name": "test_all_native_scalar_fields_and_missing_values",
+          "signature": "self"
+        },
+        {
+          "line": 149,
+          "name": "test_invalid_union_uses_every_tag",
+          "signature": "self"
+        },
+        {
+          "line": 155,
+          "name": "test_half_open_spike_windows_and_full_ragged_identity",
+          "signature": "self"
+        },
+        {
+          "line": 164,
+          "name": "test_unsorted_unit_spikes_and_bad_ragged_extent_rejected",
+          "signature": "self"
+        },
+        {
+          "line": 176,
+          "name": "test_running_interval_weighted_absolute_and_missing_pupil",
+          "signature": "self"
+        },
+        {
+          "line": 184,
+          "name": "test_running_overlap_units_and_unknown_fields_rejected",
+          "signature": "self"
+        },
+        {
+          "line": 196,
+          "name": "test_pupil_uses_inside_values_brackets_for_support_only",
+          "signature": "self"
+        },
+        {
+          "line": 214,
+          "name": "test_pupil_gap_is_missing_not_interpolated",
+          "signature": "self"
+        }
+      ],
+      "imports": [
+        "import hashlib",
+        "import importlib.util",
+        "import os",
+        "from pathlib import Path",
+        "import tempfile",
+        "import unittest",
+        "import h5py",
+        "import numpy as np"
+      ],
+      "path": "source/test_nwb_input.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 9,
+          "name": "complete_fixture",
+          "signature": "path, extra_query=False"
+        },
+        {
+          "line": 32,
+          "name": "Preparation",
+          "signature": null
+        },
+        {
+          "line": 33,
+          "name": "setUp",
+          "signature": "self"
+        },
+        {
+          "line": 34,
+          "name": "tearDown",
+          "signature": "self"
+        },
+        {
+          "line": 35,
+          "name": "call",
+          "signature": "self, task"
+        },
+        {
+          "line": 36,
+          "name": "test_both_task_geometries_and_public_no_spike_extent",
+          "signature": "self"
+        },
+        {
+          "line": 39,
+          "name": "test_held_static_activity_never_changes_fit_baseline",
+          "signature": "self"
+        },
+        {
+          "line": 41,
+          "name": "test_negative_qc_domain_not_admitted",
+          "signature": "self"
+        }
+      ],
+      "imports": [
+        "import hashlib, tempfile, unittest",
+        "from pathlib import Path",
+        "import h5py, numpy as np",
+        "from test_nwb_input import fixture, strings, descriptor",
+        "from prepare import build_one",
+        "import nwb_input"
+      ],
+      "path": "source/test_preparation.py"
+    },
+    {
+      "definitions": [
+        {
+          "line": 17,
+          "name": "row",
+          "signature": "uid, onset, run='REST', pupil='LOW', condition=('grating', 0.0), block=0"
+        },
+        {
+          "line": 22,
+          "name": "metadata",
+          "signature": "uid, area, rate=2.0, presence=0.98, isi=0.2, amp=0.02"
+        },
+        {
+          "line": 27,
+          "name": "StateTests",
+          "signature": null
+        },
+        {
+          "line": 28,
+          "name": "test_chronological_zip_and_no_reuse",
+          "signature": "self"
+        },
+        {
+          "line": 35,
+          "name": "test_exact_condition_block_and_other_state_match",
+          "signature": "self"
+        },
+        {
+          "line": 42,
+          "name": "test_missing_pupil_only_allowed_for_running",
+          "signature": "self"
+        },
+        {
+          "line": 52,
+          "name": "test_pupil_matches_low_high_same_running_bin",
+          "signature": "self"
+        },
+        {
+          "line": 59,
+          "name": "test_pair_ids_are_permutation_invariant_with_onset_ties",
+          "signature": "self"
+        },
+        {
+          "line": 67,
+          "name": "test_signed_unit_effects_hand_calculation",
+          "signature": "self"
+        },
+        {
+          "line": 72,
+          "name": "test_exact_cancellation_before_pair_mean",
+          "signature": "self"
+        },
+        {
+          "line": 81,
+          "name": "test_equal_unit_area_means_then_equal_available_areas",
+          "signature": "self"
+        },
+        {
+          "line": 91,
+          "name": "test_full_session_hierarchy_and_no_pair_undefined",
+          "signature": "self"
+        },
+        {
+          "line": 105,
+          "name": "test_extreme_finite_effect_and_mean_error_are_tagged",
+          "signature": "self"
+        },
+        {
+          "line": 119,
+          "name": "test_metadata_matching_equal_bin_counts_and_hash_order",
+          "signature": "self"
+        },
+        {
+          "line": 130,
+          "name": "test_metadata_bin_boundaries_and_no_query_inputs",
+          "signature": "self"
+        },
+        {
+          "line": 139,
+          "name": "test_invalid_fields_reuse_and_null_support_not_silent",
+          "signature": "self"
+        }
+      ],
+      "imports": [
+        "import importlib.util",
+        "from pathlib import Path",
+        "import hashlib",
+        "import json",
+        "import sys",
+        "import unittest",
+        "import numpy as np"
+      ],
+      "path": "source/test_state_core.py"
+    }
+  ],
+  "source_roles": 49
+}

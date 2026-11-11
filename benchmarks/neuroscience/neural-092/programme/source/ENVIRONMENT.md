@@ -1,0 +1,1 @@
+Python3.12.8; NumPy2.2.6 and h5py3.13.0. CPU-only deterministic preprocessing. No AllenSDK execution, model weights, paid API or fitting dependency. Full-cohort preparation and scorer memory/time have not been empirically qualified; file/per-array caps fail rather than truncate support.
