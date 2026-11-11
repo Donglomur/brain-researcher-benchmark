@@ -1,0 +1,2067 @@
+{
+  "all21_gates_open": true,
+  "condition_family_calls": 144,
+  "coverage": {
+    "all_panels_required": true,
+    "extended_data_figures": 10,
+    "main_figures": 5,
+    "supplementary_figures": 3,
+    "supplementary_table_rows": 9
+  },
+  "full_order": [
+    "J01",
+    "J02",
+    "J03",
+    "J04",
+    "J05",
+    "J06",
+    "J07",
+    "J10",
+    "J11",
+    "J12",
+    "J14",
+    "J15",
+    "J20",
+    "J27",
+    "J32",
+    "J08",
+    "J09",
+    "J13",
+    "J16",
+    "J17",
+    "J19",
+    "J21",
+    "J22",
+    "J24",
+    "J26",
+    "J28",
+    "J29",
+    "J30",
+    "J31",
+    "J33",
+    "J18",
+    "J23",
+    "J25",
+    "J34",
+    "J35",
+    "J36"
+  ],
+  "native_qualified": false,
+  "not_a_fit_count": true,
+  "original_obligations": {
+    "bytes": 23257,
+    "path": "context/ORIGINAL_OBLIGATIONS.json",
+    "sha256": "7e6c66b8d3f1ac98b9161f7abd92b6bf869a73c3232c13c1e979aac580d2c786"
+  },
+  "required_groups": [
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "architecture_source_map"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J01",
+      "original_obligation": {
+        "experimental_unit": "Mechanism description; no replicate or numerical score",
+        "family": "solver",
+        "id": "J01",
+        "metrics": [
+          "source-to-mechanism consistency"
+        ],
+        "operation": "Explain and validate simulator/autodiff/vectorization/JIT architecture against admitted code.",
+        "panels": [
+          "Fig1a",
+          "Fig1b",
+          "Fig1c"
+        ],
+        "primary_locations": [
+          "Sec3",
+          "Sec13",
+          "Supplement pp3,Table1"
+        ],
+        "status": "required",
+        "unresolved": []
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.technical",
+        "pin": {
+          "bytes": 19782,
+          "path": "scientific/technical.py",
+          "sha256": "c7e0aab32ce699dc2e2a79bfc65ebde9ecddf264653c0c976f1bccfb1579307c"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "Jaxley_voltage",
+        "NEURON_voltage",
+        "spike_times",
+        "spike_amplitudes",
+        "clock"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J02",
+      "original_obligation": {
+        "experimental_unit": "Morphology; site/amplitude nested",
+        "family": "solver",
+        "id": "J02",
+        "metrics": [
+          "trace error",
+          "spike timing error",
+          "spike amplitude error"
+        ],
+        "operation": "Complete NEURON/Jaxley trace and spike parity across CA1 plus four solver Allen morphologies; ten stimulus amplitudes0.2\u20131.1nA and three sites for ED2.",
+        "panels": [
+          "Fig1d",
+          "ED2"
+        ],
+        "primary_locations": [
+          "Sec4",
+          "Fig1",
+          "Fig7"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Exact solver morphology/site roster distinct from fitting IDs; tolerance/timebase/source contract"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.technical",
+        "pin": {
+          "bytes": 19782,
+          "path": "scientific/technical.py",
+          "sha256": "c7e0aab32ce699dc2e2a79bfc65ebde9ecddf264653c0c976f1bccfb1579307c"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "cold_compile_times",
+        "warm_times",
+        "peak_memory",
+        "gradient_times"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J03",
+      "original_obligation": {
+        "experimental_unit": "Fixed workload \u00d7 hardware; repeated timing trials",
+        "family": "solver",
+        "id": "J03",
+        "metrics": [
+          "cold compilation",
+          "warm synchronized runtime",
+          "peak memory",
+          "gradient overhead"
+        ],
+        "operation": "All CA1 and point-neuron simulation/gradient batch-size timings; CPU and A100 comparisons,10,000-simulation highlighted case.",
+        "panels": [
+          "Fig1e"
+        ],
+        "primary_locations": [
+          "Sec4",
+          "Fig1"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Exact main batch grid/repeats/hardware/runtime definitions"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.technical",
+        "pin": {
+          "bytes": 19782,
+          "path": "scientific/technical.py",
+          "sha256": "c7e0aab32ce699dc2e2a79bfc65ebde9ecddf264653c0c976f1bccfb1579307c"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "full_state",
+        "voltage",
+        "parameter_gradient",
+        "connectivity",
+        "timing_memory"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J04",
+      "original_obligation": {
+        "experimental_unit": "One declared network generator/seed with source-described repeats",
+        "family": "solver",
+        "id": "J04",
+        "metrics": [
+          "complete state/voltage integrity",
+          "simulation/gradient runtime",
+          "memory"
+        ],
+        "operation": "2,000 detailed cells;1million synapses;200ms/8,000 steps;3.92million states;3.2million parameter gradient.",
+        "panels": [
+          "Fig1f"
+        ],
+        "primary_locations": [
+          "Sec4",
+          "Supplement p3"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Connectivity and initial state; two compartments/branch; qualified hardware"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.technical",
+        "pin": {
+          "bytes": 19782,
+          "path": "scientific/technical.py",
+          "sha256": "c7e0aab32ce699dc2e2a79bfc65ebde9ecddf264653c0c976f1bccfb1579307c"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "full_state",
+        "parameter_gradient",
+        "selected_12_loss",
+        "connectivity",
+        "timing_memory"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J05",
+      "original_obligation": {
+        "experimental_unit": "Complete generated network; seed not biological replicate",
+        "family": "solver",
+        "id": "J05",
+        "metrics": [
+          "forward state",
+          "gradient coverage",
+          "runtime/memory"
+        ],
+        "operation": "12,000 three-branch cells;25.4million synapses;all sodium/potassium/leak/synaptic parameters;mean last-time activity of12selected neurons loss.",
+        "panels": [
+          "ED3"
+        ],
+        "primary_locations": [
+          "Fig8"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Exact generator/selected12/seed/timing protocol"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.technical",
+        "pin": {
+          "bytes": 19782,
+          "path": "scientific/technical.py",
+          "sha256": "c7e0aab32ce699dc2e2a79bfc65ebde9ecddf264653c0c976f1bccfb1579307c"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "physical_parameters",
+        "untransformed_parameters",
+        "derivative",
+        "log_Jacobian",
+        "bounds"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J06",
+      "original_obligation": {
+        "experimental_unit": "Each parameter family",
+        "family": "methods",
+        "id": "J06",
+        "metrics": [
+          "numerical transform/derivative consistency"
+        ],
+        "operation": "Complete parameter transform and inverse/bounds/scale behavior.",
+        "panels": [
+          "ED1a"
+        ],
+        "primary_locations": [
+          "Sec14",
+          "Fig6"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Exact bounds including unit conflict"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.technical",
+        "pin": {
+          "bytes": 19782,
+          "path": "scientific/technical.py",
+          "sha256": "c7e0aab32ce699dc2e2a79bfc65ebde9ecddf264653c0c976f1bccfb1579307c"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "loss_gradient",
+        "per_group_updates",
+        "learning_rate",
+        "zero_gradient_policy"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J07",
+      "original_obligation": {
+        "experimental_unit": "Each optimization family",
+        "family": "methods",
+        "id": "J07",
+        "metrics": [
+          "update identity",
+          "loss/gradient normalization",
+          "actual per-group update"
+        ],
+        "operation": "Native Polyak variant and per-group optimizer composition.",
+        "panels": [
+          "ED1b",
+          "ED1c"
+        ],
+        "primary_locations": [
+          "Sec14",
+          "Fig6"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Native optional loss scaling,zero gradient treatment"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.technical",
+        "pin": {
+          "bytes": 19782,
+          "path": "scientific/technical.py",
+          "sha256": "c7e0aab32ce699dc2e2a79bfc65ebde9ecddf264653c0c976f1bccfb1579307c"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J01"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "full_gradient",
+        "checkpoint_gradient",
+        "recompute_counts",
+        "peak_memory"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J08",
+      "original_obligation": {
+        "experimental_unit": "Full declared forward graph",
+        "family": "methods",
+        "id": "J08",
+        "metrics": [
+          "gradient parity",
+          "recomputed work",
+          "peak memory"
+        ],
+        "operation": "Multilevel checkpointing reproduces full derivative with explicit recomputation/memory costs.",
+        "panels": [
+          "ED1d"
+        ],
+        "primary_locations": [
+          "Sec14",
+          "Fig6"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Library version/native numerical tolerance"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.technical",
+        "pin": {
+          "bytes": 19782,
+          "path": "scientific/technical.py",
+          "sha256": "c7e0aab32ce699dc2e2a79bfc65ebde9ecddf264653c0c976f1bccfb1579307c"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J15"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "boundary_state_before",
+        "boundary_state_after",
+        "gradient_cuts",
+        "full_voltage"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J09",
+      "original_obligation": {
+        "experimental_unit": "Each full200ms trajectory",
+        "family": "methods",
+        "id": "J09",
+        "metrics": [
+          "state continuity",
+          "truncated derivative lineage"
+        ],
+        "operation": "Retinal truncation at50/100/150ms;carry forward physical state while resetting gradient.",
+        "panels": [
+          "ED1e"
+        ],
+        "primary_locations": [
+          "Sec14",
+          "Sec32",
+          "Fig6"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Exact library state ABI"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.retina",
+        "pin": {
+          "bytes": 18937,
+          "path": "scientific/retina.py",
+          "sha256": "eccf8e3bb4c5ccbe0fa7fba5e82070f83bfb46e3ae49a553195134ab9b90a438"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "full_voltage",
+        "four_summaries",
+        "parameters",
+        "loss_trajectory",
+        "simulation_count",
+        "time_to_055"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J10",
+      "original_obligation": {
+        "experimental_unit": "Synthetic problem instance;optimization seed",
+        "family": "somatic_fitting",
+        "id": "J10",
+        "metrics": [
+          "summary MAE",
+          "full trace",
+          "loss trajectories",
+          "simulations/runtime to0.55"
+        ],
+        "operation": "19-parameter L5PC synthetic fits;ten independent GD runs \u00d710steps and ten GA runs \u00d710generations \u00d710offspring;four normalized window summaries.",
+        "panels": [
+          "Fig2a",
+          "Fig2b",
+          "Fig2c",
+          "ED4a"
+        ],
+        "primary_locations": [
+          "Sec5",
+          "Sec16\u201319",
+          "Fig9"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Exact windows,generator,initialization;GA initial population accounting"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.synthetic",
+        "pin": {
+          "bytes": 8497,
+          "path": "scientific/synthetic.py",
+          "sha256": "29b0e74710b9fb41d0a543f5ca061d8d4554983b1fcc45000e399058a5b8439d"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "full_voltage",
+        "soft_DTW",
+        "spike_count",
+        "spike_times",
+        "spike_amplitudes",
+        "best_final_hof_lineage",
+        "resource_trajectory"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J11",
+      "original_obligation": {
+        "experimental_unit": "Each specimen;repeated optimization seeds nested",
+        "family": "allen_fitting",
+        "id": "J11",
+        "metrics": [
+          "softDTW",
+          "spike count",
+          "first/second spike times/amplitudes",
+          "trace vector",
+          "resource trajectories"
+        ],
+        "operation": "All four named Allen cells;GD/GA high budget and low budget;200ms fit and native longer-trace selection.",
+        "panels": [
+          "Fig2d",
+          "ED4b",
+          "ED5"
+        ],
+        "primary_locations": [
+          "Sec5",
+          "Sec17\u201319",
+          "Fig9",
+          "Fig10"
+        ],
+        "status": "required",
+        "unresolved": [
+          "1150-vs1100ms;final-vs-best/history;GAhof;weights;source imports;all sweeps"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.allen",
+        "pin": {
+          "bytes": 15072,
+          "path": "scientific/allen.py",
+          "sha256": "607f80f66e7f74bc96a890a815bccc4c36afbea24b0c3653aec34aff6385ca17"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "whole_branch_voltage",
+        "parameters_1390",
+        "regularizer",
+        "loss_trajectory",
+        "GA_comparison"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J12",
+      "original_obligation": {
+        "experimental_unit": "Synthetic morphology/problem instance",
+        "family": "conductance",
+        "id": "J12",
+        "metrics": [
+          "whole-branch voltage MAE",
+          "regularization",
+          "physical parameter errors",
+          "optimization trajectories"
+        ],
+        "operation": "All1,390parameters and every branch;GP ground truth;500GDiterations;full GA comparison;every fifth time sample1\u20135ms;lambda0.001neighbor regularizer.",
+        "panels": [
+          "Fig2e",
+          "Fig2f",
+          "Fig2g",
+          "Fig2i"
+        ],
+        "primary_locations": [
+          "Sec6",
+          "Sec21\u201323"
+        ],
+        "status": "required",
+        "unresolved": [
+          "ExactGP covariance/seed/source;completeGAsettings"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.conductance",
+        "pin": {
+          "bytes": 31276,
+          "path": "scientific/conductance.py",
+          "sha256": "aeeb9b25bde5c5468b232ce864af5397bc8a18fa74376e82d6ca93280e47106d"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J12"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "chains_200_transitions_500",
+        "log_density",
+        "acceptance",
+        "last_samples",
+        "distance_bin_quantiles",
+        "mixing_calibration"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J13",
+      "original_obligation": {
+        "experimental_unit": "Chain is a numerical sampler replicate,not independent biological data",
+        "family": "posterior",
+        "id": "J13",
+        "metrics": [
+          "raw samples",
+          "log density",
+          "acceptance",
+          "native90%pointwise quantiles",
+          "mixing/calibration diagnostics"
+        ],
+        "operation": "200chains \u00d7500posterior transitions \u00d75Hamiltonian steps;all channel conductance profiles;11distance bins and quantile interpolation;last sample perchain.",
+        "panels": [
+          "Fig2h",
+          "ED6"
+        ],
+        "primary_locations": [
+          "Sec24",
+          "Fig11",
+          "Supplement p5"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Prior stage/coordinate regularizer/Jacobian/scaling and200-vs500steps"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.posterior",
+        "pin": {
+          "bytes": 15360,
+          "path": "scientific/posterior.py",
+          "sha256": "4cce579938cc7ac1da72ceb01e9e26dce1b57268b068c49b9bfc52406c614413"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "all_input_voltage",
+        "decision_surface",
+        "class_predictions",
+        "GD_GA_trajectory"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J14",
+      "original_obligation": {
+        "experimental_unit": "Synthetic input support \u00d7 initialization",
+        "family": "nonlinear",
+        "id": "J14",
+        "metrics": [
+          "voltage MAE",
+          "full decision surface",
+          "train/development/assessment classification"
+        ],
+        "operation": "Complete two-input nonlinearly-separable set;three branches/twelve compartments/72parameters;native voltage targets\u221270/35mV at3ms;GD and GA curves.",
+        "panels": [
+          "Fig2j",
+          "Fig2k",
+          "Fig2l",
+          "Fig2m"
+        ],
+        "primary_locations": [
+          "Sec7",
+          "Sec26\u201328",
+          "SupplementTable1"
+        ],
+        "status": "required",
+        "unresolved": [
+          "32examples inferred by6400/200 needs actual roster;do not infer seed set"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.nonlinear",
+        "pin": {
+          "bytes": 10800,
+          "path": "scientific/nonlinear.py",
+          "sha256": "6488d091a46517c3db942d0f2f3684d79ad97a58d0292de783c810ac8ef58f26"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "anatomy_parameter_map",
+        "mechanism_state_map",
+        "observation_transform"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J15",
+      "original_obligation": {
+        "experimental_unit": "One cell;rawROI\u2194model-site graph",
+        "family": "retina",
+        "id": "J15",
+        "metrics": [
+          "anatomy/mechanism admission",
+          "complete transform/state identities"
+        ],
+        "operation": "Original photoreceptor/bipolar/biophysical/calcium observation construction and masked loss,full parameter groups.",
+        "panels": [
+          "Fig3a",
+          "Fig3b"
+        ],
+        "primary_locations": [
+          "Sec8",
+          "Sec30\u201332"
+        ],
+        "status": "required",
+        "unresolved": [
+          "607-vs556parameter/units/kernel version"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.retina",
+        "pin": {
+          "bytes": 18937,
+          "path": "scientific/retina.py",
+          "sha256": "eccf8e3bb4c5ccbe0fa7fba5e82070f83bfb46e3ae49a553195134ab9b90a438"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J15"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "full_site_predictions",
+        "observation_mask",
+        "site_metrics",
+        "split_lineage"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J16",
+      "original_obligation": {
+        "experimental_unit": "One cell;sites/samples nested",
+        "family": "retina",
+        "id": "J16",
+        "metrics": [
+          "per-sitePearson",
+          "meanPearson",
+          "MAE/MSE",
+          "undefined support"
+        ],
+        "operation": "All15scanfields \u00d71024original input rows;232rawROIs mapped to147model sites;complete observed-support predictions.",
+        "panels": [
+          "Fig3c"
+        ],
+        "primary_locations": [
+          "Sec8",
+          "Sec30",
+          "legacyTASK"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Originalfiltered/delayedlabels;averaging/alignment;splits and RNG history"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.retina",
+        "pin": {
+          "bytes": 18937,
+          "path": "scientific/retina.py",
+          "sha256": "eccf8e3bb4c5ccbe0fa7fba5e82070f83bfb46e3ae49a553195134ab9b90a438"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J15"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "all_branch_calcium",
+        "site_voltage",
+        "site_calcium",
+        "stimulus"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J17",
+      "original_obligation": {
+        "experimental_unit": "Full morphology and original stimulus",
+        "family": "retina",
+        "id": "J17",
+        "metrics": [
+          "spatial/temporal calcium and voltage arrays",
+          "native compartmentalization summary"
+        ],
+        "operation": "Exact distal-branch step stimulation with calcium recorded across all branches and voltage/calcium at declared sites.",
+        "panels": [
+          "Fig3d"
+        ],
+        "primary_locations": [
+          "Sec8",
+          "Fig3"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Exact branch/stimulus/evaluation recipe"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.retina",
+        "pin": {
+          "bytes": 18937,
+          "path": "scientific/retina.py",
+          "sha256": "eccf8e3bb4c5ccbe0fa7fba5e82070f83bfb46e3ae49a553195134ab9b90a438"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J16"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "experimental_RF",
+        "model_RF",
+        "normalized_RF",
+        "contours",
+        "ASD_evidence_trajectory"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J18",
+      "original_obligation": {
+        "experimental_unit": "Recording site within one cell",
+        "family": "retina",
+        "id": "J18",
+        "metrics": [
+          "RF arrays",
+          "centering/localization",
+          "native comparison"
+        ],
+        "operation": "Complete experimental/model receptive fields;ASD20evidence iterations;normalization and0.6contours.",
+        "panels": [
+          "Fig3e"
+        ],
+        "primary_locations": [
+          "Sec30",
+          "Supplementp5"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Authentic coordinate mapping and RF source/units"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.retina",
+        "pin": {
+          "bytes": 18937,
+          "path": "scientific/retina.py",
+          "sha256": "eccf8e3bb4c5ccbe0fa7fba5e82070f83bfb46e3ae49a553195134ab9b90a438"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J15"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "train_predictions",
+        "validation_predictions",
+        "test_predictions",
+        "correlations",
+        "SEM_tests",
+        "learning_curve"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J19",
+      "original_obligation": {
+        "experimental_unit": "Scanfield within same cell;paired field/size/family",
+        "family": "retina",
+        "id": "J19",
+        "metrics": [
+          "alltrain/validation/testcorrelations",
+          "nativeSEM and tests",
+          "complete learning curve"
+        ],
+        "operation": "Seven scanfields \u00d75train sizes[32,64,128,256,512] \u00d73families[linear,MLP,hybrid];batch[4,4,8,16,32],25%validation,512test examples,\u2264100steps.",
+        "panels": [
+          "Fig3f"
+        ],
+        "primary_locations": [
+          "Sec33"
+        ],
+        "status": "required",
+        "unresolved": [
+          "SevenfieldIDs/splitIDs;MLP2-layer-vs3hidden;repeatcounts;train-size includes/excludes25%"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.retina",
+        "pin": {
+          "bytes": 18937,
+          "path": "scientific/retina.py",
+          "sha256": "eccf8e3bb4c5ccbe0fa7fba5e82070f83bfb46e3ae49a553195134ab9b90a438"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "network_mechanism_map",
+        "initial_state",
+        "connectivity",
+        "parameter_map"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J20",
+      "original_obligation": {
+        "experimental_unit": "Declared network profile",
+        "family": "rnn",
+        "id": "J20",
+        "metrics": [
+          "source/parameter/initial-state admission"
+        ],
+        "operation": "Mechanism/connectivity/readout mapping for distinct untrained,EI and DMS networks.",
+        "panels": [
+          "Fig4a"
+        ],
+        "primary_locations": [
+          "Sec9",
+          "Sec35\u201342"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Distinctnetworkseeds/parameter counts"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.rnn",
+        "pin": {
+          "bytes": 21677,
+          "path": "scientific/rnn.py",
+          "sha256": "f1678354432527838f3dd588c70b306135e59078e3166e060d77f4177e9cfa05"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J20"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "full_state",
+        "voltage",
+        "Lyapunov_norms",
+        "QR_step_counts",
+        "maximal_Lyapunov"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J21",
+      "original_obligation": {
+        "experimental_unit": "Network seed \u00d7gain;statevariables nested",
+        "family": "rnn",
+        "id": "J21",
+        "metrics": [
+          "voltage dynamics",
+          "maximalLyapunov",
+          "fullstate vector"
+        ],
+        "operation": "Complete untrained50unit80/20E/I network gain sweep;maximalLyapunov with4s transient+6s accumulation.",
+        "panels": [
+          "Fig4b",
+          "Fig4c"
+        ],
+        "primary_locations": [
+          "Sec35",
+          "Sec43",
+          "Fig4"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Gaingrid/seed;codeQR/repeatedtransient/units mismatch"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.rnn",
+        "pin": {
+          "bytes": 21677,
+          "path": "scientific/rnn.py",
+          "sha256": "f1678354432527838f3dd588c70b306135e59078e3166e060d77f4177e9cfa05"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J20"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "test_logits",
+        "trial_labels",
+        "psychometric_responses",
+        "input_weights",
+        "recurrent_weights",
+        "output_weights",
+        "voltage_readout"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J22",
+      "original_obligation": {
+        "experimental_unit": "Independent generated trial \u00d7network training seed",
+        "family": "evidence_integration",
+        "id": "J22",
+        "metrics": [
+          "trialaccuracy/CE",
+          "mean-responsecurve",
+          "weight vectors",
+          "readout/voltage"
+        ],
+        "operation": "20recurrent+2readout,109parameters;2000updates\u00d7batch4;1000testtrials;allpsychometricmeans;input/recurrent/output distributions.",
+        "panels": [
+          "Fig4d",
+          "Fig4e",
+          "Fig4f"
+        ],
+        "primary_locations": [
+          "Sec9",
+          "Sec35\u201338"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Exacttesttrial/psychometricgrid/seeds;completeEIconfiguration/imports"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.rnn",
+        "pin": {
+          "bytes": 21677,
+          "path": "scientific/rnn.py",
+          "sha256": "f1678354432527838f3dd588c70b306135e59078e3166e060d77f4177e9cfa05"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J22"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "positive_trial_readout",
+        "negative_trial_readout",
+        "three_second_timecourses"
+      ],
+      "fixed_original_product_links": [
+        [
+          "trained_rnn_parameters",
+          "J22",
+          "psychometric_responses"
+        ]
+      ],
+      "group": "J23",
+      "original_obligation": {
+        "experimental_unit": "Generated longer task trial",
+        "family": "evidence_integration",
+        "id": "J23",
+        "metrics": [
+          "readoutdecision/timecourses"
+        ],
+        "operation": "Same trained EI model,all declared positive/negative3second stimuli;noadditional fit.",
+        "panels": [
+          "ED7"
+        ],
+        "primary_locations": [
+          "Fig12"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Native trial roster and response window"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.rnn",
+        "pin": {
+          "bytes": 21677,
+          "path": "scientific/rnn.py",
+          "sha256": "f1678354432527838f3dd588c70b306135e59078e3166e060d77f4177e9cfa05"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J20"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "pattern_delay_logits",
+        "trial_labels",
+        "complete_voltage",
+        "raster",
+        "readout",
+        "curriculum_loss"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J24",
+      "original_obligation": {
+        "experimental_unit": "Tasktrial/pattern/delay \u00d7networkseed",
+        "family": "DMS",
+        "id": "J24",
+        "metrics": [
+          "pattern/delayaccuracy",
+          "CE",
+          "complete voltage/raster/readout"
+        ],
+        "operation": "Allfourinputpatterns;50unitnetwork;50\u2013150ms to450\u2013550msdelaycurriculum;batch64;response-periodCE.",
+        "panels": [
+          "Fig4g"
+        ],
+        "primary_locations": [
+          "Sec9",
+          "Sec40\u201342"
+        ],
+        "status": "required",
+        "unresolved": [
+          "459-vs542params;1000-vs1250epochs;noise0.001-vs0.01;sourcewholeconfig"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.rnn",
+        "pin": {
+          "bytes": 21677,
+          "path": "scientific/rnn.py",
+          "sha256": "f1678354432527838f3dd588c70b306135e59078e3166e060d77f4177e9cfa05"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J24"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "full_ion_gate_state",
+        "Hann40ms_smoothed",
+        "normalized_state",
+        "PCA_projection",
+        "PCA_basis"
+      ],
+      "fixed_original_product_links": [
+        [
+          "dms_checkpoint",
+          "J24",
+          "curriculum_loss"
+        ]
+      ],
+      "group": "J25",
+      "original_obligation": {
+        "experimental_unit": "Complete state trajectory",
+        "family": "DMS",
+        "id": "J25",
+        "metrics": [
+          "fullstate arrays",
+          "PCAprojections/subspace diagnostics"
+        ],
+        "operation": "Long-time full-state dynamics including ions,eachinitialstimulus;40msHann smoothing,normalization,PCA.",
+        "panels": [
+          "ED8"
+        ],
+        "primary_locations": [
+          "Fig13"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Native simulation horizon/normalization/PCA fit support and sign-rotation conventions"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.rnn",
+        "pin": {
+          "bytes": 21677,
+          "path": "scientific/rnn.py",
+          "sha256": "f1678354432527838f3dd588c70b306135e59078e3166e060d77f4177e9cfa05"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J27"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "architecture_map",
+        "full_logits",
+        "hidden_voltage",
+        "parameter_map"
+      ],
+      "fixed_original_product_links": [
+        [
+          "vision-fit-state",
+          "J27",
+          "fit_parameter_identity"
+        ]
+      ],
+      "group": "J26",
+      "original_obligation": {
+        "experimental_unit": "MNISTexample;network initialization",
+        "family": "vision",
+        "id": "J26",
+        "metrics": [
+          "architecture/mechanism compliance",
+          "full logits/voltage"
+        ],
+        "operation": "28\u00d728input/64morphologicalhidden/10output;complete105k/106kparameter mapping and10msreadout.",
+        "panels": [
+          "Fig5a",
+          "Fig5b"
+        ],
+        "primary_locations": [
+          "Sec10",
+          "Sec45\u201347"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Hiddenmorphologyroster;parameter count rounding;trainingmanifest"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.vision",
+        "pin": {
+          "bytes": 16483,
+          "path": "scientific/vision.py",
+          "sha256": "ae943ebc3e3cfde4f2ccee955bddd6eb175519ddee0d2932633497ac488d75f9"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "full_test_logits",
+        "image_labels",
+        "fit_history",
+        "fit_parameter_identity"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J27",
+      "original_obligation": {
+        "experimental_unit": "Testimage;fitseed repeated",
+        "family": "vision",
+        "id": "J27",
+        "metrics": [
+          "accuracy/CE",
+          "allreferencefitdistributions"
+        ],
+        "operation": "Biophysical network and50linear+50ReLU-MLP64hiddenfits on identicalnativeMNISTtrain/test.",
+        "panels": [
+          "Fig5c"
+        ],
+        "primary_locations": [
+          "Sec10",
+          "Fig5"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Exactbiophysicalfitcount;allseed/split/nativepreprocessing"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.vision",
+        "pin": {
+          "bytes": 16483,
+          "path": "scientific/vision.py",
+          "sha256": "ae943ebc3e3cfde4f2ccee955bddd6eb175519ddee0d2932633497ac488d75f9"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J27"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "initial_parameters",
+        "trained_parameters",
+        "reset_parameters",
+        "reset_logits",
+        "reset_membership"
+      ],
+      "fixed_original_product_links": [
+        [
+          "vision-fit-state",
+          "J27",
+          "fit_parameter_identity"
+        ]
+      ],
+      "group": "J28",
+      "original_obligation": {
+        "experimental_unit": "Same trained network and identicalassessmentimages",
+        "family": "vision",
+        "id": "J28",
+        "metrics": [
+          "rawparameterdistributions",
+          "resetaccuracy/CE"
+        ],
+        "operation": "Everydeclaredparameterfamily histogram and reset-to-initial condition,includingfullytrainedbaseline.",
+        "panels": [
+          "Fig5d",
+          "Fig5e"
+        ],
+        "primary_locations": [
+          "Sec10",
+          "Fig5"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Exactresetfamilyroster/source"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.vision",
+        "pin": {
+          "bytes": 16483,
+          "path": "scientific/vision.py",
+          "sha256": "ae943ebc3e3cfde4f2ccee955bddd6eb175519ddee0d2932633497ac488d75f9"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J27"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "clean_images",
+        "attacked_images",
+        "target_labels",
+        "true_labels",
+        "attacked_logits",
+        "norm_curve",
+        "optimizer_history"
+      ],
+      "fixed_original_product_links": [
+        [
+          "vision-fit-state",
+          "J27",
+          "fit_parameter_identity"
+        ]
+      ],
+      "group": "J29",
+      "original_obligation": {
+        "experimental_unit": "Matchedexample/target \u00d7model",
+        "family": "vision",
+        "id": "J29",
+        "metrics": [
+          "attackaccuracy/success",
+          "perturbationnorm",
+          "fullpredictions"
+        ],
+        "operation": "128pairedtestexamples;randomwrongtargetlabels;normalizedgradientLR5,pixelbounds[0,1];fullnormsweep forbiophysicalandMLP.",
+        "panels": [
+          "Fig5f",
+          "Fig5g"
+        ],
+        "primary_locations": [
+          "Sec48",
+          "Fig5"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Exactexample/target IDs;normdefinition/grid;iterationsandcompute"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.vision",
+        "pin": {
+          "bytes": 16483,
+          "path": "scientific/vision.py",
+          "sha256": "ae943ebc3e3cfde4f2ccee955bddd6eb175519ddee0d2932633497ac488d75f9"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J27"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "all64_tuning",
+        "stimulus_identity",
+        "full_response"
+      ],
+      "fixed_original_product_links": [
+        [
+          "vision-fit-state",
+          "J27",
+          "fit_parameter_identity"
+        ]
+      ],
+      "group": "J30",
+      "original_obligation": {
+        "experimental_unit": "Neuron nestedwithin one model;MNISTexample",
+        "family": "vision",
+        "id": "J30",
+        "metrics": [
+          "complete tuningmatrix",
+          "native spikethreshold"
+        ],
+        "operation": "All64hiddenneurons and displayedID13/36;before/after spike fractions bydigit.",
+        "panels": [
+          "ED9"
+        ],
+        "primary_locations": [
+          "Fig14"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Definition of spike and exactexample support"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.vision",
+        "pin": {
+          "bytes": 16483,
+          "path": "scientific/vision.py",
+          "sha256": "ae943ebc3e3cfde4f2ccee955bddd6eb175519ddee0d2932633497ac488d75f9"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J27"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "input_weights",
+        "mechanism_parameters",
+        "parameter_correlations"
+      ],
+      "fixed_original_product_links": [
+        [
+          "vision-fit-state",
+          "J27",
+          "fit_parameter_identity"
+        ]
+      ],
+      "group": "J31",
+      "original_obligation": {
+        "experimental_unit": "Synapse withinnetwork",
+        "family": "vision",
+        "id": "J31",
+        "metrics": [
+          "rawpairedweights",
+          "correlations",
+          "native tests"
+        ],
+        "operation": "Completefirst/secondlayersynapticinitial/trainedpairs;fivemostchangedconnections perlayer.",
+        "panels": [
+          "ED10"
+        ],
+        "primary_locations": [
+          "Fig15"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Exactcorrelation/testmethod andties"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.vision",
+        "pin": {
+          "bytes": 16483,
+          "path": "scientific/vision.py",
+          "sha256": "ae943ebc3e3cfde4f2ccee955bddd6eb175519ddee0d2932633497ac488d75f9"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "runtime_repeats",
+        "ratio",
+        "hardware_workload",
+        "availability_reason"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J32",
+      "original_obligation": {
+        "experimental_unit": "Fixedhardware/workload;timingreplicates",
+        "family": "solver",
+        "id": "J32",
+        "metrics": [
+          "rawtimings",
+          "19ratios",
+          "OOM/unsupportedmetadata"
+        ],
+        "operation": "Twohardware ratios acrossbatch[1,10,100,1000,10000] forsimulation/gradient:AMD/M3,A100/H100;19finite ratios andexplicitM3gradient10k memory omission.",
+        "panels": [
+          "S1"
+        ],
+        "primary_locations": [
+          "Supplementp7"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Exactplatformconfiguration/repeats;noimputedmissingpoint"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.technical",
+        "pin": {
+          "bytes": 19782,
+          "path": "scientific/technical.py",
+          "sha256": "c7e0aab32ce699dc2e2a79bfc65ebde9ecddf264653c0c976f1bccfb1579307c"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J20"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "full_Jacobian",
+        "Jacobian_sign",
+        "all20_unit_state"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J33",
+      "original_obligation": {
+        "experimental_unit": "Same fullstate x0",
+        "family": "rnn",
+        "id": "J33",
+        "metrics": [
+          "fullJacobian",
+          "signmatrix",
+          "state-coordinateidentity"
+        ],
+        "operation": "20unitnetwork,5inhibitory,p0.2;fullstateJacobians at1,2,4solversteps andtheir sign matrices.",
+        "panels": [
+          "S2"
+        ],
+        "primary_locations": [
+          "Supplementp8"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Initialstate/seed;fullstateordering/nativezero handling"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.rnn",
+        "pin": {
+          "bytes": 21677,
+          "path": "scientific/rnn.py",
+          "sha256": "f1678354432527838f3dd588c70b306135e59078e3166e060d77f4177e9cfa05"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J22"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "input",
+        "readout",
+        "raster",
+        "full_voltage_both_classes"
+      ],
+      "fixed_original_product_links": [
+        [
+          "trained_rnn_parameters",
+          "J22",
+          "psychometric_responses"
+        ]
+      ],
+      "group": "J34",
+      "original_obligation": {
+        "experimental_unit": "Same trainedEI programme,notadditionalfit",
+        "family": "evidence_integration",
+        "id": "J34",
+        "metrics": [
+          "fullinput/voltage/spike/readoutarrays"
+        ],
+        "operation": "Complete trainedEI stimulus/readout/raster/recurrentvoltage panels forbothresponse classes.",
+        "panels": [
+          "S3"
+        ],
+        "primary_locations": [
+          "Supplementp8"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Exampletrialidentities;spikethreshold"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.rnn",
+        "pin": {
+          "bytes": 21677,
+          "path": "scientific/rnn.py",
+          "sha256": "f1678354432527838f3dd588c70b306135e59078e3166e060d77f4177e9cfa05"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J03",
+        "J10",
+        "J11",
+        "J12",
+        "J14",
+        "J19",
+        "J22",
+        "J24",
+        "J27"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "nine_table_rows",
+        "observed_operation_counts",
+        "observed_resources"
+      ],
+      "fixed_original_product_links": [],
+      "group": "J35",
+      "original_obligation": {
+        "experimental_unit": "Completeprogrammefamily;timing repeated as appropriate",
+        "family": "costs",
+        "id": "J35",
+        "metrics": [
+          "actual counts",
+          "totalcost",
+          "per-stepcost",
+          "publishedcontext"
+        ],
+        "operation": "Allninepublishedtaskrows;parameter/branch/device/step/timevectors andexplicitpaper/table/code discrepancies.",
+        "panels": [
+          "TableS1"
+        ],
+        "primary_locations": [
+          "Supplementp3"
+        ],
+        "status": "required",
+        "unresolved": [
+          "Nohistoric timing measuredhere;sometablelabelsoldfigure numbering"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.technical",
+        "pin": {
+          "bytes": 19782,
+          "path": "scientific/technical.py",
+          "sha256": "c7e0aab32ce699dc2e2a79bfc65ebde9ecddf264653c0c976f1bccfb1579307c"
+        }
+      }
+    },
+    {
+      "actual_parent_groups": [
+        "J01",
+        "J02",
+        "J06",
+        "J07",
+        "J08",
+        "J09",
+        "J11",
+        "J13",
+        "J18",
+        "J21"
+      ],
+      "all_conditions": [
+        "A_R",
+        "B_R",
+        "A_I",
+        "B_I"
+      ],
+      "complete_products": [
+        "eight_notes_source_map",
+        "native_method_tests"
+      ],
+      "fixed_original_product_links": [
+        [
+          "note1_source_map",
+          "J01",
+          "architecture_source_map"
+        ],
+        [
+          "note2_clock",
+          "J02",
+          "clock"
+        ],
+        [
+          "note2_jaxley_voltage",
+          "J02",
+          "Jaxley_voltage"
+        ],
+        [
+          "note2_neuron_voltage",
+          "J02",
+          "NEURON_voltage"
+        ],
+        [
+          "note3_boundary_after",
+          "J09",
+          "boundary_state_after"
+        ],
+        [
+          "note3_boundary_before",
+          "J09",
+          "boundary_state_before"
+        ],
+        [
+          "note3_bounds",
+          "J06",
+          "bounds"
+        ],
+        [
+          "note3_checkpoint_gradient",
+          "J08",
+          "checkpoint_gradient"
+        ],
+        [
+          "note3_full_gradient",
+          "J08",
+          "full_gradient"
+        ],
+        [
+          "note3_gradient_cuts",
+          "J09",
+          "gradient_cuts"
+        ],
+        [
+          "note3_optimizer_updates",
+          "J07",
+          "per_group_updates"
+        ],
+        [
+          "note3_physical",
+          "J06",
+          "physical_parameters"
+        ],
+        [
+          "note3_untransformed",
+          "J06",
+          "untransformed_parameters"
+        ],
+        [
+          "note4_allen_voltage",
+          "J11",
+          "full_voltage"
+        ],
+        [
+          "note5_acceptance",
+          "J13",
+          "acceptance"
+        ],
+        [
+          "note5_log_density",
+          "J13",
+          "log_density"
+        ],
+        [
+          "note5_mixing",
+          "J13",
+          "mixing_calibration"
+        ],
+        [
+          "note6_contours",
+          "J18",
+          "contours"
+        ],
+        [
+          "note6_evidence",
+          "J18",
+          "ASD_evidence_trajectory"
+        ],
+        [
+          "note7_counts",
+          "J21",
+          "QR_step_counts"
+        ],
+        [
+          "note7_maximal",
+          "J21",
+          "maximal_Lyapunov"
+        ],
+        [
+          "note7_norms",
+          "J21",
+          "Lyapunov_norms"
+        ]
+      ],
+      "group": "J36",
+      "original_obligation": {
+        "experimental_unit": "Namedmethodcontract",
+        "family": "methods",
+        "id": "J36",
+        "metrics": [
+          "source-groundedreasoning",
+          "numericaldefinitionparity"
+        ],
+        "operation": "Toolbox comparison historicalatpublication;solverleapfrog0.001mVderivative/twovs4compartments/300umbranchsplitting;training/bounds;softDTW;HMC;retinalpreprocessing;Lyapunovunits.",
+        "panels": [
+          "SupplementNotes1\u20138"
+        ],
+        "primary_locations": [
+          "Supplementpp3\u20136"
+        ],
+        "status": "required",
+        "unresolved": [
+          "HistoricaltoolboxclaimnotcurrentSOTA;allnumericalconflictsretainbothprofiles"
+        ]
+      },
+      "qualification": false,
+      "source_dispatch": {
+        "function": "run",
+        "module": "scientific.technical",
+        "pin": {
+          "bytes": 19782,
+          "path": "scientific/technical.py",
+          "sha256": "c7e0aab32ce699dc2e2a79bfc65ebde9ecddf264653c0c976f1bccfb1579307c"
+        }
+      }
+    }
+  ],
+  "schema": "jaxley_complete_programme_inverse_v2"
+}
