@@ -1,0 +1,53 @@
+{
+  "candidate_id": "NEURAL-029",
+  "code_archive": "https://zenodo.org/api/records/21645651/files/filio-2026-main.zip/content",
+  "code_archive_sha256": "21e86679294f5b6f316d0abfc366ea39bb2b906e73f75e730244f42b3a5e03bf",
+  "code_md5": "md5:7424fe57cb98e5ae0ac6e35c9a381091",
+  "correct_source_id": "SIGNAL-EXT-C003",
+  "data_assets": [
+    {
+      "bytes": 2408952933,
+      "checksum": "md5:f2d3b27ebbbd99a58c6ff62e8b473a58",
+      "path": "mainData1.mat",
+      "url": "https://zenodo.org/api/records/21645651/files/mainData1.mat/content"
+    },
+    {
+      "bytes": 3002001774,
+      "checksum": "md5:1f163dee80ad4baf1574e581954f0213",
+      "path": "mainData2.mat",
+      "url": "https://zenodo.org/api/records/21645651/files/mainData2.mat/content"
+    }
+  ],
+  "data_url": "https://doi.org/10.5281/zenodo.21645651",
+  "evidence_paths": [
+    "benchmarks/manifests/neural/NEURAL-029.json",
+    "docs/neuroscience-benchmarks/readiness/signals_extension_c.json",
+    "docs/neuroscience-benchmarks/readiness/manifests/find-rep-014-archive-01.json",
+    "urn:neurobench:historical-source:sha256:e151bfc046e98220cbb8d946196fdfbedb234385701d765019fb36d668e40b13"
+  ],
+  "incorrect_reuse_excluded": {
+    "package": "urn:neurobench:historical-source:sha256:040961f42ca790ea7a92973b643d2340c58c4a82d2ba5498c41196599c53837d",
+    "reason": "Different paper/source; F2 single-unit rates and F3 pseudopopulation spikes do not establish Filio registered calcium/delay inputs.",
+    "release": "19345221"
+  },
+  "local_asset_status": "No matching recording asset found by bounded repository filename inventory; no MAT payload acquired or opened.",
+  "local_code_intake": "urn:neurobench:historical-source:sha256:51e7a871af586cfa95c0607b1abfba429c8efe488389afcda9cbd8f30e5ff141",
+  "local_code_status": "Actual 78866-byte source archive authenticated by MD5 and exact44-entry held inventory; code-only intake by NEURAL030, no MAT bodies acquired.",
+  "paper_url": "https://doi.org/10.1038/s41593-026-02449-z",
+  "recording_contract": {
+    "biological_ids": "MainData obtains mouse names by splitting dirTable.DA_Dir and counts unique mice. Dated acquisition-path strings are retained provenance identifiers, not required local paths. Alt_Delay_Dir/WaterDir plus chronic registration link repeated conditions; group these under one animal.",
+    "evidence": "Versioned 11-asset manifest including ten MAT inputs and the code ZIP; archive README and MainData/IOChRmine/IOChRmine_imaging inspected. Individual optional fields differ by session; no MAT payload loaded.",
+    "labels": "rewarded, goodMvmt, movement length/pose, sol stimulation signal, DAType (DAT/MFB), delay condition, CFType/GrCs fields, water matches and experiment-specific inhibition/control data are described and used by the source.",
+    "neural": "mainData1/2.mat contain micedats trial/session structures. Inspected IOChRmine_imaging reads rewAlgn.sigFilt_right_green as trial \u00d7 cell \u00d7 time; MainData separates GrC and CF populations and uses chronicGreen/chronicRed matches where available.",
+    "time_alignment": "tmpxx is the event-aligned time vector; winfn selects time windows. dtb converts behavioral sample indices such as rewtimes into seconds. startAlgn and rewAlgn expose distinct alignment choices; benchmark must freeze which is supplied."
+  },
+  "schema": "neural029_source_identity_v1",
+  "source_evidence": {
+    "MainData.m:514-550": "GrCs use endAlgn.sigFilt_right_green and tmpx_right neural clock.",
+    "MainData.m:610-617": "finalMatchesMat orientation by distinct column maxima against nc_right_green; ambiguity is not guessed.",
+    "MainData.m:75-79": "Two-second GrC sessions with chronicGreen paired to one-second sessions by Alt_Delay_Dir.",
+    "README.md:Data": "Both mainData MAT partitions required; optional/missing fields vary; processed and normalized calcium."
+  },
+  "title": "Predictive and instructive cerebellar encoding of dopamine reward drives motivated behavior",
+  "version": "21645651"
+}

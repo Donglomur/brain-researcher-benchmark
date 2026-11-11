@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "primary_nrmse",
+    "baseline_nrmse",
+    "pairs",
+    "mice",
+    "fixed_warp_nrmse",
+    "candidate_minus_baseline",
+    "candidate_minus_fixed_warp",
+    "fixed_warp_minus_baseline",
+    "leave_one_mouse",
+    "support",
+    "primary_weighting",
+    "estimand",
+    "fixed_warp",
+    "scientific_execution_qualified",
+    "submission_ready",
+    "all_pairs_retained",
+    "condition_transfer",
+    "causal_or_new_animal_claim"
+  ],
+  "properties": {
+    "schema": {
+      "const": "neural029-grade-v2"
+    },
+    "primary_nrmse": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "baseline_nrmse": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "fixed_warp_nrmse": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "candidate_minus_baseline": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "candidate_minus_fixed_warp": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "fixed_warp_minus_baseline": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "pairs": {
+      "type": "array",
+      "minItems": 1
+    },
+    "mice": {
+      "type": "array",
+      "minItems": 1
+    },
+    "leave_one_mouse": {
+      "type": "array",
+      "minItems": 1
+    },
+    "support": {
+      "type": "object",
+      "required": [
+        "schema",
+        "pairs",
+        "cohort_dispositions",
+        "registered_components",
+        "sessions",
+        "counts",
+        "source_truth_verified",
+        "scientific_execution_qualified",
+        "component_balanced_sensitivity"
+      ],
+      "properties": {
+        "schema": {
+          "const": "neural029-support-report-v2"
+        },
+        "source_truth_verified": {
+          "const": false
+        },
+        "scientific_execution_qualified": {
+          "const": false
+        }
+      }
+    },
+    "primary_weighting": {
+      "type": "string"
+    },
+    "estimand": {
+      "type": "string"
+    },
+    "fixed_warp": {
+      "type": "string"
+    },
+    "scientific_execution_qualified": {
+      "const": false
+    },
+    "submission_ready": {
+      "const": false
+    },
+    "all_pairs_retained": {
+      "const": true
+    },
+    "condition_transfer": {
+      "const": "1s_to_2s_GrC"
+    },
+    "causal_or_new_animal_claim": {
+      "const": false
+    }
+  }
+}
