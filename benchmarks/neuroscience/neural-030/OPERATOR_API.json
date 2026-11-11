@@ -1,0 +1,58 @@
+{
+  "case_adaptive_executor": null,
+  "control": {
+    "entrypoint": "reference.query_neural_mismatch",
+    "inputs": [
+      "public"
+    ],
+    "interpretation": "deterministic diagnostic only, not randomization inference"
+  },
+  "frozen_program_executor": null,
+  "inspect": {
+    "command": "python3 -B task_operator.py inspect",
+    "imports_numpy": false,
+    "reads": "five bounded ordinary JSON metadata files"
+  },
+  "model_tool_runtime": null,
+  "prepare": {
+    "entrypoint": "packet.prepare_collection",
+    "inputs": [
+      "binding",
+      "sessions dictionary keyed by (group,record)"
+    ],
+    "native_mat_loader": null,
+    "outputs": [
+      "public session cases with train/dev targets but no query targets",
+      "operator-private expected rows, source identities and every trial disposition"
+    ]
+  },
+  "read_boundary": "No acquisition/native/scientific invocation through metadata inspector. Source APIs require separately authorized, trusted in-memory operands.",
+  "reference": {
+    "entrypoint": "reference.predict_reference",
+    "inputs": [
+      "public",
+      "arm"
+    ],
+    "outputs": "complete query prediction count vectors",
+    "private_labels_accepted": false
+  },
+  "schema_version": 1,
+  "scientific_execution_authorized": false,
+  "score": {
+    "entrypoint": "score.score_predictions",
+    "identity_claim": "computes using operator attestation; never proves authenticity",
+    "inputs": [
+      "expected",
+      "predictions",
+      "baseline_predictions",
+      "mouse_binding"
+    ],
+    "operator_only": true,
+    "required_for_primary": "complete matched context_handle baseline and genuine independently reviewed mouse mapping"
+  },
+  "validate_binding": {
+    "authenticates_source": false,
+    "entrypoint": "source_binding.validate_binding",
+    "inputs": "exact source asset/revision plus16 declared source positions and genuine evidence operands"
+  }
+}
