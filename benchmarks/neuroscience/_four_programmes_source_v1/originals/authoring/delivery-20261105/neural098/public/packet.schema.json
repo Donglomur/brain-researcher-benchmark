@@ -1,0 +1,114 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "features_sha256",
+    "rows"
+  ],
+  "properties": {
+    "schema": {
+      "const": "neural098-packet-v1"
+    },
+    "features_sha256": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64,
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 72,
+      "maxItems": 100000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "participant",
+          "trial_id",
+          "stim_trigger",
+          "category",
+          "duration_ms",
+          "relevance",
+          "orientation"
+        ],
+        "properties": {
+          "participant": {
+            "enum": [
+              "SA102",
+              "SA103",
+              "SA104",
+              "SA111",
+              "SA114",
+              "SA118",
+              "SA121",
+              "SA123",
+              "SA125",
+              "SA132",
+              "SA133",
+              "SA134",
+              "SA136",
+              "SA138",
+              "SA139",
+              "SA140",
+              "SA144",
+              "SA145",
+              "SA146",
+              "SA147",
+              "SA148",
+              "SA150",
+              "SA151",
+              "SA154",
+              "SA158",
+              "SA163",
+              "SA166",
+              "SA167",
+              "SA169",
+              "SA170",
+              "SA173",
+              "SA174",
+              "SA176"
+            ]
+          },
+          "trial_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "stim_trigger": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 40
+          },
+          "category": {
+            "enum": [
+              0,
+              1
+            ]
+          },
+          "duration_ms": {
+            "enum": [
+              500,
+              1000,
+              1500
+            ]
+          },
+          "relevance": {
+            "enum": [
+              "Irrelevant",
+              "Relevant non-target"
+            ]
+          },
+          "orientation": {
+            "enum": [
+              "Center",
+              "Left",
+              "Right"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "description": "Runtime also checks category/identity consistency and complete participant/half/condition support."
+}

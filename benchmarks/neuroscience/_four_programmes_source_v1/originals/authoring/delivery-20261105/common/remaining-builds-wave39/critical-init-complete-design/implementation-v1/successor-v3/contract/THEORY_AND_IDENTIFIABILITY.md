@@ -1,0 +1,16 @@
+# CriticalInit: what the benchmark must test
+The paper connects a near-critical symmetric random interaction matrix to covariance spectra and slow activity modes. Reproducing these numerical observations does not identify the true synaptic matrix in a recorded brain.
+
+Write the stochastic process unambiguously as dx = Mx dt + L dW, M=(A-I)/tau, Q=L L^T. A stationary covariance exists only when every real part of an eigenvalue of M is negative. It solves M Sigma + Sigma M^T = -Q. For symmetric A and the paper's dimensionless diffusion convention, Sigma=(I-A)^(-1)/2. Changing the noise/tau normalization changes this scale, so raw covariance and normalized shape are separate endpoints. At an exact eigenvalue of one, the finite stationary covariance fails; the 0.998 simulation and asymptotic critical limit are different objects.
+
+Near the upper edge of a semicircle, density is proportional to (1-a)^(1/2), so the fraction of eigenvalues above a scales as (1-a)^(3/2). Since covariance eigenvalues scale as (1-a)^(-1), rank order scales as n^(-2/3), within a finite-size/near-critical scaling regime. Long-window integration introduces another inverse relaxation-rate factor, producing the distinct n^(-4/3) asymptotic. A correct answer must state its window and finite-edge assumptions. The paper's nonsymmetric exponent near1.25 is numerical; the benchmark must not ask a grader to certify an absent proof.
+
+For a symmetric mode with interaction eigenvalue a_i, the relaxation time is tau/(1-a_i); the ideal autocorrelation is exp[-t(1-a_i)/tau]. Measured calcium/ephys cross-correlations include measurement noise, preprocessing and finite-time estimation. The paper's Figure2 longest-timescale plotting factor is separately conflicted.
+
+The ideal full-state propagator is F=exp(M delta). The observed, truncated, ridge-regularized DMD matrix is generally a different object. DMD_OBSERVATION_CONTRACT.md derives its covariance-weighted prediction operator, states the full-observation/invariant-subspace limits and separates source normalization. The source rotation formula is a principal-branch sampled-mode statistic, with continuous frequency identified only modulo2pi/delta. A real or weakly rotating fitted spectrum does not establish the absence of hidden or aliased rotation. Unit/unstable/zero magnitudes and source filter choices retain explicit dispositions.
+
+Covariance alone does not identify A, especially with unknown correlated drive, unequal noise, partial observation, nonnormality or unobserved variables. A poor power-law fit is not proof against all critical models; a good one is not proof of symmetric biological connectivity. State-conditioned data and deconvolution can induce structure. The task's scientific reasoning outputs must compare these alternatives using predictions and limitations, not word-match the paper's interpretation.
+
+In Figure4 the ground-truth connection matrix exists only in simulations. On real Facemap recordings the score can check the strong-pair spatial statistic, not whether a pair is synaptically connected. In Figure5 the held-out objects are generated patterns, not measured human or animal memory. Better retrieval can be a computational advance without establishing a new biological mechanism.
+
+

@@ -1,0 +1,125 @@
+{
+  "all_code_cells_preserved_in_order": true,
+  "code_cells": [
+    {
+      "joined_source_sha256": "047538388469c00d7919fc18e1e8a6df2e03fa54ebcc3909dc736d17db77e474",
+      "joined_utf8_bytes": 299,
+      "original_cell_index": 2,
+      "source": [
+        "import numpy as np \n",
+        "import torch\n",
+        "import sys, os\n",
+        "sys.path.insert(0, \"../\")\n",
+        "import analysis\n",
+        "from pathlib import Path \n",
+        "from natsort import natsorted\n",
+        "from sparse_clustered_local_sims import sparse_evals, clustered_evals, local_evals\n",
+        "\n",
+        "device = torch.device(\"cuda\" if torch.cuda.is_available() else \"cpu\")"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "b7819e080248ead7797369a8cad54bdf6d0d67dfc599cfd4a93a53e0a3a36f78",
+      "joined_utf8_bytes": 2043,
+      "original_cell_index": 3,
+      "source": [
+        "os.makedirs(\"../results\", exist_ok=True)\n",
+        "\n",
+        "torch.manual_seed(0)\n",
+        "if device.type == \"cuda\":\n",
+        "    torch.cuda.manual_seed(0)\n",
+        "\n",
+        "# compute eigenvalues of covariance for sparse connectivity matrices\n",
+        "print(\"computing eigenvalues of covariance for sparse connectivity matrices\")\n",
+        "evals_sparsities_all, sparsities = sparse_evals(n_sim=10, nn=10000, device=device)\n",
+        "np.save(\"../results/sim_sparse.npy\", {\"evals\": evals_sparsities_all,\n",
+        "        \"sparsities\": sparsities})\n",
+        "\n",
+        "# compute eigenvalue of covariance for clustered connectivity matrices\n",
+        "print(\"computing eigenvalues of covariance for clustered connectivity matrices\")\n",
+        "evals_clustered_all, Aex, pglobals = clustered_evals(n_sim=10, nn=10000, device=device)\n",
+        "np.save(\"../results/sim_cluster.npy\", {\"evals\": evals_clustered_all, \"Aex\": Aex,\n",
+        "                        \"pglobals\": pglobals})\n",
+        "\n",
+        "# compute eigenvalues of covariance for local connectivity matrices\n",
+        "print(\"computing eigenvalues of covariance for connectivity matrices w/ local structure\")\n",
+        "out = local_evals(n_sim=10, nn=10000, device=device)\n",
+        "(evals_local_all, perc, perc_local_all, var_all, pglobals, pcs_local_all, ypos_local_all, xpos_local_all, \n",
+        "    Aex, cov_ex, ypos_ex, xpos_ex, dbin_strong_all, dbin_other_all, cov_bin_all, drand_all, crand_all, pconn, bin_size, pstrong, dist_min) = out\n",
+        "np.save(\"../results/sim_local.npy\", {\"evals_local_all\": evals_local_all, \"perc\": perc, \n",
+        "                        \"perc_local_all\": perc_local_all, \"var_all\": var_all,\n",
+        "                        \"pglobals\": pglobals, \"pcs_local_all\": pcs_local_all,\n",
+        "                        \"ypos_local_all\": ypos_local_all, \"xpos_local_all\": xpos_local_all,\n",
+        "                        \"Aex\": Aex, \"cov_ex\": cov_ex, \"ypos_ex\": ypos_ex, \"xpos_ex\": xpos_ex,\n",
+        "                        \"dbin_strong_all\": dbin_strong_all, \"dbin_other_all\": dbin_other_all,\n",
+        "                        \"cov_bin_all\": cov_bin_all, \"drand_all\": drand_all, \n",
+        "                        \"crand_all\": crand_all, \"pconn\": pconn,\n",
+        "                        \"bin_size\": bin_size, \"pstrong\": pstrong, \"dist_min\": dist_min })\n",
+        "\n"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "a80a30f40cd4462f6d5c9811af77814bc721d7f45726dd6a5aa6230345646c4d",
+      "joined_utf8_bytes": 773,
+      "original_cell_index": 5,
+      "source": [
+        "import importlib \n",
+        "importlib.reload(analysis)\n",
+        "\n",
+        "files = [f for f in Path(\"/media/carsen/ssd3/facemap/neural_data_udcnv/\").glob(\"*.npz\")]\n",
+        "files = natsorted(files)\n",
+        "\n",
+        "out = analysis.neural_strong_pairs(files)\n",
+        "(pcs_all, ypos_all, xpos_all, var_all, \n",
+        "            dbin_strong_all, dbin_other_all, cov_bin_all, drand_all, crand_all,\n",
+        "            bin_size, pstrong, dist_min) = out\n",
+        "\n",
+        "np.save(\"../results/strongpairs_data_all.npy\", \n",
+        "           {\"pcs_all\": pcs_all, \"ypos_all\": ypos_all, \"xpos_all\": xpos_all,\n",
+        "            \"var_all\": var_all,\n",
+        "            \"dbin_strong_all\": dbin_strong_all, \"dbin_other_all\": dbin_other_all,\n",
+        "            \"cov_bin_all\": cov_bin_all, \"drand_all\": drand_all, \"crand_all\": crand_all,\n",
+        "            \"bin_size\": bin_size, \"pstrong\": pstrong, \"dist_min\": dist_min})"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "7e7b7f4f7c812a0f7c1f9c5d8594ea86d31f2f42d52bea9e3ee119c018541cb2",
+      "joined_utf8_bytes": 513,
+      "original_cell_index": 7,
+      "source": [
+        "import fig4\n",
+        "import importlib\n",
+        "importlib.reload(fig4)\n",
+        "\n",
+        "dat_sparse = np.load(\"../results/sim_sparse.npy\", allow_pickle=True).item()\n",
+        "dat_clustered = np.load(\"../results/sim_cluster.npy\", allow_pickle=True).item()\n",
+        "dat_local = np.load(\"../results/sim_local.npy\", allow_pickle=True).item()\n",
+        "dat_neural = np.load(\"../results/strongpairs_data_all.npy\", allow_pickle=True).item()\n",
+        "\n",
+        "fig = fig4.fig4(dat_sparse, dat_clustered, dat_local, dat_neural)\n",
+        "os.makedirs(\"../figures/\", exist_ok=True)\n",
+        "fig.savefig(\"../figures/fig4.pdf\")\n"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    }
+  ],
+  "executed": false,
+  "notebook_outputs_markdown_attachments_not_retained": true,
+  "original_blob_bytes": 597803,
+  "original_blob_sha256": "b07a188d7c250024e57216744ebab62abe29d461d9ddfadc4fe75afdd0785775",
+  "original_cell_count": 8,
+  "original_git_blob": "3ab9565a244358dd7fea5d25b3629fa5a8722672",
+  "original_repository_path": "fig4/fig4.ipynb",
+  "schema": "exact_notebook_code_cell_projection_v1"
+}

@@ -1,0 +1,3693 @@
+{
+  "encoding": "Inherited canonical JSON exact scientific bytes; new metadata uses valid scalar UTF-8, no duplicate keys, finite values, exact builtin types; bool never integer. Diagnostic text has separate callback-free ASCII projection. Nullable fields are explicit and still required. A null/unavailable field is never authority, zero cost, a process identity, or successful closure. New record versions are exact; no v1 fallback for revised records.",
+  "external_schemas": "All ten inherited source_selected_external nominal domains and six versioned_external_changes retain their original exact meaning. Resolve the immutable parent selectors via history-metadata/v1-SOURCE_BINDINGS.json#/frozen_parents (itself authenticated in HISTORY_BINDINGS.v1_exact_metadata_selectors); do not resolve against this successor directory or a guessed alias. Descriptor ancestry is preserved, not authority to open held or unselected bodies. Revised development/pair/seal child contracts remain mandatory as explicitly selected in EFFECTIVE_JOINS.",
+  "inherited_changed": [
+    "DevelopmentCompletion",
+    "DevelopmentPairClosure",
+    "DevelopmentFailure",
+    "ProgrammeSeal"
+  ],
+  "inherited_records": 46,
+  "new_records": [
+    "BackendAdmissionAck",
+    "BackendAttempt",
+    "BackendClosure",
+    "BackendExchangeObservation",
+    "BackendInitializationObservation",
+    "BackendLimits",
+    "BackendSampling",
+    "CompletionRequest",
+    "EarlyConstructionSubject",
+    "EarlyIssuanceObservation",
+    "EarlyIssuerBootstrapAttestation",
+    "EarlyIssuerBootstrapPolicy",
+    "EarlyIssuerProfile",
+    "InitialStatePreparation",
+    "InitialStateRecipe",
+    "LocalArtifactSelection",
+    "LocalBackendProfile",
+    "WorkerLaunchAck",
+    "WorkspaceObservation",
+    "PreparationOperation",
+    "OwnedPathIdentity",
+    "PreparationCleanup",
+    "PreparedArmPrefix",
+    "PreparationFailure",
+    "PreparationSuccess",
+    "PreparationReport",
+    "RawHttpResponse",
+    "ParsedHealth",
+    "SlotBody",
+    "ParsedSlots",
+    "CompletionBody",
+    "ParsedCompletion",
+    "RejectedResponse",
+    "AgentCompletion",
+    "ProcessObservation",
+    "SocketObservation",
+    "PeerCredentialObservation",
+    "ArtifactObservation",
+    "EnvironmentEntry",
+    "EnvironmentObservation",
+    "SourceInitializationProof",
+    "HostInitializationObservation",
+    "SubtreeMember",
+    "SubtreeObservation",
+    "SocketClosureObservation",
+    "StreamSide",
+    "StreamClosureObservation",
+    "SignalObservation",
+    "ExitObservation",
+    "ParsedLoadingHealth",
+    "WorkspaceInventoryEntry",
+    "WorkspaceInventory",
+    "BackendHttpRequest",
+    "RenderedTemplateObservation",
+    "DevelopmentContractIdentity",
+    "BackendAttemptBase"
+  ],
+  "primitive_types": {
+    "ArmMap": {
+      "keys": [
+        "paper_data",
+        "paper_data_author_code"
+      ],
+      "kind": "closed_map",
+      "values": "Pin"
+    },
+    "BackendState": {
+      "kind": "enum",
+      "values": [
+        "not_prepared",
+        "prepared",
+        "attempted_unacknowledged",
+        "spawned",
+        "initializing",
+        "initialized",
+        "admitted",
+        "serving",
+        "planned_shutdown",
+        "closed",
+        "failed",
+        "unknown"
+      ]
+    },
+    "ClosureState": {
+      "kind": "enum",
+      "values": [
+        "not_created",
+        "known_closed",
+        "open",
+        "unknown"
+      ]
+    },
+    "CompletionText": {
+      "kind": "string",
+      "maximum_length": 1048576,
+      "minimum_length": 0
+    },
+    "Condition": {
+      "kind": "enum",
+      "values": [
+        "paper_data",
+        "paper_data_author_code"
+      ]
+    },
+    "CreationOperation": {
+      "kind": "enum",
+      "values": [
+        "public_interface",
+        "public_ABI",
+        "paired_views_manifest",
+        "early_selection"
+      ]
+    },
+    "DimensionName": {
+      "kind": "enum",
+      "values": [
+        "read_bytes",
+        "write_bytes",
+        "work_units",
+        "process_starts",
+        "cpu_ns",
+        "wall_ns",
+        "retained_bytes"
+      ]
+    },
+    "Dimensions": {
+      "keys": [
+        "read_bytes",
+        "write_bytes",
+        "work_units",
+        "process_starts",
+        "cpu_ns",
+        "wall_ns",
+        "retained_bytes"
+      ],
+      "kind": "closed_map",
+      "values": "UInt"
+    },
+    "Endpoint": {
+      "kind": "enum",
+      "values": [
+        "health",
+        "slots",
+        "completion"
+      ]
+    },
+    "FailureCode": {
+      "kind": "enum",
+      "values": [
+        "source_refusal",
+        "budget_refusal",
+        "identity_refusal",
+        "clock_failure",
+        "read_failure",
+        "write_failure",
+        "encode_failure",
+        "decode_failure",
+        "spawn_failure",
+        "observation_failure",
+        "cleanup_failure",
+        "publication_failure",
+        "unknown_failure"
+      ]
+    },
+    "FailurePhase": {
+      "kind": "enum",
+      "values": [
+        "seed_admission",
+        "construction_plan_read",
+        "source_capture",
+        "interface_create",
+        "ABI_create",
+        "views_manifest_create",
+        "selection_issue",
+        "selection_open",
+        "selection_read",
+        "selection_parse",
+        "selection_authenticate",
+        "development_prepare",
+        "development_spawn",
+        "development_observe",
+        "development_close",
+        "failure_publish"
+      ]
+    },
+    "Hash": {
+      "kind": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "HexPrefix": {
+      "kind": "string",
+      "maximum_length": 2097152,
+      "meaning": "Exact bytes, maximum additionally bounded by source/profile. Only runtime evidence, never generic input decoding authority.",
+      "pattern": "^([a-f0-9]{2})*$"
+    },
+    "HttpStatus": {
+      "kind": "integer",
+      "maximum": 599,
+      "minimum": 100
+    },
+    "JobID": {
+      "kind": "string",
+      "maximum_length": 256,
+      "minimum_length": 1,
+      "unicode": "same as Text"
+    },
+    "MaybeCondition": {
+      "kind": "nullable",
+      "value_type": "Condition"
+    },
+    "MaybeHttpStatus": {
+      "kind": "nullable",
+      "value_type": "HttpStatus"
+    },
+    "MaybePin": {
+      "kind": "nullable",
+      "value_type": "Pin"
+    },
+    "MaybeProcess": {
+      "kind": "nullable",
+      "value_type": "OriginalProcessIdentity"
+    },
+    "MaybeSignedExit": {
+      "kind": "nullable",
+      "value_type": "SignedExit"
+    },
+    "MaybeText": {
+      "kind": "nullable",
+      "value_type": "Text"
+    },
+    "MaybeUInt": {
+      "kind": "nullable",
+      "value_type": "UInt"
+    },
+    "NonnegativeFiniteDecimal": {
+      "finite": true,
+      "kind": "decimal",
+      "maximum": "9007199254740991",
+      "maximum_lexeme_bytes": 64,
+      "minimum": 0
+    },
+    "ObservedDimensions": {
+      "keys": [
+        "read_bytes",
+        "write_bytes",
+        "work_units",
+        "process_starts",
+        "cpu_ns",
+        "wall_ns",
+        "retained_bytes"
+      ],
+      "kind": "closed_map",
+      "values": "MaybeUInt"
+    },
+    "OperationResult": {
+      "kind": "enum",
+      "values": [
+        "pending",
+        "complete",
+        "failed",
+        "unknown"
+      ]
+    },
+    "OriginalABIJobs": {
+      "constraint": "Exact original closed job rows and grammar; census joins replaced only as described in A03",
+      "kind": "source_selected_external",
+      "selector": "inputs/handoff/current/extensions/critical_init/output_contract.py:validate_public_abi/_bundle_schema/_json_shape"
+    },
+    "OriginalAdapterRow": {
+      "constraint": "Exact ten fields reservation_id,owner_role,stage plus seven resource dimensions. Only earlier selected H owner row; no new allowance.",
+      "kind": "source_selected_external",
+      "selector": "inputs/adopted-s3/RESOURCE_WIRE_SCHEMAS.json#/root_resource_plan_schema/properties/adapter_reservations/items"
+    },
+    "OriginalClock": {
+      "constraint": "Exact original selected clock, no change of origin/deadlines",
+      "kind": "source_selected_external",
+      "selector": "inputs/adopted-s3/CI_LIFECYCLE_SCHEMAS.json#/schemas/ClockBinding"
+    },
+    "OriginalExecutionAuthority": {
+      "kind": "source_selected_external",
+      "selector": "inputs/handoff/current/extensions/critical_init/authorization_v4.py:Selection"
+    },
+    "OriginalExpectedOutputs": {
+      "constraint": "Exact selected original value, never generated from outcome",
+      "kind": "source_selected_external",
+      "selector": "inputs/census_original.py:validate and original source-selected task_expected_outputs binding"
+    },
+    "OriginalHardEnvelope": {
+      "constraint": "Same original finite envelope including runtime physical enforcement; no values invented",
+      "kind": "source_selected_external",
+      "selector": "inputs/adopted-s3/RESOURCE_WIRE_SCHEMAS.json#/root_resource_plan_schema/properties/hard_envelope"
+    },
+    "OriginalProcessIdentity": {
+      "constraint": "Actual qualified observation, not self-declared PID",
+      "kind": "source_selected_external",
+      "selector": "inputs/adopted-s3/CI_LIFECYCLE_SCHEMAS.json#/schemas/StartBinding/$defs/ProcessIdentity"
+    },
+    "OriginalSelectedCensusMinusCandidateDispatch": {
+      "constraint": "Only candidate command and command_source_pins absent. Complete other selected original fields retained; final restoration must satisfy original validate and require_executable. Not an executable full census or permission to access descriptor bodies.",
+      "kind": "source_selected_external",
+      "selector": "inputs/census_original.py:validate plus full adopted Scope and exact selected census source contract"
+    },
+    "OriginalWholeEnvelope": {
+      "kind": "source_selected_external",
+      "selector": "inputs/adopted-s3/CI_LIFECYCLE_SCHEMAS.json#/schemas/StartBinding/properties/whole_campaign_envelope"
+    },
+    "OriginalWorkerEnvelope": {
+      "kind": "source_selected_external",
+      "selector": "inputs/adopted-s3/CI_LIFECYCLE_SCHEMAS.json#/schemas/StartBinding/properties/worker_envelope"
+    },
+    "PositiveUInt": {
+      "bool_allowed": false,
+      "kind": "integer",
+      "maximum": 9007199254740991,
+      "minimum": 1
+    },
+    "PrepOutcome": {
+      "alternatives": [
+        "PreparationSuccess",
+        "PreparationFailure"
+      ],
+      "discriminator": "schema",
+      "kind": "union"
+    },
+    "PrepStatus": {
+      "kind": "enum",
+      "values": [
+        "not_attempted",
+        "attempted_unknown",
+        "complete",
+        "failed"
+      ]
+    },
+    "PreparationOp": {
+      "kind": "enum",
+      "values": [
+        "mkdir_workspace",
+        "open_workspace",
+        "identify_workspace",
+        "mkdir_control",
+        "open_control",
+        "identify_control",
+        "inventory",
+        "publish_workspace",
+        "publish_state",
+        "publish_pair_plan",
+        "publish_request",
+        "publish_exposure",
+        "publish_launch_request",
+        "close_fd",
+        "unlink_owned_file",
+        "rmdir_control",
+        "rmdir_workspace",
+        "publish_failure"
+      ]
+    },
+    "PreparationPhase": {
+      "kind": "enum",
+      "values": [
+        "registered",
+        "workspace_work",
+        "publication",
+        "promoted",
+        "failed"
+      ]
+    },
+    "PromptText": {
+      "kind": "string",
+      "maximum_length": 1048576,
+      "minimum_length": 1,
+      "unicode": "valid scalar values; no NUL/lone surrogate; actual UTF8 bytes also fit selected maximum_request_bytes"
+    },
+    "PublicationState": {
+      "kind": "enum",
+      "values": [
+        "unattempted",
+        "complete",
+        "failed",
+        "unknown"
+      ]
+    },
+    "ReceiptPhase": {
+      "kind": "enum",
+      "values": [
+        "initialization",
+        "generation",
+        "shutdown"
+      ]
+    },
+    "ResponseOutcome": {
+      "alternatives": [
+        "ParsedHealth",
+        "ParsedSlots",
+        "ParsedCompletion",
+        "RejectedResponse",
+        "ParsedLoadingHealth"
+      ],
+      "discriminator": "schema",
+      "kind": "union"
+    },
+    "SignedExit": {
+      "bool_allowed": false,
+      "kind": "integer",
+      "maximum": 2147483647,
+      "minimum": -2147483648
+    },
+    "SmallText": {
+      "kind": "string",
+      "maximum_length": 256,
+      "minimum_length": 0
+    },
+    "SpawnState": {
+      "kind": "enum",
+      "values": [
+        "not_attempted",
+        "attempted_unacknowledged",
+        "acknowledged"
+      ]
+    },
+    "Stage": {
+      "kind": "enum",
+      "values": [
+        "prepare",
+        "independent_reference",
+        "native_reference",
+        "candidate:paper_data",
+        "candidate:paper_data_author_code"
+      ]
+    },
+    "Status": {
+      "kind": "enum",
+      "values": [
+        "complete",
+        "failed",
+        "unknown",
+        "unattempted"
+      ]
+    },
+    "Text": {
+      "kind": "string",
+      "maximum_length": 4096,
+      "minimum_length": 1,
+      "unicode": "valid scalar values; no NUL or lone surrogate"
+    },
+    "TransportState": {
+      "kind": "enum",
+      "values": [
+        "not_attempted",
+        "partial",
+        "complete",
+        "failed",
+        "unknown"
+      ]
+    },
+    "UInt": {
+      "bool_allowed": false,
+      "kind": "integer",
+      "maximum": 9007199254740991,
+      "minimum": 0
+    },
+    "boolean": {
+      "kind": "boolean"
+    }
+  },
+  "programme_output_current_composition": {
+    "all_ten_files_required": true,
+    "prior_text": "V1 operative bodies and the full final peer are immutable history, not competing current clauses.",
+    "selected_section": "programme_output_extension_v2",
+    "status": "INACTIVE_PENDING_DIFFERENT_WHOLE_REVIEW_AND_ROOT_ADOPTION",
+    "version": 2,
+    "wire_continuity": "Original102 and all12 ProgrammeOutputV1 record bodies plus ProgrammeArgument remain exactly unchanged. ProgrammeOutputV2 adds DevelopmentWorkspaceClosure, HStreamSideV1 and HStreamCaptureV1 plus exact existing CostPrefix/clock/owner/caller relations. Existing schema literals are not a version fallback."
+  },
+  "programme_output_extension_v2": {
+    "encoding": "New records use EARLY_ISSUER_CONTRACT.canonical_identity.bytes: exact builtin tree, sorted keys, comma/colon, ensure_ascii=false, single LF. Original scientific census/public ABI/paired policy/ExecutionBinding encoding remains original ensure_ascii=true, single LF; no implicit re-encoding migration. Untrusted manifest must itself equal its canonical new-record encoding; reject alternate/duplicate/nonfinite/NUL/surrogate/BOM/trailing-token forms. Source file bytes are preserved exactly after strict UTF8/noNUL validation; no newline/Unicode/source normalization. The captured source file mode is exactly0400 | (declared.mode &0100), observed on the actual created H file; its captured_identity is regular_file at captured.path with that mode and actual original H ownership. Original declared/before/after modes remain separately recorded; no group/other write or special bits are propagated. Final source readback and output identity must match before a CapturedProgrammeFile exists.",
+    "exact_pin_targets": {
+      "AgentPolicy.programme_capture_ABI": "ProgrammeCaptureABI",
+      "CapturedProgrammeSourceManifest.original_manifest": "ProgrammeOutputManifest",
+      "DevelopmentCompletion.complete_stream_capture": "HStreamCaptureV1",
+      "DevelopmentCompletion.cost_observation": "CostPrefix",
+      "DevelopmentCompletion.descendant_and_workspace_closure": "DevelopmentWorkspaceClosure",
+      "ExecutionBinding.assembler_receipt": "ProgrammeAssemblyReceipt",
+      "ProgrammeAssemblyReceipt.capture_receipts[Condition]": "ProgrammeCaptureReceipt",
+      "ProgrammeAssemblyReceipt.source_manifests[Condition]": "CapturedProgrammeSourceManifest",
+      "ProgrammeCaptureReceipt.original_manifest": "ProgrammeOutputManifest",
+      "ProgrammeCaptureReceipt.source_manifest": "CapturedProgrammeSourceManifest",
+      "ProgrammeSeal.capture_receipt": "ProgrammeCaptureReceipt",
+      "ProgrammeSeal.source_manifest": "CapturedProgrammeSourceManifest"
+    },
+    "field_relations": {
+      "CostPrefix_occurrence": {
+        "capacity": "This is the already-required cost_observation publication, under original metadata/request/write/readback/retention/cost reserves. Count every actual occurrence/repeated reader; unknown full cumulative cost remains unknown. No new budget or synthetic cost reconciliation.",
+        "consumer": "PairCompletionHandle.require_original and later complete target admission require the exact same-owner aggregate occurrence/capture and original source/clock ancestry. Decode the existing closed CostPrefix body, not a new cost schema or nominally similar record. Metadata equality alone is insufficient.",
+        "occurrence": "The actual original attempt.cost_observation is the completed same-owner CapturedRecord(kind=CostPrefix) from that defined pre-Completion occurrence. Its Pin is assigned exactly to DevelopmentCompletion.cost_observation. If both arms capture separate occurrences, each is an observation of the same aggregate owner at its own original position, not an independent arm charge; neither prefix is added to the other. No sharing is inferred without an actual same captured occurrence/owner proof.",
+        "prefix_time": "This prefix includes known earlier actual H/A/B effects, including prior completed raw stream/manifest and workspace evidence. It never claims the future cost of its own serialization/write/readback/close or the later Completion/pair/capture/assembly. Those later actual costs and failures stay on the same H/outside observations, not invented zeroes.",
+        "producer": "Same original H owner captures its actual aggregate H+A+B CostPrefix occurrence after the earlier successful original lifecycle/workspace/stream evidence and before the corresponding DevelopmentCompletion publication. Use the existing source-owned aggregate producer, never an arm-local counter or a sum of already cumulative prefix records.",
+        "success": "All original CostPrefix fields and unknown/unfinished semantics remain unchanged. Preserve truthful failed/unknown prefixes on the original owner. Actual unknown_dimensions/unavailable measured dimensions or original error state cannot qualify DevelopmentCompletion completeness; no filtering or resetting before capture. unfinished_span records the still-active original H accounting span and its actual original active origins; it is not by itself an unknown measurement or permission to stop/end/renew H early. Do not force it false before later Completion/capture work and do not claim a final whole-host total from this live prefix.",
+        "target": "DevelopmentCompletion.cost_observation -> original records.CostPrefix"
+      },
+      "DevelopmentWorkspaceClosure": {
+        "capacity": "One record per original arm replaces the previously untyped required closure body, not an additional publication. Its 11 closed fields use original Pin/OwnedPathIdentity/CostPrefix/UInt/Condition domains and must fit original M, member/depth/file/retention limits. It references, never copies, the earlier bounded subtree observation. Predeclare the actual closure write/readback and every later typed reread under the original full plan; no charge is dropped because the target is now named. All remaining capture/terminal effects and unknown native costs retain their original owners.",
+        "failure": "Failed/unknown subtree, anchor, identity, closure publication or later capture forbids successful closure/seal/promotion as applicable. Preserve actual failed prefixes, uncertain reservations and independently attempted cleanup. Never retry, fabricate a complete record or silently delete the source tree to claim workspace closure.",
+        "lifetime": "Workspace closure closes all original writers/descendants; it does not delete the readable source tree or release H read custody. Keep the original readonly/read-custody anchor or a separately qualified actual original-parent reopen capability through both-arm captures, inventories, receipts, seals and assembly. No path reconstruction, new root, renewed worker write authority or inherited-asset access is permitted. Removal/release occurs only in original H terminal cleanup after the full capture/assembly route no longer needs it, under the same E and original budgets.",
+        "ordering": "Earlier whole-arm subtree observation and retained workspace identity observation -> DevelopmentWorkspaceClosure -> DevelopmentCompletion -> DevelopmentPairClosure -> P01-P17. This record contains no future pair closure, programme manifest, source capture, seal, own Pin or own publication cost. observed_ns is the actual earlier observation and cost_prefix the actual earlier prefix before this closure publication.",
+        "producer": "The same actual original H DevelopmentAttemptHandle, after original worker natural exit0, complete original whole-arm descendant/write closure and the existing stream/worker/backend closure requirements. Capture this existing required closure product before its DevelopmentCompletion; then both completions precede pair closure. No extra closure publication is added.",
+        "source_constructor_and_inverse": "Within the existing fixed DevelopmentOwner.finish_pair_backend_v1 lifecycle, retain the actual attempt-owned workspace-closure publication slot before observation/validation/I/O. Only a completed same-owner CapturedRecord(kind=DevelopmentWorkspaceClosure) from the exact original observer and retained workspace produces attempt.descendant_workspace_closure. DevelopmentCompletion.descendant_and_workspace_closure equals that exact capture.pin; PairCompletionHandle.require_original and capture admission require the same actual capture object, kind, owner, earlier subtree capture, full closed body and the exact field inverses. No supplied record/Pin/allowed-owner set or live-capability deserialization fills the slot. An unfinished original slot remains retained without successful completion.",
+        "subtree_inverse": "subtree names the exact earlier SubtreeObservation for this original H DevelopmentAttempt capture: producer=host, scope=whole_arm, root=actual original worker identity, enumeration_complete=true, unresolved_count=0, excluded_live_worker=null and every actually enumerated member.state=exited_reaped. Require complete original qualified enumeration, never infer an empty list from wait/list absence. The natural exit and stream proofs stay separately required; a server_subtree/BackendClosure or prelaunch WorkspaceObservation cannot substitute.",
+        "target": "DevelopmentCompletion.descendant_and_workspace_closure -> ProgrammeOutputV2.DevelopmentWorkspaceClosure",
+        "workspace_inverse": "workspace names the exact earlier WorkspaceObservation for the same condition/pair/arm. retained_workspace_identity is a new actual directory OwnedPathIdentity for the same original OwnedPreparationPath object (device/inode/uid/parent ownership), with observed mode/clock retained; source-owned parent/anchor ancestry is required, not pathname equality. The record original_attempt, condition and owner_binding equal the same actual original H attempt, arm and owner."
+      },
+      "HStreamCaptureV1": {
+        "close_chronology": "Each side has an actual successful positive-size EOF observation and once-only pipe-close return. Set the original owned slot to closed immediately after that successful return, before reading the following original-H close timestamp. If the clock read fails, retain closed state and that raw failure; no complete HStreamSideV1 exists and do not retry close or replace closed_ns with zero. A failed/ambiguous close retains original unknown/attempted ownership and also cannot produce a complete side.",
+        "failure_and_caps": "Unknown byte counts, missing EOF, forced/unknown close, raw failure or incomplete captured body remains existing original failure evidence, never a successful manifest with zero/empty substitutes. Preserve original stream transfer caps and their original combined/per-side meaning exactly. All raw files/readbacks/manifest, retained raw buffers, fd/clock/cleanup and repeated readers must fit the same predeclared original H/arm shares and file limits; no extra allowance, live-pipe reread, recapture or source expansion.",
+        "private_inverse": "Within the existing finish_pair_backend_v1 lifecycle, only the actual same-owner CapturedRecord(kind=HStreamCaptureV1) over both original closed slots fills attempt.complete_stream_capture. DevelopmentCompletion.complete_stream_capture is exactly that capture.pin. PairCompletionHandle.require_original and programme/output admission verify the original attempt, condition, owner_binding, two exact earlier raw captures, full typed side positions and timestamps. No equal dictionary/Pin grants authority.",
+        "publication_order": "After both actual stream sides have known complete raw prefixes/EOF and known close timestamps, publish/read back exact stdout raw bytes first, then stderr raw bytes; only then publish/read back HStreamCaptureV1. Its observed_ns is the actual original H observation after both raw captures and before manifest publication, within E. It has no future DevelopmentCompletion or own publication Pin/cost. Every publication attempt is retained before the effect; failed stderr or manifest publication retains the completed stdout prefix and forbids success/retry.",
+        "side_inverse": "stdout.name=stdout and stderr.name=stderr, exactly one of each. Each HStreamSideV1.raw_bytes Pin is the actual completed same-H raw capture; side.bytes and side.sha256 equal that Pin and the exact observed raw bytes. Preserve bytes exactly, including zero-length streams; no Unicode decoding, newline normalization, invented padding or omission.",
+        "source_owner": "Same actual original H DevelopmentAttemptHandle and original owned stdout/stderr pipe slots, original observation/EOF/once-only-close custody and retained raw bytes. A backend server StreamClosureObservation or parsed stream manifest cannot substitute for the H worker streams.",
+        "target": "DevelopmentCompletion.complete_stream_capture -> ProgrammeOutputV2.HStreamCaptureV1"
+      },
+      "original_cutoff_ns": {
+        "consumer": "PairCompletionHandle.require_original, the fixed ProgrammeCapture.capture_pair_v3, ProgrammeAssembler.assemble_v3 and later serialized output-contract admission verify these same-owner equalities against the actual earlier captures and their source-qualified ancestry. A valid UInt or repeated equal dictionaries cannot supply the original H owner. Missing/mismatched E refuses before dependent capture/promotion; retain raw failure on the already registered original owner.",
+        "earlier_operand": "The exact same original H owner retained evidence deadline E: PairCompletionHandle.pair.owner.parent.original_deadline in the selected source snapshot. It is established before preparation and launch; it is not derived from a later completion or fresh clock.",
+        "failure_and_cost": "A clock/identity/consumer mismatch preserves first raw error, all earlier attempted reservations/effects, partial captures, unknown dimensions and once-only independent cleanup on the same original H. No recapture, replacement attempt, fresh deadline, refund or worker continuation. Cost/time snapshots remain prepublication; later actual publication/cleanup stays on H/outside observation.",
+        "intervals": "Original S,J,G,R,L,common_cutoff and original run deadline keep their full existing derivations and obligations. Natural worker/server stopping and original worker publications must finish within their respective R/G/J constraints. H DevelopmentCompletion.closed_ns and later capture/receipt/seal/assembly observations may exceed R only after actual complete stopping/closure and while <= the unchanged E. Every actual owner.check keeps its original stricter operational predicate; this field relation does not relax it.",
+        "phase_order": "Earlier preparation/launch need only the already-retained original H E and their original prerequisites, never a future pair completion or seal. Later successful pair closure and ProgrammeCapture occur only after actual full original paired closure. No new blanket completion/seal prerequisite is inserted into earlier phases.",
+        "producer": "DevelopmentOwner.finish_pair_backend_v1 assigns original_cutoff_ns = that exact retained E when publishing the already-required DevelopmentPairClosure-v3 after both actual completed original arms. No additional publication, deadline or owner is created.",
+        "required_equalities": [
+          "pair_closure.original_cutoff_ns == original_H.original_deadline",
+          "each actual original DevelopmentAttemptHandle.evidence_deadline_ns == original_H.original_deadline",
+          "each earlier original arm launch.body.evidence_deadline_ns == original_H.original_deadline",
+          "each earlier captured DevelopmentAttempt.evidence_deadline_ns == original_H.original_deadline",
+          "each original WorkerLaunchAck.evidence_deadline_ns == original_H.original_deadline"
+        ],
+        "serialized_field": "DevelopmentPairClosure.original_cutoff_ns"
+      }
+    },
+    "lookup": "All original102 definitions resolve through /records unchanged. The exact original12 added records, unchanged ProgrammeArgument union and new DevelopmentWorkspaceClosure/HStreamSideV1/HStreamCaptureV1 resolve through /programme_output_extension_v2. CostPrefix resolves only to original /records/CostPrefix. All other qualified original domains stay unchanged; no generic record or decoded capability.",
+    "namespace": "ProgrammeOutputV2",
+    "original_records_unchanged": 102,
+    "primitives": {
+      "ProgrammeArgument": {
+        "alternatives": [
+          "ProgrammeLiteralArgument",
+          "ProgrammeSourceArgument",
+          "ProgrammeInheritedArgument",
+          "ProgrammeToolArgument"
+        ],
+        "discriminator": "schema",
+        "kind": "union"
+      }
+    },
+    "records": {
+      "CapturedProgrammeFile": {
+        "additional_fields": false,
+        "fields": {
+          "after": "OwnedPathIdentity",
+          "before": "OwnedPathIdentity",
+          "captured": "Pin",
+          "captured_identity": "OwnedPathIdentity",
+          "captured_mode": "UInt",
+          "declared": "DeclaredProgrammeSource",
+          "ordinal": "UInt",
+          "schema": {
+            "kind": "literal",
+            "value": "ci_captured_programme_file_v1"
+          }
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_captured_programme_file_v1"
+      },
+      "CapturedProgrammeSourceManifest": {
+        "additional_fields": false,
+        "fields": {
+          "ABI": "Pin",
+          "agent_policy": "Pin",
+          "condition": "Condition",
+          "development": "Pin",
+          "development_contract": "Pin",
+          "files": "CapturedProgrammeFile[1:8192]",
+          "inherited_view_inventory": "Pin",
+          "jobs": "ProgrammeJob[1:8192]",
+          "original_attempt": "Pin",
+          "original_manifest": "Pin",
+          "pair_closure": "Pin",
+          "public_ABI": "Pin",
+          "public_interface": "Pin",
+          "request": "Pin",
+          "schema": {
+            "kind": "literal",
+            "value": "ci_captured_programme_source_manifest_v1"
+          },
+          "source_capture": "Pin",
+          "source_closure": "Pin[1:8192]",
+          "workspace": "Pin"
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_captured_programme_source_manifest_v1"
+      },
+      "DeclaredProgrammeJob": {
+        "additional_fields": false,
+        "fields": {
+          "argv": "ProgrammeArgument[1:128]",
+          "job_id": "JobID",
+          "report_argument_ordinal": "UInt",
+          "report_source_ordinal": "UInt",
+          "schema": {
+            "kind": "literal",
+            "value": "ci_declared_programme_job_v1"
+          }
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_declared_programme_job_v1"
+      },
+      "DeclaredProgrammeSource": {
+        "additional_fields": false,
+        "fields": {
+          "bytes": "UInt",
+          "mode": "UInt",
+          "relative_path": "Text",
+          "schema": {
+            "kind": "literal",
+            "value": "ci_declared_programme_source_v1"
+          },
+          "sha256": "Hash"
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_declared_programme_source_v1"
+      },
+      "DevelopmentWorkspaceClosure": {
+        "additional_fields": false,
+        "fields": {
+          "condition": "Condition",
+          "cost_prefix": "CostPrefix",
+          "observed_ns": "UInt",
+          "original_attempt": "Pin",
+          "owner_binding": "Pin",
+          "retained_workspace_identity": "OwnedPathIdentity",
+          "schema": {
+            "kind": "literal",
+            "value": "ci_development_workspace_closure_v1"
+          },
+          "subtree": "Pin",
+          "workspace": "Pin",
+          "workspace_state": {
+            "kind": "literal",
+            "value": "retained_for_programme_capture"
+          },
+          "write_authority_closed": {
+            "kind": "literal",
+            "value": true
+          }
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_development_workspace_closure_v1"
+      },
+      "HStreamCaptureV1": {
+        "additional_fields": false,
+        "fields": {
+          "condition": "Condition",
+          "observed_ns": "UInt",
+          "original_attempt": "Pin",
+          "owner_binding": "Pin",
+          "schema": {
+            "kind": "literal",
+            "value": "ci_h_stream_capture_v1"
+          },
+          "stderr": "HStreamSideV1",
+          "stdout": "HStreamSideV1"
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_h_stream_capture_v1"
+      },
+      "HStreamSideV1": {
+        "additional_fields": false,
+        "fields": {
+          "bytes": "UInt",
+          "close_state": {
+            "kind": "literal",
+            "value": "closed"
+          },
+          "closed_ns": "UInt",
+          "eof_observed": {
+            "kind": "literal",
+            "value": true
+          },
+          "name": {
+            "kind": "enum",
+            "values": [
+              "stdout",
+              "stderr"
+            ]
+          },
+          "raw_bytes": "Pin",
+          "schema": {
+            "kind": "literal",
+            "value": "ci_h_stream_side_v1"
+          },
+          "sha256": "Hash",
+          "unknown_bytes": {
+            "kind": "literal",
+            "value": 0
+          }
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_h_stream_side_v1"
+      },
+      "ProgrammeAssemblyReceipt": {
+        "additional_fields": false,
+        "fields": {
+          "ABI": "Pin",
+          "agent_policy": "Pin",
+          "assembler_source": "Pin",
+          "capture_receipts": "ArmMap",
+          "cost_before": "CostPrefix",
+          "cost_before_receipt": "CostPrefix",
+          "development_contract": "Pin",
+          "dispatcher_argv": "Text[1:128]",
+          "dispatcher_source": "Pin[1:8192]",
+          "early_selection": "Pin",
+          "final_census": "Pin",
+          "finished_ns": "UInt",
+          "owner_binding": "Pin",
+          "projected_template_census_sha256": "Hash",
+          "public_ABI": "Pin",
+          "public_interface": "Pin",
+          "schema": {
+            "kind": "literal",
+            "value": "ci_programme_assembly_receipt_v1"
+          },
+          "scientific_template": "Pin",
+          "seals": "ArmMap",
+          "source_manifests": "ArmMap",
+          "started_ns": "UInt",
+          "status": {
+            "kind": "literal",
+            "value": "complete"
+          }
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_programme_assembly_receipt_v1"
+      },
+      "ProgrammeCaptureABI": {
+        "additional_fields": false,
+        "fields": {
+          "argument_projection": {
+            "kind": "literal",
+            "value": "typed_argv_v1"
+          },
+          "assembler_source": "Pin",
+          "cap_rule": {
+            "kind": "literal",
+            "value": "original_plan_profile_intersection_v1"
+          },
+          "dispatcher_argv": "Text[1:128]",
+          "dispatcher_source": "Pin[1:8192]",
+          "manifest_path": {
+            "kind": "literal",
+            "value": "neurobench_programme_manifest.json"
+          },
+          "ordering": {
+            "kind": "literal",
+            "value": "unsigned_utf8_path_lexicographic"
+          },
+          "schema": {
+            "kind": "literal",
+            "value": "ci_programme_capture_abi_v1"
+          },
+          "source_capture": "Pin",
+          "source_encoding": {
+            "kind": "literal",
+            "value": "strict_utf8_no_nul"
+          }
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_programme_capture_abi_v1"
+      },
+      "ProgrammeCaptureReceipt": {
+        "additional_fields": false,
+        "fields": {
+          "ABI": "Pin",
+          "captured_files": "Pin[1:8192]",
+          "condition": "Condition",
+          "cost_before": "CostPrefix",
+          "cost_before_receipt": "CostPrefix",
+          "development": "Pin",
+          "development_contract": "Pin",
+          "finished_ns": "UInt",
+          "original_attempt": "Pin",
+          "original_manifest": "Pin",
+          "owner_binding": "Pin",
+          "pair_closure": "Pin",
+          "schema": {
+            "kind": "literal",
+            "value": "ci_programme_capture_receipt_v1"
+          },
+          "source_capture": "Pin",
+          "source_manifest": "Pin",
+          "started_ns": "UInt",
+          "status": {
+            "kind": "literal",
+            "value": "complete"
+          },
+          "workspace": "Pin"
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_programme_capture_receipt_v1"
+      },
+      "ProgrammeInheritedArgument": {
+        "additional_fields": false,
+        "fields": {
+          "schema": {
+            "kind": "literal",
+            "value": "ci_programme_inherited_argument_v1"
+          },
+          "view_member_ordinal": "UInt"
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_programme_inherited_argument_v1"
+      },
+      "ProgrammeLiteralArgument": {
+        "additional_fields": false,
+        "fields": {
+          "schema": {
+            "kind": "literal",
+            "value": "ci_programme_literal_argument_v1"
+          },
+          "value": "Text"
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_programme_literal_argument_v1"
+      },
+      "ProgrammeOutputManifest": {
+        "additional_fields": false,
+        "fields": {
+          "condition": "Condition",
+          "jobs": "DeclaredProgrammeJob[1:8192]",
+          "public_ABI": "Pin",
+          "public_interface": "Pin",
+          "schema": {
+            "kind": "literal",
+            "value": "ci_programme_output_manifest_v1"
+          },
+          "sources": "DeclaredProgrammeSource[1:8192]"
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_programme_output_manifest_v1"
+      },
+      "ProgrammeSourceArgument": {
+        "additional_fields": false,
+        "fields": {
+          "schema": {
+            "kind": "literal",
+            "value": "ci_programme_source_argument_v1"
+          },
+          "source_ordinal": "UInt"
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_programme_source_argument_v1"
+      },
+      "ProgrammeToolArgument": {
+        "additional_fields": false,
+        "fields": {
+          "schema": {
+            "kind": "literal",
+            "value": "ci_programme_tool_argument_v1"
+          },
+          "tool": "Pin"
+        },
+        "kind": "closed_record",
+        "required": "all",
+        "schema_literal": "ci_programme_tool_argument_v1"
+      }
+    },
+    "status": "INACTIVE_PENDING_DIFFERENT_WHOLE_REVIEW_AND_ROOT_ADOPTION"
+  },
+  "record_count": 102,
+  "record_grammar": {
+    "T[a:b]": "list with inclusive length bounds a,b; every item type T, no tuple/coercion",
+    "literal:RecordName": "the declared schema_literal string of that record",
+    "nullable": {
+      "kind": "nullable",
+      "rule": "Null means unavailable/not produced, never zero or a fabricated reference; phase relations further restrict null.",
+      "value_type": "one exact declared type"
+    },
+    "schema_override": "Descriptive field, not another wire key",
+    "successor_union_rule": {
+      "alternatives": "Named closed records, distinguished by exact schema literal; exactly one match; no arbitrary map/any type.",
+      "kind": "union"
+    }
+  },
+  "records": {
+    "AgentCompletion": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "condition": "Condition",
+        "exchange": "Pin",
+        "generation_stop": {
+          "kind": "enum",
+          "values": [
+            "eos",
+            "word",
+            "limit"
+          ]
+        },
+        "ordinal": "UInt",
+        "parsed_response": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_agent_completion_v1"
+        },
+        "text": "CompletionText",
+        "token_limited": {
+          "kind": "boolean"
+        },
+        "tokens_cached": "UInt",
+        "tokens_evaluated": "UInt",
+        "tokens_predicted": "UInt"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_agent_completion_v1"
+    },
+    "AgentPolicy": {
+      "additional_fields": false,
+      "fields": {
+        "development_request_ABI": "Pin",
+        "entry_argv": "Text[1:128]",
+        "environment": "Pin",
+        "initial_state": "Pin",
+        "local_backend": "Pin",
+        "network_allowed": {
+          "kind": "literal",
+          "value": false
+        },
+        "paid_API_allowed": {
+          "kind": "literal",
+          "value": false
+        },
+        "programme_capture_ABI": "Pin",
+        "schema": "literal:AgentPolicy",
+        "source_closure": "Pin[1:8192]",
+        "tool_closure": "Pin[0:8192]"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_agentpolicy_v1"
+    },
+    "ArtifactObservation": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "filesystem_identity": "OwnedPathIdentity",
+        "observed_bytes": "UInt",
+        "observed_ns": "UInt",
+        "observed_sha256": "Hash",
+        "readonly": {
+          "kind": "literal",
+          "value": true
+        },
+        "role": {
+          "kind": "enum",
+          "values": [
+            "server_executable",
+            "model_gguf",
+            "template",
+            "tokenizer_source",
+            "renderer_source"
+          ]
+        },
+        "schema": {
+          "kind": "literal",
+          "value": "ci_artifact_observation_v1"
+        },
+        "selected": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_artifact_observation_v1"
+    },
+    "BackendAdmissionAck": {
+      "additional_fields": false,
+      "fields": {
+        "backend_attempt": "Pin",
+        "condition": "Condition",
+        "generation_deadline_ns": "UInt",
+        "host_observation": "Pin",
+        "host_owner_binding": "Pin",
+        "initialization": "Pin",
+        "issued_ns": "UInt",
+        "nonce": "Text",
+        "pair_id": "Text",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_llama_backend_admission_ack_v1"
+        },
+        "source_admission": "Pin",
+        "worker_attempt": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_llama_backend_admission_ack_v1"
+    },
+    "BackendAttempt": {
+      "additional_fields": false,
+      "fields": {
+        "base_attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "first_error": "MaybePin",
+        "generation_deadline_ns": "UInt",
+        "group_observation": "MaybePin",
+        "identity": "MaybeProcess",
+        "identity_observation": "MaybePin",
+        "initialization_deadline_ns": "UInt",
+        "nonce": "Text",
+        "pair_id": "Text",
+        "preparation": "Pin",
+        "previous_snapshot": "MaybePin",
+        "profile": "Pin",
+        "request": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_llama_backend_attempt_v2"
+        },
+        "shutdown_deadline_ns": "UInt",
+        "snapshot_ordinal": "UInt",
+        "snapshot_stage": {
+          "kind": "enum",
+          "values": [
+            "postspawn",
+            "postinitialization",
+            "terminal"
+          ]
+        },
+        "spawn_state": "SpawnState",
+        "state": "BackendState",
+        "worker_attempt": "Pin",
+        "worker_launch_ack": "Pin",
+        "workspace": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_llama_backend_attempt_v2"
+    },
+    "BackendAttemptBase": {
+      "additional_fields": false,
+      "fields": {
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "generation_deadline_ns": "UInt",
+        "initialization_deadline_ns": "UInt",
+        "nonce": "Text",
+        "pair_id": "Text",
+        "preparation": "Pin",
+        "profile": "Pin",
+        "request": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_llama_backend_attempt_base_v1"
+        },
+        "shutdown_deadline_ns": "UInt",
+        "spawn_state": {
+          "kind": "literal",
+          "value": "not_attempted"
+        },
+        "worker_attempt": "Pin",
+        "worker_launch_ack": "Pin",
+        "workspace": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_llama_backend_attempt_base_v1"
+    },
+    "BackendClosure": {
+      "additional_fields": false,
+      "fields": {
+        "admission": "MaybePin",
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "exit_code": "MaybeSignedExit",
+        "exit_observation": "MaybePin",
+        "first_error": "MaybePin",
+        "forced_group_cleanup": "boolean",
+        "group_observation": "MaybePin",
+        "initialization": "MaybePin",
+        "pending_requests": "UInt",
+        "purpose": {
+          "kind": "enum",
+          "values": [
+            "planned_protocol_shutdown",
+            "failure_cleanup"
+          ]
+        },
+        "requests": "Pin[0:8192]",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_llama_backend_closure_v1"
+        },
+        "server_identity": "MaybeProcess",
+        "signal_observation": "MaybePin",
+        "socket_closure": "MaybePin",
+        "status": {
+          "kind": "enum",
+          "values": [
+            "complete",
+            "failed",
+            "unknown"
+          ]
+        },
+        "stream_closure": "MaybePin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_llama_backend_closure_v1"
+    },
+    "BackendExchangeObservation": {
+      "additional_fields": false,
+      "fields": {
+        "admission": "Pin",
+        "attempt": "Pin",
+        "cost_prefix": "CostPrefix",
+        "finished_ns": "MaybeUInt",
+        "first_error": "MaybePin",
+        "ordinal": "UInt",
+        "request": "Pin",
+        "request_complete": "ClosureState",
+        "response": "MaybePin",
+        "response_complete": "ClosureState",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_llama_exchange_observation_v1"
+        },
+        "started_ns": "MaybeUInt",
+        "status": {
+          "kind": "enum",
+          "values": [
+            "complete",
+            "failed",
+            "unknown"
+          ]
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_llama_exchange_observation_v1"
+    },
+    "BackendHttpRequest": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "body_bytes": "UInt",
+        "completion_request": "MaybePin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "endpoint": "Endpoint",
+        "method": {
+          "kind": "enum",
+          "values": [
+            "GET",
+            "POST"
+          ]
+        },
+        "ordinal": "UInt",
+        "pair_nonce": "Text",
+        "path": {
+          "kind": "enum",
+          "values": [
+            "/health",
+            "/slots",
+            "/completion"
+          ]
+        },
+        "prepared_ns": "UInt",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_backend_http_request_v1"
+        },
+        "wire_bytes": "UInt",
+        "wire_hex": "HexPrefix"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_backend_http_request_v1"
+    },
+    "BackendInitializationObservation": {
+      "additional_fields": false,
+      "fields": {
+        "artifact_observations": "Pin[1:16]",
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "environment_observation": "Pin",
+        "executable_observation": "Pin",
+        "generation_requests_before_capture": {
+          "kind": "literal",
+          "value": 0
+        },
+        "health_response": "Pin",
+        "initial_slots_response": "Pin",
+        "observed_ready_ns": "UInt",
+        "peer_credential_observation": "Pin",
+        "preparation": "Pin",
+        "profile": "Pin",
+        "same_group_observation": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_llama_backend_initialization_v1"
+        },
+        "server_identity": "OriginalProcessIdentity",
+        "socket_observation": "Pin",
+        "source_initialization_proof": "Pin",
+        "spawn_observation": "Pin",
+        "worker_identity": "OriginalProcessIdentity",
+        "worker_launch_ack": "Pin",
+        "workspace": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_llama_backend_initialization_v1"
+    },
+    "BackendLimits": {
+      "additional_fields": false,
+      "fields": {
+        "batch_tokens": "PositiveUInt",
+        "context_tokens": "PositiveUInt",
+        "http_threads": {
+          "kind": "literal",
+          "value": 1
+        },
+        "initialization_duration_ns": "PositiveUInt",
+        "maximum_generation_requests": "PositiveUInt",
+        "maximum_header_bytes": "PositiveUInt",
+        "maximum_initialization_probes": "PositiveUInt",
+        "maximum_pending_retained_bytes": "PositiveUInt",
+        "maximum_request_bytes": "PositiveUInt",
+        "maximum_response_bytes": "PositiveUInt",
+        "maximum_server_stream_bytes": "PositiveUInt",
+        "microbatch_tokens": "PositiveUInt",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_llama_limits_v1"
+        },
+        "shutdown_duration_ns": "PositiveUInt",
+        "threads": "PositiveUInt",
+        "threads_batch": "PositiveUInt"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_llama_limits_v1"
+    },
+    "BackendSampling": {
+      "additional_fields": false,
+      "fields": {
+        "maximum_generated_tokens": "PositiveUInt",
+        "min_p_milli": "UInt",
+        "repeat_penalty_milli": "PositiveUInt",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_llama_sampling_v1"
+        },
+        "seed": "UInt",
+        "temperature_milli": "UInt",
+        "top_k": "UInt",
+        "top_p_milli": "UInt"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_llama_sampling_v1"
+    },
+    "ChildFD": {
+      "additional_fields": false,
+      "fields": {
+        "actual_owner": "Text",
+        "descriptor_integer": "UInt",
+        "fstat_identity": "UInt[3:3]",
+        "pipe_call_observation": "Pin",
+        "role": {
+          "kind": "enum",
+          "values": [
+            "ready_reader",
+            "ready_writer",
+            "release_reader",
+            "release_writer"
+          ]
+        },
+        "schema": "literal:ChildFD",
+        "tuple_ordinal": {
+          "kind": "enum",
+          "values": [
+            0,
+            1
+          ]
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_childfd_v1"
+    },
+    "CommonDispatchJob": {
+      "additional_fields": false,
+      "fields": {
+        "command": "Text[1:128]",
+        "command_source_pins": "Pin[1:8192]",
+        "job_id": "JobID"
+      },
+      "kind": "closed_record",
+      "required": "all"
+    },
+    "CompletionBody": {
+      "additional_fields": false,
+      "fields": {
+        "content": "CompletionText",
+        "generation_settings/n_predict": "PositiveUInt",
+        "has_new_line": {
+          "kind": "boolean"
+        },
+        "id_slot": {
+          "kind": "literal",
+          "value": 0
+        },
+        "index": {
+          "kind": "literal",
+          "value": 0
+        },
+        "model": "Text",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_completion_body_v1"
+        },
+        "stop": {
+          "kind": "literal",
+          "value": true
+        },
+        "stop_type": {
+          "kind": "enum",
+          "values": [
+            "eos",
+            "word",
+            "limit",
+            "none"
+          ]
+        },
+        "stopping_word": "CompletionText",
+        "tokens_cached": "UInt",
+        "tokens_evaluated": "UInt",
+        "tokens_predicted": "UInt",
+        "truncated": {
+          "kind": "boolean"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_completion_body_v1"
+    },
+    "CompletionRequest": {
+      "additional_fields": false,
+      "fields": {
+        "backend_admission": "Pin",
+        "maximum_generated_tokens": "PositiveUInt",
+        "prompt": "PromptText",
+        "prompt_bytes": "PositiveUInt",
+        "rendered_template_observation": "Pin",
+        "request_ordinal": "UInt",
+        "sampling": "BackendSampling",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_llama_completion_request_v2"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_llama_completion_request_v2"
+    },
+    "ConstructionPlan": {
+      "fields": {
+        "agent_policy": "Pin",
+        "arm_subshare": "Dimensions",
+        "campaign_id": "Text",
+        "capture_source": "Pin",
+        "constructor_source": "Pin",
+        "development_profile": "Pin",
+        "host_subshare": "Dimensions",
+        "maximum_depth": "PositiveUInt",
+        "maximum_input_bytes": "PositiveUInt",
+        "maximum_members": "PositiveUInt",
+        "maximum_output_bytes": "PositiveUInt",
+        "output_root": "Text",
+        "private_issuer_profile": "Pin",
+        "public_ABI_grammar": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_constructionplan_v2"
+        },
+        "scientific_template": "Pin",
+        "selected_before_first_effect": {
+          "kind": "literal",
+          "value": true
+        },
+        "source_admission": "Pin",
+        "terminal_host_reserve": "Dimensions",
+        "view_rules": "Pin"
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_constructionplan_v2"
+    },
+    "CostPrefix": {
+      "fields": {
+        "charged": "Dimensions",
+        "cleanup_reservation_retained": {
+          "kind": "literal",
+          "value": true
+        },
+        "observed": "ObservedDimensions",
+        "original_active_cpu_start_ns": "MaybeUInt",
+        "original_active_wall_start_ns": "MaybeUInt",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_costprefix_v2"
+        },
+        "unfinished_span": {
+          "kind": "boolean"
+        },
+        "unknown_dimensions": "DimensionName[0:7]"
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_costprefix_v2"
+    },
+    "CreationCapture": {
+      "fields": {
+        "complete": {
+          "kind": "boolean"
+        },
+        "cost_after": "CostPrefix",
+        "cost_before": "CostPrefix",
+        "finished_ns": "MaybeUInt",
+        "first_error": "MaybePin",
+        "operation": "CreationOperation",
+        "output": "MaybePin",
+        "owner_binding": "Pin",
+        "publication": "PublicationState",
+        "request": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_creationcapture_v2"
+        },
+        "source_readback": "Pin[0:32]",
+        "started_ns": "MaybeUInt"
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_creationcapture_v2"
+    },
+    "CreationRequest": {
+      "fields": {
+        "capture_source": "Pin",
+        "construction_plan": "Pin",
+        "creator_source": "Pin",
+        "maximum_output_bytes": "PositiveUInt",
+        "operation": "CreationOperation",
+        "ordered_inputs": "Pin[1:32]",
+        "output_path": "Text",
+        "owner_binding": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_creationrequest_v2"
+        }
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_creationrequest_v2"
+    },
+    "DevelopmentAttempt": {
+      "fields": {
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "evidence_deadline_ns": "UInt",
+        "first_error": "MaybePin",
+        "group_observation": "MaybePin",
+        "identity": "MaybeProcess",
+        "known_records": "Pin[0:4096]",
+        "launch_request": "Pin",
+        "nonce_consumed": {
+          "kind": "literal",
+          "value": true
+        },
+        "original_start_ns": "MaybeUInt",
+        "owner_binding": "Pin",
+        "pair_plan": "Pin",
+        "run_deadline_ns": "UInt",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_developmentattempt_v2"
+        },
+        "spawn_state": "SpawnState",
+        "start_observation_ns": "MaybeUInt"
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_developmentattempt_v2"
+    },
+    "DevelopmentCompletion": {
+      "additional_fields": false,
+      "fields": {
+        "actual_launch": "Pin",
+        "actual_original_process": "Pin",
+        "backend_admission": "Pin",
+        "backend_closure": "Pin",
+        "backend_initialization": "Pin",
+        "closed_ns": "UInt",
+        "complete_stream_capture": "Pin",
+        "condition": "Condition",
+        "cost_observation": "Pin",
+        "descendant_and_workspace_closure": "Pin",
+        "equal_opportunity": {
+          "kind": "literal",
+          "value": true
+        },
+        "exposure": "Pin",
+        "launch_request": "Pin",
+        "original_attempt": "Pin",
+        "pair_plan": "Pin",
+        "request": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_developmentcompletion_v3"
+        },
+        "started_ns": "UInt",
+        "state_identity": "Pin",
+        "status": {
+          "kind": "literal",
+          "value": "complete"
+        },
+        "unknown_dimensions": "DimensionName[0:0]",
+        "workspace_identity": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_developmentcompletion_v3"
+    },
+    "DevelopmentContractIdentity": {
+      "additional_fields": false,
+      "fields": {
+        "agent_policy": "Pin",
+        "development_profile": "Pin",
+        "environment_values": "Pin",
+        "owner_binding": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_admitted_development_contract_v1"
+        },
+        "selection": "Pin",
+        "whole_envelope": "Pin",
+        "worker_envelope": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_admitted_development_contract_v1"
+    },
+    "DevelopmentFailure": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "MaybePin",
+        "backend_admission": "MaybePin",
+        "backend_attempt": "MaybePin",
+        "backend_closure": "MaybePin",
+        "backend_initialization": "MaybePin",
+        "backend_state": "BackendState",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "eligible_for_seal": {
+          "kind": "literal",
+          "value": false
+        },
+        "first_error": "FailureObservation",
+        "group_closure": "ClosureState",
+        "identity": "MaybeProcess",
+        "launch_request": "Pin",
+        "partial_streams": "Pin[0:2]",
+        "process_closure": "ClosureState",
+        "reservation_retained": {
+          "kind": "literal",
+          "value": true
+        },
+        "schema": {
+          "kind": "literal",
+          "value": "ci_developmentfailure_v3"
+        },
+        "secondary_errors": "FailureObservation[0:1024]",
+        "spawn_state": "SpawnState",
+        "streams_closure": "ClosureState",
+        "workspace_closure": "ClosureState"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_developmentfailure_v3"
+    },
+    "DevelopmentLaunchRequest": {
+      "fields": {
+        "argv": "Text[1:128]",
+        "condition": "Condition",
+        "cwd": "Text",
+        "environment": "Pin",
+        "evidence_deadline_ns": "UInt",
+        "exposure": "Pin",
+        "group_name": "Text",
+        "launch_nonce": "Text",
+        "output_prefix": "Text",
+        "owner_binding": "Pin",
+        "pair_plan": "Pin",
+        "profile": "Pin",
+        "request": "Pin",
+        "run_deadline_ns": "UInt",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_developmentlaunchrequest_v2"
+        },
+        "source_closure": "Pin[1:4096]",
+        "state_identity": "Pin",
+        "workspace_identity": "Pin"
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_developmentlaunchrequest_v2"
+    },
+    "DevelopmentPairClosure": {
+      "additional_fields": false,
+      "fields": {
+        "actual_start_skew_ns": "UInt",
+        "backend_closure_by_condition": "ArmMap",
+        "backend_profile": "Pin",
+        "both_fresh_states": {
+          "kind": "literal",
+          "value": true
+        },
+        "both_original_descendant_closures": {
+          "kind": "literal",
+          "value": true
+        },
+        "completion_by_condition": "ArmMap",
+        "equal_opportunity": {
+          "kind": "literal",
+          "value": true
+        },
+        "initialization_by_condition": "ArmMap",
+        "original_cutoff_ns": "UInt",
+        "pair_plan": "Pin",
+        "same_owner_binding": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_developmentpairclosure_v3"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_developmentpairclosure_v3"
+    },
+    "DevelopmentPairPlan": {
+      "fields": {
+        "agent_policy": "Pin",
+        "early_selection": "Pin",
+        "equal_arm_subshare": "Dimensions",
+        "fresh_mutable_state_required": {
+          "kind": "literal",
+          "value": true
+        },
+        "host_subshare": "Dimensions",
+        "outcome_retries_allowed": {
+          "kind": "literal",
+          "value": false
+        },
+        "owner_opened": "Pin",
+        "pair_id": "Text",
+        "paired_views": "Pin",
+        "profile": "Pin",
+        "public_ABI": "Pin",
+        "schedule": "MatchedSchedule",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_developmentpairplan_v2"
+        }
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_developmentpairplan_v2"
+    },
+    "DevelopmentPhysicalLimits": {
+      "fields": {
+        "cpu_ns": "PositiveUInt",
+        "memory_bytes": "PositiveUInt",
+        "pids": "PositiveUInt",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_developmentphysicallimits_v2"
+        },
+        "stream_bytes": "PositiveUInt",
+        "whole_cpu_ns": "PositiveUInt",
+        "whole_memory_bytes": "PositiveUInt",
+        "whole_storage_bytes": "PositiveUInt"
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_developmentphysicallimits_v2"
+    },
+    "DevelopmentProfile": {
+      "fields": {
+        "agent_policy": "Pin",
+        "clock_mapping": "Pin",
+        "entry_argv": "Text[1:128]",
+        "environment": "Pin",
+        "environment_values": "Pin",
+        "group_parent": "Text",
+        "group_source": "Pin",
+        "identity_source": "Pin",
+        "launcher_source": "Pin",
+        "maximum_files": "PositiveUInt",
+        "maximum_metadata_bytes": "PositiveUInt",
+        "maximum_request_bytes": "PositiveUInt",
+        "maximum_stream_bytes": "PositiveUInt",
+        "mode": {
+          "kind": "literal",
+          "value": "ci_development_v2"
+        },
+        "native_qualification": "Pin",
+        "observer_source": "Pin",
+        "output_root": "Text",
+        "parent_launch": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_developmentprofile_v2"
+        },
+        "source_admission": "Pin",
+        "source_qualification": "Pin",
+        "storage_source": "Pin",
+        "whole_envelope": "OriginalWholeEnvelope",
+        "whole_owner_selection": "Pin",
+        "worker_envelope": "OriginalWorkerEnvelope"
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_developmentprofile_v2"
+    },
+    "DevelopmentRequest": {
+      "additional_fields": false,
+      "fields": {
+        "agent_policy": "Pin",
+        "condition": "Condition",
+        "development_profile": "Pin",
+        "early_selection": "Pin",
+        "owner_opened": "Pin",
+        "pair_plan": "Pin",
+        "public_ABI": "Pin",
+        "public_interface": "Pin",
+        "schedule": "MatchedSchedule",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_developmentrequest_v2"
+        },
+        "subshare": "Dimensions",
+        "view_inventory": "Pin",
+        "workspace_identity": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_developmentrequest_v2"
+    },
+    "DevelopmentWholeEnvelope": {
+      "fields": {
+        "clock": "OriginalClock",
+        "hard_envelope": "OriginalHardEnvelope",
+        "native_qualification": "Pin",
+        "parent_launch": "Pin",
+        "parent_owner_custody": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_developmentwholeenvelope_v2"
+        },
+        "source_qualification": "Pin",
+        "storage_identity": "Pin",
+        "whole_group_identity": "Pin"
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_developmentwholeenvelope_v2"
+    },
+    "DevelopmentWorkerEnvelope": {
+      "fields": {
+        "clock": "OriginalClock",
+        "equal_arm_subshare": "Dimensions",
+        "limits": "DevelopmentPhysicalLimits",
+        "native_qualification": "Pin",
+        "original_early_reservation": "OriginalAdapterRow",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_developmentworkerenvelope_v2"
+        },
+        "source_qualification": "Pin"
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_developmentworkerenvelope_v2"
+    },
+    "EarlyConstructionSubject": {
+      "additional_fields": false,
+      "fields": {
+        "agent_policy": "Pin",
+        "arm_subshare": "Dimensions",
+        "campaign_id": "Text",
+        "capture_source": "Pin",
+        "constructor_source": "Pin",
+        "development_profile": "Pin",
+        "host_subshare": "Dimensions",
+        "maximum_depth": "PositiveUInt",
+        "maximum_input_bytes": "PositiveUInt",
+        "maximum_members": "PositiveUInt",
+        "maximum_output_bytes": "PositiveUInt",
+        "output_root": "Text",
+        "public_ABI_grammar": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_early_construction_subject_v1"
+        },
+        "scientific_template": "Pin",
+        "selected_before_first_effect": {
+          "kind": "literal",
+          "value": true
+        },
+        "source_admission": "Pin",
+        "terminal_host_reserve": "Dimensions",
+        "view_rules": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_early_construction_subject_v1"
+    },
+    "EarlyHandoff": {
+      "additional_fields": false,
+      "fields": {
+        "charged_prefix": "Dimensions",
+        "execution_binding": "Pin",
+        "handoff_ns": "UInt",
+        "observed_prefix": "Dimensions",
+        "original_processes": "Pin[2:2]",
+        "owner_continues": {
+          "kind": "literal",
+          "value": true
+        },
+        "owner_opened": "Pin",
+        "paired_policy": "Pin",
+        "schema": "literal:EarlyHandoff",
+        "selection": "Pin",
+        "unknown_dimensions": "Text[0:64]"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_earlyhandoff_v1"
+    },
+    "EarlyIssuanceObservation": {
+      "additional_fields": false,
+      "fields": {
+        "bootstrap_attestation": "Pin",
+        "construction_plan": "Pin",
+        "cost_prefix": "CostPrefix",
+        "creation_captures": "Pin[3:3]",
+        "issuer_nonce": "Text",
+        "owner_binding": "Pin",
+        "profile": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_early_issuance_observation_v1"
+        },
+        "selection": "Pin",
+        "selection_creation_capture": "Pin",
+        "subject": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_early_issuance_observation_v1"
+    },
+    "EarlyIssuerBootstrapAttestation": {
+      "additional_fields": false,
+      "fields": {
+        "bootstrap_policy": "Pin",
+        "bootstrap_source": "Pin",
+        "clock": "OriginalClock",
+        "host_identity": "OriginalProcessIdentity",
+        "issuer_source": "Pin",
+        "native_qualification": "Pin",
+        "nonce": "Text",
+        "parent_custody": "Pin",
+        "profile": "Pin",
+        "reservation": "OriginalAdapterRow",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_early_issuer_bootstrap_attestation_v1"
+        },
+        "source_qualification": "Pin",
+        "subject": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_early_issuer_bootstrap_attestation_v1"
+    },
+    "EarlyIssuerBootstrapPolicy": {
+      "additional_fields": false,
+      "fields": {
+        "bootstrap_source": "Pin",
+        "capture_root": "Text",
+        "issuer_source": "Pin",
+        "maximum_depth": "PositiveUInt",
+        "maximum_input_bytes": "PositiveUInt",
+        "maximum_members": "PositiveUInt",
+        "maximum_output_bytes": "PositiveUInt",
+        "native_qualification": "Pin",
+        "root_admission_source": "Pin",
+        "root_static_selection": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_early_issuer_bootstrap_policy_v1"
+        },
+        "source_qualification": "Pin",
+        "subject": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_early_issuer_bootstrap_policy_v1"
+    },
+    "EarlyIssuerProfile": {
+      "additional_fields": false,
+      "fields": {
+        "bootstrap_policy": "Pin",
+        "bootstrap_source": "Pin",
+        "capture_root": "Text",
+        "issuer_source": "Pin",
+        "maximum_depth": "PositiveUInt",
+        "maximum_input_bytes": "PositiveUInt",
+        "maximum_members": "PositiveUInt",
+        "maximum_output_bytes": "PositiveUInt",
+        "native_qualification": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_early_issuer_profile_v1"
+        },
+        "schema_produced": {
+          "kind": "literal",
+          "value": "ci_earlyselection_v2"
+        },
+        "source_qualification": "Pin",
+        "subject": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_early_issuer_profile_v1"
+    },
+    "EarlyOwnerBinding": {
+      "fields": {
+        "bound_ns": "UInt",
+        "clock": "OriginalClock",
+        "construction_plan": "Pin",
+        "cost_prefix": "CostPrefix",
+        "early_reservation": "OriginalAdapterRow",
+        "host_identity": "OriginalProcessIdentity",
+        "owner_nonce": "Text",
+        "parent_owner_custody": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_earlyownerbinding_v2"
+        },
+        "seed": "Pin"
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_earlyownerbinding_v2"
+    },
+    "EarlyOwnerOpened": {
+      "additional_fields": false,
+      "fields": {
+        "actual_source_owner": "Pin",
+        "early_owner_binding": "Pin",
+        "host_identity": "OriginalProcessIdentity",
+        "initial_observed": "Dimensions",
+        "opened_ns": "UInt",
+        "owner_nonce": "Text",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_earlyowneropened_v2"
+        },
+        "seed": "Pin",
+        "selection": "Pin",
+        "selection_creation_capture": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_earlyowneropened_v2"
+    },
+    "EarlyOwnerSeed": {
+      "additional_fields": false,
+      "fields": {
+        "arm_subshare": "Dimensions",
+        "campaign_id": "Text",
+        "clock": "OriginalClock",
+        "construction_plan": "Pin",
+        "early_reservation": "OriginalAdapterRow",
+        "host_identity": "OriginalProcessIdentity",
+        "host_source": "Pin",
+        "host_subshare": "Dimensions",
+        "maximum_selection_bytes": "PositiveUInt",
+        "parent_owner_custody": "Pin",
+        "private_selection_path": "Text",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_earlyownerseed_v2"
+        },
+        "terminal_host_reserve": "Dimensions"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_earlyownerseed_v2"
+    },
+    "EarlySelection": {
+      "additional_fields": false,
+      "fields": {
+        "agent_policy": "Pin",
+        "arm_subshare": "Dimensions",
+        "campaign_id": "Text",
+        "clock": "OriginalClock",
+        "construction_plan": "Pin",
+        "creation_captures": "Pin[3:3]",
+        "development_profile": "Pin",
+        "early_owner_binding": "Pin",
+        "early_reservation": "OriginalAdapterRow",
+        "hard_envelope": "OriginalHardEnvelope",
+        "host_identity": "OriginalProcessIdentity",
+        "host_source": "Pin",
+        "host_subshare": "Dimensions",
+        "paired_views": "Pin",
+        "public_ABI": "Pin",
+        "public_interface": "Pin",
+        "qualification": "Pin",
+        "schedule": "MatchedSchedule",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_earlyselection_v2"
+        },
+        "scientific_template": "Pin",
+        "source_admission": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_earlyselection_v2"
+    },
+    "EntryAcknowledgement": {
+      "additional_fields": false,
+      "fields": {
+        "release": "Pin",
+        "schema": "literal:EntryAcknowledgement",
+        "start_binding": "Pin",
+        "verified_ns": "UInt",
+        "worker": "OriginalProcessIdentity",
+        "worker_request": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_entryacknowledgement_v1"
+    },
+    "EnvironmentEntry": {
+      "additional_fields": false,
+      "fields": {
+        "name": "Text",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_environment_entry_v1"
+        },
+        "value": "Text"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_environment_entry_v1"
+    },
+    "EnvironmentObservation": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "entries": "EnvironmentEntry[0:64]",
+        "observed_ns": "UInt",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_environment_observation_v1"
+        },
+        "selected_environment": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_environment_observation_v1"
+    },
+    "ExecutionBinding": {
+      "additional_fields": false,
+      "fields": {
+        "agent_policy": "Pin",
+        "assembler_receipt": "Pin",
+        "campaign_id": "Text",
+        "dispatcher_argv": "Text[1:128]",
+        "dispatcher_source": "Pin[1:8192]",
+        "early_selection": "Pin",
+        "final_census": "Pin",
+        "public_ABI": "Pin",
+        "public_interface": "Pin",
+        "schema": "literal:ExecutionBinding",
+        "scientific_template": "Pin",
+        "seals": "ArmMap"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_executionbinding_v1"
+    },
+    "ExitObservation": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "exit_code": "MaybeSignedExit",
+        "first_error": {
+          "kind": "nullable",
+          "value_type": "FailureObservation"
+        },
+        "schema": {
+          "kind": "literal",
+          "value": "ci_exit_observation_v1"
+        },
+        "server": "OriginalProcessIdentity",
+        "state": {
+          "kind": "enum",
+          "values": [
+            "reaped",
+            "failed",
+            "unknown"
+          ]
+        },
+        "wait_finished_ns": "MaybeUInt",
+        "wait_started_ns": "MaybeUInt"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_exit_observation_v1"
+    },
+    "Exposure": {
+      "additional_fields": false,
+      "fields": {
+        "agent_policy": "Pin",
+        "condition": "Condition",
+        "early_selection": "Pin",
+        "observed_ns": "UInt",
+        "original_readback": "Pin",
+        "owner_opened": "Pin",
+        "public_ABI": "Pin",
+        "public_interface": "Pin",
+        "request": "Pin",
+        "schema": "literal:Exposure",
+        "view_inventory": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_exposure_v1"
+    },
+    "FailureObservation": {
+      "fields": {
+        "code": "FailureCode",
+        "observation_ns": "MaybeUInt",
+        "ordinal": "UInt",
+        "phase": "FailurePhase",
+        "raw_error_retained": {
+          "kind": "literal",
+          "value": true
+        },
+        "schema": {
+          "kind": "literal",
+          "value": "ci_failureobservation_v2"
+        },
+        "source_site": "Text"
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_failureobservation_v2"
+    },
+    "FailurePrefix": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Text",
+        "charged_reservation_retained": {
+          "kind": "literal",
+          "value": true
+        },
+        "cost_prefix": "CostPrefix",
+        "dependent_execution_allowed": {
+          "kind": "literal",
+          "value": false
+        },
+        "early_owner_binding": "Pin",
+        "known_records": "Pin[0:8192]",
+        "last_phase": "Text",
+        "ordered_secondary_failures": "Pin[0:8192]",
+        "original_owner_failure": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_failureprefix_v2"
+        },
+        "selection": "Pin",
+        "unknown_dimensions": "Text[0:64]"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_failureprefix_v2"
+    },
+    "FailurePublication": {
+      "fields": {
+        "attempt": "Text",
+        "cost_prefix": "CostPrefix",
+        "first_error_ordinal": "UInt",
+        "parent_custody_continues": {
+          "kind": "literal",
+          "value": true
+        },
+        "prefix_record": "MaybePin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_failurepublication_v2"
+        },
+        "secondary_error_ordinals": "UInt[0:1024]",
+        "state": "PublicationState"
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_failurepublication_v2"
+    },
+    "HostInitializationObservation": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "host_owner_binding": "Pin",
+        "initialization": "Pin",
+        "observed_ns": "UInt",
+        "pair_nonce": "Text",
+        "peer": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_host_initialization_observation_v1"
+        },
+        "server_process": "Pin",
+        "socket": "Pin",
+        "source_admission": "Pin",
+        "worker_process": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_host_initialization_observation_v1"
+    },
+    "InitialStatePreparation": {
+      "additional_fields": false,
+      "fields": {
+        "artifact_selection": "Pin",
+        "backend_profile": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "initial_inputs": "Pin[1:8192]",
+        "live_backend_identity": {
+          "kind": "literal",
+          "value": null
+        },
+        "model_initialized": {
+          "kind": "literal",
+          "value": false
+        },
+        "pair_id": "Text",
+        "prepared_source_closure": "Pin",
+        "recipe": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_prelaunch_backend_state_preparation_v1"
+        },
+        "workspace": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_prelaunch_backend_state_preparation_v1"
+    },
+    "InitialStateRecipe": {
+      "additional_fields": false,
+      "fields": {
+        "empty_directories": "Text[1:32]",
+        "immutable_inputs": "Pin[1:8192]",
+        "native_filesystem_profile": "Pin",
+        "no_existing_server": {
+          "kind": "literal",
+          "value": true
+        },
+        "no_mutable_cache_restore": {
+          "kind": "literal",
+          "value": true
+        },
+        "private_control_parent": "Text",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_backend_initial_state_recipe_v1"
+        },
+        "server_count": {
+          "kind": "literal",
+          "value": 1
+        },
+        "slot_count": {
+          "kind": "literal",
+          "value": 1
+        },
+        "workspace_parent": "Text"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_backend_initial_state_recipe_v1"
+    },
+    "LocalArtifactSelection": {
+      "additional_fields": false,
+      "fields": {
+        "format": {
+          "kind": "literal",
+          "value": "single-local-GGUF-no-shards"
+        },
+        "model_alias": "Text",
+        "model_gguf": "Pin",
+        "model_metadata_validation": "Pin",
+        "readonly_mounts": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_llama_local_artifact_selection_v1"
+        },
+        "template_file": "Pin",
+        "template_renderer": "Pin",
+        "tokenizer_kind": {
+          "kind": "literal",
+          "value": "embedded-selected-GGUF-tokenizer"
+        },
+        "tokenizer_projection": "Pin",
+        "tokenizer_source": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_llama_local_artifact_selection_v1"
+    },
+    "LocalBackendProfile": {
+      "additional_fields": false,
+      "fields": {
+        "adapter_source": "Pin",
+        "artifact_selection": "Pin",
+        "build_manifest": "Pin",
+        "device": {
+          "kind": "literal",
+          "value": "cpu-only"
+        },
+        "environment": "Pin",
+        "environment_values": "Pin",
+        "first_inference_gate": {
+          "kind": "literal",
+          "value": "actual-host-backend-admission-ack"
+        },
+        "initial_state_recipe": "Pin",
+        "limits": "BackendLimits",
+        "native_qualification": "Pin",
+        "process_placement": {
+          "kind": "literal",
+          "value": "one-owned-server-descendant-per-development-worker"
+        },
+        "runtime_closure": "Pin[1:8192]",
+        "sampling": "BackendSampling",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_llama_cpp_local_backend_profile_v1"
+        },
+        "server_executable": "Pin",
+        "shutdown_protocol": {
+          "kind": "literal",
+          "value": "once-planned-SIGTERM-after-complete-requests"
+        },
+        "source_qualification": "Pin",
+        "transport": {
+          "kind": "literal",
+          "value": "private-unix-domain-http1"
+        },
+        "upstream_commit": {
+          "kind": "literal",
+          "value": "4ed88da2ea2a51edc158efe0ee2a1e452d75644d"
+        },
+        "upstream_source_manifest": "Pin",
+        "worker_entry_source": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_llama_cpp_local_backend_profile_v1"
+    },
+    "MatchedSchedule": {
+      "additional_fields": false,
+      "fields": {
+        "common_cutoff_ns": "PositiveUInt",
+        "duration_ns": "PositiveUInt",
+        "earliest_launch_ns": "UInt",
+        "latest_launch_ns": "UInt",
+        "maximum_launch_skew_ns": "UInt",
+        "schema": "literal:MatchedSchedule"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_matchedschedule_v1"
+    },
+    "OwnedPathIdentity": {
+      "additional_fields": false,
+      "fields": {
+        "device": "UInt",
+        "inode": "UInt",
+        "kind": {
+          "kind": "enum",
+          "values": [
+            "directory",
+            "regular_file",
+            "socket"
+          ]
+        },
+        "mode": "UInt",
+        "observed_ns": "UInt",
+        "parent_handle_ordinal": "UInt",
+        "relative_path": "Text",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_owned_path_identity_v1"
+        },
+        "uid": "UInt"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_owned_path_identity_v1"
+    },
+    "PairedPolicy": {
+      "additional_fields": false,
+      "fields": {
+        "census": "Pin",
+        "conditions": {
+          "kind": "literal",
+          "value": [
+            "paper_data",
+            "paper_data_author_code"
+          ]
+        },
+        "execution_binding": "Pin",
+        "jobs": "CommonDispatchJob[1:8192]",
+        "paired_view_manifest": "Pin",
+        "programme_seals": "ArmMap",
+        "report_ABI": "Pin",
+        "same_agent_policy": "Pin",
+        "schema": "literal:PairedPolicy"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "critical_init_paired_candidate_policy_v4",
+      "schema_override": "critical_init_paired_candidate_policy_v4"
+    },
+    "ParsedCompletion": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "body": "CompletionBody",
+        "condition": "Condition",
+        "endpoint": "Endpoint",
+        "ordinal": "UInt",
+        "pair_nonce": "Text",
+        "raw": "Pin",
+        "received_ns": "UInt",
+        "request": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_parsed_completion_v1"
+        },
+        "source_commit": {
+          "kind": "literal",
+          "value": "4ed88da2ea2a51edc158efe0ee2a1e452d75644d"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_parsed_completion_v1"
+    },
+    "ParsedHealth": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "body": {
+          "kind": "literal",
+          "value": {
+            "status": "ok"
+          }
+        },
+        "condition": "Condition",
+        "endpoint": "Endpoint",
+        "observed_ns": "UInt",
+        "ordinal": "UInt",
+        "pair_nonce": "Text",
+        "raw": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_parsed_health_v1"
+        },
+        "source_commit": {
+          "kind": "literal",
+          "value": "4ed88da2ea2a51edc158efe0ee2a1e452d75644d"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_parsed_health_v1"
+    },
+    "ParsedLoadingHealth": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "body": {
+          "kind": "literal",
+          "value": {
+            "error": {
+              "code": 503,
+              "message": "Loading model",
+              "type": "unavailable_error"
+            }
+          }
+        },
+        "condition": "Condition",
+        "endpoint": "Endpoint",
+        "observed_ns": "UInt",
+        "ordinal": "UInt",
+        "pair_nonce": "Text",
+        "raw": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_parsed_loading_health_v1"
+        },
+        "source_commit": {
+          "kind": "literal",
+          "value": "4ed88da2ea2a51edc158efe0ee2a1e452d75644d"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_parsed_loading_health_v1"
+    },
+    "ParsedSlots": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "condition": "Condition",
+        "endpoint": "Endpoint",
+        "observed_ns": "UInt",
+        "ordinal": "UInt",
+        "pair_nonce": "Text",
+        "raw": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_parsed_slots_v1"
+        },
+        "slots": "SlotBody[1:1]",
+        "source_commit": {
+          "kind": "literal",
+          "value": "4ed88da2ea2a51edc158efe0ee2a1e452d75644d"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_parsed_slots_v1"
+    },
+    "PeerCredentialObservation": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "gid": "UInt",
+        "observed_ns": "UInt",
+        "pid": "PositiveUInt",
+        "producer": {
+          "kind": "enum",
+          "values": [
+            "worker",
+            "host"
+          ]
+        },
+        "schema": {
+          "kind": "literal",
+          "value": "ci_peer_credential_observation_v1"
+        },
+        "server": "OriginalProcessIdentity",
+        "socket_observation": "Pin",
+        "uid": "UInt"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_peer_credential_observation_v1"
+    },
+    "Pin": {
+      "additional_fields": false,
+      "fields": {
+        "bytes": "UInt",
+        "path": "Text",
+        "sha256": "Hash"
+      },
+      "kind": "closed_record",
+      "required": "all"
+    },
+    "PreparationCleanup": {
+      "additional_fields": false,
+      "fields": {
+        "cost_prefix": "CostPrefix",
+        "error": {
+          "kind": "nullable",
+          "value_type": "FailureObservation"
+        },
+        "finished_ns": "MaybeUInt",
+        "observed_identity": {
+          "kind": "nullable",
+          "value_type": "OwnedPathIdentity"
+        },
+        "operation": {
+          "kind": "enum",
+          "values": [
+            "close_fd",
+            "unlink_owned_file",
+            "rmdir_control",
+            "rmdir_workspace"
+          ]
+        },
+        "operation_ordinal": "UInt",
+        "owned_handle_ordinal": "UInt",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_preparation_cleanup_v1"
+        },
+        "started_ns": "MaybeUInt",
+        "state": "OperationResult"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_preparation_cleanup_v1"
+    },
+    "PreparationFailure": {
+      "additional_fields": false,
+      "fields": {
+        "arms": "PreparedArmPrefix[2:2]",
+        "cost_prefix": "CostPrefix",
+        "dependent_execution_allowed": {
+          "kind": "literal",
+          "value": false
+        },
+        "development_contract": "Pin",
+        "eligible_for_seal": {
+          "kind": "literal",
+          "value": false
+        },
+        "first_error": "FailureObservation",
+        "owner_binding": "Pin",
+        "pair_id": "Text",
+        "pair_nonce": "Text",
+        "pair_plan": "MaybePin",
+        "phase": "PreparationPhase",
+        "process_started": {
+          "kind": "literal",
+          "value": false
+        },
+        "retained_unknowns": "DimensionName[0:7]",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_preparation_failure_v1"
+        },
+        "secondary_errors": "FailureObservation[0:1024]",
+        "selection": "Pin",
+        "shared_operations": "PreparationOperation[0:32]",
+        "status": {
+          "kind": "literal",
+          "value": "failed"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_preparation_failure_v1"
+    },
+    "PreparationOperation": {
+      "additional_fields": false,
+      "fields": {
+        "condition": "MaybeCondition",
+        "cost_prefix": "CostPrefix",
+        "finished_ns": "MaybeUInt",
+        "first_error": {
+          "kind": "nullable",
+          "value_type": "FailureObservation"
+        },
+        "handle_ordinal": "MaybeUInt",
+        "identity": "MaybePin",
+        "operation": "PreparationOp",
+        "ordinal": "UInt",
+        "output": "MaybePin",
+        "relative_path": "MaybeText",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_preparation_operation_v1"
+        },
+        "started_ns": "MaybeUInt",
+        "state": "OperationResult"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_preparation_operation_v1"
+    },
+    "PreparationReport": {
+      "additional_fields": false,
+      "fields": {
+        "failure_prefix": "MaybePin",
+        "failure_publication": {
+          "kind": "enum",
+          "values": [
+            "complete",
+            "failed",
+            "not_attempted"
+          ]
+        },
+        "outcome": "PrepOutcome",
+        "pair_eligible": {
+          "kind": "literal",
+          "value": false
+        },
+        "schema": {
+          "kind": "literal",
+          "value": "ci_preparation_report_v1"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_preparation_report_v1"
+    },
+    "PreparationSuccess": {
+      "additional_fields": false,
+      "fields": {
+        "arms": "PreparedArmPrefix[2:2]",
+        "cost_prefix": "CostPrefix",
+        "development_contract": "Pin",
+        "owner_binding": "Pin",
+        "pair_id": "Text",
+        "pair_nonce": "Text",
+        "pair_plan": "Pin",
+        "process_started": {
+          "kind": "literal",
+          "value": false
+        },
+        "same_private_handle_promoted": {
+          "kind": "literal",
+          "value": true
+        },
+        "schema": {
+          "kind": "literal",
+          "value": "ci_preparation_success_v1"
+        },
+        "selection": "Pin",
+        "shared_operations": "PreparationOperation[0:32]",
+        "status": {
+          "kind": "literal",
+          "value": "prepared"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_preparation_success_v1"
+    },
+    "PreparedArmPrefix": {
+      "additional_fields": false,
+      "fields": {
+        "cleanup": "PreparationCleanup[0:128]",
+        "condition": "Condition",
+        "control_closure": "ClosureState",
+        "cost_prefix": "CostPrefix",
+        "descriptor_closure": "ClosureState",
+        "exposure": "MaybePin",
+        "launch_request": "MaybePin",
+        "operations": "PreparationOperation[0:64]",
+        "request": "MaybePin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_prepared_arm_prefix_v1"
+        },
+        "state_preparation": "MaybePin",
+        "workspace_closure": "ClosureState",
+        "workspace_observation": "MaybePin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_prepared_arm_prefix_v1"
+    },
+    "PreselectionFailurePrefix": {
+      "fields": {
+        "attempt": "Text",
+        "clock": "OriginalClock",
+        "cost_prefix": "CostPrefix",
+        "creation_captures": "Pin[0:4]",
+        "dependent_execution_allowed": {
+          "kind": "literal",
+          "value": false
+        },
+        "first_error": "FailureObservation",
+        "host_identity": "OriginalProcessIdentity",
+        "known_records": "Pin[0:4096]",
+        "owner_binding": "MaybePin",
+        "owner_nonce": "Text",
+        "parent_owner_custody": "Pin",
+        "reservation": "OriginalAdapterRow",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_preselectionfailureprefix_v2"
+        },
+        "secondary_errors": "FailureObservation[0:1024]",
+        "seed": "MaybePin",
+        "selection": {
+          "kind": "literal",
+          "value": null
+        },
+        "selection_capture": "SelectionCapturePrefix"
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_preselectionfailureprefix_v2"
+    },
+    "PrivateExecutionRequest": {
+      "additional_fields": false,
+      "fields": {
+        "condition": "Condition",
+        "execution_binding": "Pin",
+        "job_id": "JobID",
+        "original_child_authority": "Pin",
+        "original_deadline_ns": "PositiveUInt",
+        "programme_seal": "Pin",
+        "public_view": "Pin",
+        "schema": "literal:PrivateExecutionRequest"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_privateexecutionrequest_v1"
+    },
+    "ProcessObservation": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "group_identity": "OriginalProcessIdentity",
+        "identity": "OriginalProcessIdentity",
+        "observed_ns": "UInt",
+        "parent_identity": "OriginalProcessIdentity",
+        "producer": {
+          "kind": "enum",
+          "values": [
+            "worker",
+            "host"
+          ]
+        },
+        "schema": {
+          "kind": "literal",
+          "value": "ci_process_observation_v1"
+        },
+        "subject": {
+          "kind": "enum",
+          "values": [
+            "worker",
+            "server"
+          ]
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_process_observation_v1"
+    },
+    "ProgrammeJob": {
+      "additional_fields": false,
+      "fields": {
+        "argv": "Text[1:128]",
+        "job_id": "JobID",
+        "report_producer": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all"
+    },
+    "ProgrammeSeal": {
+      "additional_fields": false,
+      "fields": {
+        "agent_policy": "Pin",
+        "capture_receipt": "Pin",
+        "condition": "Condition",
+        "development": "Pin",
+        "environment": "Pin",
+        "exposure": "Pin",
+        "jobs": "ProgrammeJob[1:8192]",
+        "pair_closure": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_programmeseal_v3"
+        },
+        "sealed_ns": "UInt",
+        "source_closure": "Pin[1:8192]",
+        "source_manifest": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_programmeseal_v3"
+    },
+    "PublicABI": {
+      "additional_fields": false,
+      "fields": {
+        "conditions": {
+          "kind": "literal",
+          "value": [
+            "paper_data",
+            "paper_data_author_code"
+          ]
+        },
+        "jobs": "OriginalABIJobs",
+        "report_relative_path": {
+          "kind": "literal",
+          "value": "candidate_report.json"
+        },
+        "required_fields": {
+          "kind": "literal",
+          "value": [
+            "job_id",
+            "condition",
+            "scope_digest",
+            "bundles",
+            "identities"
+          ]
+        },
+        "schema": "literal:PublicABI",
+        "scope_digest": "Hash",
+        "task_interface": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "critical_init_public_candidate_report_abi_v2",
+      "schema_override": "critical_init_public_candidate_report_abi_v2"
+    },
+    "PublicJob": {
+      "additional_fields": false,
+      "fields": {
+        "job_id": "JobID",
+        "kind": {
+          "kind": "enum",
+          "values": [
+            "numeric",
+            "native",
+            "artifact"
+          ]
+        },
+        "task_expected_outputs": "OriginalExpectedOutputs"
+      },
+      "kind": "closed_record",
+      "required": "all"
+    },
+    "PublicTaskInterface": {
+      "additional_fields": false,
+      "fields": {
+        "jobs": "PublicJob[1:8192]",
+        "schema": "literal:PublicTaskInterface",
+        "scope_digest": "Hash"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_publictaskinterface_v1"
+    },
+    "RawHttpResponse": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "body_bytes": "UInt",
+        "body_prefix_hex": "HexPrefix",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "declared_content_length": "MaybeUInt",
+        "endpoint": "Endpoint",
+        "finished_ns": "MaybeUInt",
+        "first_error": {
+          "kind": "nullable",
+          "value_type": "FailureObservation"
+        },
+        "header_bytes": "UInt",
+        "header_prefix_hex": "HexPrefix",
+        "known_wire_bytes": "UInt",
+        "ordinal": "UInt",
+        "pair_nonce": "Text",
+        "request": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_raw_http_response_v1"
+        },
+        "secondary_errors": "FailureObservation[0:1024]",
+        "source_commit": {
+          "kind": "literal",
+          "value": "4ed88da2ea2a51edc158efe0ee2a1e452d75644d"
+        },
+        "started_ns": "MaybeUInt",
+        "state": "TransportState",
+        "status_code": "MaybeHttpStatus",
+        "unknown_physical_read": {
+          "kind": "boolean"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_raw_http_response_v1"
+    },
+    "Ready": {
+      "additional_fields": false,
+      "fields": {
+        "launch_nonce": "Text",
+        "schema": "literal:Ready",
+        "state": {
+          "kind": "literal",
+          "value": "parked"
+        },
+        "ticket": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_ready_v1"
+    },
+    "RejectedResponse": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "endpoint": "Endpoint",
+        "first_error": "FailureObservation",
+        "http_status": "MaybeHttpStatus",
+        "ordinal": "UInt",
+        "pair_nonce": "Text",
+        "raw": "MaybePin",
+        "reason": {
+          "kind": "enum",
+          "values": [
+            "transport_incomplete",
+            "http_status",
+            "content_type",
+            "framing",
+            "utf8",
+            "json_syntax",
+            "duplicate_key",
+            "nonfinite",
+            "schema",
+            "identity",
+            "deadline",
+            "empty_body",
+            "capacity",
+            "unexpected_stop"
+          ]
+        },
+        "schema": {
+          "kind": "literal",
+          "value": "ci_rejected_response_v1"
+        },
+        "source_commit": {
+          "kind": "literal",
+          "value": "4ed88da2ea2a51edc158efe0ee2a1e452d75644d"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_rejected_response_v1"
+    },
+    "Release": {
+      "additional_fields": false,
+      "fields": {
+        "launch_nonce": "Text",
+        "ready": "Pin",
+        "schema": "literal:Release",
+        "start_binding": "Pin",
+        "start_issuance": "Pin",
+        "start_observation": "Pin",
+        "ticket": "Pin",
+        "worker_request": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_release_v1"
+    },
+    "RenderedTemplateObservation": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "input_capture": "Pin",
+        "observed_ns": "UInt",
+        "ordinal": "UInt",
+        "prompt": "PromptText",
+        "prompt_sha256": "Hash",
+        "prompt_utf8_bytes": "UInt",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_rendered_template_observation_v1"
+        },
+        "selected_input_ABI": "Pin",
+        "selected_renderer": "Pin",
+        "selected_template": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_rendered_template_observation_v1"
+    },
+    "ScientificTemplate": {
+      "additional_fields": false,
+      "fields": {
+        "canonical_id": {
+          "kind": "enum",
+          "values": [
+            "PAPER-FIND-050"
+          ]
+        },
+        "census_body": "OriginalSelectedCensusMinusCandidateDispatch",
+        "schema": "literal:ScientificTemplate",
+        "scope_digest": "Hash"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_scientifictemplate_v1"
+    },
+    "SelectionCapturePrefix": {
+      "fields": {
+        "authenticated": {
+          "kind": "boolean"
+        },
+        "complete_body": "MaybePin",
+        "observed_bytes": "UInt",
+        "parse_complete": {
+          "kind": "boolean"
+        },
+        "path": "Text",
+        "read_attempted": {
+          "kind": "boolean"
+        },
+        "requested_limit": "PositiveUInt",
+        "retained_prefix": "MaybePin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_selectioncaptureprefix_v2"
+        }
+      },
+      "kind": "closed_record",
+      "schema_literal": "ci_selectioncaptureprefix_v2"
+    },
+    "SignalObservation": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "attempt_ordinal": {
+          "kind": "literal",
+          "value": 0
+        },
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "first_error": {
+          "kind": "nullable",
+          "value_type": "FailureObservation"
+        },
+        "purpose": {
+          "kind": "enum",
+          "values": [
+            "planned_protocol_shutdown",
+            "failure_cleanup"
+          ]
+        },
+        "schema": {
+          "kind": "literal",
+          "value": "ci_signal_observation_v1"
+        },
+        "sent_ns": "MaybeUInt",
+        "server": "OriginalProcessIdentity",
+        "signal": {
+          "kind": "literal",
+          "value": "SIGTERM"
+        },
+        "state": "OperationResult"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_signal_observation_v1"
+    },
+    "SlotBody": {
+      "additional_fields": false,
+      "fields": {
+        "id": {
+          "kind": "literal",
+          "value": 0
+        },
+        "is_processing": {
+          "kind": "literal",
+          "value": false
+        },
+        "n_ctx": "PositiveUInt",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_slot_body_v1"
+        },
+        "speculative": {
+          "kind": "literal",
+          "value": false
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_slot_body_v1"
+    },
+    "SocketClosureObservation": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "first_error": {
+          "kind": "nullable",
+          "value_type": "FailureObservation"
+        },
+        "identity": "OwnedPathIdentity",
+        "observed_absent": {
+          "kind": "boolean"
+        },
+        "observed_ns": "MaybeUInt",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_socket_closure_observation_v1"
+        },
+        "state": "ClosureState",
+        "unlink_attempted": {
+          "kind": "boolean"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_socket_closure_observation_v1"
+    },
+    "SocketObservation": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "identity": "OwnedPathIdentity",
+        "listen_or_connected": {
+          "kind": "enum",
+          "values": [
+            "listener",
+            "connected"
+          ]
+        },
+        "observed_ns": "UInt",
+        "producer": {
+          "kind": "enum",
+          "values": [
+            "worker",
+            "host"
+          ]
+        },
+        "relative_path": {
+          "kind": "literal",
+          "value": "backend.sock"
+        },
+        "schema": {
+          "kind": "literal",
+          "value": "ci_socket_observation_v1"
+        },
+        "server": "OriginalProcessIdentity",
+        "socket_type": {
+          "kind": "literal",
+          "value": "AF_UNIX_STREAM"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_socket_observation_v1"
+    },
+    "SourceInitializationProof": {
+      "additional_fields": false,
+      "fields": {
+        "artifact_observations": "Pin[1:16]",
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "environment_observation": "Pin",
+        "executable_observation": "Pin",
+        "generation_G_ns": "UInt",
+        "generation_request_count": {
+          "kind": "literal",
+          "value": 0
+        },
+        "health": "Pin",
+        "initialization_J_ns": "UInt",
+        "last_probe_ordinal": "UInt",
+        "original_S_ns": "UInt",
+        "peer_observation": "Pin",
+        "process_observation": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_source_initialization_proof_v1"
+        },
+        "shutdown_R_ns": "UInt",
+        "slots": "Pin",
+        "socket_observation": "Pin",
+        "source_admission": "Pin",
+        "source_stage": {
+          "kind": "literal",
+          "value": "fresh_slot_task_completed_before_first_generation"
+        },
+        "spawn_observation": "Pin",
+        "worker_launch_ack": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_source_initialization_proof_v1"
+    },
+    "StartIssuance": {
+      "additional_fields": false,
+      "fields": {
+        "issued_ns": "UInt",
+        "issuer_identity": "OriginalProcessIdentity",
+        "schema": "literal:StartIssuance",
+        "source": "Pin",
+        "start_binding": "Pin",
+        "start_observation": "Pin"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_startissuance_v1"
+    },
+    "StartObservation": {
+      "additional_fields": false,
+      "fields": {
+        "actual_launch": "Pin",
+        "controller": "OriginalProcessIdentity",
+        "enforcement_observation": "Pin",
+        "host": "OriginalProcessIdentity",
+        "observed_ns": "UInt",
+        "ready": "Pin",
+        "schema": "literal:StartObservation",
+        "ticket": "Pin",
+        "whole_envelope": "OriginalWholeEnvelope",
+        "worker": "OriginalProcessIdentity",
+        "worker_envelope": "OriginalWorkerEnvelope"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_startobservation_v1"
+    },
+    "StreamClosureObservation": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "first_error": {
+          "kind": "nullable",
+          "value_type": "FailureObservation"
+        },
+        "schema": {
+          "kind": "literal",
+          "value": "ci_stream_closure_observation_v1"
+        },
+        "sides": "StreamSide[2:2]"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_stream_closure_observation_v1"
+    },
+    "StreamSide": {
+      "additional_fields": false,
+      "fields": {
+        "bytes_observed": "UInt",
+        "closed_ns": "MaybeUInt",
+        "eof_observed": {
+          "kind": "boolean"
+        },
+        "name": {
+          "kind": "enum",
+          "values": [
+            "stdout",
+            "stderr"
+          ]
+        },
+        "pending_bytes": "UInt",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_stream_side_v1"
+        },
+        "state": "ClosureState",
+        "unknown_physical_read": {
+          "kind": "boolean"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_stream_side_v1"
+    },
+    "SubtreeMember": {
+      "additional_fields": false,
+      "fields": {
+        "identity": "OriginalProcessIdentity",
+        "kind": {
+          "kind": "enum",
+          "values": [
+            "process",
+            "thread"
+          ]
+        },
+        "parent_identity": "OriginalProcessIdentity",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_subtree_member_v1"
+        },
+        "state": {
+          "kind": "enum",
+          "values": [
+            "alive",
+            "exited_reaped",
+            "unknown"
+          ]
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_subtree_member_v1"
+    },
+    "SubtreeObservation": {
+      "additional_fields": false,
+      "fields": {
+        "attempt": "Pin",
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "enumeration_complete": {
+          "kind": "boolean"
+        },
+        "excluded_live_worker": "MaybeProcess",
+        "members": "SubtreeMember[0:4096]",
+        "observed_ns": "UInt",
+        "producer": {
+          "kind": "enum",
+          "values": [
+            "worker",
+            "host"
+          ]
+        },
+        "root": "OriginalProcessIdentity",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_subtree_observation_v1"
+        },
+        "scope": {
+          "kind": "enum",
+          "values": [
+            "server_subtree",
+            "whole_arm"
+          ]
+        },
+        "unresolved_count": "UInt"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_subtree_observation_v1"
+    },
+    "WorkerLaunchAck": {
+      "additional_fields": false,
+      "fields": {
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "evidence_deadline_ns": "UInt",
+        "group_observation": "Pin",
+        "launch_request": "Pin",
+        "nonce": "Text",
+        "original_attempt": "Pin",
+        "original_start_ns": "UInt",
+        "owner_binding": "Pin",
+        "pair_id": "Text",
+        "request": "Pin",
+        "run_deadline_ns": "UInt",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_development_worker_launch_ack_v1"
+        },
+        "source_admission": "Pin",
+        "worker_identity": "OriginalProcessIdentity"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_development_worker_launch_ack_v1"
+    },
+    "WorkerTicket": {
+      "additional_fields": false,
+      "fields": {
+        "authority": "Pin",
+        "bootstrap_reservation": "Pin",
+        "campaign_id": "Text",
+        "clock": "Pin",
+        "controller_identity": "OriginalProcessIdentity",
+        "environment": "Pin",
+        "host_identity": "OriginalProcessIdentity",
+        "launch_nonce": "Text",
+        "lease": "Pin",
+        "mapping": "Pin",
+        "max_frame_bytes": "PositiveUInt",
+        "original_evidence_deadline_ns": "PositiveUInt",
+        "original_run_deadline_ns": "PositiveUInt",
+        "output_parent": "Text",
+        "parked_entry": "Pin",
+        "parked_source": "Pin[1:8192]",
+        "profile": "Pin",
+        "schema": "literal:WorkerTicket",
+        "stage_source": "Pin[1:8192]",
+        "terminal_name": "Text",
+        "terminal_reservation": "Pin",
+        "worker_bootstrap_subshare": "Dimensions"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_workerticket_v1"
+    },
+    "WorkspaceInventory": {
+      "additional_fields": false,
+      "fields": {
+        "complete": {
+          "kind": "literal",
+          "value": true
+        },
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "entries": "WorkspaceInventoryEntry[0:8192]",
+        "observed_ns": "UInt",
+        "pair_id": "Text",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_workspace_inventory_v1"
+        },
+        "workspace_identity": "OwnedPathIdentity"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_workspace_inventory_v1"
+    },
+    "WorkspaceInventoryEntry": {
+      "additional_fields": false,
+      "fields": {
+        "content": "MaybePin",
+        "identity": "OwnedPathIdentity",
+        "readonly": {
+          "kind": "boolean"
+        },
+        "relative_path": "Text",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_workspace_inventory_entry_v1"
+        }
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_workspace_inventory_entry_v1"
+    },
+    "WorkspaceObservation": {
+      "additional_fields": false,
+      "fields": {
+        "condition": "Condition",
+        "cost_prefix": "CostPrefix",
+        "filesystem_identity": "Pin",
+        "inventory": "Pin",
+        "pair_id": "Text",
+        "private_control": "Text",
+        "process_exists": {
+          "kind": "literal",
+          "value": false
+        },
+        "recipe": "Pin",
+        "schema": {
+          "kind": "literal",
+          "value": "ci_prelaunch_workspace_observation_v1"
+        },
+        "workspace": "Text"
+      },
+      "kind": "closed_record",
+      "required": "all",
+      "schema_literal": "ci_prelaunch_workspace_observation_v1"
+    }
+  },
+  "relations": {
+    "BackendAttemptTopology": "Mandatory BACKEND_PAYLOAD_CONTRACT.attempt_identity_v3. Base first, child observations pin base, later source-owned snapshots pin base+previous; no observation pins its future snapshot. Exact all-consumer table required.",
+    "BackendChildPayloads": "All newly bound child Pins require exact closed bodies, parent/condition/attempt/nonce/ordinal equality and their actual fixed private producer. Wire decoding cannot create authority.",
+    "CompleteBackendClosure": "status=complete requires purpose=planned_protocol_shutdown, admission/initialization/server_identity/exit_observation/signal_observation/group_observation/socket_closure/stream_closure all nonnull, exit_code exactly integer0, pending_requests0, first_error null, forced_group_cleanup false and all captured requests complete. group_observation here proves only the actual server-owned subtree/threads has closed within the original arm group; it neither claims the still-live worker has exited nor that the entire arm group is empty. Exact same server attempt and original deadlines required. The later H finish_pair gate separately requires worker natural exit0 and full arm group/stream/workspace closure. Pins alone establish neither proof.",
+    "CompleteExchange": "status=complete requires started_ns/finished_ns/response nonnull, first_error null, request_complete=response_complete=known_closed, actual exact same source-owned request/admission/attempt and next ordinal; finished_ns>=started_ns within original deadlines. A failed initial clock cannot create a complete exchange. Unknown physical transfer counts/reservations persist; no retry and no inferred zero.",
+    "Completion": "A successful worker-produced BackendClosure certifies only the admitted server protocol. Failure cleanup remains permanently ineligible even if server exit_code0. H produces DevelopmentCompletion-v3 only later, after its actual independent worker natural exit0 and full original group/stream/workspace closure, joining the already captured BackendClosure. The worker never attests its own future exit.",
+    "DeadlineDerivation": "Let S be H-observed actual original worker start, D the unchanged MatchedSchedule.duration_ns, L the immutable launch latest_launch_ns+D bound and E the unchanged original evidence cutoff. Original Attempt.run_deadline R=S+D<=L<=common_cutoff<=original run deadline. WorkerLaunchAck carries S,R,E from that actual attempt. With positive selected initialization I and shutdown Q, require I+Q<D before either launch. Set generation_deadline G=R-Q, initialization_deadline J=min(S+I,G), shutdown_deadline R. BackendAttempt fields and H BackendAdmissionAck must equal these exact values. Initialization readiness <=J, H admission <G, every generation response finishes <=G, planned server shutdown and worker-owned closure/publication/natural exit finish <=R. H later evidence capture uses original E only. Checked original-clock integer arithmetic; no retry-based/readiness-based origin, added allowance or renewed clock.",
+    "DevelopmentContractIdentity": "The five constituent pins are exactly original DevelopmentContract.input_pins order [profile,policy,worker,whole,environment]. Full bytes of each earlier authenticated input remain authoritative; derived public/filtered objects are not substitutes. Pinning the profile also pins its backend/native/source/clock/source selection fields; no qualifier or object is inferred from a hash. No successful admission return and no PreparationHandle, pair nonce or arm filesystem effect. The existing actual parent retains the raw first and all failed/unknown publication/close effects; use the already selected postselection FailurePrefix/original-owner path when its required diagnostics can actually be captured. If failure publication also fails, retain actual private failure custody without a fabricated wire Pin. Do not emit PreparationFailure with a null, constituent, planned, computed-but-unpublished or future contract identity.",
+    "FailureRepresentability": "BackendClosure failed/unknown variants allow group/socket/stream/exit/admission/initialization observations to be null exactly when that operation did not return a complete captured observation; null never means closed. Exchange.started_ns may be null if the first clock observation failed, and finished_ns may be null independently. All raw first/secondary exceptions and live/unknown handles remain with the actual owner even if their diagnostic Pin cannot be published. DevelopmentFailure can retain null backend_attempt before a complete attempt snapshot exists; no missing snapshot implies no child.",
+    "InitialSlots": "Exactly one fresh slot with id0, selected n_ctx, speculative=false,is_processing=false; no id_task,params,next_token,n_prompt_tokens,n_prompt_tokens_processed,n_prompt_tokens_cache fields before any generation. Missing fields mean absent, not measured zero. Entire HTTP JSON and source/native freshness proof are required; these values alone grant no admission.",
+    "Limits": "0<microbatch_tokens<=batch_tokens<=context_tokens; max requests<=8192; context and token capacity require selected model metadata compatibility and measured physical fit. Positive bounded n_predict is never a hard physical byte ceiling.",
+    "PreparationFailure": "prepare_pair_v2 returns actual PreparationOutcomeHandle. Before promotion, PreparationFailure covers every attempted prefix without requiring a future launch Pin. FailurePrefix is an optional second diagnostic publication, never a prerequisite to retaining the original error.",
+    "Request": "prompt_bytes equals actual UTF8 prompt length, bounded prompt plus full encoded request fits profile maximum_request_bytes; ordinal exactly next expected once-only generation ordinal; admission same actual handle; n_predict equals selected profile maximum_generated_tokens. No implicit zero token initialization probe. CompletionRequest-v2 serializes the fixed response_fields array in BACKEND_PAYLOAD_CONTRACT; it is not a caller field.",
+    "Sampling": "0<=seed<=4294967294, never random sentinel; 0<=temperature_milli<=2000,0<=top_p_milli<=1000,0<=min_p_milli<=1000,0<=top_k<=context_tokens,0<repeat_penalty_milli<=4000. Request sampling equals profile exactly; fixed-point values serialize as exact 3-decimal JSON numbers. No per-request sampler/seed override.",
+    "SchemaSelection": "The four inherited v3 replacements remain effective. This successor additionally requires CompletionRequest-v2 and the exact child bindings in BACKEND_PAYLOAD_CONTRACT. No v1 request or v2 development fallback. V3 requires BackendAttempt-v2 and both new closed identities with the exact complete current nominal bindings; no historical V1/V2 design fallback by matching schema strings alone.",
+    "ServerSubtreeClosure": "The worker retains its actual server Popen/process identity and independently qualified native ownership proof for every server descendant/thread in the same original arm group. Successful BackendClosure.group_observation names that exact server subtree, excludes the still-live fixed worker, and records no unresolved server-owned member. The exact native producer is required, not inferred from a wait status or empty child list; unavailable proof makes closure failed/unknown. H later independently requires the entire original arm group empty after worker exit.",
+    "WorkerLaunchAck": "Actual H-owned original DevelopmentAttempt Popen/identity/group observation only, captured after spawn; exact nonce,request,launch_request,pair,condition,original start and deadlines. Fixed entry waits for this ack before any server spawn; it cannot be a prelaunch input."
+  },
+  "schema": "four_backend_v3_complete_effective_records",
+  "status": "INACTIVE_COMPLETE_PROPOSAL_REQUIRES_DIFFERENT_REVIEW_AND_ROOT_ADOPTION",
+  "successor_identity_replacements": {
+    "BackendAttempt": {
+      "new": "ci_llama_backend_attempt_v2",
+      "old": "ci_llama_backend_attempt_v1",
+      "rule": "Explicit stable base plus earlier-only immutable snapshots; no V1 fallback."
+    }
+  },
+  "successor_replacements": {
+    "CompletionRequest": {
+      "new": "ci_llama_completion_request_v2",
+      "old": "ci_llama_completion_request_v1",
+      "wire_change": "Fixed source response_fields literal; no participant-selectable projection"
+    }
+  },
+  "versioned_external_changes": {
+    "EarlyOwnerCarryV2": {
+      "same_live_owner_requirement": "Adopt exact EarlyOwner admitted from seed v2, full construction/development/failure prefixes and active starts; original root plan schema v3 fields remain the two earlier pins. Never recreate Share or merge counters."
+    },
+    "HostObserverDevelopmentV2": {
+      "dispatch": "Separate exact method/closed request. Never call old start using a semantic alias. Internal shared primitives require complete source review; no implementation is granted here.",
+      "method": "HostObserver.start_development_v2(launch_request, *, early_owner, pair_handle)",
+      "new_mode": "ci_development_v2",
+      "old_start_mode_domain_unchanged": [
+        "n056_outer",
+        "n098_bridge",
+        "ci_stage",
+        "hm_stage",
+        "coordinator"
+      ]
+    },
+    "OutputContract": {
+      "base": "actual complete_job_output_contract_v1",
+      "candidate": "producer_source=null; producer_by_condition both actual sealed report producers",
+      "every_row_adds": {
+        "producer_by_condition": "ArmMap|null"
+      },
+      "missing_routes": "Required_unscorable preserved; every new map value absent when row unavailable, producer_by_condition=null",
+      "new_schema": "critical_init_complete_job_output_contract_v2",
+      "noncandidate": "producer_source exact inherited descriptor/null; producer_by_condition=null",
+      "top_fields_unchanged": true
+    },
+    "RootPlanCI": {
+      "base": "root_resource_plan_schema",
+      "exact_added_fields": {
+        "early_handoff": "Pin",
+        "early_selection": "Pin"
+      },
+      "new_schema": "four_root_resource_plan_ci_precommit_v3",
+      "unchanged": "All inherited fields except schema literal; only CI branch. Actual EarlyOwner required separately, never recreated from these pins."
+    },
+    "StartBinding": {
+      "fields_unchanged": true,
+      "producer_join": "actual StartObservation -> unchanged binding -> StartIssuance -> Release",
+      "schema": "critical_init_original_stage_start_binding_v3"
+    },
+    "WorkerRequest": {
+      "delivery": "Created after actual StartBinding, received through Release",
+      "fields_unchanged": true,
+      "schema": "critical_init_original_worker_request_v3"
+    }
+  }
+}

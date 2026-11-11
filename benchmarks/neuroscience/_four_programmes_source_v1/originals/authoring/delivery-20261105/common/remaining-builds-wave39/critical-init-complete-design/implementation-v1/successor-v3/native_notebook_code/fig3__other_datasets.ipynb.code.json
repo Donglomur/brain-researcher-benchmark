@@ -1,0 +1,167 @@
+{
+  "all_code_cells_preserved_in_order": true,
+  "code_cells": [
+    {
+      "joined_source_sha256": "da891981ff07fc687ba1d5cd9e3ca220cd6d2fdcc42affd4a57d6058d903cd20",
+      "joined_utf8_bytes": 62,
+      "original_cell_index": 1,
+      "source": [
+        "!pip install nlb_tools\n",
+        "!pip install mat73\n",
+        "!pip install natsort"
+      ],
+      "syntax_only": {
+        "line": 1,
+        "message": "invalid syntax",
+        "python_ast": "not_plain_python_or_incomplete"
+      }
+    },
+    {
+      "joined_source_sha256": "ab294b5f75b25f85a7b3542a0a57e5a8a20cc84906a9639e79507c8be2d21580",
+      "joined_utf8_bytes": 78,
+      "original_cell_index": 2,
+      "source": [
+        "# !pip install pandas --upgrade # might be necessary if there is a numpy error"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "5f9d59f61fd6b17fe174bdbc32d5a6b57830ca03f27085df474a6d9f9c43503a",
+      "joined_utf8_bytes": 126,
+      "original_cell_index": 3,
+      "source": [
+        "from pathlib import Path\n",
+        "import sys\n",
+        "sys.path.insert(0, '../')\n",
+        "import other_datasets \n",
+        "\n",
+        "Path('../results').mkdir(exist_ok=True)\n"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "977f12478e36f4ae7afaceb55841572d582307cd8b34a1f30be630441ec0029a",
+      "joined_utf8_bytes": 96,
+      "original_cell_index": 5,
+      "source": [
+        "# M1/PMd\n",
+        "!dandi download https://gui.dandiarchive.org/#/dandiset/000128\n",
+        "other_datasets.mc_maze()"
+      ],
+      "syntax_only": {
+        "line": 2,
+        "message": "invalid syntax",
+        "python_ast": "not_plain_python_or_incomplete"
+      }
+    },
+    {
+      "joined_source_sha256": "af59637da412b2d68876beaeacb611f8cb3abfe06d31f0228ac99df09166d07c",
+      "joined_utf8_bytes": 98,
+      "original_cell_index": 6,
+      "source": [
+        "# area2\n",
+        "!dandi download https://gui.dandiarchive.org/#/dandiset/000127\n",
+        "other_datasets.area2_bump()"
+      ],
+      "syntax_only": {
+        "line": 2,
+        "message": "invalid syntax",
+        "python_ast": "not_plain_python_or_incomplete"
+      }
+    },
+    {
+      "joined_source_sha256": "f2ed14e024bc49d2a63d2225f7008988e500a4fce6ee1d4b78f7a506d04a29bd",
+      "joined_utf8_bytes": 91,
+      "original_cell_index": 7,
+      "source": [
+        "# M1\n",
+        "!dandi download https://gui.dandiarchive.org/#/dandiset/000129\n",
+        "other_datasets.mc_rtt()"
+      ],
+      "syntax_only": {
+        "line": 2,
+        "message": "invalid syntax",
+        "python_ast": "not_plain_python_or_incomplete"
+      }
+    },
+    {
+      "joined_source_sha256": "12a07fdc8ab645d5c9699783791b363acc9248457692b34cef52fd5b044f4c4c",
+      "joined_utf8_bytes": 115,
+      "original_cell_index": 9,
+      "source": [
+        "# downloads dataset to root folder\n",
+        "root = '/media/carsen/disk2/zhong-et-al-2025/'\n",
+        "other_datasets.zhong_visual(root)"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "2031aef884cb1c48b266f76e6a6cd226ff1624614ad1576804a0f08d97977d4f",
+      "joined_utf8_bytes": 193,
+      "original_cell_index": 10,
+      "source": [
+        "## uncomment this line to download (~15GB)\n",
+        "# !wget https://dandiarchive.s3.amazonaws.com/blobs/767/1e9/7671e910-459e-40c0-b24b-d8190a4408f1\n",
+        "# root = Path.cwd()\n",
+        "other_datasets.plitt_hippo(root)\n"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "07cc6e20f341c76e3dd49f03b70f94184acef49e226e247fcb986e15df496712",
+      "joined_utf8_bytes": 178,
+      "original_cell_index": 11,
+      "source": [
+        "### need to download Achilles data from https://crcns.org/data-sets/hc/hc-11/about-hc-11\n",
+        "root = '/media/carsen/disk2/hc-11/' # folder w/ data\n",
+        "other_datasets.grosmark_hippo(root)\n"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "e72966c01eb9dfa8b9bd1a9a8506f6583a5253f5734deee3a0949226e3dd876d",
+      "joined_utf8_bytes": 199,
+      "original_cell_index": 13,
+      "source": [
+        "import numpy as np\n",
+        "fnames = ['achilles', 'plitt', 'zhong', 'mc_maze', 'mc_rtt', 'area2_bump']\n",
+        "dsets = {fname: np.load(f'../results/{fname}_results.npy', allow_pickle=True).item() for fname in fnames}"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    },
+    {
+      "joined_source_sha256": "4ea064984275058f65c53993b6f7fda41bb4f8884edfa9f33e5206387278d32a",
+      "joined_utf8_bytes": 146,
+      "original_cell_index": 14,
+      "source": [
+        "import importlib \n",
+        "importlib.reload(other_datasets)\n",
+        "fig = other_datasets.suppfig_rotate(dsets, fnames)\n",
+        "fig.savefig('../figures/suppfig_rotate.pdf')"
+      ],
+      "syntax_only": {
+        "python_ast": "passed_not_executed"
+      }
+    }
+  ],
+  "executed": false,
+  "notebook_outputs_markdown_attachments_not_retained": true,
+  "original_blob_bytes": 4270,
+  "original_blob_sha256": "611fbcae8b7fe30108db5b26256aa50dd438664f8efee01cc073818bb5e40513",
+  "original_cell_count": 15,
+  "original_git_blob": "da208b1a1c93a9ea604e18a64e894b69d89eb6ec",
+  "original_repository_path": "fig3/other_datasets.ipynb",
+  "schema": "exact_notebook_code_cell_projection_v1"
+}

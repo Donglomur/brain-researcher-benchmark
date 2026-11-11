@@ -1,0 +1,347 @@
+{
+  "schema": "critical_init_recovered_source_scientific_addendum_v1",
+  "recovery_report": {
+    "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-ordinary-source-recovery-v1/RECOVERY_API_BLOBS.json",
+    "bytes": 13496,
+    "sha256": "598cca0e508930db73af9f6fa1e13b2b5b9b0074f5fbadba3ff7c64b955dfd9d"
+  },
+  "accepted_original_conflicts_retained": 17,
+  "new_source_findings": [
+    {
+      "id": "R01",
+      "source": {
+        "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-complete-design/implementation-v1/native_recovered/simulations.py",
+        "bytes": 14461,
+        "sha256": "cc82b889063f6cb57adba6e6a572411c36772d42daa0f2847ce923ab37c57f95"
+      },
+      "function": "simulate_random",
+      "source_lines": [
+        63,
+        114
+      ],
+      "finding": "Source integration uses dt/tau times independent unit Gaussian eps, not a fixed diffusion-amplitude sqrt(dt) law. Keep actual millisecond units and noise normalization; independent continuous OU mapping declares its diffusion coefficient.",
+      "affected": "F1,F2g-i,F3d,ED1-4",
+      "status": "requires_independent_source_scientific_review",
+      "original_conflicts_unchanged": true,
+      "shared_A_B_clarification_required": true
+    },
+    {
+      "id": "R02",
+      "source": {
+        "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-complete-design/implementation-v1/native_recovered/simulations.py",
+        "bytes": 14461,
+        "sha256": "cc82b889063f6cb57adba6e6a572411c36772d42daa0f2847ce923ab37c57f95"
+      },
+      "function": "random_connectivity",
+      "source_lines": [
+        16,
+        61
+      ],
+      "finding": "Source symmetric draw mirrors the strict lower triangle, partially symmetric draw mixes upper and lower triangles, std uses Torch correction; trunc_gaussian is centered absolute Gaussian. Independent average-symmetrization/truncated-normal routes are separately named methods.",
+      "affected": "F1,ED1-3",
+      "status": "requires_independent_source_scientific_review",
+      "original_conflicts_unchanged": true,
+      "shared_A_B_clarification_required": true
+    },
+    {
+      "id": "R03",
+      "source": {
+        "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-complete-design/implementation-v1/native_recovered/fig4/sparse_clustered_local_sims.py",
+        "bytes": 12536,
+        "sha256": "11e309e0cf863992d004ed64b01ee9208697ab614d2112127f65dbf22986b75a"
+      },
+      "function": "sparse_evals",
+      "source_lines": [
+        7,
+        53
+      ],
+      "finding": "Recovered sparse/cluster/local source normalizes to0.999, while accepted paper-description bank said0.998. Literal0.999 and paper0.998 outputs are separate; published invocation requires adjudication.",
+      "affected": "F4a-c",
+      "status": "requires_independent_source_scientific_review",
+      "original_conflicts_unchanged": true,
+      "shared_A_B_clarification_required": true
+    },
+    {
+      "id": "R04",
+      "source": {
+        "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-complete-design/implementation-v1/native_recovered/fig4/sparse_clustered_local_sims.py",
+        "bytes": 12536,
+        "sha256": "11e309e0cf863992d004ed64b01ee9208697ab614d2112127f65dbf22986b75a"
+      },
+      "function": "local_connectivity",
+      "source_lines": [
+        114,
+        134
+      ],
+      "finding": "Positions are scaled to8000 but analysis.circ_dist uses minimum(d,1-d). Corrected8000um torus is separate. The same unit-period expression also appears in PC localization diagnostics.",
+      "affected": "F4c-g",
+      "status": "requires_independent_source_scientific_review",
+      "original_conflicts_unchanged": true,
+      "shared_A_B_clarification_required": true
+    },
+    {
+      "id": "R05",
+      "source": {
+        "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-complete-design/implementation-v1/native_recovered/fig4/analysis.py",
+        "bytes": 7275,
+        "sha256": "1a89885bac11bef9c66d065b33e575121a0a84f4a8e8fa75ee8428f8e87aad28"
+      },
+      "function": "strong_pairs",
+      "source_lines": [
+        11,
+        100
+      ],
+      "finding": "Literal source takes round(pstrong*N) sorted correlations per row, without a positive-only constraint, uses strict distance>20, uint16 bin counts and N-nstrong denominator. Keep per-neuron averaging and undefined bins; do not substitute histogram renormalization.",
+      "affected": "F4d-f",
+      "status": "requires_independent_source_scientific_review",
+      "original_conflicts_unchanged": true,
+      "shared_A_B_clarification_required": true
+    },
+    {
+      "id": "R06",
+      "source": {
+        "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-complete-design/implementation-v1/native_recovered/fig5/fig5.py",
+        "bytes": 15688,
+        "sha256": "6e67b4b768a5bb827370b99027ed4e0e3b6eb758904d5baf053d9adb2ea72e35"
+      },
+      "function": "decode_kmeans",
+      "source_lines": [
+        217,
+        242
+      ],
+      "finding": "Binary run_multishot calls normalized class-centroid decoder with two random folds, while paper design states1NN. Repeated objects are drawn directly inN dimensions unless wrot provided. Paper, literal native and corrected methods remain distinct.",
+      "affected": "F5d",
+      "status": "requires_independent_source_scientific_review",
+      "original_conflicts_unchanged": true,
+      "shared_A_B_clarification_required": true
+    },
+    {
+      "id": "R07",
+      "source": {
+        "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-complete-design/implementation-v1/native_recovered/fig5/fig5.py",
+        "bytes": 15688,
+        "sha256": "6e67b4b768a5bb827370b99027ed4e0e3b6eb758904d5baf053d9adb2ea72e35"
+      },
+      "function": "decode",
+      "source_lines": [
+        244,
+        282
+      ],
+      "finding": "Source zero-shot targets normalized embeddedN-dimensional inputs and solves Gxx/n + lambdaI withlambda10. Independent100-feature decoder/ridge-on-sums is a different declared method.",
+      "affected": "F5e-f",
+      "status": "requires_independent_source_scientific_review",
+      "original_conflicts_unchanged": true,
+      "shared_A_B_clarification_required": true
+    },
+    {
+      "id": "R08",
+      "source": {
+        "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-complete-design/implementation-v1/native_recovered/fig5/fig5.py",
+        "bytes": 15688,
+        "sha256": "6e67b4b768a5bb827370b99027ed4e0e3b6eb758904d5baf053d9adb2ea72e35"
+      },
+      "function": "time_shuffle",
+      "source_lines": [
+        437,
+        442
+      ],
+      "finding": "get_acc_shuffle and get_acc_kmeans_shuffle cumulatively mutate out[:j] then decode out[0], excluding current delayj; this is not independent uniform continuous-time readout. Mutation and NumPy/Torch RNG coupling are retained.",
+      "affected": "F5d-f",
+      "status": "requires_independent_source_scientific_review",
+      "original_conflicts_unchanged": true,
+      "shared_A_B_clarification_required": true
+    },
+    {
+      "id": "R09",
+      "source": {
+        "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-complete-design/implementation-v1/native_recovered/fig5/fig5.py",
+        "bytes": 15688,
+        "sha256": "6e67b4b768a5bb827370b99027ed4e0e3b6eb758904d5baf053d9adb2ea72e35"
+      },
+      "function": "run_zeroshot",
+      "source_lines": [
+        294,
+        341
+      ],
+      "finding": "Source catches exceptions and leaves NaN accuracy cells. All original failures remain required-unscorable; outer natural exit0 cannot qualify the output. Helper niter default10 is overridden by the recovered notebook to20.",
+      "affected": "F5d-f",
+      "status": "requires_independent_source_scientific_review",
+      "original_conflicts_unchanged": true,
+      "shared_A_B_clarification_required": true
+    },
+    {
+      "id": "R10",
+      "source": {
+        "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-complete-design/implementation-v1/native_recovered/simulations.py",
+        "bytes": 14461,
+        "sha256": "cc82b889063f6cb57adba6e6a572411c36772d42daa0f2847ce923ab37c57f95"
+      },
+      "function": "ca_imaging_noise_dcnv",
+      "source_lines": [
+        205,
+        238
+      ],
+      "finding": "udcnv.apply uses an external sim_right_flex.th model and Suite2p baseline_maximin; broad except returns undeconvolved fluorescence. Native completion must positively establish deconvolution, never treat fallback as parity.",
+      "affected": "ED4,F2g-h,ED6e",
+      "status": "requires_independent_source_scientific_review",
+      "original_conflicts_unchanged": true,
+      "shared_A_B_clarification_required": true
+    },
+    {
+      "id": "R11",
+      "source": {
+        "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-complete-design/implementation-v1/native_recovered/fig3/other_datasets.py",
+        "bytes": 29564,
+        "sha256": "91fa73b943e718908a2ef3bfe8ccdcb68e05ab39802a690cebb4c13616aece71"
+      },
+      "function": "suppfig_rotate",
+      "source_lines": [
+        405,
+        659
+      ],
+      "finding": "ED8g recovered renderer selects abs(eigenvalue)>.1, not caption real(eigenvalue)>.1. Intermediate diagnostics use modulus>.25; do not conflate them.",
+      "affected": "ED8g",
+      "status": "requires_independent_source_scientific_review",
+      "original_conflicts_unchanged": true,
+      "shared_A_B_clarification_required": true
+    },
+    {
+      "id": "R12",
+      "source": {
+        "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-complete-design/implementation-v1/native_recovered/fig3/other_datasets.py",
+        "bytes": 29564,
+        "sha256": "91fa73b943e718908a2ef3bfe8ccdcb68e05ab39802a690cebb4c13616aece71"
+      },
+      "function": "mc_rtt",
+      "source_lines": [
+        273,
+        335
+      ],
+      "finding": "Recovered source uses15-degree reach-angle bins across360degrees, potentially24bins; accepted support phrase15reach-anglebins does not mean15conditions. Preserve actual max-bin+1 and all empty-condition dispositions.",
+      "affected": "ED8e",
+      "status": "requires_independent_source_scientific_review",
+      "original_conflicts_unchanged": true,
+      "shared_A_B_clarification_required": true
+    },
+    {
+      "id": "R13",
+      "source": {
+        "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-complete-design/implementation-v1/native_recovered/fig3/other_datasets.py",
+        "bytes": 29564,
+        "sha256": "91fa73b943e718908a2ef3bfe8ccdcb68e05ab39802a690cebb4c13616aece71"
+      },
+      "function": "zhong_visual",
+      "source_lines": [
+        141,
+        213
+      ],
+      "finding": "Source makes an unconditional Figshare metadata request and conditionally downloads files. Original native route is not offline-ready; no network access or substitute data acquisition is selected. Original session identity and local offline provenance remain gates.",
+      "affected": "ED8c",
+      "status": "requires_independent_source_scientific_review",
+      "original_conflicts_unchanged": true,
+      "shared_A_B_clarification_required": true
+    },
+    {
+      "id": "R14",
+      "source": {
+        "path": "authoring/delivery-20261105/common/remaining-builds-wave39/critical-init-complete-design/implementation-v1/native_recovered/simulations.py",
+        "bytes": 14461,
+        "sha256": "cc82b889063f6cb57adba6e6a572411c36772d42daa0f2847ce923ab37c57f95"
+      },
+      "function": "tbin_analysis",
+      "source_lines": [
+        138,
+        166
+      ],
+      "finding": "Exact known ED3 source grid is unique(round(exp(linspace(log1,log2000,20))))*6ms with40parallel traces; ED4 grids and nearcritical source grids now known. Original invocation/RNG state remain distinct from helper defaults.",
+      "affected": "ED3,ED4,F2g-i",
+      "status": "requires_independent_source_scientific_review",
+      "original_conflicts_unchanged": true,
+      "shared_A_B_clarification_required": true
+    }
+  ],
+  "does_not_waive_any_original_gate": true,
+  "updated_status": "Historical missing .py and four notebook-caller claims are superseded by15 recovered ordinary files and29 exact code cells. NOTEBOOK_CALLER_CONTRACT resolves20 memory replicates/50delays while retaining new source discrepancies and original raster/rendered-result lineage gaps. Data/schema, dependencies/weights, reference and native qualification remain required.",
+  "precise_known_source_grids": {
+    "ED1": {
+      "distributions": [
+        "binary",
+        "gaussian",
+        "trunc_gaussian",
+        "exponential"
+      ],
+      "replicates": 10,
+      "seed_function": "set_seed(0) at entireprogramme entry, not percell"
+    },
+    "ED2_ED4": {
+      "nonsym": [
+        0,
+        0.3333333333333333,
+        0.6666666666666666,
+        1
+      ],
+      "replicates": 10,
+      "poisson": [
+        0.7,
+        0.5,
+        0.3,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "shot": [
+        null,
+        null,
+        null,
+        0.5,
+        0.2,
+        0.08
+      ],
+      "neuron_formula": "unique(round(exp(linspace(log250,log10000,10))))",
+      "time_formula": "unique(round(exp(linspace(log(23*60*15),log194720,10))))[::-1]"
+    },
+    "ED3": {
+      "formula": "unique(round(exp(linspace(log1,log2000,20))))",
+      "base_bin_seconds": 0.006,
+      "parallel_traces": 40,
+      "replicates": 10,
+      "families": [
+        0,
+        1
+      ]
+    },
+    "F2i": {
+      "formula": "arange(0.975,0.9985,0.001)",
+      "replicates": 10,
+      "covariance_eigenvalues": ".5/(1-connectivity_eigenvalue)"
+    },
+    "F4a": {
+      "formula": "2**arange(-12,-1)",
+      "count": 11,
+      "replicates": 10,
+      "source_maximum_eigenvalue": 0.999
+    },
+    "F4b_c": {
+      "formula": "2**arange(-12,0)",
+      "count": 12,
+      "replicates": 10,
+      "source_maximum_eigenvalue": 0.999,
+      "cluster_size": 500,
+      "local_peak": 0.5,
+      "local_sigma_um": 250
+    },
+    "F4e": {
+      "formula": "10**arange(-3,0,.25)",
+      "count": 12,
+      "denominator": "first-replicate probability-matrix mean pconn"
+    },
+    "F5": {
+      "paper_full_curves": 360,
+      "delay_grid": "Exact notebook uses50delays; see NOTEBOOK_CALLER_CONTRACT.json",
+      "source_function_default_replicates": 10,
+      "notebook_invoked_replicates": 20,
+      "paper_replicates": 20,
+      "curve_delay_cells": 18000
+    }
+  }
+}
