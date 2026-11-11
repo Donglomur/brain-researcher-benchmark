@@ -1,111 +1,53 @@
 {
-  "schema_version": 1,
-  "id": "NEURAL-041",
-  "track": "neural",
-  "title": "Working-memory load decoding",
-  "status": "specification_only",
-  "source_identity": {
-    "ids": [
-      "D-P001"
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
     ],
-    "titles": [
-      "Human hippocampal/frontal working-memory LFP and single-unit recordings"
-    ],
-    "overlap_groups": [
-      "human-working-memory-dandi-000673"
-    ],
-    "task_family": "working_memory"
+    "common_policy": {
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost."
+    }
   },
-  "scientific_question": "Do equal-duration maintenance LFP/spike windows distinguish low and high memory load across patients?",
-  "task_type": "prediction",
-  "neural_role": "input",
-  "primary_outputs": [
-    "Memory-load probabilities per eligible maintenance interval."
-  ],
-  "input_assets": {
-    "routes": [
-      "https://dandiarchive.org/dandiset/000673/0.240118.2135",
-      "https://www.nature.com/articles/s41586-024-07309-z",
-      "https://github.com/rutishauserlab/SBCAT-release-NWB",
-      "https://api.dandiarchive.org/api/assets/9a0b7309-0322-4fee-bd81-1f24da41960b/",
-      "https://raw.githubusercontent.com/rutishauserlab/SBCAT-release-NWB/a25e8cc3f61630a428f190381745257d4506f148/README.md",
-      "https://raw.githubusercontent.com/rutishauserlab/SBCAT-release-NWB/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/NWB_SBCAT_analysis_main.m",
-      "https://raw.githubusercontent.com/rutishauserlab/SBCAT-release-NWB/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_LFP.m",
-      "https://raw.githubusercontent.com/rutishauserlab/SBCAT-release-NWB/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_SU.m"
-    ],
-    "readiness_records": [
-      {
-        "source_id": "D-P001",
-        "ledger": "readiness/signals_readiness.json",
-        "record_sha256": "a6714c89580f7660c78eb432c1e2f5000d9ff7ccfb8924344c80d153fa001f8c",
-        "data_manifest": {
-          "version": "0.240118.2135",
-          "number_of_files": 44,
-          "number_of_subjects": 36,
-          "total_bytes": 23447043476,
-          "example_asset": {
-            "path": "sub-4/sub-4_ses-1_ecephys+image.nwb",
-            "asset_id": "9a0b7309-0322-4fee-bd81-1f24da41960b",
-            "bytes": 1089980788,
-            "sha256": "3156dc7fc6dd19f402f88743c7d266627ee2ca7ec70cb80511a78e2d6fb015fa"
-          },
-          "manifest_url": "https://api.dandiarchive.org/api/dandisets/000673/versions/0.240118.2135/assets/"
-        },
-        "recording_contract": {
-          "neural": "Actual HDF5 structural metadata confirms acquisition/LFPs/data shape547700×69,float64;units/spike_times and spike_times_index",
-          "labels": "Actual intervals/trials keys:loads,response_accuracy,probe_in_out,PicIDs_Encoding1/2/3,PicIDs_Probe,timestamps_Maintenance,timestamps_Probe,timestamps_Response and encoding timestamps.",
-          "time_alignment": "acquisition/LFPs/starting_time and rate in NWB; trial timestamps in seconds; original PAC helper aligns maintenance windows. No neural values read in this audit.",
-          "biological_ids": "general/subject/subject_id present; sub4ses1 inspected;36biological participants from archivemetadata,44sessionfiles",
-          "evidence": "HTTP range inspection of structural metadata on one asset from each of2024and2025published snapshots; originalMATLABhelpers match bothLFP/trialschemas."
-        },
-        "status": "artifact_ready"
-      }
-    ],
-    "exact_asset_records": [
-      {
-        "source_id": "D-P001",
-        "ledger": "readiness/signals_readiness.json",
-        "source_json_pointer": "/data_manifest/example_asset",
-        "record": {
-          "path": "sub-4/sub-4_ses-1_ecephys+image.nwb",
-          "asset_id": "9a0b7309-0322-4fee-bd81-1f24da41960b",
-          "bytes": 1089980788,
-          "sha256": "3156dc7fc6dd19f402f88743c7d266627ee2ca7ec70cb80511a78e2d6fb015fa"
-        },
-        "local_payload_verified_by_this_builder": false
-      }
-    ],
-    "missing_or_unverified": [
-      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
-    ]
+  "admission": {
+    "reason": "Public source export with exact external roster dependency; all 24 gates open and no issued operator or qualified execution.",
+    "research_qualified": false,
+    "runnable": false,
+    "submission_ready": false
   },
   "allowed_inputs": {
-    "neural_measurements": "Actual HDF5 structural metadata confirms acquisition/LFPs/data shape547700×69,float64;units/spike_times and spike_times_index",
     "allowed_context": "Actual intervals/trials keys:loads,response_accuracy,probe_in_out,PicIDs_Encoding1/2/3,PicIDs_Probe,timestamps_Maintenance,timestamps_Probe,timestamps_Response and encoding timestamps.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "acquisition/LFPs/starting_time and rate in NWB; trial timestamps in seconds; original PAC helper aligns maintenance windows. No neural values read in this audit.",
-    "source_contract_evidence": "HTTP range inspection of structural metadata on one asset from each of2024and2025published snapshots; originalMATLABhelpers match bothLFP/trialschemas."
+    "allowed_context_policy": "Operator-only source metadata stays protected. Actor epochs contain only LFP volts/area indices and relative spikes/ragged unit offsets/area indices, opaque IDs and normalized timestamps/order. Training only adds labels and patient groups; held queries omit target, patient/session originals, trial/event/order/PicID/probe/correctness/load/stimulus-count cues.",
+    "neural_measurements": "Required source schema: LFP arrays and spike-time/ragged-index arrays. No authentic shapes, values or headers are distributed.",
+    "source_contract_evidence": "Documentary source contract only; complete authentic input, preprocessing and clock qualification remains required.",
+    "time_alignment": "acquisition/LFPs/starting_time and rate in NWB; trial timestamps in seconds; original PAC helper aligns maintenance windows. No neural values read in this audit."
   },
-  "biological_unit": "general/subject/subject_id present; sub4ses1 inspected;36biological participants from archivemetadata,44sessionfiles",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
-  "split": {
-    "policy": "Group all sessions by patient; fixed equal-duration maintenance intervals and artifact masks; image/condition grouping according to target.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+  "biological_unit": "Patient; all sessions from the same patient stay grouped. The declaration is 36 patients and 44 sessions, pending complete authenticated ascertainment.",
+  "case_definition": "One eligible original half-open2.5s maintenance interval,1000 samples at documented400Hz; exclusive end<=probe and every included sample<probe. Patients with all sessions grouped are replication/split units; full source declarations44sessions36patients require genuine ascertainment.",
+  "central_integration": {
+    "actual_route": "new central run -> exact original bootstrap.run -> entry.run -> preparation/projection/fullCampaign -> original protected score and report; require original normal return",
+    "declared_patients": 36,
+    "declared_sessions": 44,
+    "operator_arguments": "independently selected signature/key pins, original origin/deadline, original host-read ceiling and disjoint pre-bootstrap bridge read/write/live reservation; no defaults or body-derived authority",
+    "original_modules": 24,
+    "planned_native_operations": 864,
+    "prediction_cells": 396,
+    "program_argument": "exact signed full evaluator profile; not a participant script or authority issuer",
+    "qualification": "All24 gates remain open; program_execution:null and all admission false",
+    "separate_preparation_capsules": 1,
+    "status": "inactive_public_source_no_campaign_activation"
   },
-  "reference": {
-    "source_code_url": "https://github.com/rutishauserlab/SBCAT-release-NWB",
-    "commit_or_archive_version": "a25e8cc3f61630a428f190381745257d4506f148",
-    "entrypoints": [
-      "NWB_SBCAT_analysis/NWB_SBCAT_analysis_main.m",
-      "NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_LFP.m",
-      "NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_SU.m"
-    ],
-    "role": "Official PAC/working-memory scientific analyses. The proposed memory-load decoder still needs its own predictive baseline.",
-    "reference_executed_for_this_contract": false,
-    "source_paper": "https://www.nature.com/articles/s41586-024-07309-z",
-    "data_url": "https://dandiarchive.org/dandiset/000673/0.240118.2135"
+  "construction_review": {
+    "gates_open": 24,
+    "public_projection": "Full unchanged implementation; external roster and private provenance excluded.",
+    "source": {
+      "bytes": 7283,
+      "path": "benchmarks/neuroscience/neural-041/SOURCE_MANIFEST.json",
+      "sha256": "9b117ca43b28b531dccfcf30b8c3f909912d1d1ccb83c335b8a5540acec21187"
+    },
+    "source_acceptance_only": true
   },
   "controls": [
     "Mask event-count/PicID/phase cues",
@@ -113,50 +55,33 @@
     "no target-coded file names",
     "rate/power nuisance references."
   ],
-  "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
-    }
-  },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Patient-macro balanced accuracy and log loss.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
-    },
     "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "executor_ref": "benchmarks/neuroscience/neural-041/run.py::run",
+    "observable_endpoints": {
+      "definition": "Patient-macro balanced accuracy at0.5 and log loss clipped1e-15; pool sessions/trials within patient then equal patient mean. Empty/single-class patient support fails complete qualification.",
+      "investigation_rule": null,
+      "scoring_status": "source_implemented_not_qualified"
+    },
+    "scorer_ref": "benchmarks/neuroscience/neural-041/runtime/source/campaign.py::Campaign.run -> complete original Barrier -> score.run/score_check.check/uncertainty.paired",
     "unresolved_grading": [
       {
         "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "requirement": "Authenticate all24 open gates, complete44/36 source/clinical/preprocessing/clock/output-plan and protected operator selection; source rules are specified, authentic inputs remain unissued."
       },
       {
         "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "requirement": "Qualify all five matched references, convergence and independent numerical agreement on the entire held-patient programme."
       },
       {
         "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+        "requirement": "Execute and independently qualify source-owned full-cohort scorer/checker and complete writer/target barrier; source implementation alone is not admission."
       },
       {
         "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "requirement": "Independent full scientific/native/resource qualification; paired10000-resample patient uncertainty is conditional on fixed cross-validated predictions, excludes refit variation and has overlapping-training caveats."
       }
-    ],
-    "executor_ref": null,
-    "scorer_ref": null
-  },
-  "resources": {
-    "class": "CPU_workstation_bounded",
-    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
-    "source_storage_evidence": null
+    ]
   },
   "holds": [
     {
@@ -196,42 +121,80 @@
       "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
     }
   ],
-  "next_implementation_action": [
-    "Pin compatible NWB snapshot and artifact masks; verify patient grouping and maintenance alignment."
-  ],
-  "construction_review": null,
-  "source_audit_overlays": [],
-  "provenance": {
-    "canonical_record_sha256": "e67009a6d02b07a5d809caf3b6a8fa7f296f1bab35cc9ddffc020d868649c5c4",
-    "source_files": [
-      {
-        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
-        "bytes": 799654,
-        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
-      },
-      {
-        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
-        "bytes": 48504,
-        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
-      },
-      {
-        "path": "docs/neuroscience-benchmarks/readiness/signals_readiness.json",
-        "bytes": 67125,
-        "sha256": "a1f767fe5f088b27c6b80a2068699838becdbf96457d15530f77e4a89f7616b6"
-      }
+  "id": "NEURAL-041",
+  "input_assets": {
+    "dataset_version": "000673/0.240118.2135",
+    "distributed": false,
+    "external_inputs": "benchmarks/neuroscience/neural-041/EXTERNAL_INPUTS.json",
+    "patients_declared": 36,
+    "routes": [
+      "https://dandiarchive.org/dandiset/000673/0.240118.2135",
+      "https://www.nature.com/articles/s41586-024-07309-z",
+      "https://github.com/rutishauserlab/SBCAT-release-NWB"
     ],
-    "builder": {
-      "path": "tools/build_neural_delivery_manifests.py",
-      "bytes": 8015,
-      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    "sessions_declared": 44,
+    "status": "required_not_issued_or_validated"
+  },
+  "neural_role": "input",
+  "next_implementation_action": [
+    "Obtain and independently authenticate all required external inputs, including the exact roster.",
+    "Resolve every qualification gate, native/log/parent observer producer and full-workload scientific/resource requirement.",
+    "Issue independently qualified operator selection before any future activation; public source alone is insufficient."
+  ],
+  "primary_outputs": [
+    "Memory-load probabilities per eligible maintenance interval."
+  ],
+  "provenance": {
+    "documentary_sources": "benchmarks/neuroscience/neural-041/runtime/contracts/SOURCE_EVIDENCE.json",
+    "implementation_manifest": {
+      "bytes": 7283,
+      "path": "benchmarks/neuroscience/neural-041/SOURCE_MANIFEST.json",
+      "sha256": "9b117ca43b28b531dccfcf30b8c3f909912d1d1ccb83c335b8a5540acec21187"
     },
-    "new_payload_reads": 0,
+    "kind": "public_source_projection",
     "scientific_execution": false
   },
-  "admission": {
-    "runnable": false,
-    "research_qualified": false,
-    "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+  "reference": {
+    "commit_or_archive_version": "a25e8cc3f61630a428f190381745257d4506f148",
+    "data_url": "https://dandiarchive.org/dandiset/000673/0.240118.2135",
+    "entrypoints": [
+      "NWB_SBCAT_analysis/NWB_SBCAT_analysis_main.m",
+      "NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_LFP.m",
+      "NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_SU.m"
+    ],
+    "reference_executed_for_this_contract": false,
+    "role": "Original PAC analyses are provenance, not predictive competence. Five prospective source-owned matched references: prior, availability-only, spike-rate-only, LFP-power-only and combined; nested training-patient fitting and reference competence remain unqualified.",
+    "source_code_url": "https://github.com/rutishauserlab/SBCAT-release-NWB",
+    "source_paper": "https://www.nature.com/articles/s41586-024-07309-z"
+  },
+  "resources": {
+    "basis": "Source-only bounded CPU programme,864 planned actor/reference native operations plus whole-source preparation; all resource capacities require independent prior operator selection and complete measured qualification.",
+    "class": "CPU_workstation_bounded",
+    "source_storage_evidence": null
+  },
+  "schema_version": 1,
+  "scientific_question": "Do equal-duration maintenance LFP/spike windows distinguish low and high memory load across patients?",
+  "source_audit_overlays": [],
+  "source_identity": {
+    "ids": [
+      "D-P001"
+    ],
+    "overlap_groups": [
+      "human-working-memory-dandi-000673"
+    ],
+    "task_family": "working_memory",
+    "titles": [
+      "Human hippocampal/frontal working-memory LFP and single-unit recordings"
+    ]
+  },
+  "split": {
+    "data_scope": "public_development_only",
+    "manifest_status": "complete_source_contract_not_authentically_issued",
+    "policy": "Outer leave-one-patient-out; all sessions stay with patient. Inner whole-patient tuning uses only outer training people. Full44 source sessions/36 declared patients, no silent patient/class deletion.",
+    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+  },
+  "status": "specification_only",
+  "task_type": "prediction",
+  "title": "Working-memory load decoding",
+  "track": "neural"
 }
