@@ -1,0 +1,45 @@
+{
+  "schema": "zuco2_global_freeze_and_fold_local_adaptation_v1",
+  "applies_to": [
+    "NEURAL-085",
+    "NEURAL-086"
+  ],
+  "known_leakage": "A held-person/item query in one outer fold may be labeled training data in another. Holding targets until each fold scorer runs is insufficient if an adaptive controller, conversation, model cache, generated source, selected hyperparameter or analyst memory persists across folds.",
+  "global_freeze_before_any_outer_exposure": {
+    "fixed": [
+      "source bundle and all dependency identities",
+      "algorithm/model/hyperparameter selection procedure",
+      "controller source and base prompts",
+      "LLM/model/tool/checkpoint versions and exposure declaration",
+      "representation/mode/context/input arms/seed0",
+      "whole campaign and inner validation/support/metrics/cost policy"
+    ],
+    "required_time": "Recorded immutable acceptance before any outer training view or query is released to the evaluation agent. If candidate was built using public or prior outer data already seen, record that exposure; this timestamp cannot erase it.",
+    "master_controller": "Trusted non-learning scheduler only; it instantiates frozen policy for each job and cannot transmit learned artifacts, analysis selections, summaries, logs or query-derived code between fold clones."
+  },
+  "fold_local_scope": {
+    "unit": "One exact heldperson×itemfold×context×arm×representation×mode job; no second context/arm or neighboring fold. FIT and INFER state exchange is allowed only along this one job lineage.",
+    "adaptive_controller": "Fresh independent conversation/session/inference-cache namespace per job. Initial content contains frozen policy and allowed view only, never earlier jobs or the parent chat.",
+    "training": "Current outer-training labels may be used for local fitting/tuning and inner validation; not for choosing a global method later reused on another outer fold.",
+    "query": "Permitted current-case unlabeled features, including whole case batch, may support the explicitly allowed offline adaptation. All outputs bind that information-set ID. No claim of perword point-local or online inference.",
+    "end": "Seal outputs and full trace; destroy mutable state/conversation/cache; do not return features/analysis/selection/source summaries to another evaluation clone. Aggregate controller sees opaque completion/resource statuses needed for scheduling, not adaptive decisions or labels.",
+    "external_services": "Service/session/cache configuration must actually support this isolation. Unverifiable provider memory, retained conversation or cross-job tool cache holds condition qualification; source hash alone cannot prove it."
+  },
+  "feedback": {
+    "during_campaign": "No labels, numeric scores, support-dependent heldout diagnostics, qualitative error analysis or reference answers released to prediction agents. Operator can abort on infrastructure failure; cannot repair method/choose a different learner after seeing any outer evidence.",
+    "after_campaign": "Only once every required predictive job across the selected modes/representations/tasks in the campaign has a sealed success/failure disposition may the safe evidence report enter a separate N086 interpretation job. No subsequent prediction revision within that attempt.",
+    "repeated_attempts": "Every new programme/method revision after reading evaluation results is a new exposed attempt, linked to all earlier feedback/costs; report public-development status, never an independent heldout performance estimate. No best attempt selected and counted as single result."
+  },
+  "mode_fairness": "Fixed and case-adaptive receive identical source information, scientific tools, current-case context and ceilings. Both run cloned globally frozen policies. Adaptive may make within-job analysis choices only; fixed may embody comparable conditional computations in its program. Mode label records workflow, not a proof of reasoning mechanism.",
+  "public_exposure": "Original ZuCo2 data/text/labels/paper and overlapping ZuCo1 may be in pretraining or prior work. Record known/unresolved exposure, run matched/exclusive and memorization diagnostics. Hash splitting and hiding current filenames do not establish contamination-free unseen generalization.",
+  "scientific_gate_joins": [
+    "G10",
+    "G13",
+    "G17",
+    "G19",
+    "G23",
+    "G25"
+  ],
+  "implementation_requirement": "Concrete launcher/proxy/campaign collection must bind exact initial/final context, view and state provenance and enforce no cross-case artifact routes. Semantic guarantees about external model knowledge remain unresolved, explicitly reported.",
+  "current_evidence": "Design-only; no new execution, fixtures or native/data access."
+}

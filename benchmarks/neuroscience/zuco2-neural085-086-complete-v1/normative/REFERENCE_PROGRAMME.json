@@ -1,0 +1,99 @@
+{
+  "schema": "zuco2_independent_reference_and_controls_v1",
+  "ownership": "Trusted independent source-owned producer. Candidate cannot author, replace, weaken or select reference predictions. Reference source, fitted states and full original process/resource receipts pinned before candidate grading.",
+  "separate_from_author_code": "Original OSF readers are documentary loaders, not a trained reference or raw preprocessing implementation. Later zuco-benchmark/d7frw is not substituted. No published SOTA baseline value exists for this contract.",
+  "base_seed": 0,
+  "primary_fixed_procedure": "R_LINEAR_NESTED_V1",
+  "fit_domain": "Exactly the permitted outer-training rows for the named task/context/representation/arm; same source panel and support as candidate. No held-person labeled rows or held item group in fit/selection/calibration.",
+  "training_weights": {
+    "N085": "Equal training person, class, unique exact text within that class, repeats within text/class; renormalize mean weight to1. All arms use identical row weights.",
+    "N086": "Equal training person, exact matched item, eligible original word position, class, then repeats; renormalize mean weight to1. Common covariate state identical base/plus.",
+    "unavailable": "Any required training person/arm class/support absent -> no reference value. Preserve failed full attempt; do not skip person or use another outer fold."
+  },
+  "feature_blocks": {
+    "text": "HashingVectorizer4096 nonnegative unigram+bigram counts, lowercase, no external embeddings, TFIDF fitted on training unique-text rows only. Add character/token counts. Tokenization explicit scikit-learn word pattern (?u)\\b\\w\\w+\\b; UTF8/Unicode normalizer frozen. For N086 main46-column basis, no new free sentence text feature is silently appended.",
+    "gaze": "N085 original12 summaries with documented source units; N08619 values and absence masks defined in predecessor protocol. Missing indicators explicit for every dimension and fitted medians from outer training only; allmissing training column gets0 fill and remains tracked.",
+    "nuisance": "Original source word-slot count, validity fractions and all declared modality masks; no raw filename, task, source order, absolute block/time, question text, relation instruction, response or person ID. Raw quality fields not yet sourced cannot be guessed as0.",
+    "EEG_released_summary": "N085105x8 means; N0868 equal-scalp window means with all105-channel fixed support. Preserve literal source units and no float16. Any invalid member makes that band summary null; eligibility not conditioned on EEG.",
+    "EEG_band_spatial": "N086105x8 window-band values retaining channel identity; N085 same840 original sentence-band vector. This is a representation condition, not extra independent evidence or raw EEG.",
+    "EEG_waveforms": "R_WAVE_FEATURES_V1 below derives independently specified time/spectral/covariance features from the released permitted segment, no query labels. All transform source-stage and support gates required. Representation-specific support masks of these EEG features, sample validity and observed duration are part of both baseline and augmented views. Different representation masks are never silently omitted from the control."
+  },
+  "common_preprocessing": "Weighted training median imputation, weighted mean/population-SD, unit scale if SD<=1e-12, fixed column order. Each block scaled by sqrt(number of columns) determined a priori, and identical base blocks reused when EEG appended. No whole JOINT PCA; never change nuisance representation when adding EEG. Retained legacy eight-PC baseline remains separately named LEGACY_N085_PCA8.",
+  "model": "L2 weighted logistic with intercept; scipy/sklearn compatible explicit objective: mean weighted negative log likelihood + lambda/2*||beta||2, intercept unpenalized. Implement source reference to this objective with convergence residual, not rely on ambiguous library C scaling. lambda grid[0.001,0.01,0.1,1,10,100], fixed order.",
+  "inner_selection": "For each outer fit, rank remaining person opaque private groups by SHA256 of source-bound stable group IDs then round-robin into3 groups. Item groups map SHA256 group key modulo3 (distinct from outer holdout5). Fit each lambda on inner nonheld person AND nonheld item groups, validate intersection, for all9 cells. Refit preprocessing on each inner training set. Restore validation rows, aggregate with task primary weighting, select minimum inner loss; ties within1e-12 choose larger lambda. Same grid/procedure independently per base/plus arm; that means an explicit feature-plus-regularization-selection procedure contrast, not identical parameter tuning. If inner complete support fails, reference unavailable, no opportunistic fold reduction.",
+  "final_fit": "Refit chosen lambda and all train-only transforms on full outer training support. Max10000 solver iterations, tolerance gradient infinity norm<=1e-6 and finite objective; timeout/nonconvergence explicit. Seal fitted parameter/transform payloads before query release.",
+  "inference": "Reopen exact readonly state in fresh process and evaluate only permitted query. R_LINEAR_NESTED_V1 chooses no additional query adaptation although candidate is permitted offline-case adaptation; this is reported as reference algorithm choice, not stricter candidate information access. Deterministic p from model, exact one output per query row. Source-owned reference output schema, never accept arbitrary candidate callback.",
+  "independent_competence_models": [
+    {
+      "id": "R_NONLINEAR_V1",
+      "role": "Mandatory competence sensitivity for released_summary/band_spatial; not selected by outer query and not substituted silently for primary linear procedure.",
+      "algorithm": "HistGradientBoostingClassifier max_iter200,learning_rate0.05,max_leaf_nodes15,max_depthNone,min_samples_leaf20,l2_regularization1,max_bins255,early_stoppingFalse,random_state0; sample weights same. Text block training-only TruncatedSVD with n_components=min(64,n_unique_training_texts-1,4095), requiring at least1, random_state0, n_iter7; chosen only from training shape; record effective rank, no missing query-driven change. All base/plus models have same nuisance features and SVD basis.",
+      "selection": "Fixed hyperparameters; no test selection; competent only after independent validation against positive/label-null/task baselines, calibration and convergence."
+    },
+    {
+      "id": "R_WAVE_FEATURES_V1",
+      "role": "Mandatory raw/cleaned waveform reference featurization plus R_LINEAR_NESTED_V1; signal-derived independent comparator.",
+      "algorithm": "Per105 declared scalp channels on permitted finite samples: mean, variance, 10 equal relative-time bins each mean and variance; Welch PSD with500Hz clock, periodic Hann length min(250,N),50% overlap floor, detrend constant, density scaling, zero-padding none; integrate each of eight documented band intervals by trapezoid over actual frequency grid, empty band unsupported. Use log1p of nonnegative PSD features in verified units; this is new prospective transform, not author Hilbert power. Also shrink covariance C=(1-0.1)*sample_cov+0.1*(trace(sample_cov)/105)*I; flatten upper triangle after training-reference tangent mapping if SPD; otherwise covariance block null with shared support indicator, per covariance_tangent_operator; no numerical ridge chosen from query.",
+      "gaze_alignment": "N086 waveform segments correspond exact source fixation-window sets, not a contiguous TRT interval spanning regressions; absent segment mapping blocks route. Concatenate only within-word eligible fixations with each boundary explicit; PSD estimated per contiguous fixation then duration-weighted, no spectral bridges across artificial joins. Relative-time bins applied within each fixation then duration-weighted.",
+      "duration": "Whole sentence or named full window is retrospective. No early-latency claim. Means/covariance/PSD require sufficient finite support specified by ABI; missing channels go through common declared missingness/imputation, never varying channel identities."
+    },
+    {
+      "id": "R_TEMPORAL_CONV_V1",
+      "role": "Mandatory waveform competence comparison with same permitted samples; source design, no imported pretrained network.",
+      "algorithm": "One independently authored temporal network:105 channels -> grouped Conv1d perchannel4 filters,kernel31,stride2,padding15; GELU; pointwise mixing to32; temporal Conv1d32to32,kernel15,stride2,padding7; GELU; masked global mean and variance; concatenate permitted nuisance/text/gaze representation; linear sigmoid head. Masks propagate so padding has zero pooling weight. GroupNorm8 on32 channels uses withintrial supported samples and is expressly query-local transformation.",
+      "training": "AdamW lr0.001,weight_decay0.01,batch32,epochs50,seed0, no outer-query early stopping; clip gradient norm1. Training-person/item inner3x3 validation only for competence reporting, not best test epoch. Ragged sequences chunked into2-second windows, deterministic complete aggregation weighted by actual valid sample count; no arbitrary cropping of long sentences.",
+      "limits": "This is a defined prospective neural reference, not a claim of SOTA, fit quality or adequacy before independent future qualification.",
+      "mask_definition": "Each convolution output mask is true iff at least one input sample in its receptive field is valid; invalid inputs zeroed and convolution sum rescaled by full kernel support / actual valid support. GroupNorm computes group moments only over valid outputs. All-empty segment produces explicit unavailable feature block with common mask. Source105-channel roles mandatory; no arbitrary sensor subset."
+    }
+  ],
+  "control_programme": [
+    {
+      "id": "NC01",
+      "operator": "Mask-only and valid-duration/count-only control",
+      "support": "Same full rows and masks as main predictions",
+      "interpretation": "Predictable source missingness/behavior is not EEG amplitude evidence."
+    },
+    {
+      "id": "NC02",
+      "operator": "EEG vector alignment shuffle",
+      "support": "Within each train partition and each current query case separately, person/context and exactly equal availability-mask plus geometry buckets; deterministic seed194085. Shuffle full EEG vectors across rows without conditioning on condition label. Preserve gaze/text/targets/masks. Count nonidentity swaps and cross-label swaps in trusted report, without exposing labels.",
+      "interpretation": "No swaps/singletons/only one-class buckets make this negative control ineffective, explicitly unavailable; not a valid conditional-independence or causal null. Never permute withincondition then claim the label signal was destroyed."
+    },
+    {
+      "id": "NC03",
+      "operator": "Waveform phase/time controls",
+      "support": "Where coherent clock/segments qualified, trial-local channelwise phase randomization preserving magnitude spectrum and segment length; paired channel-common phase version separately. No filtering across protected boundaries.",
+      "interpretation": "Tests phase/temporal alignment sensitivity; retained spectrum can still predict condition. Never label it a no-condition-signal control."
+    },
+    {
+      "id": "NC04",
+      "operator": "Chronology alias diagnostic",
+      "support": "Protected block/order/session elapsed/repetition/screen-instruction metadata; source-only deterministic perfect alias possible because every block is one condition.",
+      "interpretation": "No within-block positivity; causal demand effect not identifiable. This arm is excluded from candidate prediction inputs and rankings."
+    },
+    {
+      "id": "NC05",
+      "operator": "Ocular/screen-region controls",
+      "support": "Independent9 EOG channels, raw gaze position/pupil/blink/saccade measures, question-region fixation indicators, same qualified clocks. Predefined comparison nuisance+ocular versus +scalp EEG. Train-fitted linear EOG residualization with lags[-20,-10,0,10,20]ms is a separate retrospective sensitivity, not guaranteed artifact removal.",
+      "interpretation": "No EOG/source screen join => missing control gate, not clean-neural declaration. Excluding overt question fixations does not remove concurrent visual instruction or carryover."
+    },
+    {
+      "id": "NC06",
+      "operator": "Training-label shuffled diagnostic",
+      "support": "Training labels permuted at whole recorded block bundles within training people, same mapping for repeated observations from each block; preserve evaluation labels. Use all original class/block geometry.",
+      "interpretation": "Training sanity diagnostic only; constrained blocks/same text/fixed order and class sizes do not establish an exchangeable randomization test. No p-value or causal-null interpretation."
+    },
+    {
+      "id": "NC07",
+      "operator": "Matched/exclusive item and repetition/order strata",
+      "support": "Full observations retained; first-versus-later occurrences, matched exact versus exclusive, perblock support, duration/missingness bins frozen without outcome-driven thresholds.",
+      "interpretation": "Results diagnose alternative routes and selected support; no separate cohort or causal dose-response."
+    }
+  ],
+  "reference_bank_custody": "Request/source/ABI/split/view/arm/context/seed/preprocessing/fit-state hashes, actual outer driver and inner worker completion/returncode/request/argv/cwd/streams, resource and deadline receipts, output support and independent qualification all join to exact planned job. No truthy custody flag or copied inner exit substitutes for original outer completion. Failed/missing producer makes reference unavailable.",
+  "pretrained_tools": "None required or acquired now. Optional exact decoder/tool checkpoint condition must bind source/version/training data/time/exposure/license/model hash/preparation costs/allowed inputs. Decoder-alone, participant+decoder and no-decoder separately named with same tool availability across participant modes; no undisclosed checkpoint lookup.",
+  "competence_gate": "Independent future referee examines full reference fits, constant/label-null/positive structural controls and task-appropriate held-training validation/calibration. A converged program or better-than-chance outer score alone does not qualify reference competence. Cannot choose references by their held-out losses or change procedure because EEG gain is unfavorable.",
+  "no_execution": true,
+  "covariance_tangent_operator": "For each contiguous source segment with >=2 common finite samples across all105 channels, unbiased sample covariance after withinsegment channel centering. Apply the fixed0.1 shrinkage before tangent transform. Reference G is the weighted arithmetic mean of available training covariances only, using the same train weights renormalized over available covariance rows. Require positive eigenvalues and relative minimum eigenvalue>1e-12 for G and input covariance; otherwise mark covariance block unavailable/null with shared mask (do not add a query-chosen ridge). Compute symmetric eigendecomposition G^(-1/2), then matrix logarithm of G^(-1/2) C G^(-1/2); flatten uppertriangle with offdiagonals multiplied bysqrt2. Multi-fixation windows duration-weight segment covariance/tangent and spectral/time summary blocks within the same exact window. If no supported training G exists, the waveform reference is unavailable for that job; retain all records and source reason.",
+  "waveform_validity": "For scalar/bin/PSD features use source-declared valid samples; empty support => null and shared mask. PSD only within contiguous fully valid stretches of at least2samples; normalize duration-weighted aggregation over qualified stretches and report fraction covered. Do not bridge NaN gaps or fixation boundaries. The complete source row still requires a prediction through train-only imputation; unsupported individual feature blocks do not remove it. Numerical efficacy is a future competence gate."
+}

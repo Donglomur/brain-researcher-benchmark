@@ -1,0 +1,294 @@
+{
+  "N085": {
+    "aggregation": "For each person s, exact item j and condition y average all occurrence losses. L_s=(1/2)*sum_y[(1/|J_y|)*sum_j loss_sjy]; on matched stratum J_0=J_1=J. L=(1/18)*sum_s L_s. No per-fold equal averaging: restore all row identities first. For full/exclusive text strata use their unique text sets within each class and preserve null if any person/class unsupported.",
+    "full_vs_matched": "Primary remains matched support. Full13302 prediction outputs and exclusive-text evaluation mandatory; strong full-scope classification may exploit text differences. No value substituted for unavailable matched primary.",
+    "mandatory_reports": [
+      "absolute log loss and balanced accuracy for every9 arms",
+      "matched/full/condition-exclusive strata",
+      "all18 per-person values and paired differences",
+      "all item losses and occurrence counts",
+      "independent fixed reference model NTGE loss minus candidate NTGE loss (same permitted information, method-performance contrast)",
+      "independent fixed reference NTG loss minus its NTGE loss (feature-augmentation contrast within declared procedure)",
+      "candidate NTG loss minus candidate NTGE loss (descriptive, not ranked due weakenable control)",
+      "candidate NTGE versus independent NTG loss (cross-method/cross-information, explicitly not an isolated EEG effect)",
+      "condition prevalence, perclass probability calibration/Brier score, class counts and missingness/duration/source audit"
+    ],
+    "primary_benchmark_metric_id": "N085_MATCHED_NTGE_LOG_LOSS",
+    "primary_metric": "Candidate NTGE log loss on exact matched items; lower is better. Modes, representations and tool access are separate leaderboards; never choose best after query.",
+    "qualification": "All source/split/process/reference/completeness gates required for qualified benchmark score; absent evidence -> numeric diagnostic may be reported with primary_score=null and exact gate reasons.",
+    "score_convention": "Report raw lower-is-better L; if central maximization field is required, primary_score=-L. No chance subtraction or favorable floor."
+  },
+  "N086": {
+    "aggregation": "Within(s,j,word,y) average all qualifying repeat losses; average y=0,1 equally; average eligible paired original word positions within(s,j) equally; equal all J items within person; equal18 persons. Query fold restored before aggregation. Define d_sj=loss_R_base_sj-loss_R_plus_sj and D_R=mean_s mean_j d_sj. All percell losses and signs retained.",
+    "mandatory_secondary": [
+      "Candidate PLUS_EEG absolute log loss and balanced accuracy",
+      "same-information R_PLUS_EEG loss minus C_PLUS_EEG loss",
+      "D_C and its paired matrices distinct from D_R",
+      "TRT/GD/GPT/SFD support and signed contrasts separately",
+      "legacy logistic coefficient stability and scale-state provenance; not required as representation for arbitrary learners",
+      "all ocular/chronology/missingness/alignment-control evidence",
+      "unsupported/negative/null results and unsatisfied confound checks"
+    ],
+    "numerical_admission": "Candidate analysis table must reproduce trusted losses, signed differences, denominators and specified uncertainty from captured predictions within declared numerical tolerance (abs1e-10 + rel1e-8 for finite scalar metrics), exact IDs/counts/seed/dispositions. It cannot choose a new comparator, subset or sign convention. Nonfinite/unavailable results require null and reasons, not0.",
+    "participant_analysis": "Candidate submits arbitrary paired learner outputs C_COVARIATES and C_PLUS_EEG, predictions for all contexts and matched controls, and executable analyses/reasoning. D_C computed analogously and labeled candidate-procedure contrast, never substituted for D_R or maximized as success.",
+    "primary_benchmark_metric_id": "N086_EVIDENCE_GROUNDED_INVESTIGATION",
+    "primary_benchmark_score": "If all required numerical/provenance/support admissions pass AND independently qualified rubric exists, sum six adjudicated0-2 rubric dimensions /12. A positive D is never a scoring requirement. Otherwise primary_score=null with exact failed gates; numeric recomputation checks and rubric components remain separately reported.",
+    "primary_context": "FFD",
+    "primary_scientific_quantity": "D_R = L(R_COVARIATES)-L(R_PLUS_EEG), computed from independently produced fixed reference predictions on the same matched FFD support. Signed, unrestricted. This is finite-panel predictive-performance contrast for prespecified procedures, not mutual information or proof of conditional dependence/neural origin.",
+    "rater_policy": "Two independent blinded raters per dimension, each exact integer0/1/2. Disagreement invokes third independent adjudicator with rationale; adjudicated values must also be exact integer0/1/2. Preserve original ratings/identities/conflicts, no freeform auto-grade by candidate LLM. Calibrate rubric and agreement on independently reviewed evidence packets before qualified ranking; that is a future gate. Full matched positive/null/negative fixtures are conceptual future controls, not created now.",
+    "rubric_dimensions": [
+      {
+        "id": "R1",
+        "name": "estimand and independent units",
+        "one": "Mostly correct with a nonconsequential omission.",
+        "two": "Correctly states actual finite-panel procedure, source condition, selected support,18 biological people and crossed items.",
+        "zero": "Calls slots/files independent people or claims causal demand/neural-origin identification."
+      },
+      {
+        "id": "R2",
+        "name": "numerical evidence and sign",
+        "one": "Correct main conclusion with traceable minor omission.",
+        "two": "Binds every key claim to verified loss/difference/support/receipt IDs with correct direction, magnitude and missingness.",
+        "zero": "Invented/mis-signed/cherry-picked result or numerical claim contradicts evidence."
+      },
+      {
+        "id": "R3",
+        "name": "uncertainty and dependence",
+        "one": "Correct caution but incomplete dependence explanation.",
+        "two": "Uses paired person/item summaries and fixed-prediction crossed resampling correctly; no population/causal coverage claim.",
+        "zero": "Treats folds/words as independent people or calls descriptive ranges calibrated proof."
+      },
+      {
+        "id": "R4",
+        "name": "alternative explanations and controls",
+        "one": "Several relevant alternatives but incomplete evidence linkage.",
+        "two": "Explains text, order/repetition, same-screen task cue, gaze/EOG, missingness and task-wide preprocessing; ties to actual controls and acknowledges untestable confounding.",
+        "zero": "Concludes pure neural cognition from accuracy/gain or ignores a demonstrated leakage source."
+      },
+      {
+        "id": "R5",
+        "name": "null and support reasoning",
+        "one": "Broadly correct but overstates precision of a null.",
+        "two": "Uses positive/negative/zero/unavailable evidence without reward-seeking sign selection; incomplete support leads qualified/inconclusive conclusion.",
+        "zero": "Equates no detected gain with no brain information, or drops failures to manufacture a result."
+      },
+      {
+        "id": "R6",
+        "name": "reproducibility and useful next test",
+        "one": "Reproducible main result with underspecified follow-up.",
+        "two": "Provides executable submitted analysis and versioned evidence trail plus a discriminating feasible follow-up acknowledging current identifiability limits.",
+        "zero": "No executable evidence or claims a proposed experiment was performed."
+      }
+    ],
+    "scientific_estimand_id": "N086_MATCHED_FFD_FIXED_PROCEDURE_LOG_LOSS_CONTRAST"
+  },
+  "arms": {
+    "N085": [
+      {
+        "id": "TEXT",
+        "inputs": [
+          "sentence_text"
+        ],
+        "status": "legacy preserved"
+      },
+      {
+        "id": "GAZE",
+        "inputs": [
+          "12 legacy gaze summaries"
+        ],
+        "status": "legacy preserved"
+      },
+      {
+        "id": "EEG",
+        "inputs": [
+          "selected representation EEG",
+          "explicit same-representation masks"
+        ],
+        "status": "legacy preserved"
+      },
+      {
+        "id": "TEXT_GAZE",
+        "inputs": [
+          "sentence_text",
+          "12 legacy gaze summaries"
+        ],
+        "status": "legacy preserved"
+      },
+      {
+        "id": "JOINT",
+        "inputs": [
+          "sentence_text",
+          "12 legacy gaze summaries",
+          "selected representation EEG"
+        ],
+        "status": "legacy preserved; absolute metrics only"
+      },
+      {
+        "id": "NUISANCE",
+        "inputs": [
+          "EEG availability mask",
+          "gaze availability mask",
+          "source word-slot count",
+          "valid gaze fractions"
+        ],
+        "status": "new observed non-amplitude nuisance control"
+      },
+      {
+        "id": "NTG",
+        "inputs": [
+          "sentence_text",
+          "12 legacy gaze summaries",
+          "NUISANCE"
+        ],
+        "status": "competent control information set"
+      },
+      {
+        "id": "NTGE",
+        "inputs": [
+          "all NTG inputs",
+          "selected representation EEG"
+        ],
+        "status": "full candidate primary information set"
+      },
+      {
+        "id": "NTG_SHUFFLED_E",
+        "inputs": [
+          "all NTG inputs",
+          "protected shuffled EEG with identical missingness support"
+        ],
+        "status": "negative alignment diagnostic"
+      }
+    ],
+    "N086": [
+      {
+        "id": "COVARIATES",
+        "inputs": [
+          "19 predecessor word/gaze/sentence values",
+          "19 matching absence indicators",
+          "8 same-window EEG availability indicators"
+        ],
+        "representation_extension": "Released_summary keeps exactly46 predecessor columns. Other representation conditions append every explicitly specified selected EEG feature/mask and sample-support nuisance indicator to the common COVARIATES block before appending EEG amplitude in PLUS_EEG. The same representation-specific mask block is supplied identically in both arms; dimensions and source meaning freeze in RepresentationABI, never chosen from query outcomes.",
+        "status": "legacy46-column control; same basis retained"
+      },
+      {
+        "id": "PLUS_EEG",
+        "inputs": [
+          "all COVARIATES",
+          "selected EEG representation"
+        ],
+        "representation_extension": "PLUS_EEG uses the identical common base block, including all selected-representation missingness/support indicators, then amplitudes. A non-summary condition must not claim the original46+8 numeric ABI.",
+        "status": "legacy8 scalp means in released_summary; alternative representations explicit"
+      },
+      {
+        "id": "COVARIATES_SHUFFLED_E",
+        "inputs": [
+          "all COVARIATES",
+          "protected shuffled EEG with fixed masks"
+        ],
+        "status": "mandatory negative alignment diagnostic"
+      }
+    ],
+    "chronology_alias": "CHRONOLOGY_DIAGNOSTIC is a trusted diagnostic model only using source block/order/time/repetition/task-screen annotations. It is never mounted in participant ranked views and never labeled a legitimate neural baseline. Fixed block fully determines source condition; this saturation establishes lack of conditional overlap.",
+    "missingness_control": "Missingness-only arms, duration/count-only probes and train-fitted amplitude-replaced controls explicitly report how much performance can arise without EEG amplitude.",
+    "ocular_diagnostic": "OCULAR_DIAGNOSTIC and N+text+gaze+ocular / PLUS_EEG ocular-adjusted comparisons are required where original9 EOG channels and question-region gaze are qualified. Missing raw/EOG alignment remains a gate, not zero contamination."
+  },
+  "condition_label": {
+    "NR": 0,
+    "TSR": 1,
+    "definition": "Recorded source reading condition, not a latent cognitive state or correctness of semantic annotation."
+  },
+  "context_census_resolution": {
+    "current_selector": "outer_split.contexts_N086 and cases_per_representation_mode_N086 are operative: all five contexts and 18 people x 5 item folds x 5 contexts = 450 cases per representation/mode; three required arms yield 1350 FIT/INFER chains.",
+    "historical_only": {
+      "cases_per_representation_mode_N086": 180,
+      "contexts_N086": [
+        "FFD",
+        "TRT"
+      ],
+      "source_sha256": "30ad4d21ae5ea16c51cf0c73ccfee9dc3f4629ee3d32bf26d3d37d8901f2b4fc",
+      "status": "RETIRED_SELECTOR_HISTORICAL_ONLY; cannot select current work or reduce complete support"
+    },
+    "legacy_contexts_retained": "FFD and TRT remain the first two current contexts. full_support.N086_legacy_contexts_retained names retained constituents, not a two-context current census. SCOPE.legacy_outputs and PROTECTED_EXECUTION_CHAIN legacy180 remain historical evidence only.",
+    "preserved": "FFD primary; TRT/GD/GPT/SFD separate mandatory sensitivities. Full person/item rectangle, all unavailable/null dispositions, independent recomputation and qualified human investigation rubric remain unchanged. Positive EEG gain is never required.",
+    "revision": "zuco2_n086_five_context_census_v2",
+    "scientific_execution_authorized": false
+  },
+  "default_representation": "released_summary",
+  "default_seed": 0,
+  "full_support": {
+    "J_definition": "SCOPE.json matched_support.primary_item_set; exact identities unresolved until source join. The paper63 mapping remains a separate full-source qualification gate, no hardcoded56/63 accepted as resolved.",
+    "N085": "All18x739=13302 source presentation dispositions. Every selected model output has all corresponding current query IDs, including missing EEG rows; train-only imputation with masks. Missing source, model failure or malformed output cannot be removed from denominator.",
+    "N086": "Every source sentence/word/fixation disposition retained; paired-word primary population conditions on positive finite FFD in both NR/TSR for person, exact text, original word position. EEG validity never selects eligibility. All eligible repeats enter. TRT,GD,GPT,SFD are required separate window sensitivities, not substitute FFD after results.",
+    "N086_added_contexts": [
+      "GD",
+      "GPT",
+      "SFD"
+    ],
+    "N086_complete_context_cases": 450,
+    "N086_context_count": 5,
+    "N086_legacy_contexts_retained": [
+      "FFD",
+      "TRT"
+    ],
+    "complete_attempts": "Immutable job grid before execution; every required attempt emits success/failure/unavailable receipt. Empty-query jobs are required explicit zero-row outputs with preserved fit receipt, never omitted.",
+    "full_item_rectangle": "For each context require at least one paired word for every person x every exact matched item J. Missing any cell -> that complete-context scalar and crossed interval null, with actual denominator/support matrix and subset-only diagnostic. No shrinkage to complete cases. SFD can legitimately be unsupported; report the hold rather than calling full qualification."
+  },
+  "loss": {
+    "balanced_accuracy": "PredictionTSR iff p>=0.5; secondary, deterministic ties.",
+    "epsilon": 1e-06,
+    "formula": "l(y,p)=-y*ln(clip(p,eps,1-eps))-(1-y)*ln(1-clip(p,eps,1-eps))",
+    "logarithm": "natural",
+    "name": "binary_log_loss",
+    "probability_admission": "Finite real0<=p<=1, bool rejected; clip only for log computation."
+  },
+  "modes_reported_separately": [
+    "frozen_program",
+    "case_adaptive"
+  ],
+  "multiplicity": {
+    "negative_controls": "Permutation/shuffle controls are algorithmic sensitivity diagnostics. Fixed block/time confounding defeats exchangeability for a causal null; no exact randomization p-value from withinblock label shuffles.",
+    "primary": "One registered N085 metric per named mode/representation/tool condition; one N086 primary context/estimand and one investigation rubric. No single best across conditions.",
+    "secondary": "All arms/contexts/controls reported as exploratory descriptive contrasts. No p-values or discoveries, hence no false familywise significance claim. If future confirmatory testing is selected, complete family and valid null generation need independent design before data access."
+  },
+  "normative_clarifications": {
+    "complete_primary_vs_secondary": "Full primary matched support is required for qualified primary numeric results. A required secondary window/control/tier with genuinely unavailable source or support must emit complete unavailable evidence, not fabricated values; it remains a scientific gate for that condition or attribution claim. Missing SFD cells do not silently replace FFD and do not invalidate an honestly reported FFD result merely because SFD is unsupported. No overall full-task qualification is claimed while required source gates remain.",
+    "conditional_versus_neural": "All increments are predictive-performance contrasts for named procedures on finite observed support. Neither correct sign nor a stronger fixed baseline makes them information-theoretic estimates, tests of conditional independence, neural-origin proof, population effects or causal demand effects.",
+    "global_freeze": "CROSS_FOLD_EXPOSURE_POLICY.json is mandatory; source/controller/model/selection freeze before any outer evaluation and no crossfold adaptive transfer. Interpretation follows complete selected predictive-campaign closure, not per-fold scoring.",
+    "per_output_information_set": "Every prediction, including N086 word-level output, may depend on all permitted outer-training data plus the whole unlabeled current-case query batch for that exact person/itemfold/context/arm/representation. This is offline case-local prediction, not an isolated-word or onset-local estimand. No other case/context/arm enters. Each request/output/report binds this information_set_id."
+  },
+  "normative_status": "Complete prospective design; numerical/source/runtime qualification all pending. Formulas are definitions, not executed results.",
+  "outer_split": {
+    "cases_per_representation_mode_N085": 90,
+    "cases_per_representation_mode_N086": 450,
+    "contexts_N086": [
+      "FFD",
+      "TRT",
+      "GD",
+      "GPT",
+      "SFD"
+    ],
+    "dependence": "90 folds are overlapping-training evaluation cases, not90 independent people; item/source chronology clustering survives.",
+    "duplicate_topic_control": "Prespecified secondary leave-related-biography/topic cluster analysis only if independently sourced topic mapping is complete. Cannot quietly merge or exclude items based on model errors. No new primary split chosen after outcomes.",
+    "exact_text": "NFKC then whitespace collapse; case and punctuation retained for exact matching. Preserve original strings in protected join.",
+    "group_text": "NFKC+whitespace, casefold, non-word characters mapped to spaces, whitespace collapse, UTF8 SHA256 modulo5; original protocol function defines exact normalization.",
+    "inner_validation": "If learner tunes, use only outer-training. Fixed references use complete3x3 held-training-person-group and held-training-item-group cells, no reuse of outer query. Full source support failures stay explicit.",
+    "item_folds": 5,
+    "people": 18,
+    "query": "Held person AND item group fold; all eligible presentation/word rows belonging to it. No other fold/person/context/arm views or labels accessible.",
+    "training": "All data from17 non-held people AND no instance of any query sentence group anywhere, either condition. All duplicate presentations and matched repetitions assigned together."
+  },
+  "primary_information_policy": "offline_case_local; training-derived sealed state followed by complete current-case unlabeled query. Ephemeral unsupervised current-case adaptation is explicitly allowed equally to both modes, charged and reported; no strict inductive/no-fitting claim. Supervised query fitting is disallowed through target exclusion, with exposure/isolation gates, not proved by state read-only mode.",
+  "schema": "zuco2_two_task_scientific_estimands_v1",
+  "seeds_policy": "One fixed seed0 defines the primary attempt, with deterministic process ordering. Optional robustness seeds must be registered before any query and reported separately, never best-selected or counted as people. No additional seed campaign is required by this design.",
+  "status": "All scientific gates open; no actual values, targets, fits or resampling evaluated.",
+  "uncertainty": {
+    "coefficient": "Only for original fixed logistic, report fold-specific scaler/parameters and per-person mean across5 folds; parameter stability descriptive, no neural-effect confidence intervals.",
+    "crossed": "1000 draws. Python random.Random(194086); on each draw sample18 person indices with replacement then J item indices with replacement, independently; mean all18xJ selected paired cells including multiplicities. 2.5/97.5 percentiles linearly interpolated at (n-1)*q, as original metric. Fixed seed/order/source required, no rerun seeking significance.",
+    "item": "mean over18 people for each item, sample SD of J item means /sqrt(J); undefined ifJ<2.",
+    "matrix": "All18 x J person-item d values; pair base/plus within each cell before resampling.",
+    "missing": "Any required matrix cell missing -> full D and interval null; preserve all observed rows, reasons and denominator. No simple complete-case/bootstrap substitute.",
+    "person": "mean over allJ items for each person, sample SD of18 person means /sqrt18.",
+    "primary": "Conditional descriptive uncertainty of fixed out-of-fold loss contrasts, not model-refit/population interval.",
+    "training_dependence": "Overlapping LOO/inner training, fixed chronology and nuisance estimation remain outside calibrated inference. Refit bootstrap would be a separately selected methodological extension, not silently claimed here."
+  }
+}
