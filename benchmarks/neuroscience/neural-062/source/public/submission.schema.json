@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One file per case/arm. Runtime additionally requires simplex sum within1e-6, unique exact query IDs, current generation and complete544-file collection.",
+  "properties": {
+    "arm": {
+      "enum": [
+        "CONTEXT",
+        "PRE",
+        "POST",
+        "PRE_POST"
+      ]
+    },
+    "case": {
+      "maxLength": 64,
+      "minLength": 64,
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "format": {
+      "const": "neural062_predictions_v1"
+    },
+    "generation": {
+      "maxLength": 64,
+      "minLength": 64,
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "probabilities": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "maxLength": 64,
+            "minLength": 64,
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "p": {
+            "items": {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            "maxItems": 8,
+            "minItems": 8,
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "p"
+        ],
+        "type": "object"
+      },
+      "maxItems": 500000,
+      "type": "array"
+    }
+  },
+  "required": [
+    "format",
+    "generation",
+    "case",
+    "arm",
+    "probabilities"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Runtime enforces exact arm feature names, float32 little-endian C-order NPY1, complete extents and pins. Train columns=dim+2 with class and weight; query columns=dim, rows=len(query_ids); all features may be NaN, never infinity.",
+  "properties": {
+    "arm": {
+      "enum": [
+        "CONTEXT",
+        "PRE",
+        "POST",
+        "PRE_POST"
+      ]
+    },
+    "arrays": {
+      "additionalProperties": false,
+      "properties": {
+        "query.npy": {
+          "additionalProperties": false,
+          "properties": {
+            "bytes": {
+              "maximum": 4000000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "sha256": {
+              "maxLength": 64,
+              "minLength": 64,
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            "shape": {
+              "items": false,
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "maximum": 3000000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "enum": [
+                    32,
+                    34,
+                    46,
+                    48,
+                    60,
+                    62
+                  ],
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            }
+          },
+          "required": [
+            "bytes",
+            "sha256",
+            "shape"
+          ],
+          "type": "object"
+        },
+        "train.npy": {
+          "additionalProperties": false,
+          "properties": {
+            "bytes": {
+              "maximum": 4000000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "sha256": {
+              "maxLength": 64,
+              "minLength": 64,
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            "shape": {
+              "items": false,
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "maximum": 3000000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "enum": [
+                    32,
+                    34,
+                    46,
+                    48,
+                    60,
+                    62
+                  ],
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            }
+          },
+          "required": [
+            "bytes",
+            "sha256",
+            "shape"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "train.npy",
+        "query.npy"
+      ],
+      "type": "object"
+    },
+    "case": {
+      "maxLength": 64,
+      "minLength": 64,
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "classes": {
+      "const": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "feature_names": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 60,
+      "minItems": 32,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "format": {
+      "const": "neural062_view_v1"
+    },
+    "generation": {
+      "maxLength": 64,
+      "minLength": 64,
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "query_ids": {
+      "items": {
+        "maxLength": 64,
+        "minLength": 64,
+        "pattern": "^[a-f0-9]{64}$",
+        "type": "string"
+      },
+      "maxItems": 500000,
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "format",
+    "generation",
+    "case",
+    "arm",
+    "feature_names",
+    "classes",
+    "query_ids",
+    "arrays"
+  ],
+  "type": "object"
+}
