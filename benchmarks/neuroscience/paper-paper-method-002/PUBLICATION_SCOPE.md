@@ -1,0 +1,11 @@
+# Publication scope
+
+This snapshot distributes ordinary source and scientific contracts for one existing Jaxley paper assignment. It includes all 67 accepted scientific roles unchanged and preserves 36 families, four conditions, 144 condition-family jobs and all 21 open qualification gates. Five main figures, ten Extended Data figures, three supplementary figures, nine supplementary-table rows and all sixteen scientific conflicts remain represented.
+
+No paper full text, authentic neural/retinal/stimulus arrays, morphology files, images, fitted weights, trial data, protected targets, private keys, signed acquisition URLs or local authoring history are distributed. The source intentionally retains published algorithm, conductance and ground-truth parameter literals and public specimen identifiers. These are published scientific code, not newly exposed private evaluator datasets. Public-source contamination remains a limitation for later evaluation.
+
+CANONICAL_SPEC.json projects the full current scientific contract while omitting local historical acquisition and audit notes. It retains all original current output families, observable endpoint groups and gates. Local paths in source/inverse/scope metadata are replaced by the corresponding public package paths; source resolution omits its private authoring origins. The full source API and all scientific code remain unchanged. The central lock is regenerated for projected metadata, and operator.py changes only that lock's byte/hash constants. The operator still invokes the same original scientific controller and authority path.
+
+The public contract snapshot does not rewrite the repository's separate canonical task roster. The inactive registration keeps generic run, score and program_execution null. Reference capture remains distinct from a full candidate grader. Source inspection authenticates bytes; it does not grant genuine input, native runtime, resource, target or scientific qualification.
+
+Historical component design documents and private installation reviews are not bundled. The public callable inventory and current implementations identify the actual available source interfaces. No scope reduction, replacement model or new numerical result is introduced by this projection. Original private histories remain separate.
