@@ -1,0 +1,154 @@
+{
+  "access_modes_and_gates": {
+    "case_adaptive_equal_inputs_tools_compute": "Same case TRAIN/innerVALIDATION labels, precomputed inputs/checkpoint tools, readoutsearch allowance and measuredCPU/wall/memory/IObudget; queryfeatures allowed for prediction only, no query-label feedback or query-fitted transform. Reset case state, retain adaptive decision transcript. No fake authority callback.",
+    "competence": "All producer source and nestedfits are concrete; actual reference competence, trueinput/schema/clock compatibility, checkpoint training overlap/rights, native resource and isolation qualification remain genuine empirical gates. Source acceptance cannot certify those gates.",
+    "frozen_program": "Freeze complete code, model/checkpoint exposure, features and learning recipe before any outerquery. Each outercase isolated; no crosscase fittedstate or queryEEG."
+  },
+  "arms": [
+    {
+      "fit": "training-only EEG mean, no hyperparameter search",
+      "groups": [],
+      "name": "training_mean"
+    },
+    {
+      "fit": "common ridge",
+      "groups": [
+        "eye"
+      ],
+      "name": "eye_only"
+    },
+    {
+      "fit": "common ridge",
+      "groups": [
+        "matched_static",
+        "motion",
+        "acoustic",
+        "timing",
+        "silence"
+      ],
+      "name": "nuisance"
+    },
+    {
+      "fit": "common ridge",
+      "groups": [
+        "matched_static",
+        "motion",
+        "acoustic",
+        "timing",
+        "silence",
+        "eye"
+      ],
+      "name": "nuisance_eye"
+    },
+    {
+      "fit": "common ridge",
+      "groups": [
+        "matched_static",
+        "motion",
+        "acoustic",
+        "timing",
+        "silence",
+        "learned_video"
+      ],
+      "name": "nuisance_dynamic"
+    },
+    {
+      "fit": "common ridge",
+      "groups": [
+        "matched_static",
+        "motion",
+        "acoustic",
+        "timing",
+        "silence",
+        "eye",
+        "learned_video"
+      ],
+      "name": "full"
+    },
+    {
+      "fit": "reuse identical full model; no extra selection/refit",
+      "groups": [
+        "samefullbutquerylearned_video_reversed"
+      ],
+      "name": "full_reverse"
+    }
+  ],
+  "common_readout": {
+    "alpha_grid": [
+      1e-06,
+      1e-05,
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      1.0,
+      10.0,
+      100.0,
+      1000.0,
+      10000.0,
+      100000.0,
+      1000000.0
+    ],
+    "family": "Weighted multioutput linear ridge; intercept; all127x150 outputs, same model family/grid/selection budget per distinct nonmean arm. No randomseed-dependent model selection.",
+    "feature_transform": "Per block standardization from unique FIT stimuli for shared stimulus blocks and FITperson/video rows for eye/timing; exact constant columns fixed0. Learned static/video PCA95% fitted from FIT unique videos only. Other blocks kept complete. Each transformed block divided by sqrt(numbercolumns); concatenate and divide by sqrt(numberincludedblocks), giving equal nominal block scale rather than rawdimensionality advantage. No perarm search over different feature recipes.",
+    "fit_count": "30outercases x5distinct ridgearms x(20innercells x13alphas+1refit)=39150actual fit calls required;30mean baselines;30full-reversal predictions reusefull; no source run performed",
+    "objective": "sum_i w_i ||Y_i - intercept - X_i B||^2 + alpha||B||^2, sum_i w_i=1; sample weights equalpersons then equalfamilies then equalvideos.",
+    "readout_custody": "Every actual selected training/validation coordinate, scaler/PCA/alpha/solver/output and complete fit ledger captured; resource accounting includes all discarded validation fits and shared feature preparation.",
+    "selection": "All13alphas, all20 innerperson/family cells; each inner transform fitted from innerFIT only. Weighted mean validation MSE equalinnerpersons and equalfamilies, not equalcounts of correlated videos. Lowest finite aggregate risk wins; exacttie chooses largeralpha. Any missing/failed fit makes that outerarm unavailable, never best-successful subset. Refit once on wholeouterFIT with selectedalpha and fresh permitted transforms."
+  },
+  "inputs_and_basis": {
+    "eeg": "Private unnormalized video-mean EEG, equal surviving joined repeats within person/video; no heldperson calibration. Fixed named127sensor order and released500Hz source timestamps independently reconciled across96recordings; all150bins retained.",
+    "eye": "Same joined repeats, native gazeX/gazeY/pupil means, absolute adjacent-sample speed and observed/pair fractions per20msbin; add perbin squared gazeX/gazeY,pupil and gazeX*Y as prespecified nonlinear ocular covariates,1800features; no query-fitted ocular scale.",
+    "silence": "Complete34video original no-audio-track filenames must join authentic complete media map and explicit no-playback evidence; zeros only for these verified silent stimuli plus common silence flag. Unknown/missing/unreadable audio fails.",
+    "timing": "Exact26legacy session/run/position predictors from joined roster; no target-quality metadata."
+  },
+  "population_split": {
+    "assignment": "Descending component video-count; ties SHA256 of canonical member-ID tuple with NEURAL080-family-v1 prefix; greedy smallest current fold video-count then smallest fold index; exactly5nonempty folds.",
+    "family_definition": "Complete provenance/duplicate graph connected components; no semantic-category substitution; genuine fullgraph/evidence absent remains input gate.",
+    "historical_freshness": "developmental public crossvalidation only; source supports separate genuinely sealed newperson/newfamily extension after provider identity/exposure evidence; no fresh case fabricated",
+    "inner_fit": "remaining4persons and remaining3familyfolds",
+    "inner_per_outer": 20,
+    "inner_validation": "one innerheldperson by all identities in one innerheldfamilyfold",
+    "outer": 30,
+    "outer_fit": "other5persons and other4familyfolds",
+    "outer_query": "one heldperson by every identity in one heldfamilyfold",
+    "selected": "all6persons and1102videoidentities, each with8sessions; every exact joined repeat retained; fixed127channels/150twenty-ms bins over0..3seconds"
+  },
+  "primary_evidence": {
+    "accepted_reference": "Exact old low-level five-alpha dual ridge(.01,.1,1,10,100),900FIT100validation102query perperson, fivearms; accepted custody unchanged; not competent whole new reference.",
+    "official_EMD_revision": "a7408c8be3e015770dd986628dbc3f0ed499def3",
+    "original_baseline": "Official feature script uses torchvision S3D KINETICS400_V1,14 uniform frame-index samples,17 named nodes, complete flattened activations; short-video fallback repeats final frame. TRAIN StandardScaler then PCA95percent. Figure5 encoding uses unregularized sklearn LinearRegression per participant on1000video means, after per-session zscore using all trials before train/test separation; NaNs set0. Query102 correlations/partial-correlations use query responses and test-derived ROI/time reporting. Retain literal source; prospective route changes these choices explicitly.",
+    "paper": {
+      "bytes": 6535627,
+      "complete_text_read": true,
+      "figure_table_visual_details": "not used to infer new numerical observations",
+      "pages": 28,
+      "public_reference": "https://arxiv.org/abs/2608.28768v2",
+      "sha256": "27419aca0df3e68636e6578026fc94b67a5cc8d50081c9fdee8b1c5918f750d2"
+    }
+  },
+  "proposed_fixed_feature_producers": {
+    "acoustic": "Actual SciPy1.15.3 polyphase resampling of channel-averaged native audio to16000Hz; log1p power64Slaney-normalized mel bands,400sample Hann FFT,160hop,reflect200sample boundaries, first300centers0..2.99s; append original30RMS and30zero-crossing terms. Authentic silent-no-track branch yields exactzero features plus status1, heard audio status0. Native samples/PTS and conversion profile recorded.",
+    "learned_video": "Pinned torchvision0.22.1 S3D KINETICS400_V1 with root-admitted exact local checkpoint; no network/model fallback. All17 official named nodes retained, flattened exactly in fixed order. PTS-midpoint14sample selection at(j+0.5)*3/14seconds from fully decoded authenticRGBframes; no repeated-last-frame repair. Same published weights transform. Training-only standardization/PCA95percent within each inner or outer fit; no heldfamily feature fitting.",
+    "lowlevel": "Retain complete accepted RGB384static,unsigned motion30x64,dynamic30x192 and native acoustic30x10 as diagnostic feature groups, not substitutions for learned/static/flow/logmel controls.",
+    "matched_static": "For each of the same14selected frames, pass a14frame clip repeating that one authentic frame through the identical S3D/17nodes, then mean all14feature vectors. Order-invariant appearance control with the exact same raw feature dimension and encoder as chronological video; extra preparation compute explicitly accounted.",
+    "motion": "Actual OpenCV4.11.0 Farneback dense flow for every adjacent native grayscale frame pair: pyr_scale0.5,levels3,winsize15,iterations3,poly_n5,poly_sigma1.2,flags0. Divide displacement by actual PTS delta; aggregate magnitude into8fixed direction bins in8x8all-pixel cells, duration-weighted into30x100ms bins. Require complete motion coverage; no guessed frame clock. Assign transition velocities to actual transition midpoints; use the nearest transition estimate at the two clip boundaries, an explicit feature-estimator boundary convention rather than a measured motion observation. Every100msbin receives duration-weighted support from these piecewise-constant estimates.",
+    "temporal_control": "Query-only time reversal of the14chronological selected frames, recomputed through same S3D/17nodes; same full fitted scaler/PCA/model reused. All nuisance inputs unchanged. Old shifted-low-level query control retained separately."
+  },
+  "risk_and_estimands": {
+    "candidate_primary": "Delta_improvement=R_fixed_reference_full - R_candidate_full; positive means lower candidate risk. Candidate is rewarded only for full predictions on same exact held coordinates.",
+    "fresh_extension": "Same prespecified frozenreference/metric applied only after genuine separate sealedperson/family eligibility and old-family/pretraining exposure reconciliation; historicalpublicrisk never relabeledfresh.",
+    "risk_formula": "ell_pv=mean over127channels and150bins[((Y_pv-pred_pv)/sigma_outer(ct))^2]. R_p=mean over genuinefamilies(mean overvideos in family ell_pv), pooling all5out-of-family outerpredictions. R=mean over6persons R_p. Repeated trials define a video mean and are never independent observations.",
+    "scientific_primary": "Delta_dynamic=R_fixed_reference_nuisance_eye - R_fixed_reference_full; signed, null/negative valid; neither component comes from candidate nuisance outputs.",
+    "secondary": "All7arm absolute risks; no-eye dynamic gain; ocular gain; attenuation; same-model reversal risk. Fixedsub03exclusion sensitivity remains secondary. Perchannel/time curves descriptive, never selectchannels/timeintervals or changeprimary.",
+    "training_normalization": "For each inner/outerfit, mu_ct=weightedmean over FITperson/family/video unscaledEEG; sigma_ct=sqrt(weightedmean((Y-mu)^2)). Weights equalpersons, equalfamilies, equalvideos. Apply same mu/sigma to validation/query for allarms. Undefined or exactconstant coordinate fails fullcase, no channel/time drops or sigma floor."
+  },
+  "schema": "neural080-full-method-proposal-v1",
+  "selection_status": "awaiting root; split and silence policies already selected; no scientific execution",
+  "uncertainty": {
+    "interval": "10000two-way resamples with replacement of6persons and entire genuinefamilycomponents, common draw schedule seed80080 shared acrossarms/contrasts; pointwise2.5/97.5percentiles of already captured predictions.",
+    "limits": "Descriptive conditional-on-fitted-crossvalidated-predictions stability intervals only. Sixpeople and overlapping training folds do not support an iidtrial/channel claim or a confirmatorywinner/purevisual/causal interpretation. No automatic p-value, multiplicity or generalized-population-confidence claim.",
+    "reported_units": "All6individualperson estimates, complete component/video denominator and failure ledger, equalperson mean, every fixedleave-one-person-out reduction and prespecifiedsub03excluded sensitivity.",
+    "training_variability": "Fullnestedrefits per resample are not silently omitted then claimed included; this interval explicitly excludes retraining uncertainty."
+  }
+}
