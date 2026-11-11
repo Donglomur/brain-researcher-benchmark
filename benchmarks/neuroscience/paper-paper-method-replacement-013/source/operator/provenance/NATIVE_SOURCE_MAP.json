@@ -1,0 +1,93 @@
+{
+  "schema": "neuroformer_native_source_map_v1",
+  "commit": "36ed94084628c253098d448048c980d3dea0050d",
+  "selection": "26 exact source/config/license texts; no notebooks, images, arrays or weights",
+  "loader": {
+    "source": "neuroformer/datasets.py:89-121",
+    "inputs": "neuron-by-time spikerates_dt_0.01.npy; speed/stimulus/phi/th loaded for either region",
+    "selection": "optional CSV is interpreted as 1-based neuron indices",
+    "split": "np.random.choice 80% interval indices without replacement; complement test; first floor(1% * training_count) chosen train intervals for fine-tune",
+    "identity_gap": "exact originals and full medial/source-animal/session joins absent"
+  },
+  "configs": {
+    "source": "configs/Visnav/lateral/*.yaml",
+    "supplied_loci": [
+      "lateral"
+    ],
+    "dt_seconds": 0.01,
+    "current_seconds": 0.05,
+    "history_seconds": 0.05,
+    "frame_seconds": 0.15,
+    "embedding": 256,
+    "layers": 6,
+    "paper_difference": "paper table lists5ms token,150ms history,200ms video; main8layers and embedding256 versus table512. No paper-run parity inferred."
+  },
+  "entrypoints": {
+    "training": "neuroformer_train.py",
+    "inference": "neuroformer_inference.py",
+    "training_constants": "250epochs,batch160,learning_rate1e-4; arguments batch_size/n_epochs/finetune do not select those controls in this entrypoint",
+    "evaluation_exposure": "Trainer receives test_dataset directly; fine-tune_dataset is constructed but not selected for training",
+    "inference_support": "generate_spikes uses finetune_dataset; decode_modality uses test_dataset; predict_modes overwritten to speed/phi/th",
+    "safety": "top-level scripts load data/models and train/infer; never imported or invoked in construction. The metadata planner never executes them.",
+    "legacy_launch": "launch.sh refers to absent neuroformer_Visnav_NF_1.5.py and absent legacy configs; retained as provenance, not used by native_plan",
+    "recursive_history_defect": "simulation.py:195-208 passes generated dataframe as data= to get_interval, but data_utils.py:954 unconditionally resets data=self.data. true_past=False alone therefore does not establish generated-history evaluation. Original source unchanged; prospective staged-history protocol is distinct.",
+    "pearson_example": "neuroformer_inference.py:259-261 computes Pearson on first200 rows. This example is not a full-recording evaluation or authenticated paper-run support."
+  },
+  "dependencies": {
+    "source": "requirements.txt and setup_env.sh",
+    "recorded_versions": {
+      "torch": "1.13.1",
+      "torchvision": "0.14.1",
+      "numpy": "1.22.4",
+      "scipy": "1.9.3",
+      "pandas": "2.0.3",
+      "scikit-learn": "1.2.0",
+      "omegaconf": "2.3.0",
+      "gdown": "4.6.0",
+      "timm": "0.5.4"
+    },
+    "unresolved": "requirements has machine-local file URLs including torchmetrics; setup_env lists unpinned packages and commented Python3.11. No portable lock or installation qualification."
+  },
+  "partial_native_recipe": "operator/native_plan.py emits verified lateral source commands and blockers only; no execution path or synthetic paper-run claim",
+  "author_imports": 0,
+  "scientific_executions": 0,
+  "neural_metrics": {
+    "sources": [
+      "neuroformer/analysis.py:114-151",
+      "neuroformer/analysis.py:153-181"
+    ],
+    "compute_scores": "ID sets per true-present interval; preserves source FP==0 or FN==0 shortcut returning precision=recall=1 when TP>0. Empty true intervals omitted.",
+    "compute_scores_scikit": "Predicted-present intervals; weighted binary F1 across active ID union; no true-negative IDs in union. Empty predicted intervals omitted.",
+    "interface": "Both source formulas reported separately over each full50ms interface window, not a selected source/paper reward. 5ms/native10ms, token truncation and definitive Figure6 branch unqualified.",
+    "no_support": "New bounded wrapper reports null instead of source divide-by-zero; explicit changed undefined policy.",
+    "teacher_forced_branch": {
+      "source": "neuroformer/model_neuroformer.py:1317-1355",
+      "meaning": "Per-position token multiclass F1 under teacher forcing, distinct from both interval-ID helpers and held-out recursive rollout; dense raster cannot recover truncated token order. Not implemented as the paper score."
+    },
+    "observed_call": "visualize.py:1191-1192 invokes compute_scores, but no authenticated Figure6 branch/run provenance was established."
+  },
+  "token_boundary": {
+    "source": "neuroformer/data_utils.py:947-1025",
+    "operation": "round each rate value then repeat neuron ID that many times, ordered by bin then neuron; retain last block_size-2 IDs, add SOS/EOS/PAD; dt branch has independent truncation",
+    "unqualified": "No new5ms biological event transform or equivalence to full untruncated dense raster inferred.",
+    "units": "No multiplication by dt in rate-to-repeat operation. Upstream count/rate/Hertz units are unresolved; dt token means offset from window start, not inter-event delay."
+  },
+  "clock_boundary": {
+    "source": "neuroformer/data_utils.py:884-890,1116-1130",
+    "native": "Current neural interval ends at requested interval; frame request adds one current-window before callback. Exact source clock and position convention need qualification before causal claims.",
+    "interface": "Prospective case projection uses explicitly frozen clock and contemporary visual windows; not asserted to match native alignment."
+  },
+  "retained_static_signal": {
+    "file": "neuroformer/data_utils.py",
+    "line": 869,
+    "meaning": "Unchanged NotImplementedError when no intervals passed; original source preserved, no universal supported-runtime claim."
+  },
+  "normalization": {
+    "sources": [
+      "neuroformer/utils.py:168-180",
+      "neuroformer/data_utils.py:548-567,923-945,1098-1110"
+    ],
+    "behavior": "Supplied speed/phi/th passed through then sliced/cast/padded/tokenized; no physical-unit normalization or circular-gaze transform in this path. Upstream NPY scaling and units unqualified. predict=False exposes same-current-window covariate; training-script explanatory prose is reversed.",
+    "classification": "Retained predict_all config uses regression with model MSE; no authenticated25-class edges/run configuration provided."
+  }
+}
