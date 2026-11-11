@@ -1,0 +1,139 @@
+{
+  "agent_access_modes": [
+    "frozen_program",
+    "case_adaptive_equal_inputs_tools_compute"
+  ],
+  "amendments": [
+    "All trials subject to disclosed movement/sensor QC, not source random/initial50 sampling",
+    "No reward-status, measured-delay or movement-amplitude outcome selection",
+    "Whole-trial blocked split instead of flattened-timepoint CV",
+    "Full causal QC history instead of source startup padding",
+    "Movement-end planned window and exact count targets; no original smoothed-rate/figure reproduction claim"
+  ],
+  "baseline": {
+    "alphas": [
+      0.1,
+      1,
+      10,
+      100
+    ],
+    "estimator": "clipped ridge expected counts",
+    "features": [
+      "bin midpoint",
+      "normalized bin position",
+      "original trial order",
+      "planned delay",
+      "same-bin handle x/y mean and velocity"
+    ],
+    "neural_features": "same-bin mean GrC and/or binary CF events",
+    "query_adaptation": false,
+    "selection": "development MSE; ties smaller alpha; no refit",
+    "training": "train-only mean/std and coefficients; unpenalized intercept"
+  },
+  "case_count_expected": 16,
+  "conditions": [
+    "context_handle",
+    "grc",
+    "cf",
+    "joint"
+  ],
+  "controls": [
+    "context_handle",
+    "grc",
+    "cf",
+    "joint",
+    "query_neural_mismatch",
+    "baseline_only",
+    "agent_plus_same_baseline",
+    "fixed_vs_case_adaptive_equal_inputs"
+  ],
+  "group_delays_s": [
+    1,
+    2,
+    2
+  ],
+  "group_records": [
+    5,
+    5,
+    6
+  ],
+  "isolation": {
+    "candidate_runtime": "not implemented; independent sandbox/custody qualification required",
+    "cross_case_state": "forbidden; real runtime reset not yet implemented",
+    "private_fields": [
+      "query contacts/counts",
+      "reward times/alignment",
+      "sensor QC arrays/statistics",
+      "original biological/source identities"
+    ],
+    "public_context": [
+      "stage",
+      "planned_delay",
+      "original_trial_order"
+    ],
+    "query_feedback": false
+  },
+  "mouse_count_expected": 5,
+  "native_axes": {
+    "axis_policy": "Explicit source conventions; actual extraction/axis evidence remains a gate; no automatic transpose, squeeze or truncation",
+    "contact": "trial,behavior_time",
+    "handle": "trial,coordinate,behavior_time",
+    "neural": "trial,cell,imaging_time"
+  },
+  "numerical_timestamp_policy": {
+    "behavior": "Exact200Hz integer ticks,20ticks/bin",
+    "imaging": "After movement-end rebase, snap a coordinate to the nearest100ms boundary iff distance<=1e-9 seconds. Other native timestamps retain values and bin side. Nearest-boundary bin owns equality.",
+    "interpretation": "Declared numerical coordinate convention; physical clock accuracy remains unverified",
+    "overlap": "Integer one-based source indices converted to zero-based half-open200/400tick intervals; floatseconds reporting only",
+    "scope": "Same policy for whole-window crop and feature bins; start included and planned end excluded",
+    "signal_values": "No interpolation or value change",
+    "tolerance_s": 1e-09
+  },
+  "primary_neural_condition": "joint; GrC-only and CF-only are predeclared secondary ablations, never best-of-selected endpoints",
+  "quality": {
+    "all_original_trial_dispositions_retained": true,
+    "amendment": "Every tested causal history must be fully observed; source filter startup padding is not observed data",
+    "centers_s": [
+      -1.75,
+      1.75
+    ],
+    "history_samples": 300,
+    "movement_flag": "goodmvdir",
+    "paper_described_threshold": 0.9,
+    "reject_high_count_at_least": 297,
+    "selected_threshold": 0.99,
+    "source_code_high_contact_threshold": 0.99,
+    "target_conditioning": "Reward-aligned measured contacts used privately for sensor QC; report full exclusions and conditional population"
+  },
+  "schema_version": 1,
+  "scope": "retrospective processed within-session contact-count decoding",
+  "scoring": {
+    "aggregation": "equal trials/session, sessions/mouse, mice",
+    "all_expected_bins_required": true,
+    "null_or_negative_gain": "valid result, no favored biological conclusion",
+    "poisson_mean_floor": 1e-12,
+    "primary": "paired context_handle MSE minus candidate MSE",
+    "secondary": "paired Poisson deviance gain",
+    "uncertainty": "Per-mouse paired outputs implemented; inferential procedure and acceptance thresholds not yet qualified"
+  },
+  "source_fields_same_record": true,
+  "split": {
+    "all_three_splits_required": true,
+    "boundaries": "floor(.6*N),floor(.8*N), fixed before QC",
+    "cross_fold_input_overlap": "refuse complete session; never selectively prune or fabricate independent samples",
+    "order": "strict increasing source midpoint; do not sort or repair joins",
+    "source_preprocessing": "Whole-recording processed GrC/CF; no fold-isolated native preprocessing claim",
+    "unit": "complete original trial"
+  },
+  "target": {
+    "actual_reward_jitter": "No claim planned interval is strictly before actual delivery",
+    "alignment": "delta=(trueend-midpt)*dtb; movement-end-relative",
+    "bin_s": 0.1,
+    "end_boundary_excluded": true,
+    "event_time": "right-hand sample of 0->1 transition",
+    "interval": "[delta,delta+planned_delay) on midpoint clock",
+    "step_s": 0.005,
+    "type": "binary capacitive-contact rising-edge count"
+  },
+  "task_id": "NEURAL-030"
+}

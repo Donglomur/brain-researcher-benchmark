@@ -1,243 +1,273 @@
 {
-  "schema_version": 1,
-  "id": "NEURAL-002",
-  "track": "neural",
-  "title": "Neural tracking and speech intelligibility",
-  "status": "specification_only",
-  "source_identity": {
-    "ids": [
-      "D-N056"
-    ],
-    "titles": [
-      "MEG-SCANS speech, chirps and noisy sentences"
-    ],
-    "overlap_groups": [
-      "meg-scans"
-    ],
-    "task_family": "auditory_tracking"
-  },
-  "scientific_question": "Does MEG tracking explain intelligibility beyond sentence identity, SNR and acoustics?",
-  "task_type": "investigation",
-  "neural_role": "input",
-  "primary_outputs": [
-    "A held-out intelligibility-model contrast plus participant coefficients, intervals and prediction artifacts."
-  ],
-  "input_assets": {
-    "routes": [
-      "https://openneuro.org/datasets/ds006468/versions/1.1.1",
-      "https://www.nature.com/articles/s41597-025-06397-4",
-      "https://github.com/tillhabersetzer/MEG-SCANS",
-      "https://s3.amazonaws.com/openneuro.org/ds006468/dataset_description.json",
-      "https://s3.amazonaws.com/openneuro.org/ds006468/sub-01/meg/sub-01_task-olsa_events.tsv",
-      "https://raw.githubusercontent.com/tillhabersetzer/MEG-SCANS/32bfc690e28e7591b45d96615c59b2d53b6a7165/speech/decoding/training_decoding.m"
-    ],
-    "readiness_records": [
-      {
-        "source_id": "D-N056",
-        "ledger": "readiness/signals_extension_a.json",
-        "record_sha256": "bcb171a7252610a5007f3f4c00ee98ab04924afbe93bc53bff14e6a7be024a34",
-        "data_manifest": {
-          "url": "https://openneuro.org/datasets/ds006468/versions/1.1.1",
-          "paper_snapshot_git": "5c1d52d66c6bfe4c1c908d496df8a2ecbe3fece1",
-          "observed_current_version": "1.1.2",
-          "observed_current_git": "b32cecddfd2be552fb5590000b5768e99ff277e9",
-          "manifest_url": "https://s3.amazonaws.com/openneuro.org?list-type=2&prefix=ds006468/&max-keys=1000",
-          "manifest_scope": "First 1000 keys only, not total storage.",
-          "subjects": 24,
-          "example_input": {
-            "key": "ds006468/derivatives/sub-01/maxfilter/sub-01_task-audiobook1_run-01_proc-tsss-mc_meg.fif",
-            "size": 884107554,
-            "etag": "\"cfdc9ea3f555643f6329db8ff3971e38\""
-          },
-          "processed_sentence_target": {
-            "key": "ds006468/derivatives/stimuli/preprocessed_olsa_envelopes_decoding.mat",
-            "bytes": 132360
-          },
-          "license": "CC0"
-        },
-        "recording_contract": {
-          "neural": "Raw and MaxFilter-preprocessed FIF streams; actual representative raw/derivative files and event tables were inspected.",
-          "labels": "Sentence events contain onset,duration,value,sample,trial_type,SNR,intelligibility,stim_file,sentence; processed OLSA acoustic envelopes are available.",
-          "time_alignment": "Author pipeline trains at 1000-to-64 Hz downsampled neural/acoustic resolution, applies documented 3 ms alignment correction, and supplies sentence-event timing. Alignment must be rechecked before trials are packaged.",
-          "biological_ids": "24 participants in actual participants.tsv; each participant has audiobook/chirp/sentence tasks and multiple runs, not separate cohorts.",
-          "evidence": "Prior source audit inspected OpenNeuro manifest, exact event/participant text and speech decoding loaders."
-        },
-        "status": "artifact_ready"
-      }
-    ],
-    "exact_asset_records": [],
-    "missing_or_unverified": [
-      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
-      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
-    ]
-  },
-  "allowed_inputs": {
-    "neural_measurements": "Raw and MaxFilter-preprocessed FIF streams; actual representative raw/derivative files and event tables were inspected.",
-    "allowed_context": "Sentence events contain onset,duration,value,sample,trial_type,SNR,intelligibility,stim_file,sentence; processed OLSA acoustic envelopes are available.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Author pipeline trains at 1000-to-64 Hz downsampled neural/acoustic resolution, applies documented 3 ms alignment correction, and supplies sentence-event timing. Alignment must be rechecked before trials are packaged.",
-    "source_contract_evidence": "Prior source audit inspected OpenNeuro manifest, exact event/participant text and speech decoding loaders."
-  },
-  "biological_unit": "24 participants in actual participants.tsv; each participant has audiobook/chirp/sentence tasks and multiple runs, not separate cohorts.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
-  "split": {
-    "policy": "Group whole audiobook/sentence runs and repeated sentence identities; fit on training runs, evaluate different sentences; outer group person. Any target-person calibration has a fixed labeled budget.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
-  },
-  "reference": {
-    "source_code_url": "https://github.com/tillhabersetzer/MEG-SCANS",
-    "commit_or_archive_version": "32bfc690e28e7591b45d96615c59b2d53b6a7165",
-    "entrypoints": [
-      "speech/settings_speech.m",
-      "speech/decoding/analysis_pipeline_decoding.m",
-      "speech/decoding/training_decoding.m",
-      "speech/decoding/preprocessing_audiobooks_decoding.m",
-      "speech/decoding/preprocessing_olsa_decoding.m"
-    ],
-    "role": "signal_decoder_and_preprocessing",
-    "reference_executed_for_this_contract": false,
-    "source_paper": "https://www.nature.com/articles/s41597-025-06397-4",
-    "data_url": "https://openneuro.org/datasets/ds006468/versions/1.1.1"
-  },
-  "controls": [
-    "Acoustic-only model",
-    "repeated-sentence grouping",
-    "SNR-stratified comparison",
-    "shifted envelope control."
-  ],
   "access_conditions": {
     "agent_modes": [
       "frozen_program",
       "case_adaptive_equal_inputs_tools_compute"
     ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
-    }
+    "budget": "equal budget must be frozen before native execution",
+    "labels": "held targets remain trusted evaluator-only; no feedback during32folds",
+    "reset": "fresh qualified worker per held person"
   },
-  "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed person-macro change in intelligibility prediction loss and numerical-claim verification rate.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
-    },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
-      {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
-      },
-      {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
-      },
-      {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
-      }
+  "admission": {
+    "reason": "Inactive source construction, no authentic execution or qualified worker.",
+    "research_qualified": false,
+    "runnable": false,
+    "submission_ready": false
+  },
+  "allowed_inputs": {
+    "forbidden": [
+      "held labels",
+      "source path",
+      "trigger",
+      "sample/onset",
+      "trial order",
+      "duration",
+      "response",
+      "variable length"
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "query": "held person's opaque case ID, cell and fixed62\u00d7301EEG; same312-case batch per mode",
+    "training": "31 complete people with cell/labels and fixed62\u00d7301EEG"
   },
-  "resources": {
-    "class": "workstation_or_single_GPU_after_bounded_intake",
-    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
-    "source_storage_evidence": null
+  "biological_unit": "participant;32 people, all tasks/speeds/repeats grouped",
+  "controls": [
+    "prior-only",
+    "order-only",
+    "premarker EEG",
+    "training-label permutation within person/cell",
+    "response-only after authenticated behavioral join",
+    "duration-only after authenticated timing join",
+    "matched fixed-program/case-adaptive conditions"
+  ],
+  "evaluation": {
+    "executor_ref": null,
+    "interpretation": "Raw 26-way scores alone do not establish early information. Report all paired gains and uncertainty; a null or inconclusive result is valid. No complete-character, comprehension, calibrated acoustic-onset or pre-response claim.",
+    "nominal_chance": "1/26 only with complete26-class cell coverage",
+    "paired_gains_required": [
+      "prior_only",
+      "order_only",
+      "premarker",
+      "permutation",
+      "validated_competent_EEG_reference"
+    ],
+    "primary": "equal-person mean of equal-six-cell balanced accuracy",
+    "report_composition_status": "Existing per-arm reference source, scoring and paired-interval helper are unchanged. No qualified all-control empirical report or reference competence has been established.",
+    "scorer_ref": null,
+    "scoring_status": "implemented_source_only_engineering_checked",
+    "uncertainty": "paired participant bootstrap; full per-person/per-cell report"
   },
   "holds": [
     {
-      "id": "task_specific",
-      "requirement": "Audit trial intelligibility scale and repeated sentence IDs; freeze link function and confirmation split."
+      "id": "authentic_exact_source_intake",
+      "requirement": "authentic exact source intake"
     },
     {
-      "id": "source_1",
-      "requirement": "Dataset descriptor with substantive decoding validation; rank below papers with independent new mechanistic results when selecting the100."
+      "id": "all32_identity_and_complete_class_coverage",
+      "requirement": "all32 identity and complete class coverage"
     },
     {
-      "id": "source_2",
-      "requirement": "Restricted OLSA audio waveforms are not released; processed target envelopes are public and sufficient for declared decoder scope, not alternative raw-audio feature extraction."
+      "id": "raw_marker_and_channel_schema",
+      "requirement": "raw marker and channel schema"
     },
     {
-      "id": "source_3",
-      "requirement": "Author normalization pools all samples across trials; any strict inductive extension must fit transforms only on training data and report departure from original reproduction."
+      "id": "known_bad_channel_policy",
+      "requirement": "known bad channel policy"
     },
     {
-      "id": "source_4",
-      "requirement": "Paper snapshot1.1.1 differs from observed S3 current1.1.2; compare checksums or retrieve exact annex snapshot before execution."
+      "id": "source_target_privacy_and_contamination",
+      "requirement": "source target privacy and contamination"
     },
     {
-      "id": "source_5",
-      "requirement": "MATLAB/FieldTrip/mTRF dependencies not executed."
+      "id": "matched_resource_budget",
+      "requirement": "matched resource budget"
     },
     {
-      "id": "source_6",
-      "requirement": "A neural-only reference and investigation score still require qualification; no completed decoding is implied."
+      "id": "native_reference_and_null_controls",
+      "requirement": "Validate control/reference adequacy and reliability on training-only development before scientific interpretation. Provided shrinkage/nuisance centroids are unqualified reference candidates, not proof of competent EEG/order controls. Report matched paired gains versus prior, order, premarker, permutation and a competent EEG reference; retain full authenticated nuisance controls."
     },
     {
-      "id": "packet",
-      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+      "id": "independent_scoring_replication",
+      "requirement": "independent scoring replication"
     },
     {
-      "id": "protocol",
-      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+      "id": "qualified_process_isolation",
+      "requirement": "qualified process isolation"
     },
     {
-      "id": "reference",
-      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+      "id": "scientific_interpretation_review",
+      "requirement": "scientific interpretation review"
     },
     {
-      "id": "scorer",
-      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      "id": "prefix_identifiability_and_order_controls",
+      "requirement": "Establish a relevant delivered-stimulus information opportunity and reliable discrimination of systems. If source timing establishes all relevant delivered prefixes identical, reconsider primary use or retain the window as negative-control-only. No guessed prefix ceiling, nominal-CPM clock conversion or arbitrary longer window."
     },
     {
-      "id": "replication",
-      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+      "id": "behavioral_diagnostics",
+      "requirement": "Exact measured response/duration provenance and clock join remain unavailable."
+    },
+    {
+      "id": "historical_software_terms",
+      "requirement": "Keep original MATLAB code external until redistribution grant is established."
     }
   ],
-  "next_implementation_action": [
-    "Audit trial intelligibility scale and repeated sentence IDs; freeze link function and confirmation split."
-  ],
-  "construction_review": null,
-  "source_audit_overlays": [],
-  "provenance": {
-    "canonical_record_sha256": "470c829eb0d00a154f834a93e72fa476d9ad7fbf3b01508afbe03509930e7ce2",
-    "source_files": [
-      {
-        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
-        "bytes": 799654,
-        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
-      },
-      {
-        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
-        "bytes": 48504,
-        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
-      },
-      {
-        "path": "docs/neuroscience-benchmarks/readiness/signals_extension_a.json",
-        "bytes": 75510,
-        "sha256": "c8483ac7303756678974cca75dfb64a16064f68cec4a0ae407ae84d7976f41d6"
-      }
+  "id": "NEURAL-002",
+  "input_assets": {
+    "authentic_intake": false,
+    "exact_asset_records": "All64 recording metadata identities in package SOURCES.json; content-key/raw-body authentication pending.",
+    "routes": [
+      "https://openneuro.org/datasets/ds007655/versions/1.0.2",
+      "https://github.com/OpenNeuroDatasets/ds007655/tree/d2e09f610d267b8b3679997f8bc4e52fe6ca402a"
     ],
-    "builder": {
-      "path": "tools/build_neural_delivery_manifests.py",
-      "bytes": 8015,
-      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    "source_commit": "d2e09f610d267b8b3679997f8bc4e52fe6ca402a"
+  },
+  "neural_role": "input",
+  "next_implementation_action": [
+    "Root may install the independently reviewed inactive early-information source after a genuine source commit; authenticate source payloads and establish information opportunity, adequate controls, reliability and fixed execution budgets before native qualification."
+  ],
+  "preprocessing": {
+    "channel_policy": "Globally zero PO4/TP8, average-reference remaining60, retain62slots; explicit new source amendment.",
+    "claim": "first 500 ms relative to software marker; acoustic timing, complete-character coverage and pre-response interpretation unestablished",
+    "filtering": "no added filters or future-dependent transforms; original acquisition filters persist",
+    "native_sample_hz": 600,
+    "samples": 301,
+    "start_zero_based": "sample-1"
+  },
+  "primary_outputs": [
+    "All 32 held-person/six-cell probability predictions and raw balanced accuracies with complete coverage.",
+    "Paired participant gains versus prior-only, order-only, premarker, training-label permutation and a validated competent EEG reference, reported alongside every raw score.",
+    "Reliability/information-opportunity assessment and matched authenticated nuisance controls before interpreting early information."
+  ],
+  "provenance": {
+    "dataset_doi": "10.18112/openneuro.ds007655.v1.0.2",
+    "early_information_selection": {
+      "authentic_neural_or_participant_target_reads": 0,
+      "authority": "Explicit root selection within the broad user neural-understanding track; not a user-specified full-character claim.",
+      "authorized_stimulus_dictionary_addendum": {
+        "bytes": 4170,
+        "distribution": "not_distributed_private_evidence",
+        "identity_scope": "bytes_and_hash_identify_unpublished_original_not_public_summary",
+        "path": null,
+        "public_summary": "benchmarks/neuroscience/neural-002/PUBLIC_PROVENANCE.json",
+        "sha256": "15e587fd05ca64208f44f1ab47382649c6e27432404aae09d451a8bcb30e6a8b"
+      },
+      "code_change_count": 0,
+      "note": "The separate 3,912-byte public stimulus-dictionary source audit is not a participant target or neural-data read by this metadata worker.",
+      "preceding_engineering_source": {
+        "bytes": 16180,
+        "distribution": "not_distributed_private_evidence",
+        "identity_scope": "bytes_and_hash_identify_unpublished_original_not_public_summary",
+        "path": null,
+        "public_summary": "benchmarks/neuroscience/neural-002/PUBLIC_PROVENANCE.json",
+        "sha256": "37f36c04a4aa916affc4d65c95cc03c0265c193cd11f0f73d5b3aeb3387f231c"
+      },
+      "scientific_timing_audit": {
+        "bytes": 8915,
+        "distribution": "not_distributed_private_evidence",
+        "identity_scope": "bytes_and_hash_identify_unpublished_original_not_public_summary",
+        "path": null,
+        "public_summary": "benchmarks/neuroscience/neural-002/PUBLIC_PROVENANCE.json",
+        "sha256": "d2fb40fc4609a02765655ba76338a257af237895528548227ab9b02c6d678627"
+      }
     },
     "new_payload_reads": 0,
-    "scientific_execution": false
+    "reason": "Explicit root-selected replacement; original MEG psychometric intelligibility target is not measured recognition.",
+    "scientific_execution": false,
+    "source_commit": "d2e09f610d267b8b3679997f8bc4e52fe6ca402a",
+    "supersedes": {
+      "bytes": 12815,
+      "path": "benchmarks/neuroscience/neural-002/history/NEURAL-002.prior.json",
+      "sha256": "0e6c94e8ae3fa7b0504f2e1b666bf019fe30ec677bd76bbd329983fdedba02c0"
+    }
   },
-  "admission": {
-    "runnable": false,
-    "research_qualified": false,
-    "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+  "reference": {
+    "author_code": "external provenance only; no historical method reproduction claimed",
+    "methods": [
+      "fixed training-only equal-person shrinkage ERP centroid",
+      "training prior"
+    ],
+    "native_reference_run": false
+  },
+  "resources": {
+    "basis": "nominal9984\u00d762\u00d7301float32 arithmetic, excludes raw recordings/copies/controls/overhead; not measured",
+    "class": "workstation_after_reviewed_authentic_intake",
+    "planned_signal_window_bytes": 745285632
+  },
+  "schema_version": 1,
+  "scientific_question": "Does the first 500 ms of software-marker-locked EEG contain reproducible stimulus-ID information in an unseen participant beyond prespecified context and temporal controls?",
+  "scope": {
+    "benchmark_count": 1,
+    "cells": [
+      "dotcount/15CPM",
+      "dotcount/30CPM",
+      "dotcount/40CPM",
+      "firstlast/15CPM",
+      "firstlast/30CPM",
+      "firstlast/40CPM"
+    ],
+    "class_count_per_cell": 26,
+    "endpoint": "early software-marker-window stimulus information, not complete-character decoding",
+    "nominal_trials": 9984,
+    "outer_folds": 32,
+    "participants": [
+      "sub-01",
+      "sub-02",
+      "sub-03",
+      "sub-04",
+      "sub-05",
+      "sub-06",
+      "sub-07",
+      "sub-08",
+      "sub-09",
+      "sub-10",
+      "sub-11",
+      "sub-12",
+      "sub-13",
+      "sub-14",
+      "sub-15",
+      "sub-16",
+      "sub-17",
+      "sub-18",
+      "sub-19",
+      "sub-20",
+      "sub-21",
+      "sub-22",
+      "sub-23",
+      "sub-24",
+      "sub-25",
+      "sub-26",
+      "sub-27",
+      "sub-28",
+      "sub-29",
+      "sub-30",
+      "sub-31",
+      "sub-32"
+    ],
+    "repetitions_per_class": 2,
+    "sampling_hz": 600,
+    "shape": [
+      62,
+      301
+    ],
+    "window": "marker 0 through 500 ms inclusive"
+  },
+  "source_identity": {
+    "ids": [
+      "OpenNeuro-ds007655"
+    ],
+    "overlap_groups": [
+      "morse-eeg-atp-ds007655"
+    ],
+    "task_family": "early_auditory_marker_window_information",
+    "titles": [
+      "MorseEEG-ATP"
+    ]
+  },
+  "split": {
+    "authentic_manifest_status": "not_created",
+    "data_scope": "public_development_only",
+    "policy": "all32leave-one-participant-out; grouped training-only inner validation"
+  },
+  "status": "specification_only",
+  "task_type": "prediction_and_investigation",
+  "title": "MorseEEG-ATP early marker-window stimulus information",
+  "track": "neural"
 }
