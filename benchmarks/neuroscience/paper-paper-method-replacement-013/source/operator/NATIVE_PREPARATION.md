@@ -137,3 +137,7 @@ dataset availability, paper reproduction, model performance or SOTA.
 
 Current construction authority is source work only. The future `prepare` call
 above is an implemented interface, not an instruction to execute scientific work.
+
+## Later source component
+
+`protected_rollout.py` supplies a separate source-amended current-token and generated-only-history component. This preparation API still returns original datasets and performs no rollout. The new component does not qualify original run mappings, the5ms bridge or authentic native execution; see `PROTECTED_ROLLOUT.md`.

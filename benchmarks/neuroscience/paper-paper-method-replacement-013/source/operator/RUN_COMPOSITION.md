@@ -89,8 +89,9 @@ surrogate is silently substituted.
 The original generated-history override is ineffective because get_interval
 overwrites its supplied data argument. This behavior remains unchanged. The raw
 generation result is retained alongside behavior output, not relabelled as a
-correct autoregressive benchmark. A corrected-history producer would be a new
-prospective condition and is not implemented in this packet.
+correct autoregressive benchmark. A corrected-history component is now available through `ReleasedCalls.protected_generation`;
+it is a separately labelled source amendment within protected native conditions. It does not
+select any original ablation recipe. See `PROTECTED_ROLLOUT.md`.
 
 Other source defects remain visible. Trainer reads min_eval_epoch/eval_every on
 itself, although the entrypoint writes them on its config, so the ordinary path
@@ -122,8 +123,8 @@ inference producer, not a claim of paper/native-run parity.
 This protects the inspected argument flow, **not an adversarial process boundary**.
 A provider/model in the same Python process may have other references. Authentic
 data identities, private staging, process/network containment and evaluation
-independence remain required external gates. Neural-count cells also require an
-actual autoregressive current-token/generated-only-history producer: passing
+independence remain required external gates. Neural-count cells retain original configuration/run and qualified execution gates.
+The separate generated-only component supplies an explicit current-token/history producer; passing
 teacher-forced x['id']/x['dt'] to model(x,None) would still expose current truth.
 Those cells remain blocked. No behavior-head success retires that requirement.
 
@@ -174,8 +175,10 @@ for either helper. Selecting the paper's exact metric/conversion remains open.
 
 ## Unfinished scope
 
-The 66 predecessor ordinary source roles remain byte-identical. The full primary
-PDF remains an external descriptor only and was not read or copied. All46 cases
+All 71 run/metric predecessor roles are retained. The source amendments are indexed
+in this successor; original historical source bodies remain unchanged. The exact
+external primary text was inspected for this method choice; no primary body is
+copied into the successor. All46 cases
 and simulation, passive-control, variability, geometry, representation-probing,
 CEBRA and training-curve families remain required. No benchmark registration,
 qualified-count increase, model study, original observation access or publication

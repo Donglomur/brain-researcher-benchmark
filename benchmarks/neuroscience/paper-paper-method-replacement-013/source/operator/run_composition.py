@@ -109,12 +109,12 @@ def build_matrix(source_root):
                     holds += ["physically isolated training/selection/query/target resources",
                               "nonoverlapping full neural/video context support"]
                     if case["kind"] == "counts":
-                        holds += ["actual autoregressive current-token and generated-only-history producer absent"]
+                        holds += ["original ablation/config binding and qualified execution of available generated-only rollout component"]
             cells.append({"id": case["id"] + "::" + condition, "condition": condition,
                 "native_tick_us": 5000 if prospective else 10000,
                 "historical_selection_uses_test": condition == HISTORICAL,
                 "target_free_behavior_head_available": condition == PROTECTED and case["method"] == "neuroformer" and case["kind"] in ("regression", "joint"),
-                "generated_history_repair_included": False, "holds": holds, "ready": False})
+                "generated_history_repair_included": False, "protected_rollout_component_available": condition == PROTECTED and case["kind"] == "counts", "holds": holds, "ready": False})
             cells[-1]["metric_profile"] = metric_profile
             cells[-1]["metric_selection_scientifically_qualified"] = False
         rows.append({"case": copy.deepcopy(case), "source_conditioned": not prospective, "cells": cells})
@@ -138,7 +138,7 @@ def build_matrix(source_root):
                 "selected_figure6_branch":None,"teacher_forced_token_metrics_are_separate":True},
             "native_classification_mapping_unresolved": {"holds":["original quantizer","native class decoding","paper metric/support mapping"],
                 "no_prospective25class_substitution":True},
-            "protected_autoregressive_metric_unresolved": {"holds":["current-token autoregressive producer","generated-only history","metric/window mapping"],
+            "protected_autoregressive_metric_unresolved": {"component":"operator/protected_rollout.py:produce", "holds":["original ablation/config/run mapping","qualified protected component execution","metric/window mapping"],
                 "teacher_forced_current_inputs_not_admitted_as_protected":True},
             "existing_5ms_finite_artifact": {"retained_roles":["public/metrics.py","operator/score.py"],
                 "adapter":"operator/score.py:metric; biological_macro", "native_source_metric_parity_qualified":False}},
@@ -357,6 +357,11 @@ class ReleasedCalls:
         return {"generation": generated, "behavior": self.historical_behavior(active, test),
                 "true_past": true_past, "generated_history_override_defect_preserved": True,
                 "figure6_metric_selected": None, "source_complete": False, "scientifically_qualified": False}
+
+    def protected_generation(self, fitted, request, queries):
+        """Actual amended component; no original ablation configuration is selected."""
+        import protected_rollout
+        return protected_rollout.produce(self.bodies, self.runtime, fitted, request, queries)
 
     def protected_behavior(self, fitted, query_batches, modes, *, expected_ids, max_rows):
         require(fitted["condition"] == PROTECTED, "separate protected fitted model required")
