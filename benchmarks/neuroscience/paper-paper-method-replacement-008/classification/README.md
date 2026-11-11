@@ -1,0 +1,3 @@
+# BaRISTA classification and chronological classification
+
+One paper project, PAPER-paper-method-replacement-008. The complete seven-person main and chronological grids, four tasks, fourteen models, five seeds/folds where applicable, paired improvement interface and full-support probability scorer are retained. See ../README.md for the complete source layout, external source provisioning and reconstruction. Only individually staged context directories are candidate-visible; this is an operator source package. Authentic inputs, checkpoint/exposure identities, native execution and wider paper branches remain unresolved. Source construction does not qualify the benchmark.
