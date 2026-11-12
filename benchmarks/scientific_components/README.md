@@ -29,3 +29,27 @@ Neither executes a scientific campaign, reads authentic neural data or grants na
 execution authority. Passing CI is source evidence, not a reproduction, improvement,
 SOTA or submission-readiness result. The existing [scientific contracts](../scientific_contracts/README.md)
 are indexed separately; no task registration or qualified-study count changes here.
+
+## Paired neural grading and investigation
+
+These are source components of two existing neural-data assignments. Their exact
+ordinary scorer dependencies are included; protected inputs, actual producer or
+complete export records, independent authority and native qualification remain
+external requirements.
+
+| Component | Included behavior | Preserved scope and limits |
+| --- | --- | --- |
+| [NEURAL-075 paired grading](neural075_paired_grading/README.md) | Actual source inspection and trusted paired-grading caller, with its fixed ordinary dependency chain. | Five people, three arms, two phases, two access conditions and all 60 cases; all predictions admit before protected design/targets. Descriptive paired contrasts do not establish scientific improvement. |
+| [NEURAL-100 investigation](neural100_investigation/README.md) | Two-artifact investigation and original guarded numerical/typed-claims source, with the ordinary operator-bootstrap code. | All 47 recordings, 41 mice and eight conditions; the complete authenticated 182-row export remains external. Public reference-code exposure limits claims to reproduction and bounded structured interpretation. |
+
+Both source checks use Python 3.11's standard library, with no dependency install:
+
+```sh
+python3 -I -S -B benchmarks/scientific_components/neural075_paired_grading/test_portability.py
+python3 -I -S -B benchmarks/scientific_components/neural100_investigation/test_portability.py
+```
+
+They check ordinary source loading and actual refusal boundaries without numerical,
+native, model or scientific execution. CI success does not supply protected inputs,
+an execution grant, a complete study or a scientifically qualified benchmark. The
+public source and condition files add no assignments or readiness count.
