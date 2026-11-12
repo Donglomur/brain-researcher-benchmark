@@ -1,6 +1,6 @@
 # Scientific contract companions
 
-These seven source components make the scientific claims of existing benchmark assignments more explicit. They supply descriptive comparisons, reproduction and improvement checks, or links between report claims and evidence. They are additional components of existing tasks; they add no benchmark count, completed experiment, scientific qualification, or submission-readiness claim.
+These nine source components make the scientific claims of existing benchmark assignments more explicit. They supply descriptive comparisons, reproduction and improvement checks, or links between report claims and evidence. They are additional components of existing tasks; they add no benchmark count, completed experiment, scientific qualification, or submission-readiness claim.
 
 | Component | Scientific purpose | Important boundary |
 |---|---|---|
@@ -11,6 +11,8 @@ These seven source components make the scientific claims of existing benchmark a
 | [Sleep and EOG](sleep/README.md) | Full-cohort paired mode/signal comparisons, numerical claims, and optional probability diagnostics. | Descriptive results require complete admitted support; summary joins do not authenticate raw losses, stochastic replay, or causal effects. |
 | [Cerebellar frozen executor](cerebellar_executor/README.md) | A fixed procedure over all 16 sessions and four conditions, with 192 declared phases. | Inactive source; CI inspects source only and runs no Provider, candidate, model, or native process. |
 | [Dimensionality and Majaj programme](dimensionality/programme/README.md) | The complete 42-obligation programme, including the released Majaj preparation and analysis branch. | BUILD_ONLY remains enforced and all 24 gates remain open; relocation checks do not run numerical methods or qualify a study. |
+| [OpenBMI paired case-adaptive source](openbmi_case_adaptive/README.md) | Compare a frozen programme and per-condition investigation across the complete 54-person, two-session assignment. | Inactive source with missing external admissions; strategy differences do not isolate model treatment, neural contribution or equal realized compute. |
+| [FIND-025 submission and comparison](find025/README.md) | Preserve both paper claim families and all 16 obligation groups while validating declarations and retaining missing or failed outcomes. | Reconstruction, held paper reproduction and protected improvement remain separate; consistent declarations do not prove authentic results. |
 
 Zero, negative, unavailable, and discrepant outcomes remain valid where specified. The components require trusted upstream inputs and operator controls described in their contracts. They do not run trained models or authenticate empirical data merely from supplied metadata. Original task packages and their admission states are unchanged.
 
@@ -31,6 +33,8 @@ python -I -S -B benchmarks/scientific_contracts/sleep/test_probability_diagnosti
 python -I -S -B benchmarks/scientific_contracts/sleep/probability_diagnostics/test_probability_diagnostics.py
 python -I -B benchmarks/scientific_contracts/cerebellar_executor/entry.py inspect
 python -I -S -B benchmarks/scientific_contracts/dimensionality/programme/test_portability.py
+python3 -I -S -B benchmarks/scientific_contracts/openbmi_case_adaptive/test_portability.py
+python3.11 -I -S -B -m unittest discover -s benchmarks/scientific_contracts/find025 -p test_find025_contract.py
 ```
 
 The language check creates `language/CONTROL_RESULT_V3.json` exclusively and requires a fresh component copy without that generated file. These commands test implementation and portable imports; they do not execute or qualify a scientific benchmark.
@@ -38,3 +42,5 @@ The language check creates `language/CONTROL_RESULT_V3.json` exclusively and req
 The sleep release preserves its base report and adds a separate [probability summary join](sleep/CALIBRATION_JOIN.md) and [protected-scoring source overlay](sleep/probability_diagnostics/README.md). The base alone continues to report calibration unavailable. The optional join requires the separately admitted probability diagnostics; it does not recover them from confusion counts. The overlay is uninstalled source with invented tests, not a standalone runnable task. Captured fitted-model/source equality does not establish restored stochastic state for shifted comparisons. All original scope, admission, execution and scientific holds remain.
 
 The dimensionality programme retains its full runtime and normative contract scope; the Majaj branch does not replace the larger assignment. Its portable test forbids numerical/cryptographic imports and checks the unchanged BUILD_ONLY refusal before an invocation is read. Cerebellar CI uses only `entry.py inspect`; the separate full inert-graph tests and production `run` route are not invoked here. Both new checks use only the standard library, install no dependencies, and grant no execution authority. Their package documentation retains future dependency, input-rights, runtime and scientific requirements.
+
+The OpenBMI source check authenticates its complete closure and builds trusted definitions using explicitly inert denying capabilities. Missing execution admissions remain; this package has no fixed BUILD_ONLY policy file. The check poisons numerical imports, subprocess creation and socket connections, and does not invoke execution, protected grading or the complete probability graph. Its package documentation retains native, scientific, rights and resource-history limitations. FIND-025 runs its documented standard-library discovery command against invented records; its empty authentic plan remains incomplete. Its two claim families and 16 output groups remain one assignment, with no numeric paper pass or scientific qualification. Neither command installs dependencies or runs a neuroscience study.
