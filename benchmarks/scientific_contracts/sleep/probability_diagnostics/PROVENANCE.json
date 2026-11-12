@@ -1,0 +1,104 @@
+{
+  "benchmark_registrations_added": 0,
+  "classes": [
+    "W",
+    "N1",
+    "N2",
+    "N3",
+    "R"
+  ],
+  "derivation": {
+    "new_overlay_tail": "Separate diagnostic accumulation and v2 envelope; existing v1 grade remains nested unchanged.",
+    "numeric_tail_replacements": [
+      {
+        "after": "    panels={}\n    probability_panels={}\n",
+        "before": "    panels={}\n"
+      },
+      {
+        "after": "        matrices=[]\n        diagnostics=ProbabilityAccumulator()\n",
+        "before": "        matrices=[]\n"
+      },
+      {
+        "after": "            matrix=[[0]*5 for _ in range(5)]\n            diagnostics.begin_night(n['night'],n['epochs'])\n",
+        "before": "            matrix=[[0]*5 for _ in range(5)]\n"
+      },
+      {
+        "after": "                diagnostics.update(p,stage)\n                if stage>=0:matrix[stage][max(range(5),key=lambda i:(p[i],-i))]+=1\n            diagnostics.end_night()\n",
+        "before": "                if stage>=0:matrix[stage][max(range(5),key=lambda i:(p[i],-i))]+=1\n"
+      },
+      {
+        "after": "        panels[panel][row['subject']]=combine_confusions(matrices)\n        probability_panels.setdefault(panel,{})[row['subject']]=diagnostics.result()\n",
+        "before": "        panels[panel][row['subject']]=combine_confusions(matrices)\n"
+      },
+      {
+        "after": "    grade={'schema':'neural007_full153_grade_v1'",
+        "before": "    return {'schema':'neural007_full153_grade_v1'"
+      }
+    ],
+    "predecessor_science": "predecessor/science.py",
+    "predecessor_scorer": "predecessor/scorer.py",
+    "unchanged_admission_prefix_except_added_inert_import": "from .probability_diagnostics import ProbabilityAccumulator, panel_macro"
+  },
+  "diagnostic_schema": "neural007_full153_probability_diagnostics_v1",
+  "execution_authority": false,
+  "original_scorer_schema": "neural007_full153_grade_v1",
+  "overlay_schema": "neural007_full153_grade_with_probability_diagnostics_v2",
+  "provenance_self_excluded": true,
+  "required_external_programme_dependencies": [
+    "common",
+    "science",
+    "presentation",
+    "vendor_transport"
+  ],
+  "schema": "sleep_probability_diagnostics_source_component_v1",
+  "scientific_qualification": false,
+  "source_members_count": 6,
+  "source_members_excluding_this_metadata": [
+    {
+      "bytes": 7367,
+      "git_mode": "100644",
+      "path": "probability_diagnostics.py",
+      "sha256": "6fce18e9cd3d1ab3a57c60c7c352b59a413e07b08a224b08f5d6bed4a1c3677d"
+    },
+    {
+      "bytes": 23056,
+      "git_mode": "100644",
+      "path": "scorer_with_probability_diagnostics.py",
+      "sha256": "870776f2811e479b20d8426c5cb7bf6f5b6be2eb038571470b94ba1ee302788b"
+    },
+    {
+      "bytes": 10788,
+      "git_mode": "100644",
+      "path": "test_probability_diagnostics.py",
+      "sha256": "9beba1f33405e33bd7db7cacccf93a4240aef85f42f5f5c3aa05efe401129ea2"
+    },
+    {
+      "bytes": 22105,
+      "git_mode": "100644",
+      "path": "predecessor/scorer.py",
+      "sha256": "323df0f19e5ff293523f1bf8d3db2623b95bd8d9ca0266cad12eb192cbaca1a9"
+    },
+    {
+      "bytes": 10052,
+      "git_mode": "100644",
+      "path": "predecessor/science.py",
+      "sha256": "945fb6d631e3682b98643916a4bb8fdd1ac064caae98a8d95435d451c7a47b13"
+    },
+    {
+      "bytes": 4643,
+      "git_mode": "100644",
+      "path": "README.md",
+      "sha256": "b76b5f5aad187723a859d32b6047fe4677d5023d3be758ac32b81ba1cf53d237"
+    }
+  ],
+  "source_status": "The two predecessor snapshots support exact source and numerical-grade comparisons. They and the overlay are not a standalone installed protected programme.",
+  "status": "inactive_source_component_not_installed_task",
+  "test_command": [
+    "python3",
+    "-I",
+    "-S",
+    "-B",
+    "benchmarks/scientific_contracts/sleep/probability_diagnostics/test_probability_diagnostics.py"
+  ],
+  "test_scope": "Invented numerical/source engineering checks only; no authentic targets, native runtime, model or complete custody admission."
+}
