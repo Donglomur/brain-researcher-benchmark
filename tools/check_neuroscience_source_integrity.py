@@ -116,6 +116,83 @@ def physical_members(root, prefix):
     return result
 
 
+def check_complete_inventory(reader, package, selected):
+    """One explicitly enrolled source profile; no task code or native semantics."""
+    profile = package["complete_inventory"]
+    require(type(profile) is dict and set(profile) == {"profile", "path"} and
+            profile == {"profile": "neuroformer_factory_v2", "path": "NATIVE_FACTORY_API.json"},
+            "Unknown complete inventory profile")
+    require(package["id"] == "PAPER-paper-method-replacement-013" and
+            package["root"] == "benchmarks/neuroscience/paper-paper-method-replacement-013" and
+            package["inventory"] == "TASK_SOURCE_FREEZE.json" and
+            package["inventory_paths"] == "package", "Complete profile enrollment mismatch")
+    prefix = package["root"]
+    api_path = profile["path"]
+    legacy = strict_json(reader.read(prefix + "/" + package["inventory"]))
+    require(len(legacy["files"]) == 95, "Complete profile retains the 95-row legacy inventory")
+    require({row["path"] for row in package["supplemental_files"]} ==
+            {"manifest.json", "NATIVE_FACTORY.md", "NATIVE_FACTORY_API.json",
+             "NATIVE_FACTORY_PREDECESSOR.json", "native_factory.py",
+             "native_factory_runtime.py", "native_factory_v2.py"},
+            "Complete profile requires the manifest and six fixed supplements")
+    pins = [row for row in package["supplemental_files"] if row["path"] == api_path]
+    require(len(pins) == 1, "Complete API needs independent registry supplement pin")
+    api = strict_json(reader.checked(prefix + "/" + api_path, pins[0]))
+    require(type(api) is dict and api.get("schema") == "neuroformer_fixed_historical_factory_api_v2",
+            "Complete API schema mismatch")
+    inventory = api.get("source_inventory")
+    require(type(inventory) is dict and
+            inventory.get("schema") == "neuroformer_factory_source_inventory_v2",
+            "Complete inventory schema mismatch")
+    for field, expected in (("count", 102), ("whole_package_count", 103),
+                            ("unchanged_predecessors", 97)):
+        require(type(inventory.get(field)) is int and inventory[field] == expected,
+                "Complete inventory count mismatch: " + field)
+    require(inventory.get("self_excluded") == api_path, "Complete inventory self exclusion mismatch")
+    rows = inventory.get("files")
+    require(type(rows) is list and len(rows) == 102, "Complete inventory needs 102 rows")
+    members, total = {prefix + "/" + api_path}, 0
+    for row in rows:
+        require(type(row) is dict and set(row) == {"path", "bytes", "sha256", "git_mode"},
+                "Closed complete inventory row required")
+        name = prefix + "/" + relative(row["path"])
+        require(name not in members, "Duplicate/self complete inventory member")
+        require(row["git_mode"] == "100644", "Complete inventory mode must be 100644")
+        require(name in selected, "Complete inventory member is not enrolled")
+        body = reader.checked(name, row)
+        require(stat.S_IMODE(reader.cache[name][0][2]) == 0o644,
+                "Complete source permission mode must be 0644")
+        total += len(body)
+        members.add(name)
+    require(stat.S_IMODE(reader.cache[prefix + "/" + api_path][0][2]) == 0o644,
+            "Complete API permission mode must be 0644")
+    require(type(inventory.get("total_bytes")) is int and inventory["total_bytes"] == total,
+            "Complete inventory byte total mismatch")
+    require(members == selected, "Complete inventory physical coverage mismatch")
+    for key, expected in (("entry", "native_factory_v2.run_historical"),
+                          ("historical_unselected_entry", "native_factory.run_historical")):
+        require(api.get(key) == expected, "Complete API entry mismatch: " + key)
+        module, function = expected.split(".")
+        name = prefix + "/" + module + ".py"
+        require(name in members, "Complete API entry source missing")
+        tree = ast.parse(reader.read(name).decode("utf-8"), filename=name)
+        require(sum(isinstance(node, ast.FunctionDef) and node.name == function
+                    for node in tree.body) == 1, "Complete API entry function missing/ambiguous")
+    for field in ("generic_registration_changed", "native_execution_qualified",
+                  "scientific_execution_authorized", "new_callbacks_or_runtime_injection"):
+        require(api.get(field) is False, "Complete API inactive flag mismatch: " + field)
+    require(api.get("legacy_registered_dispatch_unchanged") is True,
+            "Complete API legacy dispatch declaration changed")
+    require(type(api.get("unchanged_predecessor_files")) is int and
+            api["unchanged_predecessor_files"] == 97, "Complete API predecessor count mismatch")
+    scope = api.get("retained_scope")
+    expected_scope = {"slots": 46, "cells": 85, "wider_families": 7,
+                      "existing_apis": 6, "existing_unavailable_dispositions": 20, "gates": 29}
+    require(type(scope) is dict and set(scope) == set(expected_scope) and
+            all(type(scope[key]) is int and scope[key] == value for key, value in expected_scope.items()),
+            "Complete API retained scope mismatch")
+
+
 def check(root, registry="benchmarks/source_integrity.json"):
     reader = Reader(root)
     config = strict_json(reader.read(registry))
@@ -127,8 +204,9 @@ def check(root, registry="benchmarks/source_integrity.json"):
     require(type(packages) is list and 0 < len(packages) <= 64, "Nonempty bounded package roster required")
     ids, roots, reports = set(), set(), []
     for package in packages:
-        require(type(package) is dict and set(package) ==
-                {"id", "root", "inventory", "inventory_paths", "supplemental_files"}, "Closed package schema")
+        fields = {"id", "root", "inventory", "inventory_paths", "supplemental_files"}
+        require(type(package) is dict and set(package) in (fields, fields | {"complete_inventory"}),
+                "Closed package schema")
         task_id = package["id"]
         require(type(task_id) is str and task_id and task_id not in ids, "Duplicate or invalid task ID")
         prefix = relative(package["root"])
@@ -186,6 +264,8 @@ def check(root, registry="benchmarks/source_integrity.json"):
                 name = prefix + "/" + name
             require(name == inventory_name, "Manifest names a different inventory")
             reader.checked(name, freeze)
+        if "complete_inventory" in package:
+            check_complete_inventory(reader, package, selected)
         python_count = 0
         for name in sorted(selected):
             if name.endswith(".py"):
