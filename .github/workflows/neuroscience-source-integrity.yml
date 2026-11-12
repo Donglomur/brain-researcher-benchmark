@@ -32,3 +32,23 @@ jobs:
 
       - name: Test paired study reporting with invented outcome records
         run: python -I -S -B tools/tests/test_paired_study_report.py
+  scientific-contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+      - name: Test ERP contribution with invented complete-support records
+        run: python -I -S -B benchmarks/scientific_contracts/neural005/test_scientific_contribution.py -v
+      - name: Test Neuroformer reproduction and improvement contracts
+        run: python -I -S -B -m unittest discover -s benchmarks/scientific_contracts/neuroformer -p test_compare_v2.py
+      - name: Test language claims with invented report products
+        run: python -B benchmarks/scientific_contracts/language/test_claim_evidence.py
+      - name: Install the exact cerebellar smoke dependency
+        run: 'python -I -m pip install --disable-pip-version-check --only-binary=:all: --no-deps -r benchmarks/scientific_contracts/cerebellar/requirements.txt'
+      - name: Check cerebellar imports and invented arithmetic
+        run: python -I -B benchmarks/scientific_contracts/cerebellar/smoke_contract.py
