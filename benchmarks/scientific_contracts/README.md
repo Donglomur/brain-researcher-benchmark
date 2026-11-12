@@ -1,6 +1,6 @@
 # Scientific contract companions
 
-These five source components make the scientific claims of existing benchmark assignments more explicit. They supply descriptive comparisons, reproduction and improvement checks, or links between report claims and evidence. They are additional components of existing tasks; they add no benchmark count, completed experiment, scientific qualification, or submission-readiness claim.
+These seven source components make the scientific claims of existing benchmark assignments more explicit. They supply descriptive comparisons, reproduction and improvement checks, or links between report claims and evidence. They are additional components of existing tasks; they add no benchmark count, completed experiment, scientific qualification, or submission-readiness claim.
 
 | Component | Scientific purpose | Important boundary |
 |---|---|---|
@@ -9,6 +9,8 @@ These five source components make the scientific claims of existing benchmark as
 | [Cerebellar contact decoding](cerebellar/README.md) | Isolate candidate input views and compare matched context and joint predictions. | Retrospective within-session decoding; beating a fixed behavioral reference alone does not establish neural contribution. |
 | [Language report claims](language/README.md) | Check numerical claims against complete report support and distinguish external scientific judgments. | Numerical agreement is separate from causal, population, neural-understanding, or meaningful-improvement claims. |
 | [Sleep and EOG](sleep/README.md) | Full-cohort paired mode/signal comparisons, numerical claims, and optional probability diagnostics. | Descriptive results require complete admitted support; summary joins do not authenticate raw losses, stochastic replay, or causal effects. |
+| [Cerebellar frozen executor](cerebellar_executor/README.md) | A fixed procedure over all 16 sessions and four conditions, with 192 declared phases. | Inactive source; CI inspects source only and runs no Provider, candidate, model, or native process. |
+| [Dimensionality and Majaj programme](dimensionality/programme/README.md) | The complete 42-obligation programme, including the released Majaj preparation and analysis branch. | BUILD_ONLY remains enforced and all 24 gates remain open; relocation checks do not run numerical methods or qualify a study. |
 
 Zero, negative, unavailable, and discrepant outcomes remain valid where specified. The components require trusted upstream inputs and operator controls described in their contracts. They do not run trained models or authenticate empirical data merely from supplied metadata. Original task packages and their admission states are unchanged.
 
@@ -27,8 +29,12 @@ python -I -S -B benchmarks/scientific_contracts/sleep/test_neural008_numeric_cla
 python -I -S -B benchmarks/scientific_contracts/sleep/test_sleep_claims_integration.py -v
 python -I -S -B benchmarks/scientific_contracts/sleep/test_probability_diagnostics_join.py -v
 python -I -S -B benchmarks/scientific_contracts/sleep/probability_diagnostics/test_probability_diagnostics.py
+python -I -B benchmarks/scientific_contracts/cerebellar_executor/entry.py inspect
+python -I -S -B benchmarks/scientific_contracts/dimensionality/programme/test_portability.py
 ```
 
 The language check creates `language/CONTROL_RESULT_V3.json` exclusively and requires a fresh component copy without that generated file. These commands test implementation and portable imports; they do not execute or qualify a scientific benchmark.
 
 The sleep release preserves its base report and adds a separate [probability summary join](sleep/CALIBRATION_JOIN.md) and [protected-scoring source overlay](sleep/probability_diagnostics/README.md). The base alone continues to report calibration unavailable. The optional join requires the separately admitted probability diagnostics; it does not recover them from confusion counts. The overlay is uninstalled source with invented tests, not a standalone runnable task. Captured fitted-model/source equality does not establish restored stochastic state for shifted comparisons. All original scope, admission, execution and scientific holds remain.
+
+The dimensionality programme retains its full runtime and normative contract scope; the Majaj branch does not replace the larger assignment. Its portable test forbids numerical/cryptographic imports and checks the unchanged BUILD_ONLY refusal before an invocation is read. Cerebellar CI uses only `entry.py inspect`; the separate full inert-graph tests and production `run` route are not invoked here. Both new checks use only the standard library, install no dependencies, and grant no execution authority. Their package documentation retains future dependency, input-rights, runtime and scientific requirements.

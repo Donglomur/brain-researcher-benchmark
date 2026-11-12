@@ -73,3 +73,18 @@ jobs:
         run: 'python -I -S -B benchmarks/scientific_contracts/sleep/test_probability_diagnostics_join.py -v'
       - name: Test protected probability diagnostic source with invented inputs
         run: 'python -I -S -B benchmarks/scientific_contracts/sleep/probability_diagnostics/test_probability_diagnostics.py'
+
+  dimensionality-cerebellar-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+      - name: Inspect inactive cerebellar executor source only
+        run: 'python -I -B benchmarks/scientific_contracts/cerebellar_executor/entry.py inspect'
+      - name: Test complete dimensionality source portability and BUILD_ONLY refusal
+        run: 'python -I -S -B benchmarks/scientific_contracts/dimensionality/programme/test_portability.py'
