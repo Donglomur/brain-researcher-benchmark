@@ -1,0 +1,96 @@
+{
+  "schema": "neural005-descriptive-scientific-contract-v1",
+  "question": "Do provided ERP features improve held-person next-round choice prediction beyond the specified history for frozen matched procedures?",
+  "scope": {
+    "training_people": 26,
+    "training_examples": 3254,
+    "development_people": 7,
+    "queries_per_view": 816,
+    "views": {
+      "history": 50,
+      "prestimulus": 53,
+      "all_erp": 57
+    },
+    "predictions": 2448,
+    "complete_protocols": 21,
+    "benchmark_count": 1,
+    "new_benchmarks": 0
+  },
+  "ranking": {
+    "metric": "equal_participant_all_erp_log_loss",
+    "direction": "lower",
+    "unchanged": true
+  },
+  "descriptive_estimand": "Equal-person mean of history log loss minus all-ERP log loss on the same 816 queries; seven people, each weighted 1/7.",
+  "mandatory_absolute_arms": [
+    "history",
+    "prestimulus",
+    "all_erp",
+    "training_participant_macro_prior"
+  ],
+  "mandatory_contrasts": [
+    "history_minus_all_erp",
+    "history_minus_prestimulus",
+    "prestimulus_minus_all_erp",
+    "history_minus_training_participant_macro_prior",
+    "prestimulus_minus_training_participant_macro_prior",
+    "all_erp_minus_training_participant_macro_prior"
+  ],
+  "matched_history_ERP_control": {
+    "status": "infeasible_exact_within_participant_full_history",
+    "proof": "H includes episode and round; admitted participant:episode:round is unique, so exact within-person full-H strata are singletons.",
+    "development_singleton_strata": 816,
+    "movable_development_cases": 0,
+    "randomizations_performed": 0,
+    "repetitions_selected": null,
+    "seed": null,
+    "p_value": null,
+    "no_movement_is_not_a_null_test": true,
+    "alternative_sampling_law_or_cross_person_exchangeability_validated": false
+  },
+  "future_null_design_unselected": {
+    "all_ERP_beyond_H": "Seven-dimensional ERP vector jointly conditional on H.",
+    "offer_beyond_prestimulus": "Four offer terms jointly conditional on H and the three fixed baselines.",
+    "requires": [
+      "Justified conditional joint distribution and sequential dependence model.",
+      "Training-only estimation and separately selected fitting/refitting policy.",
+      "Validity and model-misspecification sensitivity; no arbitrary bins or assumed exchangeability."
+    ]
+  },
+  "sensitivity": "Seven leave-one-person-out descriptive means only; no refit, confidence interval, subset choice, or new assignment. Primary retains all seven.",
+  "upstream_admission_required": [
+    "Exact preparation and split/source identity admission.",
+    "Independently fixed full target-free schedule, not candidate-selected support.",
+    "Canonical support checked before view masking.",
+    "Same training-only modeling and tuning policy across views.",
+    "All 21 protocols, predictions and custody admitted before protected scoring.",
+    "Original score report retained; scalar receipt fields are not provenance proof."
+  ],
+  "scientific_limits": [
+    "Exposed development people, not an unexposed confirmation cohort.",
+    "Next-round prediction extends the published same-row choice endpoint.",
+    "Offline positional ERP linkage does not establish independent epoch identity or online availability.",
+    "Predictive procedure comparison, not causal effect or intrinsic neural information.",
+    "No conditional-independence test, scientific success threshold, confidence interval or p-value."
+  ],
+  "admission": {
+    "scientific_neural_contribution_claim_admitted": false,
+    "full_contract_complete": false,
+    "research_qualified": false,
+    "submission_ready": false
+  },
+  "public_distribution": {
+    "authentic_data_or_targets": false,
+    "real_participant_roster": false,
+    "private_paths": false,
+    "copied_upstream_code": false,
+    "models_or_native_runtime": false,
+    "implementation": "Independently authored Python standard-library pure adapter and invented engineering tests."
+  },
+  "primary_sources": [
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC12373756/",
+    "https://github.com/jpheffne/2025_epe_eeg/blob/4f5767df1516e0ec3c234d51ba36e4b741eb60e8/analysis/eeg_epe_ms.Rmd#L381-L388",
+    "https://arxiv.org/html/1807.05405v2",
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC4010955/"
+  ]
+}
