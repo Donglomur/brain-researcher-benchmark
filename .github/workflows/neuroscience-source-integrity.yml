@@ -103,3 +103,21 @@ jobs:
         run: 'python3 -I -S -B benchmarks/scientific_contracts/openbmi_case_adaptive/test_portability.py'
       - name: Test FIND-025 declarations with invented records
         run: 'python3.11 -I -S -B -m unittest discover -s benchmarks/scientific_contracts/find025 -p test_find025_contract.py'
+
+  jaxley-marble-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+      - name: Install the exact Jaxley checkout-check dependency
+        run: 'python3 -I -m pip install --disable-pip-version-check --only-binary=:all: --no-deps numpy==2.4.6'
+      - name: Check Jaxley selector source with invented scalar and schema inputs
+        working-directory: benchmarks/scientific_components/jaxley_allen_selector
+        run: 'python3 -I -B check_portable.py'
+      - name: Check MARBLE source inventory and missing-capability refusals
+        run: 'python3 -I -S -B benchmarks/scientific_components/marble_fit_closed/test_portability.py'
