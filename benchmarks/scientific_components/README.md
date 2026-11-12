@@ -53,3 +53,26 @@ They check ordinary source loading and actual refusal boundaries without numeric
 native, model or scientific execution. CI success does not supply protected inputs,
 an execution grant, a complete study or a scientifically qualified benchmark. The
 public source and condition files add no assignments or readiness count.
+
+## UnitMatch native and paired comparison
+
+[UnitMatch source component](unitmatch_native_paired/README.md) adds the complete
+source-owned native reference, paired candidate producer and target-last grader
+for one existing paper assignment. It includes all 24 ordinary source dependencies.
+The scope remains five mice, two recordings each, ten candidate outputs and all
+526,890 directed entries per method. The yield-constrained functional ISI proxy
+does not establish true neuron identity accuracy or reproduce the full 16-mouse paper.
+
+The standard-library source check uses Python 3.11 and requires no package install:
+
+```sh
+python3 -I -S -B benchmarks/scientific_components/unitmatch_native_paired/test_portability.py
+```
+
+This explicit six-case entry checks complete source inventories, actual dependency
+loading, binding and missing-input refusals, and an inert local configuration.
+It does not run Docker, MATLAB, a model or a scientific study. Licensed native
+tools, authentic inputs, protected execution and rights remain external gates.
+Public reference-code exposure also requires a separately controlled access protocol
+before interpreting paper-plus-data versus paper-plus-data-plus-code results.
+Source CI adds no assignment, empirical improvement or qualification count.
