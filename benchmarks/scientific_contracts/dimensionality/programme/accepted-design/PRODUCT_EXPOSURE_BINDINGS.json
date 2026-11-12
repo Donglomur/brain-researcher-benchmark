@@ -1,0 +1,162 @@
+{
+  "no_implicit_visibility": "Unlisted context cannot consume a product; actor must use scoped artifact capability, not merely know a filename. O03-O09 handle publication does not grant evaluation-body access. This is an unimplemented contract.",
+  "products": [
+    {
+      "allowed_consumers": [
+        "I_AUTHOR",
+        "R_PARTICIPANT",
+        "REF_TRAIN_CAL"
+      ],
+      "gate": "metadata and matched A/B paper/code rules, no primary body copied here",
+      "id": "X01",
+      "producer": "O01/P00",
+      "product": "source_versions_and_public_history"
+    },
+    {
+      "allowed_consumers": [
+        "trusted controller"
+      ],
+      "gate": "identity-only plan, not raw data release; all groups and unresolved joins retained",
+      "id": "X02",
+      "producer": "O02/P00",
+      "product": "full_group_roster_and_split"
+    },
+    {
+      "allowed_consumers": [
+        "trusted controller"
+      ],
+      "gate": "no learned global transforms; unassigned source bodies never mounted to participant",
+      "id": "X03",
+      "producer": "O03-O07/P02",
+      "product": "raw_aligned_source_measurements"
+    },
+    {
+      "allowed_consumers": [
+        "I_FOLD_TRAIN",
+        "REF_TRAIN_CAL"
+      ],
+      "gate": "exact this-fold training groups; no other fold state or interactive author feedback",
+      "id": "X04",
+      "producer": "O09/P02",
+      "product": "training_case_view"
+    },
+    {
+      "allowed_consumers": [
+        "I_FOLD_CALIBRATE",
+        "REF_TRAIN_CAL"
+      ],
+      "gate": "exact this-fold calibration groups; selection-only transform consumption",
+      "id": "X05",
+      "producer": "O09/P02-P04",
+      "product": "calibration_case_view"
+    },
+    {
+      "allowed_consumers": [
+        "I_FOLD_CALIBRATE",
+        "trusted seal"
+      ],
+      "gate": "transitive parents subset training; feature-coordinate identities exact",
+      "id": "X06",
+      "producer": "O15/P03",
+      "product": "fitted_I_transform_and_state"
+    },
+    {
+      "allowed_consumers": [
+        "trusted seal"
+      ],
+      "gate": "development/calibration parents only; no participant output or private evaluation truth",
+      "id": "X07",
+      "producer": "O12/O13/O20/O21/O22/P04",
+      "product": "independent_selector_and_reference_state"
+    },
+    {
+      "allowed_consumers": [
+        "I_INFER",
+        "REF_INFER",
+        "trusted controller"
+      ],
+      "gate": "all folds sealed; no R write capability",
+      "id": "X08",
+      "producer": "O17/P05",
+      "product": "global_I_and_reference_capsule"
+    },
+    {
+      "allowed_consumers": [
+        "R_PARTICIPANT"
+      ],
+      "gate": "allIseals verified before first disclosure; full paper source-specific preprocessing only in R",
+      "id": "X09",
+      "producer": "O09/P06",
+      "product": "held_R_full_source_views"
+    },
+    {
+      "allowed_consumers": [
+        "R_PARTICIPANT"
+      ],
+      "gate": "may use assigned full R data; cannot parent I/ref training or infer state",
+      "id": "X10",
+      "producer": "O03-O07/O18/P06",
+      "product": "R_only_fitted_state"
+    },
+    {
+      "allowed_consumers": [
+        "I_INFER",
+        "REF_INFER"
+      ],
+      "gate": "same exact input/target/protocol/view; read-only accepted transform; only assigned case",
+      "id": "X11",
+      "producer": "O09/P07",
+      "product": "held_I_case_view"
+    },
+    {
+      "allowed_consumers": [
+        "REPORT",
+        "trusted collector"
+      ],
+      "gate": "actual participant numbers and source state; no I fit or inference feedback",
+      "id": "X12",
+      "producer": "O18/P06",
+      "product": "participant_R_outputs"
+    },
+    {
+      "allowed_consumers": [
+        "REPORT",
+        "trusted collector"
+      ],
+      "gate": "all queries and typed failures; no further method update",
+      "id": "X13",
+      "producer": "O19/P07",
+      "product": "participant_I_outputs"
+    },
+    {
+      "allowed_consumers": [
+        "trusted collector",
+        "TRUSTED_GRADE"
+      ],
+      "gate": "not visible to participant/report; full pairwise membership not winners only",
+      "id": "X14",
+      "producer": "O12/O13/O20/O21/O22/P06-P07",
+      "product": "independent_all_variant_bank"
+    },
+    {
+      "allowed_consumers": [
+        "TRUSTED_GRADE afterO28"
+      ],
+      "gate": "never part of development/calibration truth roles; immediately-preopen authorization guard",
+      "id": "X15",
+      "producer": "O08/trusted custody",
+      "product": "private_truth"
+    },
+    {
+      "allowed_consumers": [
+        "trusted collector",
+        "TRUSTED_GRADE"
+      ],
+      "gate": "no later participant query after report seal/target access",
+      "id": "X16",
+      "producer": "O25/O26/P08-P09",
+      "product": "participant_report_and_final_costs"
+    }
+  ],
+  "schema": "complete_stage_product_visibility_v2"
+}
