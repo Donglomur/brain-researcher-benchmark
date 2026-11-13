@@ -1,0 +1,2245 @@
+{
+  "schema": "find032_environment_inputs_v1",
+  "status": "source_recipe_not_built_or_qualified",
+  "platform": "linux/amd64",
+  "python": "3.11.11",
+  "base_image": {
+    "repository": "docker.io/library/python",
+    "tag_observed": "3.11.11-slim-bookworm",
+    "platform_digest": "sha256:a8e0a3090316aed0b11037aac613aef32fb1747dcc1dcb5c0f6c727a0113a07f",
+    "index_digest": "sha256:081075da77b2b55c23c088251026fb69a7b2bf92471e491ff5fd75c192fd38e5",
+    "metadata_url": "https://hub.docker.com/v2/repositories/library/python/tags/3.11.11-slim-bookworm"
+  },
+  "apt": {
+    "snapshot": "20250409T000000Z",
+    "release_files": [
+      {
+        "name": "bookworm-release",
+        "url": "https://snapshot.debian.org/archive/debian/20250409T000000Z/dists/bookworm/Release",
+        "bytes": 149264,
+        "sha256": "32f971ce0803bb477f35e7f67b5522e77dd1d9259872b3f75314070282e880db"
+      },
+      {
+        "name": "bookworm-updates-release",
+        "url": "https://snapshot.debian.org/archive/debian/20250409T000000Z/dists/bookworm-updates/Release",
+        "bytes": 53793,
+        "sha256": "a44e785e21d4488580d49867060e7fb77870bff0dfc16992317f029b35bd0c69"
+      },
+      {
+        "name": "bookworm-security-release",
+        "url": "https://snapshot.debian.org/archive/debian-security/20250409T000000Z/dists/bookworm-security/Release",
+        "bytes": 46301,
+        "sha256": "265511005e4367d222661da9d693380613c607139f1edc2427c16c4654972b68"
+      }
+    ],
+    "signature_verification_required": true,
+    "valid_until_disabled_for_historical_snapshot_only": true,
+    "lock_kind": "Exact immutable repository snapshots plus immutable base; transitive apt/R package versions are resolved from these signed indexes and recorded during a future build.",
+    "direct_packages": [
+      "ca-certificates",
+      "tzdata",
+      "git",
+      "build-essential",
+      "libffi-dev",
+      "libgomp1",
+      "r-base-core=4.2.2.20221110-2",
+      "r-base-dev=4.2.2.20221110-2",
+      "r-cran-coda",
+      "r-cran-matrix",
+      "r-cran-pbapply",
+      "r-cran-mvtnorm",
+      "r-cran-stringr",
+      "r-cran-matrixmodels",
+      "r-cran-rcpp",
+      "r-cran-rcppeigen",
+      "r-cran-hypergeo"
+    ]
+  },
+  "r": {
+    "version": "4.2.2",
+    "bayesfactor": {
+      "version": "0.9.12-4.6",
+      "repository": "https://github.com/cran/BayesFactor.git",
+      "commit": "fd79157d60179efc68b36ea7b88ae7833ccedfd3",
+      "tag_metadata_url": "https://api.github.com/repos/cran/BayesFactor/git/ref/tags/0.9.12-4.6",
+      "description_git_blob": "3d424dbbf7370febbcb9c12975c3d9a63764a5a3",
+      "description_bytes": 1767,
+      "description_sha256": "bd5adb2985bc2381f1a263d95d9013468c0d3d761f7545e03387899878fcac98",
+      "source_provenance": "CRAN Git mirror source commit, not a claim that Git checkout bytes equal a CRAN tarball."
+    },
+    "required_packages": {
+      "coda": null,
+      "Matrix": "1.1-1",
+      "pbapply": null,
+      "mvtnorm": null,
+      "stringr": null,
+      "MatrixModels": null,
+      "Rcpp": "0.11.2",
+      "RcppEigen": "0.3.2.2.0",
+      "hypergeo": null
+    }
+  },
+  "python_artifacts": [
+    {
+      "name": "numpy",
+      "version": "1.23.5",
+      "filename": "numpy-1.23.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "bytes": 17056806,
+      "sha256": "58f545efd1108e647604a1b5aa809591ccd2540f468a880bedb97247e72db387",
+      "url": "https://files.pythonhosted.org/packages/e8/ad/b935c7421657a032fd2a5332eed098f3b9993a155afceb1daa280ff6611f/numpy-1.23.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "requires_python": ">=3.8",
+      "requires_dist": []
+    },
+    {
+      "name": "scipy",
+      "version": "1.10.1",
+      "filename": "scipy-1.10.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "bytes": 34124096,
+      "sha256": "15a35c4242ec5f292c3dd364a7c71a61be87a3d4ddcc693372813c0b73c9af1d",
+      "url": "https://files.pythonhosted.org/packages/21/cd/fe2d4af234b80dc08c911ce63fdaee5badcdde3e9bcd9a68884580652ef0/scipy-1.10.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "requires_python": "<3.12,>=3.8",
+      "requires_dist": [
+        "numpy<1.27.0,>=1.19.5",
+        "pytest; extra == \"test\"",
+        "pytest-cov; extra == \"test\"",
+        "pytest-timeout; extra == \"test\"",
+        "pytest-xdist; extra == \"test\"",
+        "asv; extra == \"test\"",
+        "mpmath; extra == \"test\"",
+        "gmpy2; extra == \"test\"",
+        "threadpoolctl; extra == \"test\"",
+        "scikit-umfpack; extra == \"test\"",
+        "pooch; extra == \"test\"",
+        "sphinx!=4.1.0; extra == \"doc\"",
+        "pydata-sphinx-theme==0.9.0; extra == \"doc\"",
+        "sphinx-design>=0.2.0; extra == \"doc\"",
+        "matplotlib>2; extra == \"doc\"",
+        "numpydoc; extra == \"doc\"",
+        "mypy; extra == \"dev\"",
+        "typing_extensions; extra == \"dev\"",
+        "pycodestyle; extra == \"dev\"",
+        "flake8; extra == \"dev\"",
+        "rich-click; extra == \"dev\"",
+        "click; extra == \"dev\"",
+        "doit>=0.36.0; extra == \"dev\"",
+        "pydevtool; extra == \"dev\""
+      ]
+    },
+    {
+      "name": "scikit-learn",
+      "version": "1.2.1",
+      "filename": "scikit_learn-1.2.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "bytes": 9550852,
+      "sha256": "479aedd0abedbda6b8b4529145fe4cd8622f69f726a72cef8f75548a93eeb1e1",
+      "url": "https://files.pythonhosted.org/packages/80/53/47bed2190d2d86914223454f69744553521bc20c7de922d6a3b5300316ab/scikit_learn-1.2.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "requires_python": ">=3.8",
+      "requires_dist": [
+        "numpy (>=1.17.3)",
+        "scipy (>=1.3.2)",
+        "joblib (>=1.1.1)",
+        "threadpoolctl (>=2.0.0)",
+        "matplotlib (>=3.1.3) ; extra == 'benchmark'",
+        "pandas (>=1.0.5) ; extra == 'benchmark'",
+        "memory-profiler (>=0.57.0) ; extra == 'benchmark'",
+        "matplotlib (>=3.1.3) ; extra == 'docs'",
+        "scikit-image (>=0.16.2) ; extra == 'docs'",
+        "pandas (>=1.0.5) ; extra == 'docs'",
+        "seaborn (>=0.9.0) ; extra == 'docs'",
+        "memory-profiler (>=0.57.0) ; extra == 'docs'",
+        "sphinx (>=4.0.1) ; extra == 'docs'",
+        "sphinx-gallery (>=0.7.0) ; extra == 'docs'",
+        "numpydoc (>=1.2.0) ; extra == 'docs'",
+        "Pillow (>=7.1.2) ; extra == 'docs'",
+        "pooch (>=1.6.0) ; extra == 'docs'",
+        "sphinx-prompt (>=1.3.0) ; extra == 'docs'",
+        "sphinxext-opengraph (>=0.4.2) ; extra == 'docs'",
+        "plotly (>=5.10.0) ; extra == 'docs'",
+        "matplotlib (>=3.1.3) ; extra == 'examples'",
+        "scikit-image (>=0.16.2) ; extra == 'examples'",
+        "pandas (>=1.0.5) ; extra == 'examples'",
+        "seaborn (>=0.9.0) ; extra == 'examples'",
+        "pooch (>=1.6.0) ; extra == 'examples'",
+        "plotly (>=5.10.0) ; extra == 'examples'",
+        "matplotlib (>=3.1.3) ; extra == 'tests'",
+        "scikit-image (>=0.16.2) ; extra == 'tests'",
+        "pandas (>=1.0.5) ; extra == 'tests'",
+        "pytest (>=5.3.1) ; extra == 'tests'",
+        "pytest-cov (>=2.9.0) ; extra == 'tests'",
+        "flake8 (>=3.8.2) ; extra == 'tests'",
+        "black (>=22.3.0) ; extra == 'tests'",
+        "mypy (>=0.961) ; extra == 'tests'",
+        "pyamg (>=4.0.0) ; extra == 'tests'",
+        "numpydoc (>=1.2.0) ; extra == 'tests'",
+        "pooch (>=1.6.0) ; extra == 'tests'"
+      ]
+    },
+    {
+      "name": "mne",
+      "version": "1.5.1",
+      "filename": "mne-1.5.1-py3-none-any.whl",
+      "bytes": 7672350,
+      "sha256": "cc40888cc7d55f220fd51c7ba90de5f742dd00c150ac70d6a00787dfca226b53",
+      "url": "https://files.pythonhosted.org/packages/6d/72/7d8ce176e042580a6261c7af0af6d4bbd3b495d304d8c73a229365f52ede/mne-1.5.1-py3-none-any.whl",
+      "requires_python": ">=3.8",
+      "requires_dist": [
+        "numpy (>=1.15.4)",
+        "scipy (>=1.6.3)",
+        "matplotlib (>=3.4.0)",
+        "tqdm",
+        "pooch (>=1.5)",
+        "decorator",
+        "packaging",
+        "jinja2",
+        "importlib-resources (>=5.10.2) ; python_version < \"3.9\"",
+        "h5io ; extra == 'hdf5'",
+        "pymatreader ; extra == 'hdf5'",
+        "pytest ; extra == 'test'",
+        "pytest-cov ; extra == 'test'",
+        "pytest-timeout ; extra == 'test'",
+        "pytest-harvest ; extra == 'test'",
+        "pytest-qt ; extra == 'test'",
+        "ruff ; extra == 'test'",
+        "numpydoc ; extra == 'test'",
+        "codespell ; extra == 'test'",
+        "check-manifest ; extra == 'test'",
+        "twine ; extra == 'test'",
+        "wheel ; extra == 'test'",
+        "pre-commit ; extra == 'test'",
+        "black ; extra == 'test'",
+        "nitime ; extra == 'test'",
+        "nbclient ; extra == 'test'",
+        "sphinx-gallery ; extra == 'test'",
+        "eeglabio ; extra == 'test'",
+        "EDFlib-Python ; extra == 'test'",
+        "pybv ; extra == 'test'",
+        "imageio (>=2.6.1) ; extra == 'test'",
+        "imageio-ffmpeg (>=0.4.1) ; extra == 'test'",
+        "tomli ; (python_version < \"3.11\") and extra == 'test'"
+      ]
+    },
+    {
+      "name": "matplotlib",
+      "version": "3.7.0",
+      "filename": "matplotlib-3.7.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "bytes": 11572862,
+      "sha256": "691ef1f15360e439886186d0db77b5345b24da12cbc4fc57b26c4826db4d6cab",
+      "url": "https://files.pythonhosted.org/packages/6f/07/8c77dd5538d80023f64510312a52df5f463b04450915f6636ee820e5ea95/matplotlib-3.7.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "requires_python": ">=3.8",
+      "requires_dist": [
+        "contourpy (>=1.0.1)",
+        "cycler (>=0.10)",
+        "fonttools (>=4.22.0)",
+        "kiwisolver (>=1.0.1)",
+        "numpy (>=1.20)",
+        "packaging (>=20.0)",
+        "pillow (>=6.2.0)",
+        "pyparsing (>=2.3.1)",
+        "python-dateutil (>=2.7)",
+        "importlib-resources (>=3.2.0) ; python_version<\"3.10\""
+      ]
+    },
+    {
+      "name": "rpy2",
+      "version": "3.5.11",
+      "filename": "rpy2-3.5.11.tar.gz",
+      "bytes": 216626,
+      "sha256": "0d3e554dac8f4e55a28932f2946341aae3e02894304e1198547222aa86b89e21",
+      "url": "https://files.pythonhosted.org/packages/21/83/58efe42e96397d441609e411d37392dc68198f1a2ff7663c21a1cb07e6a8/rpy2-3.5.11.tar.gz",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "cffi (>=1.10.0)",
+        "jinja2",
+        "pytz",
+        "tzlocal",
+        "packaging ; platform_system == \"Windows\"",
+        "typing-extensions ; python_version < \"3.8\"",
+        "pytest ; extra == 'all'",
+        "ipython ; extra == 'all'",
+        "pandas (>=1.3.5) ; extra == 'all'",
+        "numpy ; extra == 'all'",
+        "numpy ; extra == 'pandas'",
+        "pandas (>=1.3.5) ; extra == 'pandas'",
+        "pytest ; extra == 'test'",
+        "ipython ; extra == 'test'",
+        "numpy ; extra == 'test'",
+        "pandas (>=1.3.5) ; extra == 'test'",
+        "pytest ; extra == 'test_minimal'",
+        "coverage ; extra == 'test_minimal'",
+        "pytest-cov ; extra == 'test_minimal'",
+        "mypy ; extra == 'types'",
+        "types-pytz ; extra == 'types'",
+        "types-tzlocal ; extra == 'types'"
+      ]
+    },
+    {
+      "name": "joblib",
+      "version": "1.2.0",
+      "filename": "joblib-1.2.0-py3-none-any.whl",
+      "bytes": 297969,
+      "sha256": "091138ed78f800342968c523bdde947e7a305b8594b910a0fea2ab83c3c6d385",
+      "url": "https://files.pythonhosted.org/packages/91/d4/3b4c8e5a30604df4c7518c562d4bf0502f2fa29221459226e140cf846512/joblib-1.2.0-py3-none-any.whl",
+      "requires_python": ">=3.7",
+      "requires_dist": []
+    },
+    {
+      "name": "threadpoolctl",
+      "version": "3.1.0",
+      "filename": "threadpoolctl-3.1.0-py3-none-any.whl",
+      "bytes": 14928,
+      "sha256": "8b99adda265feb6773280df41eece7b2e6561b772d21ffd52e372f999024907b",
+      "url": "https://files.pythonhosted.org/packages/61/cf/6e354304bcb9c6413c4e02a747b600061c21d38ba51e7e544ac7bc66aecc/threadpoolctl-3.1.0-py3-none-any.whl",
+      "requires_python": ">=3.6",
+      "requires_dist": []
+    },
+    {
+      "name": "decorator",
+      "version": "5.1.1",
+      "filename": "decorator-5.1.1-py3-none-any.whl",
+      "bytes": 9073,
+      "sha256": "b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186",
+      "url": "https://files.pythonhosted.org/packages/d5/50/83c593b07763e1161326b3b8c6686f0f4b0f24d5526546bee538c89837d6/decorator-5.1.1-py3-none-any.whl",
+      "requires_python": ">=3.5",
+      "requires_dist": []
+    },
+    {
+      "name": "tqdm",
+      "version": "4.65.0",
+      "filename": "tqdm-4.65.0-py3-none-any.whl",
+      "bytes": 77094,
+      "sha256": "c4f53a17fe37e132815abceec022631be8ffe1b9381c2e6e30aa70edc99e9671",
+      "url": "https://files.pythonhosted.org/packages/e6/02/a2cff6306177ae6bc73bc0665065de51dfb3b9db7373e122e2735faf0d97/tqdm-4.65.0-py3-none-any.whl",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "colorama ; platform_system == \"Windows\"",
+        "py-make (>=0.1.0) ; extra == 'dev'",
+        "twine ; extra == 'dev'",
+        "wheel ; extra == 'dev'",
+        "ipywidgets (>=6) ; extra == 'notebook'",
+        "slack-sdk ; extra == 'slack'",
+        "requests ; extra == 'telegram'"
+      ]
+    },
+    {
+      "name": "pooch",
+      "version": "1.7.0",
+      "filename": "pooch-1.7.0-py3-none-any.whl",
+      "bytes": 60877,
+      "sha256": "74258224fc33d58f53113cf955e8d51bf01386b91492927d0d1b6b341a765ad7",
+      "url": "https://files.pythonhosted.org/packages/84/8c/4da580db7fb4cfce8f5ed78e7d2aa542e6f201edd69d3d8a96917a8ff63c/pooch-1.7.0-py3-none-any.whl",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "platformdirs (>=2.5.0)",
+        "packaging (>=20.0)",
+        "requests (>=2.19.0)",
+        "tqdm (<5.0.0,>=4.41.0) ; extra == 'progress'",
+        "paramiko (>=2.7.0) ; extra == 'sftp'",
+        "xxhash (>=1.4.3) ; extra == 'xxhash'"
+      ]
+    },
+    {
+      "name": "packaging",
+      "version": "23.1",
+      "filename": "packaging-23.1-py3-none-any.whl",
+      "bytes": 48905,
+      "sha256": "994793af429502c4ea2ebf6bf664629d07c1a9fe974af92966e4b8d2df7edc61",
+      "url": "https://files.pythonhosted.org/packages/ab/c3/57f0601a2d4fe15de7a553c00adbc901425661bf048f2a22dfc500caf121/packaging-23.1-py3-none-any.whl",
+      "requires_python": ">=3.7",
+      "requires_dist": []
+    },
+    {
+      "name": "Jinja2",
+      "version": "3.1.2",
+      "filename": "Jinja2-3.1.2-py3-none-any.whl",
+      "bytes": 133101,
+      "sha256": "6088930bfe239f0e6710546ab9c19c9ef35e29792895fed6e6e31a023a182a61",
+      "url": "https://files.pythonhosted.org/packages/bc/c3/f068337a370801f372f2f8f6bad74a5c140f6fda3d9de154052708dd3c65/Jinja2-3.1.2-py3-none-any.whl",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "MarkupSafe (>=2.0)",
+        "Babel (>=2.7) ; extra == 'i18n'"
+      ]
+    },
+    {
+      "name": "MarkupSafe",
+      "version": "2.1.2",
+      "filename": "MarkupSafe-2.1.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "bytes": 27993,
+      "sha256": "f2bfb563d0211ce16b63c7cb9395d2c682a23187f54c3d79bfec33e6705473c6",
+      "url": "https://files.pythonhosted.org/packages/5a/94/d056bf5dbadf7f4b193ee2a132b3d49ffa1602371e3847518b2982045425/MarkupSafe-2.1.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "requires_python": ">=3.7",
+      "requires_dist": []
+    },
+    {
+      "name": "contourpy",
+      "version": "1.0.7",
+      "filename": "contourpy-1.0.7-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "bytes": 299995,
+      "sha256": "54d43960d809c4c12508a60b66cb936e7ed57d51fb5e30b513934a4a23874fae",
+      "url": "https://files.pythonhosted.org/packages/b6/4b/18a8a0c4d4f935d3711fe1325d4f0b5277886bcef01ced6ecc45074c3f19/contourpy-1.0.7-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "requires_python": ">=3.8",
+      "requires_dist": [
+        "numpy (>=1.16)",
+        "bokeh ; extra == 'bokeh'",
+        "chromedriver ; extra == 'bokeh'",
+        "selenium ; extra == 'bokeh'",
+        "furo ; extra == 'docs'",
+        "sphinx-copybutton ; extra == 'docs'",
+        "contourpy[bokeh] ; extra == 'mypy'",
+        "docutils-stubs ; extra == 'mypy'",
+        "mypy (==0.991) ; extra == 'mypy'",
+        "types-Pillow ; extra == 'mypy'",
+        "matplotlib ; extra == 'test'",
+        "Pillow ; extra == 'test'",
+        "pytest ; extra == 'test'",
+        "pytest ; extra == 'test-no-images'"
+      ]
+    },
+    {
+      "name": "cycler",
+      "version": "0.11.0",
+      "filename": "cycler-0.11.0-py3-none-any.whl",
+      "bytes": 6389,
+      "sha256": "3a27e95f763a428a739d2add979fa7494c912a32c17c4c38c4d5f082cad165a3",
+      "url": "https://files.pythonhosted.org/packages/5c/f9/695d6bedebd747e5eb0fe8fad57b72fdf25411273a39791cde838d5a8f51/cycler-0.11.0-py3-none-any.whl",
+      "requires_python": ">=3.6",
+      "requires_dist": []
+    },
+    {
+      "name": "fonttools",
+      "version": "4.39.3",
+      "filename": "fonttools-4.39.3-py3-none-any.whl",
+      "bytes": 1009099,
+      "sha256": "64c0c05c337f826183637570ac5ab49ee220eec66cf50248e8df527edfa95aeb",
+      "url": "https://files.pythonhosted.org/packages/16/07/1c7547e27f559ec078801d522cc4d5127cdd4ef8e831c8ddcd9584668a07/fonttools-4.39.3-py3-none-any.whl",
+      "requires_python": ">=3.8",
+      "requires_dist": [
+        "fs (<3,>=2.2.0) ; extra == 'all'",
+        "lxml (<5,>=4.0) ; extra == 'all'",
+        "zopfli (>=0.1.4) ; extra == 'all'",
+        "lz4 (>=1.7.4.2) ; extra == 'all'",
+        "matplotlib ; extra == 'all'",
+        "sympy ; extra == 'all'",
+        "skia-pathops (>=0.5.0) ; extra == 'all'",
+        "uharfbuzz (>=0.23.0) ; extra == 'all'",
+        "brotlicffi (>=0.8.0) ; (platform_python_implementation != \"CPython\") and extra == 'all'",
+        "scipy ; (platform_python_implementation != \"PyPy\") and extra == 'all'",
+        "brotli (>=1.0.1) ; (platform_python_implementation == \"CPython\") and extra == 'all'",
+        "munkres ; (platform_python_implementation == \"PyPy\") and extra == 'all'",
+        "unicodedata2 (>=15.0.0) ; (python_version <= \"3.11\") and extra == 'all'",
+        "xattr ; (sys_platform == \"darwin\") and extra == 'all'",
+        "lz4 (>=1.7.4.2) ; extra == 'graphite'",
+        "scipy ; (platform_python_implementation != \"PyPy\") and extra == 'interpolatable'",
+        "munkres ; (platform_python_implementation == \"PyPy\") and extra == 'interpolatable'",
+        "lxml (<5,>=4.0) ; extra == 'lxml'",
+        "skia-pathops (>=0.5.0) ; extra == 'pathops'",
+        "matplotlib ; extra == 'plot'",
+        "uharfbuzz (>=0.23.0) ; extra == 'repacker'",
+        "sympy ; extra == 'symfont'",
+        "xattr ; (sys_platform == \"darwin\") and extra == 'type1'",
+        "fs (<3,>=2.2.0) ; extra == 'ufo'",
+        "unicodedata2 (>=15.0.0) ; (python_version <= \"3.11\") and extra == 'unicode'",
+        "zopfli (>=0.1.4) ; extra == 'woff'",
+        "brotlicffi (>=0.8.0) ; (platform_python_implementation != \"CPython\") and extra == 'woff'",
+        "brotli (>=1.0.1) ; (platform_python_implementation == \"CPython\") and extra == 'woff'"
+      ]
+    },
+    {
+      "name": "kiwisolver",
+      "version": "1.4.4",
+      "filename": "kiwisolver-1.4.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "bytes": 1424584,
+      "sha256": "78d6601aed50c74e0ef02f4204da1816147a6d3fbdc8b3872d263338a9052c51",
+      "url": "https://files.pythonhosted.org/packages/ac/e6/823a136cefcf0592338827f54cb73642c2ea580acd8a7d5dbf8f32437848/kiwisolver-1.4.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "typing-extensions ; python_version < \"3.8\""
+      ]
+    },
+    {
+      "name": "pillow",
+      "version": "9.5.0",
+      "filename": "Pillow-9.5.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "bytes": 3308566,
+      "sha256": "cfcc2c53c06f2ccb8976fb5c71d448bdd0a07d26d8e07e321c103416444c7ad1",
+      "url": "https://files.pythonhosted.org/packages/3b/70/e9a45a2e9c58c23e023fcda5af9686f5b42c718cc9bc86194e0025cf0ec5/Pillow-9.5.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "furo ; extra == 'docs'",
+        "olefile ; extra == 'docs'",
+        "sphinx (>=2.4) ; extra == 'docs'",
+        "sphinx-copybutton ; extra == 'docs'",
+        "sphinx-inline-tabs ; extra == 'docs'",
+        "sphinx-removed-in ; extra == 'docs'",
+        "sphinxext-opengraph ; extra == 'docs'",
+        "check-manifest ; extra == 'tests'",
+        "coverage ; extra == 'tests'",
+        "defusedxml ; extra == 'tests'",
+        "markdown2 ; extra == 'tests'",
+        "olefile ; extra == 'tests'",
+        "packaging ; extra == 'tests'",
+        "pyroma ; extra == 'tests'",
+        "pytest ; extra == 'tests'",
+        "pytest-cov ; extra == 'tests'",
+        "pytest-timeout ; extra == 'tests'"
+      ]
+    },
+    {
+      "name": "pyparsing",
+      "version": "3.0.9",
+      "filename": "pyparsing-3.0.9-py3-none-any.whl",
+      "bytes": 98338,
+      "sha256": "5026bae9a10eeaefb61dab2f09052b9f4307d44aee4eda64b309723d8d206bbc",
+      "url": "https://files.pythonhosted.org/packages/6c/10/a7d0fa5baea8fe7b50f448ab742f26f52b80bfca85ac2be9d35cdd9a3246/pyparsing-3.0.9-py3-none-any.whl",
+      "requires_python": ">=3.6.8",
+      "requires_dist": [
+        "railroad-diagrams ; extra == \"diagrams\"",
+        "jinja2 ; extra == \"diagrams\""
+      ]
+    },
+    {
+      "name": "python-dateutil",
+      "version": "2.8.2",
+      "filename": "python_dateutil-2.8.2-py2.py3-none-any.whl",
+      "bytes": 247702,
+      "sha256": "961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9",
+      "url": "https://files.pythonhosted.org/packages/36/7a/87837f39d0296e723bb9b62bbb257d0355c7f6128853c78955f57342a56d/python_dateutil-2.8.2-py2.py3-none-any.whl",
+      "requires_python": "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7",
+      "requires_dist": [
+        "six (>=1.5)"
+      ]
+    },
+    {
+      "name": "six",
+      "version": "1.16.0",
+      "filename": "six-1.16.0-py2.py3-none-any.whl",
+      "bytes": 11053,
+      "sha256": "8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254",
+      "url": "https://files.pythonhosted.org/packages/d9/5a/e7c31adbe875f2abbb91bd84cf2dc52d792b5a01506781dbcf25c91daf11/six-1.16.0-py2.py3-none-any.whl",
+      "requires_python": ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*",
+      "requires_dist": []
+    },
+    {
+      "name": "platformdirs",
+      "version": "3.2.0",
+      "filename": "platformdirs-3.2.0-py3-none-any.whl",
+      "bytes": 14863,
+      "sha256": "ebe11c0d7a805086e99506aa331612429a72ca7cd52a1f0d277dc4adc20cb10e",
+      "url": "https://files.pythonhosted.org/packages/b2/f3/4fb5fae710fc9f22a42cd90dc0547da18ec83e2e139294ab94f04c449cf5/platformdirs-3.2.0-py3-none-any.whl",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "typing-extensions>=4.5; python_version < '3.8'",
+        "furo>=2022.12.7; extra == 'docs'",
+        "proselint>=0.13; extra == 'docs'",
+        "sphinx-autodoc-typehints!=1.23.4,>=1.22; extra == 'docs'",
+        "sphinx>=6.1.3; extra == 'docs'",
+        "appdirs==1.4.4; extra == 'test'",
+        "covdefaults>=2.3; extra == 'test'",
+        "pytest-cov>=4; extra == 'test'",
+        "pytest-mock>=3.10; extra == 'test'",
+        "pytest>=7.2.2; extra == 'test'"
+      ]
+    },
+    {
+      "name": "requests",
+      "version": "2.31.0",
+      "filename": "requests-2.31.0-py3-none-any.whl",
+      "bytes": 62574,
+      "sha256": "58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f",
+      "url": "https://files.pythonhosted.org/packages/70/8e/0e2d847013cb52cd35b38c009bb167a1a26b2ce6cd6965bf26b47bc0bf44/requests-2.31.0-py3-none-any.whl",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "charset-normalizer (<4,>=2)",
+        "idna (<4,>=2.5)",
+        "urllib3 (<3,>=1.21.1)",
+        "certifi (>=2017.4.17)",
+        "PySocks (!=1.5.7,>=1.5.6) ; extra == 'socks'",
+        "chardet (<6,>=3.0.2) ; extra == 'use_chardet_on_py3'"
+      ]
+    },
+    {
+      "name": "charset-normalizer",
+      "version": "3.2.0",
+      "filename": "charset_normalizer-3.2.0-py3-none-any.whl",
+      "bytes": 46668,
+      "sha256": "8e098148dd37b4ce3baca71fb394c81dc5d9c7728c95df695d2dca218edf40e6",
+      "url": "https://files.pythonhosted.org/packages/bf/a0/188f223c7d8b924fb9b554b9d27e0e7506fd5bf9cfb6dbacb2dfd5832b53/charset_normalizer-3.2.0-py3-none-any.whl",
+      "requires_python": ">=3.7.0",
+      "requires_dist": []
+    },
+    {
+      "name": "idna",
+      "version": "3.4",
+      "filename": "idna-3.4-py3-none-any.whl",
+      "bytes": 61538,
+      "sha256": "90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2",
+      "url": "https://files.pythonhosted.org/packages/fc/34/3030de6f1370931b9dbb4dad48f6ab1015ab1d32447850b9fc94e60097be/idna-3.4-py3-none-any.whl",
+      "requires_python": ">=3.5",
+      "requires_dist": []
+    },
+    {
+      "name": "urllib3",
+      "version": "1.26.18",
+      "filename": "urllib3-1.26.18-py2.py3-none-any.whl",
+      "bytes": 143835,
+      "sha256": "34b97092d7e0a3a8cf7cd10e386f401b3737364026c45e622aa02903dffe0f07",
+      "url": "https://files.pythonhosted.org/packages/b0/53/aa91e163dcfd1e5b82d8a890ecf13314e3e149c05270cc644581f77f17fd/urllib3-1.26.18-py2.py3-none-any.whl",
+      "requires_python": ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*",
+      "requires_dist": [
+        "brotlicffi >=0.8.0 ; ((os_name != \"nt\" or python_version >= \"3\") and platform_python_implementation != \"CPython\") and extra == 'brotli'",
+        "brotli ==1.0.9 ; (os_name != \"nt\" and python_version < \"3\" and platform_python_implementation == \"CPython\") and extra == 'brotli'",
+        "brotlipy >=0.6.0 ; (os_name == \"nt\" and python_version < \"3\") and extra == 'brotli'",
+        "brotli >=1.0.9 ; (python_version >= \"3\" and platform_python_implementation == \"CPython\") and extra == 'brotli'",
+        "pyOpenSSL >=0.14 ; extra == 'secure'",
+        "cryptography >=1.3.4 ; extra == 'secure'",
+        "idna >=2.0.0 ; extra == 'secure'",
+        "certifi ; extra == 'secure'",
+        "urllib3-secure-extra ; extra == 'secure'",
+        "ipaddress ; (python_version == \"2.7\") and extra == 'secure'",
+        "PySocks !=1.5.7,<2.0,>=1.5.6 ; extra == 'socks'"
+      ]
+    },
+    {
+      "name": "certifi",
+      "version": "2023.7.22",
+      "filename": "certifi-2023.7.22-py3-none-any.whl",
+      "bytes": 158334,
+      "sha256": "92d6037539857d8206b8f6ae472e8b77db8058fec5937a1ef3f54304089edbb9",
+      "url": "https://files.pythonhosted.org/packages/4c/dd/2234eab22353ffc7d94e8d13177aaa050113286e93e7b40eae01fbf7c3d9/certifi-2023.7.22-py3-none-any.whl",
+      "requires_python": ">=3.6",
+      "requires_dist": []
+    },
+    {
+      "name": "cffi",
+      "version": "1.15.1",
+      "filename": "cffi-1.15.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "bytes": 462588,
+      "sha256": "94411f22c3985acaec6f83c6df553f2dbe17b698cc7f8ae751ff2237d96b9e3c",
+      "url": "https://files.pythonhosted.org/packages/37/5a/c37631a86be838bdd84cc0259130942bf7e6e32f70f4cab95f479847fb91/cffi-1.15.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "requires_python": "",
+      "requires_dist": [
+        "pycparser"
+      ]
+    },
+    {
+      "name": "pycparser",
+      "version": "2.21",
+      "filename": "pycparser-2.21-py2.py3-none-any.whl",
+      "bytes": 118697,
+      "sha256": "8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9",
+      "url": "https://files.pythonhosted.org/packages/62/d5/5f610ebe421e85889f2e55e33b7f9a6795bd982198517d912eb1c76e1a53/pycparser-2.21-py2.py3-none-any.whl",
+      "requires_python": "",
+      "requires_dist": []
+    },
+    {
+      "name": "pytz",
+      "version": "2023.3",
+      "filename": "pytz-2023.3-py2.py3-none-any.whl",
+      "bytes": 502345,
+      "sha256": "a151b3abb88eda1d4e34a9814df37de2a80e301e68ba0fd856fb9b46bfbbbffb",
+      "url": "https://files.pythonhosted.org/packages/7f/99/ad6bd37e748257dd70d6f85d916cafe79c0b0f5e2e95b11f7fbc82bf3110/pytz-2023.3-py2.py3-none-any.whl",
+      "requires_python": "",
+      "requires_dist": []
+    },
+    {
+      "name": "tzlocal",
+      "version": "5.0.1",
+      "filename": "tzlocal-5.0.1-py3-none-any.whl",
+      "bytes": 20809,
+      "sha256": "f3596e180296aaf2dbd97d124fe76ae3a0e3d32b258447de7b939b3fd4be992f",
+      "url": "https://files.pythonhosted.org/packages/84/d2/730a87f0dbf184760394a85088d0d2366a5a8a32bc32ffd869a83f1de854/tzlocal-5.0.1-py3-none-any.whl",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "tzdata ; platform_system == \"Windows\"",
+        "backports.zoneinfo ; python_version < \"3.9\"",
+        "black ; extra == 'devenv'",
+        "check-manifest ; extra == 'devenv'",
+        "flake8 ; extra == 'devenv'",
+        "pyroma ; extra == 'devenv'",
+        "pytest-cov ; extra == 'devenv'",
+        "pytest-mock (>=3.3) ; extra == 'devenv'",
+        "pytest (>=4.3) ; extra == 'devenv'",
+        "zest.releaser ; extra == 'devenv'"
+      ]
+    },
+    {
+      "name": "setuptools",
+      "version": "67.6.1",
+      "filename": "setuptools-67.6.1-py3-none-any.whl",
+      "bytes": 1089263,
+      "sha256": "e728ca814a823bf7bf60162daf9db95b93d532948c4c0bea762ce62f60189078",
+      "url": "https://files.pythonhosted.org/packages/0b/fc/8781442def77b0aa22f63f266d4dadd486ebc0c5371d6290caf4320da4b7/setuptools-67.6.1-py3-none-any.whl",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "sphinx (>=3.5) ; extra == 'docs'",
+        "jaraco.packaging (>=9) ; extra == 'docs'",
+        "rst.linker (>=1.9) ; extra == 'docs'",
+        "furo ; extra == 'docs'",
+        "sphinx-lint ; extra == 'docs'",
+        "jaraco.tidelift (>=1.4) ; extra == 'docs'",
+        "pygments-github-lexers (==0.0.5) ; extra == 'docs'",
+        "sphinx-favicon ; extra == 'docs'",
+        "sphinx-inline-tabs ; extra == 'docs'",
+        "sphinx-reredirects ; extra == 'docs'",
+        "sphinxcontrib-towncrier ; extra == 'docs'",
+        "sphinx-notfound-page (==0.8.3) ; extra == 'docs'",
+        "sphinx-hoverxref (<2) ; extra == 'docs'",
+        "pytest (>=6) ; extra == 'testing'",
+        "pytest-checkdocs (>=2.4) ; extra == 'testing'",
+        "flake8 (<5) ; extra == 'testing'",
+        "pytest-enabler (>=1.3) ; extra == 'testing'",
+        "pytest-perf ; extra == 'testing'",
+        "flake8-2020 ; extra == 'testing'",
+        "virtualenv (>=13.0.0) ; extra == 'testing'",
+        "wheel ; extra == 'testing'",
+        "pip (>=19.1) ; extra == 'testing'",
+        "jaraco.envs (>=2.2) ; extra == 'testing'",
+        "pytest-xdist ; extra == 'testing'",
+        "jaraco.path (>=3.2.0) ; extra == 'testing'",
+        "build[virtualenv] ; extra == 'testing'",
+        "filelock (>=3.4.0) ; extra == 'testing'",
+        "pip-run (>=8.8) ; extra == 'testing'",
+        "ini2toml[lite] (>=0.9) ; extra == 'testing'",
+        "tomli-w (>=1.0.0) ; extra == 'testing'",
+        "pytest-timeout ; extra == 'testing'",
+        "pytest ; extra == 'testing-integration'",
+        "pytest-xdist ; extra == 'testing-integration'",
+        "pytest-enabler ; extra == 'testing-integration'",
+        "virtualenv (>=13.0.0) ; extra == 'testing-integration'",
+        "tomli ; extra == 'testing-integration'",
+        "wheel ; extra == 'testing-integration'",
+        "jaraco.path (>=3.2.0) ; extra == 'testing-integration'",
+        "jaraco.envs (>=2.2) ; extra == 'testing-integration'",
+        "build[virtualenv] ; extra == 'testing-integration'",
+        "filelock (>=3.4.0) ; extra == 'testing-integration'",
+        "pytest-black (>=0.3.7) ; (platform_python_implementation != \"PyPy\") and extra == 'testing'",
+        "pytest-cov ; (platform_python_implementation != \"PyPy\") and extra == 'testing'",
+        "pytest-mypy (>=0.9.1) ; (platform_python_implementation != \"PyPy\") and extra == 'testing'",
+        "pytest-flake8 ; (python_version < \"3.12\") and extra == 'testing'"
+      ]
+    },
+    {
+      "name": "wheel",
+      "version": "0.40.0",
+      "filename": "wheel-0.40.0-py3-none-any.whl",
+      "bytes": 64545,
+      "sha256": "d236b20e7cb522daf2390fa84c55eea81c5c30190f90f29ae2ca1ad8355bf247",
+      "url": "https://files.pythonhosted.org/packages/61/86/cc8d1ff2ca31a312a25a708c891cf9facbad4eae493b3872638db6785eb5/wheel-0.40.0-py3-none-any.whl",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "pytest >= 6.0.0 ; extra == \"test\""
+      ]
+    },
+    {
+      "name": "pip",
+      "version": "23.1.2",
+      "filename": "pip-23.1.2-py3-none-any.whl",
+      "bytes": 2064688,
+      "sha256": "3ef6ac33239e4027d9a5598a381b9d30880a1477e50039db2eac6e8a8f6d1b18",
+      "url": "https://files.pythonhosted.org/packages/08/e3/57d4c24a050aa0bcca46b2920bff40847db79535dc78141eb83581a52eb8/pip-23.1.2-py3-none-any.whl",
+      "requires_python": ">=3.7",
+      "requires_dist": []
+    }
+  ],
+  "python_dependency_edges": [
+    {
+      "package": "scipy",
+      "dependency": "numpy",
+      "requirement": "<1.27.0,>=1.19.5",
+      "selected_version": "1.23.5"
+    },
+    {
+      "package": "scikit-learn",
+      "dependency": "numpy",
+      "requirement": ">=1.17.3",
+      "selected_version": "1.23.5"
+    },
+    {
+      "package": "scikit-learn",
+      "dependency": "scipy",
+      "requirement": ">=1.3.2",
+      "selected_version": "1.10.1"
+    },
+    {
+      "package": "scikit-learn",
+      "dependency": "joblib",
+      "requirement": ">=1.1.1",
+      "selected_version": "1.2.0"
+    },
+    {
+      "package": "scikit-learn",
+      "dependency": "threadpoolctl",
+      "requirement": ">=2.0.0",
+      "selected_version": "3.1.0"
+    },
+    {
+      "package": "mne",
+      "dependency": "numpy",
+      "requirement": ">=1.15.4",
+      "selected_version": "1.23.5"
+    },
+    {
+      "package": "mne",
+      "dependency": "scipy",
+      "requirement": ">=1.6.3",
+      "selected_version": "1.10.1"
+    },
+    {
+      "package": "mne",
+      "dependency": "matplotlib",
+      "requirement": ">=3.4.0",
+      "selected_version": "3.7.0"
+    },
+    {
+      "package": "mne",
+      "dependency": "tqdm",
+      "requirement": "",
+      "selected_version": "4.65.0"
+    },
+    {
+      "package": "mne",
+      "dependency": "pooch",
+      "requirement": ">=1.5",
+      "selected_version": "1.7.0"
+    },
+    {
+      "package": "mne",
+      "dependency": "decorator",
+      "requirement": "",
+      "selected_version": "5.1.1"
+    },
+    {
+      "package": "mne",
+      "dependency": "packaging",
+      "requirement": "",
+      "selected_version": "23.1"
+    },
+    {
+      "package": "mne",
+      "dependency": "jinja2",
+      "requirement": "",
+      "selected_version": "3.1.2"
+    },
+    {
+      "package": "matplotlib",
+      "dependency": "contourpy",
+      "requirement": ">=1.0.1",
+      "selected_version": "1.0.7"
+    },
+    {
+      "package": "matplotlib",
+      "dependency": "cycler",
+      "requirement": ">=0.10",
+      "selected_version": "0.11.0"
+    },
+    {
+      "package": "matplotlib",
+      "dependency": "fonttools",
+      "requirement": ">=4.22.0",
+      "selected_version": "4.39.3"
+    },
+    {
+      "package": "matplotlib",
+      "dependency": "kiwisolver",
+      "requirement": ">=1.0.1",
+      "selected_version": "1.4.4"
+    },
+    {
+      "package": "matplotlib",
+      "dependency": "numpy",
+      "requirement": ">=1.20",
+      "selected_version": "1.23.5"
+    },
+    {
+      "package": "matplotlib",
+      "dependency": "packaging",
+      "requirement": ">=20.0",
+      "selected_version": "23.1"
+    },
+    {
+      "package": "matplotlib",
+      "dependency": "pillow",
+      "requirement": ">=6.2.0",
+      "selected_version": "9.5.0"
+    },
+    {
+      "package": "matplotlib",
+      "dependency": "pyparsing",
+      "requirement": ">=2.3.1",
+      "selected_version": "3.0.9"
+    },
+    {
+      "package": "matplotlib",
+      "dependency": "python-dateutil",
+      "requirement": ">=2.7",
+      "selected_version": "2.8.2"
+    },
+    {
+      "package": "rpy2",
+      "dependency": "cffi",
+      "requirement": ">=1.10.0",
+      "selected_version": "1.15.1"
+    },
+    {
+      "package": "rpy2",
+      "dependency": "jinja2",
+      "requirement": "",
+      "selected_version": "3.1.2"
+    },
+    {
+      "package": "rpy2",
+      "dependency": "pytz",
+      "requirement": "",
+      "selected_version": "2023.3"
+    },
+    {
+      "package": "rpy2",
+      "dependency": "tzlocal",
+      "requirement": "",
+      "selected_version": "5.0.1"
+    },
+    {
+      "package": "pooch",
+      "dependency": "platformdirs",
+      "requirement": ">=2.5.0",
+      "selected_version": "3.2.0"
+    },
+    {
+      "package": "pooch",
+      "dependency": "packaging",
+      "requirement": ">=20.0",
+      "selected_version": "23.1"
+    },
+    {
+      "package": "pooch",
+      "dependency": "requests",
+      "requirement": ">=2.19.0",
+      "selected_version": "2.31.0"
+    },
+    {
+      "package": "Jinja2",
+      "dependency": "MarkupSafe",
+      "requirement": ">=2.0",
+      "selected_version": "2.1.2"
+    },
+    {
+      "package": "contourpy",
+      "dependency": "numpy",
+      "requirement": ">=1.16",
+      "selected_version": "1.23.5"
+    },
+    {
+      "package": "python-dateutil",
+      "dependency": "six",
+      "requirement": ">=1.5",
+      "selected_version": "1.16.0"
+    },
+    {
+      "package": "requests",
+      "dependency": "charset-normalizer",
+      "requirement": "<4,>=2",
+      "selected_version": "3.2.0"
+    },
+    {
+      "package": "requests",
+      "dependency": "idna",
+      "requirement": "<4,>=2.5",
+      "selected_version": "3.4"
+    },
+    {
+      "package": "requests",
+      "dependency": "urllib3",
+      "requirement": "<3,>=1.21.1",
+      "selected_version": "1.26.18"
+    },
+    {
+      "package": "requests",
+      "dependency": "certifi",
+      "requirement": ">=2017.4.17",
+      "selected_version": "2023.7.22"
+    },
+    {
+      "package": "cffi",
+      "dependency": "pycparser",
+      "requirement": "",
+      "selected_version": "2.21"
+    }
+  ],
+  "python_excluded_requirements": [
+    {
+      "package": "scipy",
+      "requirement": "pytest; extra == \"test\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "pytest-cov; extra == \"test\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "pytest-timeout; extra == \"test\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "pytest-xdist; extra == \"test\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "asv; extra == \"test\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "mpmath; extra == \"test\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "gmpy2; extra == \"test\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "threadpoolctl; extra == \"test\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "scikit-umfpack; extra == \"test\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "pooch; extra == \"test\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "sphinx!=4.1.0; extra == \"doc\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "pydata-sphinx-theme==0.9.0; extra == \"doc\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "sphinx-design>=0.2.0; extra == \"doc\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "matplotlib>2; extra == \"doc\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "numpydoc; extra == \"doc\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "mypy; extra == \"dev\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "typing_extensions; extra == \"dev\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "pycodestyle; extra == \"dev\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "flake8; extra == \"dev\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "rich-click; extra == \"dev\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "click; extra == \"dev\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "doit>=0.36.0; extra == \"dev\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scipy",
+      "requirement": "pydevtool; extra == \"dev\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "matplotlib (>=3.1.3) ; extra == 'benchmark'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "pandas (>=1.0.5) ; extra == 'benchmark'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "memory-profiler (>=0.57.0) ; extra == 'benchmark'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "matplotlib (>=3.1.3) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "scikit-image (>=0.16.2) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "pandas (>=1.0.5) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "seaborn (>=0.9.0) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "memory-profiler (>=0.57.0) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "sphinx (>=4.0.1) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "sphinx-gallery (>=0.7.0) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "numpydoc (>=1.2.0) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "Pillow (>=7.1.2) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "pooch (>=1.6.0) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "sphinx-prompt (>=1.3.0) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "sphinxext-opengraph (>=0.4.2) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "plotly (>=5.10.0) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "matplotlib (>=3.1.3) ; extra == 'examples'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "scikit-image (>=0.16.2) ; extra == 'examples'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "pandas (>=1.0.5) ; extra == 'examples'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "seaborn (>=0.9.0) ; extra == 'examples'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "pooch (>=1.6.0) ; extra == 'examples'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "plotly (>=5.10.0) ; extra == 'examples'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "matplotlib (>=3.1.3) ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "scikit-image (>=0.16.2) ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "pandas (>=1.0.5) ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "pytest (>=5.3.1) ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "pytest-cov (>=2.9.0) ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "flake8 (>=3.8.2) ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "black (>=22.3.0) ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "mypy (>=0.961) ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "pyamg (>=4.0.0) ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "numpydoc (>=1.2.0) ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "scikit-learn",
+      "requirement": "pooch (>=1.6.0) ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "importlib-resources (>=5.10.2) ; python_version < \"3.9\"",
+      "reason": "Selected Python3.11 excludes older-Python fallback."
+    },
+    {
+      "package": "mne",
+      "requirement": "h5io ; extra == 'hdf5'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "pymatreader ; extra == 'hdf5'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "pytest ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "pytest-cov ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "pytest-timeout ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "pytest-harvest ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "pytest-qt ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "ruff ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "numpydoc ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "codespell ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "check-manifest ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "twine ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "wheel ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "pre-commit ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "black ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "nitime ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "nbclient ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "sphinx-gallery ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "eeglabio ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "EDFlib-Python ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "pybv ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "imageio (>=2.6.1) ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "imageio-ffmpeg (>=0.4.1) ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "mne",
+      "requirement": "tomli ; (python_version < \"3.11\") and extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "matplotlib",
+      "requirement": "importlib-resources (>=3.2.0) ; python_version<\"3.10\"",
+      "reason": "Selected Python3.11 excludes older-Python fallback."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "packaging ; platform_system == \"Windows\"",
+      "reason": "Selected platform is Linux."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "typing-extensions ; python_version < \"3.8\"",
+      "reason": "Selected Python3.11 excludes older-Python fallback."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "pytest ; extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "ipython ; extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "pandas (>=1.3.5) ; extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "numpy ; extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "numpy ; extra == 'pandas'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "pandas (>=1.3.5) ; extra == 'pandas'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "pytest ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "ipython ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "numpy ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "pandas (>=1.3.5) ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "pytest ; extra == 'test_minimal'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "coverage ; extra == 'test_minimal'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "pytest-cov ; extra == 'test_minimal'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "mypy ; extra == 'types'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "types-pytz ; extra == 'types'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "rpy2",
+      "requirement": "types-tzlocal ; extra == 'types'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "tqdm",
+      "requirement": "colorama ; platform_system == \"Windows\"",
+      "reason": "Selected platform is Linux."
+    },
+    {
+      "package": "tqdm",
+      "requirement": "py-make (>=0.1.0) ; extra == 'dev'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "tqdm",
+      "requirement": "twine ; extra == 'dev'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "tqdm",
+      "requirement": "wheel ; extra == 'dev'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "tqdm",
+      "requirement": "ipywidgets (>=6) ; extra == 'notebook'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "tqdm",
+      "requirement": "slack-sdk ; extra == 'slack'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "tqdm",
+      "requirement": "requests ; extra == 'telegram'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pooch",
+      "requirement": "tqdm (<5.0.0,>=4.41.0) ; extra == 'progress'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pooch",
+      "requirement": "paramiko (>=2.7.0) ; extra == 'sftp'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pooch",
+      "requirement": "xxhash (>=1.4.3) ; extra == 'xxhash'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "Jinja2",
+      "requirement": "Babel (>=2.7) ; extra == 'i18n'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "contourpy",
+      "requirement": "bokeh ; extra == 'bokeh'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "contourpy",
+      "requirement": "chromedriver ; extra == 'bokeh'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "contourpy",
+      "requirement": "selenium ; extra == 'bokeh'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "contourpy",
+      "requirement": "furo ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "contourpy",
+      "requirement": "sphinx-copybutton ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "contourpy",
+      "requirement": "contourpy[bokeh] ; extra == 'mypy'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "contourpy",
+      "requirement": "docutils-stubs ; extra == 'mypy'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "contourpy",
+      "requirement": "mypy (==0.991) ; extra == 'mypy'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "contourpy",
+      "requirement": "types-Pillow ; extra == 'mypy'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "contourpy",
+      "requirement": "matplotlib ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "contourpy",
+      "requirement": "Pillow ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "contourpy",
+      "requirement": "pytest ; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "contourpy",
+      "requirement": "pytest ; extra == 'test-no-images'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "fs (<3,>=2.2.0) ; extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "lxml (<5,>=4.0) ; extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "zopfli (>=0.1.4) ; extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "lz4 (>=1.7.4.2) ; extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "matplotlib ; extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "sympy ; extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "skia-pathops (>=0.5.0) ; extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "uharfbuzz (>=0.23.0) ; extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "brotlicffi (>=0.8.0) ; (platform_python_implementation != \"CPython\") and extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "scipy ; (platform_python_implementation != \"PyPy\") and extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "brotli (>=1.0.1) ; (platform_python_implementation == \"CPython\") and extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "munkres ; (platform_python_implementation == \"PyPy\") and extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "unicodedata2 (>=15.0.0) ; (python_version <= \"3.11\") and extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "xattr ; (sys_platform == \"darwin\") and extra == 'all'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "lz4 (>=1.7.4.2) ; extra == 'graphite'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "scipy ; (platform_python_implementation != \"PyPy\") and extra == 'interpolatable'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "munkres ; (platform_python_implementation == \"PyPy\") and extra == 'interpolatable'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "lxml (<5,>=4.0) ; extra == 'lxml'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "skia-pathops (>=0.5.0) ; extra == 'pathops'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "matplotlib ; extra == 'plot'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "uharfbuzz (>=0.23.0) ; extra == 'repacker'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "sympy ; extra == 'symfont'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "xattr ; (sys_platform == \"darwin\") and extra == 'type1'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "fs (<3,>=2.2.0) ; extra == 'ufo'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "unicodedata2 (>=15.0.0) ; (python_version <= \"3.11\") and extra == 'unicode'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "zopfli (>=0.1.4) ; extra == 'woff'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "brotlicffi (>=0.8.0) ; (platform_python_implementation != \"CPython\") and extra == 'woff'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "fonttools",
+      "requirement": "brotli (>=1.0.1) ; (platform_python_implementation == \"CPython\") and extra == 'woff'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "kiwisolver",
+      "requirement": "typing-extensions ; python_version < \"3.8\"",
+      "reason": "Selected Python3.11 excludes older-Python fallback."
+    },
+    {
+      "package": "pillow",
+      "requirement": "furo ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "olefile ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "sphinx (>=2.4) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "sphinx-copybutton ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "sphinx-inline-tabs ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "sphinx-removed-in ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "sphinxext-opengraph ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "check-manifest ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "coverage ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "defusedxml ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "markdown2 ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "olefile ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "packaging ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "pyroma ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "pytest ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "pytest-cov ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pillow",
+      "requirement": "pytest-timeout ; extra == 'tests'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pyparsing",
+      "requirement": "railroad-diagrams ; extra == \"diagrams\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "pyparsing",
+      "requirement": "jinja2 ; extra == \"diagrams\"",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "platformdirs",
+      "requirement": "typing-extensions>=4.5; python_version < '3.8'",
+      "reason": "Selected Python3.11 excludes older-Python fallback."
+    },
+    {
+      "package": "platformdirs",
+      "requirement": "furo>=2022.12.7; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "platformdirs",
+      "requirement": "proselint>=0.13; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "platformdirs",
+      "requirement": "sphinx-autodoc-typehints!=1.23.4,>=1.22; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "platformdirs",
+      "requirement": "sphinx>=6.1.3; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "platformdirs",
+      "requirement": "appdirs==1.4.4; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "platformdirs",
+      "requirement": "covdefaults>=2.3; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "platformdirs",
+      "requirement": "pytest-cov>=4; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "platformdirs",
+      "requirement": "pytest-mock>=3.10; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "platformdirs",
+      "requirement": "pytest>=7.2.2; extra == 'test'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "requests",
+      "requirement": "PySocks (!=1.5.7,>=1.5.6) ; extra == 'socks'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "requests",
+      "requirement": "chardet (<6,>=3.0.2) ; extra == 'use_chardet_on_py3'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "urllib3",
+      "requirement": "brotlicffi >=0.8.0 ; ((os_name != \"nt\" or python_version >= \"3\") and platform_python_implementation != \"CPython\") and extra == 'brotli'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "urllib3",
+      "requirement": "brotli ==1.0.9 ; (os_name != \"nt\" and python_version < \"3\" and platform_python_implementation == \"CPython\") and extra == 'brotli'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "urllib3",
+      "requirement": "brotlipy >=0.6.0 ; (os_name == \"nt\" and python_version < \"3\") and extra == 'brotli'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "urllib3",
+      "requirement": "brotli >=1.0.9 ; (python_version >= \"3\" and platform_python_implementation == \"CPython\") and extra == 'brotli'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "urllib3",
+      "requirement": "pyOpenSSL >=0.14 ; extra == 'secure'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "urllib3",
+      "requirement": "cryptography >=1.3.4 ; extra == 'secure'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "urllib3",
+      "requirement": "idna >=2.0.0 ; extra == 'secure'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "urllib3",
+      "requirement": "certifi ; extra == 'secure'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "urllib3",
+      "requirement": "urllib3-secure-extra ; extra == 'secure'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "urllib3",
+      "requirement": "ipaddress ; (python_version == \"2.7\") and extra == 'secure'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "urllib3",
+      "requirement": "PySocks !=1.5.7,<2.0,>=1.5.6 ; extra == 'socks'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "tzlocal",
+      "requirement": "tzdata ; platform_system == \"Windows\"",
+      "reason": "Selected platform is Linux."
+    },
+    {
+      "package": "tzlocal",
+      "requirement": "backports.zoneinfo ; python_version < \"3.9\"",
+      "reason": "Selected Python3.11 excludes older-Python fallback."
+    },
+    {
+      "package": "tzlocal",
+      "requirement": "black ; extra == 'devenv'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "tzlocal",
+      "requirement": "check-manifest ; extra == 'devenv'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "tzlocal",
+      "requirement": "flake8 ; extra == 'devenv'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "tzlocal",
+      "requirement": "pyroma ; extra == 'devenv'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "tzlocal",
+      "requirement": "pytest-cov ; extra == 'devenv'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "tzlocal",
+      "requirement": "pytest-mock (>=3.3) ; extra == 'devenv'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "tzlocal",
+      "requirement": "pytest (>=4.3) ; extra == 'devenv'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "tzlocal",
+      "requirement": "zest.releaser ; extra == 'devenv'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "sphinx (>=3.5) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "jaraco.packaging (>=9) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "rst.linker (>=1.9) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "furo ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "sphinx-lint ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "jaraco.tidelift (>=1.4) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pygments-github-lexers (==0.0.5) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "sphinx-favicon ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "sphinx-inline-tabs ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "sphinx-reredirects ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "sphinxcontrib-towncrier ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "sphinx-notfound-page (==0.8.3) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "sphinx-hoverxref (<2) ; extra == 'docs'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pytest (>=6) ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pytest-checkdocs (>=2.4) ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "flake8 (<5) ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pytest-enabler (>=1.3) ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pytest-perf ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "flake8-2020 ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "virtualenv (>=13.0.0) ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "wheel ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pip (>=19.1) ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "jaraco.envs (>=2.2) ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pytest-xdist ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "jaraco.path (>=3.2.0) ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "build[virtualenv] ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "filelock (>=3.4.0) ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pip-run (>=8.8) ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "ini2toml[lite] (>=0.9) ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "tomli-w (>=1.0.0) ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pytest-timeout ; extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pytest ; extra == 'testing-integration'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pytest-xdist ; extra == 'testing-integration'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pytest-enabler ; extra == 'testing-integration'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "virtualenv (>=13.0.0) ; extra == 'testing-integration'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "tomli ; extra == 'testing-integration'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "wheel ; extra == 'testing-integration'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "jaraco.path (>=3.2.0) ; extra == 'testing-integration'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "jaraco.envs (>=2.2) ; extra == 'testing-integration'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "build[virtualenv] ; extra == 'testing-integration'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "filelock (>=3.4.0) ; extra == 'testing-integration'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pytest-black (>=0.3.7) ; (platform_python_implementation != \"PyPy\") and extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pytest-cov ; (platform_python_implementation != \"PyPy\") and extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pytest-mypy (>=0.9.1) ; (platform_python_implementation != \"PyPy\") and extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "setuptools",
+      "requirement": "pytest-flake8 ; (python_version < \"3.12\") and extra == 'testing'",
+      "reason": "No optional extras selected."
+    },
+    {
+      "package": "wheel",
+      "requirement": "pytest >= 6.0.0 ; extra == \"test\"",
+      "reason": "No optional extras selected."
+    }
+  ],
+  "python_build_requirements": {
+    "setuptools": ">=61",
+    "wheel": "",
+    "cffi": ">=1.10.0"
+  },
+  "scientific_versions_unchanged": {
+    "numpy": "1.23.5",
+    "scipy": "1.10.1",
+    "scikit-learn": "1.2.1",
+    "mne": "1.5.1",
+    "matplotlib": "3.7.0",
+    "BayesFactor": "0.9.12-4.6"
+  },
+  "new_prospective_choices": {
+    "Python": "3.11.11",
+    "R": "4.2.2",
+    "rpy2": "3.5.11",
+    "threading": "One BLAS/OpenMP thread by explicit image defaults; runtime qualification and paper parity remain unestablished."
+  },
+  "scientific_qualification": false,
+  "native_qualification": false
+}
