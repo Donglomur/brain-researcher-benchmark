@@ -178,3 +178,17 @@ jobs:
         run: 'python3 -I -S -B benchmarks/scientific_contracts/neural035/closed_paired_grading/operator.py inspect --source-bytes 1644 --source-sha256 01b9b3571f31971defadb1af2fb6b0e798ae36fc108fd93e13af899871daea37 --read-bytes 68537 --write-bytes 101295 --seconds 30'
       - name: Check NEURAL-035 source and protected-prerequisite refusals
         run: 'python3 -I -S -B benchmarks/scientific_contracts/neural035/test_portable_source.py'
+  nomad-recovered-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+      - name: Inspect the complete recovered NoMAD source inventory
+        run: 'python3 -I -S -B benchmarks/scientific_contracts/nomad_recovered/recovered-operators-v3/operator_entry.py --inspect'
+      - name: Check NoMAD source portability and missing-source refusals
+        run: 'python3 -I -S -B benchmarks/scientific_contracts/nomad_recovered/test_portable_source.py'
