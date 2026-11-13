@@ -1,0 +1,28 @@
+# Two profiles of one canonical assignment
+
+PAPER-FIND-032 remains one task. Its two original access arms are paper_and_data and paper_data_official_code. Profiles, pipelines, conditions, figures, source batches and output cells are not additional benchmarks. No shared canonical metadata is changed by this packet.
+
+| Scientific join | Historical source / paper | corrected_methods_v1 |
+|---|---|---|
+| Primary purpose | Historical reproduction is primary for paper parity; unresolved exact-version joins remain unavailable | Separate prospective methods evaluation; no reproduced-result claim |
+| Participants/input | Declared author roster of 33, four released 100 Hz recordings each; empirical membership/eligibility not inspected | Same full declared roster; actual complete-file captures, complete condition support and upstream rights/eligibility required; no participant deletion |
+| Release filtering | Paper identifies 1–30 Hz/MaxFilter/downsampled 100 Hz release; current scripts also request 0.1 Hz refilter | Use released 1–30 Hz data; no claim to recover frequencies previously removed |
+| Epochs | Methods ±.7; current sound trains 0–.32 and tests ±.666; omission ±.7; qmd mixes 135/141 | Observed 141 samples, -.7 through +.7 inclusive, both training/test axes |
+| Folds | Methods stratified five; current sound KFold(5); earlier sound revisions differ | Stratified five; fixed class-complete test support; paired condition-specific training purge by original sample identity |
+| Empirical null | First unused label-matched random 33-sample segments with source padding; script exhaustion rules differ for sound/omission | Preserve declared sound-stop/omission-skip rules and complete sample provenance; global matched trial count within stimulus across original/null/conditions fixed before fitting |
+| Confusion | Qmd expects five-fold complete rd_to_rd_confmats.npz; selected current/earlier decoders do not produce it | Genuine held-out random predictions from each condition’s same fitted models yield complete five-fold confusion counts and normalized tensors; exact fold/target joins, every class/fold required |
+| Theory | Literal four 34-column blocks cropped to 135; fixed 670 ms coordinate origin | Protected actual event/lag mapping; exact confusion coordinates; explicit uniform-Markov negative-lag Bayes rule; absent support refuses whole endpoint |
+| Most likely | Previous retained label, first retained label left actual; base column-oriented T | Same explicitly named convention; unchanged prediction vectors rescored. This is not a causal claim about the first retained predecessor |
+| Correlation | Qmd ordinal condition index; replaces NA with zero and ±1 with ±.99 | Pearson ordinal predictability within each participant; whole nonfinite/undefined Fisher endpoint and dependent contrasts/BF unavailable; independent endpoints continue; no clipping/imputation |
+| Contrast | Methods paired Fisher-z difference; qmd often correlation of accuracy difference | Named paired differences of Fisher z on identical condition sets; most-likely original-vs-reordered uses the same three nonrandom conditions on both sides |
+| Cluster tests | Current quick-run qmd100; publication README10000 | 10000 requested, fixed prospective input seed, deterministic named sub-seeds, two-sided cluster-forming .05, all 52 named comparison identities retained; the two random original-minus-reordered identity contrasts have coverage/provenance only and no t/p/BF evidence; other available maps use correction within each map only, not an across-map FWER claim |
+| Bayes | BayesFactor0.9.12-4.6, medium Cauchy; qmd helper misnamed BF01 and empirical index picks wrong row | Actual package ttestBF/extractBF BF10; three explicitly named paired Fisher contrasts, no numeric row selection |
+| Figures | Figures1–2 and supplements1–4; nominal axes and mismatched diagonal in places | All six consumers with actual axes, equal-time diagonal, observed 210 ms OOF confusion panel; prospective panel layout labelled |
+| Input/data authority | Filename/code roster is not authenticated data admission | Manifest strings describe required upstream evidence; they do not issue native, rights, isolation or scientific authority |
+| Deployment | Historical environment and exact full runner not qualified | Scientific consumers implemented as source; native issuer, process/resource mediation, protected participant launcher and authentic input admission remain open |
+
+## Bounded version recovery
+
+Current commit a454439aec8936ff9de2199ab255472c7d140b8c: sound/newcv names conflict with qmd/cv names; omission imports cond2code/getFiltPat/dadd absent from current base. At e6156bb4a411fb81603aee7a49eaa160b0133550, old base supplies those helpers and omission is byte-exact current; its sound is a different stratified leakage-debug route with ±.33 default and no required confusion output. At 62ff3c1a6ef38cfb166351280f780a2142524bda, reproduce_Demarchi.py uses ±1 s stratified folds and no confusion export. Those are not silently assembled into an author-exact compatible revision. HTML raw-line projections with path/currentOid and displayed short blob-prefix checks are retained; complete remote Git-blob authentication is not claimed.
+
+The current source README states BSD-3-Clause, but a standalone license and complete redistribution/dependency clearance have not been established. The public article and raw source evidence stay outside the repository delivery. Neither authentic recordings nor precomputed answer matrices have been opened. All source acquisition failures and display truncations remain in the accounting/evidence record.
