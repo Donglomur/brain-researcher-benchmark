@@ -1,0 +1,23 @@
+# GCaMP8 released117: fixed two-phase program interface
+
+This common interface is provided to both separate A and B author contexts before either program is frozen. Both contexts also receive the selected public paper, task, protocol and model configuration. Only B receives the selected nine official source files. No empirical training/query arrays or all-neuron ROSTER are released while authoring. Prior exposure is disclosed separately. Submit one UTF-8 Python program per arm, at most131072 bytes, implementing both phases below. Both programs are fixed globally before any empirical staging; there is no interactive revision or intermediate scoring feedback.
+
+This interface supersedes only the earlier TASK's joint invocation and output lifecycle. All scientific settings, training membership, signal/support interpretation and final prediction schema remain those of the selected task/protocol/configuration. The condition uses all117 released neuron files, both pooled and variant tracks, and A/B:234 outputs per arm,468 total. This is not the unresolved historical105-neuron Figure1 cohort or whole-paper reproduction.
+
+For each held-out neuron, track and arm, a fresh training process receives:
+
+`python -I -B /program/program.py --phase train --input /input --out /output`
+
+The readonly input contains common paper/task/protocol/configuration, this CANDIDATE_ABI.md, the arm's allowed official source if B, exactly permitted paired training files under training/, and TRAIN_PACKET.json. That packet has schema gcamp8_training_packet_v1, task_id, neuron_id, indicator, track, access_view, and exact ordered training_ids. It omits query-derived rows, frames, support and signals. No query/, PACKET.json or ROSTER.json is mounted during training. Pooled training excludes the held-out neuron and contains116 files; variant excludes it and uses only its indicator, with35/41/38 files as declared by the protocol. Preserve the declared balanced artificial-noise training recipe, seeds, replicas1, permutation1, five-million cap, five members and20epochs. Any algorithmic compliance claim needs separate evidence.
+
+Training must finish naturally with exit0 and no OOM. Write model state only below /output:1..256 nonempty ordinary files, total at most268435456 bytes. At most512 total files/directories, path depth at most8 and each relative path at most240 characters are allowed. Use canonical relative POSIX paths: no empty, dot or parent components, backslashes, commas, characters below ASCII32 or DEL. No links, special files, traversal or empty files. Do not write logs or temporary leftovers there. Use /tmp for scratch. The producer is removed and the complete model tree is hashed before the prediction phase can be created.
+
+The same frozen program then receives:
+
+`python -I -B /program/program.py --phase predict --input /input --out /output --model /model`
+
+The readonly input contains the matching fluorescence query under query/, original PACKET.json, common paper/task/protocol/configuration, this ABI, and B's official source when applicable. Training files and ROSTER.json are absent. The sealed training output is mounted readonly at /model. Use its saved model state and preserve exact training_ids as needed. The model tree is rehashed after prediction. It is retired after the case; no state persists into other folds/tracks/arms.
+
+Prediction must finish naturally with exit0 and no OOM and write exactly /output/prediction.json, no other file/directory. Its maximum is67108864 bytes. The unchanged schema has exactly schema, neuron_id, track, predictions, training_ids, method. schema is gcamp8_prediction_v1; identity and ordered training_ids must match the selected case. predictions is a list with every declared row, finite real numbers with absolute value at most1e100; method is a string of1..4096 characters. No partial support, duplicate JSON keys, NaN or Infinity is admitted. Scientific metrics and equal-neuron aggregation remain unchanged; no new success threshold or historical comparator is supplied.
+
+Both phases have one CPU, selected1..16GiB RAM with no extra swap,64 PIDs, no network, no host repository/socket, readonly root and readonly inputs. Scratch /tmp is at most4GiB; output volumes are335544320-byte tmpfs. The immutable runtime selection supplies fixed training/prediction deadlines, including startup; errors receive no retry. All468 producers and owned resources must close before any private target grading. Failure of any case prevents panel grading. These source rules and limits are prospective, not evidence that a model fits, finishes, or achieves scientific reproduction.
