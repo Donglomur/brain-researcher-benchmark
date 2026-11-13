@@ -1,0 +1,11 @@
+# Rights, source provenance and public exposure
+
+The task is based on the [OpenBMI paper](https://doi.org/10.1093/gigascience/giz002), [GigaDB 100542](https://gigadb.org/dataset/100542), and [official OpenBMI revision c0e56825366681ae576801af08eb5fe326a5afd8](https://github.com/PatternRecognition/OpenBMI/tree/c0e56825366681ae576801af08eb5fe326a5afd8). These locators establish provenance; they are not a statement that a particular operator has acquired eligible data or redistribution rights.
+
+This release contains benchmark-authored source, declared scientific contracts, configuration templates, numerical environment recipes and a minimal public provider inventory. The inventory preserves only person/session roster numbers, canonical source filenames and provider byte extents. It excludes original acquisition links, provider hash fields, private state and empirical payloads. Those source roster numbers are not claims about identifiable people or their traits.
+
+No recording/header, array, protected label, identity key, held answer, empirical result, private communication, credential, signed URL, model weight, paper body, wheel/image or official toolbox payload is distributed here. The reference implementation is an independent declared probability method, not a claim of native MATLAB/BBCI parity. Official code is an independently acquired provenance/task operand; it is not a hidden missing evaluator implementation.
+
+The repository LICENSE applies to benchmark-authored material. External data, official code, model weights and numerical dependencies retain their own terms. The official GigaScience toolbox subtree carries GPLv3 and its LoadData subtree documents MIT terms; do not relicense the complete repository by inference. Environment pins identify exact prospective software operands, not redistribution clearance or native/scientific qualification.
+
+Portable source paths replace historical authoring-directory names. Public source identities and manifests are regenerated coherently for their exact source-relative paths. Scientific kernels, cohort, information allowances, target policy and score definitions remain unchanged. The new process-ownership source and clarified tool-source visibility need their own current review/evidence; predecessor engineering results are not copied into a successor claim.
