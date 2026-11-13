@@ -149,3 +149,18 @@ jobs:
           python-version: '3.11'
       - name: Check UnitMatch complete source closure and missing-input refusals
         run: 'python3 -I -S -B benchmarks/scientific_components/unitmatch_native_paired/test_portability.py'
+
+  neural094-regional-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+      - name: Authenticate the fixed NEURAL-094 source manifest
+        run: 'python3 -I -B benchmarks/scientific_contracts/neural094/complete_regional/operator.py inspect --source-bytes 5851 --source-sha256 e3595f43bafff2400788ca62bddd30c7763ee7a9a7a83f35f4b92afdaa79d6be --read-bytes 378528 --write-bytes 4096 --seconds 30'
+      - name: Check NEURAL-094 source materialization and refusals
+        run: 'python3 -I -B benchmarks/scientific_contracts/neural094/test_portable_source.py'
