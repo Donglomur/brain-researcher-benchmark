@@ -76,3 +76,26 @@ tools, authentic inputs, protected execution and rights remain external gates.
 Public reference-code exposure also requires a separately controlled access protocol
 before interpreting paper-plus-data versus paper-plus-data-plus-code results.
 Source CI adds no assignment, empirical improvement or qualification count.
+
+## THINGS-EEG2 complete study source
+
+[NEURAL-055 complete source and operator](../neuroscience/neural-055/complete_study/README.md)
+provides the actual complete-study, preparation, compiler and protected-grading
+implementations for one existing neural-data assignment. The curated source
+excludes unused private history and authentic assets. Its fixed-roster helper
+creates a fresh owned runtime with exact readonly source modes; it never changes
+checkout permissions.
+
+Scope remains ten participants, 200 queries each, 960 cells, 96 panels, 1,920 phases,
+150 reference banks, 8,520 reference fits and 32 contrasts. All 30 scientific gates
+and 48 prospective scientific controls remain open. F/I programme generation,
+independent evidence, authentic inputs/targets and qualified native/model
+environments remain external requirements.
+
+~~~sh
+python3 -I -S -B benchmarks/neuroscience/neural-055/test_portability.py
+~~~
+
+This standard-library source check exercises actual owned materialization,
+inspection, closure/restoration/compiler metadata and refusal boundaries.
+It does not run a scientific campaign or change assignment/readiness counts.

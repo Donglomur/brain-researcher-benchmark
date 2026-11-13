@@ -192,3 +192,16 @@ jobs:
         run: 'python3 -I -S -B benchmarks/scientific_contracts/nomad_recovered/recovered-operators-v3/operator_entry.py --inspect'
       - name: Check NoMAD source portability and missing-source refusals
         run: 'python3 -I -S -B benchmarks/scientific_contracts/nomad_recovered/test_portable_source.py'
+
+  neural055-things-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Check THINGS complete source and owned materialization
+        run: python3 -I -S -B benchmarks/neuroscience/neural-055/test_portability.py
