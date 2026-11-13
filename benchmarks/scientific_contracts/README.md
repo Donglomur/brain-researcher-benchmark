@@ -1,6 +1,6 @@
 # Scientific contract companions
 
-These nine source components make the scientific claims of existing benchmark assignments more explicit. They supply descriptive comparisons, reproduction and improvement checks, or links between report claims and evidence. They are additional components of existing tasks; they add no benchmark count, completed experiment, scientific qualification, or submission-readiness claim.
+These ten source components make the scientific claims of existing benchmark assignments more explicit. They supply descriptive comparisons, reproduction and improvement checks, or links between report claims and evidence. They are additional components of existing tasks; they add no benchmark count, completed experiment, scientific qualification, or submission-readiness claim.
 
 | Component | Scientific purpose | Important boundary |
 |---|---|---|
@@ -13,6 +13,7 @@ These nine source components make the scientific claims of existing benchmark as
 | [Dimensionality and Majaj programme](dimensionality/programme/README.md) | The complete 42-obligation programme, including the released Majaj preparation and analysis branch. | BUILD_ONLY remains enforced and all 24 gates remain open; relocation checks do not run numerical methods or qualify a study. |
 | [OpenBMI paired case-adaptive source](openbmi_case_adaptive/README.md) | Compare a frozen programme and per-condition investigation across the complete 54-person, two-session assignment. | Inactive source with missing external admissions; strategy differences do not isolate model treatment, neural contribution or equal realized compute. |
 | [FIND-025 submission and comparison](find025/README.md) | Preserve both paper claim families and all 16 obligation groups while validating declarations and retaining missing or failed outcomes. | Reconstruction, held paper reproduction and protected improvement remain separate; consistent declarations do not prove authentic results. |
+| [NEURAL-094 regional comparison](neural094/README.md) | Complete frozen-program, investigator-policy and reference comparison across 39 sessions, ten mice, 73 regions, 2,628 pairs and five seeds. | Inactive source; whole-population primary and all native, input, provider, rights and scientific gates remain. |
 
 Zero, negative, unavailable, and discrepant outcomes remain valid where specified. The components require trusted upstream inputs and operator controls described in their contracts. They do not run trained models or authenticate empirical data merely from supplied metadata. Original task packages and their admission states are unchanged.
 
@@ -44,3 +45,29 @@ The sleep release preserves its base report and adds a separate [probability sum
 The dimensionality programme retains its full runtime and normative contract scope; the Majaj branch does not replace the larger assignment. Its portable test forbids numerical/cryptographic imports and checks the unchanged BUILD_ONLY refusal before an invocation is read. Cerebellar CI uses only `entry.py inspect`; the separate full inert-graph tests and production `run` route are not invoked here. Both new checks use only the standard library, install no dependencies, and grant no execution authority. Their package documentation retains future dependency, input-rights, runtime and scientific requirements.
 
 The OpenBMI source check authenticates its complete closure and builds trusted definitions using explicitly inert denying capabilities. Missing execution admissions remain; this package has no fixed BUILD_ONLY policy file. The check poisons numerical imports, subprocess creation and socket connections, and does not invoke execution, protected grading or the complete probability graph. Its package documentation retains native, scientific, rights and resource-history limitations. FIND-025 runs its documented standard-library discovery command against invented records; its empty authentic plan remains incomplete. Its two claim families and 16 output groups remain one assignment, with no numeric paper pass or scientific qualification. Neither command installs dependencies or runs a neuroscience study.
+
+The [NEURAL-094 regional source](neural094/README.md) preserves one existing
+assignment's whole-population primary and complete frozen-program/investigator-
+policy/reference target-last comparison. Its full scope is 39 sessions, ten mice,
+73 literal regional labels, 2,628 pairs and five seeds. This chronological
+development-cohort and deployment-strategy comparison does not establish causal
+anatomy, unseen-mouse generalization, equal realized compute or model-internal
+neural understanding. No new assignment or scientific qualification is added.
+
+The dedicated source job first authenticates the literal reviewed manifest, then
+runs the direct eight-method standard-library portability suite:
+
+```sh
+python3 -I -B benchmarks/scientific_contracts/neural094/complete_regional/operator.py inspect --source-bytes 5851 --source-sha256 e3595f43bafff2400788ca62bddd30c7763ee7a9a7a83f35f4b92afdaa79d6be --read-bytes 378528 --write-bytes 4096 --seconds 30
+python3 -I -B benchmarks/scientific_contracts/neural094/test_portable_source.py
+```
+
+The inspector reads the strict 35-file component without importing benchmark
+modules. The tests copy its 29 source members into a temporary 33-file layout and
+three capsules, check early refusals and run only tiny invented loader bodies.
+They do not run numerical methods, a model, container, provider or neuroscience
+study. Keep `-B` and keep generated files outside the closed component. Historical
+installed-source output names do not certify registry installation or runtime
+admission. Project-source MIT, separate upstream GPL software and external data
+terms remain distinct; inputs, protected authority and native/resource/provider
+qualification remain unavailable in this public source distribution.
