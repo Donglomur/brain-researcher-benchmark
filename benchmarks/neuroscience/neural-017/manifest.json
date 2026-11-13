@@ -3,15 +3,6 @@
   "id": "NEURAL-017",
   "track": "neural",
   "title": "MC_Maze withheld-neuron co-smoothing on one historical session",
-  "status": "local_scoring_adapter_verified",
-  "scope": {
-    "type": "local_prediction_file_scoring",
-    "development_exposed": true,
-    "biological_units": 1,
-    "training_trials": 1721,
-    "evaluation_trials": 574,
-    "complete_agent_contract": false
-  },
   "entrypoints": {
     "score": {
       "argv": [
@@ -24,7 +15,7 @@
         "{output}"
       ],
       "working_directory": ".",
-      "sha256": "26476e2354d87e9c7b16f528413fc392ce8033890955bb1d5bba719a9a04bf05"
+      "sha256": "c3f76f241ffe8c5780fb671545520033b1944d4bf6db8f7ccb9f8c19d7cb3631"
     },
     "validate": {
       "argv": [
@@ -37,73 +28,11 @@
         "{output}"
       ],
       "working_directory": ".",
-      "sha256": "26476e2354d87e9c7b16f528413fc392ce8033890955bb1d5bba719a9a04bf05"
-    }
-  },
-  "assets": {
-    "manifest_path": "benchmarks/neuroscience/neural-017/assets.json",
-    "manifest_sha256": "c7faa8785fb184ae6078d46ff25016520b6708631813c447858662cc232ce402",
-    "public": {
-      "packet": {
-        "path": "artifacts-build/nlb-reference-001/public_input.npz",
-        "bytes": 113599728,
-        "sha256": "6c4ae66d25a3727fa00927cfee847f60bc84a55de41d5898ad6d4f3c9e48f884",
-        "candidate_mount": "/input/public.npz",
-        "fields": [
-          "train_counts_heldin",
-          "train_counts_heldout",
-          "eval_counts_heldin",
-          "train_trial_ids",
-          "eval_trial_ids",
-          "heldin_unit_ids",
-          "heldout_unit_ids",
-          "train_condition_ids",
-          "eval_condition_ids",
-          "bin_left_edges_ms",
-          "eval_valid_mask",
-          "source_manifest_sha256",
-          "panel_fingerprint"
-        ]
-      }
-    },
-    "private": {
-      "targets": {
-        "path": "artifacts-build/nlb-reference-001/operator_targets.npz",
-        "bytes": 10900754,
-        "sha256": "c2ddd3449bb65522cda2e98101a2f5fb357411c7f61f0c08f7106ba6d51df7c4",
-        "candidate_access": false
-      },
-      "comparator": {
-        "path": "artifacts-build/nlb-reference-001/predict/rates.npz",
-        "bytes": 115772862,
-        "sha256": "a2f76cb3a6f043795ceb680178ba22199b7ec3946dec28033e84b1e84a12a1d4",
-        "candidate_access": false,
-        "comparator_key": "rates_condition_psth",
-        "verification_reference_key": "rates_glm"
-      }
+      "sha256": "c3f76f241ffe8c5780fb671545520033b1944d4bf6db8f7ccb9f8c19d7cb3631"
     }
   },
   "input_contract": "benchmarks/neuroscience/neural-017/INSTRUCTIONS.md",
   "source_freeze_path": "benchmarks/neuroscience/neural-017/SOURCE_FREEZE.json",
-  "source_freeze_sha256": "be6396a8b37bc1b72442407d96c378d5e060d1ba955b2e0010df1503acc5fa58",
-  "verification": {
-    "status": "passed",
-    "receipt_path": "authoring/delivery-integration-nlb-v1/execution-v2/outer_execution.json",
-    "receipt_sha256": "794bfd61f73033fac77098e387fa9ab53a4019110f420f8d11449ad2d241be40",
-    "result_path": "authoring/delivery-integration-nlb-v1/execution-v2/verification.json",
-    "planned_checks": [
-      "real_saved_glm_reference",
-      "empty_rejection_before_targets",
-      "invalid_shape_rejection_before_targets"
-    ],
-    "preserved_failure_receipt": "authoring/delivery-integration-nlb-v1/outer_execution.json",
-    "result_sha256": "7a6b931f62cea9a7190c6b8a80cc74ef31d4fe00c89e7f4e727b321c4fbaf600",
-    "execution_receipt_path": "authoring/delivery-integration-nlb-v1/execution-v2/verification.json.execution.json",
-    "execution_receipt_sha256": "7b944764f2231aca6cd1e777f2b7cad8653390eb55086e276848dc3ffe467c13",
-    "real_reference_scored": true,
-    "empty_and_malformed_rejected_before_targets": true,
-    "no_new_fit": true
-  },
   "evaluation": {
     "metric": "pooled_poisson_co_smoothing_bits_per_spike",
     "higher_is_better": true,
@@ -131,191 +60,49 @@
     "operator_logs_max_bytes": 524288,
     "one_attempt_only": true
   },
+  "status": "public_source_only_complete_operator",
+  "scope": {
+    "type": "complete_operator_source_only",
+    "development_exposed": true,
+    "biological_units": 1,
+    "training_trials": 1721,
+    "evaluation_trials": 574,
+    "groups": 100,
+    "scientific_broker_roles": 28844,
+    "complete_agent_contract": false
+  },
+  "source_freeze_sha256": "23854d9dd946ebbe034df7318f11f91cc5570ba6ae629292eb4480ce2b16dd72",
+  "assets": {
+    "availability": "External operator inputs; no neural arrays, protected answers, fitted state or predictions are supplied by this source checkout.",
+    "manifest_path": "benchmarks/neuroscience/neural-017/assets.json",
+    "manifest_sha256": "c7faa8785fb184ae6078d46ff25016520b6708631813c447858662cc232ce402"
+  },
+  "verification": {
+    "status": "source_only_not_native_qualified",
+    "historical_finite_local_validation_recorded": true,
+    "historical_scope": "Prior prediction-scoring and fixed-program validation on one exposed historical session under a separately selected private source/environment.",
+    "private_outcomes_and_receipts_included": false,
+    "historical_qualification_transferred": false
+  },
   "admission": {
-    "runnable": true,
+    "runnable": false,
     "full_candidate_contract_complete": false,
     "research_qualified": false,
     "submission_ready": false
   },
   "runtime_requirements": {
-    "local_docker_access": true,
-    "pinned_image_already_installed": true,
-    "host_python": "stdlib-only entrypoint",
-    "candidate_code_execution": false,
-    "private_grader_isolation": "offline nonroot read-only Docker"
-  },
-  "cost_accounting": {
-    "historical_nlb_reported_cycle_seconds": 736.799,
-    "historical_cycle_ceiling_seconds": 900,
-    "separate_failed_packaging_charge_seconds": 60,
-    "separate_successful_followup_charge_seconds": 60,
-    "known_reported_stage_charges_seconds": 856.799,
-    "old_cycle_reset": false,
-    "successful_wrapper_actual_reported_seconds": 1.641630833997624,
-    "lifetime_total_claim": false
+    "legacy_wrapper_requires_external_native_environment": true,
+    "fixed_local_docker_endpoint": "unix:///var/run/docker.sock",
+    "fixed_docker_executable": "/usr/local/bin/docker",
+    "source_inspection_requires": "Python3.11 standard library only",
+    "qualified_image_supplied": false,
+    "data_or_credentials_supplied": false
   },
   "program_execution": {
-    "status": "local_program_runner_verified",
-    "entrypoint": {
-      "argv": [
-        "python3",
-        "authoring/nlb-cosmoothing/program-capacity-v3/execute_program.py",
-        "--program",
-        "{program}",
-        "--out",
-        "{output}",
-        "--review",
-        "{review}",
-        "--other-reserve-bytes",
-        "{other_reserve_bytes}"
-      ],
-      "working_directory": ".",
-      "sha256": "06dae9ecdac2ceda201ba7298936e927952f2770222633e00303e8bd3cead0a3"
-    },
-    "source_freeze": {
-      "path": "authoring/nlb-cosmoothing/independent-program-closeout-v1/registration/REGISTRATION_SOURCE_CLOSURE.json",
-      "sha256": "2926fe4cbf0eaa34c3d8a050ebc3ddd4743c1c222ca2a6d5b0eb94c6bb516c2e"
-    },
-    "verification": {
-      "status": "passed",
-      "receipt_path": "authoring/nlb-cosmoothing/independent-program-closeout-v1/registration/receipt.json",
-      "receipt_sha256": "f7d0649aeee5afdf254862ea7676b45f5654ba0f3d75fbe1a9ce64662d5d8b4d",
-      "qualification_path": "authoring/nlb-cosmoothing/independent-program-closeout-v1/registration/verification.json",
-      "qualification_sha256": "8a8fe8c6bd39a853a2d42bb96e20bea4ec523b50f0cf4d93786b6d23fd22daa6",
-      "source_binding_path": "authoring/nlb-cosmoothing/independent-program-closeout-v1/registration/source_binding.json",
-      "source_binding_sha256": "22aed8d3afe38b2e9ba5419a5c52c5bd861e2b0f4b539dfd2a82b5d23d214f5e",
-      "planned_controls": [
-        "reference",
-        "malformed_linger",
-        "private_probe"
-      ],
-      "generated_runtime_tests": 16,
-      "actual_interrupted_wrapper_fixture_passed": true,
-      "scientific_metric_parity_checks": 3,
-      "complete_prediction_cells": 3616200,
-      "basis": "Original actual boundary controls on unchanged scientific/isolation path plus actual independent full-panel ordinary candidate through v3; new common-CLI candidate dispatch not rerun.",
-      "original_qualification": {
-        "path": "authoring/nlb-cosmoothing/program-runner-v1/verification.json",
-        "bytes": 3138,
-        "sha256": "9216b5e9238b81c5391186d45f35541c5bb750b6583620db088584f50500c09b"
-      },
-      "original_terminal_receipt": {
-        "path": "authoring/nlb-cosmoothing/program-runner-v1/receipt.json",
-        "bytes": 11296,
-        "sha256": "ae0d27ca5ac24707a751aed2559f6e733e781ab8d0f523650f6736e7c441ef19"
-      }
-    },
-    "instructions_path": "authoring/nlb-cosmoothing/program-runner-v1/PUBLIC_INSTRUCTIONS.md",
-    "scope": {
-      "mode": "offline_fixed_python_program_full_panel_retrospective_cosmoothing",
-      "public_packet_files": 1,
-      "training_trials": 1721,
-      "development_trials": 574,
-      "observed_bins": 140,
-      "heldin_units": 137,
-      "heldout_prediction_units": 45,
-      "biological_animals": 1,
-      "biological_sessions": 1,
-      "development_exposed": true,
-      "paired_investigation_mode_qualified": false,
-      "program_committed_before_any_public_release": true,
-      "producer_holder_volume_absent_before_private_grading": true,
-      "public_prediction_validation_before_private_targets": true,
-      "opaque_commit_is_not_prediction_contract_validation": true,
-      "LLM_attempts_this_qualification": 0,
-      "historical_LLM_attempt_exposure": true,
-      "full_candidate_contract_complete": false,
-      "research_qualified": false,
-      "submission_ready": false
-    },
-    "runtime": {
-      "default_whole_attempt_seconds": 110,
-      "candidate_work_wall_seconds_from_start_request": 20,
-      "termination_latency_separately_measured": true,
-      "candidate_cpus": 1.75,
-      "holder_cpus": 0.25,
-      "candidate_memory_bytes": 3221225472,
-      "holder_memory_bytes": 268435456,
-      "aggregate_container_memory_cap_bytes": 4294967296,
-      "output_tmpfs_bytes": 41943040,
-      "single_program_cap_bytes": 65536,
-      "single_submission_cap_bytes": 33554432,
-      "capture_response_cap_bytes": 45000000,
-      "artifact_cap_bytes": 40000000,
-      "network": "none",
-      "pull": "never",
-      "no_external_model_or_service": true,
-      "future_attempt_needs_new_operator_allocation": true,
-      "future_complete_reservation_must_be_rechecked": true,
-      "current_other_reserve_bytes_minimum": 352000000,
-      "review_and_current_reserve_arguments_required": true,
-      "aggregate_ceiling_bytes": 22000000000,
-      "minimum_free_bytes": 15000000000,
-      "own_reserve_bytes": 45000000,
-      "retained_image_metadata_bytes": 2517190392
-    },
-    "qualification_accounting": {
-      "actual_elapsed_before_final_receipt_seconds": 13.988577999989502,
-      "full_stage_charge_seconds": 120,
-      "prior_known_seconds": 856.799,
-      "known_charged_seconds": 976.799,
-      "operator_construction_ceiling_seconds": 1000,
-      "historical_ceiling_preserved_seconds": 900,
-      "remaining_unassigned_seconds": 23.201,
-      "future_compute_grant": false
-    },
-    "qualification_outcome": {
-      "candidate_co_bps": 0.2891491830422485,
-      "condition_co_bps": 0.26000008329109686,
-      "signed_delta_co_bps": 0.029149099751151653,
-      "private_target_loader_calls_positive": 1,
-      "private_target_loader_calls_malformed": 0,
-      "private_probe_grader_dispatched": false,
-      "all11resources_absent": true,
-      "all4activated_groups_absent": true,
-      "new_scientific_claim": false
-    },
-    "capacity_successor": {
-      "status": "actual_ordinary_execution_completed_source_and_scalar_evidence_checked",
-      "source_proposal": {
-        "path": "authoring/nlb-cosmoothing/program-capacity-v3/SOURCE_CLOSURE_PROPOSAL.json",
-        "bytes": 17150,
-        "sha256": "7af793320ad8ea864d3b97d23ccf91fad5f8a8ef7d7b97c0a216daed1e32422c"
-      },
-      "metadata_validation": {
-        "path": "authoring/nlb-cosmoothing/program-capacity-v3/SOURCE_ONLY_VALIDATION.json",
-        "bytes": 2223,
-        "sha256": "2eff08605c6a3fcc1b3f56d199c675bd8e93f168072226e7541179ccda406ad4"
-      },
-      "source_delta_checks": {
-        "path": "authoring/nlb-cosmoothing/program-capacity-v3/SOURCE_DELTA_CHECKS.json",
-        "bytes": 44848,
-        "sha256": "8837d46566b04d7307f9462e78ebb66d49907ece3602853fc120dd9dbf2dca6f"
-      },
-      "operator_handoff_path": "authoring/nlb-cosmoothing/program-capacity-v3/HANDOFF.md",
-      "registration_notes_path": "authoring/nlb-cosmoothing/independent-program-closeout-v1/RESULTS.md",
-      "latest_known_cost_receipt": {
-        "path": "artifacts-build/neural017-independent-program-001/outer_execution.json",
-        "bytes": 6978,
-        "sha256": "ff613f67ef62edc7853ab985a23bccb2bbdf645d3e5d5747c8fa5cef6f9680f3"
-      },
-      "latest_known_seconds": 1478.799,
-      "fresh_attempt_requires_full_new_seconds": 110,
-      "new_outer_candidate_execution_observed": true,
-      "new_outer_common_CLI_execution_observed": false,
-      "all_count_deltas": 0,
-      "execution_authority": false
-    },
-    "independent_ordinary_evidence": {
-      "results": {
-        "path": "authoring/nlb-cosmoothing/independent-program-closeout-v1/RESULTS.json",
-        "bytes": 4472,
-        "sha256": "eb8d609622db3fe613db449475a3a33fda13f24d0563f354c0e3bae5da0da5df"
-      },
-      "candidate_co_bps": 0.267838656723014,
-      "strongest_existing_reference_co_bps": 0.2891491830422485,
-      "improvement_over_strongest_existing_reference": false,
-      "independent_LLM_evaluation": false
-    }
+    "status": "source_only_external_prerequisites_required",
+    "complete_operator_guide": "benchmarks/neuroscience/neural-017/complete-operator/OPERATOR.md",
+    "source_component_index": "benchmarks/neuroscience/neural-017/SOURCE_COMPONENTS.json",
+    "generic_program_dispatch_selected": false,
+    "scientific_execution_observed_for_current_source": false
   }
 }

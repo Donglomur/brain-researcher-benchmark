@@ -1,0 +1,414 @@
+{
+  "schema": "nlb017_full_producer_graph_v2",
+  "stages": [
+    {
+      "id": "S01",
+      "actor": "operator",
+      "operation": "Authenticate source/raw descriptors",
+      "inputs": "none",
+      "outputs": "source manifests",
+      "private_target_access": false,
+      "target_role": "none",
+      "evidence_products": [
+        "E04"
+      ],
+      "required_checkpoints_before_entry": [
+        "G24.implemented_and_selected"
+      ]
+    },
+    {
+      "id": "S02",
+      "actor": "operator",
+      "operation": "Raw sparse counts and native timing/mask parity",
+      "inputs": "selected NWB later only",
+      "outputs": "full counts+support",
+      "private_target_access": true,
+      "target_role": "raw_preparation_only",
+      "evidence_products": [],
+      "required_checkpoints_before_entry": [
+        "G08.engineering"
+      ]
+    },
+    {
+      "id": "S03",
+      "actor": "operator",
+      "operation": "Project training/query and private target roles",
+      "inputs": "full counts+support",
+      "outputs": "separated exact views",
+      "private_target_access": true,
+      "target_role": "raw_preparation_only",
+      "evidence_products": [
+        "E05"
+      ],
+      "required_checkpoints_before_entry": []
+    },
+    {
+      "id": "S04",
+      "actor": "controller",
+      "operation": "Freeze entire programme/roster/source/prompts/budgets",
+      "inputs": "source/schema/licensed-primary and target-free planned roster metadata; no activity or withheld-target summaries",
+      "outputs": "ProgrammeSpec and protected shuffle commitment before S02; prepared identities must match at S03",
+      "private_target_access": false,
+      "target_role": "none",
+      "evidence_products": [
+        "E06"
+      ],
+      "required_checkpoints_before_entry": [
+        "G01.context",
+        "G04.source",
+        "G10.engineering"
+      ]
+    },
+    {
+      "id": "S05",
+      "actor": "reference worker",
+      "operation": "Complete training-only native parity, scheduled R0-R8 native training folds/search/refits, development competence and feasibility certificates; R5 query-dependent final fits remain S06",
+      "inputs": "training view",
+      "outputs": "TrainingStates, full search/refit receipts, DevelopmentCompetenceCertificate and TrainingFeasibilityCertificate",
+      "private_target_access": false,
+      "target_role": "none",
+      "evidence_products": [
+        "E07",
+        "E08",
+        "E09",
+        "E10"
+      ],
+      "required_checkpoints_before_entry": [
+        "G02.assets",
+        "G03.conversion",
+        "G09.envelope",
+        "G12.policy",
+        "G13.policy",
+        "G14.service",
+        "G18.preregistration",
+        "G19.view_construction",
+        "G20.rubric",
+        "G21.exposure_plan",
+        "G22.input_rights"
+      ]
+    },
+    {
+      "id": "S06",
+      "actor": "reference worker",
+      "operation": "Observed-only query calibration and complete reference inference, with no assessment scoring",
+      "inputs": "TrainingStates + QueryPool + training labels + E09/E10 checkpoint evidence",
+      "outputs": "AdaptationStates and full reference predictions",
+      "private_target_access": false,
+      "target_role": "none",
+      "evidence_products": [
+        "E11"
+      ],
+      "required_checkpoints_before_entry": [
+        "G05.training",
+        "G06.training_parity",
+        "G07.development",
+        "G15.development_feasibility",
+        "G16.scorer_source",
+        "G17.uncertainty_source"
+      ]
+    },
+    {
+      "id": "S07",
+      "actor": "F worker",
+      "operation": "Actual arbitrary frozen programme training/search/adaptation/infer",
+      "inputs": "allowed views and same tools",
+      "outputs": "complete574prediction",
+      "private_target_access": false,
+      "target_role": "none",
+      "evidence_products": [],
+      "required_checkpoints_before_entry": [
+        "G05.bank",
+        "G07.development",
+        "G12.ancestry",
+        "G15.development_feasibility"
+      ]
+    },
+    {
+      "id": "S08",
+      "actor": "I preparation",
+      "operation": "Actual shared LLM/tool preparation",
+      "inputs": "allowed training and observed-query views under the frozen policy; no query withheld labels",
+      "outputs": "shared frozen states/policy",
+      "private_target_access": false,
+      "target_role": "none",
+      "evidence_products": [],
+      "required_checkpoints_before_entry": [
+        "G05.bank",
+        "G07.development",
+        "G12.ancestry",
+        "G15.development_feasibility"
+      ]
+    },
+    {
+      "id": "S09",
+      "actor": "I case actors",
+      "operation": "574fresh actual model/tool investigations",
+      "inputs": "allowed views+shared states",
+      "outputs": "574complete prediction shards",
+      "private_target_access": false,
+      "target_role": "none",
+      "evidence_products": [],
+      "required_checkpoints_before_entry": []
+    },
+    {
+      "id": "S10",
+      "actor": "supervisor",
+      "operation": "Final wait/stream/CPU/wall/closure and absence",
+      "inputs": "all original actor observations",
+      "outputs": "truthful terminal custody",
+      "private_target_access": false,
+      "target_role": "none",
+      "evidence_products": [
+        "E12"
+      ],
+      "required_checkpoints_before_entry": []
+    },
+    {
+      "id": "S11",
+      "actor": "collector",
+      "operation": "Immutable exact full support and union",
+      "inputs": "all predictions+terminals",
+      "outputs": "CollectionCommit",
+      "private_target_access": false,
+      "target_role": "none",
+      "evidence_products": [
+        "E13"
+      ],
+      "required_checkpoints_before_entry": [
+        "G08.absence",
+        "G09.actual",
+        "G10.custody",
+        "G13.realized",
+        "G14.actual_roundtrip",
+        "G15.matched_realized"
+      ]
+    },
+    {
+      "id": "S12",
+      "actor": "barrier",
+      "operation": "All planned arms/seeds/conditions/reference roles complete and absent",
+      "inputs": "CollectionCommit+ProgrammeSpec",
+      "outputs": "one protected release permit",
+      "private_target_access": false,
+      "target_role": "none",
+      "evidence_products": [
+        "E14"
+      ],
+      "required_checkpoints_before_entry": []
+    },
+    {
+      "id": "S13",
+      "actor": "protected worker",
+      "operation": "Original metric,full bank and paired ledgers",
+      "inputs": "permit+immutable predictions+private targets",
+      "outputs": "Full574 protected bank results, post-barrier reference competence/difficulty and diagnostic ledgers",
+      "private_target_access": true,
+      "target_role": "assessment_scoring_or_private_derivative",
+      "evidence_products": [
+        "E15"
+      ],
+      "required_checkpoints_before_entry": [
+        "G11.barrier"
+      ]
+    },
+    {
+      "id": "S14",
+      "actor": "protected uncertainty",
+      "operation": "All fixed paired draws and sensitivities",
+      "inputs": "private full ledger",
+      "outputs": "private draws+aggregate summaries",
+      "private_target_access": true,
+      "target_role": "assessment_scoring_or_private_derivative",
+      "evidence_products": [
+        "E16"
+      ],
+      "required_checkpoints_before_entry": [
+        "G16.full_bank_scores"
+      ]
+    },
+    {
+      "id": "S15",
+      "actor": "report actor",
+      "operation": "Bound aggregate factual/scientific assessment",
+      "inputs": "aggregate-only projection",
+      "outputs": "separate report/rubric",
+      "private_target_access": false,
+      "target_role": "none",
+      "evidence_products": [
+        "E17"
+      ],
+      "required_checkpoints_before_entry": [
+        "G07.assessment",
+        "G17.assessment_draws",
+        "G18.complete_repeats",
+        "G19.diagnostic_results"
+      ]
+    },
+    {
+      "id": "S16",
+      "actor": "operator",
+      "operation": "Final closure/release and claim audit, or explicit metadata-only incomplete disposition",
+      "inputs": "ordinary source/terminal/resource descriptors and committed aggregate results, not raw target/ledger arrays",
+      "outputs": "Complete scoped result only with full evidence, otherwise exact missing outcomes/no fabricated scores",
+      "private_target_access": false,
+      "target_role": "none",
+      "evidence_products": [
+        "E18"
+      ],
+      "required_checkpoints_before_entry": [
+        "G20.report"
+      ]
+    }
+  ],
+  "edges": [
+    [
+      "S01",
+      "S02"
+    ],
+    [
+      "S02",
+      "S03"
+    ],
+    [
+      "S01",
+      "S04"
+    ],
+    [
+      "S04",
+      "S05"
+    ],
+    [
+      "S03",
+      "S05"
+    ],
+    [
+      "S05",
+      "S06"
+    ],
+    [
+      "S04",
+      "S07"
+    ],
+    [
+      "S03",
+      "S07"
+    ],
+    [
+      "S06",
+      "S07"
+    ],
+    [
+      "S04",
+      "S08"
+    ],
+    [
+      "S03",
+      "S08"
+    ],
+    [
+      "S08",
+      "S09"
+    ],
+    [
+      "S06",
+      "S09"
+    ],
+    [
+      "S07",
+      "S10"
+    ],
+    [
+      "S09",
+      "S10"
+    ],
+    [
+      "S06",
+      "S10"
+    ],
+    [
+      "S10",
+      "S11"
+    ],
+    [
+      "S11",
+      "S12"
+    ],
+    [
+      "S12",
+      "S13"
+    ],
+    [
+      "S13",
+      "S14"
+    ],
+    [
+      "S14",
+      "S15"
+    ],
+    [
+      "S15",
+      "S16"
+    ],
+    [
+      "S06",
+      "S08"
+    ],
+    [
+      "S04",
+      "S02"
+    ]
+  ],
+  "source_bindings": "Included nlb/operator_driver.py, operator_compiler.py, controller.py, worker.py, scientific/, scoring.py and reporting.py implement the source stages; README.md (Source provenance section) and REFERENCE_METHODS.md map methods. Actual data, native/model qualification and independent evidence remain external.",
+  "required_reference_ids": [
+    "R0",
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8"
+  ],
+  "primary_modes": [
+    "F",
+    "I"
+  ],
+  "code_views": [
+    "A",
+    "B"
+  ],
+  "planned_agent_seeds": 5,
+  "case_count": 574,
+  "primary_arm_seed_groups": 20,
+  "primary_I_case_actor_count": 5740,
+  "primary_F_complete_program_attempts": 10,
+  "canonical_task_count": 1,
+  "diagnostics": [
+    "within-condition observed shuffle",
+    "context-only",
+    "training-rate-only",
+    "tool-only",
+    "metadata-neutral"
+  ],
+  "diagnostic_execution_roster": "CONDITION_ROSTER.json fixes all100agent groups (20primary+80diagnostic), plus2tool-only orchestration controls. No favourable subset completion.",
+  "target_boundary": "S02/S03 are privileged raw preparation/target packaging before participant release; necessarily access withheld counts but may not fit/select scientific methods or expose derivatives. S13/S14 are the only assessment-stage target/derived-ledger consumers after global barrier. Distinct role capabilities, not a false claim acquisition never saw targets.",
+  "preconditions_not_extra_producer_stages": [
+    {
+      "id": "P00",
+      "meaning": "Different complete scientific/API design acceptance; not scientific authority."
+    },
+    {
+      "id": "P01",
+      "meaning": "Complete implementation, static and tiny inert engineering controls, different whole-source review; no authentic or numerical qualification inferred."
+    },
+    {
+      "id": "P02",
+      "meaning": "Separately selected current authentic qualification/study authority, rights, host containment and finite original budgets. Conditional authority alone does not satisfy any empirical checkpoint."
+    }
+  ],
+  "evidence_contract": "GATE_EVIDENCE_LINEAGE.json",
+  "gate_contract": "QUALIFICATION_GATES.json",
+  "incomplete_branch": "S10/S11/S12 failure may terminate at metadata-only S16 disposition. It is not a successful alternate scientific path: no E14 release permit, no S13/S14 target reads, no S15 performance feedback, no bank/paired claims. Post-barrier uncertainty/report failure preserves earlier independently valid full-panel scores but not complete inference claims.",
+  "schedule_amendment": "Two explicit edges retain all16 stages: S04->S02 binds the existing pre-activity shuffle/source/policy commitment; S06->S08 makes the complete allowed reference-tool bank available before shared I preparation. S03 validates prepared identities against the already committed spec. No data-dependent method/roster choice is added."
+}

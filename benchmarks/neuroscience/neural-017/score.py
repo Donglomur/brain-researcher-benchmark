@@ -100,7 +100,9 @@ def main():
         require(',' not in source and '\n' not in source and Path(source).is_absolute(), 'Unsafe mount encoding')
         if target != '/package': regular(source, 128000000, empty=(target == '/input/submission.npz'))
     name = 'nlb-delivery-' + uuid.uuid4().hex
-    env = dict(os.environ, DOCKER_CONFIG=str(ROOT / '.cache-build/docker-config'), DOCKER_HOST='unix:///Users/nicholas/.docker/run/docker.sock')
+    env = {key: value for key, value in os.environ.items()
+           if key not in {'DOCKER_HOST', 'DOCKER_CONTEXT', 'DOCKER_TLS', 'DOCKER_TLS_VERIFY', 'DOCKER_CERT_PATH'}}
+    env['DOCKER_CONFIG'] = str(ROOT / '.cache-build/docker-config')
     docker = '/usr/local/bin/docker'; commands = []; attempted = False
     record = {'benchmark_id': 'NEURAL-017', 'action': args.action, 'container_name': name, 'new_fits': 0,
               'source_freeze_sha256': digest(HERE / 'SOURCE_FREEZE.json'), 'requested_canonical_mounts': mounts,
@@ -110,7 +112,7 @@ def main():
         timeout = min(5 if cleanup else 40, deadline - time.monotonic())
         require(timeout > 0, 'Whole-stage deadline')
         commands.append(argv)
-        result = subprocess.run([docker, *argv], env=env, capture_output=True, text=True, timeout=timeout)
+        result = subprocess.run([docker, '--host', 'unix:///var/run/docker.sock', *argv], env=env, capture_output=True, text=True, timeout=timeout)
         require(len(result.stdout.encode()) <= 524288 and len(result.stderr.encode()) <= 524288, 'Tool output cap')
         return result
     result = {'benchmark_id': 'NEURAL-017', 'status': 'operator_execution_failed', 'scientific_score_computed': False}
