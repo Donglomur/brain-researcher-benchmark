@@ -1,6 +1,6 @@
 # Scientific contract companions
 
-These eleven source components make the scientific claims of existing benchmark assignments more explicit. They supply descriptive comparisons, reproduction and improvement checks, or links between report claims and evidence. They are additional components of existing tasks; they add no benchmark count, completed experiment, scientific qualification, or submission-readiness claim.
+These twelve source components make the scientific claims of existing benchmark assignments more explicit. They supply descriptive comparisons, reproduction and improvement checks, or links between report claims and evidence. They are additional components of existing tasks; they add no benchmark count, completed experiment, scientific qualification, or submission-readiness claim.
 
 | Component | Scientific purpose | Important boundary |
 |---|---|---|
@@ -15,6 +15,7 @@ These eleven source components make the scientific claims of existing benchmark 
 | [FIND-025 submission and comparison](find025/README.md) | Preserve both paper claim families and all 16 obligation groups while validating declarations and retaining missing or failed outcomes. | Reconstruction, held paper reproduction and protected improvement remain separate; consistent declarations do not prove authentic results. |
 | [NEURAL-094 regional comparison](neural094/README.md) | Complete frozen-program, investigator-policy and reference comparison across 39 sessions, ten mice, 73 regions, 2,628 pairs and five seeds. | Inactive source; whole-population primary and all native, input, provider, rights and scientific gates remain. |
 | [NEURAL-035 closed paired grading](neural035/README.md) | Complete fixed-program and public-rank comparison across 14 sessions, seven mice, 1,012 cells, 28 queries per role and 99 shifts. | Inactive source; protected metadata, authentic process authority, inputs, native and scientific qualifications remain external. |
+| [NoMAD recovered operators](nomad_recovered/README.md) | Preserve the complete recovered source, paired archive grading and statistical endpoint contracts. | Source-only inspection and refusal checks; authentic data, held calibration, rights, process authority, native and scientific gates remain external. |
 
 Zero, negative, unavailable, and discrepant outcomes remain valid where specified. The components require trusted upstream inputs and operator controls described in their contracts. They do not run trained models or authenticate empirical data merely from supplied metadata. Original task packages and their admission states are unchanged.
 
@@ -92,3 +93,26 @@ python3 -I -S -B benchmarks/scientific_contracts/neural035/test_portable_source.
 No numerical/native producer, protected scoring, model, container or authentic
 input is executed by these checks. Original target-last custody, separate trusted
 authority, post-cleanup deadline, rights and scientific gates remain unchanged.
+
+The [NoMAD recovered operators](nomad_recovered/README.md) companion carries the
+complete 23-file installed source component unchanged, its historical scientific
+corrections and explicit external prerequisites. It preserves 512 pairs, 2,560
+predictions, 160 anchors, five methods, 102 nominal tests and every U01–U21
+unresolved item. These are source obligations, not observed study results.
+The held-calibration and whole-archive requirements remain; the prospective S12
+contract is distinct from an established historical recipe. No raw upstream code,
+article, neural recording, target, checkpoint or evaluator receipt is bundled.
+
+Its dedicated job uses Python 3.11 and the standard library only:
+
+```sh
+python3 -I -S -B benchmarks/scientific_contracts/nomad_recovered/recovered-operators-v3/operator_entry.py --inspect
+python3 -I -S -B benchmarks/scientific_contracts/nomad_recovered/test_portable_source.py
+```
+
+The first command authenticates the complete manifest and source closure without
+importing the scientific modules. The second checks a cold copy in an unrelated
+working directory and exercises missing, changed and aliased source refusals.
+Neither invokes plan, consume or grade, numerical/native methods, a provider or
+a model. Project MIT notices do not supply grants for external NoMAD software,
+articles or datasets. Existing benchmark admission and qualification stay unchanged.
