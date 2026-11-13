@@ -1,0 +1,11 @@
+# Source and input rights evidence
+
+The benchmark repository carries an MIT license, copyright 2026 Brain Researcher. The exact existing text is retained at `LICENSES/brain-researcher.MIT.txt`; preserve it in the public source projection. This notice does not change any license or extend that license to external data, model weights, images or dependencies.
+
+The retained upstream IBL BrainWideBench license is reproduced unchanged at `LICENSES/ibl-bwb.MIT.txt`: 1,087 bytes, SHA-256 `d49b73c8bebf72a91f183958c530551b4a249f49a4332580facb8e82f1996d4e`, copyright 2026 The IBL BrainWideBench authors. Existing local provenance associates Git blob `16e8bf7eb6a607aa2cd5de22c7e7faee60c71ad6` with reviewed repository revision `6fbd666fe8170a2165f5198c1f490911424a654d`. That association is retained evidence, not a new network verification. Preserve the upstream notice for incorporated or adapted upstream software; the benchmark-specific amendment is described in `INPUTS.md`.
+
+The existing source-readiness audit for IBL Brain-Wide Map / BrainWideBench, dated 2026-10-29, reports **CC BY 4.0** for data and MIT for code. It cites the [dataset registry](https://registry.opendata.aws/ibl-brain-wide-bench/) and [publisher dataset guide](https://brainbench-org.github.io/ibl-bwb/guides/dataset.html). The linked scientific source is [DOI 10.1038/s41586-025-09235-0](https://doi.org/10.1038/s41586-025-09235-0). No data-license body or full creator/version attribution record was newly obtained in this source-only projection. No data or model payload is included.
+
+Before distributing independently obtained source data or derivatives, retain the actual dataset/version attribution, applicable terms, source links and modifications. Do not substitute the software's MIT license for the dataset's terms. Record model, tokenizer, package and image terms separately when those future operands are selected; no model license or redistribution permission is inferred here.
+
+`PROVENANCE.json` records the exact retained notice identity, historical data-license evidence, scientific source revision, unresolved generating revision and full-cohort scope. These records describe existing evidence. They are neither new grants nor a certification that all future input rights or scientific gates are satisfied.

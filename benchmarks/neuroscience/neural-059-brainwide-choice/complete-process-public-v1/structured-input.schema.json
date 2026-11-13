@@ -1,0 +1,496 @@
+{
+  "$defs": {
+    "session": {
+      "additionalProperties": false,
+      "description": "One full original all-unit session. Runtime performs exact member/session joins, equal spike-axis lengths, domain membership, source-derived task/split equality and all selected bounds.",
+      "properties": {
+        "original_trials": {
+          "items": {
+            "additionalProperties": false,
+            "description": "Retain every original trial, including exclusions. Runtime checks complete raw-index and optional stored-ordinal bijections, behavioral encodings, chronology, validity and holds.",
+            "properties": {
+              "choice": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "contrastLeft": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "contrastRight": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "feedbackType": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "feedback_times": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "firstMovement_times": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "intervals_0": {
+                "type": "number"
+              },
+              "intervals_1": {
+                "type": "number"
+              },
+              "probabilityLeft": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "raw_index": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "stimOn_times": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "stored_ordinal": {
+                "minimum": 0,
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "raw_index",
+              "stored_ordinal",
+              "intervals_0",
+              "intervals_1",
+              "stimOn_times",
+              "firstMovement_times",
+              "feedback_times",
+              "choice",
+              "feedbackType",
+              "probabilityLeft",
+              "contrastLeft",
+              "contrastRight"
+            ],
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "session_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_identity": {
+          "additionalProperties": false,
+          "description": "Current accepted no-profile-mismatch branch. A matching scalar hash is not authentication of an HDF5 source body. Preserve unknown source SHA as null; never invent one.",
+          "properties": {
+            "pipeline_sha256": {
+              "const": "931002bcf87e2ff88a8eb2e270d963b2479971a0a7dabc3659c5098a2bec0c29"
+            },
+            "repository": {
+              "const": "brainbench-org/ibl-bwb"
+            },
+            "revision": {
+              "const": "6fbd666fe8170a2165f5198c1f490911424a654d"
+            },
+            "source_sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "repository",
+            "revision",
+            "pipeline_sha256",
+            "source_sha256"
+          ],
+          "type": "object"
+        },
+        "source_profile": {
+          "const": "reviewed_6fbd_structured_v1"
+        },
+        "spike_domain": {
+          "items": {
+            "description": "Two finite ordered endpoints. Runtime checks start < end and interval order/non-overlap.",
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 2,
+            "minItems": 2,
+            "type": "array"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "spike_times": {
+          "items": {
+            "type": "number"
+          },
+          "minItems": 0,
+          "type": "array"
+        },
+        "spike_units": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 0,
+          "type": "array"
+        },
+        "stored_splits": {
+          "additionalProperties": false,
+          "properties": {
+            "test": {
+              "items": {
+                "description": "Two finite ordered endpoints. Runtime checks start < end and interval order/non-overlap.",
+                "items": {
+                  "type": "number"
+                },
+                "maxItems": 2,
+                "minItems": 2,
+                "type": "array"
+              },
+              "maxItems": 1,
+              "minItems": 1,
+              "type": "array"
+            },
+            "train": {
+              "items": {
+                "description": "Two finite ordered endpoints. Runtime checks start < end and interval order/non-overlap.",
+                "items": {
+                  "type": "number"
+                },
+                "maxItems": 2,
+                "minItems": 2,
+                "type": "array"
+              },
+              "maxItems": 1,
+              "minItems": 1,
+              "type": "array"
+            },
+            "val": {
+              "items": {
+                "description": "Two finite ordered endpoints. Runtime checks start < end and interval order/non-overlap.",
+                "items": {
+                  "type": "number"
+                },
+                "maxItems": 2,
+                "minItems": 2,
+                "type": "array"
+              },
+              "maxItems": 1,
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "train",
+            "val",
+            "test"
+          ],
+          "type": "object"
+        },
+        "task_intervals": {
+          "additionalProperties": false,
+          "properties": {
+            "block_prior": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "end": {
+                    "type": "number"
+                  },
+                  "start": {
+                    "type": "number"
+                  },
+                  "trial_index": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "value": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "trial_index",
+                  "start",
+                  "end",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "minItems": 0,
+              "type": "array"
+            },
+            "choice": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "end": {
+                    "type": "number"
+                  },
+                  "start": {
+                    "type": "number"
+                  },
+                  "trial_index": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "value": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "trial_index",
+                  "start",
+                  "end",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "minItems": 0,
+              "type": "array"
+            },
+            "envelope": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "end": {
+                    "type": "number"
+                  },
+                  "start": {
+                    "type": "number"
+                  },
+                  "trial_index": {
+                    "minimum": 0,
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "trial_index",
+                  "start",
+                  "end"
+                ],
+                "type": "object"
+              },
+              "minItems": 0,
+              "type": "array"
+            },
+            "licking_window": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "end": {
+                    "type": "number"
+                  },
+                  "start": {
+                    "type": "number"
+                  },
+                  "trial_index": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "value": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "trial_index",
+                  "start",
+                  "end",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "minItems": 0,
+              "type": "array"
+            },
+            "movement_window": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "end": {
+                    "type": "number"
+                  },
+                  "start": {
+                    "type": "number"
+                  },
+                  "trial_index": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "value": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "trial_index",
+                  "start",
+                  "end",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "minItems": 0,
+              "type": "array"
+            },
+            "reward": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "end": {
+                    "type": "number"
+                  },
+                  "start": {
+                    "type": "number"
+                  },
+                  "trial_index": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "value": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "trial_index",
+                  "start",
+                  "end",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "minItems": 0,
+              "type": "array"
+            },
+            "stimulus_contrast": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "end": {
+                    "type": "number"
+                  },
+                  "start": {
+                    "type": "number"
+                  },
+                  "trial_index": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "value": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "trial_index",
+                  "start",
+                  "end",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "minItems": 0,
+              "type": "array"
+            },
+            "stimulus_side": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "end": {
+                    "type": "number"
+                  },
+                  "start": {
+                    "type": "number"
+                  },
+                  "trial_index": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "value": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "trial_index",
+                  "start",
+                  "end",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "minItems": 0,
+              "type": "array"
+            }
+          },
+          "required": [
+            "stimulus_side",
+            "stimulus_contrast",
+            "choice",
+            "movement_window",
+            "licking_window",
+            "reward",
+            "block_prior",
+            "envelope"
+          ],
+          "type": "object"
+        },
+        "unit_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "session_id",
+        "source_identity",
+        "source_profile",
+        "unit_ids",
+        "original_trials",
+        "spike_times",
+        "spike_units",
+        "spike_domain",
+        "task_intervals",
+        "stored_splits"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": {
+    "$ref": "#/$defs/session"
+  },
+  "description": "Shape companion for raw_inputs JSON. Not a data converter, runtime substitute, scientific admission, or result. The runtime additionally requires the exact frozen 29-session roster and all semantic/custody checks; JSON Schema cannot establish them. No authentic examples or defaults are supplied. Nonfinite JSON numbers and duplicate keys are rejected by the actual strict JSON parser. Identity constants describe the accepted profile branch; conflicting identities must remain unavailable rather than be relabeled.",
+  "maxProperties": 29,
+  "minProperties": 29,
+  "propertyNames": {
+    "minLength": 1,
+    "type": "string"
+  },
+  "title": "NEURAL-059 structured raw-input shape (source-only companion)",
+  "type": "object"
+}
