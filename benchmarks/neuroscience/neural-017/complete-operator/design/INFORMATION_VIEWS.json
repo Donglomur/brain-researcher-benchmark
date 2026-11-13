@@ -1,0 +1,190 @@
+{
+  "all_target_support": [
+    574,
+    140,
+    45
+  ],
+  "always_protected": [
+    "query withheld counts",
+    "evaluation-derived mean",
+    "old predictions or fit state without permitted training lineage",
+    "other arm or case answers",
+    "assessment seed and permutation map",
+    "target likelihood ledgers"
+  ],
+  "base_query": [
+    "eval_counts_heldin",
+    "eval_trial_ids",
+    "heldin_unit_ids",
+    "heldout_unit_ids",
+    "eval_condition_ids",
+    "bin_left_edges_ms",
+    "eval_valid_mask"
+  ],
+  "base_training": [
+    "train_counts_heldin",
+    "train_counts_heldout",
+    "train_trial_ids",
+    "heldin_unit_ids",
+    "heldout_unit_ids",
+    "train_condition_ids",
+    "bin_left_edges_ms"
+  ],
+  "conditions": [
+    {
+      "id": "intact",
+      "paper_code": "A/B original matched views",
+      "query": "base_query",
+      "references": [
+        "R0",
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7",
+        "R8"
+      ],
+      "training": "base_training"
+    },
+    {
+      "id": "within_condition_shuffle",
+      "paper_code": "same A/B",
+      "query": "base_query with eval_counts_heldin replaced by the protected within-condition donor trace; recipient IDs, units, bins and condition unchanged",
+      "references": [
+        "R0",
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7",
+        "R8"
+      ],
+      "state": "Training-only state may be reused with original charged lineage. Every query-dependent readout, adaptation state, cache and prediction must be produced from this shuffled pool; no intact neural-adapted state or neural prediction cache is visible. All reference inference and arbitrary tools consume the shuffled pool. R0/R1/R2 deterministic context outputs may be identical with explicit lineage.",
+      "training": "base_training unchanged"
+    },
+    {
+      "forbidden": "All observed-neuron count arrays, observations, latent factors, neural-covariate state and neural predictions; nuisance states trained solely from allowed withheld training labels remain permitted.",
+      "id": "context_only",
+      "paper_code": "same A/B sources, with no empirical neural payloads or target-derived outcome comments",
+      "query": [
+        "eval_trial_ids",
+        "heldout_unit_ids",
+        "eval_condition_ids",
+        "bin_left_edges_ms",
+        "eval_valid_mask"
+      ],
+      "references": [
+        "R0",
+        "R1",
+        "R2"
+      ],
+      "training": [
+        "train_counts_heldout",
+        "train_trial_ids",
+        "heldout_unit_ids",
+        "train_condition_ids",
+        "bin_left_edges_ms"
+      ]
+    },
+    {
+      "forbidden": "All trial/time-resolved training counts, all condition IDs, all observed-neuron counts/state and non-R0 reference states/predictions. Output axes remain required; arbitrary positive predictions may use paper priors but do not gain empirical time profiles.",
+      "id": "training_rate_only",
+      "paper_code": "same A/B curated source and paper; no hidden empirical profiles",
+      "query": [
+        "eval_trial_ids",
+        "heldout_unit_ids",
+        "bin_left_edges_ms",
+        "eval_valid_mask"
+      ],
+      "references": [
+        "R0"
+      ],
+      "training": [
+        "per-withheld-unit total training counts[45]",
+        "total training bin opportunities scalar",
+        "heldout_unit_ids"
+      ]
+    },
+    {
+      "id": "metadata_neutral",
+      "interpretation": "Not anonymized biology: papers/code reveal domain. No domain-free or native-understanding inference.",
+      "paper_code": "unchanged A/B; neutral task instruction framing alone",
+      "query": "base_query",
+      "references": [
+        "R0",
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7",
+        "R8"
+      ],
+      "training": "base_training"
+    }
+  ],
+  "schema": "nlb017_information_views_v1",
+  "shuffle_recipe": {
+    "limits": "Singletons preserve alignment; m=2 uniquely invertible and m>2 may permit neural matching. Record group-size histogram/identity count in protected report, never call this information deletion or causal proof.",
+    "mapping": "For group rows r and random permutation p of 0..m-1, assign trace donor r[p[(j+1)%m]] to recipient r[p[j]] for j=0..m-1. For m=1 retain identity. One directed cycle ensures no fixed points for m>1. Same committed map across F/I,A/B and all five seeds.",
+    "partition": "Group recipient rows by public condition identity, order within each group by exact original query roster. Never use counts, labels, scores or outcomes to choose groups/map.",
+    "prospective_amendment": {
+      "commitment_rule": {
+        "adopted_selection_sha256": "8624fecac8037615e520d5e097bb5d0a956341bec725ead6255946a459fd2537",
+        "derived_integer": "SHA256(seed_bytes || tuple_bytes), unsigned big endian",
+        "donor_cycle": "original query order; recipient group[order[j]] receives group[order[(j+1)%m]]; singleton identity",
+        "planned_support_encoding": "canonical UTF8 sorted-key compact finite JSON plus exactly one LF",
+        "rng": "NumPy Generator(PCG64), exact version pinned in commitment",
+        "schema": "NLB017_target_free_shuffle_rule_v2",
+        "tuple_encoding": "UTF8 compact finite JSON array ensure_ascii=False separators=(comma,colon) without LF",
+        "tuple_prefix": [
+          "NLB017-target-free-shuffle-v2",
+          "NEURAL-017"
+        ]
+      },
+      "comparability": [
+        "One changed diagnostic randomization identity, not a new scientific task or access arm.",
+        "The same seed need not match the superseded tuple. Reproducibility requires the selected tuple/version/support; never mix old and new results.",
+        "Paired comparability holds by one common committed map across all matched conditions; no condition/model-specific map or map tuning.",
+        "Singletons preserve alignment; m=2 is invertible; larger groups may permit matching. This tests sensitivity to within-condition correspondence, not proof of information deletion or causal necessity."
+      ],
+      "complete_selected_normative_rule": {
+        "after_preparation": "Activity-derived panel fingerprint remains required for downstream original data/provenance identities; it is not an RNG input under this prospective rule.",
+        "derived_integer": "Unsigned big-endian integer of SHA256(seed_bytes concatenated with tuple_bytes).",
+        "donor_assignment": "Use exact original query order within each public condition. For random order p of m group positions, recipient r[p[j]] receives donor r[p[(j+1)%m]]. Singleton retains identity. Same single committed map across F/I, A/B and all five agent seeds.",
+        "exclusions_from_tuple": [
+          "mode F/I",
+          "code view A/B",
+          "agent seed",
+          "activity-derived panel fingerprint",
+          "target/prediction/score/statistic"
+        ],
+        "per_group_tuple": [
+          "NLB017-target-free-shuffle-v2",
+          "NEURAL-017",
+          "planned_support_sha256",
+          "public_condition_identity"
+        ],
+        "planned_support": "Exact NLB017_target_free_planned_support_v2 closed record including authenticated release/split descriptor, original train/query rosters, public condition labels, unit roles, bin edges and chronology if known. No count, prediction, score, outcome or activity-derived fingerprint. Missing original target-free metadata blocks preparation.",
+        "planned_support_sha256": "SHA256 of canonical bytes: UTF-8 json.dumps(record,sort_keys=True,separators=(comma,colon),ensure_ascii=False,allow_nan=False) followed by exactly one LF, matching nlb.contracts.canonical.",
+        "precommitment": "S01 authenticates metadata; S04 freezes complete support identity, protected seed/map, RNG/version and participant policies before S02/S03 activity preparation. Later canonical preparation must equal planned support. A mismatch refuses; do not regenerate or select a favorable map.",
+        "rng": "Pinned NumPy Generator(PCG64(derived_integer)) permutation of group positions. Runtime/version and exact implementation must be authenticated later; no RNG execution selected here.",
+        "seed": "One protected 32-byte assessment seed selected before any activity/target access, with cryptographic seed commitment; no seed is generated now.",
+        "tuple_encoding": "UTF-8 compact JSON array with ensure_ascii=False and separators=(comma,colon), no trailing LF; exact public condition identity/type from the original ordered query roster.",
+        "visibility": "Participant receives recipient-labelled transformed rows only. Donor identities, protected seed/map and intact query copy remain unavailable."
+      },
+      "id": "NLB017-target-free-shuffle-v2",
+      "precedence": "Explicitly supersedes only the old activity-fingerprint RNG identity for future selected S5-or-later programmes. Old S4 and earlier contracts/maps/runs/receipts remain historical and cannot be relabeled as this rule. All other scientific support and interpretation remain unchanged.",
+      "root_selection_sha256": "8624fecac8037615e520d5e097bb5d0a956341bec725ead6255946a459fd2537"
+    },
+    "rng": "Prospective target-free-v2: SHA256(seed_bytes || tuple_bytes), unsigned big endian, with tuple [\"NLB017-target-free-shuffle-v2\",\"NEURAL-017\",planned_support_sha256,original_public_condition_identity]. Tuple UTF8 finite compact JSON ensure_ascii=False separators=(comma,colon), no LF. planned_support_sha256 hashes nlb.contracts.canonical of the exact closed NLB017_target_free_planned_support_v2 record including exactly one LF. Pinned NumPy Generator(PCG64(derived_integer)) permutes original group positions. Activity-derived panel fingerprint remains downstream provenance and is excluded from RNG.",
+    "seed": "Protected operator draws one 256-bit random assessment seed before activity/target access; seed descriptor and cryptographic commitment bind ProgrammeSpec, seed bytes never enter participant views. This is a future acquisition operation, not performed now.",
+    "visibility": "Only transformed rows carry recipient IDs. No donor-ID field, map, random seed or intact query copy is public. Source manifests use public commitments, not map bodies."
+  },
+  "status": "design_not_implemented"
+}

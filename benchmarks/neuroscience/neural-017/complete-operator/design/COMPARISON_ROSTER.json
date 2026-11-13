@@ -1,0 +1,1426 @@
+{
+  "schema": "nlb017_comparison_roster_v1",
+  "status": "design_unexecuted",
+  "families": {
+    "primary_mode": 2,
+    "code_and_interaction": 3,
+    "intact_reference": 36,
+    "diagnostic_difference": 16,
+    "diagnostic_mode_interaction": 8
+  },
+  "total_contrasts": 65,
+  "family_alpha": 0.05,
+  "two_sided_quantiles": "alpha/(2*m),1-alpha/(2*m) per named family; optional global conservative intervals use m=65",
+  "contrast_estimator": "Linear combination of seed-mean pooled bits/spike terms; same paired trial indices across all component methods, conditions and seeds. Each component uses its draw total spike denominator. No averaging of trial-wise bps.",
+  "tool_only": "Batch/case R7 deterministic parity reported without hypothesis test or artificial seeds. Agent-versus-R7 already occurs in intact_reference.",
+  "contrasts": [
+    {
+      "id": "primary_I_minus_F_A",
+      "family": "primary_mode",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "primary_I_minus_F_B",
+      "family": "primary_mode",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "code_B_minus_A_F",
+      "family": "code_and_interaction",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "code_B_minus_A_I",
+      "family": "code_and_interaction",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "code_mode_interaction",
+      "family": "code_and_interaction",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": 1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-A_minus_R0",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R0",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-A_minus_R1",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R1",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-A_minus_R2",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R2",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-A_minus_R3",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R3",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-A_minus_R4",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R4",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-A_minus_R5",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R5",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-A_minus_R6",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R6",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-A_minus_R7",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R7",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-A_minus_R8",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R8",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-A_intact_minus_within_condition_shuffle",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "within_condition_shuffle",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-A_intact_minus_context_only",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "context_only",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-A_intact_minus_training_rate_only",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "training_rate_only",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-A_intact_minus_metadata_neutral",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "metadata_neutral",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-A_minus_R0",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R0",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-A_minus_R1",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R1",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-A_minus_R2",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R2",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-A_minus_R3",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R3",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-A_minus_R4",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R4",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-A_minus_R5",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R5",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-A_minus_R6",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R6",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-A_minus_R7",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R7",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-A_minus_R8",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R8",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-A_intact_minus_within_condition_shuffle",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "within_condition_shuffle",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-A_intact_minus_context_only",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "context_only",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-A_intact_minus_training_rate_only",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "training_rate_only",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-A_intact_minus_metadata_neutral",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "metadata_neutral",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-B_minus_R0",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R0",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-B_minus_R1",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R1",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-B_minus_R2",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R2",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-B_minus_R3",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R3",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-B_minus_R4",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R4",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-B_minus_R5",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R5",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-B_minus_R6",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R6",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-B_minus_R7",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R7",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-B_minus_R8",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R8",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-B_intact_minus_within_condition_shuffle",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "within_condition_shuffle",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-B_intact_minus_context_only",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "context_only",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-B_intact_minus_training_rate_only",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "training_rate_only",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "F-B_intact_minus_metadata_neutral",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "metadata_neutral",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-B_minus_R0",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R0",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-B_minus_R1",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R1",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-B_minus_R2",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R2",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-B_minus_R3",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R3",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-B_minus_R4",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R4",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-B_minus_R5",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R5",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-B_minus_R6",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R6",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-B_minus_R7",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R7",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-B_minus_R8",
+      "family": "intact_reference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "deterministic_reference",
+          "reference": "R8",
+          "condition": "intact",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-B_intact_minus_within_condition_shuffle",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "within_condition_shuffle",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-B_intact_minus_context_only",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "context_only",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-B_intact_minus_training_rate_only",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "training_rate_only",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "I-B_intact_minus_metadata_neutral",
+      "family": "diagnostic_difference",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "metadata_neutral",
+          "coefficient": -1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "mode_change_A_within_condition_shuffle",
+      "family": "diagnostic_mode_interaction",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "within_condition_shuffle",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "within_condition_shuffle",
+          "coefficient": 1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "mode_change_A_context_only",
+      "family": "diagnostic_mode_interaction",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "context_only",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "context_only",
+          "coefficient": 1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "mode_change_A_training_rate_only",
+      "family": "diagnostic_mode_interaction",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "training_rate_only",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "training_rate_only",
+          "coefficient": 1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "mode_change_A_metadata_neutral",
+      "family": "diagnostic_mode_interaction",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "intact",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-A",
+          "condition": "metadata_neutral",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-A",
+          "condition": "metadata_neutral",
+          "coefficient": 1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "mode_change_B_within_condition_shuffle",
+      "family": "diagnostic_mode_interaction",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "within_condition_shuffle",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "within_condition_shuffle",
+          "coefficient": 1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "mode_change_B_context_only",
+      "family": "diagnostic_mode_interaction",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "context_only",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "context_only",
+          "coefficient": 1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "mode_change_B_training_rate_only",
+      "family": "diagnostic_mode_interaction",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "training_rate_only",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "training_rate_only",
+          "coefficient": 1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    },
+    {
+      "id": "mode_change_B_metadata_neutral",
+      "family": "diagnostic_mode_interaction",
+      "terms": [
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "intact",
+          "coefficient": 1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "intact",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "I-B",
+          "condition": "metadata_neutral",
+          "coefficient": -1
+        },
+        {
+          "kind": "agent_mean_over_all_five_seeds",
+          "arm": "F-B",
+          "condition": "metadata_neutral",
+          "coefficient": 1
+        }
+      ],
+      "scope": "same complete574trial140bin45unit target support",
+      "failure": "unavailable if any required seed/prediction/reference is missing; retain roster entry"
+    }
+  ]
+}
