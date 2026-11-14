@@ -1,0 +1,206 @@
+{
+  "schema": "public_neuroscience_construction_draft_v1",
+  "id": "NEURAL-SCOPE-20261114-LOCALIZATION",
+  "track": "neural",
+  "title": "Patch-identified neuron localization under channel degradation",
+  "registration_date": "2026-11-14",
+  "scientific_question": "Can a general agent localize an identified extracellular spike source from multichannel waveforms and assess how channel degradation changes accuracy and reliability?",
+  "skill_dimensions": {
+    "tool_use": "Parse waveforms and geometry with correct units; execute fixed scientific analyses.",
+    "neural_understanding": "Use spatial action-potential structure, probe geometry, noise and reference uncertainty.",
+    "analytical_reasoning": "Compare estimators under shared masks and distinguish localization accuracy from stability.",
+    "scientific_reasoning": "Recognize selected-cohort and approximate-reference limits and use grouped evaluation. These are design aims; independent construct validity and narrative scoring have not been established."
+  },
+  "paper": {
+    "doi": "10.1371/journal.pcbi.1014059",
+    "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1014059",
+    "date": "2026-03-16",
+    "venue": "PLOS Computational Biology"
+  },
+  "official_code": {
+    "repository": "https://github.com/haozhao1996/Spike-Localization-Algorithms",
+    "revision": "a50fa6814937b281e8680d1602ea1a0856447281",
+    "declared_and_verified_repository_license": "MIT",
+    "experimental_notebook": {
+      "path": "SSL_spe1 (2026.02.10).ipynb",
+      "git_blob": "12e3cdec0baf1d12c7a700bd417d266bb1a72c30",
+      "bytes": 3685110
+    },
+    "source_included_in_this_package": false,
+    "dependency_limit": "The reviewed repository tree lacks util_loc while util_eval imports it. Notebook dispatch and the complete dependency closure require separate verification; absent dependencies are not licensed or replaced by assumption."
+  },
+  "data": {
+    "experimental_archive": {
+      "doi": "10.6084/m9.figshare.31566010.v1",
+      "url": "https://doi.org/10.6084/m9.figshare.31566010.v1",
+      "metadata_url": "https://api.figshare.com/v2/articles/31566010/versions/1",
+      "file_id": 62521915,
+      "name": "spe1.zip",
+      "bytes": 945545483,
+      "publisher_md5": "b8fcd36a2efc9bdbb9f4b127fa6c5c2f",
+      "declared_license": "CC BY 4.0"
+    },
+    "original_source": "https://crcns.org/data-sets/methods/spe-1/about-spe-1",
+    "source_pairs": 43,
+    "author_selected_pairs": 11,
+    "scope": "Author-derived experimental spike/waveform/template archive for the 11 selected pairs. This does not cover all 43 source pairs or all 25 published simulation combinations.",
+    "payloads_included": false,
+    "rights_gate": "Verify the original-source access terms, archive contents and item-level rights before extracting or redistributing materials."
+  },
+  "reference_and_intervention": {
+    "spike_identity": "Matched patch-clamp spike times define extracellular waveform extraction. This tests localization of an identified source, not spike detection.",
+    "location": "Approximate patch/probe spatial reference, with calibration uncertainty still to establish; not exact biological soma coordinates.",
+    "channel_degradation": "Published intervention replaces selected channels with 50 microvolt Gaussian noise. This is artificial signal corruption, not measured chronic electrode failure.",
+    "drift": "Distance from a method’s own undegraded estimate is a stability diagnostic. A constant predictor has zero apparent drift but may localize poorly; no genuine in-vivo motion claim follows.",
+    "threshold": "Final journal accuracy uses strict distance < 50 micrometres. This is an evaluation convention, not known calibration accuracy. No unsupported historical threshold comparison is used."
+  },
+  "input_and_support": {
+    "admission": "Authenticate the complete archive and notebook, then freeze every selected cell, recording, spike, electrode and archived condition. Verify axes, sampling/gain/voltage/coordinate units and patch/probe joins before activation.",
+    "owner_manifest_fields": [
+      "source and member hashes",
+      "source-43 versus selected-11 provenance",
+      "animal, recording and cell identities",
+      "condition, corruption level and seed identity",
+      "contact geometry and axes in micrometres",
+      "sampling frequency and waveform window",
+      "voltage units and gain",
+      "spike IDs and template derivation",
+      "spatial-reference provenance",
+      "degradation-mask provenance",
+      "typed missing or undefined support"
+    ],
+    "candidate_fields": [
+      "opaque case and condition IDs",
+      "admitted waveform or template array",
+      "probe geometry",
+      "sampling and voltage units",
+      "observed support/missingness mask"
+    ],
+    "private_fields": [
+      "reference coordinates and answer tables",
+      "patch/probe spatial calibration or other target proxies",
+      "original IDs or paths that reveal answers",
+      "patch traces or features revealing target location",
+      "author predictions, cached notebook outputs and figures",
+      "held-group labels",
+      "corruption seeds/masks in the default unknown-mask condition"
+    ],
+    "support_rule": "No outcome-dependent removal of weak cells, inconvenient conditions or missing predictions. Every source support item retains a typed status; incomplete or invalid output cannot earn a reduced-denominator score.",
+    "unknowns": "Actual array members, axes, condition counts, animal identities and all join cardinalities remain construction gates; none are inferred from archive availability."
+  },
+  "information_modes": [
+    {
+      "id": "investigator",
+      "description": "Agent investigates each admitted case using allowed signals, Python and fixed tools, then returns coordinates and structured evidence within a fixed budget."
+    },
+    {
+      "id": "program",
+      "description": "Agent develops one predictor on development groups; the evaluator freezes it and runs it on every complete held-out group and degradation condition."
+    }
+  ],
+  "code_access_factor": {
+    "without_official_code": "Same neutral schema, paper/method description and toolchain, without author analysis code.",
+    "with_official_code": "Same data and budget plus admitted computation cells/scripts at the pinned revision. Strip cached answers and output cells only after preserving and inspecting the complete original notebook.",
+    "enforcement": "Both authoring and execution must use owner-staged arm-specific resources with a fixed external-access policy; no repository retrieval may bypass the no-code arm.",
+    "counting": "Information modes and code availability are experimental conditions within this one draft."
+  },
+  "split_and_selection": {
+    "group": "Keep every paired cell’s recordings, spikes and degradation trajectory together. Join repeated recordings and animal identities before making outer folds; known animal overlap forces shared folds.",
+    "animal_identity_gate": "Unknown animal identity blocks animal-generalization claims. Any leave-cell-out engineering analysis must be separately labeled; 11 pairs are not assumed to be 11 animals.",
+    "protocol": "Freeze complete deterministic grouped outer splits before results. Tune only in development groups; keep test targets private. No random spike or trial split.",
+    "intervention_selection": "Fix all masks and noise seeds independently of target coordinates and candidate results. Preserve published masks for reproduction; new-seed generalization needs a separate frozen manifest.",
+    "small_cohort": "Show all group results. Use descriptive paired differences if too few independent groups support reliable inference; do not manufacture significance.",
+    "public_exposure": "Opaque IDs and hidden local labels do not establish that public data or notebook answers were absent from model training."
+  },
+  "submission": {
+    "rows": "Exactly one row per requested spike or template, keyed by opaque case, condition and spike-or-template ID.",
+    "prediction": "Two finite coordinates in the verified probe-plane axes and micrometres. The actual source must establish the axes before activation.",
+    "freeze": "Owner hashes one program and its dependencies before final evaluation; the program cannot change across conditions.",
+    "failure_rules": [
+      "missing, extra or duplicate rows",
+      "nonfinite coordinates",
+      "wrong units or schema",
+      "changed support",
+      "candidate-selected reference path",
+      "program mutation across conditions"
+    ],
+    "optional_evidence": "Structured per-condition reasoning may be retained for analysis; it is not an established freeform reward-model score."
+  },
+  "scoring": {
+    "per_row": "Euclidean distance to the verified approximate spatial reference.",
+    "per_cell_condition": "Fraction of all admitted requested spikes with distance < 50 micrometres. Template accuracy is reported separately.",
+    "primary": "Macro accuracy over the complete fixed condition grid, with within-cell/condition averaging, equal cell/recording weighting within animal, then equal animal weighting. Freeze the exact hierarchy after actual overlap joins.",
+    "mandatory_reporting": [
+      "every degradation-level curve",
+      "every independent group result",
+      "continuous median distance per cell/condition and macro summary",
+      "template error and accuracy separately from spike accuracy",
+      "stability relative to each method’s undegraded estimate alongside absolute error",
+      "coverage, invalid output and resource use"
+    ],
+    "failure": "Protocol failure on incomplete/invalid output; no silent intersection. Incorrect but valid predictions keep the full denominator.",
+    "uncertainty": "Paired independent-group differences; bootstrap groups only when actual group count and a preregistered method justify it. No spike-level confidence inflation.",
+    "numerical_policy": "No invented numerical tolerance or biological equivalence margin."
+  },
+  "baselines_and_controls": {
+    "proposed_author_methods": [
+      "center of mass (COM)",
+      "monopolar triangulation",
+      "grid convolution"
+    ],
+    "native_parity_gates": [
+      "dependency and notebook callgraph closure",
+      "preprocessing and template mean/median semantics",
+      "parameter defaults and RNG behavior",
+      "complete actual support and units",
+      "fresh output versus cached result distinction"
+    ],
+    "truth_conditioned_retry": {
+      "source": "src/util_eval.py",
+      "function": "get_loss_acc_spikes",
+      "revision": "a50fa6814937b281e8680d1602ea1a0856447281",
+      "finding": "The helper retries while groundtruth-derived n_right < 1 and counter < 10, accumulating correct and incorrect counts. Its active use in the experimental path is unverified in this reviewed specification. This is not proof that published results used the path.",
+      "required_resolution": "Audit the complete notebook callgraph. If active, preserve faithful historical diagnostic behavior separately and independently define fixed-support, fixed-attempt, target-independent benchmark inference. Do not silently patch author behavior and claim native parity, or compare truth-assisted outputs as a deployable baseline."
+    },
+    "negative_controls": [
+      "probe-geometry centroid",
+      "frozen development-mean coordinate",
+      "channel-permuted waveforms with fixed geometry",
+      "destroyed waveform values with unchanged allowed metadata",
+      "published aggregate answer without case joins"
+    ],
+    "engineering_controls": [
+      "constructed waveform/geometry groundtruth",
+      "consistent coordinate-axis transform",
+      "wrong-unit refusal",
+      "missing and duplicate support refusal"
+    ],
+    "interpretation_controls": [
+      "absolute accuracy alongside stability",
+      "full degradation trajectory kept together",
+      "undegraded accuracy reported",
+      "metadata-only baselines checked for target shortcuts"
+    ]
+  },
+  "improvement_claim": "Improvement requires paired group-level evidence against competent admitted baselines on identical complete support and resources, with uncertainty. No tuning on held-out coordinates, favorable subset selection, or extrapolation from 11 selected pairs to all 43 or new animals without evidence.",
+  "construction_gates": [
+    "complete notebook/output-cell and dependency/callgraph audit",
+    "complete archive checksum/member census and rights audit",
+    "lossless neutral conversion and all support/animal/coordinate joins",
+    "protected evaluator, grouped split and scorer with independent arithmetic verification",
+    "original baseline execution under a pinned environment and budget",
+    "prospectively authorized agent comparison only after qualification"
+  ],
+  "readiness": {
+    "registered_construction_draft": true,
+    "runnable": false,
+    "reference_execution_established": false,
+    "scorer_implemented": false,
+    "runner_implemented": false,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "performance_or_SOTA_claim": false
+  },
+  "counting": "One dataset-family draft. Methods, cells, spikes, folds, conditions, controls and source versions do not add benchmarks.",
+  "evidence_scope": "Projection of accepted localization contract V3 and its independent source review at registration. Later notebook investigations are outside this frozen specification until independently reviewed."
+}
