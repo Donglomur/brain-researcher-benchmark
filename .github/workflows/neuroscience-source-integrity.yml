@@ -275,3 +275,163 @@ jobs:
               '--output', str(Path(os.environ['RUNNER_TEMP']) / 'neural083-owner-ci')]
           exec(compile(bytes(raw), str(p), 'exec'), {'__name__': '__main__', '__file__': str(p)})
           PY_BOOTSTRAP
+
+  neural002-morse-production-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Copy eight exact Morse control sources outside legacy custody
+        run: |
+          timeout --signal=TERM --kill-after=5s 15s python3 -I -S -B - <<'MORSE_COPY'
+          import hashlib, json, os, stat
+          from pathlib import Path
+          pins = [{"bytes":3831,"path":"CONTROL_SELECTION.json","sha256":"2ffbf26bc0a59bb55a549a665748e0f5693b005d98f50b3ac478850f6e786fbb"},{"bytes":3811,"path":"README.md","sha256":"c1f1c5edb603fbb70843894fea4b350381f6dc032f318f4923d925ba277c6338"},{"bytes":6267,"path":"SCOPE.json","sha256":"4cfa0a2543a6a76d46eca4204a8a1968ddcd7b2c5e279e8e36d6b07b6a224b26"},{"bytes":9809,"path":"boundary_controls.py","sha256":"0cb47e62619a1911c4e1070df6c484f47b1ff9f07f70c2c911c51d25bb4d15f0"},{"bytes":7806,"path":"control_support.py","sha256":"67fa35dadb942c3e9bb9bd793ca86f9ae339dfe5e05df209620ed1c4f066499e"},{"bytes":23503,"path":"full_caller_controls.py","sha256":"3ca6c3cc3d914d4d5cba0f0972f0cb8b57b2e1e1da85ad72841d4c81a5c84a51"},{"bytes":11575,"path":"run_controls.py","sha256":"2053c0a7dbf7ebdee0f2fd6cc254b6077f642d1e655aa0cbf6b0667bec892088"},{"bytes":27979,"path":"storage-controls-v1/storage_controls.py","sha256":"e06fd7c2b0137b33be849dc2e9607d215d5c283959d4a9bca7fa425d0464ca14"}]
+          legacy = Path('benchmarks/neuroscience/neural-002').resolve(strict=True)
+          source = legacy / 'production-wiring-controls-v3'
+          supplied = Path(os.environ['RUNNER_TEMP'])
+          if not supplied.is_absolute():
+              raise ValueError('absolute selected temporary directory required')
+          temporary = supplied.resolve(strict=True)
+          destination = temporary / 'neural002-morse-controls-v3'
+          for root in (legacy, source, temporary):
+              for parent in (root, *root.parents):
+                  if not stat.S_ISDIR(parent.lstat().st_mode) or parent.is_symlink():
+                      raise ValueError('ordinary canonical source/temporary ancestry')
+          if destination == legacy or legacy in destination.parents or destination in legacy.parents:
+              raise ValueError('control copy must be outside legacy custody')
+          if destination.exists() or destination.is_symlink():
+              raise ValueError('fresh control-source destination required')
+          for group in ('boundary', 'full_positive', 'full_last_failure', 'storage'):
+              for name in ('ci-' + group, 'RESULT-ci-' + group + '.json'):
+                  if len(str(destination / name).encode()) > 384:
+                      raise ValueError('reviewed control path-length bound')
+          def captured(path, pin):
+              for parent in (path.parent, *path.parent.parents):
+                  if not stat.S_ISDIR(parent.lstat().st_mode) or parent.is_symlink():
+                      raise ValueError('ordinary selected source parents')
+              before = path.lstat()
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != pin['bytes']:
+                  raise ValueError('exact ordinary copied source extent')
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  raw = stream.read(pin['bytes'] + 1)
+                  after = os.fstat(stream.fileno())
+              stamp = lambda s: (s.st_dev, s.st_ino, s.st_mode, s.st_nlink, s.st_size, s.st_mtime_ns, s.st_ctime_ns)
+              if (stamp(before) != stamp(opened) or stamp(before) != stamp(after)
+                  or stamp(before) != stamp(path.lstat()) or len(raw) != pin['bytes']
+                  or hashlib.sha256(raw).hexdigest() != pin['sha256']):
+                  raise ValueError('stable complete pinned control copy')
+              return raw
+          if (len(pins) != 8 or sum(p['bytes'] for p in pins) > 131072
+              or 3 * sum(p['bytes'] for p in pins) + 2 * len(pins) > 393216):
+              raise ValueError('exact eight-file source-copy bound')
+          bodies = [(pin, captured(source / pin['path'], pin)) for pin in pins]
+          destination.mkdir(mode=0o700)
+          (destination / 'storage-controls-v1').mkdir(mode=0o700)
+          for pin, raw in bodies:
+              path = destination / pin['path']
+              fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o644)
+              with os.fdopen(fd, 'wb') as stream:
+                  if stream.write(raw) != len(raw):
+                      raise OSError('short control-source copy')
+                  stream.flush()
+              if captured(path, pin) != raw:
+                  raise ValueError('copied source readback differs')
+          print(json.dumps({'control_source_files': 8, 'copied_bytes': sum(p['bytes'] for p in pins),
+                            'controls_root': str(destination), 'task_code_executed': False}, sort_keys=True))
+          MORSE_COPY
+      - name: Inspect the complete inactive Morse production source
+        run: timeout --signal=TERM --kill-after=5s 15s python3 -I -S -B benchmarks/neuroscience/neural-002/production-wiring-v3/inspect_source.py --inspect
+      - name: Check Morse boundary with invented fixtures
+        run: |
+          set -euo pipefail
+          task_root="$(pwd -P)/benchmarks/neuroscience/neural-002"
+          controls_root="$(realpath "$RUNNER_TEMP")/neural002-morse-controls-v3"
+          timeout --signal=TERM --kill-after=5s 25s python3 -I -S -B "$controls_root/run_controls.py" \
+            --group boundary --package "$task_root/production-wiring-v3" --legacy "$task_root" \
+            --fixture-root "$controls_root/ci-boundary" --output "$controls_root/RESULT-ci-boundary.json" \
+            --selection-bytes 3831 --selection-sha256 2ffbf26bc0a59bb55a549a665748e0f5693b005d98f50b3ac478850f6e786fbb \
+            --transfer-bytes 8388608 --seconds 20
+      - name: Check Morse full_positive with invented fixtures
+        run: |
+          set -euo pipefail
+          task_root="$(pwd -P)/benchmarks/neuroscience/neural-002"
+          controls_root="$(realpath "$RUNNER_TEMP")/neural002-morse-controls-v3"
+          timeout --signal=TERM --kill-after=5s 45s python3 -I -S -B "$controls_root/run_controls.py" \
+            --group full_positive --package "$task_root/production-wiring-v3" --legacy "$task_root" \
+            --fixture-root "$controls_root/ci-full_positive" --output "$controls_root/RESULT-ci-full_positive.json" \
+            --selection-bytes 3831 --selection-sha256 2ffbf26bc0a59bb55a549a665748e0f5693b005d98f50b3ac478850f6e786fbb \
+            --transfer-bytes 79691776 --seconds 40
+      - name: Check Morse full_last_failure with invented fixtures
+        run: |
+          set -euo pipefail
+          task_root="$(pwd -P)/benchmarks/neuroscience/neural-002"
+          controls_root="$(realpath "$RUNNER_TEMP")/neural002-morse-controls-v3"
+          timeout --signal=TERM --kill-after=5s 45s python3 -I -S -B "$controls_root/run_controls.py" \
+            --group full_last_failure --package "$task_root/production-wiring-v3" --legacy "$task_root" \
+            --fixture-root "$controls_root/ci-full_last_failure" --output "$controls_root/RESULT-ci-full_last_failure.json" \
+            --selection-bytes 3831 --selection-sha256 2ffbf26bc0a59bb55a549a665748e0f5693b005d98f50b3ac478850f6e786fbb \
+            --transfer-bytes 79691776 --seconds 40
+      - name: Check Morse storage with invented fixtures
+        run: |
+          set -euo pipefail
+          task_root="$(pwd -P)/benchmarks/neuroscience/neural-002"
+          controls_root="$(realpath "$RUNNER_TEMP")/neural002-morse-controls-v3"
+          timeout --signal=TERM --kill-after=5s 35s python3 -I -S -B "$controls_root/run_controls.py" \
+            --group storage --package "$task_root/production-wiring-v3" --legacy "$task_root" \
+            --fixture-root "$controls_root/ci-storage" --output "$controls_root/RESULT-ci-storage.json" \
+            --selection-bytes 3831 --selection-sha256 2ffbf26bc0a59bb55a549a665748e0f5693b005d98f50b3ac478850f6e786fbb \
+            --transfer-bytes 25165824 --seconds 30
+      - name: Require all thirty-five exact Morse engineering outcomes
+        run: |
+          python3 -I -S -B - <<'MORSE_RESULTS'
+          import hashlib, json, os, stat
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']).resolve(strict=True) / 'neural002-morse-controls-v3'
+          def captured(name, limit):
+              p = root / name
+              before = p.lstat()
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or not 0 < before.st_size <= limit:
+                  raise ValueError('bounded ordinary CI result/source')
+              fd = os.open(p, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+              with os.fdopen(fd, 'rb') as stream:
+                  raw = stream.read(limit + 1)
+                  after = os.fstat(stream.fileno())
+              stamp = lambda s: (s.st_dev, s.st_ino, s.st_size, s.st_mtime_ns, s.st_ctime_ns)
+              if stamp(before) != stamp(after) or stamp(before) != stamp(p.lstat()) or len(raw) != before.st_size:
+                  raise ValueError('stable complete CI result/source capture')
+              return raw
+          selection_raw = captured('CONTROL_SELECTION.json', 16384)
+          if len(selection_raw) != 3831 or hashlib.sha256(selection_raw).hexdigest() != '2ffbf26bc0a59bb55a549a665748e0f5693b005d98f50b3ac478850f6e786fbb':
+              raise ValueError('selected public control roster')
+          selection = json.loads(selection_raw)
+          total = 0
+          for group in selection['groups']:
+              value = json.loads(captured('RESULT-ci-' + group['group'] + '.json', 65536))
+              if (value['complete'] is not True or value['group'] != group['group']
+                  or value['task_source_manifest_sha256'] != '987410573a680c23a6e21157b96bc829c1480a5da8c0d8eb7620eee895e16daa'
+                  or value['first_error_type'] is not None or value['secondary_error_types'] != []
+                  or value['scientific_result'] is not False or value['native_qualification'] is not False
+                  or value['authentic_signal_bytes'] != 0):
+                  raise ValueError('complete matching engineering-only result')
+              checks = value['checks']
+              if [row['case'] for row in checks] != group['expected_case_outcomes'] or any(row['status'] != 'PASS' for row in checks):
+                  raise ValueError('exact ordered complete case roster')
+              transfer = value['transfer']
+              values = [transfer['read_reserved'], transfer['write_reserved'], transfer['cap']]
+              if (any(type(n) is not int or n < 0 for n in values)
+                  or transfer['cap'] != group['transfer_bytes']
+                  or transfer['read_reserved'] + transfer['write_reserved'] > transfer['cap']):
+                  raise ValueError('original managed-transfer envelope')
+              total += len(checks)
+          if total != 35:
+              raise ValueError('all35 engineering outcomes required')
+          print(json.dumps({'engineering_checks': total, 'scientific_execution': False, 'scientific_qualification': False}, sort_keys=True))
+          MORSE_RESULTS
