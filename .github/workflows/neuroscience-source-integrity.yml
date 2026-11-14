@@ -275,3 +275,102 @@ jobs:
               '--output', str(Path(os.environ['RUNNER_TEMP']) / 'neural083-owner-ci')]
           exec(compile(bytes(raw), str(p), 'exec'), {'__name__': '__main__', '__file__': str(p)})
           PY_BOOTSTRAP
+
+  neural002-morse-production-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Inspect the complete inactive Morse production source
+        run: timeout --signal=TERM --kill-after=5s 15s python3 -I -S -B benchmarks/neuroscience/neural-002/production-wiring-v3/inspect_source.py --inspect
+      - name: Check Morse boundary with invented fixtures
+        run: |
+          set -euo pipefail
+          task_root="$(pwd -P)/benchmarks/neuroscience/neural-002"
+          controls_root="$task_root/production-wiring-controls-v3"
+          timeout --signal=TERM --kill-after=5s 25s python3 -I -S -B "$controls_root/run_controls.py" \
+            --group boundary --package "$task_root/production-wiring-v3" --legacy "$task_root" \
+            --fixture-root "$controls_root/ci-boundary" --output "$controls_root/RESULT-ci-boundary.json" \
+            --selection-bytes 3831 --selection-sha256 2ffbf26bc0a59bb55a549a665748e0f5693b005d98f50b3ac478850f6e786fbb \
+            --transfer-bytes 8388608 --seconds 20
+      - name: Check Morse full_positive with invented fixtures
+        run: |
+          set -euo pipefail
+          task_root="$(pwd -P)/benchmarks/neuroscience/neural-002"
+          controls_root="$task_root/production-wiring-controls-v3"
+          timeout --signal=TERM --kill-after=5s 45s python3 -I -S -B "$controls_root/run_controls.py" \
+            --group full_positive --package "$task_root/production-wiring-v3" --legacy "$task_root" \
+            --fixture-root "$controls_root/ci-full_positive" --output "$controls_root/RESULT-ci-full_positive.json" \
+            --selection-bytes 3831 --selection-sha256 2ffbf26bc0a59bb55a549a665748e0f5693b005d98f50b3ac478850f6e786fbb \
+            --transfer-bytes 79691776 --seconds 40
+      - name: Check Morse full_last_failure with invented fixtures
+        run: |
+          set -euo pipefail
+          task_root="$(pwd -P)/benchmarks/neuroscience/neural-002"
+          controls_root="$task_root/production-wiring-controls-v3"
+          timeout --signal=TERM --kill-after=5s 45s python3 -I -S -B "$controls_root/run_controls.py" \
+            --group full_last_failure --package "$task_root/production-wiring-v3" --legacy "$task_root" \
+            --fixture-root "$controls_root/ci-full_last_failure" --output "$controls_root/RESULT-ci-full_last_failure.json" \
+            --selection-bytes 3831 --selection-sha256 2ffbf26bc0a59bb55a549a665748e0f5693b005d98f50b3ac478850f6e786fbb \
+            --transfer-bytes 79691776 --seconds 40
+      - name: Check Morse storage with invented fixtures
+        run: |
+          set -euo pipefail
+          task_root="$(pwd -P)/benchmarks/neuroscience/neural-002"
+          controls_root="$task_root/production-wiring-controls-v3"
+          timeout --signal=TERM --kill-after=5s 35s python3 -I -S -B "$controls_root/run_controls.py" \
+            --group storage --package "$task_root/production-wiring-v3" --legacy "$task_root" \
+            --fixture-root "$controls_root/ci-storage" --output "$controls_root/RESULT-ci-storage.json" \
+            --selection-bytes 3831 --selection-sha256 2ffbf26bc0a59bb55a549a665748e0f5693b005d98f50b3ac478850f6e786fbb \
+            --transfer-bytes 25165824 --seconds 30
+      - name: Require all thirty-five exact Morse engineering outcomes
+        run: |
+          python3 -I -S -B - <<'MORSE_RESULTS'
+          import hashlib, json, os, stat
+          from pathlib import Path
+          root = Path('benchmarks/neuroscience/neural-002/production-wiring-controls-v3').absolute()
+          def captured(name, limit):
+              p = root / name
+              before = p.lstat()
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or not 0 < before.st_size <= limit:
+                  raise ValueError('bounded ordinary CI result/source')
+              fd = os.open(p, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+              with os.fdopen(fd, 'rb') as stream:
+                  raw = stream.read(limit + 1)
+                  after = os.fstat(stream.fileno())
+              stamp = lambda s: (s.st_dev, s.st_ino, s.st_size, s.st_mtime_ns, s.st_ctime_ns)
+              if stamp(before) != stamp(after) or stamp(before) != stamp(p.lstat()) or len(raw) != before.st_size:
+                  raise ValueError('stable complete CI result/source capture')
+              return raw
+          selection_raw = captured('CONTROL_SELECTION.json', 16384)
+          if len(selection_raw) != 3831 or hashlib.sha256(selection_raw).hexdigest() != '2ffbf26bc0a59bb55a549a665748e0f5693b005d98f50b3ac478850f6e786fbb':
+              raise ValueError('selected public control roster')
+          selection = json.loads(selection_raw)
+          total = 0
+          for group in selection['groups']:
+              value = json.loads(captured('RESULT-ci-' + group['group'] + '.json', 65536))
+              if (value['complete'] is not True or value['group'] != group['group']
+                  or value['task_source_manifest_sha256'] != '987410573a680c23a6e21157b96bc829c1480a5da8c0d8eb7620eee895e16daa'
+                  or value['first_error_type'] is not None or value['secondary_error_types'] != []
+                  or value['scientific_result'] is not False or value['native_qualification'] is not False
+                  or value['authentic_signal_bytes'] != 0):
+                  raise ValueError('complete matching engineering-only result')
+              checks = value['checks']
+              if [row['case'] for row in checks] != group['expected_case_outcomes'] or any(row['status'] != 'PASS' for row in checks):
+                  raise ValueError('exact ordered complete case roster')
+              transfer = value['transfer']
+              values = [transfer['read_reserved'], transfer['write_reserved'], transfer['cap']]
+              if (any(type(n) is not int or n < 0 for n in values)
+                  or transfer['cap'] != group['transfer_bytes']
+                  or transfer['read_reserved'] + transfer['write_reserved'] > transfer['cap']):
+                  raise ValueError('original managed-transfer envelope')
+              total += len(checks)
+          if total != 35:
+              raise ValueError('all35 engineering outcomes required')
+          print(json.dumps({'engineering_checks': total, 'scientific_execution': False, 'scientific_qualification': False}, sort_keys=True))
+          MORSE_RESULTS
