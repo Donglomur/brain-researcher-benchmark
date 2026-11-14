@@ -230,3 +230,44 @@ jobs:
           python-version: '3.11'
       - name: Check full-cohort NEURAL-083 preparation source
         run: python3 -I -S -B benchmarks/neuroscience/neural-083/test_preparation_source.py
+  neural083-linux-owner-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Check exact Linux process owners with twenty-three finite stdlib cases
+        run: |
+          python3 -I -S -B - <<'PY_BOOTSTRAP'
+          import hashlib, os, stat, sys
+          from pathlib import Path
+          p = Path('benchmarks/neuroscience/neural-083/adaptive-investigation-v1/tests/outer_owner.py').absolute()
+          if any(x.is_symlink() for x in (p, *p.parents)):
+              raise ValueError('unlinked exact outer source')
+          n = 40214
+          h = '2b368894e51986b7e45d8c9bd507b715ae51f827daeeef54b368105fe1496e95'
+          st = p.lstat()
+          if not stat.S_ISREG(st.st_mode) or st.st_nlink != 1 or st.st_size != n or n > 65536:
+              raise ValueError('exact bounded outer source extent')
+          fd = os.open(p, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+          try:
+              raw = bytearray()
+              while len(raw) < n + 1:
+                  part = os.read(fd, n + 1 - len(raw))
+                  if not part:
+                      break
+                  raw.extend(part)
+              after = os.fstat(fd)
+          finally:
+              os.close(fd)
+          stamp = lambda s: (s.st_dev, s.st_ino, s.st_mode, s.st_nlink, s.st_size, s.st_mtime_ns, s.st_ctime_ns)
+          if stamp(st) != stamp(after) or stamp(st) != stamp(p.lstat()) or len(raw) != n or hashlib.sha256(raw).hexdigest() != h:
+              raise ValueError('stable captured exact outer source')
+          sys.argv = [str(p), '--harness', str(p.parent / 'owner_controls.py'),
+              '--harness-bytes', '33730', '--harness-sha256', '319ecd92b826ed6125e172e6d310506041d13493ed71d1feb58b24366d4ccc80',
+              '--selection', str(p.parent / 'source_selection.json'),
+              '--selection-bytes', '1548', '--selection-sha256', '13dfbd310302a20190d1a4d377d68f7419d9f7c6e755bb88b8b3c0a816e063ce',
+              '--output', str(Path(os.environ['RUNNER_TEMP']) / 'neural083-owner-ci')]
+          exec(compile(bytes(raw), str(p), 'exec'), {'__name__': '__main__', '__file__': str(p)})
+          PY_BOOTSTRAP
