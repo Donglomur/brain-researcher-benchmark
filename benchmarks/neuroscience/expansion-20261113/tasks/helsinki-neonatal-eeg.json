@@ -1,0 +1,170 @@
+{
+  "schema": "neuroscience-construction-draft-v1",
+  "id": "NEURAL-EXP-005",
+  "slug": "helsinki-neonatal-eeg",
+  "track": "neural",
+  "title": "Uncertainty-aware neonatal seizure evidence from held-infant EEG",
+  "state": {
+    "stage": "registered_construction_draft",
+    "runnable": false,
+    "reference_results_qualified": false,
+    "scientifically_qualified": false,
+    "submission_ready": false
+  },
+  "source_families": [
+    "zenodo:1280683"
+  ],
+  "source_version": "zenodo:4940267-v4",
+  "source_pins": [
+    {
+      "source_id": "neural-expansion-contracts-v3",
+      "bytes": 63875,
+      "sha256": "8b2a5dd8b88d298670a53a74a18bae25cbe67596e5be7a0fdb723a12c71736d5",
+      "selector": {
+        "temporary_id": "NEURAL-EXP-005"
+      }
+    },
+    {
+      "source_id": "registered-expansion-20261113-v2",
+      "bytes": 11688,
+      "sha256": "c2ff7062f1a654e017171d2b836a51ea91e277618b3707f4e672f86b1fe68c68"
+    },
+    {
+      "source_id": "root-helsinki-quality-flag-protocol-selection-20261113",
+      "bytes": 3741,
+      "sha256": "0963ba9ca0e277d950efc9a422f35cbc16f61fca7379772a11d1eb13f30f1991"
+    },
+    {
+      "source_id": "helsinki-quality-flag-amendment-proposal-v1",
+      "bytes": 5150,
+      "sha256": "90ffc13457c6a27852929f840145492a90da942b6c54b2d37440e4e4dfa66dfe"
+    },
+    {
+      "source_id": "helsinki-quality-flag-amendment-opinion-v1",
+      "bytes": 5127,
+      "sha256": "9adf538479263eeca0dcdbd5ae4cc5f431a1943b979395feb80c6a88daa3c981"
+    },
+    {
+      "source_id": "programme-construction-plan-observation-20261113",
+      "bytes": 10537,
+      "sha256": "0a45068859446ab99cd4f83e8ba5e5ae2f8df55cc20d67ed57584a47183c6010"
+    }
+  ],
+  "paper": {
+    "title": "A dataset of neonatal EEG recordings with seizure annotations",
+    "doi": "10.1038/sdata.2019.39",
+    "url": "https://www.nature.com/articles/sdata201939",
+    "venue": "Scientific Data",
+    "publication_date": "2019-03-05"
+  },
+  "code": {
+    "url": "https://github.com/ktapani/Neonatal_Seizure_Detection",
+    "selected_commit": "1a59e4b414f28aba52e61c3360fdc324199071b4",
+    "immutable_tree_url": "https://github.com/ktapani/Neonatal_Seizure_Detection/tree/1a59e4b414f28aba52e61c3360fdc324199071b4",
+    "license": "MIT",
+    "montage_source": "Neonatal_Seizure_Detection_Algorithm/neonatal_sez_det/read_data_montage.m",
+    "montage_sha256": "57196447f307d35e981b57fab8179dd9bddde9be02badaad5db654e4adfef4dd",
+    "baseline_hold": "Supplied pretrained models are not assumed uncontaminated; exact training membership or a faithful train-only refit is required."
+  },
+  "data": [
+    {
+      "url": "https://zenodo.org/records/4940267",
+      "doi": "10.5281/zenodo.4940267",
+      "version": "v4 as designated on the official landing page; API version field was absent.",
+      "correction": "Use the corrected annotations_2017_A_fixed.csv alignment.",
+      "edf_recordings": 79,
+      "release_files": 85,
+      "release_bytes": 4336766847,
+      "license": "CC-BY-4.0",
+      "cohort": "79 term neonates at a single centre; seizure-enriched recordings with three expert annotations.",
+      "local_full79_qualification": false
+    }
+  ],
+  "conditions": {
+    "direct_investigation": "A fixed general LLM investigates each blinded case using admitted EEG, bounded deterministic analysis and qualified training-only baseline tools, then commits a probability and evidence explanation before labels are released.",
+    "program_in_advance": "The same LLM uses the same training/development information to write one hash-frozen predictor before opening the held fold; no per-case model interaction.",
+    "optional_no_tools_ablation": "A numerical or waveform-rendering arm is separately labelled and requires measured information/representation equivalence; context-driven downsampling is not assumed equivalent.",
+    "fairness": "Match model revision, scientific knowledge, data and baseline access. Account separately for model tokens/calls, computation, fitting, memory and storage, including program authorship.",
+    "counting": "One task and acquisition family; windows, folds, arms, expert labels and ablations add no benchmarks."
+  },
+  "active_protocol": {
+    "id": "helsinki_full_timestamp_quality_flags_v1",
+    "status": "Selected for source construction and finite engineering verification only; scientifically unqualified.",
+    "original_v3": "Preserved and unqualified; the quality-flag amendment has a distinct identity. Its results must not be relabelled or pooled as V3 results.",
+    "selection_pin": {
+      "source_id": "root-helsinki-quality-flag-protocol-selection-20261113",
+      "bytes": 3741,
+      "sha256": "0963ba9ca0e277d950efc9a422f35cbc16f61fca7379772a11d1eb13f30f1991"
+    },
+    "support": "All 79 infants and every integer k=29,...,floor(T)-1 from each authenticated recording. Predict the final interval [k,k+1) from exactly [k-29,k+1), a 30-second causal context. Seconds 0..28 and final incomplete seconds are outside this fixed support, with counts reported.",
+    "inputs": "Preserve original stored/calibrated EEG values and all three aligned binary expert labels. Authenticate sampling rate, units and the original 18-bipolar-channel montage; ECG is excluded from the primary EEG input.",
+    "flags": "Original-input-derived zero-bipolar/flatline quality flags. They are not verified missingness, pause intervals or complete signal-availability truth. The present exact-zero detector is unvalidated.",
+    "flag_freeze": "Freeze detector, numerical calibration, channel set, resolution and thresholds before held labels or model outputs inform them.",
+    "equal_flags": "Every arm and control receives identical flags derived from original inputs on original timestamps; do not recompute masks from replacement noise or amplitude-only inputs.",
+    "prohibitions": [
+      "No infant, timestamp or label deletion.",
+      "No fabricated, interpolated or substituted zeros presented as genuine signal.",
+      "No two-expert fallback or altered denominator."
+    ],
+    "completeness": "Require exactly one finite probability in [0,1] for every primary case with the correct binding. Missing, extra, duplicate, malformed or wrong-binding predictions prevent the full primary score.",
+    "descriptive_strata": [
+      "No flagged context.",
+      "Flagged earlier context with the final second unflagged.",
+      "Final second flagged."
+    ],
+    "stratum_reporting": "Freeze per-infant denominators and coverage; empty strata are undefined. No selected stratum replaces the full primary score.",
+    "case_isolation": "Use a fresh participant context and process for every case in both investigation and frozen-program routes. Permit only that case's causal window and immutable training-derived artifacts; no cross-case memory or access to later/overlapping windows that could reveal future signal. Actual host enforcement remains unqualified."
+  },
+  "endpoints": {
+    "reference_reproduction": "Before model evaluation, reproduce a scientifically qualified author comparator with verified training membership or a faithful train-only refit; full comparator reproduction remains a gate.",
+    "primary": {
+      "name": "Infant-macro soft-vote Brier loss",
+      "target": "q=(a1+a2+a3)/3 for the three aligned original binary expert labels.",
+      "formula": "(p-q)^2",
+      "aggregation": "Average every primary timestamp within each infant, then weight all 79 infants equally, regardless of quality flags.",
+      "interpretation": "Expert vote fraction is the target, not verified unique clinical truth."
+    },
+    "separate_expert_scores": "Report each expert's Brier and their mean separately: mean expert Brier = (p-q)^2 + q*(1-q). It is not the same numeric score as soft-vote Brier.",
+    "secondary": "Continuous event sensitivity and false positives/hour at a development-frozen operating point, after event matching/tolerance definitions are frozen.",
+    "comparison": "Paired predictive and resource comparisons across investigation, frozen-program and qualified baseline conditions; no clinical deployment or SOTA claim."
+  },
+  "experimental_unit": "Infant; windows, seizures, channels and annotators are nested or repeated measurements.",
+  "split": "Freeze five infant-grouped folds across all 79 infants using a published cryptographic-hash seed; whole recordings stay together. Reserve development infants within each training fold. Audit seizure support before model results; no favorable post-hoc fold changes or cross-fold normalization.",
+  "comparators": [
+    "Training-fold prevalence prior, calibrated on development infants.",
+    "Qualified train-only author algorithm or documented faithful refit.",
+    "Train-only feature/SVM and temporal-convolution comparators, with interfaces and budgets still to qualify.",
+    "Mask-only comparator using the identical original-input quality flags."
+  ],
+  "signal_controls": [
+    "Source-signal comparison.",
+    "Training-only independent noise, retaining all original cases, labels and original-input flags.",
+    "Amplitude-only comparator with identical original-input flags.",
+    "Prior comparison.",
+    "Optional phase-randomization and provenance-qualified ECG-only analyses remain separately specified controls."
+  ],
+  "leakage_controls": [
+    "Opaque case identifiers; exclude original filenames, infant IDs, absolute recording offset, expert labels and clinical reports from candidates.",
+    "Keep labels evaluator-owned and preprocessing/calibration train-only.",
+    "Public-label and acquisition-correlation caveats must be reported."
+  ],
+  "rights": {
+    "data": "CC-BY-4.0 reported by the official record.",
+    "code": "MIT; MATLAB runtime/license and dependency admission remain separate gates."
+  },
+  "resources": {
+    "complete_release_bytes": 4336766847,
+    "minimum_scientific_scope": "All 79 recordings and three corrected expert streams, not one convenient EDF.",
+    "runtime_and_model_budget": "Unmeasured and not activated; profile authentic inputs and freeze model/tool/computation limits before evaluation."
+  },
+  "construction_gates": [
+    "Validate actual EDF/header units, channel montage, corrected annotation alignment and full timestamp support.",
+    "Calibrate the input-only quality detector; retain the quality-flag interpretation if pause identification remains uncertain.",
+    "Resolve pretrained training membership or implement qualified train-only refits.",
+    "Validate all baselines and required signal/mask/prior controls on identical cases.",
+    "Qualify protected scorer, causal interface, resource isolation and complete probability bindings.",
+    "Qualify fresh per-case context/process enforcement so overlapping windows cannot leak future EEG."
+  ],
+  "contamination_limit": "All labels are public. Local held-infant folds do not establish unseen model training data; an independent unreleased acquisition is needed for a strong contamination-resistant claim.",
+  "uncertainty": "Resample infants for grouped uncertainty; windows and experts are not independent experimental units."
+}

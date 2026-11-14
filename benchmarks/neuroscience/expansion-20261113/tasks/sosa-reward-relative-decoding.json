@@ -1,0 +1,144 @@
+{
+  "schema": "neuroscience-construction-draft-v1",
+  "id": "PAPER-EXP-20261113-004",
+  "slug": "sosa-reward-relative-decoding",
+  "track": "paper",
+  "title": "A flexible hippocampal population code for experience relative to reward",
+  "state": {
+    "stage": "registered_construction_draft",
+    "runnable": false,
+    "reference_results_qualified": false,
+    "scientifically_qualified": false,
+    "submission_ready": false
+  },
+  "source_families": [
+    "figshare:27098065",
+    "figshare:27138633",
+    "dandi:001361"
+  ],
+  "source_pins": [
+    {
+      "source_id": "paper-expansion-contracts-v5",
+      "bytes": 53169,
+      "sha256": "a2d24ddbe6e7480a3b5a0e07b4c84eba7e98cb28b7f910ee802919839d2ba821",
+      "selector": {
+        "candidate_id": "PAPER-EXP-20261113-004"
+      }
+    },
+    {
+      "source_id": "registered-expansion-20261113-v2",
+      "bytes": 11688,
+      "sha256": "c2ff7062f1a654e017171d2b836a51ea91e277618b3707f4e672f86b1fe68c68"
+    }
+  ],
+  "paper": {
+    "doi": "10.1038/s41593-025-01985-4",
+    "url": "https://www.nature.com/articles/s41593-025-01985-4",
+    "venue": "Nature Neuroscience",
+    "publication_date": "2025-06-11"
+  },
+  "code": {
+    "url": "https://github.com/GiocomoLab/Sosa_et_al_2024",
+    "observed_main_commit": "adf0f9ed3defa22275d92fa0ed996f47008e05b3",
+    "historical_paper_commit": "Unresolved; current main is not proof of the published version.",
+    "license": "MIT"
+  },
+  "data": [
+    {
+      "url": "https://doi.org/10.25452/figshare.plus.27098065",
+      "version": 1,
+      "role": "Preprocessed fluorescence/behavior for recomputation.",
+      "archive_bytes": 134494791807,
+      "selected_seven_switch_day_bytes": 71486162858,
+      "license": "CC-BY-4.0"
+    },
+    {
+      "url": "https://doi.org/10.25452/figshare.plus.27138633",
+      "version": 1,
+      "role": "Postprocessed reward-relative identities: reference/reconstruction material only, excluded from hidden-prediction input.",
+      "switch_day_bytes": 11495726090,
+      "all_day_bytes": 22558058915,
+      "license": "CC-BY-4.0"
+    },
+    {
+      "url": "https://doi.org/10.48324/dandi.001361/0.250406.0045",
+      "version": "0.250406.0045",
+      "archive_bytes": 92560251500,
+      "files": 152,
+      "subjects": 11,
+      "license": "CC-BY-4.0"
+    }
+  ],
+  "conditions": {
+    "A": "Full paper, admitted input data and neutral schema/loader documentation.",
+    "B": "The identical input data and resource envelope, plus the historically qualified official analysis code.",
+    "shared_rules": [
+      "Keep grader, held targets, stored reference outputs and full-cohort fitted transforms outside candidate access.",
+      "Disable scored-work network access; freeze candidate submissions and record data/code/environment identities.",
+      "Require actual computation, complete scoped coverage, raw estimates or predictions and a deviation report. A copied figure or printed number cannot establish reproduction."
+    ],
+    "counting": "A/B conditions, reproduction/improvement endpoints and folds remain within one registered task."
+  },
+  "reproduction": {
+    "scope": "Complete Figure 2 and Figure 3 analyses for all 11 switching mice and seven switch days, preserving published exclusions, shuffle classifications, occupancy matching and decoding conventions.",
+    "required_outputs": [
+      "Mouse/day remapping fractions, cell-class census, shuffle distributions and seeds.",
+      "Per-session circular decoder scores and figure-level estimates.",
+      "Complete inclusion, original statistical decisions and deviation traces."
+    ],
+    "metric": "Quantitative table agreement with evaluator-only source data and an independently rebuilt official reference; numeric/stochastic tolerances remain uncalibrated.",
+    "interpretation": "Descriptive reproduction. The paper's reported effect sizes must not be described as accuracy percentages."
+  },
+  "improvement": {
+    "kind": "Prospective chronological decoding extension.",
+    "target": "Paper-defined circular reward-relative position after reward relocation.",
+    "primary_metric": "cos(theta_RR - predicted_theta_RR), averaged within held sessions and then equally across held animals; paired gain over matched official baseline.",
+    "coordinate_gate": "Pin the historical position/reward-to-angle transform, origin, track bounds, teleport handling, wrap and units. No guessed generic modulo transform.",
+    "split": "Outer leave-one-mouse-out algorithm selection. Within each held session use pre-switch trials and the first chronological 50% of complete post-switch laps for calibration, one complete lap as guard gap, then the remaining post-switch laps for evaluation. Apply identically to candidate and comparator.",
+    "comparators": [
+      "Calibration-only official circular-linear decoder.",
+      "Occupancy-matched circular shuffle.",
+      "Optional no-reward-relative-cell-selection comparator."
+    ],
+    "support": "Verify complete cohort/session support before exposure. Insufficient support prevents qualification instead of dropping animals.",
+    "query_allowlist": [
+      "Opaque session/trial sequence identifiers.",
+      "Causal admitted neural features.",
+      "Relative within-window sample clock and required missingness mask."
+    ],
+    "query_exclusions": [
+      "Evaluation position, reward locations/delivery timestamps and lap-boundary position resets.",
+      "Licking, speed, video/VR or behavioral proxies for location.",
+      "Postprocessed cell identities or classifications fitted with evaluation trials.",
+      "Target-bearing filenames, metadata and caches."
+    ],
+    "owner_only": "Evaluation position/reward metadata, occupancy weighting and scored targets remain evaluator-owned; calibration labels are separately admitted. Fit cell selection and decoders only from calibration.",
+    "direction": "Higher mean cosine score is better."
+  },
+  "experimental_unit": "Mouse; all days, sessions and cells from one animal share the outer fold.",
+  "uncertainty": "Paired animal-level effects; 77 switch sessions are not 77 independent animals.",
+  "leakage_controls": [
+    "Keep fluorescence/behavior needed for reproduction separate from the improvement query allowlist.",
+    "Match calibration, channels and resource limits for candidate and official comparator.",
+    "Require original predictions, cell census and split traces."
+  ],
+  "rights": {
+    "code": "MIT.",
+    "data": "CC-BY-4.0 reported by the three acquisition records.",
+    "serialization": "Authenticate serialized inputs and safe loader custody before reading pickles."
+  },
+  "resources": {
+    "documented_ram": "32 GB minimum; 64 GB recommended for all animals/days.",
+    "selected_switch_day_bytes": 71486162858,
+    "measured_runtime": null,
+    "streaming_or_reduction_validated": false
+  },
+  "construction_gates": [
+    "Authenticate historical code and individual data-file identities.",
+    "Resolve cohort/session/cell membership and safe loaders.",
+    "Pin exact circular coordinates and chronological support.",
+    "Run the full official reference and freeze stochastic tolerances.",
+    "Implement protected split and neural-only query interfaces."
+  ],
+  "contamination_limit": "Public data and labels remain exposed; offline grading and frozen submissions do not prove pretraining independence."
+}
