@@ -622,3 +622,62 @@ jobs:
           overwrite: false
           include-hidden-files: false
           path: ${{ runner.temp }}/neural006-broker-controls-v4/
+
+  horrocks-construction-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Run unchanged 42 controls in a bounded isolated Linux process tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 022
+          HORROCKS_ROOT="/tmp/horrocks-construction-controls-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          HORROCKS_SOURCE="$GITHUB_WORKSPACE/benchmarks/neuroscience/expansion-20261113/horrocks-construction-v1"
+          HORROCKS_PYTHON="$(python -I -S -B -c 'import sys; print(sys.executable)')"
+          /usr/bin/timeout --signal=KILL 10s "$HORROCKS_PYTHON" -I -S -B -c "import hashlib,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]); s=p.lstat(); assert stat.S_ISREG(s.st_mode) and s.st_size==int(sys.argv[2]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})" "$HORROCKS_SOURCE/ci_owner.py" 23213 b875699f5e750622ce1b4ea46a2e93bbabb328b111b3c00cc23cc730d1af7abf prepare --root "$HORROCKS_ROOT" --selection-sha256 aef6a4d1b689bb23667b300e5407131eb52b8c8d9299b93ec456ff6cd51afae8
+          IFS= read -r HORROCKS_LIBRARY < "$HORROCKS_ROOT/PYTHON_LIBRARY_DIR.txt"
+          /usr/bin/sudo -n /usr/bin/chown 65534:65534 "$HORROCKS_ROOT/inner"
+          set +e
+          /usr/bin/sudo -n /usr/bin/timeout --signal=KILL 40s /usr/bin/unshare --fork --pid --net --mount-proc --kill-child=KILL /usr/bin/setpriv --reuid=65534 --regid=65534 --clear-groups --inh-caps=-all --ambient-caps=-all --bounding-set=-all --no-new-privs --pdeathsig=KILL /usr/bin/env -i PATH=/usr/bin:/bin LANG=C.UTF-8 "LD_LIBRARY_PATH=$HORROCKS_LIBRARY" "$HORROCKS_PYTHON" -I -S -B "$HORROCKS_ROOT/source/ci_owner.py" inner --root "$HORROCKS_ROOT" --selection-sha256 aef6a4d1b689bb23667b300e5407131eb52b8c8d9299b93ec456ff6cd51afae8 >"$HORROCKS_ROOT/outer/namespace.stdout" 2>"$HORROCKS_ROOT/outer/namespace.stderr"
+          HORROCKS_OUTER_STATUS=$?
+          set -e
+          printf '%s\n' "$HORROCKS_OUTER_STATUS" >"$HORROCKS_ROOT/outer/namespace.status"
+          /usr/bin/timeout --signal=KILL 10s "$HORROCKS_PYTHON" -I -S -B -c "import hashlib,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]); s=p.lstat(); assert stat.S_ISREG(s.st_mode) and s.st_size==int(sys.argv[2]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})" "$HORROCKS_SOURCE/ci_owner.py" 23213 b875699f5e750622ce1b4ea46a2e93bbabb328b111b3c00cc23cc730d1af7abf finish --root "$HORROCKS_ROOT" --selection-sha256 aef6a4d1b689bb23667b300e5407131eb52b8c8d9299b93ec456ff6cd51afae8 --outer-status "$HORROCKS_OUTER_STATUS"
+      - name: Retain explicit failure diagnostics when setup or admission is incomplete
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          HORROCKS_ROOT="/tmp/horrocks-construction-controls-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          if [ ! -f "$HORROCKS_ROOT/artifact/ADMISSION.json" ]; then
+            mkdir -p "$HORROCKS_ROOT/artifact"
+            printf '%s\n' 'FAILED_OR_INCOMPLETE: no admitted result; this diagnostic is not evidence of 42 passing controls. Consult the complete job logs.' >"$HORROCKS_ROOT/artifact/FAILED_SETUP.txt"
+            for HORROCKS_REL in PREPARE.json outer/namespace.stdout outer/namespace.stderr outer/namespace.status outer/OBSERVATION.json inner/ISOLATION.json inner/OWNER_RESULT.json inner/attempt/REQUEST.json inner/attempt/OBSERVATION.json inner/attempt/stdout.bin inner/attempt/stderr.bin inner/attempt/fixtures/RESULT.json; do
+              if [ -f "$HORROCKS_ROOT/$HORROCKS_REL" ] && [ ! -L "$HORROCKS_ROOT/$HORROCKS_REL" ]; then
+                HORROCKS_BYTES="$(wc -c < "$HORROCKS_ROOT/$HORROCKS_REL")"
+                if [ "$HORROCKS_BYTES" -le 131072 ]; then
+                  mkdir -p "$HORROCKS_ROOT/artifact/$(dirname "$HORROCKS_REL")"
+                  cp -- "$HORROCKS_ROOT/$HORROCKS_REL" "$HORROCKS_ROOT/artifact/$HORROCKS_REL"
+                else
+                  printf '%s\n' "$HORROCKS_REL exceeded the diagnostic bound; evidence is incomplete." >>"$HORROCKS_ROOT/artifact/FAILED_SETUP.txt"
+                fi
+              fi
+            done
+          fi
+      - name: Retain complete bounded Horrocks engineering evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: horrocks-construction-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: /tmp/horrocks-construction-controls-${{ github.run_id }}-${{ github.run_attempt }}/artifact/
