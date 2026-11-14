@@ -1,0 +1,51 @@
+name: PFC conditional-null mathematical controls
+
+on:
+  pull_request:
+    paths:
+      - 'components/pfc-conditional-null/**'
+      - '.github/workflows/pfc-conditional-null.yml'
+  push:
+    branches: ['publish/neuroscience-200']
+    paths:
+      - 'components/pfc-conditional-null/**'
+      - '.github/workflows/pfc-conditional-null.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  invented-mathematical-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Run twelve invented-only mathematical controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          PFC_CONTROL_ROOT="/tmp/pfc-conditional-null-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$PFC_CONTROL_ROOT"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 35s python -I -S -B components/pfc-conditional-null/test_conditional_kernel.py -v >"$PFC_CONTROL_ROOT/stdout.log" 2>"$PFC_CONTROL_ROOT/stderr.log"
+          PFC_CONTROL_STATUS=$?
+          set -e
+          printf '%s\n' "$PFC_CONTROL_STATUS" >"$PFC_CONTROL_ROOT/exit-status.txt"
+          exit "$PFC_CONTROL_STATUS"
+      - name: Retain complete test streams and exit status
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pfc-conditional-null-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: /tmp/pfc-conditional-null-${{ github.run_id }}-${{ github.run_attempt }}/
