@@ -205,6 +205,10 @@ jobs:
           python-version: '3.11'
       - name: Check THINGS complete source and owned materialization
         run: python3 -I -S -B benchmarks/neuroscience/neural-055/test_portability.py
+      - name: Materialize and inspect the current THINGS source
+        run: >-
+          python3 -I -S -B benchmarks/neuroscience/neural-055/postscore_source_entry.py
+          --materialize "${RUNNER_TEMP}/neural055-current-source" --inspect
   neural017-mc-maze-source:
     runs-on: ubuntu-24.04
     timeout-minutes: 5

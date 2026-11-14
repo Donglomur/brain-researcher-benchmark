@@ -1,0 +1,72 @@
+{
+  "$id": "BROKER_RESPONSE_SCHEMA.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "cell": {
+      "$ref": "CELL_SCHEMA.json"
+    },
+    "error": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lease": {
+      "type": "string"
+    },
+    "original_process": {
+      "description": "Host-provided process evidence; never participant-controlled authority."
+    },
+    "phase": {
+      "enum": [
+        "FIT",
+        "INFER"
+      ]
+    },
+    "request_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "result": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "schema": {
+      "const": "neural055-broker-response-v3"
+    },
+    "sequence": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "ok",
+        "unavailable"
+      ]
+    },
+    "usage": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "schema",
+    "lease",
+    "cell",
+    "phase",
+    "sequence",
+    "request_sha256",
+    "status",
+    "result",
+    "error",
+    "usage",
+    "original_process"
+  ],
+  "title": "BROKER_RESPONSE_SCHEMA",
+  "type": "object"
+}

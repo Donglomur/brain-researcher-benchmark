@@ -1,0 +1,129 @@
+{
+  "$id": "PREEXPOSURE_POLICY_SCHEMA.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "F": {
+      "additionalProperties": false,
+      "properties": {
+        "dependencies": {
+          "type": "array"
+        },
+        "inference_restrictions": {},
+        "initializer": {
+          "const": "fresh_full_cell_and_phase_from_permitted_seal"
+        },
+        "services": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_sha256",
+        "initializer",
+        "dependencies",
+        "services",
+        "inference_restrictions"
+      ],
+      "type": "object"
+    },
+    "I": {
+      "additionalProperties": false,
+      "properties": {
+        "dependencies": {
+          "type": "array"
+        },
+        "inference_restrictions": {},
+        "initializer": {
+          "const": "fresh_full_cell_and_phase_from_permitted_seal"
+        },
+        "services": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_sha256",
+        "initializer",
+        "dependencies",
+        "services",
+        "inference_restrictions"
+      ],
+      "type": "object"
+    },
+    "common_dependencies": {},
+    "exposure_declaration": {},
+    "offline_costs": {},
+    "participant_interface": {
+      "additionalProperties": false,
+      "properties": {
+        "documents": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "properties": {
+              "bytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "sha256": {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "bytes",
+              "sha256"
+            ],
+            "type": "object"
+          },
+          "description": "Exact complete names and pins returned by inspect; subset acknowledgements are refused.",
+          "type": "object"
+        },
+        "schema": {
+          "const": "neural055-participant-interface-v4"
+        }
+      },
+      "required": [
+        "schema",
+        "documents"
+      ],
+      "type": "object"
+    },
+    "resource_policy": {
+      "const": {
+        "bytes": 5340,
+        "sha256": "b896b8e175cd401c70ed37584e9aa797407c89dd6d5e1c0e31b1ac286b79711a",
+        "version": "n055-measured-envelopes-v1"
+      }
+    },
+    "schema": {
+      "const": "neural055-complete-preexposure-policies-v3"
+    }
+  },
+  "required": [
+    "schema",
+    "F",
+    "I",
+    "common_dependencies",
+    "offline_costs",
+    "exposure_declaration",
+    "participant_interface",
+    "resource_policy"
+  ],
+  "title": "PREEXPOSURE_POLICY_SCHEMA",
+  "type": "object"
+}

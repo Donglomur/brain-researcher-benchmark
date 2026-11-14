@@ -1,0 +1,39 @@
+{
+  "$id": "OPERATIONS_SCHEMA.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "cell": {
+      "$ref": "CELL_SCHEMA.json"
+    },
+    "first_error": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "phase": {
+      "enum": [
+        "fit",
+        "infer"
+      ]
+    },
+    "records": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "schema": {
+      "const": "neural055-participant-operations-v3"
+    }
+  },
+  "required": [
+    "schema",
+    "cell",
+    "phase",
+    "records"
+  ],
+  "title": "OPERATIONS_SCHEMA",
+  "type": "object"
+}

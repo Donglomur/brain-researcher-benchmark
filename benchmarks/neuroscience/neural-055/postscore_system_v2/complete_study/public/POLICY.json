@@ -1,0 +1,51 @@
+{
+  "schema": "neural055-draft-policy-v1",
+  "status": "prospective_new_benchmark_design_choice",
+  "outcome_tuned": false,
+  "row_sum_abs_tolerance": 1e-06,
+  "renormalize_probabilities": false,
+  "independent_argmax_ties": "first_in_prospectively_frozen_public_candidate_order",
+  "log_loss": "natural_log_no_clipping",
+  "true_class_zero": "infinite",
+  "primary": "ten_participant_macro_assignment_top1",
+  "panel": {
+    "participants": 10,
+    "candidates_per_person": 200,
+    "query_repeats_averaged": 80,
+    "channels": 17,
+    "time_samples": 100
+  },
+  "development_concept_count": 330,
+  "development_concept_rule": "lowest SHA256(UTF8(\"NEURAL-055/draft1/concept-development/\" + original_THINGS_concept_id)) among1654 original training concepts; group all10 exemplars/allrepeats",
+  "outer": "all10 leave-one-person-out; policy development and fitting excludeouterperson",
+  "inner": "each of other9 people held out in turn, crossed with the same330 helddevelopment concepts; alllearned preprocessing follows this split",
+  "final_fit": "after fold-specific selection is frozen, permitted refit on all other9 peoples originaltrainingpartition; outer200query concepts remain excluded",
+  "provenance": "Explicit new draft choices made during construction, not asserted to be published author conventions or prior executed protocol.",
+  "independent_reference": {
+    "name": "ridge_all_whitened_coordinates_draft1",
+    "image_transform": "train-only feature centering/populationSD scaling; constantscale1",
+    "ridge_alpha": 1.0,
+    "EEG_target": "equal mean across eligible fitpeople; all1700 flattened coordinates",
+    "similarity": "Pearson across allcoordinates; zero-norm neutral0",
+    "not_author_reproduction": true
+  },
+  "reference_calibration": {
+    "temperature_grid": [
+      0.01,
+      0.02,
+      0.05,
+      0.1,
+      0.2,
+      0.5,
+      1.0,
+      2.0,
+      5.0,
+      10.0
+    ],
+    "objective": "equal-nine-inner-held-people natural-log loss, equalten exemplar panels/person",
+    "concepts": "fixed200 of330 development concepts by SHA256;ten deterministicone-exemplar/concept panels",
+    "exact_ties": "lowest listed temperature",
+    "exposure": "out-of-fit innerpeople andconcepts only; noouterquerytruth",
+    "limitation": "calibrates four-repeat training means; outerresponses average80repeats, so calibrationquality underSNRshift is evaluated, notassumed"
+  }
+}
