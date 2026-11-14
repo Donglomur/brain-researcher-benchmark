@@ -1,0 +1,52 @@
+name: PFC independent analytical baseline invented controls
+
+on:
+  pull_request:
+    paths:
+      - 'components/pfc-independent-analytical-baseline/**'
+      - '.github/workflows/pfc-independent-analytical-baseline.yml'
+  push:
+    branches: ['publish/neuroscience-200']
+    paths:
+      - 'components/pfc-independent-analytical-baseline/**'
+      - '.github/workflows/pfc-independent-analytical-baseline.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  invented-baseline-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Run twelve invented-only baseline controls
+        working-directory: components/pfc-independent-analytical-baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          PFC_BASELINE_CONTROL_ROOT="/tmp/pfc-independent-baseline-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$PFC_BASELINE_CONTROL_ROOT"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 35s python3 -I -S -B -c 'import sys, unittest; sys.flags.optimize == 0 or sys.exit("Tests require optimization disabled"); sys.path.insert(0, "."); suite = unittest.defaultTestLoader.loadTestsFromName("test_invented"); suite.countTestCases() == 12 or sys.exit("Expected exactly 12 tests"); result = unittest.TextTestRunner(verbosity=2).run(suite); raise SystemExit(not result.wasSuccessful())' >"$PFC_BASELINE_CONTROL_ROOT/stdout.log" 2>"$PFC_BASELINE_CONTROL_ROOT/stderr.log"
+          PFC_BASELINE_CONTROL_STATUS=$?
+          set -e
+          printf '%s\n' "$PFC_BASELINE_CONTROL_STATUS" >"$PFC_BASELINE_CONTROL_ROOT/exit-status.txt"
+          exit "$PFC_BASELINE_CONTROL_STATUS"
+      - name: Retain complete test streams and exit status
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pfc-independent-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: /tmp/pfc-independent-baseline-${{ github.run_id }}-${{ github.run_attempt }}/
