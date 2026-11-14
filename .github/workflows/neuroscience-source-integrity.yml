@@ -582,18 +582,18 @@ jobs:
       - name: Authenticate complete source and capture current Linux tool operands
         shell: bash
         run: |
-          timeout --signal=INT --kill-after=5s 15s python3 -I -S -B -c "import hashlib,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]).absolute(); s=p.lstat(); assert stat.S_ISREG(s.st_mode) and s.st_nlink==1 and s.st_size==int(sys.argv[2]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})" benchmarks/neuroscience/neural-006/broker-controls-v4/ci_source.py 18251 4425547d2cd4f80deec3ebbf9f8f60f228cee53b9d7e99a6bc01e040d804003b prepare
+          timeout --signal=INT --kill-after=5s 15s python3 -I -S -B -c "import hashlib,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]).absolute(); s=p.lstat(); assert stat.S_ISREG(s.st_mode) and s.st_nlink==1 and s.st_size==int(sys.argv[2]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})" benchmarks/neuroscience/neural-006/broker-controls-v4/ci_source.py 18251 6257b549a86695de1673d0b69b3f810938aafe9675830170a2a5dc6b13619228 prepare
       - name: Provision the exact immutable public amd64 image once
         shell: bash
         run: |
-          timeout --signal=INT --kill-after=5s 65s python3 -I -S -B -c "import hashlib,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]).absolute(); s=p.lstat(); assert stat.S_ISREG(s.st_mode) and s.st_nlink==1 and s.st_size==int(sys.argv[2]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})" benchmarks/neuroscience/neural-006/broker-controls-v4/ci_source.py 18251 4425547d2cd4f80deec3ebbf9f8f60f228cee53b9d7e99a6bc01e040d804003b provision
+          timeout --signal=INT --kill-after=5s 65s python3 -I -S -B -c "import hashlib,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]).absolute(); s=p.lstat(); assert stat.S_ISREG(s.st_mode) and s.st_nlink==1 and s.st_size==int(sys.argv[2]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})" benchmarks/neuroscience/neural-006/broker-controls-v4/ci_source.py 18251 6257b549a86695de1673d0b69b3f810938aafe9675830170a2a5dc6b13619228 provision
       - name: Run all unchanged fifty-seven inert controls once
         id: controls
         shell: bash
         run: |
           set -o noclobber
           set +e
-          timeout --signal=INT --kill-after=5s 65s python3 -I -S -B -c "import hashlib,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]).absolute(); s=p.lstat(); assert stat.S_ISREG(s.st_mode) and s.st_nlink==1 and s.st_size==int(sys.argv[2]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})" benchmarks/neuroscience/neural-006/broker-controls-v4/ci_source.py 18251 4425547d2cd4f80deec3ebbf9f8f60f228cee53b9d7e99a6bc01e040d804003b launch > "$RUNNER_TEMP/neural006-broker-controls-v4/owner.stdout" 2> "$RUNNER_TEMP/neural006-broker-controls-v4/owner.stderr"
+          timeout --signal=INT --kill-after=5s 65s python3 -I -S -B -c "import hashlib,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]).absolute(); s=p.lstat(); assert stat.S_ISREG(s.st_mode) and s.st_nlink==1 and s.st_size==int(sys.argv[2]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})" benchmarks/neuroscience/neural-006/broker-controls-v4/ci_source.py 18251 6257b549a86695de1673d0b69b3f810938aafe9675830170a2a5dc6b13619228 launch > "$RUNNER_TEMP/neural006-broker-controls-v4/owner.stdout" 2> "$RUNNER_TEMP/neural006-broker-controls-v4/owner.stderr"
           rc=$?
           printf '%s\n' "$rc" > "$RUNNER_TEMP/neural006-broker-controls-v4/OWNER_STATUS.txt"
           exit "$rc"
@@ -602,12 +602,12 @@ jobs:
         if: always()
         shell: bash
         run: |
-          timeout --signal=INT --kill-after=5s 25s python3 -I -S -B -c "import hashlib,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]).absolute(); s=p.lstat(); assert stat.S_ISREG(s.st_mode) and s.st_nlink==1 and s.st_size==int(sys.argv[2]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})" benchmarks/neuroscience/neural-006/broker-controls-v4/ci_source.py 18251 4425547d2cd4f80deec3ebbf9f8f60f228cee53b9d7e99a6bc01e040d804003b cleanup
+          timeout --signal=INT --kill-after=5s 25s python3 -I -S -B -c "import hashlib,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]).absolute(); s=p.lstat(); assert stat.S_ISREG(s.st_mode) and s.st_nlink==1 and s.st_size==int(sys.argv[2]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})" benchmarks/neuroscience/neural-006/broker-controls-v4/ci_source.py 18251 6257b549a86695de1673d0b69b3f810938aafe9675830170a2a5dc6b13619228 cleanup
       - name: Admit original natural-zero owner and exact ordered outcomes
         if: always()
         shell: bash
         run: |
-          timeout --signal=INT --kill-after=5s 15s python3 -I -S -B -c "import hashlib,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]).absolute(); s=p.lstat(); assert stat.S_ISREG(s.st_mode) and s.st_nlink==1 and s.st_size==int(sys.argv[2]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})" benchmarks/neuroscience/neural-006/broker-controls-v4/ci_source.py 18251 4425547d2cd4f80deec3ebbf9f8f60f228cee53b9d7e99a6bc01e040d804003b admit --owner-outcome '${{ steps.controls.outcome }}' --closure-outcome '${{ steps.closure.outcome }}'
+          timeout --signal=INT --kill-after=5s 15s python3 -I -S -B -c "import hashlib,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]).absolute(); s=p.lstat(); assert stat.S_ISREG(s.st_mode) and s.st_nlink==1 and s.st_size==int(sys.argv[2]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})" benchmarks/neuroscience/neural-006/broker-controls-v4/ci_source.py 18251 6257b549a86695de1673d0b69b3f810938aafe9675830170a2a5dc6b13619228 admit --owner-outcome '${{ steps.controls.outcome }}' --closure-outcome '${{ steps.closure.outcome }}'
       - name: Retain complete bounded public engineering evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

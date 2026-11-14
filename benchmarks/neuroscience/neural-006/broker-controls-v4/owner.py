@@ -291,7 +291,7 @@ class Owner:
              'no container log-driver persistence; attach streams retained by owner')
         need(host['Memory'] == 536870912 and host['MemorySwap'] == 536870912 and
              host['NanoCpus'] == 2000000000 and host['PidsLimit'] == 12 and
-             host['Tmpfs'] == {'/n006': 'rw,nosuid,nodev,noexec,size=16m,mode=1777',
+             host['Tmpfs'] == {'/n006': 'rw,nosuid,nodev,noexec,size=16m,mode=0700,uid=65534,gid=65534',
              '/tmp': 'rw,nosuid,nodev,noexec,size=8m,mode=1777'}, 'fixed finite resource/private-storage limits')
         need(cfg['User'] == '65534:65534' and cfg['WorkingDir'] == '/' and cfg['Entrypoint'] == ['/usr/local/bin/python3'] and
              cfg['Cmd'] == ['-I', '-S', '-B', '-c', self.bootstrap.decode()] and cfg['Tty'] is False and
@@ -428,7 +428,7 @@ class Owner:
             '--ipc', 'none', '--init=false', '--log-driver', 'none', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges:true',
             '--read-only', '--user', '65534:65534', '--cpus', '2', '--memory', '512m',
             '--memory-swap', '512m', '--pids-limit', '12', '--restart', 'no', '--stop-timeout', '1',
-            '--tmpfs', '/n006:rw,nosuid,nodev,noexec,size=16m,mode=1777',
+            '--tmpfs', '/n006:rw,nosuid,nodev,noexec,size=16m,mode=0700,uid=65534,gid=65534',
             '--tmpfs', '/tmp:rw,nosuid,nodev,noexec,size=8m,mode=1777',
             '--workdir', '/', '--entrypoint', '/usr/local/bin/python3', '--interactive', IMAGE_REFERENCE,
             '-I', '-S', '-B', '-c', self.bootstrap.decode()])
