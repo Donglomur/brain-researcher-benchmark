@@ -1,0 +1,148 @@
+{
+  "schema": "public_neuroscience_construction_draft_v1",
+  "track": "neural",
+  "stage": "registered_construction_draft",
+  "runnable": false,
+  "scientifically_qualified": false,
+  "submission_ready": false,
+  "reference_results_available": false,
+  "publication_note": "Public scientific design only. This is not an agent input packet, executable benchmark, result or permission to acquire data.",
+  "id": "NEURAL-SCOPE-20261114-STROOP",
+  "title": "Cross-person, unseen-session Stroop condition inference from frontal fNIRS",
+  "scientific_question": "Can an agent infer neutral, congruent and incongruent Stroop conditions from frontal hemodynamic signals in previously unseen people under a previously unseen session schedule, and distinguish spatial signal evidence from timing and systemic-hemodynamic confounds?",
+  "source_family_ids": [
+    "figshare:31839673"
+  ],
+  "source_version": "figshare:31839673-v2",
+  "counting_unit": "One complete55-person,3-session source/question family. Participants, sessions, blocks, classes, folds, contrasts and native/program/tool conditions are not additional registered benchmarks.",
+  "primary_sources": [
+    {
+      "id": "S1",
+      "title": "An fNIRS Dataset for Cognitive Decoding during a Multi-day Block-design Stroop Task",
+      "doi": "10.1038/s41597-026-07800-4",
+      "url": "https://www.nature.com/articles/s41597-026-07800-4",
+      "published": "2026-08-05",
+      "journal": "Scientific Data",
+      "pmcid": "PMC13443585",
+      "verified_fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13443585/fullTextXML",
+      "supports": [
+        "participants and consent",
+        "instrument and timing",
+        "three-condition protocol",
+        "preprocessing and author scripts",
+        "64 percent pairwise reference",
+        "identical per-session schedules",
+        "absence of short-separation channels"
+      ]
+    },
+    {
+      "id": "S2",
+      "title": "fNIRS Dataset for Stroop Decoding, version2",
+      "doi": "10.6084/m9.figshare.31839673.v2",
+      "url": "https://figshare.com/articles/dataset/fNIRS_Dataset_for_Stroop_Decoding/31839673/2",
+      "verified_metadata_url": "https://api.figshare.com/v2/articles/31839673/versions/2",
+      "supports": [
+        "exact version",
+        "public status",
+        "CC BY4.0",
+        "single archive file identifier, size and checksum"
+      ]
+    }
+  ],
+  "scientific_unit": {
+    "complete_source_population": "All55 complete-data right-handed healthy young adult medical students, across all three sessions; S1 describes59 enrolled and four excluded for incomplete recordings. Keep the published55-person task intact.",
+    "independent_unit": "Participant; blocks, channels, samples and repeated sessions are nested observations, not independent subjects.",
+    "population_limits": "Healthy, right-handed young medical students; no patient, diagnostic or broad population claim.",
+    "labels": {
+      "11": "neutral",
+      "12": "congruent",
+      "13": "incongruent"
+    },
+    "recording": "35 frontal source-detector channels, 3cm separation, LABNIRS780/805/830nm,25.6Hz. Primary signal representation uses HbO and HbR (70 channels); absolute concentration/pathlength units must be confirmed from UsageNotes and MAT schemas before any runnable release.",
+    "timing": "Three sessions separated by3–8days over approximately two weeks. Each session has approximately30 blocks (about10 per condition), four color-word trials per block,0.5s fixation and1.2s stimulus per trial,17–21s inter-block rest and an approximately15min task. Resting recording is3min. Markers101/102 indicate start/end. Verify exact onset interpretation and trial counts against source markers before constructing cases.",
+    "full_task_policy": "Include all three conditions and all55 participants. Never drop sessions, difficult subjects or condition blocks to meet storage/token/runtime budgets. Record predeclared missing/corrupt exclusions with source evidence and denominator. The author truncation to30 usable observations is reproduced only in an explicitly labeled secondary author-protocol analysis; the benchmark main endpoint retains every valid block.",
+    "source_layout": "Author reports Code, ExpBehavData and NirsData; raw Shimadzu and complete preprocessed prep MAT routes are included, while intermediate nirsmat is intentionally empty. Test1–3 and marker1–3 correspond to repeated sessions. Internal member inventory remains unverified without acquisition."
+  },
+  "inputs_outputs": {
+    "training_inputs": "Train participant/session arrays, onset-aligned blocks, channel identities and coordinates when present, documented units, and train-only class labels. Train artifacts retain full participant/session/block provenance in evaluator custody.",
+    "agent_visible_case": "One anonymized onset-aligned HbO/HbR block, relative time grid and channel geometry. Remove event code, word/ink/response, RT, block number, absolute clock, session label, chronological ordering and source filename. Shuffle evaluation cases independently of chronology. All blocks belonging to a protected participant remain outside training.",
+    "output": "A probability vector in the fixed order neutral/congruent/incongruent and one of those labels, keyed by an opaque case_id. Scientific explanation uses structured claims tied to returned analysis artifacts; evaluator never treats fluent text as evidence.",
+    "proposed_window": "[-5,20) seconds relative to verified block onset. This covers the reported late hemodynamic peak. The article reports four1.2s trials,0.5s fixation and17–21s inter-block rest, but exact fixation placement and source onset semantics must be checked in markers/author code; no exact minimum onset spacing is asserted from prose alone. Abort construction if the window intersects the following block or timing cannot be resolved without class-dependent cropping. Preceding-block carryover remains a diagnostic.",
+    "units_gate": "Do not invent microM or mM.mm units; retain explicit unresolved_units status until the actual UsageNotes/device export scale is verified. Time is seconds and sampling25.6Hz from S1."
+  },
+  "protected_split": {
+    "proposed_not_executed": true,
+    "outer_design": "Deterministic fivefold partition of the55 participant IDs into11 protected participants per fold, with a frozen stable hash rule after actual IDs are inventoried. Training uses sessions1–2 of the other44 participants. Final evaluation uses session3 of the11 held participants. Repeat five folds so every participant contributes a protected test-session result. All165 sessions participate in the full protocol, with sessions1–2 used for development/training and every session3 used only for final evaluation.",
+    "validation": "Within each outer fold, choose features, CAR choice, hyperparameters and any canonical normalization solely by nested participant-grouped validation in sessions1–2. Include leave-session2-out development checks to choose robustness strategies. Never use any session3 label, statistics fitted across participants, or score for tuning.",
+    "why_joint_holdout": "S1 states that all participants receive the same block order within each session, with different orders across sessions. A participant-only split could be solved by schedule/time cues. Holding session3 globally out removes its schedule from development; timestamp and ordering suppression plus nuisance controls remain mandatory.",
+    "custody": "Keep actual held participant IDs, block-to-label maps and session3 schedule outside the agent workspace and public task repository. Disable network during evaluation. Public source familiarity cannot be erased; release audit must explicitly test source lookup/memorization and report historical-data contamination limits.",
+    "no_random_windows": "Never random-split overlapping windows, blocks from a participant across outer train/test, or samples from the same block. Resampling and interpolation occur within already assigned records. Fit all data-dependent transforms on training participants only.",
+    "scope_of_inference": "Performance is on this observed held session order and cohort. Three session schedules do not support a general claim about arbitrary novel task schedules.",
+    "fold_and_condition_isolation": "Start every outer fold and each A/B/C condition from a fresh instance of the frozen pretrained model and prompt policy. Reset conversation, in-context examples, program workspace, retrieval memory, fitted model parameters, optimizer state, decoder objects, caches and output artifacts. Load only that fold/condition permitted training pack or full-training partition. Give distinct opaque namespaces and disjoint filesystem roots to each fold/condition. Audit read/write access so a participant appearing in training in another fold cannot leak into its protected evaluation context. A/C case processing starts from the same frozen fold/condition state for each case; no transcript, predictions or computed summaries from earlier test cases carry over. B prediction programs are frozen before evaluation and stateless across cases except fixed train-derived parameters. All methods finish before evaluator reveals any held score; no cross-fold adaptation or prompt selection from protected results."
+  },
+  "baseline_and_metrics": {
+    "original_reference": "S1 reports author svm_times.m, linear LIBSVM3.23 with70 HbO/HbR features, within-person fivefold binary MVPA and30 retained usable observations; peak neutral-versus-incongruent accuracy64% around17–20s, significant13–25s. This is contextual published evidence, not a score on the proposed three-class joint holdout and not a reproduced baseline.",
+    "author_code": "Code/BehavAnalysis.m, Code/block_avg.m and Code/svm_times.m are reported inside Figshare31839673.v2. MATLABR2022b, NIRS_KIT_V3.0_Beta_202307, LIBSVM3.23 and ClustMEv1.0.0 are stated dependencies. The code is public as part of the archived release; no separate GitHub repository or code-member SHA was verified.",
+    "competent_baselines_to_run": [
+      "Train-prior multiclass probabilities and balanced chance1/3.",
+      "Train-fitted shrinkage LDA and L2 multinomial logistic regression on fixed time bins and block means/slopes, with participant-grouped nested tuning.",
+      "A linear SVM with calibrated three-class outputs using author-inspired HbO/HbR features, trained under exactly the joint holdout. Calibrate only within training folds.",
+      "A compact temporal convolution model with subject-grouped regularization, when justified by training size and matched compute; not automatically a stronger baseline.",
+      "Common-mode-only HbO/HbR predictor, pre-onset-only predictor, and explicit schedule/time-only predictor as leakage/nuisance controls, under the same outer split."
+    ],
+    "primary_metric": "Mean participant-balanced accuracy on protected session3 blocks: compute each participant average recall across all3classes, then average equally across55participants. Report all per-participant values and a participant-bootstrap95% interval labelled conditional descriptive uncertainty on the fixed observed cohort, session3 schedule, chosen fold assignment and already fitted prediction policy. This interval does not integrate training-set, model-fitting, prompt-selection or unseen-schedule uncertainty; shared overlapping training folds also preclude treating it as unconditional independent-replication inference. Missing classes trigger a data-integrity failure, not an altered denominator.",
+    "secondary_metrics": [
+      "Participant-mean multiclass log loss with a fixed declared probability clipping epsilon",
+      "Participant-mean Brier score and calibration",
+      "All three pairwise contrasts under the same holdout for interpretation; never compare these directly to the published64% as if the split were identical",
+      "Agent-minus-competent-baseline paired participant differences, with a conditional descriptive participant-bootstrap95% interval using paired resampling and the same fixed-policy/schedule limits as the primary metric"
+    ],
+    "claim_rule": "No frontier, improvement or native-understanding claim from beating chance alone. Require a preregistered competent baseline, paired participant evidence, comparable representation/compute and passed timing/nuisance controls. No numerical target beyond defined chance and historical64% is invented.",
+    "matched_comparison_baselines": "For matched six-example A/B/C comparisons also fit simple LDA/logistic/SVM baselines on that same pack, with hyperparameters fixed from development policy rather than protected labels. Full-training baselines remain the standards for any scientific improvement claim.",
+    "uncertainty_limits": "Report fold-level results and each participant contribution. Any claim about performance under new training samples or arbitrary new session schedules needs a separate prespecified design with refitting/resampling and appropriate dependence handling; it cannot use the current fixed-prediction bootstrap as proof. Statistical intervals do not establish a causal benefit of tool use or cortical specificity."
+  },
+  "signal_and_tool_conditions": {
+    "common_representation": "Proposed frozen40timepoints×70signals per block,1.6Hz from25.6Hz by a label-independent anti-alias/resampling procedure on the verified [-5,20) window. The source preprocessing already bandpasses0.01–0.2Hz; verify implementation and filter edge behavior. Preserve physical units and apply only a disclosed train-fitted scaling. This is a fixed signal serialization, not a learned neuro encoder. Both primary conditions receive identical values and provenance metadata.",
+    "A_signal_native": "General LLM receives the numeric case matrix with time/channel metadata and the common six-block development exemplar pack, without Python execution, fitted decoder, browsing or feedback on protected labels. It returns class probabilities directly. Freeze model version, prompt, rounding and128K maximum context budget before evaluation. First verify that the exact serialization fits; do not silently drop channels, classes or cases to fit.",
+    "B_program_in_advance": "LLM writes a predictor using the same six-block exemplar pack and documentation; freeze program/parameters before protected cases are exposed. Program sees exactly the canonical case arrays used by A. Its matched comparison tests what code execution adds under the same labeled information, rather than quietly giving it all training labels.",
+    "C_interactive_tools": "Agent may investigate each canonical case using Python and frozen decoders fitted on the same six-block development pack. Enforce time/token/tool-call budgets and record every artifact. No online fitting against protected labels, external source retrieval or hidden scorer queries.",
+    "resolution_ceiling": "A separate full25.6Hz tool/model ceiling may use the original arrays. Report it separately from matched-representation comparisons. It is a condition in this family, not a new benchmark.",
+    "scientific_reasoning": "Require a structured analysis comparing common-mode-only, spatial-pattern, pre-onset-only and time/schedule controls, with effect sizes and participant-level uncertainty. Grade whether the claimed direction and magnitude match the submitted computations and whether causal/cortical specificity is withheld when controls fail. Ground-truth nuisance interventions such as channel permutation can verify reasoning mechanically; they are diagnostics within this task, not independent neuroscience datasets.",
+    "matched_training_information": "For the primary A/B/C tool-access comparison, construct a common deterministic six-block development exemplar pack: exactly two per class from outer-training sessions1–2, with distinct training participants where feasible. Fixed class stratification is the only permitted label-dependent selection; class labels are outer-training labels only. Freeze participant-balance rules and stable hash tie-breaks before scoring. Do not rank or select examples by model performance, ease, signal quality related to labels, reviewer preference, protected identity, protected signal or protected outcome. All three conditions receive exactly this pack, the same documentation and the same canonical case arrays. Tool decoders in this matched comparison fit this pack only. This limited-context sample-efficiency/direct-inference assay does not replace the complete55-person dataset or full-training endpoint. An example-selection method using any other label-dependent criterion, or a pack exceeding the fixed context limit, fails construction. No protected case or label is used in selection.",
+    "full_training_conditions": "Separately run B-full and C-full with all available outer-training participants/sessions and the competent baselines specified above; these establish useful scientific performance on the complete cohort. Label this additional-data-access condition clearly. A versus B-full/C-full cannot isolate the causal benefit of tool calling because labeled training access differs. Full-training conditions and the six-example diagnostic are not additional benchmark families."
+  },
+  "confounds_and_integrity": [
+    "No short-separation channels; scalp, respiration, blood pressure and CO2 contributions are incompletely controlled. Accurate condition classification cannot by itself establish cortical conflict representation.",
+    "CAR can remove global neural as well as systemic components; do not assume it is a biologically correct denoiser. Compare the train-selected choice with a fixed no-CAR sensitivity.",
+    "The reported preprocessing trims15s/5s, detrends, applies TDDR and bandpass filtering. Verify marker offsets and whether zero-phase filtering introduces adjacent-block information. Reproduce continuous preprocessing within each record without train/test mixing.",
+    "Late hemodynamics and preceding-block carryover require pre-onset-only and label-order sensitivity controls. Permutation nulls must preserve participant/session/block structure; sample-wise shuffling is invalid.",
+    "Color/word/keyboard fields and behavioral RT must never accompany protected signal cases. Motor requirements, practice and stimulus semantics can contribute to measured signals and must limit interpretation.",
+    "Behavioral practice changes across sessions; session3 prediction combines new participant and session shift. Report both factors rather than attributing all failure to neural comprehension.",
+    "Public paper and labels could be in model pretraining. Air-gap task execution, opaque IDs, unpublished fold assignments and source-lookup tests reduce direct retrieval but do not prove pretraining independence.",
+    "Do not use HRF polarity or negative HbO/HbR correlation as universal ground-truth reasoning: S1 itself reports atypical or noisy responses."
+  ],
+  "acquisition_and_rights": {
+    "acquired": false,
+    "exact_metadata_verified": true,
+    "file_id": 65078889,
+    "file_name": "StroopDecData.zip",
+    "archive_bytes": 5076812783,
+    "archive_computed_md5": "b3cff881f38353a80db736ea29bf00d1",
+    "download_url_not_requested": "https://ndownloader.figshare.com/files/65078889",
+    "license": "CC BY4.0 per versioned Figshare API record",
+    "consent": "S1 reports written consent for fully anonymized sharing with identification key deleted; no attempt to reidentify participants is part of the task.",
+    "complete_processed_route": "Full package includes the author denoised prep data for all55×3sessions, preserving the scientific unit without needing the omitted intermediate conversion output. A processed-only public endpoint was not verified; the currently verified transfer remains the complete5.08GB ZIP.",
+    "storage": "Archive about4.73GiB compressed. Exact uncompressed size and processed/member sizes are unknown; budget must be set only after archive metadata inspection in a separately authorized acquisition pass. Do not extrapolate compressed size into a disk-fit promise.",
+    "redistribution": "Retain attribution and version DOI. Confirm any embedded third-party library licenses and source filenames before distributing a prepared runtime; dataset CC-BY does not automatically relicense MATLAB or bundled dependencies.",
+    "github_status": "No author GitHub source was verified; code is in the versioned Figshare Code directory. Do not advertise a paper+GitHub triad."
+  },
+  "current_result": "Source and metadata verification only. No data payload, model, baseline, native runtime or scientific experiment was run. The published64% is not our result.",
+  "blocking_gates": [
+    "Registration-stage independent source/scientific review is complete. Authentic intake, data integrity, protected execution boundaries and reference-result review remain required before any runnable or scientific-qualification promotion.",
+    "Acquire only under a separate explicit finite byte/storage plan; record exact archive SHA256 in addition to publisher MD5, safe member list, total uncompressed bytes and all55×3session completeness.",
+    "Inspect UsageNotes and author code to resolve concentration units, block-versus-trial terminology, marker timing after trimming, actual matrix schemas, code hashes and numerical author reference reproduction.",
+    "Audit preprocessing and identical schedule leakage, construct protected joint holdout and quantify pre-onset, time/schedule and global-mode controls.",
+    "Implement sealed scorer/schema, test malformed or missing submissions and contamination controls, then reproduce competent baseline under the exact split.",
+    "Assess context serialization fidelity and matched-condition budgets before any native-LLM interpretation; model runs are not authorized by this scoping draft."
+  ]
+}

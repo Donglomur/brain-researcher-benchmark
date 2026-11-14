@@ -1,0 +1,218 @@
+{
+  "schema": "public_neuroscience_construction_draft_v1",
+  "track": "neural",
+  "stage": "registered_construction_draft",
+  "runnable": false,
+  "scientifically_qualified": false,
+  "submission_ready": false,
+  "reference_results_available": false,
+  "publication_note": "Public scientific design only. This is not an agent input packet, executable benchmark, result or permission to acquire data.",
+  "id": "marmoset-retinal-contrast-generalization",
+  "title": "Marmoset retinal nonlinear contrast encoding and cross-stimulus generalization",
+  "scientific_question": "Can an agent use paired neural responses and stimulus structure to predict held-out retinal responses, identify when nonlinear spatial integration is needed, and distinguish failure of an encoding model from stimulus and reliability confounds?",
+  "source_family_ids": [
+    "doi:10.12751/g-node.t43ph1"
+  ],
+  "deployment_status": "held_pending_authentic_intake_provenance_and_protected_execution",
+  "as_of": "2026-11-14",
+  "counting_unit": "One dataset/experimental-question family. Retinas, cells, stimulus regimes, baseline architectures, evaluation conditions and folds are not additional benchmarks.",
+  "sources": [
+    {
+      "id": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1014157",
+      "doi": "10.1371/journal.pcbi.1014157",
+      "title": "Modeling spatial contrast sensitivity in responses of primate retinal ganglion cells to natural movies",
+      "published": "2026-04-07",
+      "journal": "PLOS Computational Biology",
+      "source_type": "primary_peer_reviewed_article"
+    },
+    {
+      "id": "original_data",
+      "url": "https://doi.gin.g-node.org/10.12751/g-node.t43ph1/",
+      "doi": "10.12751/g-node.t43ph1",
+      "published": "2025-11-26",
+      "license": "CC BY 4.0",
+      "advertised_archive_size": "47 GiB",
+      "exact_archive_bytes": null,
+      "content_hash": null,
+      "archive_browse_url": "https://gin.g-node.org/doi/Sridhar_Gollisch_2025_Marmoset_RGC_Responses_Naturalistic_Movies",
+      "access": "Public landing page verified; archive browser returned HTTP403; payload not requested"
+    },
+    {
+      "id": "superseded_data",
+      "url": "https://doi.gin.g-node.org/10.12751/g-node.3dfiti/",
+      "published": "2025-04-04",
+      "license": "CC BY 4.0",
+      "advertised_archive_size": "28 GiB",
+      "relationship": "Landing page explicitly points to t43ph1 as newer version; do not mix versions"
+    },
+    {
+      "id": "reference_code",
+      "url": "https://github.com/gollischlab/SpatiotemporalSCModel",
+      "revision": "76b733421cc16131c2229e66a7714d8892de39d7",
+      "license": "MIT",
+      "commit_date": "2026-01-30T13:55:57Z"
+    },
+    {
+      "id": "library_code",
+      "url": "https://github.com/open-retina/open-retina",
+      "revision": "60e2e4f9c78645e1dd9b424a775f6458b456dec2",
+      "license": "MIT",
+      "role": "Alternative processed-data route and CNN baseline lead; not established equivalent to original experiment"
+    },
+    {
+      "id": "library_docs",
+      "url": "https://open-retina.org/package_docs/datasets/sridhar_2025/"
+    },
+    {
+      "id": "hf_nm",
+      "url": "https://huggingface.co/datasets/open-retina/nm_marmoset_data",
+      "revision": "27f4e663a97b8a443421c2058ffbf2299f11a492",
+      "total_file_bytes": 15366261618,
+      "all_zip_bytes": 15366256577,
+      "official_low_resolution_route_zip_bytes": 5605739362,
+      "license": "Dataset card has no explicit license; underlying original DOI CC BY 4.0 does not by itself establish rights/provenance of all additional processed sessions"
+    },
+    {
+      "id": "hf_wn",
+      "url": "https://huggingface.co/datasets/open-retina/wn_marmoset_data",
+      "revision": "7e5b92aa957ae1fb2a69c649fca914cbdc28c08b",
+      "total_file_bytes": 9543229886,
+      "all_zip_bytes": 9543225155,
+      "license": "No dataset card; same provenance/rights hold as NM"
+    },
+    {
+      "id": "stimulus_rights",
+      "stimulus": "Tears of Steel",
+      "license": "CC BY 3.0",
+      "evidence_status": "Primary-paper claim; separate from original neural-data CC BY 4.0 rights and code MIT rights",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1014157",
+      "source_location": "Methods: Naturalistic movie stimulus; movie-frame figure captions",
+      "limitation": "This records the primary article’s license attribution, not an independent archive-content or downstream-mirror rights audit. Preserve film attribution and separately resolve expanded processed-release provenance before distribution."
+    }
+  ],
+  "complete_task_unit": {
+    "canonical_cohort": "Both original retinas and all original published analysis cells across both white-noise and natural-movie conditions; no retina, cell, trial or stimulus-duration convenience sampling.",
+    "published_cell_census": {
+      "reliability_passed": 180,
+      "main_classified_cohort": 170,
+      "off_midget": 51,
+      "off_parasol": 69,
+      "on_parasol": 35,
+      "large_off_pooled_class": 15,
+      "remaining_reliable_cells": 10
+    },
+    "census_limits": "Counts are article claims, not a native-file census. Verify exact cell IDs and two-retina/animal mapping against the deposit before freezing a manifest. Large OFF is a pooled class, not one established cell type. There are two retinal preparations; their biological independence is not established while animal mapping is unknown. Do not call them independent animals or independent biological clusters.",
+    "candidate_session_identifiers": [
+      "20220412_SN_252MEA6010_le_s4",
+      "20220426_SS_252MEA6010_le_n3"
+    ],
+    "session_identifier_evidence": "Both are named in pinned original reference-code README; complete deposited session manifest remains a gate.",
+    "input_units": {
+      "electrophysiology_sampling_hz": 25000,
+      "modeled_response_grid_hz": 85,
+      "response": "Non-negative spike count per stimulus update; preserve single-repeat counts and expose rate only with explicit count/second conversion",
+      "stimulus": "Time-aligned grayscale movie/white-noise frames, original frame IDs, trial/repeat IDs, eye-movement and flip transformations, physical pixel size, projector update times",
+      "white_noise_pixel_um": 30,
+      "natural_movie_pixel_um": 7.5,
+      "sta_history_frames": 30,
+      "sta_history_ms": 352.94117647058823
+    },
+    "labels": "Protected repeated-test spike counts; classification JSON is published descriptive metadata, not independent ground truth of exact cell identity. Reversing-grating responses support a secondary nonlinear-integration diagnostic.",
+    "paper_stimulus_design": "White-noise training uses distinct 150s or300s blocks, frozen test30s or60s. Natural movie reserves1434 source frames for test from14544 selected source frames; remaining13110 used for training. Training movie yields255000 projector updates over10×300s trials, with simulated gaze and flips; repeated test sequence uses fixed gaze. These are published design facts and require native timing reconciliation."
+  },
+  "task": {
+    "deliverables": [
+      "A deterministic predictor returning expected spike counts at every protected evaluation update for every frozen cohort cell and condition",
+      "Per-retina and per-cell paired error analysis, with a prespecified test of improvement from spatial contrast over mean-intensity-only encoding",
+      "A structured explanation that names stimulus-statistics, cell-selection, noise and sample-unit limitations; explanatory text cannot substitute for predictions"
+    ],
+    "evaluation_conditions": [
+      "WN→WN with WN-only response/calibration fitting, conditional on the historically test-selected cohort",
+      "NM→NM with NM-only new response/calibration fitting, conditional on the historically test-selected cohort (proposed; NM-only RF method remains unvalidated)",
+      "NM→NM historical author-reference route with WN-derived STA/RF calibration, explicitly mixed-stimulus calibration",
+      "WN→NM strict source-only new fitting/calibration, conditional on the historically test-selected paper cohort",
+      "NM→WN strict source-only new fitting/calibration, conditional on the historically test-selected paper cohort",
+      "Optional NM→WN with additional WN-response-derived calibration, labelled target-domain-assisted and excluded from strict fitting/transfer summaries"
+    ],
+    "condition_note": "All conditions are within one scientific family. Here strict source-only means no new target-response-derived parameter fitting, calibration, tuning or quality-selection decisions, conditional on the fixed170-cell paper cohort. That cohort was historically selected using WN/NM test-repeat reliability: strict source-only fitting does not make this a completely target-unexposed evaluation. Preserve this qualification with every strict transfer score. These proposed variants do not establish cross-domain SOTA. Compared models within a condition require identical rosters, units, calibration evidence and access rules. Original NM fitting uses WN-derived STAs, so it is mixed-stimulus calibrated author-reference work. Additional WN-calibrated NM→WN results cannot populate strict source-only fitting summaries. An unvalidated NM-only RF/STA method blocks that condition; do not substitute target-domain calibration.",
+    "primary_metric": {
+      "name": "Pearson correlation on repeat-averaged held-out response",
+      "definition": "Compute per-cell r(predicted expected count, mean of protected repeat spike counts) over every eligible protected projector update. Report every cell, median per preparation×stimulus and an equal-preparation descriptive macro summary. Improvement is paired Δr against a frozen condition-matched SC baseline with exactly the same allowed calibration evidence. This summary does not assert independence of the two preparations.",
+      "range": [
+        -1,
+        1
+      ],
+      "undefined_rule": "For constant target or prediction, flag undefined; count and disclose coverage. Never silently remove cells or replace undefined r with an advantageous value. Primary pass decision blocked until coverage policy is preregistered."
+    },
+    "secondary_metrics": [
+      "Mean Poisson negative log likelihood on individual held-out repeats, in count units, with a fixed positive rate floor",
+      "Per-retina difference between in-domain and cross-domain correlation",
+      "Paired contrast-model Δr by published class, descriptive for this tiny retinal cohort"
+    ],
+    "baseline_requirements": [
+      "Constant-rate predictor estimated from condition-permitted source training counts only",
+      "LN with condition-permitted train-only STA/RF and softplus Poisson fitting; explicitly distinguish historical WN-calibrated NM implementation from proposed NM-only calibration",
+      "SC matched to LN in calibration access and roster, differing in its spatial-contrast contribution; no target-assisted comparator in a strict source-only score",
+      "Original STC/subunit comparator for WN where supported by the experiment",
+      "Before any improvement claim, validate a well-tuned regularized LN and CNN on identical frozen cells, split, preprocessing, source-only or explicitly assisted calibration access; do not compare four-retina library scores with two-preparation original scores"
+    ],
+    "reference_scores": "No executable reproduction or numeric frontier threshold established. Published relative improvements are not imported as our measurements.",
+    "scientific_success": "Report paired improvements on identical protected data over condition-matched frozen baselines, separately for each of the two preparations and with fixed-preparation/repeat noise summaries only where justified. Animal mapping must be verified before any independent-animal inference. Do not claim a population confidence interval from resampling170cells or treating the two preparations as established independent biological clusters. Require leakage, normalization, crop, calibration-access and selection audits; no broad population or causal-mechanism claim from this ex vivo cohort. Any strict source-only transfer claim is conditional on the historically test-selected roster and must state that restriction beside its score; it is not evidence of completely target-unexposed evaluation."
+  },
+  "split_and_confounds": {
+    "split": "Preserve the published non-repeating-training versus frozen-test stimulus separation. Inner development uses grouped source movie identities/contiguous segments, not a random split of repeated trials; every source frame and its jittered/flipped/repeated variants remain in one fold. Reserve at least the full model temporal context at boundaries.",
+    "calibration": "For strict source-only fitting/calibration conditional on the fixed paper-selected170-cell roster, every NEW decision about STA/RF location or crop, scaling, normalization, features, smoothing, regularization, stopping and quality filtering must use source-domain permitted train/dev responses only. NM→WN therefore cannot additionally use WN-response-derived STA/RF, reliability measures or fitted parameters, even from WN training recordings; WN→NM analogously cannot additionally use NM-response-derived calibration. The pre-existing roster did use WN/NM TEST reliability and remains an explicit historical target-exposure limitation, not an exception allowing more target-derived decisions. Label-free physical geometry/unit conversion is allowed only if established independently of target responses and identically across methods. The paper WN-derived STA for NM belongs in the mixed-stimulus author-reference condition. Optional additional WN-assisted NM→WN is separate and excluded from strict fitting summaries. A truly target-unexposed prospective quality evaluation remains blocked on verified unfiltered source/independent quality evidence and a frozen independent selection design.",
+    "published_selection_issue": "The paper selects180 reliable cells using test-repeat FEV>=0.15 and symmetric odd/even R²>=0, then retains170 classified cells. Keep this as a fixed paper-selected replication estimand with disclosed test-based ascertainment. Applying a new development-only quality rule to this already selected170-cell roster cannot undo the original test exposure. A prospective quality-selection claim requires a verified unfiltered original roster and a preregistered development-only quality rule, or independent quality evidence covering a demonstrably unselected roster; neither has been established. The expanded four-retina library is not a substitute for a verified unfiltered original two-preparation roster. If those inputs are unavailable, retain the paper-selected estimand and withhold a pristine prospective-selection claim. Within this unchanged paper-selected estimand, strict source-only transfer restricts new fitting/calibration decisions only; its conditional label must never erase historical target-based ascertainment.",
+    "statistical_unit": "Cells, time bins and repeats are nested within each of two retinal preparations and are not independent biological replications. The relationship between preparations and animals is unknown. Report both preparation-specific paired effects and descriptive within-preparation cell distributions; any repeat-noise interval is conditional on fixed preparations and model. Do not infer population precision by bootstrapping170cells or claim independence of the preparations until animal/source mapping supports it.",
+    "confounds": [
+      "NM mean light is76%ofWN and stimulus RMS/contrast distributions differ; cross-domain error does not alone establish neural adaptation",
+      "NM and STA coordinate systems require verified horizontal orientation",
+      "Trial-specific different random seeds may have nonmatching test sequences; never average across them",
+      "Public paper/data/code are model-contamination exposure; blind identifiers and deny network/test files but do not claim public data are private unseen material",
+      "Source-frame overlap within developmental splits can reward memorization",
+      "CNN pretrained tools must not have been trained on protected cells/test responses; provide provenance or designate exposed-tool exploratory condition"
+    ],
+    "historical_smoothing_selection": "Primary PLOS Methods evaluates performance with correlation on repeat-averaged TEST responses and describes an optimal smoothing level at the maximum of a performance-ratio curve. This raises a concrete test-driven selection concern; the exact paper/code selection path is not yet audited. Literal reproduction of the historical smoothing curve and its optimum must be labelled retrospective test-informed analysis. A predictive baseline must choose its smoothing scale using source-domain permitted development data only, then freeze it before final-test evaluation. Do not inherit a reported optimum or describe it as held-out predictive performance until its selection path is verified.",
+    "protected_loader": "Pinned sc_model/dataio/dataio.py get_data() calls load_responses for both train and test before checking its responses flag, and its default output includes test_responses. responses=False is not a safe candidate-side loader because the test file has already been opened. Require an audited train-only adapter or trusted-owner preparation whose candidate-visible process cannot open protected test files; allowlist paths and verify denial of forbidden opens, filenames, derived repeat averages and memory/object aliases before admitting a task. The original permissive loader is restricted to trusted-owner historical reference/scoring work after parameters are frozen; do not mount its protected files in any agent workspace. No adapter or path-denial test has been executed in this source-only draft."
+  },
+  "capability_conditions": {
+    "native_signal": "Proposed matched no-execution condition: the agent may inspect only declared training/development neural response traces and their registered calibration stimuli, physical units and timing. Protected evaluation cases expose stimulus/timebase and opaque case/cell IDs only: no protected spike counts, spike rasters, individual repeat responses, repeat averages or derived target statistics are agent-visible. A fixed packetization may partition complete calibration/evaluation input for context capacity, but must cover the full frozen roster under the same temporal-context and evidence policy for all conditions; windows are not additional benchmarks. Never describe fitted-model outputs or latent embeddings as raw neural input. Exact complete packet capacity and matched evidence remain validation gates.",
+    "tool_assisted": "The same agent-visible calibration traces, protected-case stimuli/timebase and opaque IDs as the native condition, plus a sandboxed Python analysis environment. Fit/probe approved baseline tools on train/dev only. No tool may reveal protected spike/raster/repeat targets, their averages or derived target statistics. Scientific-data execution has not been performed in this scope. Candidate tools may use only the audited train-only protected adapter and the calibration access permitted for that condition. Calling original get_data(responses=False) is prohibited as a protection mechanism.",
+    "program_synthesis": "Agent writes one prediction program using train/dev before a sealed test run; no test-label access or repeated feedback.",
+    "reasoning": "Require quantitative competing-model predictions and a preregistered contrast/error claim. Score only held-out predictive evidence plus a separately audited explanation rubric; do not confuse narrative plausibility with scientific correctness.",
+    "observed_signal_diagnostics": "Any additional reasoning diagnostic that exposes observed neural channels or time windows must define and mask the scored target before packet generation, including derived summaries or correlated duplicate representations that disclose that target. These are conditions of the same family, not separately counted benchmarks; target masking, allowed observations and leakage audits must be frozen before use.",
+    "native_understanding_claim_limit": "Encoding prediction alone does not demonstrate native neural understanding. A native-understanding claim requires audited reasoning from visible calibration neural traces, matched no-execution versus tool-assisted evidence, protected targets and appropriate ablations; this candidate has not yet established that evidence."
+  },
+  "feasibility": {
+    "canonical_route": "Entire original DOI t43ph1 published two-retina experiment, advertised47GiB ZIP. Expanded size and exact member census unknown. This is substantial storage, not a small packet; no download attempted.",
+    "processed_route": "Official OpenRetina low-resolution NM archives plus full WN archives total15148964517bytes compressed (about14.11GiB), including two separate STA archives. This is a documented resolution option rather than a proposed cell/trial subset, but cohort/content equivalence is unresolved. Do not deduplicate the two same-size STA ZIPs because their hashes differ.",
+    "processed_discrepancies": [
+      "Docs report4retinas/1156unfilteredcells; original paper and DOI report2retinas/170main-cohortcells",
+      "Pinned WNconfig omits session03, defaults to retina01 and cell272; another WNmetadata config has sessions04. Default invocation is not a full cohort run.",
+      "NMconfig excludes different cells12/168 versus WN01 and comments that exclusions used WN/NMtest reliability",
+      "Pinned response loader limits session01 to10testtrials under one seed fallback because2022/2023responsesdo not match",
+      "NM andWNcards lack a clear expanded-cohort license assertion; original-source citation alone does not resolve this"
+    ],
+    "compute": "LN/SC reference implementation supports CPU; original subunit comparator uses PyTorch and optional CUDA. Runtime/peak RAM/expanded disk have not been measured; no credible GPU-hour estimate yet.",
+    "blocks": [
+      "Obtain original metadata/member census/checksums without conflating DOI versions",
+      "Verify all170 canonical selected IDs plus180 reliable cells, full two-preparation timing and animal mapping; do not infer biological independence before then",
+      "Resolve complete processed-route provenance, session mapping and rights if selected",
+      "For a prospective quality-selection claim obtain a verified unfiltered original roster or independent quality evidence covering an unselected roster; otherwise retain disclosed paper-selected estimand",
+      "Freeze condition-specific source-only versus assisted response/calibration access; validate NM-only RF/STA fitting before strict NM→WN is enabled",
+      "Audit historical smoothing selection and freeze predictive smoothing on permitted development data only",
+      "Replace permissive candidate loader with audited train-only owner preparation/adapter and demonstrate denied protected-file access; responses=False is insufficient",
+      "Audit safe conversion of pickle/object-array formats before native loading",
+      "Reproduce competent condition-matched baselines and numerical edge cases on admitted data",
+      "Validate matched native-versus-tools packet completeness before any native-understanding claim"
+    ]
+  },
+  "execution_evidence": {
+    "scientific_payload_downloaded": false,
+    "archives_opened": false,
+    "native_data_loaded": false,
+    "models_run": false,
+    "benchmarks_run": false
+  }
+}
