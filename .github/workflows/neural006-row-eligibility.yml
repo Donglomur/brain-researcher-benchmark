@@ -1,0 +1,52 @@
+name: N006 row eligibility invented controls
+
+on:
+  pull_request:
+    paths:
+      - 'components/neural006-row-eligibility/**'
+      - '.github/workflows/neural006-row-eligibility.yml'
+  push:
+    branches: ['publish/neuroscience-200']
+    paths:
+      - 'components/neural006-row-eligibility/**'
+      - '.github/workflows/neural006-row-eligibility.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  invented-row-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Run sixteen invented-only row controls
+        working-directory: components/neural006-row-eligibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          N006_ROW_CONTROL_ROOT="/tmp/neural006-row-eligibility-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$N006_ROW_CONTROL_ROOT"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 35s python3 -I -S -B -c 'import sys, unittest; sys.flags.optimize == 0 or sys.exit("Tests require optimization disabled"); sys.path.insert(0, "."); suite = unittest.defaultTestLoader.loadTestsFromName("test_row_eligibility"); suite.countTestCases() == 16 or sys.exit("Expected exactly 16 tests"); result = unittest.TextTestRunner(verbosity=2).run(suite); raise SystemExit(not (result.testsRun == 16 and result.wasSuccessful() and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses))' >"$N006_ROW_CONTROL_ROOT/stdout.log" 2>"$N006_ROW_CONTROL_ROOT/stderr.log"
+          N006_ROW_CONTROL_STATUS=$?
+          set -e
+          printf '%s\n' "$N006_ROW_CONTROL_STATUS" >"$N006_ROW_CONTROL_ROOT/exit-status.txt"
+          exit "$N006_ROW_CONTROL_STATUS"
+      - name: Retain complete test streams and exit status
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: neural006-row-eligibility-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: /tmp/neural006-row-eligibility-${{ github.run_id }}-${{ github.run_attempt }}/
