@@ -1,4 +1,4 @@
-> **Branch status — neuroscience benchmark construction:** This branch adds a planned 100-paper / 100-neural-task suite. These are source and task definitions under construction, not 200 validated benchmarks. See [current source scope](docs/neuroscience-benchmarks/SOURCE_SNAPSHOT.md). Results for the three original examples below are inherited from the base repository and are separate from this new suite.
+> **Neuroscience construction branch:** The suite has **220 registered tasks/drafts (109 paper, 111 neural)**. Two existing task profiles—TMS and NIDER—are independently validated for their declared **private local** endpoints. Full registered-contract qualification and submission-ready counts remain zero; model performance on these profiles is unmeasured. See [current progress and public/private scope](docs/neuroscience-benchmarks/CONSTRUCTION_STATUS.md) and the [public draft registry](benchmarks/neuroscience/expansion-20261114/registry.json). Results for the three original examples below are inherited from the base repository and are separate from this new suite.
 
 # brain-researcher-benchmark
 
