@@ -25,7 +25,7 @@ WORK_SECONDS = 25
 CLEANUP_SECONDS = 2
 STDOUT_CAP = 16384
 STDERR_CAP = 65536
-HARNESS_CAP = 32768
+HARNESS_CAP = 40960
 SELECTION_CAP = 8192
 PROC_CAP = 131072
 READ_CAP = 524288
@@ -69,7 +69,7 @@ if not (sys.flags.isolated and sys.flags.no_site and sys.flags.dont_write_byteco
  raise RuntimeError("fixed isolated captured startup")
 payload,path,digest,end,*args=sys.argv[1:]
 raw=base64.b64decode(payload,validate=True)
-if len(raw)>32768 or hashlib.sha256(raw).hexdigest()!=digest:
+if len(raw)>40960 or hashlib.sha256(raw).hexdigest()!=digest:
  raise ValueError("captured harness bytes")
 if time.monotonic()>=float(end):raise TimeoutError("original outer startup deadline")
 sys.argv=[path,*args]
@@ -607,13 +607,14 @@ def platform_admit(state):
 def admit_result(raw):
     value = parse(raw)
     fields = {'schema','status','cases','managed_reserved_bytes','elapsed_seconds',
-              'real_kernel_cases','inert_logic_cases','Docker_executed',
+              'real_kernel_cases','inert_logic_cases','Docker_executed','ci_proc_grant',
               'model_science_or_data_executed','qualification_issued'}
     need(type(value) is dict and set(value) == fields
          and value['schema'] == 'neural083_prospective_owner_engineering_v1'
          and value['status'] == 'passed' and value['cases'] == list(ROSTER),
          'complete exact twenty-three-case result roster')
-    need(type(value['managed_reserved_bytes']) is int and 0 < value['managed_reserved_bytes'] <= 2097152
+    need(type(value['managed_reserved_bytes']) is int and 0 < value['managed_reserved_bytes'] <= 6291456
+         and type(value['ci_proc_grant']) is int and value['ci_proc_grant'] == 262144
          and type(value['real_kernel_cases']) is int and value['real_kernel_cases'] == 7
          and type(value['inert_logic_cases']) is int and value['inert_logic_cases'] == 16,
          'same selected case accounting')

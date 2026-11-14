@@ -2,6 +2,7 @@
 import hashlib,json,math,os,re,shutil,stat,time,types
 from pathlib import Path
 TASK="NEURAL-083"
+PROC_READ_CAP=65536
 FLOOR=2147483648
 RETAIN=32000000
 READS=700000000
@@ -70,8 +71,8 @@ def validate_process_ownership(rows,commands):
         for key in ('proc_metadata_reserved_bytes','proc_read_dispatch_reserved_bytes',
                     'proc_metadata_actual_bytes','proc_directory_entries'):
             need(type(value[key])is int,'exact managed metadata counters')
-        need(value['proc_metadata_reserved_bytes']==65536
-            and 0<value['proc_metadata_actual_bytes']<=value['proc_read_dispatch_reserved_bytes']<=65536
+        need(value['proc_metadata_reserved_bytes']==PROC_READ_CAP
+            and 0<value['proc_metadata_actual_bytes']<=value['proc_read_dispatch_reserved_bytes']<=PROC_READ_CAP
             and 1<=value['proc_directory_entries']<=4096,'complete bounded prepaid proc snapshot')
 
 

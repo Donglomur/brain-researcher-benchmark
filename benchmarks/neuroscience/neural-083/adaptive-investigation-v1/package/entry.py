@@ -12,7 +12,7 @@ import stat
 import sys
 import types
 
-INHERITED_PIN = {'bytes': 6555, 'sha256': 'c1e34df81b588c05e4bb9d34630bebe01dea6b5254e7a808bce42d735c93431c'}
+INHERITED_PIN = {'bytes': 6555, 'sha256': 'edcdd5defd45ff27bb3171ec86b3718bc5c1ae198f6d1a38c2d757993a6e386c'}
 EVIDENCE_LIMITS={'read_bytes':16777216,'write_bytes':16777216,'retained_bytes':16777216}
 OWNER_PREFLIGHT_READS=33554432
 FAILURE_CAP=2097152

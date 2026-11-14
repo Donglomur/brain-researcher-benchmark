@@ -17,7 +17,8 @@ NAMES = (
     'inherited/program/common.py', 'inherited/program/native.py',
     'inherited/program/observe.py', 'inherited/program/process.py')
 SOURCE_CAP = 262144
-TOTAL_CAP = 2097152
+TOTAL_CAP = 6291456
+CI_PROC_GRANT = 262144
 
 
 def failure_payload(error, stage, cases):
@@ -30,7 +31,7 @@ def failure_payload(error, stage, cases):
         return None if value is None else dict(type=type(value).__name__,message=str(value)[:1024])
     available=record is not None
     value=dict(schema='neural083_harness_first_failure_v1',status='failed',
-        case=stage,completed_cases=list(cases),exception=describe(error),
+        case=stage,completed_cases=list(cases),exception=describe(error),ci_proc_grant=CI_PROC_GRANT,
         original_error=describe(getattr(error,'original_error',None)),
         record_bytes=len(raw) if available else None,
         record_sha256=hashlib.sha256(raw).hexdigest() if available else None,
@@ -120,13 +121,16 @@ def main():
             bodies[name] = capture(root/name,descriptor['bytes'],descriptor['sha256'])
         if sum(map(len,bodies.values())) > SOURCE_CAP:
             raise ValueError('whole selected source cap')
-        # No sibling imports: compile the exact captured complete modules, with
-        # unique non-main module identities. Scientific functions remain inert.
         for name in NAMES:
             module = types.ModuleType('selected_owner_'+str(len(modules)))
             module.__file__ = str(root/name)
             exec(compile(bodies[name],module.__file__,'exec'),module.__dict__)
             modules[name] = module
+        grant_names=('adaptive_owner.py','inherited/process_owner.py',
+            'inherited/program/process.py','inherited/program/native.py','inherited/program/common.py')
+        if any(type(modules[n].PROC_READ_CAP)is not int or modules[n].PROC_READ_CAP!=65536
+               for n in grant_names):raise ValueError('exact original production proc grant')
+        for n in grant_names:modules[n].PROC_READ_CAP=CI_PROC_GRANT
         env = {'PATH':'/usr/bin:/bin','LANG':'C','PYTHONDONTWRITEBYTECODE':'1'}
         python = str(Path(sys.executable).resolve())
         normal_command = [python,'-I','-S','-B','-c','import os;os.write(1,b"out");os.write(2,b"err")']
@@ -144,14 +148,14 @@ def main():
                                   env=env,metadata_read=read,stream_cap=64)
                 assert base64.b64decode(record['stdout_base64'])==b'out'
                 assert base64.b64decode(record['stderr_base64'])==b'err'
-            assert grants==[65536]
+            assert grants==[CI_PROC_GRANT]
             assert record['natural_exit'] is True and record['exit_code']==0
             assert record['process_reaped'] is True and record['process_group_absent'] is True
             value=record['process_ownership']
             assert value['signals_retired_before_reap'] is True
             assert value['final_read_only_probe_after_reap'] is True
             assert value['proc_snapshot_is_absence_proof'] is False
-            assert value['proc_metadata_reserved_bytes']==65536
+            assert value['proc_metadata_reserved_bytes']==CI_PROC_GRANT
             cases.append('real_natural_'+name)
         for name in ('adaptive_owner.py','inherited/process_owner.py','inherited/program/process.py'):
             normal(name)
@@ -191,7 +195,6 @@ def main():
                 cases.append('real_'+label)
             else:
                 raise AssertionError('selected negative control unexpectedly accepted')
-        # Fourth reachable owner: the historical combined cap is not two caps.
         stage='real_legacy_combined_cap_plus_probe'
         legacy=modules['inherited/program/process.py'];now=time.monotonic()
         code='import os;os.write(1,b"a"*32768);os.write(2,b"b"*32769)'
@@ -450,7 +453,6 @@ def main():
                         assert caller.last_original['first'] is None and caller.last_original['cleanup_errors']==[]
                         common.validate_cli_commands(caller.records,64)
                         common.validate_process_ownership(caller.ownership_records,caller.records)
-                        # Actual admitted consumer refuses either single diagnostic defect.
                         for key,replacement in (('proc_descriptor_closure_known',False),
                                                 ('proc_cleanup_error_types',['OSError'])):
                             bad=dict(caller.ownership_records[0])
@@ -476,7 +478,7 @@ def main():
                 if not native_case:
                     assert record['consumed_bytes']=={'stdout':3,'stderr':3}
                     assert record['stdout_eof'] is True and record['stderr_eof'] is True
-                assert grants==[65536] and len(processes)==1
+                assert grants==[CI_PROC_GRANT] and len(processes)==1
                 assert all((processes[0].stdout.closed,processes[0].stderr.closed,selector_instances[0].closed))
                 assert ('open','stat',101) in events and ('close',101) in events
                 assert ('scandir-close',) in events and ('close',100) in events
@@ -485,6 +487,22 @@ def main():
                 assert [event for event in events[reaped_at+1:] if event[0]=='group']==[('group',0)]
                 if failing:assert ('open','707',100) not in events
                 else:assert ('open','stat',102) in events and ('close',103) in events and ('close',102) in events
+                if not failing:
+                    probe=module._PinnedGroup(processes[0]);probe.proc_read_reserved=CI_PROC_GRANT
+                    before_reads=dict(reads)
+                    try:probe._stat_body(100,'707',103.0)
+                    except ValueError as error:
+                        assert type(error)is ValueError and str(error)=='complete proc snapshot exceeds precharged metadata grant'
+                    else:raise AssertionError('exhausted selected proc grant admitted')
+                    assert reads==before_reads and probe.proc_read_reserved==CI_PROC_GRANT and probe.errors==[]
+                    if native_case:
+                        common.PROC_READ_CAP=65536
+                        try:
+                            try:common.validate_process_ownership(caller.ownership_records,caller.records)
+                            except ValueError as error:
+                                assert str(error)=='complete bounded prepaid proc snapshot'
+                            else:raise AssertionError('default validator admitted CI-sized receipt')
+                        finally:common.PROC_READ_CAP=CI_PROC_GRANT
                 cases.append('inert_proc_'+name+'_'+variant)
             finally:
                 for key,value in saved.items():setattr(module,key,value)
@@ -495,7 +513,7 @@ def main():
                 proc_disappearance(owner_name,variant)
         stage='final_result_publication'
         result=dict(schema='neural083_prospective_owner_engineering_v1',status='passed',
-            cases=cases,managed_reserved_bytes=used,elapsed_seconds=time.monotonic()-started,
+            cases=cases,ci_proc_grant=CI_PROC_GRANT,managed_reserved_bytes=used,elapsed_seconds=time.monotonic()-started,
             real_kernel_cases=7,inert_logic_cases=16,Docker_executed=False,
             model_science_or_data_executed=False,qualification_issued=False)
         assert len(cases)==23 and len(set(cases))==23
