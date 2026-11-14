@@ -1,0 +1,13 @@
+# TMS Figure2B construction controls
+
+This package implements the released-array Figure2B numerical endpoint for existing task `PAPER-paper-signal-add-021`. It adds no benchmark IDs. Programme totals remain 205 registered drafts/contracts and zero scientifically qualified benchmarks.
+
+The constructor preserves four conditions with full MATLAB shape `[62,53,200,15]`, measured axis/label order and all 15 stored positions. It validates an exact released-file identity. Positions are not verified physical-person identities. The scalar kernel retains ordered NaN-omitting condition means, the literal published normalized contrast, nearest inclusive windows, and time-then-frequency averaging. All 36 complete numeric, undefined and support fields are captured and scored.
+
+`test_source_positions.py` is the unchanged 146-control harness. It creates its own complete synthetic HDF5 inputs, checks malformed identities and storage, tests source-position permutation/support behavior and exercises actual producer → capture → admission → paired scorer. All 36 A fields must pass; B must fail exactly the deliberately changed `window.T.delay2.value` element. Invented grants and closure records are explicitly test inputs and confer no production authority.
+
+The public projection preserves all Python/MATLAB operator bodies and the harness. Two documentation files and their `OPERATOR_LOCK.json` hashes are updated for public use. The old machine-specific launcher is replaced by a separate Linux CI owner; see [CI_USAGE.md](CI_USAGE.md). The closed operator composition includes dormant provider/host adapters because the real source-admission path authenticates that composition. Construction CI invokes neither model nor production host/native MATLAB operations.
+
+Public source is covered by the repository [MIT license](../../../LICENSE). This package includes no original MAT files, authentic outputs, paper text, vendor FieldTrip source, credentials or real operator grants. The source-declared anonymous roster and input/source digests are contract predicates, not an inferred participant-position map. Authentic data and paper/code redistribution remain external release gates.
+
+Passing these checks establishes synthetic construction behavior for the recorded runtime. It does not establish authentic Figure2B reproduction, MATLAB parity, calibrated numerical tolerance, upstream preprocessing, protected agent evaluation or scientific improvement. The separately observed authentic constructor check validated full-file identity and all four schemas without reading power vectors; it produced no numerical effect estimate. Native MATLAB parity remains unresolved.
