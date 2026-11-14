@@ -1,0 +1,63 @@
+{
+  "schema": "nider_candidate_interface_description_v1",
+  "normative_validator": "Existing scientific_score.normalize_case_response and reporting_core.validate_rows; this document does not implement another validator.",
+  "transport": "Exactly one UTF-8 JSON object on stdout; diagnostics on stderr.",
+  "object": {
+    "required_exact_keys": [
+      "schema",
+      "case_id",
+      "workbook_sha256",
+      "rows"
+    ],
+    "schema_literal": "nider_scientific_case_response_v1",
+    "case_id": "Copy the string from the current /input/request.json.",
+    "workbook_sha256": "Copy the string from the current /input/request.json.",
+    "rows": {
+      "length": 3,
+      "required_exact_row_keys": [
+        "contrast",
+        "fields"
+      ],
+      "contrast_support_once_each": [
+        "amy_self",
+        "quest_self",
+        "amy_quest"
+      ],
+      "required_exact_field_keys": [
+        "pearson_r",
+        "p_two_sided",
+        "k",
+        "N"
+      ],
+      "pearson_r": "Finite JSON number in[-1,1]: random-effects correlation on the Pearson-r scale.",
+      "p_two_sided": "Finite JSON number in[0,1]: original two-sided uncorrected p-value.",
+      "k": "Finite integer-valued JSON number with1<=k<=N: fitted-model study count.",
+      "N": "Finite integer-valued JSON number withN>=k>=1: source sample-size sum for the fitted contrast."
+    }
+  },
+  "invalid": [
+    "Missing, duplicate or unknown contrasts",
+    "Missing or extra keys",
+    "NaN or Infinity",
+    "Null, Boolean or string values in numeric fields",
+    "Invalid correlation, p-value or count ranges",
+    "Changed routing identity or input hash",
+    "Additional text around the JSON object"
+  ],
+  "evaluator_only": [
+    "Authoritative selection of scoring policy and target operands; the fixed policy identifier and rules are public.",
+    "Expected case universe",
+    "Reference paths and target values",
+    "Aggregate four-case submission construction",
+    "Execution-verification flags"
+  ],
+  "original_quantities": 12,
+  "hypothetical_controls": 3,
+  "new_benchmarks_from_controls": 0,
+  "public_scoring_rule": {
+    "pearson_r_resolution": "0.01",
+    "p_resolution": "0.001",
+    "comparison": "Open nearest-reporting bins; k/N exact. Exact candidate boundary or unresolved reference bin is indeterminate.",
+    "criterion_is_not": "Numerical estimator-error bound, statistical confidence interval, or R print-string match."
+  }
+}
