@@ -4,6 +4,7 @@ No operation is selected on import. Runtime/control sources are never loaded her
 import argparse
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import platform
@@ -27,6 +28,11 @@ binary_spent=0
 
 def need(ok,reason):
     if not ok:raise ValueError(reason)
+
+def require_original_deadline(start,end):
+    # Authenticate the owner's actual float construction, not inverse subtraction.
+    need(type(start)is float and type(end)is float and math.isfinite(start) and math.isfinite(end)
+         and 0<=start<end and end==start+60,'original finite ordered 60-second deadline')
 
 def encoded(value):return (json.dumps(value,sort_keys=True,indent=2,allow_nan=False)+'\n').encode()
 def pin(body):return {'bytes':len(body),'sha256':hashlib.sha256(body).hexdigest()}
@@ -227,8 +233,9 @@ def admit(owner_outcome,closure_outcome):
         need(terminal['success']is True and 0<=terminal['elapsed_seconds']<60,'original owner complete within unchanged deadline')
         result_pin=terminal['result'];need(result_pin['path']=='RESULT.json','exact owner result filename')
         result=parsed(read(out/'attempt/RESULT.json',result_pin)[0])
+        require_original_deadline(result['original_start'],result['original_end'])
         need(result['success_before_final_transport']is True and result['errors']==[] and result['automatic_retry']is False
-             and result['maximum_attempts']==1 and result['original_end']-result['original_start']==60
+             and result['maximum_attempts']==1
              and result['container_stopped_observed']is True and result['container_removed_observed']is True
              and result['container_absent_observed']is True and result['forced_container_kill']is False
              and result['native_or_scientific_or_actual_model_qualification']is False,'original complete container ownership evidence')
