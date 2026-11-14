@@ -1,0 +1,174 @@
+{
+  "title": "Latent circuit inference from heterogeneous neural responses during cognitive tasks",
+  "counting_unit": "One paper-result family. Reproduction, improvement, code-access conditions, animals, folds and individual output checks add no independent benchmark registrations.",
+  "paper": {
+    "doi": "10.1038/s41593-025-01869-7",
+    "url": "https://www.nature.com/articles/s41593-025-01869-7",
+    "journal": "Nature Neuroscience",
+    "published": "2025-02-10",
+    "pmcid": "PMC11893458",
+    "rights": "Article XML declares CC-BY-4.0; third-party exceptions remain."
+  },
+  "scientific_question": "Can an agent reproduce the complete two-monkey empirical latent-circuit result and improve neural prediction without choosing a trivially easier projection or sacrificing behavior?",
+  "complete_scientific_unit": "All released Mante2013 PFC neurons and trials needed for the empirical Figure6/ExtendedData9 result in both monkeys A and F. The200 trained-RNN simulation study is a separate part of the paper and is not claimed reproduced by this empirical unit.",
+  "published_anchors": [
+    {
+      "metric": "test R-squared in fitted latent projection",
+      "monkey_A": 0.88,
+      "monkey_F": 0.76,
+      "meaning": "These are fits in the learned task subspace, not variance explained across the full recorded population."
+    },
+    {
+      "metric": "fraction of total PFC variance represented by learned task subspace",
+      "monkey_A_percent": 11.0,
+      "monkey_F_percent": 7.0
+    },
+    {
+      "metric": "irrelevant-stimulus suppression one-sided Mann-Whitney",
+      "A_motion": {
+        "U": 120,
+        "p": 1.4e-09
+      },
+      "A_color": {
+        "U": 83,
+        "p": 1e-10
+      },
+      "F_motion": {
+        "U": 277,
+        "p": 1.5e-05
+      },
+      "F_color": {
+        "U": 194,
+        "p": 1.6e-07
+      },
+      "units": "36 stimulus conditions per context; not36 animals"
+    }
+  ],
+  "candidate_conditions": [
+    {
+      "name": "paper_and_data",
+      "reproduction_exposure": "Paper, complete authentic inputs for the declared reproduction endpoint, common schema and output interface. Full reproduction inputs may contain outcomes later reserved for improvement; this packet is not a protected-improvement packet. No official analysis source or fitted reference parameters.",
+      "improvement_exposure": "Paper, development inputs/labels and only explicitly permitted past calibration material, plus a common schema and output interface. Outer assessment targets, forbidden future signal and future annotations remain with the owner; full-data reproduction material is absent."
+    },
+    {
+      "name": "paper_data_official_code",
+      "reproduction_exposure": "Identical reproduction packet plus the selected official analysis source and declared dependencies. Owner reference caches and fitted answer-parameter artifacts are excluded.",
+      "improvement_exposure": "Identical protected improvement packet plus the selected official analysis source and declared dependencies, audited to exclude fitted answer parameters, held outcomes and reference caches. A reproduction run or its artifacts are not supplied."
+    }
+  ],
+  "evaluation_owner": "Reference construction and private target generation stay outside every candidate context. Reproduction and protected improvement use distinct authoring packets/workspaces/contexts as specified by phase_and_context_isolation. Frozen improvement programs are assessed in fresh offline containers with owner-only targets/reference caches. No model or native run is selected.",
+  "contamination": "Public papers, data and code may already occur in model training. Paper reproduction is an execution/reasoning test with known published anchors, not a claim of unseen scientific discovery. Prospective splits, hidden labels, code-access parity and frozen-program evaluation are required for improvement.",
+  "reproduction": {
+    "required_outputs": [
+      "Complete unit/trial/condition eligibility ledger for both monkeys, retaining excluded units with original reasons.",
+      "Both72-condition train/test trajectory tensors and all preprocessing identities.",
+      "Both200-start fitting ensembles, fixed model-selection criteria, selected top-ten connectivity summaries and embedding identities.",
+      "Projected test R-squared, fraction of full variance captured, task fit and all four irrelevant-stimulus suppression statistics.",
+      "No-recurrence comparator for both monkeys; error-trial analysis reported separately with all available conditions and explicit denominator."
+    ],
+    "original_method": "At least four correct trials per unit in each of72 stimulus conditions; disjoint half-trial split;50ms firing-rate bins,40ms Gaussian smoothing, within-split z-scoring and condition-independent mean subtraction; PCA retaining50% variance; latent circuit alpha.2, recurrent noise.15, modified three-term PFC loss with lambda.5;200 model initializations per monkey.",
+    "unit_discrepancy": "Results name727/574 PFC units; Methods name762/640 available units and483/323 meeting the>=4-correct-trials-per-condition criterion. These populations must be reconciled against source/data rather than selecting the numbers that fit. Full-trial eligibility is unverified.",
+    "source_gap": "Pinned latent_net.py implements mse_z + l_y*nmse_y and has no fitted intercept or the paper-specific three-term PFC objective. The release tree and README expose a trained-RNN tutorial, not a demonstrated complete empirical-PFC entry point. Recover or faithfully specify the missing empirical procedure before claiming an official-reference run.",
+    "stochastic_matching": "Use declared seed manifests and compare the whole distribution of retained fits and numerical anchors within predeclared MonteCarlo/tolerance intervals. Do not tune seeds or tolerances until the published values appear.",
+    "limits": "Original half-trial/PCA/z-scoring choices are reproduction semantics; they are not automatically acceptable prospective preprocessing. Published parameters are owner-side reference aids, not candidate code-access material.",
+    "native_clock_gate": {
+      "status": "UNRESOLVED_NATIVE_REFERENCE_GATE",
+      "published_descriptions": [
+        "Experimental stimulus follows the context cue by650ms and lasts750ms.",
+        "Neural data are described as750ms starting100ms after stimulus onset;50ms windows/steps are described, with the first window centered100ms after onset and the last100ms after stimulus offset. The paper also refers to15 available neural time steps.",
+        "The model is described as150 steps of10ms from context onset to1500ms, with context input throughout0–1500ms and stimulus input750–1500ms.",
+        "Methods says neural-response fitting uses the last15 model time steps for which PFC data are available, and task-output error is penalized only during the last250ms."
+      ],
+      "required_resolution": [
+        "Authenticate the exact neural sample-center/end-point convention and all preprocessing support.",
+        "Identify the model-to-neural sampling/resampling adapter, context/stimulus schedules, initial state and physical-time correspondence.",
+        "Join the exact neural-fit and task-readout/loss windows to the recovered empirical code before a native reference is declared."
+      ],
+      "rule": "Retain all published descriptions. Do not silently choose an alignment that makes fitting convenient or declare a paper error from this unresolved source-level ambiguity.",
+      "source_gap": "The inspected released class does not provide the complete empirical sampling/timing adapter."
+    }
+  },
+  "improvement": {
+    "proposed_primary": "Predict held-trial neural trajectories in a fixed original-neuron coordinate system; score normalized squared prediction error using training-defined scaling. Report each monkey and their equal-weight mean. Candidate-dependent projected R-squared is diagnostic only.",
+    "split": "Predeclare nested disjoint trial splits per unit and stimulus condition. Fit all centering, scaling, denoising/PCA and hyperparameters on development trials; an outer frozen trial set is only accessed by the owner scorer. Preserve all original eligible units and72 conditions. Because units need not be simultaneously recorded, do not invent synchronized single-trial population vectors.",
+    "baselines": [
+      "Original reconstructed latent circuit with equal optimization budget",
+      "Fixed low-rank linear dynamics or reduced-rank predictor",
+      "Condition-mean predictor"
+    ],
+    "behavior_guard": {
+      "primary_guard": "Predeclare the exact native continuous task-output loss, its normalization and scoring time window after recovering the empirical reference. The paper describes two targets taking1.2 and0.2 according to choice and penalizing task-output error in the last250ms; verify exact implementation before freezing the guard.",
+      "choice_metric": "Binary choice accuracy may be reported as a separately defined metric with an explicit decision rule and time point. It is not interchangeable with continuous task-output loss or task-fit R-squared.",
+      "non_inferiority": "Compare against the same native reference under identical protected folds and optimization budget. No non-inferiority threshold, tolerance or calibration is currently validated; predeclare it using development evidence before viewing outer outcomes.",
+      "separation": "Report neural prediction loss, native task-output loss and any separately defined choice metric separately. Neither projected neural R-squared nor task-fit R-squared is presented as choice accuracy."
+    },
+    "scientific_extension": "Test whether model-derived suppression predicts error-condition activity and whether conclusions survive fixed-coordinate evaluation and condition-blocked validation. Model connectivity is an inferred mechanism, not an anatomical or interventional finding.",
+    "uncertainty": "Only two biological animals. Report per-monkey paired differences and conditional trial/session uncertainty; neither random initializations nor72 conditions justify population-level n=400 or n=144. Session hierarchy and trial independence must be established before resampling."
+  },
+  "resource_estimate": {
+    "storage_known_bytes": {
+      "neural_archive": 62296615,
+      "tdr_code_archive": 885082,
+      "official_release": 121068
+    },
+    "expanded_sizes_unknown": true,
+    "model_count": "200 initializations per monkey=400 for the core empirical reference, plus separately declared comparator/grid fits; do not silently replace this with a convenient subset.",
+    "planning_hardware": "PyTorch CPU is supported by inspected class defaults; a GPU may accelerate fitting. A provisional16GiB RAM planning target is not a measured requirement.",
+    "wall_time": "Unknown until exact empirical entry point, dimensions and stopping rules are recovered. No claimed hours or cost."
+  },
+  "activation_gates": [
+    "Verify reproduction/improvement packet and context separation, including no transfer of full-data reproduction artifacts, outcomes or transcripts into protected improvement.",
+    "Complete authentic archive hash/census, rights notices and all original support joins.",
+    "Resolve unit-denominator discrepancies and identify exact empirical fitting and hyperparameter-selection source.",
+    "Resolve the complete150-by10ms model to15-by50ms neural sampling/time-support join and exact native task-output loss; do not substitute a convenient alignment or binary accuracy.",
+    "Rebuild native reference with full seed/model census; preserve failed starts.",
+    "Freeze common A/B preprocessing assistance and exclude fitted answer parameters from candidate packets.",
+    "Qualify protected scorer with positive controls, wrong-projection and label-leakage attacks.",
+    "Conduct actual end-to-end agent comparisons before scientific qualification."
+  ],
+  "phase_and_context_isolation": {
+    "reproduction": "Use a distinct reproduction workspace, packet and authoring context. This explicitly known-answer reconstruction condition may expose the complete reproduction dataset.",
+    "improvement": "Start a fresh independent authoring context and workspace for each improvement code-access condition and replicate. It receives only the improvement packet. No reproduction transcript, full-data file, reference result, fitted weights, source-derived answer cache, prior session state or adapted candidate program transfers into this context.",
+    "cross_condition": "The paper-and-data context must not inherit source/code/output seen by the paper-data-code context. Common supplied scientific assistance is fixed independently and declared for both.",
+    "assessment": "Freeze the improvement program before outer assessment. Only the owner creates assessment inputs under the declared protocol; sealed labels and forbidden future signals/annotations are not mounted or exposed through tools, logs, filenames or returned scores. Permitted calibration is fixed in advance and is not a channel for full-data reproduction results.",
+    "intentional_transfer": "A deliberately reused/exposed context is a separately labeled transfer/contaminated condition. Its score must not be described as protected improvement and it does not create another benchmark registration.",
+    "limits": "Fresh local context prevents the specific cross-phase transfer above; it does not prove absence of public paper/data memorization from pretraining or other prior exposure. Public-data contamination remains acknowledged."
+  },
+  "schema": "public_neuroscience_paper_construction_draft_v1",
+  "id": "PAPER-SCOPE-20261114-LATENTCIRCUIT",
+  "track": "paper",
+  "stage": "registered_construction_draft",
+  "runnable": false,
+  "scientifically_qualified": false,
+  "submission_ready": false,
+  "document_scope": "Public scientific design for review. This is not an activated task, candidate input packet, official-code distribution, numerical reference or release of protected outcomes.",
+  "source_scope": "Source metadata, article and selected official source support this design. Complete data census, authentic reference execution, protected scorer and end-to-end scientific qualification remain required.",
+  "provenance": {
+    "official_code": {
+      "repository": "https://github.com/engellab/latentcircuit",
+      "tag": "v1.0.0",
+      "commit": "3e151da42379a0e659f3fefcdc858a66eba1eaac",
+      "zenodo_record": 14020108,
+      "archive": "engellab/latentcircuit-v1.0.0.zip",
+      "archive_bytes": 121068,
+      "archive_md5": "26fc627a5e7fe81560cf417123dc09a5",
+      "repository_license": "MIT reported by GitHub metadata and license entry",
+      "zenodo_license": "CC-BY-4.0 metadata; preserve this difference rather than silently replace either declaration.",
+      "inspected_files": [
+        "README.md",
+        "latent_net.py"
+      ]
+    },
+    "data": {
+      "source_page": "https://www.ini.uzh.ch/en/research/groups/mante/data.html",
+      "neural_url": "https://www.uzh.ch/dam/jcr:ca4213cf-1692-4c3d-8aeb-d4c5081d2fd1/PFC%20data.zip",
+      "reported_bytes": 62296615,
+      "last_modified": "2020-10-08T08:56:23Z",
+      "publisher_checksum": null,
+      "preprocessing_code_url": "https://www.uzh.ch/dam/jcr:e530b74d-8a46-430a-9a8d-38dd3b957f8e/tdr.zip",
+      "preprocessing_code_reported_bytes": 885082,
+      "license": "The official UZH source page states GPL3 for all data/code below unless otherwise specified. Archive-specific notices are uninspected.",
+      "admission_status": "No complete authentic neural archive is admitted. Complete acquisition, checksum, census and archive-specific rights inspection remain required."
+    }
+  }
+}
