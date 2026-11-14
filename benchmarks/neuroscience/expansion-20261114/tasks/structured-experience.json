@@ -1,0 +1,238 @@
+{
+  "title": "Reproduce and improve context-transfer time decoding in mouse medial entorhinal cortex",
+  "family": "paper-reproduction-and-method-improvement",
+  "scientific_question": "Does shaping experience change how MEC activity represents elapsed trial time across odor-sequence contexts, and can a fixed decoder-building policy improve held-trial cross-context decoding under equal calibration access?",
+  "experimental_units": {
+    "groups": {
+      "SL_only_shaping": {
+        "mice": 4,
+        "sessions": 8
+      },
+      "standard_shaping": {
+        "mice": 4,
+        "sessions": 5
+      }
+    },
+    "independent_biological_units": 8,
+    "no_independence_claim_for": [
+      "neurons",
+      "time bins",
+      "trials",
+      "repeated sessions",
+      "cross-validation folds",
+      "conditions"
+    ],
+    "roster_authentication_required": true,
+    "source_figure": "6f"
+  },
+  "actor_semantics": {
+    "attempts": "Paper_data and paper_data_code are conditions of one paper family; eight outer cases/ten folds/three contexts are not additional benchmark registrations.",
+    "improvement": "Fixed submitted prediction program, not live query-by-query code changes. A later investigative arm would require separately reviewed equal-information protocol; it is not silently added here.",
+    "reproduction": "Tool-using analysis and Python program production allowed within isolated task. Outcomes are numeric reconstruction plus provenance, not tool-call count."
+  },
+  "conditions": [
+    {
+      "exposure": "Full final paper and necessary processed source data; no official implementation, owner reference code, cached predictions, published source tables with per-query answers or private scorer inputs. Candidate writes its own analysis.",
+      "id": "paper_data",
+      "task_prompt": "inactive_instruction_text.reproduction"
+    },
+    {
+      "exposure": "Same final paper and same processed data plus an explicitly listed, rights-cleared official source-code snapshot. Code view preserves executable analysis and declared dependencies; answer caches/data are excluded transparently and identically as data, not silently edited out of code. Current source snapshot has a licensing/admission gate.",
+      "id": "paper_data_code",
+      "task_prompt": "inactive_instruction_text.reproduction"
+    }
+  ],
+  "reproduction": {
+    "expected_outputs": [
+      "complete session/context-pair squared-error matrix",
+      "within and across session summaries",
+      "signed across-minus-within and original absolute gap separately",
+      "group statistic/p value with declared experimental unit",
+      "method choices, inclusion provenance, analysis program and limitations"
+    ],
+    "input_origin": "fresh per-session processed spike-event tables, not author prediction cache",
+    "method_ambiguity_gate": "Paper RNN methods say nearest1s, while the ephys producer/consumer explicitly use0.5s. Before task activation independently adjudicate paper-only recoverability and acceptable documented method variants. The exact-source scorer is a computational concordance diagnostic, not the sole score for paper comprehension. Do not provide the owner algorithm to the paper_data actor to erase the condition.",
+    "ordering": "Preserve the original ordered trial/index workflow for scientific source reproduction; index is used for target/grouping, never passed as a neural feature. The protected improvement view is separately defined and never silently substituted for the paper workflow.",
+    "owner_source_target": {
+      "caveat": "Published figure statistics treat sessions as units; reproduction reports this faithfully and separately reports mouse-grouped summaries. It must not represent the published session-level test as independent-animal inference.",
+      "context_pairs": "3 within and 6 across from LS,SL,SS; all-context decoder is not part of Figure6f score",
+      "error": "min(abs(predicted_seconds-true_seconds),20-abs(predicted_seconds-true_seconds))**2",
+      "period_seconds": 20,
+      "published_statistic": {
+        "p_rounded": 0.00872,
+        "p_rounding_interval": [
+          0.008715,
+          0.008725
+        ],
+        "t_rounded": 3.2
+      },
+      "seconds_per_bin": 0.5,
+      "session_weights": "equal context-pair weighting after averaging rows within each test context; then original absolute gap per session",
+      "source_statistic": "scipy.stats.ttest_ind(SL_only session gaps,standard session gaps), default equal_var=True",
+      "time_grid_bins": 40
+    },
+    "selected_figure": "6f"
+  },
+  "improvement": {
+    "aggregation": "average bins within each trial, trials within each ordered source/test-context pair, six cross-context pairs within session, sessions within mouse, then equal eight-mouse mean. Report both four-mouse shaping strata and all three within-context pairs separately.",
+    "baseline_portfolio": [
+      "fresh official source LDA on identical split/inputs",
+      "regularized LDA with development-only hyperparameter selection (solver lsqr; shrinkage auto or0.01,0.1,0.5), original SVD LDA retained as anchor",
+      "constant-bin prior selected only on calibration; no-neural shape/order surrogate controls"
+    ],
+    "context_access": "For each source-context decoder, fit on that context only; evaluate LS,SL,SS equally. No query context, trial outcome, group, clock, row order or target bin supplied. Candidate cannot substitute an all-context decoder for a cross-context source-restricted comparison.",
+    "endpoint": "mouse-macro cross-context circular squared error in seconds squared; lower is better",
+    "evaluation_split": "Eight outer leave-one-mouse-out cases. Each fresh actor sees only seven development mice. Before held-mouse calibration is released, freeze algorithm source, hyperparameters/selection policy and artifact hashes. Fixed policy may fit session-specific decoder parameters on calibration trials of the held mouse; it cannot change policy after seeing that mouse.",
+    "inference": "Report all eight paired mouse-level loss differences. The 256-sign enumeration is a descriptive symmetry diagnostic (tail fraction), not a calibrated p-value: leave-one-mouse-out development sets overlap, so the resulting loss differences are not established independent. A calibrated inferential claim requires a separately justified joint sign-exchangeability design. No significance/SOTA claim from this enumeration; no seed/cell/trial pseudoreplication.",
+    "novelty_limit": "All source recordings and paper are public. Local answer isolation is not proof of absence from model pretraining. Paper-wide and code-cache contamination audit required; reproduction and improvement actors/history must be separate.",
+    "prediction_geometry": "Row-wise offline decoding, matching the selected ephys LDA observation unit. One output is a function of its fixed fitted artifact and one neural feature vector; cross-query recurrent state, complete ordered trial geometry, query batch position/size and evaluation step counters are not inputs. Query row order/batch partition changes must preserve predictions after opaque-ID alignment. This pointwise contract is an explicit extension restriction, not a claim to reproduce an RNN sequence task.",
+    "state_isolation": "Fresh restricted process and writable storage for EVERY outer-mouse/session/query-fold/source-context fit+predict unit. That unit receives only the fixed immutable policy/development assets, its source-context calibration, then its query vectors and its own fitted artifact. No other-fold or other-context calibration, fitted artifacts, query outputs or mutable state is accessible. Owner aggregates after all isolated units close. Ten-fold calibration/query reuse across different units cannot become a cache channel. Isolation enforcement is a constructor/runtime admission gate. Fresh isolation never resets the original outer-case absolute deadline or aggregate CPU/memory/PID/output budget; all units share the same remaining allowance and complete cleanup accounting.",
+    "transfer_claim": "Unseen-animal algorithm/policy transfer with within-session calibration; not zero-shot shared-unit decoding across mice.",
+    "within_session_split": "All trials and all cells/time bins of a trial stay together. Ten folds use authenticated source trial ordering and np.array_split semantics; each query fold is disjoint from its nine-fold calibration. Empty folds or absent required context/class support fail admission, not silent dropping."
+  },
+  "schema": "public_structured_experience_construction_draft_v1",
+  "id": "PAPER-ADMISSION-STRUCTURED-EXPERIENCE-20261113",
+  "track": "paper",
+  "stage": "registered_construction_draft",
+  "runnable": false,
+  "scientifically_qualified": false,
+  "submission_ready": false,
+  "document_scope": "Public construction design. This is not an activated task, candidate data packet, official-code distribution or release of private expected outputs.",
+  "paper": {
+    "doi": "10.1038/s41593-026-02409-7",
+    "journal": "Nature Neuroscience",
+    "pmcid": "PMC13633125",
+    "preprint_identifiers": [
+      "10.1101/2025.05.13.653873",
+      "10.21203/rs.3.rs-6658028/v1"
+    ],
+    "publication_date": "2026-09-03",
+    "title": "Structured experience shapes strategy learning and neural dynamics in the medial entorhinal cortex",
+    "url": "https://www.nature.com/articles/s41593-026-02409-7",
+    "year": 2026
+  },
+  "official_repository": {
+    "commit": "8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8",
+    "tree": "2059424881ddb2e348bbfe0ba8e317276c30be8b",
+    "url": "https://github.com/heyslab/StructuredExperience_NatNeuro_2026"
+  },
+  "source_revision_limit": "Selected Figure6f numerical source is consistent across these observations, but byte identity is reported exactly and no whole-repository commit equivalence or runtime parity is claimed.",
+  "source_rights": {
+    "archive_root_license_file_present": false,
+    "current_github_root_license": "No license identified by retained GitHub API; do not label current repository MIT",
+    "deposit_license": "CC-BY4.0, observed on official analysis-code/source-file record20855879; the code ZIP is an explicitly listed deposited object",
+    "external_dependencies": "Scientific library licenses/runtime and the companion models_database service are separate. The proposed numerical wrapper removes only provably unused plotting/database imports; it does not pretend those dependencies were inspected or installed.",
+    "nested_scope": {
+      "README_sha256": "91227aea8436bc595989ac4b2412206fb4ba1fbe5d776cc2b2eb3b9e9a1b19d2",
+      "README_statement": "Identifies an Apache2.0 subset of fixed-point finder code with retained notices and local housekeeping edits. It is used by RNN fixed-point analysis, not selectedFigure6f LDA.",
+      "license": "Apache-2.0",
+      "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "per_file_vendored_header_inspection": "Not performed; no need to include this subtree in the selected numerical reference/code view.",
+      "prefix": "fpf_code/computation-thru-dynamics/"
+    },
+    "redistribution_gate": "Before any public source view or official-code candidate distribution, root must resolve and select exact file scope, revision identity, attribution, and genuine numerical dependencies. The unrelated Apache subtree and cached scientific answers are excluded from the proposed Figure6f view; such exclusion is declared, not a claim that every remaining file is already cleared. No redistribution is selected.",
+    "selected_author_source_basis": "The official Zenodo deposit explicitly lists the analysis-code object and CC-BY 4.0 metadata. This is retained archive-scoped provenance, not a completed per-file rights determination, blanket permission for every archive member, relicensing of current GitHub HEAD, or native/dependency qualification."
+  },
+  "required_gates": [
+    {
+      "id": "complete_authentic_inputs",
+      "requirement": "Acquire and authenticate the entire checksum-bound ephys object, every opaque member and the source-defined13-session/eight-mouse join. No authentic neural archive has been acquired in this workstream.",
+      "status": "open"
+    },
+    {
+      "id": "trial_unit_authority",
+      "requirement": "An owner-approved contained native reader must prove the complete behavior trial roster, all units/raw rows, source trial ordering, clocks, source exclusions and duplicate-alias policy. A full behavior/unit roster is not reconstructible from spike-bearing rows alone.",
+      "status": "open"
+    },
+    {
+      "id": "all_unit_zero_event_trials",
+      "requirement": "The producer derives trials from retained event rows; all-unit-zero-event trials may disappear. The current constructor refuses them. Resolve against authentic behavior and native source; never silently drop them or add synthetic zeros while claiming source parity. Individual units lacking events for an otherwise present trial and retained out-of-window event trials are separate cases.",
+      "status": "open_hard_refusal"
+    },
+    {
+      "id": "code_view_rights_revision",
+      "requirement": "Select exact file-scoped author-code rights, revision, attribution and dependency notices. Zenodo CC-BY4 metadata explicitly includes the ZIP, but no root license exists and the nested Apache2 fixed-point subtree does not license the whole release. Nine-file comparison does not prove full Git-tree equivalence. Do not mount the answer-containing ZIP as candidate input.",
+      "status": "open"
+    },
+    {
+      "id": "paper_only_identifiability",
+      "requirement": "Adjudicate the paper's nearest1s versus source0.5s methods and reasonable paper-only variants before activation. Owner source-concordance cannot be the sole paper-understanding score; do not supply the owner recipe to both arms.",
+      "status": "open"
+    },
+    {
+      "id": "native_reference_and_baseline",
+      "requirement": "Select actual dependency/runtime identities and implement a minimal source-preserving reference wrapper; compare all13x9 context-pair outputs freshly, with source trial order, inclusion and preprocessing unchanged. The independent stdlib feature translation and synthetic controls do not prove Pandas/SciPy/LDA parity. Cached author predictions are not truth. Run competent baselines on identical complete inputs after separate selection.",
+      "status": "open"
+    },
+    {
+      "id": "production_owner_and_leakage",
+      "requirement": "Implement and demonstrate real per-fit process/storage isolation and immutable policy/calibration/query boundaries under one outer deadline and aggregate resource accounting. Current state checks and trusted46-control owner are not an arbitrary-candidate sandbox. Freeze no-neural, preprocessing-edge, clock, order, batch and cache adversarial checks; time accuracy alone is not neural understanding.",
+      "status": "open"
+    },
+    {
+      "id": "scorer_uncertainty_and_tolerances",
+      "requirement": "Authenticate the complete private expected-row universe before candidate output; freeze numeric tolerances from native parity and rounding anchors before evaluation. Use mouse aggregation, retain all eight paired differences, and keep256sign tails descriptive because LOOM training overlaps. Published session t-test is reproduction, not independent-animal inference.",
+      "status": "open"
+    },
+    {
+      "id": "empirical_evaluation",
+      "requirement": "Fresh root-selected finite reference/baseline/candidate operations, complete original outputs, independent result review and honest contamination limits. No real candidate/model comparison or scientific qualification has occurred.",
+      "status": "unselected"
+    }
+  ],
+  "data_source": {
+    "compressed_bytes": 2807041310,
+    "exact_metadata_url": "https://zenodo.org/api/records/20855879/files/ephys_session_release.tar.gz/content",
+    "name": "ephys_session_release.tar.gz",
+    "published_md5": "971fc2ec3c9feee60df490a004f489cb",
+    "record": 20855879,
+    "sha256": "must be observed from complete separately selected acquisition",
+    "acquired": false
+  },
+  "data_contract": {
+    "animal_mapping": "All13 source-list session IDs must join an authenticated author-defined eight-mouse mapping. The source strings and multiplicities are admission constraints, not permission to infer animals by filename prefix.",
+    "input": "All selected per-session spikes.h5 cluster keys and complete source trial/trial_type/result/trial_time columns, paired with authoritative behavior and unit rosters; original files and excluded rows remain in private lineage.",
+    "private_target_boundary": "Owner keeps true time bins, trial/context/outcome/mouse/source-path lineage and complete expected-row universe. Protected actors receive only permitted calibration and opaque-ID neural queries; no scientific answer cache, reference outputs or owner algorithm in paper-only inputs.",
+    "rows_and_folds": "Forty time bins per eligible trial per source-context decoder; all source trial/time/cell rows remain grouped for ten authenticated source-order folds. Private expected rows and hashes are computed by the owner before actor output. Actual authentic trial/unit/prediction counts are unknown.",
+    "session_multiplicity": {
+      "SL_only_shaping": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "standard_shaping": [
+        1,
+        1,
+        1,
+        2
+      ]
+    },
+    "source_fidelity": "Preserve source dropna across all original columns, literal None handling, source event/trial ordering and unit census. Source40-bin rates divide counts by2; do not silently replace with a Hz convention. Offline Gaussian window16/std4/edge renormalization and per-unit/per-trial sample-SD normalization remain source operations pending native parity.",
+    "source_session_ids": {
+      "SL_only_shaping": [
+        "M2_2202025_g0",
+        "M2_2212025_g0",
+        "M1_2182025_g0",
+        "M1_2202025_g0",
+        "M4_2252025_g0",
+        "M4_2272025_g1",
+        "M5_2272025_g0",
+        "M5_3012025_g0"
+      ],
+      "standard_shaping": [
+        "AC01_01292025_g0",
+        "j2_05092024_g0",
+        "AB02_08272024_g0",
+        "AB02_08282024_g0",
+        "AB04_09092024_g0"
+      ]
+    },
+    "unit_support": "Every source unit and raw row accounted for, including empty event support; all-unit-zero-event trials hard-refuse pending explicit adjudication. No silent cell, trial, context, fold, session or mouse deletion."
+  },
+  "inactive_instruction_text": {
+    "reproduction": "# Reproduce the paper's MEC context-transfer result\n\nGiven the final paper and the admitted processed MEC recordings, reconstruct the quantitative result shown in Figure 6f: how trial-time decoding changes between within-context and across-context evaluation for the two shaping histories.\n\nUse all admitted animals and recording sessions. Derive the result from the processed spike-event data. Provide a runnable analysis program, the per-session context-pair error table with units, within/across summaries, the plotted comparison and its statistical calculation, and a concise account of your choices and limitations. State the experimental unit used in each calculation; distinguish repeated sessions from independent mice. Explain any ambiguity between the paper and the materials available in your condition, rather than silently changing the cohort or interpreting a published statistic as a new result.\n\nYour packet states whether official analysis source is available. The paper-only condition includes no reference implementation. Both conditions have the same paper and source recording data; cached author predictions and final answer tables are not analysis inputs. Numerical agreement, method validity and provenance are reported separately. An exact-source match by itself is not a comprehensive score for scientific reasoning.\n\nDo not access the network or owner reference outputs. Every run must stay within the supplied runtime, input manifest and attempt budget. Report a missing or contradictory required input instead of substituting a smaller dataset.\n\nThis prompt is inactive until the constructor, reference comparison and paper-method ambiguity gates in the owner contract have been resolved.\n",
+    "improvement": "# Improve held-trial cross-context time decoding\n\nDevelop a fixed program that builds a decoder of elapsed trial time from MEC feature vectors. You receive development mice and a source-context calibration interface. An outer evaluation uses a mouse absent from development. Your code and hyperparameter-selection policy are frozen before that mouse's calibration data are released. The policy may then fit session-specific parameters from the allowed calibration trials.\n\nFor each fit, use only the supplied source context. The evaluator scores that decoder on all three trial contexts, with the six cross-context pairs as the primary endpoint. Query IDs are opaque and unordered; submit one integer time-bin prediction in 0..39 for every supplied ID. Bins are spaced0.5seconds on a20second circular interval. The loss is squared shortest circular time distance in seconds squared. All forty bins in every query trial are evaluated. Scores average bins within trials, trials within each context pair, context pairs within sessions, sessions within each mouse and then mice equally. Within-context results and both shaping strata are also reported.\n\nCompare against the fixed reference baselines on exactly the same cases and calibration access. Improvement is the paired per-mouse decrease in cross-context loss, not an increase in the between-minus-within gap. The released results will include every mouse. Leave-one-mouse-out development sets overlap, so eight mice do not automatically produce eight independent loss differences; any sign-enumeration summary is descriptive, not a calibrated significance test. A better score is not by itself a broad SOTA or causal claim.\n\nEvery session/query-fold/source-context fit and its prediction phase runs in fresh restricted process/storage with only its own calibration and fitted artifact. No state, calibration, artifact, prediction or feedback from any other fold/context is available. This matters because a query trial in one fold is calibration in other folds.\n\nNo query timestamps, temporal ordering, trial outcomes, row-to-time mapping, private labels or score feedback are available. Do not modify code after held calibration is released, fit to query data, load cached author answers, or change the admitted cohort. The task is offline feature-vector decoding with declared preprocessing, not causal streaming inference. All code/source/data access is restricted to the manifest for your condition.\n\nThe held-mouse evaluation represents algorithm transfer with within-session calibration. It does not assume neuron identities align across mice. This is a prospective extension of the paper; its numeric improvement endpoint was not a published paper result.\n\nThis prompt is inactive until the complete source roster, trial support, rights, runtime, reference baselines and leakage controls pass admission.\n\nThe prediction interface is pointwise: a fixed fitted artifact and the current neural vector determine its output. Do not use query position, batch boundaries, a recurrent step counter or state carried from other query rows. The owner mixes rows across trials/contexts and will require identical ID-aligned outputs under different row orders and batch partitions. Neural-unit columns retain the same order as calibration. Offline within-trial feature construction is performed before this mixing. This is a declared row-wise ephys decoding extension, not a shuffled version of the paper's RNN sequence task.\n"
+  },
+  "counting_note": "One paper-result family; two code-access conditions, reproduction/improvement, mice, sessions, folds and controls add no separate benchmark registrations."
+}
