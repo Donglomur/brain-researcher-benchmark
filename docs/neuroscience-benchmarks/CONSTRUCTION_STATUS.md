@@ -41,6 +41,18 @@ All 80 final ridge artifacts and complete reference predictions were independent
 
 This accepted construction/reference tier is separate from the two-profile admission count above. It is not an LLM campaign, original Julia/Float32 reproduction, full-paper result or public authentic-data release.
 
+## Further verified construction
+
+| Family | Independently verified progress | What remains unestablished |
+| --- | --- | --- |
+| Latent circuit | All 22 prepared arrays and 1,023,465 logical values converted into 17 technical documents across the four reproduction/improvement and paper/data/code variants. The 806 source coordinates, 72 conditions and 15 neural bins remain complete. | This verifies data preparation and evaluator templates. The complete 6,400-start named reference, actual assistance delivery, protected participant evaluation and historical paper parity remain unrun or unresolved. |
+| Neural intake | All 81 main invented controls and a separate interrupted-process fixture passed whole review. The latter verified the expected failed worker and cleanup while the supervising driver survived. | These are engineering checks. They do not measure neural understanding or admit a scientific benchmark. |
+| APCx | All 66 host controls passed. The complete reference design selects tuning parameters from each session's own development data and freezes predictions before protected labels are opened. | The 35 numerical controls, container integration and authentic reference fits have not run. Physical-target and unresolved-trial limits remain. |
+
+The first complete AASD metadata intake also passed structural review: 18 EEG files each contain an array with shape **62 × 7,680 × 60**, and all 62 audio files have consistent stereo PCM16 layouts at 16 kHz. The earlier **18 × 70** contract, including passive trials, is not established by this processed release. This discrepancy remains a scope hold. Participant assignments, active-trial labels, event/audio alignment and any motor-control claim still require semantic verification. A smaller trial axis is not silently treated as completion of the broader contract.
+
+These milestones do not change any admission or registration count above. Their complete data, output and review evidence remains private; this update does not add runnable authentic tasks to the public checkout.
+
 ## What can be reproduced from this repository
 
 The public packages below contain reusable source and **invented-data controls**, with their own dependencies and run instructions:
