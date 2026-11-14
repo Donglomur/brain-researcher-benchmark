@@ -47,7 +47,8 @@ def validate_process_ownership(rows,commands):
         'signals_retired_before_reap','wait_ownership_lost','final_read_only_probe_after_reap',
         'proc_snapshot_is_absence_proof','proc_metadata_reserved_bytes',
         'proc_read_dispatch_reserved_bytes','proc_metadata_actual_bytes','proc_directory_entries',
-        'other_group_members_observed','metadata_cost_scope'}
+        'other_group_members_observed','proc_descriptor_closure_known',
+        'proc_cleanup_error_types','metadata_cost_scope'}
     need(type(rows)is list and len(rows)==len(commands),'one ownership record per actual CLI')
     for row,command in zip(rows,commands):
         need(type(row)is dict and set(row)=={'phase','ownership','stdout_eof','stderr_eof','cleanup_error_types'}
@@ -64,6 +65,8 @@ def validate_process_ownership(rows,commands):
             need(value[key]is True,'strict held-leader retirement diagnostics')
         need(value['wait_ownership_lost']is False and value['proc_snapshot_is_absence_proof']is False
             and value['other_group_members_observed']==[],'no lost ownership or observed survivor')
+        need(value['proc_descriptor_closure_known'] is True
+            and value['proc_cleanup_error_types']==[], 'known error-free proc descriptor closure')
         for key in ('proc_metadata_reserved_bytes','proc_read_dispatch_reserved_bytes',
                     'proc_metadata_actual_bytes','proc_directory_entries'):
             need(type(value[key])is int,'exact managed metadata counters')

@@ -11,7 +11,7 @@ from pathlib import Path
 import sys
 import time
 
-PROGRAM_PIN = {'bytes': 2468, 'sha256': 'e237ed31a52b074f70debc9639919e7f056973ff319f1499c15d044f623aca25'}
+PROGRAM_PIN = {'bytes': 2468, 'sha256': 'e620ecc842cc98e6a9aa1722522dfcb007d8b0e27204ca6e628331e192a247fa'}
 PREP_ENTRY_PIN = {'bytes': 29770, 'sha256': '822f25917057c3df24c3f6bb77ea76f610bb3493f41b1c9524ba2a68040bf1b9'}
 SCOPE = dict(records=108, query_trials=10800, combined_conditions=2592)
 CAPTURED = ('import base64,sys\n'

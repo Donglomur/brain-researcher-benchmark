@@ -1,0 +1,39 @@
+# Linux process-ownership engineering checks
+
+This directory checks the four concrete process owners used by the adaptive EEG source. It does not acquire neural data, run a model, build an image, invoke Docker or report a scientific result. Twenty-three cases are engineering cases within one assignment, not twenty-three new benchmarks. The earlier source-version results do not qualify a changed owner.
+
+Run only on a supported Linux host with an existing CPython 3.11 or later. The new CI job uses the existing Ubuntu runner Python and standard library; it installs no package and downloads no runtime, image, model or data. The workflow's pinned checkout remains the normal source-checkout step. The previous fourteen job definitions are preserved.
+
+## Exact case coverage
+
+Seven cases run tiny Python children through the actual source owners: natural completion for the adaptive, preparation and historical batch owners; the native CLI owner with its Docker command prefix explicitly replaced by a tiny Python command; adaptive combined-output overflow; the original work timeout; and the historical owner's combined 65,537-byte overflow. These use real Linux pipes, process waits, procfs metadata and owned-child cleanup.
+
+Four original cases use explicit inert leaves: native.phase must retain its first dispatch error when its original clock has expired and publication separately fails; a reused post-reap group must never receive another destructive signal; lost child-wait ownership must stop signaling and retain the exact error; and actual entry.launch must pass the proc metadata reservation callback. Complete captured modules and their actual globals/callers are used, not detached functions. The native phase's Docker, file, numerical, clock and publication leaves are inert in that case.
+
+Twelve added inert cases exercise each of the four actual `_stat_body` → `other_members` → owner caller paths. Each owner sees (1) FileNotFoundError plus a directory-close OSError, (2) ProcessLookupError plus the same close failure, and (3) vanished metadata with known successful closure. Kernel/process/selector/signal/clock leaves are inert; the helper and caller functions remain actual captured source. The failures must retain the exact first and secondary objects and both stream prefixes. The native transport must retain the original carrier, refuse cleanup completion and refuse whole-transport reaping. The successful native case also checks the actual strict consumer rejects either a false closure field or a nonempty cleanup-error list. These twelve cases create no real child or proc operand.
+
+The negative oracles require the selected original exception class/message or exact injected error object, matching original record and clean retirement diagnostics. An unexpected timer, resource error, programming error, secondary close failure or expired inherited alarm fails the batch. A successful cleanup after a failure does not turn it into a passing case.
+
+No real descendant-creation case is in the twenty-three-case roster. The outer runner must nevertheless own and retire any adopted child left by a failed harness. Its containment evidence is distinct from the four inner owners' process-group evidence. Passing these cases is not proof of escaped-descendant behavior in arbitrary scientific code, container/cgroup/daemon closure, model-server ownership or whole-machine resource enforcement.
+
+## Source and invocation
+
+source_selection.json binds the exact ten exact runtime source bodies under the sibling package directory. Its root is repository-relative, so invoke from the repository checkout root. The selected harness is captured and compiled in memory; no sibling task import or bytecode cache supplies its definitions. The CI step separately authenticates and compiles the exact outer runner source. This companion binds the reviewed cleanup-propagation successor: ten runtime/manifest members change while the other 186 source members remain exact. The scientific kernels and scope remain fixed.
+
+Each workflow job starts one harness attempt. A manual workflow rerun is a separate attempt; the runner does not retry failures or deduplicate unrelated GitHub events. A local invocation must use the same exact inputs, a supported environment and a fresh absolute output directory. Read the actual workflow's neural083-linux-owner-controls job for the pinned command and source bootstrap. Do not replace its fixed source pins or treat a manually edited selector as the same experiment. There is no automatic retry.
+
+## Local environment and retained evidence
+
+GitHub supplies RUNNER_TEMP. For a separately selected local invocation, supply an owned, absolute, non-symlink RUNNER_TEMP directory and a fresh direct child named neural083-owner-*. The runner creates that child exclusively with a fixed three-file inventory: stdout.bin, stderr.bin and OWNER.json. It never overwrites or recursively deletes an old attempt. Source and selector paths are absolute paths to their exact siblings beside outer_owner.py; execute from the repository root.
+
+The logs carry JSON/base64 frames of original consumed stdout/stderr and the exact pending OWNER receipt. These make the bounded evidence recoverable after an ephemeral CI runner disappears without introducing an upload action. OWNER.json describes observations before its own final publication; it is not a success certificate. Require the complete original outer command result, its natural zero exit and final summary together. A late write or restoration failure may leave only partial durable evidence and must remain a failed attempt.
+
+The inner harness retains its original 15-second interval. The outer runner has one 25-second work interval and a two-second cleanup/publication remainder, never renewed per child. Outer managed reads are capped at 512 KiB with 128 KiB reserved for child-discovery metadata; the harness separately has a 2 MiB source/proc allowance. Its nineteen complete 65,536-byte proc grants (seven real, twelve inert) and exact ten-body/selector capture reserve 1429823 bytes, within that original allowance; failed attempts are not refunded. Stdout and stderr caps are 16 KiB and 64 KiB, each with a retained refusal probe. The fixed local raw/receipt payload is at most 147,458 bytes; log copies are additional retained evidence, not free bytes. The prospective combined evidence allowance is 512 KiB. These are source-derived operation bounds, not claims about GitHub's whole-job checkout traffic, filesystem allocation or a measured RSS limit.
+
+## Evidence and limits
+
+The outer runner's complete retained original result, natural command exit and original streams are required together. A JSON field or a visible completion file alone is insufficient. Both stdout and stderr have finite caps; original failure prefixes and secondary cleanup diagnostics remain failures. Forced termination, a remaining adopted child, timeout, short/overflow output or failed publication cannot produce passing evidence merely because cleanup later succeeds.
+
+The environment requires Linux waitid/WNOWAIT, procfs, default SIGCHLD, exclusive single-threaded child waiting, child-subreaper support and pidfd operations. Unsupported conditions refuse before starting the harness. The procfs entry/read limits remain finite and may reject an unusually busy or restricted runner. Such refusal is not a passing ownership test. Source checks and logical byte reservations are not whole-machine physical-I/O or RSS measurements.
+
+The public source currently supplies no passing result for this companion. Actual CI execution is a separately selected step. The complete original EEG study, authentic inputs, numerical environment, model service, matched information/compute comparison and protected scientific grading remain separate qualifications.

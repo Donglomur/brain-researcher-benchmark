@@ -160,6 +160,10 @@ class _PinnedGroup:
                 try:
                     raw = self._stat_body(root, name, deadline)
                 except (FileNotFoundError, ProcessLookupError):
+                    # Vanishing proc metadata is ignorable only after known closure.
+                    # Keep the original first error; raw close errors remain on this owner.
+                    if self.errors:
+                        raise
                     # A vanished process does not prove global absence; final probe does.
                     continue
                 close = raw.rfind(b')')
@@ -251,6 +255,8 @@ class _PinnedGroup:
                 'proc_metadata_actual_bytes': self.proc_read_bytes,
                 'proc_directory_entries': self.proc_entries,
                 'other_group_members_observed': list(self.members),
+                'proc_descriptor_closure_known': not self.errors,
+                'proc_cleanup_error_types': [type(error).__name__ for error in self.errors],
                 'metadata_cost_scope': 'precharged_managed_proc_reads_not_OS_internal_IO'}
 
 
@@ -315,8 +321,10 @@ class Docker:
                     if stream is not None:
                         try:stream.close()
                         except BaseException as exc:cleanup_errors.append(exc)
+            if group is not None:
+                cleanup_errors.extend(group.errors)  # Retain each original close error object.
             cleanup_in_time=time.monotonic()<cleanup_end
-            cleanup_ok=child_reaped and group_absent and not cleanup_errors and cleanup_in_time
+            cleanup_ok=child_reaped and group_absent and group is not None and not group.errors and not cleanup_errors and cleanup_in_time
             group_error=type(cleanup_errors[0]).__name__ if cleanup_errors else None
             self.reaped=previous_reaped and cleanup_ok
             self.records.append({'phase':phase,'returncode':rc,'error_type':error,'observed_retained_bytes':sum(map(len,bufs.values())),'seconds':time.monotonic()-start,'client_reaped':child_reaped,'cleanup_complete':cleanup_ok,'cleanup_before_original_cutoff':cleanup_in_time,'owned_group_absence_observed':group_absent,'leader_exited_with_group_alive':survivor_observed,'group_probe_or_cleanup_error':group_error})

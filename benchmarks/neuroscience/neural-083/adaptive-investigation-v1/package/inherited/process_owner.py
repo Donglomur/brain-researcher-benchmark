@@ -156,6 +156,10 @@ class _PinnedGroup:
                 try:
                     raw = self._stat_body(root, name, deadline)
                 except (FileNotFoundError, ProcessLookupError):
+                    # Vanishing proc metadata is ignorable only after known closure.
+                    # Keep the original first error; raw close errors remain on this owner.
+                    if self.errors:
+                        raise
                     # A vanished process does not prove global absence; final probe does.
                     continue
                 close = raw.rfind(b')')
@@ -247,6 +251,8 @@ class _PinnedGroup:
                 'proc_metadata_actual_bytes': self.proc_read_bytes,
                 'proc_directory_entries': self.proc_entries,
                 'other_group_members_observed': list(self.members),
+                'proc_descriptor_closure_known': not self.errors,
+                'proc_cleanup_error_types': [type(error).__name__ for error in self.errors],
                 'metadata_cost_scope': 'precharged_managed_proc_reads_not_OS_internal_IO'}
 
 
@@ -353,6 +359,8 @@ def run(argv, *, normal_end, cleanup_end, env, metadata_read, stream_cap=65_536)
                         record['process_group_absent'] = group.absent_after_reap()
                     except BaseException as error:
                         record['cleanup_errors'].append('final-read-only-group-probe:' + type(error).__name__)
+                record['cleanup_errors'].extend('proc-close:' + type(error).__name__
+                                                for error in group.errors)
                 record['process_ownership'] = group.evidence()
         if selector is not None:
             try:
@@ -390,7 +398,8 @@ def run(argv, *, normal_end, cleanup_end, env, metadata_read, stream_cap=65_536)
                 record['parent_alarm_restored'] = True
         record['finished'] = time.monotonic()
         record['elapsed'] = record['finished'] - start
-        good = (record['primary_error'] is None and not record['cleanup_errors'] and
+        good = (group is not None and not group.errors and
+                record['primary_error'] is None and not record['cleanup_errors'] and
                 record['natural_exit'] and type(record['exit_code']) is int and record['exit_code'] == 0 and
                 record['process_reaped'] and record['process_group_absent'] and all(eof.values()) and
                 record['finished'] < normal_end)
