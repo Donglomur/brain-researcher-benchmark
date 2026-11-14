@@ -1,0 +1,159 @@
+{
+  "schema": "public_neuroscience_aasd_construction_draft_v1",
+  "frozen_on": "2026-11-14",
+  "status": "registered_construction_draft",
+  "finished_benchmark_count": 0,
+  "scientific_runs": 0,
+  "biological_data_downloads": 0,
+  "evaluation_status": "Prospective protocol. No native data census, baseline run, scorer validation, contamination qualification or successful reproduction claimed.",
+  "evaluation_modes": [
+    "Interactive tool-using investigator with fixed compute/tool budget",
+    "Program authored before protected evaluation and then executed without adaptation",
+    "Optional matched information-budget direct-input arm only when whole scientifically sufficient cases can be represented; never counted as a new task"
+  ],
+  "paper_code_conditions": "Paper + permitted data versus paper + identical data + audited official source are access conditions of this family, not separate benchmark counts. Protected labels and executable-result caches are excluded in both.",
+  "qualification_rule": "No promotion until complete input/cohort inventory, rights, deterministic reference, leakage probes, competent baselines, protected scoring and independent scientific review pass. A null or reversed biological conclusion is a valid scientific outcome.",
+  "candidate_id": "HOLD-NEURAL-FRONTIER-AASD-20261114",
+  "family": "spontaneous-auditory-attention-under-motor-control",
+  "title": "Reported attention-state decoding with explicit motor controls",
+  "paper": {
+    "title": "An Open Non-Invasive EEG Dataset for Spontaneous Auditory Attention Switch Decoding",
+    "venue": "Scientific Data",
+    "published": "2026-04-16",
+    "doi": "10.1038/s41597-026-07244-w",
+    "url": "https://www.nature.com/articles/s41597-026-07244-w",
+    "pmcid": "PMC13261058",
+    "evidence": [
+      "https://www.nature.com/articles/s41597-026-07244-w"
+    ]
+  },
+  "scientific_question": "Does offline EEG support out-of-person and out-of-mixture decoding of the self-reported attended speech direction beyond measured motor/report, speech-identity and trial-timing alternatives? This is report decoding; attention-specific interpretation requires the stated controls and limitations.",
+  "estimand": {
+    "primary": "Pool confusion counts across the three held-mixture folds separately for each participant, then compute that participant's balanced accuracy and average the 18 participant scores equally. Windows are fixed, non-overlapping 1 s targets with the common EEG information boundary below. Do not average per-fold balanced accuracies or drop one-class folds silently.",
+    "reference": "Behavioral self-report, not direct access to true attention. Labels come from recorded left/right key events and the stimulus-to-trigger correspondence. Score only windows with a defined initial state and an unambiguous majority state; ties and uninitialized intervals remain explicit exclusions.",
+    "secondary": [
+      "Participant-macro log loss and calibration; transition-distance, switch-density, block/order and class-specific coverage strata.",
+      "A prespecified at-least-2 s-from-keypress sensitivity stratum, using evaluator-only key events to define the stratum. This is not an attention-purity test.",
+      "Motor diagnostic in all available passive trials: whether attention-trained features predict alternating response keys. These key labels are motor reports, not passive-block attention ground truth."
+    ],
+    "claim_limit": "Neither accuracy, a 2 s keypress guard nor failure on the passive control proves attention specificity. Offline 0.1 Hz filtering and sustained movement can spread motor information beyond 2 s. The passive block is described as final and changes task/order, so poor transfer can reflect distribution shift. Key-response latency and unrecorded horizontal eye movements remain limitations.",
+    "missing_class_policy": {
+      "fold": "A one-class mixture fold contributes its observed class counts to the participant aggregate; do not invent a missing-class recall. Report both label counts per fold.",
+      "participant": "Participant balanced accuracy is defined only if both classes occur after all prespecified masks and aggregation. If any participant lacks a class, the declared all-18 primary score is not estimable; report that status, the exact 18-person denominator/coverage table, the secondary eligible-participant estimate with its explicit denominator, observed-class recalls, and log loss on all defined labels. Do not silently relabel the subset score as all-18 performance.",
+      "prediction_failure": "Missing or nonfinite submitted predictions fail the output contract; they do not change scientific eligibility or the denominator."
+    }
+  },
+  "whole_input_inventory": {
+    "required_cohort": "All 18 adults, all six 10-trial attention blocks and the separate 10-trial passive block per participant: nominal 1,080 active + 180 control one-minute trials, 1,260 minutes. Preserve documented quality exclusions and account for every missing trial. No single-subject pilot qualifies.",
+    "objects": [
+      {
+        "record": "10.5281/zenodo.17413336",
+        "file": "Processed EEG.zip",
+        "bytes": 1872638444,
+        "md5": "8ed97d44056d6b0c34ffd9505624adce",
+        "required": true,
+        "contents_required": "All 18 processed MAT EEG/time/event arrays, channel map, subject/trial/block/control identifiers, key-event type and time."
+      },
+      {
+        "record": "10.5281/zenodo.17413336",
+        "file": "Stimuli Audio.zip",
+        "bytes": 193464233,
+        "md5": "e0be11ebc667da4a739b208de89b9182",
+        "required": true,
+        "contents_required": "Every presented two-channel WAV, exact stimulus-to-trigger spreadsheet, speaker/side/counterbalancing identity and sample alignment."
+      },
+      {
+        "record": "10.5281/zenodo.17413336",
+        "file": "Original EEG.zip",
+        "bytes": 10802976788,
+        "md5": "1e4760203e1c47ea84e199b1b782ee3f",
+        "required": false,
+        "reason": "Needed for a separate raw-preprocessing or truly online claim. The proposed endpoint explicitly conditions on the complete official offline derivative; raw CNT is not an unrelated readiness gate."
+      }
+    ],
+    "required_published_transfer_bytes": 2066102677,
+    "all_published_objects_bytes": 12869079465,
+    "expanded_and_peak_memory_bytes": "Unknown until archive central-directory and array-schema census; stream per participant/trial, no whole-corpus memory assumption.",
+    "data_access": "https://zenodo.org/records/17413336",
+    "metadata_evidence": "https://zenodo.org/records/17413336",
+    "scientific_sufficiency": "The complete processed recording, stimulus and control set supports the offline decoder comparison. Passive trials, trigger correspondence and timing are mandatory. If they are absent from the processed release, hold the family rather than reduce it to 60 active trials."
+  },
+  "derivation_and_exposure": {
+    "documented": "64 channels acquired at 500 Hz; mastoid reference, 0.1–45 Hz filtering, 128 Hz resampling. Paper reports offline quality rejection and synchronized events.",
+    "verified_code_limits": "The pinned official tree contains only README.md and src/AASD_processing.m, with no Transformer/TRF trainer or LICENSE. It uses machine-specific paths, removes the final four recorded channels, selects trigger codes 11–70, uses default EEGLAB filtering and comments out ICA. Exact removed/remaining channel identities and mapping to the claimed 64-channel acquisition require native verification.",
+    "causal_limit": "All models receive the same fixed offline EEG context defined in information_equality; common direct-sample exposure does not remove the preprocessing's future dependence. The released derivative can use later samples. Do not claim online or prospective causal attention decoding. Future report labels, key events and event-coded filenames are evaluator-only.",
+    "source_conflicts": [
+      "Paper says blocks randomized but separately describes control as final; native event/block audit must establish actual order.",
+      "README documents 60 active trials; paper describes 70 total including controls. Trigger list and processed archive must be reconciled.",
+      "Paper and preprocessing source list reference/filter operations in different orders. Preserve historical implementation and document any benchmark reimplementation separately."
+    ]
+  },
+  "protected_split": {
+    "unit": "Participant plus whole stimulus-mixture identity; never random adjacent windows.",
+    "proposal": "Outer leave-one-participant-out across all 18 participants. Within each outer fold, three fixed mixture-family folds partition all available mixtures; a test cell contains held participant trials using that held mixture fold, and training excludes those mixture families from all other participants. Aggregate each person once across the three mixture folds. All trials/blocks/control diagnostics remain represented. Freeze the seed and connected stimulus-family map after identity census, before any outcome analysis.",
+    "development": "Hyperparameters use only other participants and permitted mixture folds, with grouped internal validation. Fit normalization, class weights and calibration only there.",
+    "unresolved": "Exact WAV/transcript overlap graph and event schema are not inspected. If sentence reuse prevents valid mixture separation, redesign transparently before promotion; do not silently claim unseen-speaker generalization.",
+    "uncertainty": "Paired participant bootstrap/permutation; within-person windows are dependent. Report all 18 effects, confidence intervals and coverage, and avoid p-values treating windows as independent."
+  },
+  "competent_baselines": [
+    {
+      "name": "Paper TRF",
+      "definition": "Backward ridge reconstruction with 0–500 ms lags, alpha=100, Hilbert speech envelope filtered 1–9 Hz; rebuild as an explicitly independent implementation if no source is released. Match allowed offline information."
+    },
+    {
+      "name": "Regularized EEG classifier",
+      "definition": "Train-only covariance/log-bandpower spatial features with regularized logistic or shrinkage-LDA classifier, tuned on grouped validation."
+    },
+    {
+      "name": "Compact temporal neural decoder",
+      "definition": "EEGNet/TCN-style compact baseline with the same windows and grouped validation; fixed compute, several training seeds."
+    },
+    {
+      "name": "Shortcut controls",
+      "definition": "Class-prior, time-within-trial, speaker/side/audio-only and available EOG-only comparators; passive keypress control; phase-preserving time-shifted EEG negative control."
+    }
+  ],
+  "historical_numbers": "Paper reports Transformer 1 s ACC 70.36%, F1 62.04% and TRF 1 s ACC 50.5%. These are source-reported, not reproduced, not protected-split thresholds, and not SOTA claims.",
+  "official_code": {
+    "url": "https://github.com/XXuefeii/AASD-Processing",
+    "commit": "033856b3f4762b5fa33bc096b0de9f04bf0b5205",
+    "tree": "5939f568ed6de3fa4b87e7f6d6dc328a4c9f3875",
+    "retained_complete_tree": true,
+    "files": 2,
+    "release_model_trainer_present": false,
+    "rights": "No LICENSE file in complete pinned tree; GitHub API license is null. Source existence verified, redistribution/reuse grant unresolved. No copied code included here."
+  },
+  "rights": {
+    "data": "Zenodo CC BY 4.0; preserve attribution and exact file hashes.",
+    "stimulus_chain": "Official OpenSLR33 labels AISHELL Apache License v2.0 and also says free for academic use; the AASD article uses noncommercial-academic wording. Preserve all source-specific statements and inspect actual stimulus and HRTF identities/notices before redistribution. Data CC BY 4.0, paper access and missing code permission are distinct; none resolves the other by assumption.",
+    "evidence": [
+      "https://zenodo.org/records/17413336",
+      "https://github.com/XXuefeii/AASD-Processing/tree/033856b3f4762b5fa33bc096b0de9f04bf0b5205"
+    ]
+  },
+  "construction_gates": [
+    "Reconcile every participant's 60 active and 10 passive trials, native event/block order and authentic stimulus-to-trigger map; the 11–70 source trigger range does not establish passive absence or completeness.",
+    "Reconcile acquired, removed and retained channel identities, preprocessing/reference/filter order and exact EEG/audio timing before implementing the common context/edge masks.",
+    "Freeze evaluator-only label initialization, majority-state/tie policy, class denominators and matched EEG/TRF lag/padding rules.",
+    "Resolve official source reuse permission or build and label a competent independent TRF/compact neural reference. Do not call it the unreleased official Transformer.",
+    "Inspect full stimulus/HRTF rights chain without dropping scientifically necessary audio.",
+    "Only later implement and validate the scorer, grouped baseline comparisons, motor/time/audio/EOG leakage challenges and robust uncertainty."
+  ],
+  "dedup": "No selected paper/accession/repository identity match. NEURAL-001 is MEG-SCANS envelope reconstruction. Current NEURAL-002 is MorseEEG-ATP early software-marker-window stimulus information (OpenNeuro ds007655), not MEG-SCANS intelligibility. This family instead concerns self-selected competing-stream report decoding with motor controls; the distinction survives the corrected neighbor identity.",
+  "information_equality": {
+    "target_interval": "Target audio/label window [t,t+1 s), with non-overlapping t values on the declared trial grid.",
+    "allowed_eeg": "Exactly [t-0.5 s,t+1.5 s) for every TRF, direct EEG classifier and neural comparator: 0.5 s context on either side of the 1 s target. Each method gets the same channels, timestamps and valid-sample mask. This is an offline fixed-500-ms-post-window-latency condition, not the paper's unqualified 1 s implementation.",
+    "lags": "The 0–500 ms TRF lag orientation, index convention and envelope-reconstruction mapping must be frozen and checked against the common interval. It cannot silently fetch more EEG than a direct classifier. Direct classifiers may use the same full 2 s context.",
+    "padding_and_edges": "No synthetic edge padding or neighboring-trial data. A case is eligible only when the whole 2 s context is present, correctly aligned and valid under the same mask for all methods; all discarded edge/missing windows and per-person coverage are reported. No method-specific case deletion.",
+    "audio": "All methods have identical access to the presented WAV and its fixed, documented offline envelope derivation. Filtering support is documented and identical; no label-dependent audio transform. Extra speech context is not restricted for one method while supplied to another.",
+    "train_and_test": "Use identical rules in grouped training/validation/test. Normalization, calibration and hyperparameter choice use training participants/mixtures only. Future labels and key events are never predictor features.",
+    "comparison_limit": "Reported paper 70.36% is not a threshold or information-matched comparator for this new common-context protocol."
+  },
+  "registered_id": "NEURAL-SCOPE-20261114-AASD-REPORT",
+  "runnable": false,
+  "reference_results_available": false,
+  "scientifically_qualified": false,
+  "submission_ready": false,
+  "scientific_design_review": "The complete source-backed scientific construction contract has undergone independent review. Authentic native inputs, executable references, protected evaluation and scientific qualification remain separate unresolved stages.",
+  "publication_note": "Public design document, not a candidate input packet or a runnable benchmark. Publisher statements, historical results and proposed evaluation choices are distinguished. No code bodies, data, weights, private labels, actual model comparison or SOTA result are included. Data-record license statements do not settle code, dependency, stimulus or third-party rights."
+}
