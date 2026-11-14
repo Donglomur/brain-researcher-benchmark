@@ -1,9 +1,4 @@
-"""Unexecuted engineering proposal; source selector must be frozen by root first.
-
-Loads complete captured stdlib modules. Real children are tiny Python commands;
-Docker transport prefixes are explicitly replaced by that tiny Python command.
-No Docker, datasets, model, scientific packages, network or credential access.
-"""
+"""Finite Linux owner controls; scope and custody are specified in README.md."""
 import argparse
 import base64
 import hashlib
@@ -23,6 +18,43 @@ NAMES = (
     'inherited/program/observe.py', 'inherited/program/process.py')
 SOURCE_CAP = 262144
 TOTAL_CAP = 2097152
+
+
+def failure_payload(error, stage, cases):
+    record=getattr(error,'record',None)
+    raw=json.dumps(record,sort_keys=True).encode()
+    owner=getattr(error,'actual_owner',None)
+    secondaries=list(getattr(owner,'errors',()))
+    restoration=list(getattr(error,'engineering_diagnostic_errors',()))
+    def describe(value):
+        return None if value is None else dict(type=type(value).__name__,message=str(value)[:1024])
+    available=record is not None
+    value=dict(schema='neural083_harness_first_failure_v1',status='failed',
+        case=stage,completed_cases=list(cases),exception=describe(error),
+        original_error=describe(getattr(error,'original_error',None)),
+        record_bytes=len(raw) if available else None,
+        record_sha256=hashlib.sha256(raw).hexdigest() if available else None,
+        record=record if available and len(raw)<=24576 else None,
+        record_available=available,record_complete=available and len(raw)<=24576,
+        owner_secondary_errors=[describe(x) for x in secondaries[:4]],
+        owner_secondary_count=len(secondaries),
+        diagnostic_secondary_errors=[describe(x) for x in restoration[:4]],
+        diagnostic_secondary_count=len(restoration),qualification_issued=False)
+    encoded=(json.dumps(value,sort_keys=True)+'\n').encode()
+    if len(encoded)>32768:raise ValueError('failure diagnostic output cap')
+    return encoded
+
+
+def emit_failure(error, raw, write):
+    try:
+        position=0
+        while position<len(raw):
+            n=write(2,raw[position:])
+            if type(n)is not int or not 0<n<=len(raw)-position:
+                raise RuntimeError('short failure diagnostic output')
+            position+=n
+    except BaseException as secondary:
+        error.engineering_diagnostic_errors=tuple(getattr(error,'engineering_diagnostic_errors',()))+(secondary,)
 
 
 def main():
@@ -73,6 +105,8 @@ def main():
         return bytes(raw)
     modules = {}
     cases = []
+    stage = 'source_admission'
+    first_failure = None
     try:
         selected = json.loads(capture(args.selection,args.selection_bytes,args.selection_sha256))
         if set(selected) != {'root','files'} or set(selected['files']) != set(NAMES):
@@ -97,6 +131,8 @@ def main():
         python = str(Path(sys.executable).resolve())
         normal_command = [python,'-I','-S','-B','-c','import os;os.write(1,b"out");os.write(2,b"err")']
         def normal(name):
+            nonlocal stage
+            stage='real_natural_'+name
             module=modules[name];grants=[]
             def read(n):grants.append(n);debit(n)
             now=time.monotonic()
@@ -119,6 +155,7 @@ def main():
             cases.append('real_natural_'+name)
         for name in ('adaptive_owner.py','inherited/process_owner.py','inherited/program/process.py'):
             normal(name)
+        stage='real_native_owner_tiny_cli_prefix_no_Docker'
         native=modules['inherited/program/native.py'];common=modules['inherited/program/common.py']
         docker=native.Docker(python,'/selected-inert-socket',metadata_read=debit)
         docker.prefix=normal_command;docker.env=env
@@ -131,6 +168,7 @@ def main():
         for label,code,cap,duration in (
             ('combined_cap_plus_probe','import os;os.write(1,b"123456789")',8,2),
             ('original_timeout','import time;time.sleep(5)',64,.15)):
+            stage='real_'+label
             now=time.monotonic()
             try:
                 adaptive.run([python,'-I','-S','-B','-c',code],normal_end=now+duration,
@@ -154,6 +192,7 @@ def main():
             else:
                 raise AssertionError('selected negative control unexpectedly accepted')
         # Fourth reachable owner: the historical combined cap is not two caps.
+        stage='real_legacy_combined_cap_plus_probe'
         legacy=modules['inherited/program/process.py'];now=time.monotonic()
         code='import os;os.write(1,b"a"*32768);os.write(2,b"b"*32769)'
         try:
@@ -173,9 +212,7 @@ def main():
             assert base64.b64decode(prefixes['stderr'])==b'b'*32769
             cases.append('real_legacy_combined_cap_plus_probe')
         else:raise AssertionError('fourth owner admitted combined-cap overflow')
-        # Complete actual phase caller with inert Docker/file/science leaves.
-        # Dispatch crosses its original cutoff; publication then also fails.
-        # The original transport exception must survive without a second source read.
+        stage='inert_actual_native_late_failure_no_recapture'
         saved={key:getattr(native,key,None) for key in ('c','BoundedDocker','path','call','time')}
         reads=[];clock=[100.0];first=OSError('invented native dispatch failure')
         secondary=TimeoutError('invented expired publication deadline')
@@ -207,8 +244,7 @@ def main():
             else:raise AssertionError('late native failure unexpectedly accepted')
         finally:
             for key,value in saved.items():setattr(native,key,value)
-        # Inert OS leaves, complete actual module/class. A reused post-reap
-        # numeric group may be observed but no subsequent signal is admissible.
+        stage='inert_post_reap_reuse_no_signal'
         original_os=adaptive.os;events=[]
         terminal=types.SimpleNamespace(si_pid=707,si_code=os.CLD_EXITED,si_status=0)
         proxy=types.SimpleNamespace(**{name:getattr(os,name) for name in dir(os)})
@@ -229,6 +265,7 @@ def main():
             else:raise AssertionError('post-reap mutation admitted')
             assert events==[('group',707,signal.SIGTERM),('reap',707),('group',707,0)]
             events.clear()
+            stage='inert_lost_wait_ownership_no_signal'
             ownership_error=ChildProcessError('invented external reap')
             def lost(*_):raise ownership_error
             proxy.waitid=lost
@@ -241,8 +278,7 @@ def main():
             cases.extend(('inert_post_reap_reuse_no_signal','inert_lost_wait_ownership_no_signal'))
         finally:
             adaptive.os=original_os
-        # Actual caller function, whole module loaded above; only its child leaf
-        # and publication leaves are inert. This checks the callback ABI itself.
+        stage='inert_actual_entry_metadata_callback'
         entry=modules['entry.py'];charged=[];published=[];sentinel={}
         def fake_run(argv,**kw):kw['metadata_read'](65536);return sentinel
         bridge=types.SimpleNamespace(child_argv=lambda *a:[],environment=lambda:env,
@@ -252,11 +288,28 @@ def main():
              'bridge':bridge,'metadata_budget':types.SimpleNamespace(read=lambda n:charged.append(n))}
         assert entry.launch(ctx,root/'entry.py',bodies['entry.py'],[],0,1,2,None) is sentinel
         assert charged==[65536] and published==[sentinel]
+        fault=adaptive.ChildFailure({'primary_error':{'type':'ValueError','message':'invented'},
+            'stdout_base64':'b3V0','stderr_base64':'ZXJy'},ValueError('invented'),
+            types.SimpleNamespace(errors=[OSError('invented close')]))
+        wire=failure_payload(fault,stage,cases)
+        decoded=json.loads(wire)
+        assert decoded['record']==fault.record and decoded['record_complete'] is True
+        assert decoded['original_error']=={'type':'ValueError','message':'invented'}
+        assert decoded['owner_secondary_errors']==[{'type':'OSError','message':'invented close'}]
+        write_error=OSError('invented diagnostic publication failure')
+        def no_write(*args):raise write_error
+        emit_failure(fault,wire,no_write)
+        assert fault.engineering_diagnostic_errors==(write_error,)
+        assert fault.original_error.args==('invented',) and fault.record is not None
+        decoded=json.loads(failure_payload(fault,stage,cases))
+        assert decoded['diagnostic_secondary_count']==1
+        assert decoded['diagnostic_secondary_errors'][0]['message']==str(write_error)
+        absent=json.loads(failure_payload(ValueError('invented missing record'),stage,cases))
+        assert absent['record_available'] is False and absent['record_complete'] is False
         cases.append('inert_actual_entry_metadata_callback')
-        # Twelve source-bound regressions: execute the complete actual owner,
-        # other_members and _stat_body with only kernel/process/timer leaves inert.
-        # A disappearing stat operand never licenses loss of its close failure.
         def proc_disappearance(name, variant):
+            nonlocal stage
+            stage='inert_proc_'+name+'_'+variant
             module=modules[name]
             saved={key:getattr(module,key) for key in
                    ('os','subprocess','selectors','signal','time','sys')}
@@ -440,6 +493,7 @@ def main():
                            'inherited/program/process.py','inherited/program/native.py'):
             for variant in ('not_found_close_failure','lookup_close_failure','vanished_known_closure'):
                 proc_disappearance(owner_name,variant)
+        stage='final_result_publication'
         result=dict(schema='neural083_prospective_owner_engineering_v1',status='passed',
             cases=cases,managed_reserved_bytes=used,elapsed_seconds=time.monotonic()-started,
             real_kernel_cases=7,inert_logic_cases=16,Docker_executed=False,
@@ -450,9 +504,27 @@ def main():
         if len(encoded)>16384:raise ValueError('selected result output cap')
         if os.write(1,encoded)!=len(encoded):raise RuntimeError('short engineering output')
         if time.monotonic()-started>=15:raise TimeoutError('original postpublication cutoff')
+    except BaseException as error:
+        first_failure=error
     finally:
-        signal.setitimer(signal.ITIMER_REAL,0)
-        signal.signal(signal.SIGALRM,old)
+        for restore in (lambda:signal.setitimer(signal.ITIMER_REAL,0),
+                        lambda:signal.signal(signal.SIGALRM,old)):
+            try:restore()
+            except BaseException as secondary:
+                if first_failure is None:first_failure=secondary
+                else:
+                    first_failure.engineering_diagnostic_errors=tuple(getattr(
+                        first_failure,'engineering_diagnostic_errors',()))+(secondary,)
+    if first_failure is not None:
+        try:
+            if time.monotonic()-started>=15:raise TimeoutError('original failure publication cutoff')
+            raw=failure_payload(first_failure,stage,cases)
+            emit_failure(first_failure,raw,os.write)
+            if time.monotonic()-started>=15:raise TimeoutError('original failure postpublication cutoff')
+        except BaseException as secondary:
+            first_failure.engineering_diagnostic_errors=tuple(getattr(
+                first_failure,'engineering_diagnostic_errors',()))+(secondary,)
+        raise first_failure
 
 
 if __name__=='__main__':
