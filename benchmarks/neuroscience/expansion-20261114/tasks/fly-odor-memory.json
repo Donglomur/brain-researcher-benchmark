@@ -1,0 +1,166 @@
+{
+  "schema": "public_neuroscience_fly_construction_draft_v1",
+  "frozen_on": "2026-11-14",
+  "status": "registered_construction_draft",
+  "finished_benchmark_count": 0,
+  "scientific_runs": 0,
+  "biological_data_downloads": 0,
+  "evaluation_status": "Prospective protocol. No native data census, baseline run, scorer validation, contamination qualification or successful reproduction claimed.",
+  "evaluation_modes": [
+    "Interactive tool-using investigator with fixed compute/tool budget",
+    "Program authored before protected evaluation and then executed without adaptation",
+    "Optional matched information-budget direct-input arm only when whole scientifically sufficient cases can be represented; never counted as a new task"
+  ],
+  "paper_code_conditions": "Paper + permitted data versus paper + identical data + audited official source are access conditions of this family, not separate benchmark counts. Protected labels and executable-result caches are excluded in both.",
+  "qualification_rule": "No promotion until complete input/cohort inventory, rights, deterministic reference, leakage probes, competent baselines, protected scoring and independent scientific review pass. A null or reversed biological conclusion is a valid scientific outcome.",
+  "candidate_id": "HOLD-NEURAL-FRONTIER-FLYMEMORY-20261114",
+  "family": "fan-shaped-body-odor-memory-and-navigation",
+  "title": "Retrospective held-horizon prediction of goal-aligned movement from odor-memory dynamics",
+  "paper": {
+    "title": "Neural dynamics for working memory and evidence integration during olfactory navigation in Drosophila",
+    "venue": "Nature Communications",
+    "published": "2026-07-28",
+    "doi": "10.1038/s41467-026-75945-2",
+    "url": "https://www.nature.com/articles/s41467-026-75945-2",
+    "pmcid": "PMC13518903",
+    "version_note": "Earlier preprint PMC12632460 and a repository named 2025 are the same family, not extra candidates.",
+    "evidence": [
+      "https://www.nature.com/articles/s41467-026-75945-2"
+    ]
+  },
+  "scientific_question": "Within the released offline imaging/behavior derivatives, do fan-shaped-body neural histories add information about later goal-aligned movement beyond sensory and movement histories, and does this relationship differ between persistent VT062617 and transient 52G12 populations?",
+  "estimand": {
+    "primary": "Retrospective, animal-macro held-horizon reduction in squared error for mean goal-aligned speed over (odor offset, odor offset+5 s], using neural plus nuisance history versus the strongest preselected competent nuisance-only validation baseline. Goal-aligned speed is explicitly calc_speed(t)*cos(theta(t)-theta_goal), where theta_goal is the valid circular mean over the final 1 s before the physical-offset reference. This scalar-speed/body-heading measure is not asserted to be exact physical displacement velocity.",
+    "required_inference": "Report genotype and pulse/plume condition separately, paired fly-level neural-minus-nuisance losses, and complete eligibility/coverage. Future odor re-encounters are evaluator-only descriptive strata and never remove primary cases or enter inputs. Linear odor-integration filters are supporting historical analyses, not additional task counts.",
+    "historical_replay": "Recompute published persistence, behavior associations and filters only after resolving the full historical recipe, cohort/event lists, normalization, smoothing, thresholds, boundary handling and inference procedure. Preserve literal equation/code behavior; separately name stabilized variants. Historical future-bump selection and two-sided filters are never treated as direct held-horizon predictor features.",
+    "claim_limit": "This is retrospective prediction conditional on released derivatives, whose all-trial baseline and other transforms can contain later observations. A past-window mask does not establish prospectively causal exposure. It supports neither online navigation forecasting nor causal effects of odor/neural activity. Optogenetic necessity and search-optimality simulations remain separate full-paper claims."
+  },
+  "whole_input_inventory": {
+    "required_cohort": "All released imaging and synchronized behavior for both VT062617 and 52G12, all pulse, wind-shift, no-wind/no-odor controls and plume trials. Supplement reports VT062617 15 recorded/14 eligible bump-analysis flies, 52G12 11 pulse flies; plume endpoint has 8 VT062617 flies, with 6 eligible filters and 5 52G12 filters. These groups may overlap: do not sum into unique animal count without the map. Preserve all 15/11 and every plume animal; preregister transparent quality rules rather than deleting subjects to recover significance.",
+    "objects": [
+      {
+        "record": "10.5281/zenodo.20053990",
+        "file": "2p data structs.zip",
+        "bytes": 789165393,
+        "md5": "f56dc10694d4aad3a122c644f32a88fe",
+        "required": true,
+        "contents_required": "All per-fly syncstruct MATs and the complete allflies_filenames mapping: trial genotype/identity, odor/wind commands and timing, wind speed/direction, open/closed loop flags, FicTrac heading and velocity, plume indices and coordinates, dff_green/red/diff and imaging timestamps."
+      },
+      {
+        "record": "10.5281/zenodo.20053990",
+        "file": "PIDdata.zip",
+        "bytes": 1525818,
+        "md5": "3debdff6f7501cb7d97a92edd101486b",
+        "required": true,
+        "contents_required": "All odor-delivery calibration recordings; commanded offset must be related to measured physical odor dynamics."
+      },
+      {
+        "record": "10.5281/zenodo.20053990",
+        "file": "Kathman2026_readme.rtf",
+        "bytes": 9511,
+        "md5": "1421a42e7d0a301a1d4f1e38f959e476",
+        "required": true,
+        "contents_required": "Official full derived-data schema; retained as documentation only."
+      },
+      {
+        "record": "10.5281/zenodo.20053990",
+        "file": "confocal.zip",
+        "bytes": 483115445,
+        "md5": "c899dbf1631eb65bb0d326cccad34852",
+        "required": false,
+        "reason": "Anatomical validation, not a mandatory input to the conditional recorded-neural-dynamics endpoint. Needed to independently reproduce anatomy or source-population targeting."
+      }
+    ],
+    "required_published_transfer_bytes": 790700722,
+    "all_published_objects_bytes": 1273816167,
+    "data_access": "https://zenodo.org/records/20053990",
+    "metadata_evidence": "https://zenodo.org/records/20053990",
+    "expanded_and_peak_memory_bytes": "Unknown until full ZIP/member census. The entire required compressed derivative is under 0.8 GB; this is not a one-fly convenience subset.",
+    "full_paper_extensions": "Freely walking silencing cohorts and controls (including empty-Gal4/empty-split), anatomical imaging, and Dryad plume movie 10.5061/dryad.g27mq71 are required to reproduce causal and simulation claims. Their complete input bytes are not yet inventoried; no full-paper replication claimed."
+  },
+  "derivation_and_exposure": {
+    "documented": "Motion-corrected dual-channel images; manually selected columns; fluorescence baseline uses lowest 3% over all trials, then synchronized to behavior. Signals include already-derived bump fields, which are not accepted as ground truth without provenance.",
+    "historical_bump": "Paper threshold mean+0.5 SD over whole experiment; minimum duration 3 s and gap-merging under 3 s; often conditioned on future bump offset. Those noncausal definitions cannot be used as forecast-time features.",
+    "protected_inputs": "All models receive only directly exposed history ending at the offset, with the common clock/availability masks above. Post-offset odor and behavior, future-derived bump presence/duration/offset, straightness, whole-test statistics and figure caches are forbidden. Historical two-sided filters need a separately specified past-only learned comparator before use in prediction.",
+    "offline_derivative_limit": "The selected endpoint is explicitly retrospective and conditional on released derivatives. sync2struct estimates fluorescence baselines over all trials; other transforms can use whole-trial/whole-experiment values. Exposed pre-offset dFF can therefore embody later observations. Match derivative provenance across all neural comparators and report normalization sensitivity; masking direct future samples alone cannot certify prospective exposure. A genuinely prospective variant requires sufficient authentic parent inputs and qualified past/calibration-only normalization and registration, a distinct condition within this family."
+  },
+  "protected_split": {
+    "unit": "Fly, with every trial/ROI/window from the same fly staying together; preserve overlap between pulse and plume recordings.",
+    "proposal": "Outer leave-one-fly-out within genotype, shared across stimulus conditions, with every trial/ROI/case from one fly kept together and overlapping pulse/plume identities resolved. Select model, regularization and any learned transformations only on remaining flies. Freeze full identity map, prespecified quality exclusions, event/pseudo-event rules and direct-input masks before outcomes.",
+    "grouping": "Never treat 222 bumps, 143 plume bumps or frames as independent animals. Bootstrap/permutation at fly level and show all animal effects. Small genotype cohorts limit inference; no trial-level pseudoreplication.",
+    "causal_exposure": "Odor encounters and wind tuning arise in a closed loop; wind speed was manually optimized per fly. Control elapsed trial time, prior heading/speed, wind speed, odor history, genotype and session. Re-encounter strata are descriptive selection, not randomized treatment effects."
+  },
+  "competent_baselines": [
+    {
+      "name": "Nuisance dynamics",
+      "definition": "Past-window autoregressive ridge and nonlinear boosted-tree/compact temporal predictors from permitted odor, wind and locomotor histories; naive movement persistence as a floor. Training and selection remain within allowed fly groups. Two-sided historical filters are excluded."
+    },
+    {
+      "name": "Neural increment",
+      "definition": "The same model classes and information boundary with permitted synchronized green/red fluorescence histories, using matched released-derivative provenance and normalization controls. Report paired fly-level incremental loss."
+    },
+    {
+      "name": "Published dynamics versus stabilized comparison",
+      "definition": "Literal published equation-7/filter and threshold-persistence analyses are historical diagnostics. A separately labeled stabilized, past-window train-only estimator may be a comparator; never call it literal published reproduction."
+    },
+    {
+      "name": "Controls",
+      "definition": "Red/motion-channel comparator, trial-preserving neural time shift, within-fly mismatched-trial neural pairing, prespecified no-odor/no-wind pseudo-offset diagnostics, genotype-specific effects and descriptive re-encounter strata. All chosen comparisons and animal-level multiplicity handling are frozen before test inspection."
+    }
+  ],
+  "official_code": {
+    "url": "https://github.com/nagellab/Kathmanetal2025",
+    "commit": "371dc9de7a26edb0de4ee79b077a09283ac3a2eb",
+    "tree": "20a70f60d87fc544b195f950a65fae217745fb1e",
+    "retained_complete_source_tree": true,
+    "files": 47,
+    "rights": "GPL-3.0 LICENSE verified in pinned complete source tree; all 47 Git blobs downloaded as source only and checked against Git blob SHA-1 and lengths.",
+    "specific_gaps": [
+      "Final paper equation (7) and active source both use inverse singular value plus lambda: 1/Sigma + lambda. They agree. This is not standard ridge/Tikhonov shrinkage and can amplify small singular values; preserve the literal form for replay, with singular/near-singular handling explicitly recorded. Name any stabilization separately.",
+      "Historical recipe still requires reconciliation of input normalization versus cross-correlation normalization, filter smoothing/peak thresholds, trial concatenation boundaries and sample selection.",
+      "Figure scripts call allflies_filenames_all while data README promises allflies_filenames.m; the required map is absent from the complete Git tree and may be in the data archive. Resolve before execution.",
+      "Persistence script successively overwrites fly lists and ends at 12 IDs while the historical pulse description has 14 selected flies; wind-shift plotting contains a selected event-index list. Reconcile these, the six/five filter lists and complete eligible cohorts without assuming integer IDs are unique animals.",
+      "Pulse/plume scripts calculate FDR outputs but shade unadjusted h_values; paired-looking comparisons sometimes use ttest2. These are historical recipe/inference gates, not evidence that the paper is false. Protected uncertainty must use paired animal-level losses and prespecified comparisons.",
+      "Utility filenames end with copy.m and paths are machine-specific; README acknowledges incomplete raw import dependencies. No executable package success is claimed."
+    ]
+  },
+  "rights": {
+    "data": "Zenodo CC BY 4.0; exact file MD5 and record pinned.",
+    "code": "GPL-3.0; audit dependencies before redistribution. Source code is referenced, not copied into this safe candidate packet.",
+    "evidence": [
+      "https://zenodo.org/records/20053990",
+      "https://github.com/nagellab/Kathmanetal2025/tree/371dc9de7a26edb0de4ee79b077a09283ac3a2eb"
+    ]
+  },
+  "historical_numbers": "Paper reports an exponential bump-persistence time constant around 5.59 s and broader odor filters for VT062617. These are published observations, not reproduced results and not compulsory positive outcomes for a scorer.",
+  "construction_gates": [
+    "Census complete 2p/PID archives and all relevant control cohorts; reconcile fly identities and every historical quality/selection list without silently reducing the prospective declared scientific unit.",
+    "Qualify reference frames, wrap convention, speed/rotation units, nominal versus hardware time, physical odor delay, circular-goal missingness and shared target/control denominators.",
+    "Freeze the retrospective released-derivative interpretation and all direct-input/future-field masks; implement the required normalization sensitivities without calling secondary rescaling a causal repair.",
+    "Resolve literal historical equation/filter normalization/smoothing/selection/inference recipes separately from constructing a scientifically sound held-horizon reference.",
+    "Later validate grouped past-window nuisance/neural comparators, paired fly-level uncertainty, no-odor diagnostic schedules and leakage challenges."
+  ],
+  "dedup": "No identity match in original200, broader catalogue or expansion V9. Added APCx task concerns odor quantity and source identity; this asks navigation-memory dynamics in identified fan-shaped-body populations. It does not reuse a prior odor task with a new modality or representation.",
+  "case_and_coordinate_contract": {
+    "heading": "Use integrated FicTrac yaw in a consistent reference frame, including the wind-shift trials where source code uses calc_heading rather than wind-tube/motor position. Verify radians/degrees, wrapping, zero reference and continuity from the native schema. Motor angle may be a historical ordinary-trial quantity, but is not silently substituted for animal heading during wind rotation.",
+    "speed": "The target uses the verified mm/s calc_speed quantity. calc_deltapitch is a rotation rate and cannot be substituted without the documented ball-radius/unit conversion; source code contains a 9.52/2 conversion, while the physical ball specification must be reconciled. The chosen scalar speed times heading cosine is named goal-aligned speed until its relation to physical displacement is validated.",
+    "time": "Reconcile nominal reconstructed dff_ts = sample_index/FrameRate + trigger with actual imaging/behavior clocks, sample count, dropped frames and physical odor delay from PID. No claim that this nominal clock is hardware-exact.",
+    "goal_missingness": "Require finite heading with at least 95% of expected samples in the one-second goal interval, no gap over two native behavior-frame intervals, and circular resultant length at least 1e-6. Otherwise goal direction is undefined and the case receives an explicit reason code. No outcome-dependent heading repair.",
+    "horizon": "Require the complete five-second target interval within the same trial, with at least 95% expected finite speed/heading samples and no gap over two behavior-frame intervals. Compute the time-weighted mean over valid samples using the frozen clock convention; never fill from another trial. Common eligibility applies to all models, with per-fly/genotype/condition and missingness denominators.",
+    "short_history": "The history interval is (offset-10 s,offset], truncated only at the same trial start and accompanied by the same availability mask for all models. Neither features nor goal estimation use directly supplied post-offset data. This direct-input boundary does not undo offline derivative exposure.",
+    "no_odor_controls": "No-odor/no-wind trials do not have natural odor offsets. Score them as separately labeled diagnostics using the fixed nominal pulse-off time from the authentic acquisition schedule for the same paradigm; define that schedule from metadata before outcome inspection. For a plume control lacking such a schedule, use a fixed-seed offset schedule drawn only from training-fly command times matched on paradigm/duration, never from held behavior/neural outcomes. Keep the full controls and report available/eligible pseudo-offset counts. If an authentic map cannot be established, retain the control gate rather than manufacture event times.",
+    "future_reencounters": "Never select primary inputs/cases using future re-encounters. Report these afterward as descriptive endogenous-exposure strata, not randomized causal effects."
+  },
+  "normalization_sensitivity": {
+    "required": "Compare the released-derivative reference with clearly labeled train/calibration-only secondary centering/scaling of those derivatives, and document dependence on normalization/selection choices. Such postprocessing does not undo the all-trial F0 and is not a causal repair.",
+    "when_parent_inputs_exist": "If authentic sufficient fluorescence/calibration parents become available, evaluate a separately qualified past-only normalization variant under the same grouped evaluation. Parent-input availability is not assumed and is not replaced by invented raw arrays.",
+    "interpretation": "Report any apparent neural gain as conditional retrospective information; do not interpret it as future-uncontaminated prospective neural predictability without the separate qualification."
+  },
+  "registered_id": "NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY",
+  "runnable": false,
+  "reference_results_available": false,
+  "scientifically_qualified": false,
+  "submission_ready": false,
+  "scientific_design_review": "The complete source-backed scientific construction contract has undergone independent review. Authentic native inputs, executable references, protected evaluation and scientific qualification remain separate unresolved stages.",
+  "publication_note": "Public design document, not a candidate input packet or a runnable benchmark. Publisher statements, historical results and proposed evaluation choices are distinguished. No code bodies, data, weights, private labels, actual model comparison or SOTA result are included. Data-record license statements do not settle code, dependency, stimulus or third-party rights."
+}
