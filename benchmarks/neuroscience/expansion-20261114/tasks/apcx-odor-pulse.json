@@ -1,0 +1,241 @@
+{
+  "schema": "public_neuroscience_construction_draft_v1",
+  "id": "apcx-odor-pulse-evidence",
+  "track": "neural",
+  "title": "Recover odor-pulse quantity and temporal sensory evidence from anterior piriform spike trains",
+  "stage": "registered_construction_draft",
+  "runnable": false,
+  "scientifically_qualified": false,
+  "submission_ready": false,
+  "reference_results_available": false,
+  "publication_note": "Public scientific design only. This is not an agent input packet, executable benchmark, result or permission to acquire data.",
+  "source_family_ids": [
+    "figshare:31792705"
+  ],
+  "family_count": 1,
+  "scientific_question": "How much information about a five-second intermittent odor sequence is recoverable from population spike activity in anterior piriform cortex, and does decoding across temporal windows support persistent accumulation or transient sensory coding? Better held-out decoding alone does not establish an accumulator or a causal mechanism.",
+  "scope": {
+    "canonical_unit": "The complete APCx electrophysiology assay in the cited paper: all three animals and all 42 reported sessions (17, 13, 12). All quality-passing units and all source-valid trials must be accounted for. Native member counts and unit/trial census remain unverified. If the released Parquet includes only historical AIC/p-value-selected units, that release does not satisfy this preferred all-quality-passing-unit primary. The primary remains held until its original complete unit support is obtained; retaining all animals/sessions does not repair a changed unit estimand.",
+    "not_included": "The seven-animal behavioral cohort, separate catch-trial cohorts, multiple-duration behavioral cohorts and olfactory sensory-neuron calcium assay are different assays in the paper; they are not silently substituted for or counted as extensions of this neural family.",
+    "reason_for_route": "The APCx assay directly tests neural representation of intermittent sensory evidence and has its own processed neural-plus-behavior file. Its definition is scientific, not a convenience sample of the wider paper or selected easiest sessions.",
+    "inference_population": "Conditional decoding in these recorded preparations and trained animals. Three mice do not support a broad population-level generalization claim. Session-specific neurons preclude naive zero-shot channel-aligned transfer."
+  },
+  "primary_sources": {
+    "article": {
+      "title": "Perception and neural representation of intermittent odor stimuli in mice",
+      "doi": "10.1038/s41467-026-72445-1",
+      "publication_date": "2026-04-29",
+      "journal": "Nature Communications",
+      "url": "https://www.nature.com/articles/s41467-026-72445-1",
+      "pmcid": "PMC13304163",
+      "verified_full_text": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13304163/fullTextXML",
+      "license": "CC BY 4.0, subject to separately credited third-party material"
+    },
+    "dataset": {
+      "record_id": 31792705,
+      "version": 1,
+      "doi": "10.6084/m9.figshare.31792705.v1",
+      "url": "https://doi.org/10.6084/m9.figshare.31792705.v1",
+      "metadata_url": "https://api.figshare.com/v2/articles/31792705",
+      "license": "CC BY 4.0",
+      "published": "2026-03-17",
+      "processed_route": {
+        "name": "apcx_neural_data_plus_behavior.parquet",
+        "canonical_file_id": 62893717,
+        "bytes": 281948826,
+        "md5": "71898ac370476e634e592f17171f2ee2",
+        "payload_url": "https://ndownloader.figshare.com/files/62893717",
+        "payload_requested": false,
+        "duplicate_alias": {
+          "file_id": 62893672,
+          "bytes": 281948826,
+          "md5": "71898ac370476e634e592f17171f2ee2"
+        },
+        "completeness_status": "File title and paper assay support a proposed complete route; Parquet schema, trial/unit coverage, breathing support and preselection state have not been inspected. These are hard gates, not inferred from filename."
+      },
+      "record_total_listed_bytes": 17813691759,
+      "storage_policy": "Do not download the entire multiassay record or both identical uploads. A future separately bounded intake may obtain the one canonical 281,948,826-byte file, validate MD5 plus compute SHA-256, census it and establish whether it supplies the complete APCx target/support. Any missing support requires a new finite source plan; do not fill gaps by dropping animals, sessions or units."
+    },
+    "author_code": {
+      "url": "https://github.com/leboero/Odor_Pulses_Task_Analysis",
+      "article_link": "https://github.com/leboero/Odor_Pulses_Task_Analysis/tree/main/NComms_Submission",
+      "commit": "5653ebc491961e6ca196b39c18b086ffedf932ac",
+      "tree": "4cc8bbc995cb18ec727779a98d460533d7b15c5d",
+      "license": "MIT; license body fetched at pinned commit and Git blob SHA-1 authenticated",
+      "code_status": "Tree and two small helper bodies inspected. Neural ephys_compiler notebook is identified but not fetched or audited; this is not an execution-qualified code release.",
+      "inspected_files": [
+        {
+          "path": "LICENSE",
+          "git_blob": "fc0f9a091d8be0405dbe9913c4f2c7b669e93858"
+        },
+        {
+          "path": "data_loader.py",
+          "git_blob": "27c5997ebb099a6b8118ed202343196fdfe47d6c"
+        },
+        {
+          "path": "odor_breathing_functions.py",
+          "git_blob": "0e47277d6b71216f5232878ef3d90caf08dcf2fc"
+        }
+      ],
+      "uninspected_neural_reference": {
+        "path": "NComms_Submission/ephys_compiler.ipynb",
+        "bytes": 4420070,
+        "git_blob": "149d80a3835142b0efba3211f70d2c0219ab5a03",
+        "reason": "Large notebook may contain scientific outputs; outside this source-only acquisition and retention selection. No selective body slicing or execution performed."
+      },
+      "loader_cautions": "The inspected data_loader.py is principally behavioral and uses pickle.load on historical raw session files; its spike-loader lines are commented out. It is not evidence that the Parquet neural adapter is implemented. Helpers compute sniff histograms using true odor pulse onsets and must not be exposed as stimulus-blind inputs. Specifically, data_loader.py uses an integrated-command ceiling count whereas odor_breathing_functions.py identifies positive-difference events. Their equivalence for every trial has not been established. This is a static source ambiguity, not an observed label error."
+    }
+  },
+  "evidence_anchors": [
+    {
+      "source": "article",
+      "section": "Neuronal recordings",
+      "claim": "Only the 5 s sampling window was recorded; first 500 ms were discarded for artifacts. Tetrodes were advanced about 40 micrometers after each session; recordings were digitized at 30 kHz with 0.3–6 kHz filtering. Units violating refractory-period or waveform/amplitude stability criteria were discarded."
+    },
+    {
+      "source": "article",
+      "section": "Fig. 4 and Fig. 5 captions",
+      "claim": "Three animals, with 17, 13 and 12 sessions. Figure 4 uses OLS R-squared for pulse-count decoding and logistic classification of trial identity and choice; independent 500 ms intervals and population-size curves are reported."
+    },
+    {
+      "source": "article",
+      "section": "Analysis of APCx spiking data",
+      "claim": "Author cell selection ranks regression p-values and minimizes AIC by deleting units. The text does not establish training-only selection for every reported decoding analysis."
+    },
+    {
+      "source": "article",
+      "section": "Analysis of APCx neural responses using deconvolutional unrolled neural learning (DUNL)",
+      "claim": "DUNL explicitly receives true odor-pulse timing support and event-count-dependent baseline information. It is an encoding/response-decomposition analysis, not a target-blind pulse decoder."
+    },
+    {
+      "source": "article",
+      "section": "Behavioral task",
+      "claim": "Lick ports are moved away during odor sampling; the subsequent go period is 1.5 s. Trial outcomes, choices, rewards and post-sampling signals must be withheld from count prediction."
+    },
+    {
+      "source": "dataset",
+      "section": "version-1 file metadata",
+      "claim": "Two file entries have identical APCx Parquet names, sizes and MD5. They are aliases, not independent cohorts."
+    }
+  ],
+  "signal_and_target": {
+    "input_modality": "Extracellular sorted APCx spike events or equivalent counts from awake head-restrained mice; these are processed neural signals, not raw 30 kHz voltage.",
+    "time_origin": "Start of odor sampling at t=0; confirm native event alignment and units before any conversion.",
+    "observation_window_seconds": [
+      0.5,
+      5.0
+    ],
+    "published_target_window_seconds": [
+      0.0,
+      5.0
+    ],
+    "primary_target": "The intended target is the physical number of odor-valve pulse events delivered over the full 5 s sampling window, including the unobserved first 500 ms. This preserves the published full-window scope and its observability limitation, but equivalence between physical event count and the published integrated-command count convention is unverified and is a hard target-reconciliation gate. It is not presented as the number of pulses perceived or accumulated by the animal.",
+    "secondary_target": "High/low stimulus category using the paper task boundary: counts <=8 low and >=9 high. Reconcile released categories with the authenticated primary target under the exact source command/event convention before enabling this diagnostic; positive-difference onset counts alone do not establish equivalence. Behavioral choice is retained only in owner-side confound analyses, not the primary target.",
+    "missing_interval_rule": "No zero-fill may pretend that the first 500 ms was measured. Each packet states that neural observations start at 0.5 s. An owner-only diagnostic quantifies early versus observed pulse contributions. A distinct 0.5–5 s target, if later studied, must be explicitly relabeled as a secondary estimand and cannot replace the full-window result.",
+    "candidate_signal_projection": "Fixed 50 ms spike-count bins for t in [0.5,5), 90 bins by every quality-passing recorded unit in that session. Each integer is a spike count, not firing rate. Zero denotes observed zero spikes, while missing data requires an explicit mask and gate. Column order is stable within a session and pseudonymized across sessions. No neuron selection based on held-out labels, across-trial test responses or performance.",
+    "target_derivation": "The intended primary target is the number of physical odor-valve pulse events delivered in the full [0,5) s sampling window, not an assumed equivalent of integrated valve-command area. The inspected data_loader.py computes a published count convention as ceil(sum(command)/(pulse_time_ms*100)); the inspected odor_breathing_functions.py instead locates events using positive command differences. These are distinct operations and can disagree for an event at t=0, adjacent or overlapping commands, clipping, amplitude/duration scaling or boundary placement. Owner must reconcile authentic command/event metadata, command units and sampling interval, pulse duration/amplitude, window endpoints and event-merging conventions with the released count/category labels across every source-valid trial. Establish whether scheduled commands correspond to separately delivered physical pulses. Do not silently substitute a rising-edge count or an integrated-area count for the intended event target, and do not infer truth from neural predictions or plot labels. Any unresolved discrepancy blocks this primary; a differently defined quantity target requires an explicit versioned contract/owner decision before execution. The full 0–5 s target remains distinct from the observed 0.5–5 s spike window.",
+    "trial_support_gate": "The released Parquet must preserve a per-session all-unit roster, source-valid trial identifiers, chronology and sufficient pulse target metadata. Actual schema, numerical units and per-session trial counts remain unknown until controlled intake.",
+    "fixed_mask_rule": "The sole declared artifact exclusion is the same fixed initial [0,0.5) s interval relative to the common trial sampling-start cue for every case. There is no mask or event-aligned censoring after individual unknown odor pulses. Any additional missing interval must be authenticated as target-independent; target-derived masks or pulse-triggered snippets are prohibited candidate inputs. If raw validity cannot satisfy this, hold the affected condition rather than silently disclose event times."
+  },
+  "protected_evaluation": {
+    "independent_unit": "Biological animal is the broadest independent cluster (n=3). Session is nested within animal; trial is the grouping unit for all spike bins, units, features and labels. Cells and bins are not independent test replicates.",
+    "primary_design": "Session-calibrated chronological prediction. Within every reported session, sort source-valid trials by authenticated chronological order; first floor(0.60*n) form calibration, next floor(0.20*n) development and remainder protected test. All views of a trial remain in its one partition. Same within-session neuron basis is available through calibration, development and test. No claim of zero-shot decoding in novel sessions/animals.",
+    "minimum_support_gate": "For the proposed matched packet there must be at least 16 calibration trials, 8 development trials and 10 protected test trials in every one of the 42 sessions. If any session fails, hold and revise the complete-cohort scientific design before execution; never drop that session quietly. Source records merely report a typical 100–200 behavioral trials, not an authenticated per-session count.",
+    "matched_small_support_condition": "All compared native/tool/program approaches receive exactly the first 16 calibration trials and first 8 development trials per session, selected by chronology only, with their true count/category labels. This deterministic rule does not stratify by difficulty, correctness, class or model performance. Remaining calibration/development trials are not exposed in this matched condition. All protected test trials in all sessions are still evaluated.",
+    "separate_full_calibration_condition": "Competent classical baselines and optionally an agent-written program may use the complete 60% calibration and 20% development partitions. Report separately from the matched 16/8 condition; a full-data baseline win or loss is not a clean test of native versus tool capability.",
+    "tuning": "Choose features, preprocessing, regularization and cell inclusion using allowed calibration/development only. The baseline candidate menu and temporal contrasts are frozen before owner evaluation. Candidate-side APIs cannot open protected target files or source directories.",
+    "state_isolation": "A fresh model/context/process/cache and decoder state is created for every session and condition. Protected cases yield predictions only, no labels, rewards, scores or adaptive feedback until the complete frozen submission is scored. Subsequent case traces may not carry information from other protected cases; either fresh per-case context or a predeclared purely predictive immutable decoder.",
+    "trial_order_confounds": "Chronological drift is part of this target distribution and must be quantified with calibration-only intercept/time controls and protected owner-side reports. Trial order, original filenames, animal IDs, session dates, reward, choice, pulse timings and sniff histograms derived from pulse timing are excluded from candidate inputs. Pseudonymous session identity is supplied only to associate its own training packet and channel basis.",
+    "source_publicity": "The paper, author outputs and public Parquet contain the historical outcomes. Protect held-out labels operationally and disable network access in evaluation; anonymous IDs are only a deterrent. Public-source memorization cannot be ruled out. Report these limits; do not describe the source cohort as uncontaminated prospective evidence.",
+    "eligibility_rule": "All trial exclusions must be enumerated from source acquisition/QC rules and audited for dependence on target, animal choice, correctness or model predictions. Do not retain only correct-choice or easy/count-extreme trials. Historical source eligibility, including any task-label/count-consistency filter, must be reported and cannot be retroactively described as unbiased prospective sampling. Unknown filtering is a readiness hold.",
+    "common_documentation": "Every matched native, tools and program condition receives one byte-identical frozen packet with the same article/methods summary, unit and timing definitions, count-target conventions, fixed artifact mask, support/split rules, approved baseline/tool descriptions, prediction schema and scoring policy. Pin its bytes/hash with the matched 16/8 support pack. No extra labelled examples, protected outputs, author-selected target-derived objects, true pulse timing, event-count baselines or pretrained target exposure may be hidden in documentation or tools. Full source folders and notebook outputs are not implicit candidate inputs. Only the declared execution environment and approved algorithms differ; fitted parameters use the same permitted support. The packet counts toward the identical information/context budget."
+  },
+  "conditions": [
+    {
+      "id": "signal_native",
+      "input": "The common 16/8 support pack plus one full protected spike-count matrix, units, timing, masking rules and output schema. No Python, external retrieval or pretrained decoder calls. The protected_evaluation.common_documentation packet is supplied byte-identically in this condition.",
+      "interpretation": "Performance is native reasoning over the stated binned neural representation and examples, not proof of understanding raw voltage or neurons in arbitrary domains.",
+      "capacity_gate": "All quality-passing units, all 90 bins and all 24 support trials must fit the frozen model context with declared serialization and token count. If not, hold this condition or develop a separately reviewed information-matched representation applied to every condition. Do not remove units, downsample time, omit hard sessions or retrieve only favorable examples silently."
+    },
+    {
+      "id": "matched_tools",
+      "input": "Exactly the same signal matrices, support labels, metadata, frozen article/methods summary and evaluation schema as signal_native. The protected_evaluation.common_documentation packet is supplied byte-identically in this condition.",
+      "allowed": "Sandboxed Python and a small audited library of trainable decoders; any decoder is fitted only on the same allowed 16/8 support. The LLM may inspect fits and execute analyses but cannot read the source Parquet or protected target store.",
+      "forbidden": "No DUNL tool receiving true pulse times, trial labels, choices, reward or full-data-selected neurons. No extra training rows hidden in tools."
+    },
+    {
+      "id": "matched_program",
+      "input": "Exactly the same 16/8 support per session, count-matrix format and allowed methods information. The protected_evaluation.common_documentation packet is supplied byte-identically in this condition.",
+      "allowed": "Agent writes a deterministic training/prediction program before protected evaluation. It may fit per-session parameters on allowed support and must emit all predictions under fixed resource limits.",
+      "isolation": "No labels, scores, adaptive human feedback, network or code changes after owner begins evaluation."
+    },
+    {
+      "id": "full_calibration_program_and_baselines",
+      "input": "All allowed calibration/development rows from every session; same protected cases and signal projection.",
+      "interpretation": "A practical high-data decoding result, reported separately from the matched access capability comparison."
+    }
+  ],
+  "baseline_and_scoring": {
+    "baselines": [
+      {
+        "name": "training mean / category prior",
+        "details": "Per-session calibration mean count and empirical category probability, without neural inputs. Freeze before protected evaluation."
+      },
+      {
+        "name": "author-style linear decoding with safe selection",
+        "details": "OLS or regularized linear regression of count on per-unit total spikes; optional AIC cell selection must be learned entirely from allowed calibration/development, with no protected access. This is a repaired predictive reference, not an assertion that the historical author curves used that split."
+      },
+      {
+        "name": "ridge temporal decoder",
+        "details": "All per-unit 500 ms counts across the observed window, standardized using calibration only; choose ridge penalty by allowed development loss. Includes the time-resolved population information that a count-only baseline discards."
+      },
+      {
+        "name": "Poisson count regression and logistic category decoder",
+        "details": "Regularized Poisson GLM for nonnegative count and L2 logistic regression for high/low category, with the same allowed calibration/development rows and fixed train-only preprocessing. Report fallback behavior for singular or single-class support without dropping sessions."
+      }
+    ],
+    "primary_metric": "Animal-macro RMSE: for each animal compute sqrt(mean((prediction-true_full_5s_count)^2)) over all its protected trials across its reported sessions; arithmetic mean the three animal RMSEs. Lower is better. Predicted counts are finite real numbers clipped below at zero by the common scorer, with no data-derived upper clip.",
+    "secondary_metrics": "Animal-specific RMSE and MAE; animal-macro MAE; each-animal and pooled held-out R-squared against the relevant protected-target mean, with undefined constant-target cases explicitly reported; high/low balanced accuracy and log loss if a probability is submitted. These are secondary diagnostics, not independent benchmark families.",
+    "paper_comparison": "The paper reports count R-squared and classification accuracies as figures. No precise scalar SOTA or reproduced score is asserted here. Different protected splits, cell selection and weighting prevent naive numerical comparison to the published curves.",
+    "baseline_budget": "Fixed candidate families and finite hyperparameter grids must be frozen after schema audit. All baselines get identical training budgets within a condition. No exhaustive test-guided search or selecting the best test run.",
+    "uncertainty": "Report the three animal-level values, all 42 session values, paired method differences on identical protected trials, and an explicitly conditional within-recorded-session block bootstrap of contiguous trials. Freeze block length using calibration only, report chosen length and sensitivity. This bootstrap describes sampling variation conditional on these animals, session schedule and trained fits; it is not a population confidence interval. No resampling cells/bins as independent observations, and no strong population p-value based on 42 nominally independent sessions.",
+    "missing_output_rule": "Every eligible protected trial is required. Invalid/nonfinite outputs and timeouts are reported as failures with separate coverage, and cannot be erased from the denominator. Predeclare failure penalty using calibration-only bounds or report no aggregate valid score if a complete submission is unavailable; do not invent a penalty after seeing test results.",
+    "results_so_far": "No payload has been opened, no baseline or LLM has run, and no scientific result or advancement is claimed."
+  },
+  "analytical_and_scientific_reasoning": {
+    "required_outputs": "A structured prediction file plus a bounded evidence report interpreting prespecified temporal ablations and confounds. Score numerical predictions separately from reasoning; no free-form explanation substitutes for accuracy.",
+    "within_family_probes": [
+      "Whole observed 0.5–5 s spike history versus each independent 500 ms interval and cumulative histories, using identical training and test trials; report paired loss differences.",
+      "Training-only shuffled-target controls and a metadata/prior baseline; hold test labels owner-only. Block-aware shuffles preserve specified nuisance structure and must not shuffle individual bins or units across partitions.",
+      "Owner-only comparison with physical pulse count in the observed versus discarded first 500 ms, and conditional prediction versus behavioral choice, to identify how much uncertainty/choice correlation could explain apparent accumulation. These oracle controls are never candidate tools.",
+      "Breathing-adjusted diagnostic only if the complete APCx file contains synchronized breathing without using true odor events in its feature calculation. Breathing-only and spikes-plus-breathing are separately labelled evidence-access variants. A sniff histogram computed at true pulse times leaks target structure and is not a blind-input condition."
+    ],
+    "reasoning_rubric": "Correctly distinguish physical stimulus count from perception, prediction from causal evidence, transient sensory coding from a persistent accumulator, and information absence from failure of a finite decoder. Claims must cite actual future paired held-out numbers and negative controls. Report the 500 ms observability gap, three-animal limit, drifting neuron basis, public-label contamination and any historically selected units.",
+    "DUNL_rule": "The paper DUNL receives true event support and a baseline scaled by event count; it is permitted only as an owner-side labelled response decomposition/encoding diagnostic. It cannot populate a blind stimulus-decoding leaderboard. A new target-blind DUNL variant would need its own fully audited algorithm and train/test contract, but remains a condition of this one family."
+  },
+  "confounds_and_rights": {
+    "selection": "Author AIC/p-value neuron selection potentially uses all trials. The preferred predictive primary starts from all original quality-passing units and selects only on allowed calibration/development. If the Parquet contains only historically selected units, a new training-only selector cannot undo that ascertainment: the preferred all-quality-passing-unit primary stays blocked until the original complete support is obtained. A conditional historical paper-selected route is only a potential alternative, requiring a separate explicit versioned contract and owner decision before execution; it must identify historical selection beside every score and compare only with baselines on the identical selected units and allowed evidence. It cannot silently satisfy or replace the preferred primary, and it is not another benchmark family. The source-QC ascertainment caveat remains applicable even when the unfiltered quality-passing roster is available.",
+    "quality": "Source refractory/waveform criteria may themselves use full recordings. Document as historical signal-quality ascertainment, distinguish it from label-dependent predictive selection, and do not claim online prospective quality gating without a causal-in-time audit.",
+    "other_confounds": "Animals are proficient and head-restrained, from a small cohort; odors, pulse duration and sampling window constrain generality. Respiratory phase alters effective sensory input; physical pulse number does not equal perceived count. Neighboring pulses can overlap. Tetrode motion and session drift complicate cross-day alignment. No causal APCx intervention is part of this primary assay.",
+    "rights": "Article and dataset metadata declare CC BY 4.0; author repository MIT license is verified at the pinned commit. Preserve attribution, indications of modification and MIT notice for distributed source. Review any third-party dependency/material terms before package redistribution. Do not expose public scientific target files through a candidate packet merely because they are legally public.",
+    "privacy": "Mouse data; no human participant data is being acquired. Candidate packets must exclude protected target fields and target-bearing derived objects even though the source data are public."
+  },
+  "hard_gates_before_construction_or_readiness": [
+    "Authenticate the complete 281,948,826-byte canonical Parquet with declared file identity, MD5, newly computed SHA-256 and a safe parser; current work has not downloaded it.",
+    "Confirm all 3 animals/42 sessions, their 17/13/12 mapping, chronological trial census, all quality-passing units, field units, valid-trial exclusions and exact neural/odor alignment. No silent unit/session/trial removal.",
+    "Establish original unit-selection lineage and authenticate the all-quality-passing-unit roster. A release prefiltered by full-data AIC blocks the preferred primary until complete original support is obtained. A conditional historical selected-unit route needs a separate explicit versioned contract/owner decision before execution, matching its baselines and labelling selection beside every result; it does not satisfy this preferred primary or add a family.",
+    "Verify sufficient target and support in the processed route, especially pulse onset/count consistency and whether any breathing diagnostic requires extra files; approve a finite complete-support acquisition before fetching anything else.",
+    "Reconcile integrated-command ceiling labels with physical valve-event count and positive-difference events across every trial, using authentic command/event units, pulse duration/amplitude and boundary/overlap rules. Unresolved disagreement is a primary-target hold; no silent target substitution.",
+    "Audit the pinned ephys compiler and dependencies with safe code/output handling; trace author split and selection paths; implement a safe owner-side Parquet adapter rather than executing arbitrary pickle loaders or notebook outputs.",
+    "Freeze complete-cohort partitions, exact signal serialization, per-session native context feasibility, baseline menu/hyperparameters, prediction schema, missing-output policy and resource caps before protected labels are scored.",
+    "Build separate candidate-readable and owner-only stores and audit every loader/tool so it cannot open target or reward columns, source payloads, test-selected fitted objects or test labels; validate target timing/oracle controls on owner side.",
+    "Run deterministic scorer unit checks, leakage/identity stress tests and reference baselines under the declared matched and full-support settings, then independently review all results and cohort coverage.",
+    "Only after those gates may a runnable packet or research qualification be considered. A source-backed draft is not a run-ready benchmark, and none of these gates has been passed by this metadata-only phase."
+  ],
+  "construction_feasibility": {
+    "prospective_transfer_bytes": 281948826,
+    "storage_estimate_status": "Exact archive/file transfer bytes only. Decoded arrays, memory, extraction cache and complete-support extra storage are unmeasured; no estimate presented as observed capacity.",
+    "compute_status": "Small classical per-session decoders are plausible, but no runtime or resource budget has been empirically established. No LLM spend or model execution authorized in this phase.",
+    "recommendation": "Registered as one source-backed construction draft, retaining all hard gates. The design separates ordinary blind decoding from timing-informed neural decomposition; neither a runnable implementation nor a scientific result has been established."
+  }
+}
