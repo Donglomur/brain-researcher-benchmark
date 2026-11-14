@@ -637,7 +637,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          HORROCKS_ROOT="$RUNNER_TEMP/horrocks-construction-controls-v1"
+          umask 022
+          HORROCKS_ROOT="/tmp/horrocks-construction-controls-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           HORROCKS_SOURCE="$GITHUB_WORKSPACE/benchmarks/neuroscience/expansion-20261113/horrocks-construction-v1"
           HORROCKS_PYTHON="$(python -I -S -B -c 'import sys; print(sys.executable)')"
           /usr/bin/timeout --signal=KILL 10s "$HORROCKS_PYTHON" -I -S -B -c "import hashlib,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]); s=p.lstat(); assert stat.S_ISREG(s.st_mode) and s.st_size==int(sys.argv[2]); b=p.read_bytes(); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})" "$HORROCKS_SOURCE/ci_owner.py" 23213 b875699f5e750622ce1b4ea46a2e93bbabb328b111b3c00cc23cc730d1af7abf prepare --root "$HORROCKS_ROOT" --selection-sha256 aef6a4d1b689bb23667b300e5407131eb52b8c8d9299b93ec456ff6cd51afae8
@@ -654,7 +655,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          HORROCKS_ROOT="$RUNNER_TEMP/horrocks-construction-controls-v1"
+          HORROCKS_ROOT="/tmp/horrocks-construction-controls-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           if [ ! -f "$HORROCKS_ROOT/artifact/ADMISSION.json" ]; then
             mkdir -p "$HORROCKS_ROOT/artifact"
             printf '%s\n' 'FAILED_OR_INCOMPLETE: no admitted result; this diagnostic is not evidence of 42 passing controls. Consult the complete job logs.' >"$HORROCKS_ROOT/artifact/FAILED_SETUP.txt"
@@ -679,4 +680,4 @@ jobs:
           if-no-files-found: error
           overwrite: false
           include-hidden-files: false
-          path: ${{ runner.temp }}/horrocks-construction-controls-v1/artifact/
+          path: /tmp/horrocks-construction-controls-${{ github.run_id }}-${{ github.run_attempt }}/artifact/
