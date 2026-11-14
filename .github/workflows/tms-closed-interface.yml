@@ -1,0 +1,52 @@
+name: TMS closed-submission synthetic checks
+
+on:
+  pull_request:
+    paths:
+      - 'benchmarks/neuroscience/tms-real-interval-controls-v1/**'
+      - '.github/workflows/tms-closed-interface.yml'
+  push:
+    branches: ['publish/neuroscience-200']
+    paths:
+      - 'benchmarks/neuroscience/tms-real-interval-controls-v1/**'
+      - '.github/workflows/tms-closed-interface.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-interface:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Check complete invented submissions and private outcome routing
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          TMS_INTERFACE_ROOT="/tmp/tms-closed-interface-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          TMS_INTERFACE_SOURCE="$GITHUB_WORKSPACE/benchmarks/neuroscience/tms-real-interval-controls-v1"
+          mkdir -m 700 "$TMS_INTERFACE_ROOT"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 35s python -I -S -B -c 'import hashlib,os,pathlib,stat,sys; p=pathlib.Path(sys.argv[1]); f=os.open(p,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK); z=os.fstat(f); assert stat.S_ISREG(z.st_mode) and z.st_nlink==1 and z.st_size==int(sys.argv[2]) and z.st_size<1048576; b=os.read(f,z.st_size+1); os.close(f); assert len(b)==int(sys.argv[2]) and hashlib.sha256(b).hexdigest()==sys.argv[3]; sys.argv=[str(p)]+sys.argv[4:]; exec(compile(b,str(p),"exec"),{"__name__":"__main__","__file__":str(p)})' "$TMS_INTERFACE_SOURCE/run_interface_controls.py" 6951 7abcee4d32fcfacbe3972f4a2fe7546f21446953eeafdf01eec2862922e3ee5b --out "$TMS_INTERFACE_ROOT/artifact" --selection-sha256 c45215c9194b841073ada655594d90670132aaed2450274b342cc421c961acc4 >"$TMS_INTERFACE_ROOT/stdout.log" 2>"$TMS_INTERFACE_ROOT/stderr.log"
+          TMS_INTERFACE_STATUS=$?
+          set -e
+          printf '%s\n' "$TMS_INTERFACE_STATUS" >"$TMS_INTERFACE_ROOT/exit-status.txt"
+          exit "$TMS_INTERFACE_STATUS"
+      - name: Retain complete synthetic examples and original test outcome
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: tms-closed-interface-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: /tmp/tms-closed-interface-${{ github.run_id }}-${{ github.run_attempt }}/
