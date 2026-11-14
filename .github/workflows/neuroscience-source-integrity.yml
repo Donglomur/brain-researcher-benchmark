@@ -534,7 +534,8 @@ jobs:
         with:
           python-version: '3.11.18'
       - name: Install selected engineering NumPy
-        run: timeout --kill-after=5s 90s python3 -I -m pip install --disable-pip-version-check --only-binary=:all: --no-deps numpy==2.4.6
+        run: |
+          timeout --kill-after=5s 90s python3 -I -m pip install --disable-pip-version-check --only-binary=:all: --no-deps numpy==2.4.6
       - name: Run exact eleven captured controls once
         id: controls
         shell: bash
