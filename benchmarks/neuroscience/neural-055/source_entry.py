@@ -18,10 +18,10 @@ import time
 # Parent injects exactly one final reviewed 88-row literal before publication.
 TRANSPORT_MANIFEST = [
   {
-    "bytes": 1520,
+    "bytes": 3142,
     "path": "SOURCE_COMPONENTS.json",
     "runtime_mode": "0o644",
-    "sha256": "35b456ba68d1fdb91a9194e93999879c2ad86872315b4f0040038033ec6e4b8f",
+    "sha256": "ac518de0c3e979c673df2b9a63396d2b3f47f5556f233c2cdeed5da9ed37346c",
     "transport_mode": "0o644"
   },
   {
