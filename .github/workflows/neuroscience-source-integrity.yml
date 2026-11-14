@@ -435,3 +435,90 @@ jobs:
               raise ValueError('all35 engineering outcomes required')
           print(json.dumps({'engineering_checks': total, 'scientific_execution': False, 'scientific_qualification': False}, sort_keys=True))
           MORSE_RESULTS
+
+  neural090-controller-engineering:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Authenticate full N090 sources and stage seven exact harness members
+        run: |
+          timeout --signal=TERM --kill-after=5s 15s python3 -I -S -B - <<'N090_PREPARE'
+          import hashlib,os,stat,sys
+          from pathlib import Path
+          p=Path('benchmarks/neuroscience/neural-090/native-controller-controls-v6/ci_source.py').absolute();n=12470;h='abb49442169d56ebb4168e6c6c4fd686922a7ea2bf3df638bfbad7f629ffe783'
+          s=p.lstat()
+          if not stat.S_ISREG(s.st_mode) or s.st_nlink!=1 or s.st_size!=n:raise ValueError('exact ordinary public CI source')
+          fd=None;raw=bytearray();first=None
+          stamp=lambda s:(s.st_dev,s.st_ino,s.st_mode,s.st_nlink,s.st_size,s.st_mtime_ns,s.st_ctime_ns)
+          try:
+           fd=os.open(p,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+           if stamp(os.fstat(fd))!=stamp(s):raise ValueError('same public CI source identity')
+           while len(raw)<=n:
+            part=os.read(fd,min(65536,n+1-len(raw)))
+            if not part:break
+            raw.extend(part)
+           if stamp(os.fstat(fd))!=stamp(s) or stamp(p.lstat())!=stamp(s):raise ValueError('stable captured public CI source')
+          except BaseException as e:first=e
+          finally:
+           if fd is not None:
+            try:os.close(fd)
+            except BaseException as e:
+             if first is None:first=e
+             else:first.add_note('Secondary CI bootstrap close failure: '+repr(e));first.secondary_close_error=e
+          if first is not None:first.source_prefix=bytes(raw);raise first
+          if len(raw)!=n or hashlib.sha256(raw).hexdigest()!=h:raise ValueError('complete selected public CI source')
+          sys.argv=[str(p),'prepare']
+          exec(compile(bytes(raw),str(p),'exec'),{'__name__':'__main__','__file__':str(p)})
+          N090_PREPARE
+      - name: Run the unchanged complete twenty-four N090 engineering groups once
+        run: |
+          timeout --signal=TERM --kill-after=5s 125s python3 -I -S -B - <<'N090_OWNER'
+          import hashlib,os,stat,sys
+          from pathlib import Path
+          stage=Path(os.environ['RUNNER_TEMP']).resolve(strict=True)/'neural090-controls-v6'
+          source=Path('benchmarks/neuroscience/neural-090/native-controller-v6').absolute()
+          p=stage/'control_owner.py';n=15338;h='4828c5b22aadf5b0b894e6c4b863e558629883ea68cd112728bc2de985be5876'
+          fd=os.open(p,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+          with os.fdopen(fd,'rb') as f:
+           if not stat.S_ISREG(os.fstat(f.fileno()).st_mode):raise ValueError('ordinary selected child')
+           raw=f.read(n+1)
+          if len(raw)!=n or hashlib.sha256(raw).hexdigest()!=h:raise ValueError('selected child source')
+          sys.argv=[str(p),'--manifest',str(stage/'SOURCE_SELECTION.json'),'--manifest-bytes','3011','--manifest-sha256','f11614e05932c3bdcc7b78c4cea45c5657a3519c06da50b6dd3ecca3a5cd149e','--source-root',str(source),'--output',str(stage/'actual-v1')]
+          exec(compile(raw,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})
+          N090_OWNER
+      - name: Require all ordered groups and original natural-zero owner evidence
+        run: |
+          timeout --signal=TERM --kill-after=5s 15s python3 -I -S -B - <<'N090_RESULTS'
+          import hashlib,os,stat,sys
+          from pathlib import Path
+          p=Path('benchmarks/neuroscience/neural-090/native-controller-controls-v6/ci_source.py').absolute();n=12470;h='abb49442169d56ebb4168e6c6c4fd686922a7ea2bf3df638bfbad7f629ffe783'
+          s=p.lstat()
+          if not stat.S_ISREG(s.st_mode) or s.st_nlink!=1 or s.st_size!=n:raise ValueError('exact ordinary public CI source')
+          fd=None;raw=bytearray();first=None
+          stamp=lambda s:(s.st_dev,s.st_ino,s.st_mode,s.st_nlink,s.st_size,s.st_mtime_ns,s.st_ctime_ns)
+          try:
+           fd=os.open(p,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+           if stamp(os.fstat(fd))!=stamp(s):raise ValueError('same public CI source identity')
+           while len(raw)<=n:
+            part=os.read(fd,min(65536,n+1-len(raw)))
+            if not part:break
+            raw.extend(part)
+           if stamp(os.fstat(fd))!=stamp(s) or stamp(p.lstat())!=stamp(s):raise ValueError('stable captured public CI source')
+          except BaseException as e:first=e
+          finally:
+           if fd is not None:
+            try:os.close(fd)
+            except BaseException as e:
+             if first is None:first=e
+             else:first.add_note('Secondary CI bootstrap close failure: '+repr(e));first.secondary_close_error=e
+          if first is not None:first.source_prefix=bytes(raw);raise first
+          if len(raw)!=n or hashlib.sha256(raw).hexdigest()!=h:raise ValueError('complete selected public CI source')
+          sys.argv=[str(p),'results']
+          exec(compile(bytes(raw),str(p),'exec'),{'__name__':'__main__','__file__':str(p)})
+          N090_RESULTS
