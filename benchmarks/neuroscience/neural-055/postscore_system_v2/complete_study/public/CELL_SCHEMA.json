@@ -1,0 +1,71 @@
+{
+  "$id": "CELL_SCHEMA.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "arm": {
+      "enum": [
+        "FULL",
+        "IMAGE_ONLY",
+        "PRE_ONLY",
+        "POST_ONLY",
+        "ALIGN_SHUFFLE"
+      ]
+    },
+    "evaluated_system": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "F",
+        "I"
+      ]
+    },
+    "outer_person": {
+      "enum": [
+        "sub-01",
+        "sub-02",
+        "sub-03",
+        "sub-04",
+        "sub-05",
+        "sub-06",
+        "sub-07",
+        "sub-08",
+        "sub-09",
+        "sub-10"
+      ]
+    },
+    "protocol_version": {
+      "const": "complete-scientific-api-design-s3"
+    },
+    "seed": {
+      "enum": [
+        55055,
+        55056,
+        55057
+      ]
+    },
+    "task_id": {
+      "const": "NEURAL-055"
+    },
+    "tool_setting": {
+      "enum": [
+        "T0",
+        "T1"
+      ]
+    }
+  },
+  "required": [
+    "task_id",
+    "protocol_version",
+    "evaluated_system",
+    "mode",
+    "tool_setting",
+    "seed",
+    "arm",
+    "outer_person"
+  ],
+  "title": "CELL_SCHEMA",
+  "type": "object"
+}

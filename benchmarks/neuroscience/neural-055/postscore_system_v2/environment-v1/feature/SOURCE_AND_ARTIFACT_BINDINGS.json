@@ -1,0 +1,137 @@
+{
+  "actual_entry": "central_entry.py prepare-features -> n055.central.execute -> n055.features.execute -> produce",
+  "producer": {
+    "bytes": 19589,
+    "path": "benchmarks/neuroscience/neural-055/postscore_system_v2/complete_study/n055/features.py",
+    "sha256": "5e828b2aaa283e98a5dc28f59e89298d0ad4476c25ccccbb2de8b77e15cf2bd6"
+  },
+  "required_compatibility_companion": {
+    "blockers": [
+      "line44 first.add_note",
+      "line90 first.add_note"
+    ],
+    "bytes": 7225,
+    "path": "benchmarks/neuroscience/neural-055/postscore_system_v2/complete_study/central_entry.py",
+    "selected_successor": {
+      "bytes": 7671,
+      "mechanism": "Keep raw cleanup_failures; optional add_note cannot replace original failure.",
+      "path": "central_entry.py",
+      "sha256": "b662f740f12426fbd9d972a53f494381c43ac6da7c5bc721a241e77f137a9b3a"
+    },
+    "sha256": "b3e13e53949f6b96c976b9d291bf9e3e4e4e4a058e4e5afcc6d84f1fa65d7d0f",
+    "status": "Exact lead-authored non-scientific successor observed; different review and root installation/whole runtime manifest update remain lead-owned. Installed predecessor above is preserved, not replaced by this author."
+  },
+  "runtime_qualification": "Actual independently signed fixed_image_feature_preparation_runtime receipt binds source/checkpoint/image order/recipe/environment/limits before scientific input access. This package supplies no receipt, key or signature.",
+  "schema": "n055_fixed_feature_source_artifact_bindings_v1",
+  "scientific_recipe": {
+    "checkpoint_loading": "exact_local_state_dict_strict_cpu_no_download",
+    "device": "cpu",
+    "evaluation_mode": true,
+    "features": 4096,
+    "image_conversion": "PIL_RGB",
+    "interpolation": "torchvision0.11.2_PIL_default_bilinear",
+    "network_path": "features; avgpool6x6; view(batch,-1); classifier0_through5_inclusive",
+    "normalization_mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "normalization_std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "official_alexnet_source_sha256": "4d878918c40544618f613fba5c2d2484b6659b58f7308b3d198cbdda78efad56",
+    "one_image_per_forward": true,
+    "original_extractor_sha256": "8dcb281793e567e53ec891ae27ef13b0c0a7c60d4c46e6569a17156901eceaef",
+    "output_dtype": "<f4",
+    "pretrained_constructor": false,
+    "representation_name": "alexnet_torchvision_0.11.2_relu7_4096",
+    "resize": [
+      224,
+      224
+    ],
+    "row_order": "exact_original_image_metadata_lists",
+    "schema": "neural055-fixed-alexnet-relu7-recipe-v1",
+    "seed": 20200220,
+    "selected_layer": "ReLU7",
+    "tensor_conversion": "torchvision0.11.2_ToTensor",
+    "test_rows": 200,
+    "torch": "1.10.1",
+    "torchvision": "0.11.2",
+    "trained_transform_scope": "fixed_checkpoint_no_dataset_fitted_transform_no_EEG",
+    "training_rows": 16540
+  },
+  "scope": "source construction, no native or scientific qualification",
+  "selected_environment": {
+    "Pillow": "8.4.0",
+    "cffi": "1.16.0",
+    "cryptography": "41.0.7",
+    "numpy": "1.21.6",
+    "platform": "linux-x86_64",
+    "pycparser": "2.21",
+    "python": "3.9.18",
+    "torch": "1.10.1+cpu",
+    "torchvision": "0.11.2+cpu",
+    "typing_extensions": "4.7.1"
+  },
+  "source_script_changed": false,
+  "unresolved_primary_metadata": [
+    {
+      "body_observed_here": false,
+      "bytes": null,
+      "id": "checkpoint",
+      "maximum_runtime_bytes": 536870912,
+      "missing": "Preexisting exact local state dict, full byte count/hash and reviewed upstream identity; URL filename hash prefix is insufficient.",
+      "sha256": null,
+      "url": "https://download.pytorch.org/models/alexnet-owt-7be5be79.pth",
+      "url_basis": "Literal in the exact observed official AlexNet source; not a full hash or evidence of artifact acquisition."
+    },
+    {
+      "id": "base_image",
+      "image_digest": null,
+      "missing": "Selected actual Linux-amd64 base manifest/platform digest and resulting built image ID.",
+      "observed": false,
+      "requested_reference_family": "python:3.9.18-bullseye@sha256:<actual digest>"
+    },
+    {
+      "body_observed_here": false,
+      "full_release_hashes": "WHEEL_ARTIFACTS.json: eight complete primary-metadata identities",
+      "id": "wheel_artifacts",
+      "metadata_lookup_status": "Root/lead separate finite captures completed; source author read complete metadata only. Earlier partial Pillow body is excluded from complete metadata evidence.",
+      "missing": "Actual complete wheel bodies and CPU-wheel Requires-Dist/Requires-Python have not been observed. CPU index advertises full hashes but not byte counts. Actual bounded wheel metadata capture plus offline resolver and pip check remain required before environment qualification.",
+      "strategy": "Exact direct-URL --require-hashes acquisition; full local body hash/filename/version/advertised-size matching; actual wheel metadata capture; offline hash-locked install with pip check. No unreviewed replacement."
+    },
+    {
+      "counts": {
+        "test": 200,
+        "training": 16540
+      },
+      "headers_or_payloads_observed_here": false,
+      "id": "stimulus_assets",
+      "strategy": "Exact original image metadata/order plus per-file path/bytes/SHA/mode/role descriptors; original producer validates every row and duplicate path policy."
+    }
+  ],
+  "verified_upstream_source_identities": [
+    {
+      "basis": "Actual complete HTTP200 ordinary source; exact declared recipe hash; no execution.",
+      "bytes": 4530,
+      "id": "original_extractor",
+      "path": "03_dnn_feature_maps_extraction/extract_feature_maps_alexnet.py",
+      "repository": "gifale95/eeg_encoding",
+      "revision": "101997d4f14c41b615bcaf8c0907740106d260c5",
+      "sha256": "8dcb281793e567e53ec891ae27ef13b0c0a7c60d4c46e6569a17156901eceaef",
+      "url": "https://raw.githubusercontent.com/gifale95/eeg_encoding/101997d4f14c41b615bcaf8c0907740106d260c5/03_dnn_feature_maps_extraction/extract_feature_maps_alexnet.py"
+    },
+    {
+      "basis": "Actual complete HTTP200 ordinary source; exact declared recipe hash; no execution.",
+      "bytes": 2283,
+      "id": "official_alexnet_source",
+      "path": "torchvision/models/alexnet.py",
+      "ref": "v0.11.2",
+      "repository": "pytorch/vision",
+      "sha256": "4d878918c40544618f613fba5c2d2484b6659b58f7308b3d198cbdda78efad56",
+      "url": "https://raw.githubusercontent.com/pytorch/vision/v0.11.2/torchvision/models/alexnet.py"
+    }
+  ]
+}

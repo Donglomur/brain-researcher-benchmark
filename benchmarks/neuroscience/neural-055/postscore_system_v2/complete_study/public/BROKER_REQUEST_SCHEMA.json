@@ -1,0 +1,72 @@
+{
+  "$id": "BROKER_REQUEST_SCHEMA.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "cell": {
+      "$ref": "CELL_SCHEMA.json"
+    },
+    "lease": {
+      "type": "string"
+    },
+    "operation": {
+      "enum": [
+        "generate",
+        "development_report",
+        "training_predictions",
+        "candidate_predictions",
+        "query_scores"
+      ]
+    },
+    "parent_response_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "payload": {
+      "description": "Operation-specific exact field sets and F/I/T0/T1/phase/ancestry rules are defined in PROGRAM_ABI_V3.md and checked by the trusted broker.",
+      "type": "object"
+    },
+    "phase": {
+      "enum": [
+        "FIT",
+        "INFER"
+      ]
+    },
+    "provider": {
+      "type": "string"
+    },
+    "schema": {
+      "const": "neural055-broker-request-v3"
+    },
+    "sequence": {
+      "maximum": 99999999,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "source_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "lease",
+    "cell",
+    "phase",
+    "sequence",
+    "parent_response_sha256",
+    "source_sha256",
+    "provider",
+    "operation",
+    "payload"
+  ],
+  "title": "BROKER_REQUEST_SCHEMA",
+  "type": "object"
+}

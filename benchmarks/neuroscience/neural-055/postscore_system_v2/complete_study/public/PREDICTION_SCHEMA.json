@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "not": {
+        "pattern": "[^A-Za-z0-9_-]"
+      }
+    }
+  },
+  "title": "NEURAL055 complete independent probabilities and balanced assignment",
+  "properties": {
+    "schema": {
+      "const": "neural055-prediction-v1"
+    },
+    "case_id": {
+      "$ref": "#/$defs/id"
+    },
+    "query_ids": {
+      "type": "array",
+      "minItems": 200,
+      "maxItems": 200,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/id"
+      }
+    },
+    "candidate_ids": {
+      "type": "array",
+      "minItems": 200,
+      "maxItems": 200,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/id"
+      }
+    },
+    "probabilities": {
+      "type": "array",
+      "minItems": 200,
+      "maxItems": 200,
+      "items": {
+        "type": "array",
+        "minItems": 200,
+        "maxItems": 200,
+        "items": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "assignment": {
+      "type": "array",
+      "minItems": 200,
+      "maxItems": 200,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/id"
+      }
+    }
+  },
+  "required": [
+    "schema",
+    "case_id",
+    "query_ids",
+    "candidate_ids",
+    "probabilities",
+    "assignment"
+  ],
+  "x-runtime-validation": [
+    "exact current case/query/candidate roster equality",
+    "assignment bijection over current candidate roster",
+    "finite non-Boolean probabilities",
+    "row sums within explicit operator-bound tolerance; never renormalize",
+    "duplicate JSON keys forbidden; at most4MiB UTF-8",
+    "no column normalization or assignment optimization requirement"
+  ]
+}

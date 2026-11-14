@@ -1,0 +1,99 @@
+{
+  "$id": "SELECTED_METHOD_SCHEMA.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "cell": {
+      "$ref": "CELL_SCHEMA.json"
+    },
+    "fit_rows": {
+      "items": {
+        "maximum": 16539,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "fitted_people": {
+      "description": "Must exclude cell.outer_person; enforced by runtime.",
+      "items": {
+        "enum": [
+          "sub-01",
+          "sub-02",
+          "sub-03",
+          "sub-04",
+          "sub-05",
+          "sub-06",
+          "sub-07",
+          "sub-08",
+          "sub-09",
+          "sub-10"
+        ]
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "inference_action_policy": {
+      "additionalProperties": true,
+      "properties": {
+        "broker_actions": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "operation": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "provider": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "provider",
+              "operation"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "query_fit": {
+          "const": false
+        }
+      },
+      "required": [
+        "query_fit",
+        "broker_actions"
+      ],
+      "type": "object"
+    },
+    "inner_search": {
+      "type": "array"
+    },
+    "learned_transforms": {
+      "type": "array"
+    },
+    "reference_detail": {},
+    "schema": {
+      "const": "neural055-selected-method-v2"
+    },
+    "selected_settings": {},
+    "source_lineage": {
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema",
+    "cell",
+    "fitted_people",
+    "fit_rows",
+    "learned_transforms",
+    "inner_search",
+    "selected_settings",
+    "inference_action_policy",
+    "source_lineage"
+  ],
+  "title": "SELECTED_METHOD_SCHEMA",
+  "type": "object"
+}
