@@ -1,19 +1,19 @@
 # Neuroscience benchmark construction progress
 
-Snapshot: **14 November 2026**. The programme now has **233 registered task drafts: 116 paper and 117 neural**. The [public successor registry](../../benchmarks/neuroscience/expansion-20261114-v11/registry.json) now represents the same **233 drafts**, adding [13 complete definitions](../../benchmarks/neuroscience/expansion-20261114-v11/README.md) to the unchanged 220-draft predecessor. The receipt-aware private construction catalog is not included. Three existing task profiles are independently validated at precisely defined **private local** tiers. The 233 drafts are not 233 finished benchmarks.
+Snapshot: **14 November 2026**. The programme and [public definition chain](../../benchmarks/neuroscience/expansion-20261114-v12/registry.json) now contain **234 registered task drafts: 116 paper and 118 neural**. One new [Hybrid behavioral-data task](../../benchmarks/neuroscience/expansion-20261114-v12/README.md) extends the unchanged 233-draft predecessor. Four narrowly scoped private local profiles are recorded: three protected reconstruction evaluations and one trusted-host reference-construction profile. Their evidence tiers differ. These are not 234 finished benchmarks; the receipt-aware private catalog is not published.
 
 | Stage | Count |
 | --- | ---: |
-| Registered task drafts in the current programme | 233 |
-| Task drafts represented by the public registry chain | 233 |
-| Existing task profiles validated for their declared private local endpoint | 3 |
+| Registered task drafts in the current programme | 234 |
+| Task drafts represented by the public registry chain | 234 |
+| Narrow private local profiles with their explicitly stated evidence scopes | 4 |
 | Qualified across the complete registered task contract | 0 |
 | Submission-ready tasks | 0 |
 | New publicly runnable authentic tasks supplied by this update | 0 |
 
-These counts concern the neuroscience construction suite. The three original repository examples and their inherited agent results are separate. Profiles, access conditions, contrasts, fields, folds and controls do not add task registrations. LLM/agent performance on the three admitted profiles remains unmeasured.
+These counts concern the neuroscience construction suite. The three original repository examples and their inherited agent results are separate. Profiles, access conditions, contrasts, fields, folds and controls do not add task registrations. LLM/agent performance on these admitted profiles remains unmeasured.
 
-## Three validated private local profiles
+## Three protected local reconstruction evaluations
 
 | Existing task | Validated endpoint | Remaining scope limits |
 | --- | --- | --- |
@@ -27,7 +27,7 @@ PFC retains **46 undefined analytic contexts per arm**, alongside 1,058 defined 
 
 The authentic input packets, protected references and complete execution evidence for these validations are retained privately. **The public checkout does not supply those local evaluations or their required private bindings.** Local validation grants no article/data/preprocessing redistribution permission or Terminal-Bench acceptance.
 
-## Hybrid: accepted reference construction, reported separately
+## Hybrid: fourth profile at the reference-construction tier
 
 A complete local processed-state construction and named statistical-reference operation also passed independent review. It covers **20 participants, four sessions each, 80 outer folds and all 163,135 eligible decision predictions** across 4,884 trials. Training-only selection and normalization were preserved. This is within-person held-session interpolation with chronological within-trial revelation, not future-session forecasting or unseen-person generalization.
 
@@ -43,7 +43,7 @@ Family selection chose context counts in 37 folds and ridge in 43. The paired 95
 
 All 80 final ridge artifacts and complete reference predictions were independently checked; the 720 inner fits are supported by the executed source and selection records, not independent refits. The bounded participant interface was exercised on 17 isolated invented episodes. The separate full 4,884-trial authentic candidate evaluation was not run. Current-state references also use less history than a future participant may receive, limiting stronger reasoning comparisons.
 
-This accepted construction/reference tier is separate from the three-profile admission count above. It is not an LLM campaign, original Julia/Float32 reproduction, full-paper result or public authentic-data release.
+Root has admitted this as the fourth narrowly scoped local profile, associated with the new Hybrid behavioral-data draft. It combines authentic trusted-host reference inference and invented isolated episodes; it has not passed the same authentic protected-evaluation route as the three earlier profiles. It is not an LLM campaign, original Julia/Float32 reproduction, full-paper result or public authentic-data release.
 
 ## Earlier verified construction checkpoints
 
@@ -61,7 +61,7 @@ These milestones do not change any admission or registration count above. Their 
 
 ## Current public source releases
 
-The source for all three private-local profiles is now published:
+Source for the three protected reconstruction profiles is published:
 
 | Profile source | Release | What an external user must still supply |
 | --- | --- | --- |
@@ -73,7 +73,7 @@ PR #83 passed **28 CI jobs and 243 steps at both its head and merge commit**, wi
 
 These are source releases with invented-data validation. They do not distribute authentic packets, protected answers, runtime images or private execution evidence, and do not establish new scientific or model results. Frozen source-phase descriptions in the packages may precede later validation records; a source-stage flag is not a substitute for the scope of the accepted evidence reported here.
 
-Current programme execution discovery still covers the original **200** tasks. The **33 expansion drafts** have no runtime binding. The current private programme catalog exposes all 233 metadata entries. The public registry chain now links all registered definitions, including the 13 later drafts, but the receipt-aware catalog and its private authority chain are not installed or published here. Neither discovery nor source availability establishes scientific readiness.
+Current programme execution discovery still covers the original **200** tasks. The **34 expansion drafts** have no runtime binding. The current private programme catalog exposes all 234 metadata entries. The public registry chain now links all registered definitions, including Hybrid and the 13 preceding additions, but the receipt-aware catalog and its private authority chain are not installed or published here. Neither discovery nor source availability establishes scientific readiness.
 
 ## What can be reproduced from this repository
 
@@ -88,4 +88,4 @@ The PFC component was merged in [PR #74](https://github.com/Donglomur/brain-rese
 
 Running those controls does not reproduce the private authentic results reported above, confer input rights, or count as additional benchmarks. Hybrid's public authentic-file admission is disabled; its loader can still open and hash an explicitly supplied file before refusing it. Public component source is not a deployed protected evaluator for arbitrary submissions.
 
-Earlier dated registration inventories remain unchanged; the new successor snapshot publishes existing definitions with privacy-only locator removal and administrative registration updates. Scientific contracts are preserved. [Machine-readable progress](CONSTRUCTION_STATUS_COUNTS.json) records the same distinctions. This definition and documentation update publishes no scientific inputs, observations, targets, fitted artifacts, private execution logs or new scientific run.
+Earlier dated registration inventories remain unchanged; the new successor snapshot publishes one newly admitted definition with privacy-only locator removal and administrative registration updates. Scientific contracts are preserved. [Machine-readable progress](CONSTRUCTION_STATUS_COUNTS.json) records the same distinctions. This definition and documentation update publishes no scientific inputs, observations, targets, fitted artifacts, private execution logs or new scientific run.
