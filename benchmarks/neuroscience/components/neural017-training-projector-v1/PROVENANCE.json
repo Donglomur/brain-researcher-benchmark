@@ -1,0 +1,56 @@
+{
+  "schema": "neural017-training-projector-public-component/v1",
+  "component": "neural017-training-projector-v1",
+  "task": "NEURAL-017",
+  "implementation": "Accepted corrected training-only byte projector; authentic projection unrun.",
+  "unchanged_files": [
+    {
+      "path": "training_projection.py",
+      "bytes": 14990,
+      "sha256": "4ac3b1985ee6238a60b0577afd611ebee3efcbc5ddddfbc310dafa368a3acabe"
+    },
+    {
+      "path": "test_training_projection.py",
+      "bytes": 10870,
+      "sha256": "ceff7a908bc7b51b080b93e71aaba906222d61eef45430e77ccc438ebba47ef9"
+    }
+  ],
+  "independent_regression": {
+    "path": "test_zip64_end_boundary_v2.py",
+    "original_bytes": 2866,
+    "original_sha256": "94cca9d349a5124e493a454198af6d46918ad3318463271c69c9dac275ab3b4c",
+    "transformation": {
+      "before": "SOURCE = Path(__file__).parents[1] / \"training_projection.py\"",
+      "after": "SOURCE = Path(__file__).with_name(\"training_projection.py\")",
+      "occurrences": 1,
+      "reason": "Locate the unchanged implementation beside the test in the flat public package."
+    },
+    "all_other_bytes_unchanged": true,
+    "implementation_pin_and_adversarial_assertions_unchanged": true,
+    "public_bytes": 2864,
+    "public_sha256": "610a7b970a1232f69edd9b68e0f679470df46808ee19e1e0b4084950d08a2d3e"
+  },
+  "validation_at_assembly": {
+    "retained_author_controls": 17,
+    "retained_distinct_peer_controls": 1,
+    "total_unique_controls": 18,
+    "retained_result": "All 18 passed on the accepted corrected implementation before public assembly.",
+    "tests_executed_during_assembly": 0,
+    "adapted_regression_executed_during_assembly": false,
+    "public_ci": "Configured for all 18 controls; no CI pass is asserted here."
+  },
+  "boundaries": {
+    "receipts_and_errors_operator_only": true,
+    "selected_members": 8,
+    "verified_source_members": 13,
+    "numerical_arrays_decoded": false,
+    "authentic_projection_performed": false,
+    "hostile_host_sandbox": false,
+    "hard_deadline_enforcement_included": false,
+    "qualified_backend": false,
+    "scientific_result": false,
+    "benchmark_count_change": 0,
+    "qualification_promotion": false
+  },
+  "dependencies": "Python standard library only; CI uses Python 3.11.18 and Ubuntu 24.04."
+}
