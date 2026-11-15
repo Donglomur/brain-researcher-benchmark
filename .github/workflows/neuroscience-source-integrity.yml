@@ -1179,3 +1179,38 @@ jobs:
           overwrite: false
           include-hidden-files: false
           path: ${{ runner.temp }}/tms-behavior-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  horrocks-frozen-component-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Test frozen decoder helpers with invented arrays and requests
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          HORROCKS_FROZEN_LOGS="${RUNNER_TEMP}/horrocks-frozen-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$HORROCKS_FROZEN_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s tools/neuroscience_components/horrocks_frozen -p 'test_*.py' -v >"$HORROCKS_FROZEN_LOGS/stdout.log" 2>"$HORROCKS_FROZEN_LOGS/stderr.log"
+          HORROCKS_FROZEN_STATUS=$?
+          set -e
+          printf '%s\n' "$HORROCKS_FROZEN_STATUS" >"$HORROCKS_FROZEN_LOGS/exit-status.txt"
+          cat "$HORROCKS_FROZEN_LOGS/stderr.log"
+          exit "$HORROCKS_FROZEN_STATUS"
+      - name: Preserve frozen decoder component test output
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: horrocks-frozen-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/horrocks-frozen-${{ github.run_id }}-${{ github.run_attempt }}/
