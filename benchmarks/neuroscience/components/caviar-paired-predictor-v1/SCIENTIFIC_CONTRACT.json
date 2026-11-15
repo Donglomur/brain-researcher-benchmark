@@ -1,0 +1,72 @@
+{
+  "schema": "caviar-paired-predictor-public-scientific-contract/v1",
+  "scope": "Prospective typed fixed-posterior prediction component for a future complete 14-experiment reproduction. No fitting, authentic evaluation, score, registration or qualification is supplied.",
+  "primary_source": {
+    "doi": "10.1038/s41593-025-02053-7",
+    "article": "https://doi.org/10.1038/s41593-025-02053-7",
+    "supplement": "https://pmc-oa-opendata.s3.amazonaws.com/PMC12497653.1/41593_2025_2053_MOESM1_ESM.pdf",
+    "locations": "Supplement Algorithm 4 (PDF page 8 / printed page 7), main Equations 10 and 16, Figure 5.",
+    "basis": "The accepted source inquiry and mathematical review supply the interpretation below. Historical implementation conventions remain held; this public assembly did not retrieve or rerun the paper."
+  },
+  "implementation": {
+    "module": "algorithm4_predictor_v2.py",
+    "bytes": 13166,
+    "sha256": "aced479993b854cd0d55c64d00d8caf1e7b40709d8c1e0caadfb702291926c41",
+    "entry": "predict_paired(FixedPosterior, HeldHologram, ProspectiveSettings) -> PairedPrediction",
+    "dependencies": "Python standard library only; no fitting, official optimizer, beta adapter, response construction, scorer, data loader or execution sandbox."
+  },
+  "typed_posterior": {
+    "power_curve": "For each target, phi=(phi0,phi1) is sampled jointly from a two-dimensional Gaussian conditioned on phi0>0 and phi1>0. Inputs are the pre-truncation mean and exactly symmetric, numerically strictly positive-definite covariance. No marginal substitution, clipping, diagonal approximation or jitter is applied.",
+    "weight": "WeightPosterior declares mean mu and nonnegative standard_deviation sigma explicitly. Exact mu==0 gives the zero point mass regardless of declared sigma. Otherwise W is Gaussian with mean mu and variance sigma^2, including negative draws; sigma==0 is degenerate at mu. Official beta/covariance/SD conventions remain unresolved and are never inferred or converted.",
+    "factorization": "Target posterior factors are independent; W is independent of phi. Within a draw, each target's accepted phi and W are shared across all power rows. Bernoulli outcomes are conditionally independent across targets and powers.",
+    "metadata": "posterior_id, fit_provenance, held_hologram_id, response_unit and stimulation_power_unit are nonempty declarations. Matching the held-hologram string is not authentication of a fit or exclusion. Units and provenance must be independently bound.",
+    "joins": "Each power row explicitly joins exactly every posterior target ID; supplied power order is preserved. Negative/nonfinite powers, duplicate/missing/extra IDs and invalid types are refused. ID completeness does not prove the same positive target support across powers or a valid biological hologram. A test intentionally changes support to exercise the low-level join, not to certify a paper case.",
+    "units": "Weights and predictions have the declared response unit. The scientific endpoint is integrated synaptic charge, intended in nC only after authentic calibration. phi0 has inverse stimulation-power units and phi1 is dimensionless. A unit string does not convert traces, establish an integration window or certify nC calibration."
+  },
+  "sampling": {
+    "probability": "p_jnk = sigmoid(phi_jn0 * h_nk - phi_jn1). No I>0 prediction mask is applied: zero power generally retains sigmoid(-phi1), subject to floating-point tail rounding.",
+    "prospective_order": "Python random.Random(seed); draw j, posterior target order, two normal draws per joint phi rejection attempt, one weight normal only when mu!=0 and sigma>0, then a distinct uniform for every power including mu==0. Cross-Python bitstream and historical-seed parity are not promised.",
+    "settings": "J and the per-target/per-draw rejection-attempt cap are explicit positive integers; seed is an explicit integer. Booleans are refused. J must be representable as a finite float before RNG construction; this is not a practical workload limit.",
+    "failure": "Bounded rejection exhaustion identifies target, zero-based draw and attempted count and returns no partial prediction. Invalid inputs or nonfinite intermediate arithmetic also fail. Do not normalize over accepted subsets, drop failed targets/folds or report only successful scientific cases."
+  },
+  "estimators": {
+    "literal": "Y_jk = sum_n W_jn * S_jnk, S_jnk ~ Bernoulli(p_jnk); literal_mean_k = sum_j Y_jk / J. This is a declared prospective source-faithful sampler, not a verified historical caller.",
+    "rao_blackwell": "M_jk = sum_n mu_n * p_jnk using exactly the SAME accepted phi vectors as the literal path; rao_blackwell_mean_k = sum_j M_jk / J. Sharing only a seed across different RNG streams is insufficient.",
+    "fixed_posterior_mean": "Both estimators target sum_n mu_n * E_phi[sigmoid(phi_n0*h_nk-phi_n1)] under the stated factors and successful exact joint rejection.",
+    "conditional_covariance": "For a target with mu!=0 and fixed accepted phi: C_kk = sigma^2*p_k + mu^2*p_k*(1-p_k); C_kl = sigma^2*p_k*p_l for k!=l, because W is shared while spikes are conditionally independent. The exact mu==0 point mass contributes the zero matrix.",
+    "returned_matrix": "removed_conditional_covariance_of_mean = sum_j sum_n C_jn / J^2. It is Cov(literal_mean - rao_blackwell_mean | all accepted phi), in squared response units. It omits phi Monte Carlo uncertainty and is neither total predictive/posterior uncertainty nor an empirical performance score.",
+    "comparison": "Rao-Blackwellization is a competent variance-reduced reference/control of the same fixed-posterior mean. It does not guarantee higher held R^2 for a finite seed, repair a posterior, establish empirical superiority/SOTA or supply a novel neuroscience result. A future improvement reference must be prospectively fixed and sufficiently precise or variance-reduced, with Monte Carlo uncertainty assessed; removing avoidable sampling noise alone is not frontier improvement."
+  },
+  "workload": {
+    "variables": "N posterior targets, K power rows, J draws and A per-target/per-draw rejection cap.",
+    "work": "O(J*N*K^2 + J*N*A), with O(N*K^2) working storage. Preparation includes worst-case O(N^2 + K^2 + N*K) duplicate checks, joins and result allocation.",
+    "admission": "The library is not a practical resource sandbox and enforces no global wall, CPU or memory budget. A trusted outer runtime must explicitly bound N, K, J and A, account for covariance work/storage and supply process limits and recovery. No authentic or untrusted workload is admitted by this package.",
+    "numeric_limits": "Strict typed tuples, finite real inputs excluding booleans, explicit covariance validation and finite intermediates are required. Extreme or ill-conditioned inputs may be refused without repair; probability tails may round to 0 or 1."
+  },
+  "complete_study_obligations": [
+    "Retain all 14 authentic experiments and every declared held-hologram fold, power row and repeat. They are not automatically 14 animals or 14 independent biological replicates.",
+    "Bind the actual Figure 5 cohort, experiment/animal/slice hierarchy, target support, schemas, powers, repeats, time windows, units and nC calibration. Biological grouping and uncertainty remain unresolved until those joins are verified.",
+    "Separate LOHO/fitting code must establish the all-trials-except-held-hologram rule and independently authenticate each fitted posterior. Matching strings cannot prove training exclusion; do not silently substitute a narrower training subset.",
+    "Validate authentic identical positive support across power rows, zero-power handling and the complete hologram design. Low-level target-ID joins do not establish those biological constraints.",
+    "Resolve historical beta/posterior conventions, executed caller, J/RNG/truncation/thresholds, comparator/demixer provenance, preprocessing/window leakage controls and observed-repeat reduction.",
+    "Complete charge target construction, scoring, reference precision and all uncertainty obligations in the separate trusted study pipeline. No output of this component alone establishes full-paper reproduction.",
+    "Data access, rights and redistribution remain separate. This package ships no authentic data, fitted posterior, held response or model checkpoint."
+  ],
+  "validation_at_assembly": {
+    "existing_author_controls": 22,
+    "retained_execution": "21 controls ran against the earlier implementation; one added huge-J-before-RNG control ran against the accepted V2 implementation. The complete 22-test V2 suite was not rerun wholesale before publication assembly.",
+    "independent_review": "The final source and mathematical opinion is closed and accepted. It includes a distinct unequal-phi mean/covariance check and verification of the corrected huge-J error contract; no pending-review status is inherited.",
+    "assembly_tests_executed": 0,
+    "public_ci": "Configured to authenticate the five public component files and run all 22 existing controls. An actual pass requires the exact future CI run.",
+    "test_scope": "Invented deterministic component controls only. A two-point weight fixture checks Gaussian first/second-moment formulas; production sampling remains Gaussian."
+  },
+  "status": {
+    "authentic_data_evaluation": false,
+    "fit_or_model_run": false,
+    "empirical_score": false,
+    "novelty_or_sota_claim": false,
+    "registered_benchmark_addition": false,
+    "qualification_promotion": false,
+    "full_paper_reproduction": "held"
+  }
+}
