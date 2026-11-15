@@ -1645,3 +1645,68 @@ jobs:
           overwrite: false
           include-hidden-files: false
           path: ${{ runner.temp }}/caviar-paired-predictor-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  dmfc-four-cell-component-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Install the exact invented-control dependency
+        run: 'python -I -m pip install --disable-pip-version-check --only-binary=:all: --no-deps numpy==2.4.6'
+      - name: Verify the complete DMFC component and run its 14 invented controls
+        shell: bash
+        working-directory: benchmarks/neuroscience/neural-095-four-cell
+        run: |
+          set -euo pipefail
+          umask 077
+          DMFC_COMPONENT_LOGS="${RUNNER_TEMP}/dmfc-component-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$DMFC_COMPONENT_LOGS"
+          python -I -S -B - >"$DMFC_COMPONENT_LOGS/source-auth.stdout" 2>"$DMFC_COMPONENT_LOGS/source-auth.stderr" <<'DMFC_SOURCE_AUTH'
+          import hashlib, json, stat
+          from pathlib import Path, PurePosixPath
+          root = Path.cwd()
+          lock = json.loads((root / 'SOURCE_LOCK.json').read_text())
+          assert lock['schema'] == 'relative-public-source-lock-v1'
+          rows = lock['files']
+          assert len(rows) == 17 and len({r['path'] for r in rows}) == 17
+          for row in rows:
+              relative = PurePosixPath(row['path'])
+              assert not relative.is_absolute() and '..' not in relative.parts
+              path = root / relative
+              assert not any(p.is_symlink() for p in (path, *path.parents))
+              before = path.lstat()
+              assert stat.S_ISREG(before.st_mode) and before.st_nlink == 1
+              assert 0 < row['bytes'] <= 262144 and before.st_size == row['bytes']
+              body = path.read_bytes()
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256']
+              after = path.lstat()
+              fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+              assert all(getattr(before, key) == getattr(after, key) for key in fields)
+          actual = {str(p.relative_to(root)) for p in root.rglob('*') if p.is_file() or p.is_symlink()}
+          assert actual == {r['path'] for r in rows} | {'SOURCE_LOCK.json'}
+          print(json.dumps({'source_files': 17, 'invented_controls_only': True, 'original_data_read': False}))
+          DMFC_SOURCE_AUTH
+          for DMFC_CONTROL in score provision; do
+            set +e
+            /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -B "test_${DMFC_CONTROL}.py" >"$DMFC_COMPONENT_LOGS/${DMFC_CONTROL}.stdout" 2>"$DMFC_COMPONENT_LOGS/${DMFC_CONTROL}.stderr"
+            DMFC_CONTROL_STATUS=$?
+            set -e
+            printf '%s\n' "$DMFC_CONTROL_STATUS" >"$DMFC_COMPONENT_LOGS/${DMFC_CONTROL}.status"
+            cat "$DMFC_COMPONENT_LOGS/${DMFC_CONTROL}.stdout" "$DMFC_COMPONENT_LOGS/${DMFC_CONTROL}.stderr"
+            if [ "$DMFC_CONTROL_STATUS" -ne 0 ]; then exit "$DMFC_CONTROL_STATUS"; fi
+          done
+      - name: Preserve complete DMFC component control streams
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: dmfc-component-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/dmfc-component-${{ github.run_id }}-${{ github.run_attempt }}/
