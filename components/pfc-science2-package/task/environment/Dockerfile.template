@@ -1,0 +1,12 @@
+# UNMATERIALIZED: replace the token only with the separately reviewed literal
+# immutable image reference. This is not a runnable Dockerfile or a build claim.
+FROM __REVIEWED_PFC_RUNTIME_REFERENCE__
+WORKDIR /app
+COPY assets/participant-packet.json /input/participant-packet.json
+COPY assets/paper.xml /instructions/paper.xml
+COPY assets/category_matching.py /official/category_matching.py
+COPY assets/LICENSE /official/LICENSE
+COPY assets/notices/ /instructions/notices/
+COPY PACKET_SCHEMA.json /instructions/PACKET_SCHEMA.json
+RUN mkdir -p /app/output
+# No solution, scorer, reference outputs, task directory, or host socket copied.

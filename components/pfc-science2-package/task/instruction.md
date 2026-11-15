@@ -1,0 +1,11 @@
+Compute the conditional spatial statistics for every unit in /input/participant-packet.json. The fixed map contains 99 recordings, 19,186 fitting units and 68 fitting animals. /instructions/PACKET_SCHEMA.json defines the packet, /instructions/paper.xml provides scientific context, and /official/category_matching.py is available with its license.
+
+For each of the twelve families, units with a nonnegative family label form its eligible population. Within each effective task stratum, independently and uniformly permute the ROI and category labels while preserving both margins. Each unit has weight one; task strata are independent. Return the observed coincidence count and exact conditional mean and variance for every family-label/category cell. The requested quantities are exact conditional moments, not random-permutation estimates.
+
+Include the full cohort and one case deleting each whole animal in packet roster order, jointly across all recordings and families. Retain the original twelve-family order, every family label and all eight category columns, including unsupported or zero cells. These are fixed-map reconstruction and sensitivity results; animal deletions are not confidence intervals or biological ground-truth predictions.
+
+Write /app/output/submission.jsonl as UTF-8 JSONL, no larger than 128 MiB, with one header and exactly 69 case lines. The header has exactly the fields schema, packet_sha256 and cases: schema is PFC_CONDITIONAL_CASES_V1, packet_sha256 is SHA-256 of the exact original packet bytes, and cases is full followed by without:ANIMAL_ID for every animal in roster order.
+
+Each case has exactly case and families. Each family has exactly key, counts, mean and variance. Its matrices have one row per original family label and eight columns. Counts are nonnegative integers. Every mean and variance is a reduced rational pair [numerator, denominator] of integers with positive denominator. Preserve all coordinates and declared axes; booleans, nonfinite values, missing or reordered cases, duplicate JSON keys and unreduced rationals are invalid.
+
+You have 28800 seconds to complete this task. Do not cheat by using online solutions or hints specific to this task.
