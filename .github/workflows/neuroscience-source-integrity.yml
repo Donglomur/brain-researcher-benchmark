@@ -1144,3 +1144,38 @@ jobs:
           overwrite: false
           include-hidden-files: false
           path: ${{ runner.temp }}/nider-full120-public-source-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  tms-behavior-component-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Test TMS behavioral reference and scorer with invented records
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          TMS_BEHAVIOR_LOGS="${RUNNER_TEMP}/tms-behavior-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$TMS_BEHAVIOR_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B tools/neuroscience_components/tms_behavior/test_behavior_reference.py -v >"$TMS_BEHAVIOR_LOGS/stdout.log" 2>"$TMS_BEHAVIOR_LOGS/stderr.log"
+          TMS_BEHAVIOR_STATUS=$?
+          set -e
+          printf '%s\n' "$TMS_BEHAVIOR_STATUS" >"$TMS_BEHAVIOR_LOGS/exit-status.txt"
+          cat "$TMS_BEHAVIOR_LOGS/stderr.log"
+          exit "$TMS_BEHAVIOR_STATUS"
+      - name: Preserve TMS component test output
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: tms-behavior-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/tms-behavior-${{ github.run_id }}-${{ github.run_attempt }}/
