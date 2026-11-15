@@ -1,0 +1,9 @@
+# UNMATERIALIZED: a new reviewed verifier runtime must include CPython3.12.8,
+# NumPy2.2.6, SciPy1.15.3, pytest8.4.1 and pytest-json-ctrf0.3.5 at build time.
+# No fabricated image digest, implicit mutable base, or runtime package install.
+FROM __REVIEWED_PFC_VERIFIER_RUNTIME_REFERENCE__
+WORKDIR /tests
+COPY . /tests/
+COPY assets/participant-packet.json /input/participant-packet.json
+RUN mkdir -p /app/output /logs/verifier && chmod 700 /logs/verifier
+# The only agent-produced file will be the declared submission.jsonl artifact.
