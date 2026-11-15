@@ -1,0 +1,11 @@
+# Attribution and rights
+
+The authored task/scoring component is distributed under the accompanying MIT license, copyright 2026 Brain Researcher. It uses Python and NumPy; their own licenses continue to apply. No upstream manuscript, original experimental source code, recordings or derived answer arrays are copied into this directory.
+
+The source data is **DMFC_RSG: macaque dorsomedial frontal cortex spiking activity during time interval reproduction task**, credited by DANDI to **Sohn, Hansem; Jazayeri, Mehrdad (2024)**. Cite the exact version: [DANDI dandiset 000130, version 0.241017.1448](https://doi.org/10.48324/dandi.000130/0.241017.1448). The [version's primary metadata](https://api.dandiarchive.org/api/dandisets/000130/versions/0.241017.1448/) identifies the data license as **CC BY 4.0**. The metadata was checked on 2026-11-15. Data licensing is distinct from this component's MIT code license.
+
+The associated scientific paper is Sohn H, Narain D, Meirhaeghe N and Jazayeri M (2019), [Bayesian Computation through Cortical Latent Dynamics](https://doi.org/10.1016/j.neuron.2019.06.012). The author's [RSG2prior repository](https://github.com/hansem/RSG2prior) identifies itself as data and code for that paper. A license was not returned by its GitHub license endpoint during this review; no permission to redistribute that repository's code or the article is inferred from the data license. Neither is bundled here.
+
+The [Neural Latents Benchmark](https://neurallatents.github.io/) provides related benchmark context and points to [nlb_tools](https://github.com/neurallatents/nlb_tools), whose repository supplies an MIT license. This package does not vendor or require those tools. Their benchmark scores must not be presented as interchangeable with this task's distinct observed-Set behavioral target and finite-session paired endpoint.
+
+Any later distribution of a derived packet must retain the data citation, license notice and a clear description of the conversion, selection and changes. The present source release includes only public source references and artifact identities. It does not redistribute the DANDI data or assert that a portable data conversion pipeline has been delivered.
