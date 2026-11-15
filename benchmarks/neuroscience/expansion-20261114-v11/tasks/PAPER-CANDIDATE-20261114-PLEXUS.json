@@ -1,0 +1,139 @@
+{
+  "id": "PAPER-CANDIDATE-20261114-PLEXUS",
+  "track": "paper",
+  "title": "Network-aware neuronal activity phenotyping across a complete CRISPRi screen",
+  "registration_recommendation": "REGISTER_DRAFT_ONLY",
+  "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
+  "scientific_question": "Does network-aware representation learning recover reproducible neuronal activity phenotypes of the complete52-gene CRISPRi screen beyond single-cell/manual features and plate effects?",
+  "paired_access_conditions": {
+    "A": "Paper and sufficient scientific specification plus identical complete authorized data and train/dev labels; no official implementation.",
+    "B": "The same paper/specification/data and role information plus pinned official code. Missing essential method specification is a construction defect, not an A-arm model failure.",
+    "parity": "Equal execution, tuning and compute budgets; same complete held cases and metric. Public event schedules and paper-provided information remain equally available. Code/model/checkpoint exposure and contamination are audited.",
+    "outcomes": "Separate historical reproduction from prospective improvement. Preserve original test-selection/leakage if reproducing it, label it, and never substitute a corrected split without a distinct prospective result. Narrative cannot replace numeric artifacts."
+  },
+  "provenance": {
+    "paper": {
+      "title": "Network-aware self-supervised learning enables high-content phenotypic screening for genetic modifiers of neuronal activity dynamics",
+      "venue": "Nature Machine Intelligence",
+      "year": 2025,
+      "doi": "10.1038/s42256-025-01156-x",
+      "url": "https://www.nature.com/articles/s42256-025-01156-x"
+    },
+    "data": [
+      {
+        "doi": "10.5281/zenodo.15809433",
+        "version": "Record 15809433 (paper reference labels v2)",
+        "url": "https://zenodo.org/records/15809433",
+        "license": "CC-BY-4.0",
+        "access": "Open archive metadata and file link; body not downloaded.",
+        "observed_bytes": 38590002068,
+        "representation": "processed_zarr_files neural traces/spikes/masks plus metadata_files. This preserves neuronal network inputs while avoiding raw movies.",
+        "version_caveat": "Availability text also cites first record 14714574 (31,989,485,708 B). v2 is larger; do not silently substitute or infer equality."
+      }
+    ],
+    "official_code": {
+      "owner": "pgrosjean",
+      "repo": "https://github.com/pgrosjean/plexus",
+      "commit": "69ccecbcc00f8462c8ce2a9d699be09f4c53ed66",
+      "license": "MIT",
+      "archive": "https://zenodo.org/records/15811302",
+      "archive_version": "v1.0.0",
+      "archive_bytes": 1204854,
+      "availability": "Official pinned repository and archived software metadata verified.",
+      "publication_identity": "Archive describes the preprint manuscript; final-paper compatibility and current-commit equivalence need a source comparison."
+    },
+    "reviewed_dossier": {
+      "path": null,
+      "bytes": 4590,
+      "sha256": "c31c181f989bbab1412679ec521c6e069c1cc6b7ad66daa424d50cc3465aac5d"
+    }
+  },
+  "complete_scope": "Complete 52-gene screen, all released cell lines, plates, wells and controls required for its main screen result. Use processed per-well neuronal traces and metadata, not published embeddings alone. Preserve complete eligible plate/well manifest; training and held plates cannot share wells.",
+  "reference": {
+    "outputs": [
+      "Full per-gene phenotype-effect and significance table",
+      "Network-aware versus single-cell/manual-feature comparison",
+      "Cell-line and plate heterogeneity with complete negative controls"
+    ],
+    "baselines": [
+      "Plexus network-aware model",
+      "Single-cell representation ablation",
+      "Published manual neuronal features"
+    ],
+    "panel": "Main CRISPRi screen result; exact final-paper figure/table mapping must be reconciled with archived v1.0.0 software."
+  },
+  "prospective_improvement": {
+    "endpoint": "Improve held-plate effect reproducibility and perturbation discrimination at a frozen false-discovery rate, with plate-level AUROC and calibration as predictive endpoints. Do not reward simply finding more significant genes.",
+    "heldout_unit": "Whole plate/batch and well; report cell-line transfer separately. Cells are nested observations, not independent experimental replicates.",
+    "controls": [
+      "Plate/well/line-only predictors",
+      "Shuffled treatment labels within permissible blocks",
+      "Network-context ablation at matched input/parameter budget",
+      "Train-only representation/statistics; no use of released held-data-trained checkpoints",
+      "Negative-control treatment calibration"
+    ]
+  },
+  "resources": {
+    "storage_GiB": [
+      120,
+      250
+    ],
+    "host_RAM_GiB": [
+      32,
+      64
+    ],
+    "GPU_RAM_GiB": [
+      24,
+      48
+    ],
+    "GPU_hours": [
+      100,
+      1500
+    ],
+    "basis": "38.59 GB archive, extraction and complete per-well trace batches, three model families across full blocked folds/seeds. Archive expansion and full training cost unmeasured."
+  },
+  "remaining_gates": [
+    "Reconcile final-paper v2 data versus v1 availability citation",
+    "Complete plate/line/guide/replicate mapping and screen panel identity",
+    "Archive-to-current-code comparison",
+    "Split-compatible preprocessing/statistics and finite full model grid"
+  ],
+  "overlap": "No exact identity in finite dedup inputs; transcriptomic perturbation tasks are distinct from this neural-activity phenotype claim.",
+  "common_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+  "readiness": {
+    "runnable": false,
+    "inputs_verified": false,
+    "reference_validated": false,
+    "research_qualified": false,
+    "reproduction_established": false,
+    "model_evaluated": false,
+    "submission_ready": false
+  },
+  "participant_inputs": "Version-bound processed neural trace/spike/mask arrays plus well/plate/cell-line metadata for every released perturbation and negative control. Released embeddings or held-data-trained checkpoints cannot replace neuronal inputs.",
+  "machine_output": {
+    "predictions": "Held-well/plate perturbation probabilities and phenotype effect estimates keyed by gene, cell line, plate, well and control status.",
+    "tables": "All52 gene effect and significance rows, network versus single-cell/manual-feature contrasts, plate/line heterogeneity, negative-control calibration and full exclusions.",
+    "artifacts": "Train-only representations/models, source/config/provenance, complete grouped uncertainty and fixed multiplicity procedure."
+  },
+  "scoring": "Recompute published screen estimator and network-context ablation. Prospective held-plate discrimination/calibration and effect reproducibility at frozen FDR are separate outcomes; more significant genes alone is not improvement.",
+  "protected_split": "Whole plates/batches and wells; keep all cells from each well together. Inner grouped tuning, TRAIN-only representation/statistics, distinct cell-line transfer. Biological replication is at plate/well/line hierarchy, not cell count.",
+  "comparators": "Plexus network-aware, single-cell ablation and manual neuronal features; plate/well/line-only and permissible block label shuffles at matched input and tuning budgets.",
+  "source_family_ids": [
+    "plexus-crispri-52gene"
+  ],
+  "distinctness": "Complete neuronal network perturbation phenotype screen, with independent biological perturbation and plate hierarchy; no matching existing question found.",
+  "publication_context": {
+    "status": "registered_construction_draft_definition_only",
+    "source_snapshot_date": "2026-11-14",
+    "source_definition_bytes": 7791,
+    "source_definition_sha256": "ec8eb9f750a300b03af45287fadc056ea9920ad2f80f2c0fa373ed55bd124e4b",
+    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
+    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
+    "scientific_definition_changed": false,
+    "runtime_binding": null,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+  }
+}

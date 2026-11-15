@@ -1,11 +1,11 @@
 # Neuroscience benchmark construction progress
 
-Snapshot: **14 November 2026**. The programme now has **233 registered task drafts: 116 paper and 117 neural**. The unchanged [public registry snapshot](../../benchmarks/neuroscience/expansion-20261114/registry.json) contains **220 drafts: 109 paper and 111 neural**; this documentation update does not publish the 13 additional task definitions or the current programme catalog. Three existing task profiles are independently validated at precisely defined **private local** tiers. The 233 drafts are not 233 finished benchmarks.
+Snapshot: **14 November 2026**. The programme now has **233 registered task drafts: 116 paper and 117 neural**. The [public successor registry](../../benchmarks/neuroscience/expansion-20261114-v11/registry.json) now represents the same **233 drafts**, adding [13 complete definitions](../../benchmarks/neuroscience/expansion-20261114-v11/README.md) to the unchanged 220-draft predecessor. The receipt-aware private construction catalog is not included. Three existing task profiles are independently validated at precisely defined **private local** tiers. The 233 drafts are not 233 finished benchmarks.
 
 | Stage | Count |
 | --- | ---: |
 | Registered task drafts in the current programme | 233 |
-| Task drafts represented by the linked public registry snapshot | 220 |
+| Task drafts represented by the public registry chain | 233 |
 | Existing task profiles validated for their declared private local endpoint | 3 |
 | Qualified across the complete registered task contract | 0 |
 | Submission-ready tasks | 0 |
@@ -21,7 +21,7 @@ These counts concern the neuroscience construction suite. The three original rep
 | NIDER — `PAPER-EXP-20261113-003` | All 120 outputs from the three original correlation meta-analyses, plus the existing coarse computation screen. The protected R submission route and authentic reference comparisons passed complete independent review. | Original reporting compares **27 reporting-bin quantities, 21 exact counts and 72 continuous diagnostics**. The original and three hypothetical cases each use a **12-field** procedure check; the other **108 hypothetical fields remain unscored**. No overall 120-field binary scientific pass is defined. |
 | PFC — `PAPER-EXP-20261113-005` | Conditional exact reconstruction on all **99 recordings and 19,186 fitting units**, across **69 full-cohort and whole-animal deletion cases**, with protected complete scoring of an independently authored analytical program. | The learned map, categories and ROI axes are supplied inputs. All 12 null families, 16 analytic contexts and four Gao contexts remain covered. This is a prospective numerical reconstruction, not historical random-shuffle or full-paper reproduction. |
 
-All three profiles provide explicit method assistance in A and B; B adds selected official code. Known valid and deliberately wrong submissions establish the functioning evaluations, not independent model reasoning or an A/B capability result. NIDER's older 12-field protocol, full V5 leave-one-study/cohort/prediction obligations and broader paper claims remain separate. Each profile counts once within the programme inventory. The three profiles already belonged to the linked 220-draft public snapshot; their validation and source publication add no registrations.
+All three profiles provide explicit method assistance in A and B; B adds selected official code. Known valid and deliberately wrong submissions establish the functioning evaluations, not independent model reasoning or an A/B capability result. NIDER's older 12-field protocol, full V5 leave-one-study/cohort/prediction obligations and broader paper claims remain separate. Each profile counts once within the programme inventory. The three profiles already belonged to the earlier 220-draft public snapshot; their validation and source publication add no registrations.
 
 PFC retains **46 undefined analytic contexts per arm**, alongside 1,058 defined contexts. Its fitting cohort contains 68 animals; the scored-PFC population contains 65. Whole-animal deletion is sensitivity analysis, not a population confidence interval. Three deletions per predeclared direction are undefined, so **complete 68-animal directional stability is false**. The same independently authored program exercised both assistance interfaces; this does not measure an assistance effect or LLM performance. Historical random draws, panel/population lineage and broader paper claims remain unresolved.
 
@@ -73,7 +73,7 @@ PR #83 passed **28 CI jobs and 243 steps at both its head and merge commit**, wi
 
 These are source releases with invented-data validation. They do not distribute authentic packets, protected answers, runtime images or private execution evidence, and do not establish new scientific or model results. Frozen source-phase descriptions in the packages may precede later validation records; a source-stage flag is not a substitute for the scope of the accepted evidence reported here.
 
-Current programme execution discovery still covers the original **200** tasks. The **33 expansion drafts** have no runtime binding. The current programme catalog exposes all 233 metadata entries, but that catalog and its additional definitions are not installed or published by this documentation-only update. Neither discovery nor source availability establishes scientific readiness.
+Current programme execution discovery still covers the original **200** tasks. The **33 expansion drafts** have no runtime binding. The current private programme catalog exposes all 233 metadata entries. The public registry chain now links all registered definitions, including the 13 later drafts, but the receipt-aware catalog and its private authority chain are not installed or published here. Neither discovery nor source availability establishes scientific readiness.
 
 ## What can be reproduced from this repository
 
@@ -88,4 +88,4 @@ The PFC component was merged in [PR #74](https://github.com/Donglomur/brain-rese
 
 Running those controls does not reproduce the private authentic results reported above, confer input rights, or count as additional benchmarks. Hybrid's public authentic-file admission is disabled; its loader can still open and hash an explicitly supplied file before refusing it. Public component source is not a deployed protected evaluator for arbitrary submissions.
 
-The dated registration inventories and original contracts remain unchanged. [Machine-readable progress](CONSTRUCTION_STATUS_COUNTS.json) records the same distinctions. This documentation update publishes no scientific inputs, observations, targets, fitted artifacts, private execution logs or new scientific run.
+Earlier dated registration inventories remain unchanged; the new successor snapshot publishes existing definitions with privacy-only locator removal and administrative registration updates. Scientific contracts are preserved. [Machine-readable progress](CONSTRUCTION_STATUS_COUNTS.json) records the same distinctions. This definition and documentation update publishes no scientific inputs, observations, targets, fitted artifacts, private execution logs or new scientific run.

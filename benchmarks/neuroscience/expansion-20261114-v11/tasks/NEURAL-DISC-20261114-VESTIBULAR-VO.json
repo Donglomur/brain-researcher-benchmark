@@ -1,0 +1,180 @@
+{
+  "id": "NEURAL-DISC-20261114-VESTIBULAR-VO",
+  "track": "neural",
+  "title": "Continuous self-motion reconstruction from simultaneous vestibular spike trains",
+  "registration_recommendation": "REGISTER_DRAFT_ONLY",
+  "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
+  "scientific_question": "Can spikes from a genuinely simultaneous vestibular recording recover measured angular head velocity in held-out complete stimulus repeats, beyond stimulus-class and phase priors?",
+  "participant_inputs": "Exact spikes and permitted training calibration for each genuine simultaneously recorded pair, observation start/timebase and label-independent recording-quality masks. Query inputs exclude head-velocity samples, stimulus waveform ID, absolute repeat index, fitted tuning from held trials, and simulated neural data.",
+  "known_answer": "Experimentally measured angular head velocity time series aligned with the recording; units/sign/sampling and stimulus repeat identities must be established from authentic schema before task freeze.",
+  "complete_scope": "All49 neurons and35 simultaneous pair relationships, all3 animals and naturalistic plus artificial conditions in the published acquisition, subject to reconciled payload membership. A cell can occur in multiple recorded pairs: it remains one cell and animal and is never independent replication. No fabricated49-neuron pseudo-population; non-simultaneously recorded traces cannot be concatenated as same-time input.",
+  "protected_split": "Primary: complete repeated stimulus presentations held out within verified recording pair with fixed training-only neural calibration; training/evaluation temporal buffers cover model history. Secondary: leave-one-animal-out with a prespecified small target-animal calibration budget, labelled calibrated transfer; report all3 animals individually and no broad population precision claim.",
+  "input_representation": "Complete integer spike times for each observed neuron and exact query duration, or explicitly binned counts at a fixed training-selected resolution; timebase maintained. Tile only for no-tools context, cover entire naturalistic and sinusoidal presentations once, carry declared history/retrospective halos and score each core once. Continuous velocity is requested, not a convenient artificial natural-vs-sine label. Fixed rate-decoding is a derived representation; specialist arms receive no richer signal unless reported separately.",
+  "scoring": {
+    "primary": "Per-recording held-repeat velocity MSE, paired improvement against training-only repeat-phase/stimulus prior, grouped by animal. Report naturalistic and sinusoidal strata separately.",
+    "secondary": "R² and Pearson correlation plus sign/scale bias; define constant-target cases and report complete-duration coverage. Any pooled R² is supplementary and cannot hide failed animals.",
+    "uncertainty": "Three individual animal estimates plus descriptive cluster summaries; timebins/pairs are not35 independent animals."
+  },
+  "comparators": "Training-only Wiener/ridge filter from spike bins; a static firing-rate/tuning readout; phase-only predictor using only information legitimately given at query. If the exact stimulus is replayed, report its memorization prior explicitly. Author source mainly supports encoding/correlation/simulation analyses; it is not an already-qualified decoder.",
+  "negative_controls": [
+    "Time-shift and trial-reassignment controls preserving spike autocorrelation and stimulus class.",
+    "Stimulus/phase-only prior and spike-count-only reference.",
+    "Separate actual simultaneous versus explicitly labelled nonsimultaneous descriptive analyses, never combine them for primary."
+  ],
+  "leakage_controls": [
+    "Repeated stimulus waveform or absolute presentation phase may determine velocity without neural evidence.",
+    "Using alltrials for filter/tuning/normalization or mixing the same cells across folds.",
+    "Confusing deposited LIF simulation outputs with biological recordings.",
+    "Pair/cell counts inflate independent n; head-motion units and sign may be silently inferred from outputs."
+  ],
+  "provenance": {
+    "reviewed_dossier": {
+      "path": null,
+      "bytes": 8953,
+      "sha256": "566a03aedc46a2c3b3d7d3511fa140c5a6362a33eaf135ef8957ff560be97bbf"
+    },
+    "sources": [
+      {
+        "role": "primary paper",
+        "url": "https://doi.org/10.1371/journal.pbio.3002623",
+        "primary_fulltext": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11086886/",
+        "year": 2024,
+        "title": "Neural populations within macaque early vestibular pathways are adapted to encode natural self-motion"
+      },
+      {
+        "role": "data and author source",
+        "url": "https://doi.org/10.5683/SP3/FXFZ2J",
+        "version": "2.0",
+        "release_time": "2024-03-29T12:11:37Z",
+        "api_metadata": "https://borealisdata.ca/api/datasets/:persistentId/?persistentId=doi:10.5683/SP3/FXFZ2J",
+        "status": "Provider API and complete file metadata verified; website returned403."
+      }
+    ],
+    "verified_source_facts": "The2024 PLOS Biology study reports49 neurons and35 recorded pairs across3 macaques under naturalistic and sinusoidal motion. Borealis v2.0 lists51 unrestricted files totaling275,709,428 bytes, including VO_dataset.mat180,725,660 bytes and MATLAB analysis/simulation code. Deposit terms are CC BY-NC4.0, distinct from the paper's open license.",
+    "rights_access_version": "Borealis release2.0 and full51file manifest verified; public unrestricted flags do not negate CC BY-NC4.0. External local noncommercial research access may be feasible; redistribution/commercial hosted evaluation requires terms review. All file MD5s are provider metadata; compute SHA256 upon any later approved intake. Code deposit has no separate permissive license established."
+  },
+  "source_family_ids": [
+    "vestibular-vo-borealis-FXFZ2J"
+  ],
+  "resources": "Known complete deposit275.71MB, including180.73MB main recording file; this is a plausible first local qualification source. Prospective float arrays may expand, so reserve2GiB disk and4–8GiB RAM after schema inventory. CPU linear baseline minutes tohours estimated; no GPU needed for the initial reference. Model/API costs separate and unselected.",
+  "remaining_gates": [
+    "Root duplicate/source-family adjudication across both tracks and held reserves.",
+    "Exact full scientific membership and immutable file identities before acquisition.",
+    "Rights and permitted assessment/redistribution checked for every selected release component.",
+    "Authentic schema/clock/unit/label QC, reference qualification, independent grader review and all controls.",
+    "Model exposure audit and defensible outer assessment; public historical labels are development material."
+  ],
+  "paired_access_conditions": {
+    "direct": "No-tools inference on the complete canonical signal packet and target-free permitted context.",
+    "numerical": "Numerical tools on the identical packet. Frozen-program versus per-case adaptive tool use is separately logged within this task.",
+    "specialist": "Audited fixed feature extractor or train-only physiological model on identical information; trained model access is an assistance condition, not evidence of unaided understanding.",
+    "parity": "Same case IDs, inputs, units, masks, training/calibration exposure, protected answers, and transform support. Raw versus lossy derived signals are separately labelled input substrates; no equivalence assumed. Richer-input specialists are auxiliary.",
+    "interpretation": "Association, tool use, public exposure and physiological understanding remain separate. No model campaign is selected."
+  },
+  "common_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+  "readiness": {
+    "runnable": false,
+    "inputs_verified": false,
+    "reference_validated": false,
+    "research_qualified": false,
+    "reproduction_established": false,
+    "model_evaluated": false,
+    "submission_ready": false
+  },
+  "machine_output": {
+    "predictions": "Measured angular head-velocity value for every native target sample of every complete held repeat, keyed by animal, authenticated recording group/genuine pair, condition and repeat.",
+    "score_rows": "Per-repeatMSE; equal repeat means within recording group, equal group means within animal-condition. Primary is the full animal×condition vector, plus strongest admissible priorMSE minus candidateMSE on identical cases/masks. No cross-animal headline pooling.",
+    "coverage": "All49 neurons/35 real simultaneous pairs/3 animals as census targets; naturalistic and eight sine frequencies0.5,1,2,3,4,5,8,17Hz. Fig2D41 eligible neurons is distinct historical subset, not replacement full scope. Missing/malformed prediction cases fail the primary submission."
+  },
+  "exact_primary_estimand": {
+    "schema": "vestibular-exact-primary-estimand-v2",
+    "supersedes": "The unspecified aggregate weights in ../PROSPECTIVE_TASK_CONTRACT.json scorer.primary_definition. Other original scientific scope remains, governed by ../SCIENTIFIC_SCOPE_CLARIFICATION.json.",
+    "primary": "A vector of animal-by-condition paired prediction errors and improvements, with no collapsed cross-animal headline score.",
+    "indices": "a=authenticated animal; c=one authenticated motion condition; g=authenticated simultaneous recording group (session plus actual pair membership; if only a single neuron is genuinely available it belongs to a separately declared single-neuron stratum); r=complete outer-held repeat of that condition/group; t=predetermined valid core sample.",
+    "equations": [
+      "e_m(a,c,g,r)=sum_t(pred_m(t)-target(t))^2 / n_valid(a,c,g,r).",
+      "E_m(a,c,g)=sum over complete held repeats r of e_m(a,c,g,r) / R(a,c,g). Repeats receive equal weight regardless of length.",
+      "P_m(a,c)=sum over eligible authenticated recording groups g of E_m(a,c,g) / G(a,c). Groups receive equal weight inside each animal-condition cell.",
+      "D(a,c)=P_prior(a,c)-P_candidate(a,c), with the same frozen groups/repeats/sample masks and identical failed-case policy for both. Positive D means improvement.",
+      "Report every authenticated animal-condition cell individually, including unavailable cells and their exact coverage reasons. No across-animal average is primary."
+    ],
+    "failure_policy": "Submission must cover every required case/sample with finite correctly aligned values. A malformed/missing case is a typed task failure and no successful primary aggregate is issued for that submission. Complete coverage/rejection details remain visible; failed cases/groups are never dropped from averages.",
+    "dependence": "Repeated neurons may occur in multiple real pair groups. Primary weights intentionally describe performance across recorded groups, not an independent-neuron population estimate. Shared-neuron and session links are preserved in coverage and any uncertainty calculation. Three animals remain three independent animal units; no timebin/pair pseudoreplication.",
+    "secondary": "A separate duration-weighted summary may use sum of squared errors divided by total valid sample count within each animal-condition cell. Label it secondary and publish its sample weights. Do not replace the equal-repeat/equal-group primary vector with it.",
+    "unsupported": "Do not compute animal-balanced/grouped primary metrics until the authentic animal/session/pair/repeat identities and valid masks exist. Historical41-neuron eligibility is not silently applied to this prospective full-cohort task.",
+    "qualification_threshold": "Signal-specific degradation and positive D are scientific diagnostics, not a frozen numeric pass threshold yet. Freeze any future threshold before model assessment, after baseline qualification; no present claim of passing."
+  },
+  "scope_clarification": {
+    "schema": "scientific-scope-clarification-v1",
+    "governs": [
+      "PROSPECTIVE_TASK_CONTRACT.json",
+      "AUTHENTIC_INPUT_OPERANDS.json"
+    ],
+    "published_cohort": "49 neurons,35 genuine simultaneously recorded pairs,3 animals (paper census). Preserve complete intake and membership audit. Raw pair IDs, repeat counts and per-condition eligibility are unresolved.",
+    "published_figure_subset": "Figure2D author README identifies41 VO neurons. This is an analysis-specific subset; no basis exists to silently replace49by41, claim8missing files, or infer identical inclusion acrossfigures.",
+    "conditions": [
+      "naturalistic",
+      "sinusoidal0.5Hz",
+      "sinusoidal1Hz",
+      "sinusoidal2Hz",
+      "sinusoidal3Hz",
+      "sinusoidal4Hz",
+      "sinusoidal5Hz",
+      "sinusoidal8Hz",
+      "sinusoidal17Hz"
+    ],
+    "condition_caveat": "These eight frequencies are explicit in figure-summary source. Authentic recording availability, any additional conditions, amplitude strata and exact membership must be enumerated from the full mainfile; summaries are not a substitute.",
+    "historical_criteria": [
+      "Within-cell heterogeneity needs≥2trials.",
+      "Per-stimulus outlier analysis precedes pooled artificial-condition heterogeneity; exact rule/indices missing.",
+      "Signal-correlation summaries retain pairs with two weakly stationary responses; exact operational test/indices missing.",
+      "Noise-correlation README has signal/noise wording ambiguity; do not silently decide it."
+    ],
+    "new_protocol": "Keep exact paper-reproduction eligibility and prospective full-cohort held-out decoding as separate estimands. New prediction QC is defined from permitted input/acquisition metadata without selecting on target performance. Every excluded record remains in coverage and reason tables. No train/test normalization or filter fitting can access held motion values.",
+    "phase_control": "An exactly repeated stimulus with knownphase may trivialize velocity reconstruction. Both admissible metadata/phase baselines and paired-channel shift controls are mandatory. Same-stimulus whole-repeat reassignment tests trial-specific information only and can be powerless when trajectories are identical; report this, not fake a permutation significance result.",
+    "status": "Source-complete scientific specification; measured-field bindings and executable scientific qualification remain incomplete."
+  },
+  "source_overlays": [
+    {
+      "path": null,
+      "bytes": 11369,
+      "sha256": "e84e92a5aac9de871c114a76cb4d2f03658c6b35b3975dd8655b04d637856e2d"
+    },
+    {
+      "path": null,
+      "bytes": 2399,
+      "sha256": "75540bc39a6e1793e117107876f3da58d3bb4235e6fbde24b85c30583045690d"
+    },
+    {
+      "path": null,
+      "bytes": 2960,
+      "sha256": "287500408df0d560cba9105c4686beda573fe9c6e7ddc63192cfda87cdc7ce54"
+    },
+    {
+      "path": null,
+      "bytes": 18820,
+      "sha256": "2c8efbb068b5bb9d94817ca455128c497c8fe568a77d2111d391bbe6bf8e1ae8"
+    },
+    {
+      "path": null,
+      "bytes": 5354,
+      "sha256": "9eb7823b77b4afdf469331350fe97444a471c69a957951ecff3817a1a185e3ee"
+    }
+  ],
+  "distinctness": "Measured self-motion reconstruction from genuine vestibular pairs, distinct from synthetic populations or image-retina contrast tasks. Historical simulated source analyses are not biological held-out baselines.",
+  "stronger_claim_hold": "Three animals limit population uncertainty; repeated pairs sharing neurons remain dependent. Phase/time priors may solve replayed stimuli, so high score alone does not establish neural dependence. Concurrent mainfile intake is not imported into this proposal.",
+  "publication_context": {
+    "status": "registered_construction_draft_definition_only",
+    "source_snapshot_date": "2026-11-14",
+    "source_definition_bytes": 16798,
+    "source_definition_sha256": "6df82c5037c5aefe31e0a2db5e82d86b82f681b96a1228a0c2c091fb7dfa42bc",
+    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
+    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
+    "scientific_definition_changed": false,
+    "runtime_binding": null,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+  }
+}
