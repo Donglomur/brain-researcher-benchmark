@@ -1,0 +1,9 @@
+# Invented source controls
+
+The relocated package has 19 provisioning tests, 19 strict behavior/delivery tests, eight fixed-construction-program tests, and public graph/relocation/privacy controls. The first three suites passed unchanged in their scientific content on CPython 3.11.6. The public controls are independently reviewed with the whole export.
+
+Provisioning checks complete CSV/code/reference commitments, fresh output trees, all 16 dependencies, four declared binding changes, real manifest/delivery interfaces, typed grants, unselected defaults, path aliases, changed source, forged runtime identity and absence of automatic execution. Delivery transport is explicitly mocked; both closed output commitments must exist before the first protected-reference read. Complete invented 315/18/270 outputs and missing, duplicate, reordered, omitted, nonfinite, changed-input and copied-answer controls exercise the strict scorer. Lower p-values are deliberately not rewarded.
+
+Fixed-program tests authenticate its embedded authored algorithm, use explicit invented release-identity substitutions only in tests, and verify complete all-one arithmetic and exact candidate command construction. The unmodified production program refuses invented input. No production asset pin is weakened by a fixture.
+
+No authentic CSV/reference was opened or regenerated, no Docker/native scientific engine ran, and no model call occurred in this export. The initial author source-test launcher failed before a test ran because Darwin rejected a hard data-memory limit. That original failure is preserved outside this public package; the successor used hard CPU/file-size bounds, a wall deadline and monitored process RSS under the selected host envelope. Sampled RSS is not a hard aggregate memory guarantee. All completed control groups were absent after reaping.
