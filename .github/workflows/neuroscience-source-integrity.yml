@@ -71,8 +71,10 @@ jobs:
           mkdir -m 700 "$NEURAL_SOURCE_LOGS"
           export PFC_FIXTURE_ROOT="${RUNNER_TEMP}/pfc-fixtures-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           test ! -e "$PFC_FIXTURE_ROOT"
+          export PFC_LOCAL_FIXTURE_ROOT="${RUNNER_TEMP}/pfc-local-fixtures-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          test ! -e "$PFC_LOCAL_FIXTURE_ROOT"
           set +e
-          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s . -p 'test_materialize.py' -v >"$NEURAL_SOURCE_LOGS/tests.stdout" 2>"$NEURAL_SOURCE_LOGS/tests.stderr"
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s . -p 'test_*.py' -v >"$NEURAL_SOURCE_LOGS/tests.stdout" 2>"$NEURAL_SOURCE_LOGS/tests.stderr"
           NEURAL_SOURCE_STATUS=$?
           printf '%s\n' "$NEURAL_SOURCE_STATUS" >"$NEURAL_SOURCE_LOGS/tests.status"
           cat "$NEURAL_SOURCE_LOGS/tests.stdout"
