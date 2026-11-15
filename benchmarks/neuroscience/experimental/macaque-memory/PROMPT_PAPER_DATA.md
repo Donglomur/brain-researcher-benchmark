@@ -1,0 +1,7 @@
+Reproduce the complete-session memory-condition decoding endpoint in Abbaspoor, Aljishi and Hoffman's macaque-memory study, then submit predictions for the separate prospective protected-block endpoint specified in CONTRACT.md.
+
+Use the supplied paper, admitted observation-level data, neutral dictionary, complete 35-session roster, training labels and fixed split information. Explain each transformation, grouping decision and departure from the historical method. Preserve all session accounts and every required reference/permutation output. Do not interpret Set_day as a trial-level old/new label. Stop and report a missing join or unsupported operand instead of inventing it.
+
+For improvement, fit preprocessing, stability masks, assembly templates, hyperparameters and probability calibration on training blocks only. Investigate whether assembly structure adds predictive value beyond behavior and mean firing rates. Produce one probability of `new` for every evaluator case, without targets or extra fields. Commit predictions before evaluation. Report descriptive finite-cohort comparisons and both animals individually; do not infer causal consolidation, hidden-data status or population generalization.
+
+This prompt is inactive until complete authentic data admission, reference construction, rights and isolated runner validation have passed. The current source component includes no evaluation cases or model results.

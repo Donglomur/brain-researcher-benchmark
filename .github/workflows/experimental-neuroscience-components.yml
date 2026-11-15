@@ -1,0 +1,94 @@
+name: Experimental neuroscience components
+
+on:
+  pull_request:
+    branches: [publish/neuroscience-200]
+  push:
+    branches: [publish/neuroscience-200]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: experimental-neuroscience-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  invented-component-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Verify all 24 experimental source files
+        run: |
+          python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path, PurePosixPath
+          import stat
+          root = Path('benchmarks/neuroscience/experimental').absolute()
+          def captured(path, length, digest):
+              assert type(length) is int and 0 <= length <= 262144
+              assert not any(p.is_symlink() for p in (path, *path.parents))
+              before = path.stat()
+              assert stat.S_ISREG(before.st_mode) and before.st_nlink == 1
+              assert before.st_size == length
+              with path.open('rb') as stream:
+                  body = stream.read(length + 1)
+              after = path.stat()
+              stamp = lambda s: (s.st_dev, s.st_ino, s.st_size, s.st_mtime_ns, s.st_ctime_ns)
+              assert stamp(before) == stamp(after)
+              assert len(body) == length and hashlib.sha256(body).hexdigest() == digest
+              body.decode('utf-8')
+              assert b'\0' not in body
+              return body
+          lock = json.loads(captured(root / 'SOURCE_LOCK.json', 4602,
+              '631dc49138c09b15785c585f26a526e4ddf93839fd3b579ded339729e5fb3708'))
+          assert lock['schema'] == 'experimental-neuroscience-source-lock-v1'
+          assert lock['status'] == 'NOT_READY'
+          assert len(lock['files']) == lock['files_excluding_self'] == 23
+          expected = {'SOURCE_LOCK.json'}
+          total = 0
+          for row in lock['files']:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              relative = PurePosixPath(row['path'])
+              assert not relative.is_absolute() and str(relative) == row['path']
+              assert all(part not in ('', '.', '..') for part in row['path'].split('/'))
+              assert '\\' not in row['path'] and row['path'] not in expected
+              captured(root / row['path'], row['bytes'], row['sha256'])
+              expected.add(row['path'])
+              total += row['bytes']
+          assert total == lock['bytes_excluding_self'] == 103438
+          actual = set()
+          for path in root.rglob('*'):
+              assert not path.is_symlink()
+              if path.is_dir():
+                  continue
+              assert path.is_file()
+              actual.add(path.relative_to(root).as_posix())
+          assert actual == expected
+          print(json.dumps({'files': 24, 'bytes': total + 4602,
+                            'invented_controls_only': True,
+                            'authentic_inputs_read': False}))
+          PY
+      - name: Test macaque scoring with invented data
+        run: >-
+          timeout --signal=TERM --kill-after=5s 30s
+          python -I -S -B -m unittest discover
+          -s benchmarks/neuroscience/experimental/macaque-memory -p test_score.py -v
+      - name: Test dendrite scoring with invented data
+        run: >-
+          timeout --signal=TERM --kill-after=5s 30s
+          python -I -S -B -m unittest discover
+          -s benchmarks/neuroscience/experimental/dendrites -p test_score_lobes.py -v
+      - name: Test calcium scoring with invented data
+        run: >-
+          timeout --signal=TERM --kill-after=5s 30s
+          python -I -S -B -m unittest discover
+          -s benchmarks/neuroscience/experimental/calcium-state -p test_scorer.py -v

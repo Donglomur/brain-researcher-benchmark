@@ -1,0 +1,7 @@
+Reproduce the declared frontal/parietal lobe-separability endpoint from the supplied paper, admitted morphology data and pinned official source, then attempt the separately specified donor/animal-held prediction task. Follow CONTRACT.md and the frozen manifest; these define a finite paper endpoint, not the entire manuscript.
+
+For reproduction, submit the full human and mouse feature-count curves and executable analysis, explaining the preprocessing, source exclusions and validation rule. Do not substitute published figure values for a recomputation. Clearly distinguish historical neuron-level validation from the prospective grouped test.
+
+For improvement, use only the training groups for normalization, feature selection, fitting and tuning. Produce a probability of PL for every test neuron in every frozen held-group fold. Do not use donor identity, species identity as a lobe shortcut, test labels or fitted reference outputs. The task operator supplies the same computational budget and cases for both information conditions. Commit your complete prediction JSON and analysis program before scoring. Report uncertainty and limitations at the biological-group level, and explain whether gains could be explained by size alone.
+
+This condition additionally supplies official source at revision a0cc151a00384543a21c95c61479e65112ba6b5d, with notebook outputs, saved fitted models and expected figure scores removed. The historical recipe can help reproduce the paper; its preprocessing and validation choices do not override the protected prospective protocol.
