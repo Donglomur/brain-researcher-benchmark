@@ -860,3 +860,44 @@ jobs:
           overwrite: false
           include-hidden-files: false
           path: /tmp/tms-real-interval-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  dmn-evaluator-invented-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+      - name: Check all 28 analytical cases and three numerical boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          DMN_ROOT="${RUNNER_TEMP}/dmn-evaluator-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          DMN_SOURCE="${GITHUB_WORKSPACE}/benchmarks/neuroscience/dmn-evaluator-controls-v1"
+          mkdir -m 700 "$DMN_ROOT"
+          set +e
+          timeout --signal=TERM --kill-after=5s 1250s python -I -S -B "$DMN_SOURCE/analytical_controls.py" --output "$DMN_ROOT/analytical" >"$DMN_ROOT/analytical.stdout" 2>"$DMN_ROOT/analytical.stderr"
+          DMN_STATUS=$?
+          set -e
+          printf '%s\n' "$DMN_STATUS" >"$DMN_ROOT/analytical.status"
+          if [ "$DMN_STATUS" -ne 0 ]; then exit "$DMN_STATUS"; fi
+          set +e
+          timeout --signal=TERM --kill-after=5s 350s python -I -S -B "$DMN_SOURCE/numerical_boundary_controls.py" --output "$DMN_ROOT/boundary" >"$DMN_ROOT/boundary.stdout" 2>"$DMN_ROOT/boundary.stderr"
+          DMN_STATUS=$?
+          set -e
+          printf '%s\n' "$DMN_STATUS" >"$DMN_ROOT/boundary.status"
+          exit "$DMN_STATUS"
+      - name: Preserve complete invented-control evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: dmn-evaluator-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/dmn-evaluator-${{ github.run_id }}-${{ github.run_attempt }}/
