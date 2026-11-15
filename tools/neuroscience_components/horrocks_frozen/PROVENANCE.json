@@ -1,0 +1,49 @@
+{
+  "schema": "horrocks-public-frozen-helper-provenance-v1",
+  "scope": "Clean source-only helpers and invented tests; no data or trained models.",
+  "origins": [
+    {
+      "name": "predict_one.py",
+      "bytes": 4125,
+      "sha256": "bd70faf03ec8caaf281abb3081c6a7d3fc403f7a937ce75ddcde62c57d9a2adb",
+      "reuse": "Byte-for-byte unchanged."
+    },
+    {
+      "name": "export_frozen_v2.py",
+      "bytes": 9784,
+      "sha256": "8969312a09a93eba373dd82db558801ef270a77922cd83217ce7552afef22ae6",
+      "reuse": "The require, exact, npy, convert and write_new function ASTs are unchanged in convert_model.py. Private fixed-cohort orchestration, source binding, staging and manifest logic are omitted. A new single-triple CLI accepts paths and SHA-256 arguments."
+    },
+    {
+      "name": "test_transport.py",
+      "bytes": 8429,
+      "sha256": "95cdd9c697c44f8d49e9fd0c8439ad422c9c86515d0efce07fd5d7373942ffb2",
+      "reuse": "Sixteen numerical/wire test methods remain AST-identical. Loader name changes to convert_model; unused imports and two private fixed-cohort orchestration tests are removed."
+    }
+  ],
+  "validation": {
+    "predictor_identity": "Verified unchanged bytes and SHA-256.",
+    "core_identity": "Verified five unchanged function ASTs.",
+    "retained_control_identity": "Verified sixteen unchanged test-method ASTs.",
+    "reused_prior_evidence": "The original eighteen-control suite and later one-control staging check passed on invented fixtures. Only the sixteen numerical/wire controls apply directly to this public helper; private orchestration/staging evidence is not represented as a test of its new CLI.",
+    "new_public_cli_controls": {
+      "passed": 3,
+      "failed": 0,
+      "names": [
+        "pinned_triplet_and_model",
+        "rejects_digest_mismatch_without_output",
+        "preserves_existing_output"
+      ]
+    },
+    "old_controls_rerun": 0,
+    "authentic_model_or_query_reads": 0,
+    "authentic_inference_calls": 0,
+    "fits": 0
+  },
+  "arithmetic": "binary64-products-math-fsum-including-intercept-v1",
+  "limits": [
+    "Coefficient bits are preserved; prediction parity with NumPy/BLAS is not established.",
+    "This component has six classes and an original feature width of at most 984.",
+    "No complete benchmark qualification, paper reproduction or performance claim follows from these helpers."
+  ]
+}
