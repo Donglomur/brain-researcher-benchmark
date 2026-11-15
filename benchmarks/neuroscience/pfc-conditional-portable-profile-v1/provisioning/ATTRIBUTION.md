@@ -1,0 +1,15 @@
+# Attribution to retain with an authorized release
+
+The participant packet is a derived input for the conditional reconstruction benchmark. It must be identified as a derived benchmark artifact, not the authors' original file or a full-paper reproduction. No data file is included or released by this notice.
+
+Dataset: Pierre Le Merre, Katharina Heining and Marie Carlén, *A Prefrontal Cortex Map based on Single Neuron Activity*, Zenodo version DOI [10.5281/zenodo.17559037](https://doi.org/10.5281/zenodo.17559037). The saved primary record declares the dataset open under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/). PUBLIC_LINEAGE.json identifies the four exact upstream intermediate files and frozen source archive by their published sizes and MD5 identifiers. This is a version-specific recorded license declaration; it is not a blanket assurance about unrelated downstream files.
+
+Official implementation: [hejDMC/pfcmap](https://github.com/hejDMC/pfcmap), frozen `pfcmap_Github_frozencode_20251108.zip` from the same record. Retain the complete selected 1,300-byte BSD-2-Clause LICENSE, SHA-256 `beeebec59505f45b936c0129cf92fbd6f705cd7c9062b248bbe12010c39e509a`, including Copyright (c) 2024 Carlén lab. Preserve that notice beside the selected official method; this summary does not replace it or license newly authored benchmark code.
+
+Paper: [A prefrontal cortex map based on single-neuron activity](https://www.nature.com/articles/s41593-025-02190-z), DOI [10.1038/s41593-025-02190-z](https://doi.org/10.1038/s41593-025-02190-z). Preserve the article's own attribution and applicable CC BY 4.0 notice with the exact selected article XML; the dataset declaration does not substitute for the article notice.
+
+Recording/animal metadata provenance: [DANDI 000473, version 0.230417.1502](https://dandiarchive.org/dandiset/000473/0.230417.1502) and [DANDI 001260, version 0.250911.0744](https://dandiarchive.org/dandiset/001260/0.250911.0744). The existing accepted join uses explicit Session and Participant fields for all 99 recordings. Retain the applicable metadata-source attribution/terms in the final release record; this source phase has not independently re-fetched their version notices or inspected raw NWB content. The Zenodo license is not silently substituted for a separate source's terms.
+
+Changes to disclose: complete eligibility and source-order binding; retention of the accepted saved UUID mapping; the accepted original-method seed-zero map/category annotations; Gao and data-driven ROI labels; opaque record/animal identifiers; fixed full-cohort context selection; and conversion to the complete participant JSON schema. The benchmark packet does not include original waveforms, private evaluation targets, conditional null-moment answer tables or owner reports. An owner-derived diagnostic report digest and declared historical status metadata remain in the exact input and must be described honestly.
+
+No author endorsement, guaranteed anonymization, newly observed biological result, held-animal prediction or redistribution permission for the container image is claimed.

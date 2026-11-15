@@ -958,6 +958,49 @@ jobs:
           set -e
           printf '%s\n' "$PFC_CONTROL_STATUS" >"$PFC_PORTABLE_ROOT/controls.status"
           exit "$PFC_CONTROL_STATUS"
+      - name: Authenticate provisioning source and run all 19 invented controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          PFC_PROVISION_SOURCE="${GITHUB_WORKSPACE}/benchmarks/neuroscience/pfc-conditional-portable-profile-v1/provisioning"
+          PFC_PROVISION_CAPTURE="${RUNNER_TEMP}/pfc-conditional-portable-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 45s python -I -S -B - "$PFC_PROVISION_SOURCE" >"$PFC_PROVISION_CAPTURE/provisioning.stdout" 2>"$PFC_PROVISION_CAPTURE/provisioning.stderr" <<'PFC_PROVISION_CONTROLS'
+          import hashlib, json, resource, signal, stat, sys, unittest
+          from pathlib import Path
+          root = Path(sys.argv[1])
+          resource.setrlimit(resource.RLIMIT_CPU, (30, 30))
+          signal.alarm(40)
+          raw = (root / 'SOURCE_LOCK.json').read_bytes()
+          assert len(raw) == 1455 and hashlib.sha256(raw).hexdigest() == 'ed7541914e6798eaff3fa8a1647408db655ee0167e13f8e2a8b22b4a2243f61e'
+          lock = json.loads(raw)
+          assert lock['schema'] == 'PFC_PROVISIONING_SOURCE_LOCK_V1' and len(lock['files']) == 8
+          seen = set()
+          for row in lock['files']:
+              name = row['relative_path']
+              assert Path(name).name == name and name not in seen
+              seen.add(name)
+              path = root / name
+              before = path.lstat()
+              assert stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size <= 1048576
+              assert not any(p.is_symlink() for p in (path, *path.parents))
+              body = path.read_bytes()
+              after = path.lstat()
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256']
+              assert all(getattr(before, k) == getattr(after, k) for k in ('st_dev', 'st_ino', 'st_size', 'st_mtime_ns', 'st_ctime_ns'))
+          assert sum(row['bytes'] for row in lock['files']) == lock['total_bytes'] == 41649
+          print(json.dumps({'source_files': 8, 'source_bytes': 41649, 'authentic_assets_read': False}))
+          sys.path.insert(0, str(root))
+          suite = unittest.defaultTestLoader.discover(str(root), pattern='test_*.py')
+          assert suite.countTestCases() == 19
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          raise SystemExit(not result.wasSuccessful())
+          PFC_PROVISION_CONTROLS
+          PFC_PROVISION_STATUS=$?
+          set -e
+          printf '%s\n' "$PFC_PROVISION_STATUS" >"$PFC_PROVISION_CAPTURE/provisioning.status"
+          exit "$PFC_PROVISION_STATUS"
       - name: Preserve complete invented-control streams and statuses
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

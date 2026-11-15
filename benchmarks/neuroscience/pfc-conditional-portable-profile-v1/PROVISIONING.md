@@ -1,18 +1,61 @@
-# Existing accepted inputs and provisioning boundary
+# PFC Full99 input provisioning
 
-The simplest supported route is an owner-provided authorized copy of the admitted5,368,996-byte participant packet. Its SHA256 is `8f6dc8ffff5e6ab4aa3be41dd3e9b0847c829b345142204d154124847908b21e`. The packet is an input identity, not a bundled hidden answer. The owner's exact historical nine-input selection manifest is separately pinned and checked as metadata; its scientific paths are never followed by participant delivery and it is never mounted into the candidate.
+Download the four fixed inputs from the [PFC Full99 input release](https://github.com/Donglomur/brain-researcher-benchmark/releases/tag/pfc-full99-inputs-v1). Together they are **5,565,161 bytes (5.57 MB)**. [PUBLIC_INPUTS.json](PUBLIC_INPUTS.json) records every filename, role, length and SHA-256.
 
-The packet's fixed learned map came from the accepted seed-zero original-method numerical reference. Another published map, a new fit or a reduced cohort is not a compatible substitute. Reuse existing accepted inputs wherever available. This source operation performs no provisioning, preparation or refit.
+The release contains the complete participant packet, selected article XML, official method and its full BSD-2-Clause license, with attribution and versioned provenance notices. It excludes numerical reference answers, evaluator reports, private preparation authority and the container image.
 
-If the derived packet cannot be distributed, the previously accepted preparation lineage is the basis for a later authorized provisioning implementation:
+## Download and verify
 
-1. Four official files from Zenodo record17559037: `metrics_files.zip`27,035,168B, `preprocessing.zip`1,928,203,597B, `flatmaps.zip`14,343B and `ROI_Gao_hierarchy_index.csv`1,138B. Their complete acquisition was1,955,254,246B;202 selected operands covered all99 recordings. The original source archive, explicit participant metadata and source-order evidence are separate prerequisites, not inferred from filenames.
-2. The accepted variable-string-aware complete99 binder preserves29,782 source positions and establishes19,186 fitting units and the distinct10,243 scored-PFC units/65 animals. Existing complete preparation evidence can be reused without re-auditing neural arrays merely to package the interface.
-3. The accepted seed-zero reference and its saved audit bind all fitting-unit/category/ROI order and the provided map. Existing saved inputs are the compatibility authority. Re-executing the fitting chain is not selected here and cannot silently replace those inputs.
-4. The unchanged `preparation/prepare_packet.py` consumes the nine pinned prepared inputs (22,183,624B), accepted bounded/scalar reader source, and the unchanged scientific modules. It is included as a source operand, not advertised as a standalone public downloader. Its original admitted owner establishes the runtime and import paths. The original complete-input manifest and predecessor selectors are pinned in the private handoff.
+Choose absolute paths for this profile's source directory, a new input directory, and a private owner directory. The source directory contains this guide, `package/` and `provisioning/`.
 
-The owner-provided paper and official source/license also have fixed accepted identities. The recorded paper license is CC BY4.0 and the selected original source carries its BSD2 license. This does not establish a redistribution license for every derived data artifact. Resolving a file-specific release route is separate from using authorized existing local assets.
+```sh
+PFC_SOURCE=/absolute/repository/benchmarks/neuroscience/pfc-conditional-portable-profile-v1
+PFC_ASSETS=/absolute/pfc-inputs
+PFC_OWNER_DIR=/absolute/private/pfc-owner
+mkdir -p "$PFC_ASSETS" "$PFC_OWNER_DIR"
+gh release download pfc-full99-inputs-v1 \
+  --repo Donglomur/brain-researcher-benchmark --dir "$PFC_ASSETS"
 
-The exact admitted image must already be available on the explicitly selected local Docker daemon. No image pull/build/export is performed by configuration or participant execution. An authorized image export/import or reproducible image distribution is still an external provisioning step. This package does not claim that versions alone recover the accepted image digest, or that the current image supports every host architecture.
+python3 -I -S -B - "$PFC_SOURCE" "$PFC_ASSETS" <<'PFC_VERIFY'
+import hashlib, json, sys
+from pathlib import Path
+source, assets = map(Path, sys.argv[1:])
+manifest = json.loads((source / 'PUBLIC_INPUTS.json').read_text())
+for entry in manifest['assets']:
+    body = (assets / entry['release_name']).read_bytes()
+    assert len(body) == entry['bytes'], entry['release_name']
+    assert hashlib.sha256(body).hexdigest() == entry['sha256'], entry['release_name']
+print('Verified all four fixed inputs.')
+PFC_VERIFY
 
-The private handoff preserves exact predecessor source/actual pins. Those are provenance evidence, not commands to rerun consumed attempts or publish private manifests. No hidden-clock sampler protocol, full SOM programme, historical RNG recovery, raw-signal rederivation or model campaign is a gate to relocating this already accepted conditional profile.
+python3 -I -S -B "$PFC_SOURCE/provisioning/audit_packet_release.py" \
+  --packet "$PFC_ASSETS/participant-packet.json"
+```
+
+Keep the downloaded notices with the inputs. The packet is a derived benchmark artifact under CC BY 4.0, with its transformations documented in the release notes. The article and official method retain their separate notices. See [attribution](provisioning/ATTRIBUTION.md) and [versioned DANDI notices](provisioning/DANDI_VERSION_NOTICES.md).
+
+## Create the owner-local provenance descriptor
+
+Generate the deployment's identity descriptor for the nine historical prepared inputs from the fixed public lineage manifest:
+
+```sh
+python3 -I -S -B "$PFC_SOURCE/provisioning/make_owner_provenance.py" \
+  --output "$PFC_OWNER_DIR/input-provenance.json" \
+  --locator-root "$PFC_OWNER_DIR/input-identities"
+```
+
+The command prints the path, byte count and SHA-256 to place in `assets.source_input_selection` in your deployment configuration. It writes one new metadata file and refuses to overwrite an existing file. Its nine `.identity-only` paths are inert labels; no scientific file is created, required or opened there. This descriptor is accepted by the unchanged deployment metadata interface. The original private manifest is unnecessary.
+
+Fill the four other asset paths in [deployment.example.json](deployment.example.json) using the downloaded files and their fixed identities. Then follow the [operator guide](OPERATOR_GUIDE.md) for source, host, runtime and compatibility admission. The pinned `PUBLIC_LINEAGE.json` records the earlier source stage; its `publication_selected=false` is historical metadata, not the current availability of this release or execution authority.
+
+## Scientific scope and information conditions
+
+The packet contains all 19,186 fitting units, 99 recordings and 68 fitting animals, with twelve families and sixteen contexts. A complete read-only audit on 15 November 2026 verified its fixed identity and every declared field, found no protected answer fields, and made no new fit or benchmark run. Opaque identifiers do not guarantee anonymization. Declared historical status metadata and an owner-derived report digest are preserved as provenance.
+
+The benchmark reconstructs conditional statistics for the supplied fixed map and all 68 fitting-animal deletions: 69 full/deletion cases. Its scored PFC population is separately 10,243 units from 65 animals. Reuse the saved map and UUID mapping; refitting or substituting another map changes the task. This endpoint does not establish held-animal prediction or reproduction of the entire paper.
+
+Both conditions receive the packet, paper, task and schema. Only condition B receives `category_matching.py` and `LICENSE` inside its evaluation container. The evaluator must enforce those mounts; public discoverability and possible prior model exposure remain separate considerations.
+
+## Runtime availability
+
+The exact admitted image must be available on the selected local Docker daemon. Configuration and participant execution do not pull, build or export images. A reproducible image distribution/build route and fresh admission on another host remain outstanding; downloading these inputs does not establish new-host compatibility. Existing selected-host validation remains the evidence for this profile.

@@ -1,19 +1,27 @@
-# Portable PFC conditional profile source
+# PFC Full99 conditional reconstruction benchmark
 
-This package relocates the already accepted **PFC Full99 Conditional Reconstruction and Animal Robustness v1** interface. The numerical kernel, continuous scorer, independent analytical participant, negative constructor, packet schema and supplied-method task are byte-identical to the accepted sources. No authentic asset is bundled. This source has not been executed; static parsing is not a passing test or a new benchmark.
+This benchmark reconstructs conditional statistics from a supplied prefrontal-cortex map and measures sensitivity to whole-animal deletion. It has completed a full seven-stage compatibility run on the selected local host, including both information conditions and an incorrect-answer control.
 
-`package/configure.py` accepts an explicitly pinned owner deployment configuration and this source lock. It writes a fresh read-only policy/request directory. It authenticates the source lock, but does not read the neural packet, call Docker, install packages or execute a participant. The separately selected `package/outer_once.py` consumes that request's absolute path, byte length and SHA256. It authenticates the input packet, paper, official code/license and private input-selection metadata before any container is created.
+The [four fixed input assets](https://github.com/Donglomur/brain-researcher-benchmark/releases/tag/pfc-full99-inputs-v1) total **5.57 MB**. Start with [input provisioning](PROVISIONING.md), then the [operator guide](OPERATOR_GUIDE.md). The exact runtime image still needs a distribution/build route and fresh admission on another host; the input release does not establish arbitrary-host compatibility.
 
-Host Python, Docker executable, Unix socket, expected daemon identity, nonroot UID/GID, attempt parent, candidate programs and authorized assets are explicit configuration values. There is no implicit Docker context, registry pull, inherited credential environment or automatic retry. The existing image identity remains fixed. A different image is a separately validated runtime change, not a relocation. Container UID/GID must be able to read the selected assets and write the owner-created output directories; ordinary permissions are not relaxed by this package.
+## Task and information conditions
 
-Two modes are explicit. Participant mode retains the accepted five-stage route: eight route controls, A, B, then protected scoring of both complete frozen submissions. Compatibility mode requires the exact independent analytical participant in both arms and adds the unchanged all-counts-plus-one constructor and its full protected score. All seven stages must finish. Complete score checks retain all69 cases,1,593,072 exact fields per arm,1,058 defined and46 undefined contexts, and false complete68-animal directional stability. They do not filter undefined cases or reinterpret sensitivity as a population confidence interval.
+Both conditions receive the same participant packet, paper, task and schema. Condition B additionally receives the selected official method and its BSD-2-Clause license. The evaluator enforces these mounts. Public discoverability and possible prior model exposure are separate from the controlled information condition.
 
-Both arms receive explicit methods, complete packet, paper and schema. B adds exactly the selected official null-method file and its license. This is not the entire GitHub repository, neutral paper-only reasoning or a measured code-assistance benefit. The same frozen baseline validates the delivery interfaces; no LLM/model campaign is implied.
+The packet retains all 99 recordings, 19,186 fitting units and 68 fitting animals. The scored PFC population is separately 10,243 units from 65 animals. Evaluation includes the full cohort and all 68 fitting-animal deletions, for 69 cases. The supplied map and saved UUID mapping are fixed inputs; this endpoint does not refit a SOM, test held-animal prediction or reproduce the entire source paper.
 
-Participant containers receive no reference, scorer, private lineage manifest, owner request or report mount and no writable host mount. They have only bounded private tmpfs. Both submissions are captured to fresh immutable files and their containers close before scoring. Negative construction uses the owner's already validated A submission, after both full positive scores pass; its output is never given to a participant. The unchanged scorer validates every case before target-dependent scoring.
+## Validation and boundaries
 
-The new `test_portability.py` defines16 invented controls for relocation, source/asset identity, missing inputs, filesystem aliases, mount separators, runtime endpoints, complete compatibility cases and negative discrimination. It uses no authentic data, Docker or models. Its60-second hard process deadline starts after imports; no child process is launched by this suite. The eight inherited stream/isolation controls remain separately defined in `route_controls.py`. Neither suite has run in this source phase.
+[VALIDATION.md](VALIDATION.md) records the accepted local compatibility run and the later complete input-content audit. All 16 portability controls and all 19 provisioning controls have passing local evidence. CI checks both suites on invented fixtures without downloading neural data or launching the authentic benchmark.
 
-Source publication can include the reviewed package and these instructions. `private-handoff/`, donor machine paths, original custody and future local request/configuration are owner-side evidence and must not be presumed public. Public source plus owner-provided authorized data is distinct from a fully provisioned external benchmark submission.
+The same analytical program was used in both compatibility arms. That validates delivery and scoring; it measures neither LLM performance nor the effect of code assistance. The public inputs contain no protected numerical answer tables, private execution authority or owner diagnostics.
 
-`NEXT_OPERATIONS.json` separates one bounded invented-control invocation from a later complete authentic compatibility invocation. Both need their own root selection and fresh capacity, executable, source, daemon/socket, image and output-absence checks. The latter is not authorized by constructing this package.
+## Source and provenance
+
+- [PUBLIC_INPUTS.json](PUBLIC_INPUTS.json): exact public input identities and information roles.
+- [SOURCE_LOCK.json](SOURCE_LOCK.json): unchanged 20-file benchmark implementation.
+- [provisioning/SOURCE_LOCK.json](provisioning/SOURCE_LOCK.json): eight provisioning source/documentation files.
+- [RELEASE_MANIFEST.json](RELEASE_MANIFEST.json): complete source/documentation inventory.
+- [Attribution](provisioning/ATTRIBUTION.md) and [DANDI version notices](provisioning/DANDI_VERSION_NOTICES.md): upstream references and notices.
+
+Keep execution receipts and evaluation outputs in the selected owner-private output directory. The provenance helper creates the metadata descriptor needed by deployment without distributing the original private preparation manifest.
