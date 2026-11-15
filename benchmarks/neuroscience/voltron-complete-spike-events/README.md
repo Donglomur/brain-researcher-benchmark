@@ -2,6 +2,18 @@
 
 This standalone scientific source component belongs to the existing draft `NEURAL-DISC-20261114-VOLTRON-SPIKES`. It adds no benchmark ID and requires only the Python standard library. It contains the event scorer, complete input/output contract, and invented tests. It contains no optical or electrical recordings, private answers, animal identities or model weights.
 
+## Authentic-data applicability: not yet qualified
+
+The fixed seven-animal and exact 400/1000 Hz interface is a proposed mathematical contract, not an authenticated description of the deposited recordings. Do not use successful source tests as evidence that this interface fits the real collection.
+
+The acquisition methods describe seven experimental mice. The twelve deposited cell titles contain six subject tokens; the number of represented animals still requires the complete per-movie metadata census. No seventh animal may be invented, and six tokens alone do not establish a biological map.
+
+The version-pinned [author notebook](https://doi.org/10.25378/janelia.14141609.v1) defines recorded frame timestamps relative to electrophysiology at exposure midpoints. Its retained example reports `movie_frame_rate=401.60642570281124` and electrophysiology `sample_rate=10000`. These are one historical example, not a census of the twelve cells; they already show why nominal 400 Hz and paper-level acquisition rates cannot substitute for the actual time vectors. Do not reconstruct timing with `arange/rate`, silently round the observed rate, or resample onto an assumed common grid. A future scientific interface must specify timestamp precision, conversion error and treatment of events near the five-millisecond boundary before claiming exact physical-time matching.
+
+The notebook uses an interactively drawn ROI and reads only the first thirteen TIFF chunks in its example. It is a usage demonstration, not the complete deterministic extractor required by this benchmark. Freeze optical-only ROI/background/motion choices without held electrophysiology, retain every movie and extraction failure, and qualify the complete optical/electrical support before scoring.
+
+All twelve version-one cell deposits advertise CC BY 4.0 and a total of **170,740,637,908 archive bytes**. This is a metadata sum, not downloaded or authenticated signal data. Full archive-directory and JSON metadata inspection should precede a large transfer. The scorer and its 34 invented tests remain unchanged; real biological/clock qualification is still pending.
+
 `event_score.py` implements inclusive five-millisecond, one-to-one maximum-cardinality spike matching; complete movie/core/cell coverage; optical/electrical validity intersection; grouped animal-fold validation; and paired candidate/reference metrics. `CONTRACT.md` specifies the interface, aggregation and scientific limits. `PUBLIC_SOURCE_PINS.json` pins these source files. All matched-role predictions are admitted before the trusted evaluator's single private-reference callback.
 
 Run the invented controls from this directory:
