@@ -1112,9 +1112,9 @@ jobs:
               assert len(body) == size and hashlib.sha256(body).hexdigest() == digest
               assert all(getattr(before, k) == getattr(after, k) for k in ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns'))
               return body
-          manifest = json.loads(read_exact(root / 'SOURCE_MANIFEST.json', 4271, 'eae2a7d0459e4722fda5648d0e3a030b22cd8dbe46d756c49bcbfcd746d556d2'))
+          manifest = json.loads(read_exact(root / 'SOURCE_MANIFEST.json', 4437, 'b60197b3a3a140400cc23ddfdc94b629e9444cac0c7c699f960496060d328ed4'))
           assert set(manifest) == {'schema', 'files'} and manifest['schema'] == 'nider_public_source_manifest_v1'
-          assert type(manifest['files']) is list and len(manifest['files']) == 25
+          assert type(manifest['files']) is list and len(manifest['files']) == 26
           seen = set()
           total = 0
           for row in manifest['files']:
@@ -1126,7 +1126,7 @@ jobs:
               total += row['bytes']
               assert total <= 2097152
               read_exact(root / relative, row['bytes'], row['sha256'])
-          assert total == 223800
+          assert total == 227404
           actual = {str(path.relative_to(root)) for path in root.rglob('*') if path.is_file() or path.is_symlink()}
           assert actual == seen | {'SOURCE_MANIFEST.json'}
           print(json.dumps({'source_files': len(seen), 'source_bytes': total, 'authentic_assets_read': False, 'python_version': sys.version}))
