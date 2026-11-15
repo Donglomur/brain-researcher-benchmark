@@ -968,3 +968,69 @@ jobs:
           overwrite: false
           include-hidden-files: false
           path: ${{ runner.temp }}/pfc-conditional-portable-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  tms-independent-condition-portable-invented-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate source and run all 44 invented TMS portability controls once
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          TMS_PORTABLE_ROOT="${RUNNER_TEMP}/tms-independent-condition-portable-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          TMS_PORTABLE_SOURCE="${GITHUB_WORKSPACE}/benchmarks/neuroscience/tms-independent-condition-portable-profile-v1/package"
+          mkdir -m 700 "$TMS_PORTABLE_ROOT"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 20s python -I -S -B - "$TMS_PORTABLE_SOURCE" >"$TMS_PORTABLE_ROOT/source-auth.stdout" 2>"$TMS_PORTABLE_ROOT/source-auth.stderr" <<'TMS_SOURCE_AUTH'
+          import hashlib, json, stat, sys
+          from pathlib import Path
+          root = Path(sys.argv[1])
+          def read_exact(path, size, digest):
+              assert path.is_absolute() and not any(p.is_symlink() for p in (path, *path.parents))
+              before = path.lstat()
+              assert stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == size and 0 < size <= 1048576
+              with path.open('rb') as stream:
+                  body = stream.read(size + 1)
+              after = path.lstat()
+              assert len(body) == size and hashlib.sha256(body).hexdigest() == digest
+              assert all(getattr(before, k) == getattr(after, k) for k in ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns'))
+              return body
+          lock = json.loads(read_exact(root / 'PORTABLE_SOURCE_LOCK.json', 4660, 'd4434c374b5e00e2ceddacb575073a95c494949e58275034e2064e4033d7deba'))
+          assert set(lock) == {'schema', 'members'} and lock['schema'] == 'tms_portable_source_lock_v1'
+          assert type(lock['members']) is dict and len(lock['members']) == 33
+          total = 0
+          for name, row in lock['members'].items():
+              relative = Path(name)
+              assert not relative.is_absolute() and '..' not in relative.parts and str(relative) == name
+              assert set(row) == {'bytes', 'sha256'}
+              total += row['bytes']
+              assert total <= 2097152
+              read_exact(root / relative, row['bytes'], row['sha256'])
+          assert total == 230127
+          print(json.dumps({'source_files': len(lock['members']), 'source_bytes': total, 'authentic_assets_read': False}))
+          TMS_SOURCE_AUTH
+          TMS_SOURCE_STATUS=$?
+          printf '%s\n' "$TMS_SOURCE_STATUS" >"$TMS_PORTABLE_ROOT/source-auth.status"
+          if [ "$TMS_SOURCE_STATUS" -ne 0 ]; then exit "$TMS_SOURCE_STATUS"; fi
+          /usr/bin/timeout --signal=TERM --kill-after=5s 95s python -I -S -B "$TMS_PORTABLE_SOURCE/controls.py" >"$TMS_PORTABLE_ROOT/controls.stdout" 2>"$TMS_PORTABLE_ROOT/controls.stderr"
+          TMS_CONTROL_STATUS=$?
+          set -e
+          printf '%s\n' "$TMS_CONTROL_STATUS" >"$TMS_PORTABLE_ROOT/controls.status"
+          exit "$TMS_CONTROL_STATUS"
+      - name: Preserve complete invented-control streams and statuses
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: tms-independent-condition-portable-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/tms-independent-condition-portable-${{ github.run_id }}-${{ github.run_attempt }}/
