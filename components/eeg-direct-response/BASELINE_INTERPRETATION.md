@@ -1,0 +1,15 @@
+# Baselines and what this panel can establish
+
+This is operator interpretation, not extra model prompt content.
+
+For the original waveform condition, the four-demo LDA used exactly the same four labeled epochs as the proposed model. Its 48 block means are a fixed algorithmic transformation of those full samples, with no additional training examples. It is matched in available raw input and label budget, not architecture or tool affordances. It performed poorly: balanced accuracy 0.481250 and log loss 15.844713, versus 0.500000 and 0.693147 for the four-demo prior. Preserve it as a negative control; it is not a competent few-shot performance target.
+
+The full-training LDA used 1,200 labeled trials from six other people. It achieved log loss 0.487368 against its own 0.2 prior's 0.500402, and AUC about 0.621484. Its legacy balanced accuracy at 0.5 was only 0.507812. These are modest predictive signals in this exposed cohort under a larger training budget, not a strong competitive or optimal-decoder guarantee. The fixed signal swap worsened performance, supporting alignment dependence without identifying whether EEG, ocular, motor or acquisition-related information supplied it.
+
+The later, independently accepted shared-prior logistic comparison is a distinct probability contract: numerical prior 0.2 is disclosed and log loss is primary. Its four-demo logistic uses the same four demonstrations and 48 features, so it is the closest existing information-matched classical comparator for a prior-disclosed 48-feature model condition. It was worse than the prior (log loss 0.850162 versus 0.500402); a failed low-data comparator does not establish that an LLM needs deep signal reasoning. Its swapped-query version and constant prior correspond to alignment and measurements-withheld controls; their information and roles must remain explicit.
+
+The later full-training logistic reached log loss 0.485867 and AUC about 0.631328, with lower loss than the prior in both people. Its trained numerical procedure passed the retained convergence and reconstruction checks. This is evidence of modest cohort decodability from the retained representation with many more labels. It does not establish strong few-shot decodability, neural-specific mechanism, superior LLM performance or SOTA. It is an auxiliary comparator, not a replacement for the four-demo baseline.
+
+Neither later logistic result establishes performance under the older waveform model prompt, which supplies no numerical prior and retains balanced-accuracy primary. A future prior-disclosed waveform condition would require the same disclosure and endpoint for the model and comparator; it would not retroactively alter the old prompt. The source package preserves that old prompt exactly.
+
+All results are historical fixed comparisons on two exposed development people. They are not new fits or a population estimate. A deterministic within-person swap is one alignment diagnostic, not a null distribution or significance test. No completed model study follows from these classical controls.

@@ -15,6 +15,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  eeg-direct-response-source-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Check eeg-direct-response scientific source
+        shell: bash
+        working-directory: components/eeg-direct-response
+        run: |
+          set -euo pipefail
+          umask 077
+          NEURAL_SOURCE_LOGS="${RUNNER_TEMP}/eeg-direct-response-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$NEURAL_SOURCE_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s . -p 'test_collector_destination.py' -v >"$NEURAL_SOURCE_LOGS/tests.stdout" 2>"$NEURAL_SOURCE_LOGS/tests.stderr"
+          NEURAL_SOURCE_STATUS=$?
+          printf '%s\n' "$NEURAL_SOURCE_STATUS" >"$NEURAL_SOURCE_LOGS/tests.status"
+          cat "$NEURAL_SOURCE_LOGS/tests.stdout"
+          cat "$NEURAL_SOURCE_LOGS/tests.stderr"
+          exit "$NEURAL_SOURCE_STATUS"
+      - name: Preserve eeg-direct-response source evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: eeg-direct-response-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/eeg-direct-response-${{ github.run_id }}-${{ github.run_attempt }}/
+
   pfc-science2-package-source-tests:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
