@@ -1710,3 +1710,177 @@ jobs:
           overwrite: false
           include-hidden-files: false
           path: ${{ runner.temp }}/dmfc-component-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  apcx-deposited-label-component-tests:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      ARROW_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Authenticate all 28 APCx source files and run 33 invented controls
+        shell: bash
+        working-directory: components/apcx-deposited-label
+        run: |
+          set -euo pipefail
+          umask 077
+          APCX_COMPONENT_LOGS="${RUNNER_TEMP}/apcx-component-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$APCX_COMPONENT_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B - >"$APCX_COMPONENT_LOGS/controls.stdout" 2>"$APCX_COMPONENT_LOGS/controls.stderr" <<'APCX_SOURCE_AND_CONTROLS'
+          """Workflow-embedded, invented-only APCx source check; no native dependencies."""
+          import hashlib
+          import importlib.abc
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import platform
+          import resource
+          import stat
+          import sys
+          import unittest
+
+          LOCK_BYTES = 4392
+          LOCK_SHA256 = 'fa7aaf0bfd594641c590325e2bafd821cf9883c03b682c9e4cb86bc195fbad64'
+          SOURCE_BYTES = 222789
+          TEST_MODULES = ('test_task', 'test_native_source', 'test_rss_guard')
+          EXPECTED_TESTS = 33
+          FIELDS = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+
+
+          def require(condition, message):
+              if not condition:
+                  raise ValueError(message)
+
+
+          def stable(st):
+              return tuple(getattr(st, key) for key in FIELDS)
+
+
+          def capture(path, length, digest):
+              require(type(length) is int and 0 < length <= 262144, 'bounded source member')
+              require(not any(p.is_symlink() for p in (path, *path.parents)), 'unlinked source ancestry')
+              before = path.lstat()
+              require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == length,
+                      'ordinary exact-length source')
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+              try:
+                  require(stable(before) == stable(os.fstat(fd)), 'source descriptor identity')
+                  body = bytearray()
+                  while len(body) < length + 1:
+                      part = os.read(fd, min(65536, length + 1 - len(body)))
+                      if not part:
+                          break
+                      body.extend(part)
+                  after = os.fstat(fd)
+              finally:
+                  os.close(fd)
+              require(stable(before) == stable(after) == stable(path.lstat()), 'stable source capture')
+              require(len(body) == length and hashlib.sha256(body).hexdigest() == digest, 'exact source digest')
+              return bytes(body)
+
+
+          def authenticate(root):
+              raw = capture(root/'SOURCE_LOCK.json', LOCK_BYTES, LOCK_SHA256)
+              lock = json.loads(raw)
+              require(set(lock) == {'schema', 'files'} and lock['schema'] == 'relative-public-source-lock-v1',
+                      'fixed source lock schema')
+              rows = lock['files']
+              require(len(rows) == 28 and len({row['path'] for row in rows}) == 28, 'complete 28-file roster')
+              require(sum(row['bytes'] for row in rows) == SOURCE_BYTES, 'complete source byte extent')
+              expected = {'SOURCE_LOCK.json'}
+              expected_dirs = set()
+              for row in rows:
+                  require(set(row) == {'path', 'bytes', 'sha256'}, 'closed source entry')
+                  relative = PurePosixPath(row['path'])
+                  require(not relative.is_absolute() and '..' not in relative.parts
+                          and str(relative) == row['path'], 'canonical relative source path')
+                  capture(root/relative, row['bytes'], row['sha256'])
+                  expected.add(row['path'])
+                  expected_dirs.update(str(p) for p in relative.parents if str(p) != '.')
+              actual_files = set()
+              actual_dirs = set()
+              for path in root.rglob('*'):
+                  require(not path.is_symlink(), 'no symlink in complete component')
+                  mode = path.lstat().st_mode
+                  relative = path.relative_to(root).as_posix()
+                  if stat.S_ISREG(mode):
+                      actual_files.add(relative)
+                  elif stat.S_ISDIR(mode):
+                      actual_dirs.add(relative)
+                  else:
+                      raise ValueError('no special node in component')
+              require(actual_files == expected and actual_dirs == expected_dirs, 'closed complete source tree')
+              return rows
+
+
+          class StdlibAndSelectedSourceOnly(importlib.abc.MetaPathFinder):
+              def __init__(self, rows):
+                  self.project_top = {PurePosixPath(row['path']).parts[0].removesuffix('.py')
+                                      for row in rows if row['path'].endswith('.py')}
+
+              def find_spec(self, fullname, path=None, target=None):
+                  top = fullname.split('.', 1)[0]
+                  if top not in sys.stdlib_module_names and top not in self.project_top:
+                      raise ModuleNotFoundError('CI admits only stdlib and authenticated source: ' + fullname)
+                  return None
+
+
+          def main():
+              require(sys.platform == 'linux' and platform.python_version() == '3.11.6',
+                      'CI uses the exact Linux CPython3.11.6 source-control runtime')
+              require(sys.flags.isolated and sys.flags.no_site and sys.dont_write_bytecode,
+                      'invoke with -I -S -B')
+              resource.setrlimit(resource.RLIMIT_CPU, (60, 60))
+              root = Path.cwd()
+              rows = authenticate(root)
+              require(not any(name.split('.', 1)[0] in {'pyarrow', 'numpy'} for name in sys.modules),
+                      'native scientific libraries absent before controls')
+              sys.path.insert(0, str(root))
+              finder = StdlibAndSelectedSourceOnly(rows)
+              sys.meta_path.insert(0, finder)
+              suite = unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName(name) for name in TEST_MODULES)
+              require(suite.countTestCases() == EXPECTED_TESTS, 'all 33 invented controls must load')
+              result = unittest.TextTestRunner(verbosity=2).run(suite)
+              authenticate(root)
+              require(not any(name.split('.', 1)[0] in {'pyarrow', 'numpy'} for name in sys.modules),
+                      'no native scientific library import during controls')
+              peak_bytes = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024
+              require(peak_bytes <= 512 * 1024**2, 'observed 512-MiB CI soft stop')
+              complete = (result.testsRun == EXPECTED_TESTS and result.wasSuccessful()
+                          and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses)
+              print(json.dumps({'source_files': 28, 'source_bytes': SOURCE_BYTES, 'source_lock_sha256': LOCK_SHA256,
+                                'source_pre_post_verified': True, 'tests_run': result.testsRun,
+                                'expected_tests': EXPECTED_TESTS, 'complete': complete,
+                                'invented_controls_only': True, 'original_data_read': False,
+                                'native_scientific_imports': False, 'observed_maxrss_bytes': peak_bytes,
+                                'python': platform.python_version()}, sort_keys=True))
+              return 0 if complete else 1
+
+
+          if __name__ == '__main__':
+              raise SystemExit(main())
+          APCX_SOURCE_AND_CONTROLS
+          APCX_CONTROL_STATUS=$?
+          set -e
+          printf '%s\n' "$APCX_CONTROL_STATUS" >"$APCX_COMPONENT_LOGS/controls.status"
+          cat "$APCX_COMPONENT_LOGS/controls.stdout" "$APCX_COMPONENT_LOGS/controls.stderr"
+          exit "$APCX_CONTROL_STATUS"
+      - name: Preserve complete APCx component control streams
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: apcx-component-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/apcx-component-${{ github.run_id }}-${{ github.run_attempt }}/

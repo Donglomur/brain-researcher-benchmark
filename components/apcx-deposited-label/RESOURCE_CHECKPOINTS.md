@@ -1,0 +1,5 @@
+# Resource checkpoint correction
+
+This reviewed replacement adds an observed-RSS/deadline check after each JSON canonicalization and before opening its output, and after final terminal-receipt canonicalization before emitting command success. It covers allocations from decoding, auditing, assembly/scoring and final output encoding by the next checkpoint. The 4-GiB RSS check remains an observed high-water soft stop; it cannot prevent transient allocation or replace an external memory/timeout owner.
+
+A successful command requires natural exit zero, its exact terminal receipt and independent whole-output review. A failed or killed command may retain earlier files, including a completion-shaped file written before a later final checkpoint fails. None of that directory is admitted merely because a named manifest exists. Preserve all partial outputs and failure streams; do not consume them as accepted inputs. This is a construction-resource correction and adds no scientific qualification or benchmarks.
