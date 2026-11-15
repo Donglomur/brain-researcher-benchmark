@@ -1673,7 +1673,7 @@ jobs:
           lock = json.loads((root / 'SOURCE_LOCK.json').read_text())
           assert lock['schema'] == 'relative-public-source-lock-v1'
           rows = lock['files']
-          assert len(rows) == 17 and len({r['path'] for r in rows}) == 17
+          assert len(rows) == 19 and len({r['path'] for r in rows}) == 19
           for row in rows:
               relative = PurePosixPath(row['path'])
               assert not relative.is_absolute() and '..' not in relative.parts
@@ -1689,7 +1689,7 @@ jobs:
               assert all(getattr(before, key) == getattr(after, key) for key in fields)
           actual = {str(p.relative_to(root)) for p in root.rglob('*') if p.is_file() or p.is_symlink()}
           assert actual == {r['path'] for r in rows} | {'SOURCE_LOCK.json'}
-          print(json.dumps({'source_files': 17, 'invented_controls_only': True, 'original_data_read': False}))
+          print(json.dumps({'source_files': 19, 'invented_controls_only': True, 'original_data_read': False}))
           DMFC_SOURCE_AUTH
           for DMFC_CONTROL in score provision; do
             set +e
