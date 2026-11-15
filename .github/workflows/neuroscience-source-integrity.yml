@@ -15,6 +15,114 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  voltron-event-source-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Check voltron-events scientific source
+        shell: bash
+        working-directory: benchmarks/neuroscience/voltron-complete-spike-events
+        run: |
+          set -euo pipefail
+          umask 077
+          NEURAL_SOURCE_LOGS="${RUNNER_TEMP}/voltron-events-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$NEURAL_SOURCE_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s . -p 'test_*.py' -v >"$NEURAL_SOURCE_LOGS/tests.stdout" 2>"$NEURAL_SOURCE_LOGS/tests.stderr"
+          NEURAL_SOURCE_STATUS=$?
+          printf '%s\n' "$NEURAL_SOURCE_STATUS" >"$NEURAL_SOURCE_LOGS/tests.status"
+          cat "$NEURAL_SOURCE_LOGS/tests.stdout"
+          cat "$NEURAL_SOURCE_LOGS/tests.stderr"
+          exit "$NEURAL_SOURCE_STATUS"
+      - name: Preserve voltron-events source evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: voltron-events-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/voltron-events-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  graspbox-scientific-source-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Check graspbox-scorer scientific source
+        shell: bash
+        working-directory: components/graspbox-scientific-scorer
+        run: |
+          set -euo pipefail
+          umask 077
+          NEURAL_SOURCE_LOGS="${RUNNER_TEMP}/graspbox-scorer-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$NEURAL_SOURCE_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s . -p 'test_*.py' -v >"$NEURAL_SOURCE_LOGS/tests.stdout" 2>"$NEURAL_SOURCE_LOGS/tests.stderr"
+          NEURAL_SOURCE_STATUS=$?
+          printf '%s\n' "$NEURAL_SOURCE_STATUS" >"$NEURAL_SOURCE_LOGS/tests.status"
+          cat "$NEURAL_SOURCE_LOGS/tests.stdout"
+          cat "$NEURAL_SOURCE_LOGS/tests.stderr"
+          exit "$NEURAL_SOURCE_STATUS"
+      - name: Preserve graspbox-scorer source evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: graspbox-scorer-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/graspbox-scorer-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  zapbench-finite-forecast-source-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Check zapbench-forecast scientific source
+        shell: bash
+        working-directory: components/zapbench_finite_forecast_v1
+        run: |
+          set -euo pipefail
+          umask 077
+          NEURAL_SOURCE_LOGS="${RUNNER_TEMP}/zapbench-forecast-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$NEURAL_SOURCE_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s . -p 'test_*.py' -v >"$NEURAL_SOURCE_LOGS/tests.stdout" 2>"$NEURAL_SOURCE_LOGS/tests.stderr"
+          NEURAL_SOURCE_STATUS=$?
+          printf '%s\n' "$NEURAL_SOURCE_STATUS" >"$NEURAL_SOURCE_LOGS/tests.status"
+          cat "$NEURAL_SOURCE_LOGS/tests.stdout"
+          cat "$NEURAL_SOURCE_LOGS/tests.stderr"
+          exit "$NEURAL_SOURCE_STATUS"
+      - name: Preserve zapbench-forecast source evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: zapbench-forecast-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/zapbench-forecast-${{ github.run_id }}-${{ github.run_attempt }}/
+
   purkinje-program-source-tests:
     runs-on: ubuntu-24.04
     timeout-minutes: 6
