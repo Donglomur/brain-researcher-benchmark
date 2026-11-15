@@ -1,0 +1,11 @@
+# Source review scope
+
+The author made no authentic input/output read, module import, test, subprocess workload, Docker/runtime probe, network request or Git mutation. Python AST parsing and source-file identity checks are the only code verification in this phase. Historical audit reads remain separately charged; this source phase has author16MiB reads/4MiB retention and distinct peer8MiB/2MiB. Root prospectively selected512KiB aggregate external raw custody, within author retention and at most8 files.
+
+Review the complete configuration → exact request → outer → owner → candidate capture → unchanged protected scorer graph. Scientific modules and baseline must remain byte-identical. The donor provenance records which lifecycle functions were extracted and the explicit Docker argv/environment changes. Do not mistake the preserved scientific result for an observed result of this new portable source.
+
+Participant mode retains1830s owner/1860s outer,1.5GiB managed reads and512MiB output retention. Compatibility mode explicitly extends to2550s owner/2580s outer,2.5GiB managed reads and768MiB retention for the negative construction/scoring and complete report checks. A serial container retains4GiB VM/2CPUs; compatibility review planning reserves1GiB host separately. These are planning/control envelopes, not measurements of this unrun implementation or hard aggregate host-memory containment. Runtime byte hashing uses actual configured executable lengths in a conservative preflight reservation; a configuration exceeding its complete envelope refuses.
+
+The outer protects its owned process group and the inherited container lifecycle removes only exact owned IDs. It cannot promise recovery under arbitrary external supervisor death, uninterruptible kernel I/O or scheduling starvation. Owner source/preflight failure before container creation does not establish a scientific result. Hard timeout or partial custody is failure, never a successful partial benchmark. No retry is automatic.
+
+The owner-private future local configuration uses historical executable/daemon facts only as proposed bindings; fresh admission remains required. Source acceptance does not authorize an authentic run, declare arbitrary-platform compatibility or resolve public data/image redistribution.

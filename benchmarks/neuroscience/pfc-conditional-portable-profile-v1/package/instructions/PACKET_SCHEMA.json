@@ -1,0 +1,38 @@
+{
+  "schema": "PFC_FULL99_FIXED_MAP_PACKET_V1",
+  "description": "Schema documentation only, no authentic values or answer fields.",
+  "fields": {
+    "schema": "literal PFC_FULL99_FIXED_MAP_PACKET_V1",
+    "units": "array of19186 objects in admitted fixed-map order",
+    "families": "array of12 objects in exact output order",
+    "contexts": "array of16 fixed analytic-context descriptors",
+    "animals": "ordered array of68 opaque animal IDs; delete cases use this order",
+    "records": "all99 recording descriptors, including any zero-fitting-unit recording",
+    "historical_diagnostics": "provenance/status metadata, not target moments or scores"
+  },
+  "unit": {
+    "id": "opaque string",
+    "recording": "opaque recording ID",
+    "animal": "opaque animal ID",
+    "task": "effective-task string",
+    "category": "integer0..7",
+    "labels": "12 integer slots; -1 means ineligible for that family, otherwise zero-based index into that family's labels"
+  },
+  "family": {
+    "key": "unique string (ROI route/reference population/layer encoding)",
+    "labels": "ordered unique strings defining matrix rows"
+  },
+  "record": {
+    "id": "opaque recording ID",
+    "animal": "opaque animal ID",
+    "task": "effective-task string"
+  },
+  "context": {
+    "key": "analytic context name",
+    "family": "zero-based parent-family index",
+    "indices": "fixed full-cohort selected row indices",
+    "hierarchy": "null or coordinate array with numbers/explicit nonfinite string states"
+  },
+  "output_shape": "All69 cases × all12 family label axes ×8 categories × observed count/exact conditional mean/exact conditional variance; output fields follow TASK.md.",
+  "input_exclusions": "No null moments, reference JSONL, owner reports, archived output arrays, scorer or mathematical reference source are participant inputs."
+}

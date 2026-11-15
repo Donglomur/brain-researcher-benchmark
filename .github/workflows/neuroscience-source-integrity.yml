@@ -901,3 +901,70 @@ jobs:
           overwrite: false
           include-hidden-files: false
           path: ${{ runner.temp }}/dmn-evaluator-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  pfc-conditional-portable-invented-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate source and run all 16 invented PFC portability controls once
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          PFC_PORTABLE_ROOT="${RUNNER_TEMP}/pfc-conditional-portable-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          PFC_PORTABLE_SOURCE="${GITHUB_WORKSPACE}/benchmarks/neuroscience/pfc-conditional-portable-profile-v1"
+          mkdir -m 700 "$PFC_PORTABLE_ROOT"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 20s python -I -S -B - "$PFC_PORTABLE_SOURCE" >"$PFC_PORTABLE_ROOT/source-auth.stdout" 2>"$PFC_PORTABLE_ROOT/source-auth.stderr" <<'PFC_SOURCE_AUTH'
+          import hashlib, json, stat, sys
+          from pathlib import Path
+          root = Path(sys.argv[1])
+          def read_exact(path, size, digest):
+              assert path.is_absolute() and not any(p.is_symlink() for p in (path, *path.parents))
+              before = path.lstat()
+              assert stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == size and 0 < size <= 1048576
+              with path.open('rb') as stream:
+                  body = stream.read(size + 1)
+              after = path.lstat()
+              assert len(body) == size and hashlib.sha256(body).hexdigest() == digest
+              assert all(getattr(before, k) == getattr(after, k) for k in ('st_dev', 'st_ino', 'st_size', 'st_mtime_ns', 'st_ctime_ns'))
+              return body
+          lock = json.loads(read_exact(root / 'SOURCE_LOCK.json', 3531, 'efccfd03513a4e4c85eeb112083f1bc9b4640f6afa9eb363cee20dab21dba257'))
+          assert lock['schema'] == 'PFC_PORTABLE_SOURCE_LOCK_V1' and len(lock['files']) == 20
+          seen = set()
+          total = 0
+          for row in lock['files']:
+              relative = Path(row['relative_path'])
+              assert not relative.is_absolute() and relative.parts[0] == 'package' and '..' not in relative.parts
+              assert str(relative) not in seen
+              seen.add(str(relative))
+              total += row['bytes']
+              assert total <= 2097152
+              read_exact(root / relative, row['bytes'], row['sha256'])
+          assert total == 139094
+          print(json.dumps({'source_files': len(seen), 'source_bytes': total, 'authentic_assets_read': False}))
+          PFC_SOURCE_AUTH
+          PFC_SOURCE_STATUS=$?
+          printf '%s\n' "$PFC_SOURCE_STATUS" >"$PFC_PORTABLE_ROOT/source-auth.status"
+          if [ "$PFC_SOURCE_STATUS" -ne 0 ]; then exit "$PFC_SOURCE_STATUS"; fi
+          /usr/bin/timeout --signal=TERM --kill-after=5s 65s python -I -S -B "$PFC_PORTABLE_SOURCE/package/test_portability.py" >"$PFC_PORTABLE_ROOT/controls.stdout" 2>"$PFC_PORTABLE_ROOT/controls.stderr"
+          PFC_CONTROL_STATUS=$?
+          set -e
+          printf '%s\n' "$PFC_CONTROL_STATUS" >"$PFC_PORTABLE_ROOT/controls.status"
+          exit "$PFC_CONTROL_STATUS"
+      - name: Preserve complete invented-control streams and statuses
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pfc-conditional-portable-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/pfc-conditional-portable-${{ github.run_id }}-${{ github.run_attempt }}/
