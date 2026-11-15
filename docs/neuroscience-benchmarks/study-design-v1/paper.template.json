@@ -1,0 +1,335 @@
+{
+  "format": "neurobench.paired-study-draft.v1",
+  "state": "DRAFT_UNBOUND_NOT_EXECUTABLE",
+  "study_id": null,
+  "track": "paper",
+  "endpoint_contracts": [],
+  "registered_task_count_delta": 0,
+  "authority": {
+    "execution_selected": false,
+    "scientific_qualification": false,
+    "submission_readiness": false
+  },
+  "corpus": {
+    "selection_policy_artifact": null,
+    "source_family_overlap_graph_artifact": null,
+    "assignment_manifest_artifact": null,
+    "task_ids": [],
+    "source_family_ids": [],
+    "intended_population": null,
+    "finite_panel_limitations": null,
+    "inclusion_and_exclusion_rule": null,
+    "exclusions_frozen_before_assignment": null,
+    "across_suite_overlap_resolved": null
+  },
+  "pairing": {
+    "pair_key_fields": [
+      "task_revision",
+      "model_version",
+      "scaffold_version",
+      "run_index"
+    ],
+    "case_manifest_identical_within_pair": true,
+    "condition_order_randomization": null,
+    "randomization_artifact": null,
+    "context_workspace_cache_reset_artifact": null,
+    "model_identity_policy": null,
+    "seed_support_and_limits": null,
+    "repeats_per_task_per_arm": null,
+    "repeat_count_rationale": null,
+    "repeated_runs_are_new_biological_units": false
+  },
+  "phases": [
+    {
+      "id": "reproduction",
+      "source_split_role": "reproduction",
+      "submission_locked_before_next_phase": true,
+      "may_expose_confirmation_units": false,
+      "allowed_feedback_artifact": null,
+      "budget_profile_id": "reproduction_common"
+    },
+    {
+      "id": "improvement_development",
+      "source_split_role": "development",
+      "starts_after_reproduction_submission_lock": true,
+      "allowed_feedback_artifact": null,
+      "budget_profile_id": "improvement_common",
+      "carry_unused_reproduction_budget": false
+    },
+    {
+      "id": "improvement_confirmation",
+      "source_split_role": "confirmation",
+      "candidate_and_analysis_locked_before_label_access": true,
+      "allowed_feedback": "none_before_submission_and_analysis_lock",
+      "budget_profile_id": "confirmation_common",
+      "reproduction_exposure_overlap_audited": null,
+      "overlap_policy": "overlap_or_unresolved_exposure_blocks_confirmatory_claim; retain_development_only_result"
+    }
+  ],
+  "artifacts": {
+    "endpoint": {
+      "role": "unchanged_complete_scientific_task_contract",
+      "locator": null,
+      "bytes": null,
+      "sha256": null,
+      "privacy": "evaluator_metadata_only",
+      "independent_review": null
+    },
+    "materials_common": {
+      "role": "paper_supplements_permitted_data_features_environment_and_library",
+      "locator": null,
+      "bytes": null,
+      "sha256": null,
+      "privacy": "evaluator_metadata_only",
+      "independent_review": null
+    },
+    "sanitized_official_code": {
+      "role": "official_code_without_answer_tables_outputs_or_answer_bearing_fitted_artifacts",
+      "locator": null,
+      "bytes": null,
+      "sha256": null,
+      "privacy": "evaluator_metadata_only",
+      "independent_review": null
+    },
+    "information_policy": {
+      "role": "same_offline_access_and_environment_support_except_official_code",
+      "locator": null,
+      "bytes": null,
+      "sha256": null,
+      "privacy": "evaluator_metadata_only",
+      "independent_review": null
+    },
+    "exposure_and_splits": {
+      "role": "reproduction_development_confirmation_unit_and_public_exposure_join",
+      "locator": null,
+      "bytes": null,
+      "sha256": null,
+      "privacy": "evaluator_metadata_only",
+      "independent_review": null
+    },
+    "assignment": {
+      "role": "all_assigned_projects_pairs_model_versions_run_indices_and_condition_order",
+      "locator": null,
+      "bytes": null,
+      "sha256": null,
+      "privacy": "evaluator_metadata_only",
+      "independent_review": null
+    },
+    "budget_profiles": {
+      "role": "measured_and_frozen_reproduction_and_improvement_budgets",
+      "locator": null,
+      "bytes": null,
+      "sha256": null,
+      "privacy": "evaluator_metadata_only",
+      "independent_review": null
+    },
+    "baseline_original": {
+      "role": "original_method_rerun_on_identical_cases_and_resources",
+      "locator": null,
+      "bytes": null,
+      "sha256": null,
+      "privacy": "evaluator_metadata_only",
+      "independent_review": null
+    },
+    "baseline_contemporary": {
+      "role": "relevant_contemporary_method_under_named_comparison_contract",
+      "locator": null,
+      "bytes": null,
+      "sha256": null,
+      "privacy": "evaluator_metadata_only",
+      "independent_review": null
+    },
+    "analysis": {
+      "role": "locked_paired_analysis_and_failure_denominator_implementation",
+      "locator": null,
+      "bytes": null,
+      "sha256": null,
+      "privacy": "evaluator_metadata_only",
+      "independent_review": null
+    },
+    "rubric": {
+      "role": "calibrated_scientific_validity_and_claim_evidence_rubric",
+      "locator": null,
+      "bytes": null,
+      "sha256": null,
+      "privacy": "evaluator_metadata_only",
+      "independent_review": null
+    },
+    "whole_admission": {
+      "role": "independent_complete_scientific_and_technical_review",
+      "locator": null,
+      "bytes": null,
+      "sha256": null,
+      "privacy": "evaluator_metadata_only",
+      "independent_review": null
+    }
+  },
+  "arms": [
+    {
+      "id": "paper_data",
+      "mode": "reconstruct_then_improve",
+      "common_materials_id": "materials_common",
+      "official_code_id": null,
+      "information_policy_id": "information_policy",
+      "reproduction_budget_id": "reproduction_common",
+      "improvement_budget_id": "improvement_common",
+      "confirmation_budget_id": "confirmation_common"
+    },
+    {
+      "id": "paper_data_code",
+      "mode": "reconstruct_then_improve",
+      "common_materials_id": "materials_common",
+      "official_code_id": "sanitized_official_code",
+      "information_policy_id": "information_policy",
+      "reproduction_budget_id": "reproduction_common",
+      "improvement_budget_id": "improvement_common",
+      "confirmation_budget_id": "confirmation_common"
+    }
+  ],
+  "contrasts": [
+    {
+      "id": "official_code_reproduction",
+      "arms": [
+        "paper_data_code",
+        "paper_data"
+      ],
+      "phase": "reproduction",
+      "declared_intervention": [
+        "official_code_id"
+      ],
+      "primary": null,
+      "estimand": null,
+      "endpoints_artifact": "endpoint",
+      "pairwise_material_equality_required_except": [
+        "official_code_id"
+      ],
+      "analysis_artifact": "analysis",
+      "claim": "effect_of_sanitized_official_code_access_under_the_frozen_information_policy"
+    },
+    {
+      "id": "official_code_end_to_end_improvement",
+      "arms": [
+        "paper_data_code",
+        "paper_data"
+      ],
+      "phase": "improvement_confirmation",
+      "declared_intervention": [
+        "official_code_id"
+      ],
+      "primary": null,
+      "estimand": "difference_in_validated_improvement_success_over_all_assigned_projects",
+      "endpoints_artifact": "endpoint",
+      "pairwise_material_equality_required_except": [
+        "official_code_id"
+      ],
+      "analysis_artifact": "analysis",
+      "claim": "end_to_end_assigned_project_success; numerical_valid_subset_reported_separately"
+    }
+  ],
+  "analysis": {
+    "primary_contrast_ids": [],
+    "exploratory_contrast_ids": [],
+    "direction_by_endpoint": null,
+    "scientific_minimum_effect_by_endpoint": null,
+    "independent_unit": null,
+    "nested_and_crossed_dependence": null,
+    "aggregation_order": null,
+    "family_weighting": null,
+    "paired_uncertainty_method": null,
+    "uncertainty_level": null,
+    "finite_panel_versus_population_claim": null,
+    "multiplicity_family_and_rule": null,
+    "all_assigned_success_estimand": null,
+    "numerical_effect_estimand_and_missingness": null,
+    "analysis_code_artifact": null,
+    "calibrated_judgment_rubric_artifact": null,
+    "human_expert_review_plan": null
+  },
+  "attempt_accounting": {
+    "ledger_artifact": null,
+    "all_assigned_attempts_retained": true,
+    "required_ledger_fields": [
+      "task_revision",
+      "source_family_id",
+      "pair_id",
+      "arm_id",
+      "model_version",
+      "scaffold_version",
+      "run_index",
+      "assigned_case_manifest_id",
+      "attempt_id",
+      "retry_of_attempt_id",
+      "attempt_status",
+      "failure_class",
+      "reproduction_submission_id",
+      "improvement_submission_id",
+      "resource_receipt_id",
+      "output_artifact_id",
+      "validity_decision_id",
+      "reason"
+    ],
+    "failure_classes": [
+      "infrastructure",
+      "invalid_submission",
+      "model_abstention",
+      "resource_exhaustion",
+      "scientifically_invalid",
+      "successful_valid_submission"
+    ],
+    "class_adjudication_rule": null,
+    "primary_denominator": "all_assigned_runs_under_frozen_eligibility",
+    "complete_case_results": "supplementary_with_coverage_and_selection_limits",
+    "retry_limit_per_assigned_attempt": null,
+    "retryable_failure_classes": [],
+    "blinded_retry_adjudication": null,
+    "retry_budget_and_aggregation": null,
+    "outcome_dependent_retry_or_drop": false
+  },
+  "stopping_and_selection": {
+    "design": null,
+    "fixed_assignment_count": null,
+    "measured_variance_or_precision_justification_artifact": null,
+    "sequential_boundary_artifact": null,
+    "safety_or_infrastructure_stop_rule": null,
+    "early_termination_reporting_rule": null,
+    "candidate_selection_uses_development_only": true,
+    "candidate_search_count_and_budget": null,
+    "global_policy_frozen_before_assessment": true,
+    "assessment_feedback_for_selection": false,
+    "unseen_test_refresh_after_material_change": null
+  },
+  "exposure": {
+    "exposure_inventory_artifact": null,
+    "paper_code_label_and_checkpoint_training_history": null,
+    "offline_information_policy_artifact": null,
+    "final_labels_inaccessible_to_agent": true,
+    "final_feedback_inaccessible_until_lock": true,
+    "new_context_proves_unseen": false,
+    "public_historical_material_claim": "controlled_retrospective_evaluation_unless_separate_evidence_supports_more",
+    "later_release_is_unseen_guarantee": false,
+    "rl_training_and_outer_assessment_separation_artifact": null,
+    "rl_experiment_selected": false
+  },
+  "claim_gate": {
+    "interpretation_limits": null,
+    "source_and_domain_admission_artifact": null,
+    "reference_and_evaluator_end_to_end_artifact": null,
+    "contemporary_comparator_artifact": null,
+    "protected_confirmation_artifact": null,
+    "final_state_assigned_by_independent_review": false,
+    "all_required_bindings_complete": false
+  },
+  "improvement_claims": {
+    "candidate_changes_declared_before_confirmation": true,
+    "comparison_reference": "rerun_original_on_identical_cases",
+    "fidelity_improvement_and_frontier_claims_separate": true,
+    "copied_published_metric_is_reference": false,
+    "changed_split_cohort_metric_or_budget_is_direct_paper_improvement": false,
+    "confirmatory_decision_rule": null,
+    "contemporary_superiority_rule": null,
+    "scientific_novelty_requires_independent_review": true,
+    "candidate_effect_table_artifact": null,
+    "all_assigned_improvement_denominator_preserved": true
+  }
+}
+
