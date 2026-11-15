@@ -15,6 +15,41 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  dmfc-portable-runner-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Check portable DMFC configuration and candidate boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          DMFC_PORTABLE_LOGS="${RUNNER_TEMP}/dmfc-portable-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$DMFC_PORTABLE_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -B benchmarks/neuroscience/neural-095-four-cell-runner/test_configure.py >"$DMFC_PORTABLE_LOGS/tests.stdout" 2>"$DMFC_PORTABLE_LOGS/tests.stderr"
+          DMFC_PORTABLE_STATUS=$?
+          printf '%s\n' "$DMFC_PORTABLE_STATUS" >"$DMFC_PORTABLE_LOGS/tests.status"
+          cat "$DMFC_PORTABLE_LOGS/tests.stdout"
+          cat "$DMFC_PORTABLE_LOGS/tests.stderr"
+          exit "$DMFC_PORTABLE_STATUS"
+      - name: Preserve portable DMFC test evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: dmfc-portable-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/dmfc-portable-${{ github.run_id }}-${{ github.run_attempt }}/
+
   source-integrity:
     runs-on: ubuntu-24.04
     timeout-minutes: 5

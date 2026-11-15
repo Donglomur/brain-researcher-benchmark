@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "candidate_id": "NEURAL-095",
+  "status": "specified_development_contract_runtime_pending",
+  "question": "At observed Set, do strictly pre-Set spikes improve prediction of released behavioral tp relative to the same declared procedure using only already-known cues and elapsed session clock?",
+  "scope": {
+    "train_n": 748,
+    "query_n": 258,
+    "animal": "Haydn",
+    "session": "20161211",
+    "observation": "[Set-0.2s,Set), four50ms bins,40held-in units",
+    "target": "released behavioral tp milliseconds, not Go-minus-Set",
+    "exposure": "historical public development panel; not secret or independent animal replication",
+    "unit_of_population_inference": "one animal/session; no population CI or p-value",
+    "clock_limit": "offline processed spikes; no claim of causal real-time sorting or established hand-response clock conversion"
+  },
+  "input_files": [
+    "train.npz",
+    "query.npz",
+    "schema.json",
+    "units.json",
+    "contract.json"
+  ],
+  "views": {
+    "cue_only": {
+      "train_fields": [
+        "case_id",
+        "condition",
+        "context",
+        "nominal_ts_ms",
+        "clock_seconds",
+        "tp_ms",
+        "fold"
+      ],
+      "query_fields": [
+        "case_id",
+        "condition",
+        "context",
+        "nominal_ts_ms",
+        "clock_seconds"
+      ]
+    },
+    "neural": {
+      "additional_field": "counts",
+      "shape": [
+        "case",
+        4,
+        40
+      ],
+      "dtype": "uint32"
+    }
+  },
+  "view_identity": "All common NPY members byte-identical; counts member absent from cue-only train/query. Same rows/order/dtypes/folds/target bytes. Units and contract identical; schema differs only in declared view and available fields.",
+  "entrypoint": [
+    "python",
+    "-I",
+    "/program/program.py",
+    "--input",
+    "/input",
+    "--out",
+    "/output"
+  ],
+  "program_contract": {
+    "one_committed_source_file": true,
+    "maximum_program_bytes": 65536,
+    "fresh_process_and_filesystem_each_view": true,
+    "order": [
+      "cue_only",
+      "neural"
+    ],
+    "assessment_feedback_between_views": false,
+    "other_view_files_or_outputs_mounted": false,
+    "required_output": "submission.npz",
+    "output_members": [
+      "case_id",
+      "prediction_ms"
+    ],
+    "maximum_output_bytes": 1048576,
+    "same_program_hash_is_not_matched_method_proof": true
+  },
+  "fit_selection": {
+    "training_targets_only": true,
+    "query_predictor_unsupervised_transduction": "must be predeclared; strict default prohibits estimating preprocessing/selection parameters from query rows",
+    "folds": "five provided contiguous chronological training groups",
+    "procedure_declaration_required_before_run": [
+      "estimator_family",
+      "cue_feature_map",
+      "neural_feature_map",
+      "training_preprocessing",
+      "hyperparameter_candidates",
+      "selection_folds",
+      "selection_loss",
+      "tie_rule",
+      "constant_or_missing_group_policy",
+      "training_random_seed",
+      "allowed_view_specific_changes",
+      "query_transduction_policy"
+    ],
+    "realized_provenance": "Bounded stdout JSON records selected settings, training rows, fold/grid evaluation and preprocessing scope. It is candidate self-report until source/procedure audit corroborates it. Missing or contradictory provenance leaves matched-method interpretation unresolved; predictions remain numerically scoreable."
+  },
+  "evaluation": {
+    "primary_per_arm": "trial_mean_mae_ms",
+    "lower_is_better": true,
+    "secondary_per_arm": [
+      "rmse_ms",
+      "eight_context_macro_mae_ms",
+      "40condition_group_MAE_ms",
+      "8context_group_MAE_ms"
+    ],
+    "fixed_comparators": [
+      "nominal_sample_interval",
+      "exact_condition_training_median",
+      "cue_clock_ridge",
+      "cue_clock_total_spike_ridge",
+      "cue_clock_temporal_spike_ridge"
+    ],
+    "fixed_difference": "candidate_error_minus_reference_error; negative is better",
+    "separate_paired_increment": "cue_only_MAE_ms_minus_neural_MAE_ms; positive is better",
+    "paired_support": "exact same258cases with no filtering, group-specific increments also retained",
+    "scientific_pass_floor": null,
+    "paired_increment_is_standalone_RL_reward": false,
+    "paired_increment_proves_neural_understanding": false,
+    "zero_or_negative_increment": "valid result; neither schema nor execution failure",
+    "weak_self_baseline": "Retain absolute errors and fixed strong comparators. A large self-relative gain from intentionally weakened cue output is not evidence of matched neural value."
+  },
+  "commitment": "One program plus procedure declaration frozen before first release. Both producers stopped/removed and both outputs hash-committed before assessment. A separate target-free validation unit must commit before any private target hashing/read/decode or feedback.",
+  "excluded_claims": [
+    "generalization to another animal/session",
+    "causal neural mechanism",
+    "native LLM signal reasoning",
+    "fixed versus interactive comparison",
+    "unseen public-data contamination resistance",
+    "full research admission or expert validation from lifecycle qualification"
+  ]
+}
