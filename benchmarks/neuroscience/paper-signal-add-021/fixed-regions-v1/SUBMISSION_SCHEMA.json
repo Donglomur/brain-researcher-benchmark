@@ -1,0 +1,661 @@
+{
+  "$defs": {
+    "effect": {
+      "additionalProperties": false,
+      "properties": {
+        "bootstrap": {
+          "additionalProperties": false,
+          "properties": {
+            "lower": {
+              "maximum": 1.7976931348623157e+308,
+              "minimum": -1.7976931348623157e+308,
+              "type": "number"
+            },
+            "upper": {
+              "maximum": 1.7976931348623157e+308,
+              "minimum": -1.7976931348623157e+308,
+              "type": "number"
+            }
+          },
+          "required": [
+            "lower",
+            "upper"
+          ],
+          "type": "object"
+        },
+        "differences": {
+          "items": {
+            "maximum": 1.7976931348623157e+308,
+            "minimum": -1.7976931348623157e+308,
+            "type": "number"
+          },
+          "maxItems": 15,
+          "minItems": 15,
+          "type": "array"
+        },
+        "holm_p": {
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308,
+          "type": "number"
+        },
+        "id": {
+          "enum": [
+            "pin_T_minus_NT",
+            "pout_T_minus_NT",
+            "location_interaction"
+          ]
+        },
+        "leave_one_out": {
+          "items": false,
+          "maxItems": 15,
+          "minItems": 15,
+          "prefixItems": [
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 0
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 1
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 2
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 3
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 4
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 5
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 6
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 7
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 8
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 9
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 10
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 11
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 12
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 13
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/omission"
+                },
+                {
+                  "properties": {
+                    "excluded_position": {
+                      "const": 14
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "type": "array"
+        },
+        "paired": {
+          "$ref": "#/$defs/paired"
+        },
+        "sign_flip": {
+          "additionalProperties": false,
+          "properties": {
+            "extreme": {
+              "maximum": 1000000000,
+              "minimum": -1000000000,
+              "type": "integer"
+            },
+            "p_two_sided": {
+              "maximum": 1.7976931348623157e+308,
+              "minimum": -1.7976931348623157e+308,
+              "type": "number"
+            }
+          },
+          "required": [
+            "extreme",
+            "p_two_sided"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "differences",
+        "paired",
+        "sign_flip",
+        "bootstrap",
+        "holm_p",
+        "leave_one_out"
+      ],
+      "type": "object"
+    },
+    "omission": {
+      "additionalProperties": false,
+      "properties": {
+        "excluded_position": {
+          "maximum": 14,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "paired": {
+          "$ref": "#/$defs/paired"
+        }
+      },
+      "required": [
+        "excluded_position",
+        "paired"
+      ],
+      "type": "object"
+    },
+    "paired": {
+      "additionalProperties": false,
+      "properties": {
+        "cohens_dz": {
+          "anyOf": [
+            {
+              "maximum": 1.7976931348623157e+308,
+              "minimum": -1.7976931348623157e+308,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "degenerate": {
+          "enum": [
+            null,
+            "all_zero",
+            "constant_nonzero"
+          ]
+        },
+        "mean": {
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308,
+          "type": "number"
+        },
+        "sample_sd": {
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308,
+          "type": "number"
+        },
+        "standard_error": {
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308,
+          "type": "number"
+        },
+        "t": {
+          "anyOf": [
+            {
+              "maximum": 1.7976931348623157e+308,
+              "minimum": -1.7976931348623157e+308,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "mean",
+        "sample_sd",
+        "standard_error",
+        "t",
+        "cohens_dz",
+        "degenerate"
+      ],
+      "type": "object"
+    },
+    "region": {
+      "additionalProperties": false,
+      "properties": {
+        "condition_means": {
+          "items": {
+            "items": {
+              "maximum": 1.7976931348623157e+308,
+              "minimum": -1.7976931348623157e+308,
+              "type": "number"
+            },
+            "maxItems": 15,
+            "minItems": 15,
+            "type": "array"
+          },
+          "maxItems": 4,
+          "minItems": 4,
+          "type": "array"
+        },
+        "effects": {
+          "items": false,
+          "maxItems": 3,
+          "minItems": 3,
+          "prefixItems": [
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/effect"
+                },
+                {
+                  "properties": {
+                    "id": {
+                      "const": "pin_T_minus_NT"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/effect"
+                },
+                {
+                  "properties": {
+                    "id": {
+                      "const": "pout_T_minus_NT"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/effect"
+                },
+                {
+                  "properties": {
+                    "id": {
+                      "const": "location_interaction"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "type": "array"
+        },
+        "id": {
+          "enum": [
+            "primary6/alpha/early",
+            "primary6/alpha/late",
+            "primary6/alpha/extended_late",
+            "primary6/beta/early",
+            "primary6/beta/late",
+            "primary6/beta/extended_late",
+            "sensitivity7/alpha/early",
+            "sensitivity7/alpha/late",
+            "sensitivity7/alpha/extended_late",
+            "sensitivity7/beta/early",
+            "sensitivity7/beta/late",
+            "sensitivity7/beta/extended_late"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "condition_means",
+        "effects"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Complete fixed-region output. UTF-8 JSON is limited to 2097152 bytes. Duplicate keys, booleans in numeric fields, NaN/Inf, depth above 24 or more than 100000 nodes are rejected. Counts and excluded_position must use JSON integer tokens (1, not 1.0 or 1e0); this lexical rule supplements JSON Schema integer semantics. Exact public region, effect and omission order is required. Finite wrong numeric results are scored continuously; schema conformance does not imply correct numerical answers.",
+  "properties": {
+    "regions": {
+      "items": false,
+      "maxItems": 12,
+      "minItems": 12,
+      "prefixItems": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/region"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "primary6/alpha/early"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/region"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "primary6/alpha/late"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/region"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "primary6/alpha/extended_late"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/region"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "primary6/beta/early"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/region"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "primary6/beta/late"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/region"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "primary6/beta/extended_late"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/region"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "sensitivity7/alpha/early"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/region"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "sensitivity7/alpha/late"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/region"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "sensitivity7/alpha/extended_late"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/region"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "sensitivity7/beta/early"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/region"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "sensitivity7/beta/late"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/region"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "sensitivity7/beta/extended_late"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "type": "array"
+    },
+    "schema": {
+      "const": "tms_fixed_regions_submission_v1"
+    }
+  },
+  "required": [
+    "schema",
+    "regions"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,132 @@
+{
+  "axis_order": [
+    "condition",
+    "channel",
+    "frequency",
+    "time",
+    "source_position"
+  ],
+  "bands": {
+    "alpha": [
+      8,
+      12
+    ],
+    "beta": [
+      13,
+      30
+    ]
+  },
+  "bootstrap": {
+    "draws": 2000,
+    "method": "For EACH effect initialize Python 3.11 random.Random(20261114). Generate 2000 draws, each using 15 successive rng.randrange(15) indices. Each draw mean uses math.fsum / 15. Sort all 2000 means; type 7 quantiles at 0.025 and 0.975 give lower and upper bounds. These are unadjusted paired-position percentile intervals, not simultaneous intervals.",
+    "seed": 20261114
+  },
+  "condition_means": "For each condition, region and position: math.fsum of all selected channel-frequency-time values divided by their count. Store 4 by 15 means in condition order.",
+  "conditions": [
+    "NT.pin.all",
+    "NT.pout.all",
+    "T.pin.all",
+    "T.pout.all"
+  ],
+  "conditions_comparison": "Both arms receive identical task, method, schema, paper and data, with the same offline Python/tool image and owner-selected budgets. Only B receives reviewed official code. This is method-assisted reconstruction; do not interpret the code-condition difference as unaided scientific method discovery.",
+  "dtype": "little-endian IEEE754 binary64",
+  "effects": {
+    "location_interaction": "Pin difference minus pout difference at each position.",
+    "pin_T_minus_NT": "Condition 2 minus condition 0 at each position (zero-based condition indices).",
+    "pout_T_minus_NT": "Condition 3 minus condition 1 at each position (zero-based condition indices)."
+  },
+  "holm": "One family of 36 effects. Sort by (p_two_sided, region_id + \"/\" + effect_id). At index j from 0 to 35: corrected = max(previous_corrected, min(1, (36-j)*p)), starting previous_corrected at 0; write holm_p for each effect. This sensitivity family is separate from the paper primary cluster test.",
+  "leave_one_out": "For each effect and excluded_position from 0 to 14, recompute the paired summary on the remaining 14 values. Do not rerun bootstrap or sign flips for omissions. All 540 summaries are required.",
+  "order": "C; source_position fastest",
+  "paired_summary": {
+    "cohens_dz": "mean/sample_sd, null when sample_sd==0",
+    "degenerate": "null if sample_sd > 0; all_zero if sample_sd == 0 and mean == 0; constant_nonzero otherwise",
+    "mean": "fsum(x)/n",
+    "n": "15 for the full sample, 14 for each fixed omission",
+    "sample_sd": "sqrt(fsum((v-mean)**2 for v in x)/(n-1))",
+    "standard_error": "sample_sd/sqrt(n)",
+    "t": "mean/standard_error, null when standard_error==0"
+  },
+  "pairing_assumption": "The four released conditions retain the documented joint 15-position order. Physical-person linkage is not independently certified. No position may be dropped or reordered per condition.",
+  "primary6": [
+    "O1",
+    "PO7",
+    "PO3",
+    "P1",
+    "P3",
+    "P5"
+  ],
+  "region_order": [
+    "primary6/alpha/early",
+    "primary6/alpha/late",
+    "primary6/alpha/extended_late",
+    "primary6/beta/early",
+    "primary6/beta/late",
+    "primary6/beta/extended_late",
+    "sensitivity7/alpha/early",
+    "sensitivity7/alpha/late",
+    "sensitivity7/alpha/extended_late",
+    "sensitivity7/beta/early",
+    "sensitivity7/beta/late",
+    "sensitivity7/beta/extended_late"
+  ],
+  "schema": "tms-fixed-regions-public-method-v1",
+  "scope": "One method-assisted reconstruction profile; no primary cluster or historical output claim.",
+  "scoring": {
+    "artifact": "One complete JSON object on stdout conforming to SUBMISSION_SCHEMA.json",
+    "component_weights": "Seven equal weights. Condition means average within a region then over 12 regions; all other components average within an effect then over 36 effects. Paired summaries give equal weight to their three dB fields and their two dimensionless fields; leave-one-out first averages over 15 omissions. No reward is given for repeated protocol, provenance or support constants.",
+    "components": [
+      "condition_means",
+      "differences",
+      "paired",
+      "sign_flip",
+      "bootstrap",
+      "holm",
+      "leave_one_out"
+    ],
+    "coordinate_loss": "For finite values, d = abs(submitted - reference). For dB and dimensionless fields, d <= max(1e-12, 1e-12 * abs(reference)) has loss 0. Probabilities and sign counts have no tolerance. Otherwise loss = 1 - 1/(1 + d/scale), saturated to 1 for overflow. Unit scales: dB 1; dimensionless 1; probability 1; sign count 32768. A mismatch in nullable definedness has loss 1. A wrong declared degenerate category sets its paired summary loss to 1.",
+    "failure": "Malformed, omitted, extra, duplicate, NaN or bool-in-numeric outputs are invalid. Finite wrong values remain graded. Trusted reference integrity failure is an infrastructure error, not a candidate wrong answer.",
+    "report": "score = 1 - mean(component losses); report each component loss and unit-specific MAE/Linf separately. These disclosed normalization scales define reconstruction utility, not biological significance thresholds.",
+    "score_range": [
+      0,
+      1
+    ]
+  },
+  "selection": "Inclusive coordinate comparisons; preserve source channel order selected by label. No nearest-bin snapping for fixed regions. Use every included cell and all 15 positions; do not impute, omit, smooth, rebaseline or transform dB. Nonfinite values outside fixed regions are retained in the input; selected nonfinite values must be reported as an execution failure, never selectively removed.",
+  "sensitivity7": [
+    "O1",
+    "PO7",
+    "PO3",
+    "P1",
+    "P3",
+    "P5",
+    "P7"
+  ],
+  "shape": [
+    4,
+    7,
+    53,
+    200,
+    15
+  ],
+  "sign_flip": {
+    "assumption": "Joint sign exchangeability of paired differences; neither bins nor channels are independent replicates.",
+    "enumerated": 32768,
+    "method": "Enumerate all 2**15 sign patterns. observed = abs(math.fsum(x)); tolerance = 32 * math.ulp(math.fsum(abs(v) for v in x)); extreme = count(abs(math.fsum(sign[i] * x[i] for i in range(15))) >= observed - tolerance); p_two_sided = extreme / 32768.",
+    "unit": "paired source position"
+  },
+  "windows": {
+    "early": [
+      0.5,
+      1.5
+    ],
+    "extended_late": [
+      3,
+      4.5
+    ],
+    "late": [
+      3,
+      4
+    ]
+  }
+}
