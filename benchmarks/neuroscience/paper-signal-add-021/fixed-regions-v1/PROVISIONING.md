@@ -1,6 +1,6 @@
 # Deployment and asset boundary
 
-This is a source-only task specification and scoring release. No data download or candidate execution is triggered by these files.
+This is a source-only task specification, scorer and portable owner release. No data download or candidate execution is triggered by these files.
 
 A deployment needs the following separately provisioned roles:
 
@@ -29,8 +29,10 @@ The authored files in this release carry the repository's MIT notice. Separately
 
 These observations do not establish a separate grant for redistributing the original dataset or the extracted tensor. Missing license evidence is not an explicit prohibition. Obtain or identify applicable permission before bundling those assets; publication of this authored source subset need not wait for that later data-release decision.
 
-The accepted local operation used an existing private owner with exact source/asset pins and a fixed runtime. That host-specific owner and its private paths are not part of this public subset. A portable owner still needs explicit source and asset binding, network isolation, read-only delivery, equal budgets across conditions, source/version admission, a fresh complete output pair, termination/cleanup receipts, and protected scoring. Importing scorer.py alone does not supply those guarantees. Reuse an existing reviewed owner when available; do not claim a new host is admitted from the local validation statement.
+The accepted local operation used an existing reviewed owner with exact source/asset pins and a fixed runtime. This release now includes a sanitized authored owner template and executable plan/build/select interface under [portable/](portable/README.md). The full source graph is present; shared task/method/schema/scorer files are bound from this directory rather than duplicated. Templates contain no observed host paths, socket identities, private records or research bodies.
+
+The provisioner retains exact accepted non-sensitive article/data/code commitments and the complete twelve-code allowlist. The protected reference has a fixed opaque commitment only; it contains no reference values or person identifiers. A digest binds later supplied bytes; it does not establish that the provider has the asset or permission to redistribute it. Owner-private asset/evidence locators and newly authenticated source/runtime bindings are required. Publishing these authored sources does not provision a public submission or admit a new runtime.
 
 The measured local route used a 60-second compatibility allowance and 120 seconds per arm, serially, with one CPU and two GiB per container, inside a 510-second whole-owner ceiling. These are the selected construction limits, not an evaluated LLM budget or a performance guarantee. The normative numerical conventions remain CPython 3.11.6; the observed CPython 3.12.16 compatibility applies to the exact selected image and method.
 
-The next release step is a rights-resolved provisioning packet and a reviewed portable binding to the existing task. Publishing this specification/scorer or recording the selected-host validation does not complete that step.
+The next deployment step is an owner-authorized complete provisioning packet and independent admission of its rendered source and runtime. Any separate distribution of research assets requires applicable redistribution permission. Publishing this specification/scorer or recording the selected-host validation does not complete that step.
