@@ -15,6 +15,47 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  abr-protected-fold-source-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Verify ABR source and test protected fold boundaries
+        shell: bash
+        working-directory: components/abr-protected-fold-runner
+        run: |
+          set -euo pipefail
+          umask 077
+          ABR_PROTECTED_LOGS="${RUNNER_TEMP}/abr-protected-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$ABR_PROTECTED_LOGS"
+          set +e
+          ABR_PROTECTED_FAILED=0
+          for ABR_PROTECTED_FILE in verify_export.py tests/test_runner.py tests/test_boundary.py tests/test_lifecycle_edges.py; do
+            ABR_PROTECTED_NAME="${ABR_PROTECTED_FILE##*/}"
+            /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B "$ABR_PROTECTED_FILE" >"$ABR_PROTECTED_LOGS/${ABR_PROTECTED_NAME}.stdout" 2>"$ABR_PROTECTED_LOGS/${ABR_PROTECTED_NAME}.stderr"
+            ABR_PROTECTED_STATUS=$?
+            printf '%s\n' "$ABR_PROTECTED_STATUS" >"$ABR_PROTECTED_LOGS/${ABR_PROTECTED_NAME}.status"
+            cat "$ABR_PROTECTED_LOGS/${ABR_PROTECTED_NAME}.stdout"
+            cat "$ABR_PROTECTED_LOGS/${ABR_PROTECTED_NAME}.stderr"
+            if [ "$ABR_PROTECTED_STATUS" -ne 0 ]; then ABR_PROTECTED_FAILED=1; fi
+          done
+          exit "$ABR_PROTECTED_FAILED"
+      - name: Preserve ABR source control evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: abr-protected-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/abr-protected-${{ github.run_id }}-${{ github.run_attempt }}/
+
   tms-behavior-portable-runner-tests:
     runs-on: ubuntu-24.04
     timeout-minutes: 6
