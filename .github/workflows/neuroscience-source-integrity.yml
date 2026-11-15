@@ -1214,3 +1214,161 @@ jobs:
           overwrite: false
           include-hidden-files: false
           path: ${{ runner.temp }}/horrocks-frozen-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  neuralflow-choice-component-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate NeuralFlow source and run 22 author plus four independent invented controls
+        shell: bash
+        working-directory: benchmarks/neuroscience/components/neuralflow-choice-v1
+        run: |
+          set -euo pipefail
+          umask 077
+          NEURALFLOW_CHOICE_LOGS="${RUNNER_TEMP}/neuralflow-choice-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$NEURALFLOW_CHOICE_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 20s python -I -S -B - "${PWD}" >"$NEURALFLOW_CHOICE_LOGS/source-auth.stdout" 2>"$NEURALFLOW_CHOICE_LOGS/source-auth.stderr" <<'COMPONENT_SOURCE_AUTH'
+          import hashlib, json, os, stat, sys
+          from pathlib import Path
+          root = Path(sys.argv[1])
+          assert sys.version_info[:3] == (3, 11, 18)
+          assert root.is_absolute() and not any(p.is_symlink() for p in (root, *root.parents))
+          expected = [
+              ('README.md', 6298, 'd971960065485f76d7d232f820fae5f228a7e632b3bb5e60cde1cf7890cd682a'),
+              ('neuralflow_adapter.py', 17686, '119914a6b14b9e0a656fb9213b35527dfd442ce2c9030f199ef84062a9d1b240'),
+              ('test_neuralflow_adapter.py', 15466, '8a34250caf0be07e0ace311191aee7f1eac9e15ed9dec0275ba6986d2570dc6d'),
+              ('peer/test_independent_review.py', 5949, '5b8392883b874210c8b2237cc34ca23119c6f5906a362bc527561b54527613dc'),
+          ]
+          total = 0
+          for relative, size, digest in expected:
+              path = root / relative
+              assert not any(p.is_symlink() for p in (path, *path.parents))
+              before = path.lstat()
+              assert stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == size and 0 < size <= 262144
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              try:
+                  opened = os.fstat(fd)
+                  body = os.read(fd, size + 1)
+                  closed = os.fstat(fd)
+              finally:
+                  os.close(fd)
+              after = path.lstat()
+              fields = ("st_dev", "st_ino", "st_mode", "st_nlink", "st_size", "st_mtime_ns", "st_ctime_ns")
+              assert all(getattr(before, key) == getattr(other, key) for other in (opened, closed, after) for key in fields)
+              assert len(body) == size and hashlib.sha256(body).hexdigest() == digest
+              total += len(body)
+          actual = {str(p.relative_to(root)) for p in root.rglob("*") if p.is_file() or p.is_symlink()}
+          assert actual == {row[0] for row in expected}
+          print(json.dumps({"source_files": len(expected), "source_bytes": total, "invented_controls_only": True, "authentic_inputs_read": False}))
+          COMPONENT_SOURCE_AUTH
+          NEURALFLOW_CHOICE_SOURCE_STATUS=$?
+          set -e
+          printf '%s\n' "$NEURALFLOW_CHOICE_SOURCE_STATUS" >"$NEURALFLOW_CHOICE_LOGS/source-auth.status"
+          cat "$NEURALFLOW_CHOICE_LOGS/source-auth.stderr"
+          if [ "$NEURALFLOW_CHOICE_SOURCE_STATUS" -ne 0 ]; then exit "$NEURALFLOW_CHOICE_SOURCE_STATUS"; fi
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s . -p 'test_neuralflow_adapter.py' -v >"$NEURALFLOW_CHOICE_LOGS/author.stdout" 2>"$NEURALFLOW_CHOICE_LOGS/author.stderr"
+          NEURALFLOW_CHOICE_AUTHOR_STATUS=$?
+          printf '%s\n' "$NEURALFLOW_CHOICE_AUTHOR_STATUS" >"$NEURALFLOW_CHOICE_LOGS/author.status"
+          cat "$NEURALFLOW_CHOICE_LOGS/author.stderr"
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s peer -p 'test_independent_review.py' -v >"$NEURALFLOW_CHOICE_LOGS/peer.stdout" 2>"$NEURALFLOW_CHOICE_LOGS/peer.stderr"
+          NEURALFLOW_CHOICE_PEER_STATUS=$?
+          printf '%s\n' "$NEURALFLOW_CHOICE_PEER_STATUS" >"$NEURALFLOW_CHOICE_LOGS/peer.status"
+          cat "$NEURALFLOW_CHOICE_LOGS/peer.stderr"
+          set -e
+          if [ "$NEURALFLOW_CHOICE_AUTHOR_STATUS" -ne 0 ]; then exit "$NEURALFLOW_CHOICE_AUTHOR_STATUS"; fi
+          if [ "$NEURALFLOW_CHOICE_PEER_STATUS" -ne 0 ]; then exit "$NEURALFLOW_CHOICE_PEER_STATUS"; fi
+      - name: Preserve complete component test streams and statuses
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: neuralflow-choice-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/neuralflow-choice-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  ahn-count-component-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate AHN source and run all 19 invented scorer and verifier controls
+        shell: bash
+        working-directory: benchmarks/neuroscience/components/ahn-count-prediction-v1
+        run: |
+          set -euo pipefail
+          umask 077
+          AHN_COUNT_LOGS="${RUNNER_TEMP}/ahn-count-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$AHN_COUNT_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 20s python -I -S -B - "${PWD}" >"$AHN_COUNT_LOGS/source-auth.stdout" 2>"$AHN_COUNT_LOGS/source-auth.stderr" <<'COMPONENT_SOURCE_AUTH'
+          import hashlib, json, os, stat, sys
+          from pathlib import Path
+          root = Path(sys.argv[1])
+          assert sys.version_info[:3] == (3, 11, 18)
+          assert root.is_absolute() and not any(p.is_symlink() for p in (root, *root.parents))
+          expected = [
+              ('predictive_score.py', 9815, '535d8fb4e85270430da448b6408a85459fc904e613d89d5b15384b935a4da692'),
+              ('verify_release.py', 2924, 'bcf967923f9bd4550286baaf746ff75f560bdf77135de50477c310ef3763bacb'),
+              ('test_components.py', 8278, '7eda05904510a3bf225d98db96c1b0360e167c4ab3a4d706f4cea1a30e470ba1'),
+              ('README.md', 7792, 'b05d468841f13bd1590e84e3b93d8cfb0e1e3af8eaf11a8714088a1641c286cd'),
+              ('PROVENANCE.json', 2949, '15bef3c7837e8535a888f7891e5993e3f6a32346bb76be0db8af6ae9b3d0015c'),
+          ]
+          total = 0
+          for relative, size, digest in expected:
+              path = root / relative
+              assert not any(p.is_symlink() for p in (path, *path.parents))
+              before = path.lstat()
+              assert stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == size and 0 < size <= 262144
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              try:
+                  opened = os.fstat(fd)
+                  body = os.read(fd, size + 1)
+                  closed = os.fstat(fd)
+              finally:
+                  os.close(fd)
+              after = path.lstat()
+              fields = ("st_dev", "st_ino", "st_mode", "st_nlink", "st_size", "st_mtime_ns", "st_ctime_ns")
+              assert all(getattr(before, key) == getattr(other, key) for other in (opened, closed, after) for key in fields)
+              assert len(body) == size and hashlib.sha256(body).hexdigest() == digest
+              total += len(body)
+          actual = {str(p.relative_to(root)) for p in root.rglob("*") if p.is_file() or p.is_symlink()}
+          assert actual == {row[0] for row in expected}
+          print(json.dumps({"source_files": len(expected), "source_bytes": total, "invented_controls_only": True, "authentic_inputs_read": False}))
+          COMPONENT_SOURCE_AUTH
+          AHN_COUNT_SOURCE_STATUS=$?
+          set -e
+          printf '%s\n' "$AHN_COUNT_SOURCE_STATUS" >"$AHN_COUNT_LOGS/source-auth.status"
+          cat "$AHN_COUNT_LOGS/source-auth.stderr"
+          if [ "$AHN_COUNT_SOURCE_STATUS" -ne 0 ]; then exit "$AHN_COUNT_SOURCE_STATUS"; fi
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s . -p 'test_components.py' -v >"$AHN_COUNT_LOGS/controls.stdout" 2>"$AHN_COUNT_LOGS/controls.stderr"
+          AHN_COUNT_CONTROLS_STATUS=$?
+          printf '%s\n' "$AHN_COUNT_CONTROLS_STATUS" >"$AHN_COUNT_LOGS/controls.status"
+          cat "$AHN_COUNT_LOGS/controls.stderr"
+          set -e
+          if [ "$AHN_COUNT_CONTROLS_STATUS" -ne 0 ]; then exit "$AHN_COUNT_CONTROLS_STATUS"; fi
+      - name: Preserve complete component test streams and statuses
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ahn-count-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/ahn-count-${{ github.run_id }}-${{ github.run_attempt }}/
