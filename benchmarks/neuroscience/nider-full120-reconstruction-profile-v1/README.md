@@ -26,7 +26,7 @@ There is **no overall120-field binary scientific pass**. Exact reporting boundar
 
 The unchanged `runtime/full120_output.py` constant `ORIGINAL` is the identity of the public original **input workbook**, not an expected-answer identity. For the original it validates the source-workbook identity; the projected12-field response separately binds the delivered XLSX. Derivatives bind their own delivered workbook. Genuine reference hashes and owner runtime policies remain private.
 
-Read [PROVISIONING.md](PROVISIONING.md) before using the comparator or constructing a benchmark run. The current private inert-image44-control attempt was refused before dispatch by a memory guard; all44 remain unrun. The earlier corrected portable51-control result and accepted local scientific evidence do not establish the new inert-image/runtime provisioning or an external Linux ARM64 run.
+Read [PROVISIONING.md](PROVISIONING.md) before using the comparator or constructing a benchmark run. A later selected private owner completed the full engineered compatibility route: four fixture profiles, 16 responses, 480 original-field comparisons and 192 coarse statuses, with independent outcome and cleanup review. See [VALIDATION_20261115.md](VALIDATION_20261115.md) for the exact scope and preserved failures. This does not supply the missing public runner, assets or new-host qualification.
 
 The separate whole-paper leave-one-study/cohort contract, frontier improvement experiments and LLM campaign are broader work. They are not claimed here and do not redefine this existing narrower profile. Publishing source changes neither the number of empirical datasets nor submission-ready benchmarks.
 
