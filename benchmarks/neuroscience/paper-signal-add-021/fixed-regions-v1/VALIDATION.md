@@ -1,0 +1,15 @@
+# Completed local validation
+
+One complete selected-host construction operation ran the numerical-compatibility probe followed by two strictly serial frozen programs. Both conditions received the full 4 x 7 x 53 x 200 x 15 tensor: 4,452,000 values, including all 346,080 original NaNs, plus 222,600 paired-support counts. Every declared region had support at all fifteen source positions. The fixed method, regions, windows and reference were unchanged.
+
+Both arms scored 1.0, with zero loss in all seven components and zero unit-specific numerical errors. An independent reviewer compared all 4,320 scientific numerical fields per arm directly against the accepted reference without importing either the scorer or candidate. All fields were exactly equal, together with all 540 omission coordinates and 625 other schema/category leaves. The complete A and B submissions were byte-identical. These frozen competent programs demonstrate construction feasibility; they are not model attempts or evidence of a code-access benefit.
+
+Protected checks covered seven complete finite wrong answers, each penalized in its intended component; twelve malformed answers, each rejected; and one wrong trusted-reference digest, rejected as an infrastructure error. The score rewards reconstruction fidelity, not significance or agreement with a rounded historical result. The declared full 36-effect correction and complete sensitivity outputs were retained, including null and unstable results.
+
+The selected CPython 3.12.16 image passed primitive numerical conventions and the complete invented-method fixture established under normative CPython 3.11.6 before authentic inputs were staged. Exact authentic agreement then corroborated compatibility for this selected operation. This is not universal platform equivalence or native FieldTrip validation.
+
+All three containers used no network, read-only inputs, one CPU and two GiB memory. Both candidate outputs were sealed before private evaluation. Independent review verified removal and ID/name absence for all three containers, all 99 durable journal events and absence of all 36 registered native process groups. No reference or scorer was provided to either candidate.
+
+The separately invoked protected check initially refused the original reference's 0644 mode because its request incorrectly required 0400. The failed command and traceback were preserved. A separately reviewed, explicitly selected successor changed only that expected metadata mode, kept all byte/hash checks and fresh 0400 outputs, and passed. It did not chmod or regenerate the reference, replay candidates, or change the method.
+
+The complete original evidence and answer bodies remain in protected local custody. This public document is a curated validation statement, not those raw logs. Public distribution and provisioning remain separate from completed local construction. The task does not claim whole-paper reproduction, the primary cluster result, physical-person identity certification, model capability, novelty or SOTA.
