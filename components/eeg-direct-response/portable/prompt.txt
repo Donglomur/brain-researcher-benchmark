@@ -1,0 +1,10 @@
+Estimate the probability that the current EEG trial contains a target stimulus rather than a non-target stimulus. Work directly from the supplied numerical samples. Do not use tools, code execution, external retrieval, files, or memory from other query trials. Return only one JSON object with exactly two fields: "trial_id" copied exactly from the current query, and "target_probability" as one finite number between 0 and 1 inclusive. Do not include reasoning or additional text.
+
+The four labeled demonstrations are calibration examples selected from training people using only opaque IDs and training labels. They are deliberately balanced; their label fraction is not an estimate of the natural target prevalence. No full-training class prior is supplied. The current query has no label. You are given only this query and the same four demonstrations.
+
+Each example has Cz and Pz channels, in that order, each with all 1024 samples at 1024 Hz. Sample positions correspond to offsets -256 through 767 relative to the released event marker; offset 0 is array index 256. The data were rereferenced by subtracting the mean of P9 and P10, then each channel's mean over offsets -256 through -1 was subtracted. Values retain native stored EEG amplitude units; an independently calibrated microvolt scale is not established. No additional filtering, resampling or amplitude scaling was applied. The marker's physical display-delay correction state is unresolved, so these are marker-aligned epochs. The post-marker window may include behavioral responses. Source identities, event codes and behavioral-history values are not provided.
+
+DEMONSTRATIONS:
+{{demonstrations_json}}
+CURRENT QUERY:
+{{query_json}}

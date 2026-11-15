@@ -1,0 +1,65 @@
+{
+  "schema": "neural077_distinct_existing_conditions_v1",
+  "benchmark_id": "NEURAL-077",
+  "new_benchmark_ids": 0,
+  "operator_only_not_model_prompt": true,
+  "conditions": [
+    {
+      "id": "ordinary_feature_program",
+      "input": "Eight fixed public feature files; six training people1200labelled trials and two development people400queries.",
+      "mode": "One frozen Python prediction program with tools/numerical runtime.",
+      "historical_local_program_and_scoring_evidence": true,
+      "no_tools_model_channel": false,
+      "raw_signals_supplied": false,
+      "research_or_submission_ready": false
+    },
+    {
+      "id": "legacy_waveform_no_tools",
+      "queries": 400,
+      "development_people": 2,
+      "samples_per_channel": 1024,
+      "channels": [
+        "Cz",
+        "Pz"
+      ],
+      "sampling_hz": 1024,
+      "demonstrations": 4,
+      "numerical_prior_supplied": false,
+      "representation": "Full-resolution rereferenced/baseline-corrected epochs in native stored amplitude units; not raw continuous voltages.",
+      "primary": "Equal-person balanced accuracy at0.5",
+      "secondary": "Equal-person natural log loss",
+      "full_packet_constructed": true,
+      "complete_model_collection": false,
+      "transport_enforcement_qualified": false,
+      "research_or_submission_ready": false
+    },
+    {
+      "id": "processed_feature_no_tools",
+      "queries_per_arm": 400,
+      "arms": [
+        "observed_features",
+        "reassigned_query_features",
+        "measurements_withheld"
+      ],
+      "contexts": 1200,
+      "features": 48,
+      "representation": "Twenty-four consecutive32-sample post-marker means per channel; lossy relative to full1024-sample waveform.",
+      "demonstrations": 4,
+      "shared_training_prior": 0.2,
+      "primary": "Equal-person natural log loss",
+      "complete_materialization_and_context_census_reported": true,
+      "complete_model_collection": false,
+      "historical_incomplete_model_collection": "Reported12attempts/11observed-feature responses; no completed control arms or score.",
+      "native_waveform_understanding_claim": false,
+      "research_or_submission_ready": false
+    }
+  ],
+  "limits": [
+    "Two exposed development participants do not support unseen-population inference.",
+    "The deterministic within-person reassignment checks alignment sensitivity; it is invertible and is not a causal/null-distribution proof.",
+    "Ocular,motor,amplitude and acquisition contributions remain plausible; no isolated P3 mechanism is established.",
+    "Four demonstrations and1200training examples are different label budgets.",
+    "A model response instruction cannot establish no-tools enforcement.",
+    "No model/API invocation or data export is authorized by this source package."
+  ]
+}
