@@ -2,7 +2,7 @@
 
 Standard-library building blocks for constructing a neuroscience paper benchmark from [Nonlinear receptive fields evoke redundant retinal coding of natural scenes](https://doi.org/10.1038/s41586-024-08212-3). The component checks supplied manifests, field roles and coverage, computes limited protected scoring primitives, and validates byte transfers through an explicitly supplied response provider.
 
-It includes 53 invented offline controls. It contains no retinal recordings, fitted answer parameters, authentic content manifest, upstream MATLAB implementation, or completed scientific reproduction.
+It includes 76 invented offline controls: the original 53 construction controls, preserved unchanged, plus 23 provider-MD5 and HTTP-original integrity regressions. It contains no retinal recordings, fitted answer parameters, authentic content manifest, upstream MATLAB implementation, or completed scientific reproduction.
 
 ## Run the offline controls
 
@@ -12,13 +12,13 @@ From the repository root on a Unix system with Python 3.11:
 python -I -S -B components/retina-construction/run_offline_controls.py
 ```
 
-The runner requires exactly 53 tests with no failures, errors, skips, expected failures or unexpected successes. Tests use fabricated records and temporary files containing invented bytes. All byte-transfer cases inject an offline response; no downloader is included. The workflow retains complete stdout, stderr and exit status.
+The runner requires exactly 53 tests from `test_retina_construction.py` and 23 from `test_provider_md5.py`, 76 total, with no failures, errors, skips, expected failures or unexpected successes. Tests use fabricated records and temporary files containing invented bytes. All byte-transfer cases inject an offline response; no downloader is included. The workflow retains complete stdout, stderr and exit status.
 
 The runner sets a 30-second alarm after standard-library imports, a 30/32-second soft/hard CPU limit, a 128 KiB per-file limit, a 64 KiB captured-log limit and a 128 KiB serialized-result limit. CI supplies a separate 40-second command deadline followed by up to five seconds of kill grace. There is no hard memory or hostile-code isolation boundary. These limits are for the offline controls, not a full scientific run.
 
 ## Library use
 
-The three modules are adjacent, dependency-free Python modules. For example, from the component directory, this operates on invented vectors only:
+The five library modules are adjacent, dependency-free Python modules. For example, from the component directory, this operates on invented vectors only:
 
 ```sh
 cd components/retina-construction
@@ -33,21 +33,27 @@ python -S -B -c 'from scientific_kernels import score_response; print(score_resp
 | `scientific_kernels.score_response` | Requires aligned, complete finite target/prediction vectors. Returns SSE, MSE, unclipped R² and historical zero-clipped R² separately. Missing/NaN frames and overflow refuse; constant targets produce an explicit hold. |
 | `scientific_kernels.pair_disagreement_ranking` | Requires both cells' SG and DoG predictions, protected test responses, and exhaustive fixation/nonfixation frame coverage. Returns the full range-normalized ranking; never applies an inferred top-20% cutoff or half partition. |
 | `scientific_kernels.improvement_population_gate` | Checks complete supplied unit/error records but always withholds animal-balanced scores and improvement claims until an authenticated sampling hierarchy and population exist. |
-| `archive_intake.acquire` | Validates and retains all 18 declared byte streams through a required response provider. No default transport, RAR extraction or MAT decoder is supplied. |
+| `provider_md5.validate_provider_md5_manifest` | Requires all 18 declared provider MD5 digests, canonical `MD5-s<size>--digest` keys, fixed release/last-change identities and metadata fingerprints. It validates declarations; provenance and received payloads are not authenticated by this parser. |
+| `archive_intake.acquire` | Retains all 18 declared streams through a required response provider; checks either expected SHA-256 or provider MD5 and records local SHA-256. No default transport, RAR extraction or MAT decoder is supplied. |
+| `http_original_integrity.verify_http_original_bindings` | Requires 18 unique observed HTTP-original fingerprints to match their respective receipt records by exact filename, byte count and SHA-256. This pure join does not read files or establish receipt provenance. |
 
-The invented fixtures in `test_retina_construction.py` demonstrate complete manifest, inventory and coverage schemas. Their toy extents, hashes, animal IDs and array values are not usable authentic metadata.
+The invented fixtures in `test_retina_construction.py` demonstrate complete SHA-256 manifest, inventory and coverage schemas. `test_provider_md5.py` adds invented provider-MD5 manifests and integrity cases. Their toy extents, hashes, animal IDs and array values are not usable authentic metadata.
 
 ### Explicit byte provider
 
-Call `acquire(manifest, output, wall_seconds, open_response)`. The output must be a new absolute directory with ordinary directory ancestors. The provider receives the fixed declared URL and remaining wall budget, and returns a context manager exposing:
+Call `acquire(manifest, output, wall_seconds, open_response, minimum_free_bytes=0)`. A positive `minimum_free_bytes` adds a per-archive check for the complete remaining payload plus that reserve; zero disables this optional check. An independently reviewed outer owner must still establish whole-operation capacity. The output must be a new absolute directory with ordinary directory ancestors. The provider receives the fixed declared URL and remaining wall budget, and returns a context manager exposing:
 
 - `status` equal to 200 and `geturl()` equal to the requested URL;
-- `headers.get_all(name, default)` for content length, encoding and transfer framing;
+- `headers.get_all(name, default)` for content length, encoding and transfer framing, and `headers.raw_items()` for every exposed original header;
 - `read(n)` returning at most n bytes, with empty bytes marking EOF.
 
-The primitive refuses redirected/status-mismatched responses, non-identity content encoding, duplicate/conflicting framing, short or oversized bodies, and digest mismatches. It creates exclusive private output files, retains completed objects and partial bytes, stops on the first failure without retry, and writes a receipt. A read exception leaves an explicit unknown-consumed-prefix flag. Provider/context/clock operations are not hard-isolated; a provider must honor its timeout and a separate outer owner must enforce the whole operation.
+The primitive refuses redirected/status-mismatched responses, non-identity content encoding, duplicate/conflicting framing, short or oversized bodies, and digest mismatches. It creates exclusive private output files, retains completed objects, partial bytes and the admitted one-byte overflow sentinel, stops on the first failure without retry, and writes a receipt. Available `http.client.IncompleteRead.partial` bytes are retained and fingerprinted; other read exceptions leave an explicit unknown-consumed-prefix flag. The full exposed status/header observation is retained in a private sidecar before body admission, bounded to 256 KiB and fingerprinted in the receipt. This is parsed HTTP metadata, not a wire/TLS capture. Body fingerprints cover bytes actually written, including retained partials. Provider/context/clock operations are not hard-isolated; a provider must honor its timeout and a separate outer owner must enforce the whole operation.
 
-No authenticated content hashes or provider implementation are distributed here. A real intake requires independently authenticated metadata for the complete release, a reviewed provider and outer owner, adequate storage, and complete failure review. This helper alone does not make authentic acquisition ready.
+The additional explicit schema `retina-provider-md5-intake-v1` checks provider MD5 and exact declared size, then records SHA-256 over the received local bytes. MD5 is not a collision-resistant authenticity proof, and local SHA-256 is not a provider declaration. The original SHA-256-only schema remains unchanged and still refuses a missing expected digest. Both modes require all 18 archive names; neither infers animals from filenames.
+
+A separate reviewer must independently hash every complete header sidecar and use `verify_http_original_bindings(receipt_rows, observed_headers, archive_names)` to join all 18 fingerprints to the receipt. Missing, duplicated, wrong-name or altered records refuse, even if allowed header values still look valid. The regression suite actually mutates an unallowlisted header while preserving URL, status, framing and payload. It also covers malformed provider keys, size/digest mismatches, omitted archives, checksum failures, retained partials/overflow, header limits and disk admission. These are invented controls, not 23 additional neuroscience benchmarks.
+
+No authenticated content manifest or network provider implementation is distributed here. A real intake requires independently authenticated metadata for the complete release, a reviewed provider and outer owner, adequate storage, and complete failure review. This helper alone does not make authentic acquisition ready.
 
 ## Full scientific scope stays required
 

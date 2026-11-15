@@ -1,4 +1,4 @@
-"""Run the 53 invented Retina construction controls on a Unix Python runtime."""
+"""Run the 76 invented Retina construction controls on a Unix Python runtime."""
 import contextlib
 import io
 import json
@@ -9,7 +9,8 @@ import sys
 import time
 import unittest
 
-EXPECTED_TESTS = 53
+EXPECTED_TESTS = 76
+CONTROL_MODULES = {"test_retina_construction": 53, "test_provider_md5": 23}
 LOG_CAP_BYTES = 65536
 OUTPUT_CAP_BYTES = 131072
 
@@ -40,9 +41,16 @@ def main():
         sys.path.insert(0, str(Path(__file__).resolve().parent))
         with contextlib.redirect_stdout(log), contextlib.redirect_stderr(log):
             loader = unittest.TestLoader()
-            suite = loader.loadTestsFromName("test_retina_construction")
-            if loader.errors or suite.countTestCases() != EXPECTED_TESTS:
-                raise RuntimeError("Exactly 53 loadable controls are required")
+            suite = unittest.TestSuite()
+            module_counts = {}
+            for module_name, required_count in CONTROL_MODULES.items():
+                module_suite = loader.loadTestsFromName(module_name)
+                module_counts[module_name] = module_suite.countTestCases()
+                if loader.errors or module_counts[module_name] != required_count:
+                    raise RuntimeError("Control module census mismatch: " + module_name)
+                suite.addTests(module_suite)
+            if suite.countTestCases() != EXPECTED_TESTS:
+                raise RuntimeError("Exactly 76 loadable controls are required")
             result = unittest.TextTestRunner(stream=log, verbosity=2).run(suite)
         success = (result.wasSuccessful() and result.testsRun == EXPECTED_TESTS
                    and not result.skipped and not result.expectedFailures
@@ -50,7 +58,8 @@ def main():
         report = {
             "schema": "retina-construction-invented-controls-v1",
             "status": "pass" if success else "fail",
-            "tests": result.testsRun, "failures": len(result.failures),
+            "tests": result.testsRun, "control_modules": module_counts,
+            "failures": len(result.failures),
             "errors": len(result.errors), "skipped": len(result.skipped),
             "expected_failures": len(result.expectedFailures),
             "unexpected_successes": len(result.unexpectedSuccesses),
