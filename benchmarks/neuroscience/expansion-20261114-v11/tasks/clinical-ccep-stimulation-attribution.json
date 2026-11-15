@@ -1,0 +1,164 @@
+{
+  "id": "clinical-ccep-stimulation-attribution",
+  "track": "neural",
+  "title": "Anatomical stimulation-site attribution from complete VTC evoked responses",
+  "registration_recommendation": "REGISTER_DRAFT_ONLY",
+  "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
+  "scientific_question": "From a VTC evoked response, identify the documented anatomical compartment of the stimulated electrode pair.",
+  "participant_inputs": "Complete baseline-corrected waveform matrix over the original11–500 ms response interval for every repetition, timestamps/native sample grid, units, missing/artifact masks and target-free recording-location descriptors. Stimulating-contact IDs/anatomy, event codes that reveal the site and subject-identifying filenames are scorer-only.",
+  "known_answer": "Stimulation-site anatomical compartment, derived from original stimulation/contact localization metadata. It is not a learned BPC category or a claim that a new causal connection was established.",
+  "complete_scope": {
+    "question": "From a VTC evoked response, identify the documented anatomical compartment of the stimulated electrode pair.",
+    "one_target": "Stimulation-site anatomical compartment, derived from original stimulation/contact localization metadata. It is not a learned BPC category or a claim that a new causal connection was established.",
+    "planned_taxonomy": "Prespecify hippocampus, amygdala, lateral temporal cortex and other/mixed compartments using a frozen author/atlas mapping. The exact original labels and mixed-pair policy require metadata validation; unsupported or ambiguous pairs are retained explicitly rather than silently assigned or dropped.",
+    "unit": "One stimulation-site × VTC recording-contact block, containing every pulse repetition in that declared block; blocks, pulses and contacts are cases, not separate benchmarks.",
+    "input": "Complete baseline-corrected waveform matrix over the original11–500 ms response interval for every repetition, timestamps/native sample grid, units, missing/artifact masks and target-free recording-location descriptors. Stimulating-contact IDs/anatomy, event codes that reveal the site and subject-identifying filenames are scorer-only.",
+    "complete_compact_representation": "Use the full per-block response matrix at the authenticated original sample grid with all repetitions. No favorable-pulse selection or arbitrary decimation. A separately declared training-chosen anti-aliased representation may be evaluated identically in all arms, but cannot claim native/raw equivalence. Context-size feasibility remains a gate until full repetition/channel counts are known.",
+    "full_release_accounting": "All five patients, every released VTC recording contact and every stimulated-site block must appear in the census. Other/mixed sites, atypical responses and failed artifact rejection remain explicit. Published BPC aggregates cannot substitute for an authentic event/contact join.",
+    "heldout": "Outer leave-one-patient-out; every repetition, contact block and session from that patient stays together. Inner patient-group tuning only. A fold lacking a training class remains an explicit unsupported-generalization outcome, not a reason to discard that patient.",
+    "baseline": "Training-class prevalence; nearest training-class mean waveform/correlation; regularized multinomial model on train-only temporal coefficients. Specialist option is a frozen training-only BPC/template feature extractor plus classifier, with no test-derived consensus curves.",
+    "scorer": "Primary patient-macro multiclass log loss with a fixed finite-probability policy; report macro recall, confusion matrices, calibration and every patient fold. No invented accuracy threshold or SOTA claim.",
+    "negative_controls": [
+      "Training-only stimulation-label shuffle remains a distinct training control, with the authentic held-out labels and inputs unchanged; it cannot replace the evaluator-owned input-pairing control.",
+      "Compare to pre-stimulus-only and amplitude-only inputs.",
+      "Keep artifact masks fixed across arms and audit whether residual pulse artifact or channel IDs predict class.",
+      "Evaluator-owned complete response/repetition-block reassignment with targets and recipient context fixed, under the formal input-pairing policy below."
+    ],
+    "evaluator_owned_input_pairing_control": {
+      "transformation": "Within an outer held-out patient, reassign entire stimulation-site × VTC recording-contact response matrices among distinct stimulation-site blocks. Move every repetition and every sample together. Never shuffle individual pulses, time points or recording channels. Keep the recipient target, case identifiers and target-free contextual metadata fixed.",
+      "nuisance_strata": "Require the same participant, session, VTC recording contact/montage, stimulation pulse waveform/intensity/duration/rate, sampling grid, reference/filter/baseline procedure, repetition count, response-time grid and exact observable missingness/artifact-mask signature. Use only authenticated target-free acquisition metadata for these strata. Do not use stimulation anatomical class, BPC category or model outcomes to create strata or select maps.",
+      "admissible_maps": "Use one-to-one derangements among compatible distinct-site blocks, so each moved matrix appears exactly once in its group and no source block is duplicated or split. Only groups with at least two mutually compatible distinct-site blocks can support a derangement. Freeze 20 seeds numbered 0 through 19, at most 100 candidate maps per seed and a deterministic target-free group ordering before execution. Reject invalid maps; retain the first admissible map per seed, deduplicate identical maps and report the actual distinct count. Exhausted or singleton groups are unsupported; do not keep drawing until classes mix or model scores change.",
+      "preservation_and_checks": "Verify original and transformed case counts, waveform shape, all repetitions, native relative timing and masks before exposing packets. The original target/context join must be byte-identical. Donor stimulus labels and contact identifiers are never participant inputs. Cross-class versus same-class pairing composition is reported only after mappings are fixed and is not a selection criterion.",
+      "scope_and_interpretation": "All five patients and their original full inputs remain in the primary evaluation, including nonpermutable strata. Apply the common paired-support aggregation to the null; do not assume the release provides sufficient compatible blocks in any or all patients. The diagnostic probes reliance on the original waveform/site association, not a newly established causal connection."
+    }
+  },
+  "protected_split": "Outer leave-one-patient-out; every repetition, contact block and session from that patient stays together. Inner patient-group tuning only. A fold lacking a training class remains an explicit unsupported-generalization outcome, not a reason to discard that patient.",
+  "scoring": "Primary patient-macro multiclass log loss with a fixed finite-probability policy; report macro recall, confusion matrices, calibration and every patient fold. No invented accuracy threshold or SOTA claim.",
+  "comparators": "Training-class prevalence; nearest training-class mean waveform/correlation; regularized multinomial model on train-only temporal coefficients. Specialist option is a frozen training-only BPC/template feature extractor plus classifier, with no test-derived consensus curves.",
+  "negative_controls": [
+    "Training-only stimulation-label shuffle remains a distinct training control, with the authentic held-out labels and inputs unchanged; it cannot replace the evaluator-owned input-pairing control.",
+    "Compare to pre-stimulus-only and amplitude-only inputs.",
+    "Keep artifact masks fixed across arms and audit whether residual pulse artifact or channel IDs predict class.",
+    "Evaluator-owned complete response/repetition-block reassignment with targets and recipient context fixed, under the formal input-pairing policy below."
+  ],
+  "paired_access_conditions": {
+    "direct": "No-tools inference on the complete canonical signal packet and target-free permitted context.",
+    "numerical": "Numerical tools on the identical packet. Frozen-program versus per-case adaptive tool use is separately logged within this task.",
+    "specialist": "Audited fixed feature extractor or train-only physiological model on identical information; trained model access is an assistance condition, not evidence of unaided understanding.",
+    "parity": "Same case IDs, inputs, units, masks, training/calibration exposure, protected answers, and transform support. Raw versus lossy derived signals are separately labelled input substrates; no equivalence assumed. Richer-input specialists are auxiliary.",
+    "interpretation": "Association, tool use, public exposure and physiological understanding remain separate. No model campaign is selected."
+  },
+  "clinical_null_common_policy": {
+    "direct_no_tools": "A general LLM receives the complete canonical per-case neural packet and the same prespecified training-derived reference information as the other arms, without code execution, external search or specialist calls.",
+    "numerical": "The same model receives the identical packet and reference information plus sandboxed numerical/Python tools. Training and tuning use only outer-training groups.",
+    "specialist_assisted": "The same packet and numerical tools plus frozen specialist feature extractors or predictors trained/tuned only in outer-training groups; returned predictions/features must use only that packet and the explicitly matched training evidence.",
+    "evidence_parity": "All main comparison arms use byte-identical canonical packets, target-free metadata, the same group splits and training evidence. Raw-waveform and derived-feature variants are separate information-substrate analyses, never relabelled as a pure tool effect.",
+    "full_scope": "Every released participant, recording, eligible condition and prespecified evaluation window is accounted for. Unsupported labels, ambiguous timing, missing channels, artifact exclusions and context-overflow cases remain in coverage and failure reports; no successful subset becomes the benchmark.",
+    "frozen_evaluation": "Prespecify labels, windows, preprocessing, splits and metric before any model outcomes. Fit transforms and hyperparameters within training groups. Protected target rows, test labels, annotation-bearing code and answer-derived features cannot be participant inputs.",
+    "uncertainty": "Report group-level scores and paired group differences; bootstrap or other intervals must respect participants and repeated recordings. Small cohorts require prominent fold-by-fold results and limited precision.",
+    "scope_of_claim": "This evaluates interpretation of a specified neural representation. Behavioral responsiveness is not proof of consciousness; stimulation metadata is not a newly measured causal-connection label; symptom recognition is not a treatment recommendation.",
+    "execution_modes": {
+      "direct_no_tools": "The model predicts directly from each complete common packet without writing or executing a prediction program. It is not a program-writing condition.",
+      "frozen_program": "Within each numerical-only or specialist-assisted arm, the LLM develops one prediction program using outer-training groups only. Freeze its source/configuration before protected evaluation. Execute that fixed program on every held-out case without per-case agent intervention or post-freeze tuning. Data-dependent computation inside the frozen program remains allowed by the prespecified rules.",
+      "case_adaptive_agent": "Within each numerical-only or specialist-assisted arm, the LLM may choose analyses, write code and call permitted tools while investigating one held-out input case. Target labels remain protected; no case-derived state or fitted updates carry into other held-out cases unless a separate causal online protocol was prospectively declared.",
+      "comparison": "Cross frozen-program versus case-adaptive execution with numerical-only versus specialist assistance. Use identical packets, training evidence, group folds and declared compute/tool budgets, and report one-time program-development cost separately from per-case cost. These are conditions of each candidate benchmark, not additional benchmark counts."
+    },
+    "evaluator_owned_pairing_controls": {
+      "purpose": "Descriptive signal-pairing dependence checks. A change in prediction loss does not establish causality, a calibrated randomization test or exchangeability. No permutation p-value is reported without an independently justified prospective exchangeability model.",
+      "custody_and_parity": "The evaluator freezes target-free nuisance strata, admissibility rules, seeds/lags and mapping manifests before model outcomes. Targets, recipient case context and annotations stay fixed. Every arm receives the same transformed packet bytes, case order, masks and support status for each transform. Donor identities, protected labels and mappings that reveal answers stay evaluator-only. Training references, fitted transforms and models remain frozen under the original outer-fold rules.",
+      "original_full_scope": "The primary evaluation still scores the full original case census and reports all original missing, ambiguous or failed cases. An unavailable null never removes a case, participant, channel, condition or session from that primary evaluation. Null packets are additional diagnostics; unsupported cases retain explicit records and are not silently filled with unchanged inputs.",
+      "support_and_aggregation": "For every transform, publish counts and reasons for valid, invalid and unsupported mappings by participant/session and declared nuisance stratum, plus descriptive target-class coverage after maps are frozen. Compare original and transformed losses on exactly the same supported case IDs within each participant; average those paired case differences within participant, then equally across participants with support. Label this explicitly as a support-limited diagnostic, list every participant without support and retain the separate full-cohort original score. Report each transform, actual distinct-transform count and, if aggregated across transforms, equal-weight the valid transform-level paired differences; do not pool windows or hide differing coverage. No supported-case diagnostic replaces the natural-coverage primary score.",
+      "invalid_policy": "No identity transform counted as a null, outcome-driven retries, post-hoc stratum relaxation, cross-group donors, target-driven map selection, invented channels, altered repetition counts, synthetic boundary joins or unequal arm coverage. Prediction failures use the same frozen scorer policy as the original evaluation. If no valid transformation exists, report the null unavailable and its exact reason."
+    }
+  },
+  "provenance": {
+    "paper": {
+      "title": "Electrical Stimulation of Temporal and Limbic Circuitry Produces Distinct Responses in Human Ventral Temporal Cortex",
+      "doi": "10.1523/JNEUROSCI.1325-22.2023",
+      "year": 2023,
+      "official_url": "https://doi.org/10.1523/JNEUROSCI.1325-22.2023",
+      "open_author_paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10278681/"
+    },
+    "data": {
+      "official_url": "https://openneuro.org/datasets/ds004457/versions/1.0.2",
+      "snapshot": "1.0.2",
+      "accession": "ds004457",
+      "metadata_reported_extent": "2,751 files / 10.9 GB from indexed OpenNeuro metadata; not independently censused or downloaded",
+      "licence": "Not verified in this bounded metadata pass; do not infer CC0 from hosting platform.",
+      "content_hashes": "Unresolved; obtain frozen snapshot/file inventory before intake."
+    },
+    "official_code": {
+      "official_url": "https://github.com/hharveygit/VTCBPC_JNS_Manu",
+      "evidence": "Official OpenNeuro description names this MATLAB analysis repository.",
+      "commit": "Unresolved; no code body fetched.",
+      "licence": "Unresolved; official paper license is distinct from data/code rights."
+    },
+    "observed_facts": [
+      {
+        "claim": "The source study reports intracranial recordings in five patients, with single-pulse stimulation and VTC measurements in collateral/lateral occipitotemporal sulci.",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10278681/"
+      },
+      {
+        "claim": "The paper analyzes response shapes over 11–500 ms and reports four consensus BPC patterns related to stimulation regions; these fitted patterns are not independent ground-truth class labels.",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10278681/"
+      },
+      {
+        "claim": "OpenNeuro metadata describes resting SPES at approximately0.2 Hz, 200-microsecond biphasic pulses and6 mA, and links author analysis code.",
+        "source": "https://openneuro.org/datasets/ds004457/versions/1.0.2"
+      }
+    ],
+    "reviewed_dossier": {
+      "path": null,
+      "bytes": 35968,
+      "sha256": "cca076d5ab3e80ab85ac714b49f940696dd5b3f44a10d1c6d4fb03bb14ab1db4"
+    },
+    "selector": {
+      "array": "candidates",
+      "identity_field": "candidate_id",
+      "identity": "clinical-ccep-stimulation-attribution"
+    }
+  },
+  "resources_and_remaining_gates": {
+    "planning": "Metadata reports approximately10.9 GB source release. Proposed CPU streaming preparation and small linear/template baselines should not need a GPU; exact peak RAM, runtimes, output sizes and per-case token load are unmeasured. MATLAB/code dependencies need a separate rights/runtime plan.",
+    "must_resolve": [
+      "Exact stimulus→contact→anatomy mapping and all pulse/block counts.",
+      "Full snapshot/file checksums and data/code licenses.",
+      "Artifact window, filtering, referencing and baseline semantics from official implementation.",
+      "Class support across all five held-out patients; small-n uncertainty.",
+      "A complete case must fit no-tools context without truncating repetitions or altering the endpoint."
+    ]
+  },
+  "distinctness": "Perturbational source attribution from evoked neural signals, not visual object decoding, spontaneous intracranial behavior prediction, sleep or seizure detection.",
+  "common_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+  "readiness": {
+    "runnable": false,
+    "inputs_verified": false,
+    "reference_validated": false,
+    "research_qualified": false,
+    "reproduction_established": false,
+    "model_evaluated": false,
+    "submission_ready": false
+  },
+  "source_family_ids": [
+    "ccep-openneuro-ds004457"
+  ],
+  "machine_output": {
+    "predictions": "One finite probability vector in frozen authenticated anatomical-class order per full site×VTC-contact response block. All pulse repetitions belong to the same input case; labels and stimulation identifiers protected.",
+    "score_rows": "Mean negative log probability within each patient, then equal-weight patient mean; all five patient folds, confusion, recall, calibration and class-support statuses.",
+    "controls": "Exactly specified V3 complete-block derangements, identical target/context bytes and matched-case paired losses; unsupported strata never reduce original five-patient primary census."
+  },
+  "publication_context": {
+    "status": "registered_construction_draft_definition_only",
+    "source_snapshot_date": "2026-11-14",
+    "source_definition_bytes": 19754,
+    "source_definition_sha256": "71ffec5855733039437c65a2b26fb1e7236ecb61e259211f517b5b94d3c4783b",
+    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
+    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
+    "scientific_definition_changed": false,
+    "runtime_binding": null,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+  }
+}

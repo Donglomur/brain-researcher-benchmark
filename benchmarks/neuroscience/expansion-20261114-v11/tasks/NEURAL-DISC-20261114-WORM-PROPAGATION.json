@@ -1,0 +1,119 @@
+{
+  "id": "NEURAL-DISC-20261114-WORM-PROPAGATION",
+  "track": "neural",
+  "title": "Conditional downstream calcium-response reconstruction after identified-neuron perturbation",
+  "registration_recommendation": "REGISTER_DRAFT_ONLY",
+  "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
+  "scientific_question": "Given a stimulated neuron's measured evoked calcium and a receiver's pre-stimulation trace, can a model predict that receiver's complete measured response in a held-out worm?",
+  "participant_inputs": "For each experimentally observed source→receiver pair/trial, source calcium from−10to+30seconds, receiver calcium from−10to0, actual timestamps, verified neuron identities and stimulus timing/parameters. Include only information established independently of the withheld receiver response. Source post-stimulus input makes this retrospective conditional prediction, not forecasting before stimulation.",
+  "known_answer": "Receiver fluorescence/time series from0to30seconds in the same trial, hidden in evaluator custody. This is an observed-response target, not a binary ground truth for direct synapses or mechanism.",
+  "complete_scope": "All acquisitions and measured receiver/source pairs in the declared immutable release, including weak/nonresponding pairs and failed/self-response trials with explicit quality/coverage flags. This is a new release-level task, not whole-paper reproduction. The release's genotype/condition coverage must be reconciled against OSF; missing mutant or spontaneous cohorts cannot silently be claimed included.",
+  "protected_split": "All recordings of one authenticated worm held together; session IDs/NWB subjects first joined to original acquisition and animal identities. If the same animal cannot be resolved, no between-animal result. Train-only pair kernels or mean responses exclude the held worm; neuron identities can recur across worms.",
+  "input_representation": "All original time samples in each declared source/receiver window, with channel IDs, exact timestamps and explicit missingness. Each case is a genuine measured pair/trial, not a new benchmark. The complete case roster retains all receiver neurons; no significance selection or top-responsive-cell compression. Trace-only extraction must retain all declared measurements and metadata from the original release, with checksum/source-index joins; no fitted kernel/atlas substitute. If30s tails are unavailable, preserve explicit missing-time coverage and resolve one common supported horizon from development metadata before freeze.",
+  "scoring": {
+    "primary": "Receiver response MSE relative to training-only pair-mean predictor, aggregated over valid samples then trials/pairs within authenticated worm; compare per-worm paired error. Raw error and training-variance normalized error both reported.",
+    "secondary": "Correlation and response-area error, with zero-variance cases explicitly handled; target variance or normalizing range from held response is evaluator-only and never agent-visible.",
+    "uncertainty": "Worm-level paired intervals after identity verification, not pair/trial pseudo-replication."
+  },
+  "comparators": "Receiver pre-stimulus persistence/flat baseline, training-only source→receiver mean trajectory, and training-only linear convolution kernel fitted with regularization chosen on separate development worms. Author atlas kernels fitted using the full release are disallowed as clean held-out baselines; a declared exposed specialist is only an auxiliary condition.",
+  "negative_controls": [
+    "Source traces reassigned across matched stimulations within animal/condition, preserving autocorrelation and missingness.",
+    "Stimulus/identity-only and receiver-prehistory-only references.",
+    "Target-neuron identity permutation, synchronization shifts and all-failure coverage audits."
+  ],
+  "leakage_controls": [
+    "Published pooled kernels/response significance include prospective test animals.",
+    "Automated target assignment and ROI order can be wrong; independent acquisition→trace→identity alignment is a required gate.",
+    "Light artifact, adjacent-cell stimulation, source autoreponse and overall calcium state may explain gain.",
+    "Quality masks chosen from target effect size, target-side normalization and hidden spontaneous/mutant cohort mixing can leak."
+  ],
+  "provenance": {
+    "reviewed_dossier": {
+      "path": null,
+      "bytes": 9764,
+      "sha256": "ce03aefc7fbaf035013a192c4089bd7232d2be106f9384ab95ce5cff9f0a5e5a"
+    },
+    "sources": [
+      {
+        "role": "primary paper",
+        "url": "https://www.nature.com/articles/s41586-023-06683-4",
+        "alternative_primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10632145/",
+        "year": 2023,
+        "title": "Neural signal propagation atlas of Caenorhabditis elegans",
+        "access_observation": "Nature redirected to inaccessible identity provider; PMC full open challenged, indexed primary abstract/data statement available."
+      },
+      {
+        "role": "immutable NWB release",
+        "url": "https://dandiarchive.org/dandiset/001075/0.240930.1859",
+        "doi": "10.48324/dandi.001075/0.240930.1859"
+      },
+      {
+        "role": "author original export",
+        "url": "https://osf.io/e2syt/",
+        "status": "Named by primary paper; exact version/file membership and rights not verified in this phase."
+      },
+      {
+        "role": "author analysis",
+        "url": "https://github.com/leiferlab/pumpprobe",
+        "license": "GPL-3.0",
+        "status": "README inspected: per-recording classes, neural identity joins, kernels and aggregate atlas; exactcommit unpinned."
+      },
+      {
+        "role": "official conversion",
+        "url": "https://github.com/catalystneuro/leifer_lab_to_nwb",
+        "status": "Linked by DANDI immutable metadata; source not executed or fully reviewed."
+      }
+    ],
+    "verified_source_facts": "The paper uses optogenetic activation and calcium measurements to study signal propagation. DANDI release0.240930.1859 is open CC BY4.0 and advertises223 files,113 subjects and4,074,234,123,623 bytes. One listed imaging NWB is32,745,117,057 bytes. These metadata counts do not prove113 independent animals or trace availability for every acquisition.",
+    "rights_access_version": "DANDI fixedversion and CC BY4.0 verified; original OSF export rights/version and official software dependency licenses still need exact review. No authentic payload or image acquired."
+  },
+  "source_family_ids": [
+    "leifer-worm-propagation-001075"
+  ],
+  "resources": "Full immutable DANDI release is4.07TB, not a laptop-scale download. A scientifically complete trace-only acquisition may be far smaller, but full trace-file/array manifest and exact total are UNESTABLISHED. Do not download imaging merely to meet count goals or choose a small convenient animal subset. Propose source-only inventory next; after verification, stream traces and fit CPU kernels with8–32GB RAM, hours estimated; no GPU scientifically required.",
+  "remaining_gates": [
+    "Root duplicate/source-family adjudication across both tracks and held reserves.",
+    "Exact full scientific membership and immutable file identities before acquisition.",
+    "Rights and permitted assessment/redistribution checked for every selected release component.",
+    "Authentic schema/clock/unit/label QC, reference qualification, independent grader review and all controls.",
+    "Model exposure audit and defensible outer assessment; public historical labels are development material."
+  ],
+  "paired_access_conditions": {
+    "direct": "No-tools inference on the complete canonical signal packet and target-free permitted context.",
+    "numerical": "Numerical tools on the identical packet. Frozen-program versus per-case adaptive tool use is separately logged within this task.",
+    "specialist": "Audited fixed feature extractor or train-only physiological model on identical information; trained model access is an assistance condition, not evidence of unaided understanding.",
+    "parity": "Same case IDs, inputs, units, masks, training/calibration exposure, protected answers, and transform support. Raw versus lossy derived signals are separately labelled input substrates; no equivalence assumed. Richer-input specialists are auxiliary.",
+    "interpretation": "Association, tool use, public exposure and physiological understanding remain separate. No model campaign is selected."
+  },
+  "common_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+  "readiness": {
+    "runnable": false,
+    "inputs_verified": false,
+    "reference_validated": false,
+    "research_qualified": false,
+    "reproduction_established": false,
+    "model_evaluated": false,
+    "submission_ready": false
+  },
+  "machine_output": {
+    "predictions": "Complete receiver calcium trace on authenticated0..30s poststimulus grid for every declared trial/source-receiver pair, with cases keyed by authentic worm/acquisition/genotype and pair.",
+    "score_rows": "Per-worm full-support MSE and difference from train-only pair-mean prediction; variance-normalized evaluation secondary, not a target-derived input. Every weak/nonresponse and unsupported pair retained.",
+    "coverage": "All acquisitions/pairs/conditions in declared release and complementary source scope;113metadata subjects are not assumed independent worms."
+  },
+  "distinctness": "Conditional response propagation from controlled neural stimulation, distinct from existing Flavell locomotor-turn decoding and history analyses.",
+  "stronger_claim_hold": "Source input includes−10..+30s calcium while receiver context stops at0; this is retrospective conditional inference, not pre-stimulus forecasting or proof of direct synaptic connectivity.",
+  "publication_context": {
+    "status": "registered_construction_draft_definition_only",
+    "source_snapshot_date": "2026-11-14",
+    "source_definition_bytes": 10027,
+    "source_definition_sha256": "0f22be2c0ca9dcf74817cc272b491f84fcbb21efca28e2baceb9a2c8a3fdc8ab",
+    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
+    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
+    "scientific_definition_changed": false,
+    "runtime_binding": null,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+  }
+}
