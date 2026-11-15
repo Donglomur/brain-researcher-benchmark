@@ -1448,3 +1448,80 @@ jobs:
           overwrite: false
           include-hidden-files: false
           path: ${{ runner.temp }}/neural017-broker-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  neural017-training-projector-component-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate NEURAL-017 projector source and run all 18 invented archive controls
+        shell: bash
+        working-directory: benchmarks/neuroscience/components/neural017-training-projector-v1
+        run: |
+          set -euo pipefail
+          umask 077
+          NEURAL017_PROJECTOR_LOGS="${RUNNER_TEMP}/neural017-projector-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$NEURAL017_PROJECTOR_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 20s python -I -S -B - "${PWD}" >"$NEURAL017_PROJECTOR_LOGS/source-auth.stdout" 2>"$NEURAL017_PROJECTOR_LOGS/source-auth.stderr" <<'COMPONENT_SOURCE_AUTH'
+          import hashlib, json, os, stat, sys
+          from pathlib import Path
+          root = Path(sys.argv[1])
+          assert sys.version_info[:3] == (3, 11, 18)
+          assert root.is_absolute() and not any(p.is_symlink() for p in (root, *root.parents))
+          expected = [
+              ('training_projection.py', 14990, '4ac3b1985ee6238a60b0577afd611ebee3efcbc5ddddfbc310dafa368a3acabe'),
+              ('test_training_projection.py', 10870, 'ceff7a908bc7b51b080b93e71aaba906222d61eef45430e77ccc438ebba47ef9'),
+              ('test_zip64_end_boundary_v2.py', 2864, '610a7b970a1232f69edd9b68e0f679470df46808ee19e1e0b4084950d08a2d3e'),
+              ('README.md', 4291, 'a19f7c44fc456d5e68ef10d066492dfbc4da7998c35a0abd6b0085230261d2ad'),
+              ('PROVENANCE.json', 2282, 'f4c598b8f73100ae693c44191370261372ade9f4fcc21681148b18baee792b6d'),
+          ]
+          total = 0
+          for relative, size, digest in expected:
+              path = root / relative
+              assert not any(p.is_symlink() for p in (path, *path.parents))
+              before = path.lstat()
+              assert stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == size and 0 < size <= 262144
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              try:
+                  opened = os.fstat(fd)
+                  body = os.read(fd, size + 1)
+                  closed = os.fstat(fd)
+              finally:
+                  os.close(fd)
+              after = path.lstat()
+              fields = ("st_dev", "st_ino", "st_mode", "st_nlink", "st_size", "st_mtime_ns", "st_ctime_ns")
+              assert all(getattr(before, key) == getattr(other, key) for other in (opened, closed, after) for key in fields)
+              assert len(body) == size and hashlib.sha256(body).hexdigest() == digest
+              total += len(body)
+          actual = {str(p.relative_to(root)) for p in root.rglob("*") if p.is_file() or p.is_symlink()}
+          assert actual == {row[0] for row in expected}
+          print(json.dumps({"source_files": len(expected), "source_bytes": total, "invented_controls_only": True, "authentic_inputs_read": False}))
+          COMPONENT_SOURCE_AUTH
+          NEURAL017_PROJECTOR_SOURCE_STATUS=$?
+          set -e
+          printf '%s\n' "$NEURAL017_PROJECTOR_SOURCE_STATUS" >"$NEURAL017_PROJECTOR_LOGS/source-auth.status"
+          cat "$NEURAL017_PROJECTOR_LOGS/source-auth.stderr"
+          if [ "$NEURAL017_PROJECTOR_SOURCE_STATUS" -ne 0 ]; then exit "$NEURAL017_PROJECTOR_SOURCE_STATUS"; fi
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s . -p 'test_*.py' -v >"$NEURAL017_PROJECTOR_LOGS/controls.stdout" 2>"$NEURAL017_PROJECTOR_LOGS/controls.stderr"
+          NEURAL017_PROJECTOR_CONTROLS_STATUS=$?
+          printf '%s\n' "$NEURAL017_PROJECTOR_CONTROLS_STATUS" >"$NEURAL017_PROJECTOR_LOGS/controls.status"
+          cat "$NEURAL017_PROJECTOR_LOGS/controls.stderr"
+          set -e
+          if [ "$NEURAL017_PROJECTOR_CONTROLS_STATUS" -ne 0 ]; then exit "$NEURAL017_PROJECTOR_CONTROLS_STATUS"; fi
+      - name: Preserve complete component test streams and statuses
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: neural017-projector-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/neural017-projector-${{ github.run_id }}-${{ github.run_attempt }}/
