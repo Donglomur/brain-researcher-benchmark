@@ -1,0 +1,353 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "task_id": {
+      "const": "PAPER-FIND-003"
+    },
+    "input_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "submission_status": {
+      "enum": [
+        "complete",
+        "partial",
+        "abstained"
+      ]
+    },
+    "models": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/model"
+      },
+      "minItems": 3,
+      "maxItems": 3,
+      "allOf": [
+        {
+          "contains": {
+            "properties": {
+              "phase": {
+                "const": "stimulus"
+              }
+            },
+            "required": [
+              "phase"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "phase": {
+                "const": "feedback"
+              }
+            },
+            "required": [
+              "phase"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "phase": {
+                "const": "interval"
+              }
+            },
+            "required": [
+              "phase"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "task_id",
+    "input_sha256",
+    "submission_status",
+    "models"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "fit": {
+      "type": "object",
+      "properties": {
+        "coefficients": {
+          "type": "object",
+          "properties": {
+            "(Intercept)": {
+              "type": "number"
+            },
+            "ACC": {
+              "type": "number"
+            },
+            "trial": {
+              "type": "number"
+            },
+            "ACC:trial": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "(Intercept)",
+            "ACC",
+            "trial",
+            "ACC:trial"
+          ],
+          "additionalProperties": false
+        },
+        "covariance": {
+          "type": "object",
+          "properties": {
+            "axes": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "(Intercept)",
+                  "ACC",
+                  "trial",
+                  "ACC:trial"
+                ]
+              },
+              "minItems": 4,
+              "maxItems": 4,
+              "uniqueItems": true
+            },
+            "values": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "items": {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 4,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "required": [
+            "axes",
+            "values"
+          ],
+          "additionalProperties": false
+        },
+        "variance_components": {
+          "type": "object",
+          "properties": {
+            "subject": {
+              "type": "number"
+            },
+            "nested_contact": {
+              "type": "number"
+            },
+            "residual": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "subject",
+            "nested_contact",
+            "residual"
+          ],
+          "additionalProperties": false
+        },
+        "support": {
+          "type": "object",
+          "properties": {
+            "n_obs": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 8082
+            },
+            "n_subjects": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 8082
+            },
+            "n_nested_contacts": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 8082
+            },
+            "row_ids_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "n_obs",
+            "n_subjects",
+            "n_nested_contacts",
+            "row_ids_sha256"
+          ],
+          "additionalProperties": false
+        },
+        "method": {
+          "type": "object",
+          "properties": {
+            "estimator": {
+              "enum": [
+                "REML",
+                "ML",
+                "other"
+              ]
+            },
+            "random_effects": {
+              "enum": [
+                "subject_plus_nested_contact",
+                "subject_only",
+                "contact_only",
+                "pooled_contact",
+                "other"
+              ]
+            },
+            "weights": {
+              "enum": [
+                "unit",
+                "other"
+              ]
+            },
+            "offset": {
+              "enum": [
+                "zero",
+                "other"
+              ]
+            }
+          },
+          "required": [
+            "estimator",
+            "random_effects",
+            "weights",
+            "offset"
+          ],
+          "additionalProperties": false
+        },
+        "reml_diagnostic": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "criterion": {
+                  "type": "number"
+                },
+                "convention": {
+                  "enum": [
+                    "lme4_profiled_REML_original_design_including_constants",
+                    "other"
+                  ]
+                }
+              },
+              "required": [
+                "criterion",
+                "convention"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "coefficients",
+        "covariance",
+        "variance_components",
+        "support",
+        "method",
+        "reml_diagnostic"
+      ],
+      "additionalProperties": false
+    },
+    "model": {
+      "type": "object",
+      "properties": {
+        "phase": {
+          "enum": [
+            "stimulus",
+            "feedback",
+            "interval"
+          ]
+        },
+        "status": {
+          "enum": [
+            "reported",
+            "abstained"
+          ]
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 512
+        },
+        "fit": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/fit"
+            }
+          ]
+        }
+      },
+      "required": [
+        "phase",
+        "status",
+        "reason",
+        "fit"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "abstained"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "fit": {
+                "type": "null"
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "fit": {
+                "$ref": "#/$defs/fit"
+              },
+              "reason": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "description": "Additional source admission requires active input SHA; exactly3/1-2/0 reported models for complete/partial/abstained; strict finite binary64 and nonzero-underflow checks, duplicate-key rejection, UTF8 and32KiB cap. Covariance may use any permutation of four named axes. Finite mathematically wrong values are scored, not accuracy-rejected."
+}

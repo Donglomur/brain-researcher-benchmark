@@ -15,6 +15,90 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  purkinje-program-source-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Verify Purkinje PROGRAM source and test execution boundaries
+        shell: bash
+        working-directory: benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1
+        run: |
+          set -euo pipefail
+          umask 077
+          PURKINJE_PROGRAM_LOGS="${RUNNER_TEMP}/purkinje-program-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$PURKINJE_PROGRAM_LOGS"
+          set +e
+          PURKINJE_PROGRAM_FAILED=0
+          for PURKINJE_PROGRAM_FILE in verify_source.py source_controls.py; do
+            PURKINJE_PROGRAM_NAME="${PURKINJE_PROGRAM_FILE##*/}"
+            PURKINJE_PROGRAM_ARGS=()
+            if [ "$PURKINJE_PROGRAM_FILE" = verify_source.py ]; then PURKINJE_PROGRAM_ARGS=(3f7417c5da25224b049387d92316a4c37201e8b88622dd26a5258b65826f0f32); fi
+            /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B "$PURKINJE_PROGRAM_FILE" "${PURKINJE_PROGRAM_ARGS[@]}" >"$PURKINJE_PROGRAM_LOGS/${PURKINJE_PROGRAM_NAME}.stdout" 2>"$PURKINJE_PROGRAM_LOGS/${PURKINJE_PROGRAM_NAME}.stderr"
+            PURKINJE_PROGRAM_STATUS=$?
+            printf '%s\n' "$PURKINJE_PROGRAM_STATUS" >"$PURKINJE_PROGRAM_LOGS/${PURKINJE_PROGRAM_NAME}.status"
+            cat "$PURKINJE_PROGRAM_LOGS/${PURKINJE_PROGRAM_NAME}.stdout"
+            cat "$PURKINJE_PROGRAM_LOGS/${PURKINJE_PROGRAM_NAME}.stderr"
+            if [ "$PURKINJE_PROGRAM_STATUS" -ne 0 ]; then PURKINJE_PROGRAM_FAILED=1; fi
+          done
+          exit "$PURKINJE_PROGRAM_FAILED"
+      - name: Preserve Purkinje PROGRAM source control evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: purkinje-program-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/purkinje-program-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  human-ripple-program-source-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Verify human ripple PROGRAM source and test execution boundaries
+        shell: bash
+        working-directory: benchmarks/neuroscience/paper-find-003/program-v1/portable
+        run: |
+          set -euo pipefail
+          umask 077
+          HUMAN_RIPPLE_PROGRAM_LOGS="${RUNNER_TEMP}/human-ripple-program-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$HUMAN_RIPPLE_PROGRAM_LOGS"
+          set +e
+          HUMAN_RIPPLE_PROGRAM_FAILED=0
+          for HUMAN_RIPPLE_PROGRAM_FILE in verify_export.py tests/test_component.py; do
+            HUMAN_RIPPLE_PROGRAM_NAME="${HUMAN_RIPPLE_PROGRAM_FILE##*/}"
+            /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B "$HUMAN_RIPPLE_PROGRAM_FILE" >"$HUMAN_RIPPLE_PROGRAM_LOGS/${HUMAN_RIPPLE_PROGRAM_NAME}.stdout" 2>"$HUMAN_RIPPLE_PROGRAM_LOGS/${HUMAN_RIPPLE_PROGRAM_NAME}.stderr"
+            HUMAN_RIPPLE_PROGRAM_STATUS=$?
+            printf '%s\n' "$HUMAN_RIPPLE_PROGRAM_STATUS" >"$HUMAN_RIPPLE_PROGRAM_LOGS/${HUMAN_RIPPLE_PROGRAM_NAME}.status"
+            cat "$HUMAN_RIPPLE_PROGRAM_LOGS/${HUMAN_RIPPLE_PROGRAM_NAME}.stdout"
+            cat "$HUMAN_RIPPLE_PROGRAM_LOGS/${HUMAN_RIPPLE_PROGRAM_NAME}.stderr"
+            if [ "$HUMAN_RIPPLE_PROGRAM_STATUS" -ne 0 ]; then HUMAN_RIPPLE_PROGRAM_FAILED=1; fi
+          done
+          exit "$HUMAN_RIPPLE_PROGRAM_FAILED"
+      - name: Preserve human ripple PROGRAM source control evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: human-ripple-program-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/human-ripple-program-${{ github.run_id }}-${{ github.run_attempt }}/
+
   abr-protected-fold-source-tests:
     runs-on: ubuntu-24.04
     timeout-minutes: 6
