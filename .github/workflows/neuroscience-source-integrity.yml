@@ -1034,3 +1034,113 @@ jobs:
           overwrite: false
           include-hidden-files: false
           path: ${{ runner.temp }}/tms-independent-condition-portable-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  nider-full120-public-source-invented-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate public source and run 51 invented interface controls once
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          NIDER_PUBLIC_ROOT="${RUNNER_TEMP}/nider-full120-public-source-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          NIDER_PUBLIC_SOURCE="${GITHUB_WORKSPACE}/benchmarks/neuroscience/nider-full120-reconstruction-profile-v1"
+          mkdir -m 700 "$NIDER_PUBLIC_ROOT"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 20s python -I -S -B - "$NIDER_PUBLIC_SOURCE" >"$NIDER_PUBLIC_ROOT/source-auth.stdout" 2>"$NIDER_PUBLIC_ROOT/source-auth.stderr" <<'NIDER_SOURCE_AUTH'
+          import hashlib, json, stat, sys
+          from pathlib import Path
+          root = Path(sys.argv[1])
+          assert sys.version_info[:3] == (3, 11, 18)
+          def read_exact(path, size, digest):
+              assert path.is_absolute() and not any(p.is_symlink() for p in (path, *path.parents))
+              before = path.lstat()
+              assert stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == size and 0 < size <= 1048576
+              with path.open('rb') as stream:
+                  body = stream.read(size + 1)
+              after = path.lstat()
+              assert len(body) == size and hashlib.sha256(body).hexdigest() == digest
+              assert all(getattr(before, k) == getattr(after, k) for k in ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns'))
+              return body
+          manifest = json.loads(read_exact(root / 'SOURCE_MANIFEST.json', 4271, 'eae2a7d0459e4722fda5648d0e3a030b22cd8dbe46d756c49bcbfcd746d556d2'))
+          assert set(manifest) == {'schema', 'files'} and manifest['schema'] == 'nider_public_source_manifest_v1'
+          assert type(manifest['files']) is list and len(manifest['files']) == 25
+          seen = set()
+          total = 0
+          for row in manifest['files']:
+              assert set(row) == {'relative_path', 'bytes', 'sha256'}
+              relative = Path(row['relative_path'])
+              assert not relative.is_absolute() and '..' not in relative.parts and str(relative) == row['relative_path']
+              assert str(relative) not in seen
+              seen.add(str(relative))
+              total += row['bytes']
+              assert total <= 2097152
+              read_exact(root / relative, row['bytes'], row['sha256'])
+          assert total == 223800
+          actual = {str(path.relative_to(root)) for path in root.rglob('*') if path.is_file() or path.is_symlink()}
+          assert actual == seen | {'SOURCE_MANIFEST.json'}
+          print(json.dumps({'source_files': len(seen), 'source_bytes': total, 'authentic_assets_read': False, 'python_version': sys.version}))
+          NIDER_SOURCE_AUTH
+          NIDER_SOURCE_STATUS=$?
+          printf '%s\n' "$NIDER_SOURCE_STATUS" >"$NIDER_PUBLIC_ROOT/source-auth.status"
+          if [ "$NIDER_SOURCE_STATUS" -ne 0 ]; then exit "$NIDER_SOURCE_STATUS"; fi
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B "$NIDER_PUBLIC_SOURCE/tests/public_source_controls.py" --output "$NIDER_PUBLIC_ROOT/controls" >"$NIDER_PUBLIC_ROOT/controls.stdout" 2>"$NIDER_PUBLIC_ROOT/controls.stderr"
+          NIDER_CONTROL_STATUS=$?
+          set -e
+          printf '%s\n' "$NIDER_CONTROL_STATUS" >"$NIDER_PUBLIC_ROOT/controls.status"
+          if [ "$NIDER_CONTROL_STATUS" -ne 0 ]; then exit "$NIDER_CONTROL_STATUS"; fi
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 20s python -I -S -B - "$NIDER_PUBLIC_SOURCE/tests/CONTROL_SPEC.json" "$NIDER_PUBLIC_ROOT/controls" >"$NIDER_PUBLIC_ROOT/output-closure.stdout" 2>"$NIDER_PUBLIC_ROOT/output-closure.stderr" <<'NIDER_OUTPUT_CLOSURE'
+          import hashlib, json, stat, sys
+          from pathlib import Path
+          spec_path, out = map(Path, sys.argv[1:])
+          spec_raw = spec_path.read_bytes()
+          assert len(spec_raw) == 13797 and hashlib.sha256(spec_raw).hexdigest() == 'cb7ff9b608fd80f3fee90a228b9e475e62f6b391a553f2b9b4f6be2fd0414c5c'
+          spec = json.loads(spec_raw)
+          expected = set(spec['expected_success_output']['files'])
+          assert len(expected) == 32
+          rows, total = [], 0
+          for path in sorted(out.rglob('*')):
+              assert not path.is_symlink()
+              if path.is_dir():
+                  continue
+              before = path.lstat()
+              assert stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and 0 < before.st_size <= 262144
+              body = path.read_bytes()
+              after = path.lstat()
+              assert len(body) == before.st_size
+              assert all(getattr(before, k) == getattr(after, k) for k in ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns'))
+              total += len(body)
+              assert total <= 8388608
+              rows.append({'relative_path': str(path.relative_to(out)), 'bytes': len(body), 'sha256': hashlib.sha256(body).hexdigest()})
+          assert {row['relative_path'] for row in rows} == expected
+          empty = out / spec['expected_success_output']['extra_empty_directory']
+          assert empty.is_dir() and not any(empty.iterdir())
+          result = json.loads((out / 'RESULTS.json').read_bytes())
+          assert result['status'] == 'PASS' and result['declared_controls'] == result['observed_controls'] == 51
+          assert [row['id'] for row in result['controls']] == spec['ordered_control_ids']
+          assert all(row['status'] == 'PASS' for row in result['controls'])
+          assert result['new_benchmarks'] == 0 and result['submission_ready_established'] is False
+          print(json.dumps({'fixture_files': rows, 'fixture_bytes': total, 'controls': 51, 'invented_only': True, 'scientific_run': False}))
+          NIDER_OUTPUT_CLOSURE
+          NIDER_CLOSURE_STATUS=$?
+          set -e
+          printf '%s\n' "$NIDER_CLOSURE_STATUS" >"$NIDER_PUBLIC_ROOT/output-closure.status"
+          exit "$NIDER_CLOSURE_STATUS"
+      - name: Preserve complete invented-control outputs and statuses
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: nider-full120-public-source-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/nider-full120-public-source-${{ github.run_id }}-${{ github.run_attempt }}/
