@@ -1,10 +1,11 @@
 # Neuroscience benchmark construction progress
 
-Snapshot: **14 November 2026**. The [public registry](../../benchmarks/neuroscience/expansion-20261114/registry.json) contains **220 tasks/drafts: 109 paper and 111 neural**. Three existing task profiles are independently validated at precisely defined **private local** tiers. This is not a release of 220 finished benchmarks.
+Snapshot: **14 November 2026**. The programme now has **233 registered task drafts: 116 paper and 117 neural**. The unchanged [public registry snapshot](../../benchmarks/neuroscience/expansion-20261114/registry.json) contains **220 drafts: 109 paper and 111 neural**; this documentation update does not publish the 13 additional task definitions or the current programme catalog. Three existing task profiles are independently validated at precisely defined **private local** tiers. The 233 drafts are not 233 finished benchmarks.
 
 | Stage | Count |
 | --- | ---: |
-| Registered tasks/drafts | 220 |
+| Registered task drafts in the current programme | 233 |
+| Task drafts represented by the linked public registry snapshot | 220 |
 | Existing task profiles validated for their declared private local endpoint | 3 |
 | Qualified across the complete registered task contract | 0 |
 | Submission-ready tasks | 0 |
@@ -20,7 +21,7 @@ These counts concern the neuroscience construction suite. The three original rep
 | NIDER — `PAPER-EXP-20261113-003` | All 120 outputs from the three original correlation meta-analyses, plus the existing coarse computation screen. The protected R submission route and authentic reference comparisons passed complete independent review. | Original reporting compares **27 reporting-bin quantities, 21 exact counts and 72 continuous diagnostics**. The original and three hypothetical cases each use a **12-field** procedure check; the other **108 hypothetical fields remain unscored**. No overall 120-field binary scientific pass is defined. |
 | PFC — `PAPER-EXP-20261113-005` | Conditional exact reconstruction on all **99 recordings and 19,186 fitting units**, across **69 full-cohort and whole-animal deletion cases**, with protected complete scoring of an independently authored analytical program. | The learned map, categories and ROI axes are supplied inputs. All 12 null families, 16 analytic contexts and four Gao contexts remain covered. This is a prospective numerical reconstruction, not historical random-shuffle or full-paper reproduction. |
 
-All three profiles provide explicit method assistance in A and B; B adds selected official code. Known valid and deliberately wrong submissions establish the functioning evaluations, not independent model reasoning or an A/B capability result. NIDER's older 12-field protocol, full V5 leave-one-study/cohort/prediction obligations and broader paper claims remain separate. Each profile counts once within the existing 220.
+All three profiles provide explicit method assistance in A and B; B adds selected official code. Known valid and deliberately wrong submissions establish the functioning evaluations, not independent model reasoning or an A/B capability result. NIDER's older 12-field protocol, full V5 leave-one-study/cohort/prediction obligations and broader paper claims remain separate. Each profile counts once within the programme inventory. The three profiles already belonged to the linked 220-draft public snapshot; their validation and source publication add no registrations.
 
 PFC retains **46 undefined analytic contexts per arm**, alongside 1,058 defined contexts. Its fitting cohort contains 68 animals; the scored-PFC population contains 65. Whole-animal deletion is sensitivity analysis, not a population confidence interval. Three deletions per predeclared direction are undefined, so **complete 68-animal directional stability is false**. The same independently authored program exercised both assistance interfaces; this does not measure an assistance effect or LLM performance. Historical random draws, panel/population lineage and broader paper claims remain unresolved.
 
@@ -44,7 +45,9 @@ All 80 final ridge artifacts and complete reference predictions were independent
 
 This accepted construction/reference tier is separate from the three-profile admission count above. It is not an LLM campaign, original Julia/Float32 reproduction, full-paper result or public authentic-data release.
 
-## Further verified construction
+## Earlier verified construction checkpoints
+
+The following rows and structural-intake paragraph retain the previous public snapshot. Their pending-state statements describe that earlier checkpoint, not the current execution queue. The current counts and source-release section in this document supersede earlier aggregate status.
 
 | Family | Independently verified progress | What remains unestablished |
 | --- | --- | --- |
@@ -55,6 +58,22 @@ This accepted construction/reference tier is separate from the three-profile adm
 The first complete AASD metadata intake also passed structural review: 18 EEG files each contain an array with shape **62 × 7,680 × 60**, and all 62 audio files have consistent stereo PCM16 layouts at 16 kHz. The earlier **18 × 70** contract, including passive trials, is not established by this processed release. This discrepancy remains a scope hold. Participant assignments, active-trial labels, event/audio alignment and any motor-control claim still require semantic verification. A smaller trial axis is not silently treated as completion of the broader contract.
 
 These milestones do not change any admission or registration count above. Their complete data, output and review evidence remains private; this update does not add runnable authentic tasks to the public checkout.
+
+## Current public source releases
+
+The source for all three private-local profiles is now published:
+
+| Profile source | Release | What an external user must still supply |
+| --- | --- | --- |
+| [PFC conditional reconstruction](../../benchmarks/neuroscience/pfc-conditional-portable-profile-v1/README.md) | [PR #81](https://github.com/Donglomur/brain-researcher-benchmark/pull/81) | Authorized packet, paper/code assets, runtime and owner configuration. |
+| [TMS independent-condition reconstruction](../../benchmarks/neuroscience/tms-independent-condition-portable-profile-v1/README.md) | [PR #82](https://github.com/Donglomur/brain-researcher-benchmark/pull/82) | Authorized original-input projection, protected reference, admitted runtime and owner configuration. |
+| [NIDER full-120 reconstruction](../../benchmarks/neuroscience/nider-full120-reconstruction-profile-v1/README.md) | [PR #83](https://github.com/Donglomur/brain-researcher-benchmark/pull/83) | Authorized assets and private reference/owner bindings; the package supplies no isolated candidate runner or admitted runtime. |
+
+PR #83 passed **28 CI jobs and 243 steps at both its head and merge commit**, with no skips. Complete independent artifact review accepted all **51 invented interface checks**, 32 fixtures and nine stage receipts, 360 recomputed report cells and 48 projection values. One deliberately empty directory is absent from the uploaded archive; its existence and emptiness are supported by the successful in-run closure assertion, not an independently transported directory. Separate exception traces for each expected refusal are not retained.
+
+These are source releases with invented-data validation. They do not distribute authentic packets, protected answers, runtime images or private execution evidence, and do not establish new scientific or model results. Frozen source-phase descriptions in the packages may precede later validation records; a source-stage flag is not a substitute for the scope of the accepted evidence reported here.
+
+Current programme execution discovery still covers the original **200** tasks. The **33 expansion drafts** have no runtime binding. The current programme catalog exposes all 233 metadata entries, but that catalog and its additional definitions are not installed or published by this documentation-only update. Neither discovery nor source availability establishes scientific readiness.
 
 ## What can be reproduced from this repository
 
