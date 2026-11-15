@@ -1,0 +1,99 @@
+# Running the PFC Full99 conditional benchmark
+
+This package is locally validated for the **PFC Full99 Conditional Reconstruction and Animal Robustness v1** endpoint. The existing 16 relocation controls and complete seven-stage authentic compatibility run both passed on the selected local host and exact image, with independent review. The compatibility review covered all 293 retained files, 71 call receipts, both complete participant arms and the count-plus-one negative. All seven owned containers and the owner process group were confirmed closed. `VALIDATION.md` records that completed validation; the old README's pending statements describe its earlier source-freeze date.
+
+This guide adds concrete setup instructions to that unchanged implementation. It does not report a new scientific run or arbitrary-platform validation. Authorized input assets and the exact runtime image must be provisioned separately. A future execution uses fresh current-target checks below; historical successful execution is not a current resource observation.
+
+The question is conditional reconstruction from the supplied map/categories and whole-animal sensitivity. All 99 recordings, 19,186 fitting units, 68 fitting animals and 69 full/deletion cases remain. The scored PFC population is a distinct 10,243 units from 65 animals. This package does not rebuild a learned SOM or test held-animal prediction.
+
+## Source and authorized inputs
+
+Use the exact 24-file source subset identified by the release index `RELEASE_MANIFEST.json`, with its directory structure preserved. That index selects the 24 existing files, the previously accepted `VALIDATION.md`, this guide and `deployment.example.json`, totaling 27 payload files; it is supplied separately and does not hash itself. Keep `SOURCE_LOCK.json` beside `package/`; this guide and `deployment.example.json` may sit beside them. The lock is 3,531 bytes with SHA-256 `efccfd03513a4e4c85eeb112083f1bc9b4640f6afa9eb363cee20dab21dba257`.
+
+Supply these five assets under your own authorization; the package downloads none:
+
+| Configuration key | Required asset |
+|---|---|
+| `packet` | Exact admitted 5,368,996-byte participant packet; fixed identity in the example and `package/profile.py`. |
+| `paper.xml` | Exact 182,214-byte paper XML. |
+| `category_matching.py` | Exact 12,651-byte selected official method. |
+| `LICENSE` | Exact 1,300-byte official source license. |
+| `source_input_selection` | Owner-private complete nine-input provenance manifest. Its role names and 22,183,624-byte input total are checked; its scientific paths are not followed by delivery. |
+
+The packet contains permitted scientific inputs, not a hidden answer report. Participant containers never receive the lineage manifest, scorer, reference programs or owner reports. Both arms receive the packet, paper, task and schema. B additionally receives the selected official method and license. The analytical program is mounted only as the submitted program for a compatibility run. Equal programs establish interface compatibility, not a code-assistance advantage.
+
+Source/article licenses do not grant blanket rights to redistribute the packet, input archives or container image. The existing `PROVISIONING.md` documents the original 99-recording lineage. Reuse admitted assets; no new fitting or substitute map is needed.
+
+## Fill the deployment configuration
+
+Use Python 3.11 or later for the commands below; the descriptor helper uses `hashlib.file_digest`.
+
+Copy `deployment.example.json` to an owner-private file outside the attempt directory. Replace every placeholder. The example deliberately has invalid zero executable lengths and UID/GID; it cannot launch as supplied.
+
+The top-level keys are exactly `schema`, `attempt`, `compatibility`, `deployment`, `assets` and `programs`.
+
+- `attempt`: a fresh lowercase identifier, at most 48 characters, using letters, digits and hyphens.
+- `deployment`: exact host Python and Docker executable descriptors; explicit local `unix:///` socket; current daemon ID; a dedicated output parent; nonzero UID/GID that can read mounted inputs and write owner-created scoring directories.
+- `assets`: all five descriptors above.
+- `programs.A` and `programs.B`: for `compatibility: true`, both must be the unchanged `package/participant/solution.py` baseline. Ordinary participant mode uses `compatibility: false` and the two frozen participant programs.
+- Each descriptor has exactly `path`, integer `bytes` and lowercase 64-digit `sha256`.
+
+Use canonical absolute paths, ordinary single-link files, no symlink ancestry, no comma or control characters, and no `..` components. Inputs and source must remain outside `deployment.attempts_root`. Do not replace accepted asset hashes with whatever happens to be available.
+
+For a file you are authorized to read, this local command prints its descriptor without downloading anything. It reads the complete selected file; use it only within the selected provisioning budget:
+
+```sh
+"/absolute/canonical/python3" -I -S -B - "/absolute/selected/file" <<'PY'
+import hashlib, json, pathlib, sys
+p = pathlib.Path(sys.argv[1]).resolve(strict=True)
+with p.open("rb") as stream:
+    digest = hashlib.file_digest(stream, "sha256").hexdigest()
+print(json.dumps({"path": str(p), "bytes": p.stat().st_size, "sha256": digest}))
+PY
+```
+
+The exact image `sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156` must already exist on the selected daemon with a compatible host/architecture. The package does not pull, build or export it. A different digest requires a separately validated runtime change. Bind the real current daemon ID and executable identities; historical metadata are not a runtime check.
+
+## Configure without scientific execution
+
+Set these absolute paths to the completed private configuration, selected package and a fresh request directory. `PFC_PYTHON` must name the canonical executable bound in the configuration.
+
+```sh
+PFC_PYTHON="/absolute/canonical/python3"
+PFC_SOURCE="/absolute/pfc-source"
+PFC_CONFIG="/absolute/private/deployment.json"
+PFC_REQUEST_DIR="/absolute/private/pfc-request-001"
+read -r PFC_CONFIG_BYTES PFC_CONFIG_SHA256 < <(
+  "$PFC_PYTHON" -I -S -B -c 'import hashlib,pathlib,sys; b=pathlib.Path(sys.argv[1]).read_bytes(); print(len(b),hashlib.sha256(b).hexdigest())' "$PFC_CONFIG"
+)
+"$PFC_PYTHON" -I -S -B "$PFC_SOURCE/package/configure.py" \
+  --config "$PFC_CONFIG" \
+  --config-bytes "$PFC_CONFIG_BYTES" \
+  --config-sha256 "$PFC_CONFIG_SHA256" \
+  --source-lock "$PFC_SOURCE/SOURCE_LOCK.json" \
+  --source-lock-bytes 3531 \
+  --source-lock-sha256 efccfd03513a4e4c85eeb112083f1bc9b4640f6afa9eb363cee20dab21dba257 \
+  --output-directory "$PFC_REQUEST_DIR"
+```
+
+This is bash/zsh syntax. Configuration authenticates selected source/configuration metadata and creates exclusive read-only `POLICY.json` and `REQUEST.json`. It does not authenticate the scientific asset bodies, start Docker or prove runtime readiness. It prints the request's exact descriptor. Never overwrite or reuse a consumed request/attempt.
+
+## Run the selected complete route
+
+Before execution, reserve the full declared operation and check current source/runtime/daemon/image identity, authorized assets, host/VM/disk capacity and absent output namespaces. Both `attempts_root/attempt` and `attempts_root/attempt-outer` must be absent. For compatibility, the existing envelope is 2 VM CPUs, 4 GiB VM memory plus 1 GiB host planning, 2,580 seconds outer lifetime, 2.5 GiB managed reads and 768 MiB original retention plus a separately allocated 768 MiB review cache. These are limits/planning amounts, not measured requirements or a hard aggregate memory sandbox. Preserve the whole cohort if a guard refuses.
+
+Use the exact descriptor printed by configure:
+
+```sh
+PFC_REQUEST="/absolute/private/pfc-request-001/REQUEST.json"
+PFC_REQUEST_BYTES="REPLACE_WITH_PRINTED_LENGTH"
+PFC_REQUEST_SHA256="REPLACE_WITH_PRINTED_SHA256"
+"$PFC_PYTHON" -I -S -B "$PFC_SOURCE/package/outer_once.py" \
+  "$PFC_REQUEST" "$PFC_REQUEST_BYTES" "$PFC_REQUEST_SHA256"
+```
+
+The compatibility route executes seven serial stages: eight inherited route controls; participant A; participant B; protected score A; protected score B; complete count-plus-one negative construction; protected negative score. Candidate containers close and both complete submissions are frozen before scoring. The route admits no automatic retries or new reference fits.
+
+Require natural outer completion, complete captures and owner cleanup evidence as well as all seven stage results. Positive compatibility checks cover 1,593,072 exact fields per arm across all 69 cases, retaining 1,058 defined and 46 undefined geometry contexts and false complete 68-animal directional stability. The negative must change every count by one while preserving all rational means/variances; a missing or late incorrect case fails. A partial report is not completion.
+
+For participant mode, both complete submissions are scored with the same conditional endpoint; compatibility-only negative stages are omitted. Each selected run still needs its full ownership/resource contract. Model improvement and a paid LLM campaign are not prerequisites to validate this benchmark's construction.
