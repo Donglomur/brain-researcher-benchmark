@@ -1,0 +1,149 @@
+{
+  "schema": "calcium-state-prospective-task-contract-v2",
+  "candidate_id": "sleep-anesthesia-calcium-2026",
+  "title": "Calcium state prediction beyond population rate and acquisition context",
+  "track": "neural_data_understanding",
+  "status": "SCORER_IMPLEMENTED_AUTHENTIC_INTAKE_AND_REFERENCE_BLOCKED",
+  "registered_count_delta": 0,
+  "qualified_count_delta": 0,
+  "question": "Does population calcium organization help predict independently annotated state in an unseen animal beyond population activity and acquisition-context information?",
+  "scope": "One prospective task across both natural sleep and anesthesia. It is not exact reproduction of the paper's modularity figures, raw-movie processing, anatomical connectivity, or a consciousness mechanism test.",
+  "source_facts": {
+    "official_commit": "90e1c7dc5823f9d413b1bddf5c649ec87d6598a3",
+    "processed_record": "https://zenodo.org/records/17667863",
+    "archive": "mouse_data.zip",
+    "archive_bytes": 1865754335,
+    "archive_md5": "d611c4577b4e3a32762860fa4ab7b5f6",
+    "data_license": "CC-BY-4.0",
+    "demo_loaded_files": [
+      "sleep_data.mat",
+      "ane_data.mat"
+    ],
+    "demo_fields": [
+      "dFF",
+      "spike",
+      "smoothed_spike",
+      "used_frame",
+      "atlasID",
+      "SleepState",
+      "sleep_state",
+      "boundary_ind",
+      "x_coord",
+      "y_coord"
+    ],
+    "analysis_loader_fields": [
+      "smoothed_spike",
+      "ROIs",
+      "frame",
+      "state"
+    ],
+    "schema_conflict": "The demo and analysis loader name different metadata variables. Authentic reconciliation is required; neither dictionary is presumed authoritative for all files.",
+    "state_codes": {
+      "sleep": {
+        "0": "awake",
+        "0.5": "quiet_wake",
+        "1": "nrem",
+        "2": "rem"
+      },
+      "anesthesia": {
+        "0": "awake",
+        "1": "anesthesia"
+      }
+    },
+    "indexing": "The demo describes boundary_ind(k)=9500 as a cut between MATLAB frames9500 and9501. Convert this to zero-based half-open cut9500 only after actual field authentication. Do not subtract1 from the cut value.",
+    "used_frame": "The official selected-frame lists select awake versus NREM/anesthesia for network analysis. This prospective all-state classifier must not treat those selected frames as a complete cohort or discard quiet-wake/REM silently."
+  },
+  "protected_input_contract": {
+    "all_release_members": "Acquire and checksum the entire processed archive once; inventory all original members, all animal/session identities, all neurons, all frame labels and every acquisition boundary. No sample/prefix can qualify the complete source.",
+    "no_movies": "No raw TIFF reconstruction is selected. The1.32TiB raw collection is not needed if complete processed signal/annotation equivalence is established.",
+    "version": "Reconcile the2025 Zenodo processed record against the2026 RIKEN/SSBD version3 collection; a link or matching title alone is not equivalence.",
+    "animal_identity": "Require explicit source-backed animal-to-recording joins. Never derive mouse IDs from file names, cell indexes or arbitrary blocks.",
+    "signals": "Use a completely inventoried neuron-by-frame field with independently authenticated sampling rate, units, orientation and preprocessing context. Do not hand label fields, used_frame selections, state-specific paths, absolute acquisition order or outcome-bearing filenames to participants.",
+    "manifest_ownership": "The evaluator owns the digest-bound manifest. Its admission evidence digests refer to real reviewed evidence; Boolean flags cannot establish scientific admission. No authentic manifest is supplied with this source package.",
+    "case_identity": "Case IDs are HMAC-SHA256 of canonicalprivate task/recording/animal/source/frame coordinates under an evaluator-only cryptographically random256-bit salt, sealed in the digest-bound private manifest. Salt and privatecoordinates must never be mounted to a participant. candidate_index projects onlycase_id, permittedregime,n_frames and sorts byopaque token rather than acquisition time. The validator checks keyformat, not entropy; trustedintake generates the salt withsecrets.token_hex(32)."
+  },
+  "split": {
+    "outer": "Complete leave-one-animal-out evaluation, each authenticated animal tested exactly once. All its sessions remain together.",
+    "inner": "One or more disjoint validation animals selected in a frozen rotation; remaining animals train. At least3 animals required. Hyperparameters, feature scaling, cell/region handling and any learned transform fit without test animals.",
+    "coverage_gate": "Every outer training and validation pool must contain all six regime/state combinations. Missing support blocks this declared task; it does not authorize class removal or within-recording substitution.",
+    "windowing": "Freeze integer window_frames after authentic sampling-rate review. Split every complete state epoch at every acquisition discontinuity, guard each segment at both ends by the complete preprocessing/context radius, then enumerate all complete nonoverlapping windows from its start. Account explicitly for every guarded and remainder frame. No window crosses a state or acquisition boundary.",
+    "guard": "guard_frames must cover the authenticated smoothing/filter impulse support and any feature context. If this cannot be bounded, processed features are inadmissible for this split. The supplied source permits0 only with true zero-context evidence.",
+    "test_missing_classes": "Preserve per-animal/regime state coverage in outputs; average recalls only over states actually present in that animal/regime. Training and validation still require complete global support. No interpretation as uniform global-class accuracy when test coverage differs."
+  },
+  "metrics": {
+    "primary": "Within each animal/regime, compute recall separately for each present state and average states; average regimes within animal; average animals. This is animal-macro balanced accuracy.",
+    "secondary": "The same hierarchy applied to negative log2 probability, clipping only at1e-12 for log computation. Report every state/regime/animal result and complete frame conservation.",
+    "tie_break": {
+      "sleep": [
+        "awake",
+        "quiet_wake",
+        "nrem",
+        "rem"
+      ],
+      "anesthesia": [
+        "awake",
+        "anesthesia"
+      ]
+    },
+    "comparison": "Paired per-animal differences against an evaluator-owned training-selected global-activity reference, with identical cases. primary_gain is the macro balanced-accuracy difference. No significance claim is produced by this scorer.",
+    "uncertainty": "Before authentic candidate execution, select a group-level interval/test appropriate to the final animal count and fix multiplicity for the two regimen contrasts. Cells and windows are not inferential replicates. This unresolved plan blocks qualification, not source construction.",
+    "refusals": "Unknown labels, class collisions, missing/extra/duplicate predictions, unsupported probabilities, animal leakage, missing folds, epoch gaps, unsorted/duplicate/out-of-range cuts, unadmitted source evidence, and nonfinite values are rejected."
+  },
+  "competent_references": [
+    {
+      "name": "global_activity",
+      "plan": "For each complete window compute population mean, standard deviation, active-cell fraction and temporal power summaries in prespecified physical-frequency bands. Fit train-standardized regularized multinomial logistic regression; choose regularization using the held validation animals. Sampling-rate-dependent bands and active thresholds must be bound after authentic units review."
+    },
+    {
+      "name": "network_plus_activity",
+      "plan": "Add population correlation-distribution and independently implemented spatial-distance-conditioned summaries to the same reference; compare with global_activity under identical training/validation/test groups. Region/coordinate aggregation must be train-bound and handle unseen neuronal identities without test fitting. FullN-by-N correlation storage is not assumed feasible; use exact streamed sufficient statistics if the complete scope is preserved."
+    },
+    {
+      "name": "metadata_nuisance",
+      "plan": "Use only permitted acquisition/regimen metadata, duration and missingness summaries; remove direct state/filename information. Score it on identical groups to detect recording or acquisition confounding. Failure to authenticate animal/condition overlap is a hold, not a reason to call the calcium model neural understanding."
+    },
+    {
+      "name": "structure_destruction",
+      "plan": "Apply a frozen per-neuron circular shift inside eligible contiguous segments with shifts exceeding the complete feature context; compare identically tuned references. Never shift across discontinuities or claim destroyed all temporal information. This control is proposed, unimplemented and unrun."
+    }
+  ],
+  "two_modes": {
+    "fixed_program": "Same complete training labels, public paper/specification and allowed tools as interactive. Commit a reusable program before evaluation animal data are mounted. The program emits probabilities for every required case without target feedback.",
+    "interactive": "Same cases, public context and permitted model/reference tools; investigate each evaluation animal within an equal total compute and tool budget. Commit all probabilities before private scoring. No case-level score feedback or protected labels.",
+    "information_arms": "Primary comparison varies workflow only. A separate official-code arm is held until code permissions are established; public availability is not a redistribution license. This package copies no official code.",
+    "resources": "No authentic compute operation is selected. Both arms require an identical concrete resource selection after full schema/size census and baseline profiling; no unbounded interactive compute or arbitrary candidate-only preprocessing allowance."
+  },
+  "open_holds": [
+    "No authentic processed archive was read; complete cohort, neurons, frames and native schema remain unknown.",
+    "Unknown animal identities and full cross-animal state support; proposed complete split may prove infeasible.",
+    "Processed release equivalence, independent EEG/EMG label joins and filtering context are unverified.",
+    "Code license is not established; do not redistribute official implementation.",
+    "References, authentic protected execution, suitable animal-level uncertainty and resource calibration remain unrun."
+  ],
+  "contamination": "Data and labels are public and may be pretraining-exposed. Runtime isolation cannot undo exposure. No SOTA, native-LLM signal understanding, causal or consciousness conclusion follows from a score alone.",
+  "candidate_signal_packet": {
+    "implementation_status": "Only metadata whitelist projection is implemented; actualsignal extraction/packaging and containment remain unimplemented admission gates.",
+    "signal": "A complete per-window neuron-by-relative-frame matrix from one frozen authentic field (dFF, spike or another explicitly admitted representation), with original physicalunits and all eligible neurons; declared samplingrate and relativewindowtime, neverabsolute frame oracquisitiontime. The fieldchoice and all preprocessing are shared acrossmodes.",
+    "permitted_metadata": [
+      "opaque_case_id",
+      "explicit_sleep_or_anesthesia_regime",
+      "window_frame_count",
+      "authenticated_sampling_rate_and_physical_units",
+      "neuron_coordinates_only_if_required_by_frozen_spatial_feature_contract"
+    ],
+    "prohibited_metadata": [
+      "source_filename_or_path",
+      "recording_id",
+      "animal_id",
+      "absolute_frame_offset",
+      "absolute_acquisition_order",
+      "state_label",
+      "used_frame",
+      "state_specific_directory",
+      "case_salt_hex",
+      "unredacted_source_metadata"
+    ],
+    "delivery_order": "Opaque-token order. The protectedrunner creates a freshscope for eachouterfold and exposes onlyits training/validationlabels; evaluator targetlabels,manifest and sourceidentity maps remain separate.",
+    "nuisance_comparator": "Explicitregime,neuroncount,allowedcoordinate distributions and permittedacquisitionmetadata mustalso be available to the matchedmetadata-onlybaseline. The regime is an allowedknown context, not evidence extracted fromcalcium."
+  }
+}
