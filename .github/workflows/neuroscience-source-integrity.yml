@@ -1372,3 +1372,79 @@ jobs:
           overwrite: false
           include-hidden-files: false
           path: ${{ runner.temp }}/ahn-count-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  neural017-adaptive-broker-component-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate NEURAL-017 broker source and run all 20 invented protocol controls
+        shell: bash
+        working-directory: benchmarks/neuroscience/components/neural017-adaptive-broker-v1
+        run: |
+          set -euo pipefail
+          umask 077
+          NEURAL017_BROKER_LOGS="${RUNNER_TEMP}/neural017-broker-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$NEURAL017_BROKER_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 20s python -I -S -B - "${PWD}" >"$NEURAL017_BROKER_LOGS/source-auth.stdout" 2>"$NEURAL017_BROKER_LOGS/source-auth.stderr" <<'COMPONENT_SOURCE_AUTH'
+          import hashlib, json, os, stat, sys
+          from pathlib import Path
+          root = Path(sys.argv[1])
+          assert sys.version_info[:3] == (3, 11, 18)
+          assert root.is_absolute() and not any(p.is_symlink() for p in (root, *root.parents))
+          expected = [
+              ('adaptive_protocol.py', 22776, '20533b7ceff1adee84ca18dea0547ecdee08c9ca13607e2d6c801cd7108e5be3'),
+              ('test_adaptive_protocol.py', 16949, '566fb358e5b03b5c56879fb1837276bb0c1a0de99787c4e80df0b037960fccfb'),
+              ('README.md', 4206, '94b660f67613b5633e7f8403e7fa864348266b09b668d99b34bf1b417600c750'),
+              ('PROVENANCE.json', 1822, '099e229c6a277c97153d7ecbfefa7c25f39c9cca39b646f9abc75f6722a4e67d'),
+          ]
+          total = 0
+          for relative, size, digest in expected:
+              path = root / relative
+              assert not any(p.is_symlink() for p in (path, *path.parents))
+              before = path.lstat()
+              assert stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == size and 0 < size <= 262144
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              try:
+                  opened = os.fstat(fd)
+                  body = os.read(fd, size + 1)
+                  closed = os.fstat(fd)
+              finally:
+                  os.close(fd)
+              after = path.lstat()
+              fields = ("st_dev", "st_ino", "st_mode", "st_nlink", "st_size", "st_mtime_ns", "st_ctime_ns")
+              assert all(getattr(before, key) == getattr(other, key) for other in (opened, closed, after) for key in fields)
+              assert len(body) == size and hashlib.sha256(body).hexdigest() == digest
+              total += len(body)
+          actual = {str(p.relative_to(root)) for p in root.rglob("*") if p.is_file() or p.is_symlink()}
+          assert actual == {row[0] for row in expected}
+          print(json.dumps({"source_files": len(expected), "source_bytes": total, "invented_controls_only": True, "authentic_inputs_read": False}))
+          COMPONENT_SOURCE_AUTH
+          NEURAL017_BROKER_SOURCE_STATUS=$?
+          set -e
+          printf '%s\n' "$NEURAL017_BROKER_SOURCE_STATUS" >"$NEURAL017_BROKER_LOGS/source-auth.status"
+          cat "$NEURAL017_BROKER_LOGS/source-auth.stderr"
+          if [ "$NEURAL017_BROKER_SOURCE_STATUS" -ne 0 ]; then exit "$NEURAL017_BROKER_SOURCE_STATUS"; fi
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s . -p 'test_adaptive_protocol.py' -v >"$NEURAL017_BROKER_LOGS/controls.stdout" 2>"$NEURAL017_BROKER_LOGS/controls.stderr"
+          NEURAL017_BROKER_CONTROLS_STATUS=$?
+          printf '%s\n' "$NEURAL017_BROKER_CONTROLS_STATUS" >"$NEURAL017_BROKER_LOGS/controls.status"
+          cat "$NEURAL017_BROKER_LOGS/controls.stderr"
+          set -e
+          if [ "$NEURAL017_BROKER_CONTROLS_STATUS" -ne 0 ]; then exit "$NEURAL017_BROKER_CONTROLS_STATUS"; fi
+      - name: Preserve complete component test streams and statuses
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: neural017-broker-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/neural017-broker-${{ github.run_id }}-${{ github.run_attempt }}/
