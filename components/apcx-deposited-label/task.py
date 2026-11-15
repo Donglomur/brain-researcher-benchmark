@@ -101,9 +101,9 @@ def fresh_directory(path):
     return path
 
 
-def write_json(path, value, b, maximum=MAX_DOCUMENT):
-    body = core.canonical(value)
-    check(b)  # Include allocation during JSON/canonicalization before opening output.
+def write_bytes(path, body, b, maximum=MAX_DOCUMENT):
+    need(type(body) is bytes, "exact output bytes")
+    check(b)  # Check allocations before opening the exclusive output.
     need(len(body) <= maximum, "whole output-file bound")
     b.charge("retained_bytes", len(body))
     fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
@@ -112,6 +112,10 @@ def write_json(path, value, b, maximum=MAX_DOCUMENT):
         stream.flush()
         os.fsync(stream.fileno())
     return {"bytes": len(body), "sha256": hashlib.sha256(body).hexdigest()}
+
+
+def write_json(path, value, b, maximum=MAX_DOCUMENT):
+    return write_bytes(path, core.canonical(value), b, maximum)
 
 
 def audit_pair(packets, owners=None):
@@ -218,9 +222,10 @@ def provision(args, b):
     cfg = config(); source = absolute(args.inputs); output = fresh_directory(args.output)
     for name in PROFILE_FILES:
         body = read_bytes(source/name, b, MAX_DOCUMENT, cfg["accepted_profile_inputs"][name])
-        value = json_interface.decode(body)
-        need(core.canonical(value) == body, "accepted canonical packet")
-        write_json(output/name, value, b)
+        json_interface.decode(body)  # Keep strict JSON admission before copying.
+        # Accepted hashes bind the original encoding. Integer object keys become
+        # strings on decode, so reserialization can change their sorted order.
+        write_bytes(output/name, body, b)
     return finish_bundle(output, b, "exact_authentic86_accepted_profile_inputs")
 
 
