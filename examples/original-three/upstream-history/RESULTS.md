@@ -1,3 +1,7 @@
+> **Upstream history.** This document records the original three-task programme.
+> For this fork's current neuroscience work, use the [task catalog](../../../benchmarks/README.md)
+> and [development workflow](../../../docs/DEVELOPMENT.md). Historical claims are retained, not revalidated here.
+
 # Results — measured difficulty of the three tasks
 
 Each task satisfies the definition of done: a correct reference **solves it** (oracle
@@ -6,9 +10,9 @@ reason (not a computation bug), **hand re-scored**.
 
 **These numbers were reproduced end-to-end on 2026-07-06 with Harbor 0.17.1.** Every run
 below completed cleanly (0 harness exceptions); the raw `result.json` for each is under
-[`results/`](results/).
+[`results/`](../../../results/).
 
-![reward scorecard](results/scorecard.png)
+![reward scorecard](../../../results/scorecard.png)
 
 ## Summary (reproduced 2026-07-06, Harbor 0.17.1)
 
@@ -44,7 +48,7 @@ Agents run **un-cued**. Every agent run **passed the compute checks** and failed
   this reproduction, GPT-5.5's first attempts scored 0.0 in ~40 s from (1) an empty
   `OPENAI_API_KEY`, then (2) a codex **usage-limit**. Both were discarded, not counted.
   Always check `exception_stats` and the run duration before scoring a 0.0. See
-  [`CONTRIBUTING.md`](CONTRIBUTING.md) for the codex/Claude auth setup that avoids these.
+  [`CONTRIBUTING.md`](../../../docs/original-examples-contributing.md) for the codex/Claude auth setup that avoids these.
 - **Run counts:** DEVCONN GPT-5.5 is 4 runs (a k=3 job + one probe); everything else is
   k=3 per family, k=1 for oracles. All used a warm `~/nilearn_data` cache mount so
   `ds000228` downloads=0 (oracle runtimes ~6 min, agents ~15–20 min).
@@ -72,7 +76,7 @@ run volunteered the motion attribution (see honesty note), two did not.
 ## Reproduce
 
 Install [harbor-framework/harbor](https://github.com/harbor-framework/harbor), then from the
-repo root (see [`CONTRIBUTING.md`](CONTRIBUTING.md) for agent auth):
+repo root (see [`CONTRIBUTING.md`](../../../docs/original-examples-contributing.md) for agent auth):
 
 ```bash
 harbor run -p examples/original-three/DEVCONN-001 -a oracle                                              -o jobs -k 1 -y

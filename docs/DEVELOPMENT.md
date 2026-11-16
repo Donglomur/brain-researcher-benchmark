@@ -4,8 +4,8 @@
 
 - **Upstream repository:** `brain-researcher/brain-researcher-benchmark`.
 - **Our fork:** `Donglomur/brain-researcher-benchmark`, an independently owned GitHub repository.
-- **Integration branch:** `publish/neuroscience-200`, containing the neuroscience work.
-- **Fork default branch:** `master`. It remains separate from the integration branch.
+- **Default and integration branch:** `publish/neuroscience-200`, containing the neuroscience work.
+- **Preserved upstream branch:** `master`, retained with its original history.
 - **Feature branch:** a temporary place to commit one coherent change.
 - **Pull request:** the review and CI record for merging that branch into the integration branch.
 
@@ -49,7 +49,8 @@ Keep task IDs stable. Moving a package can break manifest paths, source hashes,
 container build contexts and command documentation; update and verify those
 consumers together. The original three Harbor examples live under
 `examples/original-three/`. Their legacy bare IDs still resolve through
-`tools/run_task.sh`.
+`tools/run_task.sh`. Their inherited planning and result documents are grouped in
+[upstream history](../examples/original-three/upstream-history/README.md).
 
 Historical source manifests describe their recorded revisions. Do not rewrite them
 merely to make a new layout appear historically identical. Record a new selection
