@@ -1,6 +1,26 @@
-> **Neuroscience construction branch:** The suite has **234 registered task drafts (116 paper, 118 neural)**. Earlier local profiles cover three protected reconstruction evaluations and one trusted-host reference-construction profile. A separately validated [TMS fixed-region task](benchmarks/neuroscience/paper-signal-add-021/fixed-regions-v1/README.md) now has public specifications and a scorer; its data and portable runner remain unbundled. A separate [DMFC four-cell task and scorer](benchmarks/neuroscience/neural-095-four-cell/README.md) exposes the complete finite-session scoring contract; its portable input converter is included, while the required original data/reference metadata and isolated producers remain separately provisioned. The [APCx deposited-label component](components/apcx-deposited-label/README.md) now includes complete-cohort provisioning, original-input conversion, episode construction and scoring source for 43 sessions. Its portable native conversion and external candidate isolation still require verification. Evidence tiers differ. Complete registered-contract qualification and submission-ready counts remain zero; LLM/agent performance on these profiles is unmeasured. See [current progress and public/private scope](docs/neuroscience-benchmarks/CONSTRUCTION_STATUS.md) and the [public draft registry](benchmarks/neuroscience/expansion-20261114-v12/registry.json). Results for the three original examples below are inherited from the base repository and are separate from this new suite.
+> **Neuroscience construction branch:** **234 registered drafts (116 paper, 118 neural); zero complete registered contracts qualified; zero submission-ready tasks.** Six complete authentic local profiles across five existing task IDs are recorded separately from public source availability. The 42 historical finite acceptance IDs are not 42 revalidated scientific execution graphs. No LLM/agent performance or code-assistance benefit has been established for this new suite. See [current evidence and public/private scope](docs/neuroscience-benchmarks/CONSTRUCTION_STATUS.md). Results for the three original examples below are inherited from the base repository and are separate.
 
 # brain-researcher-benchmark
+
+## Use the neuroscience construction source
+
+Check out the construction branch of the public fork:
+
+```sh
+git clone --branch publish/neuroscience-200 --single-branch https://github.com/Donglomur/brain-researcher-benchmark.git
+cd brain-researcher-benchmark
+```
+
+There is no single installation command that makes all 234 drafts runnable. The [registry](benchmarks/neuroscience/expansion-20261114-v12/registry.json) supplies definitions. Each published component has its own inputs, dependencies and verification scope:
+
+- **Inspect source or run invented controls:** start with the [source-integrity instructions](docs/neuroscience-benchmarks/SOURCE_INTEGRITY.md) or a component's own test instructions. The integrity checker covers only its explicitly enrolled bundles; passing it establishes source consistency, not authentic benchmark performance.
+- **Provision and score the finite DMFC task:** follow [DMFC provisioning](benchmarks/neuroscience/neural-095-four-cell/PROVISIONING.md), then the [four-output scoring contract](benchmarks/neuroscience/neural-095-four-cell/README.md). The original NWB is acquired separately. [Publication metadata](benchmarks/neuroscience/neural-095-four-cell/PUBLICATION.json) records the three evaluator metadata assets as published and hash-verified on 15 November 2026. Keep those operands and generated targets outside candidate access. The [shared-runtime runner source](benchmarks/neuroscience/neural-095-four-cell-runner-shared-runtime-v1/README.md) still requires an obtainable exact runtime and fresh numerical compatibility checks.
+- **Provision PFC inputs:** follow the [PFC input guide](benchmarks/neuroscience/pfc-conditional-portable-profile-v1/PROVISIONING.md) and [operator guide](benchmarks/neuroscience/pfc-conditional-portable-profile-v1/OPERATOR_GUIDE.md). Four separate release assets contain the participant packet, article, official method and license; they exclude numerical answers and the runtime image. Exact runtime distribution/build and admission on another host remain outstanding.
+- **Use other source components:** [TMS fixed-region reconstruction](benchmarks/neuroscience/paper-signal-add-021/fixed-regions-v1/README.md) supplies specifications, a scorer and an owner template with separately provisioned assets. [APCx deposited-label prediction](components/apcx-deposited-label/README.md) supplies provisioning, conversion, episode and scoring source; portable native conversion and external candidate isolation still require verification.
+
+The source checkout does not contain the suite's neural recordings, protected reference arrays, private execution evidence or deployment bindings. Selected release assets are available separately as documented above; that does not make the entire suite portable or reproduce the private local validations. Component tests, metadata intake and fixed-reference construction do not add tasks or establish model ability, full-paper reproduction or readiness.
+
+## Original three-task benchmark
 
 A small benchmark of **un-cued scientific judgement** for coding/agent systems, in
 [Harbor / terminal-bench](https://github.com/harbor-framework/harbor) task format. Each task is a real neuroimaging analysis a capable agent can *run*
@@ -38,7 +58,7 @@ All three run on the same public dataset (OpenNeuro `ds000228`, via nilearn-pinn
 derivatives) so the environments are cheap to build. Measured difficulty (hand re-scored,
 with honesty notes on run counts and verifier hardening): **[`RESULTS.md`](RESULTS.md)**.
 
-## Task layout (Harbor)
+## Task layout (the three original examples)
 
 Every task is a self-contained directory:
 
@@ -51,7 +71,7 @@ TASK-NAME/
 └── tests/                # test.sh + test_outputs.py — the verifier
 ```
 
-## How to run
+## Run the three original examples
 
 Install the harness ([harbor-framework/harbor](https://github.com/harbor-framework/harbor)).
 
@@ -104,7 +124,7 @@ may support a frozen benchmark, an evolvable family, both, or neither.
 For a new coding agent:
 
 ```bash
-git clone https://github.com/brain-researcher/brain-researcher-benchmark.git
+git clone --branch publish/neuroscience-200 --single-branch https://github.com/Donglomur/brain-researcher-benchmark.git
 cd brain-researcher-benchmark
 mkdir -p ~/.claude/skills/tb-science-task-authoring
 mkdir -p ~/.claude/skills/self-evolvable-question-design
