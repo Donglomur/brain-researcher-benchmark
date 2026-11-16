@@ -142,3 +142,19 @@ def join(metadata):
          and policy["ordinary_exclusion"]["subject"] in roster, "Policy identities belong to full source cohort")
     return metadata
 
+
+
+ARCHIVE_PIN = {"bytes": 3015691,
+    "sha256": "2379c49ca5c8bf88a419ff6e6c726cb91f6534fd7360a51fb8aaf19de210a534"}
+
+
+def validate_archive_pin(pin):
+    """Bind a new local input, using observed release identity rather than an ETag."""
+    from pathlib import Path
+    need(type(pin) is dict and set(pin) == {"path", "bytes", "sha256"}
+         and type(pin["path"]) is str and Path(pin["path"]).is_absolute()
+         and str(Path(pin["path"])) == pin["path"] and ".." not in Path(pin["path"]).parts
+         and type(pin["bytes"]) is int
+         and {key: pin[key] for key in ("bytes", "sha256")} == ARCHIVE_PIN,
+         "Exact original release pin required; no caller-selected substitute")
+    return pin

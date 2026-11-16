@@ -75,8 +75,8 @@ def build(arguments):
     manifest = decode(manifest_body)
     need(set(manifest) == {"schema", "execution_authority", "entrypoint", "worker", "files"}
          and manifest["schema"] == "findlay-portable-source-manifest/v1"
-         and manifest["execution_authority"] is False and len(manifest["files"]) == 13,
-         "Complete nonauthorizing thirteen-file software closure")
+         and manifest["execution_authority"] is False and len(manifest["files"]) == 14,
+         "Complete nonauthorizing fourteen-file software closure")
     # Bootstrap the selected owner only after authenticating its software body.
     entry = manifest["entrypoint"]
     need(type(entry) is dict and set(entry) == {"path", "bytes", "sha256"}
@@ -125,20 +125,36 @@ def build(arguments):
         body = owner.capture(path, cap)
         return {"path": str(path), "bytes": len(body), "sha256": owner.sha(body)}, owner.decode(body)
 
-    prior, prior_value = external_pin(arguments.prior_attempt, 262144)
-    need(prior_value.get("schema") == "findlay-census-continuation-inputs/v1"
-         and prior_value.get("prior_status") == "REFUSED",
-         "Previously reviewed retained-input manifest required; no fabricated history")
+    archive_path = getattr(arguments, "original_archive", None)
+    prior_path = getattr(arguments, "prior_attempt", None)
+    need(bool(archive_path) != bool(prior_path), "Choose original archive or prior manifest, never both")
+    if archive_path:
+        path = owner.absolute(archive_path)
+        need(not path.is_relative_to(root)
+             and not any(x.is_symlink() for x in (path, *path.parents)), "External unlinked original archive")
+        observed = path.lstat()
+        need(stat.S_ISREG(observed.st_mode) and observed.st_nlink == 1
+             and observed.st_size == contract.ARCHIVE_PIN["bytes"], "Complete original archive extent")
+        task["original_archive"] = {"path": str(path), **contract.ARCHIVE_PIN}
+        contract.validate_archive_pin(task["original_archive"])
+        request_schema = "findlay-portable-first-intake-request/v1"
+    else:
+        prior, prior_value = external_pin(prior_path, 262144)
+        need(prior_value.get("schema") == "findlay-census-continuation-inputs/v1"
+             and prior_value.get("prior_status") == "REFUSED",
+             "Previously reviewed retained-input manifest required; no fabricated history")
+        task["prior_attempt"] = prior
+        request_schema = "findlay-portable-census-continuation-request/v1"
     runtime, runtime_value = external_pin(arguments.runtime_manifest, 2 * 1024**2)
     need(type(runtime_value) is dict, "Existing runtime inventory object required")
-    task.update(prior_attempt=prior, data_read_cap=33554432, worker_output_cap=33554432)
+    task.update(data_read_cap=33554432, worker_output_cap=33554432)
     lock = {"schema": "findlay-intake-source-lock/v1", "repository_root": str(root),
             "execution_authority": False, "entrypoint": entry, "worker": worker,
             "files": manifest["files"]}
     lock_body = owner.canonical(lock)
     lock_pin = {"path": str(write_dir / "source-lock.json"),
                 "bytes": len(lock_body), "sha256": owner.sha(lock_body)}
-    request = {"schema": "findlay-portable-census-continuation-request/v1",
+    request = {"schema": request_schema,
         "execution": {"repository_root": str(root), "output_root": str(output),
             "source_lock": lock_pin, "runtime_manifest": runtime,
             "source_adoption": {"commit": arguments.commit, "worker": worker},
@@ -157,8 +173,11 @@ def build(arguments):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("commit", "input-ledger", "published-families", "private-policy",
-                 "prior-attempt", "runtime-manifest", "operation-output", "write-dir"):
+                 "runtime-manifest", "operation-output", "write-dir"):
         parser.add_argument("--" + name, required=True)
+    inputs = parser.add_mutually_exclusive_group(required=True)
+    inputs.add_argument("--prior-attempt")
+    inputs.add_argument("--original-archive")
     args = parser.parse_args()
     print(json.dumps(build(args), sort_keys=True))
     return 0

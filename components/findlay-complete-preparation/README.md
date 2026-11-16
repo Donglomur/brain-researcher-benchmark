@@ -1,14 +1,15 @@
 # Findlay complete preparation source
 
-This package continues the complete **13-table / 98-family** preparation for
-`PAPER-CANDIDATE-FINDLAY-SHARP-WAVE-SLEEP`. It checks retained original inputs,
-recomputes complete family support, and writes **both** ordinary and regional
+This package provides the complete **13-table / 98-family** preparation for
+`PAPER-CANDIDATE-FINDLAY-SHARP-WAVE-SLEEP`. It accepts the exact original local release or continues previously reviewed retained inputs,
+computes complete family support, and writes **both** ordinary and regional
 contrast reports. It does not fit models, score a participant submission, download
 data, or establish a new benchmark. The full scientific endpoint remains
 unqualified.
 
-The numerical reconciler and complete census tail are unchanged from their
-accepted implementations. The ordinary report still covers all 344 measure rows,
+The numerical reconciler and continuation tail are unchanged from their
+accepted implementations. The complete first-intake census now uses the same
+ordinary policy while scanning every table, including the OFF-duration table. The ordinary report still covers all 344 measure rows,
 29 contrast rows and 783 target positions, with the fixed 27-column float32/64
 subtraction semantics and 13 declared exclusions. The 16 animals and 29 sessions
 are distinct units. None of these counts is a new experimental result.
@@ -27,14 +28,19 @@ An authorized operator needs:
    [external_contract.py](../../authoring/delivery-20261105/common/remaining-builds-wave40/findlay-ordinary-contrast-integration-source-20261116-v1/external_contract.py).
    These are operator inputs, not candidate-visible materials. No alternate
    ledgers, renamed cohort, shortened scope or replacement policy are accepted.
-2. The already reviewed retained-input manifest
+2. For a **fresh first intake**, the exact 3,015,691-byte original release archive
+   from the [frozen data DOI](https://doi.gin.g-node.org/10.12751/g-node.xzmv31/).
+   The worker checks its fixed SHA256 before copying or extraction, validates all
+   17 members and 13 footers, then constructs new complete receipts. No earlier
+   failed run, old output root, HTTP receipt or cleanup graph is required.
+   For **continuation only**, provide the already reviewed retained-input manifest
    (`findlay-census-continuation-inputs/v1`) and **all** files it pins: original
    archive, all 17 extracted members, the 13 complete table reports and their
    group parts, prior request/source-lock/HTTP/integrity/outcome receipts, and the
    independent review. The continuation checks the recorded prior refusal and
    closure; it does not fabricate an acquisition history. Arbitrary Parquet files
-   cannot replace this provenance. This package does not supply a first-intake
-   workflow or those private assets.
+   cannot replace continuation provenance. The new first-intake path instead
+   authenticates the complete original archive; it does not fabricate old receipts.
 3. A concrete compatible runtime and its inventory. The inherited verifier
    requires CPython **3.11.6**, PyArrow **24.0.0**, and a complete pinned NumPy
    installation. It records the actual NumPy version and all selected package
@@ -44,15 +50,19 @@ An authorized operator needs:
    actual 40-character commit, never private repository ancestry. The owner
    compares every selected software body with that commit before dispatch.
 
-Keep the three private metadata files, prior material and runtime inventory
+Keep the three private metadata files, original archive or prior material, and runtime inventory
 outside the public checkout. The retained original root can be elsewhere on the
 host; it must be canonical, unlinked and disjoint from new output. Do not rewrite
 old receipt paths to pretend a copied archive has the same provenance. A moved
 prior dataset requires a separately reviewed provenance migration.
 
-There is no currently published distribution of these required private metadata
-and provenance assets. Obtaining them is a real prerequisite. Source availability
-alone does not make the preparation runnable for an arbitrary outside user.
+The fixed private grading metadata is not currently published. Obtaining it is
+a real prerequisite for either mode; the historical receipt graph is required
+only for continuation. [PROVISIONING.md](PROVISIONING.md) identifies the exact
+public-origin inputs and the missing deterministic metadata-generation operation.
+The first-intake source is usable with legitimately provisioned originals and
+those fixed metadata, without our historical attempt. Source publication alone
+does not distribute a data-complete benchmark.
 
 ## Bind and invoke the existing owner
 
@@ -69,7 +79,8 @@ python3 -I -B "$FINDLAY_OWNER/runtime_manifest.py" \
   --receipt /absolute/private/runtime-preparation.json
 ```
 
-Select existing private assets and a fresh private binding directory. The
+For a fresh first intake, select the original release, existing fixed private
+grading metadata, and a fresh private binding directory. The
 `artifacts-build` parent must already exist in the checkout. Use actual absolute
 paths and the actual public commit in place of the illustrative arguments:
 
@@ -79,17 +90,22 @@ python3 -I -B components/findlay-complete-preparation/bind_request.py \
   --input-ledger /absolute/private/INPUT_LEDGER.json \
   --published-families /absolute/private/PUBLISHED_98_LEDGER.json \
   --private-policy /absolute/private/PRIVATE_IDENTITY_POLICY.json \
-  --prior-attempt /absolute/private/retained-inputs.json \
+  --original-archive /absolute/private/10.12751_g-node.xzmv31.zip \
   --runtime-manifest /absolute/private/runtime.json \
   --operation-output /absolute/public-checkout/artifacts-build/findlay-new-operation \
   --write-dir /absolute/private/fresh-binding-directory
 ```
 
+For continuation, use `--prior-attempt /absolute/private/retained-inputs.json`
+instead of `--original-archive`; the two arguments are mutually exclusive.
+
 The binder authenticates all selected software and three external metadata
 bodies, checks their full-scope schema and cohort joins, and writes a new
 `source-lock.json` and `request.json`. Its stdout gives both exact SHA256
 digests. It does not inspect arrays, start a worker, grant execution authority,
-or qualify science. It refuses generated fixtures and incomplete/changed inputs.
+or qualify science. For a fresh archive it checks the ordinary file extent and
+binds the fixed expected digest; the worker performs the complete body hash.
+It refuses generated production metadata and incomplete/changed inputs.
 
 Only after selecting the actual operation and its resources, invoke the existing
 owner with those exact paths and emitted digests:
@@ -102,7 +118,7 @@ python3 -I -B "$FINDLAY_OWNER/run.py" \
   --source-lock-sha256 ACTUAL_EMITTED_SOURCE_LOCK_SHA256
 ```
 
-The source graph contains 13 Python members. Only those software members must
+The source graph contains 14 Python members. Only those software members must
 exist in the selected Git commit. The three fixed private metadata bodies are
 separately authenticated at owner and worker admission; they are never required
 in Git. Absolute paths appear only in newly created private bindings and outputs.
@@ -119,8 +135,8 @@ tests on Linux do not establish native execution compatibility there.
 
 The owner retains refusal evidence and partial output. A successful preparation
 status is `COMPLETE_INTAKE_CENSUS_WITH_GATES`; it still has
-`scientific_qualification: false`. The worker accounts for all 13 original
-table reports, all 98 family supports, the ordinary
+`scientific_qualification: false`. The fresh route constructs all 13 original table reports; continuation retains
+and checks the existing 13 reports. Both account for all 98 family supports, the ordinary
 `condition-reconstruction.private.json`, and the separate regional
 `multicortical_condition-reconstruction.private.json`. These outputs contain
 operator-only numerical/identity material and must stay outside candidate access.
@@ -139,6 +155,7 @@ NumPy, PyArrow, a runtime inventory or a native run:
 
 ```sh
 python3 -I -S -B components/findlay-complete-preparation/test_portable.py
+python3 -I -S -B components/findlay-complete-preparation/test_fresh_intake.py
 python3 -I -S -B authoring/delivery-20261105/common/remaining-builds-wave40/findlay-ordinary-contrast-integration-source-20261116-v1/test_integration.py
 ```
 
@@ -149,7 +166,12 @@ fixtures and test identities are **invented**. The 98-family composition fixture
 tests routing and complete accounting, not biological eligibility. Shape-only
 fixture validation is explicitly distinct from fixed-digest production
 admission; every generated metadata body is rejected by production admission.
-No native decoder, actual historical receipt chain or model is validated by CI.
+The fresh tests use a complete classic ZIP containing invented payloads, real
+extraction/integrity code and explicitly mocked native/census seams. A separate
+composition control uses all 13 tables and 98 invented family slots with the
+actual ordinary reconciler. The production contract rejects every invented
+archive. No native decoder, original dataset, actual historical receipt chain
+or model is validated by CI.
 
 Our software is distributed under [MIT](LICENSE). Original data, paper, upstream
 analysis code and private metadata are not included; their separate permissions
