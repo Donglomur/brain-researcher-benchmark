@@ -182,5 +182,41 @@ class PortableGradeTests(unittest.TestCase):
             relocated.load_core()
 
 
+class PrivateWriterTests(unittest.TestCase):
+    def test_report_is_owner_only_under_umask_zero_without_scoring(self):
+        # Exercise the real CLI writer while stubbing both numerical entrypoints.
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp).resolve(); root.chmod(0o755)
+            output = root / "private-grade.json"
+            args = ["--submission", str(root / "not-read-candidate.json"),
+                    "--reference", str(root / "not-read-reference.json"),
+                    "--reference-bytes", "1", "--reference-sha256", "a" * 64,
+                    "--output", str(output)]
+            previous_umask = os.umask(0)
+            try:
+                with mock.patch.object(grade, "load_core", return_value=object()) as loader, \
+                     mock.patch.object(grade, "evaluate", return_value=({"status": "generated_writer_only"}, 0)) as evaluator, \
+                     contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(grade.main(args), 0)
+                loader.assert_called_once(); evaluator.assert_called_once()
+                self.observed_mode = format(output.stat().st_mode & 0o777, "04o")
+                self.assertEqual(self.observed_mode, "0600")
+                self.assertFalse((root / "not-read-candidate.json").exists())
+                self.assertFalse((root / "not-read-reference.json").exists())
+                # A file appearing after the early existence check is preserved.
+                output.unlink()
+                def race(*unused):
+                    output.write_bytes(b"generated intervening owner file")
+                    return {"status": "generated_writer_only"}, 0
+                with mock.patch.object(grade, "load_core", return_value=object()), \
+                     mock.patch.object(grade, "evaluate", side_effect=race), \
+                     contextlib.redirect_stdout(io.StringIO()):
+                    with self.assertRaises(FileExistsError):
+                        grade.main(args)
+                self.assertEqual(output.read_bytes(), b"generated intervening owner file")
+            finally:
+                os.umask(previous_umask)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

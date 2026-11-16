@@ -91,7 +91,8 @@ def main(argv=None):
                   benchmark_id="PAPER-ROOT-ADD-016", new_benchmark_ids=0,
                   scope="Six prescribed Salzburg posterior summaries; no model-fidelity, biological-causality, improvement or full-paper qualification.")
     encoded = (json.dumps(result, indent=2, allow_nan=False) + "\n").encode()
-    with args.output.open("xb") as stream:
+    fd = os.open(args.output, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+    with os.fdopen(fd, "wb") as stream:
         stream.write(encoded)
         stream.flush()
         os.fsync(stream.fileno())
