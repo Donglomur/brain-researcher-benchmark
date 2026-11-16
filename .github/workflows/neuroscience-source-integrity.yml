@@ -2884,3 +2884,42 @@ jobs:
           ulimit -t 60
           ulimit -v 262144
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B authoring/cardiac-paired-execution/test_public.py
+
+  neural090-investigation-claims-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Check all twelve numerical investigation controls with invented reports
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'N090_NUMERICAL'
+          import hashlib, importlib.util, pathlib, sys, unittest
+          if sys.flags.optimize:
+              raise RuntimeError("source controls require assertions enabled")
+          root = pathlib.Path("benchmarks/neuroscience/neural-090/investigation-claims-v1")
+          for name, size, digest in [
+              ("claims.py", 15025, "3902466dee7b45003c76e5a2821982da53f5d2c27e7ee0532fd60e6b95ded48d"),
+              ("test_claims.py", 11657, "cc0aee6572f2dab780683ac5183f5e451cda61643d9d1e79a37284b1b54278bb"),
+          ]:
+              data = (root / name).read_bytes()
+              if len(data) != size or hashlib.sha256(data).hexdigest() != digest:
+                  raise RuntimeError("selected numerical consumer/test source changed")
+          spec = importlib.util.spec_from_file_location("n090_claim_controls", root / "test_claims.py")
+          module = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(module)
+          suite = unittest.defaultTestLoader.loadTestsFromModule(module)
+          if suite.countTestCases() != 12:
+              raise RuntimeError("all twelve declared source controls required")
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not (result.testsRun == 12 and result.wasSuccessful() and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses):
+              raise SystemExit(1)
+          N090_NUMERICAL
