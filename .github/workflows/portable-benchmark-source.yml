@@ -99,3 +99,101 @@ jobs:
           sys.argv = [str(p), 'check-package', '--manifest-bytes', str(9771), '--manifest-sha256', '5f4414b4e7569e299edb718bbca49f21049947ac2fc514aded3aa04da71204dd']
           exec(compile(source, str(p), 'exec'), {'__name__':'__main__', '__file__':str(p)})
           PY
+  neural029-portable-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Check NEURAL-029 frozen-program source and generated controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          """CI bootstrap: authenticate the selected verifier before executing its bytes."""
+          import argparse, hashlib, os, pathlib, stat, sys, types
+          parser = argparse.ArgumentParser()
+          parser.add_argument('--package-root', default='benchmarks/neuroscience/neural029-programme')
+          args = parser.parse_args()
+          root = pathlib.Path(args.package_root).absolute()
+          if any(p.is_symlink() for p in (root, *root.parents)):
+              raise SystemExit('linked package root refused')
+          p = root / 'verify_source.py'
+          fd = os.open(p, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW)
+          try:
+              before = os.fstat(fd)
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != 7688:
+                  raise SystemExit('verifier type or size mismatch')
+              with os.fdopen(fd, 'rb', closefd=False) as stream:
+                  source = stream.read(7688 + 1)
+              after, linked = os.fstat(fd), p.lstat()
+              fields = ('st_dev','st_ino','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns')
+              if any(getattr(before, k) != getattr(after, k) or getattr(before, k) != getattr(linked, k) for k in fields):
+                  raise SystemExit('verifier changed while reading')
+          finally:
+              os.close(fd)
+          if len(source) != 7688 or hashlib.sha256(source).hexdigest() != '47cd1ecec5fcbf6d467ffe9d38ae1607596b8c978da46267976283ba97e5d83f':
+              raise SystemExit('verifier identity mismatch')
+          sys.argv = [str(p), '--manifest-bytes', str(3170), '--manifest-sha256', '9b8d4b1551f0114b3041b2fbe0ef1ab5c8eb9af4f934f3e0404a2560c6b30204', '--check']
+          name = '_neurobench_neural029_source_bootstrap'
+          if name in sys.modules:
+              raise SystemExit('bootstrap module name occupied')
+          module = types.ModuleType(name)
+          module.__file__ = str(p)
+          sys.modules[name] = module
+          exec(compile(source, str(p), 'exec'), module.__dict__)
+          raise SystemExit(module.main())
+          PY
+  find050-portable-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Check FIND-050 complete-program source and generated controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          """CI bootstrap: authenticate the selected verifier before executing its bytes."""
+          import argparse, hashlib, os, pathlib, stat, sys, types
+          parser = argparse.ArgumentParser()
+          parser.add_argument('--package-root', default='benchmarks/neuroscience/paper-find050-programme')
+          args = parser.parse_args()
+          root = pathlib.Path(args.package_root).absolute()
+          if any(p.is_symlink() for p in (root, *root.parents)):
+              raise SystemExit('linked package root refused')
+          p = root / 'package_tools.py'
+          fd = os.open(p, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW)
+          try:
+              before = os.fstat(fd)
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != 14177:
+                  raise SystemExit('verifier type or size mismatch')
+              with os.fdopen(fd, 'rb', closefd=False) as stream:
+                  source = stream.read(14177 + 1)
+              after, linked = os.fstat(fd), p.lstat()
+              fields = ('st_dev','st_ino','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns')
+              if any(getattr(before, k) != getattr(after, k) or getattr(before, k) != getattr(linked, k) for k in fields):
+                  raise SystemExit('verifier changed while reading')
+          finally:
+              os.close(fd)
+          if len(source) != 14177 or hashlib.sha256(source).hexdigest() != '6e53e633f6088a827d6e009d013873703c7c09a58da43674317efb20e38ecced':
+              raise SystemExit('verifier identity mismatch')
+          sys.argv = [str(p), 'check', '--root', str(root), '--manifest-bytes', str(7199), '--manifest-sha256', '0afba4c97bfde7728ab84b0a8fc7aed9b55b679ee85d2c6518d9145a1cfe8163']
+          name = '_neurobench_find050_source_bootstrap'
+          if name in sys.modules:
+              raise SystemExit('bootstrap module name occupied')
+          module = types.ModuleType(name)
+          module.__file__ = str(p)
+          sys.modules[name] = module
+          exec(compile(source, str(p), 'exec'), module.__dict__)
+          raise SystemExit(module.main())
+          PY
