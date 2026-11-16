@@ -2287,3 +2287,21 @@ jobs:
           python -I -S -B benchmarks/neuroscience/paper-signal-add-021/fixed-regions-v1/portable/test_provision.py -v
           python -I -S -B benchmarks/neuroscience/paper-signal-add-021/fixed-regions-v1/portable/test_public_export.py -v
           TMS_PORTABLE_TESTS
+
+  cardiac-six-model-summary-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Verify portable six-model scorer with invented summaries
+        shell: bash
+        working-directory: components/cardiac-six-model-summary
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_grade.py' -v
