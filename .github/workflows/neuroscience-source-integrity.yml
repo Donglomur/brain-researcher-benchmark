@@ -2574,3 +2574,39 @@ jobs:
           set -euo pipefail
           ulimit -t 60
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_*.py' -v
+
+  voltron-native-frame-source-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Check native-frame event matching and complete subject coverage
+        shell: bash
+        working-directory: benchmarks/neuroscience/voltron-native-frame-events-v1
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B test_event_score.py
+
+  pfc-matched-offline-source-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Check matched offline task contexts and fresh session custody
+        shell: bash
+        working-directory: components/pfc-matched-offline-harbor
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B test_paired_delivery.py
