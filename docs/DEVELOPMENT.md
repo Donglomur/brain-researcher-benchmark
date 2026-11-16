@@ -54,3 +54,10 @@ consumers together. The original three Harbor examples live under
 Historical source manifests describe their recorded revisions. Do not rewrite them
 merely to make a new layout appear historically identical. Record a new selection
 when source or scientific contracts change.
+
+## Archived and retained branches
+
+The [November 16 branch archive](history/BRANCH_ARCHIVE_20261116.md) preserves
+153 unfinished or legacy branch tips as tags, with exact recovery commands.
+Another 48 task branches remain because they back open upstream PRs. Branch count
+is not a benchmark count, and an archived change is not an accepted change.
