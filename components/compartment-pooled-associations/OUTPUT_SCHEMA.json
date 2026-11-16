@@ -1,0 +1,274 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "PAPER-FIND-REP-012-four-pooled-Pearson-result-v1",
+  "description": "One bounded result artifact; four endpoints are not four benchmarks. Exact unique endpoint IDs and finite numeric encoding are additionally enforced by scorer_core. Extra fields and omitted slots are invalid. Fields declared integer additionally require a literal JSON integer token with no decimal point or exponent. For example, 1 is accepted where in range, while 1.0 and 1e0 are rejected even though JSON Schema considers them mathematically integral. Booleans are never integer counts or schema versions. Nonzero decimal tokens that round to zero in binary64 (for example1e-999) are unsupported; genuine zero tokens such as0e-999 remain valid numeric values.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "input_manifest_sha256",
+    "analysis_id",
+    "cohort",
+    "endpoints"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "type": "integer"
+    },
+    "task_id": {
+      "const": "PAPER-FIND-REP-012"
+    },
+    "input_manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "analysis_id": {
+      "const": "released_source_four_pooled_pearson_v1",
+      "description": "Declared analysis only; this string does not prove computation or execution."
+    },
+    "cohort": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "member_count",
+        "raw_rows",
+        "unique_mice",
+        "shared_mouse_ids",
+        "raw_row_ids_sha256"
+      ],
+      "properties": {
+        "member_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 50000
+        },
+        "raw_rows": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 50000
+        },
+        "unique_mice": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 50000
+        },
+        "shared_mouse_ids": {
+          "type": "array",
+          "maxItems": 50000,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "raw_row_ids_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "endpoints": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "endpoint_id",
+          "status",
+          "reason",
+          "result"
+        ],
+        "properties": {
+          "endpoint_id": {
+            "enum": [
+              "apical_local",
+              "basal_local",
+              "apical_coincident",
+              "basal_coincident"
+            ]
+          },
+          "status": {
+            "enum": [
+              "reported",
+              "abstained"
+            ]
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "result": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "raw_rows",
+                  "eligible_rows",
+                  "paired_rows",
+                  "excluded_nan_rows",
+                  "eligible_row_ids_sha256",
+                  "paired_row_ids_sha256",
+                  "r",
+                  "p",
+                  "paired_y_mean",
+                  "paired_y_sd"
+                ],
+                "properties": {
+                  "raw_rows": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 50000
+                  },
+                  "eligible_rows": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 50000
+                  },
+                  "paired_rows": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 50000
+                  },
+                  "excluded_nan_rows": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 50000
+                  },
+                  "eligible_row_ids_sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "paired_row_ids_sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "r": {
+                    "type": "number",
+                    "description": "Finite binary64-representable scalar. Finite scientifically incorrect values remain scoreable."
+                  },
+                  "p": {
+                    "type": "number",
+                    "description": "Finite binary64-representable scalar. Finite scientifically incorrect values remain scoreable."
+                  },
+                  "paired_y_mean": {
+                    "type": "number",
+                    "description": "Added reproducibility diagnostic, not a published endpoint: mean of the reconstructed structural-change outcome on the exact paired support, with NumPy float64 accumulation."
+                  },
+                  "paired_y_sd": {
+                    "type": "number",
+                    "description": "Added reproducibility diagnostic, not a published endpoint: population SD (ddof=0) of the reconstructed structural-change outcome on the exact paired support, with NumPy float64 accumulation."
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "reported"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "type": "null"
+                },
+                "result": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "raw_rows",
+                    "eligible_rows",
+                    "paired_rows",
+                    "excluded_nan_rows",
+                    "eligible_row_ids_sha256",
+                    "paired_row_ids_sha256",
+                    "r",
+                    "p",
+                    "paired_y_mean",
+                    "paired_y_sd"
+                  ],
+                  "properties": {
+                    "raw_rows": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 50000
+                    },
+                    "eligible_rows": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 50000
+                    },
+                    "paired_rows": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 50000
+                    },
+                    "excluded_nan_rows": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 50000
+                    },
+                    "eligible_row_ids_sha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    },
+                    "paired_row_ids_sha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    },
+                    "r": {
+                      "type": "number",
+                      "description": "Finite binary64-representable scalar. Finite scientifically incorrect values remain scoreable."
+                    },
+                    "p": {
+                      "type": "number",
+                      "description": "Finite binary64-representable scalar. Finite scientifically incorrect values remain scoreable."
+                    },
+                    "paired_y_mean": {
+                      "type": "number",
+                      "description": "Added reproducibility diagnostic, not a published endpoint: mean of the reconstructed structural-change outcome on the exact paired support, with NumPy float64 accumulation."
+                    },
+                    "paired_y_sd": {
+                      "type": "number",
+                      "description": "Added reproducibility diagnostic, not a published endpoint: population SD (ddof=0) of the reconstructed structural-change outcome on the exact paired support, with NumPy float64 accumulation."
+                    }
+                  }
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                },
+                "result": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
