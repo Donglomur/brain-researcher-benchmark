@@ -1,0 +1,28 @@
+name: OFC operator source interface
+
+on:
+  pull_request:
+    branches: [publish/neuroscience-200]
+  push:
+    branches: [publish/neuroscience-200]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ofc-relocated-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Check relocated OFC source with invented engineering inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s benchmarks/neuroscience/paper-root-add-018 -p test_public_interface.py -v
