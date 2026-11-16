@@ -1,0 +1,810 @@
+{
+  "additional_tasks": 0,
+  "artwork_scope": "Original plotting sources retained; licensed raster caches, microscopy originals, schematics and exact page layout are not computational score targets. Scientific estimands are not silently excluded.",
+  "full_paper_reproduced": false,
+  "operations": [
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "connectivity_eigenvalues",
+        "covariance_eigenvalues",
+        "lyapunov_residual",
+        "spectrum_exponent",
+        "variance_timescale_relation"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "dense_covariance",
+      "panels": [
+        "F1",
+        "ED2"
+      ],
+      "population": {
+        "initial_conditions_per_network": 80,
+        "networks_per_symmetry": 10,
+        "symmetric_covariance_timescale_theory": "All10000 modes of the10 symmetric networks. No assertion that nonsymmetric connectivity modes diagonalize covariance; all40 complete raw spectra remain required.",
+        "symmetry": [
+          0,
+          0.3333333333333333,
+          0.6666666666666666,
+          1
+        ],
+        "units": 10000
+      },
+      "producer": "dense_reference",
+      "qualification_holds": [
+        "G04",
+        "G05"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "full_eigenspectra",
+        "exponents"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "distribution_robustness",
+      "panels": [
+        "ED1"
+      ],
+      "population": {
+        "distributions": [
+          "binary",
+          "gaussian",
+          "trunc_gaussian",
+          "exponential"
+        ],
+        "networks_per_distribution": 10,
+        "units": 10000
+      },
+      "producer": "simulations.random_probs_sim",
+      "qualification_holds": []
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "full_eigenspectra",
+        "exponent_by_bin"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "temporal_binning",
+      "panels": [
+        "ED3"
+      ],
+      "population": {
+        "bins": "exact source unique(round(exp(linspace(log(1),log(2000),20)))) * 0.006 seconds",
+        "networks_per_symmetry": 10,
+        "symmetry": [
+          0,
+          1
+        ],
+        "units": 10000
+      },
+      "producer": "simulations.tbin_analysis",
+      "qualification_holds": []
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "ground_truth_spectra",
+        "all_estimated_spectra",
+        "all_exponent_errors"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "noise_estimators",
+      "panels": [
+        "ED4"
+      ],
+      "population": {
+        "durations": 10,
+        "estimators": [
+          "direct",
+          "SVCA",
+          "SVCA2"
+        ],
+        "networks_per_symmetry": 10,
+        "neuron_counts": 10,
+        "noise_conditions": 6,
+        "symmetry": [
+          0,
+          0.3333333333333333,
+          0.6666666666666666,
+          1
+        ],
+        "units": 10000
+      },
+      "producer": "simulations.random_uniform_sim_sizes",
+      "qualification_holds": [
+        "G06"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "eigenspectra",
+        "exponents",
+        "longest_timescales"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "near_criticality",
+      "panels": [
+        "F2i"
+      ],
+      "population": {
+        "networks": 10,
+        "normalizations": "source arange(0.975,0.9985,0.001)",
+        "units": 10000
+      },
+      "producer": "simulations.enorm_sweep",
+      "qualification_holds": []
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "noise_matched_eigenspectra",
+        "example_embeddings"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "near_critical_examples",
+      "panels": [
+        "F2g",
+        "F2h"
+      ],
+      "population": {
+        "networks_per_normalization": 10,
+        "normalizations": [
+          0.998,
+          0.975
+        ],
+        "units": 10000
+      },
+      "producer": "simulations.sims_fig2",
+      "qualification_holds": [
+        "G06"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "direct_spectra",
+        "SVCA2_spectra",
+        "signed_SVCA",
+        "shuffle_spectra",
+        "all_neuron_sweeps",
+        "all_duration_sweeps",
+        "shapes",
+        "region_summaries",
+        "paired_shuffle_contrasts"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "empirical_spectra",
+      "panels": [
+        "F2d",
+        "F2e",
+        "F2f",
+        "ED6a-d",
+        "ED6f-h"
+      ],
+      "population": {
+        "calcium": 26,
+        "duration_chunks": "all source ikeeps",
+        "ephys": 3,
+        "frames": "all source-defined",
+        "neuron_fractions": "all source ineurs",
+        "neurons": "all admitted original",
+        "sessions": 29,
+        "shuffle_steps": 500
+      },
+      "producer": "fig2.analysis.neural_powerlaws",
+      "qualification_holds": [
+        "G01",
+        "G02",
+        "G03"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "all_DMD_modes",
+        "raw_PC_correlations",
+        "pooled_normalized_curves",
+        "rotation_distributions"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "empirical_dynamics",
+      "panels": [
+        "F3a",
+        "F3b",
+        "F3e",
+        "F3f"
+      ],
+      "population": {
+        "ACG_lags": 100,
+        "DMD_dimensions": 1000,
+        "PC_rows": {
+          "CA1": 100,
+          "cortex": 400,
+          "ephys": 100
+        },
+        "PC_rows_meaning": "Source displayed/lag-summary ranks only; not a raw-ACG truncation. Preserve the complete actual kernel ACG geometry, at least400 rows for literal avg_acg.",
+        "lag_frames": 5,
+        "sessions": 29
+      },
+      "producer": "empirical_dynamics",
+      "qualification_holds": [
+        "G01",
+        "G02",
+        "G03"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "all_DMD_modes",
+        "raw_PC_correlations",
+        "rotation_distributions"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "simulated_dynamics",
+      "panels": [
+        "F3d",
+        "F3f"
+      ],
+      "population": {
+        "networks_per_symmetry": 4,
+        "source_driver_count": 37,
+        "symmetry": [
+          0,
+          1
+        ],
+        "units": 10000
+      },
+      "producer": "simulated_dynamics",
+      "qualification_holds": []
+    },
+    {
+      "allowed_unavailability": [
+        "source_defined_insufficient_support"
+      ],
+      "estimands": [
+        "stratified_spectra",
+        "source_neuron_counts",
+        "unavailable_group_dispositions"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "ephys_regions",
+      "panels": [
+        "ED5b",
+        "ED5c"
+      ],
+      "population": {
+        "groups": [
+          "striatum",
+          "hippocampal formation",
+          "subcortical areas",
+          "visual cortex",
+          "sensorimotor cortices"
+        ],
+        "sessions": 3,
+        "source_min_neurons": 50
+      },
+      "producer": "fig2.analysis.ephys_areas",
+      "qualification_holds": [
+        "G07"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "full_bin_spectra",
+        "exponents"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "ephys_bins",
+      "panels": [
+        "ED5d",
+        "ED5e"
+      ],
+      "population": {
+        "bins": "all exact source unique rounded geometric bins, 0.005 to0.1s",
+        "sessions": 3,
+        "source_files": "Krebs/Waksman/Robbins_spks_face2.npz"
+      },
+      "producer": "fig2.analysis.ephys_tbins",
+      "qualification_holds": [
+        "G08"
+      ]
+    },
+    {
+      "allowed_unavailability": [
+        "source_defined_insufficient_support"
+      ],
+      "estimands": [
+        "state_spectra",
+        "paired_slope_contrasts",
+        "DMD_modes",
+        "explicit_unavailable_DMD_support"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "running_state",
+      "panels": [
+        "ED7"
+      ],
+      "population": {
+        "DMD_min_each_state_frames": 39600,
+        "equalized_time_support": true,
+        "sessions": "every original hasrunning=true session; input-bound eligibility",
+        "states": [
+          "running",
+          "not_running"
+        ]
+      },
+      "producer": "fig2.analysis.running",
+      "qualification_holds": [
+        "G09"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "all_SVCA_spectra",
+        "exponents",
+        "rates"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "gcamp_comparison",
+      "panels": [
+        "ED6e"
+      ],
+      "population": {
+        "cohorts": [
+          "Facemap_GCaMP6",
+          "London_spont_M",
+          "all26_Fsub2_GCaMP8"
+        ],
+        "selection": "complete positively admitted rosters, no glob expansion outside them"
+      },
+      "producer": "fig2.analysis.gcamp_subsample",
+      "qualification_holds": [
+        "G06",
+        "G10",
+        "G11"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "full_eigenspectra",
+        "exponents"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "sparse_connectivity",
+      "panels": [
+        "F4a"
+      ],
+      "population": {
+        "networks": 10,
+        "probabilities": "all11 source powers2^-12 through2^-2",
+        "units": 10000
+      },
+      "producer": "fig4.sparse_clustered_local_sims.sparse_evals",
+      "qualification_holds": [
+        "G12"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "full_eigenspectra",
+        "exponents",
+        "example_connectivity"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "clustered_connectivity",
+      "panels": [
+        "F4b"
+      ],
+      "population": {
+        "cluster_size": 500,
+        "global_probabilities": "all12 source powers2^-12 through2^-1",
+        "networks": 10,
+        "units": 10000
+      },
+      "producer": "fig4.sparse_clustered_local_sims.clustered_evals",
+      "qualification_holds": [
+        "G12"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "full_eigenspectra",
+        "exponents",
+        "connection_recovery_curve",
+        "strong_pair_counts",
+        "distance_odds",
+        "PC_spatial_summaries"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "local_connectivity",
+      "panels": [
+        "F4c",
+        "F4d",
+        "F4e",
+        "F4f",
+        "F4g"
+      ],
+      "population": {
+        "global_probabilities": "all12 source powers2^-12 through2^-1",
+        "local_scale_micrometres": 250,
+        "networks": 10,
+        "torus_micrometres": 8000,
+        "units": 10000
+      },
+      "producer": "fig4.sparse_clustered_local_sims.local_evals",
+      "qualification_holds": [
+        "G12",
+        "G13"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "pairwise_correlation_by_distance",
+        "strong_pair_counts",
+        "near_far_odds",
+        "PC_spatial_summaries"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "neural_strong_pairs",
+      "panels": [
+        "F4d",
+        "F4f",
+        "F4g"
+      ],
+      "population": {
+        "bin_um": 200,
+        "bins": 15,
+        "cohort": "complete original Facemap spontaneous roster",
+        "exclude_distance_um": 20,
+        "rate_Hz": 3,
+        "strong_fraction": 0.01
+      },
+      "producer": "fig4.analysis.neural_strong_pairs",
+      "qualification_holds": [
+        "G10",
+        "G13"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "DMD_modes",
+        "rotation_summary",
+        "exact_used_support"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "external_achilles",
+      "panels": [
+        "ED8a",
+        "ED8g"
+      ],
+      "population": {
+        "lag_samples": 30,
+        "rate_Hz": 15,
+        "region": "CA1",
+        "ridge": 0.1,
+        "session": "Achilles_10252013",
+        "species": "rat"
+      },
+      "producer": "fig3.other_datasets.grosmark_hippo",
+      "qualification_holds": [
+        "G14"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "DMD_modes",
+        "rotation_summary",
+        "exact_used_support"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "external_plitt",
+      "panels": [
+        "ED8b",
+        "ED8g"
+      ],
+      "population": {
+        "lag_samples": 30,
+        "rate_Hz": 15,
+        "region": "CA1",
+        "ridge": 0.1,
+        "session": "sub-R1_ses-20190209T210000_obj-bxnk6r_behavior+ophys.nwb",
+        "species": "mouse"
+      },
+      "producer": "fig3.other_datasets.plitt_hippo",
+      "qualification_holds": [
+        "G14"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "DMD_modes",
+        "rotation_summary",
+        "exact_used_support"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "external_zhong",
+      "panels": [
+        "ED8c",
+        "ED8g"
+      ],
+      "population": {
+        "lag_samples": 6,
+        "rate_Hz": 3,
+        "region": "visual cortex",
+        "ridge": 0.1,
+        "session": "source first sup_train1_after_learning descriptor; actual identity unbound",
+        "species": "mouse"
+      },
+      "producer": "fig3.other_datasets.zhong_visual",
+      "qualification_holds": [
+        "G14",
+        "G15"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "DMD_modes",
+        "rotation_summary",
+        "condition_PSTHs",
+        "exact_used_support"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "external_maze",
+      "panels": [
+        "ED8d",
+        "ED8g"
+      ],
+      "population": {
+        "conditions": "all source trial_type/trial_version combinations; six shown is not six included",
+        "dataset": "DANDI000128",
+        "lag_samples": 10,
+        "rate_Hz": 50,
+        "ridge": 0.1,
+        "selection": "all exact source train files",
+        "subject": "Jenkins"
+      },
+      "producer": "fig3.other_datasets.mc_maze",
+      "qualification_holds": [
+        "G14"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "DMD_modes",
+        "rotation_summary",
+        "condition_PSTHs",
+        "exact_used_support"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "external_rtt",
+      "panels": [
+        "ED8e",
+        "ED8g"
+      ],
+      "population": {
+        "angles": "source15-degree bins, not an assumed15-bin count",
+        "dataset": "DANDI000129",
+        "lag_samples": 10,
+        "rate_Hz": 50,
+        "ridge": 0.1,
+        "selection": "all exact source train files",
+        "subject": "Indy"
+      },
+      "producer": "fig3.other_datasets.mc_rtt",
+      "qualification_holds": [
+        "G14"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "DMD_modes",
+        "rotation_summary",
+        "condition_PSTHs",
+        "exact_used_support"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "external_area2",
+      "panels": [
+        "ED8f",
+        "ED8g"
+      ],
+      "population": {
+        "conditions": 16,
+        "dataset": "DANDI000127",
+        "lag_samples": 10,
+        "rate_Hz": 50,
+        "ridge": 0.1,
+        "selection": "all exact source train files",
+        "subject": "Han"
+      },
+      "producer": "fig3.other_datasets.area2_bump",
+      "qualification_holds": [
+        "G14"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "complete_accuracy_curves",
+        "per_network_failures"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "memory_binary",
+      "panels": [
+        "F5d"
+      ],
+      "population": {
+        "decoding": [
+          "fixed_lag",
+          "time_independent"
+        ],
+        "features": 100,
+        "interval_seconds": 3,
+        "model_families": [
+          "symmetric",
+          "nonsymmetric",
+          "echo_state"
+        ],
+        "network_repetitions": 20,
+        "total_trials": 2000,
+        "units": 10000
+      },
+      "producer": "fig5.fig5.run_multishot",
+      "qualification_holds": [
+        "G04",
+        "G16"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "complete_accuracy_curves",
+        "per_network_failures"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "memory_zeroshot",
+      "panels": [
+        "F5e"
+      ],
+      "population": {
+        "decoding": [
+          "fixed_lag",
+          "time_independent"
+        ],
+        "features": 100,
+        "interval_seconds": 3,
+        "model_families": [
+          "symmetric",
+          "nonsymmetric",
+          "echo_state"
+        ],
+        "network_repetitions": 20,
+        "test_inputs": 1000,
+        "train_inputs": 1000,
+        "units": 10000
+      },
+      "producer": "fig5.fig5.run_zeroshot",
+      "qualification_holds": [
+        "G04",
+        "G16"
+      ]
+    },
+    {
+      "allowed_unavailability": [],
+      "estimands": [
+        "complete_accuracy_curves",
+        "per_network_failures"
+      ],
+      "failure_policy": "Retain the actual first error and known costs; no silent fallback or dropping planned units.",
+      "id": "memory_aligned",
+      "panels": [
+        "F5f"
+      ],
+      "population": {
+        "decoding": [
+          "fixed_lag",
+          "time_independent"
+        ],
+        "features": 100,
+        "interval_seconds": 9,
+        "mode": "aligned",
+        "model_families": [
+          "symmetric",
+          "nonsymmetric",
+          "echo_state"
+        ],
+        "network_repetitions": 20,
+        "test_inputs": 1000,
+        "train_inputs": 1000,
+        "units": 10000
+      },
+      "producer": "fig5.fig5.run_zeroshot",
+      "qualification_holds": [
+        "G04",
+        "G16"
+      ]
+    }
+  ],
+  "profiles": {
+    "complete": [
+      "dense_covariance",
+      "distribution_robustness",
+      "temporal_binning",
+      "noise_estimators",
+      "near_criticality",
+      "near_critical_examples",
+      "empirical_spectra",
+      "empirical_dynamics",
+      "simulated_dynamics",
+      "ephys_regions",
+      "ephys_bins",
+      "running_state",
+      "gcamp_comparison",
+      "sparse_connectivity",
+      "clustered_connectivity",
+      "local_connectivity",
+      "neural_strong_pairs",
+      "external_achilles",
+      "external_plitt",
+      "external_zhong",
+      "external_maze",
+      "external_rtt",
+      "external_area2",
+      "memory_binary",
+      "memory_zeroshot",
+      "memory_aligned"
+    ],
+    "legacy_empirical_core": [
+      "empirical_spectra",
+      "empirical_dynamics"
+    ],
+    "reproduction": [
+      "dense_covariance",
+      "distribution_robustness",
+      "temporal_binning",
+      "noise_estimators",
+      "near_criticality",
+      "near_critical_examples",
+      "empirical_spectra",
+      "empirical_dynamics",
+      "simulated_dynamics",
+      "ephys_regions",
+      "ephys_bins",
+      "running_state",
+      "gcamp_comparison",
+      "sparse_connectivity",
+      "clustered_connectivity",
+      "local_connectivity",
+      "neural_strong_pairs",
+      "external_achilles",
+      "external_plitt",
+      "external_zhong",
+      "external_maze",
+      "external_rtt",
+      "external_area2",
+      "memory_binary",
+      "memory_zeroshot",
+      "memory_aligned"
+    ]
+  },
+  "schema": "critical_init_complete_programme_v1",
+  "source_revision": "2c15edf4e770165fc3962dcc3920c8bcaf555bed",
+  "task_id": "PAPER-FIND-050"
+}

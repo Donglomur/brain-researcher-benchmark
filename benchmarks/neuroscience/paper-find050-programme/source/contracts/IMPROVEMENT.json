@@ -1,0 +1,81 @@
+{
+  "adaptation": "training/development only; no test feedback until complete final programme locked",
+  "aligned_delays_seconds": [
+    0.12,
+    0.25,
+    0.5,
+    1,
+    2,
+    4,
+    6,
+    8
+  ],
+  "bootstrap_replicates": 10000,
+  "bootstrap_seed": 1729,
+  "candidate_paired_conditions": [
+    "paper-data",
+    "paper-data-author"
+  ],
+  "confidence": 0.95,
+  "development_networks": 10,
+  "empirical_holdout_forecasting": "explicitly unselected additional endpoint, not substituted for memory comparison",
+  "endpoint": "novel-input time-independent memory",
+  "features": 100,
+  "independent_delays_seconds": [
+    0.12,
+    0.25,
+    0.5,
+    1,
+    2,
+    2.5
+  ],
+  "margin": 0.02,
+  "original_CV_reproduced": false,
+  "original_delay_grid_recovered": false,
+  "paper_dynamical_families": [
+    "symmetric",
+    "nonsymmetric",
+    "echo_state"
+  ],
+  "primary_stratum": "symmetric_independent",
+  "protected_seed_custody": "fresh live operator producer commits separate development/test networks before exposure; candidate never receives test labels or source seeds",
+  "reference_competence": "unqualified; required for every test stratum",
+  "reference_failure_policy": "invalid comparison, never candidate win",
+  "reference_formula": "Both use source per-row eps=0.001 normalization and ridge in the projected-neuron metric; one fixes lambda=10, one chooses from the fixed grid on development networks only.",
+  "reference_ids": [
+    "source_formula_ridge10",
+    "development_selected_ridge"
+  ],
+  "replication_profile_separate": true,
+  "ridge_grid": [
+    0.01,
+    0.1,
+    1,
+    10,
+    100,
+    1000
+  ],
+  "schema": "critical_init_prospective_memory_v1",
+  "secondary_strata": [
+    "nonsymmetric_independent",
+    "echo_state_independent",
+    "symmetric_aligned",
+    "nonsymmetric_aligned",
+    "echo_state_aligned"
+  ],
+  "statistic": "paired network-level normalized trapezoidal AUC; one-sided Bonferroni percentile bounds across fixed references within a stratum",
+  "target_representation": {
+    "latent_features": 100,
+    "prediction_coefficients": 100,
+    "projected_neurons": 10000,
+    "retrieval": "Exact Gram-metric Euclidean distances in the centered original projected-neuron basis, not latent Euclidean distance. Algebraic equivalence remains unqualified."
+  },
+  "task_id": "PAPER-FIND-050",
+  "test_failure_utility": 0,
+  "test_inputs": 1000,
+  "test_networks": 20,
+  "test_queries_max_per_frozen_program": 1,
+  "time_independent_queries": "For each network and upper-delay endpoint, the operator independently samples a delay for each query from that endpoint and every preceding grid delay, using a protected precommitted stream. Same mixing applies to development. No progressive in-place source shuffle is silently relabeled equivalent.",
+  "train_inputs": 1000,
+  "units": 10000
+}

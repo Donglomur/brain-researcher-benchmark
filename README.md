@@ -21,6 +21,8 @@ contracts is **not established**. No new LLM performance or code-assistance effe
 is established by these source releases. See the [dated evidence and scope record](docs/neuroscience-benchmarks/CONSTRUCTION_STATUS.md).
 The [repository quality review](docs/neuroscience-benchmarks/REPO_QUALITY_20261116.md)
 identifies the remaining delivery, scientific-scope and evaluation gaps.
+The [historical execution evidence](docs/neuroscience-benchmarks/historical-evidence-v1/README.md)
+explains what three inspected program/control profiles actually established and what remains unqualified.
 
 ## Start here
 
@@ -52,7 +54,7 @@ original recordings, protected references and deployment bindings are separate.
 
 | Starting point | What it supplies |
 | --- | --- |
-| [Portable source packages](docs/neuroscience-benchmarks/PORTABLE_COMPONENTS.md) | NEURAL-061 persistent-state and CBraMod paired-program source checks, commands and external prerequisites. |
+| [Portable source packages](docs/neuroscience-benchmarks/PORTABLE_COMPONENTS.md) | NEURAL-029, NEURAL-061, CBraMod and PAPER-FIND-050 source checks, commands and external prerequisites. |
 | [Paired-study description checks](components/study_binding_validator_v1/README.md) | Validate declared assignments, budgets, endpoint denominators, exposure and stopping policies for both tracks. |
 | [Source integrity](docs/neuroscience-benchmarks/SOURCE_INTEGRITY.md) | Verification instructions for explicitly enrolled source bundles. Passing checks establishes software consistency. |
 | [Direct artifact grading routes](docs/neuroscience-benchmarks/ARTIFACT_GRADING.md) | TMS, motor decoding, Purkinje, optogenetics and NEURAL-022 scorers for finished submissions, with their external-asset requirements. |
