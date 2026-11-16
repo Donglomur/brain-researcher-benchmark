@@ -1,0 +1,54 @@
+{
+  "schema": "thalamus_portable_environment_v1",
+  "architecture": "linux/arm64",
+  "python": "3.12.8",
+  "public_base": "python:3.12.8-slim-bookworm@sha256:2199a62885a12290dc9c5be3ca0681d367576ab7bf037da120e564723292a2f0",
+  "candidate_recipe": "Dockerfile",
+  "software_archive": "R-4.3.1-prefix.tar.gz",
+  "original_software_archive_pin": {
+    "bytes": 159436800,
+    "sha256": "ca15b595d5439ab729db2eba84941a51a26c88ca8f99ded02cb575fefb528330"
+  },
+  "R": {
+    "R": "4.3.1",
+    "caret": "6.0.94",
+    "xgboost": "1.7.5.1",
+    "pROC": "1.18.0",
+    "jsonlite": "1.8.4",
+    "digest": "0.6.31"
+  },
+  "Python_distribution_lock": "python-requirements.lock",
+  "Debian_runtime_lock": "debian-runtime.lock",
+  "candidate": {
+    "program_max_bytes": 65536,
+    "per_session_output_max_bytes": 4000000,
+    "candidate_seconds_per_session": 300,
+    "cpus": 1.75,
+    "memory_bytes": 3221225472,
+    "numeric_threads": 2,
+    "sessions": 17,
+    "conditions_per_session": 2,
+    "same_source_all_sessions": true,
+    "intermediate_private_feedback": false,
+    "network": false,
+    "runtime_readonly_mounts": [
+      "/input/Figure3C_data.RData",
+      "/input/SESSION_MANIFEST.json",
+      "/input/session.json"
+    ],
+    "enforcement": "external evaluator; no new coordinator included"
+  },
+  "grader": {
+    "python_core_stdlib_only": true,
+    "paired_statistics_require_R": true,
+    "Rscript": "/opt/thalamus/R-4.3.1/bin/Rscript",
+    "complete_output_max_bytes": 1000000,
+    "candidate_source_execution": false,
+    "host_services_required": []
+  },
+  "new_dependency_only_build": true,
+  "software_metadata_and_linkage_checked": true,
+  "candidate_executed": false,
+  "scorer_executed": false,
+  "scientific_parity_tested": false
+}

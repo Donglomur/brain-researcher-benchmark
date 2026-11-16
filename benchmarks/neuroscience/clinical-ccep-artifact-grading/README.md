@@ -39,11 +39,13 @@ statuses do not certify scientific provenance, biological completeness, actual
 LOPO training, model competence or isolation. The API returns private reports;
 the CLI prints them to stdout. The operator owns feedback and process custody.
 
-This package includes only the `original_full_scope` primary condition. It
-rejects transformed conditions. The separately developed CCEP pairing extension
-is not included. Remaining work includes full five-patient source/contact/block
-joins, clinical clocks and anatomy/mixed-pair policy, legal exposure, competent
-train-only references, protected matched access, paired controls and uncertainty.
+This directory includes only the `original_full_scope` primary condition and
+rejects transformed conditions. The adjacent [complete-block pairing component](../clinical-ccep-pairing/README.md)
+supplies prospective mappings, packet materialization and support-matched paired
+losses while retaining this primary score unchanged. Remaining work includes full
+five-patient source/contact/block joins, clinical clocks and anatomy/mixed-pair
+policy, legal exposure, competent train-only references, protected matched access,
+authentic paired execution and uncertainty.
 No registered count, historical contract or readiness flag changes here.
 
 Run the new relocated interface checks, which use only invented fixtures:
