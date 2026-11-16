@@ -1,0 +1,112 @@
+{
+  "CAPS": {
+    "cells.csv": 500000,
+    "branches.csv": 4000000,
+    "author_sections.csv": 3000000,
+    "components.csv": 250000,
+    "summary.json": 200000,
+    "interpretation.json": 20000
+  },
+  "TOTAL_CAP": 8000000,
+  "CELLS": [
+    "H13_Poly_1",
+    "H13_Split_1",
+    "H13_Split_3",
+    "H14_Poly_2",
+    "Mse_Normative_1",
+    "Mse_Normative_2",
+    "Mse_Poly_1",
+    "Mse_Split_1",
+    "Mse_Split_2",
+    "T6051_Poly_1"
+  ],
+  "tables": {
+    "cells.csv": {
+      "keys": [
+        "cell_id"
+      ],
+      "columns": [
+        "cell_id",
+        "species",
+        "n_nodes",
+        "n_components",
+        "n_tips",
+        "n_segments",
+        "max_order",
+        "graph_length_um",
+        "author_sholl_length_um",
+        "relative_export_difference",
+        "analysis_eligible",
+        "has_author_sections",
+        "author_retained_sections",
+        "author_retained_length_um",
+        "declared_diameter_thin_fraction",
+        "reloaded_size_thin_fraction",
+        "edge_thin_fraction_1.0",
+        "edge_thin_fraction_1.310202",
+        "edge_thin_fraction_1.6"
+      ]
+    },
+    "branches.csv": {
+      "keys": [
+        "cell_id",
+        "start_id",
+        "end_id"
+      ],
+      "columns": [
+        "cell_id",
+        "start_id",
+        "end_id",
+        "component_root",
+        "order",
+        "terminal",
+        "n_edges",
+        "length_um",
+        "mean_edge_diameter_um"
+      ]
+    },
+    "author_sections.csv": {
+      "keys": [
+        "cell_id",
+        "section_id"
+      ],
+      "columns": [
+        "cell_id",
+        "section_id",
+        "original_nodes",
+        "length_um",
+        "declared_diameter_um",
+        "reloaded_size_um",
+        "order"
+      ]
+    },
+    "components.csv": {
+      "keys": [
+        "cell_id",
+        "root_id"
+      ],
+      "columns": [
+        "cell_id",
+        "root_id",
+        "n_nodes",
+        "length_um",
+        "n_tips"
+      ]
+    }
+  },
+  "schema_version": 1,
+  "candidate_id": "PAPER-FIND-REP-013",
+  "required_files": [
+    "cells.csv",
+    "branches.csv",
+    "author_sections.csv",
+    "components.csv",
+    "summary.json"
+  ],
+  "optional_unscored_file": "interpretation.json",
+  "csv_row_and_column_order": "free",
+  "source_syntax_requirements": null,
+  "integer_values": "integral finite decimal/scientific spelling accepted; range0..1e9",
+  "numeric_tokens": "finite,at most128 characters; reject nonzero-to-zero float underflow",
+  "nulls": "empty CSV cells only for the four annotation-derived cell fields; exact reference missingness required"
+}
