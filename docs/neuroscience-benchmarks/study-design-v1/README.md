@@ -2,7 +2,7 @@
 
 Use the [paper template](paper.template.json) to plan paper-plus-data versus paper-plus-data-plus-code comparisons, or the [neural template](neural.template.json) to plan frozen-program versus live-investigation comparisons with explicit tool access. Copy a template into a new study directory and bind it to the complete scientific task contract. Preserve this source template unchanged.
 
-These are unbound study-planning templates and instructions, not executable benchmarks, runner configurations, a formal JSON Schema or an implemented validator. They supply no data, answer keys, measured budgets, statistical defaults or authorization to run an experiment. Completing fields does not establish scientific qualification.
+These templates remain unbound planning documents. A [companion description validator](../../../components/study_binding_validator_v1/README.md) now checks a normalized binding format with an exported schema, complete assignments, matched budget declarations and endpoint-specific denominators. It accepts the companion format, not these raw templates, and never opens referenced artifacts. Neither the templates nor a passing description check supply data, measured budgets, statistical defaults, scientific qualification or execution authority.
 
 The [scientific task-scope policy](../SCIENTIFIC_TASK_SCOPE_V1.md) defines task granularity and qualification. The [current construction status](../CONSTRUCTION_STATUS.md) reports programme readiness and counts; historical counts in the scope document do not override it. Conditions and comparisons do not add benchmark registrations.
 
@@ -50,5 +50,4 @@ The direct-signal extension is a separate unbound comparison, not the frozen-pro
 - All required bindings, primary comparisons and decision rules are resolved before execution. Null/empty placeholders cannot be interpreted as zero cost or permission.
 - The claim stays within actual evidence: no automatic qualification, uncontaminated-test, causal-mechanism, SOTA, novelty or submission-readiness promotion.
 
-This is a structural review checklist, not an implemented validator. Family-specific validators and actual enforcement remain separate. No model campaign or scientific execution is selected by this package.
-
+This checklist includes scientific and human review obligations beyond the companion validator. Its source checks enforce declared structure and joins; family-specific validation, artifact authentication, executable analysis and actual enforcement remain separate. No model campaign or scientific execution is selected by these documents.
