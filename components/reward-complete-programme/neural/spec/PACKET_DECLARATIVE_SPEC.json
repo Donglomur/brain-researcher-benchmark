@@ -1,0 +1,362 @@
+{
+  "schema": "packet_claim_policy_and_evidence_specification_v1",
+  "status": "scientific_design_specification_not_implementation_or_fixture",
+  "artifact_schema": "packet_claim_policy_v1",
+  "packet_schema": "closed_control_evidence_packet_v1",
+  "policy_keys": [
+    "schema",
+    "packet_schema",
+    "task_id",
+    "control_id",
+    "binding",
+    "claim_slots"
+  ],
+  "binding": {
+    "F": "bank_schema_id before query evidence",
+    "I": "same bank_schema_id plus permitted single packet_id after seeing packet"
+  },
+  "claim_slots": {
+    "endpoint": [
+      "native_fluorescence_prediction_evidence",
+      "cue_response_AUC_evidence",
+      "reward_response_AUC_evidence",
+      "omission_response_AUC_evidence",
+      "aversive_response_AUC_evidence",
+      "protocol_only_evidence",
+      "endpoint_not_established",
+      "insufficient_evidence"
+    ],
+    "availability": [
+      "retrospective_offline",
+      "cue_time_inputs_offline_target",
+      "online_pipeline_qualified",
+      "availability_not_established",
+      "insufficient_evidence"
+    ],
+    "support": [
+      "declared_population_supported",
+      "partial_source_support",
+      "identity_unverified",
+      "support_not_established",
+      "insufficient_evidence"
+    ],
+    "uncertainty": [
+      "animal_cluster_uncertainty",
+      "refitted_public_CV_exploratory",
+      "conditional_descriptive_only",
+      "uncertainty_not_qualified",
+      "insufficient_evidence"
+    ],
+    "comparison": [
+      "time_point_estimate_lower_loss",
+      "count_point_estimate_lower_loss",
+      "zero_point_estimate_difference",
+      "only_time_vs_nuisance",
+      "only_count_vs_nuisance",
+      "nuisance_only",
+      "no_model_evidence",
+      "native_error_summary_only",
+      "insufficient_evidence"
+    ],
+    "identifiability": [
+      "comparison_estimable_as_predictive_only",
+      "not_identifiable",
+      "support_not_established",
+      "adjustment_different_from_primary",
+      "training_signal_destroyed",
+      "missing_axis",
+      "no_neural_training_evidence",
+      "insufficient_evidence"
+    ],
+    "exposure": [
+      "public_exploratory_only",
+      "protected_replication_scope_only",
+      "no_frontier_claim",
+      "insufficient_evidence"
+    ],
+    "missing_information": [
+      "required_evidence_available",
+      "missing_axis_comparator_unavailable",
+      "training_response_removed_no_fitted_model",
+      "source_or_reference_unqualified",
+      "structurally_not_applicable",
+      "insufficient_evidence"
+    ]
+  },
+  "rules": {
+    "ordered_first_match": true,
+    "max_rules_per_slot_excluding_default": 8,
+    "max_rules_total_excluding_default": 64,
+    "max_conjuncts_per_rule": 4,
+    "mandatory_default": "insufficient_evidence",
+    "predicate_operations": [
+      "present",
+      "equals",
+      "compare"
+    ],
+    "numeric_comparators": [
+      "lt",
+      "le",
+      "eq",
+      "ge",
+      "gt"
+    ],
+    "numeric_rhs": "finite literal or another allowed numeric field",
+    "action": "one enum valid for the slot and at most4whitelisted evidence field references; numbers bind existing fields only",
+    "max_policy_bytes": 16384,
+    "missing_or_unavailable_field": "present false; all value comparisons false; no zero imputation",
+    "no_general_code_or_arithmetic_expressions": true
+  },
+  "packet_field_catalogue": {
+    "task_id": {
+      "type": "enum",
+      "values": [
+        "NEURAL-045",
+        "NEURAL-046"
+      ]
+    },
+    "control_id": {
+      "type": "enum",
+      "values": [
+        "full_permitted",
+        "metadata_only",
+        "neural_trained_nuisance_only",
+        "time_only",
+        "count_only",
+        "time_plus_count",
+        "no_behavior",
+        "past_behavior_only",
+        "concurrent_behavior",
+        "neural_pairing_destruction",
+        "neural_timing_destruction",
+        "training_response_removal",
+        "opaque_ID",
+        "source_prior"
+      ]
+    },
+    "endpoint_id": {
+      "type": "enum",
+      "values": [
+        "native_fluorescence_trajectory",
+        "cue_time_native_fluorescence",
+        "cue_AUC",
+        "reward_AUC",
+        "omission_AUC",
+        "aversive_cue_AUC",
+        "protocol_only"
+      ]
+    },
+    "unit": {
+      "type": "enum",
+      "values": [
+        "verified_stored_fluorescence",
+        "verified_stored_fluorescence_seconds",
+        "protocol_only",
+        "unverified"
+      ]
+    },
+    "availability": {
+      "type": "enum",
+      "values": [
+        "retrospective_processed",
+        "cue_information_offline_target",
+        "causal_online_qualified",
+        "protocol_only",
+        "unverified"
+      ]
+    },
+    "source_scope": {
+      "type": "enum",
+      "values": [
+        "public_development",
+        "protected_replication",
+        "unverified"
+      ]
+    },
+    "analysis_unit": {
+      "type": "enum",
+      "values": [
+        "biological_animal",
+        "source_directory_unverified",
+        "unverified"
+      ]
+    },
+    "support.status": {
+      "type": "enum",
+      "values": [
+        "complete",
+        "partial",
+        "unverified",
+        "not_identifiable"
+      ]
+    },
+    "support.verified_animals": {
+      "type": "nonnegative_integer_or_unavailable"
+    },
+    "support.verified_conditions": {
+      "type": "nonnegative_integer_or_unavailable"
+    },
+    "input.E_available_to_reference": {
+      "type": "boolean"
+    },
+    "input.N_available_to_reference": {
+      "type": "boolean"
+    },
+    "input.neural_training_available_to_reference": {
+      "type": "boolean"
+    },
+    "nuisance_profile": {
+      "type": "enum",
+      "values": [
+        "past_only",
+        "metadata_only",
+        "behavior_removed",
+        "past_plus_concurrent"
+      ]
+    },
+    "training_signal_state": {
+      "type": "enum",
+      "values": [
+        "original",
+        "none",
+        "pairing_destroyed",
+        "timing_destroyed"
+      ]
+    },
+    "reference_qualification": {
+      "type": "enum",
+      "values": [
+        "qualified",
+        "unqualified",
+        "not_applicable"
+      ]
+    },
+    "uncertainty.kind": {
+      "type": "enum",
+      "values": [
+        "protected_animal_cluster",
+        "refitted_public_CV_exploratory",
+        "conditional_on_fit_descriptive",
+        "unqualified",
+        "unavailable"
+      ]
+    },
+    "identifiability.status": {
+      "type": "enum",
+      "values": [
+        "predictively_estimable",
+        "not_identifiable",
+        "insufficient_support",
+        "not_assessable_missing_axis",
+        "unqualified"
+      ]
+    },
+    "predictor.mse": {
+      "type": "finite_nonnegative_number"
+    },
+    "predictor.mae": {
+      "type": "finite_nonnegative_number"
+    },
+    "predictor.bias": {
+      "type": "finite_number"
+    },
+    "models.M0.mse": {
+      "type": "finite_nonnegative_number"
+    },
+    "models.ME.mse": {
+      "type": "finite_nonnegative_number"
+    },
+    "models.MN.mse": {
+      "type": "finite_nonnegative_number"
+    },
+    "models.MEN.mse": {
+      "type": "finite_nonnegative_number"
+    },
+    "contrasts.Delta.point": {
+      "type": "finite_number"
+    },
+    "contrasts.Delta.lower": {
+      "type": "finite_number"
+    },
+    "contrasts.Delta.upper": {
+      "type": "finite_number"
+    },
+    "contrasts.G_E.point": {
+      "type": "finite_number"
+    },
+    "contrasts.G_E.lower": {
+      "type": "finite_number"
+    },
+    "contrasts.G_E.upper": {
+      "type": "finite_number"
+    },
+    "contrasts.G_N.point": {
+      "type": "finite_number"
+    },
+    "contrasts.G_N.lower": {
+      "type": "finite_number"
+    },
+    "contrasts.G_N.upper": {
+      "type": "finite_number"
+    },
+    "contrasts.ME_gain_over_M0.point": {
+      "type": "finite_number"
+    },
+    "contrasts.ME_gain_over_M0.lower": {
+      "type": "finite_number"
+    },
+    "contrasts.ME_gain_over_M0.upper": {
+      "type": "finite_number"
+    },
+    "contrasts.MN_gain_over_M0.point": {
+      "type": "finite_number"
+    },
+    "contrasts.MN_gain_over_M0.lower": {
+      "type": "finite_number"
+    },
+    "contrasts.MN_gain_over_M0.upper": {
+      "type": "finite_number"
+    },
+    "contrasts.MEN_gain_over_M0.point": {
+      "type": "finite_number"
+    },
+    "contrasts.MEN_gain_over_M0.lower": {
+      "type": "finite_number"
+    },
+    "contrasts.MEN_gain_over_M0.upper": {
+      "type": "finite_number"
+    }
+  },
+  "field_availability": "Every packet field must also occur in the exact task/cell packet_fields whitelist in APPLICABILITY_MATRIX.json; catalogue membership alone is not permission. Absent fields omitted or tagged unavailable, never privately recovered. No extraneous fields.",
+  "scoring": {
+    "numerical_prediction_endpoints": [],
+    "separate_outputs": [
+      "schema_and_coverage_validity",
+      "correct_eligible_claim_slots_over_eligible_slots",
+      "unsupported_overclaim_count",
+      "evidence_binding_correctness"
+    ],
+    "expected_claim_set": "Independent rubric fixed before the diagnostic bank; based only on permitted packet evidence and declared scientific semantics. Qualified experts adjudicate nonunique scientifically correct labels; record agreement. Insufficient-evidence default is correct only where evidence is actually insufficient, not a universal successful response.",
+    "no_weighted_composite": true
+  },
+  "evaluator": {
+    "max_primitive_tests": 256,
+    "operations": [
+      "schema_check",
+      "whitelisted_predicate_evaluation",
+      "first_match_selection",
+      "existing_field_binding",
+      "fixed_template_rendering",
+      "rubric_comparison",
+      "resource_logging"
+    ],
+    "prohibited": [
+      "participant_programme_execution",
+      "model_fitting_during_policy_application",
+      "neural_endpoint_extraction_during_policy_application",
+      "new_trajectory_or_model_predictions",
+      "hidden_comparator_backfill"
+    ]
+  },
+  "packet_generation": "Separately authorized operator preparation from closed control-admissible analyses; generation costs and source exposure recorded; no generation/execution this phase."
+}

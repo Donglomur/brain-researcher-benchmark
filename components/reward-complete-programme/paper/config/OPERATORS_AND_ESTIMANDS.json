@@ -1,0 +1,126 @@
+{
+  "schema": "reward_full_operator_contract_v2",
+  "operators": [
+    {
+      "id": "O01",
+      "name": "Identity and source census",
+      "inputs": "Immutable asset bytes plus animal registry and all sessions/modalities",
+      "definition": "Resolve each source-directory alias to biological animal, recording hardware, group, sex if verified, surgery, histology and exclusions. Never infer identity solely from path naming. Join full13cohorts; alias collapse precedes splits.",
+      "source_locators": "Methods Animals; loader48\u2013150,1329\u20131331",
+      "required_gate": "required identity registry, raw source hashes andhistology gates"
+    },
+    {
+      "id": "O02",
+      "name": "Event clocks and chronology",
+      "inputs": "Task event logs and photometry/video synchronization",
+      "definition": "Keep absolute session clocks, native sampling grid, cue/reward/omission/CS\u2212/milk identities, actual intervals, session boundaries and gaps. Event15=CS+; event10 carries outcome timestamp plus omission flag; reward_del=1\u2212event_flag; event7 is CS\u2212 only in60s-CSminus and milk only in600s-bgdmilk. Synthetic cue_on=milk_time\u22121.25 is alignment metadata, never a truecue. Separate cuecount, deliveredrewardcount, omissioncount and elapsedconditioningtime.",
+      "source_locators": "Methods conditioning/photometry; loader266\u2013511,990\u20131100",
+      "required_gate": "unit/sync, omitted/out-of-order events, contact and crash handling"
+    },
+    {
+      "id": "O03",
+      "name": "Behavior extraction",
+      "inputs": "Lick onset/offset and cue/outcome times",
+      "definition": "Baseline[-1.25,0) relativecue; anticipatory[0,1.25). \u0394lickcount=ncue\u2212nbase; \u0394Hz=\u0394count/1.25. Consumption[0,5) relativeoutcome sets nativefirsttrial, except partialreinforcement. Native keeps prolongedspout contacts, missing50trials imputed0 only with documented animal mapping; independent branch labelsmissing and propagates uncertainty. PSTH100ms bins, Gaussian\u03c3.75 fordisplay only.",
+      "source_locators": "Methods Analysis/Cue\u2013reward behavior; loader516\u2013617; lickhelpers18\u2013200,817\u2013843",
+      "required_gate": "all counts and contact availability, no fabricated zeros",
+      "improvement_branch": "Score conditional NB2 q(A|B,H): raw anticipatory count A is the target; pre-cue count B is known at cue onset. Signed A\u2212B and \u0394Hz remain derived secondary outcomes, never clipped or scored with an unsigned-count likelihood. Exact sample space/boundary: BEHAVIOR_SCORE_CONTRACT.json."
+    },
+    {
+      "id": "O04",
+      "name": "dF/F and native epochs",
+      "inputs": "Raw470/405or410,TTL and retainedprocessed dF/F",
+      "definition": "Native session-wide linearregression: fittedcontrol=a\u00d7iso+b; dF/F=100\u00d7(signal\u2212fittedcontrol)/fittedcontrol. Acquisition12Hzlowpass,120/130/30Hz grids. Distinguish nativeprocessedNWB input from rawsensor reconstruction; absentrawchannels means physiology reconstruction unscorable. NativeextractEpoch chooses firstsample>event; unequalepoch lengths triggerlinearinterpolation; truncatedtail edgepadding retainedandflagged. Independent physiological branch scoresactualobservedsampleswithgapmasks.",
+      "source_locators": "Methods Fiber photometry/Dopamine; lickhelpers220\u2013287,340\u2013460; loader234\u2013248",
+      "required_gate": "raw sensor and conversion pipeline absent; no causal preprocessing claim fromprocessedtrace"
+    },
+    {
+      "id": "O05",
+      "name": "Appetitive dopamine summaries",
+      "inputs": "Timestamped dF/F and events/licks",
+      "definition": "CueAUC integrates[0,.5) minus[-.5,0) relativecue. RewardAUC[0,.5) followingfirstlickafterreward orrewardtime ifalreadycontacting, minusprecuebaseline. OmissionAUC[1.25,3.25) relativecue minus2spre-cuebaseline. Keepunits%\u0394F/F\u00d7seconds; peakalternatives maxwindow\u2212meanbaseline. Native top3rewardresponse average peranimal/perwindow normalizesalltrials. Code fulltrialinput may include nonreward epochs unless driverfilters: verify, do not silently fix.",
+      "source_locators": "Methods Dopamine; loader711\u2013963; data_wrangling26\u2013220; figure_functions403\u2013558",
+      "required_gate": "normalization eligibility and exactdriver missing; future-dependent native only",
+      "improvement_branch": "Paired appetitive primary uses cue DA[0,.5)s on the six designated conditions only. Reward and omission DA remain mandatory separate event-origin predictions; their history and applicability are fixed in IMPROVEMENT_POPULATIONS.json. No current/future neural samples enter predictors."
+    },
+    {
+      "id": "O06",
+      "name": "Retrospective onset and learning eligibility",
+      "inputs": "Animal full finite cue behavior or dopamine trajectory",
+      "definition": "Cumsum; firstpoint withdistance\u2265.75\u00d7maxdist fromchord. Forwrongpolarity iterate backwards. Preserve source0-based/index conventions through typedtrialkey, notposition. Native helper computesdistance fromactualfirstpoint butpolaritydiagonal starts0; catchesfailure thenreturnsstate. Independentimplementation rejectsdegenerate/constant/NaN/zerochord ratherthanmanufacturingonset. Native learners require\u2265.5Hz mean intwo nonconsecutivedays (paper says>);exclude10%fromcriterion. Dopaminewindow truncated1.5\u00d7behavioronset, fullhorizonfornonlearners. Omissionpolaritydecrease acrossallomissions. Fearhelper defaultmultiple50, exactdriver missing.",
+      "source_locators": "Methods Analysis; lickhelpers546\u2013647,707\u2013741; figure_functions697\u2013802,3891+",
+      "required_gate": "boundary,degeneracy, \u2265versus>, fearnormalization/horizon andpanel masks"
+    },
+    {
+      "id": "O07",
+      "name": "Counts and elapsed time to learned trial",
+      "inputs": "O06 onset plus full event table",
+      "definition": "Deliveredrewardcount=sum deliveredflag at cueindices\u2264learnedtrial. Appetitivetime=sum precedingITI throughlearned+1 + learned\u00d7median anticipatoryduration; precedingITI derives previousoutcome-to-nextcue soincludesconsumptioninterval. Fear sumITIs throughlearned+1+cue-trace/shockdurations throughlearned, includingeach300s sessionlead-in. Calendarovernight gaps excluded native. Emitboth nativecalculation and directevent-derivedaudit.",
+      "source_locators": "lickhelpers846\u2013902; Methods behavior",
+      "required_gate": "finaltrialwithno nextcue, droppedinitialevents, truncatedsession musthave explicitcensoring"
+    },
+    {
+      "id": "O08",
+      "name": "Trajectory, alignment and asymptote",
+      "inputs": "Complete per-animal responses",
+      "definition": "Group arithmeticmeans andanimalSEM; allanimalcurves unaveraged. Trial-normalizedcumsum dividesbyfinal availabletrialcount, notrunningindexunlessexplicit. Behavioralignedcurves normalizedbycumsumattrial400/40. ITI-scaled x is display, actualseconds separate. Use eachfigure-specificfirst/lasttrialwindow including3600s8versus16 and14\u201316versus15\u201316.",
+      "source_locators": "allfigures; Methods Dopamine; figure_functions403\u2013576,1488+,2093+",
+      "required_gate": "perpanelcardinality/denominator andmissingtrialmask"
+    },
+    {
+      "id": "O09",
+      "name": "Scaling law and extrapolation",
+      "inputs": "Animal onset by condition",
+      "definition": "NativeOLS log10(groupmean learnedtrial)~log10(nominalITI+4.25) for30,60,300,600; test slope\u22121 with4groupobservations (df2), notnanimals. Two-pointDAline60/600 descriptive, no residualfitdf. Extrapolate3600,partialreinforcement,milk; independentreference bootstrapanimalswithingroups andrefitline topropagatepredictionuncertainty; no proofproportionality fromnonsignificance.",
+      "source_locators": "Methods Analysis; figure_functions2556\u20132723; stats_functions140\u2013158",
+      "required_gate": "native slope testn andSupplementaryTable1 unresolved"
+    },
+    {
+      "id": "O10",
+      "name": "Behavioral controls",
+      "inputs": "40trial controls plus ITI andconsumptionevents",
+      "definition": "FourF6interventions,8Welchcontrasts BY correction. ITI licking starts afterconsumptionbout ends; bout consecutive lickoff\u2192lickon\u2264.5s. First/last6boutduration averaged8days thenpairedanimals. Peranimalmedian prelearnedITIlickrate; explicitnonlearner and>10scontactexclusion. Keepbetween-group ecological regression separate fromwithinconditionrelationship.",
+      "source_locators": "Methods behavior; F6,ED8/9; lickhelpers486\u2013541",
+      "required_gate": "missingfullcontrol drivers andlongcontactidentity"
+    },
+    {
+      "id": "O11",
+      "name": "Aversive physiology and behavior",
+      "inputs": "Video/calibration,freeze/motion,410/470,TTL,placements",
+      "definition": "ezTrack640\u00d7480~30fps; noise11.5; freezing\u226510consecutiveframesmotion<500. Cuefreeze percentage15s minuspreceding15s,continuousmotioncontrol. DA cueAUC[1,15]s minus[-14,0); firstsecondomitted toremovevariableonsetresponse. NativePSTHnormalizedtop3peaks cueonset\u21922spostshock. Polaritydecrease. All15animals andtwooutcome-basedDAexclusions audited.",
+      "source_locators": "Methods Cue\u2013shockbehavior/Dopamine; ED5; loader990\u20131251",
+      "required_gate": "rawvideo,calibration,placement,rawsignals anddedicateddriver unresolved",
+      "improvement_branch": "Mandatory separate aversive transfer: predict raw cue freezing fraction, raw mean motion and cue DA, using baseline/history at cue onset. Keep squared-error units separate; signed changes derived. Each endpoint averages equally across the two ISI conditions; no appetitive-primary weight or fabricated lick target."
+    },
+    {
+      "id": "O12",
+      "name": "Omission cue dissociation",
+      "inputs": "50%cueand2somissionDA acrossomissionindex",
+      "definition": "Sixbehaviorlearners selectednative; pairedcueanddiponsets. Sigmoid y=L/(1+exp(\u2212k(x\u2212x0)))+b withcurve_fittrf,p0[max(y),median(x),1,min(y)]. Nativehalf/95% computed relativefitstart andfitmax overobserveddomain, notautomaticallyx0/asymptoticfraction. Returnfitdiagnostics,parametercovariance,residuals,nonconvergence andanimalresamplingintervals. DistinctAUCwindows requirephysiologicalkineticcontrol.",
+      "source_locators": "Methods statistics; F8; lickhelpers913\u2013941",
+      "required_gate": "SupplementaryTable1,nativeFigure8driver andtimekernelcontrol"
+    },
+    {
+      "id": "O13",
+      "name": "Histology and localization",
+      "inputs": "Originalimages,atlascoordinates,placementregistry",
+      "definition": "Recreateallfiberplacements,representativecomposite andmissedfiberexample withidentitylinkedQC; blindedplacementverificationdescribed inpaper. Keepimageprovenance,physicalunits andNAcCore/shell/dorsalstriatum distinctions. Do not inferplacement fromDAresponsepolarity.",
+      "source_locators": "Methods Surgery; ED3;ED5h",
+      "required_gate": "required histology source unavailable inreadscope"
+    },
+    {
+      "id": "O14",
+      "name": "Scientific inference and multiplicity",
+      "inputs": "Animal-level endpoint andmodeloutputs",
+      "definition": "NativeWelcht/two-tailed,WelchANOVA,Fvariancetest,pairedt aspanel-specific;Kruskal\u2013Wallis/Mann\u2013Whitney forsimulations/skewed10%;F6BY8contrasts;F4jandED7aBH;otherlistedmultiplefamiliesBonferroni. NativeSEM,SD,IQR specifiedperpanel. SupplementaryTable1 mustcloseexactfamilies/teststatistics/df. Independentrobustness usesanimalcluster bootstrap forrepeatedtrials,pairedresampling forcue/dip,allcohortcensoring,simulationsseparate frombiologicaluncertainty.",
+      "source_locators": "Methods Statistics and reproducibility; stats_functions19\u2013204",
+      "required_gate": "no pvalue-onlyrubric or biologicaln fromtrial/seedcount",
+      "improvement_branch": "Fixed population and weights, required per-condition guardrails, multiplicity and claim ladder are binding in IMPROVEMENT_POPULATIONS.json. All11 appetitive behavior cohorts and mixed behavior-only subgroups are mandatory. Missing support cannot disappear by weight renormalization."
+    }
+  ],
+  "failure_policy": "Everyoperator returns typed status,sourceunits,n input/n output,missing/excluded identities and reasons. NoNaNs converted tosuccess orsilentdrop. Nativecaughtfailures reproducedasdiagnostics andcannotqualifycorrectonset. Scientificquantities unscorable whenunidentified; conservative bounds/censoring forindependentanalysis.",
+  "binding_improvement_contracts": [
+    "BEHAVIOR_SCORE_CONTRACT.json",
+    "IMPROVEMENT_POPULATIONS.json"
+  ]
+}
