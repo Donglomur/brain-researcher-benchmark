@@ -2,7 +2,7 @@
 
 This additive component implements the submitted-program interface for the existing **PAPER-FIND-REP-013** task. It reconstructs ten released Purkinje-cell trees from Busch and Hansel (2025), including all thirteen components, then compares every required keyed numerical output. It is one existing benchmark component, not another benchmark ID.
 
-Read `TASK.md` for the scientific question, geometry conventions, units, coverage and interpretation limits. `SCHEMA.json` gives the output interface. The scientific scorer (`numeric_score.py`) and its schema (`schema.py`) are byte-for-byte copies of the accepted PROGRAM route. The old binary artifact scorer is separate and unchanged.
+Read `TASK.md` for the scientific question, geometry conventions, units, coverage and interpretation limits. `SCHEMA.json` gives the output interface. The schema (`schema.py`) remains byte-for-byte identical to the accepted PROGRAM route. The current scientific scorer (`numeric_score.py`) includes the separately reviewed identity and signed-bias correction described below. The old binary artifact scorer is separate and unchanged.
 
 This directory can be copied into a clean checkout without any private authoring modules. It contains source, public task text, schemas, input/reference **hash descriptors**, an unselected request template, and invented control cases. It does not contain released SWC arrays, private numerical answers, a model, or a provisioned container image.
 
@@ -25,3 +25,17 @@ Review the full `RESULT.json` metric vector and closure evidence. A zero branch-
 ## Scope
 
 This is an exposed-data morphology reproduction audit with source-excerpt and author-total assistance. It establishes neither full-paper reproduction, a paper-only versus official-code advantage, held-out improvement, a new neuroscience finding, donor-level inference nor Terminal-Bench acceptance. The capacity/history receipts are trusted operator adjudications bound by the selected request; the component validates their shape, pins and limits but cannot discover an entire organization's concurrent workloads or authenticate a reviewer's judgment by itself.
+
+## Scorer revision: exact identity and signed bias
+
+The current scorer rejects decimal identity tokens that become integers only after binary64 rounding, consistently rejects nonzero Unicode decimal underflow, and preserves small signed-bias cancellation residuals. RMSE, MAE, maximum absolute error, complete coverage and the output schema are unchanged. Ordinary bias can intentionally change in its last bits. This is a source correction, not a new authentic result. The earlier scientific results and `SOURCE_CONTROL_RESULTS.json` remain tied to the historical scorer/source lock. Fresh native qualification is still required for the revised source.
+
+Submission receipts bind the scorer hash. An old receipt is refused by this revision; preserve historical attempts and grades, and freeze a new submission only under the selected revised source. No automatic regrading occurs.
+
+Run the eight relocated numerical regression methods plus the scorer-receipt boundary check, using invented values only, from the repository root:
+
+```sh
+python3.11 -I -S -B components/purkinje-artifacts/test_numeric_score.py
+```
+
+The old scorer in `regression_fixtures/old_numeric_score.py` is a pinned regression fixture only. Production loads the single current scorer from `program-v1`; fixtures contain no authentic reconstructions or reference answers.

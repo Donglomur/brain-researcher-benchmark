@@ -23,10 +23,6 @@
       "bytes": 11039,
       "sha256": "f1a3f481639ca70a69e0c761dadaa78cf238bbd05b853b57427b2d83cd82cb00"
     },
-    "numeric_score.py": {
-      "bytes": 8644,
-      "sha256": "d04eca18294d3cf328c52e3dea8cff63dd59dd639b366f3fe0a6435fea4a5973"
-    },
     "schema.py": {
       "bytes": 2123,
       "sha256": "76df29fdab9d70dbcf129788c4201bf75df65c4ce9abd9bf1f5fff334cbc4538"
@@ -55,11 +51,32 @@
     }
   },
   "schema": "purkinje-program-public-provenance/v1",
+  "scorer_revision": {
+    "bias_rounding": "Ordinary signed-bias last bits may intentionally differ; historical bias results retain their original scorer.",
+    "changes": [
+      "Reject nonintegral identity tokens before binary64 rounding.",
+      "Reject nonzero Unicode decimal underflow consistently.",
+      "Preserve signed cancellation residuals and finite means after intermediate sum overflow."
+    ],
+    "current_scorer": {
+      "bytes": 9797,
+      "sha256": "5c80e13c45d04fe7fbecc6f14e2cf2dc45f3a87bcaaf916b46cedcdcac9d732c"
+    },
+    "historical_scorer": {
+      "bytes": 8644,
+      "sha256": "d04eca18294d3cf328c52e3dea8cff63dd59dd639b366f3fe0a6435fea4a5973"
+    },
+    "historical_source_controls": "Historical SOURCE_CONTROL_RESULTS and accepted scientific records are unchanged and do not qualify this revision.",
+    "name": "exact-integer-identity-and-signed-bias-v2",
+    "preserved": "Full ten-tree support, topology/missingness, schema, RMSE/MAE/max and target-last ordering.",
+    "qualification": "generated source controls only; no authentic reconstruction or new scientific qualification",
+    "receipt_policy": "Old scorer-bound receipts are refused; any new frozen submission must bind the new scorer. Preserve old attempts and grades."
+  },
   "task_id": "PAPER-FIND-REP-013",
   "transport_changes": [
     "Original task-specific image, CPU, memory, threads, UID, scratch, file and CPU/core limits are explicit.",
     "New bounded multifile wrapper; candidate sixty seconds, capture allowance, bounded stdout/stderr.",
-    "Exact input/reference descriptors; post-closure inert-byte host grading with unchanged scorer.",
+    "Exact input/reference descriptors; post-closure inert-byte host grading with the separately versioned scorer.",
     "Fresh source-bound external native qualification is required; none inherited."
   ]
 }
