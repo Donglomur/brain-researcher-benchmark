@@ -3420,3 +3420,89 @@ jobs:
           if not (result.testsRun == 13 and result.wasSuccessful() and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses):
               raise SystemExit(1)
           MARM0SET_SOURCE
+  consensus-held-neuron-source-delivery:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Verify CONSENSUS source and relocated source-admission interface
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'CONSENSUS_SOURCE'
+          import hashlib, json, pathlib, runpy, stat
+          root = pathlib.Path('benchmarks/scientific_components/consensus_held_neuron')
+          if not stat.S_ISDIR(root.lstat().st_mode):
+              raise RuntimeError('ordinary CONSENSUS package directory required')
+          manifest_path = root / 'SOURCE_MANIFEST.json'
+          if not stat.S_ISREG(manifest_path.lstat().st_mode):
+              raise RuntimeError('ordinary CONSENSUS manifest required')
+          raw = manifest_path.read_bytes()
+          if len(raw) != 1217 or hashlib.sha256(raw).hexdigest() != '67ae2e59b54e60408c274a02e9145850f701acc26c1083dacadbc63e4fc2d91a':
+              raise RuntimeError('selected CONSENSUS manifest changed')
+          manifest = json.loads(raw)
+          members = manifest['files']
+          names = [row['path'] for row in members]
+          if len(names) != 7 or len(set(names)) != 7 or any(pathlib.PurePosixPath(name).name != name for name in names):
+              raise RuntimeError('selected CONSENSUS member namespace changed')
+          expected = set(names) | {'SOURCE_MANIFEST.json'}
+          if {p.name for p in root.iterdir()} != expected:
+              raise RuntimeError('unexpected CONSENSUS package member')
+          for row in members:
+              member = root / row['path']
+              if not stat.S_ISREG(member.lstat().st_mode):
+                  raise RuntimeError('ordinary CONSENSUS member required')
+              body = member.read_bytes()
+              if len(body) != row['bytes'] or hashlib.sha256(body).hexdigest() != row['sha256']:
+                  raise RuntimeError('selected CONSENSUS source member changed')
+          runpy.run_path(str(root / 'test_portability.py'), run_name='__main__')
+          CONSENSUS_SOURCE
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/scientific_components/consensus_held_neuron/test_correction.py Projection
+
+  fus-fullfield-component-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Authenticate complete fUS source and portable dependency admission
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'FUS_SOURCE'
+          import hashlib, json, pathlib, runpy, sys
+          if sys.flags.optimize:
+              raise RuntimeError('source controls require assertions enabled')
+          root = pathlib.Path('components/fus-fullfield')
+          manifest = root / 'SOURCE.json'
+          if root.is_symlink() or not root.is_dir() or manifest.is_symlink() or not manifest.is_file():
+              raise RuntimeError('ordinary component directory and manifest required')
+          raw = manifest.read_bytes()
+          if len(raw) != 1734 or hashlib.sha256(raw).hexdigest() != '8bde2b2f23b0a12110741b6461b82dbc8a8cbb128068c8e7a95713fa8ed6ee8e':
+              raise RuntimeError('selected fUS source distribution changed')
+          members = json.loads(raw)['files']
+          expected = {member['path'] for member in members} | {'SOURCE.json'}
+          if {p.name for p in root.iterdir()} != expected:
+              raise RuntimeError('exact fUS package members required')
+          for member in members:
+              path = root / member['path']
+              if pathlib.Path(member['path']).name != member['path'] or path.is_symlink() or not path.is_file():
+                  raise RuntimeError('ordinary local source member required')
+              body = path.read_bytes()
+              if len(body) != member['bytes'] or hashlib.sha256(body).hexdigest() != member['sha256']:
+                  raise RuntimeError('selected fUS source member changed before import')
+          runpy.run_path(str(root / 'test_delivery.py'), run_name='__main__')
+          FUS_SOURCE

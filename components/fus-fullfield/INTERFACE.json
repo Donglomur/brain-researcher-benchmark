@@ -1,0 +1,33 @@
+{
+  "authentic_runtime_selected": false,
+  "benchmark_count_delta": 0,
+  "dependencies": [
+    "scorer.py",
+    "roster.py"
+  ],
+  "entrypoint": "fullfield.prepare_fold(intake, load_record, emit, *, held_record_id, fold_key)",
+  "failures": [
+    "Incomplete intake/record/frame/pixel support",
+    "New or inconsistent exclusions",
+    "Wrong native shape/rate/source float or nonrepresentable source operands",
+    "Missing, tied or inconsistent last-complete baseline/memory frame",
+    "Zero/all-invalid training scale",
+    "Source or output callback failure; preserve staged partials"
+  ],
+  "full_study_requirement": "All48 independent outer folds; each uses all other47 positive records. Zero record retained in intake.",
+  "input_contract": {
+    "emit": "Evaluator-owned private staging callback receives raw RGB bytes and allowed metadata, plus labels only for calibration. Must commit only after success; partial output on failure is not a completed fold.",
+    "intake": "Unchanged full fus_adjudicated_intake_v1 schema; exact49 records and20622 declared source slots. External authentic adjudication required.",
+    "load_record": "Evaluator-owned deterministic callback returning complete fus_normalized_fullfield_record_v1; declared IEEE binary32/binary64, native y,x grid/pitch, full ordered frame catalogues and all source slots. See README."
+  },
+  "output": "One fold receipt and every held eligible calibration/query map; no native loader, participant delivery or process isolation.",
+  "schema": "fus_fullfield_callable_interface_v1",
+  "scientific_scope": {
+    "animals": 2,
+    "calibration_per_positive_record": 8,
+    "declared_records": 49,
+    "declared_trials": 20622,
+    "positive_records": 48,
+    "provisional_all_eligible_queries": 20238
+  }
+}
