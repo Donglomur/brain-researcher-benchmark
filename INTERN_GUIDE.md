@@ -8,9 +8,9 @@ around* it: the daily contract, the difficulty ratchet, the environment, and how
 board + queue keep two people from colliding.
 
 Three shipped tasks are your copy-templates:
-- `GRADIENT-001/` — rigor genre, **over-claim** failure axis (un-cued "characterise").
-- `SOCIALBRAIN-001/` — reproduction genre, **confident-refutation** axis (un-cued GSR lever).
-- `DEVCONN-001/` — reproduction genre, **wrong-cause** axis (un-cued head-motion confound).
+- `examples/original-three/GRADIENT-001/` — rigor genre, **over-claim** failure axis (un-cued "characterise").
+- `examples/original-three/SOCIALBRAIN-001/` — reproduction genre, **confident-refutation** axis (un-cued GSR lever).
+- `examples/original-three/DEVCONN-001/` — reproduction genre, **wrong-cause** axis (un-cued head-motion confound).
 
 ---
 

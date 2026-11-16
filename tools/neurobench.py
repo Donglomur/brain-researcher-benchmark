@@ -8,6 +8,7 @@ command never starts an LLM. Metadata commands and --dry-run execute no candidat
 """
 import argparse
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import stat
@@ -18,6 +19,70 @@ ROOT = Path(__file__).resolve().parents[1]
 COMMON = {'schema_version', 'id', 'track', 'title', 'status', 'primary_outputs',
           'input_assets', 'evaluation', 'resources', 'holds',
           'next_implementation_action', 'provenance', 'admission'}
+
+
+def public_metadata_mode(root):
+    """A public clone has source specs, not the private construction ledgers."""
+    paths = [Path(root) / 'docs/neuroscience-benchmarks/build' / name
+             for name in ('paper_100.json', 'neural_100.json')]
+    present = [path.is_file() for path in paths]
+    if any(present) and not all(present):
+        raise ValueError('Incomplete legacy roster pair')
+    return not all(present)
+
+
+def public_catalog_module():
+    # Explicit sibling load also works under python -I, without changing sys.path.
+    spec = importlib.util.spec_from_file_location('neurobench_public_catalog',
+                                                 Path(__file__).with_name('build_public_catalog.py'))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def public_summary(catalog):
+    counts = catalog['counts']
+    return {'target_assignments': counts['total'], 'delivery_specifications': counts['total'],
+            'paper_specifications': counts['paper'], 'neural_specifications': counts['neural'],
+            'canonical_source_specifications': counts['canonical_specifications'],
+            'expansion_drafts': counts['expansion_drafts'],
+            'runtime_manifests_present': counts['runtime_manifests'],
+            'supporting_source_components': counts['source_components'],
+            'local_score_adapters_verified': None, 'score_adapter_ids': None,
+            'local_program_runners_verified': None, 'program_runner_ids': None,
+            'bounded_reference_runs_recorded': None, 'bounded_reference_ids': None,
+            'distinct_ids_with_reference_or_score_adapter': None,
+            'historical_native_development_packages': None,
+            'distinct_ids_with_native_package_or_scoring_adapter': None,
+            'full_candidate_contracts_completed': None, 'research_qualified': None,
+            'submission_ready': None, 'scientific_readiness': 'unknown',
+            'submission_readiness': 'unknown',
+            'count_basis': 'Published source specifications and the complete expansion registry chain. '
+                           'Runtime receipts, candidate code, data and private construction ledgers are not inspected.',
+            'counting_note': catalog['counting_note']}
+
+
+def public_metadata_command(action, root, *, track=None, task_id=None):
+    builder = public_catalog_module()
+    catalog = builder.generate(root, check=True) if action == 'check' else builder.load(root)
+    if action in ('status', 'check'):
+        result = public_summary(catalog)
+        if action == 'check':
+            result.update(metadata_check='passed', check_scope='Deterministic public metadata/catalog consistency only')
+        return result
+    if action == 'list':
+        return [{key: row[key] for key in ('id', 'title', 'track', 'source_specification',
+                  'registration_stage', 'specification', 'runtime_manifest',
+                  'scientific_readiness', 'submission_readiness',
+                  'local_scoring_adapter_verified', 'local_program_runner_verified')}
+                for row in catalog['tasks'] if track is None or row['track'] == track]
+    row = next((row for row in catalog['tasks'] if row['id'] == task_id), None)
+    if row is None:
+        raise ValueError('Specification not yet built for ' + str(task_id))
+    return {'specification': read(builder.public_path(Path(root), row['specification']['path'])),
+            'runtime': read(builder.public_path(Path(root), row['runtime_manifest']['path']))
+                       if row['runtime_manifest'] else None,
+            'catalog_entry': row}
 
 
 def read(path):
@@ -36,6 +101,13 @@ def digest(path):
 
 
 def specifications(root=ROOT, complete=False):
+    if public_metadata_mode(root):
+        builder = public_catalog_module()
+        catalog = builder.discover(root) if complete else builder.load(root)
+        expected = {row['id']: row for row in catalog['tasks']}
+        docs = {identifier: read(builder.public_path(Path(root), row['specification']['path']))
+                for identifier, row in expected.items()}
+        return docs, expected
     expected = {}
     for name in ('paper_100.json', 'neural_100.json'):
         for task in read(root / 'docs/neuroscience-benchmarks/build' / name)['tasks']:
@@ -237,6 +309,8 @@ def verified_program_runtime(path, doc, root=ROOT):
 
 
 def summary(root=ROOT):
+    if public_metadata_mode(root):
+        return public_metadata_command('status', root)
     docs, canonical = specifications(root)
     runtime = runtime_manifests(root)
     if set(runtime) - set(canonical):
@@ -362,7 +436,9 @@ def run_command(task_id, program, output, root=ROOT, *, review=None, other_reser
     return command, root.resolve()
 
 
-def main():
+def main(argv=None, root=None):
+    dispatch_options = {} if root is None else {'root': Path(root)}
+    root = ROOT if root is None else Path(root)
     parser = argparse.ArgumentParser(description=__doc__)
     subs = parser.add_subparsers(dest='action', required=True)
     subs.add_parser('status')
@@ -375,32 +451,35 @@ def main():
     p = subs.add_parser('run'); p.add_argument('id'); p.add_argument('--program', required=True)
     p.add_argument('--output', required=True); p.add_argument('--dry-run', action='store_true')
     p.add_argument('--review'); p.add_argument('--other-reserve-bytes', type=int)
-    args = parser.parse_args()
-    if args.action == 'status':
-        result = summary()
+    args = parser.parse_args(argv)
+    if args.action in ('status', 'check', 'list', 'show') and public_metadata_mode(root):
+        result = public_metadata_command(args.action, root, track=getattr(args, 'track', None),
+                                         task_id=getattr(args, 'id', None))
+    elif args.action == 'status':
+        result = summary(root)
     elif args.action == 'check':
-        specifications(complete=True)
-        result = {'metadata_check': 'passed', **summary()}
+        specifications(root, complete=True)
+        result = {'metadata_check': 'passed', **summary(root)}
     elif args.action == 'list':
-        docs, _ = specifications()
-        runtime = runtime_manifests()
+        docs, _ = specifications(root)
+        runtime = runtime_manifests(root)
         result = [{'id': d['id'], 'title': d['title'], 'track': d['track'],
                    'source_specification': True,
-                   'local_scoring_adapter_verified': d['id'] in runtime and verified_runtime(*runtime[d['id']]),
-                   'local_program_runner_verified': d['id'] in runtime and verified_program_runtime(*runtime[d['id']])}
+                   'local_scoring_adapter_verified': d['id'] in runtime and verified_runtime(*runtime[d['id']], root),
+                   'local_program_runner_verified': d['id'] in runtime and verified_program_runtime(*runtime[d['id']], root)}
                   for d in docs.values() if args.track is None or d['track'] == args.track]
     elif args.action == 'show':
-        docs, _ = specifications()
+        docs, _ = specifications(root)
         if args.id not in docs:
             raise ValueError('Specification not yet built for ' + args.id)
         result = {'specification': docs[args.id],
-                  'runtime': runtime_manifests().get(args.id, (None, None))[1]}
+                  'runtime': runtime_manifests(root).get(args.id, (None, None))[1]}
     else:
         if args.action == 'run':
-            command, cwd = run_command(args.id, args.program, args.output,
+            command, cwd = run_command(args.id, args.program, args.output, **dispatch_options,
                                        review=args.review, other_reserve_bytes=args.other_reserve_bytes)
         else:
-            command, cwd = score_command(args.id, args.submission, args.output,
+            command, cwd = score_command(args.id, args.submission, args.output, **dispatch_options,
                                          review=args.review, other_reserve_bytes=args.other_reserve_bytes)
         if not args.dry_run:
             return subprocess.run(command, cwd=cwd, check=False).returncode

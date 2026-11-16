@@ -1,6 +1,8 @@
 # Neuroscience benchmark construction progress
 
-Snapshot: **15 November 2026**. The [public definition chain](../../benchmarks/neuroscience/expansion-20261114-v12/registry.json) contains **234 registered task drafts: 116 paper and 118 neural**. These are not 234 finished benchmarks. The receipt-aware private catalogue and complete private execution evidence are not published.
+Historical snapshot: **15 November 2026**. A 16 November metadata audit confirms 234 registrations and 42 historical finite acceptances; it does not establish a current complete-contract or submission-ready total. The zero counts below remain the dated snapshot, not a fresh requalification. The [public catalog](../../benchmarks/catalog/README.md) now supports metadata discovery without private execution receipts.
+
+ The [public definition chain](../../benchmarks/neuroscience/expansion-20261114-v12/registry.json) contains **234 registered task drafts: 116 paper and 118 neural**. These are not 234 finished benchmarks. The receipt-aware private catalogue and complete private execution evidence are not published.
 
 | Stage | Count |
 | --- | ---: |
@@ -17,7 +19,7 @@ The 42 historical acceptance decisions are authenticated; not all underlying sci
 
 For practical public entry points, see [using the construction source](../../README.md#use-the-neuroscience-construction-source). Public package and release availability is described below; the current local count is not an installation claim.
 
-For completed submissions, the [direct artifact grading index](../../README.md#direct-artifact-grading-routes) links the TMS, across-day motor, Purkinje, optogenetics and NEURAL-022 movement-decoding commands. Each route requires its separately provisioned input/reference assets; software availability does not change the qualification counts above.
+For completed submissions, the [direct artifact grading index](ARTIFACT_GRADING.md) links the TMS, across-day motor, Purkinje, optogenetics and NEURAL-022 movement-decoding commands. Each route requires its separately provisioned input/reference assets; software availability does not change the qualification counts above.
 
 ## Earlier reconstruction and compatibility checkpoint
 

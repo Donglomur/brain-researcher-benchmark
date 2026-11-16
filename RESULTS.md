@@ -75,9 +75,9 @@ Install [harbor-framework/harbor](https://github.com/harbor-framework/harbor), t
 repo root (see [`CONTRIBUTING.md`](CONTRIBUTING.md) for agent auth):
 
 ```bash
-harbor run -p DEVCONN-001 -a oracle                                              -o jobs -k 1 -y
-harbor run -p DEVCONN-001 -a codex       -m gpt-5.5 --ak reasoning_effort=xhigh  -o jobs -k 3 -y
-harbor run -p DEVCONN-001 -a claude-code -m claude-opus-4-8                       -o jobs -k 3 -y
+harbor run -p examples/original-three/DEVCONN-001 -a oracle                                              -o jobs -k 1 -y
+harbor run -p examples/original-three/DEVCONN-001 -a codex       -m gpt-5.5 --ak reasoning_effort=xhigh  -o jobs -k 3 -y
+harbor run -p examples/original-three/DEVCONN-001 -a claude-code -m claude-opus-4-8                       -o jobs -k 3 -y
 ```
 
 Then **read each run's `findings.md`** and hand re-score against the task's judgement

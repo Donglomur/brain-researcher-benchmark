@@ -200,7 +200,7 @@ Tells that scream "machine-generated" (avoid):
 - an instruction that **describes its own scoring rubric**;
 - bespoke artifact contracts (e.g. a `method_route.json`/`claim_support.json`/`artifact_contract_scan.json` trio).
 
-Human version (see `GRADIENT-001/tests/test_outputs.py`):
+Human version (see `examples/original-three/GRADIENT-001/tests/test_outputs.py`):
 - a short reviewer-style `pytest` with **plain `assert`s** and a comment stating the ground truth;
 - a natural deliverable (`findings.md` write-up + `run_metadata.json`), not a rigor-artifact trio;
 - for reproduction tasks, literally `assert abs(result - expected) < tol`.
