@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Stroop55 candidate predictions",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "task", "predictions"],
+  "properties": {
+    "schema": {"const": "stroop55-predictions-v1"},
+    "task": {"const": "NEURAL-SCOPE-20261114-STROOP"},
+    "predictions": {
+      "type": "array",
+      "minItems": 165,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["case_id", "probabilities", "label"],
+        "properties": {
+          "case_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "probabilities": {"type": "array", "minItems": 3, "maxItems": 3,
+                            "items": {"type": "number", "minimum": 0, "maximum": 1}},
+          "label": {"enum": ["neutral", "congruent", "incongruent"]}
+        }
+      }
+    }
+  },
+  "$comment": "The executable scorer additionally enforces exact case census, unique IDs, strict duplicate-key JSON, probability sum within1e-9, finite values and first-index argmax label consistency.165 is the logical minimum from55people times3nonempty classes, not an asserted authentic block count."
+}
