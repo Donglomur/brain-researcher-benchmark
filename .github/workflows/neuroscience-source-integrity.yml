@@ -4985,3 +4985,116 @@ jobs:
           CONSENSUS_SOURCE
           /usr/bin/timeout --signal=TERM --kill-after=5s 60s python3 -I -S -B benchmarks/neuroscience/consensus35-header-operator/test_portable.py
           /usr/bin/timeout --signal=TERM --kill-after=5s 60s python3 -I -S -B benchmarks/neuroscience/consensus35-header-operator/test_headers.py
+
+  dunl-coupled-reconstruction-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate DUNL package and check complete coupled reconstruction
+        working-directory: benchmarks/neuroscience/dunl-coupled-reconstruction
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'DUNL_SOURCE'
+          import hashlib, json, os, stat, sys
+          from pathlib import Path
+          root = Path.cwd()
+          manifest_pin = (871, '05a5567972335856ae14ce64050d27e2af756887e59340fedf8181f7da6752a4')
+          expected = {'README.md', 'PROVENANCE.json', 'reconstruction.py', 'test_reconstruction.py', 'verify_and_test.py'}
+          def identity(st):
+              return tuple(getattr(st, key) for key in ('st_dev','st_ino','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns'))
+          def capture(path, size, digest):
+              if type(size) is not int or not 0 < size <= 262144:
+                  raise ValueError('invalid source size')
+              if any(p.is_symlink() for p in (path, *path.parents)):
+                  raise ValueError('source symlink')
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as f:
+                  before = os.fstat(f.fileno())
+                  if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != size:
+                      raise ValueError('ordinary exact source required')
+                  body = f.read(size + 1)
+                  after = os.fstat(f.fileno())
+              if identity(before) != identity(after) or identity(after) != identity(path.lstat()):
+                  raise ValueError('source changed')
+              if len(body) != size or hashlib.sha256(body).hexdigest() != digest:
+                  raise ValueError('source identity')
+              body.decode('utf-8')
+              return body
+          manifest = json.loads(capture(root/'SOURCE_MANIFEST.json', *manifest_pin))
+          assert set(manifest) == {'schema','family','files'}
+          assert manifest['schema'] == 'dunl_public_package_manifest_v1'
+          assert manifest['family'] == 'PAPER-CANDIDATE-20261114-DUNL'
+          rows = manifest['files']
+          assert len(rows) == 5 and {r['path'] for r in rows} == expected
+          assert sum(r['bytes'] for r in rows) == 41520
+          assert {p.name for p in root.iterdir()} == expected | {'SOURCE_MANIFEST.json'}
+          bodies = {r['path']: capture(root/r['path'], r['bytes'], r['sha256']) for r in rows}
+          path = root/'verify_and_test.py'
+          sys.argv = [str(path), '--manifest-bytes', str(manifest_pin[0]), '--manifest-sha256', manifest_pin[1]]
+          exec(compile(bodies['verify_and_test.py'], str(path), 'exec'), {'__name__':'__main__', '__file__':str(path)})
+          DUNL_SOURCE
+
+  neural021-deferred-grade-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate NEURAL-021 package and check complete deferred grading
+        working-directory: benchmarks/neuroscience/neural021-deferred-grade
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/timeout --signal=TERM --kill-after=5s 150s python -I -S -B - <<'NEURAL021_SOURCE'
+          import hashlib, json, os, stat, sys
+          from pathlib import Path
+          root = Path.cwd()
+          manifest_pin = (3466, '34c8815c87dfa5193253678612aac246f608a7be865882fe7a8ca941dbb13ee2')
+          def identity(st):
+              return tuple(getattr(st, key) for key in ('st_dev','st_ino','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns'))
+          def capture(path, size, digest):
+              if type(size) is not int or not 0 < size <= 262144:
+                  raise ValueError('invalid source size')
+              if any(p.is_symlink() for p in (path, *path.parents)):
+                  raise ValueError('source symlink')
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as f:
+                  before = os.fstat(f.fileno())
+                  if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != size:
+                      raise ValueError('ordinary exact source required')
+                  body = f.read(size + 1)
+                  after = os.fstat(f.fileno())
+              if identity(before) != identity(after) or identity(after) != identity(path.lstat()):
+                  raise ValueError('source changed')
+              if len(body) != size or hashlib.sha256(body).hexdigest() != digest:
+                  raise ValueError('source identity')
+              body.decode('utf-8')
+              return body
+          manifest = json.loads(capture(root/'SOURCE_MANIFEST.json', *manifest_pin))
+          assert set(manifest) == {'schema','files'}
+          assert manifest['schema'] == 'neural021_public_source_manifest_v1'
+          rows = manifest['files']
+          assert len(rows) == 24 and sum(r['bytes'] for r in rows.values()) == 189666
+          expected = set(rows) | {'SOURCE_MANIFEST.json'}
+          actual = set()
+          for path in root.rglob('*'):
+              mode = path.lstat().st_mode
+              if stat.S_ISREG(mode):
+                  actual.add(path.relative_to(root).as_posix())
+              elif not stat.S_ISDIR(mode):
+                  raise ValueError('ordinary source tree required')
+          assert actual == expected
+          bodies = {name: capture(root/name, row['bytes'], row['sha256']) for name, row in rows.items()}
+          path = root/'verify_source.py'
+          sys.argv = [str(path), '--manifest-bytes', str(manifest_pin[0]), '--manifest-sha256', manifest_pin[1], '--check']
+          exec(compile(bodies['verify_source.py'], str(path), 'exec'), {'__name__':'__main__', '__file__':str(path)})
+          NEURAL021_SOURCE

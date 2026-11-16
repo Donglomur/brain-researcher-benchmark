@@ -289,3 +289,11 @@ The [REP012 portable paired API](benchmarks/neuroscience/rep012-portable/README.
 ### CONSENSUS35 header operator source
 
 [CONSENSUS35 header operator](benchmarks/neuroscience/consensus35-header-operator/README.md) packages configuration, transport, parsing, process ownership and independent auditing for the complete 35-file header inquiry. The create-only configurator preserves the existing source graph and emits inert requests. Generated checks cover all 35 headers and source admission limits; external data and runtime qualification are required before authentic execution. This does not establish numerical reconstruction or a new finished benchmark.
+
+### DUNL coupled reconstruction scoring
+
+The [DUNL coupled scorer](benchmarks/neuroscience/dunl-coupled-reconstruction/README.md) evaluates submitted kernels, nonnegative event codes and baselines together. It checks that the convolution, logits and response agree before computing reconstruction losses across the complete declared roster. The portable command and generated checks require only the Python standard library. This is a reconstruction endpoint; historical paper reproduction and prediction on protected data remain separate evaluations.
+
+### NEURAL-021 complete deferred grading
+
+The [NEURAL-021 grading component](benchmarks/neuroscience/neural021-deferred-grade/README.md) preserves all 92 query cases and the original R2 scorer. Its command verifies the complete producer output and externally supplied process-closure evidence before accessing protected targets. The package includes the required authored source and generated checks; original scientific inputs, truthful external observation and current native-runtime qualification remain operator prerequisites. This improves an existing task without adding another benchmark ID.
