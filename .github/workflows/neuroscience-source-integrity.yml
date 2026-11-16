@@ -2746,3 +2746,39 @@ jobs:
           set -euo pipefail
           ulimit -t 60
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -B components/neural022-artifact-grading/tests/test_artifact.py
+  findlay-complete-preparation-source-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Check complete Findlay preparation source using invented controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          FINDLAY_LOGS="${RUNNER_TEMP}/findlay-source-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$FINDLAY_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B components/findlay-complete-preparation/test_portable.py >"$FINDLAY_LOGS/portable.stdout" 2>"$FINDLAY_LOGS/portable.stderr"
+          FINDLAY_PORTABLE_STATUS=$?
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B authoring/delivery-20261105/common/remaining-builds-wave40/findlay-ordinary-contrast-integration-source-20261116-v1/test_integration.py >"$FINDLAY_LOGS/integration.stdout" 2>"$FINDLAY_LOGS/integration.stderr"
+          FINDLAY_INTEGRATION_STATUS=$?
+          printf '%s\n' "$FINDLAY_PORTABLE_STATUS" >"$FINDLAY_LOGS/portable.status"
+          printf '%s\n' "$FINDLAY_INTEGRATION_STATUS" >"$FINDLAY_LOGS/integration.status"
+          cat "$FINDLAY_LOGS/portable.stdout" "$FINDLAY_LOGS/portable.stderr" "$FINDLAY_LOGS/integration.stdout" "$FINDLAY_LOGS/integration.stderr"
+          test "$FINDLAY_PORTABLE_STATUS" -eq 0 && test "$FINDLAY_INTEGRATION_STATUS" -eq 0
+      - name: Preserve Findlay source evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: findlay-source-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/findlay-source-${{ github.run_id }}-${{ github.run_attempt }}/
