@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "candidate_id": "PAPER-FIND-ADD-006",
+  "ordered_session_ids": [
+    "jc233/170220",
+    "jc233/180220",
+    "jc233/190220",
+    "jc233/200220",
+    "jc233/210220",
+    "jc243/240820",
+    "jc243/260820",
+    "jc243/270820",
+    "jc243/280820",
+    "jc243/310820",
+    "jc250/010221",
+    "jc250/020221",
+    "jc250/030221",
+    "jc250/050221",
+    "jc250/060221",
+    "jc253/160321",
+    "jc253/170321",
+    "jc253/180321",
+    "jc253/190321",
+    "jc253/210321",
+    "jc259/210421",
+    "jc259/220421",
+    "jc259/230421",
+    "jc259/240421",
+    "jc259/260421"
+  ],
+  "top_level_keys": [
+    "schema_version",
+    "candidate_id",
+    "sessions"
+  ],
+  "session_keys": [
+    "id",
+    "training_row_ids",
+    "probe_row_ids",
+    "p1_cluster_ids",
+    "leaf_row_ids",
+    "excluded_primary_row_ids",
+    "linkage",
+    "raw_curve",
+    "normalized_curve",
+    "normalization"
+  ],
+  "label_names": [
+    "Context",
+    "Direction",
+    "Position"
+  ],
+  "submission_max_bytes": 4000000,
+  "max_leaves": 360,
+  "max_p1_columns": 92,
+  "rtol": 1e-08,
+  "atol": 1e-10,
+  "json_policy": "UTF8 object, unique keys, literal finite JSON numbers; no bool-as-number, NaN, Infinity, duplicate keys or unrequested fields. null only for explicitly undefined curve entries/denominators.",
+  "scoring_version": "hierarchy_source_defined_full25_v1",
+  "session_fields": {
+    "id": {
+      "type": "string",
+      "value": "exact ordered_session_ids entry"
+    },
+    "training_row_ids": {
+      "type": "array of literal JSON integers",
+      "length": "50 for jc233/170220;40 for all other sessions",
+      "ordering": "strictly increasing",
+      "range": "0..N+3 whereNis traininglength"
+    },
+    "probe_row_ids": {
+      "type": "array of literal JSON integers",
+      "length": 4,
+      "ordering": "strictly increasing",
+      "range": "0..N+3",
+      "join": "training/probe disjoint; union exactly0..N+3"
+    },
+    "p1_cluster_ids": {
+      "type": "array of literal JSON integers",
+      "length": "1..92",
+      "ordering": "strictly increasing",
+      "range": "2..4096"
+    },
+    "leaf_row_ids": {
+      "type": "array of [trial,bin] literalinteger pairs",
+      "length": "2..360",
+      "ordering": "strict lexicographic",
+      "range": "trial is in submitted training_row_ids[:40];bin0..8"
+    },
+    "excluded_primary_row_ids": {
+      "type": "array of [trial,bin] literalinteger pairs",
+      "ordering": "strict lexicographic",
+      "join": "disjoint from leaf_row_ids; unionexact first40 submittedtraining\u00d7ninebins"
+    },
+    "linkage": {
+      "shape": "(m-1)\u00d74, where m=len(leaf_row_ids)",
+      "fields": [
+        "left child ID",
+        "right child ID",
+        "Ward merge distance",
+        "descendant count"
+      ],
+      "types": "finite JSONnumbers; childIDs/counts integer-valued numbers (e.g.0.0 accepted),distance>=0; boolnevernumber",
+      "topology": "rowi node=m+i;two distinct childrenin0..m+i-1;each childconsumedonce;counts exactsum;rootcoversallleaves"
+    },
+    "raw_curve": {
+      "shape": "3\u00d7H, H=bottomup rootheight fromsubmittedtree",
+      "order": [
+        "Context",
+        "Direction",
+        "Position"
+      ],
+      "entries": "finite JSONnumbers ornull;nullonlyifthatlabeldeclaresundefined"
+    },
+    "normalized_curve": {
+      "shape": "3\u00d7H",
+      "order": [
+        "Context",
+        "Direction",
+        "Position"
+      ],
+      "entries": "definedlabel:allfinite JSONnumbers;undefinedlabel:allnull"
+    },
+    "normalization": {
+      "type": "3 ordered objects",
+      "keys": [
+        "label",
+        "status",
+        "reason",
+        "denominator"
+      ],
+      "labels": [
+        "Context",
+        "Direction",
+        "Position"
+      ],
+      "defined": "statusdefined;reasonnull;positivefinite denominator",
+      "undefined": "statusundefined;reasononeof permittedreasons;denominatornullorfinite>=0",
+      "permitted_undefined_reasons": [
+        "no_nonroot_curve",
+        "nonfinite_last_nonroot_denominator",
+        "zero_last_nonroot_denominator",
+        "nonfinite_normalized_curve"
+      ]
+    }
+  },
+  "public_vs_private": "These structural rules precede private callback. Complete but wrong row-role identities, occupancy partition, p1 IDs, tree, curve or positive denominator are scored scientific discrepancies. Numeric tolerances apply to tree-derived curve consistency, not relaxation of identifier/type/shape rules."
+}
