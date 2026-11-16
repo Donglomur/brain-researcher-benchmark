@@ -193,3 +193,12 @@ To contribute a task (fork → PR, and the definition of done a PR must meet), s
 | `INTERN_GUIDE.md` | team process: daily contract, difficulty ratchet, environment, definition-of-done |
 | `ASSIGNMENT_QUEUE.md` | candidate lanes / backlog for new tasks |
 | `TASK_BOARD.md` | one-row-per-task summary (paper, axis, lever, Step-0 result, oracle, agent verdict) |
+
+
+## Clinical CCEP metadata preparation source
+
+[CCEP native metadata preparation](benchmarks/neuroscience/clinical-ccep-native-metadata/README.md)
+provides a prospective complete five-recording operator metadata projection and
+validation command. It requires separately authenticated private native inputs
+and external reader dependencies. Generated CI checks do not establish native
+execution, waveform conversion or a new scientifically qualified benchmark.

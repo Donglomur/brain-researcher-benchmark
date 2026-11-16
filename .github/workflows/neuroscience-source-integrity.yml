@@ -3634,3 +3634,164 @@ jobs:
               verify(root)
               runpy.run_path(str(root / 'run_public_checks.py'), run_name='__main__')
           PY
+  stroop165-prepared-metadata-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.6'
+      - name: Authenticate complete Stroop source and run generated checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          """CI-only bootstrap: authenticate all public members before package execution."""
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import runpy
+          import stat
+
+          MANIFEST_BYTES = 1308
+          MANIFEST_SHA256 = '2b02b8eb545c1b582ec2ee7656152bc7bdceda230c801a38fccc2a6f93034dae'
+
+          def identity(value):
+              return (value.st_dev, value.st_ino, value.st_mode, value.st_nlink,
+                      value.st_size, value.st_mtime_ns, value.st_ctime_ns)
+
+          def read_exact(path, size, digest):
+              before = path.lstat()
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != size:
+                  raise ValueError('public member type or extent differs: ' + path.name)
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                  if identity(os.fstat(stream.fileno())) != identity(before):
+                      raise ValueError('public member changed before read')
+                  body = stream.read(size + 1)
+                  after = os.fstat(stream.fileno())
+              if identity(before) != identity(after) or identity(after) != identity(path.lstat()):
+                  raise ValueError('public member changed during read')
+              if len(body) != size or hashlib.sha256(body).hexdigest() != digest:
+                  raise ValueError('public member digest differs: ' + path.name)
+              return body
+
+          def verify(root):
+              if root.is_symlink() or not root.is_dir():
+                  raise ValueError('public component root must be an ordinary directory')
+              manifest = json.loads(read_exact(root / 'SOURCE_MANIFEST.json', MANIFEST_BYTES, MANIFEST_SHA256))
+              if set(manifest) != {'schema', 'members'} or manifest['schema'] != 'stroop165-prepared-metadata-public-source-v1':
+                  raise ValueError('public manifest schema differs')
+              rows = manifest['members']
+              if not isinstance(rows, list) or len(rows) != 8:
+                  raise ValueError('complete eight public source members required')
+              names = set()
+              for row in rows:
+                  if set(row) != {'path', 'bytes', 'sha256'} or not isinstance(row['path'], str):
+                      raise ValueError('public manifest member shape differs')
+                  name = row['path']
+                  if name in names or name in ('.', '..', 'SOURCE_MANIFEST.json') or '/' in name or '\\' in name:
+                      raise ValueError('public manifest member path differs')
+                  if type(row['bytes']) is not int or not 0 < row['bytes'] <= 262144:
+                      raise ValueError('public manifest byte ceiling differs')
+                  names.add(name)
+              if {path.name for path in root.iterdir()} != names | {'SOURCE_MANIFEST.json'}:
+                  raise ValueError('complete public component inventory differs')
+              for row in rows:
+                  read_exact(root / row['path'], row['bytes'], row['sha256'])
+              return True
+
+          if __name__ == '__main__':
+              root = Path('components/stroop165-prepared-metadata')
+              verify(root)
+              runpy.run_path(str(root / 'run_public_checks.py'), run_name='__main__')
+          PY
+
+  ccep-native-metadata-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.6'
+      - name: Authenticate complete CCEP metadata source and check generated relocation
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          ulimit -v 131072
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'CCEP_PUBLIC'
+          """Fixed CCEP CI admission: authenticate the complete component before execution."""
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import stat
+
+          MANIFEST_BYTES = 1298
+          MANIFEST_SHA256 = '1c7f1e3a1f91a190575f7d3b796a6f958be5ab8bcad2f36b803fa9989324e2d2'
+          NAMES = {'ccep_project_native_metadata.m', 'validate_metadata.py', 'test_metadata.py',
+                   'README.md', 'DEPENDENCIES.md', 'LICENSE', 'SOURCE_BINDING.json', 'test_delivery.py'}
+
+
+          def identity(info):
+              return (info.st_dev, info.st_ino, info.st_mode, info.st_nlink,
+                      info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+
+
+          def read_exact(path, size, digest):
+              before = path.lstat()
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != size:
+                  raise ValueError('public member type or extent differs')
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                  if identity(os.fstat(stream.fileno())) != identity(before):
+                      raise ValueError('public member changed before read')
+                  body = stream.read(size + 1)
+                  after = os.fstat(stream.fileno())
+              if identity(before) != identity(after) or identity(after) != identity(path.lstat()):
+                  raise ValueError('public member changed during read')
+              if len(body) != size or hashlib.sha256(body).hexdigest() != digest:
+                  raise ValueError('public member digest differs')
+              return body
+
+
+          def verify(root):
+              if root.is_symlink() or not root.is_dir():
+                  raise ValueError('public component root must be an ordinary directory')
+              manifest_body = read_exact(root / 'COMPONENT_SOURCE.json', MANIFEST_BYTES, MANIFEST_SHA256)
+              manifest = json.loads(manifest_body)
+              if set(manifest) != {'schema', 'files'} or manifest['schema'] != 'clinical-ccep-native-metadata-public-manifest-v1':
+                  raise ValueError('public manifest schema differs')
+              rows = manifest['files']
+              if type(rows) is not list or len(rows) != len(NAMES):
+                  raise ValueError('complete public member roster required')
+              names = set()
+              for row in rows:
+                  if type(row) is not dict or set(row) != {'path', 'bytes', 'sha256'}:
+                      raise ValueError('public manifest member shape differs')
+                  if type(row['path']) is not str or row['path'] not in NAMES or row['path'] in names:
+                      raise ValueError('public manifest member name differs')
+                  if type(row['bytes']) is not int or not 0 < row['bytes'] <= 262144:
+                      raise ValueError('public member extent differs')
+                  if type(row['sha256']) is not str or not re.fullmatch('[0-9a-f]{64}', row['sha256']):
+                      raise ValueError('public member digest shape differs')
+                  names.add(row['path'])
+              if names != NAMES or {p.name for p in root.iterdir()} != NAMES | {'COMPONENT_SOURCE.json'}:
+                  raise ValueError('complete public directory roster differs')
+              bodies = {row['path']: read_exact(root / row['path'], row['bytes'], row['sha256']) for row in rows}
+              return bodies, manifest_body
+
+
+          if __name__ == '__main__':
+              root = Path('benchmarks/neuroscience/clinical-ccep-native-metadata')
+              bodies, manifest_body = verify(root)
+              context = {'__name__': '__main__', '__file__': str(root / 'test_delivery.py'),
+                         '_SOURCE_BODIES': bodies, '_MANIFEST_BODY': manifest_body}
+              exec(compile(bodies['test_delivery.py'], context['__file__'], 'exec'), context)
+          CCEP_PUBLIC
