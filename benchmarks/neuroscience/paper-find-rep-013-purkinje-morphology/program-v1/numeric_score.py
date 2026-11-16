@@ -14,8 +14,36 @@ def finite(token):
  need(type(token) is str and len(token)<=128 and re.fullmatch(r'[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?',token) is not None,'Numeric token')
  x=float(token);need(math.isfinite(x),'Finite numeric value')
  mantissa=re.split('[eE]',token)[0]
- need(x!=0 or not any(c in '123456789' for c in mantissa),'Nonzero numeric underflow')
+ need(x!=0 or not any(c.isdecimal() and int(c)!=0 for c in mantissa),'Nonzero numeric underflow')
  return x
+
+def bounded_integer(token):
+ # finite() has already admitted the syntax and numeric extent. Keep exact
+ # decimal identity before float rounding, including Unicode decimal digits.
+ mantissa,_,exponent=token.lower().partition('e')
+ digits=''.join(str(int(c)) for c in mantissa if c.isdecimal()).lstrip('0')
+ if not digits:return 0
+ fraction=len(mantissa.partition('.')[2])
+ significant=digits.rstrip('0')
+ power=(int(exponent) if exponent else 0)-fraction+len(digits)-len(significant)
+ need(not mantissa.startswith('-') and power>=0 and len(significant)+power<=10,
+      'Bounded integral count/identity')
+ # The length check bounds power to at most nine, even for long exponents.
+ value=int(significant)*10**power
+ need(value<=1000000000,'Bounded integral count/identity')
+ return value
+
+def signed_mean(values):
+ # Avoid scaling signed terms: small residuals can vanish before cancellation.
+ try:return math.fsum(values)/len(values)
+ except OverflowError:
+  total,denominator=0,1
+  for value in values:
+   numerator,divisor=value.as_integer_ratio()
+   if divisor>denominator:
+    total*=divisor//denominator;denominator=divisor
+   total+=numerator*(denominator//divisor)
+  return total/(denominator*len(values))
 
 def pairs(rows):
  out={}
@@ -45,7 +73,7 @@ def table(raw,name):
      need(name=='cells.csv' and col in S.NULLABLE,'Only declared blank fields');parsed[col]=None
     else:
      x=finite(v)
-     if col in S.INTEGERS:need(x.is_integer() and 0<=x<=1000000000,'Bounded integral count/identity');x=int(x)
+     if col in S.INTEGERS:x=bounded_integer(v)
      parsed[col]=x
    key=tuple(parsed[k] for k in spec['keys']);need(key not in out,'Duplicate row identity');out[key]=parsed
   need(out,'Nonempty table');return out
@@ -85,7 +113,7 @@ def stats(errors):
  z=[x/scale for x in errors]
  vals={'rmse':scale*math.sqrt(math.fsum(x*x for x in z)/len(z)),
        'mae':scale*(math.fsum(map(abs,z))/len(z)),
-       'bias':scale*(math.fsum(z)/len(z)),'max_abs_error':scale}
+       'bias':signed_mean(errors),'max_abs_error':scale}
  if not all(math.isfinite(x) for x in vals.values()):raise Unscorable('Aggregate overflow')
  return {'n':len(errors),**vals}
 

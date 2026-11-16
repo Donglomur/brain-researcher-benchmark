@@ -1,10 +1,10 @@
 # Purkinje morphology: direct numerical artifacts
 
-This component adds `inputs`, `freeze` and `score` commands for the existing **PAPER-FIND-REP-013** finite task. It uses the already published scorer, schema, task and hash inventories in [program-v1](../../benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/README.md). No scientific source is duplicated or changed.
+This component adds `inputs`, `freeze` and `score` commands for the existing **PAPER-FIND-REP-013** finite task. It uses the already published scorer, schema, task and hash inventories in [program-v1](../../benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/README.md). The production scorer is shared with that directory; its current source revision is described below.
 
 The complete endpoint covers ten released trees, thirteen components, 21,116 branches and 12,603 retained author sections. The primary metric is equal-cell branch-length RMSE in micrometres; all other field and summary errors remain separate. Zero primary error alone does not certify caliber, counts or summary reconstruction. Exact topology and missingness joins prevent a partial submission receiving a matched-subset score.
 
-This is a trusted-operator artifact interface. It does not execute participant code. The existing binary artifact scorer and isolated program interface retain their original behavior; the common CLI has no new profile switch. The program instructions in the shared TASK describe the older program route; for this interface, submit the same numerical files directly.
+This is a trusted-operator artifact interface. It does not execute participant code. The existing binary artifact scorer retains its original behavior; the isolated program interface shares the revised numerical scorer; the common CLI has no new profile switch. The program instructions in the shared TASK describe the older program route; for this interface, submit the same numerical files directly.
 
 ## Required assets
 
@@ -49,7 +49,7 @@ python3.11 -I -S -B "$adapter" --profile-root "$profile" --seconds 30 score --re
 
 Replace the two `RECORDED_...` placeholders with the values returned by `freeze`; do not compute an expected pin from an untrusted replacement receipt. The output path must be new, have an existing parent and be outside the attempt.
 
-The scorer reauthenticates captured bytes and admits all candidate public syntax before opening any private reference. Exact topology/missingness comparison then uses the unchanged scorer. Reference identity/parse failures are operator errors, not candidate scores. Handled grades, including incomplete coverage and unsupported derived numerics, exit zero with their original status. Transport/operator errors exit two. Files from failed commands are not successful results.
+The scorer reauthenticates captured bytes and admits all candidate public syntax before opening any private reference. Exact topology/missingness comparison then uses the selected scorer revision. Reference identity/parse failures are operator errors, not candidate scores. Handled grades, including incomplete coverage and unsupported derived numerics, exit zero with their original status. Transport/operator errors exit two. Files from failed commands are not successful results.
 
 The grade file has mode0600 and contains reference-dependent metrics and identity diagnostics. Keep it operator-private under the study's feedback policy. The component does not enforce one-use grading or cumulative feedback limits.
 
@@ -68,3 +68,17 @@ These checks use invented files and public source only; they do not read release
 Stable file identities, fixed hashes/byte caps, no-follow opens, exclusive fresh outputs and captured read-only modes support a trusted operator convention. Producer termination is an attestation. Modes are not immutable against the owner/root; race-proof ancestor confinement, atomic multi-file snapshots and crash-atomic directory publication are not claimed. Each command has a requested 1–120-second wall alarm, with no hard memory/CPU quota or whole-study resource scheduler.
 
 This endpoint does not establish donor-aware inference, all morphology findings, biological replication, full-paper reproduction, held-out improvement, new benchmark IDs, model performance or submission acceptance.
+
+## Scorer revision: exact identity and signed bias
+
+The current scorer rejects decimal identity tokens that become integers only after binary64 rounding, consistently rejects nonzero Unicode decimal underflow, and preserves small signed-bias cancellation residuals. RMSE, MAE, maximum absolute error, complete coverage and the output schema are unchanged. Ordinary bias can intentionally change in its last bits. This is a source correction, not a new authentic result. The earlier scientific results and `SOURCE_CONTROL_RESULTS.json` remain tied to the historical scorer/source lock. Fresh native qualification is still required for the revised source.
+
+Submission receipts bind the scorer hash. An old receipt is refused by this revision; preserve historical attempts and grades, and freeze a new submission only under the selected revised source. No automatic regrading occurs.
+
+Run the eight relocated numerical regression methods plus the scorer-receipt boundary check, using invented values only, from the repository root:
+
+```sh
+python3.11 -I -S -B components/purkinje-artifacts/test_numeric_score.py
+```
+
+The old scorer in `regression_fixtures/old_numeric_score.py` is a pinned regression fixture only. Production loads the single current scorer from `program-v1`; fixtures contain no authentic reconstructions or reference answers.

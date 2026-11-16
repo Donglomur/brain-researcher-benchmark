@@ -219,10 +219,10 @@ jobs:
           mkdir -m 700 "$PURKINJE_PROGRAM_LOGS"
           set +e
           PURKINJE_PROGRAM_FAILED=0
-          for PURKINJE_PROGRAM_FILE in verify_source.py source_controls.py; do
+          for PURKINJE_PROGRAM_FILE in verify_source.py source_controls.py ../../../../components/purkinje-artifacts/test_numeric_score.py; do
             PURKINJE_PROGRAM_NAME="${PURKINJE_PROGRAM_FILE##*/}"
             PURKINJE_PROGRAM_ARGS=()
-            if [ "$PURKINJE_PROGRAM_FILE" = verify_source.py ]; then PURKINJE_PROGRAM_ARGS=(3f7417c5da25224b049387d92316a4c37201e8b88622dd26a5258b65826f0f32); fi
+            if [ "$PURKINJE_PROGRAM_FILE" = verify_source.py ]; then PURKINJE_PROGRAM_ARGS=(2021c9d399196a3a19546b5b84a6c2bc67d630a2a6c8b193d0905f2628a291b6); fi
             /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B "$PURKINJE_PROGRAM_FILE" "${PURKINJE_PROGRAM_ARGS[@]}" >"$PURKINJE_PROGRAM_LOGS/${PURKINJE_PROGRAM_NAME}.stdout" 2>"$PURKINJE_PROGRAM_LOGS/${PURKINJE_PROGRAM_NAME}.stderr"
             PURKINJE_PROGRAM_STATUS=$?
             printf '%s\n' "$PURKINJE_PROGRAM_STATUS" >"$PURKINJE_PROGRAM_LOGS/${PURKINJE_PROGRAM_NAME}.status"
