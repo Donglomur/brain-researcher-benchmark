@@ -2868,3 +2868,19 @@ jobs:
           set -euo pipefail
           ulimit -t 60
           /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B components/purkinje-paired-execution/test_paired_execution.py --relocation-only
+
+  cardiac-paired-execution-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check Cardiac executable public relocation with generated metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          ulimit -v 262144
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B authoring/cardiac-paired-execution/test_public.py
