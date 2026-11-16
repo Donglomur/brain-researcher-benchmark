@@ -202,3 +202,18 @@ provides a prospective complete five-recording operator metadata projection and
 validation command. It requires separately authenticated private native inputs
 and external reader dependencies. Generated CI checks do not establish native
 execution, waveform conversion or a new scientifically qualified benchmark.
+
+
+### NIDER120 trusted-owner source
+
+[The NIDER120 owner kit](components/nider120-owner-v3/README.md) supplies the reconciled Linux engine, private-input setup interface and [concrete provisioning requirements](components/nider120-owner-v3/PROVISIONING.md). It preserves all 120 fields (21 exact counts, 27 author-reported quantities, 72 unreported diagnostics), 24 material slots and the separate private reference. It is trusted-owner source and must not be mounted into a candidate workspace.
+
+The public check authenticates all 44 manifest members before running 13 existing setup controls and 3 projection controls on generated metadata. It performs no scientific inference, Docker operation or model evaluation:
+
+```sh
+python3 -I -S -B components/nider120-owner-v3/run_public_checks.py \
+  --manifest-bytes 7273 \
+  --manifest-sha256 e0b0b4274fdb9dc481780970a694e9c696efe6f3b9c22dc8198bc7438b2ea8af
+```
+
+The existing scoped V3 compatibility result is historical evidence. Runtime-image distribution, fresh Linux target admission and any further scientific qualification remain separate; this source addition does not increase the number of finished benchmarks.
