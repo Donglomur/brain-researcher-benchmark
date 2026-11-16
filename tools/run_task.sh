@@ -53,4 +53,4 @@ case "$AGENT" in
   *) echo "unknown agent: $AGENT (oracle|gpt-5.5|claude|all)"; exit 1 ;;
 esac
 
-[[ -z "$RUN" ]] && echo "# add --run to execute. Then hand re-score each run's findings.md (see RESULTS.md)."
+[[ -z "$RUN" ]] && echo "# add --run to execute. Then hand re-score each run's findings.md (see examples/original-three/upstream-history/RESULTS.md)."

@@ -1,3 +1,7 @@
+> **Upstream history.** This document records the original three-task programme.
+> For this fork's current neuroscience work, use the [task catalog](../../../benchmarks/README.md)
+> and [development workflow](../../../docs/DEVELOPMENT.md). Historical claims are retained, not revalidated here.
+
 # tb-science task authoring — team operating guide
 
 Operational wrapper for a small team (currently 2 authors) turning papers into
@@ -100,7 +104,7 @@ harbor run -p <TASKDIR> -a claude-code -m claude-opus-4-8               -o <jobs
 
 A benchmark of five ds000228 + resting-connectivity tasks tests one weakness five times.
 Before assigning, check the board: **spread across `failure axis × dataset × modality`** (skill's
-"Suite-level design"). The queue (`ASSIGNMENT_QUEUE.md`) is pre-split into data/modality **lanes** —
+"Suite-level design"). The queue ([ASSIGNMENT_QUEUE.md](ASSIGNMENT_QUEUE.md)) is pre-split into data/modality **lanes** —
 the two authors should be working **different lanes** on any given day.
 
 ---

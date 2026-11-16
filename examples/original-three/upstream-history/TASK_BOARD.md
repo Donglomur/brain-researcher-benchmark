@@ -1,9 +1,13 @@
+> **Upstream history.** This document records the original three-task programme.
+> For this fork's current neuroscience work, use the [task catalog](../../../benchmarks/README.md)
+> and [development workflow](../../../docs/DEVELOPMENT.md). Historical claims are retained, not revalidated here.
+
 # Task board
 
 One row per paper in the pipeline. Stages: `1-assigned → 2-step0 → 3-v0+oracle →
 4-agent-gate → 5-ratchet → 6-merge`. A paper dropped at Step-0 stays here with
 `stage=dropped` and the reason — that's a logged success, not a deletion. See
-`INTERN_GUIDE.md` for the contract, `ASSIGNMENT_QUEUE.md` for lanes.
+[INTERN_GUIDE.md](INTERN_GUIDE.md) for the contract, [ASSIGNMENT_QUEUE.md](ASSIGNMENT_QUEUE.md) for lanes.
 
 | task_id | author | paper | lane | failure axis | lever | stage | step-0 result | oracle | agent verdict | updated |
 |---|---|---|---|---|---|---|---|---|---|---|

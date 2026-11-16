@@ -1,3 +1,7 @@
+> **Upstream history.** This document records the original three-task programme.
+> For this fork's current neuroscience work, use the [task catalog](../../../benchmarks/README.md)
+> and [development workflow](../../../docs/DEVELOPMENT.md). Historical claims are retained, not revalidated here.
+
 # Assignable task queue
 
 Pulled from the landscape backlog (`landscape/results/topic_paper_map.csv`, 555 ranked
