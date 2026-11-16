@@ -4501,3 +4501,103 @@ jobs:
           if __name__ == '__main__':
               main()
           HYBRID_PUBLIC
+
+  helsinki-zero-case-generated-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate zero-case source and run generated interfaces only
+        shell: bash
+        working-directory: benchmarks/neuroscience/helsinki-zero-case-diagnostic
+        run: |
+          set -euo pipefail
+          umask 077
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B - <<'HELSINKI_GENERATED'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import stat
+          import sys
+          import types
+          import unittest
+
+
+          def require(value, message):
+              if not value:
+                  raise ValueError(message)
+
+
+          def signature(s):
+              return (s.st_dev, s.st_ino, s.st_mode, s.st_nlink, s.st_size,
+                      s.st_mtime_ns, s.st_ctime_ns)
+
+
+          def read_exact(path, extent, expected):
+              require(type(extent) is int and 0 < extent <= 262144, 'bounded source extent')
+              require(not any(p.is_symlink() for p in (path, *path.parents)), 'no source aliases')
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+              try:
+                  before = os.fstat(fd)
+                  require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and
+                          before.st_size == extent, 'ordinary exact source member')
+                  blocks = []
+                  remaining = extent
+                  while remaining:
+                      block = os.read(fd, min(65536, remaining))
+                      require(bool(block), 'complete source read')
+                      blocks.append(block)
+                      remaining -= len(block)
+                  require(not os.read(fd, 1), 'source EOF')
+                  require(signature(before) == signature(os.fstat(fd)) == signature(path.lstat()),
+                          'stable source member')
+                  body = b''.join(blocks)
+                  require(hashlib.sha256(body).hexdigest() == expected, 'source hash')
+                  return body
+              finally:
+                  os.close(fd)
+
+
+          root = Path.cwd()
+          manifest = read_exact(root / 'SOURCE.json', 2179,
+              '8d4543cb25b398ecb9092941114b383303d5e26e3b96c5f62e79afca70fc4d4e')
+          obj = json.loads(manifest)
+          require(type(obj) is dict and set(obj) == {'schema', 'files'} and
+                  obj['schema'] == 'helsinki-zero-case-source/v1', 'source manifest schema')
+          rows = obj['files']
+          require(type(rows) is list and len(rows) == 14, 'complete source count')
+          expected_names = {'EMPTY_INPUT.json', 'LICENSE', 'NOTICES.md', 'README.md',
+              'REQUEST.template.json', 'SYNTHETIC_IMAGE.json', 'common.py', 'diagnostic.py',
+              'durable_evidence.py', 'fixture_solution.py', 'parent_observer.py',
+              'participant_container.py', 'participant_policy.py', 'test_diagnostic.py'}
+          require(all(type(r) is dict and set(r) == {'path', 'bytes', 'sha256'} for r in rows),
+                  'source descriptor fields')
+          require(len({r['path'] for r in rows}) == 14 and
+                  {r['path'] for r in rows} == expected_names, 'exact authenticated roster')
+          entries = list(root.iterdir())
+          require(len(entries) == 15 and {p.name for p in entries} == expected_names | {'SOURCE.json'},
+                  'exact namespace before test import')
+          for p in entries:
+              s = p.lstat()
+              require(stat.S_ISREG(s.st_mode) and s.st_nlink == 1, 'no unlisted directories/aliases')
+          require(sum(r['bytes'] for r in rows) == 125692, 'complete source extent')
+          bodies = {r['path']: read_exact(root / r['path'], r['bytes'], r['sha256']) for r in rows}
+          # No package code executes before every member is authenticated. Select only
+          # this exact captured test module; do not discover unlisted Python files.
+          name = 'helsinki_zero_case_generated_tests'
+          require(name not in sys.modules, 'fresh test module')
+          module = types.ModuleType(name)
+          module.__file__ = str(root / 'test_diagnostic.py')
+          sys.modules[name] = module
+          exec(compile(bodies['test_diagnostic.py'], module.__file__, 'exec'), module.__dict__)
+          suite = unittest.defaultTestLoader.loadTestsFromModule(module)
+          require(suite.countTestCases() == 13, 'complete generated method count')
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          raise SystemExit(0 if result.wasSuccessful() else 1)
+          HELSINKI_GENERATED

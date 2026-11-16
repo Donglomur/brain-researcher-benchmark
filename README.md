@@ -253,3 +253,9 @@ python3 -I -S -B benchmarks/neuroscience/hybrid-frozen-model-candidate/run_check
 ```
 
 CI authenticates all 54 package files before the nine invented controls; it does not run a candidate, model fit, native container or scientific evaluation.
+
+### Helsinki synthetic Linux lifecycle diagnostic
+
+The [Helsinki zero-case diagnostic](benchmarks/neuroscience/helsinki-zero-case-diagnostic/README.md) supplies a portable trusted-owner `check`/`run` command for one fixed synthetic fork/allocation fixture. `check` authenticates the selected source, executables, local Docker endpoint, cgroupfs-v2 delegation and synthetic amd64 image before any container or cgroup creation. `run` additionally requires a separately reviewed operation selection and complete owned closure. An ordinary GitHub Ubuntu runner may refuse because its driver or delegation differs; this source does not configure Docker or qualify a runtime.
+
+The package has 15 files / 127,871 bytes. Its external SOURCE.json SHA-256 is `8d4543cb25b398ecb9092941114b383303d5e26e3b96c5f62e79afca70fc4d4e` (2,179 bytes). The source-integrity job `helsinki-zero-case-generated-source` authenticates every member before the 13 generated interface methods. CI executes no Docker/cgroup operation, synthetic fixture, model or scientific programme; one generated test invokes only the inert CLI template-refusal path. The [operator instructions and limits](benchmarks/neuroscience/helsinki-zero-case-diagnostic/README.md#invocation) retain bootstrap trust, external provisioning and supervision, post-closure CPU accounting versus a hard aggregate fuse, and the unchanged full 79-infant/five-fold production gate. This component adds no benchmark ID, qualified runtime or scientific result.
