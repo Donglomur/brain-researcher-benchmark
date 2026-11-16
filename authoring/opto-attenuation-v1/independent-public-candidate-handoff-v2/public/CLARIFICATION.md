@@ -1,0 +1,14 @@
+# Prospective edge-policy clarification
+
+This addendum clarifies the central processed-panel contract before any independent candidate run. It discloses no observed endpoint or expected statistic. The original v1 handoff remains unchanged.
+
+- **Membership changes:** for each source group and cross-half orientation, count the symmetric difference between Boolean cell-membership masks: `count_nonzero(cross_half_mask != all_trial_source_mask)`, across all 364 cells. This is the number entering plus leaving the group, not merely the change in group size.
+- **Shared-baseline cancellation:** compare source versus baseline_only and unclipped versus paper_method using float64 `abs(K_left-K_right) <= 1e-10 + 1e-12*abs(K_right)` for every cell. This is a numerical algebra diagnostic, not a scientific effect-size floor. Do not require bitwise equality, round values to force equality, or assume cancellation across different clipping conventions. Other score tolerances remain a separate grader contract.
+- **Paired-test precedence:** first handle an empty paired set with null statistic/p and `empty_source_group`; then handle a nonempty all-zero difference with statistic0, p1 and `all_zero_differences_explicit_policy` for every requested method, including exact. Only otherwise mark exact inapplicable when zeros or tied absolute nonzero differences occur. The all-zero rule is explicit task policy, not a SciPy/historical parity claim.
+- **Empty Mann–Whitney group:** retain the empty group and set statistic, p_two_sided and p_bonferroni_3 all to null; keep the declared method string. For nonempty groups all three are finite numbers, with p-values in[0,1]. Do not reject the complete panel solely because a group is empty. The public schema now allows these nulls.
+- **SciPy API:** in the declared SciPy1.15.3, `method='asymptotic'` is accepted directly. Public `scipy.stats.wilcoxon` also maps the backwards-compatible alias `method='approx'` to asymptotic. Either call token is valid; report the canonical `method_requested='asymptotic'` for those two diagnostic rows. No author translation is required merely to make this version accept the call.
+
+The API statement was checked by reading installed official package source only, without importing SciPy or running statistics. Source identity is below; these source paths are evidence of the API, not new candidate data or house-analysis inputs.
+- `.venv-build/lib/python3.12/site-packages/scipy/version.py`: 318 bytes, SHA256 `a271fdebc4f15ae566cd3c8ca9686bcf52e123dd5d2254b1618acbd9d4292ebc`.
+- `.venv-build/lib/python3.12/site-packages/scipy/stats/_wilcoxon.py`: 9382 bytes, SHA256 `c2aff6b0fc2e895035900156270df27a0169d133f95950023e46224ccac3b3d5`.
+- `.venv-build/lib/python3.12/site-packages/scipy/stats/_morestats.py`: 170393 bytes, SHA256 `d10d4526a84c2480a0b962fb1dbad12b0c02caa7d95132cded6c4e79e29adbed`.
