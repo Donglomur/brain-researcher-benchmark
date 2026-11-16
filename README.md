@@ -226,3 +226,13 @@ The existing scoped V3 compatibility result is historical evidence. Runtime-imag
 ### PFC clean runtime source
 
 The [PFC clean runtime source package](benchmarks/neuroscience/pfc-clean-runtime-source-v1/README.md) supplies the accepted Linux ARM64 build recipe, all 17 wheel descriptors, the pinned Python base and the four existing public Full99 input identities. Its 17 source files total 296,263 bytes; wheels, image layers and scientific inputs are not bundled. The external delivery-manifest SHA-256 is `d8ff7c06357357e9b274e3b0d2d50dcc52bb2acd4fbd1d6aa4d7602220d590d2` (2,882 bytes). CI authenticates every member before parsing source JSON and the two verifier ASTs, without importing those verifiers or running a build. The existing 99-recording/69-case scope is unchanged. Image distribution, fresh-host admission, full compatibility on the new runtime and exact installed-component notice lineage remain open; this source publication adds no benchmark ID or scientific result.
+
+### Hybrid complete replay source
+
+The [complete Hybrid replay source](benchmarks/neuroscience/hybrid-complete-replay/README.md) supplies all 43 declared source positions for the existing no-refit replay, preserving 20 people, 80 held-session folds and 4,884 trials. Its operator materializer binds explicit local paths and creates a fresh, unselected operation proposal. This supplies the authored source closure that the earlier provisioning component left external; the case map, immutable reference and frozen model artifacts remain operator-provided inputs. The existing [artifact-provisioning component](benchmarks/neuroscience/hybrid-artifact-provisioning/README.md) optionally supplies model-location maps.
+
+The owned CLI replays the fixed reference programme and all 80 historical models, then requires equality with the complete reference score.
+
+The endpoint remains within-person cross-session interpolation of processed behavior. Source publication does not establish unseen-person prediction, raw-neural understanding, a completed protected replay or new scientific performance. The historical runtime and fresh execution admission remain required. CI authenticates the complete public package before its admission-only generated controls; it excludes the inherited lifecycle test bank and scientific execution.
+
+The external source-manifest SHA-256 is `6b346c779ab5f5450f2d495e5f631ce73c9570eae2a1b67dc3298aec4767bb3b` (7,534 bytes). The public package contains 53 files; CI authenticates all 52 manifest members before the twelve admission controls and does not rerun the 15 inherited lifecycle controls.
