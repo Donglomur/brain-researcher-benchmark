@@ -1,0 +1,106 @@
+{
+  "candidate_and_reference": {
+    "container": "JSON array",
+    "exact_keys": [
+      "session_id",
+      "fold",
+      "observed_percent",
+      "replicate_id",
+      "method",
+      "mask_sha256",
+      "sample_ids_sha256",
+      "values"
+    ],
+    "mask_sha256": "SHA256 of raw ASCII bits, no newline.",
+    "methods": "dfine_filter/dfine_smooth for every ratio; ldm_smooth/sae_zero_smooth/sae_average_smooth at30,60,100.",
+    "sample_ids_sha256": "SHA256 of compact ensure_ascii JSON array plus LF; scorer.json_bytes defines exact serialization.",
+    "values": "Complete N by4 finite nonboolean numeric matrix; all declared cells exactly once."
+  },
+  "candidate_execution_verified": false,
+  "contract_sha256": "1ef29d2543e0fb1c6b707b2ae6206baaf1b79fc36a728020f7dea3ac181622cc",
+  "file_refusal_limit_bytes": 67108864,
+  "interface": "scorer.grade(profile, candidate_records, reference_records, target_loader)",
+  "limits": [
+    "All JSON parsed in memory; no authentic peak-memory claim.",
+    "Float64 formula equivalence, not native float32/SciPy bitwise parity.",
+    "Hash binds bytes, not trusted preparation or original mask randomness.",
+    "No causal inference boundary or candidate computation verified."
+  ],
+  "metric": "Pearson r per dimension; constant columns contribute0 with flag; mean four dimensions, equal replicate means within each of35 equally weighted session-folds. Separate method/ratio curves and candidate-reference deltas.",
+  "native_reference_qualified": false,
+  "no_scalar_or_pass": true,
+  "private_targets": {
+    "container": "35-record JSON array",
+    "exact_keys": [
+      "session_id",
+      "fold",
+      "sample_ids",
+      "values"
+    ],
+    "values": "Exact admitted N by4 full-time support; no masking of behavior scoring."
+  },
+  "profile": {
+    "dimensions": [
+      "position_x",
+      "position_y",
+      "velocity_x",
+      "velocity_y"
+    ],
+    "exact_keys": [
+      "schema",
+      "task_id",
+      "contract_sha256",
+      "sessions",
+      "folds",
+      "dimensions",
+      "observed_percents",
+      "replicate_ids",
+      "supports",
+      "masks"
+    ],
+    "folds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "masks": {
+      "bits": "N ASCII bits;1 observed,0 missing; exact observed-percent ones per100-step block from first supplied fold sample. Historical origin and partial tail unresolved.",
+      "count": "7*5*len(observed_percents)*len(replicate_ids)",
+      "exact_keys": [
+        "session_id",
+        "fold",
+        "observed_percent",
+        "replicate_id",
+        "bits"
+      ]
+    },
+    "observed_percents": "Sorted distinct integer percentages 20..100 including 20,30,60,100. Full historical grid unresolved.",
+    "replicate_ids": "1..100 unique printable ASCII names; historical RNG/count unresolved.",
+    "schema": "dfine_missing_observation_profile_v1",
+    "sessions": "Seven unique owner-established printable ASCII names; exact historical filenames unresolved.",
+    "supports": {
+      "count": 35,
+      "exact_keys": [
+        "session_id",
+        "fold",
+        "sample_ids"
+      ],
+      "sample_ids": "Sorted unique nonnegative integers; folds disjoint and equal-sized within session; N>=100 and divisible by100."
+    }
+  },
+  "ready_to_run_authentic_benchmark": false,
+  "runtime": {
+    "python": "3.11 or later",
+    "third_party_packages": []
+  },
+  "runtime_files": [
+    "scorer.py"
+  ],
+  "schema": "dfine_public_numeric_component_v1",
+  "scope": "Generated source/interface validation does not authenticate scientific inputs or execute model inference.",
+  "status": "source_component_only",
+  "task_count_delta": 0,
+  "task_id": "PAPER-CANDIDATE-20261114-DFINE"
+}
