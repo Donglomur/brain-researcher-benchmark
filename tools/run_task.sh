@@ -12,23 +12,30 @@
 # Reads a warm ~/nilearn_data cache if present (skips the ~30-min ds000228 fetch).
 set -euo pipefail
 
-TASK="${1:?usage: run_task.sh <TASK_DIR> [oracle|gpt-5.5|claude|all] [--run]}"
+TASK="${1:?usage: run_task.sh <TASK_ID_OR_DIR> [oracle|gpt-5.5|claude|all] [--run]}"
+case "$TASK" in
+  GRADIENT-001|SOCIALBRAIN-001|DEVCONN-001)
+    REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+    TASK="$REPO_DIR/examples/original-three/$TASK"
+    ;;
+esac
 AGENT="${2:-all}"; [[ "${2:-}" == --run ]] && AGENT="all"
 RUN=""; for a in "$@"; do [[ "$a" == --run ]] && RUN=1; done
-[[ -d "$TASK" ]] || { echo "no such task dir: $TASK (run from the repo root)"; exit 1; }
+[[ -d "$TASK" ]] || { echo "no such task dir: $TASK (use a task ID or an existing directory)"; exit 1; }
+printf -v TASK_ARG '%q' "$TASK"
 
 OUT="${OUT:-jobs}"
 MNT=""
 [[ -d "$HOME/nilearn_data" ]] && \
   MNT="--mounts '[{\"type\":\"bind\",\"source\":\"$HOME/nilearn_data\",\"target\":\"/nilearn_data\",\"read_only\":true}]' --ae NILEARN_DATA=/nilearn_data"
 
-cmd_oracle="harbor run -p $TASK -a oracle -k 1 -o $OUT $MNT -y"
+cmd_oracle="harbor run -p $TASK_ARG -a oracle -k 1 -o $OUT $MNT -y"
 # GPT-5.5 via a ChatGPT login (~/.codex/auth.json) needs CODEX_FORCE_AUTH_JSON=1;
 # with an OPENAI_API_KEY exported you can drop that --ae.
-cmd_gpt="harbor run -p $TASK -a codex -m gpt-5.5 --ak reasoning_effort=xhigh -k 3 -o $OUT $MNT --ae CODEX_FORCE_AUTH_JSON=1 -y"
+cmd_gpt="harbor run -p $TASK_ARG -a codex -m gpt-5.5 --ak reasoning_effort=xhigh -k 3 -o $OUT $MNT --ae CODEX_FORCE_AUTH_JSON=1 -y"
 # claude-code reads CLAUDE_CODE_OAUTH_TOKEN from host env; if unset, run
 # `python tools/patch_harbor_oauth.py` once to fall back to your ~/.claude login.
-cmd_claude="harbor run -p $TASK -a claude-code -m claude-opus-4-8 -k 3 -o $OUT $MNT -y"
+cmd_claude="harbor run -p $TASK_ARG -a claude-code -m claude-opus-4-8 -k 3 -o $OUT $MNT -y"
 
 emit(){ # $1 label  $2 command
   echo "# $1"; echo "$2"; echo
