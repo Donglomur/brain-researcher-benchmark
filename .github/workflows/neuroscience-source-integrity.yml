@@ -3927,3 +3927,261 @@ jobs:
                          '_PUBLIC_SOURCE_BODIES': bodies}
               exec(compile(bodies['run_public_checks.py'], context['__file__'], 'exec'), context)
           NIDER_PUBLIC
+
+  hybrid-artifact-provisioning-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.6'
+      - name: Authenticate Hybrid provisioning source and run generated interface controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B - <<'HYBRID_PUBLIC'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import stat
+          import sys
+
+          root = Path('benchmarks/neuroscience/hybrid-artifact-provisioning').absolute()
+          bootstrap = root / 'source_binding.py'
+          if any(p.is_symlink() for p in (bootstrap, *bootstrap.parents)):
+              raise ValueError('ordinary bootstrap ancestry')
+          fd = os.open(bootstrap, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+          try:
+              before = os.fstat(fd)
+              stamp = lambda s: (s.st_dev, s.st_ino, s.st_mode, s.st_nlink, s.st_size, s.st_mtime_ns, s.st_ctime_ns)
+              if not (stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == 4147):
+                  raise ValueError('literal bootstrap extent')
+              with os.fdopen(fd, 'rb', closefd=False) as stream:
+                  body = stream.read(4148)
+              if not (len(body) == 4147 and stamp(before) == stamp(os.fstat(fd)) == stamp(bootstrap.lstat()) and
+                      hashlib.sha256(body).hexdigest() == '1079a68cb275a35543f02dff2ad973ef2ae2e89b85c72fab9263d00eee89c3ce'):
+                  raise ValueError('literal stable bootstrap identity')
+          finally:
+              os.close(fd)
+          helper = {'__name__': 'ci_verified_binding', '__file__': str(bootstrap)}
+          exec(compile(body, str(bootstrap), 'exec'), helper)
+          manifest_raw = helper['exact'](root / 'SOURCE_MANIFEST.json', {'bytes': 1209, 'sha256': '93a34180b129533a37ea10a2614a753ddabcfdca0c8b6d1d274309bd190a9c4d'}, 65536)
+          manifest = json.loads(manifest_raw)
+          expected = {'provision.py', 'source_binding.py', 'test_provision.py', 'README.md', 'ATTRIBUTION.md', 'LICENSE', 'SOURCE_BINDING.json'}
+          if manifest['schema'] != 'hybrid-relocation-source-v1' or {r['name'] for r in manifest['files']} != expected or len(manifest['files']) != 7:
+              raise ValueError('exact public component source roster')
+          if {x.name for x in root.iterdir()} != expected | {'SOURCE_MANIFEST.json'}:
+              raise ValueError('unexpected component files')
+          bodies = {r['name']: helper['exact'](root / r['name'], r, 262144) for r in manifest['files']}
+          entry = root / 'test_provision.py'
+          sys.argv = [str(entry), '--source-manifest-sha256', '93a34180b129533a37ea10a2614a753ddabcfdca0c8b6d1d274309bd190a9c4d', '-v']
+          __file__ = str(entry)
+          exec(compile(bodies['test_provision.py'], str(entry), 'exec'), globals())
+          HYBRID_PUBLIC
+
+  pfc-clean-runtime-public-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.6'
+      - name: Authenticate PFC source and check JSON and Python ASTs only
+        shell: bash
+        working-directory: benchmarks/neuroscience/pfc-clean-runtime-source-v1
+        run: |
+          set -euo pipefail
+          ulimit -t 90
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PFC_PUBLIC'
+          """Authenticate the complete PFC source delivery before static content checks."""
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import re
+          import stat
+
+          NAMES = frozenset(["ARTIFACTS.json","NOTICE_STATUS.json","PFC_PUBLIC_INPUTS.json","PROVENANCE.json","README.md","context/.dockerignore","context/BASE_IMAGE.json","context/Dockerfile","context/LICENSES/CPython-3.12.8.txt","context/LICENSES/docker-library-python-MIT.txt","context/SOURCE_LOCK.json","context/WHEELS.json","context/requirements.direct.in","context/requirements.linux-arm64.lock","context/verify_artifacts.py","context/verify_runtime.py"])
+          MANIFEST_NAME = 'DELIVERY_MANIFEST.json'
+          SCHEMA = 'pfc-clean-runtime-source-delivery/v1'
+
+
+          def identity(info):
+              return (info.st_dev, info.st_ino, info.st_mode, info.st_nlink,
+                      info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+
+
+          def read_exact(path, extent, digest):
+              before = path.lstat()
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != extent:
+                  raise ValueError('ordinary exact public member required: ' + path.name)
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                  if identity(os.fstat(stream.fileno())) != identity(before):
+                      raise ValueError('public member changed before read')
+                  body = stream.read(extent + 1)
+                  after = os.fstat(stream.fileno())
+              if identity(before) != identity(after) or identity(after) != identity(path.lstat()):
+                  raise ValueError('public member changed during read')
+              if len(body) != extent or hashlib.sha256(body).hexdigest() != digest:
+                  raise ValueError('public member digest differs: ' + path.name)
+              return body
+
+
+          def strict_json(raw):
+              def pairs(items):
+                  result = {}
+                  for key, value in items:
+                      if key in result:
+                          raise ValueError('duplicate manifest key')
+                      result[key] = value
+                  return result
+              return json.loads(raw, object_pairs_hook=pairs,
+                                parse_constant=lambda value: (_ for _ in ()).throw(ValueError('nonfinite manifest')))
+
+
+          def verify_public(root, manifest_bytes, manifest_sha256):
+              root = Path(root).absolute()
+              if '..' in root.parts or any(path.is_symlink() for path in (root, *root.parents)):
+                  raise ValueError('ordinary component ancestry required')
+              if not stat.S_ISDIR(root.lstat().st_mode):
+                  raise ValueError('ordinary component directory required')
+              if type(manifest_bytes) is not int or not 0 < manifest_bytes <= 65536:
+                  raise ValueError('manifest extent out of bounds')
+              if type(manifest_sha256) is not str or not re.fullmatch('[0-9a-f]{64}', manifest_sha256):
+                  raise ValueError('manifest digest shape differs')
+              raw = read_exact(root / MANIFEST_NAME, manifest_bytes, manifest_sha256)
+              manifest = strict_json(raw)
+              if type(manifest) is not dict or set(manifest) != {'schema', 'files', 'file_count', 'total_bytes', 'execution_selected', 'new_benchmark_ids', 'scope'} or manifest['schema'] != SCHEMA:
+                  raise ValueError('public manifest schema differs')
+              if manifest['execution_selected'] is not False or type(manifest['new_benchmark_ids']) is not int or manifest['new_benchmark_ids'] != 0:
+                  raise ValueError('source-only manifest required')
+              if type(manifest['file_count']) is not int or manifest['file_count'] != 16 or type(manifest['total_bytes']) is not int or manifest['total_bytes'] != 293381 or type(manifest['scope']) is not str:
+                  raise ValueError('exact manifest counts and scope required')
+              rows = manifest['files']
+              if type(rows) is not list or len(rows) != len(NAMES):
+                  raise ValueError('complete public member count required')
+              seen = set()
+              total = 0
+              for row in rows:
+                  if type(row) is not dict or set(row) != {'path', 'bytes', 'sha256'}:
+                      raise ValueError('public member schema differs')
+                  name = row['path']
+                  if type(name) is not str or name not in NAMES or name in seen:
+                      raise ValueError('complete unique public member names required')
+                  if type(row['bytes']) is not int or not 0 < row['bytes'] <= 262144:
+                      raise ValueError('public member extent out of bounds')
+                  if type(row['sha256']) is not str or not re.fullmatch('[0-9a-f]{64}', row['sha256']):
+                      raise ValueError('public member digest shape differs')
+                  seen.add(name)
+                  total += row['bytes']
+              if seen != NAMES or total != manifest['total_bytes'] or total > 2097152:
+                  raise ValueError('complete bounded source selection required')
+              allowed_dirs = {str(parent) for name in NAMES for parent in PurePosixPath(name).parents
+                              if str(parent) != '.'}
+              found_files, found_dirs, pending = set(), set(), [root]
+              while pending:
+                  directory = pending.pop()
+                  with os.scandir(directory) as entries:
+                      for entry in entries:
+                          path = Path(entry.path)
+                          rel = str(path.relative_to(root))
+                          info = entry.stat(follow_symlinks=False)
+                          if stat.S_ISDIR(info.st_mode):
+                              if rel not in allowed_dirs:
+                                  raise ValueError('unexpected source directory')
+                              found_dirs.add(rel)
+                              pending.append(path)
+                          elif stat.S_ISREG(info.st_mode) and info.st_nlink == 1:
+                              found_files.add(rel)
+                          else:
+                              raise ValueError('ordinary single-link source required')
+              if found_files != NAMES | {MANIFEST_NAME} or found_dirs != allowed_dirs:
+                  raise ValueError('exact recursive component inventory required')
+              bodies = {row['path']: read_exact(root / row['path'], row['bytes'], row['sha256']) for row in rows}
+              return bodies
+
+          import ast
+
+
+          def require(condition, message):
+              if not condition:
+                  raise ValueError(message)
+
+
+          def check_sources(bodies):
+              """Check authenticated cached source; never import either verifier."""
+              require(set(bodies) == NAMES, 'complete authenticated cache required')
+              for body in bodies.values():
+                  body.decode('utf-8')
+              documents = {name: strict_json(body) for name, body in bodies.items()
+                           if name.endswith('.json')}
+              require(len(documents) == 7, 'seven source JSON documents required')
+              for name, doc in documents.items():
+                  require(type(doc) is dict and type(doc.get('schema')) is str,
+                          'source JSON object/schema required: ' + name)
+              python_names = sorted(name for name in bodies if name.endswith('.py'))
+              require(python_names == ['context/verify_artifacts.py', 'context/verify_runtime.py'],
+                      'exact two source ASTs required')
+              for name in python_names:
+                  ast.parse(bodies[name].decode('utf-8'), filename=name)
+
+              lock = documents['context/SOURCE_LOCK.json']
+              expected_context = {name.removeprefix('context/') for name in NAMES
+                                  if name.startswith('context/') and name != 'context/SOURCE_LOCK.json'}
+              require(set(lock['files']) == expected_context and len(expected_context) == 10,
+                      'complete inherited context lock required')
+              for name, row in lock['files'].items():
+                  body = bodies['context/' + name]
+                  require(row == {'bytes': len(body), 'sha256': hashlib.sha256(body).hexdigest()},
+                          'context source pin differs: ' + name)
+
+              wheels = documents['context/WHEELS.json']
+              artifacts = documents['ARTIFACTS.json']
+              fields = ('name', 'version', 'filename', 'bytes', 'sha256', 'url')
+              projected = [{key: row[key] for key in fields} for row in wheels['wheels']]
+              require(len(projected) == wheels['wheel_count'] == artifacts['wheel_count'] == 17,
+                      'complete wheel metadata roster required')
+              require(projected == artifacts['wheels'], 'wheel metadata projections differ')
+              require(len({row['filename'] for row in projected}) == 17, 'unique wheel names required')
+              expected_wheels = {row['filename']: {key: row[key] for key in ('bytes', 'sha256', 'url')}
+                                 for row in projected}
+              require(expected_wheels == lock['expected_wheels'], 'context wheel metadata differs')
+              require(sum(row['bytes'] for row in projected) == wheels['future_wheel_download_bytes']
+                      == artifacts['wheel_bytes'] == 84435444, 'declared wheel extent differs')
+              inputs = documents['PFC_PUBLIC_INPUTS.json']
+              require(len(inputs['assets']) == inputs['asset_count'] == 4
+                      and sum(row['bytes'] for row in inputs['assets'])
+                      == inputs['total_asset_bytes'] == 5565161, 'declared public input roster differs')
+              notice = documents['NOTICE_STATUS.json']
+              require(notice['exact_installed_0_3_5_notice_lineage_established'] is False
+                      and notice['runtime_distribution_clearance_claimed'] is False,
+                      'notice limitations must remain explicit')
+              provenance = documents['PROVENANCE.json']
+              require(provenance['historical_evidence']['current_target_admission'] is False
+                      and provenance['historical_evidence']['full_new_image_Full99_compatibility'] is False,
+                      'runtime compatibility limitations must remain explicit')
+              return {'authenticated_source_members': 16, 'source_json_documents': 7,
+                      'python_asts_parsed': 2, 'context_lock_members': 10,
+                      'wheel_metadata_rows': 17, 'declared_public_input_assets': 4,
+                      'verifier_imported': False, 'runtime_admitted': False,
+                      'scientific_execution': False, 'new_benchmark_ids': 0}
+
+
+          def main(root):
+              if not __debug__:
+                  raise ValueError('optimized execution is not selected')
+              bodies = verify_public(root, 2882, 'd8ff7c06357357e9b274e3b0d2d50dcc52bb2acd4fbd1d6aa4d7602220d590d2')
+              return check_sources(bodies)
+
+
+          if __name__ == '__main__':
+              print(json.dumps(main(Path.cwd()), sort_keys=True))
+          PFC_PUBLIC

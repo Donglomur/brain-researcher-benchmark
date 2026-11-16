@@ -217,3 +217,12 @@ python3 -I -S -B components/nider120-owner-v3/run_public_checks.py \
 ```
 
 The existing scoped V3 compatibility result is historical evidence. Runtime-image distribution, fresh Linux target admission and any further scientific qualification remain separate; this source addition does not increase the number of finished benchmarks.
+
+
+### Hybrid frozen-artifact provisioning
+
+[Hybrid artifact provisioning](benchmarks/neuroscience/hybrid-artifact-provisioning/README.md) creates an authenticated location map for all 80 folds and a fresh, unselected no-refit operation proposal for authorized operators holding the exact private source and data bundle. It preserves all 20 people and 4,884 trials. It supplies no scientific assets or complete public replay runtime; generated interface checks do not establish authentic replay or readiness.
+
+### PFC clean runtime source
+
+The [PFC clean runtime source package](benchmarks/neuroscience/pfc-clean-runtime-source-v1/README.md) supplies the accepted Linux ARM64 build recipe, all 17 wheel descriptors, the pinned Python base and the four existing public Full99 input identities. Its 17 source files total 296,263 bytes; wheels, image layers and scientific inputs are not bundled. The external delivery-manifest SHA-256 is `d8ff7c06357357e9b274e3b0d2d50dcc52bb2acd4fbd1d6aa4d7602220d590d2` (2,882 bytes). CI authenticates every member before parsing source JSON and the two verifier ASTs, without importing those verifiers or running a build. The existing 99-recording/69-case scope is unchanged. Image distribution, fresh-host admission, full compatibility on the new runtime and exact installed-component notice lineage remain open; this source publication adds no benchmark ID or scientific result.
