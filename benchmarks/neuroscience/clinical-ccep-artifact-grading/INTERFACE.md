@@ -87,10 +87,11 @@ permutation p-value, independent-block population inference or pass threshold
 is invented. A source-only five-person implementation does not establish broad
 human generalization. The primary uses every original block and equal people.
 
-The contract's target-free whole-block derangements and support-matched paired
-null summaries remain separate required construction. This primary command
-rejects a transformed-condition submission. It does not pretend an unvalidated
-null or training-label shuffle completes the pairing control. Competent train-only
+The adjacent [pairing interface](../clinical-ccep-pairing/INTERFACE.md) supplies
+prospective target-free whole-block derangements and support-matched paired
+null summaries. This primary command still rejects a transformed-condition
+submission. Normalized source equivalence and authentic paired execution remain
+unqualified; an unvalidated null or training-label shuffle does not establish them. Competent train-only
 prevalence/template/regularized references, all access arms, protected export,
 complete source/rights/census/anatomy/timing/preprocessing, context feasibility,
 exposure accounting and authentic evaluation remain held. There is no new task

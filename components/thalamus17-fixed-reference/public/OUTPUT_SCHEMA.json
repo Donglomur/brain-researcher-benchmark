@@ -1,0 +1,50 @@
+{
+  "schema": "thalamus_figure3C_reconstruction_output_contract_v1",
+  "per_session_filename": "submission.json",
+  "max_bytes_per_session": 4000000,
+  "encoding": "UTF-8 JSON; no duplicate keys, NaN, Infinity, booleans in numeric fields, links, extra files or trailing non-whitespace.",
+  "top_level_exact_keys": [
+    "schema",
+    "cohort_index",
+    "experiment_id",
+    "conditions"
+  ],
+  "schema_literal": "thalamus_figure3C_candidate_pair_v1",
+  "cohort_index": "literal integer selected by /input/session.json",
+  "experiment_id": "literal selected roster ID",
+  "conditions": "Array of exactly2 records in Laser_OFF,Laser_ON order.",
+  "condition_exact_keys": [
+    "condition",
+    "feature_order",
+    "training_rows",
+    "test_rows",
+    "probability_randomised"
+  ],
+  "condition_fields": {
+    "condition": "Literal condition for this array position.",
+    "feature_order": "Unique strings,1..condition feature_count_upper_bound; each starts uuid_, UTF-8 length<=260. Preserve candidate-derived source first-appearance order.",
+    "training_rows": "Unique integer 1-based post-pivot trial row IDs in their actual partition-return order, length public training_rows.",
+    "test_rows": "Unique increasing integer 1-based post-pivot trial row IDs, length public test_rows.",
+    "partition": "training_rows and test_rows disjoint and their sorted union exactly1..public trial_rows. Neither context nor tone is a predictor.",
+    "probability_randomised": "Finite JSON numbers in[0,1], exactly one per test_rows entry, same order. Other probability is1-p; class is Randomised at p>=0.5, Regular otherwise."
+  },
+  "public_rejection": "Wrong keys/types/identity/order/counts/ranges/partition/nonfinite values or oversize => invalid_submission before any private reference body read.",
+  "scored_support_mismatch": "A structurally valid but different actual feature_order, training_rows or test_rows compared with the source reconstruction is a complete cell support mismatch: primary cell error1 with explicit reason. Do not silently drop it or treat hidden expected row identity as a public parse rule.",
+  "not_required": [
+    "caret objects",
+    "model binaries",
+    "fit counts or internal search journals",
+    "candidate metric tables",
+    "claimed p-value",
+    "importance/SHAP output"
+  ],
+  "full_cohort_aggregation": "Exactly17 committed session outcomes. Infrastructure failures are not scores; candidate failure or missing valid output is retained as a failure, never a successful all34 reconstruction.",
+  "json_literal_rules": {
+    "encoding": "strict UTF-8",
+    "duplicate_keys": "reject",
+    "unpaired_unicode_surrogates": "reject",
+    "nonfinite_numbers": "reject",
+    "nonzero_literal_underflow_to_zero": "reject",
+    "probability_type": "JSON integer or float; booleans rejected"
+  }
+}

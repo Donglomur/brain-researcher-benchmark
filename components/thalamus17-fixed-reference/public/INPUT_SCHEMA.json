@@ -1,0 +1,176 @@
+{
+  "schema": "thalamus_figure3C_reconstruction_inputs_v1",
+  "status": "source_design_only_no_candidate_execution",
+  "authoring_materials": {
+    "common": [
+      "TASK.md",
+      "INPUT_SCHEMA.json",
+      "OUTPUT_SCHEMA.json",
+      "PUBLIC_SCORING.md",
+      "SESSION_MANIFEST.json",
+      "Official combined article and supplement (CC BY4.0)",
+      "Exact released Figure3C_data.RData (CC BY4.0 deposit)"
+    ],
+    "optional_code_condition_only": [
+      "Exact original 3C_analysis.R text, no other archive members or reference code"
+    ]
+  },
+  "runtime_readonly_mounts": {
+    "/program/program.py": "Same frozen UTF-8 Python source <=65536bytes; may invoke installed Rscript inside container. Never executed on host.",
+    "/input/Figure3C_data.RData": {
+      "bytes": 46260209,
+      "sha256": "9346505621a11d2704126b1e9c2b45dd02d3f645487effd4ab719c1978c19bea",
+      "all_bytes_visible_in_reproduction": true
+    },
+    "/input/SESSION_MANIFEST.json": "This public all17 roster and structural support counts.",
+    "/input/session.json": {
+      "exact_keys": [
+        "schema",
+        "cohort_index",
+        "experiment_id",
+        "conditions"
+      ],
+      "schema": "thalamus_figure3C_session_request_v1",
+      "cohort_index": "integer1..17, selected once by trusted serial coordinator",
+      "experiment_id": "exact corresponding public roster string",
+      "conditions": [
+        "Laser_OFF",
+        "Laser_ON"
+      ]
+    }
+  },
+  "runtime_writable_mounts": {
+    "/output": "Fresh bounded memory-backed directory; only submission.json is captured after producer absence.",
+    "/tmp": "Ephemeral scratch, no persistence across sessions."
+  },
+  "workspace": {
+    "serialization": "Original R workspace; load only inside candidate container.",
+    "exact_objects": {
+      ".Random.seed": {
+        "R_type": "integer",
+        "R_class": [
+          "integer"
+        ],
+        "length": 626,
+        "meaning": "Original RNG state. Source recipe restores it before explicit seed101 calls; no fabricated replacement seed state."
+      },
+      "raw_pred_db": {
+        "R_type": "list",
+        "R_class": [
+          "tbl_df",
+          "tbl",
+          "data.frame"
+        ],
+        "column_count": 10,
+        "row_count": 16295010,
+        "columns_in_saved_header_order": [
+          {
+            "name": "clu",
+            "R_type": "double",
+            "R_class": "numeric",
+            "length": 16295010
+          },
+          {
+            "name": "t_num",
+            "R_type": "double",
+            "R_class": "numeric",
+            "length": 16295010
+          },
+          {
+            "name": "uuid",
+            "R_type": "character",
+            "R_class": "character",
+            "length": 16295010
+          },
+          {
+            "name": "tone",
+            "R_type": "double",
+            "R_class": "numeric",
+            "length": 16295010
+          },
+          {
+            "name": "time",
+            "R_type": "character",
+            "R_class": "character",
+            "length": 16295010
+          },
+          {
+            "name": "spk.st",
+            "R_type": "integer",
+            "R_class": "integer",
+            "length": 16295010
+          },
+          {
+            "name": "uuid_tb",
+            "R_type": "character",
+            "R_class": "character",
+            "length": 16295010
+          },
+          {
+            "name": "context",
+            "R_type": "character",
+            "R_class": "character",
+            "length": 16295010
+          },
+          {
+            "name": "laser_block",
+            "R_type": "character",
+            "R_class": "character",
+            "length": 16295010
+          },
+          {
+            "name": "exp_id",
+            "R_type": "character",
+            "R_class": "character",
+            "length": 16295010
+          }
+        ],
+        "context_levels": [
+          "Randomised",
+          "Regular"
+        ],
+        "laser_levels": [
+          "Laser_OFF",
+          "Laser_ON"
+        ]
+      }
+    }
+  },
+  "reference_recipe_uses": [
+    "uuid",
+    "t_num",
+    "tone",
+    "context",
+    "laser_block",
+    "spk.st",
+    "uuid_tb"
+  ],
+  "visible_but_not_decoder_predictors": [
+    "clu",
+    "t_num",
+    "uuid",
+    "tone",
+    "time",
+    "context",
+    "laser_block",
+    "exp_id"
+  ],
+  "neural_predictors": "Only source-order uuid_-prefixed columns from pivoting uuid_tb/spk.st. Absent slots=0; observed NA remains NA.",
+  "no_saved_answers": {
+    "preexisting_model_db": false,
+    "preexisting_auc_db": false,
+    "reference_predictions_metrics_worker_and_operator_receipts_in_mounts": false
+  },
+  "label_exposure": "The original workspace contains context labels for every row, including source heldout rows. This is a reconstruction/reanalysis input, never a protected improvement input.",
+  "reference_environment": {
+    "image": "sha256:4c9865b42da4267f6500a2541a51813358aaf5f24d7e565e3b244c21351e0ad6",
+    "R": "4.3.1",
+    "caret_raw": "6.0-94",
+    "xgboost": "1.7.5.1",
+    "pROC": "1.18.0",
+    "reference_foreach": "sequential",
+    "reference_xgboost_nthread": 2,
+    "historical_author_binary_environment_verified": false
+  },
+  "network": "Disabled for runtime; no package installation. Public authoring access conditions frozen separately."
+}

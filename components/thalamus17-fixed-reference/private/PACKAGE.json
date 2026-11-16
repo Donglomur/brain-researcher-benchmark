@@ -1,0 +1,100 @@
+{
+  "schema": "thalamus_portable_package_v1",
+  "task_id": "PAPER-FIND-REP-009",
+  "scope": "Complete seventeen Figure3C session pairs and thirty-four OFF/ON Randomised probability vectors, with unchanged full diagnostics.",
+  "analysis_units": {
+    "sessions": 17,
+    "condition_cells": 34,
+    "cell_weight": "1/34",
+    "pair_conditions": [
+      "Laser_OFF",
+      "Laser_ON"
+    ],
+    "last_OFF_trials": 477,
+    "last_OFF_test_rows": 143,
+    "animal_map": "unresolved; do not infer independent animal replication from session IDs"
+  },
+  "artifact_interface": {
+    "filenames": [
+      "pair001.json",
+      "pair002.json",
+      "pair003.json",
+      "pair004.json",
+      "pair005.json",
+      "pair006.json",
+      "pair007.json",
+      "pair008.json",
+      "pair009.json",
+      "pair010.json",
+      "pair011.json",
+      "pair012.json",
+      "pair013.json",
+      "pair014.json",
+      "pair015.json",
+      "pair016.json",
+      "pair017.json"
+    ],
+    "per_file_max_bytes": 4000000,
+    "score_max_bytes": 1000000,
+    "private_scorer": [
+      "python3",
+      "-I",
+      "private/grader.py",
+      "--submission-dir",
+      "SEVENTEEN_PAIR_FILES",
+      "--output",
+      "FRESH_SCORE_JSON"
+    ],
+    "candidate_code_executed": false
+  },
+  "primary_metric": "macro_34_cell_mean_absolute_probability_discrepancy",
+  "direction": "lower",
+  "scientific_success_threshold": null,
+  "support_mismatch_cell_error": 1,
+  "dependencies": "public/environment/ENVIRONMENT.json",
+  "build_checks": {
+    "schema": "thalamus_generated_software_checks_v1",
+    "command": "python3 -I authoring/delivery-20261105/thalamus/private/tests/test_packaging.py",
+    "result": "passed",
+    "test_count": 12,
+    "tool_chunk_id": "5e361c",
+    "inputs": "Invented scalar probabilities and trial-ID partitions, public counts/identity metadata, temporary files and source syntax.",
+    "excluded_calls": [
+      "score",
+      "metrics",
+      "validate_reference",
+      "r_diagnostics",
+      "original generated scoring checks",
+      "candidate program",
+      "model fits"
+    ],
+    "empirical_workspace_decoded": false,
+    "private_reference_decoded": false,
+    "scoring_calls": 0,
+    "dependency_build_evidence": "private/ENVIRONMENT_BUILD.json"
+  },
+  "historical_qualification": {
+    "attribution": "Current canonical manifest and original frozen task/scorer/reference/software descriptors; historical scientific evidence was not rerun.",
+    "manifest_source": "benchmarks/neuroscience/paper-find-rep-009/manifest.json",
+    "source_status_as_recorded": "local_program_runner_verified",
+    "program_status_as_recorded": "qualified_closed_staged_ordinary_program_with_source_reviewed_cli_adapter",
+    "historical_complete_program_series_as_recorded": 2,
+    "standalone_route_as_recorded": "not_applicable_no_standalone_score_route",
+    "meaning": "This portable artifact adapter is new construction around the unchanged core; it does not register a new canonical route or refresh scientific qualification."
+  },
+  "limits": {
+    "selected_export_bytes_max": 200000000,
+    "approved_total_new_retained_files_max": 300000000
+  },
+  "limitations": [
+    "This is fixed-reference reconstruction on all17 exposed-label sessions/34conditions, not protected prediction or improvement; no accuracy/AUC/p-value success floor is added.",
+    "Animal identity and extra TableS1 names remain unresolved; nominal paired-session diagnostics do not establish independent-animal significance.",
+    "Original upstream preprocessing, original author options and published AUC annotation remain uncertain; Figure3G/TRN, Figure3F/SHAP and whole-paper claims are excluded.",
+    "The artifact adapter cannot attest source chronology, same-program use, stopped producers, all17 execution or absence of intermediate feedback; the external evaluator owns those boundaries.",
+    "The unchanged numeric core and paired R diagnostics are packaged, but no candidate/scientific score or numerical parity run was performed in this delivery.",
+    "The dependency image was built and metadata/linkage checked only; the private grader image and actual candidate/scorer execution were not run.",
+    "The exact compiled R prefix is preserved; public-base image byte identity with the historical image is not asserted. Rebuilding needs Debian/Python software mirror access, while runtime is offline.",
+    "Recorded article/data/code terms are CC BY4.0, and bundled R software retains its licenses/source obligations; local packaging does not grant new external redistribution rights.",
+    "The generated runtime gzip plus one assembled export are approved under a300MB total newly retained-file ceiling; selected export files remain below200MB, with original RData/PDF directly bound and no staging duplicate."
+  ]
+}

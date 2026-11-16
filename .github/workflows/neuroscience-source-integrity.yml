@@ -3031,7 +3031,7 @@ jobs:
           import hashlib, json, pathlib, runpy
           root = pathlib.Path('benchmarks/neuroscience/clinical-ccep-artifact-grading')
           raw = (root / 'COMPONENT_SOURCE.json').read_bytes()
-          if len(raw) != 1107 or hashlib.sha256(raw).hexdigest() != 'd3bd01405289bfa575ccd8357d93aef5450a683c52fa56d33c04f68cfeb553ee':
+          if len(raw) != 1107 or hashlib.sha256(raw).hexdigest() != '8a2b4ba7a9df5c2eaae59404d51f6579a39c429590b092521e1cb208ead0d99e':
               raise RuntimeError('selected component manifest changed')
           for member in json.loads(raw)['files']:
               body = (root / member['path']).read_bytes()
@@ -3256,3 +3256,42 @@ jobs:
                   raise RuntimeError('selected DoSEI source member changed')
           runpy.run_path(str(root / 'test_delivery.py'), run_name='__main__')
           DOSEI_SOURCE
+
+  thalamus17-artifact-delivery-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Verify complete Thalamus source and relocated artifact interface
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'THALAMUS_SOURCE'
+          import hashlib, json, pathlib, runpy
+          root = pathlib.Path('components/thalamus17-fixed-reference')
+          raw = (root / 'SOURCE.json').read_bytes()
+          if len(raw) != 8455 or hashlib.sha256(raw).hexdigest() != 'b0b0af9c57c031ace73bc1ef57118764ac5a10548bd95915380b3dd1f794cf7f':
+              raise RuntimeError('selected public source manifest changed')
+          for row in json.loads(raw)['files']:
+              body = (root / row['path']).read_bytes()
+              if len(body) != row['bytes'] or hashlib.sha256(body).hexdigest() != row['sha256']:
+                  raise RuntimeError('selected public source changed')
+          runpy.run_path(str(root / 'test_delivery.py'), run_name='__main__')
+          THALAMUS_SOURCE
+
+  ccep-pairing-source-delivery:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check CCEP pairing public relocation with invented inputs
+        run: python3 -I -S -B benchmarks/neuroscience/clinical-ccep-pairing/test_delivery.py
