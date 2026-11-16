@@ -217,3 +217,8 @@ python3 -I -S -B components/nider120-owner-v3/run_public_checks.py \
 ```
 
 The existing scoped V3 compatibility result is historical evidence. Runtime-image distribution, fresh Linux target admission and any further scientific qualification remain separate; this source addition does not increase the number of finished benchmarks.
+
+
+### Hybrid frozen-artifact provisioning
+
+[Hybrid artifact provisioning](benchmarks/neuroscience/hybrid-artifact-provisioning/README.md) creates an authenticated location map for all 80 folds and a fresh, unselected no-refit operation proposal for authorized operators holding the exact private source and data bundle. It preserves all 20 people and 4,884 trials. It supplies no scientific assets or complete public replay runtime; generated interface checks do not establish authentic replay or readiness.

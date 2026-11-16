@@ -3927,3 +3927,58 @@ jobs:
                          '_PUBLIC_SOURCE_BODIES': bodies}
               exec(compile(bodies['run_public_checks.py'], context['__file__'], 'exec'), context)
           NIDER_PUBLIC
+
+  hybrid-artifact-provisioning-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.6'
+      - name: Authenticate Hybrid provisioning source and run generated interface controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B - <<'HYBRID_PUBLIC'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import stat
+          import sys
+
+          root = Path('benchmarks/neuroscience/hybrid-artifact-provisioning').absolute()
+          bootstrap = root / 'source_binding.py'
+          if any(p.is_symlink() for p in (bootstrap, *bootstrap.parents)):
+              raise ValueError('ordinary bootstrap ancestry')
+          fd = os.open(bootstrap, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+          try:
+              before = os.fstat(fd)
+              stamp = lambda s: (s.st_dev, s.st_ino, s.st_mode, s.st_nlink, s.st_size, s.st_mtime_ns, s.st_ctime_ns)
+              if not (stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == 4147):
+                  raise ValueError('literal bootstrap extent')
+              with os.fdopen(fd, 'rb', closefd=False) as stream:
+                  body = stream.read(4148)
+              if not (len(body) == 4147 and stamp(before) == stamp(os.fstat(fd)) == stamp(bootstrap.lstat()) and
+                      hashlib.sha256(body).hexdigest() == '1079a68cb275a35543f02dff2ad973ef2ae2e89b85c72fab9263d00eee89c3ce'):
+                  raise ValueError('literal stable bootstrap identity')
+          finally:
+              os.close(fd)
+          helper = {'__name__': 'ci_verified_binding', '__file__': str(bootstrap)}
+          exec(compile(body, str(bootstrap), 'exec'), helper)
+          manifest_raw = helper['exact'](root / 'SOURCE_MANIFEST.json', {'bytes': 1209, 'sha256': '93a34180b129533a37ea10a2614a753ddabcfdca0c8b6d1d274309bd190a9c4d'}, 65536)
+          manifest = json.loads(manifest_raw)
+          expected = {'provision.py', 'source_binding.py', 'test_provision.py', 'README.md', 'ATTRIBUTION.md', 'LICENSE', 'SOURCE_BINDING.json'}
+          if manifest['schema'] != 'hybrid-relocation-source-v1' or {r['name'] for r in manifest['files']} != expected or len(manifest['files']) != 7:
+              raise ValueError('exact public component source roster')
+          if {x.name for x in root.iterdir()} != expected | {'SOURCE_MANIFEST.json'}:
+              raise ValueError('unexpected component files')
+          bodies = {r['name']: helper['exact'](root / r['name'], r, 262144) for r in manifest['files']}
+          entry = root / 'test_provision.py'
+          sys.argv = [str(entry), '--source-manifest-sha256', '93a34180b129533a37ea10a2614a753ddabcfdca0c8b6d1d274309bd190a9c4d', '-v']
+          __file__ = str(entry)
+          exec(compile(bodies['test_provision.py'], str(entry), 'exec'), globals())
+          HYBRID_PUBLIC
