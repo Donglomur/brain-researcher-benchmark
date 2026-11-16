@@ -24,3 +24,7 @@ The existing [28-file programme manifest](https://github.com/Donglomur/brain-res
 Actual preparation requires the exact external 41,063-byte inventory (`4c7713e7e82b9c48f718e0c65811d21e70f42734626cd1af35d2808fe9cb3b44`), all 108 authentic inputs and observed bindings, and separately authorized custody/resource limits. Finalization preserves private files 0400/directories 0500 and the independent review boundary. There is no fallback cohort or newly inferred data-use permission.
 
 See the retained [reference attribution and limits](https://github.com/Donglomur/brain-researcher-benchmark/blob/d3e2c5c27276a36eaa23c53a0502ef06c3bfbef3/authoring/delivery-20261105/neural083/public/REFERENCE.md): original GigaScience GPLv3 terms, LoadData MIT terms and separate helper terms are not merged into a new grant. External numerical dependencies remain separate. Python preparation is not a claim of MATLAB/native numerical parity. Scientific qualification and completed-study counts remain unchanged.
+
+## Full-cohort acquisition source
+
+The separate [acquisition package](acquisition-v1/README.md) streams all 108 original recordings against fixed publisher extents and MD5 declarations while recording SHA256 over confirmed writes. It supplies the existing adaptive preparation manifest without a separate prehash sweep. Its example is inert, and the package has generated source/interface validation only: authentic acquisition, observed schemas, external owner/storage admission and scientific qualification remain separate.

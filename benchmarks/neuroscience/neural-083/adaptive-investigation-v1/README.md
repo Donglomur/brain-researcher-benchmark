@@ -29,3 +29,7 @@ The public owner successor requires supported Linux waitid/proc semantics and ex
 Prior engineering checks apply only to their exact source versions. They are not passing evidence for a changed owner, a scientific score, a complete model study or platform qualification. Any new Linux engineering cases require their own exact selected attempt and original evidence. Source-integrity CI likewise does not qualify this neuroscience assignment.
 
 See [rights and provenance](RIGHTS_AND_PROVENANCE.md) before acquiring or redistributing external material.
+
+## Optional full-cohort acquisition source
+
+The sibling [acquisition package](../acquisition-v1/README.md) provides the fixed 108-object publisher roster and a streaming MD5/SHA256 receipt producer. Its public roster adds unsigned URLs and declared MD5 values separately from this programme's inventory. After a separately admitted, successful acquisition, its verified source manifest can supply the expected SHA256 inputs here without an extra prehash sweep. Current-body authentication during preparation, actual schema bindings, resource ownership and scientific qualification are still required. No acquisition is selected by these source files.
