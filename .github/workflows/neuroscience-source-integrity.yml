@@ -2775,6 +2775,20 @@ jobs:
           printf '%s\n' "$FINDLAY_FRESH_STATUS" >"$FINDLAY_LOGS/fresh.status"
           cat "$FINDLAY_LOGS/fresh.stdout" "$FINDLAY_LOGS/fresh.stderr" "$FINDLAY_LOGS/portable.stdout" "$FINDLAY_LOGS/portable.stderr" "$FINDLAY_LOGS/integration.stdout" "$FINDLAY_LOGS/integration.stderr"
           test "$FINDLAY_PORTABLE_STATUS" -eq 0 && test "$FINDLAY_INTEGRATION_STATUS" -eq 0 && test "$FINDLAY_FRESH_STATUS" -eq 0
+      - name: Check relocated Findlay metadata provisioning interfaces
+        if: ${{ !cancelled() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          FINDLAY_LOGS="${RUNNER_TEMP}/findlay-source-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -p "$FINDLAY_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 30s python -I -S -B components/findlay-complete-preparation/metadata/test_public_layout.py >"$FINDLAY_LOGS/metadata-layout.stdout" 2>"$FINDLAY_LOGS/metadata-layout.stderr"
+          FINDLAY_METADATA_STATUS=$?
+          printf '%s\n' "$FINDLAY_METADATA_STATUS" >"$FINDLAY_LOGS/metadata-layout.status"
+          cat "$FINDLAY_LOGS/metadata-layout.stdout" "$FINDLAY_LOGS/metadata-layout.stderr"
+          test "$FINDLAY_METADATA_STATUS" -eq 0
       - name: Preserve Findlay source evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

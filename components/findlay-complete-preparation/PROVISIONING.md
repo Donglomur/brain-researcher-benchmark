@@ -38,65 +38,39 @@ The following bodies are required outside the source checkout:
 | Complete published-family ledger | 66,285 | `e6602394041e2a6f448db374ffccbf06856f262e13df468003a901ae4fa2eced` |
 | Private identity policy | 935 | `4879ce87b72c06d88a67149c990f876ffca8254bfcfc659229a72e0ebd569ab2` |
 
-These are frozen benchmark metadata, not original observations and not a
-historical execution graph. Obtain the accepted bodies from an authorized
-benchmark operator. The source does not currently publish them or provide a
-deterministic exporter that reconstructs their exact serialization from public
-origins. Reformatting JSON also changes the selected digest; no formatting or
-schema fallback is accepted.
+These are fixed benchmark metadata, not original observations or a historical
+execution graph. The [metadata provisioning commands](metadata/README.md) now
+reconstruct the published-family ledger and identity policy with exactly these
+sizes and digests. The one complete input ledger still comes from an authorized
+benchmark operator. Reformatting JSON changes the selected digest; no schema or
+formatting fallback is accepted.
 
-The input ledger binds the exact 17-member ZIP census, thirteen complete
-footer schemas/row counts and the full 16-animal/29-session roster. The family
-ledger binds all 98 published analyses, their exact source parameters and table
-joins. The private policy binds the accepted five-animal balanced subset and
-one fixed thirteen-column ordinary exclusion, without embedding their
-identities in the software.
+The family exporter authenticates the publisher workbook and all 14 official
+parameter files, then uses our explicit 98-row curated crosswalk. This mapping
+is benchmark-authored, not publisher-supplied. It preserves all 109 source
+configurations, the 94 selected rendering configurations, the five-family
+occupancy expansion and all 15 excluded drafts. The identity exporter derives
+the five balanced animals and one applicable 13-column exclusion from exact
+official sources without embedding animal identities in this repository.
 
-## Exact public-origin generation operation still missing
+## One accepted audit ledger remains operator-supplied
 
-Independent provisioning without an operator-supplied metadata bundle needs
-one deterministic, separately reviewed metadata exporter. The current
-first-intake implementation does not substitute a guessed exporter. Its
-required operands and outputs are concrete:
+The input ledger binds the 17-member archive census, all thirteen footer
+schemas/counts and the full 16-animal/29-session roster. Those factual fields
+can be checked against legitimate originals. The same fixed body also contains
+its original audit's exposure assertions, historic HTTP observation and authored
+policy/prose. A new archive read cannot reconstruct that earlier history.
 
-1. Parse the exact original archive's complete directory and all thirteen
-   Parquet footers, preserving ZIP sizes/CRC/modes and footer hashes. Join the
-   original archived source metadata for the full roster and protocol mapping.
-   Generate every input-ledger field, including the complete member and
-   observation-page-exposure descriptions, without selecting animals from
-   outcomes or decoding observations merely to guess metadata.
-2. Read the publisher's
-   [Supplementary Table 1](https://static-content.springer.com/esm/art%3A10.1038%2Fs41593-025-02141-8/MediaObjects/41593_2025_2141_MOESM3_ESM.xlsx),
-   **26,378 bytes**, SHA256
-   `e0f45c39c36cf9b9b82f84d54e622cb2449ac2e7607ac57ab3fec20ddc17f62b`.
-   Join all 98 table rows to the official source's 94 rendering configurations.
-   The occupancy configuration contains five analyses; the 15 unpublished
-   source configurations remain excluded explicitly. These are analysis
-   families within one task, not 98 separate benchmarks.
-3. Use the [official code release](https://zenodo.org/records/17364618)
-   (`v1.0.0`, release-linked tag commit
-   `1e7afd0f5b1dfd7a12eb2bf6a1e1d28c3049719e`). The retained audit used its
-   direct parent `1bb2e72a3d590556e63aec1ffed6b461734c8021`; scientific
-   source/dependency/R-data top-level Git objects were identical and README
-   differed. This is a source-object correspondence, not a byte validation of
-   the Zenodo ZIP. Capture the exact source parameters and formula/table map,
-   and derive the balanced-cohort and ordinary exclusion identities from that
-   source, never from similar labels or favorable results.
-4. Produce complete ledgers and the identity policy with deterministic
-   serialization. Check their exact fixed digests, schema, all 98 unique IDs,
-   thirteen table memberships and policy-to-full-roster joins. If exact
-   reconstruction is impossible because a curated field's derivation is
-   missing, retain the discrepancy for explicit scientific review; do not
-   accept a different metadata body under the existing endpoint.
+This is a precise provisioning requirement, not a missing dataset or permission
+to omit a table. The accepted audit metadata can be supplied separately; the
+commands do not fabricate its history, replace its pin or copy prior receipts.
+The [metadata guide](metadata/README.md) identifies the exact public origins,
+commands, source/metadata digests and remaining audit-input boundary.
 
-This metadata-export operation is unimplemented in the selected package.
-The missing operation does not stop an operator who already holds the three
-accepted metadata bodies from performing a fresh full preparation. It does
-limit a claim that every prerequisite can currently be reconstructed
-automatically from public links alone. The source does not distribute the
-publisher workbook, official code, roster identities or numerical answers.
-The code's root MIT notice does not supersede the nested R source's separate
-CC BY-NC-ND notice.
+No publisher workbook, official source body, animal identity, reconstructed
+metadata or numerical answer is redistributed here. The official code's root
+MIT notice does not supersede the R subtree's CC BY-NC-ND notice. The software
+and crosswalk do not qualify scientific results or claim a blind evaluation.
 
 ## Fresh operation and its outputs
 
