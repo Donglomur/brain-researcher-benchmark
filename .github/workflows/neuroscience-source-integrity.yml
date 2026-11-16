@@ -4185,3 +4185,160 @@ jobs:
           if __name__ == '__main__':
               print(json.dumps(main(Path.cwd()), sort_keys=True))
           PFC_PUBLIC
+
+  hybrid-complete-replay-admission-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.6'
+      - name: Authenticate complete Hybrid source and run admission controls only
+        shell: bash
+        working-directory: benchmarks/neuroscience/hybrid-complete-replay
+        run: |
+          set -euo pipefail
+          ulimit -t 90
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'HYBRID_PUBLIC'
+          """Authenticate the complete Hybrid public source before admission-only tests."""
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import re
+          import stat
+
+          NAMES = frozenset(["ATTRIBUTION.md","LICENSE","OPERATOR.md","PLAN.json","README.md","READ_BOUNDS.json","SOURCE_LOCK.json","SOURCE_RELATIONSHIPS.json","integration/protected_delivery.py","operation_outer.py","operation_worker.py","prepare_operation.py","result_contract.py","reuse_delivery.py","run_checks.py","runner/EXISTING_ENDPOINT_BINDING.json","runner/EXISTING_RUNTIME_BINDINGS.json","runner/PLAN.json","runner/SOURCE_LOCK.json","runner/checks.py","runner/cognitive.py","runner/consumer.py","runner/donor_checked_source.py","runner/donor_create_lifecycle.py","runner/donor_process_closure.py","runner/endpoint_controls.py","runner/endpoint_guard.py","runner/endpoint_outer.py","runner/endpoint_worker.py","runner/episode_owner_base.py","runner/hostile_program.py","runner/journal_controls.py","runner/model_artifact.py","runner/owner_core.py","runner/participant_entry.py","runner/reference.py","runner/reference_workflow.py","runner/scoring.py","runner/stage_io.py","runner/transport_harness.py","runner/trial_transport.py","runtime/runtime_setup.py","science/CONTRACT.json","science/REFERENCE_SCOPE.md","science/REFERENCE_VALIDATION.md","source_binding.py","test_operation.py","test_prepare.py","training/accepted/consumer.py","training/accepted/model_artifact.py","training/accepted/reference.py","training/train_export.py"])
+          MANIFEST_NAME = 'SOURCE_MANIFEST.json'
+          SCHEMA = 'hybrid-complete-portable-source-v1'
+
+
+          def identity(info):
+              return (info.st_dev, info.st_ino, info.st_mode, info.st_nlink,
+                      info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+
+
+          def read_exact(path, extent, digest):
+              before = path.lstat()
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != extent:
+                  raise ValueError('ordinary exact public member required: ' + path.name)
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                  if identity(os.fstat(stream.fileno())) != identity(before):
+                      raise ValueError('public member changed before read')
+                  body = stream.read(extent + 1)
+                  after = os.fstat(stream.fileno())
+              if identity(before) != identity(after) or identity(after) != identity(path.lstat()):
+                  raise ValueError('public member changed during read')
+              if len(body) != extent or hashlib.sha256(body).hexdigest() != digest:
+                  raise ValueError('public member digest differs: ' + path.name)
+              return body
+
+
+          def strict_json(raw):
+              def pairs(items):
+                  result = {}
+                  for key, value in items:
+                      if key in result:
+                          raise ValueError('duplicate manifest key')
+                      result[key] = value
+                  return result
+              return json.loads(raw, object_pairs_hook=pairs,
+                                parse_constant=lambda value: (_ for _ in ()).throw(ValueError('nonfinite manifest')))
+
+
+          def verify_public(root, manifest_bytes, manifest_sha256):
+              root = Path(root).absolute()
+              if '..' in root.parts or any(path.is_symlink() for path in (root, *root.parents)):
+                  raise ValueError('ordinary component ancestry required')
+              if not stat.S_ISDIR(root.lstat().st_mode):
+                  raise ValueError('ordinary component directory required')
+              if type(manifest_bytes) is not int or not 0 < manifest_bytes <= 65536:
+                  raise ValueError('manifest extent out of bounds')
+              if type(manifest_sha256) is not str or not re.fullmatch('[0-9a-f]{64}', manifest_sha256):
+                  raise ValueError('manifest digest shape differs')
+              raw = read_exact(root / MANIFEST_NAME, manifest_bytes, manifest_sha256)
+              manifest = strict_json(raw)
+              if type(manifest) is not dict or set(manifest) != {'schema', 'files'} or manifest['schema'] != SCHEMA:
+                  raise ValueError('public manifest schema differs')
+              files = manifest['files']
+              if type(files) is not dict or set(files) != NAMES:
+                  raise ValueError('complete exact manifest roster required')
+              rows = []
+              for name, descriptor in files.items():
+                  if type(descriptor) is not dict or set(descriptor) != {'bytes', 'sha256'}:
+                      raise ValueError('manifest member descriptor differs')
+                  rows.append({'path': name, **descriptor})
+              if type(rows) is not list or len(rows) != len(NAMES):
+                  raise ValueError('complete public member count required')
+              seen = set()
+              total = 0
+              for row in rows:
+                  if type(row) is not dict or set(row) != {'path', 'bytes', 'sha256'}:
+                      raise ValueError('public member schema differs')
+                  name = row['path']
+                  if type(name) is not str or name not in NAMES or name in seen:
+                      raise ValueError('complete unique public member names required')
+                  if type(row['bytes']) is not int or not 0 < row['bytes'] <= 262144:
+                      raise ValueError('public member extent out of bounds')
+                  if type(row['sha256']) is not str or not re.fullmatch('[0-9a-f]{64}', row['sha256']):
+                      raise ValueError('public member digest shape differs')
+                  seen.add(name)
+                  total += row['bytes']
+              if seen != NAMES or total != 418682 or total > 2097152:
+                  raise ValueError('complete bounded source selection required')
+              allowed_dirs = {str(parent) for name in NAMES for parent in PurePosixPath(name).parents
+                              if str(parent) != '.'}
+              found_files, found_dirs, pending = set(), set(), [root]
+              while pending:
+                  directory = pending.pop()
+                  with os.scandir(directory) as entries:
+                      for entry in entries:
+                          path = Path(entry.path)
+                          rel = str(path.relative_to(root))
+                          info = entry.stat(follow_symlinks=False)
+                          if stat.S_ISDIR(info.st_mode):
+                              if rel not in allowed_dirs:
+                                  raise ValueError('unexpected source directory')
+                              found_dirs.add(rel)
+                              pending.append(path)
+                          elif stat.S_ISREG(info.st_mode) and info.st_nlink == 1:
+                              found_files.add(rel)
+                          else:
+                              raise ValueError('ordinary single-link source required')
+              if found_files != NAMES | {MANIFEST_NAME} or found_dirs != allowed_dirs:
+                  raise ValueError('exact recursive component inventory required')
+              bodies = {row['path']: read_exact(root / row['path'], row['bytes'], row['sha256']) for row in rows}
+              return bodies
+
+          import sys
+
+
+          def run_admission(bodies, root):
+              """Dispatch only the unchanged authenticated admission-only interface."""
+              path = root / 'run_checks.py'
+              previous = sys.argv
+              sys.argv = [str(path), '--manifest-sha256',
+                          '6b346c779ab5f5450f2d495e5f631ce73c9570eae2a1b67dc3298aec4767bb3b',
+                          '--admission-only']
+              try:
+                  namespace = {'__name__': '__main__', '__file__': str(path)}
+                  exec(compile(bodies['run_checks.py'], str(path), 'exec'), namespace)
+              finally:
+                  sys.argv = previous
+
+
+          def main(root=None):
+              if not __debug__:
+                  raise ValueError('optimized execution is not selected')
+              root = Path.cwd() if root is None else Path(root).absolute()
+              bodies = verify_public(root, 7534, '6b346c779ab5f5450f2d495e5f631ce73c9570eae2a1b67dc3298aec4767bb3b')
+              run_admission(bodies, root)
+
+
+          if __name__ == '__main__':
+              main()
+          HYBRID_PUBLIC

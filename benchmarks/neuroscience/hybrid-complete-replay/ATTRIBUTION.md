@@ -1,0 +1,5 @@
+# Source and asset rights
+
+This package contains benchmark-authored Python, source policy, operator instructions and invented engineering controls under the accompanying repository MIT license. The selected 43-position closure has been traced to the accepted benchmark authoring sources; no publisher code, R/Julia source, paper text or scientific dataset is included. Scientific methods derive from the cited paper and accepted source contract; this is not a clean-room claim.
+
+The original paper, processed case map, participant-level records, fitted models, historical result and upstream code retain their own rights. The repository MIT license grants no rights to those external assets. Data redistribution remains unresolved. An operator must obtain authorized access separately; this package neither accepts third-party terms nor distributes or downloads those assets. The immutable runtime receipt and Docker image are also external; their availability or redistribution permission is not established here.
