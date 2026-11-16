@@ -47,11 +47,11 @@ The unchanged runtime verifier checks CPython 3.12.8 and all locked distribution
 
 ## Full99 inputs and remaining delivery gaps
 
-The four existing Full99 inputs are publicly available at the [versioned input release](https://github.com/Donglomur/brain-researcher-benchmark/releases/tag/pfc-full99-inputs-v1), totaling 5,565,161 bytes. The unchanged `PFC_PUBLIC_INPUTS.json` supplies their complete identities. Follow the existing task's provisioning and attribution instructions; the old private nine-input file collection is unnecessary for its owner-local identity descriptor.
+The four existing Full99 inputs are publicly available at the [versioned input release](https://github.com/Donglomur/brain-researcher-benchmark/releases/tag/pfc-full99-inputs-v1), totaling 5,565,161 bytes. The unchanged `PFC_PUBLIC_INPUTS.json` supplies their complete identities. Follow the task’s [input provisioning](../pfc-conditional-portable-profile-v1/PROVISIONING.md) and [seven-stage operator guide](../pfc-conditional-portable-profile-v1/OPERATOR_GUIDE.md). The released packet is the complete prepared task input; the old private nine-input collection is unnecessary for its owner-local identity descriptor.
 
 Full99 preserves all 99 recordings, 19,186 fitting units, 68 fitting animals and 69 full/deletion cases. Its separately scored PFC population is 10,243 units from 65 animals. It reconstructs conditional statistics of a supplied fixed map, not the broader original learned-map or held-animal prediction question. The new two-constant 9aaf source successor is reviewed, but its full seven-stage compatibility operation remains unrun. Within-runtime candidate/reference agreement would not by itself prove bitwise equality to every historical continuous-geometry result.
 
 An external operator still lacks (a) a distributed immutable copy of the admitted 9aaf image, or a separately qualified rebuild; (b) fresh host/daemon/image/mount admission and full compatibility; and (c) a completed runtime redistribution notice/privacy assessment. `NOTICE_STATUS.json` records a recovered MIT notice at the maintainer's pinned current 0.6.5 source. It is not evidence that the exact installed 0.3.5 wheel/sdist shipped or corresponds to that notice. No blanket prohibition on local research use is inferred.
 
-No acquisition, build, image export, Full99 run or publication was performed to prepare this source package. Its create-only public projection is a proposal for root integration.
+This source package does not acquire artifacts, build/export an image or run Full99 by itself. Runtime provisioning and qualification remain separate operator steps; the public task’s image binding and historical validation remain unchanged.
 

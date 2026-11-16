@@ -28,7 +28,9 @@ The exact derived packet and selected paper/method are distributed with the noti
 
 Use Python 3.11 or later for the commands below; the descriptor helper uses `hashlib.file_digest`.
 
-Copy `deployment.example.json` to an owner-private file outside the attempt directory. Replace every placeholder. The example deliberately has invalid zero executable lengths and UID/GID; it cannot launch as supplied.
+Continue with the same `PFC_SOURCE`, `PFC_ASSETS` and `PFC_OWNER_DIR` paths from [PROVISIONING.md](PROVISIONING.md). Copy `deployment.example.json` to an owner-private file outside the attempt directory and replace every placeholder. For example, use `$PFC_OWNER_DIR/deployment.json` for the configuration, `$PFC_OWNER_DIR/request-001` for the fresh request directory, and `$PFC_OWNER_DIR/attempts` for `deployment.attempts_root`. The existing owner directory is their parent; do not create the request directory, attempt child or `attempt-outer` child yourself. The outer caller creates the attempt parent if needed, but its parent must already exist. These are your own paths, not locations from the historical run.
+
+The example deliberately has invalid zero executable lengths and UID/GID; it cannot launch as supplied.
 
 The top-level keys are exactly `schema`, `attempt`, `compatibility`, `deployment`, `assets` and `programs`.
 
@@ -52,7 +54,9 @@ print(json.dumps({"path": str(p), "bytes": p.stat().st_size, "sha256": digest}))
 PY
 ```
 
-The exact image `sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156` must already exist on the selected daemon with a compatible host/architecture. The package does not pull, build or export it. A different digest requires a separately validated runtime change. Bind the real current daemon ID and executable identities; historical metadata are not a runtime check.
+The exact image `sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156` must already exist on the selected daemon with a compatible host/architecture. The package does not pull, build or export it. A different digest requires a separately validated runtime change. The [clean runtime source package](../pfc-clean-runtime-source-v1/README.md) records 9aaf’s exact build inputs; this public task still pins 385454 in its unchanged source lock. Building 9aaf or another digest does not make it a drop-in replacement, and editing the image constant would invalidate this source lock. If the required runtime is unavailable, input provisioning can finish but execution remains blocked.
+
+Bind the real current daemon ID and executable identities; historical metadata are not a runtime check. The supported endpoint is a local Unix socket, with canonical ordinary paths and a nonroot UID/GID that has access to the bind mounts. Remote Docker endpoints and an arbitrary rebuilt image are outside this interface.
 
 ## Configure without scientific execution
 
@@ -80,7 +84,9 @@ This is bash/zsh syntax. Configuration authenticates selected source/configurati
 
 ## Run the selected complete route
 
-Before execution, reserve the full declared operation and check current source/runtime/daemon/image identity, authorized assets, host/VM/disk capacity and absent output namespaces. Both `attempts_root/attempt` and `attempts_root/attempt-outer` must be absent. For compatibility, the existing envelope is 2 VM CPUs, 4 GiB VM memory plus 1 GiB host planning, 2,580 seconds outer lifetime, 2.5 GiB managed reads and 768 MiB original retention plus a separately allocated 768 MiB review cache. These are limits/planning amounts, not measured requirements or a hard aggregate memory sandbox. Preserve the whole cohort if a guard refuses.
+Before execution, reserve the full declared operation and check current source/runtime/daemon/image identity, authorized assets, host/VM/disk capacity and absent output namespaces. Both `attempts_root/attempt` and `attempts_root/attempt-outer` must be absent. For compatibility, each serial container is configured for 2 CPUs, 4 GiB memory, the same 4 GiB combined memory/swap setting and 64 PIDs; those Docker HostConfig values are checked before start. Only one owned stage container runs at a time, and its removal is required before the next stage. **The 4 GiB container setting does not bound the whole Docker VM or its host footprint.** Account separately for the selected VM’s reported configuration, daemon/kernel/cache/hypervisor overhead, other work and 1 GiB host planning; no portable 4 GiB VM maximum is claimed.
+
+The remaining existing envelope is 2,580 seconds outer lifetime, 2.5 GiB managed reads and 768 MiB original retention plus a separately allocated 768 MiB review cache. These are limits/planning amounts, not measured requirements or a hard aggregate memory sandbox. This package has no universal host-capacity gate: the operator must make a current target-specific admission before dispatch. Preserve the whole cohort if admission refuses.
 
 Use the exact descriptor printed by configure:
 
@@ -95,5 +101,30 @@ PFC_REQUEST_SHA256="REPLACE_WITH_PRINTED_SHA256"
 The compatibility route executes seven serial stages: eight inherited route controls; participant A; participant B; protected score A; protected score B; complete count-plus-one negative construction; protected negative score. Candidate containers close and both complete submissions are frozen before scoring. The route admits no automatic retries or new reference fits.
 
 Require natural outer completion, complete captures and owner cleanup evidence as well as all seven stage results. Positive compatibility checks cover 1,593,072 exact fields per arm across all 69 cases, retaining 1,058 defined and 46 undefined geometry contexts and false complete 68-animal directional stability. The negative must change every count by one while preserving all rational means/variances; a missing or late incorrect case fails. A partial report is not completion.
+
+## Verify the complete run
+
+The owner performs protected scoring during the seven-stage route. There is no separate host-side scorer command needed after a successful compatibility run. `package/score_entry.py` authenticates the packet, complete frozen submission and scorer sources, then invokes `package/science/endpoint_cli.py score` inside the selected runtime. Its reports are owner-private; candidate containers never receive the scorer or reference cases.
+
+Let `<attempts_root>` and `<attempt>` be the exact values in your frozen `REQUEST.json`. All locations below are relative to `<attempts_root>` and are created by this attempt:
+
+| Location | Required evidence |
+|---|---|
+| `<attempt>-outer/CALLER_RESULT.json` | `complete: true`, `exit_code: 0`, `reaped: true`, `process_group_absent: true`, both stdout/stderr in `EOF`, no signals and no failure. `docker_cleanup_proven_by_outer` remains false: container closure comes from the owner evidence below. |
+| `<attempt>/OWNER_RESULT.json` | `complete: true`, no primary or secondary failure, all seven ordered stage results, both frozen submissions and compatibility entries `A`, `B`, `negative`. |
+| `<attempt>/owner/<stage>/STAGE_RESULT.json` and `CLEANUP.json` | Natural zero exit and exact owned-container removal, with immutable ID and name absence. Check the corresponding `PRESTART.json` and `POSTRUN.json` for the selected runtime/mount policy and natural zero/no-OOM state. |
+| `<attempt>/artifacts/participant_A/submission.jsonl` and `participant_B/submission.jsonl` | Complete immutable participant streams; identities agree with `OWNER_RESULT.json.submissions` and each stage’s `FROZEN_SUBMISSION.json`. |
+| `<attempt>/artifacts/score_A/score.json` and `score_B/score.json` | Complete positive score reports for the exact packet and corresponding submission. |
+| `<attempt>/artifacts/negative_submission/negative.jsonl` and `negative_score/score.json` | Complete count-plus-one control and its protected score; the negative must be detected across the full case population. |
+
+The exact stage names, in order, are `binding_and_participant_controls`, `participant_A`, `participant_B`, `score_A`, `score_B`, `negative_submission`, `negative_score`. A filename or a successful terminal line alone is insufficient: verify the original outer captures, owner result, every stage and retained call/cleanup receipts. The owner checks these joins during execution; the summary is a navigation aid, not a replacement independent audit.
+
+For the compatibility baseline, each `A`/`B` entry in `OWNER_RESULT.json.compatibility_checks` must have `compatible: true`, `negative: false`, `cases: 69`, `exact_fields: 1593072`, `defined_contexts: 1058` and `undefined_contexts: 46`. The `negative` entry has `negative: true` and the same complete support. `compatible: true` for that entry means the expected incorrect output was correctly recognized; it does not mean the negative answer was scientifically correct. These checks are enforced by `package/compatibility.py`.
+
+Each score report uses schema `PFC_FULL99_CONDITIONAL_SCORE_V1`. Its `packet_sha256` and `candidate_sha256` must join the authenticated packet and frozen submission. It retains 69 ordered full/deletion cases, twelve families, sixteen analytic contexts and four Gao contexts; the exact roster is 99 recordings, 19,186 fitting units and 68 fitting animals. Retain undefined geometry and the complete false 68-animal direction-stability result rather than dropping inconvenient cases. Per-case `moment_errors`, `continuous_comparisons`, hierarchy results and grouped animal influence are the reported outputs; there is no extra scalar leaderboard score invented by this guide.
+
+For an independent review, retain the original terminal status/streams and the entire owned output tree. Within the separately allocated review budget, authenticate each recorded length/SHA-256 against the saved submission, score and stream bytes; join every retained `CALL-*.json` to its complete captures and allowed command outcome; and inspect all seven ownership/cleanup records. Expected absence queries can return the accepted absence response, so requiring every Docker call to return 0 would be incorrect. Keep failed or partial outputs and distinguish missing capture, scientific rejection and cleanup failure. Do not edit receipts or rerun an exhausted attempt to turn it into a pass.
+
+## Participant programs after compatibility
 
 For participant mode, both complete submissions are scored with the same conditional endpoint; compatibility-only negative stages are omitted. Each selected run still needs its full ownership/resource contract. Model improvement and a paid LLM campaign are not prerequisites to validate this benchmark's construction.

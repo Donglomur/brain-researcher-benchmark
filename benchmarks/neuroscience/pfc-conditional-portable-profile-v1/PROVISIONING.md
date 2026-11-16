@@ -46,6 +46,8 @@ python3 -I -S -B "$PFC_SOURCE/provisioning/make_owner_provenance.py" \
 
 The command prints the path, byte count and SHA-256 to place in `assets.source_input_selection` in your deployment configuration. It writes one new metadata file and refuses to overwrite an existing file. Its nine `.identity-only` paths are inert labels; no scientific file is created, required or opened there. This descriptor is accepted by the unchanged deployment metadata interface. The original private manifest is unnecessary.
 
+The released `participant-packet.json` is the complete prepared input for this endpoint. Downloading and verifying it is the input-preparation step; the nine original preparation files are not required to run the released task. `package/preparation/prepare_packet.py` documents the earlier construction route and is not an additional prerequisite.
+
 Fill the four other asset paths in [deployment.example.json](deployment.example.json) using the downloaded files and their fixed identities. Then follow the [operator guide](OPERATOR_GUIDE.md) for source, host, runtime and compatibility admission. The pinned `PUBLIC_LINEAGE.json` records the earlier source stage; its `publication_selected=false` is historical metadata, not the current availability of this release or execution authority.
 
 ## Scientific scope and information conditions
@@ -58,4 +60,4 @@ Both conditions receive the packet, paper, task and schema. Only condition B rec
 
 ## Runtime availability
 
-The exact admitted image must be available on the selected local Docker daemon. Configuration and participant execution do not pull, build or export images. A reproducible image distribution/build route and fresh admission on another host remain outstanding; downloading these inputs does not establish new-host compatibility. Existing selected-host validation remains the evidence for this profile.
+The exact admitted image must be available on the selected local Docker daemon. Configuration and participant execution do not pull, build or export images. This task still pins image 385454. Separate [clean runtime build sources](../pfc-clean-runtime-source-v1/README.md) provide exact source/dependency provenance for 9aaf, but neither a distributed admitted image nor a qualified replacement for this task is supplied by that source package. A rebuild needs its own runtime binding and complete compatibility qualification. Downloading these inputs does not establish new-host compatibility; the [operator guide](OPERATOR_GUIDE.md#verify-the-complete-run) identifies the required run outputs.
