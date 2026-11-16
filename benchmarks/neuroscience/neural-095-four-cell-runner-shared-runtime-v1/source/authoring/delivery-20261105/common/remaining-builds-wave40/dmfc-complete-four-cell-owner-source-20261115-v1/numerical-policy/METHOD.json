@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "candidate_id": "NEURAL-095",
+  "method_id": "independent_residual_ridge_v1",
+  "estimator_family": "Linear ridge regression of tp_ms minus nominal_ts_ms with an unpenalized intercept. Restore nominal_ts_ms to each prediction. For fold-standardized X and centered residual target r, solve (X.T@X/n + lambda*I) beta = X.T@(r-mean(r))/n; this minimizes mean squared residual error plus lambda*sum(beta**2). No clipping or case exclusion.",
+  "cue_feature_map": "One indicator for every condition and context observed in the fitting subset; continuous nominal_ts_ms and clock_seconds; one clock_seconds times context-indicator interaction per fitting-subset context. Same cue construction in both views. Categories are not inferred from validation/query rows.",
+  "neural_feature_map": "Only when the public neural view contains counts, append all 160 log1p(uint32 count) features in C-order: four chronological 50ms bins by all forty supplied unit columns. No smoothing, unit selection, count aggregation or post-Set input.",
+  "training_preprocessing": "Within each training-CV fitting subset, derive category vocabularies, column means and population RMS scales. Detect constant raw feature columns by exact equality to their first fitting row, set their center to that exact value and scale to one, and force their transformed values and coefficients to zero on every prediction row. Center residual targets using the fitting subset only. Refit the complete preprocessing on all748 training rows after lambda selection.",
+  "hyperparameter_candidates": {
+    "ridge_lambda": [
+      0.01,
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "normalization": "mean squared residual error; no feature-count rescaling",
+    "other_search": null
+  },
+  "selection_folds": "The five provided contiguous chronological training groups, each held out once. No random split or fold mutation. Both views use the same supplied fold membership. No assessment/validation targets other than these held training rows are read.",
+  "selection_loss": "Pooled out-of-fold MAE in milliseconds over all748 training rows, each contributing exactly once for each lambda; sum each fold absolute error sum and divide by748. This is not an unweighted mean of unequal-sized fold MAEs.",
+  "tie_rule": "Choose the largest lambda among EXACT equal minimum pooled MAEs; no tolerance tie or outcome-dependent grid expansion.",
+  "constant_or_missing_group_policy": "Keep all training and query cases. Unknown condition/context categories get all-zero indicators for that group; available nominal/global-clock/known-group features remain. Exact fitting-constant columns are zero for every future row. Nonfinite inputs or failed finite solve are execution errors, not removed cases or alternative-model triggers.",
+  "training_random_seed": null,
+  "allowed_view_specific_changes": "The sole observation-view change is appending the160 neural columns when counts are supplied. The model family, cue features, preprocessing, lambda grid, folds, selection loss, tie rule and final refit are identical. The selected lambda and fitted coefficients may differ because training data differ. No choice is made from private assessment outcomes, and cue-only output/state is unavailable to the neural run.",
+  "query_transduction_policy": "Prohibited. Query NPZ is opened only after training-only selection and full-training refit. Its predictors enter only fixed feature transformation and prediction; query values do not change vocabulary, centering, scales, inactive mask, lambda or coefficients.",
+  "work_bound": {
+    "preprocessing_fits_per_view": 6,
+    "training_cv_ridge_fits_per_view": 25,
+    "final_training_refits_per_view": 1,
+    "ridge_fits_per_view": 26,
+    "total_two_view_ridge_fits_if_both_complete": 52,
+    "training_rows": 748,
+    "query_rows": 258,
+    "supplied_units": 40,
+    "spike_features_neural_view": 160,
+    "no_optimizer_restarts": true
+  },
+  "fit_provenance_stdout": "Original bounded candidate-self-reported fit provenance is retained inside the opaque fitted artifact; it is not a privileged execution attestation. Numerical helpers and all12 core method declarations remain unchanged.",
+  "output": "Two-stage numerical tool transport: prepare returns one opaque fitted artifact; tool returns all258 original query IDs and finite float64 predictions in result.json. The trusted producer retains original submission.npz encoding. No clipping, missing cases or extra output files.",
+  "authoring_basis": "Independently written from public contract, public cue/neural schema and units metadata. No empirical NPZ, private target, assessment result, fixed-reference implementation or previous paired candidate code inspected while authoring.",
+  "scientific_limits": "Prediction AT observed Set from strictly pre-Set offline processed spikes on exposed Haydn20161211 data. Produced interval is released tp_ms, not Go-minus-Set. No cross-session/animal, causal neural-mechanism, native LLM understanding, significance or guaranteed positive neural-increment claim. Both absolute arm errors and fixed strong comparators remain necessary.",
+  "execution_profile": {
+    "schema": "dmfc-prepare-frozen-predict-v1",
+    "predecessor_source_sha256": "c4c70e79e47f17a667d533159ec6755e39926f26b5b1b5712271f0a13406e104",
+    "numerical_helpers_unchanged": true,
+    "training_only_prepare": true,
+    "query_tool_has_no_fit_call": true,
+    "artifact_float_encoding": "canonical float.hex / float.fromhex preserves binary64 exactly",
+    "fitted_artifact_cap_bytes": 65536,
+    "candidate_fits_per_preparation": 26,
+    "new_reference_fits": 0
+  }
+}

@@ -2492,3 +2492,85 @@ jobs:
           set -euo pipefail
           ulimit -t 60
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_bridge.py' -v
+
+  dmfc-shared-runtime-source-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate the complete locked runtime source context
+        working-directory: benchmarks/neuroscience/neural-095-four-cell-runner-shared-runtime-v1
+        run: |
+          python -I -S -B - <<'DMFC_CONTEXT_SOURCE'
+          import hashlib, json, stat
+          from pathlib import Path, PurePosixPath
+          root = Path.cwd()
+          raw = (root / 'RUNTIME_INSTALL_INPUTS.json').read_bytes()
+          assert len(raw) == 3024 and hashlib.sha256(raw).hexdigest() == '0d4372af8356c8d7e26a6f5d7f8baa638382e30b6c09d97026b242053d934f8d'
+          manifest = json.loads(raw)
+          rows = manifest['context_files']
+          assert len(rows) == 11 and sum(row['bytes'] for row in rows) == 268162
+          expected = set()
+          for row in rows:
+              relative = PurePosixPath(row['path'])
+              assert not relative.is_absolute() and '..' not in relative.parts and str(relative) == row['path']
+              assert relative.parts[0] == 'runtime-context'
+              path = root / relative
+              assert not any(p.is_symlink() for p in (path, *path.parents))
+              before = path.stat()
+              assert stat.S_ISREG(before.st_mode) and before.st_nlink == 1
+              assert before.st_size == row['bytes'] and 0 < row['bytes'] <= 262144
+              body = path.read_bytes()
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256']
+              expected.add(str(relative))
+          actual = {str(p.relative_to(root)) for p in (root / 'runtime-context').rglob('*') if p.is_file() or p.is_symlink()}
+          assert actual == expected
+          print(json.dumps({'source_context_files': 11, 'source_context_bytes': 268162, 'wheel_or_image_acquisition': False}))
+          DMFC_CONTEXT_SOURCE
+      - name: Check the unchanged seventeen generated DMFC source controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          DMFC_SHARED_LOGS="${RUNNER_TEMP}/dmfc-shared-runtime-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -m 700 "$DMFC_SHARED_LOGS"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B benchmarks/neuroscience/neural-095-four-cell-runner-shared-runtime-v1/test_configure.py >"$DMFC_SHARED_LOGS/tests.stdout" 2>"$DMFC_SHARED_LOGS/tests.stderr"
+          DMFC_SHARED_STATUS=$?
+          printf '%s\n' "$DMFC_SHARED_STATUS" >"$DMFC_SHARED_LOGS/tests.status"
+          cat "$DMFC_SHARED_LOGS/tests.stdout"
+          cat "$DMFC_SHARED_LOGS/tests.stderr"
+          exit "$DMFC_SHARED_STATUS"
+      - name: Preserve complete shared-runtime source control streams
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: dmfc-shared-runtime-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          overwrite: false
+          include-hidden-files: false
+          path: ${{ runner.temp }}/dmfc-shared-runtime-${{ github.run_id }}-${{ github.run_attempt }}/
+
+  fus-input-conventions-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Check timestamp parsing and the complete FUS roster join
+        shell: bash
+        working-directory: benchmarks/neuroscience/components/fus-input-conventions
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_*.py' -v
