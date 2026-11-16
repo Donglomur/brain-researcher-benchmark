@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CBraMod complete prediction artifact transport; contract.py enforces query-dependent invariants",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "task_id",
+    "query_sha256",
+    "information_arm",
+    "files"
+  ],
+  "properties": {
+    "schema": {
+      "const": "cbramod_prediction_artifacts_v1"
+    },
+    "task_id": {
+      "const": "PAPER-paper-method-024"
+    },
+    "query_sha256": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64,
+      "pattern": "^[0-9a-f]{64}$(?![\\s\\S])"
+    },
+    "information_arm": {
+      "enum": [
+        "paper_and_data",
+        "paper_data_official_code"
+      ]
+    },
+    "files": {
+      "type": "array",
+      "minItems": 60,
+      "maxItems": 800,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case",
+          "path",
+          "shape",
+          "dtype",
+          "bytes",
+          "sha256"
+        ],
+        "properties": {
+          "case": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "^[A-Za-z0-9_.-]+$(?![\\s\\S])"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 17,
+            "maxLength": 176,
+            "pattern": "^predictions/[A-Za-z0-9_.-]{1,160}\\.npy$(?![\\s\\S])"
+          },
+          "shape": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "dtype": {
+            "enum": [
+              "<f4",
+              "<f8"
+            ]
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 80,
+            "maximum": 8000000000
+          },
+          "sha256": {
+            "type": "string",
+            "minLength": 64,
+            "maxLength": 64,
+            "pattern": "^[0-9a-f]{64}$(?![\\s\\S])"
+          }
+        }
+      }
+    }
+  },
+  "$comment": "Runtime enforces exactly800 reproduction or60 improvement rows, canonical order, unique paths, summed8GB cap, full support, complete normalized probabilities, and private-load ordering."
+}

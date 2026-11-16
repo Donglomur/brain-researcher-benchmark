@@ -19,6 +19,7 @@ PAGES = (
     "docs/original-examples-contributing.md",
     "docs/neuroscience-benchmarks/CONSTRUCTION_STATUS.md",
     "docs/neuroscience-benchmarks/ARTIFACT_GRADING.md",
+    "docs/neuroscience-benchmarks/PORTABLE_COMPONENTS.md",
     "docs/history/SOURCE_COMPONENTS_20261116.md",
     "examples/original-three/README.md",
     "benchmarks/catalog/README.md",

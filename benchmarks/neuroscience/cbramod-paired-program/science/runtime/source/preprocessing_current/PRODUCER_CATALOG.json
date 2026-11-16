@@ -1,0 +1,626 @@
+{
+  "additional_required_paper_families": [
+    "E.9 BCIC-IV-2a:9people,22channels,4classes,4s,5088samples;1-5train/6-7val/8-9test;Table15 metric headers conflict with multiclass convention, unresolved",
+    "AppendixQ BCIC-IV-2a leave-one-subject-out versus EEG-SimpleConv; not primary split",
+    "Scaling data/model size",
+    "Architectures trained on matched pretraining corpus",
+    "Pretraining segment4/8/30seconds",
+    "Time-domain/frequency-domain ablation",
+    "Frozen-backbone versus full fine-tuning",
+    "30percent labeled-data low-resource comparison",
+    "L attention-head spatial:temporal ratios2:6/4:4/6:2",
+    "M masking ratios0.1 through0.9",
+    "N full-zero versus learnable masking token",
+    "O parameters and FLOPs comparison",
+    "C/P reconstruction, topography and representation visualization",
+    "R convergence speed versus supervised model"
+  ],
+  "artifact_scope": {
+    "improvement": 60,
+    "operator": 420,
+    "reproduction": 800
+  },
+  "datasets": [
+    {
+      "all_loader_signals_divide_by": 100,
+      "id": "FACED",
+      "loader": {
+        "bytes": 2192,
+        "git_blob": "94fa1858cda31b40178e894228897b613f63b573",
+        "path": "datasets/faced_dataset.py",
+        "sha256": "a9b6ef27aeaaa424a8d2521f06bbcf35e3fc991633d0bedc9ed25f0235275f1e"
+      },
+      "loader_kind": "lmdb",
+      "paper_parity_holds": [
+        "Exact sorted raw-directory order and28-source-trial labels are retained; matching genuine123-person release remains unqualified."
+      ],
+      "primary": true,
+      "stages": {
+        "convert": {
+          "auxiliary": [],
+          "relocations": [
+            {
+              "binding": "raw_dir",
+              "occurrences": 1,
+              "original": "/data/cyn/FACED/Processed_data",
+              "suffix": ""
+            },
+            {
+              "binding": "prepared_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/Faced/processed",
+              "suffix": ""
+            }
+          ],
+          "source": {
+            "bytes": 1444,
+            "git_blob": "358ef4a9307f593e8e7e8fdb03de83a141e629db",
+            "path": "preprocessing/preprocessing_faced.py",
+            "sha256": "8ed039ecdf5bdb1f320c009ab7eabb1143e88b34fcdd7271eb69bba3aab7ca17"
+          }
+        }
+      }
+    },
+    {
+      "all_loader_signals_divide_by": 100,
+      "id": "SEED-V",
+      "loader": {
+        "bytes": 2265,
+        "git_blob": "132812fef5b19933c188d36f9242b880250105ac",
+        "path": "datasets/seedv_dataset.py",
+        "sha256": "3908c0e9a94c36faaa60246855b6ce67b12835f6ee37adc2295223a4118d078f"
+      },
+      "loader_kind": "lmdb",
+      "paper_parity_holds": [
+        "Source hardcodes15 trial boundaries/session and trial0-4/5-9/10-14 splits; release/file-to-person/class-order qualification is missing."
+      ],
+      "primary": true,
+      "stages": {
+        "convert": {
+          "auxiliary": [],
+          "relocations": [
+            {
+              "binding": "raw_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/SEED-V/files",
+              "suffix": ""
+            },
+            {
+              "binding": "prepared_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/SEED-V/processed",
+              "suffix": ""
+            }
+          ],
+          "source": {
+            "bytes": 2763,
+            "git_blob": "603802d7f0cc60898e7c2de49a62912e96740463",
+            "path": "preprocessing/preprocessing_SEEDV.py",
+            "sha256": "93975f61734ee75378ea7f962d5813adcabb7b07bb32f640eec25c544a0e10d4"
+          }
+        }
+      }
+    },
+    {
+      "all_loader_signals_divide_by": 100,
+      "id": "PhysioNet-MI",
+      "loader": {
+        "bytes": 2258,
+        "git_blob": "8018c3c778418b11eb9991fada0ffc3d78ce0543",
+        "path": "datasets/physio_dataset.py",
+        "sha256": "7af1ab084073de1f535d410e4c8cf37a8847d7604bfb67e6642531a9a749b69a"
+      },
+      "loader_kind": "lmdb",
+      "paper_parity_holds": [
+        "Source sorts the complete original os.listdir staging including sidecars; no filtering/exclusion repair is introduced.",
+        "Runs04/06/08/10/12/14, event!=1 and source event mapping retained; original staged directory/cohort/class correspondence unqualified."
+      ],
+      "primary": true,
+      "stages": {
+        "convert": {
+          "auxiliary": [],
+          "relocations": [
+            {
+              "binding": "raw_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/eeg-motor-movementimagery-dataset-1.0.0/files",
+              "suffix": ""
+            },
+            {
+              "binding": "prepared_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/eeg-motor-movementimagery-dataset-1.0.0/processed_average",
+              "suffix": ""
+            }
+          ],
+          "source": {
+            "bytes": 3180,
+            "git_blob": "ec5760d57d09fb3476c245d187f4b379c1a584d3",
+            "path": "preprocessing/preprocessing_physio.py",
+            "sha256": "4bcfa76e5076d53f14bcf5e7ad728bf38a67f472c4a51157e799487882ea4bcb"
+          }
+        }
+      }
+    },
+    {
+      "all_loader_signals_divide_by": 100,
+      "id": "SHU-MI",
+      "loader": {
+        "bytes": 2206,
+        "git_blob": "627a5b9076a720dd29b1b9e6129b1da047b5d9fe",
+        "path": "datasets/shu_dataset.py",
+        "sha256": "70461c2cecf6026f4988c7e222d10b9d46f006f32c6b5d9031b35e31fb0b0739"
+      },
+      "loader_kind": "lmdb",
+      "paper_parity_holds": [
+        "Source splits sorted files75/25/rest; five sessions per person and complete25-person source inventory are not established."
+      ],
+      "primary": true,
+      "stages": {
+        "convert": {
+          "auxiliary": [],
+          "relocations": [
+            {
+              "binding": "raw_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/shu_datasets/mat",
+              "suffix": ""
+            },
+            {
+              "binding": "prepared_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/shu_datasets/processed",
+              "suffix": ""
+            }
+          ],
+          "source": {
+            "bytes": 1395,
+            "git_blob": "782b6ed6580a99bc7b0813e761118e2bbc25a9e0",
+            "path": "preprocessing/preprocessing_shu.py",
+            "sha256": "8c62c62bcbb46dd7af5f4fc5d3e96782157196440f38c9dca1abebd87a89a3b5"
+          }
+        }
+      }
+    },
+    {
+      "all_loader_signals_divide_by": 100,
+      "id": "ISRUC",
+      "loader": {
+        "bytes": 3756,
+        "git_blob": "73973f04f631885de25d0e2991d4aa87d6cd41fc",
+        "path": "datasets/isruc_dataset.py",
+        "sha256": "0a0c6dee0825319df4e67f2be727af2b78d1bec515de869ab8e02bc1f5cae104"
+      },
+      "loader_kind": "sequence_pairs",
+      "paper_parity_holds": [
+        "Source uses custom edf_.py; its resample call is commented; actual effective200Hz source parity needs qualification.",
+        "Converter retains20 consecutive epochs and drops trailing epochs; labels map0,1,2,3,5\u21920..4.",
+        "Official loader independently lists sequence and label directories and zips unsorted; mismatched pairs are not silently repaired.",
+        "Source global sequence counters must map to original night and original within-night epoch; true row/target binding unqualified."
+      ],
+      "primary": true,
+      "stages": {
+        "convert": {
+          "auxiliary": [
+            {
+              "bytes": 77056,
+              "git_blob": "3d377cb0214e5234e0344afe63b297479ee0e247",
+              "output": "edf_.py",
+              "path": "preprocessing/ISRUC/edf_.py",
+              "sha256": "f0e3489c5193313943dc05c988d94485a0d3859a016f4d553bddf3204ad5ee73"
+            }
+          ],
+          "relocations": [
+            {
+              "binding": "raw_dir",
+              "occurrences": 1,
+              "original": "/data/datasets2/ISRUC_extracted/group1",
+              "suffix": ""
+            },
+            {
+              "binding": "prepared_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/ISRUC/precessed_filter_35/seq",
+              "suffix": "seq"
+            },
+            {
+              "binding": "prepared_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/ISRUC/precessed_filter_35/labels",
+              "suffix": "labels"
+            }
+          ],
+          "source": {
+            "bytes": 3292,
+            "git_blob": "b3ee1308e0d4d7d7eba477079757039eeaae699c",
+            "path": "preprocessing/ISRUC/prepare_ISRUC_1.py",
+            "sha256": "938f0228de8c222e3c860f546ad49e39acf6cecf8bbaad88c3488df34f8ec466"
+          }
+        }
+      }
+    },
+    {
+      "all_loader_signals_divide_by": 100,
+      "id": "CHB-MIT",
+      "loader": {
+        "bytes": 2152,
+        "git_blob": "bfdc42be63fe39232238fc9699afbdf8623a3994",
+        "path": "datasets/chb_dataset.py",
+        "sha256": "49c039b79fd59d0e37939645d191486b359f7d00112921fac530117b1c7605b9"
+      },
+      "loader_kind": "pickle_xy",
+      "paper_parity_holds": [
+        "Official process1 parameters contain21 cases, include24 and omit12,13,17; process2 val21,22/test23,24 differ from paper val20,21/test22,23.",
+        "Provider chb01 and chb21 are the same biological person; original case split and future person-disjoint arm remain distinct.",
+        "Source seizure interval and extra5s windows retained, including potentially short terminal windows; no scientific repair introduced.",
+        "Official unguarded multiprocessing scripts require qualified native process-start context; no source execution performed."
+      ],
+      "primary": true,
+      "stages": {
+        "clean": {
+          "auxiliary": [],
+          "relocations": [
+            {
+              "binding": "raw_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/chb-mit-scalp-eeg-database-1.0.0",
+              "suffix": ""
+            },
+            {
+              "binding": "intermediate_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/chb-mit/processed",
+              "suffix": ""
+            }
+          ],
+          "source": {
+            "bytes": 9226,
+            "git_blob": "092bf7a3775d728a21026f93caa7a61d4dcc8110",
+            "path": "preprocessing/CHB-MIT/process1.py",
+            "sha256": "0b04de1966a58a8f526a7c880dd163fa8dc057f838d9cfa61f39d4981b00ae0f"
+          }
+        },
+        "segment": {
+          "auxiliary": [],
+          "relocations": [
+            {
+              "binding": "intermediate_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/chb-mit/processed",
+              "suffix": ""
+            },
+            {
+              "binding": "prepared_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/chb-mit/processed_seg",
+              "suffix": ""
+            }
+          ],
+          "source": {
+            "bytes": 6871,
+            "git_blob": "642c02ee20837b386243c5bc76020bd3e6d23043",
+            "path": "preprocessing/CHB-MIT/process2.py",
+            "sha256": "bdb2cfd714a0264b396b0b2be2f849c613ba8e92463288328644c614acd38838"
+          }
+        }
+      }
+    },
+    {
+      "all_loader_signals_divide_by": 100,
+      "id": "BCIC2020-3",
+      "loader": {
+        "bytes": 2207,
+        "git_blob": "81e72d62c817155f26dba25d2be5047e15abb9ee",
+        "path": "datasets/speech_dataset.py",
+        "sha256": "69e5f4455312fd24c1a7c46ded049d9f2fca601fa62588b4c17c94536dccde10"
+      },
+      "loader_kind": "lmdb",
+      "paper_parity_holds": [
+        "Official source reads the supplied test answer spreadsheet during operator-only preparation; it must never be in query-visible inference mounts.",
+        "Exact source supplied split and class mapping remain unqualified against authentic released inventory."
+      ],
+      "primary": true,
+      "stages": {
+        "convert": {
+          "auxiliary": [],
+          "relocations": [
+            {
+              "binding": "train_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/Imagined speech/mat/Training set",
+              "suffix": ""
+            },
+            {
+              "binding": "val_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/Imagined speech/mat/Validation set",
+              "suffix": ""
+            },
+            {
+              "binding": "test_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/Imagined speech/mat/Test set",
+              "suffix": ""
+            },
+            {
+              "binding": "prepared_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/Imagined speech/processed",
+              "suffix": ""
+            },
+            {
+              "binding": "test_answer_sheet",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/Imagined speech/mat/Track3_Answer Sheet_Test.xlsx",
+              "suffix": ""
+            }
+          ],
+          "source": {
+            "bytes": 3342,
+            "git_blob": "9b318c801499a79449b9abf22d1a5c8c2822e684",
+            "path": "preprocessing/preprocessing_speech.py",
+            "sha256": "8139632992dc8bd9b152ce642da9b8896acb5bf25dcce46624a40d730443783f"
+          }
+        }
+      }
+    },
+    {
+      "all_loader_signals_divide_by": 100,
+      "id": "Mumtaz2016",
+      "loader": {
+        "bytes": 2210,
+        "git_blob": "8a7565356a1b9d65a6cc31f08af86e89236da1eb",
+        "path": "datasets/mumtaz_dataset.py",
+        "sha256": "2eec3dd63f490fe2747adb2ead8d15a126d875fe51c2d6d3cff90aaa37265ad9"
+      },
+      "loader_kind": "lmdb",
+      "paper_parity_holds": [
+        "Paper64 people vs specified62-person split unresolved.",
+        "Source excludes filenames containingTASK, sorts remainingH/MDD files and takes40H+42MDD train,8H+10MDDval,remainingtest; correspondence to paper24MDD+19NC train not established."
+      ],
+      "primary": true,
+      "stages": {
+        "convert": {
+          "auxiliary": [],
+          "relocations": [
+            {
+              "binding": "raw_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/MDDPHCED/files",
+              "suffix": ""
+            },
+            {
+              "binding": "prepared_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/MDDPHCED/processed_lmdb_75hz",
+              "suffix": ""
+            }
+          ],
+          "source": {
+            "bytes": 2831,
+            "git_blob": "86be546787a0b904ad80d258b32d8ba989c3de66",
+            "path": "preprocessing/preprocessing_mumtaz.py",
+            "sha256": "47bcaec678c8e18ef06a3ced40e620a8a54ce45033d6f711876e715a5b32ca56"
+          }
+        }
+      }
+    },
+    {
+      "all_loader_signals_divide_by": 100,
+      "id": "SEED-VIG",
+      "loader": {
+        "bytes": 2177,
+        "git_blob": "8915de2c4109693f820258982b6f003991f1c44d",
+        "path": "datasets/seedvig_dataset.py",
+        "sha256": "259829a4bdd8d871073501e3c321d43244b64fc93ff2cc0af0529649f390e1c4"
+      },
+      "loader_kind": "lmdb",
+      "paper_parity_holds": [
+        "Source hardcodes885 eight-second epochs/file and preserves PERCLOS labels; authentic file/person inventory unqualified."
+      ],
+      "primary": true,
+      "stages": {
+        "convert": {
+          "auxiliary": [],
+          "relocations": [
+            {
+              "binding": "raw_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/SEED-VIG/mat/Raw_Data",
+              "suffix": ""
+            },
+            {
+              "binding": "label_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/SEED-VIG/mat/perclos_labels",
+              "suffix": ""
+            },
+            {
+              "binding": "prepared_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/SEED-VIG/processed",
+              "suffix": ""
+            }
+          ],
+          "source": {
+            "bytes": 1560,
+            "git_blob": "575d0693ec0ebe58d20289f333a3298ee00ba63a",
+            "path": "preprocessing/preprocessing_seedvig.py",
+            "sha256": "33a3cf9eec66f2d3ff85efa5bd7c7321918e3e0913e85322c831a429b0e24a52"
+          }
+        }
+      }
+    },
+    {
+      "all_loader_signals_divide_by": 100,
+      "id": "MentalArithmetic",
+      "loader": {
+        "bytes": 2206,
+        "git_blob": "627a5b9076a720dd29b1b9e6129b1da047b5d9fe",
+        "path": "datasets/stress_dataset.py",
+        "sha256": "70461c2cecf6026f4988c7e222d10b9d46f006f32c6b5d9031b35e31fb0b0739"
+      },
+      "loader_kind": "lmdb",
+      "paper_parity_holds": [
+        "Source explicitly uses19EEG channels plus EEG A2-A1 as20th; provider availability and scientific interpretation remain unqualified."
+      ],
+      "primary": true,
+      "stages": {
+        "convert": {
+          "auxiliary": [],
+          "relocations": [
+            {
+              "binding": "raw_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/mental-arithmetic/edf",
+              "suffix": ""
+            },
+            {
+              "binding": "prepared_dir",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/mental-arithmetic/processed",
+              "suffix": ""
+            }
+          ],
+          "source": {
+            "bytes": 1802,
+            "git_blob": "b2e662f782fdb92452c70bda3df16b8b4e381463",
+            "path": "preprocessing/preprocessing_stress.py",
+            "sha256": "cadf6b080c062cdec507ca13cf5ba695cc858545a05c8596d5544c1f785125a6"
+          }
+        }
+      }
+    },
+    {
+      "all_loader_signals_divide_by": 100,
+      "id": "TUEV",
+      "loader": {
+        "bytes": 2494,
+        "git_blob": "78888a730bdd23a05086bfdd0842445fb0c20876",
+        "path": "datasets/tuev_dataset.py",
+        "sha256": "da78fb2caa0ddc462e59b172f00f2680009b455fef384c1e3bdf05825f8de475"
+      },
+      "loader_kind": "pickle_signal",
+      "paper_parity_holds": [
+        "Source original train/eval, sorted80/20 training-person split, bipolar16channel and label-1 loader retained.",
+        "Exact release/pretraining overlap and excludingTUEV condition remain unqualified.",
+        "Official final stage uses unquoted os.system(cp); future selected workspace and staged filenames must be shell-safe, without changing scientific source behavior."
+      ],
+      "primary": true,
+      "stages": {
+        "convert": {
+          "auxiliary": [],
+          "relocations": [
+            {
+              "binding": "raw_dir",
+              "occurrences": 1,
+              "original": "/data/zcb/data/TUEV/edf",
+              "suffix": ""
+            },
+            {
+              "binding": "workspace_dir",
+              "occurrences": 2,
+              "original": "/data/datasets/BigDownstream/TUEV_refine",
+              "suffix": ""
+            }
+          ],
+          "source": {
+            "bytes": 8490,
+            "git_blob": "19c2b93fc433b8faba35c33c829118d8e94c99f7",
+            "path": "preprocessing/preprocessing_tuev.py",
+            "sha256": "3ec3ae3967353f86f4c970bdf86e7382e59bc492b7397382372f6b429231c6f3"
+          }
+        }
+      }
+    },
+    {
+      "all_loader_signals_divide_by": 100,
+      "id": "TUAB",
+      "loader": {
+        "bytes": 2155,
+        "git_blob": "f19d629d0fa8a479894e6acfb28344a5b91e7151",
+        "path": "datasets/tuab_dataset.py",
+        "sha256": "a2e4c5224c5d6492b4a416562639adcb2c7b4a0a68756fb4101960913dd5f0b2"
+      },
+      "loader_kind": "pickle_xy",
+      "paper_parity_holds": [
+        "Source writes process_refine beneath raw_workspace; caller must provide a private writable original-layout workspace, not an immutable raw-data owner.",
+        "Exact release/pretraining overlap and excludingTUAB condition remain unqualified."
+      ],
+      "primary": true,
+      "stages": {
+        "convert": {
+          "auxiliary": [],
+          "relocations": [
+            {
+              "binding": "raw_workspace",
+              "occurrences": 1,
+              "original": "/data/datasets/BigDownstream/TUAB/edf",
+              "suffix": ""
+            }
+          ],
+          "source": {
+            "bytes": 9164,
+            "git_blob": "5b62298570802057c5e27d2f5256b36db4ee5df1",
+            "path": "preprocessing/preprocessing_tuab.py",
+            "sha256": "91e22f38601c5505fb3250bc249b7b6f376c3b4b47f4761f93ec7bf20790df8a"
+          }
+        }
+      }
+    },
+    {
+      "all_loader_signals_divide_by": 100,
+      "id": "BCIC-IV-2a",
+      "loader": {
+        "bytes": 2191,
+        "git_blob": "c8129c2ba33cc75822e3c8ada1e94319ca4cfbb6",
+        "path": "datasets/bciciv2a_dataset.py",
+        "sha256": "f5d2e28ea48d5e395106cda09ab22a205c73533a462db3a13eda516436b05ec0"
+      },
+      "loader_kind": "lmdb",
+      "paper_parity_holds": [
+        "Current official source dynamically skips empty-label EOG structs, including A04T exception; parity with original published experiment remains unqualified.",
+        "Primary1-5/6-7/8-9 split preserved; LOSO is a distinct retained unimplemented recipe, not silently substituted."
+      ],
+      "primary": false,
+      "stages": {
+        "convert": {
+          "auxiliary": [],
+          "relocations": [
+            {
+              "binding": "raw_dir",
+              "occurrences": 1,
+              "original": "/data/wjq/datasets/BigDownstream/BCICIV2a/data_mat",
+              "suffix": ""
+            },
+            {
+              "binding": "prepared_dir",
+              "occurrences": 1,
+              "original": "/data/wjq/datasets/BigDownstream/BCICIV2a/processed_inde_avg_filter",
+              "suffix": ""
+            }
+          ],
+          "source": {
+            "bytes": 4047,
+            "git_blob": "87417120bd43ce92c7642315381f6ac97c208b4f",
+            "path": "preprocessing/preprocessing_bciciv2a.py",
+            "sha256": "f4af467b98dcc5982713251fe5ecb1a71be1de1ebe92d5a1dc13d09ddf6e1788"
+          }
+        }
+      }
+    }
+  ],
+  "no_scientific_execution": true,
+  "official_commit": "b9e961003214326972c567eff390e75b0287e32a",
+  "pretraining_source": {
+    "bytes": 3777,
+    "git_blob": "ccbcad048ed20e872fd1b6ac32775546da5600bc",
+    "git_mode": "100644",
+    "path": "official/preprocessing/preprocessing_tueg_for_pretraining.py",
+    "sha256": "33710ce918c1babd9f45cc7aab342cd03786550bded5faaccb3b0408d0f65577"
+  },
+  "schema": "cbramod_official_producers_v1",
+  "scope_note": "All12 primary raw producers plus additionalBCIC-IV-2a producer. Other retained families remain explicit paper obligations, not claimed complete.",
+  "source_parity_qualified": false,
+  "task_id": "PAPER-paper-method-024"
+}

@@ -1,0 +1,322 @@
+{
+  "ISRUC_context": {
+    "epochs": 20,
+    "isolated_epoch_substitution_allowed": false,
+    "seconds_per_epoch": 30,
+    "sequence_encoder": "one-layer transformer in addition to sample encoder"
+  },
+  "additional_primary_conditions": {
+    "ISRUC": [
+      "DeepSleepNet",
+      "USleep"
+    ],
+    "TUAB": [
+      "LaBraM-Large reported-only",
+      "LaBraM-Huge reported-only",
+      "CBraMod excludingTUAB pretraining"
+    ],
+    "TUEV": [
+      "LaBraM-Large reported-only",
+      "LaBraM-Huge reported-only",
+      "CBraMod excludingTUEV pretraining"
+    ]
+  },
+  "additional_required_paper_families": [
+    "E.9 BCIC-IV-2a:9people,22channels,4classes,4s,5088samples;1-5train/6-7val/8-9test;Table15 metric headers conflict with multiclass convention, unresolved",
+    "AppendixQ BCIC-IV-2a leave-one-subject-out versus EEG-SimpleConv; not primary split",
+    "Scaling data/model size",
+    "Architectures trained on matched pretraining corpus",
+    "Pretraining segment4/8/30seconds",
+    "Time-domain/frequency-domain ablation",
+    "Frozen-backbone versus full fine-tuning",
+    "30percent labeled-data low-resource comparison",
+    "L attention-head spatial:temporal ratios2:6/4:4/6:2",
+    "M masking ratios0.1 through0.9",
+    "N full-zero versus learnable masking token",
+    "O parameters and FLOPs comparison",
+    "C/P reconstruction, topography and representation visualization",
+    "R convergence speed versus supervised model"
+  ],
+  "auc_pr_definition": "trapezoidal_pr_auc",
+  "author_commit_identity": "b9e961003214326972c567eff390e75b0287e32a",
+  "author_source_available": true,
+  "canonical_registry_verified": true,
+  "central_ablation_families": {
+    "attention": [
+      "full",
+      "axial",
+      "CCNet single-map criss-cross",
+      "native dual spatial-temporal criss-cross"
+    ],
+    "position": [
+      "none",
+      "absolute",
+      "conditional",
+      "asymmetric conditional"
+    ],
+    "pretraining": [
+      "clean",
+      "dirty",
+      "none"
+    ]
+  },
+  "central_ablation_panel": [
+    "FACED",
+    "SEED-V",
+    "PhysioNet-MI",
+    "SHU-MI"
+  ],
+  "metrics_abi_status": "Pinned official code authenticates trapezoidal PR-area, strict binary p>0.5 and downstream /100. Seed5 identities and SD denominator remain absent. ISRUC source sequence metrics and source-to-cohort qualifications remain unresolved.",
+  "normalization_scope": "Official downstream loaders divide their processed sample values by100; raw source units and dataset-specific transformations still require original inventory qualification.",
+  "paper": "ICLR2025; arXiv2412.07236",
+  "paper_text_pin": {
+    "bytes": 201761,
+    "sha256": "6f678df6ff6399e02d5bd0347e6c7583e20ea1b6620fd35632e6d1cb47c3687c"
+  },
+  "patch_samples": 200,
+  "primary_downstream_datasets": [
+    {
+      "channels": 32,
+      "classes": 9,
+      "epoch_seconds": 10,
+      "id": "FACED",
+      "metrics": [
+        "balanced_accuracy",
+        "cohen_kappa",
+        "weighted_f1"
+      ],
+      "monitor": "cohen_kappa",
+      "paper_subjects": 123,
+      "source_qualified": false,
+      "split": "subject1-80 train,81-100 validation,101-123 test",
+      "split_unit": "whole_subject",
+      "task": "multiclass",
+      "total_paper_samples": 10332
+    },
+    {
+      "channels": 62,
+      "classes": 5,
+      "epoch_seconds": 1,
+      "id": "SEED-V",
+      "metrics": [
+        "balanced_accuracy",
+        "cohen_kappa",
+        "weighted_f1"
+      ],
+      "monitor": "cohen_kappa",
+      "paper_subjects": 16,
+      "source_qualified": false,
+      "split": "each subject/session15trials:5train/5validation/5test;3sessions perperson",
+      "split_unit": "within_subject_session_trial",
+      "task": "multiclass",
+      "total_paper_samples": 117744
+    },
+    {
+      "channels": 64,
+      "classes": 4,
+      "epoch_seconds": 4,
+      "id": "PhysioNet-MI",
+      "metrics": [
+        "balanced_accuracy",
+        "cohen_kappa",
+        "weighted_f1"
+      ],
+      "monitor": "cohen_kappa",
+      "paper_subjects": 109,
+      "source_qualified": false,
+      "split": "subject1-70 train,71-89 validation,90-109 test; actual exclusions/run mapping require source",
+      "split_unit": "whole_subject",
+      "task": "multiclass",
+      "total_paper_samples": 9837
+    },
+    {
+      "channels": 32,
+      "classes": 2,
+      "epoch_seconds": 4,
+      "id": "SHU-MI",
+      "metrics": [
+        "balanced_accuracy",
+        "auc_pr",
+        "auroc"
+      ],
+      "monitor": "auroc",
+      "paper_subjects": 25,
+      "source_qualified": false,
+      "split": "subject1-15 train,16-20 validation,21-25 test",
+      "split_unit": "whole_subject",
+      "task": "binary",
+      "total_paper_samples": 11988
+    },
+    {
+      "channels": 6,
+      "classes": 5,
+      "epoch_seconds": 30,
+      "id": "ISRUC",
+      "metrics": [
+        "balanced_accuracy",
+        "cohen_kappa",
+        "weighted_f1"
+      ],
+      "monitor": "cohen_kappa",
+      "paper_subjects": 100,
+      "source_qualified": false,
+      "split": "subgroup1 subjects1-80 train,81-90 validation,91-100 test;20epochs/sequence",
+      "split_unit": "whole_subject_sequence",
+      "task": "multiclass",
+      "total_paper_samples": 89240
+    },
+    {
+      "channels": 16,
+      "classes": 2,
+      "epoch_seconds": 10,
+      "id": "CHB-MIT",
+      "metrics": [
+        "balanced_accuracy",
+        "auc_pr",
+        "auroc"
+      ],
+      "monitor": "auroc",
+      "paper_subjects": 23,
+      "source_qualified": false,
+      "split": "paper indices1-19 train,20-21 validation,22-23 test; original record/case-to-person ABI unqualified; provider chb01/chb21 are same person",
+      "split_unit": "source_case_identity_unqualified",
+      "task": "binary",
+      "total_paper_samples": 326993
+    },
+    {
+      "channels": 64,
+      "classes": 5,
+      "epoch_seconds": 3,
+      "id": "BCIC2020-3",
+      "metrics": [
+        "balanced_accuracy",
+        "cohen_kappa",
+        "weighted_f1"
+      ],
+      "monitor": "cohen_kappa",
+      "paper_subjects": 15,
+      "source_qualified": false,
+      "split": "perperson/perclass60train+10validation+10test trials; official supplied splits",
+      "split_unit": "within_subject_trial",
+      "task": "multiclass",
+      "total_paper_samples": 6000
+    },
+    {
+      "channels": 19,
+      "classes": 2,
+      "epoch_seconds": 5,
+      "id": "Mumtaz2016",
+      "metrics": [
+        "balanced_accuracy",
+        "auc_pr",
+        "auroc"
+      ],
+      "monitor": "auroc",
+      "paper_subjects": 64,
+      "source_qualified": false,
+      "split": "eyes-open/closed only; train24MDD+19NC,val5MDD+4NC,test5MDD+5NC; specificIDs unbound",
+      "split_unit": "whole_subject",
+      "task": "binary",
+      "total_paper_samples": 7143
+    },
+    {
+      "channels": 17,
+      "classes": null,
+      "epoch_seconds": 8,
+      "id": "SEED-VIG",
+      "metrics": [
+        "pearson",
+        "r2",
+        "rmse"
+      ],
+      "monitor": "r2",
+      "paper_subjects": 23,
+      "source_qualified": false,
+      "split": "subject1-15 train,16-19 validation,20-23 test; PERCLOS regression",
+      "split_unit": "whole_subject",
+      "task": "regression",
+      "total_paper_samples": 20355
+    },
+    {
+      "channels": 20,
+      "classes": 2,
+      "epoch_seconds": 5,
+      "id": "MentalArithmetic",
+      "metrics": [
+        "balanced_accuracy",
+        "auc_pr",
+        "auroc"
+      ],
+      "monitor": "auroc",
+      "paper_subjects": 36,
+      "source_qualified": false,
+      "split": "subject1-28 train,29-32 validation,33-36 test",
+      "split_unit": "whole_subject",
+      "task": "binary",
+      "total_paper_samples": 1707
+    },
+    {
+      "channels": 16,
+      "classes": 6,
+      "epoch_seconds": 5,
+      "id": "TUEV",
+      "metrics": [
+        "balanced_accuracy",
+        "cohen_kappa",
+        "weighted_f1"
+      ],
+      "monitor": "cohen_kappa",
+      "paper_subjects": null,
+      "source_qualified": false,
+      "split": "original train/test; training subjects80/20 train/validation; original pretraining overlap vs independent excludingTUEV condition",
+      "split_unit": "source_split_unqualified",
+      "task": "multiclass",
+      "total_paper_samples": 112491
+    },
+    {
+      "channels": 16,
+      "classes": 2,
+      "epoch_seconds": 10,
+      "id": "TUAB",
+      "metrics": [
+        "balanced_accuracy",
+        "auc_pr",
+        "auroc"
+      ],
+      "monitor": "auroc",
+      "paper_subjects": null,
+      "source_qualified": false,
+      "split": "original train/test; training subjects80/20 train/validation; original pretraining overlap vs independent excludingTUAB condition",
+      "split_unit": "source_split_unqualified",
+      "task": "binary",
+      "total_paper_samples": 409455
+    }
+  ],
+  "primary_methods": [
+    "EEGNet",
+    "EEGConformer",
+    "SPaRCNet",
+    "ContraWR",
+    "CNN-Transformer",
+    "FFCL",
+    "ST-Transformer",
+    "BIOT",
+    "LaBraM-Base",
+    "CBraMod"
+  ],
+  "qualification": {
+    "actual_recordings_or_weights": false,
+    "authentic_gold": false,
+    "full_paper_reproduced": false,
+    "runtime_verified": false,
+    "scientific_runs": 0
+  },
+  "resampling_hz": 200,
+  "schema": "cbramod_paper_scope_v1",
+  "scope_history": "Old registry boundedPhysioNet only; currentcatalog/root full12+centralablations; retain extra13thdataset family explicitly without altering canonical count",
+  "seed_repetitions": 5,
+  "seed_values": null,
+  "signal_unit_normalizer_microvolts": 100,
+  "standard_deviation_ddof": null,
+  "task_id": "PAPER-paper-method-024"
+}
