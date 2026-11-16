@@ -2662,3 +2662,45 @@ jobs:
           set -euo pipefail
           ulimit -t 60
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B components/tms-fixed-region-artifacts/test_artifacts.py --profile-root benchmarks/neuroscience/paper-signal-add-021/fixed-regions-v1 -v
+
+  purkinje-artifact-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Check complete Purkinje artifact intake and relocatable source
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B components/purkinje-artifacts/test_artifact.py --profile-root benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1 --output-root "${RUNNER_TEMP}/purkinje-artifact-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+
+  motor-artifact-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      NUMEXPR_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Install fixed numerical dependency
+        shell: bash
+        run: 'timeout --kill-after=5s 90s python -I -m pip install --disable-pip-version-check --only-binary=:all: --no-deps numpy==2.4.6'
+      - name: Check relocated full-support motor artifact scoring
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neuroscience/neural-023/external-artifact-v1/test_external_score.py
