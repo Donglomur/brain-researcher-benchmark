@@ -3295,3 +3295,128 @@ jobs:
           python-version: '3.11'
       - name: Check CCEP pairing public relocation with invented inputs
         run: python3 -I -S -B benchmarks/neuroscience/clinical-ccep-pairing/test_delivery.py
+
+  npvc-signed-motif-portable-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Verify NPVC source and complete relocated graph interface
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'NPVC_SOURCE'
+          import hashlib, json, pathlib, runpy
+          root = pathlib.Path('components/npvc-signed-motifs')
+          raw = (root / 'SOURCE.json').read_bytes()
+          if len(raw) != 1368 or hashlib.sha256(raw).hexdigest() != 'e3674cef56d370e3e1aa5c4a0b5bfc0d062df9e6bc6a7066325c3f09ab9965cf':
+              raise RuntimeError('selected NPVC source distribution changed')
+          for member in json.loads(raw)['files']:
+              if pathlib.Path(member['path']).name != member['path']:
+                  raise RuntimeError('NPVC source member must be a basename')
+              path = root / member['path']
+              if path.is_symlink() or not path.is_file():
+                  raise RuntimeError('NPVC source member must be an ordinary file')
+              body = path.read_bytes()
+              if len(body) != member['bytes'] or hashlib.sha256(body).hexdigest() != member['sha256']:
+                  raise RuntimeError('selected NPVC source member changed')
+          runpy.run_path(str(root / 'test_portability.py'), run_name='__main__')
+          NPVC_SOURCE
+
+  sbind-whole-trial-preparation-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Authenticate complete SBIND preparation source and run generated controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'SBIND_SOURCE'
+          import hashlib, json, pathlib, sys, unittest
+          if sys.flags.optimize:
+              raise RuntimeError("assertions must remain enabled")
+          root = pathlib.Path("components/sbind-whole-trial-preparation")
+          manifest = root / "SOURCE.json"
+          if root.is_symlink() or not root.is_dir() or manifest.is_symlink() or not manifest.is_file():
+              raise RuntimeError("ordinary component namespace required")
+          body = manifest.read_bytes()
+          if len(body) != 1452 or hashlib.sha256(body).hexdigest() != "9110b9ef65bc205e719edd4cfb0d41e5e8edfb6bd6a51a2480ee780a1913e08d":
+              raise RuntimeError("component manifest identity changed")
+          source = json.loads(body)
+          expected = {member["path"] for member in source["files"]} | {"SOURCE.json"}
+          entries = list(root.iterdir())
+          if {entry.name for entry in entries} != expected or any(entry.is_symlink() or not entry.is_file() for entry in entries):
+              raise RuntimeError("exact ordinary component members required before import")
+          for member in source["files"]:
+              data = (root / member["path"]).read_bytes()
+              if len(data) != member["bytes"] or hashlib.sha256(data).hexdigest() != member["sha256"]:
+                  raise RuntimeError("component member changed before import: " + member["path"])
+          sys.path.insert(0, str(root.resolve()))
+          suite = unittest.defaultTestLoader.discover(str(root), pattern="test_*.py")
+          if suite.countTestCases() != 11:
+              raise RuntimeError("complete generated component test discovery required")
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not (result.testsRun == 11 and result.wasSuccessful() and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses):
+              raise SystemExit(1)
+          SBIND_SOURCE
+
+  marmoset-train-only-response-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Check complete170 marmoset training response source and portable interface
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'MARM0SET_SOURCE'
+          import hashlib, importlib.util, json, pathlib, sys, unittest
+          if sys.flags.optimize:
+              raise RuntimeError("source controls require assertions enabled")
+          root = pathlib.Path("components/marmoset-train-only").resolve()
+          raw = (root / "SOURCE.json").read_bytes()
+          if len(raw) != 1667 or hashlib.sha256(raw).hexdigest() != "ebc6e7f95da43ec19fd056897b2709921873519929e694a05d86ed68c7915e93":
+              raise RuntimeError("selected marmoset source distribution changed")
+          for member in json.loads(raw)["files"]:
+              if pathlib.Path(member["path"]).name != member["path"]:
+                  raise RuntimeError("source member escaped component")
+              body = (root / member["path"]).read_bytes()
+              if len(body) != member["bytes"] or hashlib.sha256(body).hexdigest() != member["sha256"]:
+                  raise RuntimeError("marmoset source member changed before import")
+          sys.path.insert(0, str(root))
+          suite = unittest.TestSuite()
+          for name, count in [("test_train_only", 10), ("test_relocation", 3)]:
+              spec = importlib.util.spec_from_file_location(name, root / (name + ".py"))
+              module = importlib.util.module_from_spec(spec)
+              sys.modules[name] = module
+              spec.loader.exec_module(module)
+              selected = unittest.defaultTestLoader.loadTestsFromModule(module)
+              if selected.countTestCases() != count:
+                  raise RuntimeError("all declared marmoset controls required")
+              suite.addTests(selected)
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not (result.testsRun == 13 and result.wasSuccessful() and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses):
+              raise SystemExit(1)
+          MARM0SET_SOURCE
