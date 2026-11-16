@@ -17,6 +17,8 @@ The 42 historical acceptance decisions are authenticated; not all underlying sci
 
 For practical public entry points, see [using the construction source](../../README.md#use-the-neuroscience-construction-source). Public package and release availability is described below; the current local count is not an installation claim.
 
+For completed submissions, the [direct artifact grading index](../../README.md#direct-artifact-grading-routes) links the TMS, across-day motor, Purkinje, optogenetics and NEURAL-022 movement-decoding commands. Each route requires its separately provisioned input/reference assets; software availability does not change the qualification counts above.
+
 ## Earlier reconstruction and compatibility checkpoint
 
 The following three-profile report preserves the earlier local checkpoint. It is not the current complete-authentic-profile census. In particular, [NIDER's later validation summary](../../benchmarks/neuroscience/nider-full120-reconstruction-profile-v1/VALIDATION_20261115.md) classifies its completed operation as engineered compatibility evidence.
