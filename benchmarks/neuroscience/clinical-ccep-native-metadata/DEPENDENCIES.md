@@ -1,0 +1,7 @@
+# External dependency boundary
+
+The Python validator and generated checks use Python's standard library. The MATLAB projection is original benchmark code that accepts an externally supplied native metadata object; it neither vendors nor executes the external reader by itself.
+
+The prospective producer is [MatMef at commit c896ca41b28f2af927836d18b0afc8ba719b8d57](https://github.com/MultimodalNeuroimagingLab/matmef/tree/c896ca41b28f2af927836d18b0afc8ba719b8d57). Its wrapper source declares GPL version 3 or later; the repository [license text](https://github.com/MultimodalNeuroimagingLab/matmef/blob/c896ca41b28f2af927836d18b0afc8ba719b8d57/LICENSE) and the nested MEF library's [Apache 2.0 notice](https://github.com/MultimodalNeuroimagingLab/matmef/blob/c896ca41b28f2af927836d18b0afc8ba719b8d57/meflib/LICENSE.txt) apply separately. Obtain and review those dependencies and their complete build requirements independently. This package does not provide a compiled reader or establish a historical version lock.
+
+The MIT license included here covers our authored projection, validator, generated controls and documentation. It does not relicense external code, grant data access or authorize redistribution of clinical inputs. No upstream implementation or upstream license-body copy, downloaded asset, patient identifier or authentic numerical output is included here. External dependency and data rights must be established for the intended operation; no automatic download, installation or acceptance is performed.
