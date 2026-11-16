@@ -100,3 +100,9 @@ sessions,41 pupil sessions and552 directed controls. Both packages contain
 portable standard-library source and invented interface checks. Authentic input,
 model execution and reference qualification remain explicit holds; these are not
 new benchmark IDs or ready-to-run original-data studies.
+The [CONSENSUS held-neuron source correction](scientific_components/consensus_held_neuron/README.md)
+authenticates and corrects three pinned author-source consumers so observations
+and parameters use the same all-other-neuron complement. Its portable source
+and invented interface checks require no upstream bodies. Owner-supplied source
+integration, native/runtime parity and complete scientific qualification remain
+separate; this is an existing task component, not a new benchmark ID.
