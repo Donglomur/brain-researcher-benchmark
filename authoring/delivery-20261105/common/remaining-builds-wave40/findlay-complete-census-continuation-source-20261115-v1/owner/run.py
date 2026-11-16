@@ -126,7 +126,8 @@ def load_request(path, expected_sha256, with_bytes=False):
          and sha(body) == expected_sha256, "Exact selected request")
     value = decode(body)
     need(type(value) is dict and set(value) == {"schema", "execution", "task"}
-         and value["schema"] == "findlay-portable-census-continuation-request/v1", "Exact Findlay request")
+         and value["schema"] in ("findlay-portable-census-continuation-request/v1",
+                              "findlay-portable-first-intake-request/v1"), "Exact Findlay request")
     ex = value["execution"]
     need(type(ex) is dict and set(ex) == {"repository_root", "output_root", "source_lock",
          "runtime_manifest", "source_adoption", "profile"} and ex["profile"] == PROFILE, "Fixed execution profile")
@@ -137,11 +138,14 @@ def load_request(path, expected_sha256, with_bytes=False):
     need(type(ad) is dict and set(ad) == {"commit", "worker"}
          and type(ad["commit"]) is str and re.fullmatch("[a-f0-9]{40}", ad["commit"]), "Selected adopted commit")
     task = value["task"]
-    need(type(task) is dict and set(task) == {"input_ledger", "published_families", "data_read_cap", "worker_output_cap", "prior_attempt", "private_policy"}
+    input_field = ("original_archive" if value["schema"] == "findlay-portable-first-intake-request/v1" else "prior_attempt")
+    need(type(task) is dict and set(task) == {"input_ledger", "published_families", "data_read_cap", "worker_output_cap", input_field, "private_policy"}
          and task["data_read_cap"] == 33554432 and task["worker_output_cap"] == 33554432, "Fixed complete-census-continuation task")
-    checked_prior = task["prior_attempt"]
-    need(type(checked_prior) is dict and set(checked_prior) == {"path", "bytes", "sha256"}, "Exact selected prior-attempt manifest")
-    absolute(checked_prior["path"])
+    checked_prior = task[input_field]
+    need(type(checked_prior) is dict and set(checked_prior) == {"path", "bytes", "sha256"}, "Exact selected input descriptor")
+    selected_input = absolute(checked_prior["path"])
+    if input_field == "original_archive":
+        need(not selected_input.is_relative_to(root), "Original archive remains outside checkout")
     for field in ("input_ledger", "published_families", "private_policy"):
         pin = task[field]
         need(type(pin) is dict and set(pin) == {"path", "bytes", "sha256"}, "Selected task pin")
@@ -210,6 +214,8 @@ def source_capture(request, lock, deadline, adopted=False):
         result[pin["path"]] = body
         read_bytes += len(body)
     contract.join(metadata)
+    if "original_archive" in request["task"]:
+        contract.validate_archive_pin(request["task"]["original_archive"])
     return result, read_bytes
 
 

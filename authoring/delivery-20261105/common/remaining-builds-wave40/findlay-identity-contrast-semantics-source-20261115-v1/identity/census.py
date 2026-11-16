@@ -359,7 +359,7 @@ def reconcile_contrasts(measures, contrasts, keys, definitions):
 
 
 def census(root_path, input_ledger, family_ledger, budget, *, parquet_factory=None,
-           rules_module=None):
+           rules_module=None, ordinary_module=None, ordinary_policy=None):
     """Write complete private receipts and return their small manifest.
 
     The parent must pass the exact accepted ledger objects, with measured SHA-256
@@ -387,6 +387,7 @@ def census(root_path, input_ledger, family_ledger, budget, *, parquet_factory=No
                                  if table in book.tables_for(id_)] for table in TABLES}
     tables = []
     retained = {}
+    schemas = {}
     gates = []
     total_rows = 0
     expected_sessions = {(r["subject"], p) for r in input_ledger["static_source_roster"]
@@ -413,12 +414,17 @@ def census(root_path, input_ledger, family_ledger, budget, *, parquet_factory=No
         tables.append(budget.write_json("table-" + member["path"] + ".private.json", report))
         total_rows += report["rows"]
         gates.extend({"scope": member["path"], "gate": gate} for gate in report["readiness_gates"])
-        if member["path"] in SMALL: retained[member["path"]] = rows
+        if member["path"] in SMALL:
+            retained[member["path"]] = rows
+            schemas[member["path"]] = report["schema"]
     family_reports = []
     for id_ in book.ids:
         budget.check()
+        support = accumulators[id_].finish()
+        if support["census_rows_complete"] is not True:
+            raise CensusError("Every declared row must be accounted in every family")
         family_reports.append({"id": id_, "schema_assessment": book.assess_schema(id_),
-                               "support": accumulators[id_].finish()})
+                               "support": support})
     families = budget.write_json("family-support-98.private.json", {
         "families": family_reports, "families_accounted": 98,
         "scope": "Complete eligibility/support census, no statistical fits or inferential results"})
@@ -428,9 +434,17 @@ def census(root_path, input_ledger, family_ledger, budget, *, parquet_factory=No
     contrast_reports = []
     for prefix, keys in (("condition", ("subject", "experiment")),
                          ("multicortical_condition", ("subject", "experiment", "acronym", "spw_probe", "region"))):
-        result = reconcile_contrasts(retained[prefix + "_measures.pqt"],
-                                     retained[prefix + "_contrasts.pqt"], keys,
-                                     definitions.get(prefix, {}))
+        if prefix == "condition" and ordinary_module is not None:
+            if ordinary_policy is None:
+                raise CensusError("Admitted ordinary scalar policy required")
+            result = ordinary_module.reconcile(
+                retained["condition_measures.pqt"], retained["condition_contrasts.pqt"],
+                schemas["condition_measures.pqt"], schemas["condition_contrasts.pqt"],
+                policy=ordinary_policy)
+        else:
+            result = reconcile_contrasts(retained[prefix + "_measures.pqt"],
+                                         retained[prefix + "_contrasts.pqt"], keys,
+                                         definitions.get(prefix, {}))
         contrast_reports.append(budget.write_json(prefix + "-reconstruction.private.json", result))
         if not result["all_target_cells_reconciled"]:
             gates.append({"scope": prefix, "gate": "contrast_reconstruction_not_fully_reconciled"})

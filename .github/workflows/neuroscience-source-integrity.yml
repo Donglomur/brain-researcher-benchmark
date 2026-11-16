@@ -2768,10 +2768,13 @@ jobs:
           FINDLAY_PORTABLE_STATUS=$?
           /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B authoring/delivery-20261105/common/remaining-builds-wave40/findlay-ordinary-contrast-integration-source-20261116-v1/test_integration.py >"$FINDLAY_LOGS/integration.stdout" 2>"$FINDLAY_LOGS/integration.stderr"
           FINDLAY_INTEGRATION_STATUS=$?
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B components/findlay-complete-preparation/test_fresh_intake.py >"$FINDLAY_LOGS/fresh.stdout" 2>"$FINDLAY_LOGS/fresh.stderr"
+          FINDLAY_FRESH_STATUS=$?
           printf '%s\n' "$FINDLAY_PORTABLE_STATUS" >"$FINDLAY_LOGS/portable.status"
           printf '%s\n' "$FINDLAY_INTEGRATION_STATUS" >"$FINDLAY_LOGS/integration.status"
-          cat "$FINDLAY_LOGS/portable.stdout" "$FINDLAY_LOGS/portable.stderr" "$FINDLAY_LOGS/integration.stdout" "$FINDLAY_LOGS/integration.stderr"
-          test "$FINDLAY_PORTABLE_STATUS" -eq 0 && test "$FINDLAY_INTEGRATION_STATUS" -eq 0
+          printf '%s\n' "$FINDLAY_FRESH_STATUS" >"$FINDLAY_LOGS/fresh.status"
+          cat "$FINDLAY_LOGS/fresh.stdout" "$FINDLAY_LOGS/fresh.stderr" "$FINDLAY_LOGS/portable.stdout" "$FINDLAY_LOGS/portable.stderr" "$FINDLAY_LOGS/integration.stdout" "$FINDLAY_LOGS/integration.stderr"
+          test "$FINDLAY_PORTABLE_STATUS" -eq 0 && test "$FINDLAY_INTEGRATION_STATUS" -eq 0 && test "$FINDLAY_FRESH_STATUS" -eq 0
       - name: Preserve Findlay source evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

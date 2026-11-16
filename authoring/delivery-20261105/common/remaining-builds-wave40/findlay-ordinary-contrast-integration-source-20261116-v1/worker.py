@@ -146,7 +146,11 @@ def admit_prior(pin, new_output, ledger_value, budget, intake):
         "verified_input_files": len(consumed), "new_downloads": 0}
 
 
-def operate(admission, intake, census, rules, tail, native_ready, ordinary_module, ordinary_policy):
+def operate(admission, intake, census, rules, tail, native_ready, ordinary_module, ordinary_policy, fresh_module=None, archive_contract=None):
+    if "original_archive" in admission["request"]["task"]:
+        need(fresh_module is not None, "Admitted full first-intake component required")
+        return fresh_module.operate(admission, intake, census, rules, native_ready,
+                                    ordinary_module, ordinary_policy, archive_contract)
     task = admission["request"]["task"]
     need(set(task) == {"input_ledger", "published_families", "data_read_cap", "worker_output_cap", "prior_attempt", "private_policy"}
          and task["data_read_cap"] == 33554432 and task["worker_output_cap"] == 33554432,
@@ -220,6 +224,7 @@ def main():
         admission["request"]["task"]["private_policy"]["path"]])
     rules.configure_private_policy(private)
     policy.configure_private_policy(private)
+    fresh = captured("findlay_fresh_original_intake", PREFIX + "/fresh_intake.py", admission)
     runtime = admission["runtime_module"]
     runtime.install_import_guard(admission["runtime_manifest"],
         allowed_source_files=[str(REPOSITORY / relative) for relative in admission["source_capture"] if not Path(relative).is_absolute()])
@@ -231,7 +236,7 @@ def main():
         pyarrow.set_io_thread_count(1)
         return runtime.verify_imported_runtime(admission["runtime_manifest"])
 
-    result = operate(admission, intake, census, rules, tail, native_ready, ordinary, policy)
+    result = operate(admission, intake, census, rules, tail, native_ready, ordinary, policy, fresh, contract)
     print(json.dumps({"status": result["status"], "all_tables": 13, "all_families": 98,
                       "models_fitted": 0, "new_GETs": 0}), flush=True)
     need(time.monotonic() < admission["work_deadline"], "Original final worker deadline")

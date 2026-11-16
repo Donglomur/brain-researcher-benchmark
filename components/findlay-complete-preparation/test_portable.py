@@ -141,7 +141,7 @@ class RelocationTests(unittest.TestCase):
         path = self.private / "request.json";path.write_bytes(body)
         self.owner.load_request(path, hashlib.sha256(body).hexdigest())
         checked = self.owner.source_lock(request)
-        self.assertEqual(len(checked["files"]), 13)
+        self.assertEqual(len(checked["files"]), 14)
         self.assertTrue(all(p.endswith(".py") and not Path(p).is_absolute() for p in checked["files"]))
         self.assertEqual(self.binder.ROOT, self.root)
         # Admitted software is read from relocated paths. Fixed metadata then rejects;
@@ -152,7 +152,7 @@ class RelocationTests(unittest.TestCase):
 
     def test_private_admission_preserves_original_deadline(self):
         request, lock = self.make_request()
-        with mock.patch.object(self.owner.time, "monotonic", side_effect=[0] * 13 + [2]):
+        with mock.patch.object(self.owner.time, "monotonic", side_effect=[0] * 14 + [2]):
             with self.assertRaisesRegex(ValueError, "Private metadata original deadline"):
                 self.owner.source_capture(request, lock, 1)
 

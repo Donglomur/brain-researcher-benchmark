@@ -163,7 +163,7 @@ def read_all(path, budget, cap):
     before = ordinary(path)
     require(before.st_size <= cap, "bounded stored input")
     require(budget.remaining_read >= before.st_size, "pre-admit stored input read")
-    with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW), "rb") as f:
+    with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_NONBLOCK", 0)), "rb") as f:
         require(identity(os.fstat(f.fileno())) == identity(before), "opened input identity")
         data = f.read(before.st_size + 1)
         budget.charge_read(len(data))

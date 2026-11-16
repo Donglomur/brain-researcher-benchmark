@@ -233,7 +233,7 @@ class CompositionTests(unittest.TestCase):
 
     def test_complete_source_graph_pins_new_and_accepted_dependencies(self):
         lock = json.loads((REPO / "components/findlay-complete-preparation/SOURCE_MANIFEST.json").read_text())
-        self.assertEqual(len(lock["files"]), 13)
+        self.assertEqual(len(lock["files"]), 14)
         for path, pin in lock["files"].items():
             body = (REPO / path).read_bytes()
             self.assertEqual((len(body), hashlib.sha256(body).hexdigest()), (pin["bytes"], pin["sha256"]))
