@@ -54,6 +54,7 @@ These packages and shared contracts are not additional registered benchmark IDs.
 | [sbind-whole-trial-preparation](../../components/sbind-whole-trial-preparation) | source_component |
 | [sensefog-recording-lag-controls-v2](../../components/sensefog-recording-lag-controls-v2) | source_component |
 | [stroop165-prepared-metadata](../../components/stroop165-prepared-metadata) | source_component |
+| [study_binding_validator_v1](../../components/study_binding_validator_v1) | source_component |
 | [t15-completed-grade](../../components/t15-completed-grade) | source_component |
 | [thalamus17-fixed-reference](../../components/thalamus17-fixed-reference) | source_component |
 | [tms-fixed-region-artifacts](../../components/tms-fixed-region-artifacts) | source_component |

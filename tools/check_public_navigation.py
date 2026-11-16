@@ -20,6 +20,8 @@ PAGES = (
     "docs/neuroscience-benchmarks/CONSTRUCTION_STATUS.md",
     "docs/neuroscience-benchmarks/ARTIFACT_GRADING.md",
     "docs/neuroscience-benchmarks/PORTABLE_COMPONENTS.md",
+    "docs/neuroscience-benchmarks/study-design-v1/README.md",
+    "components/study_binding_validator_v1/README.md",
     "docs/history/SOURCE_COMPONENTS_20261116.md",
     "examples/original-three/README.md",
     "benchmarks/catalog/README.md",

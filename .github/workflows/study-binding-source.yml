@@ -1,0 +1,96 @@
+name: Paired study description source
+
+on:
+  pull_request:
+    branches: [publish/neuroscience-200]
+  push:
+    branches: [publish/neuroscience-200]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: study-description-source-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  paired-study-description-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate source and check paired-study descriptions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          """Authenticate and relocate the complete study-description source before tests."""
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import stat
+          import sys
+          import tempfile
+          import types
+          import unittest
+
+          root = Path('components/study_binding_validator_v1').absolute()
+          if any(p.is_symlink() for p in (root, *root.parents)):
+              raise SystemExit('linked source root refused')
+
+          def capture(path, size, digest):
+              fd = os.open(path, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW)
+              try:
+                  before = os.fstat(fd)
+                  if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != size:
+                      raise ValueError('source type or size mismatch')
+                  with os.fdopen(fd, 'rb', closefd=False) as stream:
+                      raw = stream.read(size + 1)
+                  after, linked = os.fstat(fd), path.lstat()
+                  fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+                  if any(getattr(before, k) != getattr(after, k) or getattr(before, k) != getattr(linked, k) for k in fields):
+                      raise ValueError('source changed while reading')
+              finally:
+                  os.close(fd)
+              if len(raw) != size or hashlib.sha256(raw).hexdigest() != digest:
+                  raise ValueError('source digest mismatch')
+              return raw
+
+          manifest = capture(root / 'SOURCE_MANIFEST.json', 1041,
+                             '8183b5f9077f63bdece84f4f8bcfef11fbc68d317201a3971f70e1fcba7d1f35')
+          rows = json.loads(manifest)['files']
+          names = {'README.md', 'FORMAT.md', 'validate_study.py', 'generated_examples.py',
+                   'test_validate_study.py', 'binding.schema.json'}
+          if len(rows) != 6 or {row['path'] for row in rows} != names:
+              raise SystemExit('source roster mismatch')
+          if {p.name for p in root.iterdir()} != names | {'SOURCE_MANIFEST.json'}:
+              raise SystemExit('unlisted source member')
+          bodies = {row['path']: capture(root / row['path'], row['bytes'], row['sha256']) for row in rows}
+          bodies['SOURCE_MANIFEST.json'] = manifest
+          with tempfile.TemporaryDirectory(prefix='study-source-ci-') as directory:
+              copied = Path(directory)
+              for name, raw in bodies.items():
+                  (copied / name).write_bytes(raw)
+              module = types.ModuleType('authenticated_study_binding_tests')
+              module.__file__ = str(copied / 'test_validate_study.py')
+              sys.modules[module.__name__] = module
+              try:
+                  exec(compile(bodies['test_validate_study.py'], module.__file__, 'exec'), module.__dict__)
+                  suite = unittest.defaultTestLoader.loadTestsFromModule(module)
+                  result = unittest.TextTestRunner(verbosity=2).run(suite)
+              finally:
+                  sys.modules.pop(module.__name__, None)
+              passed = (result.wasSuccessful() and result.testsRun == 22 and not result.skipped
+                        and not result.expectedFailures and not result.unexpectedSuccesses)
+              print(json.dumps({'generated_methods': result.testsRun, 'source_checks_passed': bool(passed),
+                                'real_study_executed': False, 'scientific_qualification': False}))
+              if not passed:
+                  raise SystemExit(1)
+          PY
