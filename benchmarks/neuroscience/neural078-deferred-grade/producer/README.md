@@ -1,0 +1,11 @@
+# NEURAL078 holder readiness successor
+
+This source-only proposal preserves the installed full-cohort investigation, scientific limits, output domain, strict CLI/native-exit evidence and original deadlines. The only runtime implementation changes are holder.py and native.py. The adapter is byte-identical and remains at the same repository depth.
+
+The holder owns a separate 4,096-byte /ready tmpfs. Its PID1 validates the capture and readiness mounts, checks both are initially empty, then writes and atomically publishes one bounded marker for its exact owner token. Ready probes return false until publication; malformed/stale markers fail. Capture also requires the marker. The producer never receives /ready. Publication is live coordination, not a crash-recovery or ongoing-liveness proof.
+
+The host performs at most 16 readiness probes, at most 4,096 response bytes each, within min(original work deadline, readiness entry+30 seconds). Only exact Boolean false retries; malformed replies or command failure stop the phase and enter existing cleanup. No producer is created before exact true. Ordinary success uses at most 54 CLI calls per phase, below the unchanged 64-record bound for each separate native receipt (two phases, at most 108 calls total). Immediately before producer start, remaining original work must exceed the selected producer interval plus the existing one-second transport margin. This rejects a known-short dispatch; it does not guarantee OS execution duration.
+
+Both default and named routes require fresh source-specific qualification and root selection. All templates remain disabled. No data, Docker, model, reference or scorer run is selected; no new benchmark or scientific/runtime qualification is added. The unchanged adapter preserves original ORIGIN and startup alarm through observer import and retains its independent cleanup attempts. Existing physical floor, fresh OTHER, clocks and reservation ceilings remain; RESOURCE_ADDENDUM.json explicitly accounts for the new private tmpfs and bounded replies.
+
+The holder explicitly uses `--init=false`, and native admission requires `HostConfig.Init is False`, so marker publication by Python PID1 does not depend on daemon init defaults. Other role init semantics remain unchanged. This is a source-profile correction, not an observed native failure.

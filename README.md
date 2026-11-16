@@ -23,6 +23,8 @@ The [repository quality review](docs/neuroscience-benchmarks/REPO_QUALITY_202611
 identifies the remaining delivery, scientific-scope and evaluation gaps.
 The [historical execution evidence](docs/neuroscience-benchmarks/historical-evidence-v1/README.md)
 explains what three inspected program/control profiles actually established and what remains unqualified.
+The [legacy-task recovery audit](docs/neuroscience-benchmarks/LEGACY_TASK_RECOVERY_20261116.md)
+separates reusable archived code from retired or unqualified scientific tasks.
 
 ## Start here
 
@@ -54,7 +56,7 @@ original recordings, protected references and deployment bindings are separate.
 
 | Starting point | What it supplies |
 | --- | --- |
-| [Portable source packages](docs/neuroscience-benchmarks/PORTABLE_COMPONENTS.md) | NEURAL-029, NEURAL-061, CBraMod and PAPER-FIND-050 source checks, commands and external prerequisites. |
+| [Portable source packages](docs/neuroscience-benchmarks/PORTABLE_COMPONENTS.md) | NEURAL-029/030/061/078, CBraMod and PAPER-FIND-050 source, commands and external prerequisites. |
 | [Paired-study description checks](components/study_binding_validator_v1/README.md) | Validate declared assignments, budgets, endpoint denominators, exposure and stopping policies for both tracks. |
 | [Source integrity](docs/neuroscience-benchmarks/SOURCE_INTEGRITY.md) | Verification instructions for explicitly enrolled source bundles. Passing checks establishes software consistency. |
 | [Direct artifact grading routes](docs/neuroscience-benchmarks/ARTIFACT_GRADING.md) | TMS, motor decoding, Purkinje, optogenetics and NEURAL-022 scorers for finished submissions, with their external-asset requirements. |

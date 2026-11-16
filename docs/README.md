@@ -9,6 +9,8 @@
 - [Artifact grading routes](neuroscience-benchmarks/ARTIFACT_GRADING.md).
 - [Source integrity checks](neuroscience-benchmarks/SOURCE_INTEGRITY.md).
 - [Fork, branch and PR workflow](DEVELOPMENT.md).
+- [Legacy task recovery and reuse limits](neuroscience-benchmarks/LEGACY_TASK_RECOVERY_20261116.md).
+- [Portable source package commands](neuroscience-benchmarks/PORTABLE_COMPONENTS.md).
 - [Original example contribution process](original-examples-contributing.md).
 - [Source component release notes through 16 November 2026](history/SOURCE_COMPONENTS_20261116.md).
 
