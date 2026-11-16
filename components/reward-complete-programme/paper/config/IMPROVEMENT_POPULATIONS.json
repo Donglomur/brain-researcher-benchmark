@@ -1,0 +1,441 @@
+{
+  "schema": "reward_full_improvement_population_v2",
+  "repairs": "R2",
+  "canonical_id": "PAPER-FIND-044",
+  "independent_corpora": 1,
+  "total_conditions": 13,
+  "group_n_sum_is_source_claim_not_verified_animals": 126,
+  "primary": {
+    "name": "Appetitive cue-response prediction in the six photometry-designated conditions",
+    "conditions": [
+      "60s",
+      "600s",
+      "3600s",
+      "60s-few",
+      "60s-50percent",
+      "60s-10percent"
+    ],
+    "population": "Verified animals with both usable pre-cue/anticipatory lick observations and independently admissible cue-DA observations. Include all outcome classes; report prospective measurement QC and every missing member.",
+    "equation": "\u0394P=(1/6)\u03a3_c [(1/n_c)\u03a3_i {0.5 \u0394L_ci +0.5 \u0394C_ci}]. L_ci is mean per-trial log q(A|B,H); C_ci is mean per-trial native-time cue-DA log density, each compared to the same competent baseline on the identical observations. \u0394 denotes candidate minus baseline.",
+    "time_weighting": "Within each cue-DA trial average log density with native timestamp integration weights over[0,.5)s, then equal trial means within animal. Use only observed support; source/coverage gates prevent candidate-selected masks. Do not give120/130Hz recording more animal weight.",
+    "units": "L and C gains are log probability/density ratios against a common baseline. A common change of fluorescence units changes both densities by the same Jacobian and cancels in the ratio. Do not average raw count error, fluorescence MSE, freezing error or motion error into this primary.",
+    "completeness": "All six condition means required for the named primary. If one is unavailable, report the available per-condition results and an incomplete primary; never renormalize remaining weights to claim full support. No eligibility count inferred from D suffix.",
+    "scope": "A positive primary supports only this paired appetitive cue-response population. It does not itself establish an all-animal, all-control, aversive, causal or universal-mechanism improvement.",
+    "baseline_selection": "Freeze the strongest competent eligible baseline using inner-training evidence only. All primary gain terms compare against that same frozen baseline on common outer observation keys; no selecting a weak comparator after outer outcomes."
+  },
+  "rows": [
+    {
+      "condition": "30s",
+      "paper_group_n_unverified": 6,
+      "D_designated_source_tokens_not_verified_neural_eligibility": 0,
+      "behavior_only_designated_members": 6,
+      "scientific_role": "spacing, short interval",
+      "improvement_horizon": "All actually observed trials during the first 8 documented conditioning sessions; retain original first exposures and missingness; do not reuse native learned-trial or outcome-dependent trims.",
+      "eligibility": "All verified biological animals in this condition. QC may remove an unavailable/corrupted modality on source-grounded rules; no exclusion for nonlearning, negative responses, late onset or weak effects. Nominal n is not a verified eligibility count.",
+      "primary_weight": "0; separate mandatory control result",
+      "required_endpoints": [
+        "L: raw anticipatory count conditional log score for every eligible behavior animal",
+        "D: signed cue-minus-baseline count/rate prediction and calibration, all negative responses retained"
+      ],
+      "mandatory_weights": {
+        "L_all_appetitive": "1/11 in the all-appetitive behavior summary; equal animal weights within condition.",
+        "per_condition": "Individual condition estimate and interval always required; never hidden by a pooled gain.",
+        "L_wholly_behavior_only_controls": "1/5 in the separate wholly behavior-only condition summary; no primary paired weight."
+      },
+      "guardrail": "Predeclare per-condition L noninferiority margin and interval rule from scientific requirements/training-only reliability. Every L condition and the five wholly behavior-only controls must meet its guardrail for an all-appetitive controlled-improvement claim. Paired conditions additionally require C and their applicable R/O guardrails for a claim covering dopamine dynamics.",
+      "neural_applicability": "No designated neural acquisition: C/R/O structurally not applicable; no imputed or synthetic dopamine."
+    },
+    {
+      "condition": "60s",
+      "paper_group_n_unverified": 19,
+      "D_designated_source_tokens_not_verified_neural_eligibility": 6,
+      "behavior_only_designated_members": 13,
+      "scientific_role": "reference spacing",
+      "improvement_horizon": "All actually observed trials during the first 8 documented conditioning sessions; retain original first exposures and missingness; do not reuse native learned-trial or outcome-dependent trims.",
+      "eligibility": "All verified biological animals in this condition. QC may remove an unavailable/corrupted modality on source-grounded rules; no exclusion for nonlearning, negative responses, late onset or weak effects. Nominal n is not a verified eligibility count.",
+      "primary_weight": "1/6 across the six paired appetitive condition means; within condition equal weight per eligible paired animal; each animal contributes1/2 behavior gain +1/2 cue-DA gain.",
+      "required_endpoints": [
+        "L: raw anticipatory count conditional log score for every eligible behavior animal",
+        "D: signed cue-minus-baseline count/rate prediction and calibration, all negative responses retained",
+        "C: native-grid cue-DA predictive log-density gain on eligible observed samples, on the same paired animals as L for the primary",
+        "R: reward/consumption-locked DA prediction, separate mandatory neural endpoint"
+      ],
+      "mandatory_weights": {
+        "L_all_appetitive": "1/11 in the all-appetitive behavior summary; equal animal weights within condition.",
+        "per_condition": "Individual condition estimate and interval always required; never hidden by a pooled gain.",
+        "L_behavior_only_members_of_mixed_cohorts": "1/4 across the four mixed-cohort behavior-only subgroup means; equal verified animals within subgroup. Full condition L also includes these animals. This overlapping audit is not added to the primary.",
+        "C_all_paired_conditions": "1/6 across condition means; equal paired animals. Separate noninferiority required, in addition to the combined primary.",
+        "R": "Equal animals within condition, then1/6 across supported condition means, never added to the cue primary; missing condition does not trigger weight redistribution."
+      },
+      "guardrail": "Predeclare per-condition L noninferiority margin and interval rule from scientific requirements/training-only reliability. Every L condition and the five wholly behavior-only controls must meet its guardrail for an all-appetitive controlled-improvement claim. Paired conditions additionally require C and their applicable R/O guardrails for a claim covering dopamine dynamics.",
+      "omission_applicability": "No scheduled omissions: structurally not applicable, not a zero score or fabricated outcome."
+    },
+    {
+      "condition": "300s",
+      "paper_group_n_unverified": 6,
+      "D_designated_source_tokens_not_verified_neural_eligibility": 0,
+      "behavior_only_designated_members": 6,
+      "scientific_role": "spacing, intermediate interval",
+      "improvement_horizon": "All actually observed trials during the first 8 documented conditioning sessions; retain original first exposures and missingness; do not reuse native learned-trial or outcome-dependent trims.",
+      "eligibility": "All verified biological animals in this condition. QC may remove an unavailable/corrupted modality on source-grounded rules; no exclusion for nonlearning, negative responses, late onset or weak effects. Nominal n is not a verified eligibility count.",
+      "primary_weight": "0; separate mandatory control result",
+      "required_endpoints": [
+        "L: raw anticipatory count conditional log score for every eligible behavior animal",
+        "D: signed cue-minus-baseline count/rate prediction and calibration, all negative responses retained"
+      ],
+      "mandatory_weights": {
+        "L_all_appetitive": "1/11 in the all-appetitive behavior summary; equal animal weights within condition.",
+        "per_condition": "Individual condition estimate and interval always required; never hidden by a pooled gain.",
+        "L_wholly_behavior_only_controls": "1/5 in the separate wholly behavior-only condition summary; no primary paired weight."
+      },
+      "guardrail": "Predeclare per-condition L noninferiority margin and interval rule from scientific requirements/training-only reliability. Every L condition and the five wholly behavior-only controls must meet its guardrail for an all-appetitive controlled-improvement claim. Paired conditions additionally require C and their applicable R/O guardrails for a claim covering dopamine dynamics.",
+      "neural_applicability": "No designated neural acquisition: C/R/O structurally not applicable; no imputed or synthetic dopamine."
+    },
+    {
+      "condition": "600s",
+      "paper_group_n_unverified": 19,
+      "D_designated_source_tokens_not_verified_neural_eligibility": 7,
+      "behavior_only_designated_members": 12,
+      "scientific_role": "reference spacing",
+      "improvement_horizon": "All actually observed trials during the first 8 documented conditioning sessions; retain original first exposures and missingness; do not reuse native learned-trial or outcome-dependent trims.",
+      "eligibility": "All verified biological animals in this condition. QC may remove an unavailable/corrupted modality on source-grounded rules; no exclusion for nonlearning, negative responses, late onset or weak effects. Nominal n is not a verified eligibility count.",
+      "primary_weight": "1/6 across the six paired appetitive condition means; within condition equal weight per eligible paired animal; each animal contributes1/2 behavior gain +1/2 cue-DA gain.",
+      "required_endpoints": [
+        "L: raw anticipatory count conditional log score for every eligible behavior animal",
+        "D: signed cue-minus-baseline count/rate prediction and calibration, all negative responses retained",
+        "C: native-grid cue-DA predictive log-density gain on eligible observed samples, on the same paired animals as L for the primary",
+        "R: reward/consumption-locked DA prediction, separate mandatory neural endpoint"
+      ],
+      "mandatory_weights": {
+        "L_all_appetitive": "1/11 in the all-appetitive behavior summary; equal animal weights within condition.",
+        "per_condition": "Individual condition estimate and interval always required; never hidden by a pooled gain.",
+        "L_behavior_only_members_of_mixed_cohorts": "1/4 across the four mixed-cohort behavior-only subgroup means; equal verified animals within subgroup. Full condition L also includes these animals. This overlapping audit is not added to the primary.",
+        "C_all_paired_conditions": "1/6 across condition means; equal paired animals. Separate noninferiority required, in addition to the combined primary.",
+        "R": "Equal animals within condition, then1/6 across supported condition means, never added to the cue primary; missing condition does not trigger weight redistribution."
+      },
+      "guardrail": "Predeclare per-condition L noninferiority margin and interval rule from scientific requirements/training-only reliability. Every L condition and the five wholly behavior-only controls must meet its guardrail for an all-appetitive controlled-improvement claim. Paired conditions additionally require C and their applicable R/O guardrails for a claim covering dopamine dynamics.",
+      "omission_applicability": "No scheduled omissions: structurally not applicable, not a zero score or fabricated outcome."
+    },
+    {
+      "condition": "3600s",
+      "paper_group_n_unverified": 5,
+      "D_designated_source_tokens_not_verified_neural_eligibility": 5,
+      "behavior_only_designated_members": 0,
+      "scientific_role": "extreme spacing",
+      "improvement_horizon": "All actually observed trials during the first 8 documented conditioning sessions; retain original first exposures and missingness; do not reuse native learned-trial or outcome-dependent trims.",
+      "eligibility": "All verified biological animals in this condition. QC may remove an unavailable/corrupted modality on source-grounded rules; no exclusion for nonlearning, negative responses, late onset or weak effects. Nominal n is not a verified eligibility count.",
+      "primary_weight": "1/6 across the six paired appetitive condition means; within condition equal weight per eligible paired animal; each animal contributes1/2 behavior gain +1/2 cue-DA gain.",
+      "required_endpoints": [
+        "L: raw anticipatory count conditional log score for every eligible behavior animal",
+        "D: signed cue-minus-baseline count/rate prediction and calibration, all negative responses retained",
+        "C: native-grid cue-DA predictive log-density gain on eligible observed samples, on the same paired animals as L for the primary",
+        "R: reward/consumption-locked DA prediction, separate mandatory neural endpoint"
+      ],
+      "mandatory_weights": {
+        "L_all_appetitive": "1/11 in the all-appetitive behavior summary; equal animal weights within condition.",
+        "per_condition": "Individual condition estimate and interval always required; never hidden by a pooled gain.",
+        "C_all_paired_conditions": "1/6 across condition means; equal paired animals. Separate noninferiority required, in addition to the combined primary.",
+        "R": "Equal animals within condition, then1/6 across supported condition means, never added to the cue primary; missing condition does not trigger weight redistribution."
+      },
+      "guardrail": "Predeclare per-condition L noninferiority margin and interval rule from scientific requirements/training-only reliability. Every L condition and the five wholly behavior-only controls must meet its guardrail for an all-appetitive controlled-improvement claim. Paired conditions additionally require C and their applicable R/O guardrails for a claim covering dopamine dynamics.",
+      "omission_applicability": "No scheduled omissions: structurally not applicable, not a zero score or fabricated outcome."
+    },
+    {
+      "condition": "60s-few",
+      "paper_group_n_unverified": 18,
+      "D_designated_source_tokens_not_verified_neural_eligibility": 6,
+      "behavior_only_designated_members": 12,
+      "scientific_role": "number of trials per day",
+      "improvement_horizon": "All actually observed trials during the first 8 documented conditioning sessions; retain original first exposures and missingness; do not reuse native learned-trial or outcome-dependent trims.",
+      "eligibility": "All verified biological animals in this condition. QC may remove an unavailable/corrupted modality on source-grounded rules; no exclusion for nonlearning, negative responses, late onset or weak effects. Nominal n is not a verified eligibility count.",
+      "primary_weight": "1/6 across the six paired appetitive condition means; within condition equal weight per eligible paired animal; each animal contributes1/2 behavior gain +1/2 cue-DA gain.",
+      "required_endpoints": [
+        "L: raw anticipatory count conditional log score for every eligible behavior animal",
+        "D: signed cue-minus-baseline count/rate prediction and calibration, all negative responses retained",
+        "C: native-grid cue-DA predictive log-density gain on eligible observed samples, on the same paired animals as L for the primary",
+        "R: reward/consumption-locked DA prediction, separate mandatory neural endpoint"
+      ],
+      "mandatory_weights": {
+        "L_all_appetitive": "1/11 in the all-appetitive behavior summary; equal animal weights within condition.",
+        "per_condition": "Individual condition estimate and interval always required; never hidden by a pooled gain.",
+        "L_behavior_only_members_of_mixed_cohorts": "1/4 across the four mixed-cohort behavior-only subgroup means; equal verified animals within subgroup. Full condition L also includes these animals. This overlapping audit is not added to the primary.",
+        "C_all_paired_conditions": "1/6 across condition means; equal paired animals. Separate noninferiority required, in addition to the combined primary.",
+        "R": "Equal animals within condition, then1/6 across supported condition means, never added to the cue primary; missing condition does not trigger weight redistribution."
+      },
+      "guardrail": "Predeclare per-condition L noninferiority margin and interval rule from scientific requirements/training-only reliability. Every L condition and the five wholly behavior-only controls must meet its guardrail for an all-appetitive controlled-improvement claim. Paired conditions additionally require C and their applicable R/O guardrails for a claim covering dopamine dynamics.",
+      "omission_applicability": "No scheduled omissions: structurally not applicable, not a zero score or fabricated outcome."
+    },
+    {
+      "condition": "60s-few-ctxt",
+      "paper_group_n_unverified": 6,
+      "D_designated_source_tokens_not_verified_neural_eligibility": 0,
+      "behavior_only_designated_members": 6,
+      "scientific_role": "extra context extinction",
+      "improvement_horizon": "All actually observed trials during the first 8 documented conditioning sessions; retain original first exposures and missingness; do not reuse native learned-trial or outcome-dependent trims.",
+      "eligibility": "All verified biological animals in this condition. QC may remove an unavailable/corrupted modality on source-grounded rules; no exclusion for nonlearning, negative responses, late onset or weak effects. Nominal n is not a verified eligibility count.",
+      "primary_weight": "0; separate mandatory control result",
+      "required_endpoints": [
+        "L: raw anticipatory count conditional log score for every eligible behavior animal",
+        "D: signed cue-minus-baseline count/rate prediction and calibration, all negative responses retained"
+      ],
+      "mandatory_weights": {
+        "L_all_appetitive": "1/11 in the all-appetitive behavior summary; equal animal weights within condition.",
+        "per_condition": "Individual condition estimate and interval always required; never hidden by a pooled gain.",
+        "L_wholly_behavior_only_controls": "1/5 in the separate wholly behavior-only condition summary; no primary paired weight."
+      },
+      "guardrail": "Predeclare per-condition L noninferiority margin and interval rule from scientific requirements/training-only reliability. Every L condition and the five wholly behavior-only controls must meet its guardrail for an all-appetitive controlled-improvement claim. Paired conditions additionally require C and their applicable R/O guardrails for a claim covering dopamine dynamics.",
+      "neural_applicability": "No designated neural acquisition: C/R/O structurally not applicable; no imputed or synthetic dopamine."
+    },
+    {
+      "condition": "60s-CSminus",
+      "paper_group_n_unverified": 6,
+      "D_designated_source_tokens_not_verified_neural_eligibility": 0,
+      "behavior_only_designated_members": 6,
+      "scientific_role": "auditory cue-rate control",
+      "improvement_horizon": "All actually observed trials during the first 8 documented conditioning sessions; retain original first exposures and missingness; do not reuse native learned-trial or outcome-dependent trims.",
+      "eligibility": "All verified biological animals in this condition. QC may remove an unavailable/corrupted modality on source-grounded rules; no exclusion for nonlearning, negative responses, late onset or weak effects. Nominal n is not a verified eligibility count.",
+      "primary_weight": "0; separate mandatory control result",
+      "required_endpoints": [
+        "L: raw anticipatory count conditional log score for every eligible behavior animal",
+        "D: signed cue-minus-baseline count/rate prediction and calibration, all negative responses retained",
+        "Qminus: separately reported real CS\u2212 cue count prediction using the same conditional law, with its own event-typed baseline; equal animal weights. This auditory-response diagnostic is not merged into CS+ L by the much larger number of distractors."
+      ],
+      "mandatory_weights": {
+        "L_all_appetitive": "1/11 in the all-appetitive behavior summary; equal animal weights within condition.",
+        "per_condition": "Individual condition estimate and interval always required; never hidden by a pooled gain.",
+        "L_wholly_behavior_only_controls": "1/5 in the separate wholly behavior-only condition summary; no primary paired weight."
+      },
+      "guardrail": "Predeclare per-condition L noninferiority margin and interval rule from scientific requirements/training-only reliability. Every L condition and the five wholly behavior-only controls must meet its guardrail for an all-appetitive controlled-improvement claim. Paired conditions additionally require C and their applicable R/O guardrails for a claim covering dopamine dynamics. Report Qminus and the observed cue-discrimination contrast to interpret auditory-rate transfer; a missing Qminus result prevents a claim covering both cue types.",
+      "neural_applicability": "No designated neural acquisition: C/R/O structurally not applicable; no imputed or synthetic dopamine."
+    },
+    {
+      "condition": "600s-bgdmilk",
+      "paper_group_n_unverified": 6,
+      "D_designated_source_tokens_not_verified_neural_eligibility": 0,
+      "behavior_only_designated_members": 6,
+      "scientific_role": "reward identity and background reward",
+      "improvement_horizon": "All actually observed trials during the first 8 documented conditioning sessions; retain original first exposures and missingness; do not reuse native learned-trial or outcome-dependent trims.",
+      "eligibility": "All verified biological animals in this condition. QC may remove an unavailable/corrupted modality on source-grounded rules; no exclusion for nonlearning, negative responses, late onset or weak effects. Nominal n is not a verified eligibility count.",
+      "primary_weight": "0; separate mandatory control result",
+      "required_endpoints": [
+        "L: raw anticipatory count conditional log score for every eligible behavior animal",
+        "D: signed cue-minus-baseline count/rate prediction and calibration, all negative responses retained",
+        "Consumption response to sucrose versus uncued milk: required source-linked identity/consumption diagnostic. No synthetic cue-onset L query for milk. A claim about predicting these consumption trajectories requires a separately registered consumption endpoint, not an inference from CS+ L alone."
+      ],
+      "mandatory_weights": {
+        "L_all_appetitive": "1/11 in the all-appetitive behavior summary; equal animal weights within condition.",
+        "per_condition": "Individual condition estimate and interval always required; never hidden by a pooled gain.",
+        "L_wholly_behavior_only_controls": "1/5 in the separate wholly behavior-only condition summary; no primary paired weight."
+      },
+      "guardrail": "Predeclare per-condition L noninferiority margin and interval rule from scientific requirements/training-only reliability. Every L condition and the five wholly behavior-only controls must meet its guardrail for an all-appetitive controlled-improvement claim. Paired conditions additionally require C and their applicable R/O guardrails for a claim covering dopamine dynamics.",
+      "neural_applicability": "No designated neural acquisition: C/R/O structurally not applicable; no imputed or synthetic dopamine."
+    },
+    {
+      "condition": "60s-50percent",
+      "paper_group_n_unverified": 10,
+      "D_designated_source_tokens_not_verified_neural_eligibility": 8,
+      "behavior_only_designated_members": 2,
+      "scientific_role": "partial reinforcement and omission learning",
+      "improvement_horizon": "All actually observed trials during the first 12 documented conditioning sessions; retain original first exposures and missingness; do not reuse native learned-trial or outcome-dependent trims.",
+      "eligibility": "All verified biological animals in this condition. QC may remove an unavailable/corrupted modality on source-grounded rules; no exclusion for nonlearning, negative responses, late onset or weak effects. Nominal n is not a verified eligibility count.",
+      "primary_weight": "1/6 across the six paired appetitive condition means; within condition equal weight per eligible paired animal; each animal contributes1/2 behavior gain +1/2 cue-DA gain.",
+      "required_endpoints": [
+        "L: raw anticipatory count conditional log score for every eligible behavior animal",
+        "D: signed cue-minus-baseline count/rate prediction and calibration, all negative responses retained",
+        "C: native-grid cue-DA predictive log-density gain on eligible observed samples, on the same paired animals as L for the primary",
+        "R: reward/consumption-locked DA prediction, separate mandatory neural endpoint",
+        "O: omission-locked DA prediction; both partial-reinforcement cohorts retained, without native learner/sign exclusions."
+      ],
+      "mandatory_weights": {
+        "L_all_appetitive": "1/11 in the all-appetitive behavior summary; equal animal weights within condition.",
+        "per_condition": "Individual condition estimate and interval always required; never hidden by a pooled gain.",
+        "L_behavior_only_members_of_mixed_cohorts": "1/4 across the four mixed-cohort behavior-only subgroup means; equal verified animals within subgroup. Full condition L also includes these animals. This overlapping audit is not added to the primary.",
+        "C_all_paired_conditions": "1/6 across condition means; equal paired animals. Separate noninferiority required, in addition to the combined primary.",
+        "R": "Equal animals within condition, then1/6 across supported condition means, never added to the cue primary; missing condition does not trigger weight redistribution.",
+        "O": "1/2 across the two partial-reinforcement condition means; separate from cue/reward summaries."
+      },
+      "guardrail": "Predeclare per-condition L noninferiority margin and interval rule from scientific requirements/training-only reliability. Every L condition and the five wholly behavior-only controls must meet its guardrail for an all-appetitive controlled-improvement claim. Paired conditions additionally require C and their applicable R/O guardrails for a claim covering dopamine dynamics."
+    },
+    {
+      "condition": "60s-10percent",
+      "paper_group_n_unverified": 10,
+      "D_designated_source_tokens_not_verified_neural_eligibility": 10,
+      "behavior_only_designated_members": 0,
+      "scientific_role": "extreme partial reinforcement",
+      "improvement_horizon": "All actually observed trials during the first 32 documented conditioning sessions; retain original first exposures and missingness; do not reuse native learned-trial or outcome-dependent trims.",
+      "eligibility": "All verified biological animals in this condition. QC may remove an unavailable/corrupted modality on source-grounded rules; no exclusion for nonlearning, negative responses, late onset or weak effects. Nominal n is not a verified eligibility count.",
+      "primary_weight": "1/6 across the six paired appetitive condition means; within condition equal weight per eligible paired animal; each animal contributes1/2 behavior gain +1/2 cue-DA gain.",
+      "required_endpoints": [
+        "L: raw anticipatory count conditional log score for every eligible behavior animal",
+        "D: signed cue-minus-baseline count/rate prediction and calibration, all negative responses retained",
+        "C: native-grid cue-DA predictive log-density gain on eligible observed samples, on the same paired animals as L for the primary",
+        "R: reward/consumption-locked DA prediction, separate mandatory neural endpoint",
+        "O: omission-locked DA prediction; both partial-reinforcement cohorts retained, without native learner/sign exclusions."
+      ],
+      "mandatory_weights": {
+        "L_all_appetitive": "1/11 in the all-appetitive behavior summary; equal animal weights within condition.",
+        "per_condition": "Individual condition estimate and interval always required; never hidden by a pooled gain.",
+        "C_all_paired_conditions": "1/6 across condition means; equal paired animals. Separate noninferiority required, in addition to the combined primary.",
+        "R": "Equal animals within condition, then1/6 across supported condition means, never added to the cue primary; missing condition does not trigger weight redistribution.",
+        "O": "1/2 across the two partial-reinforcement condition means; separate from cue/reward summaries."
+      },
+      "guardrail": "Predeclare per-condition L noninferiority margin and interval rule from scientific requirements/training-only reliability. Every L condition and the five wholly behavior-only controls must meet its guardrail for an all-appetitive controlled-improvement claim. Paired conditions additionally require C and their applicable R/O guardrails for a claim covering dopamine dynamics."
+    },
+    {
+      "condition": "FC-45s",
+      "paper_group_n_unverified": 8,
+      "D_designated_source_tokens_not_verified_neural_eligibility": 8,
+      "behavior_only_designated_members": 0,
+      "scientific_role": "aversive short ISI",
+      "improvement_horizon": "All actually observed trials during the first 3 documented conditioning sessions; retain original first exposures and missingness; do not reuse native learned-trial or outcome-dependent trims.",
+      "eligibility": "All verified biological animals in this condition. QC may remove an unavailable/corrupted modality on source-grounded rules; no exclusion for nonlearning, negative responses, late onset or weak effects. Nominal n is not a verified eligibility count.",
+      "primary_weight": "0; separate mandatory control result",
+      "required_endpoints": [
+        "F: raw cue freezing fraction in[0,1] predicted at cue onset given past/baseline; animal mean squared error, signed baseline-subtracted freezing separately reported",
+        "M: raw cue mean motion in pixels changing per frame, nonnegative predicted mean at cue onset; animal mean squared error in its own units, baseline-subtracted motion separately reported",
+        "V: aversive cue DA on native observed timestamps[1,15]s and the source-defined baseline-corrected AUC; separate animal-level time-weighted squared error, no appetitive log-score pooling",
+        "Shock-locked DA and full-trial physiological curves remain required for complete reproduction. Improvement claims are bounded to F/M/V unless a separately registered shock-response prediction endpoint is added before outer scoring; never infer whole-physiology improvement from cue transfer."
+      ],
+      "mandatory_weights": {
+        "F": "1/2 across the two aversive condition means, equal animals within each; freeze units must be fractions rather than mixed fraction/percent.",
+        "M": "1/2 across the two aversive condition means, equal animals within each; require matched camera/calibration meaning. Never pooled with F or V.",
+        "V": "1/2 across two condition means, equal source-eligible animals; consistent dF/F units required. Never pooled with F/M/appetitive primary.",
+        "per_condition": "Separate45s and135s results and coverage always required."
+      },
+      "guardrail": "Required separate aversive transfer test: fit domain observation mapping using permitted training animals/conditions; whole-animal and leave-one-ISI-condition-out scoring. Fixed candidate/baseline mapping and per-endpoint F/M/V margins must be registered. No defensible aversive extension or missing source makes transfer required-unscorable; it cannot disappear from a full13-condition mechanistic claim. This does not establish zero-shot appetitive-to-aversive transfer."
+    },
+    {
+      "condition": "FC-135s",
+      "paper_group_n_unverified": 7,
+      "D_designated_source_tokens_not_verified_neural_eligibility": 7,
+      "behavior_only_designated_members": 0,
+      "scientific_role": "aversive long ISI",
+      "improvement_horizon": "All actually observed trials during the first 3 documented conditioning sessions; retain original first exposures and missingness; do not reuse native learned-trial or outcome-dependent trims.",
+      "eligibility": "All verified biological animals in this condition. QC may remove an unavailable/corrupted modality on source-grounded rules; no exclusion for nonlearning, negative responses, late onset or weak effects. Nominal n is not a verified eligibility count.",
+      "primary_weight": "0; separate mandatory control result",
+      "required_endpoints": [
+        "F: raw cue freezing fraction in[0,1] predicted at cue onset given past/baseline; animal mean squared error, signed baseline-subtracted freezing separately reported",
+        "M: raw cue mean motion in pixels changing per frame, nonnegative predicted mean at cue onset; animal mean squared error in its own units, baseline-subtracted motion separately reported",
+        "V: aversive cue DA on native observed timestamps[1,15]s and the source-defined baseline-corrected AUC; separate animal-level time-weighted squared error, no appetitive log-score pooling",
+        "Shock-locked DA and full-trial physiological curves remain required for complete reproduction. Improvement claims are bounded to F/M/V unless a separately registered shock-response prediction endpoint is added before outer scoring; never infer whole-physiology improvement from cue transfer."
+      ],
+      "mandatory_weights": {
+        "F": "1/2 across the two aversive condition means, equal animals within each; freeze units must be fractions rather than mixed fraction/percent.",
+        "M": "1/2 across the two aversive condition means, equal animals within each; require matched camera/calibration meaning. Never pooled with F or V.",
+        "V": "1/2 across two condition means, equal source-eligible animals; consistent dF/F units required. Never pooled with F/M/appetitive primary.",
+        "per_condition": "Separate45s and135s results and coverage always required."
+      },
+      "guardrail": "Required separate aversive transfer test: fit domain observation mapping using permitted training animals/conditions; whole-animal and leave-one-ISI-condition-out scoring. Fixed candidate/baseline mapping and per-endpoint F/M/V margins must be registered. No defensible aversive extension or missing source makes transfer required-unscorable; it cannot disappear from a full13-condition mechanistic claim. This does not establish zero-shot appetitive-to-aversive transfer."
+    }
+  ],
+  "endpoint_boundaries": {
+    "L": "BEHAVIOR_SCORE_CONTRACT.json: q(A|B,H) at cue onset; B known, A/D/current reward realization withheld. The common L score uses real CS+ presentations only. CS\u2212 is a separately typed cue; background milk has no real cue and cannot create an L query from the loader\u2019s synthetic cue timestamp.",
+    "C": "At cue onset, only past/current cue descriptor and allowed pre-cue observations; target cue DA[0,.5)s hidden. No current or future neural response, full-record normalization or behavior-derived horizon. Native retrospective source remains separate.",
+    "R": "Separately named consumption-onset conditional prediction: origin is the first observed reward consumption lick, or reward delivery when contact is already ongoing. Reward identity/delivery and the observed onset are known; post-origin DA is hidden. This is not a cue-onset forecast. Nonconsumed rewards remain a reported support/failure category, never silently scored as consumed.",
+    "O": "At scheduled outcome time, once non-delivery is known, predict following2s DA using past history and omission indicator; post-outcome DA hidden. This is not a forecast of the stochastic omission from cue onset.",
+    "F_and_M": "At aversive cue onset, preceding15s behavior and current cue descriptor may be known; cue-window freezing/motion targets are hidden. Predict raw cue-window quantities, derive signed changes separately.",
+    "V": "At aversive cue onset, predict future DA[1,15]s with train/prefix-only admissible signal calibration and gap mask; current cue DA and future shock response are unavailable.",
+    "source_limits": "All prospective endpoints remain required-unscorable if the deposited processed signal cannot satisfy the declared information boundary and no raw calibration source is available."
+  },
+  "aggregation_and_claim_rules": {
+    "all_behavior": "L_all_appetitive has fixed1/11 condition weights and includes all behavior-only members of mixed cohorts as well as all five wholly behavior-only cohorts. It is a mandatory separate score, not inferred from the paired primary.",
+    "controls": "L_wholly_behavior_only_controls is a separate1/5 summary, plus all five individual effects/intervals. L_behavior_only_members_of_mixed_cohorts is a separate1/4 summary plus individual subgroup effects. These audits overlap L_all and are never counted as independent datasets or added twice to a globalscore.",
+    "noninferiority": "Predeclare margins \u03b4_L,c for each of11 L conditions and \u03b4_C,c/\u03b4_R,c/\u03b4_O,c where applicable. Claim materially non-worse only if the prespecified lower simultaneous confidence bound for candidate-minus-baseline performance exceeds\u2212\u03b4. Lower error is oriented as baseline loss\u2212candidate loss for F/M/V; analogous per-endpoint margins required. Numeric margins are still a pre-outer-label registration gate. Lack of power or a missing interval is inconclusive, not success.",
+    "claim_ladder": [
+      "Paired-primary gain alone: only paired appetitive cue-response prediction claim.",
+      "Paired-primary gain plus all11 L guardrails, five wholly behavior-only controls, and mixed-cohort behavior-only audits: controlled appetitive cue-response improvement; no aversive/general-dynamics claim.",
+      "Add all applicable R/O guardrails: appetitive dopamine dynamics claim bounded to supported epochs and populations.",
+      "A full13-condition mechanistic-generalization claim additionally requires separately interpretable and successful F/M/V aversive transfer and source closure. No pooled raw-unit score or missing-modality imputation can replace these results.",
+      "Any public-source split remains exploratory at every level. Protected independent replication and scientific identification are required for a confirmatory frontier claim; predictive gain does not prove unique mechanism or causal necessity."
+    ],
+    "multiplicity": "Preregister primary superiority and guardrail families. Use the registered simultaneous interval/multiplicity procedure across every condition/endpoint in a claimed rung; Holm for planned secondary hypothesis tests. No selecting only passing conditions.",
+    "missing": "Report every animal/modality/condition in denominators. Structural neural absence in the five behavior-only groups is not a failed measured target, but L is still mandatory. Unresolved/corrupt expected modalities or absent aversive mapping block corresponding complete claims and are not reweighted away."
+  },
+  "unchanged_reproduction": "All166 panels, full13 original groups, raw physiology/histology/supplements and model branches remain required. This table clarifies improvement populations only; it creates no new benchmark or dataset.",
+  "fixed_weight_sets": {
+    "primary_paired_appetitive": {
+      "members": [
+        "60s",
+        "600s",
+        "3600s",
+        "60s-few",
+        "60s-50percent",
+        "60s-10percent"
+      ],
+      "weight_per_member": {
+        "numerator": 1,
+        "denominator": 6
+      },
+      "renormalize_if_missing": false
+    },
+    "all_appetitive_behavior": {
+      "members": [
+        "30s",
+        "60s",
+        "300s",
+        "600s",
+        "3600s",
+        "60s-few",
+        "60s-few-ctxt",
+        "60s-CSminus",
+        "600s-bgdmilk",
+        "60s-50percent",
+        "60s-10percent"
+      ],
+      "weight_per_member": {
+        "numerator": 1,
+        "denominator": 11
+      },
+      "renormalize_if_missing": false
+    },
+    "wholly_behavior_only": {
+      "members": [
+        "30s",
+        "300s",
+        "60s-few-ctxt",
+        "60s-CSminus",
+        "600s-bgdmilk"
+      ],
+      "weight_per_member": {
+        "numerator": 1,
+        "denominator": 5
+      },
+      "renormalize_if_missing": false
+    },
+    "behavior_only_subgroups_of_mixed": {
+      "members": [
+        "60s",
+        "600s",
+        "60s-few",
+        "60s-50percent"
+      ],
+      "weight_per_member": {
+        "numerator": 1,
+        "denominator": 4
+      },
+      "renormalize_if_missing": false
+    },
+    "aversive_each_endpoint_separately": {
+      "members": [
+        "FC-45s",
+        "FC-135s"
+      ],
+      "weight_per_member": {
+        "numerator": 1,
+        "denominator": 2
+      },
+      "renormalize_if_missing": false
+    },
+    "omission_neural": {
+      "members": [
+        "60s-50percent",
+        "60s-10percent"
+      ],
+      "weight_per_member": {
+        "numerator": 1,
+        "denominator": 2
+      },
+      "renormalize_if_missing": false
+    }
+  }
+}

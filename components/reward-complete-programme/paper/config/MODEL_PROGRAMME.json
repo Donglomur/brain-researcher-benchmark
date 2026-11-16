@@ -1,0 +1,227 @@
+{
+  "schema": "reward_full_model_programme_v1",
+  "source": "paper.xml Methods Theory and simulations; Fig5; ED7; ED10l",
+  "families": [
+    {
+      "family": "Microstimulus TD",
+      "fixed": {
+        "dt_s": 0.25,
+        "lambda": 0.99,
+        "sigma": 0.08
+      },
+      "sweep": {
+        "threshold": [
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8
+        ],
+        "d": [
+          0.8,
+          0.9,
+          0.99,
+          0.999,
+          0.9999
+        ],
+        "gamma": [
+          0.8,
+          0.9,
+          0.99,
+          0.999,
+          0.9999
+        ],
+        "m": [
+          3,
+          10,
+          100,
+          1000
+        ],
+        "alpha": [
+          0.001,
+          0.01,
+          0.1
+        ]
+      },
+      "printed_combinations": 2400,
+      "best_reported": {
+        "threshold": 0.3,
+        "alpha": 0.1,
+        "gamma": 0.99,
+        "m": 3,
+        "d": 0.9
+      },
+      "branch": "Main experimental-length fit; \u2265400trial separate refit bestthreshold.4,alpha.1,gamma.8,m3,d.999; both required",
+      "output": "maxcue\u2192rewardvalue, cueRPE, firstvalue>threshold, fulltrajectories andasymptote"
+    },
+    {
+      "family": "IRI-scaled microstimulus TD",
+      "base": "MainTD bestfit",
+      "alpha_rule": "1\u2212exp(\u2212k\u00d7IRI)",
+      "k_sweep": [
+        0.00015,
+        0.0002,
+        0.00025,
+        0.0003,
+        0.00035,
+        0.0004
+      ],
+      "best_k": 0.0003,
+      "branches": "Originalhorizon foronset;2400trials percondition forasymptote perED7d, Methods says2400intotal ambiguously; codegate required",
+      "output": "value/RPE/onset/time/asymptote"
+    },
+    {
+      "family": "SOP",
+      "fixed": {
+        "dt_s": 0.25,
+        "r1": 1,
+        "r2": 0.5,
+        "Lplus": 0.2,
+        "Lminus": 0.1,
+        "p1cs": 0.1,
+        "p1us": 0.6
+      },
+      "printed_sweep": {
+        "threshold": [
+          0.01,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8
+        ],
+        "pd1us": [
+          0.01,
+          0.2,
+          0.25,
+          0.5,
+          0.75
+        ],
+        "pd2us": [
+          0.001,
+          0.001,
+          0.01,
+          0.1
+        ],
+        "pd1cs": [
+          0.01,
+          0.2,
+          0.25,
+          0.5,
+          0.75
+        ],
+        "pd2cs": [
+          0.001,
+          0.001,
+          0.01,
+          0.1
+        ]
+      },
+      "printed_cartesian_combinations_with_duplicates": 3600,
+      "branches": [
+        "constrained pd1>pd2 forCSandUS",
+        "unconstrained"
+      ],
+      "best_constrained_reported": {
+        "threshold": 0.1,
+        "pd1us": 0.25,
+        "pd2us": 0.1,
+        "pd1cs": 0.1,
+        "pd2cs": 0.0001
+      },
+      "best_unconstrained_reported": {
+        "threshold": 0.6,
+        "pd1us": 0.01,
+        "pd2us": 0.01,
+        "pd1cs": 0.1,
+        "pd2cs": 0.0001
+      },
+      "conflict": "Reported best pd1cs=.1 and pd2cs=.0001 are absent from printed grid; duplicated .001 values remain source evidence. Do not guess a corrected sweep. Native source must adjudicate constrained/unconstrained memberships and duplicate handling.",
+      "output": "value,maxcue\u2192reward,pA2reward,firstvalue>threshold"
+    },
+    {
+      "family": "ANCCR",
+      "fixed": {
+        "w": 0.5,
+        "dt_s": 0.2,
+        "innate_reward_meaningfulness": 1,
+        "innate_cue_meaningfulness": 0
+      },
+      "sweep": {
+        "threshold": [
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8
+        ],
+        "alpha0": [
+          0.0001,
+          8e-05,
+          6e-05,
+          4e-05,
+          2e-05,
+          1e-05,
+          8e-06
+        ],
+        "k": [
+          0.1,
+          0.3,
+          0.5,
+          0.7
+        ]
+      },
+      "printed_combinations": 224,
+      "best_reported": {
+        "threshold": 0.4,
+        "alpha0": 4e-05,
+        "k": 0.5
+      },
+      "rules": [
+        "alpha=1\u2212(1\u2212alpha0)^(IRI/dt)",
+        "T=k\u00d7IRI",
+        "Smalllearning-rateapprox alpha\u2248alpha0\u00d7IRI/dt; assumption notvalidglobally",
+        "M_pre updatesatreward; M_baseline everydt; prospectiveM=retrospectiveM\u00d7baseline_reward/baseline_cue,conditionedoncontext"
+      ],
+      "branches": [
+        "fullfiveITI fit",
+        "asymptoticcueDA",
+        "latent inhibition200cue-onlypreexposuresat30sITI versusnone"
+      ],
+      "output": "NC_cue\u2194reward threshold,fullDA andprospectiveassociationtrajectories",
+      "formal_gate": "SupplementaryNote1 finiteeligibilitytrace derivation; modelbodies absent"
+    }
+  ],
+  "conditions": [
+    30,
+    60,
+    300,
+    600,
+    3600
+  ],
+  "native_simulated_trials": [
+    800,
+    400,
+    88,
+    48,
+    16
+  ],
+  "note": "Simulated88/48 differ empiricalanalyzed80/40; preservepurpose-specificcounts,notuniformcrop.",
+  "iterations_per_case": 20,
+  "common_selection": "Native search minimizes RSS oflogtransformed learnedtrial versus animalexperimentalonsets acrossfiveconditions. Allfamilies use thresholdcrossing forbehavior; exact treatmentofnevercrossing,logzero,replicateaveraging andfailedsimulation mustbe adjudicated frommissing nativecode,neverimputed maximumtrialbydefault.",
+  "native_AIC": "DisplayedAIC=n\u00d7ln(meanRSS), k=0; relativeweight=exp(\u2212.5\u00d7(AIC\u2212minAIC)); parameter-penalizedvariant inmissingTableS1. Reproduce exact reportedconvention butdo notlabelthis crossvalidatedprediction or universalmodelproof.",
+  "native_state_unit": "simulationiteration; 20iterations not20biologicalanimals andnotindependent testconditions",
+  "workload": "Printed grid implies2400TD\u00d75ITI\u00d720=240000 parameter-condition-iteration evaluations and224ANCCR\u00d75\u00d720=22400. SOP printed3600\u00d75\u00d720=360000 nominalevaluations beforeconstraints/duplicates. These are logical evaluations, not measured native launches: threshold sweeps may share trajectory computation. ExtraTD refit/scaling/asymptote,unconstrainedSOP andlatent inhibition addwork. Exactnative schedule/resourcecost gatedbyoriginalsource andlaterauthorizedpilot.",
+  "protected_improvement": "Use samecompetent nativefamilies plusfairlyretunedvariants andnuisancebaselines under nestedheldanimal/heldschedule evaluation; fullscientificcomparison in SCIENTIFIC_DESIGN.md. Trainingandsample size/capacity/headmapping matched.",
+  "source_closure": "Alloriginalmodels,simulationdrivers,eventgenerator,configs,sweep/behaviorfit/RSS/AIC code and MATLABruntime sources required. Capturedtree is metadata, not these bodies. SavedMAToutputs are answers, neverreplacementmodels.",
+  "binding_improvement": "All mechanistic and nuisance baselines predict the same conditional A|B,H target and fixed13-condition endpoint map. NB2 head family and training options shared; strongest baseline selected without outer labels. Native model branches unchanged."
+}
