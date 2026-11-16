@@ -14,7 +14,8 @@ do not grant rights to external source materials.
 
 The fixed external identity policy preserves exactly the accepted five-animal
 balanced cohort and the single-session thirteen-column ordinary exclusion.
-It must be supplied with the exact provenance/digest accepted by
+It can be reconstructed from pinned official sources with the metadata
+exporter, and must retain the exact provenance/digest accepted by
 external_contract.py. No pseudonym, guessed alias or renamed cohort replaces
 it. Generated test identities are invented and cannot pass production
 metadata admission.
@@ -24,3 +25,8 @@ their own rights and access conditions. MIT applies to this software only.
 Source publication is not scientific qualification or distribution of a
 complete runnable data package.
 
+The metadata exporters and explicit 98-row crosswalk are benchmark-authored
+software/curation under MIT. The crosswalk is not a publisher-provided mapping.
+Official analysis bodies and the publisher workbook are external inputs; the
+R subtree retains its separate CC BY-NC-ND notice despite the upstream root
+MIT notice. The one fixed historical input ledger remains operator-supplied.

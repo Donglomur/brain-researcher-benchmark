@@ -22,8 +22,12 @@ tables, private ledgers, identity policies, reference values or execution receip
 
 An authorized operator needs:
 
-1. The exact `INPUT_LEDGER.json` and `PUBLISHED_98_LEDGER.json` used by the full
-   contract, plus its private identity-policy JSON. The immutable expected sizes
+1. The exact historical `INPUT_LEDGER.json` from an authorized benchmark
+   operator. Reconstruct the other two exact inputs, `PUBLISHED_98_LEDGER.json`
+   and the private identity-policy JSON, with the
+   [metadata provisioning commands](metadata/README.md) using legitimate
+   official source files and the publisher workbook, or obtain their accepted
+   bodies from the operator. The immutable expected sizes
    and SHA256 digests are in
    [external_contract.py](../../authoring/delivery-20261105/common/remaining-builds-wave40/findlay-ordinary-contrast-integration-source-20261116-v1/external_contract.py).
    These are operator inputs, not candidate-visible materials. No alternate
@@ -56,13 +60,12 @@ host; it must be canonical, unlinked and disjoint from new output. Do not rewrit
 old receipt paths to pretend a copied archive has the same provenance. A moved
 prior dataset requires a separately reviewed provenance migration.
 
-The fixed private grading metadata is not currently published. Obtaining it is
-a real prerequisite for either mode; the historical receipt graph is required
-only for continuation. [PROVISIONING.md](PROVISIONING.md) identifies the exact
-public-origin inputs and the missing deterministic metadata-generation operation.
-The first-intake source is usable with legitimately provisioned originals and
-those fixed metadata, without our historical attempt. Source publication alone
-does not distribute a data-complete benchmark.
+The three metadata bodies remain external. Two now have deterministic exporters
+that reproduce their exact existing bytes; one historical audit ledger remains
+operator-supplied. [PROVISIONING.md](PROVISIONING.md) gives the original-data and
+metadata prerequisites. The first-intake source works with those inputs without
+our historical attempt. Source publication alone does not distribute a
+data-complete benchmark.
 
 ## Bind and invoke the existing owner
 
@@ -105,7 +108,8 @@ bodies, checks their full-scope schema and cohort joins, and writes a new
 digests. It does not inspect arrays, start a worker, grant execution authority,
 or qualify science. For a fresh archive it checks the ordinary file extent and
 binds the fixed expected digest; the worker performs the complete body hash.
-It refuses generated production metadata and incomplete/changed inputs.
+It refuses invented metadata and incomplete/changed inputs; exact metadata
+reconstructed by the reviewed exporters is accepted under the same fixed pins.
 
 Only after selecting the actual operation and its resources, invoke the existing
 owner with those exact paths and emitted digests:
