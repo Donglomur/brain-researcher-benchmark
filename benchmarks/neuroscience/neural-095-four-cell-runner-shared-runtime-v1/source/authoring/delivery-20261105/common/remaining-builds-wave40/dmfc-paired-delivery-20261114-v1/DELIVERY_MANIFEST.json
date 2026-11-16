@@ -1,0 +1,175 @@
+{
+  "scientific_scope": {
+    "training_trials": 748,
+    "assessment_cases_per_view": 258,
+    "views": [
+      "cue_only",
+      "neural"
+    ],
+    "animal": "Haydn",
+    "session": "20161211",
+    "neural_shape_per_case": [
+      4,
+      40
+    ],
+    "prefix_seconds": [
+      -0.2,
+      0
+    ],
+    "target": "released tp milliseconds at observed Set",
+    "primary_per_view": "trial MAE milliseconds",
+    "paired_primary": "cue MAE minus neural MAE",
+    "references": [
+      "nominal_sample_interval",
+      "exact_condition_training_median",
+      "cue_clock_ridge",
+      "cue_clock_total_spike_ridge",
+      "cue_clock_temporal_spike_ridge"
+    ],
+    "no_accuracy_floor": true,
+    "full_registered_adaptive_mode_qualified": false
+  },
+  "public_views": {
+    "cue_only": {
+      "unit_id": "cue_only",
+      "expected_query_count": 258,
+      "public_inputs": [
+        {
+          "path": "data/views/cue_only/train.npz",
+          "bytes": 70438,
+          "sha256": "2f7025c155c6b40c4a505157e78dbac6dcfdcf31f3c1506541f4a3f0a0beeab7",
+          "mount_destination": "/input/train.npz",
+          "read_only": true
+        },
+        {
+          "path": "data/views/cue_only/query.npz",
+          "bytes": 20788,
+          "sha256": "3e25af9a2af8049c8678ed60f38375b1dfe1705b572761ebf98730f23bb36cf7",
+          "mount_destination": "/input/query.npz",
+          "read_only": true
+        },
+        {
+          "path": "data/views/cue_only/schema.json",
+          "bytes": 1208,
+          "sha256": "9ea4890fe70459be74d0afb9b977a442b63d6518c97d91572e9793511e71a724",
+          "mount_destination": "/input/schema.json",
+          "read_only": true
+        },
+        {
+          "path": "data/views/cue_only/units.json",
+          "bytes": 487,
+          "sha256": "74e5bb5c49662db4e54466d0da06e9377d21f57233f5d474bb129d2486ade899",
+          "mount_destination": "/input/units.json",
+          "read_only": true
+        },
+        {
+          "path": "data/views/cue_only/contract.json",
+          "bytes": 5194,
+          "sha256": "eb332e622e352c72014fbefdaf283c6ad313a90730c2ea110a49a8fbcfcdcb64",
+          "mount_destination": "/input/contract.json",
+          "read_only": true
+        }
+      ],
+      "output_filename": "submission.npz",
+      "max_output_bytes": 1048576
+    },
+    "neural": {
+      "unit_id": "neural",
+      "expected_query_count": 258,
+      "public_inputs": [
+        {
+          "path": "data/views/neural/train.npz",
+          "bytes": 549542,
+          "sha256": "179444d27110427b84920f07aecddcf2d58e90addbc787dc68b8e58a7f0cdd4a",
+          "mount_destination": "/input/train.npz",
+          "read_only": true
+        },
+        {
+          "path": "data/views/neural/query.npz",
+          "bytes": 186252,
+          "sha256": "6f9af185ddeef4e3c2f120ac530152667097f3383bc9293e8c7e7684932108f1",
+          "mount_destination": "/input/query.npz",
+          "read_only": true
+        },
+        {
+          "path": "data/views/neural/schema.json",
+          "bytes": 1237,
+          "sha256": "d1c2db31fded2bdfa6575060bb42bf20768271e6a766fae10cd428a9db012d21",
+          "mount_destination": "/input/schema.json",
+          "read_only": true
+        },
+        {
+          "path": "data/views/neural/units.json",
+          "bytes": 487,
+          "sha256": "74e5bb5c49662db4e54466d0da06e9377d21f57233f5d474bb129d2486ade899",
+          "mount_destination": "/input/units.json",
+          "read_only": true
+        },
+        {
+          "path": "data/views/neural/contract.json",
+          "bytes": 5194,
+          "sha256": "eb332e622e352c72014fbefdaf283c6ad313a90730c2ea110a49a8fbcfcdcb64",
+          "mount_destination": "/input/contract.json",
+          "read_only": true
+        }
+      ],
+      "output_filename": "submission.npz",
+      "max_output_bytes": 1048576
+    }
+  },
+  "evaluator_only_assets": {
+    "identity": {
+      "path": "data/evaluator/public_identity.json",
+      "bytes": 4947,
+      "sha256": "0b1c30e2e753891b480607b0061ac76f225403ac01ff718325a84d44d84c91f1"
+    },
+    "targets": {
+      "path": "data/evaluator/query_targets.npz",
+      "bytes": 18550,
+      "sha256": "473352256d5239c967b014910aa5134fc6a24bdd38ccaabb7d42b283b83c35dc"
+    },
+    "reference_grade": {
+      "path": "data/evaluator/reference_grade.json",
+      "bytes": 23286,
+      "sha256": "414e09845d11548e96c921b202491bc7680ad6ecec96a0433b2676feeec5d823"
+    },
+    "reference_commit": {
+      "path": "data/evaluator/reference_commit.json",
+      "bytes": 473,
+      "sha256": "238d86371eccca7fe32635c63e36f004eab499f8f5d4781f17cb9ccb387a4dfe"
+    },
+    "reference_audit": {
+      "path": "data/evaluator/reference_audit.json",
+      "bytes": 585,
+      "sha256": "eaf3ad0f754f8096dfdfd68a584f541ece0ea1190ad0b1a947a41900297c3272"
+    }
+  },
+  "evaluator_sources": {
+    "pair_worker": {
+      "path": "authoring/dmfc-timing/paired-investigation-v1/pair_worker.py",
+      "bytes": 9790,
+      "sha256": "5ca4f66099e577a6fd05b987db2ff2ff12fa91e22d3a71d2db4163d7798d947e"
+    },
+    "validator": {
+      "path": "benchmarks/neuroscience/neural-095/validator.py",
+      "bytes": 8279,
+      "sha256": "f179cbf80fedf17cd67dfe942a7b3dc323075bedae1aa72a2f004467df6de3be"
+    },
+    "metrics": {
+      "path": "benchmarks/neuroscience/neural-095/metrics.py",
+      "bytes": 9271,
+      "sha256": "748fbaaaf14416f5cf13f3702c26031064fc3b60a872e236c09dff4365c8ae47"
+    }
+  },
+  "schema_version": 1,
+  "task_id": "NEURAL-095",
+  "portable_manifest_scope": "Active source/data descriptors only; no historical execution authority.",
+  "new_source_has_no_execution_authority": true,
+  "required_existing_source_and_authority_files": [
+    {
+      "path": "benchmarks/neuroscience/neural-095/assets.json",
+      "bytes": 1455,
+      "sha256": "4dd239d168f3d83fa6fa8abb932394e4e75f23db41b21918dea9ba0f762339f2"
+    }
+  ]
+}
