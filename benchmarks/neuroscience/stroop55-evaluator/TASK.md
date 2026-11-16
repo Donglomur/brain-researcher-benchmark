@@ -36,4 +36,6 @@ No bootstrap interval is implemented in this source phase. A future fixed-predic
 
 The two study-wide comparisons require continuous numerical scores and same-case paired participant comparisons against competent train-only baselines. No success threshold, SOTA claim or published64% comparison is invented: that author result concerns a different within-person binary task. Passing generated controls says nothing about model ability.
 
+The author code pools all three sessions within each person, groups 30 events per class into five six-event pseudo-trials per class, and holds out one pseudo-trial from each class in each fold, repeating 33 random regroupings. The frozen V3 contract's reference to historical 64% is contextual only: it is not a numerical target or acceptance threshold for this benchmark.
+
 All source labels are public. Session3 is **intended** evaluation until exposure, independence and the enforced input boundary are audited. No short-separation channels were recorded, so accurate classification cannot establish cortical specificity over systemic hemodynamics. Schedule-only, common-mode-only, pre-onset-only and spatial-pattern controls remain mandatory authentic scientific work, not simulated outcomes in this package.
