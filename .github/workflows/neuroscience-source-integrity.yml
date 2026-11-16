@@ -2456,3 +2456,39 @@ jobs:
           set -euo pipefail
           ulimit -t 60
           /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -B -c 'import runpy, sys; sys.path.insert(0, "."); runpy.run_path("generated_checks.py", run_name="__main__")' --evidence "$RUNNER_TEMP/neural073-generated-images"
+
+  rem-dmm-figure5e-evaluator-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Check complete REM cohort scoring and malformed-output refusals
+        shell: bash
+        working-directory: benchmarks/neuroscience/components/rem-dmm-figure5e
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_score.py' -v
+
+  stroop55-native-bridge-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Check complete Stroop inventory and native window alignment
+        shell: bash
+        working-directory: benchmarks/neuroscience/stroop55-evaluator
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s . -p 'test_bridge.py' -v
