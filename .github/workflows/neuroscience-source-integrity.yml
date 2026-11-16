@@ -4802,3 +4802,39 @@ jobs:
           if __name__ == '__main__':
               main()
           REP013_PUBLIC
+
+  rep012-portable-paired-api-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Authenticate REP012 paired API and check generated relocation
+        run: |
+          python -I -S -B - <<'REP012_SOURCE'
+          import hashlib, types, unittest
+          from pathlib import Path
+          root = Path('benchmarks/neuroscience/rep012-portable').absolute()
+          path = root / 'bootstrap.py'
+          with path.open('rb') as stream:
+              body = stream.read(7365)
+          assert len(body) == 7364
+          assert hashlib.sha256(body).hexdigest() == 'd880eefa6b96200b43de1744fe528090829160e5c43ca8a1bd30247dbab34128'
+          bootstrap = types.ModuleType('rep012_authenticated_bootstrap')
+          bootstrap.__file__ = str(path)
+          exec(compile(body, str(path), 'exec'), bootstrap.__dict__)
+          root, manifest, bodies = bootstrap.verify('e6f7d5e355abedad833bd7d9c63f78c47258c99cb723d19422cab196e6e119a0')
+          assert len(bodies) == 13
+          path = root / 'tests/test_relocation.py'
+          tests = types.ModuleType('rep012_generated_relocation_tests')
+          tests.__file__ = str(path)
+          exec(compile(bodies['tests/test_relocation.py'], str(path), 'exec'), tests.__dict__)
+          suite = unittest.defaultTestLoader.loadTestsFromModule(tests)
+          assert suite.countTestCases() == 8
+          if not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful():
+              raise SystemExit(1)
+          REP012_SOURCE

@@ -275,3 +275,5 @@ python3 -I -S -B benchmarks/neuroscience/rep013-purkinje-portable/portable.py \
 ```
 
 Legitimate original inputs and fixed private references, the qualified external owner, original 385454 runtime and independent late-grading authority remain required. Source relocation does not supply those approvals, demonstrate a paper/code benefit, or qualify the broader donor/allometry/Sholl/spine claims. CI authenticates all 35 files before seven generated relocation/admission checks; no new benchmark or authentic result is counted.
+
+The [REP012 portable paired API](benchmarks/neuroscience/rep012-portable/README.md) preserves the complete A9/B17 paper-access packets and four pooled-spine reconstruction endpoints over 1,143 released rows. It authenticates the existing paired controller and scalar scorer, with concrete operator API commands and inert external-input/runtime descriptors. Original data, paper/code bodies, private targets and current runtime/owner qualification remain external. This improves one already-counted finite task; it adds no benchmark ID or scientific result.
