@@ -2581,7 +2581,8 @@ jobs:
 
   voltron-native-frame-source-tests:
     runs-on: ubuntu-24.04
-    timeout-minutes: 3
+    # Hosted checkout previously consumed 170s; keep the 90s test limit below.
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:

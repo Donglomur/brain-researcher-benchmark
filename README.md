@@ -19,6 +19,8 @@ studies, datasets or specification aliases. The programme records 42 historical
 finite acceptances; the current number qualified across their complete registered
 contracts is **not established**. No new LLM performance or code-assistance effect
 is established by these source releases. See the [dated evidence and scope record](docs/neuroscience-benchmarks/CONSTRUCTION_STATUS.md).
+The [repository quality review](docs/neuroscience-benchmarks/REPO_QUALITY_20261116.md)
+identifies the remaining delivery, scientific-scope and evaluation gaps.
 
 ## Start here
 

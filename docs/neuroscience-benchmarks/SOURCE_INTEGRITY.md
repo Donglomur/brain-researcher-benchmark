@@ -1,9 +1,15 @@
 # Public source integrity checks
 
-The GitHub workflow checks only the packages explicitly enrolled in
+The registry checker covers only the packages explicitly enrolled in
 `benchmarks/source_integrity.json`: Morse EEG, cerebellar contact prediction,
-and Neuroformer. It does not run benchmark modules, load neural data, download
-models, or assess scientific qualification.
+and Neuroformer. That checker parses source without running benchmark modules,
+loading neural data, downloading models, or assessing scientific qualification.
+
+The [source-integrity workflow](../../.github/workflows/neuroscience-source-integrity.yml)
+also runs separate component-specific source tests, including generated-input
+checks. Its coverage extends beyond the registry checker. Each job's commands
+define its tested scope; a green workflow does not qualify a complete scientific
+benchmark or establish an agent result.
 
 The standard-library checker verifies each declared source byte length and
 SHA-256, rejects missing and unexpected package files, checks the manifest's
