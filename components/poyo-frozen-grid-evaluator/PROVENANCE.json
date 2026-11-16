@@ -1,0 +1,65 @@
+{
+  "original_implementation": {
+    "bytes": 15264,
+    "file": "evaluator.py",
+    "sha256": "bb4f284fb5514425f9942b785647f2c06d20a43ca516f0dffaf9df4c94f429e1"
+  },
+  "policy": "poyo-stitch-uniform-r2-tm1.9-prospective-v1",
+  "qualifications": {
+    "authentic_inputs": false,
+    "fixed_reference_competence": false,
+    "method_execution": false,
+    "paired_access": false,
+    "scientific": false
+  },
+  "schema": "public_primary_provenance_v1",
+  "source_limits": "Primary views informed prospective policy; historical2023 environment, exact158 session identities, transfer grid and native numerical fidelity remain unresolved.",
+  "sources": [
+    {
+      "finding": "Current callback receives masked values, absolute starts and session IDs; current train entry has no recovered historical transfer grid.",
+      "role": "official_training",
+      "url": "https://raw.githubusercontent.com/nerdslab/poyo/6b052f148128ec5d8e3fe7077692b3ffbac92039/train.py"
+    },
+    {
+      "finding": "Selects full multi-source dataset class; this is not a 158-session identity manifest.",
+      "role": "official_configuration",
+      "url": "https://raw.githubusercontent.com/nerdslab/poyo/6b052f148128ec5d8e3fe7077692b3ffbac92039/configs/train_poyo_1.yaml"
+    },
+    {
+      "finding": "Current requirements select TorchMetrics~=1.9.0 and short torch_brain ca3cfb; this is not the historical 2023 environment or a qualified dependency lock.",
+      "role": "official_dependencies",
+      "url": "https://raw.githubusercontent.com/nerdslab/poyo/6b052f148128ec5d8e3fe7077692b3ffbac92039/requirements.txt"
+    },
+    {
+      "finding": "Continuous-output default R2Score is calculated after timestamp pooling per session; the outer metric is the arithmetic session mean. No inference of original historical native equivalence.",
+      "role": "official_callback",
+      "url": "https://raw.githubusercontent.com/nerdslab/poyo/6b052f148128ec5d8e3fe7077692b3ffbac92039/src/callbacks.py"
+    },
+    {
+      "finding": "Four-source composition and two-dimensional velocity readout with source-specific scale declarations; Flint uses hand velocity. Current data conversion does not establish original session membership.",
+      "role": "official_readout",
+      "url": "https://raw.githubusercontent.com/nerdslab/poyo/6b052f148128ec5d8e3fe7077692b3ffbac92039/src/datasets/poyo_1.py"
+    },
+    {
+      "finding": "The selected cursor velocity modality is continuous and two-dimensional. A short source reference does not establish a complete immutable native runtime.",
+      "role": "official_registry",
+      "url": "https://raw.githubusercontent.com/neuro-galaxy/torch_brain/ca3cfb/torch_brain/registry.py"
+    },
+    {
+      "finding": "Continuous values at exactly identical timestamps are averaged; both predictions and targets are pooled. Floating native addition/quantization is not emulated bitwise.",
+      "role": "official_stitch",
+      "url": "https://raw.githubusercontent.com/neuro-galaxy/torch_brain/ca3cfb/torch_brain/utils/stitcher.py"
+    },
+    {
+      "finding": "Default multioutput is uniform average, adjusted=0. This source view is rendered text, not independently authenticated original file bytes.",
+      "role": "metric_class",
+      "url": "https://raw.githubusercontent.com/Lightning-AI/torchmetrics/v1.9.0/src/torchmetrics/regression/r2.py"
+    },
+    {
+      "finding": "RSS/TSS within absolute1e-4 of zero select explicit force-finite branches; at least two samples required. New exact arithmetic follows the chosen mathematical policy, not GPU rounding.",
+      "role": "metric_formula",
+      "url": "https://raw.githubusercontent.com/Lightning-AI/torchmetrics/v1.9.0/src/torchmetrics/functional/regression/r2.py"
+    }
+  ],
+  "task_id": "PAPER-CANDIDATE-20261114-POYO"
+}

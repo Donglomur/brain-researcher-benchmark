@@ -3068,3 +3068,191 @@ jobs:
                   raise RuntimeError('selected component source changed')
           runpy.run_path(str(root / 'test_delivery.py'), run_name='__main__')
           NEURAL_SOURCE
+
+  poyo-frozen-grid-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Authenticate complete source and run generated component controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'COMPONENT_SOURCE'
+          import hashlib, json, pathlib, sys, unittest
+          if sys.flags.optimize:
+              raise RuntimeError("assertions must remain enabled")
+          root = pathlib.Path("components/poyo-frozen-grid-evaluator")
+          body = (root / "SOURCE.json").read_bytes()
+          if len(body) != 1899 or hashlib.sha256(body).hexdigest() != "183fca19bba16ad372b4ea0c6cc26bf6da0445159f05d1ff341fcf6294856673":
+              raise RuntimeError("component manifest identity changed")
+          source = json.loads(body)
+          expected = {member["path"] for member in source["files"]} | {"SOURCE.json"}
+          entries = list(root.iterdir())
+          if root.is_symlink() or {entry.name for entry in entries} != expected:
+              raise RuntimeError("component namespace changed before test import")
+          if any(entry.is_symlink() or not entry.is_file() for entry in entries):
+              raise RuntimeError("component requires ordinary non-symlink files")
+          for member in source["files"]:
+              data = (root / member["path"]).read_bytes()
+              if len(data) != member["bytes"] or hashlib.sha256(data).hexdigest() != member["sha256"]:
+                  raise RuntimeError("component member changed before test import: " + member["path"])
+          suite = unittest.defaultTestLoader.discover(str(root), pattern="test_*.py")
+          if suite.countTestCases() != 14:
+              raise RuntimeError("complete component test discovery required")
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not (result.testsRun == 14 and result.wasSuccessful() and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses):
+              raise SystemExit(1)
+          COMPONENT_SOURCE
+
+  lep-full-assay-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Authenticate complete source and run generated component controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'COMPONENT_SOURCE'
+          import hashlib, json, pathlib, sys, unittest
+          if sys.flags.optimize:
+              raise RuntimeError("assertions must remain enabled")
+          root = pathlib.Path("components/lep-full-assay-scorer")
+          body = (root / "SOURCE.json").read_bytes()
+          if len(body) != 1590 or hashlib.sha256(body).hexdigest() != "d6e5110e21dc6375c714af0e9c05f6a813100818e200e53340c660ca57f50195":
+              raise RuntimeError("component manifest identity changed")
+          source = json.loads(body)
+          expected = {member["path"] for member in source["files"]} | {"SOURCE.json"}
+          entries = list(root.iterdir())
+          if root.is_symlink() or {entry.name for entry in entries} != expected:
+              raise RuntimeError("component namespace changed before test import")
+          if any(entry.is_symlink() or not entry.is_file() for entry in entries):
+              raise RuntimeError("component requires ordinary non-symlink files")
+          for member in source["files"]:
+              data = (root / member["path"]).read_bytes()
+              if len(data) != member["bytes"] or hashlib.sha256(data).hexdigest() != member["sha256"]:
+                  raise RuntimeError("component member changed before test import: " + member["path"])
+          suite = unittest.defaultTestLoader.discover(str(root), pattern="test_*.py")
+          if suite.countTestCases() != 18:
+              raise RuntimeError("complete component test discovery required")
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not (result.testsRun == 18 and result.wasSuccessful() and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses):
+              raise SystemExit(1)
+          COMPONENT_SOURCE
+
+  dfine-missing-observation-portable-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+      - name: Check dfine-missing-observation source and relocated generated interface
+        run: python3 -I -S -B benchmarks/scientific_components/dfine_missing_observation/test_portability.py
+
+  pcca-descriptive-outputs-portable-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+      - name: Check pcca-descriptive-outputs source and relocated generated interface
+        run: python3 -I -S -B benchmarks/scientific_components/pcca_descriptive_outputs/test_portability.py
+
+  localization-complete-centroid-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Check complete880 localization scorer and geometry control with invented inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'LOCALIZATION_SOURCE'
+          import hashlib, importlib.util, json, pathlib, sys, unittest
+          if sys.flags.optimize:
+              raise RuntimeError("source controls require assertions enabled")
+          root = pathlib.Path("components/localization-centroid").resolve()
+          body = (root / "SOURCE.json").read_bytes()
+          if len(body) != 1821 or hashlib.sha256(body).hexdigest() != "d8903d3d8c15fda04f7c74b8aeb732f7f14bfd8b71e34a5181ea6d9c221ff9e6":
+              raise RuntimeError("selected localization source distribution changed")
+          distribution = json.loads(body)
+          for member in distribution["files"]:
+              if pathlib.Path(member["path"]).name != member["path"]:
+                  raise RuntimeError("component source member path changed")
+              content = (root / member["path"]).read_bytes()
+              if len(content) != member["bytes"] or hashlib.sha256(content).hexdigest() != member["sha256"]:
+                  raise RuntimeError("localization source member changed before test import")
+          sys.path.insert(0, str(root))
+          suite = unittest.TestSuite()
+          for name, count in [("test_centroid_control", 13), ("test_relocation", 3)]:
+              spec = importlib.util.spec_from_file_location(name, root / (name + ".py"))
+              module = importlib.util.module_from_spec(spec)
+              sys.modules[name] = module
+              spec.loader.exec_module(module)
+              selected = unittest.defaultTestLoader.loadTestsFromModule(module)
+              if selected.countTestCases() != count:
+                  raise RuntimeError("all declared localization source controls required")
+              suite.addTests(selected)
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not (result.testsRun == 16 and result.wasSuccessful() and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses):
+              raise SystemExit(1)
+          LOCALIZATION_SOURCE
+
+  dosei-conditional-component-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Verify exact DoSEI source and portable conditional interfaces
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'DOSEI_SOURCE'
+          import hashlib, json, pathlib, runpy
+          root = pathlib.Path('components/dosei-ordinal-and-paired')
+          raw = (root / 'SOURCE.json').read_bytes()
+          if len(raw) != 2031 or hashlib.sha256(raw).hexdigest() != '86aca32739620d4348f6cd51c3fcb81d766c25de8c3dcdf9b0c6b9c9b993b299':
+              raise RuntimeError('selected DoSEI source distribution changed')
+          for member in json.loads(raw)['files']:
+              body = (root / member['path']).read_bytes()
+              if len(body) != member['bytes'] or hashlib.sha256(body).hexdigest() != member['sha256']:
+                  raise RuntimeError('selected DoSEI source member changed')
+          runpy.run_path(str(root / 'test_delivery.py'), run_name='__main__')
+          DOSEI_SOURCE

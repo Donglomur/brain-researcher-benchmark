@@ -1,0 +1,133 @@
+{
+  "all_fields_strict": true,
+  "authentic_census_available": false,
+  "categories": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "clinical_or_reference_qualification": false,
+  "count_delta": 0,
+  "eligibility": "valid AND complete AND verified AND included, all four statuses retained",
+  "execution_selected": false,
+  "ids": "opaque ASCII [A-Za-z0-9_-],1..64 chars; no inferred equivalence",
+  "io_caps_bytes": {
+    "output": 4194304,
+    "policy": 4194304,
+    "predictions": 2097152,
+    "targets": 1048576
+  },
+  "missing_evaluable_predictions": "whole submission refused before CLI opens protected targets",
+  "primary": "exact normalized five-category RPS, mean eligible assessment within biological person then equal person",
+  "required_files": {
+    "policy": {
+      "assessment_fields": [
+        "assessment_id",
+        "recording_id",
+        "source_event_id",
+        "label_status",
+        "window_status",
+        "timing_status",
+        "artifact_status"
+      ],
+      "fold_fields": [
+        "fold_id",
+        "training_people",
+        "heldout_people"
+      ],
+      "label_source": "original_EVENT_MOAAS_assessment",
+      "provenance_roles": [
+        "person_join",
+        "assessment_census",
+        "transition_census",
+        "missingness",
+        "group_split",
+        "packet_causality"
+      ],
+      "provenance_values": "external receipt SHA256 strings, not validated clinical evidence",
+      "recording_fields": [
+        "recording_id",
+        "person_id"
+      ],
+      "schema": "dosei_complete_policy_v1",
+      "status_values": {
+        "artifact_status": [
+          "included",
+          "excluded",
+          "unresolved"
+        ],
+        "label_status": [
+          "valid",
+          "missing",
+          "ambiguous"
+        ],
+        "timing_status": [
+          "verified",
+          "unresolved"
+        ],
+        "window_status": [
+          "complete",
+          "incomplete",
+          "unresolved"
+        ]
+      },
+      "top_fields": [
+        "schema",
+        "task",
+        "categories",
+        "label_source",
+        "provenance",
+        "people",
+        "folds",
+        "recordings",
+        "assessments",
+        "transitions"
+      ],
+      "transition_fields": [
+        "transition_id",
+        "recording_id",
+        "source_event_id"
+      ]
+    },
+    "predictions": {
+      "assessment_fields": [
+        "assessment_id",
+        "outer_fold",
+        "status",
+        "probabilities"
+      ],
+      "probabilities": "exactly five decimal strings,0..1,<=18 decimal places,exact sum1; no normalization",
+      "schema": "dosei_predictions_v1",
+      "status": "ok for every evaluable case; not_evaluable with null probabilities otherwise",
+      "top_fields": [
+        "schema",
+        "task",
+        "assessments"
+      ]
+    },
+    "targets": {
+      "assessment_fields": [
+        "assessment_id",
+        "category"
+      ],
+      "category": "integer1..5 iff label_status valid, otherwise null",
+      "schema": "dosei_targets_v1",
+      "top_fields": [
+        "schema",
+        "task",
+        "assessments"
+      ]
+    }
+  },
+  "schema": "dosei_primary_artifact_interface_v1",
+  "scope_counts": {
+    "assessments": 7328,
+    "recordings": 171,
+    "transitions": 1129
+  },
+  "task": "clinical-dosei-responsiveness",
+  "transitions": "separate full census; never extra ordinal labels or RPS observations",
+  "zero_evaluable_person": "primary null; all people and slot counts retained"
+}

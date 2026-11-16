@@ -89,3 +89,14 @@ NEURAL-007 has a qualified [whole-night feature program runner](../authoring/sle
 NEURAL-023 now has a qualified [across-day program runner](../authoring/rtt-transfer-v1/program-runner-v1-preparation/RESULTS.md). It gives one committed program the four fixed public packet files, captures bounded predictions, removes producer resources, then invokes the unchanged private scorer. The fresh 51-fit positive control reproduced the reference; valid negative, malformed/lingering and named-private-path controls passed. All 15 resources and two process groups were absent. Its batch access is retrospective, and this is a known-control qualification rather than a new LLM or native-understanding result.
 
 PAPER-paper-signal-add-021 has a qualified [behavioral CSV program runner](../authoring/v1-tms-memory-v1/program-cli-v1/RESULTS.md). A single positive program reconstructs original, fixed-transformed and hand-derived inputs; stale and coherent null outputs receive poor continuous scores, and missing output rejects. The ordinary direct positive and common-CLI null runs reproduced their earlier complete scores. Historical p-value/effect-size provenance and whole-paper reconstruction remain unresolved.
+
+## Additional paper-method source components
+
+The [DFINE missing-observation scorer](scientific_components/dfine_missing_observation/README.md)
+validates a complete declared seven-session/five-fold mask grid and computes
+behavior-correlation curves. The [bilateral pCCA output evaluator](scientific_components/pcca_descriptive_outputs/README.md)
+computes descriptive covariance and fitted pupil associations over all42 neural
+sessions,41 pupil sessions and552 directed controls. Both packages contain
+portable standard-library source and invented interface checks. Authentic input,
+model execution and reference qualification remain explicit holds; these are not
+new benchmark IDs or ready-to-run original-data studies.
