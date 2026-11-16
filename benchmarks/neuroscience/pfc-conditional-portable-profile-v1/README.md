@@ -2,7 +2,7 @@
 
 This benchmark reconstructs conditional statistics from a supplied prefrontal-cortex map and measures sensitivity to whole-animal deletion. It has completed a full seven-stage compatibility run on the selected local host, including both information conditions and an incorrect-answer control.
 
-The [four fixed input assets](https://github.com/Donglomur/brain-researcher-benchmark/releases/tag/pfc-full99-inputs-v1) total **5.57 MB**. Start with [input provisioning](PROVISIONING.md), then the [operator guide](OPERATOR_GUIDE.md). The exact runtime image still needs a distribution/build route and fresh admission on another host; the input release does not establish arbitrary-host compatibility.
+The [four fixed input assets](https://github.com/Donglomur/brain-researcher-benchmark/releases/tag/pfc-full99-inputs-v1) total **5.57 MB**. Start with [input provisioning](PROVISIONING.md), then the [operator guide](OPERATOR_GUIDE.md). The admitted runtime image still needs a distribution route and fresh admission on another host. Separate [clean runtime build sources](../pfc-clean-runtime-source-v1/README.md) describe the newer 9aaf dependency stack; they do not replace this task’s validated 385454 image or establish arbitrary-host compatibility.
 
 ## Task and information conditions
 

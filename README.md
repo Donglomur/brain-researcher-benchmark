@@ -236,3 +236,20 @@ The owned CLI replays the fixed reference programme and all 80 historical models
 The endpoint remains within-person cross-session interpolation of processed behavior. Source publication does not establish unseen-person prediction, raw-neural understanding, a completed protected replay or new scientific performance. The historical runtime and fresh execution admission remain required. CI authenticates the complete public package before its admission-only generated controls; it excludes the inherited lifecycle test bank and scientific execution.
 
 The external source-manifest SHA-256 is `6b346c779ab5f5450f2d495e5f631ce73c9570eae2a1b67dc3298aec4767bb3b` (7,534 bytes). The public package contains 53 files; CI authenticates all 52 manifest members before the twelve admission controls and does not rerun the 15 inherited lifecycle controls.
+
+
+### Hybrid frozen-model candidate interface
+
+The [Hybrid candidate package](benchmarks/neuroscience/hybrid-frozen-model-candidate/README.md) adds a frozen external programme condition to the same 20-person, 80-fold, 4,884-trial behavioral task. It supplies the complete 43-position source closure, reuses all 80 original trained models, and scores committed predictions with the unchanged paired-person scorer. The published [reference-only replay](benchmarks/neuroscience/hybrid-complete-replay/README.md) and its parity checks remain unchanged.
+
+For an authorized operator, the [candidate binding instructions](benchmarks/neuroscience/hybrid-frozen-model-candidate/OPERATOR.md#separate-frozen-model-candidate-arm) specify the four Python files and their immutable manifest, then the existing `prepare_operation.py` command creates a fresh unselected operation. Legitimate complete case/reference/model assets, the exact historical runtime and fresh capacity/endpoint admission are still external prerequisites. Candidate-internal reads and whole-runtime qualification remain unresolved; `new_fits=0` describes trusted evaluator/reference-model fits, not an inspection of arbitrary candidate computation. Source freezing does not establish absence of earlier exposure. No authentic candidate result or additional benchmark is claimed.
+
+From the repository root, run only the generated candidate-interface checks with:
+
+```sh
+python3 -I -S -B benchmarks/neuroscience/hybrid-frozen-model-candidate/run_checks.py \
+  --manifest-sha256 600584659a526fb3f4c91e46afa0c1242b185f8a99fdf33fe17bad1e4278acd4 \
+  --candidate-only
+```
+
+CI authenticates all 54 package files before the nine invented controls; it does not run a candidate, model fit, native container or scientific evaluation.
