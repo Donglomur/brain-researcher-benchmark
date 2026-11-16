@@ -3506,3 +3506,131 @@ jobs:
                   raise RuntimeError('selected fUS source member changed before import')
           runpy.run_path(str(root / 'test_delivery.py'), run_name='__main__')
           FUS_SOURCE
+
+  sbind-continuous-normalization-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.6'
+      - name: Authenticate SBIND numerical component and shared preparation before imports
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'SBIND_NUMERICAL_SOURCE'
+          import hashlib, json, pathlib, stat, sys, unittest
+          if sys.flags.optimize:
+              raise RuntimeError('source controls require assertions enabled')
+          def authenticate(root, extent, digest):
+              if not stat.S_ISDIR(root.lstat().st_mode):
+                  raise RuntimeError('ordinary component directory required')
+              manifest = root / 'SOURCE.json'
+              if not stat.S_ISREG(manifest.lstat().st_mode):
+                  raise RuntimeError('ordinary source manifest required')
+              raw = manifest.read_bytes()
+              if len(raw) != extent or hashlib.sha256(raw).hexdigest() != digest:
+                  raise RuntimeError('selected component manifest changed')
+              members = json.loads(raw)['files']
+              names = [item['path'] for item in members]
+              if len(names) != len(set(names)) or any(pathlib.PurePosixPath(name).name != name for name in names):
+                  raise RuntimeError('flat unique source namespace required')
+              if {p.name for p in root.iterdir()} != set(names) | {'SOURCE.json'}:
+                  raise RuntimeError('exact source namespace required before discovery')
+              for item in members:
+                  member = root / item['path']
+                  if not stat.S_ISREG(member.lstat().st_mode):
+                      raise RuntimeError('ordinary source member required')
+                  body = member.read_bytes()
+                  if len(body) != item['bytes'] or hashlib.sha256(body).hexdigest() != item['sha256']:
+                      raise RuntimeError('selected source changed before imports')
+          root = pathlib.Path('components/sbind-continuous-normalization')
+          dependency = pathlib.Path('components/sbind-whole-trial-preparation')
+          authenticate(root, 1871, 'f07a901cf4d8f9ef44d97909dfd6e730cf57c9cd2ad47e96806f9a6c680ca5ea')
+          authenticate(dependency, 1452, '9110b9ef65bc205e719edd4cfb0d41e5e8edfb6bd6a51a2480ee780a1913e08d')
+          sys.path[:0] = [str(root.resolve()), str(dependency.resolve())]
+          suite = unittest.defaultTestLoader.discover(str(root), pattern='test_*.py')
+          if suite.countTestCases() != 9:
+              raise RuntimeError('exactly seven numerical and two delivery methods required')
+          if not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful():
+              raise SystemExit(1)
+          SBIND_NUMERICAL_SOURCE
+  fly-pid-calibration-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.6'
+      - name: Authenticate complete public source and run generated checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -t 60
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          """CI-only bootstrap: authenticate all public members before package execution."""
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import runpy
+          import stat
+
+          MANIFEST_BYTES = 1124
+          MANIFEST_SHA256 = 'c4a03e130d0a645e71115303fb3aedac60708d932648ea20a507fa6c73998e57'
+
+          def identity(value):
+              return (value.st_dev, value.st_ino, value.st_mode, value.st_nlink,
+                      value.st_size, value.st_mtime_ns, value.st_ctime_ns)
+
+          def read_exact(path, size, digest):
+              before = path.lstat()
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != size:
+                  raise ValueError('public member type or extent differs: ' + path.name)
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                  if identity(os.fstat(stream.fileno())) != identity(before):
+                      raise ValueError('public member changed before read')
+                  body = stream.read(size + 1)
+                  after = os.fstat(stream.fileno())
+              if identity(before) != identity(after) or identity(after) != identity(path.lstat()):
+                  raise ValueError('public member changed during read')
+              if len(body) != size or hashlib.sha256(body).hexdigest() != digest:
+                  raise ValueError('public member digest differs: ' + path.name)
+              return body
+
+          def verify(root):
+              if root.is_symlink() or not root.is_dir():
+                  raise ValueError('public component root must be an ordinary directory')
+              manifest = json.loads(read_exact(root / 'SOURCE_MANIFEST.json', MANIFEST_BYTES, MANIFEST_SHA256))
+              if set(manifest) != {'schema', 'members'} or manifest['schema'] != 'fly-pid-public-source-manifest-v1':
+                  raise ValueError('public manifest schema differs')
+              rows = manifest['members']
+              if not isinstance(rows, list) or len(rows) != 7:
+                  raise ValueError('complete seven public source members required')
+              names = set()
+              for row in rows:
+                  if set(row) != {'path', 'bytes', 'sha256'} or not isinstance(row['path'], str):
+                      raise ValueError('public manifest member shape differs')
+                  name = row['path']
+                  if name in names or name in ('.', '..', 'SOURCE_MANIFEST.json') or '/' in name or '\\' in name:
+                      raise ValueError('public manifest member path differs')
+                  if type(row['bytes']) is not int or not 0 < row['bytes'] <= 262144:
+                      raise ValueError('public manifest byte ceiling differs')
+                  names.add(name)
+              if {path.name for path in root.iterdir()} != names | {'SOURCE_MANIFEST.json'}:
+                  raise ValueError('complete public component inventory differs')
+              for row in rows:
+                  read_exact(root / row['path'], row['bytes'], row['sha256'])
+              return True
+
+          if __name__ == '__main__':
+              root = Path('components/fly-complete-pid-preparation')
+              verify(root)
+              runpy.run_path(str(root / 'run_public_checks.py'), run_name='__main__')
+          PY
