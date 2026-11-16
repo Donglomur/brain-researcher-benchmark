@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "candidate_id": "PAPER-FIND-ADD-006",
+  "res_hz": 20000,
+  "session_shifts_hz": 24000,
+  "position_hz": 50,
+  "res_frame_divisor": 400,
+  "shift_frame_divisor": 480,
+  "primary_training_trials_per_session": 40,
+  "training_type_tokens": [
+    "learning",
+    "visible"
+  ],
+  "probe_type_token": "probe",
+  "behavior_columns": [
+    "Context",
+    "Start",
+    "Correct",
+    "Type",
+    "U",
+    "A",
+    "B",
+    "Other"
+  ],
+  "class_tokens": [
+    "b1",
+    "brc",
+    "p1",
+    "prc",
+    "i1",
+    "pu"
+  ],
+  "included_class": "p1",
+  "position_bin_edges_cm": {
+    "jc233": [
+      0,
+      40,
+      80,
+      120,
+      160,
+      200,
+      240,
+      280,
+      320,
+      360
+    ],
+    "jc243": [
+      0,
+      45,
+      90,
+      130,
+      170,
+      210,
+      250,
+      290,
+      325,
+      360
+    ],
+    "jc250": [
+      0,
+      35,
+      70,
+      110,
+      150,
+      190,
+      230,
+      270,
+      315,
+      360
+    ],
+    "jc253": [
+      0,
+      40,
+      80,
+      120,
+      160,
+      195,
+      235,
+      275,
+      320,
+      360
+    ],
+    "jc259": [
+      0,
+      40,
+      80,
+      120,
+      160,
+      200,
+      240,
+      280,
+      320,
+      360
+    ]
+  },
+  "speed_threshold_cm_per_second": 3,
+  "first_last_motion_zero_samples": 5,
+  "motion_window_left": 5,
+  "motion_window_right_exclusive": 5,
+  "source_primary_counting": "at most one spike per cluster per20ms frame",
+  "alternative_multiplicity": "not the primary; diagnostic reference only",
+  "software": {
+    "python": "3.12.8",
+    "numpy": "2.2.6",
+    "scipy": "1.15.3"
+  },
+  "serialization": {
+    "linear_position": "One ASCII floating scalar per line, no header; 50Hz order.",
+    "spikes": "One plain nonnegative decimal integer per line, no header;20kHz ticks.",
+    "clusters": "First plain integer is cluster-count header; remaining one plain integer label per corresponding spike record.",
+    "cell_classes": "Noheader;one class token per nonblankline;whitespace trimmed;order retained.",
+    "session_shifts": "Noheader;one exact integer-valued numeric timestamp per nonblankline;decimal/scientific notation supported;24kHz clock.",
+    "behavior": "UTF8/BOM-compatible,headered comma CSV;standard quoting;exacteightcolumns in behavior_columns.",
+    "absent_behavior_columns": [
+      "holesdug",
+      "error_type"
+    ],
+    "reward_coordinates": "Oneheaderrecord thenwhitespace numericrows withthreecolumns."
+  }
+}
