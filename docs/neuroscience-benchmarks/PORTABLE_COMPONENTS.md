@@ -8,6 +8,8 @@ Linux/macOS; Windows-native execution is not claimed. Hosted source CI uses Ubun
 | Package | Preserved scope | Required beyond source checks |
 | --- | --- | --- |
 | [NEURAL-029](../../benchmarks/neuroscience/neural029-programme/README.md) | Complete registered GrC1s-to-2s calcium transfer: all required pairs, cells, query trials and 61 times, with the accepted frozen-program boundary | Complete admitted public/private packet, NumPy grader, qualified Docker environment, capacity and outside observation |
+| [NEURAL-030](../../benchmarks/neuroscience/neural030-four-cell/README.md) | All 16 cerebellar sessions, four input arms and two agent modes: 128 dispatches | Authentic MAT extraction and five-mouse/clock binding, complete public/private packets, adaptive agent and native environment qualification |
+| [NEURAL-078](../../benchmarks/neuroscience/neural078-deferred-grade/README.md) | Full eight-person EEG reconstruction, all 195 report fields and protected grading after producer closure | Admitted authentic collection/reference export, frozen programme, trusted outside observation and native grading qualification |
 | [NEURAL-061](../../benchmarks/neuroscience/neural061-persistent-state/README.md) | 423 source sessions, 29 evaluation sessions, six references, ten seeds and both BR/BC arms; persistent fitted state remains in its isolated child | Authentic inputs/targets, qualified native environment, provider/capture/allocation provenance and independent outside observation |
 | [CBraMod / PAPER-paper-method-024](../../benchmarks/neuroscience/cbramod-paired-program/README.md) | 12 datasets; 800 reproduction artifacts, 60 improvement cases and 420 comparator slots per condition | All 65 exact external official-code files, authentic data/reference lineage, native execution and 8GB output capacity qualification |
 | [PAPER-FIND-050](../../benchmarks/neuroscience/paper-find050-programme/README.md) | Critical initialization: 26 operations, 40 complete 10,000-mode spectra, 29 main sessions and a separate prospective memory endpoint | Exact external official source, authentic inputs and all 32 scientific/runtime gates, including live-issuer and full-capacity qualification |
@@ -63,3 +65,47 @@ external because file-level license headers differ from its top-level license.
 
 No dataset, Docker image or model is downloaded by these source-check commands.
 Failure or a missing prerequisite is not permission to bypass an admission check.
+
+## NEURAL-030 and NEURAL-078
+
+NEURAL-030's source manifest is 3,848 bytes, SHA-256
+`7edea739a129cfefd109d347171f0867d87898a2d95b7242fc98f1ac407cc815`.
+Its trusted `package.py` is 7,541 bytes, SHA-256
+`cf0014cec118accaaf2f075d1f0021032e9de30aa3abb7b4817a39dce5a7236b`.
+The generated-control profile uses Python 3.12.8 and NumPy 2.2.6. It does not
+select or qualify the numerical environment for authentic scientific execution.
+After authenticating the release, run from the repository root:
+
+```sh
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -I -B \
+  benchmarks/neuroscience/neural030-four-cell/package.py self-test \
+  --source-bytes 3848 \
+  --source-sha256 7edea739a129cfefd109d347171f0867d87898a2d95b7242fc98f1ac407cc815
+python -I -B benchmarks/neuroscience/neural030-four-cell/package_tests.py
+```
+
+These run 14 unchanged full-schedule controls and nine packaging methods.
+`check` and `inspect` need only the standard library. The package guide describes
+the separate `run` and `grade` input-admission requirements.
+
+NEURAL-078's trusted `verify_source.py` is 10,727 bytes, SHA-256
+`9b49f50406bc136f681a2f83125ade937452ab684831b4a408cdab38a5610946`.
+Its source manifest is 5,873 bytes, SHA-256
+`5021a1142e861763bcf8edd89bcb7ceb35bc996f1807ffd59c9c015fd7c9ae61`.
+Use Python 3.11 or later and a canonical absolute package path:
+
+```sh
+NEURAL078_PACKAGE=/absolute/path/to/benchmarks/neuroscience/neural078-deferred-grade
+python -I -S -B "$NEURAL078_PACKAGE/verify_source.py" verify \
+  --source-bytes 5873 \
+  --source-sha256 5021a1142e861763bcf8edd89bcb7ceb35bc996f1807ffd59c9c015fd7c9ae61
+python -I -S -B "$NEURAL078_PACKAGE/test_portable.py"
+python -I -S -B "$NEURAL078_PACKAGE/test_generated.py"
+python -I -S -B "$NEURAL078_PACKAGE/test_namespace_isolation.py"
+python -I -S -B "$NEURAL078_PACKAGE/test_publication_deadline.py"
+```
+
+The checks cover 15 portability methods, 11 complete-cohort grading methods,
+16 namespace cases and five publication-boundary cases using generated fixtures.
+The producer installer copies its complete 18-file authored source into a fresh
+operator root; it does not acquire data or create evidence of an actual run.

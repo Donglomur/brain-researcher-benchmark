@@ -197,3 +197,195 @@ jobs:
           exec(compile(source, str(p), 'exec'), module.__dict__)
           raise SystemExit(module.main())
           PY
+  neural030-portable-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12.8'
+      - name: Install the generated-control NumPy profile
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -m pip install --disable-pip-version-check --only-binary=:all: --no-deps numpy==2.2.6
+      - name: Check NEURAL-030 complete four-cell source and generated controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          """Workflow-owned NEURAL030 source authentication and generated CI controls."""
+          import argparse
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import stat
+          import subprocess
+          import sys
+          import types
+
+          parser = argparse.ArgumentParser(description=__doc__)
+          parser.add_argument('--package-root', default='benchmarks/neuroscience/neural030-four-cell')
+          args = parser.parse_args()
+          if not sys.flags.isolated or not sys.flags.dont_write_bytecode:
+              raise SystemExit('use Python -I -B')
+          if sys.version_info[:3] != (3, 12, 8):
+              raise SystemExit('selected generated-control interpreter is Python 3.12.8')
+          root = Path(args.package_root).absolute()
+          if root.anchor != '/' or '..' in root.parts or any(c in str(root) for c in '\0\r\n'):
+              raise SystemExit('ordinary canonical POSIX package path required')
+          if any(p.is_symlink() for p in (root, *root.parents)):
+              raise SystemExit('linked package root refused')
+          path = root / 'package.py'
+          fd = os.open(path, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW)
+          try:
+              before = os.fstat(fd)
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != 7541:
+                  raise SystemExit('verifier type or size mismatch')
+              with os.fdopen(fd, 'rb', closefd=False) as stream:
+                  source = stream.read(7542)
+              after, named = os.fstat(fd), path.lstat()
+              fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_uid', 'st_gid', 'st_mtime_ns', 'st_ctime_ns')
+              if any(getattr(before, k) != getattr(after, k) or getattr(before, k) != getattr(named, k) for k in fields):
+                  raise SystemExit('verifier changed while reading')
+          finally:
+              os.close(fd)
+          if len(source) != 7541 or hashlib.sha256(source).hexdigest() != 'cf0014cec118accaaf2f075d1f0021032e9de30aa3abb7b4817a39dce5a7236b':
+              raise SystemExit('verifier identity mismatch')
+          name = '_neurobench_neural030_ci_verifier'
+          if name in sys.modules:
+              raise SystemExit('bootstrap module name occupied')
+          module = types.ModuleType(name)
+          module.__file__ = str(path)
+          sys.modules[name] = module
+          exec(compile(source, str(path), 'exec'), module.__dict__)
+          pins = ['--source-bytes', '3848', '--source-sha256', '7edea739a129cfefd109d347171f0867d87898a2d95b7242fc98f1ac407cc815']
+          module.main(['check', *pins])
+
+          # All selected bytes are authenticated above. These fresh children assume the
+          # workflow-owned checkout stays stable; this is not a concurrent-writer sandbox.
+          environment = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', OPENBLAS_NUM_THREADS='1', OMP_NUM_THREADS='1')
+          for argv, count in [([str(root / 'package_tests.py')], 9), ([str(path), 'self-test', *pins], 14)]:
+              command = [sys.executable, '-I', '-B', *argv]
+              print(json.dumps({'source_control_command': command, 'expected_tests': count}), flush=True)
+              try:
+                  result = subprocess.run(command, env=environment, capture_output=True, text=True, timeout=180)
+              except subprocess.TimeoutExpired as error:
+                  for output, destination in ((error.stdout, sys.stdout), (error.stderr, sys.stderr)):
+                      if output:
+                          print(output.decode(errors='replace') if isinstance(output, bytes) else output, file=destination, end='', flush=True)
+                  raise
+              print(result.stdout, end='', flush=True)
+              print(result.stderr, file=sys.stderr, end='', flush=True)
+              if result.returncode:
+                  raise SystemExit(result.returncode)
+              reported = re.findall(r'^Ran ([0-9]+) tests? in ', result.stderr, re.MULTILINE)
+              if reported != [str(count)] or re.search(r'^OK$', result.stderr, re.MULTILINE) is None:
+                  raise SystemExit('complete unskipped source-control result required')
+          print(json.dumps({'package': 'NEURAL-030', 'source_only': True, 'source_controls_passed': 23,
+                            'python': sys.version.split()[0], 'numpy_profile_checked_by_self_test': '2.2.6',
+                            'scientific_execution': False, 'scientific_qualification': False}), flush=True)
+          PY
+  neural078-portable-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Check NEURAL-078 protected grading source and generated controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          """Workflow-owned NEURAL078 source authentication and generated CI controls."""
+          import argparse
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import stat
+          import subprocess
+          import sys
+          import types
+
+          parser = argparse.ArgumentParser(description=__doc__)
+          parser.add_argument('--package-root', default='benchmarks/neuroscience/neural078-deferred-grade')
+          args = parser.parse_args()
+          if not sys.flags.isolated or not sys.flags.no_site or not sys.flags.dont_write_bytecode:
+              raise SystemExit('use Python -I -S -B')
+          root = Path(args.package_root).absolute()
+          if root.anchor != '/' or '..' in root.parts or any(c in str(root) for c in '\0\r\n'):
+              raise SystemExit('ordinary canonical POSIX package path required')
+          if any(p.is_symlink() for p in (root, *root.parents)):
+              raise SystemExit('linked package root refused')
+          path = root / 'verify_source.py'
+          fd = os.open(path, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW)
+          try:
+              before = os.fstat(fd)
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != 10727:
+                  raise SystemExit('verifier type or size mismatch')
+              with os.fdopen(fd, 'rb', closefd=False) as stream:
+                  source = stream.read(10728)
+              after, named = os.fstat(fd), path.lstat()
+              fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_uid', 'st_gid', 'st_mtime_ns', 'st_ctime_ns')
+              if any(getattr(before, k) != getattr(after, k) or getattr(before, k) != getattr(named, k) for k in fields):
+                  raise SystemExit('verifier changed while reading')
+          finally:
+              os.close(fd)
+          if len(source) != 10727 or hashlib.sha256(source).hexdigest() != '9b49f50406bc136f681a2f83125ade937452ab684831b4a408cdab38a5610946':
+              raise SystemExit('verifier identity mismatch')
+          name = '_neurobench_neural078_ci_verifier'
+          if name in sys.modules:
+              raise SystemExit('bootstrap module name occupied')
+          module = types.ModuleType(name)
+          module.__file__ = str(path)
+          sys.modules[name] = module
+          exec(compile(source, str(path), 'exec'), module.__dict__)
+          module.main(['verify', '--source-bytes', '5873', '--source-sha256',
+                       '5021a1142e861763bcf8edd89bcb7ceb35bc996f1807ffd59c9c015fd7c9ae61'])
+
+          # Some accepted controls monkeypatch subprocess or module globals. Each suite
+          # therefore runs in its own interpreter after complete source authentication.
+          # The workflow-owned checkout must remain stable throughout these children.
+          environment = dict(os.environ, PYTHONDONTWRITEBYTECODE='1')
+          suites = [('test_portable.py', 15), ('test_generated.py', 11),
+                    ('test_namespace_isolation.py', 16), ('test_publication_deadline.py', 5)]
+          for filename, count in suites:
+              command = [sys.executable, '-I', '-S', '-B', str(root / filename)]
+              print(json.dumps({'source_control_command': command, 'expected_controls': count}), flush=True)
+              try:
+                  result = subprocess.run(command, env=environment, capture_output=True, text=True, timeout=180)
+              except subprocess.TimeoutExpired as error:
+                  for output, destination in ((error.stdout, sys.stdout), (error.stderr, sys.stderr)):
+                      if output:
+                          print(output.decode(errors='replace') if isinstance(output, bytes) else output, file=destination, end='', flush=True)
+                  raise
+              print(result.stdout, end='', flush=True)
+              print(result.stderr, file=sys.stderr, end='', flush=True)
+              if result.returncode:
+                  raise SystemExit(result.returncode)
+              if filename in ('test_portable.py', 'test_generated.py'):
+                  reported = re.findall(r'^Ran ([0-9]+) tests? in ', result.stderr, re.MULTILINE)
+                  if reported != [str(count)] or re.search(r'^OK$', result.stderr, re.MULTILINE) is None:
+                      raise SystemExit('complete unskipped source-control result required')
+              else:
+                  report = json.loads(result.stdout)
+                  if filename == 'test_namespace_isolation.py':
+                      if len(report['observations']) != count or report['corrected_namespace_conjunction'] is not True:
+                          raise SystemExit('complete namespace controls required')
+                  elif len(report['cases']) != count or not all(row['passed'] is True for row in report['cases']):
+                      raise SystemExit('complete publication controls required')
+          print(json.dumps({'package': 'NEURAL-078', 'source_only': True, 'source_controls_passed': 47,
+                            'python': sys.version.split()[0], 'dependencies': 'standard_library_only',
+                            'scientific_execution': False, 'scientific_qualification': False}), flush=True)
+          PY
