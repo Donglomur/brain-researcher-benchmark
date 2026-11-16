@@ -1,0 +1,104 @@
+{
+  "$comment": "Field-level contract only. Production additionally checks cohort membership, uniqueness and completeness of every unit/method pair, finite arithmetic and tau_ms representability. Strict JSON rejects duplicate keys and nonfinite literals. No mathematical correctness or fit provenance is inferred.",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "rows": {
+      "items": {
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "else": {
+              "properties": {
+                "failure_reason": {
+                  "type": "null"
+                }
+              }
+            },
+            "if": {
+              "anyOf": [
+                {
+                  "properties": {
+                    "tau_bins": {
+                      "type": "null"
+                    }
+                  }
+                },
+                {
+                  "properties": {
+                    "r_squared": {
+                      "type": "null"
+                    }
+                  }
+                }
+              ]
+            },
+            "then": {
+              "properties": {
+                "failure_reason": {
+                  "maxLength": 1024,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "properties": {
+          "failure_reason": {
+            "maxLength": 1024,
+            "minLength": 1,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "method": {
+            "enum": [
+              "acf_full",
+              "isttc_full",
+              "pearsonr_trial_avg",
+              "sttc_trial_concat"
+            ]
+          },
+          "r_squared": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "tau_bins": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "unit_id": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "unit_id",
+          "method",
+          "tau_bins",
+          "r_squared",
+          "failure_reason"
+        ],
+        "type": "object"
+      },
+      "maxItems": 23100,
+      "minItems": 23100,
+      "type": "array"
+    },
+    "schema": {
+      "const": "isttc_empirical_estimates_v1"
+    }
+  },
+  "required": [
+    "schema",
+    "rows"
+  ],
+  "type": "object"
+}

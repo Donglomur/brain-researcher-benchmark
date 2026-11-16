@@ -1,0 +1,25 @@
+{
+  "schema": "isttc_empirical_cohort_field_mapping_v1",
+  "applies_to": "TASK_AND_PROVENANCE.json input_contract.cohort",
+  "author_notebook": "notebooks/mice/calculate_and_plot_tau_per_unit_4methods.ipynb",
+  "git_blob": "461c2b0aa62f8b23e28d164ad2bb1dc399389e26",
+  "cell": 6,
+  "source_table": "lv_df.pkl",
+  "mapping": {
+    "unit_id": "unit_id",
+    "area": "ecephys_structure_acronym",
+    "fr_hz": "fr_hz_spont_30min",
+    "lv": "lv"
+  },
+  "fr_hz_semantics": "Spontaneous firing rate over the selected first30-minute source recording; it must not be replaced by a broader Allen session firing_rate field. Its actual source values/derivation remain unqualified until authentic preparation.",
+  "use_here": "Covariates affect missingness only. No effect-model GLM or covariate regression is implemented.",
+  "required_external_correspondence": "Mouse/session/original unit IDs and final5775/QC/eight-area membership require an authoritative source manifest; neither row count nor digest syntax establishes that correspondence.",
+  "paper_qc": {
+    "source_section": "4.1.2",
+    "presence_ratio_min": 0.9,
+    "isi_violations_max": 0.5,
+    "amplitude_cutoff_max": 0.01,
+    "qualification": "Literal publisher criteria confirmed. Current retained loader invokes AllenSDK filtering implicitly; a selected version and actual resulting roster must reconcile the old0.1 loader/readiness claim. This component does not silently apply either cutoff to invented metadata."
+  }
+}
+
