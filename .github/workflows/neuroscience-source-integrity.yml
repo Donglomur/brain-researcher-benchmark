@@ -4501,3 +4501,304 @@ jobs:
           if __name__ == '__main__':
               main()
           HYBRID_PUBLIC
+
+  helsinki-zero-case-generated-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate zero-case source and run generated interfaces only
+        shell: bash
+        working-directory: benchmarks/neuroscience/helsinki-zero-case-diagnostic
+        run: |
+          set -euo pipefail
+          umask 077
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B - <<'HELSINKI_GENERATED'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import stat
+          import sys
+          import types
+          import unittest
+
+
+          def require(value, message):
+              if not value:
+                  raise ValueError(message)
+
+
+          def signature(s):
+              return (s.st_dev, s.st_ino, s.st_mode, s.st_nlink, s.st_size,
+                      s.st_mtime_ns, s.st_ctime_ns)
+
+
+          def read_exact(path, extent, expected):
+              require(type(extent) is int and 0 < extent <= 262144, 'bounded source extent')
+              require(not any(p.is_symlink() for p in (path, *path.parents)), 'no source aliases')
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+              try:
+                  before = os.fstat(fd)
+                  require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and
+                          before.st_size == extent, 'ordinary exact source member')
+                  blocks = []
+                  remaining = extent
+                  while remaining:
+                      block = os.read(fd, min(65536, remaining))
+                      require(bool(block), 'complete source read')
+                      blocks.append(block)
+                      remaining -= len(block)
+                  require(not os.read(fd, 1), 'source EOF')
+                  require(signature(before) == signature(os.fstat(fd)) == signature(path.lstat()),
+                          'stable source member')
+                  body = b''.join(blocks)
+                  require(hashlib.sha256(body).hexdigest() == expected, 'source hash')
+                  return body
+              finally:
+                  os.close(fd)
+
+
+          root = Path.cwd()
+          manifest = read_exact(root / 'SOURCE.json', 2179,
+              '8d4543cb25b398ecb9092941114b383303d5e26e3b96c5f62e79afca70fc4d4e')
+          obj = json.loads(manifest)
+          require(type(obj) is dict and set(obj) == {'schema', 'files'} and
+                  obj['schema'] == 'helsinki-zero-case-source/v1', 'source manifest schema')
+          rows = obj['files']
+          require(type(rows) is list and len(rows) == 14, 'complete source count')
+          expected_names = {'EMPTY_INPUT.json', 'LICENSE', 'NOTICES.md', 'README.md',
+              'REQUEST.template.json', 'SYNTHETIC_IMAGE.json', 'common.py', 'diagnostic.py',
+              'durable_evidence.py', 'fixture_solution.py', 'parent_observer.py',
+              'participant_container.py', 'participant_policy.py', 'test_diagnostic.py'}
+          require(all(type(r) is dict and set(r) == {'path', 'bytes', 'sha256'} for r in rows),
+                  'source descriptor fields')
+          require(len({r['path'] for r in rows}) == 14 and
+                  {r['path'] for r in rows} == expected_names, 'exact authenticated roster')
+          entries = list(root.iterdir())
+          require(len(entries) == 15 and {p.name for p in entries} == expected_names | {'SOURCE.json'},
+                  'exact namespace before test import')
+          for p in entries:
+              s = p.lstat()
+              require(stat.S_ISREG(s.st_mode) and s.st_nlink == 1, 'no unlisted directories/aliases')
+          require(sum(r['bytes'] for r in rows) == 125692, 'complete source extent')
+          bodies = {r['path']: read_exact(root / r['path'], r['bytes'], r['sha256']) for r in rows}
+          # No package code executes before every member is authenticated. Select only
+          # this exact captured test module; do not discover unlisted Python files.
+          name = 'helsinki_zero_case_generated_tests'
+          require(name not in sys.modules, 'fresh test module')
+          module = types.ModuleType(name)
+          module.__file__ = str(root / 'test_diagnostic.py')
+          sys.modules[name] = module
+          exec(compile(bodies['test_diagnostic.py'], module.__file__, 'exec'), module.__dict__)
+          suite = unittest.defaultTestLoader.loadTestsFromModule(module)
+          require(suite.countTestCases() == 13, 'complete generated method count')
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          raise SystemExit(0 if result.wasSuccessful() else 1)
+          HELSINKI_GENERATED
+
+  neural034-portable-provisioning-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Authenticate portable source and run generated relocation checks
+        run: |
+          python -I -B - <<'NEURAL034_SOURCE'
+          import hashlib, json, runpy, stat
+          from pathlib import Path
+          root = Path('benchmarks/neuroscience/neural034-portable')
+          manifest = root / 'SOURCE_MANIFEST.json'
+          body = manifest.read_bytes()
+          assert len(body) == 6598
+          assert hashlib.sha256(body).hexdigest() == 'fe66143cda6de7f54c4e63b8751262aa6d892f0ae9074c8cbc86665795c9e4f3'
+          selected = json.loads(body)['files']
+          assert len(selected) == 37
+          seen = set()
+          for path in root.rglob('*'):
+              info = path.lstat()
+              assert not path.is_symlink()
+              if stat.S_ISREG(info.st_mode):
+                  assert info.st_nlink == 1
+                  seen.add(path.relative_to(root).as_posix())
+              else:
+                  assert stat.S_ISDIR(info.st_mode)
+          assert seen == set(selected) | {'SOURCE_MANIFEST.json'}
+          for name, pin in selected.items():
+              path = Path(name)
+              assert not path.is_absolute() and '..' not in path.parts
+              info = (root / name).stat()
+              assert info.st_size == pin['bytes'] <= 1048576
+              data = (root / name).read_bytes()
+              assert len(data) == pin['bytes']
+              assert hashlib.sha256(data).hexdigest() == pin['sha256']
+          runpy.run_path(str(root / 'tests/test_relocation.py'), run_name='__main__')
+          NEURAL034_SOURCE
+
+  rep013-purkinje-portable-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.6'
+      - name: Authenticate complete Purkinje source and run generated relocation controls
+        shell: bash
+        working-directory: benchmarks/neuroscience/rep013-purkinje-portable
+        run: |
+          set -euo pipefail
+          ulimit -t 90
+          ulimit -v 131072
+          /usr/bin/timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'REP013_PUBLIC'
+          """Authenticate the complete Purkinje source before relocation-only controls."""
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import re
+          import stat
+
+          NAMES = frozenset(["LICENSE","OPERATOR.md","OPERATOR_PATHS.template.json","README.md","benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/INPUT_PINS.json","benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/REFERENCE_PINS.json","benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/SCHEMA.json","benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/TASK.md","benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/boundary.py","benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/bridge.py","benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/bundle.py","benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/common.py","benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/docker_owner.py","benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/durable_evidence.py","benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/numeric_score.py","benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/schema.py","components/purkinje-artifacts/artifact.py","components/purkinje-paired-access/A.json","components/purkinje-paired-access/ATTRIBUTION.md","components/purkinje-paired-access/B.json","components/purkinje-paired-access/COMMON.json","components/purkinje-paired-access/CONTRACT.json","components/purkinje-paired-access/HARNESS_REVIEW.template.json","components/purkinje-paired-access/NOTICES.md","components/purkinje-paired-access/RUN_REQUEST_A.template.json","components/purkinje-paired-access/RUN_REQUEST_B.template.json","components/purkinje-paired-access/SCHEMA.json","components/purkinje-paired-access/TASK.md","components/purkinje-paired-access/paired_packet.py","components/purkinje-paired-execution/NOTICES.md","components/purkinje-paired-execution/OWNER_AUTHORIZATION.template.json","components/purkinje-paired-execution/paired_execution.py","portable.py","test_portable.py"])
+          MANIFEST_NAME = 'SOURCE_MANIFEST.json'
+          SCHEMA = 'purkinje-paired-portable-source-v1'
+
+
+          def identity(info):
+              return (info.st_dev, info.st_ino, info.st_mode, info.st_nlink,
+                      info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+
+
+          def read_exact(path, extent, digest):
+              before = path.lstat()
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != extent:
+                  raise ValueError('ordinary exact public member required: ' + path.name)
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                  if identity(os.fstat(stream.fileno())) != identity(before):
+                      raise ValueError('public member changed before read')
+                  body = stream.read(extent + 1)
+                  after = os.fstat(stream.fileno())
+              if identity(before) != identity(after) or identity(after) != identity(path.lstat()):
+                  raise ValueError('public member changed during read')
+              if len(body) != extent or hashlib.sha256(body).hexdigest() != digest:
+                  raise ValueError('public member digest differs: ' + path.name)
+              return body
+
+
+          def strict_json(raw):
+              def pairs(items):
+                  result = {}
+                  for key, value in items:
+                      if key in result:
+                          raise ValueError('duplicate manifest key')
+                      result[key] = value
+                  return result
+              return json.loads(raw, object_pairs_hook=pairs,
+                                parse_constant=lambda value: (_ for _ in ()).throw(ValueError('nonfinite manifest')))
+
+
+          def verify_public(root, manifest_bytes, manifest_sha256):
+              root = Path(root).absolute()
+              if '..' in root.parts or any(path.is_symlink() for path in (root, *root.parents)):
+                  raise ValueError('ordinary component ancestry required')
+              if not stat.S_ISDIR(root.lstat().st_mode):
+                  raise ValueError('ordinary component directory required')
+              if type(manifest_bytes) is not int or not 0 < manifest_bytes <= 65536:
+                  raise ValueError('manifest extent out of bounds')
+              if type(manifest_sha256) is not str or not re.fullmatch('[0-9a-f]{64}', manifest_sha256):
+                  raise ValueError('manifest digest shape differs')
+              raw = read_exact(root / MANIFEST_NAME, manifest_bytes, manifest_sha256)
+              manifest = strict_json(raw)
+              if type(manifest) is not dict or set(manifest) != {'schema', 'files'} or manifest['schema'] != SCHEMA:
+                  raise ValueError('public manifest schema differs')
+              files = manifest['files']
+              if type(files) is not dict or set(files) != NAMES:
+                  raise ValueError('complete exact manifest roster required')
+              rows = []
+              for name, descriptor in files.items():
+                  if type(descriptor) is not dict or set(descriptor) != {'bytes', 'sha256'}:
+                      raise ValueError('manifest member descriptor differs')
+                  rows.append({'path': name, **descriptor})
+              if type(rows) is not list or len(rows) != len(NAMES):
+                  raise ValueError('complete public member count required')
+              seen = set()
+              total = 0
+              for row in rows:
+                  if type(row) is not dict or set(row) != {'path', 'bytes', 'sha256'}:
+                      raise ValueError('public member schema differs')
+                  name = row['path']
+                  if type(name) is not str or name not in NAMES or name in seen:
+                      raise ValueError('complete unique public member names required')
+                  if type(row['bytes']) is not int or not 0 < row['bytes'] <= 262144:
+                      raise ValueError('public member extent out of bounds')
+                  if type(row['sha256']) is not str or not re.fullmatch('[0-9a-f]{64}', row['sha256']):
+                      raise ValueError('public member digest shape differs')
+                  seen.add(name)
+                  total += row['bytes']
+              if seen != NAMES or total != 196593 or total > 2097152:
+                  raise ValueError('complete bounded source selection required')
+              allowed_dirs = {str(parent) for name in NAMES for parent in PurePosixPath(name).parents
+                              if str(parent) != '.'}
+              found_files, found_dirs, pending = set(), set(), [root]
+              while pending:
+                  directory = pending.pop()
+                  with os.scandir(directory) as entries:
+                      for entry in entries:
+                          path = Path(entry.path)
+                          rel = str(path.relative_to(root))
+                          info = entry.stat(follow_symlinks=False)
+                          if stat.S_ISDIR(info.st_mode):
+                              if rel not in allowed_dirs:
+                                  raise ValueError('unexpected source directory')
+                              found_dirs.add(rel)
+                              pending.append(path)
+                          elif stat.S_ISREG(info.st_mode) and info.st_nlink == 1:
+                              if rel not in NAMES | {MANIFEST_NAME}:
+                                  raise ValueError('unexpected source file')
+                              found_files.add(rel)
+                          else:
+                              raise ValueError('ordinary single-link source required')
+              if found_files != NAMES | {MANIFEST_NAME} or found_dirs != allowed_dirs:
+                  raise ValueError('exact recursive component inventory required')
+              bodies = {row['path']: read_exact(root / row['path'], row['bytes'], row['sha256']) for row in rows}
+              return bodies
+
+          import sys
+
+
+          def run_generated_checks(bodies, root):
+              """Dispatch only the accepted authenticated relocation controls."""
+              path = root / 'test_portable.py'
+              previous = sys.argv
+              sys.argv = [str(path), '--manifest-sha256',
+                          '1e1398a2430b32ecc1fc7aefe622ad123dfe8a5c85eed604dcdfc91a9bb526f8']
+              try:
+                  namespace = {'__name__': '__main__', '__file__': str(path)}
+                  exec(compile(bodies['test_portable.py'], str(path), 'exec'), namespace)
+              finally:
+                  sys.argv = previous
+
+
+          def main(root=None):
+              if not __debug__:
+                  raise ValueError('optimized execution is not selected')
+              root = Path.cwd() if root is None else Path(root).absolute()
+              bodies = verify_public(root, 6102, '1e1398a2430b32ecc1fc7aefe622ad123dfe8a5c85eed604dcdfc91a9bb526f8')
+              run_generated_checks(bodies, root)
+
+
+          if __name__ == '__main__':
+              main()
+          REP013_PUBLIC
