@@ -1,0 +1,11 @@
+# Finite REM stimulation outcome evaluator
+
+This adds an executable missing output evaluator for registered `PAPER-SCOPE-20261114-REM-DYNAMICS`, restricted to the complete Figure 5e dmM stimulation cohort. It does not add another benchmark ID. It does not reproduce the six-mouse spontaneous-transition Figure 2h, other interventions, LDA fitting, whole-session PCA or native paper results.
+
+`score.py` scores complete held predictions under an owner-bound 22-PC by ten-repeat realization of the published protocol. It computes confusion matrices, accuracy, sample SEM and one-sided t statistics, leaving unresolved multiple-testing correction explicit. A separate probability profile implements the previously scoped prospective equal-mouse Brier endpoint, clearly distinguished from the original paper statistic. `TASK.md` and `INTERFACE.md` explain exposure, inference and finite support.
+
+`test_score.py` uses only fabricated data, with deliberately unequal mouse trial counts. It exercises complete support, omission/duplication, group weighting, label authority, split separation, analytic t-tail controls, undefined statistics, malformed probabilities and bounded filesystem parsing. Running those controls is source validation, not neuroscience analysis or an agent benchmark run.
+
+No authentic numerical dataset, reference predictions, original author code or article text is bundled. `PRIMARY_EVIDENCE.json` records retained source identities and paraphrased endpoint observations. The source provenance is Nature Neuroscience DOI10.1038/s41593-026-02314-z, Zenodo19462601 Ver2 and Npx commitded027368c37f19c837baf02b81802007886ba46. The 22.6GB archive is not acquired by this phase. Its required processed subset, exact cohort mapping, expanded size, rights closure, pipeline and authentic reference remain unresolved. This implementation does not imply a small authentic input package has already been demonstrated.
+
+No candidate/model/native/container execution, new scientific score, reference qualification or runtime admission is claimed. Published paper values and an owner-authored split digest cannot substitute for recovered author outputs. Source-level utility is immediate; authentic scientific evaluation still requires the stated source/data/implementation joins.
