@@ -1,0 +1,35 @@
+# Complete released cerebellar numerical reconstruction
+
+Existing task PAPER-FIND-REP-015: reconstruct every one of the 1,006 Figure 2 single-unit records and fourteen Figure 3 mouse-by-reward panels. The fixed roster covers 104,312 F2 trial rows and 560 F3 trials across seven mice. All 1,020 records belong to one assignment. Figures share animals; pseudopopulation trials are not independent animals or simultaneous ensembles. F2 rate units remain unverified; F3 rates are pooled mean spikes/s.
+
+Use both exact processed rate binaries and the complete separately admitted public layout/classification described in INPUT_LAYOUT.md and PUBLIC_INPUTS.json. ROSTER.json supplies output identities; it does not supply binary row offsets or F2 direction classifications. No data or paper body is included in this source package.
+
+This is a saved-artifact interface. Any method may produce the records; candidate code is never executed by grade.py. Write exactly the 1,020 filenames determined by the roster: F2_<mouse>_u<four-digit-source-index>.json or F3_<mouse>_rw<reward-code>.json. Each record must be ordinary strict JSON, at most 2,000,000 bytes, with no duplicate keys, nonfinite literals or extra fields. After stopping the producer, the trusted operator adds the existing COMMIT.json inventory, seals files and directory, and independently fixes the commitment length/hash. The artifact interface retains its 1,500,000,000-byte total ceiling; this is not the separate program runner's 134,217,728-byte transport ceiling. The portable evaluator provides no candidate runtime.
+
+The numerical protocol below is retained from the previously accepted public task text. No historical private reference outcomes or optimum indices are disclosed.
+
+Use all350 samples, with sample-index1 mapped to time−1500+10(index−1)ms. Centered9-sample moving means use shorter intervals at endpoints. Delta is smoothed[j+4]−smoothed[j] at the first346 positions. F2's last4 delta values carry the preceding trial's first4 deltas, including across units; initialize them tozero only at each mouse start. F3's last4 values arezero independently for each trial. These are offline analyses.
+
+CUSUM starts atzero at sample1 and uses the complete350-value delta mean and sample SD(ddof1). At later samples the upper recurrence is `max(0,previous+delta−mean−SD/2)`, the lower is `min(0,previous+delta−mean+SD/2)`. F2 uses upper only for released expert2 units, otherwise negative lower; F3 always uses negative lower. Extract local maxima with endpoints excluded and first point of any plateau. Retain finite zero-variance cases. At most174 peaks can occur per350-sample trial. For peak-time tests preserve released binary64 arithmetic `(index0/100.0)*1000.0−1500.0`; algebraic rewriting can alter an exact boundary comparison.
+
+F2 thresholds are nearest binary64 values i/10 for integeri0..150000; F3 uses i/20 fori0..30000. A peak is detected when its height is≥threshold. The search time range is inclusive−1500..2000ms. F2 hits require strict40<t<140; F3 hits require strict0<t<250. Peaks exactly on either hit boundary remain in Detection and Boundary counts, without contributing to Hit or FalseAlarm. FalseAlarm is outside the closed hit interval. Hit is an any-hit indicator, not the number of interior peaks. Per-trial false fraction is `(FalseAlarm*100/Detection)/100`, with0/0→0; FP is its equal-trial average and TP is the equal-trial average of Hit. This FP is not conventional negative-class false-positive rate.
+
+Select the first threshold index maximizing **absolute** TP−FP. Reverse the original threshold-order curves and compute trapezoids, without sorting FP or clamping the result. Add `(1−FP[0])*TP[0]` for F2, but `1−FP[0]` for F3. Consequently an all-zero F3 detection curve has literal area1. The benchmark rewards reconstruction accuracy, never a larger area.
+
+For F3 timing, average negative delta across the panel's trials, take its first global maximum, select the first nearest time to center−15ms and center+15ms, then use each trial's first maximum within that inclusive window. Away from boundaries the window covers offsets−20,−10,0,+10ms. At edges it is truncated. Record each trial's exact-flat-window flag. The window is selected on the same trials; flat selections are deterministic outputs, not measured event latencies. Original code does not compute jitter SD. This contract does not add a jitter inference or a prospective prediction claim.
+
+
+Output fields and evaluation:
+
+- `identity`: exact roster row with figure, mouse_source_label, source_index1, trials.
+- `curve`: `{starts_index1:[...],FP:[...],TP:[...]}`. First start1; strictly increasing indices; each inclusive constant interval continues to the next start−1, or through150001(F2)/30001(F3). Values are finite[0,1]. Equivalent redundant interval segmentation is allowed; no particular peak/CUSUM implementation or intermediate arrays are required.
+- `selected_index1`: integer on the full threshold grid. Own first-argmax conformance is reported; an otherwise valid wrong selection is scored continuously.
+- `selected_trial_counts`: one source-order row per trial `[Detection,FalseAlarm,Hit,Boundary]` at the submitted selected threshold. Counts conserve detected peaks; Hit equals whether Detection−FalseAlarm−Boundary>0.
+- F3 only, `timing`: complete350-value `mean_silencing`, `mean_peak_index1`, and complete source-order lists `trial_peak_indices1` and `trial_flat_selected_window`. Times and selected-window endpoints are derived from indices. This avoids redundant timestamp/endpoint fields.
+
+`science.grade` compares every logical curve location using interval merging, reports FP/TP MAE and maximum error, reconstructs both literal areas, grades trial counts at the **candidate's** threshold using private lossless count steps, and reports reference-gap regret. A different near-tied maximizing index is recorded without an exact-index pass/fail penalty. Probability bounds are F2 `1e−10+1e−10*maxabs(reference probability)` and F3 `64*eps*trials`; gap uncertainty is4 times that curve bound. Area bounds follow the prior audit, F2 `1e−9+1e−10*abs(reference area)` and F3 `32*eps*30001*max(1,sumabs(trapezoid terms))`.
+
+F3 separately reports mean-trace error, mean-peak and trial-timing error inms, flat-flag mismatch and own mean-argmax/window conformance. These timing errors remain descriptive; flat reference trials are counted explicitly. `science.aggregate` requires the complete ordered roster, averages within mouse then equally across mice, and retains separate F2/F3 components. There is no arbitrary composite score, unit-weighted biological inference, accuracy dispatch gate, or reward for matching a published scalar while the curves disagree. Keep all per-record diagnostics, including negative/null outputs.
+
+
+This packet is data+explicit numerical protocol. It contains no complete local paper asset and does not establish a paper-only/code-assisted experiment. Do not claim full-paper reproduction, native MATLAB parity, causal mechanism or an improved frontier method from this output.
