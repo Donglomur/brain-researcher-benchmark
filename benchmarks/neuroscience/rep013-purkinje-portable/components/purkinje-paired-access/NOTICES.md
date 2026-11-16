@@ -1,0 +1,7 @@
+# Notices and original-asset boundary
+
+Benchmark-authored source and documentation use the repository [MIT license](../../LICENSE). This projection contains no original article, RMarkdown, source excerpt, SWC, empirical CSV/cell metadata or private answer bodies. Their hash descriptors neither redistribute those bodies nor grant new rights.
+
+Primary sources: Silas E Busch and Christian Hansel (2025), [Non-allometric expansion and enhanced compartmentalization of Purkinje cell dendrites in the human cerebellum](https://doi.org/10.7554/eLife.105013.3), eLife14:RP105013, and [Zenodo15066697](https://zenodo.org/records/15066697). The retained exact HTML identifies the2025-04-15 Version of Record and a Creative Commons Attribution copyright notice. The retained source audit records the deposited archive as CC BY4.0 with Busch/Hansel attribution. This is inherited provenance, not a new publisher availability/license inquiry; linked figure pixels, supplements and third-party exceptions are not a verified local closure.
+
+Only condition B receives the exact official `HumanvsMousePaperAnalysis.Rmd` and marked `source_semantics.json` excerpt. The materializer requires those provisioned identities but does not download or publish them. The shared benchmark-authored specification transparently discloses its source-informed rules and the common answer-bearing Sholl totals. See [ATTRIBUTION.md](ATTRIBUTION.md) for participant-facing information exposure.

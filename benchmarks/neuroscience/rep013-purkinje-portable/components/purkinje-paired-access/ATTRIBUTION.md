@@ -1,0 +1,7 @@
+# Source attribution and information exposure
+
+Silas E Busch and Christian Hansel (2025), Non-allometric expansion and enhanced compartmentalization of Purkinje cell dendrites in the human cerebellum, eLife14:RP105013; DOI10.7554/eLife.105013.3. The held main-article HTML identifies the2025-04-15 Version of Record. Its embedded copyright notice states copyright2025 Busch and Hansel and Creative Commons Attribution; author/source credit is required. Linked figure pixels, supplements and third-party exceptions are not a locally verified closure. No public asset redistribution is selected here.
+
+The retained SOURCE_AUDIT records Zenodo15066697 archive CC-BY-4.0, attributed to Busch and Hansel. This is retained source provenance, not a new publisher/license lookup. Official deposited code is the unmodified HumanvsMousePaperAnalysis.Rmd; source_semantics.json is a separately marked, numbered excerpt with original source hash. Only condition B receives these two files. The shared numerical TASK is a benchmark-authored, openly source-informed specification; it is not represented as independent paper-only reasoning.
+
+Author-derived Sholl totals remain common and answer-bearing. The paper/code retain published numerical results. Rmd253–256 manually assign height, width, fractal dimension and primary-compartment vectors; those are not independent computational-originality targets. Both Size conventions, release mismatch and retrospective eligibility remain disclosed. No donor-level or biological improvement claim follows.

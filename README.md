@@ -261,3 +261,17 @@ The [Helsinki zero-case diagnostic](benchmarks/neuroscience/helsinki-zero-case-d
 The package has 15 files / 127,871 bytes. Its external SOURCE.json SHA-256 is `8d4543cb25b398ecb9092941114b383303d5e26e3b96c5f62e79afca70fc4d4e` (2,179 bytes). The source-integrity job `helsinki-zero-case-generated-source` authenticates every member before the 13 generated interface methods. CI executes no Docker/cgroup operation, synthetic fixture, model or scientific programme; one generated test invokes only the inert CLI template-refusal path. The [operator instructions and limits](benchmarks/neuroscience/helsinki-zero-case-diagnostic/README.md#invocation) retain bootstrap trust, external provisioning and supervision, post-closure CPU accounting versus a hard aggregate fuse, and the unchanged full 79-infant/five-fold production gate. This component adds no benchmark ID, qualified runtime or scientific result.
 
 The [NEURAL-034 portable operator package](benchmarks/neuroscience/neural034-portable/README.md) preserves the existing seven-mouse,140-window task with seven isolated folds and six comparators. It provisions exact external inputs and runs an arbitrary submitted Python program through the existing owner and late grader. Its relocation/admission checks use generated fixtures; authentic inputs, image385454, current runtime qualification and historical outcomes remain external. This improves one already-counted finite task and adds no benchmark ID.
+
+
+### Purkinje complete paired-program source
+
+The [REP013 portable bundle](benchmarks/neuroscience/rep013-purkinje-portable/README.md) supplies the complete task-local source for the existing ten-tree/13-component Purkinje comparison. It preserves the corrected integer and signed-bias scorer, all 31 numerical fields, 16 integer/flag fields and 58 diagnostics. Its [operator guide](benchmarks/neuroscience/rep013-purkinje-portable/OPERATOR.md) gives the existing A16/B18 packet command and arbitrary-program paired API, with a complete external input-map template. No full repository checkout is needed once this bundle and its independently authenticated release pins are available.
+
+From the repository root, the following command authenticates the complete source and constructs the existing API without reading scientific data or starting a participant:
+
+```sh
+python3 -I -S -B benchmarks/neuroscience/rep013-purkinje-portable/portable.py \
+  --manifest-sha256 1e1398a2430b32ecc1fc7aefe622ad123dfe8a5c85eed604dcdfc91a9bb526f8
+```
+
+Legitimate original inputs and fixed private references, the qualified external owner, original 385454 runtime and independent late-grading authority remain required. Source relocation does not supply those approvals, demonstrate a paper/code benefit, or qualify the broader donor/allometry/Sholl/spine claims. CI authenticates all 35 files before seven generated relocation/admission checks; no new benchmark or authentic result is counted.
