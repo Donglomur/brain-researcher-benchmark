@@ -1,0 +1,101 @@
+name: Portable benchmark source packages
+
+on:
+  pull_request:
+    branches: [publish/neuroscience-200]
+  push:
+    branches: [publish/neuroscience-200]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portable-benchmark-source-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  neural061-portable-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Check NEURAL-061 captured source and generated controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          """CI bootstrap: authenticate the selected verifier before executing its bytes."""
+          import argparse, hashlib, os, pathlib, stat, sys
+          parser = argparse.ArgumentParser()
+          parser.add_argument('--package-root', default='benchmarks/neuroscience/neural061-persistent-state')
+          args = parser.parse_args()
+          root = pathlib.Path(args.package_root).absolute()
+          if any(p.is_symlink() for p in (root, *root.parents)):
+              raise SystemExit('linked package root refused')
+          p = root / 'verify_source.py'
+          fd = os.open(p, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW)
+          try:
+              before = os.fstat(fd)
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != 13111:
+                  raise SystemExit('verifier type or size mismatch')
+              with os.fdopen(fd, 'rb', closefd=False) as stream:
+                  source = stream.read(13111 + 1)
+              after, linked = os.fstat(fd), p.lstat()
+              fields = ('st_dev','st_ino','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns')
+              if any(getattr(before, k) != getattr(after, k) or getattr(before, k) != getattr(linked, k) for k in fields):
+                  raise SystemExit('verifier changed while reading')
+          finally:
+              os.close(fd)
+          if len(source) != 13111 or hashlib.sha256(source).hexdigest() != 'caef56e76cee96dde96c960e414f49b9e9b36a9f6f381c1c5f8c31f9d35c6fd0':
+              raise SystemExit('verifier identity mismatch')
+          sys.argv = [str(p), '--manifest-bytes', str(7808), '--manifest-sha256', 'a9ad5d89c13cd5c9fb1789848329fc9ce7895a2f9b4765fb1e0f3fb042b6bcfb', '--check']
+          exec(compile(source, str(p), 'exec'), {'__name__':'__main__', '__file__':str(p)})
+          PY
+  cbramod-portable-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Check CBraMod source and offline import boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          """CI bootstrap: authenticate the selected verifier before executing its bytes."""
+          import argparse, hashlib, os, pathlib, stat, sys
+          parser = argparse.ArgumentParser()
+          parser.add_argument('--package-root', default='benchmarks/neuroscience/cbramod-paired-program')
+          args = parser.parse_args()
+          root = pathlib.Path(args.package_root).absolute()
+          if any(p.is_symlink() for p in (root, *root.parents)):
+              raise SystemExit('linked package root refused')
+          p = root / 'verify_source.py'
+          fd = os.open(p, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW)
+          try:
+              before = os.fstat(fd)
+              if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != 10037:
+                  raise SystemExit('verifier type or size mismatch')
+              with os.fdopen(fd, 'rb', closefd=False) as stream:
+                  source = stream.read(10037 + 1)
+              after, linked = os.fstat(fd), p.lstat()
+              fields = ('st_dev','st_ino','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns')
+              if any(getattr(before, k) != getattr(after, k) or getattr(before, k) != getattr(linked, k) for k in fields):
+                  raise SystemExit('verifier changed while reading')
+          finally:
+              os.close(fd)
+          if len(source) != 10037 or hashlib.sha256(source).hexdigest() != '7cff2ade21783c057c68459d60f1a6453e2ba5ef3fe9e83612a763f32e680b77':
+              raise SystemExit('verifier identity mismatch')
+          sys.argv = [str(p), 'check-package', '--manifest-bytes', str(9771), '--manifest-sha256', '5f4414b4e7569e299edb718bbca49f21049947ac2fc514aded3aa04da71204dd']
+          exec(compile(source, str(p), 'exec'), {'__name__':'__main__', '__file__':str(p)})
+          PY

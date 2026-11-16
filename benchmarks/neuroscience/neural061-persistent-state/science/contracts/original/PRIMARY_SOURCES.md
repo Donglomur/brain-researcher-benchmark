@@ -1,0 +1,10 @@
+# Primary-source provenance
+
+- [IBL Nature paper, A brain-wide map of neural activity during complex behaviour](https://pmc.ncbi.nlm.nih.gov/articles/PMC12408349/): original recording hierarchy, inclusion and decoding methods. The paper-specific windows/nulls and session aggregation are not silently substituted for N061's prospective animal-level matched estimand.
+- [Official BrainWideBench dataset registry](https://registry.opendata.aws/ibl-brain-wide-bench/): release description, public access and task suites. No bucket objects or authentic recording headers were followed.
+- [Pinned preprocessing source](https://github.com/brainbench-org/ibl-bwb/blob/6fbd666fe8170a2165f5198c1f490911424a654d/ibl_brain_wide_bench_2026/pipeline.py): actual per-probe cluster metadata, source unit order and remapping into the session spike axis.
+- [Pinned TS1 readout vocabulary](https://github.com/brainbench-org/ibl-bwb/blob/6fbd666fe8170a2165f5198c1f490911424a654d/src/ibl_bwb_eval/tasks/ts1.py): eight official task names, output kinds, windows, target fields and masks.
+- [Pinned TS1 loader](https://github.com/brainbench-org/ibl-bwb/blob/6fbd666fe8170a2165f5198c1f490911424a654d/src/ts1/ts1_dataset.py): original interval intersections and trailing target behavior.
+- [Pinned shared dataset loader](https://github.com/brainbench-org/ibl-bwb/blob/6fbd666fe8170a2165f5198c1f490911424a654d/src/core/dataset.py): namespacing and original QC vocabulary. N061's raw hierarchy join occurs before that namespacing.
+
+The exact repository tree and four Python originals are outside Git at `/private/tmp/neural061-primary-source-20261110`. `PRIMARY_ORIGINAL_BINDINGS.json` provides their actual lengths/SHA256 and original Git blob identities. Raw web/tool responses remain there as well. No original scientific result, model, neural recording, data header, waveform or credential was acquired. The original Nature DOI endpoint and one documentation route were inaccessible in the first attempt; PMC and pinned source supplied the actual evidence. Unrelated search hits were not used.

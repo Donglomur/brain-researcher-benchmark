@@ -1,0 +1,160 @@
+{
+  "schema": "n061_feasible_evaluation_symbolic_counts_v1",
+  "actual_region_count": null,
+  "actual_region_count_status": "unacquired; no invented value",
+  "factor_values": {
+    "source_sessions": 423,
+    "source_animals": 126,
+    "source_folds": 5,
+    "reference_configs": 6,
+    "final_refits_per_arm_cell": 1,
+    "evaluation_animals": 13,
+    "evaluation_sessions": 29,
+    "heads": 9,
+    "unit_budgets": 3,
+    "matching_seeds": 10,
+    "anatomy_realizations": 2,
+    "full_arms": 6,
+    "primary_agent_arms": 2,
+    "original_tool_repeat_settings": 6
+  },
+  "units": "Coefficients multiply R unless explicitly scalar. All-eligibility opportunities, not runtime/provider-call/token/money measurements.",
+  "tiers": [
+    {
+      "id": "ORIGINAL_FULL",
+      "scope": "Unchanged original prospective factorial; not recommended default",
+      "cells_R": 540,
+      "reference_fit_R": 100440,
+      "reference_evaluation_session_predictions_R": 93960,
+      "F_author_contexts_scalar": 6,
+      "F_fit_R": 19440,
+      "I_author_contexts_R": 252720,
+      "I_fit_R": 252720,
+      "candidate_evaluation_session_predictions_R": 1127520
+    },
+    {
+      "id": "S0_PRIMARY_REFERENCE",
+      "primary_seed_count": 10,
+      "reference_arms": 6,
+      "reference_fit_R": 1860,
+      "reference_evaluation_session_predictions_R": 1740,
+      "agent_work_selected": false
+    },
+    {
+      "id": "A0_F_PRIMARY",
+      "primary_seed_count": 10,
+      "tool_policies": [
+        "T0"
+      ],
+      "method_repeats": 1,
+      "F_author_contexts_scalar": 1,
+      "F_fit_R": 20,
+      "I_author_contexts_R": 0,
+      "I_fit_R": 0,
+      "candidate_evaluation_session_predictions_R": 580,
+      "claim": "F only; no F/I/tool effect"
+    },
+    {
+      "id": "A1_PAIRED_PRIMARY",
+      "primary_seed_count": 10,
+      "tool_policies": [
+        "T0"
+      ],
+      "method_repeats": 1,
+      "F_author_contexts_scalar": 1,
+      "F_fit_R": 20,
+      "I_author_contexts_R": 260,
+      "I_fit_R": 260,
+      "candidate_fit_R": 280,
+      "candidate_evaluation_session_predictions_R": 1160,
+      "claim": "F/I primary slice, conditional on actual capacity admission"
+    },
+    {
+      "id": "A2_TOOL_FACTOR",
+      "primary_seed_count": 10,
+      "tool_policies": [
+        "T0",
+        "T1"
+      ],
+      "method_repeats": 1,
+      "F_author_contexts_scalar": 2,
+      "F_fit_R": 40,
+      "I_author_contexts_R": 520,
+      "I_fit_R": 520,
+      "candidate_fit_R": 560,
+      "candidate_evaluation_session_predictions_R": 2320,
+      "optional": true
+    },
+    {
+      "id": "A3_TOOL_REPEAT_FACTOR",
+      "primary_seed_count": 10,
+      "tool_policies": [
+        "T0",
+        "T1"
+      ],
+      "method_repeats": 3,
+      "F_author_contexts_scalar": 6,
+      "F_fit_R": 120,
+      "I_author_contexts_R": 1560,
+      "I_fit_R": 1560,
+      "candidate_fit_R": 1680,
+      "candidate_evaluation_session_predictions_R": 6960,
+      "optional": true
+    },
+    {
+      "id": "SECONDARY_ONE_SEED_ALTERNATIVE",
+      "primary_seed_count": 1,
+      "tool_policies": [
+        "T0"
+      ],
+      "method_repeats": 1,
+      "F_author_contexts_scalar": 1,
+      "F_fit_R": 2,
+      "I_author_contexts_R": 26,
+      "I_fit_R": 26,
+      "candidate_fit_R": 28,
+      "candidate_evaluation_session_predictions_R": 116,
+      "primary_ten_seed_claim": false,
+      "query_seed_union": false,
+      "requires_distinct_prospective_selection": true
+    }
+  ],
+  "reference_vs_agent": "Full sensitivity reference remains separate and already shared across agent panels. All original audit rows retained, no complete-study claim for unexecuted waves.",
+  "source_anchors": {
+    "n061/contracts.py": [
+      "HEADS",
+      "ARMS",
+      "BUDGETS",
+      "MATCH_SEEDS",
+      "REALIZATIONS",
+      "PANELS",
+      "catalogue"
+    ],
+    "n061/production.py": [
+      "_collect context_animals/source/evaluation/cell/arm loops"
+    ],
+    "n061/reference.py": [
+      "complete_reference five folds then final refit per arm"
+    ],
+    "n061/models.py": [
+      "CONFIGS",
+      "reference_select"
+    ],
+    "n061/scoring.py": [
+      "aggregate complete ten-seed support"
+    ],
+    "n061/grading.py": [
+      "competence mismatch remains in frozen source"
+    ]
+  },
+  "runtime_costs": {
+    "wall_seconds": "UNKNOWN",
+    "native_memory": "UNKNOWN",
+    "tokens": "UNKNOWN",
+    "provider_calls": "UNKNOWN",
+    "money": "UNKNOWN",
+    "whole_reference_bytes": "UNKNOWN",
+    "whole_output_bytes": "UNKNOWN"
+  },
+  "no_scientific_execution": true
+}
