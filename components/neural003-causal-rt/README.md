@@ -1,6 +1,6 @@
 # NEURAL-003 causal reaction-time source component
 
-This is an incomplete source component for a prospective EEG reaction-time task. It is not a runnable benchmark, registered task, scientific result, or qualified data pipeline. No scientific runs, reference fitting, scoring, data acquisition, or dependency installation were performed for this snapshot. It adds no canonical assignment or qualification.
+This is an incomplete source component for a prospective EEG reaction-time task. It is not a runnable benchmark, registered task, scientific result, or qualified data pipeline. No authentic scientific run, reference fitting, data acquisition, or dependency installation is qualified by this snapshot. Generated arithmetic controls exercise the scoring code only. It adds no canonical assignment or qualification.
 
 The planned population is 26 people. Whole-person outer holdouts and inner validation keep each person's sessions and original blocks together. The two matched arms are EEG plus contrast/instruction and contrast/instruction alone. Complete evaluation would require 52 person-by-arm output sets, with matching opaque query identifiers admitted before target access. A positive EEG gain is not required.
 
@@ -15,7 +15,7 @@ The prospective source uses a forward-only fixed smoother at native 1024 Hz and 
 - `neural003/scoring.py`: target-last scoring arithmetic; the protected target producer is still missing.
 - `neural003/__init__.py`: package marker; no runtime entrypoint.
 
-The six modules and two included contracts are unchanged source bytes. This README is only a scope summary; it does not replace or amend either contract. No recordings, participant identifiers, targets, predictions, primary-paper copies, execution records, source locks, or private build history are included.
+Five scientific modules and both included contracts retain their previous source bytes. The scoring module now preserves finite participant means when an intermediate sum overflows, while retaining the original successful arithmetic, equal-person weighting and target-last barrier. This README is only a scope summary; it does not replace or amend either contract. No recordings, participant identifiers, targets, predictions, primary-paper copies, execution records, source locks, or private build history are included.
 
 ## Prerequisites still open
 
@@ -24,3 +24,7 @@ The component still needs the original raw-data roster and redistribution rights
 ## Dependencies
 
 The code uses Python standard-library `dataclasses` and `math`. Python 3.11 or later provides the diagnostic `BaseException.add_note` API used by the raw-read error handler. NumPy is imported only inside the reference-fit and prediction functions. A future admitted MNE Raw-compatible object is required by the downstream window reader; MNE and an actual acquisition/decoder are not supplied here. No dependency versions or environments have been qualified, and this snapshot supplies no installation or execution recipe.
+
+## Generated scoring regression checks
+
+Run `python3 -I -S -B components/neural003-causal-rt/test_scoring.py` from the repository root. The seven tests use the actual public prediction schema and scorer with invented complete26-person/52-product inputs. `fixtures/scoring_before_overflow.py` is the ordinary predecessor regression fixture (2,737 bytes; SHA-256 `11299c87f9b0a4affa50bdaff57cad8923a2b1599effb90e767f82cad6761d45`), not an alternative runtime. No authentic targets or private history are included. The existing scientific-contracts CI job runs the same checks. The new internal mean materializes a tuple; its authentic aggregate memory/CPU cost remains unqualified.

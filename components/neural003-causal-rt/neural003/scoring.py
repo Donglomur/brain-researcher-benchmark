@@ -2,6 +2,28 @@
 import math
 from .prediction_schema import admit_predictions, ARMS
 
+
+def _finite_mean(values):
+    """Average admitted finite floats without overflowing an intermediate sum.
+
+    Keep the original arithmetic whenever it succeeds. On sum overflow,
+    accumulate exact binary ratios with integer arithmetic; their mean stays
+    within the finite input range, including for signed, cancelling gains.
+    """
+    values = tuple(values)
+    try:
+        return math.fsum(values) / len(values)
+    except OverflowError:
+        total, denominator = 0, 1
+        for value in values:
+            numerator, divisor = value.as_integer_ratio()
+            if divisor > denominator:
+                total *= divisor // denominator
+                denominator = divisor
+            total += numerator * (denominator // divisor)
+        return total / (denominator * len(values))
+
+
 def grade(outputs, expected, sealed_targets):
     """sealed_targets() is called only after full public output admission.
 
@@ -33,18 +55,18 @@ def grade(outputs, expected, sealed_targets):
     per_person = []
     for person in range(26):
         actual = targets[person]
-        losses = {arm: math.fsum(abs(v - t) for v, t in
-                  zip(predictions[(person, arm)], actual)) / len(actual)
+        losses = {arm: _finite_mean(abs(v - t) for v, t in
+                  zip(predictions[(person, arm)], actual))
                   for arm in ARMS}
         if any(not math.isfinite(v) for v in losses.values()):
             raise ValueError("nonfinite loss")
         per_person.append({"person": person, "trials": len(actual), **losses,
                            "gain": losses["contrast_instruction"] - losses["eeg"]})
-    macro = {arm: math.fsum(r[arm] for r in per_person) / 26 for arm in ARMS}
+    macro = {arm: _finite_mean(r[arm] for r in per_person) for arm in ARMS}
     gains = tuple(r["gain"] for r in per_person)
     return {"schema": "neural003_observed_at_risk_mae_v1",
             "people": 26, "per_person": per_person, "macro_mae_seconds": macro,
-            "paired_gain_seconds": math.fsum(gains) / 26,
+            "paired_gain_seconds": _finite_mean(gains),
             "paired_person_gains": gains,
             "uncertainty": "Paired person values; overlapping LOPO training makes naive trial or person independence claims inappropriate.",
             "constant_outputs_valid": True,
