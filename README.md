@@ -277,3 +277,15 @@ python3 -I -S -B benchmarks/neuroscience/rep013-purkinje-portable/portable.py \
 Legitimate original inputs and fixed private references, the qualified external owner, original 385454 runtime and independent late-grading authority remain required. Source relocation does not supply those approvals, demonstrate a paper/code benefit, or qualify the broader donor/allometry/Sholl/spine claims. CI authenticates all 35 files before seven generated relocation/admission checks; no new benchmark or authentic result is counted.
 
 The [REP012 portable paired API](benchmarks/neuroscience/rep012-portable/README.md) preserves the complete A9/B17 paper-access packets and four pooled-spine reconstruction endpoints over 1,143 released rows. It authenticates the existing paired controller and scalar scorer, with concrete operator API commands and inert external-input/runtime descriptors. Original data, paper/code bodies, private targets and current runtime/owner qualification remain external. This improves one already-counted finite task; it adds no benchmark ID or scientific result.
+
+### Complete EEG waveform context preparation
+
+[EEG waveform contexts](components/eeg-waveform-contexts/README.md) exports all 400 independent prompts from the fixed public packet, preserving the four demonstrations and every waveform decimal. The standard-library CLI authenticates inputs, retains failed partial exports, and publishes completion only after every case is written and checked. Generated controls cover the complete roster; authentic export, model inference and no-tools enforcement remain separate qualification steps. This adds no benchmark ID or model result.
+
+### Complete Fly inspection operator source
+
+[Fly native inspection](components/fly-complete-native-inspection/README.md) provides a relocatable, create-only operator package for all 42 files and 1,345 trials, preserving the existing inspector, independent auditor and process closure checks. Configuration remains inert until separately selected. Source tests cover relocation and input refusals; original data distribution, actual macOS execution, biological identity and forecasting qualification remain open.
+
+### CONSENSUS35 header operator source
+
+[CONSENSUS35 header operator](benchmarks/neuroscience/consensus35-header-operator/README.md) packages configuration, transport, parsing, process ownership and independent auditing for the complete 35-file header inquiry. The create-only configurator preserves the existing source graph and emits inert requests. Generated checks cover all 35 headers and source admission limits; external data and runtime qualification are required before authentic execution. This does not establish numerical reconstruction or a new finished benchmark.

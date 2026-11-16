@@ -4838,3 +4838,150 @@ jobs:
           if not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful():
               raise SystemExit(1)
           REP012_SOURCE
+
+  eeg-waveform-context-export-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate complete EEG context exporter and check generated cases
+        working-directory: components/eeg-waveform-contexts
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B - <<'EEG_CONTEXT_SOURCE'
+          import hashlib,json,os,stat,sys,types,unittest
+          from pathlib import Path
+          root=Path.cwd()
+          MANIFEST_BYTES=633
+          MANIFEST_SHA='657b8bb1c90ea6da5d27da3817a25c1c1f14dfd15b0ad7709ad92e6a90d29c68'
+          EXPECTED={'README.md','export_contexts.py','test_export_contexts.py'}
+          def identity(info):
+              return tuple(getattr(info,k) for k in ('st_dev','st_ino','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns'))
+          def read_exact(path,size,sha):
+              if type(size) is not int or not 0<size<=262144: raise ValueError('source size')
+              if any(p.is_symlink() for p in (path,*path.parents)): raise ValueError('source symlink')
+              with os.fdopen(os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK),'rb') as f:
+                  before=os.fstat(f.fileno())
+                  if not stat.S_ISREG(before.st_mode) or before.st_nlink!=1 or before.st_size!=size:
+                      raise ValueError('ordinary exact source required')
+                  body=f.read(size+1);after=os.fstat(f.fileno())
+              if identity(before)!=identity(after) or identity(after)!=identity(path.lstat()):
+                  raise ValueError('source changed during read')
+              if len(body)!=size or hashlib.sha256(body).hexdigest()!=sha: raise ValueError('source digest')
+              return body
+          manifest=json.loads(read_exact(root/'SOURCE_MANIFEST.json',MANIFEST_BYTES,MANIFEST_SHA).decode('utf-8'))
+          assert manifest['schema']=='neural077_waveform_context_source_manifest_v1'
+          rows=manifest['files'];assert len(rows)==3 and {r['path'] for r in rows}==EXPECTED
+          assert manifest['file_count']==3 and manifest['total_bytes']==20871
+          assert {p.name for p in root.iterdir()}==EXPECTED|{'SOURCE_MANIFEST.json'}
+          bodies={r['path']:read_exact(root/r['path'],r['bytes'],r['sha256']) for r in rows}
+          module=types.ModuleType('authenticated_waveform_context_tests');module.__file__=str(root/'test_export_contexts.py')
+          sys.modules[module.__name__]=module
+          exec(compile(bodies['test_export_contexts.py'],module.__file__,'exec'),module.__dict__)
+          suite=unittest.defaultTestLoader.loadTestsFromModule(module);assert suite.countTestCases()==8
+          result=unittest.TextTestRunner(verbosity=2).run(suite)
+          if not result.wasSuccessful() or result.skipped:raise SystemExit(1)
+          EEG_CONTEXT_SOURCE
+
+  fly-complete-native-inspection-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate complete Fly inspection operator and check relocation
+        working-directory: components/fly-complete-native-inspection
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B - <<'FLY_SOURCE'
+          import hashlib,json,os,stat,sys,types,unittest
+          from pathlib import Path
+          root=Path.cwd()
+          MANIFEST_BYTES=2634
+          MANIFEST_SHA='6ebd814a91c5f0b7b51b7ea90e070c15997255b8cd0ebfa29806cfd54e2f7fee'
+          EXPECTED=set(['README.md', 'provision.py', 'runtime/audit_values.py', 'runtime/base_owner.py', 'runtime/donor_process_closure.py', 'runtime/inspector/diagnostics.py', 'runtime/inspector/optional_inputs.py', 'runtime/inspector/structural_stream.py', 'runtime/inspector/value_consumer.py', 'runtime/outer_closure.py', 'runtime/owner.py', 'runtime/process_owner.py', 'runtime/worker.py', 'templates/INERT_DISPATCH.template.sh', 'templates/REQUEST_TEMPLATE.json', 'test_portable.py'])
+          def identity(info):
+              return tuple(getattr(info,k) for k in ('st_dev','st_ino','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns'))
+          def read_exact(path,size,sha):
+              if type(size) is not int or not 0<size<=262144: raise ValueError('source size')
+              if any(p.is_symlink() for p in (path,*path.parents)): raise ValueError('source symlink')
+              with os.fdopen(os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK),'rb') as f:
+                  before=os.fstat(f.fileno())
+                  if not stat.S_ISREG(before.st_mode) or before.st_nlink!=1 or before.st_size!=size:
+                      raise ValueError('ordinary exact source required')
+                  body=f.read(size+1);after=os.fstat(f.fileno())
+              if identity(before)!=identity(after) or identity(after)!=identity(path.lstat()):
+                  raise ValueError('source changed during read')
+              if len(body)!=size or hashlib.sha256(body).hexdigest()!=sha: raise ValueError('source digest')
+              return body
+          manifest=json.loads(read_exact(root/'SOURCE_MANIFEST.json',MANIFEST_BYTES,MANIFEST_SHA).decode('utf-8'))
+          assert manifest['schema']=='fly-portable-source-manifest-v1'
+          rows=manifest['files'];assert len(rows)==16 and {r['path'] for r in rows}==EXPECTED
+          assert set(manifest)=={'schema','files'} and sum(r['bytes'] for r in rows)==163784
+          allowed_dirs={str(parent) for name in EXPECTED for parent in Path(name).parents if str(parent)!='.'}
+          seen=set()
+          for p in root.rglob('*'):
+              rel=str(p.relative_to(root))
+              if p.is_symlink(): raise ValueError('source inventory symlink')
+              if p.is_dir():
+                  if rel not in allowed_dirs: raise ValueError('unexpected directory')
+              elif p.is_file():seen.add(rel)
+              else:raise ValueError('unexpected special file')
+          assert seen==EXPECTED|{'SOURCE_MANIFEST.json'}
+          bodies={r['path']:read_exact(root/r['path'],r['bytes'],r['sha256']) for r in rows}
+          module=types.ModuleType('authenticated_fly_portable_tests');module.__file__=str(root/'test_portable.py')
+          sys.modules[module.__name__]=module
+          exec(compile(bodies['test_portable.py'],module.__file__,'exec'),module.__dict__)
+          suite=unittest.defaultTestLoader.loadTestsFromModule(module);assert suite.countTestCases()==6
+          result=unittest.TextTestRunner(verbosity=2).run(suite)
+          if not result.wasSuccessful() or result.skipped:raise SystemExit(1)
+          FLY_SOURCE
+
+  consensus35-header-operator-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Authenticate CONSENSUS35 operator and check complete generated headers
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python3 -I -S -B - <<'CONSENSUS_SOURCE'
+          import hashlib,json,os,stat,types
+          from pathlib import Path
+          p=Path('benchmarks/neuroscience/consensus35-header-operator').resolve()
+          def capture(path,size,sha):
+           assert not any(x.is_symlink() for x in (path,*path.parents))
+           fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+           with os.fdopen(fd,'rb') as f:
+            s=os.fstat(f.fileno());assert stat.S_ISREG(s.st_mode) and s.st_nlink==1 and s.st_size==size
+            b=f.read(size+1)
+           assert len(b)==size and hashlib.sha256(b).hexdigest()==sha
+           return b
+          manifest=json.loads(capture(p/'SOURCE_MANIFEST.json',2726,'a600eefe94c020bc626355f22d7c452f8a8f3f2d912c0b3fab709cb3866645d9'))
+          row=next(x for x in manifest['files'] if x['path']=='configure.py')
+          b=capture(p/'configure.py',row['bytes'],row['sha256'])
+          m=types.ModuleType('authenticated_consensus_configuration');m.__file__=str(p/'configure.py')
+          exec(compile(b,m.__file__,'exec'),m.__dict__)
+          files=m.verify_package(p)
+          assert len(files)==17
+          print('Authenticated complete CONSENSUS35 portable source:18files; generated checks only')
+          CONSENSUS_SOURCE
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python3 -I -S -B benchmarks/neuroscience/consensus35-header-operator/test_portable.py
+          /usr/bin/timeout --signal=TERM --kill-after=5s 60s python3 -I -S -B benchmarks/neuroscience/consensus35-header-operator/test_headers.py
