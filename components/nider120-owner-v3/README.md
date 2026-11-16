@@ -1,0 +1,15 @@
+# NIDER120 trusted-owner deployment source
+
+This package composes the existing metadata setup kit with the accepted V3 Linux scientific engine with one stronger privacy guard. All 120 output fields remain: 21 exact counts, 27 author-reported quantities and 72 unreported continuous diagnostics. It is one existing method-assisted reconstruction endpoint, not 120 benchmarks or an overall 120-field scientific pass.
+
+Six of the original 32 engine members are based on their accepted V3 versions: configuration/owner lock bindings, Docker image-config comparison and historical evidence relocation. The other 26 are identical. The runtime guard now denies any `/Users/` home prefix instead of one private username; linked locks are refreshed. This is the sole behavioral successor to V3 and strengthens rejection. `setup.py` changes only its two engine-manifest constants. No estimator, scorer, field schema, material template or candidate limit is changed; the private-path rejection boundary is stricter.
+
+The historical V3 full route completed with 16 engineered responses, 480 original-field comparisons, 192 coarse statuses and 36 intended derivative disagreements; all 20 candidate containers and 72 owned groups closed. That accepted run is reused. This newly composed kit has source/metadata checks only; it has not run on another host and does not carry the private V3 host orchestration wrapper.
+
+Start with `PROVISIONING.md`, then `OPERATIONS.md`. Run owner commands only in a separately admitted Linux ARM64 trusted-owner environment with a conventional local Docker daemon and positive UID/GID. A Mac host interpreter must never directly replace that owner. An archive digest, setup success or historical image receipt is not current runtime admission.
+
+Supply the exact 17 external material slots, six included candidate documents and one fresh delivery-basis record (24 total), plus the separate private full120 reference. `LOCATIONS.template.json` contains deliberately invalid placeholder pins. The setup helper reads source/configuration metadata, not those scientific operands; the existing owner performs their admission. Keep all generated owner requests and results private.
+
+The remaining distribution operands are explicit in `RUNTIME_REQUIREMENTS.json`: the scientific dependency image archive and its nine provenance bodies; and, when using the historical retained-owner route, its separate trusted-owner image/toolchain and exact outer source graph. This source release supplies neither image and does not pull, load, install, build or run one. The scientific archive is 1,089,059,840 bytes; a distributable archive for the retained owner image is not identified by this selection.
+
+The broad 40-study cohort-transfer/CRPS, cohort-overlap and additional sensitivity obligations remain separate and unmet. No LLM result, SOTA improvement, new task ID or submission readiness is claimed. `RIGHTS.md` governs external material handling; the full kit is trusted-owner source, not candidate-visible material.
