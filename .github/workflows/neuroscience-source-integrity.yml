@@ -4601,3 +4601,46 @@ jobs:
           result = unittest.TextTestRunner(verbosity=2).run(suite)
           raise SystemExit(0 if result.wasSuccessful() else 1)
           HELSINKI_GENERATED
+
+  neural034-portable-provisioning-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Authenticate portable source and run generated relocation checks
+        run: |
+          python -I -B - <<'NEURAL034_SOURCE'
+          import hashlib, json, runpy, stat
+          from pathlib import Path
+          root = Path('benchmarks/neuroscience/neural034-portable')
+          manifest = root / 'SOURCE_MANIFEST.json'
+          body = manifest.read_bytes()
+          assert len(body) == 6598
+          assert hashlib.sha256(body).hexdigest() == 'fe66143cda6de7f54c4e63b8751262aa6d892f0ae9074c8cbc86665795c9e4f3'
+          selected = json.loads(body)['files']
+          assert len(selected) == 37
+          seen = set()
+          for path in root.rglob('*'):
+              info = path.lstat()
+              assert not path.is_symlink()
+              if stat.S_ISREG(info.st_mode):
+                  assert info.st_nlink == 1
+                  seen.add(path.relative_to(root).as_posix())
+              else:
+                  assert stat.S_ISDIR(info.st_mode)
+          assert seen == set(selected) | {'SOURCE_MANIFEST.json'}
+          for name, pin in selected.items():
+              path = Path(name)
+              assert not path.is_absolute() and '..' not in path.parts
+              info = (root / name).stat()
+              assert info.st_size == pin['bytes'] <= 1048576
+              data = (root / name).read_bytes()
+              assert len(data) == pin['bytes']
+              assert hashlib.sha256(data).hexdigest() == pin['sha256']
+          runpy.run_path(str(root / 'tests/test_relocation.py'), run_name='__main__')
+          NEURAL034_SOURCE
