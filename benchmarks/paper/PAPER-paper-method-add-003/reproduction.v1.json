@@ -1,0 +1,412 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-add-003",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Independently assessed reproduction has recoverable per-patient agreement targets and reported association bounds, but not the original aligned manual/native trace panel, complete source companions, justified reproduction criteria, raw-data execution interface or independent source-granular verifier. This is a source/computation limitation, not merely the absence of a superiority margin.",
+  "source_paper": {
+    "title": "DREDge: robust motion correction for high-density extracellular recordings across species",
+    "url": "https://www.nature.com/articles/s41592-025-02614-5"
+  },
+  "evidence": [
+    {
+      "id": "dr-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13055889/",
+      "locator": "Results: DREDge rescues spike sorting and LFP features in human brain activity; Extended Data Fig. 2; Methods: Preprocessing of LFP band data",
+      "supports": "Human manual-tracking agreement and LFP preprocessing; recovered source correlations are Pt01 0.98, Pt02 0.99, Pt03 0.85."
+    },
+    {
+      "id": "dr-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/evarol/dredge/ed236113a0b6c29b376065440174da6341a1d875/README.md",
+      "locator": "Introduction; demos; code structure",
+      "supports": "Original AP and LFP motion estimation implementation, rigid/nonrigid modes and registration demos."
+    },
+    {
+      "id": "dr-data",
+      "kind": "author_data",
+      "url": "https://datadryad.org/api/v2/versions/224794/files",
+      "locator": "Version 224794 pages 1 and 2; file inventory only",
+      "supports": "Versioned raw Pt01-Pt03 AP/LFP inputs, metadata, motion tracking CSVs and already-aligned derivatives are distinct assets."
+    },
+    {
+      "id": "dr-local",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-add-003/docs/initial-evaluator-v1.md",
+      "locator": "Implemented computation; Prospective metrics and scientific limits; Source audit",
+      "supports": "Local rigid control, linear interpolation and held-channel consistency/fidelity metrics are prospective and not native paper accuracy/reproduction."
+    },
+    {
+      "id": "dr-human-route",
+      "kind": "author_code",
+      "url": "https://github.com/Center-For-Neurotechnology/HumanNeuropixelsPipeline/blob/d74413cb8ff48c6d52f11e8ce57a8a6829862c15/README.md",
+      "locator": "Processing steps 4-7",
+      "supports": "Recording-specific preparation and DepthMicronsTracking.csv as DREDge output; the name alone does not identify a manual reference."
+    },
+    {
+      "id": "dr-human-preparation",
+      "kind": "author_code",
+      "url": "https://github.com/Center-For-Neurotechnology/HumanNeuropixelsPipeline/blob/d74413cb8ff48c6d52f11e8ce57a8a6829862c15/PreprocessingLoading/savingBinaryFilesorMotionRegistraton.m",
+      "locator": "Spreadsheet import, depth selection, signal write and channel-map metadata save",
+      "supports": "Participant-specific metadata are external; the inspected script saves time bounds but writes all time columns after depth selection, so it does not establish the original temporal crop."
+    },
+    {
+      "id": "dr-manual-route",
+      "kind": "author_code",
+      "url": "https://github.com/Center-For-Neurotechnology/CorticalNeuropixelProcessingPipeline/blob/64e1949dd8ac44c0d8f0ac5329fc0a1297bef4e3/README.md",
+      "locator": "Introduction and manual tracing steps",
+      "supports": "The cited manual route originates with the 2021 Paulk study and describes Blender surface tracing; it does not bind the original 2025 three-patient comparison."
+    },
+    {
+      "id": "dr-manual-import",
+      "kind": "author_code",
+      "url": "https://github.com/Center-For-Neurotechnology/CorticalNeuropixelProcessingPipeline/blob/64e1949dd8ac44c0d8f0ac5329fc0a1297bef4e3/Load_CSV_from_blender.m",
+      "locator": "BlenderCurveX and BlenderCurveY construction",
+      "supports": "Example coordinate sorting, downsampling and scaling require original settings, coordinate origin and source reference linkage; they are not a recovered patient-specific time-matching recipe."
+    },
+    {
+      "id": "dr-human-companions",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41592-025-02614-5",
+      "locator": "Extended Data Figure 2a-e; human Figures 2-3; Extended Data Figures 7-8",
+      "supports": "Manual motion traces, per-patient reported p<10^-6, full and zoomed motion spectra, Pt03 video-motion/spectral comparison, and human neural-feature/interpolation controls. Exact companion analysis identities and criteria remain to be recovered."
+    },
+    {
+      "id": "dr-agreement-component",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-method-add-003/implementations/manual-trace-agreement-v1/README.md",
+      "locator": "agreement.py, README.md, SOURCE_RECOVERY.md and source-provenance.json",
+      "supports": "Reviewed standard-library Pearson kernel on prealigned operator packets, exact cohort/support validation and source audit; no raw-data-to-motion execution or source-companion verifier."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate brain/probe displacement and stabilize the human recordings; the recovered ordered source comparison is agreement of DREDge LFP motion with manual LFP tracking, not independently observed physical displacement.",
+      "evidence_ids": [
+        "dr-paper",
+        "dr-code"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Human Neuropixels deposit Dryad DOI 10.5061/dryad.d2547d840, version 224794: raw AP/LFP data and metadata. Already-aligned data must not replace raw candidate inputs.",
+      "evidence_ids": [
+        "dr-data"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All three source manual-tracking participants Pt01, Pt02 and Pt03; acute mouse, Ultra, chronic or synthetic cohorts are different original paper experiments and cannot substitute for this human registration.",
+      "evidence_ids": [
+        "dr-paper",
+        "dr-data"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "This source human agreement analysis is not a supervised train/test benchmark. Exact recording intervals, dropped samples, temporal matching and any tuning exposure behind the reported correlations are not yet bound. A newly reserved channel/time split is an extension.",
+      "evidence_ids": [
+        "dr-paper",
+        "dr-local"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Raw human LFP with channel geometry and acquisition metadata for motion inference; AP can assess resulting stability. Manual tracks are evaluation references only. Availability of DepthMicronsTracking CSV names does not establish their exact correspondence to the published manual reference.",
+      "evidence_ids": [
+        "dr-code",
+        "dr-data",
+        "dr-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source describes IBL LFP preprocessing, downsampling and spatial sharpening; exact patient-specific settings, edge support and author trace resampling for the correlation endpoint have not been recovered. The local raw-grid linear interpolation differs from native preprocessing/kriging.",
+      "evidence_ids": [
+        "dr-paper",
+        "dr-local"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Published human comparison uses Pearson correlation between DREDge and manual LFP displacement traces per patient. Correlation increases agreement but is insensitive to offset/scale and does not certify physical displacement accuracy. Exact reference/temporal alignment is unresolved; adjacent-time voltage consistency is a different metric.",
+      "evidence_ids": [
+        "dr-paper",
+        "dr-local"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Source reports separate Pearson r values for three patients, not a single cohort threshold. Preserve the full patient vector; do not silently average or select Pt03 to manufacture a scalar paper baseline.",
+      "evidence_ids": [
+        "dr-paper"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Preserve Pt01, Pt02 and Pt03 separately: all three original Pearson correlations and reported association bounds, complete manual/native/candidate displacement traces on the original temporal support, and Extended Data Figure 2c motion spectra. Retain the Pt03 video-motion/spectrum companion in Figure 2d-e and source human neural-fidelity/interpolation controls. Exact reference identities, spectral recipes, full original fidelity panel and evaluation representations are unresolved; no averaged patient, selected plot, or new spectral similarity score substitutes.",
+      "evidence_ids": [
+        "dr-paper",
+        "dr-human-companions",
+        "dr-human-route",
+        "dr-manual-route"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Motion inference uses the same original raw human LFP, authenticated raw-compatible geometry and acquisition metadata; AP/LFP signal outputs support the source fidelity controls. Manual Blender traces and Pt03 video-derived comparisons are operator evaluation references after candidate freeze, not candidate fitting inputs. Paper-reported r and significance bounds are exposed reference facts. Original temporal/channel selection, tuning exposure and a matched paper+data versus paper+data+author-code delivery manifest have not been recovered.",
+      "evidence_ids": [
+        "dr-paper",
+        "dr-code",
+        "dr-data",
+        "dr-human-route",
+        "dr-manual-import"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "pt01_manual_lfp_pearson_r",
+      "kind": "scalar",
+      "description": "Pt01: reproduce the original Pearson correlation between DREDge LFP displacement and manually tracked LFP displacement on the original paired temporal support. This is agreement, not independent physical displacement accuracy.",
+      "status": "verified",
+      "expected": 0.98,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "One Pearson correlation over the original paired trace samples for Pt01; retain the full Pt01-Pt03 vector without cross-patient averaging.",
+      "evidence_ids": [
+        "dr-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published two-decimal value is an exposed target. Display precision alone does not justify a scientific tolerance; exact alignment, manual tracing uncertainty and reproducibility variation are unresolved.",
+        "evidence_ids": [
+          "dr-paper",
+          "dr-manual-import"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original aligned traces and source uncertainty, then justify a reproduction rule accounting for temporal dependence; no precision-derived equivalence margin or IID-sample confidence interval is assigned.",
+        "independent_unit": "Pt01 recording for the source-specific finding; temporal samples are dependent. Cross-person inference has only the three original participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The scientific unit, original pairing and source dependence treatment must be verified before assigning inferential criteria. Failure to reject a difference cannot count as reproduction.",
+        "evidence_ids": [
+          "dr-paper",
+          "dr-human-companions"
+        ]
+      }
+    },
+    {
+      "id": "pt01_reported_pearson_significance_bound",
+      "kind": "categorical",
+      "description": "Pt01: retain the original companion report p<10^-6 for manual-versus-DREDge Pearson association (Extended Data Figure 2b). Matching this printed bound alone cannot verify the analysis or displacement accuracy.",
+      "status": "verified",
+      "expected": "p_less_than_0.000001",
+      "units": "Reported p-value bound category (dimensionless)",
+      "aggregation": "One source-reported association bound for Pt01; do not pool temporal samples across patients or promote stronger significance to greater motion accuracy.",
+      "evidence_ids": [
+        "dr-human-companions"
+      ],
+      "categories": [
+        "p_less_than_0.000001",
+        "p_not_less_than_0.000001"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source supplies a categorical bound, not an exact p-value. Its computation and inferential reproduction rule remain unresolved.",
+        "evidence_ids": [
+          "dr-human-companions"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original Pearson significance computation and paired temporal support; the source p<10^-6 statement is an exposed finding, not a frozen valid independence assumption or reproduction rule.",
+        "independent_unit": "Pt01 recording for the source-specific finding; temporal samples are dependent. Cross-person inference has only the three original participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The scientific unit, original pairing and source dependence treatment must be verified before assigning inferential criteria. Failure to reject a difference cannot count as reproduction.",
+        "evidence_ids": [
+          "dr-paper",
+          "dr-human-companions"
+        ]
+      }
+    },
+    {
+      "id": "pt02_manual_lfp_pearson_r",
+      "kind": "scalar",
+      "description": "Pt02: reproduce the original Pearson correlation between DREDge LFP displacement and manually tracked LFP displacement on the original paired temporal support. This is agreement, not independent physical displacement accuracy.",
+      "status": "verified",
+      "expected": 0.99,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "One Pearson correlation over the original paired trace samples for Pt02; retain the full Pt01-Pt03 vector without cross-patient averaging.",
+      "evidence_ids": [
+        "dr-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published two-decimal value is an exposed target. Display precision alone does not justify a scientific tolerance; exact alignment, manual tracing uncertainty and reproducibility variation are unresolved.",
+        "evidence_ids": [
+          "dr-paper",
+          "dr-manual-import"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original aligned traces and source uncertainty, then justify a reproduction rule accounting for temporal dependence; no precision-derived equivalence margin or IID-sample confidence interval is assigned.",
+        "independent_unit": "Pt02 recording for the source-specific finding; temporal samples are dependent. Cross-person inference has only the three original participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The scientific unit, original pairing and source dependence treatment must be verified before assigning inferential criteria. Failure to reject a difference cannot count as reproduction.",
+        "evidence_ids": [
+          "dr-paper",
+          "dr-human-companions"
+        ]
+      }
+    },
+    {
+      "id": "pt02_reported_pearson_significance_bound",
+      "kind": "categorical",
+      "description": "Pt02: retain the original companion report p<10^-6 for manual-versus-DREDge Pearson association (Extended Data Figure 2b). Matching this printed bound alone cannot verify the analysis or displacement accuracy.",
+      "status": "verified",
+      "expected": "p_less_than_0.000001",
+      "units": "Reported p-value bound category (dimensionless)",
+      "aggregation": "One source-reported association bound for Pt02; do not pool temporal samples across patients or promote stronger significance to greater motion accuracy.",
+      "evidence_ids": [
+        "dr-human-companions"
+      ],
+      "categories": [
+        "p_less_than_0.000001",
+        "p_not_less_than_0.000001"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source supplies a categorical bound, not an exact p-value. Its computation and inferential reproduction rule remain unresolved.",
+        "evidence_ids": [
+          "dr-human-companions"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original Pearson significance computation and paired temporal support; the source p<10^-6 statement is an exposed finding, not a frozen valid independence assumption or reproduction rule.",
+        "independent_unit": "Pt02 recording for the source-specific finding; temporal samples are dependent. Cross-person inference has only the three original participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The scientific unit, original pairing and source dependence treatment must be verified before assigning inferential criteria. Failure to reject a difference cannot count as reproduction.",
+        "evidence_ids": [
+          "dr-paper",
+          "dr-human-companions"
+        ]
+      }
+    },
+    {
+      "id": "pt03_manual_lfp_pearson_r",
+      "kind": "scalar",
+      "description": "Pt03: reproduce the original Pearson correlation between DREDge LFP displacement and manually tracked LFP displacement on the original paired temporal support. This is agreement, not independent physical displacement accuracy.",
+      "status": "verified",
+      "expected": 0.85,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "One Pearson correlation over the original paired trace samples for Pt03; retain the full Pt01-Pt03 vector without cross-patient averaging.",
+      "evidence_ids": [
+        "dr-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published two-decimal value is an exposed target. Display precision alone does not justify a scientific tolerance; exact alignment, manual tracing uncertainty and reproducibility variation are unresolved.",
+        "evidence_ids": [
+          "dr-paper",
+          "dr-manual-import"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original aligned traces and source uncertainty, then justify a reproduction rule accounting for temporal dependence; no precision-derived equivalence margin or IID-sample confidence interval is assigned.",
+        "independent_unit": "Pt03 recording for the source-specific finding; temporal samples are dependent. Cross-person inference has only the three original participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The scientific unit, original pairing and source dependence treatment must be verified before assigning inferential criteria. Failure to reject a difference cannot count as reproduction.",
+        "evidence_ids": [
+          "dr-paper",
+          "dr-human-companions"
+        ]
+      }
+    },
+    {
+      "id": "pt03_reported_pearson_significance_bound",
+      "kind": "categorical",
+      "description": "Pt03: retain the original companion report p<10^-6 for manual-versus-DREDge Pearson association (Extended Data Figure 2b). Matching this printed bound alone cannot verify the analysis or displacement accuracy.",
+      "status": "verified",
+      "expected": "p_less_than_0.000001",
+      "units": "Reported p-value bound category (dimensionless)",
+      "aggregation": "One source-reported association bound for Pt03; do not pool temporal samples across patients or promote stronger significance to greater motion accuracy.",
+      "evidence_ids": [
+        "dr-human-companions"
+      ],
+      "categories": [
+        "p_less_than_0.000001",
+        "p_not_less_than_0.000001"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "The source supplies a categorical bound, not an exact p-value. Its computation and inferential reproduction rule remain unresolved.",
+        "evidence_ids": [
+          "dr-human-companions"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original Pearson significance computation and paired temporal support; the source p<10^-6 statement is an exposed finding, not a frozen valid independence assumption or reproduction rule.",
+        "independent_unit": "Pt03 recording for the source-specific finding; temporal samples are dependent. Cross-person inference has only the three original participants.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The scientific unit, original pairing and source dependence treatment must be verified before assigning inferential criteria. Failure to reject a difference cannot count as reproduction.",
+        "evidence_ids": [
+          "dr-paper",
+          "dr-human-companions"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Exact original Pt01-Pt03 manual reference identities, native DREDge outputs and their sample-level pairing are not authenticated. The author pipeline identifies DepthMicronsTracking.csv as DREDge output; unopened deposited CSV filenames cannot be treated as manual truth.",
+    "The original raw recording intervals, dropped samples, time origin, sampling basis, coordinate sign, channel selection, source preprocessing and native execution version/settings remain unbound. Generic Blender example factors and raw-grid prospective interpolation cannot substitute.",
+    "Extended Data Figure 2c requires the complete manual and DREDge motion spectra for every patient; Figure 2d-e requires the original Pt03 video-motion/spectral companion. Original frequency grids, spectral estimator/normalization, video time basis, quantitative source targets and admissible comparisons are unresolved. These curve-valued controls are mandatory, not invented scalar spectral findings.",
+    "Original Pt01-Pt03 before/after neural-signal alignment and required source fidelity/control comparisons still need exact patient/segment/event linkage, source correction conditions, targets and criteria. The accepted source-scope decision retains real-human DREDge/manual-reference agreement with complete Pt01-Pt03 and source-linked neural fidelity as the primary result; it corrects the historical held-channel consistency and alternate-settings comparison to a prospective extension. Three scalar correlations provide partial primary coverage only. Exact predecessor definitions and useful prospective components remain preserved externally; prospective metrics do not substitute for source-native controls. Unrelated human figures are not automatically compulsory; generic energy ratios or a smoothed trace cannot replace the original controls. Accepted review: external-evidence/comprehensive-revision-20261116-v2/dual-outcomes/scope-adjudication/PAPER-paper-method-add-003_REVIEW.md (SHA256 4688a6913712ab05c059b153781d6bed6b4a45e3daad7360251d36d7e5c947ec).",
+    "The six listed source findings are the recovered scalar/bound subpanel, not an assertion that the complete original companion panel has been specified. Full-panel eligibility remains unresolved until all mandatory curve/signal companions have source-grounded evaluation representations and output identities.",
+    "There is no authenticated runnable submitted-analysis interface from original raw LFP to full displacement traces and source companion outputs. initial-evaluator-v1 reads raw segments with supplied motions and computes prospective consistency/fidelity; manual-trace-agreement-v1 only computes Pearson values from supplied prealigned traces.",
+    "Independent verification must rerun a frozen submitted program on the identical authenticated original raw inputs, bind each per-patient displacement/time/depth output to the invocation, reconstruct the source alignment and all companion analyses independently, and recalculate the reported findings from those granular artifacts. The Pearson kernel alone cannot distinguish an authentic analysis from supplied or copied values; no complete verification program or authentic-data/interface identity manifest is available.",
+    "Published r values and p bounds are allowed paper input. Printing them, importing a table, or matching them without source-derived motion traces and independent execution/verification cannot qualify either AI outcome. Admission policy is omitted rather than assigning placeholder evaluator, identity or verifier hashes.",
+    "Scientific reproduction tolerances, dependence-aware uncertainty, original significance computation and complete companion criteria remain unresolved; no tolerance is inferred from rounding and non-significance of a difference is not equivalence.",
+    "Both matched information-condition protocols remain unresolved because original common-input, full-panel identity, exposure, native author-code, cumulative access/resource budget and evaluator manifests are absent. The original DREDge pin and later human-pipeline inspection pins do not prove the exact executed figure versions."
+  ]
+}

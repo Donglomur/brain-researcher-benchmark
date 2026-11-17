@@ -1,0 +1,551 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-paper-signal-add-001",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The approved PAC primary and actual structured source quantities are identified, independently of the secondary decoder contract. Publication-equivalent reference arrays, source support/axis/domain identities, native SU alignment/publication linkage, scientific criteria and trusted computational verification remain unresolved. V2 representation does not qualify a runnable or reproduced result.",
+  "source_paper": {
+    "title": "Control of working memory by phase–amplitude coupling of human hippocampal neurons",
+    "url": "https://www.nature.com/articles/s41586-024-07309-z"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-07309-z",
+      "locator": "Figure2d caption; Methods PAC; Figure4a and Methods Selection of PAC neurons. Reviewed text lines1288-1350,1649-1670,2314-2345,2414-2438.",
+      "supports": "Complete load-wise phase-amplitude curves/raw Tort comodulograms; caption normalized MI16.52/7.92; both necessary full-versus-reduced Poisson comparisons and source null/selection controls."
+    },
+    {
+      "id": "lfp_helper",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_LFP.m",
+      "locator": "sub4/session1/channel49; saved P60cs_RH1_stratTrials; source frequency grid,18bins and load-specific outputs.",
+      "supports": "Exact example route and full rawMI/phase2power calculations; sample helper requests0surrogates while paper normalization uses200."
+    },
+    {
+      "id": "cfc_helper",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/cfc_tort_comodulogram.m",
+      "locator": "Trial-local FIR/Hilbert;18phase-bin mean amplitudes, normalized probabilities, entropy MI and trial-shuffle normalization.",
+      "supports": "Original array coordinates, aggregation, edge treatment and raw-versus-normalized MI semantics; undefined source bins cannot be silently replaced."
+    },
+    {
+      "id": "su_helper",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/NWB_samplePAC_SU.m",
+      "locator": "sub26/session1/LFProw33/unitrow20; original correct-load3/artifact mask, spike-bin/LFP extraction and plot_PAC_neuron call.",
+      "supports": "Retained single example route, not a complete population roster; source inclusive LFP versus binary-spike length conflict remains unresolved."
+    },
+    {
+      "id": "su_models",
+      "kind": "author_code",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/blob/a25e8cc3f61630a428f190381745257d4506f148/NWB_SBCAT_analysis/helpers/internal/PAC/plot_PAC_neuron.m",
+      "locator": "20theta-by-gamma counts; model1_full,model2_noInt,model3_noGamma; compare(model2_noInt,model1_full) and compare(model3_noGamma,model1_full).",
+      "supports": "Full Poisson model, separate interaction and gamma-main-effect reduced controls; counts/designs/all3fits and both tests must remain computationally verifiable."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://dandiarchive.org/dandiset/000673/0.240118.2135",
+      "locator": "Retained2024example assets: sub4/session1 and sub26/session1. Actual example asset IDs, source-reported hashes and public-mask values are pinned in retained source_contract.json.",
+      "supports": "Original NWB LFP/spike/trial data route. Inventory44files/36participants does not establish PAC eligibility; no authentic arrays read during this conversion."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "The retained empirical Figure 2d load-1/load-3 LFP phase-amplitude curves and Tort comodulograms plus registered single-unit PAC model comparisons, beginning with source-defined examples and indispensable controls. No automatic whole-paper, complete-population or every-figure claim; the declared eligible-patient extension is reported separately.",
+      "evidence_ids": [
+        "paper",
+        "lfp_helper",
+        "su_helper",
+        "su_models"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "DANDI000673 snapshot0.240118.2135 actual NWB LFP, spike and trial fields; retain author public stratified-trial/artifact masks. LFP example is sub4/session1 and SU helper example is sub26/session1. No replacement snapshot or decoder dataset is introduced.",
+      "evidence_ids": [
+        "data",
+        "lfp_helper",
+        "su_helper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Example-first primary: LFP MATLAB row49 in sub4/session1 with53saved clean correct trials per load; SU helper LFProw33/unitrow20 in sub26/session1 on correct nonartifact load3 trials. Exact published SU example linkage remains unresolved. No automatic population roster; eligible-patient extension is separate.",
+      "evidence_ids": [
+        "data",
+        "lfp_helper",
+        "su_helper",
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "No held-out train/test predictive split for the PAC primary. Preserve saved balanced correct load1/load3 trial selections for the LFP example and original SU load/accuracy/artifact masks. These source trial selections are not decoder cross-validation.",
+      "evidence_ids": [
+        "paper",
+        "lfp_helper",
+        "su_helper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source LFP channel samples with starting_time/rate, maintenance timestamps, load and accuracy; SU ragged spike times and electrode/unit row correspondence; original stratified-trial and artifact masks. Source sample-to-trial and spike/LFP alignment are mandatory.",
+      "evidence_ids": [
+        "data",
+        "lfp_helper",
+        "su_helper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve original padded maintenance epochs, final0-2.5s support, trial-local FIR/Hilbert,18bin LFP PAC, LF2:2:14Hz and HF30:5:150Hz grid. SU uses theta3-7Hz and7cycle Morlet70:5:140Hz, source sample-SD gamma normalization/median split and10theta x2gamma bins. N+1clock and SU2201-versus2200sample conflict, paper/helper padding difference and prospective right-edge repair remain unresolved.",
+      "evidence_ids": [
+        "paper",
+        "lfp_helper",
+        "cfc_helper",
+        "su_helper",
+        "su_models"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Full load-specific normalized phase-bin amplitude curves and raw Tort MI surfaces, with documentary caption normalized MI as companions. Registered SU endpoints are both Poisson full-versus-reduced likelihood-ratio comparisons: remove interactions and separately remove gamma main effect while keeping interactions. No decoder accuracy or monotone PAC-improvement score.",
+      "evidence_ids": [
+        "paper",
+        "lfp_helper",
+        "cfc_helper",
+        "su_models"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "LFP mean amplitude per phase bin is normalized within frequency pair; Figure2d curves average source LF4/6 and HF70:5:140 probabilities, retaining each complete rawMI grid. SU uses source20bin spike counts and all3models for the same retained pair/trials. Do not average away a required model, load or array member, or infer independent patients from trials/units.",
+      "evidence_ids": [
+        "paper",
+        "lfp_helper",
+        "cfc_helper",
+        "su_models"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Require both complete Figure2d curves/comodulograms, their source masks/transformations and normalizedMI/null companions, plus both registered SU reduced-model comparisons with all3fits and granular count/design evidence. Native SU publication linkage/reference outputs and source alignment are unresolved. Whole-paper and complete-population claims are not inferred; extension and Fig6/ED7a decoders remain separate.",
+      "evidence_ids": [
+        "paper",
+        "lfp_helper",
+        "cfc_helper",
+        "su_helper",
+        "su_models"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "The original paper, approved authentic PAC example inputs and declared noncode resources must match across paper+data and paper+data+author-code conditions; only the approved author-code package differs. No published-output printer can qualify computation. Actual common-input, exposure, evaluator and cumulative-budget manifests are absent; primary pairing stays unavailable.",
+      "evidence_ids": [
+        "paper",
+        "data",
+        "lfp_helper",
+        "su_helper"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig2d_complete_lfp_pac",
+      "kind": "indexed_array_family",
+      "description": "The complete original Figure2d LFP example, represented by exactly both18bin phase-amplitude curves and both7x25rawMI comodulograms. Four fixed members preserve separate source load outputs, not four independent discoveries. No peak/mean/subset substitutes for any member.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "fig2d_lfp_load1_load3_full_curves_and_raw_mi",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "load1_phase_amplitude_curve",
+            "manifest_key": "result.load1.fig2d_curve",
+            "source_quantity": "Figure2d load1 normalized gamma-amplitude probability at all18source phase bins; one cycle, with duplicated plotted cycle presentation only.",
+            "membership": "fixed",
+            "shape": [
+              18
+            ],
+            "axes": [
+              {
+                "name": "theta_phase_bin_left_edge",
+                "units": "degrees",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": -180,
+                  "step": 20,
+                  "count": 18
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Average phase-bin normalized mean-amplitude probabilities across LF4/6Hz and HF70:5:140Hz in the source selected trials. Left-edge coordinates define bins; exact+180degree source edge is excluded. Undefined bins are not silently filled or dropped.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "lfp_helper",
+              "cfc_helper"
+            ]
+          },
+          {
+            "id": "load1_raw_tort_comodulogram",
+            "manifest_key": "result.load1.mi",
+            "source_quantity": "Figure2d load1 full raw Tort modulation-index surface; rawMI differs from surrogate-normalized zMI.",
+            "membership": "fixed",
+            "shape": [
+              7,
+              25
+            ],
+            "axes": [
+              {
+                "name": "phase_frequency_center",
+                "units": "Hz",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 2,
+                  "step": 2,
+                  "count": 7
+                }
+              },
+              {
+                "name": "amplitude_frequency_center",
+                "units": "Hz",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 30,
+                  "step": 5,
+                  "count": 25
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Compute per-frequency pair from pooled source trial-local phase and amplitude samples after edge trimming;18bin mean amplitudes normalized to probabilities, then entropy deficit/log18. LFbandwidth2Hz; HFhalf-bandwidth equals current LFcenter. Preserve undefined-bin/domain treatment.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "lfp_helper",
+              "cfc_helper"
+            ]
+          },
+          {
+            "id": "load3_phase_amplitude_curve",
+            "manifest_key": "result.load3.fig2d_curve",
+            "source_quantity": "Figure2d load3 normalized gamma-amplitude probability at all18source phase bins; one cycle, with duplicated plotted cycle presentation only.",
+            "membership": "fixed",
+            "shape": [
+              18
+            ],
+            "axes": [
+              {
+                "name": "theta_phase_bin_left_edge",
+                "units": "degrees",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": -180,
+                  "step": 20,
+                  "count": 18
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Average phase-bin normalized mean-amplitude probabilities across LF4/6Hz and HF70:5:140Hz in the source selected trials. Left-edge coordinates define bins; exact+180degree source edge is excluded. Undefined bins are not silently filled or dropped.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "lfp_helper",
+              "cfc_helper"
+            ]
+          },
+          {
+            "id": "load3_raw_tort_comodulogram",
+            "manifest_key": "result.load3.mi",
+            "source_quantity": "Figure2d load3 full raw Tort modulation-index surface; rawMI differs from surrogate-normalized zMI.",
+            "membership": "fixed",
+            "shape": [
+              7,
+              25
+            ],
+            "axes": [
+              {
+                "name": "phase_frequency_center",
+                "units": "Hz",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 2,
+                  "step": 2,
+                  "count": 7
+                }
+              },
+              {
+                "name": "amplitude_frequency_center",
+                "units": "Hz",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 30,
+                  "step": 5,
+                  "count": 25
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Compute per-frequency pair from pooled source trial-local phase and amplitude samples after edge trimming;18bin mean amplitudes normalized to probabilities, then entropy deficit/log18. LFbandwidth2Hz; HFhalf-bandwidth equals current LFcenter. Preserve undefined-bin/domain treatment.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "lfp_helper",
+              "cfc_helper"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "lfp_helper",
+          "cfc_helper"
+        ]
+      },
+      "required_granular_output_ids": [
+        "lfp_inputs_masks_alignment",
+        "lfp_phase_amplitude_bin_derivation",
+        "lfp_complete_fig2d_arrays",
+        "lfp_trial_shuffle_controls"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Source-faithful full-family comparison to authenticated publication-equivalent arrays; actual comparison rule is not yet justified. No allclose norm, averaging reduction or precision-derived tolerance is supplied.",
+        "independent_unit": "The named channel/session example; repeated trials, phase bins and frequencies are dependent observations, not independent people.",
+        "dependence": "Both loads from one source channel/session; overlapping frequency filters and18phase bins share samples. The separate patient extension needs patient grouping.",
+        "multiplicity": "Preserve both full source conditions and every declared curve/matrix member; no invented cellwise testing or familywise acceptance rule.",
+        "rationale": "V2 represents this real indexed family, but native reference arrays, authenticated support/domain/derivation identities and independent scientific comparison/uncertainty policies remain absent.",
+        "evidence_ids": [
+          "paper",
+          "lfp_helper",
+          "cfc_helper"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "lfp_helper",
+        "cfc_helper"
+      ]
+    },
+    {
+      "id": "fig2d_load1_normalized_mi_caption",
+      "kind": "scalar",
+      "description": "Published Figure2d load1 normalizedMI reference; documentary companion, not the rawMI surface or a replacement for the complete curves.",
+      "status": "verified",
+      "expected": 16.52,
+      "units": "z score",
+      "aggregation": "Original example channel load1, standardized against within-condition trial-shuffle MI as source Methods. Exact original null realization and native band reduction require verification; no new reduction is defined.",
+      "evidence_ids": [
+        "paper",
+        "lfp_helper",
+        "cfc_helper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No scientific reproduction band has been justified. Printed precision, source selection thresholds and numerical implementation checks are not an acceptance tolerance.",
+        "evidence_ids": [
+          "paper",
+          "lfp_helper",
+          "cfc_helper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source-native uncertainty/null or likelihood-ratio evidence; independent scientific reproduction acceptance is unresolved.",
+        "independent_unit": "Named source channel/session or neuron-channel example; bins/trials are not independent patients.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A same-data rerun or agreement with a printed value is not independent biological replication. No p-value threshold or nonrejection is made an equivalence rule.",
+        "evidence_ids": [
+          "paper",
+          "lfp_helper",
+          "cfc_helper"
+        ]
+      }
+    },
+    {
+      "id": "fig2d_load3_normalized_mi_caption",
+      "kind": "scalar",
+      "description": "Published Figure2d load3 normalizedMI reference; documentary companion, not the rawMI surface or a replacement for the complete curves.",
+      "status": "verified",
+      "expected": 7.92,
+      "units": "z score",
+      "aggregation": "Original example channel load3, standardized against within-condition trial-shuffle MI as source Methods. Exact original null realization and native band reduction require verification; no new reduction is defined.",
+      "evidence_ids": [
+        "paper",
+        "lfp_helper",
+        "cfc_helper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No scientific reproduction band has been justified. Printed precision, source selection thresholds and numerical implementation checks are not an acceptance tolerance.",
+        "evidence_ids": [
+          "paper",
+          "lfp_helper",
+          "cfc_helper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source-native uncertainty/null or likelihood-ratio evidence; independent scientific reproduction acceptance is unresolved.",
+        "independent_unit": "Named source channel/session or neuron-channel example; bins/trials are not independent patients.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A same-data rerun or agreement with a printed value is not independent biological replication. No p-value threshold or nonrejection is made an equivalence rule.",
+        "evidence_ids": [
+          "paper",
+          "lfp_helper",
+          "cfc_helper"
+        ]
+      }
+    },
+    {
+      "id": "su_full_vs_no_interaction_likelihood_ratio",
+      "kind": "scalar",
+      "description": "Registered source SU full Poisson model versus model2 without cos(theta)xgamma and sin(theta)xgamma interactions; preserve its2df likelihood-ratio comparison.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "twice log-likelihood difference",
+      "aggregation": "2*(logLik_full-logLik_no_interaction) for the identical source20bin counts and retained example pair/trials; source p value and both fits are required granular outputs.",
+      "evidence_ids": [
+        "paper",
+        "su_helper",
+        "su_models"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No scientific reproduction band has been justified. Printed precision, source selection thresholds and numerical implementation checks are not an acceptance tolerance.",
+        "evidence_ids": [
+          "paper",
+          "su_helper",
+          "su_models"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source-native uncertainty/null or likelihood-ratio evidence; independent scientific reproduction acceptance is unresolved.",
+        "independent_unit": "Named source channel/session or neuron-channel example; bins/trials are not independent patients.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A same-data rerun or agreement with a printed value is not independent biological replication. No p-value threshold or nonrejection is made an equivalence rule.",
+        "evidence_ids": [
+          "paper",
+          "su_helper",
+          "su_models"
+        ]
+      }
+    },
+    {
+      "id": "su_full_vs_no_gamma_main_likelihood_ratio",
+      "kind": "scalar",
+      "description": "Registered source SU full Poisson model versus model3 without gamma main effect while retaining both interactions; preserve the distinct1df control required to avoid spurious PAC-cell selection.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "twice log-likelihood difference",
+      "aggregation": "2*(logLik_full-logLik_no_gamma_main) for the same20bin counts and retained pair/trials; source p value and all3models must be reported, not an interaction-only selection.",
+      "evidence_ids": [
+        "paper",
+        "su_helper",
+        "su_models"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No scientific reproduction band has been justified. Printed precision, source selection thresholds and numerical implementation checks are not an acceptance tolerance.",
+        "evidence_ids": [
+          "paper",
+          "su_helper",
+          "su_models"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source-native uncertainty/null or likelihood-ratio evidence; independent scientific reproduction acceptance is unresolved.",
+        "independent_unit": "Named source channel/session or neuron-channel example; bins/trials are not independent patients.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A same-data rerun or agreement with a printed value is not independent biological replication. No p-value threshold or nonrejection is made an equivalence rule.",
+        "evidence_ids": [
+          "paper",
+          "su_helper",
+          "su_models"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "No authenticated publication-equivalent complete curve/comodulogram reference manifest or SU model statistics has been recovered. The two caption z values are exposed documentary references only.",
+    "Known source coordinates/shapes are retained, but actual family/axis/support/domain/derivation identity manifests and allowed numeric-representation policy are absent; all corresponding hashes/types remain null.",
+    "No separately justified full-family scientific equivalence/uncertainty policies, comparator program or scalar tolerance exists. Do not use default norms, printed precision or source selection thresholds as benchmark criteria.",
+    "The retained LFP helper selects sub4/session1/channel49; the SU helper selects sub26/session1/LFP33/unit20. Exact publication-equivalence of the SU route remains unresolved; no complete-population roster is inferred.",
+    "Both source helpers construct an N+1 clock for N LFP samples; SU inclusive2201sample LFP versus2200binary-spike bins and differing paper/helper padding remain unresolved. The retained Python right-edge alignment is a prospective repair, not verified native reproduction.",
+    "Existing initial-evaluator-v1 supports local pinned-input LFP/SU computations, complete source arrays, all3Poisson fits and both tests. Authentic execution and MATLAB fitglme/filter parity remain unverified; it does not provide all filtered arrays, permutation-identity manifests or a trusted independent verification bundle.",
+    "Mandatory LFP output groups are original inputs/masks/alignment, full trial-local phase/amplitude/bin derivation, both complete curves/rawMI surfaces, and within-condition200trial-shuffle identities/null draws/mean/SD/z outputs for normalizedMI. Helper0surrogate raw output cannot substitute for paper normalization.",
+    "Mandatory SU output groups retain source trial/unit/spike/LFP alignment,20bin counts and occupancy, source gamma normalization/median split and all3designs, all3Poisson coefficients/fitted counts/objectives/convergence, and both LR/df/pvalue comparisons. No occupancy offset or silent regularization is introduced.",
+    "Population selection is not implemented or claimed. If such a claim is later registered, retain actual MTL pair/load roster, both FDR-adjusted tests, either-load/highest-full-model-R2 pairing and200whole-selection trial-shuffles. Do not infer this roster from the example or archive totals.",
+    "No authentic submitted-analysis interface/verifier identity, common-input/exposure/evaluation/budget manifest or AI receipt is admitted. Admission policy is deliberately omitted; external granular-output IDs are requirements with unresolved identities.",
+    "The accepted primary-contract conversion removes the earlier array-representation limitation only. Original PRIMARY_REPRODUCTION_PROPOSAL and review remain preserved; scientific/source/runtime gaps are unchanged.",
+    "Figure6maintenance and ED7aencoding remain distinct unselected secondary alternatives. This primary declaration must not be combined with their unchanged improvement anchors into a normal same-task outcomes bundle; primary paired outcomes and superiority remain unavailable.",
+    "Any eligible-patient extension remains separately reported prospective work, not exact-example completion; no source result is inferred from its proposed weighting/bootstrap."
+  ]
+}

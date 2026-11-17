@@ -1,0 +1,504 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-018",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The registered Allen reconstruction and source-ablation findings have five reported Table S1 mean/SE pairs. Reproduction eligibility remains independently source_unresolved because the original ten-session observation support, split, model-stage identity, likelihood reduction, independent repetitions and data-derived computational verification are unrecovered. This conclusion is not copied from improvement eligibility and is not based solely on the metadata schema.",
+  "source_paper": {
+    "title": "Identifying interactions across brain areas while accounting for individual-neuron dynamics with a Transformer-based variational autoencoder",
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/ac643478c07baa8432690555e4702b65-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "glm-paper",
+      "kind": "paper",
+      "url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/ac643478c07baa8432690555e4702b65-Paper-Conference.pdf",
+      "locator": "Section 3 Training; Section 4.5; Appendix A Table S1; Appendix G",
+      "supports": "Source task, Allen cohort, trial preprocessing, posterior-mean inference and published full-model test NLL."
+    },
+    {
+      "id": "glm-loader",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/Qi-Xin/GLM-Transformer/421b5eef321cac3d1c1279759e0f6b638068b021/DataLoader.py",
+      "locator": "Allen_dataloader_multi_session.__init__ and _split_data, lines 120–217",
+      "supports": "Code defaults train=.7, val=.1, remainder test, with condition-dependent integer allocations, unlike paper train/test/validation=.7/.1/.2."
+    },
+    {
+      "id": "glm-loss",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/Qi-Xin/GLM-Transformer/421b5eef321cac3d1c1279759e0f6b638068b021/GLMTransformer.py",
+      "locator": "loss_function, lines 437–445; encoder/decoder and sample_a_latent",
+      "supports": "Released loss averages Poisson terms and adds scaled KL; this does not directly identify Table S1 total test NLL."
+    },
+    {
+      "id": "glm-infer",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/Qi-Xin/GLM-Transformer/421b5eef321cac3d1c1279759e0f6b638068b021/model_trainer.py",
+      "locator": "train and predict, lines 245–355",
+      "supports": "Validation loss selects checkpoint; predict uses posterior means and defaults self-history/coupling off, so exact evaluation flags and batch membership matter."
+    },
+    {
+      "id": "glm-complete-paper-panel",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2506.02263v2",
+      "locator": "Appendix A Table S1, Allen Visual Coding column; Section 4.5 and Appendix G; broader figures consulted as contextual source inventory only",
+      "supports": "The five Allen Table S1 mean/SE pairs and original empirical six-area, ten-session support. Broader synthetic and qualitative findings are retained externally and are not automatically registered reproduction obligations."
+    },
+    {
+      "id": "glm-ablation-source",
+      "kind": "author_code",
+      "url": "https://github.com/Qi-Xin/GLM-Transformer/blob/421b5eef321cac3d1c1279759e0f6b638068b021/Reproduce_figures/SupTable_Ablation_experiments.ipynb",
+      "locator": "Zero-based cells6-7,9-14,18; raw notebook SHA256 deda27df1b815a51c6760cfb68bce2c59089c933a83c3f9e8d7ffbe3ce3f88b8",
+      "supports": "The packed 2,467-position test-loader cache, re-split 1,726/247/494 with session identity 0, five-repetition setting, saved training-stage attribution and rounded historical outputs. Those outputs are not an AI reproduction or authenticated Table S1 result."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate held-out-trial spike-count intensity with the full GLM-Transformer and compare its reconstruction NLL to source ablations. Posterior inference sees target-population activity; this is not blind forecasting or proof of causal coupling.",
+      "evidence_ids": [
+        "glm-paper",
+        "glm-infer"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Allen Institute Visual Coding Neuropixels data used by the authors; six visual areas, all available trial types, 121,679 400-ms trials reported. Exact retrieved recording content remains unbound.",
+      "evidence_ids": [
+        "glm-paper"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All ten source sessions: 757216464, 798911424, 715093703, 719161530, 721123822, 737581020, 739448407, 742951821, 743475441, 744228101. Do not omit sessions or anatomical groups to obtain a lower loss.",
+      "evidence_ids": [
+        "glm-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper says training/test/validation 70/10/20%; pinned loader uses training/validation/test 70/10/remainder with special 15-trial allocations. Original Table S1 memberships, seed/state, eligibility and native inference batches must be recovered before a same-task score.",
+      "evidence_ids": [
+        "glm-paper",
+        "glm-loader"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source neural spike trains and within-trial self/cross-population history with target-conditioned latent inference; preserve posterior-mean test inference and the same source conditioning. Removing target conditioning changes the task.",
+      "evidence_ids": [
+        "glm-paper",
+        "glm-infer"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source uses 2-ms bins and 400-ms trials: concatenate short contiguous presentations, truncate longer discrete trials and segment long stimuli without overlap. Exact neuron QC, invalid-time exclusion, padding, source/code axis layout and historical artifact identities are not reconciled.",
+      "evidence_ids": [
+        "glm-paper",
+        "glm-loader"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Table S1 names test negative log likelihood. Poisson NLL is sum(exp(eta)-y*eta+log(y!)); pinned loss_function instead averages the first two terms and adds beta times KL. Recover the exact total, constant, KL and model-flag convention that produced 4.218e7.",
+      "evidence_ids": [
+        "glm-paper",
+        "glm-loss"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Paper Table S1 gives total-scale test NLL and SE; native trainer trial-weights batch mean variational loss. The local evaluator’s equal-session mean interaction gain has different units and weighting. Historical aggregation and replicate units remain unresolved.",
+      "evidence_ids": [
+        "glm-paper",
+        "glm-loss",
+        "glm-infer"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Accepted same-primary empirical modeling family: all ten source Allen sessions and six visual areas, held-out neural modeling and matched original component comparisons, with the supported coupling/dynamics outputs within the retained scope. Retain all five original Allen Table S1 variants (full, bidirectional RNN encoder, no trial-wise latent, no coupling, no post-spike history), each mean and standard error, and the exact original observation, run, model-stage, posterior-conditioning and fitted-component identities. Full-model NLL is a legitimate empirical performance component; its value alone cannot establish coupling/dynamics reconstruction or full-family success. The no-coupling source variant retains trial-wise dynamics and history and is not a pure history-only model or the prospective equal-session interaction-gain comparison. Exact supported source coupling/dynamics output membership and original evaluation identities remain unresolved. Preserve the historical exclusions for associated anatomical/condition-specific subpanels with unavailable dependencies; do not automatically require every Figure 5 panel, behavioral association, synthetic Table S1 column or unrelated paper figure.",
+      "evidence_ids": [
+        "glm-paper",
+        "glm-complete-paper-panel"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Preserve the original neural self/cross-population history and target-conditioned posterior-mean reconstruction, stimulus handling, 2-ms binning and exact native inference batches. The posterior sees test target-population activity; this is not blind prediction. Original anatomy, neuron/trial and behavioral metadata may verify the registered Allen analyses but are not automatically additional model inputs. No changed cache split, extra future observations, invented hidden perturbations or easier cohort may be introduced.",
+      "evidence_ids": [
+        "glm-paper",
+        "glm-infer",
+        "glm-complete-paper-panel"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "tables1_allen_visual_coding_full_mean",
+      "kind": "scalar",
+      "description": "Original Table S1 allen_visual_coding, GLM-Transformer full model; posterior-mean inference with the source model-specific flags and stage. This published number is an exposed reference, not computational evidence.",
+      "status": "verified",
+      "expected": 42180000,
+      "units": "paper-reported test negative log likelihood; exact total-scale reduction and additive constant convention unresolved",
+      "aggregation": "Original Table S1 test-NLL support and complete original model-run panel. Recover total/constant/KL/penalty convention and run averaging; no equal-session interaction-gain substitution or reduction from the packed historical notebook cache.",
+      "evidence_ids": [
+        "glm-complete-paper-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance is inferred from printed rounding or the reported standard error. Original observation support, loss convention, run identity and scientific equivalence must be recovered before a margin can be justified.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original independent simulation/training-run and source summary units; then freeze a source-grounded interval/equivalence rule without treating bins, neurons or printed SE as independent repetitions.",
+        "independent_unit": "Independent simulation/training realization, with complete original within-run trial dependence and shared fitting; biological sessions remain clustered where applicable.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, complete numerical reference, or independently executable uncertainty rule has been frozen. Published precision, nonrejection and a copied figure cannot establish reproduction.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      }
+    },
+    {
+      "id": "tables1_allen_visual_coding_full_se",
+      "kind": "scalar",
+      "description": "Reproduce the Table S1 reported standard error for allen_visual_coding, GLM-Transformer full model, from original run-level results; copying this printed uncertainty is insufficient.",
+      "status": "verified",
+      "expected": 38000,
+      "units": "standard error in the same paper-reported test-NLL units",
+      "aggregation": "Original Table S1 standard-error estimator and independent repetition unit, currently unresolved. Do not infer five source repetitions from the incompatible historical notebook or use this SE as an acceptance tolerance.",
+      "evidence_ids": [
+        "glm-complete-paper-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance is inferred from printed rounding or the reported standard error. Original observation support, loss convention, run identity and scientific equivalence must be recovered before a margin can be justified.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original independent simulation/training-run and source summary units; then freeze a source-grounded interval/equivalence rule without treating bins, neurons or printed SE as independent repetitions.",
+        "independent_unit": "Independent simulation/training realization, with complete original within-run trial dependence and shared fitting; biological sessions remain clustered where applicable.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, complete numerical reference, or independently executable uncertainty rule has been frozen. Published precision, nonrejection and a copied figure cannot establish reproduction.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      }
+    },
+    {
+      "id": "tables1_allen_visual_coding_bidirectional_rnn_mean",
+      "kind": "scalar",
+      "description": "Original Table S1 allen_visual_coding, bidirectional RNN encoder; posterior-mean inference with the source model-specific flags and stage. This published number is an exposed reference, not computational evidence.",
+      "status": "verified",
+      "expected": 42250000,
+      "units": "paper-reported test negative log likelihood; exact total-scale reduction and additive constant convention unresolved",
+      "aggregation": "Original Table S1 test-NLL support and complete original model-run panel. Recover total/constant/KL/penalty convention and run averaging; no equal-session interaction-gain substitution or reduction from the packed historical notebook cache.",
+      "evidence_ids": [
+        "glm-complete-paper-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance is inferred from printed rounding or the reported standard error. Original observation support, loss convention, run identity and scientific equivalence must be recovered before a margin can be justified.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original independent simulation/training-run and source summary units; then freeze a source-grounded interval/equivalence rule without treating bins, neurons or printed SE as independent repetitions.",
+        "independent_unit": "Independent simulation/training realization, with complete original within-run trial dependence and shared fitting; biological sessions remain clustered where applicable.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, complete numerical reference, or independently executable uncertainty rule has been frozen. Published precision, nonrejection and a copied figure cannot establish reproduction.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      }
+    },
+    {
+      "id": "tables1_allen_visual_coding_bidirectional_rnn_se",
+      "kind": "scalar",
+      "description": "Reproduce the Table S1 reported standard error for allen_visual_coding, bidirectional RNN encoder, from original run-level results; copying this printed uncertainty is insufficient.",
+      "status": "verified",
+      "expected": 27000,
+      "units": "standard error in the same paper-reported test-NLL units",
+      "aggregation": "Original Table S1 standard-error estimator and independent repetition unit, currently unresolved. Do not infer five source repetitions from the incompatible historical notebook or use this SE as an acceptance tolerance.",
+      "evidence_ids": [
+        "glm-complete-paper-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance is inferred from printed rounding or the reported standard error. Original observation support, loss convention, run identity and scientific equivalence must be recovered before a margin can be justified.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original independent simulation/training-run and source summary units; then freeze a source-grounded interval/equivalence rule without treating bins, neurons or printed SE as independent repetitions.",
+        "independent_unit": "Independent simulation/training realization, with complete original within-run trial dependence and shared fitting; biological sessions remain clustered where applicable.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, complete numerical reference, or independently executable uncertainty rule has been frozen. Published precision, nonrejection and a copied figure cannot establish reproduction.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      }
+    },
+    {
+      "id": "tables1_allen_visual_coding_no_trial_latent_mean",
+      "kind": "scalar",
+      "description": "Original Table S1 allen_visual_coding, no trial-wise latent; posterior-mean inference with the source model-specific flags and stage. This published number is an exposed reference, not computational evidence.",
+      "status": "verified",
+      "expected": 42640000,
+      "units": "paper-reported test negative log likelihood; exact total-scale reduction and additive constant convention unresolved",
+      "aggregation": "Original Table S1 test-NLL support and complete original model-run panel. Recover total/constant/KL/penalty convention and run averaging; no equal-session interaction-gain substitution or reduction from the packed historical notebook cache.",
+      "evidence_ids": [
+        "glm-complete-paper-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance is inferred from printed rounding or the reported standard error. Original observation support, loss convention, run identity and scientific equivalence must be recovered before a margin can be justified.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original independent simulation/training-run and source summary units; then freeze a source-grounded interval/equivalence rule without treating bins, neurons or printed SE as independent repetitions.",
+        "independent_unit": "Independent simulation/training realization, with complete original within-run trial dependence and shared fitting; biological sessions remain clustered where applicable.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, complete numerical reference, or independently executable uncertainty rule has been frozen. Published precision, nonrejection and a copied figure cannot establish reproduction.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      }
+    },
+    {
+      "id": "tables1_allen_visual_coding_no_trial_latent_se",
+      "kind": "scalar",
+      "description": "Reproduce the Table S1 reported standard error for allen_visual_coding, no trial-wise latent, from original run-level results; copying this printed uncertainty is insufficient.",
+      "status": "verified",
+      "expected": 33000,
+      "units": "standard error in the same paper-reported test-NLL units",
+      "aggregation": "Original Table S1 standard-error estimator and independent repetition unit, currently unresolved. Do not infer five source repetitions from the incompatible historical notebook or use this SE as an acceptance tolerance.",
+      "evidence_ids": [
+        "glm-complete-paper-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance is inferred from printed rounding or the reported standard error. Original observation support, loss convention, run identity and scientific equivalence must be recovered before a margin can be justified.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original independent simulation/training-run and source summary units; then freeze a source-grounded interval/equivalence rule without treating bins, neurons or printed SE as independent repetitions.",
+        "independent_unit": "Independent simulation/training realization, with complete original within-run trial dependence and shared fitting; biological sessions remain clustered where applicable.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, complete numerical reference, or independently executable uncertainty rule has been frozen. Published precision, nonrejection and a copied figure cannot establish reproduction.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      }
+    },
+    {
+      "id": "tables1_allen_visual_coding_no_coupling_mean",
+      "kind": "scalar",
+      "description": "Original Table S1 allen_visual_coding, no coupling term; posterior-mean inference with the source model-specific flags and stage. This published number is an exposed reference, not computational evidence.",
+      "status": "verified",
+      "expected": 42630000,
+      "units": "paper-reported test negative log likelihood; exact total-scale reduction and additive constant convention unresolved",
+      "aggregation": "Original Table S1 test-NLL support and complete original model-run panel. Recover total/constant/KL/penalty convention and run averaging; no equal-session interaction-gain substitution or reduction from the packed historical notebook cache.",
+      "evidence_ids": [
+        "glm-complete-paper-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance is inferred from printed rounding or the reported standard error. Original observation support, loss convention, run identity and scientific equivalence must be recovered before a margin can be justified.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original independent simulation/training-run and source summary units; then freeze a source-grounded interval/equivalence rule without treating bins, neurons or printed SE as independent repetitions.",
+        "independent_unit": "Independent simulation/training realization, with complete original within-run trial dependence and shared fitting; biological sessions remain clustered where applicable.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, complete numerical reference, or independently executable uncertainty rule has been frozen. Published precision, nonrejection and a copied figure cannot establish reproduction.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      }
+    },
+    {
+      "id": "tables1_allen_visual_coding_no_coupling_se",
+      "kind": "scalar",
+      "description": "Reproduce the Table S1 reported standard error for allen_visual_coding, no coupling term, from original run-level results; copying this printed uncertainty is insufficient.",
+      "status": "verified",
+      "expected": 26000,
+      "units": "standard error in the same paper-reported test-NLL units",
+      "aggregation": "Original Table S1 standard-error estimator and independent repetition unit, currently unresolved. Do not infer five source repetitions from the incompatible historical notebook or use this SE as an acceptance tolerance.",
+      "evidence_ids": [
+        "glm-complete-paper-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance is inferred from printed rounding or the reported standard error. Original observation support, loss convention, run identity and scientific equivalence must be recovered before a margin can be justified.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original independent simulation/training-run and source summary units; then freeze a source-grounded interval/equivalence rule without treating bins, neurons or printed SE as independent repetitions.",
+        "independent_unit": "Independent simulation/training realization, with complete original within-run trial dependence and shared fitting; biological sessions remain clustered where applicable.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, complete numerical reference, or independently executable uncertainty rule has been frozen. Published precision, nonrejection and a copied figure cannot establish reproduction.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      }
+    },
+    {
+      "id": "tables1_allen_visual_coding_no_post_spike_mean",
+      "kind": "scalar",
+      "description": "Original Table S1 allen_visual_coding, no post-spike history; posterior-mean inference with the source model-specific flags and stage. This published number is an exposed reference, not computational evidence.",
+      "status": "verified",
+      "expected": 42940000,
+      "units": "paper-reported test negative log likelihood; exact total-scale reduction and additive constant convention unresolved",
+      "aggregation": "Original Table S1 test-NLL support and complete original model-run panel. Recover total/constant/KL/penalty convention and run averaging; no equal-session interaction-gain substitution or reduction from the packed historical notebook cache.",
+      "evidence_ids": [
+        "glm-complete-paper-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance is inferred from printed rounding or the reported standard error. Original observation support, loss convention, run identity and scientific equivalence must be recovered before a margin can be justified.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original independent simulation/training-run and source summary units; then freeze a source-grounded interval/equivalence rule without treating bins, neurons or printed SE as independent repetitions.",
+        "independent_unit": "Independent simulation/training realization, with complete original within-run trial dependence and shared fitting; biological sessions remain clustered where applicable.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, complete numerical reference, or independently executable uncertainty rule has been frozen. Published precision, nonrejection and a copied figure cannot establish reproduction.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      }
+    },
+    {
+      "id": "tables1_allen_visual_coding_no_post_spike_se",
+      "kind": "scalar",
+      "description": "Reproduce the Table S1 reported standard error for allen_visual_coding, no post-spike history, from original run-level results; copying this printed uncertainty is insufficient.",
+      "status": "verified",
+      "expected": 10000,
+      "units": "standard error in the same paper-reported test-NLL units",
+      "aggregation": "Original Table S1 standard-error estimator and independent repetition unit, currently unresolved. Do not infer five source repetitions from the incompatible historical notebook or use this SE as an acceptance tolerance.",
+      "evidence_ids": [
+        "glm-complete-paper-panel"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No tolerance is inferred from printed rounding or the reported standard error. Original observation support, loss convention, run identity and scientific equivalence must be recovered before a margin can be justified.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original independent simulation/training-run and source summary units; then freeze a source-grounded interval/equivalence rule without treating bins, neurons or printed SE as independent repetitions.",
+        "independent_unit": "Independent simulation/training realization, with complete original within-run trial dependence and shared fitting; biological sessions remain clustered where applicable.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No source-grounded equivalence margin, complete numerical reference, or independently executable uncertainty rule has been frozen. Published precision, nonrejection and a copied figure cannot establish reproduction.",
+        "evidence_ids": [
+          "glm-complete-paper-panel"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Exact original Table S1 observation identities remain unresolved. Preserve all ten Allen sessions, source trial types and six areas. The ablation notebook packs a prior test_loader into 250 x 352 x 2,467 allocated positions, uses one neuron layout, resets session IDs to 0 and re-splits 1,726/247/494; it does not authenticate the full cohort, populated rows or historical test membership.",
+    "Paper training/test/validation 70/10/20 differs from the Allen loader training/validation/test 70/10/remainder and special 15-trial allocations. Original trial/neuron/bin ordering, QC, invalid-time exclusions, padding, native batches and apparent encoder sequence/batch-axis behavior are not reconciled.",
+    "Published Table S1 total test NLL differs from the released mean Poisson loss without factorial constant plus scaled KL. Training adds regularization, trial-weights batch losses, selects val_loader minima and returns best_test_loss. Recover the exact constant/KL/penalty/total/aggregation convention for every Allen variant and the independent units and estimator behind each reported SE.",
+    "Original model-stage and ablation mapping are unresolved. Pinned Trainer.train does not accept notebook fix_latents; the no-post-spike block captures stage two, executes stage three, then saves the earlier scalar. The paper no-trial-wise-latent and notebook no-encoder labels are not automatically equivalent.",
+    "The original source ten-session prediction/coupling definition and current Allen Table S1 definition are preserved literally in external design evidence for scope review. The legacy history-only versus interaction-enabled evaluator is prospective and cannot silently replace the five original paper ablations or their native flags. Full native coupling matrices, waveforms and observation-level terms are mandatory computational evidence where they support these registered ablations; their incomplete identity/coverage is a blocker, not an invented scalar similarity score.",
+    "Public paper means/SEs and historical notebook strings, including Allen full 0.05674 (0.00005), are exposed references. A submission or program that copies these values cannot qualify reproduction; no historical output-to-Table-S1 conversion or AI success is inferred.",
+    "Existing runnable audit.py inspects source text; existing evaluator.py accepts declared prediction arrays for a prospective two-arm endpoint. Neither runs a submitted source-native analysis, authenticates the full Allen inputs, verifies original fitting/stage/checkpoint provenance, or independently reproduces every original Allen Table S1 reduction. No complete submitted-analysis interface or independent original-endpoint verifier exists.",
+    "Required granular computational evidence includes, for every source variant and original run/session/trial/neuron/bin, authentic counts, predicted log expected counts, posterior moments, separate Poisson/log-factorial/KL/penalty contributions, source model stage and flags, checkpoint/input lineage and complete ordered identities. An independent operator must execute the frozen submitted program and a verifier must recompute all five means and SEs from the original support; declared aggregates and self-attested hashes are insufficient.",
+    "No justified numerical equivalence tolerance or uncertainty design is frozen. Published rounding and SEs are not default tolerances, and bins/neurons are not independent repetitions. Neither nonrejection nor a qualitative coupling claim can replace the original numerical findings. Structured native outputs remain external design requirements without fabricated scalar reductions or output-identity hashes.",
+    "Authentic data, submitted-analysis-interface, independent-verifier and complete native-output identity manifests are unavailable, so admission_policy is omitted. Common input/evaluator/exposure/code-delivery manifests and cumulative matched budgets for paper+data versus paper+data+author-code remain unresolved. Both scientific outcomes and all four condition cells remain unknown.",
+    "outcomes.original_task_sha256 currently binds observed group current-task bytes, not a historical task. This is PROVISIONAL and ON HOLD: integration will supply the final integrated current-task bytes after its authorized reproduction-wording correction. Do not treat this draft pin as final accepted integration provenance.",
+    "Approved source-scope ruling is same_primary_unqualified: ten-session Allen empirical neural modeling, matched original component comparisons and supported coupling/dynamics outputs. The full-model Table S1 NLL is a legitimate ordered component in this family, but a component-only NLL match or improvement cannot establish the complete family result. Exact supported coupling/dynamics findings and their trusted native derivation remain unresolved; the scalar findings do not encode those complete outputs. Preserve historical anatomical/condition-specific exclusions and keep prospective interaction gain separate. Family admission remains unavailable unless future source-bound full-coverage verification and outcome scope prevent a component-only success from being promoted; no unrelated-simulation mismatch is asserted."
+  ]
+}

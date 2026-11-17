@@ -1,0 +1,1028 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-FIND-004",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The original prior-decoding finding and its controls have a defensible reproduction objective independent of improvement, and several printed scalar references are recoverable. Complete labeled result/cohort identities, native analysis, companion execution, derivation verification and scientifically justified acceptance criteria remain unresolved; the accepted arithmetic component alone is insufficient.",
+  "source_paper": {
+    "title": "Brain-wide representations of prior information in mouse decision-making",
+    "url": "https://www.nature.com/articles/s41586-025-09226-1"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12408363/",
+      "locator": "Methods: Inclusion criteria; Electrophysiology data; WFI data; Nested cross-validation; Assessing statistical significance",
+      "supports": "Original modalities, cohort counts, feature windows, nested folds and corrected-score aggregation."
+    },
+    {
+      "id": "author-region",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/prior-localization/blob/380e7e68f31f9b55ec20e3f4863abec9eec25d30/prior_localization/run_scripts/format_outputs_stage_3.py",
+      "locator": "significance_by_region; argument defaults; regional output construction",
+      "supports": "Generic script uses median scores minus median null medians and at least two sessions, unlike the paper methods."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-004/task.json",
+      "locator": "primary_outputs; implementations/initial-evaluator-v1/provenance.json, README.md and evaluator.py",
+      "supports": "Registered task includes neural/movement prior decoding. Local component explicitly names generic script defaults, lists paper conflicts and reports zero authentic runs."
+    },
+    {
+      "id": "iti-findings",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-025-09226-1",
+      "locator": "Results: Decoding the prior during the ITI; Figure 2a-d; Extended Data Figures 3, 5, 6 and 7",
+      "supports": "Original Ephys/WFI regional prior-decoding panel, printed region counts and cross-modality correlation; alternative-target/time-window and region-size controls. Printed numbers are exposed references, not execution evidence."
+    },
+    {
+      "id": "movement-findings",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-025-09226-1",
+      "locator": "Results: Decoding the prior during the ITI (embodiment paragraphs); Figure 2f; Extended Data Figure 9a-d; Methods: Inclusion criteria, Embodiment, DLC residual analysis and Eye position decoding",
+      "supports": "Separate 171-session/806-region-session DLC panel; neural/movement and residual-decoding correlations; 124-session/660-region-session joint DLC+eye and 44-record eye-only visual-region controls."
+    },
+    {
+      "id": "choice-findings",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-025-09226-1",
+      "locator": "Figure 2e; Extended Data Figure 8a-e; Methods: Choice probability as a function of decoded Bayes-optimal prior",
+      "supports": "Behavioral relevance of decoded prior, contrast dependence and drift control with 200 action-kernel pseudosessions; this null differs from 1000 decoding pseudosessions. Extended Data 8a compares empirical mean session slopes with 200 averaged pseudoslopes; 8d/e uses null-corrected regional slopes and strategy-confound controls. The Ephys regional choice analysis excludes two sessions and contains 241 regions."
+    },
+    {
+      "id": "target-source",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/prior-localization/blob/380e7e68f31f9b55ec20e3f4863abec9eec25d30/prior_localization/functions/behavior_targets.py",
+      "locator": "optBay target selection and pLeft output; prior_localization/functions/nulldistributions.py; prior_localization/prepare_data.py",
+      "supports": "Bayes-optimal prior construction and source pseudosession route; labels are not the experimental block probability. Actual source data linkage and executed paper-compatible configuration remain unresolved."
+    },
+    {
+      "id": "journal-component",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark",
+      "locator": "Parent-supplied integrated source d3a4d4ed420bbab19d253da5b44eefca1d73eb00: benchmarks/paper/PAPER-FIND-004/implementations/journal-metrics-v2/{metrics.py,README.md,provenance.json}; metrics.py SHA256 fb0c052095c28af8f545b8719bf9b4380661488a5d9a48dd035f5c3a84554865",
+      "supports": "Accepted operator-supplied-prediction arithmetic: pooled trial R2, median of ten runs, complete 1000-null correction, modality-specific regional means and matching movement subset. Does not authenticate source inputs, fit models, produce residuals, reconstruct full panel or verify derivation from data."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Decode the Bayes-optimal prior from pre-stimulus neural activity; retain movement-predictor and pseudosession controls. Better prior decoding does not prove causal prior computation.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Paper identifies the 2024 IBL release and separate WFI recordings; registration pins the 2023_12_bwm_release loader family. Exact versioned input manifest and modality coverage are not yet reconciled.",
+      "evidence_ids": [
+        "paper",
+        "registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Journal regional analyses contain 414 Ephys sessions/242 regions/2,289 region-sessions and 51 WFI sessions/32 regions/1,539 region-sessions. The exact roster must be recovered, including the separate 171-session movement subset.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Ephys uses nested interleaved fivefold outer and fivefold inner trial CV; WFI uses 50 outer folds and leave-one-out inner CV. Ten random splits are repeated. New held-mouse/session testing changes the original task.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Ephys binned spike counts and WFI pixel fluorescence are modality-specific inputs; behavior/video predictors are controls, not extra oracle information for the neural decoder.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Ephys sums spikes from -600 to -100 ms and uses Lasso; WFI uses frame -2 and Ridge. Preserve published QC, reaction-time and minimum-trial/unit/pixel inclusion.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "R-squared measures prior decoding; corrected R-squared subtracts the median of 1,000 pseudosession scores. Counts of significant regions and smaller p-values do not measure prediction improvement.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Paper takes median R-squared over ten repeats, then mean session corrected R-squared per region. Pinned stage3 instead takes median score minus median null medians and requires two sessions; reconcile the actual publication pipeline.",
+      "evidence_ids": [
+        "paper",
+        "author-region"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "evidence_ids": [
+        "paper",
+        "iti-findings",
+        "movement-findings",
+        "choice-findings"
+      ],
+      "description": "The unchanged registered pre-stimulus prior-decoding finding requires all 242 Ephys and 32 WFI regional raw/corrected-R2 and null-inference profiles: 414 Ephys sessions/2289 region-sessions and 51 WFI sessions/1539 region-sessions. Preserve ten runs, source nested folds and 1000 decoding pseudosessions for each eligible cell; main and sensitivity-target/time-window profiles, cross-modality/size controls, decoded-prior choice/drift/contrast controls, the separate 171-session/806-region-session DLC panel, 124-session/660-region-session DLC+eye panel, and VISp/LGd eye controls. The present finding list contains recovered scalar summaries plus explicitly unresolved numerical controls; it is NOT the complete labeled regional finding vector. Exact region/session/condition identities and source-native result vectors must be recovered and expanded into individually identified scalar findings before admission. No regional vector is coerced to a scalar, and no arbitrary region identifiers are fabricated."
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "evidence_ids": [
+        "paper",
+        "iti-findings",
+        "movement-findings",
+        "target-source"
+      ],
+      "description": "Original Ephys pre-stimulus counts (-600 to -100 ms) and WFI frame -2 features with source QC, trial history for source Bayes-optimal target construction, and source-matched nested training/validation folds. Body/eye video and their source windows belong to explicit companion decoders and residual analyses; they are not silently added to the primary neural predictor. True block probability and the narrower time window remain separately named controls, not replacements for the Bayes-optimal prior endpoint. The executable delivery/exposure boundary and exact permitted-observation manifest remain unresolved."
+    }
+  },
+  "findings": [
+    {
+      "id": "ephys_significant_prior_regions",
+      "kind": "scalar",
+      "description": "Source uncorrected regional significance count for pre-stimulus Bayes-optimal-prior decoding; a companion summary of the full regional R2 and null results, not a replacement for them.",
+      "status": "verified",
+      "expected": 73,
+      "units": "regions",
+      "aggregation": "Count among all 242 Ephys regions after source session p-values and Fisher combination at P<0.05, before multiple-comparison correction.",
+      "evidence_ids": [
+        "iti-findings",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "iti-findings",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "iti-findings",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "wfi_significant_prior_regions",
+      "kind": "scalar",
+      "description": "Source prior decoding is significant in all 32 analyzed dorsal cortical WFI regions; retain the complete labeled regional effect and null vectors.",
+      "status": "verified",
+      "expected": 32,
+      "units": "regions",
+      "aggregation": "Count among the 32 left-hemisphere WFI regions at source regional Fisher P<0.05.",
+      "evidence_ids": [
+        "iti-findings",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "iti-findings",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "iti-findings",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "combined_significant_prior_regions",
+      "kind": "scalar",
+      "description": "Combined Ephys/WFI source significance map after the specified multiple-comparison correction; anatomical coverage is not a performance improvement score.",
+      "status": "verified",
+      "expected": 58,
+      "units": "regions",
+      "aggregation": "Fisher combination across Ephys/WFI, then Benjamini-Hochberg at 1% FDR over the complete 242-region map.",
+      "evidence_ids": [
+        "iti-findings",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "iti-findings",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "iti-findings",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "ephys_wfi_regional_effect_correlation",
+      "kind": "scalar",
+      "description": "Correspondence of corrected Bayes-optimal-prior decoding R2 across modalities.",
+      "status": "verified",
+      "expected": 0.52,
+      "units": "Spearman correlation coefficient",
+      "aggregation": "Correlation across the 32 matched regional corrected-R2 pairs; each regional value uses source session/run/null aggregation.",
+      "evidence_ids": [
+        "iti-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "iti-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "iti-findings"
+        ]
+      }
+    },
+    {
+      "id": "orbvl_example_raw_r2",
+      "kind": "scalar",
+      "description": "Published illustrative ORBvl recording with 160 neurons: raw prior-decoding R2. The exact session identity must be recovered; this example cannot stand for the complete regional panel.",
+      "status": "verified",
+      "expected": 0.35,
+      "units": "R-squared",
+      "aggregation": "Published single-session example; recover original ordered trials, all ten runs, folds and matching nulls before using it as a computational check.",
+      "evidence_ids": [
+        "iti-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "iti-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "iti-findings"
+        ]
+      }
+    },
+    {
+      "id": "orbvl_example_corrected_r2",
+      "kind": "scalar",
+      "description": "Published illustrative 160-neuron ORBvl recording: null-corrected prior-decoding R2, paired with the raw score.",
+      "status": "verified",
+      "expected": 0.28,
+      "units": "corrected R-squared",
+      "aggregation": "Same source session as orbvl_example_raw_r2; subtract median of the source pseudoscores from the actual session score.",
+      "evidence_ids": [
+        "iti-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "iti-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "iti-findings"
+        ]
+      }
+    },
+    {
+      "id": "log_odds_significant_ephys_regions",
+      "kind": "scalar",
+      "description": "Source target-transform sensitivity control: decode log odds of the Bayes-optimal prior, retaining the full corresponding regional effect/null panel.",
+      "status": "verified",
+      "expected": 92,
+      "units": "regions",
+      "aggregation": "Count among the same 242 Ephys regions using the source significance procedure for the log-odds target; do not select this target after seeing evaluation results.",
+      "evidence_ids": [
+        "iti-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "iti-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "iti-findings"
+        ]
+      }
+    },
+    {
+      "id": "narrow_window_significant_ephys_regions",
+      "kind": "scalar",
+      "description": "Source temporal-window sensitivity control: Bayes-optimal-prior decoding from -400 to -100 ms before stimulus onset.",
+      "status": "verified",
+      "expected": 62,
+      "units": "regions",
+      "aggregation": "Count among 242 Ephys regions under the source narrower-window analysis, with its own complete run/null outputs.",
+      "evidence_ids": [
+        "iti-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "iti-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "iti-findings"
+        ]
+      }
+    },
+    {
+      "id": "true_block_significant_ephys_regions",
+      "kind": "scalar",
+      "description": "Source alternative-target control: true experimental block prior. This control must not replace the Bayes-optimal target in the primary decoder.",
+      "status": "verified",
+      "expected": 47,
+      "units": "regions",
+      "aggregation": "Count among 242 Ephys regions under the source true-block-target analysis and source null procedure.",
+      "evidence_ids": [
+        "iti-findings",
+        "target-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "iti-findings",
+          "target-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "iti-findings",
+          "target-source"
+        ]
+      }
+    },
+    {
+      "id": "size_adjusted_cross_modal_effect_correlation",
+      "kind": "scalar",
+      "description": "Cross-modality prior-decoding association after the source correction of WFI effect sizes for region size; the printed qualitative statement must not replace its numerical control.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "correlation coefficient",
+      "aggregation": "Source Extended Data Figure 7f subtracts the size-predicted WFI R2 from panel 7d from the WFI R2 before the complete matched-region comparison, retaining significant and nonsignificant Ephys regions. The numerical correlation, fitted size-prediction coefficients and granular fit inputs are unresolved.",
+      "evidence_ids": [
+        "iti-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source subtraction recipe is recovered, but the exact adjusted correlation, size-prediction fit coefficients and granular regional inputs have not been recovered; no target or tolerance is fabricated.",
+        "evidence_ids": [
+          "iti-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "iti-findings"
+        ]
+      }
+    },
+    {
+      "id": "dlc_significant_sessions",
+      "kind": "scalar",
+      "description": "Prior decoding from the seven source body/posture/movement features on the original video-quality subset.",
+      "status": "verified",
+      "expected": 65,
+      "units": "sessions",
+      "aggregation": "Count of significant movement decoders among all 171 eligible Ephys sessions, using source pseudosession inference; paired neural comparisons span 806 region-sessions.",
+      "evidence_ids": [
+        "movement-findings",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "movement-findings",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "movement-findings",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "neural_dlc_decoding_correlation",
+      "kind": "scalar",
+      "description": "Association between neural prior decoding and the matched session-level DLC prior decoder.",
+      "status": "verified",
+      "expected": 0.18,
+      "units": "Pearson correlation coefficient",
+      "aggregation": "Source comparison across all 806 matched Ephys region-sessions from 171 movement sessions; reuse each session-level movement fit across its regions.",
+      "evidence_ids": [
+        "movement-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "movement-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "movement-findings"
+        ]
+      }
+    },
+    {
+      "id": "neural_dlc_residual_decoding_correlation",
+      "kind": "scalar",
+      "description": "Association between full neural prior decoding and neural decoding of the prior residual after the DLC decoder; preserves the source embodiment control beyond a descriptive neural-minus-motor score.",
+      "status": "verified",
+      "expected": 0.89,
+      "units": "Pearson correlation coefficient",
+      "aggregation": "Paired complete 806-region-session panel: source full-prior neural R2 versus source DLC-residual neural R2.",
+      "evidence_ids": [
+        "movement-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "movement-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "movement-findings"
+        ]
+      }
+    },
+    {
+      "id": "neural_dlc_eye_decoding_correlation",
+      "kind": "scalar",
+      "description": "Joint DLC and eye-position movement control paired with neural prior decoding.",
+      "status": "verified",
+      "expected": 0.24,
+      "units": "Pearson correlation coefficient",
+      "aggregation": "Source joint-video subset: 124 sessions and 660 region-sessions, preserving exact quality/trial masks and the source joint-feature decoder.",
+      "evidence_ids": [
+        "movement-findings",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "movement-findings",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "movement-findings",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "neural_dlc_eye_residual_decoding_correlation",
+      "kind": "scalar",
+      "description": "Residual-decoding control after accounting jointly for DLC features and eye position.",
+      "status": "verified",
+      "expected": 0.79,
+      "units": "Pearson correlation coefficient",
+      "aggregation": "Full source joint DLC+eye subset of 660 region-sessions; compare paired full-prior neural R2 with joint-feature residual neural R2.",
+      "evidence_ids": [
+        "movement-findings",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "movement-findings",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "movement-findings",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "visual_neural_eye_decoding_correlation",
+      "kind": "scalar",
+      "description": "Association between eye-position prior decoding and neural prior decoding in VISp/LGd.",
+      "status": "verified",
+      "expected": 0.36,
+      "units": "Pearson correlation coefficient",
+      "aggregation": "All 44 source visual-region/session records with reliable eye tracking; resolve source session-versus-region-session roster terminology before admission.",
+      "evidence_ids": [
+        "movement-findings",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "movement-findings",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "movement-findings",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "visual_neural_eye_residual_correlation",
+      "kind": "scalar",
+      "description": "Neural decoding of the eye-position prior residual compared with full-prior neural decoding in VISp/LGd.",
+      "status": "verified",
+      "expected": 0.8,
+      "units": "Pearson correlation coefficient",
+      "aggregation": "Same 44 visual-region/session records as the eye-decoding companion; exact residual construction and retained trial correspondence required.",
+      "evidence_ids": [
+        "movement-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "movement-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "movement-findings"
+        ]
+      }
+    },
+    {
+      "id": "ephys_zero_contrast_choice_slope",
+      "kind": "scalar",
+      "description": "Behavioral relevance of decoded prior in Ephys: empirical mean session logistic choice slope on zero-contrast trials, before subtraction of a pseudo-slope. This mean is compared with the drift-null distribution, not equated to a corrected regional slope.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "logistic slope in source prior parameterization",
+      "aggregation": "Extended Data Figure 8a: average empirical session slopes; for each of 200 action-kernel pseudoaction sessions, average the corresponding pseudo-slopes across sessions to form 200 null means. Preserve source session weights and exclusions; no pooling of folds as independent animals.",
+      "evidence_ids": [
+        "choice-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The numerical empirical mean Ephys slope, exact parameterization and its uncertainty are not recovered; direction or separation from the drift null cannot replace its magnitude or complete null distribution.",
+        "evidence_ids": [
+          "choice-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "choice-findings"
+        ]
+      }
+    },
+    {
+      "id": "wfi_zero_contrast_choice_slope",
+      "kind": "scalar",
+      "description": "Behavioral relevance of decoded prior in WFI: empirical mean session zero-contrast logistic choice slope, before subtraction of a pseudo-slope; compare with its modality-specific drift-null distribution.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "logistic slope in source prior parameterization",
+      "aggregation": "Extended Data Figure 8a: average empirical WFI session slopes and compare with 200 averages of session-level action-kernel pseudo-slopes. This empirical mean differs from the corrected regional slopes in panels 8d/e.",
+      "evidence_ids": [
+        "choice-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The numerical empirical mean WFI slope and its uncertainty are unrecovered; no value or reproduction band is inferred from the qualitative plot.",
+        "evidence_ids": [
+          "choice-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "choice-findings"
+        ]
+      }
+    },
+    {
+      "id": "ephys_significant_choice_slope_region_percentage",
+      "kind": "scalar",
+      "description": "Published percentage of Ephys regions with significant zero-contrast choice slopes for the regional decoded prior, using the source pseudo-session correction.",
+      "status": "verified",
+      "expected": 17.8,
+      "units": "percent of source eligible regions",
+      "aggregation": "Extended Data Figure 8d: source region-level P<0.05 using Fisher combination; 241 Ephys regions after excluding two sessions with constant choices on zero-contrast trials. Preserve the printed percentage without deriving an integer significant-region count.",
+      "evidence_ids": [
+        "choice-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "choice-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "choice-findings"
+        ]
+      }
+    },
+    {
+      "id": "wfi_significant_choice_slope_region_percentage",
+      "kind": "scalar",
+      "description": "Published percentage of WFI regions with significant zero-contrast choice slopes for the regional decoded prior, using the source pseudo-session correction.",
+      "status": "verified",
+      "expected": 90.1,
+      "units": "percent of source eligible regions",
+      "aggregation": "Extended Data Figure 8d: source region-level P<0.05 using Fisher combination. Preserve the reported 90.1 percent; the exact eligible identities and denominator for this percentage remain unbound, and no integer region count is inferred from other WFI panel totals.",
+      "evidence_ids": [
+        "choice-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "choice-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "choice-findings"
+        ]
+      }
+    },
+    {
+      "id": "ephys_strategy_corrected_slope_correlation",
+      "kind": "scalar",
+      "description": "Association between session-level behavioral-strategy log Bayes factor and null-corrected choice slope in Ephys; the reported nonsignificant result does not establish absence or equivalence.",
+      "status": "verified",
+      "expected": 0.05,
+      "units": "Spearman correlation coefficient",
+      "aggregation": "Extended Data Figure 8e: 412 Ephys sessions; correlate action-kernel minus Bayes-optimal marginal log likelihood with corrected slopes averaged across regions within each session. Retain the original per-session model evidence and slopes.",
+      "evidence_ids": [
+        "choice-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "choice-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "choice-findings"
+        ]
+      }
+    },
+    {
+      "id": "wfi_strategy_corrected_slope_correlation",
+      "kind": "scalar",
+      "description": "Association between session-level behavioral-strategy log Bayes factor and null-corrected choice slope in WFI.",
+      "status": "verified",
+      "expected": -0.34,
+      "units": "Spearman correlation coefficient",
+      "aggregation": "Extended Data Figure 8e: 51 WFI sessions; correlate action-kernel minus Bayes-optimal marginal log likelihood with corrected slopes averaged across regions within each session. Preserve source session identities and aggregation.",
+      "evidence_ids": [
+        "choice-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "choice-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "choice-findings"
+        ]
+      }
+    },
+    {
+      "id": "wfi_strategy_adjusted_effect_slope_correlation",
+      "kind": "scalar",
+      "description": "Regional association of corrected prior-decoding R2 with corrected choice slope after removing its linear prediction from the strategy log Bayes factor.",
+      "status": "verified",
+      "expected": 0.935,
+      "units": "Spearman correlation coefficient",
+      "aggregation": "Extended Data Figure 8e: 32 WFI regions after the stated log-Bayes-factor linear-prediction subtraction from corrected slopes. Recover fitted coefficients, session-to-region aggregation and complete adjusted slope/R2 pairs; do not substitute raw empirical session slopes.",
+      "evidence_ids": [
+        "choice-findings"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source value is an exposed target. Its reporting precision does not establish an equivalence tolerance; recover original granular results, run variability and a scientifically justified numerical/uncertainty criterion before evaluation.",
+        "evidence_ids": [
+          "choice-findings"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original source procedure must be reproduced; no equivalence or uncertainty acceptance rule has been frozen.",
+        "independent_unit": "Mouse for biological sampling, with sessions and regions nested/reused within mouse; matched regions or region-sessions are analysis units, not independent animals; Ephys and WFI remain distinct populations.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source significance versus a pseudosession null is not equivalence to the original finding; nonrejection is not reproduction. No independent-unit minimum or confidence threshold is invented.",
+        "evidence_ids": [
+          "choice-findings"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Full-panel identity is unresolved: recover every original Ephys/WFI region-session, mouse, unit/pixel and retained trial; expand the complete labeled regional raw/corrected-R2, null and sensitivity/choice/feature-removal profiles into source-identified findings. Recovered scalar summaries here do not constitute complete-panel reproduction.",
+    "Publication-linked raw numerical regional results and original seed/fold identities remain unrecovered. The illustrative 160-neuron ORBvl session must be identified; source decimals and printed region counts are exposed references, not scientific tolerances or computational proof.",
+    "Resolve the 2024 journal data release versus 2023_12_bwm_release loader, exact WFI source files and all modality/control subset rosters, including eye-only source session/region-session terminology. Cohort totals alone cannot authenticate these inputs.",
+    "Resolve journal-versus-generic author defaults for estimator/inner and outer folds, 1000 versus 200 decoding nulls, median versus mean over ten runs, session inclusion and regional aggregation; the independent choice-drift control uses 200 pseudoaction sessions and must not be mistaken for the decoding null.",
+    "No complete submitted-analysis interface or independent derivation-verification program exists. The runnable journal-metrics-v2 CLI accepts supplied per-trial predictions, targets and folds and recomputes arithmetic; it neither reconstructs authentic features/priors/nulls nor proves fitting or source-data use. A program printing the paper numbers, or supplying fabricated granular arrays, cannot qualify.",
+    "Require independently executed submitted analysis and verification of source-native per-trial feature/target/mask lineage, each run and inner/outer fold, every pseudosession target and prediction, raw and corrected score formation, source Fisher/BH maps, and exact complete-cohort coverage. Neither a prediction-file hash nor a matching aggregate establishes this derivation.",
+    "Movement and eye companions need source session-level features/predictions and matched trial identities, then separately reconstructed residual targets, residual neural fits, complete paired score vectors and source correlations. journal-metrics-v2 implements only descriptive matched movement differences; it does not implement residual/eye, size, choice/drift, contrast or feature-removal analyses.",
+    "Recover empirical mean session choice slopes and all 200 mean pseudo-slopes separately from null-corrected regional slopes, complete contrast-dependence profiles, and source feature-removal effects. Reconstruct the 17.8% Ephys/90.1% WFI regional choice significance summaries without inferring counts, session strategy-evidence/slope correlations and the WFI strategy-adjusted regional slope association. Recover the size-prediction fit inputs/coefficients for the known WFI R2 subtraction recipe and complete control result vectors. Qualitative direction or nonrejection cannot replace magnitudes, uncertainty or required companion outputs.",
+    "Scientific equivalence tolerances and uncertainty rules remain unestablished for every finding; do not infer them from rounded printing, significance thresholds or historical grader acceptance. Respect mouse dependence and repeated regions/sessions in each modality/control population.",
+    "No immutable common input, cohort/split/full-panel/observation/metric/aggregation, independent evaluator, exposure or cumulative episode budget manifests support either matched paper+data versus paper+data+author-code protocol. Both pairings remain unresolved and all four scientific outcomes unknown."
+  ]
+}

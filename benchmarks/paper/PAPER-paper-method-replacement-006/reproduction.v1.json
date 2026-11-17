@@ -1,0 +1,1257 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-replacement-006",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The original Volume target and the exposed Table 1 pretrained-PopT/Linear values are identified, and the Figure 3 four-method/six-count structure is identified. Exact curve references, complete source control coverage, authentic historical rows/ensembles/features and scientific reproduction criteria remain unresolved. This eligibility is derived from reproduction evidence independently of the existing improvement design_ready disposition; the tested metadata binder does not qualify computational reproduction.",
+  "source_paper": {
+    "title": "Population Transformer: Learning Population-level Representations of Neural Activity",
+    "url": "https://arxiv.org/html/2406.03044v4"
+  },
+  "evidence": [
+    {
+      "id": "popt-paper",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2406.03044v4",
+      "locator": "Section 4; Table 1; Appendix A Downstream Training; Appendix C Volume; Appendix D Table 6",
+      "supports": "Original volume endpoint, 90-channel ROC-AUC baseline, subject aggregation, training recipe and downstream recording cohort."
+    },
+    {
+      "id": "popt-readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/README.md",
+      "locator": "Fine-tuning section; data.write_multi_subject_multi_channel and run_train.py routes",
+      "supports": "Author BrainBERT-feature extraction, checkpoint and saved-split route exists; exact historic artifacts are not authenticated."
+    },
+    {
+      "id": "popt-splits",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/tasks/utils.py",
+      "locator": "get_split_idxs, lines 7–19",
+      "supports": "Source downstream row splits use train_test_split with random_state=42 and separate saved split identities."
+    },
+    {
+      "id": "popt-roster",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/trial_selections/test_trials.json",
+      "locator": "Entire seven-subject recording roster",
+      "supports": "Pins the downstream subject/trial pairs without reading labels."
+    },
+    {
+      "id": "popt-input",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/conf/data/subject_data_template.yaml",
+      "locator": "samp_frequency, rereference, delta and duration",
+      "supports": "Defines 2048-Hz Laplacian neural inputs and five-second context around words."
+    },
+    {
+      "id": "popt-metric",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/tasks/pt_feature_extract_coords.py",
+      "locator": "get_valid_outs, lines 25–40",
+      "supports": "Native ROC-AUC uses sklearn roc_auc_score; rounded-probability F1 is a separate diagnostic."
+    },
+    {
+      "id": "popt-counts",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2406.03044v4/figures/CR_ensemble_scaling.png",
+      "locator": "Figure 3, Volume panel horizontal axis and legend",
+      "supports": "The original electrode-count conditions are 1, 10, 20, 30, 40 and 50; curves compare pretrained PopT, non-pretrained PopT, Linear and Deep NN. Exact curve ordinates were not digitized."
+    },
+    {
+      "id": "popt-label-writer",
+      "kind": "author_code",
+      "url": "https://api.github.com/repos/czlwang/PopulationTransformer/contents/data/write_multi_subject_multi_channel.py?ref=d237755bbdea123c60bface0cecbb48bab6f42de",
+      "locator": "get_word_features_labels; write_outputs; write_labels; revision d237755bbdea123c60bface0cecbb48bab6f42de; raw SHA256 c70a51d3f18ff88cf0b0bf881af11a7bd640cdb148fa84e861621142c1306402",
+      "supports": "Retained extreme-quartile label construction, post-selection feature ordinals and Boolean/onset TSV serialization; authentic inputs and tie handling have not been recovered."
+    },
+    {
+      "id": "popt-native-loader",
+      "kind": "author_code",
+      "url": "https://api.github.com/repos/czlwang/PopulationTransformer/contents/datasets/pt_supervised_task_coords.py?ref=d237755bbdea123c60bface0cecbb48bab6f42de",
+      "locator": "PTSupervisedTask.__init__; make_sub_sample; __getitem__; revision d237755bbdea123c60bface0cecbb48bab6f42de; raw SHA256 fbbb587d1d7d54d4f21e852b90c5530f15beaa0ae639a32ad0e30f87b1e9e93f",
+      "supports": "Native manifest/label ordering, set-enumerated class mapping, feature-column order after channel membership selection and coordinate input."
+    },
+    {
+      "id": "popt-subject-projection",
+      "kind": "author_code",
+      "url": "https://api.github.com/repos/czlwang/PopulationTransformer/contents/data/make_subject_specific_manifest.py?ref=d237755bbdea123c60bface0cecbb48bab6f42de",
+      "locator": "main subject filtering of manifest/labels; revision d237755bbdea123c60bface0cecbb48bab6f42de; raw SHA256 82e91e00eb5c5ab3b49cffc81c3315d33bc0847d6875eecee837e3991e0fb56e",
+      "supports": "Subject projection preserves paired row order; source zip may truncate unequal metadata, which the accepted binder rejects."
+    },
+    {
+      "id": "popt-native-criterion",
+      "kind": "author_code",
+      "url": "https://api.github.com/repos/czlwang/PopulationTransformer/contents/criterions/pt_feature_extract_coords_criterion.py?ref=d237755bbdea123c60bface0cecbb48bab6f42de",
+      "locator": "forward BCE sigmoid/squeeze path; revision d237755bbdea123c60bface0cecbb48bab6f42de; raw SHA256 c4c8d178807aeaad151c42438f7986b4c45ecd1a3e162143fa9445bf7491ed3a",
+      "supports": "Flat native probabilities refer to runtime class index 1; this is not automatically high RMS."
+    },
+    {
+      "id": "popt-clean-channels",
+      "kind": "author_code",
+      "url": "https://api.github.com/repos/czlwang/PopulationTransformer/contents/electrode_selections/clean_laplacian.json?ref=d237755bbdea123c60bface0cecbb48bab6f42de",
+      "locator": "complete source file; revision d237755bbdea123c60bface0cecbb48bab6f42de; raw SHA256 6490851f35355a1b4283b77cd14cc4317b8bd6f38357260785c1b79cd3ab22f5",
+      "supports": "Pinned clean-channel eligibility lists have at least 90 names for each of the seven participants; they do not identify historical ranked selections."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Binary word-volume decoding on the paper’s original Volume endpoint: distinguish top versus bottom RMS-intensity quartiles within each recording. This original endpoint is within the registration’s volume/speech/sentence scope; a result claims this endpoint only. Retain the original Volume electrode-count analysis alongside the 90-electrode Table 1 primary.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-counts"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "The original BrainTreebank intracranial movie recordings and word/audio annotations used for Table 1. Pin exact source-release and derived feature manifests before execution; a newer corpus version cannot silently replace them.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-readme"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All seven source downstream pairs: sub_1/trial001, sub_2/trial006, sub_3/trial000, sub_4/trial000, sub_6/trial004, sub_7/trial000, sub_10/trial000. Table 6 identifies their held-out movies; three share Cars 2.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-roster"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original downstream train/validation/test proportions are .8/.1/.1, using random row splits and saved identities. Exact original word/feature row order and saved membership are not authenticated. Replacing them with the local support-disjoint split creates an extension.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-splits"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Table 1 Volume comparison uses 90 clean Laplacian electrodes per participant with the original BrainBERT temporal embeddings and coordinates; preserve identical feature/checkpoint access and channel-ranking policy. A smaller ensemble is not the Table 1 task. Figure 3 Volume additionally uses the original 1, 10, 20, 30, 40 and 50 electrode conditions; the local 1/10/50/90 grid is not their replacement.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-readme",
+        "popt-input",
+        "popt-counts"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Author source specifies Laplacian rereferencing, 2048 Hz and five-second neural context; paper Appendix C defines per-word RMS with frame length 2048 and hop 512 and extreme-quartile labels. Exact feature timing, original ranked channel membership/order, ties, transcript alignment and native class mapping still need artifact-level reconciliation.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-input",
+        "popt-readme"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Within each participant compute ROC-AUC, equivalently P(score_positive>score_negative)+0.5 P(tie), then source aggregation. Higher is better. F1 and local PopT-minus-linear gains do not replace the absolute PopT source score.",
+      "evidence_ids": [
+        "popt-metric",
+        "popt-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Table 1 reports the mean ROC-AUC across source participants with standard error across subjects; for Volume, BrainBERT+pretrained PopT is 0.87 ± 0.03 at 90 channels. Preserve participant weighting, not pooled words.",
+      "evidence_ids": [
+        "popt-paper"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "The registered Volume panel retains all seven subjects at the 90-electrode Table 1 BrainBERT comparison and at Figure 3 electrode counts 1, 10, 20, 30, 40 and 50. The recovered Table 1 pretrained-PopT and Linear rows include subject-mean ROC-AUC and descriptive subject SEM. Figure 3 requires every count for pretrained PopT, non-pretrained PopT, Linear and Deep NN, with original per-subject outputs, count effects and source uncertainty displays. All 24 curve ordinates and their exact dispersion convention remain unrecovered; completeness of any additional Table 1 Volume control rows must be reconciled with the original table before eligibility. Neither the prospective 1/10/50/90 evaluator nor one method's 49-run binder establishes complete original finding coverage.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-counts",
+        "popt-metric"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Use only original BrainTreebank recordings and word/audio annotations for the seven registered downstream subject/trial pairs, the original BrainBERT representations/coordinates and permitted pretrained access, and the original saved random-row training/validation/test identities and selected channel ensembles. Preserve the source five-second neural context and validation-based model selection; label/reference artifacts remain operator-controlled at final scoring. The two information conditions receive the same paper/data/feature/checkpoint and exposure package; author code is the sole added information in the +code condition. Pretraining includes downstream subjects, so this is not an unseen-subject or independently replicated unseen-movie evaluation. Exact exposed-data, pretrained-access and row/channel manifests remain unresolved.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-readme",
+        "popt-input",
+        "popt-splits",
+        "popt-roster"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "table1_volume_90_pretrained_popt_mean",
+      "kind": "scalar",
+      "description": "Table 1 Volume, 90 clean electrodes: BrainBERT plus pretrained PopT, original seven-subject mean ROC-AUC. The published target is exposed through the allowed paper and is not evidence of a data-derived rerun.",
+      "status": "verified",
+      "expected": 0.87,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "table1_volume_90_pretrained_popt_sem",
+      "kind": "scalar",
+      "description": "Table 1 Volume, 90 clean electrodes: descriptive subject SEM accompanying BrainBERT plus pretrained PopT. This companion cannot be omitted or repurposed as a tolerance or confidence interval.",
+      "status": "verified",
+      "expected": 0.03,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Source-reported descriptive standard error across the seven participant ROC-AUC values, kept separate from the mean and from any inferential equivalence rule; exact source estimator/seed aggregation needs artifact-level reconciliation.",
+      "evidence_ids": [
+        "popt-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "table1_volume_90_linear_mean",
+      "kind": "scalar",
+      "description": "Table 1 Volume, 90 clean electrodes: BrainBERT plus Linear aggregation, original seven-subject mean ROC-AUC. The published target is exposed through the allowed paper and is not evidence of a data-derived rerun.",
+      "status": "verified",
+      "expected": 0.66,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "table1_volume_90_linear_sem",
+      "kind": "scalar",
+      "description": "Table 1 Volume, 90 clean electrodes: descriptive subject SEM accompanying BrainBERT plus Linear aggregation. This companion cannot be omitted or repurposed as a tolerance or confidence interval.",
+      "status": "verified",
+      "expected": 0.03,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Source-reported descriptive standard error across the seven participant ROC-AUC values, kept separate from the mean and from any inferential equivalence rule; exact source estimator/seed aggregation needs artifact-level reconciliation.",
+      "evidence_ids": [
+        "popt-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_pretrained_popt_1_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for pretrained PopT at exactly 1 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_pretrained_popt_10_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for pretrained PopT at exactly 10 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_pretrained_popt_20_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for pretrained PopT at exactly 20 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_pretrained_popt_30_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for pretrained PopT at exactly 30 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_pretrained_popt_40_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for pretrained PopT at exactly 40 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_pretrained_popt_50_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for pretrained PopT at exactly 50 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_nonpretrained_popt_1_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for non-pretrained PopT at exactly 1 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_nonpretrained_popt_10_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for non-pretrained PopT at exactly 10 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_nonpretrained_popt_20_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for non-pretrained PopT at exactly 20 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_nonpretrained_popt_30_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for non-pretrained PopT at exactly 30 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_nonpretrained_popt_40_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for non-pretrained PopT at exactly 40 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_nonpretrained_popt_50_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for non-pretrained PopT at exactly 50 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_linear_1_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for Linear at exactly 1 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_linear_10_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for Linear at exactly 10 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_linear_20_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for Linear at exactly 20 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_linear_30_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for Linear at exactly 30 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_linear_40_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for Linear at exactly 40 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_linear_50_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for Linear at exactly 50 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_deep_nn_1_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for Deep NN at exactly 1 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_deep_nn_10_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for Deep NN at exactly 10 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_deep_nn_20_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for Deep NN at exactly 20 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_deep_nn_30_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for Deep NN at exactly 30 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_deep_nn_40_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for Deep NN at exactly 40 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    },
+    {
+      "id": "figure3_volume_deep_nn_50_mean",
+      "kind": "scalar",
+      "description": "Figure 3 Volume curve for Deep NN at exactly 50 electrodes, retaining the full original seven-participant condition and original selected membership/order. The numerical ordinate is unrecovered; no plot digitization or invented value is substituted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "ROC-AUC (dimensionless)",
+      "aggregation": "Compute original test-row ROC-AUC within each of the seven participants, then take the equally weighted arithmetic mean of the seven values; never pool words across subjects. Retain the original curve dispersion and count-effect analysis; exact uncertainty display/reference is unresolved.",
+      "evidence_ids": [
+        "popt-counts",
+        "popt-paper",
+        "popt-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded scientific equivalence margin has been justified for this Volume finding. Printed decimal precision and the published descriptive SEM are not acceptance tolerances. Historical data/row/channel identity, author calibration and participant/seed variability must be resolved before freezing a reproduction criterion.",
+        "evidence_ids": [
+          "popt-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Separate the source descriptive subject SEM from a reproduction decision rule. Preserve repeated-seed effects, dependence among nearby/overlapping word contexts, and shared-movie dependence across participants; no interval-containment or equivalence rule has been fixed.",
+        "independent_unit": "Participant with recording-time clustering; three participants share Cars 2, so seven participants are not seven independent movie replications.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The observed cohort has seven subjects, but the effective independent replication and justified joint uncertainty rule are unresolved. No significance nonrejection, curve overlap or rounded aggregate match qualifies reproduction.",
+        "evidence_ids": [
+          "popt-paper",
+          "popt-input"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "The four Table 1 scalar targets (pretrained PopT 0.87 with descriptive SEM 0.03; Linear 0.66 with descriptive SEM 0.03) and Figure 3 four-method/six-count identities are inherited declared references from the existing source-reviewed improvement.v1.json metadata and prior evaluator documentation. No retained primary Table 1 paper asset or Figure 3 image was independently inspected in this rollout or acquired by the preceding binder worker. Exact primary-asset verification and complete original control/uncertainty coverage remain outstanding. No missing paper/figure asset hash is invented; inherited scalar references are not independently reauthenticated empirical measurements.",
+    "Original Figure 3 Volume references for all four methods at 1/10/20/30/40/50 electrodes are missing. Their exact source uncertainty convention, count-effect constraints and complete Table 1 control-row coverage require primary-source reconciliation; the 28 explicitly identified findings are not asserted to exhaust unreviewed source controls.",
+    "All seven original per-word population/label TSVs, saved .8/.1/.1 membership and original ranked channel ensembles remain unauthenticated. The pinned repository saved_data_splits route returned 404 and electrode_selections contains only clean_laplacian.json and debug_electrodes.json; clean-channel eligibility is not historical ranking.",
+    "Authentic BrainTreebank release, transcript/audio alignment, RMS frame/hop calculation, quartile ties, source word/feature indexing, five-second neural supports, Laplacian channels, coordinates, BrainBERT features and BrainBERT/PopT checkpoint identity/rights are not bound to an immutable authentic-data manifest.",
+    "The runnable original-volume-binding-v1 commands prepare and bind-native validate supplied source-format metadata and one method's 49 subject/count exports. They do not derive RMS labels/features, authenticate runtime row order or class mapping, train/run source comparators, recompute ROC-AUC/F1/SEM, or establish derivation from authentic data. The predecessor prospective evaluator changes split/grid and cannot serve as the original-panel verifier.",
+    "No source-matched submitted-analysis interface, independent operator execution path and verifier are frozen for the complete model/finding/control panel. Required granular outputs include every retained word's original identity, per-run class-index probabilities and labels, saved split/channel bindings, all seven subject ROC-AUCs and native F1 diagnostics per original condition, subject-macro means/dispersion, count effects and validation-selection/checkpoint provenance. A program printing 0.87, 0.66 or the paper's curves cannot satisfy this requirement.",
+    "No scientific reproduction tolerances or dependence-aware uncertainty criteria are justified. The reported 0.03 SEM and two-decimal print precision are exposed descriptive references, not equivalence thresholds. Reproduction and improvement require separate decision rules.",
+    "Paired paper+data and paper+data+author-code delivery lacks authenticated common input, complete code package, original scientific identities, exposure policy and cumulative access/resource budget manifests. Pretraining includes downstream subjects and three downstream participants share Cars 2. Both paired protocols remain null.",
+    "The required admission_policy hashes for the complete evaluator, original identities, authentic data, analysis interface and granular verification program are unknown. The policy is omitted rather than filled with placeholders or the partial binder hash. Current task.json still has improvement-only/calibration-only wording; integration must correct that centrally and repin outcomes.original_task_sha256 to the final current canonical bytes."
+  ]
+}

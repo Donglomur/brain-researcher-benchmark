@@ -1,0 +1,2151 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-033",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "design_ready",
+  "eligibility_reason": "Independent reproduction assessment: the complete original Table2 target-7 finding/control panel is identifiable and all48 published scalar targets are recovered. This establishes a source-grounded design, not computational eligibility: original memberships, authentic neural-to-reconstruction execution, independent feature/metric verification, justified reproduction tolerance/uncertainty and paired access protocols remain unresolved.",
+  "source_paper": {
+    "title": "MindBridge: A Cross-Subject Brain Decoding Framework",
+    "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Wang_MindBridge_A_Cross-Subject_Brain_Decoding_Framework_CVPR_2024_paper.html"
+  },
+  "evidence": [
+    {
+      "id": "mb-paper",
+      "kind": "paper",
+      "url": "https://openaccess.thecvf.com/content/CVPR2024/papers/Wang_MindBridge_A_Cross-Subject_Brain_Decoding_Framework_CVPR_2024_paper.pdf",
+      "locator": "CVPR 2024 final paper, Sections 3.1, 4.1, 4.2; Tables 1 and 2 (printed page 11339 for Table 2)",
+      "supports": "Original subjects, common-image test split, four-subject reconstruction results and subject-7 adaptation conditions."
+    },
+    {
+      "id": "mb-supp",
+      "kind": "paper",
+      "url": "https://openaccess.thecvf.com/content/CVPR2024/supplemental/Wang_MindBridge_A_Cross-Subject_CVPR_2024_supplemental.pdf",
+      "locator": "CVPR 2024 final supplement, sections A and B, page 1",
+      "supports": "GLMSingle/session normalization, NSDGeneral ROI, repeat handling and target-aware best-of-eight generation selection."
+    },
+    {
+      "id": "mb-readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/README.md",
+      "locator": "Preparation / Training / Reconstructing and evaluating",
+      "supports": "Author uses MindEye webdataset_avg_split, releases subject 1/2/5/7 checkpoints, and distinguishes single, bridge and adaptation workflows."
+    },
+    {
+      "id": "mb-eval",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/src/eval.py",
+      "locator": "two_way_identification lines 11-31; CLIP lines 145-156; cal_metrics",
+      "supports": "Pearson all-pairs two-way identification, strict ties, CLIP ViT-L/14 and resize/normalization, image averaging."
+    },
+    {
+      "id": "mb-adapt",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/scripts/adapt_bridge.sh",
+      "locator": "Source/target/length and optimization arguments",
+      "supports": "Pinned author route uses subjects 1/2/5, target 7 and 4000 calibration images; this is not evidence that exact published subset IDs were recovered."
+    },
+    {
+      "id": "mb-local",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-033/docs/initial-evaluator-v1.md",
+      "locator": "Source and material distinctions; Computation; What remains held",
+      "supports": "Local evaluator explicitly substitutes fixed candidate index, uses prospective curve summary and does not execute MindBridge or reproduce published scores."
+    },
+    {
+      "id": "mb-data",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/src/data.py",
+      "locator": "NSDDataset.__init__, _load_samples, get_dls",
+      "supports": "The released loader sorts recognized sample keys and takes a length prefix before shuffling; train and validation directories remain separate. This recovers code procedure, not published image memberships."
+    },
+    {
+      "id": "mb-recon",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/src/recon.py",
+      "locator": "prepare_CLIP and reconstruction/output loop",
+      "supports": "Hidden-state normalized Clipper selection and saving the selected reconstruction; full eight-candidate capture and protected target separation still require an admitted execution interface."
+    },
+    {
+      "id": "mb-models",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/src/models.py",
+      "locator": "Clipper initialization, versatile_normalize_embeddings and embed_image",
+      "supports": "Bicubic resize/crop, projected hidden tokens and CLS normalization for selection, distinct from final CLIP metric features."
+    },
+    {
+      "id": "mb-selection",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/src/utils.py",
+      "locator": "batchwise_cosine_similarity and reconstruction best_picks lines 249-266",
+      "supports": "Target-aware cosine ranking of eight flattened hidden-token embeddings; first maximum index supplies the common selected image."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Reconstruct viewed images for original target subject 7 after adapting a model pretrained on subjects 1, 2 and 5, retaining all Table 2 calibration conditions (500, 1500 and 4000 images). The 4000-image condition is nominated as primary by this design; the paper did not designate a single primary. New target subjects or sessions are extensions.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-adapt"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Natural Scenes Dataset with COCO stimuli; author-designated MindEye webdataset_avg_split representation. Exact asset hashes and dataset snapshot still require execution admission.",
+      "evidence_ids": [
+        "mb-readme"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Original Table 2 cohort: source subjects 01, 02 and 05; fixed target subject 07. Preserve the complete original target-7 evaluation at every original calibration budget. The four-subject Table 1 aggregate is a separate experiment and cannot serve as this target-specific baseline.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-adapt"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Source uses 982 common test images and 8859 training images per subject; Table 2 adapts target subject 7 on 500, 1500 and 4000 training images. Exact immutable memberships and the published calibration subset-selection procedure remain to be recovered. Retain each full original budget condition; replacement subsets or splits are extensions.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-readme",
+        "mb-adapt"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Target-7 NSDGeneral fMRI, original calibration images/captions at each budget, source-subject 1/2/5 pretraining data and author image-generation priors. Operator scoring must apply the source target-aware selection to eight frozen candidates; true test stimuli must not reach model fitting or candidate generation.",
+      "evidence_ids": [
+        "mb-supp",
+        "mb-readme"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "GLMSingle betas normalized within session, NSDGeneral masking, random single training repeat and averaging test repetitions. Author preprocessing includes adaptive pooling; native feature transforms and model weights must be pinned for replay.",
+      "evidence_ids": [
+        "mb-supp",
+        "mb-eval"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Nominated primary is Table 2 target-7 CLIP two-way identification at 4000 calibration images: for predicted image j, fraction of other real-image features with strictly lower Pearson correlation than its true image; average across j. Use source CLIP ViT-L/14 transforms. Retain all eight paper metrics and all three budget conditions; the primary nomination is a benchmark design choice.",
+      "evidence_ids": [
+        "mb-eval",
+        "mb-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Mean identification across the complete original target-7 test-image set, separately at 500, 1500 and 4000 calibration images. The nominated primary is the 4000-image mean. Do not substitute a cross-subject average, selected test subset or local adaptation-benefit AUC.",
+      "evidence_ids": [
+        "mb-eval",
+        "mb-paper"
+      ]
+    },
+    "full_panel": {
+      "status": "verified",
+      "description": "Complete original Table 2: target subject 7; MindBridge reset-tuning from source subjects 1/2/5 and the target-only Vanilla-from-scratch companion; 500, 1500 and 4000 calibration-image conditions; all 982 original test images and all eight metrics separately for every arm/budget. This is six rows and 48 scalar findings. Preserve PixCorr, SSIM, AlexNet(2), AlexNet(5), Inception, CLIP, EffNet-B and SwAV; no selected metric, budget, image subset, Table 1 four-subject result or adaptation AUC can replace this panel.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-supp",
+        "mb-eval"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Use the original source-subject 1/2/5 neural pretraining observations only for the adaptation arm, target-7 calibration neural observations and associated training stimuli/captions at each original budget, and source image-generation priors. The Vanilla companion is trained from scratch on the same target-7 calibration condition. Reconstruction uses the original target-7 test fMRI with source repeat averaging; final true test stimuli are operator inputs for best-of-eight selection and metric computation only after all eight candidate images freeze. The source uses target-aware evaluation; it does not permit test-target fitting or candidate generation. Exact dataset identities, prior exposure and enforcement remain unqualified.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-supp",
+        "mb-readme",
+        "mb-recon",
+        "mb-selection"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "table2.vanilla.500.pixcorr",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 PixCorr for Vanilla target-only from scratch companion with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.079,
+      "units": "dimensionless Pearson correlation",
+      "aggregation": "Mean of per-image Pearson correlations between flattened RGB target and selected reconstruction after the source 425-pixel bilinear resize. Keep this vanilla arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published PixCorr number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact PixCorr extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.500.ssim",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 SSIM for Vanilla target-only from scratch companion with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.171,
+      "units": "dimensionless structural-similarity score",
+      "aggregation": "Mean per-image grayscale SSIM after source 425-pixel bilinear resize, gaussian_weights=True, sigma=1.5, use_sample_covariance=False and data_range=1.0; exact native skimage/multichannel semantics require qualification. Keep this vanilla arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published SSIM number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact SSIM extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.500.alexnet2",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 AlexNet(2) for Vanilla target-only from scratch companion with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.735,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source AlexNet features.4. Keep this vanilla arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published AlexNet(2) number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact AlexNet(2) extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.500.alexnet5",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 AlexNet(5) for Vanilla target-only from scratch companion with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.833,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source AlexNet features.11. Keep this vanilla arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published AlexNet(5) number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact AlexNet(5) extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.500.inception",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 Inception for Vanilla target-only from scratch companion with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.744,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source InceptionV3 avgpool. Keep this vanilla arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published Inception number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact Inception extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.500.clip",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 CLIP for Vanilla target-only from scratch companion with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.801,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using final OpenAI CLIP ViT-L/14 encode_image features and source bilinear224 transform, not selection hidden-token cosine. Keep this vanilla arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published CLIP number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact CLIP extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.500.effnet_b",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 EffNet-B for Vanilla target-only from scratch companion with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.894,
+      "units": "dimensionless Pearson correlation distance",
+      "aggregation": "Mean of 982 paired target/selected-reconstruction correlation distances, one minus Pearson correlation, in source EfficientNet-B1 avgpool features; lower is better. Keep this vanilla arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published EffNet-B number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact EffNet-B extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.500.swav",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 SwAV for Vanilla target-only from scratch companion with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.587,
+      "units": "dimensionless Pearson correlation distance",
+      "aggregation": "Mean of 982 paired target/selected-reconstruction correlation distances, one minus Pearson correlation, in source SwAV ResNet50 avgpool features; lower is better; the source dynamic main/weight identity remains to be frozen. Keep this vanilla arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published SwAV number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact SwAV extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.500.pixcorr",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 PixCorr for MindBridge adaptation from subjects 1/2/5 with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.112,
+      "units": "dimensionless Pearson correlation",
+      "aggregation": "Mean of per-image Pearson correlations between flattened RGB target and selected reconstruction after the source 425-pixel bilinear resize. Keep this mindbridge arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published PixCorr number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact PixCorr extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.500.ssim",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 SSIM for MindBridge adaptation from subjects 1/2/5 with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.229,
+      "units": "dimensionless structural-similarity score",
+      "aggregation": "Mean per-image grayscale SSIM after source 425-pixel bilinear resize, gaussian_weights=True, sigma=1.5, use_sample_covariance=False and data_range=1.0; exact native skimage/multichannel semantics require qualification. Keep this mindbridge arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published SSIM number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact SSIM extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.500.alexnet2",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 AlexNet(2) for MindBridge adaptation from subjects 1/2/5 with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.796,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source AlexNet features.4. Keep this mindbridge arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published AlexNet(2) number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact AlexNet(2) extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.500.alexnet5",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 AlexNet(5) for MindBridge adaptation from subjects 1/2/5 with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.89,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source AlexNet features.11. Keep this mindbridge arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published AlexNet(5) number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact AlexNet(5) extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.500.inception",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 Inception for MindBridge adaptation from subjects 1/2/5 with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.823,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source InceptionV3 avgpool. Keep this mindbridge arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published Inception number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact Inception extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.500.clip",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 CLIP for MindBridge adaptation from subjects 1/2/5 with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.867,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using final OpenAI CLIP ViT-L/14 encode_image features and source bilinear224 transform, not selection hidden-token cosine. Keep this mindbridge arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published CLIP number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact CLIP extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.500.effnet_b",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 EffNet-B for MindBridge adaptation from subjects 1/2/5 with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.84,
+      "units": "dimensionless Pearson correlation distance",
+      "aggregation": "Mean of 982 paired target/selected-reconstruction correlation distances, one minus Pearson correlation, in source EfficientNet-B1 avgpool features; lower is better. Keep this mindbridge arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published EffNet-B number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact EffNet-B extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.500.swav",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 SwAV for MindBridge adaptation from subjects 1/2/5 with 500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.521,
+      "units": "dimensionless Pearson correlation distance",
+      "aggregation": "Mean of 982 paired target/selected-reconstruction correlation distances, one minus Pearson correlation, in source SwAV ResNet50 avgpool features; lower is better; the source dynamic main/weight identity remains to be frozen. Keep this mindbridge arm/500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published SwAV number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact SwAV extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.1500.pixcorr",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 PixCorr for Vanilla target-only from scratch companion with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.107,
+      "units": "dimensionless Pearson correlation",
+      "aggregation": "Mean of per-image Pearson correlations between flattened RGB target and selected reconstruction after the source 425-pixel bilinear resize. Keep this vanilla arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published PixCorr number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact PixCorr extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.1500.ssim",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 SSIM for Vanilla target-only from scratch companion with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.206,
+      "units": "dimensionless structural-similarity score",
+      "aggregation": "Mean per-image grayscale SSIM after source 425-pixel bilinear resize, gaussian_weights=True, sigma=1.5, use_sample_covariance=False and data_range=1.0; exact native skimage/multichannel semantics require qualification. Keep this vanilla arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published SSIM number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact SSIM extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.1500.alexnet2",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 AlexNet(2) for Vanilla target-only from scratch companion with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.794,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source AlexNet features.4. Keep this vanilla arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published AlexNet(2) number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact AlexNet(2) extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.1500.alexnet5",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 AlexNet(5) for Vanilla target-only from scratch companion with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.9,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source AlexNet features.11. Keep this vanilla arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published AlexNet(5) number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact AlexNet(5) extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.1500.inception",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 Inception for Vanilla target-only from scratch companion with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.824,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source InceptionV3 avgpool. Keep this vanilla arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published Inception number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact Inception extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.1500.clip",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 CLIP for Vanilla target-only from scratch companion with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.872,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using final OpenAI CLIP ViT-L/14 encode_image features and source bilinear224 transform, not selection hidden-token cosine. Keep this vanilla arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published CLIP number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact CLIP extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.1500.effnet_b",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 EffNet-B for Vanilla target-only from scratch companion with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.844,
+      "units": "dimensionless Pearson correlation distance",
+      "aggregation": "Mean of 982 paired target/selected-reconstruction correlation distances, one minus Pearson correlation, in source EfficientNet-B1 avgpool features; lower is better. Keep this vanilla arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published EffNet-B number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact EffNet-B extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.1500.swav",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 SwAV for Vanilla target-only from scratch companion with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.523,
+      "units": "dimensionless Pearson correlation distance",
+      "aggregation": "Mean of 982 paired target/selected-reconstruction correlation distances, one minus Pearson correlation, in source SwAV ResNet50 avgpool features; lower is better; the source dynamic main/weight identity remains to be frozen. Keep this vanilla arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published SwAV number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact SwAV extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.1500.pixcorr",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 PixCorr for MindBridge adaptation from subjects 1/2/5 with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.14,
+      "units": "dimensionless Pearson correlation",
+      "aggregation": "Mean of per-image Pearson correlations between flattened RGB target and selected reconstruction after the source 425-pixel bilinear resize. Keep this mindbridge arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published PixCorr number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact PixCorr extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.1500.ssim",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 SSIM for MindBridge adaptation from subjects 1/2/5 with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.25,
+      "units": "dimensionless structural-similarity score",
+      "aggregation": "Mean per-image grayscale SSIM after source 425-pixel bilinear resize, gaussian_weights=True, sigma=1.5, use_sample_covariance=False and data_range=1.0; exact native skimage/multichannel semantics require qualification. Keep this mindbridge arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published SSIM number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact SSIM extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.1500.alexnet2",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 AlexNet(2) for MindBridge adaptation from subjects 1/2/5 with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.846,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source AlexNet features.4. Keep this mindbridge arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published AlexNet(2) number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact AlexNet(2) extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.1500.alexnet5",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 AlexNet(5) for MindBridge adaptation from subjects 1/2/5 with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.926,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source AlexNet features.11. Keep this mindbridge arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published AlexNet(5) number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact AlexNet(5) extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.1500.inception",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 Inception for MindBridge adaptation from subjects 1/2/5 with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.858,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source InceptionV3 avgpool. Keep this mindbridge arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published Inception number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact Inception extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.1500.clip",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 CLIP for MindBridge adaptation from subjects 1/2/5 with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.91,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using final OpenAI CLIP ViT-L/14 encode_image features and source bilinear224 transform, not selection hidden-token cosine. Keep this mindbridge arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published CLIP number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact CLIP extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.1500.effnet_b",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 EffNet-B for MindBridge adaptation from subjects 1/2/5 with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.796,
+      "units": "dimensionless Pearson correlation distance",
+      "aggregation": "Mean of 982 paired target/selected-reconstruction correlation distances, one minus Pearson correlation, in source EfficientNet-B1 avgpool features; lower is better. Keep this mindbridge arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published EffNet-B number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact EffNet-B extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.1500.swav",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 SwAV for MindBridge adaptation from subjects 1/2/5 with 1500 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.485,
+      "units": "dimensionless Pearson correlation distance",
+      "aggregation": "Mean of 982 paired target/selected-reconstruction correlation distances, one minus Pearson correlation, in source SwAV ResNet50 avgpool features; lower is better; the source dynamic main/weight identity remains to be frozen. Keep this mindbridge arm/1500-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published SwAV number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact SwAV extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.4000.pixcorr",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 PixCorr for Vanilla target-only from scratch companion with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.114,
+      "units": "dimensionless Pearson correlation",
+      "aggregation": "Mean of per-image Pearson correlations between flattened RGB target and selected reconstruction after the source 425-pixel bilinear resize. Keep this vanilla arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published PixCorr number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact PixCorr extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.4000.ssim",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 SSIM for Vanilla target-only from scratch companion with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.232,
+      "units": "dimensionless structural-similarity score",
+      "aggregation": "Mean per-image grayscale SSIM after source 425-pixel bilinear resize, gaussian_weights=True, sigma=1.5, use_sample_covariance=False and data_range=1.0; exact native skimage/multichannel semantics require qualification. Keep this vanilla arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published SSIM number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact SSIM extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.4000.alexnet2",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 AlexNet(2) for Vanilla target-only from scratch companion with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.814,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source AlexNet features.4. Keep this vanilla arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published AlexNet(2) number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact AlexNet(2) extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.4000.alexnet5",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 AlexNet(5) for Vanilla target-only from scratch companion with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.922,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source AlexNet features.11. Keep this vanilla arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published AlexNet(5) number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact AlexNet(5) extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.4000.inception",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 Inception for Vanilla target-only from scratch companion with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.853,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source InceptionV3 avgpool. Keep this vanilla arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published Inception number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact Inception extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.4000.clip",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 CLIP for Vanilla target-only from scratch companion with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.898,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using final OpenAI CLIP ViT-L/14 encode_image features and source bilinear224 transform, not selection hidden-token cosine. Keep this vanilla arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published CLIP number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact CLIP extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.4000.effnet_b",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 EffNet-B for Vanilla target-only from scratch companion with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.815,
+      "units": "dimensionless Pearson correlation distance",
+      "aggregation": "Mean of 982 paired target/selected-reconstruction correlation distances, one minus Pearson correlation, in source EfficientNet-B1 avgpool features; lower is better. Keep this vanilla arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published EffNet-B number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact EffNet-B extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.vanilla.4000.swav",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 SwAV for Vanilla target-only from scratch companion with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.491,
+      "units": "dimensionless Pearson correlation distance",
+      "aggregation": "Mean of 982 paired target/selected-reconstruction correlation distances, one minus Pearson correlation, in source SwAV ResNet50 avgpool features; lower is better; the source dynamic main/weight identity remains to be frozen. Keep this vanilla arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published SwAV number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact SwAV extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.4000.pixcorr",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 PixCorr for MindBridge adaptation from subjects 1/2/5 with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.156,
+      "units": "dimensionless Pearson correlation",
+      "aggregation": "Mean of per-image Pearson correlations between flattened RGB target and selected reconstruction after the source 425-pixel bilinear resize. Keep this mindbridge arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published PixCorr number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact PixCorr extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.4000.ssim",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 SSIM for MindBridge adaptation from subjects 1/2/5 with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.258,
+      "units": "dimensionless structural-similarity score",
+      "aggregation": "Mean per-image grayscale SSIM after source 425-pixel bilinear resize, gaussian_weights=True, sigma=1.5, use_sample_covariance=False and data_range=1.0; exact native skimage/multichannel semantics require qualification. Keep this mindbridge arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published SSIM number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact SSIM extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.4000.alexnet2",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 AlexNet(2) for MindBridge adaptation from subjects 1/2/5 with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.857,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source AlexNet features.4. Keep this mindbridge arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published AlexNet(2) number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact AlexNet(2) extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.4000.alexnet5",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 AlexNet(5) for MindBridge adaptation from subjects 1/2/5 with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.941,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source AlexNet features.11. Keep this mindbridge arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published AlexNet(5) number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact AlexNet(5) extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.4000.inception",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 Inception for MindBridge adaptation from subjects 1/2/5 with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.889,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using source InceptionV3 avgpool. Keep this mindbridge arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published Inception number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact Inception extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.4000.clip",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 CLIP for MindBridge adaptation from subjects 1/2/5 with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.925,
+      "units": "proportion correctly identified in two-way comparisons",
+      "aggregation": "For each selected reconstruction, fraction of the other 981 target images having strictly lower Pearson feature correlation than its matching target; mean across 982 reconstruction identities using final OpenAI CLIP ViT-L/14 encode_image features and source bilinear224 transform, not selection hidden-token cosine. Keep this mindbridge arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published CLIP number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact CLIP extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.4000.effnet_b",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 EffNet-B for MindBridge adaptation from subjects 1/2/5 with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.765,
+      "units": "dimensionless Pearson correlation distance",
+      "aggregation": "Mean of 982 paired target/selected-reconstruction correlation distances, one minus Pearson correlation, in source EfficientNet-B1 avgpool features; lower is better. Keep this mindbridge arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published EffNet-B number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact EffNet-B extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    },
+    {
+      "id": "table2.mindbridge.4000.swav",
+      "kind": "scalar",
+      "description": "Original Table 2 target-7 SwAV for MindBridge adaptation from subjects 1/2/5 with 4000 calibration images. The expected value is the publicly printed reference, not an observed AI result; all eight candidates must be frozen before the source target-aware choice, and one selected image supplies all metrics.",
+      "status": "verified",
+      "expected": 0.458,
+      "units": "dimensionless Pearson correlation distance",
+      "aggregation": "Mean of 982 paired target/selected-reconstruction correlation distances, one minus Pearson correlation, in source SwAV ResNet50 avgpool features; lower is better; the source dynamic main/weight identity remains to be frozen. Keep this mindbridge arm/4000-image condition separate; no averaging across budgets or source subjects.",
+      "evidence_ids": [
+        "mb-paper",
+        "mb-eval",
+        "mb-supp"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The published SwAV number is a rounded source target. Its display precision is not an admitted reproduction tolerance. Reproduction variation from source training, eight-candidate generation/selection and the exact SwAV extraction/runtime must be measured or otherwise scientifically justified before freezing a tolerance for this original condition.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-eval",
+          "mb-supp"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No confidence level, containment rule, image-resampling scheme or number of independent fitted/generation runs is admitted. Freeze a source-justified reproduction criterion accounting for shared gallery, paired budgets and native stochastic execution; interval overlap or nonsignificance cannot establish reproduction.",
+        "independent_unit": "Unique target-7 stimulus for a conditional fixed-gallery image summary; independent fitted/generation run for stochastic variation. Repeats, eight candidates and 981 pairwise competitors are not independent participants; one target subject does not support new-subject population inference.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The paper Table 2 supplies point estimates, not an admitted equivalence band or replication design for these two AI information conditions.",
+        "evidence_ids": [
+          "mb-paper",
+          "mb-supp",
+          "mb-eval"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate the complete original 982-stimulus target-7 test identity roster and all original source-subject/target training, session, ROI and repeat joins, including every 500/1500/4000 calibration membership. The released lexicographic prefix rule is recovered, but its authentic published memberships are not. Cached metadata separates8559 train and300 validation; do not merge them to create a replacement8859-prefix split.",
+    "No end-to-end runnable submitted-analysis interface or authentic input manifest is admitted for both original Table2 arms across all three budgets. The released training/recon/eval scripts are source routes; actual native training/checkpoint inference, diffusion and all eight metric extractors have not been qualified here.",
+    "The tested source-protocol-v2 helper consumes supplied embeddings/inventories; it does not derive fMRI inputs, train/adapt either arm, produce any of the47136 required candidate images, extract selection features or compute a complete empirical reproduction. The predecessor fixed-index feature evaluator changes source selection, omits native SSIM/extraction and is not the original Table2 evaluator.",
+    "A protected operator must independently execute the frozen submitted program on authenticated neural/calibration inputs; retain all six condition outputs and all eight candidate images per original test stimulus before any target-aware selection. Require genuine generation/exposure receipts and verify the common selected image; target-derived indices or features must not reach fitting or generation.",
+    "Independent computational verification must bind original stimulus/neural/calibration identities, repetition/pooling outputs, trained/checkpoint provenance, all candidate image tensors,257x768 selection-token features and eight cosine scores, the chosen5892 image tensors, source-native metric features/SSIM inputs, per-image scores/all-gallery comparison counts, and all48 final aggregates including the Vanilla companion. Merely importing or printing published table numbers cannot qualify.",
+    "Freeze exact diffusion/CLIP/AlexNet/Inception/EfficientNet/SwAV weights, preprocessing/runtime versions and upstream exposure; source SwAV main is mutable, SSIM version/multichannel semantics and source-device near-tie selection parity remain unresolved. The selection CLIP tokens and final CLIP identification representation must stay distinct.",
+    "Justify separate metric/condition reproduction tolerances and uncertainty from source computation and stochastic variation; none is inferred from decimal rounding. Preserve all48 findings, every982-image denominator and all original Vanilla/adaptation contrasts without selecting successful rows or inventing a headline reproduction score.",
+    "Paper+data and paper+data+author-code need one genuine common authentic-input manifest, source cohort/split/panel/observation/metric/aggregation identities, protected evaluation/verifier, exposure policy and cumulative episode budgets. Only author code may differ. Data, generation priors, permitted checkpoints and exposure must not silently differ; none of these paired manifests is yet admitted.",
+    "The paper and its48 printed targets are allowed public inputs, and source stimuli may be publicly exposed. Equality with these known values is not evidence of computation. No private targets, hidden perturbations, new splits, smaller panels or historical solver relabeling can supply missing verification."
+  ]
+}
