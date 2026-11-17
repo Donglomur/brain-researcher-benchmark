@@ -1,0 +1,1111 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-002",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Retinal reproduction is an independent first-class objective. Three full-population published summaries are source targets, but authentic147site/232ROI joins, original split/cache/checkpoint and complete required control/companion targets and criteria remain unresolved. The accepted scorer supplies only prediction arithmetic, not genuine analysis execution or a complete reproductive endpoint. Separate reduced7field results and the broader full36 registration are not promoted to full retinal or whole-programme success.",
+  "source_paper": {
+    "title": "Jaxley: differentiable simulation enables large-scale training of detailed biophysical models of neural dynamics",
+    "url": "https://www.nature.com/articles/s41592-025-02895-w"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12695658/",
+      "locator": "Results: Fitting neural networks to large-scale recordings; Figure 3; Methods: Hybrid model of the retina",
+      "supports": "Original retinal stimulus-to-calcium task has mean held-out Pearson correlation 0.25 over 147 recording sites; final-paper figure numbering differs from author directory naming."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/3708064",
+      "locator": "Ran et al. version 1.0 record and file metadata",
+      "supports": "Source archive contains retinal imaging, morphology and recording/ROI metadata; no arrays were acquired for this review."
+    },
+    {
+      "id": "train",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/train.py",
+      "locator": "Cell selection; full-field recording loading; masked per-ROI correlations and validation-selected test tracking",
+      "supports": "Author routine selects 20161028_1, loads avg_recordings.pkl and computes an arithmetic mean of masked per-ROI Pearson correlations."
+    },
+    {
+      "id": "split",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/utils/dataloader.py",
+      "locator": "build_dataloaders",
+      "supports": "Author splitter permutes indices and allocates test first, then training/validation, persisting index files."
+    },
+    {
+      "id": "config",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/config/train.yaml",
+      "locator": "Fields, samples, validation fraction and test_num",
+      "supports": "Defaults cover fields 1–15, 1024 samples per field, validation fraction 0.2 and test_num 128; these are not proven to be the published mean-0.25 run settings."
+    },
+    {
+      "id": "prep",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/utils/data_utils.py",
+      "locator": "Recording preprocessing, compartment assignment and response masks",
+      "supports": "Author loader uses lowpass labels, combines recording locations assigned to the same morphology compartment and masks unavailable sites."
+    },
+    {
+      "id": "legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/CURRENT_SCIENTIFIC_LIMITS.json",
+      "locator": "missing_historical_equivalence, unissued_external_authentic_inputs, grading_not_run",
+      "supports": "Current source retains explicit historical retinal-147-site-cache and input/backend holds."
+    },
+    {
+      "id": "scope",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/CANONICAL_SPEC.json",
+      "locator": "full_programme_conditions and admission",
+      "supports": "Implementation expands to 36 families and four conditions but explicitly remains unrunnable and unqualified; a retinal result cannot silently satisfy this whole programme."
+    },
+    {
+      "id": "retinal-distribution",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12695658/",
+      "locator": "Results: Fitting neural networks to large-scale recordings; final Figure 3c and accompanying retinal text; prior improvement comparison.published_baseline",
+      "supports": "Prior source-grounded contract records mean test r=0.25 across147 sites,146 positive sites and maximum0.51. These printed values are expected source targets, not local executed results."
+    },
+    {
+      "id": "retinal-companions",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12695658/",
+      "locator": "Final Figure3a-f; Methods Hybrid model of the retina; retained original J15-J19 obligations",
+      "supports": "Anatomy/observation construction, full retinal prediction, compartmentalization, receptive fields and separate reduced-data comparison have distinct native outputs. Exact companion target values and comparison conventions remain unrecovered in this rollout."
+    },
+    {
+      "id": "source-retinal-results",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/notebooks/04_results.ipynb",
+      "locator": "Pinned author result notebook identified in preserved source tree; retained retina.py compartmentalization/receptive_fields adapters",
+      "supports": "Source route for spatial calcium/voltage and experimental-versus-model receptive fields; current adapter equivalence and reference arrays remain unqualified."
+    },
+    {
+      "id": "source-reduced-data",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/notebooks/05_ann_inductive_bias.ipynb",
+      "locator": "Pinned retinal inductive-bias notebook; retained CANONICAL_SPEC J19 and retina.py::baseline_matrix",
+      "supports": "Separate Fig3f seven-field comparison of linear,MLP,hybrid families at32,64,128,256,512 training-size settings. Historical field/split/repeat and aggregation equivalence remains unresolved; this is not the full147site endpoint."
+    },
+    {
+      "id": "original-controls",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/fa92bd1ceb8d6695cbbfc9ebb52e873f86b70cae/benchmarks/paper/PAPER-paper-method-002/historical/task.pre-improvement.v1.json",
+      "locator": "primary_outputs[1]",
+      "supports": "Preserved original retinal task asks for fitted model comparison with fixed/untrained or constrained-parameter controls on identical stimulus splits. Exact original control identities/values are not recovered; no new control choice is made here."
+    },
+    {
+      "id": "retinal-scorer",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/fa92bd1ceb8d6695cbbfc9ebb52e873f86b70cae/benchmarks/paper/PAPER-paper-method-002/implementations/retinal-heldout/score.py",
+      "locator": "compare(operator,author,candidate); validate_sites; validate_split; source_metrics; CLI --targets --author --candidate --output",
+      "supports": "Runnable software scorer aligns complete147site/232ROI/full15field held-out predictions and emits mean and per-site Pearson values,counts and paired deltas. It does not compute predictions or authenticate data,source splits,fit procedure or AI execution."
+    },
+    {
+      "id": "retinal-source-interface",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/fa92bd1ceb8d6695cbbfc9ebb52e873f86b70cae/benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/programme/scientific/retina.py",
+      "locator": "anatomy; prediction_products; compartmentalization; receptive_fields; baseline_matrix",
+      "supports": "Source-native granular output inventory for J15-J19; exact profiles and native qualification remain held. Reference capture source is not a qualified participant runtime."
+    },
+    {
+      "id": "full36-boundary",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/fa92bd1ceb8d6695cbbfc9ebb52e873f86b70cae/benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/PUBLICATION_SCOPE.md",
+      "locator": "full36/four-condition/144job scope and separate canonical task roster",
+      "supports": "The wider preserved programme is not rewritten or declared reproduced by the retinal outcome; generic native run/score remains unqualified."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original task.json retinal target: predict dendritic calcium of the supplied transient Off-alpha retinal ganglion cell from checkerboard stimulation using its detailed morphology. This is final published Figure 3, despite author directory nex/fig4_rgc and historical Fig4 labels. The broader 36-family implementation is retained and must not be declared won by this single endpoint.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "scope"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Source retinal recording archive Ran et al. version 1.0 at Zenodo 3708064; cell 20161028_1. The exact historical avg_recordings.pkl cache, morphology-to-ROI joins and source artifact hashes remain unqualified.",
+      "evidence_ids": [
+        "data",
+        "train",
+        "prep",
+        "legacy"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "One source retinal ganglion cell, with 15 recording fields and 147 model recording sites in the published aggregate. Methods describe 232 raw ROIs before source processing; the authentic 232-to-147 mapping must be recovered rather than selecting favorable sites.",
+      "evidence_ids": [
+        "paper",
+        "prep",
+        "legacy"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original held-out image evaluation with separate validation selection. Author build_dataloaders saves permuted split indices, but exact published run indices/configuration are unrecovered; config defaults are not evidence of the published split. Reduced-data Figure 3f has a different seven-field/512-test design and must stay separate.",
+      "evidence_ids": [
+        "paper",
+        "split",
+        "config"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original checkerboard stimuli, training calcium labels, cell morphology and author model/input transformations. Final held-out calcium is scoring-only; fitted conductances need not identify biological truth.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "prep"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Paper Methods use the first 1024 stimuli per field, 7-Hz lowpass calcium filtering, per-ROI standardization and 1.8-second label delay. Author loader merges compartment-assigned recording sites and masks unavailable labels; historical cache equivalence remains an execution gate.",
+      "evidence_ids": [
+        "paper",
+        "prep"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "For each recording site compute Pearson correlation between predicted and observed held-out calcium on its valid mask; then take the arithmetic mean across the 147 sites. Training loss or neuron-simulator numerical agreement cannot replace this response-prediction score.",
+      "evidence_ids": [
+        "paper",
+        "train"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Published mean held-out Pearson correlation across 147 recording sites of one cell. Sites, stimuli and fields are dependent measurements within that cell, not 147 independent biological replicates; the seven-field reduced-data result is a separate comparison.",
+      "evidence_ids": [
+        "paper",
+        "train"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Retain cell20161028_1, all15 fields with1024 source image rows per field, all232 raw ROIs and their authentic147site mapping, the complete original held-out site vector and all source masks/splits. Required retinal companions include the original matched fixed/untrained or constrained control comparison, J15 anatomy/observation identities, J17 spatial calcium/voltage compartmentalization and J18 experimental/model receptive fields. Keep the complete J19 Figure3f seven-field,512-test,three-family/five-training-size comparison separately identified; its scores never replace the full147site score. Exact original companion values,control membership and historical recipe equivalence remain unresolved. The wider36-family/four-condition registration remains preserved and receives no whole-programme reproduction or improvement result from this retinal contract.",
+      "evidence_ids": [
+        "paper",
+        "prep",
+        "train",
+        "original-controls",
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface",
+        "full36-boundary"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Both information conditions receive the same source paper, original checkerboard stimuli, morphology, training calcium and frozen validation mechanism with identical raw-ROI/site identities, transformations and final masks. Final held-out calcium is operator-scoring-only. The paper_data_author_code condition adds only the pinned author-code information; it does not add target arrays, alternate splits, extra fields,parameter-selection privileges or a different baseline. Paper figures and printed findings are exposed allowed inputs, so independent authentic-data execution and granular output verification are required to distinguish computation from aggregate copying.",
+      "evidence_ids": [
+        "paper",
+        "data",
+        "train",
+        "split",
+        "prep"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "retinal147_mean_test_pearson",
+      "kind": "scalar",
+      "description": "Full original retinal mean held-out calcium prediction correlation.",
+      "status": "verified",
+      "expected": 0.25,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Arithmetic mean of per-site Pearson correlations on each original valid held-out mask, retaining all147 sites from all15fields; undefined sites are not dropped.",
+      "evidence_ids": [
+        "paper",
+        "retinal-distribution",
+        "train",
+        "prep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source mean0.25 is rounded. Rounding precision alone does not justify an equivalence band for a stochastic fitting replay; exact reference outputs, historical split/cache and source variability are not qualified. No0.005 or other tolerance, confidence level or independent-site assumption is invented.",
+        "evidence_ids": [
+          "paper",
+          "retinal-distribution",
+          "train",
+          "prep"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source mean0.25 is rounded. Rounding precision alone does not justify an equivalence band for a stochastic fitting replay; exact reference outputs, historical split/cache and source variability are not qualified. No0.005 or other tolerance, confidence level or independent-site assumption is invented.",
+        "evidence_ids": [
+          "paper",
+          "retinal-distribution",
+          "train",
+          "prep"
+        ]
+      }
+    },
+    {
+      "id": "retinal147_positive_test_site_count",
+      "kind": "scalar",
+      "description": "Number of the complete147 original recording sites with positive held-out Pearson correlation.",
+      "status": "verified",
+      "expected": 146,
+      "units": "recording sites",
+      "aggregation": "Count r>0 over the same complete147site vector used for the mean; retain negative/undefined sites and source identities.",
+      "evidence_ids": [
+        "paper",
+        "retinal-distribution",
+        "train"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The reported146 is a descriptive source target. It does not supply a replay tolerance or significance rule near r=0; exact site correlations, optimization variation and source support must be recovered before a count-matching criterion is frozen.",
+        "evidence_ids": [
+          "paper",
+          "retinal-distribution",
+          "train"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The reported146 is a descriptive source target. It does not supply a replay tolerance or significance rule near r=0; exact site correlations, optimization variation and source support must be recovered before a count-matching criterion is frozen.",
+        "evidence_ids": [
+          "paper",
+          "retinal-distribution",
+          "train"
+        ]
+      }
+    },
+    {
+      "id": "retinal147_maximum_test_pearson",
+      "kind": "scalar",
+      "description": "Maximum held-out Pearson correlation in the complete original147site distribution.",
+      "status": "verified",
+      "expected": 0.51,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Maximum of the same complete masked147site correlation vector, never a selected site subset or a different split.",
+      "evidence_ids": [
+        "paper",
+        "retinal-distribution",
+        "train"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded maximum0.51 does not establish a tolerance for an extreme statistic or identify its source site. Exact source vector and stochastic/conditional uncertainty remain unresolved.",
+        "evidence_ids": [
+          "paper",
+          "retinal-distribution",
+          "train"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The rounded maximum0.51 does not establish a tolerance for an extreme statistic or identify its source site. Exact source vector and stochastic/conditional uncertainty remain unresolved.",
+        "evidence_ids": [
+          "paper",
+          "retinal-distribution",
+          "train"
+        ]
+      }
+    },
+    {
+      "id": "retinal_original_fitting_control_comparison",
+      "kind": "categorical",
+      "description": "Original fitted-versus-fixed/untrained or constrained-parameter response-prediction finding on identical full retinal stimulus splits; exact originally required control membership and reported direction/magnitude remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source qualitative finding",
+      "aggregation": "Retain every originally required control with all147sites and identical observations,masks,splits; source control membership must be established before any categorical or numerical comparison.",
+      "evidence_ids": [
+        "original-controls",
+        "train",
+        "retinal-source-interface"
+      ],
+      "categories": [
+        "fitted_model_improves_original_matched_controls",
+        "fitted_model_does_not_improve_original_matched_controls"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source criterion is not recovered; no numerical tolerance or inferred direction is substituted. Any required numerical panel remains a granular verification obligation.",
+        "evidence_ids": [
+          "original-controls",
+          "train",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The historical registration requires this comparison but does not identify a complete source control panel, expected magnitude, direction threshold or uncertainty rule. Do not invent a baseline, choose the favorable control,or use generic author-versus-candidate labels as proof.",
+        "evidence_ids": [
+          "original-controls",
+          "train",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "retinal_spatial_compartmentalization",
+      "kind": "categorical",
+      "description": "Original spatial/temporal calcium and voltage compartmentalization response to the declared distal-branch stimulation in Figure3d.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source qualitative finding",
+      "aggregation": "Full source morphology, all source-recorded branch calcium and declared stimulated/remote-site voltage/calcium trajectories under each original stimulus; no favorable branch/time selection.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-retinal-results",
+        "retinal-source-interface"
+      ],
+      "categories": [
+        "localized_calcium_with_distinct_voltage_spread",
+        "no_localized_calcium_with_distinct_voltage_spread"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source criterion is not recovered; no numerical tolerance or inferred direction is substituted. Any required numerical panel remains a granular verification obligation.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-retinal-results",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Reference branch/stimulus/trajectory identities and original categorical/numerical decision criteria remain unqualified. Source adapter arrays and literal stimulation choices are not empirical evidence for the published finding.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-retinal-results",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "retinal_receptive_field_correspondence",
+      "kind": "categorical",
+      "description": "Original experimental-versus-model receptive-field localization/shape correspondence in Figure3e.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source qualitative finding",
+      "aggregation": "Retain all147 sites with experimental/model RF arrays, normalization, source coordinates and original contour/native-comparison conventions; no selected illustrative-site substitution.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-retinal-results",
+        "retinal-source-interface"
+      ],
+      "categories": [
+        "experimental_model_receptive_fields_correspond",
+        "experimental_model_receptive_fields_do_not_correspond"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source criterion is not recovered; no numerical tolerance or inferred direction is substituted. Any required numerical panel remains a granular verification obligation.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-retinal-results",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Exact source RF reference arrays, coordinate/normalization mapping and0.6/0.5/0.4 contour-profile equivalence are unresolved. No arbitrary distance threshold, correlation cutoff or significance level is supplied.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-retinal-results",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_linear_size32",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for linear at source training-size setting32; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_mlp_size32",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for MLP at source training-size setting32; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_hybrid_size32",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for hybrid at source training-size setting32; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_linear_size64",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for linear at source training-size setting64; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_mlp_size64",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for MLP at source training-size setting64; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_hybrid_size64",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for hybrid at source training-size setting64; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_linear_size128",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for linear at source training-size setting128; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_mlp_size128",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for MLP at source training-size setting128; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_hybrid_size128",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for hybrid at source training-size setting128; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_linear_size256",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for linear at source training-size setting256; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_mlp_size256",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for MLP at source training-size setting256; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_hybrid_size256",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for hybrid at source training-size setting256; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_linear_size512",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for linear at source training-size setting512; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_mlp_size512",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for MLP at source training-size setting512; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    },
+    {
+      "id": "reduced7_field_test_pearson_hybrid_size512",
+      "kind": "scalar",
+      "description": "Separate Figure3f reduced-data held-out learning-curve point for hybrid at source training-size setting512; never the full147site Figure3c score.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Retain all seven original fields, each original site population, all source training/validation/test predictions and repeats,512test examples and the exact source field/repeat reduction. Field identities, realized split, whether size includes validation,repeat counts and historical aggregation remain unresolved. Preserve native SEM/tests as companions without treating fields or seeds as independent cells.",
+      "evidence_ids": [
+        "retinal-companions",
+        "source-reduced-data",
+        "retinal-source-interface"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The exact published curve ordinate, historical field/repeat aggregation and source stochastic variability are unrecovered. The prospective complete7x5x3x5 adapter cannot supply the published target or an equivalence tolerance; no number is inferred from the separate0.25 full-population result.",
+        "evidence_ids": [
+          "retinal-companions",
+          "source-reduced-data",
+          "retinal-source-interface"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Recover and authenticate cell20161028_1 morphology,232 raw ROI identities,147 merged sites,all15fields, original filtered/delayed normalized calcium and historical cache correspondence.",
+    "Recover exact published training/validation/test indices and checkpoint/configuration; defaults including128test rows do not establish historical equivalence.",
+    "Recover exact original matched fixed/untrained or constrained control membership and findings without inventing or selecting a convenient control.",
+    "Pin J15 anatomy/mechanism/observation transforms and resolve607-versus556parameter,units,scale,soma andkernel variants before native reference equivalence.",
+    "Recover original J17 spatial trajectory references and J18 RF arrays/coordinates/contour conventions and source-native comparison criteria.",
+    "Recover all original Fig3f seven-field learning-curve ordinates,controls,split/validation/repeat identity and nativeSEM/tests; current complete prospective adapter is not historical proof and cannot replace the full147site result.",
+    "Justify finding-specific tolerances and dependence-aware uncertainty from source evidence; published rounding and one-cell site/field/seed repetition do not establish an equivalence criterion.",
+    "No authentic data manifest, immutable granular-output identities or independent submitted-analysis verification program is admitted. Therefore admission_policy is omitted rather than populated with source-file hashes masquerading as data/output identities.",
+    "The retinal-heldout scorer consumes operator-owned targets and two supplied prediction packets; it does not derive predictions, run the submitted analysis, verify author/control execution or attest target isolation. Printed0.25/146/0.51 values or executable aggregate printers cannot establish reproduction.",
+    "Paired paper_data and paper_data_author_code common inputs,code-only exposure difference,independent execution/custody,author-code manifest and cumulative budgets remain unresolved for both outcomes.",
+    "Preserve all36 families/four conditions/144jobs and existing qualification holds in the broader source registration. This retinal contract supplies no claim for the other paper families."
+  ]
+}

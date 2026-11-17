@@ -1,0 +1,1763 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-EXP-20261113-004",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Original descriptive Figures 2/3 are first-class reproduction targets independently of method superiority. Pinned source defines real scalar summaries and mandatory array-valued findings, but targets, authentic derivations, full structured panel and agreement criteria are unresolved. Existing software controls or author replay cannot establish an AI reproduction.",
+  "source_paper": {
+    "title": "A flexible hippocampal population code for experience relative to reward",
+    "url": "https://www.nature.com/articles/s41593-025-01985-4"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-01985-4",
+      "locator": "Fig. 3a–c; Methods, Decoding of RR position",
+      "supports": "Original RR decoding target, source cross-validation, occupancy matching and cosine metric; Fig. 3 effect sizes are not raw decoding accuracies."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GiocomoLab/Sosa_et_al_2024/main/README.md",
+      "locator": "Data organization; preprocessing and stochasticity notes",
+      "supports": "Author data classes include computed cell classifications and depend on stochastic processing; current main is not a historical publication pin."
+    },
+    {
+      "id": "data-route",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GiocomoLab/Sosa_et_al_2024/adf0f9ed3defa22275d92fa0ed996f47008e05b3/docs/data_download.md",
+      "locator": "Data download instructions",
+      "supports": "Distinct preprocessed and postprocessed releases; postprocessed data already contain RR cell identities; switch days 3,5,7,8,10,12,14."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-EXP-20261113-004/task.json",
+      "locator": "reproduction; improvement; code; data",
+      "supports": "Historical Fig. 2/3 scope, proposed chronological extension and unresolved author revision."
+    },
+    {
+      "id": "evaluator",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-EXP-20261113-004/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "split_session; prepare; score; HOLDS",
+      "supports": "Current executable scorer uses a prospective chronological split and animal-level summaries, not the published Fig. 3 split."
+    },
+    {
+      "id": "paper-fig2",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12229899/",
+      "locator": "Results: Moving reward induced remapping spanning the environment; Fig. 2 caption panels d-g; rendered primary source lines 130-142",
+      "supports": "Published remapping census summaries and circular mean positions with confidence limits for first/last-switch RR distributions. These are expected source values only, not computational execution."
+    },
+    {
+      "id": "fig2-source",
+      "kind": "author_code",
+      "url": "https://github.com/GiocomoLab/Sosa_et_al_2024/blob/adf0f9ed3defa22275d92fa0ed996f47008e05b3/notebooks/Fig2_Ext2_identifyRewardRelative.md",
+      "locator": "Cell classification lines 131-201; census 252-440; Fig. 2 histograms, fraction above shuffle and LMM 514-772; reward exclusion and before/after curves 775-1036",
+      "supports": "Complete remapping census and cell masks, circular peak and shuffle distributions, actual scalar fraction/regression summaries, and required exclusion-distance companions. Current source pin is not proof of publication revision."
+    },
+    {
+      "id": "fig3-source",
+      "kind": "author_code",
+      "url": "https://github.com/GiocomoLab/Sosa_et_al_2024/blob/adf0f9ed3defa22275d92fa0ed996f47008e05b3/notebooks/Fig3_Decoder.md",
+      "locator": "Population and preparation 80-280; five models and shuffle 344-512; Fig. 3c 571-766; Fig. 3a example 771 onward; Fig. 3b session table and statistics 835-1034",
+      "supports": "Eleven named mice, seven switch days, three cell populations, five model conditions, ten folds, 100 shuffles; original cosine and position-bin z-score derivations and paired session statistics."
+    },
+    {
+      "id": "decoder-source",
+      "kind": "author_code",
+      "url": "https://github.com/GiocomoLab/Sosa_et_al_2024/blob/adf0f9ed3defa22275d92fa0ed996f47008e05b3/src/reward_relative/decode.py",
+      "locator": "CircularRegression and train_vs_test_blocks",
+      "supports": "Author projected-normal circular regression, mean cosine score, ten ordered test blocks and stochastic training selection; linear sin/cos least-squares is not this baseline."
+    },
+    {
+      "id": "remapping-source",
+      "kind": "author_code",
+      "url": "https://github.com/GiocomoLab/Sosa_et_al_2024/blob/adf0f9ed3defa22275d92fa0ed996f47008e05b3/src/reward_relative/dayData.py",
+      "locator": "_hist_dist_btwn_rel; _frac_hist_above_shuf; plot_rew_rel_hist_across_an; plot_rew_rel_hist_indiv_an; get_cell_class_n",
+      "supports": "Native cell classification, normalized circular histograms, positive histogram excess over the 95th shuffle percentile, original exclusion flags and source-native intermediate arrays."
+    },
+    {
+      "id": "preprocessed-data",
+      "kind": "author_data",
+      "url": "https://doi.org/10.25452/figshare.plus.27098065",
+      "locator": "Version 1; seven switch days 3,5,7,8,10,12,14",
+      "supports": "Registered preprocessed fluorescence and behavior route for recomputation; no admitted individual-file/sample identity manifest or executed result is established here."
+    },
+    {
+      "id": "postprocessed-data",
+      "kind": "author_data",
+      "url": "https://doi.org/10.25452/figshare.plus.27138633",
+      "locator": "Version 1; postprocessed multiDayData",
+      "supports": "Reference/reconstruction route includes retrospective RR identities. It cannot silently become a hidden-prediction input or independently authenticate recalculated identities."
+    },
+    {
+      "id": "score-construction",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/fa92bd1ceb8d6695cbbfc9ebb52e873f86b70cae/benchmarks/paper/PAPER-EXP-20261113-004/implementations/fig3-score-v2/README.md",
+      "locator": "Original Fig. 3b score construction, interfaces and limitations",
+      "supports": "Existing JSON adapter and fold arithmetic cover 1155 source conditions and matched-support comparison. Generated controls are software evidence, not authentic reproduction or improvement."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Decode circular position relative to reward from CA1 activity, retaining Fig. 3 before-switch and after-switch conditions and RR, TR and non-RR cell panels; Fig. 2 remapping outputs remain calibration.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Author preprocessed Figshare 27098065 and postprocessed 27138633 are identified, but exact immutable files and Fig. 3 sample mapping remain unadmitted. The registered DANDI version differs from the current author download route.",
+      "evidence_ids": [
+        "data-route",
+        "registration"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Fig. 3 includes 11 switching mice over seven switch days, 77 sessions; smaller animal/session subsets cannot substitute.",
+      "evidence_ids": [
+        "paper",
+        "data-route"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper specifies tenfold 90/10 fitting before the switch, testing before or after, and last 30 post-switch trials for matched support. Exact realized folds and occupancy sample indices remain absent; chronological half-session calibration is an extension.",
+      "evidence_ids": [
+        "paper",
+        "evaluator"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Deconvolved calcium event time series for each original cell subpopulation. Historical retrospective RR classification must be reproduced and disclosed; any train-only classification changes need a separately labelled comparison.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source speed threshold is >2 cm/s and occupancy matching uses 45 circular bins. Exact position/reward alignment, teleport treatment, stochastic classifications and downsampling realization still need binding.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "registration"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Per-sample score cos(theta_RR - theta_hat_RR), higher is better; Fig. 3b compares session means with shuffle means. Effect size 2.7 for post-switch RR is not a cosine score.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Fig. 3b averages time samples and cross-validation folds within session; Fig. 3c uses session-shuffle z-scores and animal averages. These remain distinct endpoints.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Original registered reproduction is complete Figures 2 and 3 for all 11 switching mice and seven switch days (77 sessions), with original exclusions and source companions. Fig. 3 native support is 77 sessions x 3 cell populations (rr, track, nonreward_remap) x 5 models (train0_test0, train0_test1, train1_test1, train1_test0, random) = 1155 conditions. The 462 train0_test0/train0_test1 conditions form Fig. 3b; the other 693 remain required companions. Retain all ten ordered test folds, real sample predictions/targets, training selections and 100 shuffle realizations, without collapsing conditions. Mandatory Fig. 3c retains real/shuffle binwise scores and z-scores for both cross-switch directions, every day and population, and first/last-switch source profiles with animal means and SEM. The inspected source has 45 linspace edges and 44 intervals; do not silently reinterpret the inherited 45-bin wording. Fig. 3a requires its non-downsampled example trace rather than the downsampled quantification illustration. Fig. 2 requires original remapping masks and class census, cell-level circular peaks/cross-correlations, actual/shuffle histograms, individual and pooled above-shuffle fractions, switch trends, and reward-exclusion and preceding/following curves. The scalar findings below represent actual source summaries only. Required arrays remain unrepresented by the scalar schema; no complete-panel admission is claimed. The exact inherited target wording about Fig. 2 calibration is preserved for improvement-contract identity, not used to remove Fig. 2 from this first-class reproduction outcome.",
+      "evidence_ids": [
+        "registration",
+        "paper",
+        "fig2-source",
+        "fig3-source",
+        "remapping-source"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Reproduction requires authentic source fluorescence/deconvolved events, behavior and reward coordinates needed to reconstruct Figures 2/3, with all original source retrospective cell classification and occupancy-matching privileges disclosed. Postprocessed identities are reference/reconstruction evidence and cannot substitute for proof of recalculation. An improvement prediction boundary must separately resolve source-matched training labels, owner-held evaluation targets and retrospective classifications; the chronological neural-only extension is not the original split. Paper+data and paper+data+author-code must share original cohort, samples, folds, observations, preprocessing, metric/aggregation, evaluator and cumulative budgets, with author code the only added information. Authentic immutable exposure and input manifests are absent.",
+      "evidence_ids": [
+        "paper",
+        "registration",
+        "preprocessed-data",
+        "postprocessed-data",
+        "fig2-source",
+        "fig3-source"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig3b_train0_test0_rr_hedges_effect",
+      "kind": "scalar",
+      "description": "Fig. 3b rr, train0_test0: original real-versus-shuffle standardized effect, retaining the complete paired session-score table and original statistical contrasts. A standardized effect is not a cosine decoding accuracy.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Hedges standardized effect (dimensionless)",
+      "aggregation": "Original source paired session comparison: each real session score is the equal mean of ten within-fold mean cos(actual-predicted) scores; shuffle session means average ten folds then 100 repeats. Preserve 77 paired sessions and source pingouin pairwise_ttests within ct/score_type, subject sess_id, nonparametric, Bonferroni contrasts and effsize=hedges; exact package behavior/reference must be authenticated.",
+      "evidence_ids": [
+        "paper",
+        "fig3-source",
+        "decoder-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      }
+    },
+    {
+      "id": "fig3b_train0_test0_track_hedges_effect",
+      "kind": "scalar",
+      "description": "Fig. 3b track, train0_test0: original real-versus-shuffle standardized effect, retaining the complete paired session-score table and original statistical contrasts. A standardized effect is not a cosine decoding accuracy.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Hedges standardized effect (dimensionless)",
+      "aggregation": "Original source paired session comparison: each real session score is the equal mean of ten within-fold mean cos(actual-predicted) scores; shuffle session means average ten folds then 100 repeats. Preserve 77 paired sessions and source pingouin pairwise_ttests within ct/score_type, subject sess_id, nonparametric, Bonferroni contrasts and effsize=hedges; exact package behavior/reference must be authenticated.",
+      "evidence_ids": [
+        "paper",
+        "fig3-source",
+        "decoder-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      }
+    },
+    {
+      "id": "fig3b_train0_test0_nonreward_remap_hedges_effect",
+      "kind": "scalar",
+      "description": "Fig. 3b nonreward_remap, train0_test0: original real-versus-shuffle standardized effect, retaining the complete paired session-score table and original statistical contrasts. A standardized effect is not a cosine decoding accuracy.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Hedges standardized effect (dimensionless)",
+      "aggregation": "Original source paired session comparison: each real session score is the equal mean of ten within-fold mean cos(actual-predicted) scores; shuffle session means average ten folds then 100 repeats. Preserve 77 paired sessions and source pingouin pairwise_ttests within ct/score_type, subject sess_id, nonparametric, Bonferroni contrasts and effsize=hedges; exact package behavior/reference must be authenticated.",
+      "evidence_ids": [
+        "paper",
+        "fig3-source",
+        "decoder-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      }
+    },
+    {
+      "id": "fig3b_train0_test1_rr_hedges_effect",
+      "kind": "scalar",
+      "description": "Fig. 3b rr, train0_test1: original real-versus-shuffle standardized effect, retaining the complete paired session-score table and original statistical contrasts. A standardized effect is not a cosine decoding accuracy.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Hedges standardized effect (dimensionless)",
+      "aggregation": "Original source paired session comparison: each real session score is the equal mean of ten within-fold mean cos(actual-predicted) scores; shuffle session means average ten folds then 100 repeats. Preserve 77 paired sessions and source pingouin pairwise_ttests within ct/score_type, subject sess_id, nonparametric, Bonferroni contrasts and effsize=hedges; exact package behavior/reference must be authenticated.",
+      "evidence_ids": [
+        "paper",
+        "fig3-source",
+        "decoder-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      }
+    },
+    {
+      "id": "fig3b_train0_test1_track_hedges_effect",
+      "kind": "scalar",
+      "description": "Fig. 3b track, train0_test1: original real-versus-shuffle standardized effect, retaining the complete paired session-score table and original statistical contrasts. A standardized effect is not a cosine decoding accuracy.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Hedges standardized effect (dimensionless)",
+      "aggregation": "Original source paired session comparison: each real session score is the equal mean of ten within-fold mean cos(actual-predicted) scores; shuffle session means average ten folds then 100 repeats. Preserve 77 paired sessions and source pingouin pairwise_ttests within ct/score_type, subject sess_id, nonparametric, Bonferroni contrasts and effsize=hedges; exact package behavior/reference must be authenticated.",
+      "evidence_ids": [
+        "paper",
+        "fig3-source",
+        "decoder-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      }
+    },
+    {
+      "id": "fig3b_train0_test1_nonreward_remap_hedges_effect",
+      "kind": "scalar",
+      "description": "Fig. 3b nonreward_remap, train0_test1: original real-versus-shuffle standardized effect, retaining the complete paired session-score table and original statistical contrasts. A standardized effect is not a cosine decoding accuracy.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Hedges standardized effect (dimensionless)",
+      "aggregation": "Original source paired session comparison: each real session score is the equal mean of ten within-fold mean cos(actual-predicted) scores; shuffle session means average ten folds then 100 repeats. Preserve 77 paired sessions and source pingouin pairwise_ttests within ct/score_type, subject sess_id, nonparametric, Bonferroni contrasts and effsize=hedges; exact package behavior/reference must be authenticated.",
+      "evidence_ids": [
+        "paper",
+        "fig3-source",
+        "decoder-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper",
+          "fig3-source",
+          "decoder-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_rr_placecell_fraction_first_switch_mean",
+      "kind": "scalar",
+      "description": "Original source mean of RR-cell fraction among place cells on the first switch (day 3). Retain corresponding per-mouse numerators, denominators and cell identities.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction of place cells",
+      "aggregation": "For every switching mouse on day 3, n_rr / n_pcs_or from the original masks; source pandas Series mean across those mice. Standard deviation preserves source pandas convention, not a replacement confidence interval.",
+      "evidence_ids": [
+        "fig2-source",
+        "remapping-source",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "fig2_rr_placecell_fraction_first_switch_standard_deviation",
+      "kind": "scalar",
+      "description": "Original source standard deviation of RR-cell fraction among place cells on the first switch (day 3). Retain corresponding per-mouse numerators, denominators and cell identities.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction of place cells",
+      "aggregation": "For every switching mouse on day 3, n_rr / n_pcs_or from the original masks; source pandas Series std across those mice. Standard deviation preserves source pandas convention, not a replacement confidence interval.",
+      "evidence_ids": [
+        "fig2-source",
+        "remapping-source",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "fig2_rr_placecell_fraction_last_switch_mean",
+      "kind": "scalar",
+      "description": "Original source mean of RR-cell fraction among place cells on the last switch (day 14). Retain corresponding per-mouse numerators, denominators and cell identities.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction of place cells",
+      "aggregation": "For every switching mouse on day 14, n_rr / n_pcs_or from the original masks; source pandas Series mean across those mice. Standard deviation preserves source pandas convention, not a replacement confidence interval.",
+      "evidence_ids": [
+        "fig2-source",
+        "remapping-source",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "fig2_rr_placecell_fraction_last_switch_standard_deviation",
+      "kind": "scalar",
+      "description": "Original source standard deviation of RR-cell fraction among place cells on the last switch (day 14). Retain corresponding per-mouse numerators, denominators and cell identities.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction of place cells",
+      "aggregation": "For every switching mouse on day 14, n_rr / n_pcs_or from the original masks; source pandas Series std across those mice. Standard deviation preserves source pandas convention, not a replacement confidence interval.",
+      "evidence_ids": [
+        "fig2-source",
+        "remapping-source",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "fig2_pooled_above_shuffle_switch_slope",
+      "kind": "scalar",
+      "description": "Original pooled fraction-above-shuffle regression slope across the seven reward switches.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "fraction above shuffle per switch",
+      "aggregation": "Apply original regression.linear_reg to seven pooled fractions versus switch numbers 1..7. Each day uses source normalized circular peak-distance histogram, excludes track-relative cells, requires spatial information before AND after, retains reward-adjacent cells, and sums positive excess over the 95th-percentile shuffle histogram within source window. Preserve coefficients, r2, p and all underlying histogram/shuffle arrays; seven pooled days are not seven independent biological replicates.",
+      "evidence_ids": [
+        "fig2-source",
+        "remapping-source",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "fig2_pooled_above_shuffle_switch_r_squared",
+      "kind": "scalar",
+      "description": "Original pooled fraction-above-shuffle regression r squared across the seven reward switches.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless",
+      "aggregation": "Apply original regression.linear_reg to seven pooled fractions versus switch numbers 1..7. Each day uses source normalized circular peak-distance histogram, excludes track-relative cells, requires spatial information before AND after, retains reward-adjacent cells, and sums positive excess over the 95th-percentile shuffle histogram within source window. Preserve coefficients, r2, p and all underlying histogram/shuffle arrays; seven pooled days are not seven independent biological replicates.",
+      "evidence_ids": [
+        "fig2-source",
+        "remapping-source",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "fig2_pooled_above_shuffle_switch_p_value",
+      "kind": "scalar",
+      "description": "Original pooled fraction-above-shuffle regression p value across the seven reward switches.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "probability",
+      "aggregation": "Apply original regression.linear_reg to seven pooled fractions versus switch numbers 1..7. Each day uses source normalized circular peak-distance histogram, excludes track-relative cells, requires spatial information before AND after, retains reward-adjacent cells, and sums positive excess over the 95th-percentile shuffle histogram within source window. Preserve coefficients, r2, p and all underlying histogram/shuffle arrays; seven pooled days are not seven independent biological replicates.",
+      "evidence_ids": [
+        "fig2-source",
+        "remapping-source",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "fig2_mouse_lmm_switch_coefficient",
+      "kind": "scalar",
+      "description": "Original mouse random-intercept mixed-model switch coefficient for logit-transformed fraction above shuffle.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "logit fraction above shuffle per switch",
+      "aggregation": "Source df_f retains every mouse/day fraction and applies logit(avoid_naninf(fraction)); fit mixedlm(\"frac_logit ~ 1 + switch\", groups=\"mouse\", re_formula=\"~1\", missing=\"drop\") with REML. Preserve exact observed/missing rows, convergence, coefficients and wald_test_terms outputs. No independent-unit claim is inferred from cell or session counts.",
+      "evidence_ids": [
+        "fig2-source",
+        "remapping-source",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "fig2_mouse_lmm_switch_wald_statistic",
+      "kind": "scalar",
+      "description": "Original mouse random-intercept mixed-model switch wald statistic for logit-transformed fraction above shuffle.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Wald chi-square statistic",
+      "aggregation": "Source df_f retains every mouse/day fraction and applies logit(avoid_naninf(fraction)); fit mixedlm(\"frac_logit ~ 1 + switch\", groups=\"mouse\", re_formula=\"~1\", missing=\"drop\") with REML. Preserve exact observed/missing rows, convergence, coefficients and wald_test_terms outputs. No independent-unit claim is inferred from cell or session counts.",
+      "evidence_ids": [
+        "fig2-source",
+        "remapping-source",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "fig2_mouse_lmm_switch_wald_p_value",
+      "kind": "scalar",
+      "description": "Original mouse random-intercept mixed-model switch wald p value for logit-transformed fraction above shuffle.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "probability",
+      "aggregation": "Source df_f retains every mouse/day fraction and applies logit(avoid_naninf(fraction)); fit mixedlm(\"frac_logit ~ 1 + switch\", groups=\"mouse\", re_formula=\"~1\", missing=\"drop\") with REML. Preserve exact observed/missing rows, convergence, coefficients and wald_test_terms outputs. No independent-unit claim is inferred from cell or session counts.",
+      "evidence_ids": [
+        "fig2-source",
+        "remapping-source",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authenticated numerical reference and source-grounded computational agreement band is bound. Source rounding or a statement that stochastic values should be close does not justify a tolerance.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "fig2-source",
+          "remapping-source",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "fig2_reward_relative_position_day3_circular_mean",
+      "kind": "scalar",
+      "description": "Published Fig. 2 reward-relative position circular mean on switch day 3. Source cells have relative peaks within 50 cm before versus after switching; preserve original circular construction and distributions.",
+      "status": "verified",
+      "expected": 0.441,
+      "units": "radians",
+      "aggregation": "Circular mean test and reported 95% confidence limits for the pooled distribution of mean RR firing position: 453 qualifying cells across all 11 mice on day 3. Source cell-level inference is retained as a descriptive output, without treating those cells as independent animals.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source target is known, but its decimal precision and source confidence interval do not define computational equivalence. Stochastic/preprocessing variability and the agreement criterion remain uncalibrated.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_reward_relative_position_day3_source_ci_lower",
+      "kind": "scalar",
+      "description": "Published Fig. 2 reward-relative position source ci lower on switch day 3. Source cells have relative peaks within 50 cm before versus after switching; preserve original circular construction and distributions.",
+      "status": "verified",
+      "expected": 0.306,
+      "units": "radians",
+      "aggregation": "Circular mean test and reported 95% confidence limits for the pooled distribution of mean RR firing position: 453 qualifying cells across all 11 mice on day 3. Source cell-level inference is retained as a descriptive output, without treating those cells as independent animals.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source target is known, but its decimal precision and source confidence interval do not define computational equivalence. Stochastic/preprocessing variability and the agreement criterion remain uncalibrated.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_reward_relative_position_day3_source_ci_upper",
+      "kind": "scalar",
+      "description": "Published Fig. 2 reward-relative position source ci upper on switch day 3. Source cells have relative peaks within 50 cm before versus after switching; preserve original circular construction and distributions.",
+      "status": "verified",
+      "expected": 0.575,
+      "units": "radians",
+      "aggregation": "Circular mean test and reported 95% confidence limits for the pooled distribution of mean RR firing position: 453 qualifying cells across all 11 mice on day 3. Source cell-level inference is retained as a descriptive output, without treating those cells as independent animals.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source target is known, but its decimal precision and source confidence interval do not define computational equivalence. Stochastic/preprocessing variability and the agreement criterion remain uncalibrated.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_reward_relative_position_day14_circular_mean",
+      "kind": "scalar",
+      "description": "Published Fig. 2 reward-relative position circular mean on switch day 14. Source cells have relative peaks within 50 cm before versus after switching; preserve original circular construction and distributions.",
+      "status": "verified",
+      "expected": 0.292,
+      "units": "radians",
+      "aggregation": "Circular mean test and reported 95% confidence limits for the pooled distribution of mean RR firing position: 645 qualifying cells across all 11 mice on day 14. Source cell-level inference is retained as a descriptive output, without treating those cells as independent animals.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source target is known, but its decimal precision and source confidence interval do not define computational equivalence. Stochastic/preprocessing variability and the agreement criterion remain uncalibrated.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_reward_relative_position_day14_source_ci_lower",
+      "kind": "scalar",
+      "description": "Published Fig. 2 reward-relative position source ci lower on switch day 14. Source cells have relative peaks within 50 cm before versus after switching; preserve original circular construction and distributions.",
+      "status": "verified",
+      "expected": 0.205,
+      "units": "radians",
+      "aggregation": "Circular mean test and reported 95% confidence limits for the pooled distribution of mean RR firing position: 645 qualifying cells across all 11 mice on day 14. Source cell-level inference is retained as a descriptive output, without treating those cells as independent animals.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source target is known, but its decimal precision and source confidence interval do not define computational equivalence. Stochastic/preprocessing variability and the agreement criterion remain uncalibrated.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_reward_relative_position_day14_source_ci_upper",
+      "kind": "scalar",
+      "description": "Published Fig. 2 reward-relative position source ci upper on switch day 14. Source cells have relative peaks within 50 cm before versus after switching; preserve original circular construction and distributions.",
+      "status": "verified",
+      "expected": 0.38,
+      "units": "radians",
+      "aggregation": "Circular mean test and reported 95% confidence limits for the pooled distribution of mean RR firing position: 645 qualifying cells across all 11 mice on day 14. Source cell-level inference is retained as a descriptive output, without treating those cells as independent animals.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed source target is known, but its decimal precision and source confidence interval do not define computational equivalence. Stochastic/preprocessing variability and the agreement criterion remain uncalibrated.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_imaged_cell_count_mean",
+      "kind": "scalar",
+      "description": "Published source mean for imaged cell count; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 954,
+      "units": "cells per session",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and all seven switch days. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_imaged_cell_count_standard_deviation",
+      "kind": "scalar",
+      "description": "Published source standard deviation for imaged cell count; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 453,
+      "units": "cells per session",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and all seven switch days. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_place_cell_count_mean",
+      "kind": "scalar",
+      "description": "Published source mean for place cell count; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 459,
+      "units": "place cells per session",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and all seven switch days. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_place_cell_count_standard_deviation",
+      "kind": "scalar",
+      "description": "Published source standard deviation for place cell count; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 263,
+      "units": "place cells per session",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and all seven switch days. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_place_cell_fraction_mean",
+      "kind": "scalar",
+      "description": "Published source mean for place cell fraction; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 48.5,
+      "units": "percent of imaged cells",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and all seven switch days. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_place_cell_fraction_standard_deviation",
+      "kind": "scalar",
+      "description": "Published source standard deviation for place cell fraction; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 14.5,
+      "units": "percent of imaged cells",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and all seven switch days. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_track_relative_fraction_mean",
+      "kind": "scalar",
+      "description": "Published source mean for track relative fraction; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 21.4,
+      "units": "percent of place cells",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and six within-environment switches excluding day 8. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_track_relative_fraction_standard_deviation",
+      "kind": "scalar",
+      "description": "Published source standard deviation for track relative fraction; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 7.9,
+      "units": "percent of place cells",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and six within-environment switches excluding day 8. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_disappearing_fraction_mean",
+      "kind": "scalar",
+      "description": "Published source mean for disappearing fraction; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 11.2,
+      "units": "percent of place cells",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and six within-environment switches excluding day 8. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_disappearing_fraction_standard_deviation",
+      "kind": "scalar",
+      "description": "Published source standard deviation for disappearing fraction; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 7.0,
+      "units": "percent of place cells",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and six within-environment switches excluding day 8. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_appearing_fraction_mean",
+      "kind": "scalar",
+      "description": "Published source mean for appearing fraction; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 6.8,
+      "units": "percent of place cells",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and six within-environment switches excluding day 8. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_appearing_fraction_standard_deviation",
+      "kind": "scalar",
+      "description": "Published source standard deviation for appearing fraction; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 4.0,
+      "units": "percent of place cells",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and six within-environment switches excluding day 8. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_remap_near_reward_fraction_mean",
+      "kind": "scalar",
+      "description": "Published source mean for remap near reward fraction; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 4.8,
+      "units": "percent of place cells",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and six within-environment switches excluding day 8. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_remap_near_reward_fraction_standard_deviation",
+      "kind": "scalar",
+      "description": "Published source standard deviation for remap near reward fraction; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 3.3,
+      "units": "percent of place cells",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and six within-environment switches excluding day 8. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_remap_far_from_reward_fraction_mean",
+      "kind": "scalar",
+      "description": "Published source mean for remap far from reward fraction; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 15.6,
+      "units": "percent of place cells",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and six within-environment switches excluding day 8. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    },
+    {
+      "id": "fig2_census_remap_far_from_reward_fraction_standard_deviation",
+      "kind": "scalar",
+      "description": "Published source standard deviation for remap far from reward fraction; retain corresponding source cell-level masks and denominator census.",
+      "status": "verified",
+      "expected": 3.6,
+      "units": "percent of place cells",
+      "aggregation": "Published mean and standard deviation over original mouse/session census for all 11 switching mice and six within-environment switches excluding day 8. Initial remapping categories are quantified before the later RR exclusion, so preserve reward_inc_rr and nonreward_remap_inc_rr where appropriate; do not replace them with disjoint decoder classes.",
+      "evidence_ids": [
+        "paper-fig2",
+        "fig2-source",
+        "remapping-source"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded published mean/standard deviation is an expected source summary only. No absolute equivalence band is inferred from its rounding or descriptive dispersion.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Reconstruct the original summary and statistical decision with full native support; separately justify a computational reproduction uncertainty/acceptance rule before admission.",
+        "independent_unit": "Mouse; repeated sessions, cells, folds and shuffles are nested observations, not additional independent mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source descriptive tests and error bars are required outputs but do not specify a valid equivalence rule. The complete 11-mouse cohort remains mandatory; no confidence level or minimum replication criterion is invented.",
+        "evidence_ids": [
+          "paper-fig2",
+          "fig2-source",
+          "remapping-source"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "The scalar schema cannot represent the required Fig. 3b full session table, Fig. 3c position profiles, Fig. 2 cell masks/histograms and exclusion-distance curves, or original example traces. They remain mandatory in full_panel and the external granular-interface inventory. A reviewed structured-output extension or source-faithful complete evaluator is needed before admission; the scalar subset is not the full reproduction contract.",
+    "Some Fig. 2 scalar targets were verified in the primary article, but no complete expected numerical table, figure source array or Fig. 3 statistical vector is bound. The preserved improvement contract mentions post-switch RR effect size 2.7, but the later article read was blocked and this sidecar does not relabel that inherited statement as a newly source-verified complete target. Printed values alone would not be executed reproduction.",
+    "The pinned current author revision is inspected source, not proof of the historical publication revision. A source-supported protocol-equivalent stochastic rerun with recorded new random state is admissible in principle; historical RNG state is not an independent prerequisite. Such a rerun and its calibration have not occurred.",
+    "Authentic ordered cohort/cell/sample manifests, original occupancy selections and training/test fold receipts are missing. Native pickle authentication, safe loader custody and complete original preprocessed/postprocessed provenance remain unresolved.",
+    "Fig. 3b score construction consumes predictions and support but does not fit the author decoder, verify original retrospective memberships/occupancy sampling, or establish authentic data use. It does not implement Fig. 3c or Fig. 2. Its 1e-10 stored-score consistency check is software arithmetic only, not a reproduction tolerance.",
+    "Source Fig. 3 has 45 linspace edges (44 intervals); the unchanged improvement anchor says 45 bins. Source-specific alignment, teleport treatment, endpoint handling and bin identities must be resolved explicitly rather than silently altered.",
+    "Full Fig. 2 exclusions, cell-class overlap handling, shuffle realizations, logit missingness and source statistical decisions need independent output verification. The scoped 77-session cohort cannot be reduced to fit compute. Extended Data-only stay-day analyses are not silently added to this original switch-day task.",
+    "No source-justified tolerance, stochastic agreement rule or uncertainty criterion is frozen. Source session-level significance, effect size, mean/SEM and shuffle percentiles are distinct outputs and cannot substitute for computational equivalence.",
+    "No authentic-data analysis interface covering all findings, independent verification program, immutable full-panel/observation identities, protected paired delivery or matched cumulative access/resource budgets is admitted. Therefore admission_policy is omitted and both pairing protocols remain null."
+  ]
+}
