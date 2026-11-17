@@ -18,7 +18,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-004](NEURAL-004/README.md) | Sensory versus decision-stage contrast effects | 2 | not linked |
 | [NEURAL-005](NEURAL-005/README.md) | ERP contribution to subsequent social choice | 2 | [manifest](NEURAL-005/implementations/registered-runtime/manifest.json) |
 | [NEURAL-006](NEURAL-006/README.md) | Reward versus emotion prediction-error physiology | 2 | not linked |
-| [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 3 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
+| [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 4 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
 | [NEURAL-008](NEURAL-008/README.md) | EOG information beyond EEG and sleep timing | 2 | [manifest](NEURAL-008/implementations/registered-runtime/manifest.json) |
 | [NEURAL-009](NEURAL-009/README.md) | Pediatric continuous seizure-event detection | 1 | not linked |
 | [NEURAL-010](NEURAL-010/README.md) | Seizure false alarms and montage confounding | 1 | not linked |
@@ -88,7 +88,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-074](NEURAL-074/README.md) | Shared cognitive components across tasks | 1 | not linked |
 | [NEURAL-075](NEURAL-075/README.md) | Perception-to-imagery object decoding | 2 | [manifest](NEURAL-075/implementations/registered-runtime/manifest.json) |
 | [NEURAL-076](NEURAL-076/README.md) | Visual-feature hierarchy in mental imagery | 1 | [manifest](NEURAL-076/implementations/registered-runtime/manifest.json) |
-| [NEURAL-077](NEURAL-077/README.md) | Visual oddball target detection from EEG | 4 | [manifest](NEURAL-077/implementations/registered-runtime/manifest.json) |
+| [NEURAL-077](NEURAL-077/README.md) | Visual oddball target detection from EEG | 6 | [manifest](NEURAL-077/implementations/registered-runtime/manifest.json) |
 | [NEURAL-078](NEURAL-078/README.md) | Error-related negativity beyond response timing | 2 | [manifest](NEURAL-078/implementations/registered-runtime/manifest.json) |
 | [NEURAL-079](NEURAL-079/README.md) | Natural-video EEG response encoding | 1 | not linked |
 | [NEURAL-080](NEURAL-080/README.md) | Video dynamics versus eye movements in EEG | 1 | not linked |
