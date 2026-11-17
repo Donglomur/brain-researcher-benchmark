@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-replacement-015",
-  "source_id": "paper-method-replacement-015",
   "track": "paper",
   "title": "Spike Rate Inference from Mouse Spinal Cord Calcium Imaging Data",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Infer continuous, smoothed spike rates from spinal-cord calcium fluorescence against paired electrophysiology. Discrete-spike detection and in-vivo denoising are different endpoints.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Infer continuous, smoothed spike rates from spinal-cord calcium fluorescence against paired electrophysiology. Discrete-spike detection and in-vivo denoising are different endpoints.",
+    "Source-paper comparison for Per-neuron spike-rate correlation summarized by the original cell-type and sampling/noise panels: Pearson correlation of inferred and target spike-rate traces, higher is better. Error and signed bias must remain separate diagnostics rather than a new composite score."
+  ],
+  "success_criteria": [
+    "Recover exact original retrained-CASCADE per-cell outputs and every paper sampling/noise condition, with the original held-neuron exclusions.",
+    "Compare candidate and author models on identical fluorescence, target smoothing, alignment, edge masks and cell denominators.",
+    "Retain both glutamatergic and GABAergic cohorts; no favorable cell class, lower noise, slower target or reduced panel can define victory.",
+    "Keep source-era results and the later timing correction separate. Repairing a one-frame discrepancy is calibration, not scientific improvement.",
+    "Require meaningful correlation gain under a justified paired uncertainty rule with bias/error guardrails; new animal splits are extensions.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-replacement-015",
   "canonical_position_one_based": 69,
   "paper_identity": {
     "url": "https://doi.org/10.1523/JNEUROSCI.1187-24.2025",
     "publication_year": 2025,
     "venue": "Journal of Neuroscience"
   },
-  "primary_outputs": [
-    "Correlation, bias and error of inferred spike rates against paired electrical ground truth under the paper sampling/noise conditions.",
-    "Compare spinal retraining, cortical pretrained CASCADE, raw fluorescence and Suite2p/OASIS baselines with identical held-out cells and target smoothing."
-  ],
   "input_assets": {
     "routes": [
       "https://github.com/HelmchenLabSoftware/Cascade/tree/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth"
@@ -803,121 +814,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Code GPL-3.0. Preserve per-source ground-truth data terms; a code license alone is not evidence that every contributed recording shares that license.",
-        "Actual paired data files are publicly committed in the official repository."
-      ],
-      "declared_overlap_group": "cascade-spinal-ds40-ds41",
-      "existing_graph_evidence_leads": [
-        {
-          "tasks": [
-            "PAPER-paper-method-047",
-            "PAPER-paper-method-replacement-015"
-          ],
-          "relation": "shared_exact_data_locator",
-          "value": "https://github.com/HelmchenLabSoftware/Cascade/tree/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": false,
-          "biological_overlap_verified": false
-        }
-      ],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Correlation, bias and error of inferred spike rates against paired electrical ground truth under the paper sampling/noise conditions.",
-        "Compare spinal retraining, cortical pretrained CASCADE, raw fluorescence and Suite2p/OASIS baselines with identical held-out cells and target smoothing."
-      ],
-      "construction_specificity": "Freeze paper target smoothing, frame rate, edge mask, alignment, per-neuron correlation/bias/error definitions and inclusion rules; supplied demo paths are tree-verified rather than individually text-inspected in this record.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Historical paper settings and the 2026 timing correction must be distinct; a one-frame repair is not scientific improvement.",
-      "Retrained spinal CASCADE, cortical pretrained CASCADE, raw fluorescence and OASIS need identical held-out cells, kernels and label/tuning access.",
-      "The later GCaMP8 source audit exposes shared-library timing/memory risks, not DS40/41 empirical qualification or proof of spinal checkpoint membership."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Freeze paper target smoothing, frame rate, edge mask, alignment, per-neuron correlation/bias/error definitions and inclusion rules; supplied demo paths are tree-verified rather than individually text-inspected in this record.",
-        "Neuron/recording with every segment and noise replica grouped; animal/session mapping and demonstrably excluded-neuron baseline weights remain unknown.",
-        "The strongest improvement comparator needs training exclusion evidence or fair retraining. The common preprocessor allocation and TF/Torch timing discrepancy in the GCaMP8 preflight are transferable code-review warnings; the GCaMP8 counts, folds and scores are not spinal evidence.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve robustness/calibration across spinal neuron classes or reduce required labeled cells under identical leave-out partitions, noise levels and temporal resolution."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Improve robustness/calibration across spinal neuron classes or reduce required labeled cells under identical leave-out partitions, noise levels and temporal resolution."
-      ],
-      "independent_panel_gate": "Neuron/recording with every segment and noise replica grouped; animal/session mapping and demonstrably excluded-neuron baseline weights remain unknown.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": "CPU inference/GPU training;44paired-cell files. Paper reports7.4h and>70,000spikes; download size and runtime were not measured.",
-    "source_resource_evidence": "Unmeasured planning estimate unless an author-reported figure is separately stated.",
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "Freeze paper target smoothing, frame rate, edge mask, alignment, per-neuron correlation/bias/error definitions and inclusion rules; supplied demo paths are tree-verified rather than individually text-inspected in this record.",
-      "Neuron/recording with every segment and noise replica grouped; animal/session mapping and demonstrably excluded-neuron baseline weights remain unknown.",
-      "The strongest improvement comparator needs training exclusion evidence or fair retraining. The common preprocessor allocation and TF/Torch timing discrepancy in the GCaMP8 preflight are transferable code-review warnings; the GCaMP8 counts, folds and scores are not spinal evidence.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Build a DS40/41-specific source contract for file-to-cell/animal identity, exclusions, paper-era target construction and checkpoint membership; inspect the benchmark entrypoint and shared preprocessor before proposing any training.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Build a DS40/41-specific source contract for file-to-cell/animal identity, exclusions, paper-era target construction and checkpoint membership; inspect the benchmark entrypoint and shared preprocessor before proposing any training.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -1003,11 +899,84 @@
     ],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_statement": "CPU inference/GPU training;44paired-cell files. Paper reports7.4h and>70,000spikes; download size and runtime were not measured.",
+    "source_resource_evidence": "Unmeasured planning estimate unless an author-reported figure is separately stated.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-015/improvement.v1.json",
+      "bytes": 10285,
+      "sha256": "8bc9c83b2f6d029700c7e729d8c7de3c808cdaf3c67263aaaeac126c200a48ca"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-015/historical/task.pre-improvement.v1.json",
+        "bytes": 62282,
+        "sha256": "b24f01de53f9195dc060cfe7d88b05b531de544edd43c88b33b2edac62d3d80c"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-paper-method-replacement-015"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-015/implementations/registered-runtime/manifest.json",
+        "bytes": 14266,
+        "sha256": "beb7d189316b5555af28a5bf60b65c03c448259eff565abe44639a8578185a19"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After recovering the DS40/41 source-era configuration, iterate on declared training/development neurons while respecting each original leave-one-neuron-out exclusion. Keep all recordings and artificial-noise replicas of the test neuron out of that fit; tune denoisers and spike-rate inference only through the declared development route, with each attempt and timing convention recorded.",
+    "candidate_freeze": "Freeze the full glutamatergic/GABAergic roster, original sampling/noise grid and noise realizations, Gaussian target kernels, alignment and edge masks, source-era delay correction, held-neuron training exclusions, candidate parameters and budgets before final scoring. Do not select a favorable temporal shift using newly exposed final labels.",
+    "final_evaluation": "Evaluate candidate and recovered author models on every original held-neuron and sampling/noise condition. Preserve separate per-cell-type correlation summaries and bias/error diagnostics; retain failures and denominator changes explicitly. Lower noise, wider target smoothing, a subset of cells or the later timing repair cannot establish source-paper superiority.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The comparison target is the matching original retrained-CASCADE result, with cortical-default CASCADE, cross-dataset models, raw fluorescence and OASIS separately identified. Approximate default-model correlation and the modern demo’s different noise grid cannot replace the exact paper baseline. A source-era rerun and a timing-corrected rerun remain separate calibration records."
+  },
+  "blocking_issues": [
+    "Exact full numeric retrained-author baseline and original figure-producing configurations are not recovered.",
+    "Later author demo noise grid differs from the original published main comparison.",
+    "Delay correction, edge masks, random noise replicates and checkpoint training exclusions need source-era authentication.",
+    "Animal/session dependence and full original cell membership need a frozen manifest.",
+    "No qualified evaluator/rerun, justified effect threshold or fixed episode budgets."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact full numeric retrained-author baseline and original figure-producing configurations are not recovered.",
+      "Later author demo noise grid differs from the original published main comparison.",
+      "Delay correction, edge masks, random noise replicates and checkpoint training exclusions need source-era authentication.",
+      "Animal/session dependence and full original cell membership need a frozen manifest.",
+      "No qualified evaluator/rerun, justified effect threshold or fixed episode budgets."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original spike-rate inference endpoint is recoverable, but the exact full retrained-CASCADE correlation baseline, source-era timing/configurations and per-condition panel are not yet bound. Approximate cortical-default performance or a later timing repair cannot serve as the improvement target. Exact full numeric retrained-author baseline and original figure-producing configurations are not recovered. Later author demo noise grid differs from the original published main comparison. Delay correction, edge masks, random noise replicates and checkpoint training exclusions need source-era authentication. Animal/session dependence and full original cell membership need a frozen manifest. No qualified evaluator/rerun, justified effect threshold or fixed episode budgets.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-015/historical/task.pre-improvement.v1.json",
+      "bytes": 62282,
+      "sha256": "b24f01de53f9195dc060cfe7d88b05b531de544edd43c88b33b2edac62d3d80c"
+    },
+    "notes": "The registered runtime manifest has no qualified entrypoint or executed scientific comparison. Historical 44-cell/132-recording construction counts are not a paper win; all existing source/runtime artifacts remain calibration material."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

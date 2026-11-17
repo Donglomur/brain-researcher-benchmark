@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-010",
-  "source_id": "paper-method-010",
   "track": "paper",
   "title": "Rastermap: a discovery method for neural population recordings",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Recover one-dimensional within-module neuron order and preserve module continuity in the original Figure 1h-j five-module simulation benchmark. This is an endpoint actually evaluated in the source paper.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Recover one-dimensional within-module neuron order and preserve module continuity in the original Figure 1h-j five-module simulation benchmark. This is an endpoint actually evaluated in the source paper.",
+    "Source-paper comparison for Figure 1i per-module correctly ordered triplets (%); Figure 1j per-module contamination (%) is a required lower-is-better companion endpoint: Per-module fraction of sampled triples with the correct relative order, allowing reversal (higher is better), and sampled between-neuron contamination by other modules (lower is better). Preserve the exact metrics.py draw counts, qualifying-pair rule and interval slicing; report percentages as in Figure 1."
+  ],
+  "success_criteria": [
+    "Recover exact original published Rastermap scores and reproduce the source generator, original ten realizations and both per-module scoring panels.",
+    "Surpass Rastermap itself under the same source simulation condition; beating t-SNE, UMAP, random sorting or a locally authored baseline is insufficient.",
+    "Declare meaningful improvement, guardrails and paired uncertainty before candidate evaluation; retain every original module and both metrics rather than choosing a favorable subset.",
+    "Freeze candidate code and all tuning before final scoring; prohibit access to xi_all, iperm and latent generator outputs as model inputs, and disclose that the public generator and original seeds are exposed.",
+    "New seeds, altered noise, fewer neurons, power-law-only simulations, new splits or empirical behavior prediction can be separately reported source conditions or extensions, but cannot replace this Figure 1 score comparison.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-010",
   "canonical_position_one_based": 93,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41593-024-01783-4",
     "publication_year": 2024,
     "venue": "Nature Neuroscience"
   },
-  "primary_outputs": [
-    "Reproduce neural sorting and behavioral/position relationships from actual population activity, using source-defined preprocessing.",
-    "Compare organization/stability and held-out behavior-linked structure with declared baseline embeddings under equal input and tuning budgets."
-  ],
   "input_assets": {
     "routes": [
       "https://api.osf.io/v2/nodes/xn4cm/files/osfstorage/"
@@ -379,106 +390,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Public OSF exact files:spont2_data.npz1.95GB and hippocampus_data.npz6MB with fileIDs and metadata.",
-        "GPLv3 code; OSF data reuse license should be resolved before redistribution."
-      ],
-      "declared_overlap_group": "https://api.osf.io/v2/nodes/xn4cm/files/osfstorage/",
-      "existing_graph_evidence_leads": [],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Reproduce neural sorting and behavioral/position relationships from actual population activity, using source-defined preprocessing.",
-        "Compare organization/stability and held-out behavior-linked structure with declared baseline embeddings under equal input and tuning budgets."
-      ],
-      "construction_specificity": "Population sorting and behavior relationships documented, but visual similarity is not a metric: held-out structure/behavior, stability and baseline comparisons remain undefined.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Predefine held-out behavior/neighborhood and stability scores rather than reward attractive rasters.",
-      "Match source preprocessing and tuning against appropriate embedding baselines; do not infer discovery from order alone."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Population sorting and behavior relationships documented, but visual similarity is not a metric: held-out structure/behavior, stability and baseline comparisons remain undefined.",
-        "Recording/session and blocked time; neuron subsampling is a robustness perturbation, not independent biological replication.",
-        "Smallhippocampal6MBfile does not make a meaningful benchmark by itself; mousefile1.95GB and author16–32GBRAM guidance are not measured local requirements. OSF terms unresolved.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve stability under neuron subsampling or missing time periods, scoring independent structure preservation and downstream prediction rather than visual attractiveness."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Improve stability under neuron subsampling or missing time periods, scoring independent structure preservation and downstream prediction rather than visual attractiveness."
-      ],
-      "independent_panel_gate": "Recording/session and blocked time; neuron subsampling is a robustness perturbation, not independent biological replication.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": "CPU16–32GB for large mouse recording per author guidance; optional GPU for behavior predictor",
-    "source_resource_evidence": "Inspection estimate; no measured runtime.",
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "Population sorting and behavior relationships documented, but visual similarity is not a metric: held-out structure/behavior, stability and baseline comparisons remain undefined.",
-      "Recording/session and blocked time; neuron subsampling is a robustness perturbation, not independent biological replication.",
-      "Smallhippocampal6MBfile does not make a meaningful benchmark by itself; mousefile1.95GB and author16–32GBRAM guidance are not measured local requirements. OSF terms unresolved.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Choose a quantitative source-grounded central endpoint and independent temporal/behavior control using the exact hippocampus/mouse input schema before fitting Rastermap.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Choose a quantitative source-grounded central endpoint and independent temporal/behavior control using the exact hippocampus/mouse input schema before fitting Rastermap.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -554,11 +465,80 @@
     ],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_statement": "CPU16–32GB for large mouse recording per author guidance; optional GPU for behavior predictor",
+    "source_resource_evidence": "Inspection estimate; no measured runtime.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-010/improvement.v1.json",
+      "bytes": 13559,
+      "sha256": "69d79c1c42009119815f4158a8a151a314e5169bf719f490e21955e869e762e5"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-010/historical/task.pre-improvement.v1.json",
+        "bytes": 28326,
+        "sha256": "8764f79a3610f0323b82f342d2bfde9a98b5551241604d44af8684c1a97932bd"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-010-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After recovering the original baseline, iterate on explicitly declared development feedback while keeping the original ten-realization final roster fixed. Any additional development simulations must retain their provenance and may not substitute for the original final condition.",
+    "candidate_freeze": "Freeze algorithm, hyperparameters, source access, preprocessing, evaluator RNG policy, joint metric rule and budgets before scoring on the original final realizations.",
+    "final_evaluation": "Run the calibrated source Rastermap and frozen candidate on every original Figure 1 simulation using identical activity inputs and source metric semantics; report published agreement and candidate gains separately. Preserve the full ten-by-five-by-two result panel.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep original published scores, author reruns, alternative algorithms and later SOTA scores distinct. Existing empirical reconstruction and local synthetic unit controls remain calibration only."
+  },
+  "blocking_issues": [
+    "Original numeric Figure 1i-j baseline and sim_performance.npz provenance/checksums are unrecovered.",
+    "Original serialized simulation assets and execution environment need pinning and source-generator reconciliation without assuming reruns reproduce published bytes.",
+    "No calibrated complete simulation evaluator is bound to this registration; historical empirical evaluator measures different endpoints.",
+    "Meaningful-effect, joint-panel superiority and uncertainty rules remain unspecified.",
+    "Candidate development access, ground-truth isolation, tuning/compute and final-query budgets remain unfixed."
+  ],
+  "holds": {
+    "task_specific": [
+      "Original numeric Figure 1i-j baseline and sim_performance.npz provenance/checksums are unrecovered.",
+      "Original serialized simulation assets and execution environment need pinning and source-generator reconciliation without assuming reruns reproduce published bytes.",
+      "No calibrated complete simulation evaluator is bound to this registration; historical empirical evaluator measures different endpoints.",
+      "Meaningful-effect, joint-panel superiority and uncertainty rules remain unspecified.",
+      "Candidate development access, ground-truth isolation, tuning/compute and final-query budgets remain unfixed."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The source paper has a defensible ordered task: recover the original within-module ordering in its Figure 1 five-module simulation benchmark. The original generator, population, ten realization IDs and metric implementations are recoverable, but the published numeric Rastermap score panel and original result artifact have not been recovered and pinned. No scientific run establishes an author replay. The legacy empirical evaluator is not the simulation scorer and cannot establish this paper win. Original numeric Figure 1i-j baseline and sim_performance.npz provenance/checksums are unrecovered. Original serialized simulation assets and execution environment need pinning and source-generator reconciliation without assuming reruns reproduce published bytes. No calibrated complete simulation evaluator is bound to this registration; historical empirical evaluator measures different endpoints. Meaningful-effect, joint-panel superiority and uncertainty rules remain unspecified. Candidate development access, ground-truth isolation, tuning/compute and final-query budgets remain unfixed.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-010/historical/task.pre-improvement.v1.json",
+      "bytes": 28326,
+      "sha256": "8764f79a3610f0323b82f342d2bfde9a98b5551241604d44af8684c1a97932bd"
+    },
+    "notes": "Preserve all empirical artifacts and the original evaluator. They do not constrain the paper-wide improvement objective to a descriptive subanalysis. The source also provides nonlinear128-PC behavior prediction; its authentic score route may be separately reviewed, but local linear prediction is not equivalent."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

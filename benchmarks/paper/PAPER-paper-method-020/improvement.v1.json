@@ -1,0 +1,177 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-020",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Table 1 CSI1 overall accuracy 0.7041 is a verified numeric anchor, but the publication-identical evaluated query denominator, checkpoint selection and source scoring identity remain unresolved. Author test-based selection and query skipping differ from the local exhaustive train-only evaluator; that extension cannot be used to claim a source-paper win.",
+  "source_paper": {
+    "title": "Neuro-Symbolic Decoding of Neural Activity",
+    "url": "https://proceedings.iclr.cc/paper_files/paper/2026/file/33c069ac8440595724bcc373c9a52852-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2026/file/33c069ac8440595724bcc373c9a52852-Paper-Conference.pdf",
+      "locator": "Sections 4 and 5.1; Table 1; Appendix F.2 and G.1–G.2",
+      "supports": "Original CSI1 task, numerical paper score, question types, preprocessing and training settings."
+    },
+    {
+      "id": "loader",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/loader/fqa.py",
+      "locator": "get_npy_paths and FQADataset.__getitem__",
+      "supports": "Subject/split directory loading, per-record queries/answers and full-record return."
+    },
+    {
+      "id": "train",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/train_bold5000.py",
+      "locator": "main lines 31–46, 55–99 and 129–194",
+      "supports": "Train/test domain construction, query exclusion, training sampling, test-based checkpoint selection; source flags must be authenticated."
+    },
+    {
+      "id": "reg",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-020/task.json",
+      "locator": "implementations/initial-evaluator-v1/README.md; docs/initial-evaluator-v1.md; evaluator.py: prepare_assessment and score_assessment",
+      "supports": "Existing CSI1 metadata inventory (4802 train/84 test paths), prospective exhaustive scorer and explicitly unqualified status."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Answer semantic queries about the viewed image from CSI1 fMRI: action, position and true/false answers, using the original BOLD5000-QA task in Table 1. This is not visual reconstruction or a new cross-subject task.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Author BOLD5000-QA, derived from BOLD5000 images and image-aligned fMRI. Section 4 reports 133146 training and 2095 test QA examples; the source loader consumes the author subject/train and subject/test NPY directories. Payload identity and manifest reconciliation remain admission blockers.",
+      "evidence_ids": [
+        "paper",
+        "loader"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "CSI1 is the subject for Table 1 BOLD5000-QA and the registered component. Appendix four-subject mean 0.7102 and CNeuroMod results are different paper endpoints; neither may be substituted as this baseline or claimed from a CSI1 win.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Retain the original image-aligned train/test partition referenced in Appendix F.2 and the released CSI1 directories. Filenames are not validated stimulus IDs. Exact image aliases, eligible query denominator, selected checkpoint and exposure history remain unresolved. A new split or train-only denominator cannot count against Table 1.",
+      "evidence_ids": [
+        "paper",
+        "loader",
+        "train",
+        "reg"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "A symbolic question and the corresponding fMRI tensor; model output is a Boolean or answer-vocabulary concept. Images, scene graphs and answers used to construct QA are not inference inputs. Author source uses train+test query strings for symbolic-domain construction, which must be explicitly reconciled with the evaluation access policy.",
+      "evidence_ids": [
+        "paper",
+        "train"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Appendix F.2: WAVE-preprocessed image-aligned BOLD5000 fMRI, five TRs by 1024 regions, 2-second TR and a two-TR hemodynamic lag. Preserve the published atlas/model configuration; a different atlas is a separate paper condition.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Overall structured-answer QA accuracy, proportion of correct evaluated queries, with action/position/T/F companions. Exact original inclusion and decoding aggregation must match Table 1: training source can skip test queries with unseen concepts, whereas the local evaluator includes all declared queries and failures.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "reg"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Table 1 is within CSI1 QA-level overall accuracy, alongside category accuracies, not an equal-image or four-subject average. Image/person summaries and neural-input controls are additional diagnostics.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Table 1 BOLD5000-QA CSI1 overall QA accuracy on the publication-identical evaluated query set",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.7041,
+      "description": "Table 1 NEURONA (Ours), BOLD5000-QA Overall, is 0.7041; Action 0.6207, Position 0.5079 and T/F 0.7407 are companion endpoints. Table 2 unseen-query accuracy 0.6840 is a distinct setting.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No author model was run or checkpoint authenticated. Pinned train_bold5000.py supplies a route, but it constructs its domain with test queries, excludes some unseen concepts and reloads the checkpoint selected by best test accuracy.",
+      "evidence_ids": [
+        "train"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Select a scientifically meaningful absolute QA-accuracy gain using paired errors, category coverage and neural-information controls; the paper prior-method relative gain is not an appropriate minimum effect for a new method.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired uncertainty clustered by original stimulus/image identity, retaining all queries for an image together. Training-seed variability and historical test selection require separate treatment; no numeric confidence threshold is asserted here.",
+      "independent_unit": "Original image/stimulus identity within CSI1; seed is an algorithmic replicate, not another subject.",
+      "rationale": "The 2095 questions share a small image panel and a single person; treating questions as independent biological samples overstates evidence.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Authenticate the original CSI1 data, complete official test support, original query eligibility, atlas, symbolic-domain access and publication checkpoint selection before comparing with 0.7041.",
+      "Freeze a candidate selected without final-result feedback and evaluate candidate and authenticated author reference under an explicit comparable access policy; resolve historical source test tuning rather than silently copying or repairing it.",
+      "Require a predeclared meaningful gain over the original 0.7041 and the author rerun, plus valid paired uncertainty and complete action/position/T/F reporting.",
+      "Preserve no-neural and shuffled-neural controls with identical non-neural resources; a zero-input inference ablation is not a separately trained language-only baseline.",
+      "The local prospective exhaustive-query train-only protocol, a new image/person split or a smaller query set can support only a labeled extension. A CSI1 result does not establish four-subject or CNeuroMod superiority."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was established by this source review; a paper baseline is not a present-day SOTA baseline.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Iterate on the original training data and a development partition within training, with matched query/neural access. Fix how the author test-informed domain and checkpoint are treated before any candidate evaluation; no new external model budget is assumed.",
+    "candidate_freeze": "Freeze candidate source/weights, atlas, query transforms, vocabulary/domain, prompt or no-language-model declaration, eligible test manifest and selection rule before final scores.",
+    "final_evaluation": "Use the original Table 1 test task and independently authenticated reference. Produce exhaustive accounting of original eligible and excluded queries; keep the local all-query extension report separate.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The 0.7041 published score, a rerun of the author recipe and any modern comparator are separate. Calibration of structured decoding or the construction fixture is not a scientific result. Historical test selection must remain disclosed."
+  },
+  "blocking_issues": [
+    "Paper evaluated-query denominator and source unseen-concept exclusion have not been reconciled with the released 2095-test-query count.",
+    "Original checkpoint, seed/configuration and test-based selection history are not authenticated.",
+    "CSI1 stimulus identities, train/test aliases and permitted query-domain exposure require a label-blind audit.",
+    "Existing evaluator changes domain, selection and denominator policy; publication-parity evaluator and native rerun remain absent.",
+    "Meaningful effect, clustered uncertainty decision, and concrete access/resource budgets are not yet fixed."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Historical specifications and implementations remain calibration evidence; they do not establish surpassing the source paper."
+  }
+}

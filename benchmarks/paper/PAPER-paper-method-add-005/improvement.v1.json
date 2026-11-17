@@ -1,0 +1,178 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-add-005",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original AJILE12 missing-channel experiment has ordered decoding and imputation endpoints, but exact Fig. 3E participant-by-dropout decoding results and paper-equivalent event/mask provenance are not recovered. The current local MSE/PSD/ridge scorer is a prospective reconstruction extension, not the published RF decoding comparison.",
+  "source_paper": {
+    "title": "Generating realistic neurophysiological time series with denoising diffusion probabilistic models",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11573898/"
+  },
+  "evidence": [
+    {
+      "id": "nt-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11573898/",
+      "locator": "Results: DDPM-generated imputations improve neural decoding with missing data; Fig.3E; Methods: Data preprocessing and Details on the imputation experiment and neural decoder",
+      "supports": "Original12-participant design, day split, missingness levels, RF decoding and secondary correlation results."
+    },
+    {
+      "id": "nt-rf",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/mackelab/neural_timeseries_diffusion/7e9c3314dc242c36a206d18f13158c049e84cd1d/ntd/ajile_imputation_experiment.py",
+      "locator": "conditional_ajile_imputation_experiment",
+      "supports": "Random mask generation; observed/imputed signal merge; unstandardization; three RF folds,240 trees and depth9; accuracy outputs."
+    },
+    {
+      "id": "nt-config",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/mackelab/neural_timeseries_diffusion/7e9c3314dc242c36a206d18f13158c049e84cd1d/conf/dataset/ajile.yaml",
+      "locator": "signal_length/time_before_event/time_after_event; conditional_training; IQR fields",
+      "supports": "Source4-second event windows,1001 samples and five-IQR threshold configuration."
+    },
+    {
+      "id": "nt-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-add-005/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "HOLDS; score_case; participant/day preparation; summarize",
+      "supports": "Local standardized MSE, correlation and PSD metrics, mean/ridge reference and latest-day split are explicitly prospective rather than original RF results."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Impute whole missing ECoG channels and preserve their utility for rest-versus-movement decoding with the paper fixed random-forest classifier. Correlation/spectral fidelity are additional imputation checks, not interchangeable with classification accuracy.",
+      "evidence_ids": [
+        "nt-paper",
+        "nt-rf"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original AJILE12 processed event-window release from all 12 human participants. Exact files/event identities and preprocessing-to-paper lineage must be pinned; neither a new extracted subset nor an unqualified latest-day mapping establishes source identity.",
+      "evidence_ids": [
+        "nt-paper",
+        "nt-config",
+        "nt-registration"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All12 epilepsy-monitoring participants in Fig. 3E; each is modeled separately. Preserve each participant and all source dropout conditions rather than selecting the best participant.",
+      "evidence_ids": [
+        "nt-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper trains on the first 6 recording days and evaluates day 7. Reconcile each participant original day labels/event roster to author loader before adopting any latest-available-day implementation; a new blocked-time or participant-held-out split is an extension.",
+      "evidence_ids": [
+        "nt-paper",
+        "nt-registration"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "At test, observed ECoG channels plus their binary mask for the complete4-second event window. Retain 50%,70%,90% channel missingness with five source mask replicates; missing channel values and movement/rest answers remain evaluator-only.",
+      "evidence_ids": [
+        "nt-paper",
+        "nt-rf"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper uses class-balanced rest/movement windows at250Hz, per-channel training statistics and five-IQR outlier masking. Author config is1001 samples over -2..2s; preserve exact endpoint convention and reverse normalization before RF inference. Exact event/mask and seed lineage remains unrecovered.",
+      "evidence_ids": [
+        "nt-paper",
+        "nt-rf",
+        "nt-config"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Original downstream metric is binary rest/movement test accuracy = correct labels divided by all eligible original test events, after source RF decoding of completed observed-plus-imputed channels. Lower local MSE is not equivalent.",
+      "evidence_ids": [
+        "nt-paper",
+        "nt-rf"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "For each participant and50/70/90% dropout, average test accuracy over three RF training folds, then report mean and SD over five channel-mask replicates. Fig. 3E retains participant-specific curves; no invented equal-participant grand scalar replaces them. In the pinned code mask_seed also seeds the RF training permutation, so each reported replicate couples a channel mask and RF fit partitions.",
+      "evidence_ids": [
+        "nt-paper",
+        "nt-rf"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Fig. 3E per-participant rest-versus-movement RF accuracy at each original channel-dropout level",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "description": "Exact Fig. 3E DDPM accuracy vector for 12 participants times 3 dropout levels is not recovered as source numbers. Reported 0.27 DDPM and 0.50 deterministic-network correlation at 50% dropout are secondary imputation results, not RF accuracy baselines.",
+      "evidence_ids": [
+        "nt-paper"
+      ],
+      "value": null
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "Author conditional_ajile_imputation_experiment provides a reproducible route once data, trained diffusion models, deterministic comparator, masks and source RF recipe are resolved; no native baseline executed. Local ridge is not the paper neural-network baseline.",
+      "evidence_ids": [
+        "nt-rf",
+        "nt-registration"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Choose a scientifically meaningful gain in source RF accuracy across the original participant/dropout panel after recovering baseline variability, preserving observed-channel access and spectral/imputation diagnostics. No arbitrary margin or favorable mask selection.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired participant-level inference with each participant full dropout/mask/fold panel grouped; retain within-participant mask variation and original per-cell reporting. Determine multiplicity/decision rule before selection.",
+      "independent_unit": "human participant; folds, masks, channels and event windows are dependent repetitions",
+      "rationale": "The source five-replicate SD combines channel-mask variation, RF partition variation and stochastic imputation rather than independent people. In the source code mask_seed also seeds the RF training permutation; paired comparisons must hold masks and RF partitions identical. Temporal windows and repeated decoders must not inflate sample size.",
+      "evidence_ids": [
+        "nt-paper",
+        "nt-rf"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the full original Fig. 3E result vector, all 12-participant day/event identities and original mask-sampling protocol; reproduce author accuracy on historical masks or calibrated source-equivalent paired mask/RF-partition draws.",
+      "Compare to both published DDPM results and a competent author DDPM rerun with original deterministic-neural-network, mean-imputation and fully-observed controls.",
+      "Demonstrate a predeclared meaningful improvement over the original accuracy panel with appropriate participant-level uncertainty and matched observed-channel/time-context access.",
+      "A lower standardized MSE/PSD error, correlation-only gain, new ridge win, changed missingness pattern or new participant/time split is an extension and cannot establish the original decoding win.",
+      "Retain source secondary imputation correlations: surpassing DDPM 0.27 alone does not surpass the paper deterministic imputation result 0.50, and correlation does not guarantee decoding improvement.",
+      "Pair channel masks and RF training partitions across candidate/reference for every declared replicate; mask_seed controls both in the pinned author implementation. Source-equivalent stochastic mask draws are allowed after calibration; changed missingness mechanisms remain extensions."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The source-paper comparison is separate from present-day SOTA; no current leaderboard or later-method superiority is asserted.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Develop conditional imputation on original training-day windows and declared training-only validation; all final masks are isolated and source evaluation labels stay sealed. The published twelve-person imputation problem replaces no participant with a smaller proxy.",
+    "candidate_freeze": "Seal preprocessing, model training and sampling, data/day identities, channel access, RF recipe and all random seeds before final day 7 evaluation across the complete original mask panel.",
+    "final_evaluation": "After source recovery, apply candidate and paper-trained comparators to identical source test events and observed-channel masks, then unstandardize and score the original RF task. Keep local reconstruction scores as diagnostics.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Original published DDPM accuracy, independently rerun author DDPM and deterministic/mean source controls are distinct. Local mean/ridge reconstructions and rat-ripple F1 cannot substitute for this AJILE12 result. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+  },
+  "blocking_issues": [
+    "Numeric source Fig. 3E accuracy vector and complete participant/dropout/fold aggregation lineage are not recovered.",
+    "Original processed event identities, paper day 7 split, masks and RNG state need exact reconciliation with current author loader and local latest-day implementation.",
+    "No trained author imputation models, deterministic-network baseline or native RF numerical calibration is admitted.",
+    "Current local reconstruction scorer has no original RF-accuracy success path and must remain calibration/extension-only.",
+    "Meaningful effect, paired uncertainty decision and fixed access/cumulative compute budgets remain unresolved."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve evaluator.py, mean/ridge baselines and historical results. Its MSE/PSD/correlation outputs and180-case reconstructed panel remain calibration or separately labeled extension evidence, never a Fig. 3E paper victory."
+  }
+}

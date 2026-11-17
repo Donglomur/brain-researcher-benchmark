@@ -1,0 +1,186 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-004",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The source contains a genuine object-versus-scene decoding task (localizer-trained classifiers applied to retrieval EEG), but an exact final-article AUC comparator and complete native protocol are not recovered. Published remembered/nonremembered significance, effect size and respiration-memory correlation do not supply a decoding-performance baseline. The repository implementation explicitly changes preprocessing and time grids, so its results cannot establish a same-task paper win.",
+  "source_paper": {
+    "title": "Respiration shapes the neural dynamics of successful remembering in humans",
+    "url": "https://doi.org/10.1523/JNEUROSCI.1221-25.2025"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41339096/",
+      "locator": "Abstract and Figure 1c/e and Figure 3a–c captions",
+      "supports": "18-participant study, localizer/retrieval decoding and respiratory associations; reported inference is not a scalar AUC baseline."
+    },
+    {
+      "id": "deposit",
+      "kind": "author_data",
+      "url": "https://data.ub.uni-muenchen.de/596/",
+      "locator": "Description; files; deposited 30 April 2025",
+      "supports": "Preprint-linked release contains openData.zip, auxiliary.zip and 68 kB code.zip; version reconciliation to journal article needed."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://data.ub.uni-muenchen.de/596/5/code.zip",
+      "locator": "code/figure_1c.m; code/figure_3a.m; code/legacy/gen_classi_loc_ret_dvals.m",
+      "supports": "Direct static archive review: explicit 18-subject roster, LDA/AUC, localizer→retrieval classification, source preprocessing and separate decision-value path."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-004/task.json",
+      "locator": "primary_outputs; input_assets; evaluation",
+      "supports": "Registered exhalation-aligned retrieval and alpha/beta coupling scope."
+    },
+    {
+      "id": "implementation",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-004/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "Module docstring; HOLDS; fit_lda; temporal_auc; evaluate",
+      "supports": "Prospective train-only/ridge-LDA normalized-epoch recipe explicitly is not native MATLAB equivalence and has no authentic reference results."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Recover object-versus-scene category information in retrieval EEG using the independent localizer, including exhalation-aligned remembered and not-remembered trials. Retain alpha/beta and respiratory coupling as distinct descriptive outcomes.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "LMU record 596 is the 30-April-2025 preprint release. Its relationship to the final journal analysis and exact eligible epoch inventory are unverified; auxiliary classifier/TFR products cannot replace raw analysis inputs.",
+      "evidence_ids": [
+        "deposit",
+        "implementation"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "18 participants (15 female in the paper abstract). Author code roster: P02,P05,P07,P09,P11,P12,P13,P14,P15,P16,P19,P21,P22,P25,P26,P29,P30,P31; all original eligible trials must be retained.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Source Figure 3a trains within participant on independent object/scene localizer data and tests retrieval; Figure 1c separately uses repeated localizer cross-validation. Exact final-version trial selection, stochastic folds and permissible validation exposure remain unbound. A held-out-participant split is an extension.",
+      "evidence_ids": [
+        "code",
+        "paper",
+        "implementation"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "EEG localizer and retrieval signals, stimulus categories, trial memory labels and respiration timing/phase. Respiration and remembered status are analysis stratifiers; saved classifier outputs are validation artifacts.",
+      "evidence_ids": [
+        "code",
+        "deposit"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Author scripts remove mastoid/respiration channels, rereference, downsample, standardize and apply temporal/PCA operations differently across localizer and decision-value branches. The repository uses train-only PCA/ridge LDA and a coarser grid; native equivalence and final-paper/source differences must be resolved.",
+      "evidence_ids": [
+        "code",
+        "implementation"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Source classification metric is ROC AUC for object/scene discrimination (Figure 1c and Figure 3a code). Remembered-minus-not-remembered contrasts and significance are separate inferential results, not an optimization score.",
+      "evidence_ids": [
+        "code",
+        "paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "The source keeps participant×training-time×retrieval-time arrays (and a searchlight branch) then performs participant-level contrasts. A faithful, predeclared scalar or simultaneous comparison over the original time/channel support and its numeric author result are not recovered.",
+      "evidence_ids": [
+        "code",
+        "implementation"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original localizer-to-retrieval object/scene ROC AUC on the source support; exact final-version aggregation unresolved.",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No numeric AUC comparator recovered. Figure 3a p=0.042 and d=0.8434 describe a remembered/nonremembered contrast, and Figure 3b r=0.558 describes a memory association; none is source decoding accuracy.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Public MATLAB scripts provide a candidate author route, but archive/final-paper reconciliation, dependencies and native outputs remain unqualified; the Python recipe is not an author rerun.",
+      "evidence_ids": [
+        "code",
+        "implementation"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful AUC gain must be justified after source score scale and participant variability are recovered; no universal delta or stronger-significance threshold is invented.",
+      "evidence_ids": [
+        "code",
+        "implementation"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired participant-level improvement inference with repeated trials, respiratory cycles and time/channel multiplicity retained; confidence rule is not yet fixed.",
+      "independent_unit": "Participant (18 original participants); time bins, electrodes and trials are dependent repeats.",
+      "rationale": "Source participant contrasts do not establish uncertainty for an adaptively selected decoder improvement.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover exact final-paper data/version, category labels, preprocessing, original localizer→retrieval split and evaluation support.",
+      "Qualify an author baseline under that original protocol and retain its score separately from the printed paper result.",
+      "Freeze method and time/channel aggregation using only declared development access before final source-comparable evaluation.",
+      "Require a justified AUC gain and valid paired-participant uncertainty; stronger respiratory correlation, smaller p-values or a new participant split cannot count as a paper win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA primary-source comparison has been performed.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending native source recovery. A future decoder may iterate on localizer training/validation feedback while preserving the paper retrieval test conditions; respiratory effect hunting is not the objective.",
+    "candidate_freeze": "Freeze preprocessing, model, label orientation, searchlight/time aggregation, hyperparameter policy and source-version mapping before final retrieval evaluation.",
+    "final_evaluation": "Evaluate full source-matched retrieval support with the qualified native baseline and participant-level uncertainty; new held-out-participant or altered-window studies are separately labelled extensions.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published inferential findings, a native MATLAB rerun, and the existing prospective Python analysis in distinct roles. Only a qualified source-comparable performance baseline can support paper victory."
+  },
+  "blocking_issues": [
+    "No exact final-article numeric AUC baseline or original aggregation recovered.",
+    "April2025 release versus final article, exact epoch/trial inventory and native preprocessing unresolved.",
+    "Native reference execution, scorer admission, meaningful effect and uncertainty rule absent.",
+    "Concrete access/resource budgets and protected final evaluation not qualified."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain normalized-epoch Python analysis as calibration/prospective extension only; its train-only PCA and ridge-LDA implementation is not a source-author baseline."
+  }
+}

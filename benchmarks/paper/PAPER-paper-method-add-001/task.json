@@ -1,20 +1,32 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-add-001",
-  "source_id": "paper-method-add-001",
   "track": "paper",
   "title": "Stabilizing brain-computer interfaces through alignment of latent dynamics",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Stabilize the original offline neural-to-behavior decoders through neural-only alignment across the complete monkey session panels: isometric wrist force for Jango (Figure 3) and cursor velocity during reaching for Chewie (Figure 4). Preserve fixed reference decoders and original task-specific outputs; an illustrated Day0→Day95 pair alone cannot satisfy this task.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Stabilize the original offline neural-to-behavior decoders through neural-only alignment across the complete monkey session panels: isometric wrist force for Jango (Figure 3) and cursor velocity during reaching for Chewie (Figure 4). Preserve fixed reference decoders and original task-specific outputs; an illustrated Day0→Day95 pair alone cannot satisfy this task.",
+    "Source-paper comparison for Task-stratified median variance-weighted R² on the complete original isometric-force and reaching-cursor-velocity session-pair panels: Paper Eq. 4 uses variance-weighted multi-output R²: 1 minus summed squared residuals across the original behavior dimensions divided by their summed centered target sums of squares. Preserve force and cursor-velocity target units separately. The paper names sklearn r2_score with multioutput=variance_weighted; pinned Ridge.score uses a different aggregation."
+  ],
+  "success_criteria": [
+    "Recover complete original data, trial support, preprocessing and variance-weighted scoring for all 380 isometric and 132 reaching pairs, and reproduce both author panel baselines.",
+    "Surpass the source author method under a predeclared task-specific meaningful-gain and uncertainty rule while preserving original fixed-reference decoders, allowed neural/behavior access and resources; no invented pooled score.",
+    "Keep target-day behavior hidden from adaptation and candidate selection.",
+    "Do not substitute demo uniform-average scores, supervised target-day decoders, local authored baselines, new trial splits or selected favorable pairs for the original source comparison.",
+    "A Figure 2d pair improvement is calibration/subpanel evidence only and cannot satisfy this full original task. Preserve all original pairs, failures and task-specific controls; human online results require their own original evaluation.",
+    "Resolve source-code rights before prohibited modifications, redistribution or competitive use; independent implementation does not itself qualify source/data rights or comparison validity.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-add-001",
   "canonical_position_one_based": 70,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41467-025-59652-y",
     "publication_year": 2025,
     "venue": "Nature Communications"
   },
-  "primary_outputs": [
-    "Reproduce Day0-to-Day95 decoding degradation and recovery after latent-dynamics alignment.",
-    "Compare aligned decoder to unadapted decoder and supervised calibration reference on identical held-out Day95 trials."
-  ],
   "input_assets": {
     "routes": [
       "https://datadryad.org/api/v2/versions/257783/files"
@@ -472,107 +484,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Public source tree contains actual processed Day0/Day95 H5 and trialized PKL inputs; no request-only source needed for this scope.",
-        "Dryad version257783 includes Jango_ISO_2015.7z4.01GB and other monkeys; file manifest inspected.",
-        "Code/data reuse terms must accompany source; repository does not authorize arbitrary relicensing."
-      ],
-      "declared_overlap_group": "https://datadryad.org/api/v2/versions/257783/files",
-      "existing_graph_evidence_leads": [],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Reproduce Day0-to-Day95 decoding degradation and recovery after latent-dynamics alignment.",
-        "Compare aligned decoder to unadapted decoder and supervised calibration reference on identical held-out Day95 trials."
-      ],
-      "construction_specificity": "Exact held-out-trial identity, force/cursor metric aggregation and supervised comparator budget remain unfrozen.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Day95 adaptation may observe neural activity only unless separately declared; behavior used to score cannot leak through preprocessing or calibration.",
-      "Compare unadapted, dynamics-aligned, static-manifold and supervised calibration references under declared label budgets."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Exact held-out-trial identity, force/cursor metric aggregation and supervised comparator budget remain unfrozen.",
-        "Forward-in-time session/trial panel with behavior-hidden adaptation; two sessions from one monkey do not establish cross-animal generalization.",
-        "Later saved selection review finds restrictions on modification, derivatives, distribution and competitive applications. This supersedes the earlier generic public-access note; no permission or outreach is implied.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Compare dynamics-based alignment with static manifold alignment under fixed calibration budgets, forward-in-time splits and subject-level reporting."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Compare dynamics-based alignment with static manifold alignment under fixed calibration budgets, forward-in-time splits and subject-level reporting."
-      ],
-      "independent_panel_gate": "Forward-in-time session/trial panel with behavior-hidden adaptation; two sessions from one monkey do not establish cross-animal generalization.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": "GPU; two-session processed project smaller than full15.4GB archive",
-    "source_resource_evidence": "Resource class is inspection-based estimate, not measured runtime.",
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "Exact held-out-trial identity, force/cursor metric aggregation and supervised comparator budget remain unfrozen.",
-      "Forward-in-time session/trial panel with behavior-hidden adaptation; two sessions from one monkey do not establish cross-animal generalization.",
-      "Later saved selection review finds restrictions on modification, derivatives, distribution and competitive applications. This supersedes the earlier generic public-access note; no permission or outreach is implied.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Resolve the pinned NoMAD license restrictions before constructing a modifiable or redistributable code-plus-improvement task; retain the longitudinal design as a candidate only.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Resolve the pinned NoMAD license restrictions before constructing a modifiable or redistributable code-plus-improvement task; retain the longitudinal design as a candidate only.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -658,11 +569,82 @@
     ],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_statement": "GPU; two-session processed project smaller than full15.4GB archive",
+    "source_resource_evidence": "Resource class is inspection-based estimate, not measured runtime.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-add-001/improvement.v1.json",
+      "bytes": 14293,
+      "sha256": "df81822b85a1bffc950c7357c782aed406ea96ebbf107716fddb89f685f97b0e"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-add-001/historical/task.pre-improvement.v1.json",
+        "bytes": 34067,
+        "sha256": "216699c4e38c1d70250aeb96253eb0cb9b8009a56ba1e07cb6dd9c2d3afc0ea9"
+      },
+      "implementation_ids": [
+        "benchmarks-scientific_contracts-nomad_recovered"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Design only. After source-route and rights resolution, iterate alignment methods using original permitted reference-day labeled training and target-day neural-only adaptation plus predeclared development feedback. Preserve the complete original force and reaching task panels and label budgets.",
+    "candidate_freeze": "Seal method code/configuration, every reference state, adaptation/checkpoint rule, preprocessing, complete pair roster and evaluation support before final target behavior or comparisons are opened.",
+    "final_evaluation": "Run frozen candidate and source-author methods on all original 380 isometric and 132 reaching pairs, using Eq.4 R² and separate original median reductions. Report published 0.91/0.78, reproduced author values and candidate values separately, retaining failed pairs. No illustrated-pair result or combined 512-pair score can award task success.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Author baseline must match the paper metric, CV and support. Demo output and independent recovered operators are not automatically historical results; preserve their discrepancies and all broader original obligations."
+  },
+  "blocking_issues": [
+    "Complete original isometric/reaching data and train-validation-scoring trial identities, event support and preprocessing lineage unresolved.",
+    "Pinned demo Ridge.score and alpha/CV recipe differ from paper Methods.",
+    "Author rerun/reference result and working source-matched evaluator not qualified.",
+    "Pinned NoMAD license restrictions unresolved for a modifiable or competitive improvement task.",
+    "Task-specific meaningful effect, dependence-aware uncertainty and fixed concrete access/resource budgets not yet admitted.",
+    "All512 directed pairs and task-specific controls remain required; a Day0/Day95 demonstration cannot satisfy original complete-panel scope."
+  ],
+  "holds": {
+    "task_specific": [
+      "Complete original isometric/reaching data and train-validation-scoring trial identities, event support and preprocessing lineage unresolved.",
+      "Pinned demo Ridge.score and alpha/CV recipe differ from paper Methods.",
+      "Author rerun/reference result and working source-matched evaluator not qualified.",
+      "Pinned NoMAD license restrictions unresolved for a modifiable or competitive improvement task.",
+      "Task-specific meaningful effect, dependence-aware uncertainty and fixed concrete access/resource budgets not yet admitted.",
+      "All512 directed pairs and task-specific controls remain required; a Day0/Day95 demonstration cannot satisfy original complete-panel scope."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original offline stability comparison has ordered, published task-specific medians: isometric force R²=0.91 across 380 Jango pairs and reaching cursor-velocity R²=0.78 across 132 Chewie pairs. This grounds a complete source-task design, not readiness. Original partitions/preprocessing, author replay, metric/CV correspondence, source rights, uncertainty and budgets remain unresolved. The illustrated Day0→Day95 R²0.88 is calibration evidence and cannot establish the complete original task. Complete original isometric/reaching data and train-validation-scoring trial identities, event support and preprocessing lineage unresolved. Pinned demo Ridge.score and alpha/CV recipe differ from paper Methods. Author rerun/reference result and working source-matched evaluator not qualified. Pinned NoMAD license restrictions unresolved for a modifiable or competitive improvement task. Task-specific meaningful effect, dependence-aware uncertainty and fixed concrete access/resource budgets not yet admitted. All512 directed pairs and task-specific controls remain required; a Day0/Day95 demonstration cannot satisfy original complete-panel scope.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-add-001/historical/task.pre-improvement.v1.json",
+      "bytes": 34067,
+      "sha256": "216699c4e38c1d70250aeb96253eb0cb9b8009a56ba1e07cb6dd9c2d3afc0ea9"
+    },
+    "notes": "Preserve Day0/Day95 demonstration and complete recovered-operator source obligations without alteration. Source inspection, operator correctness and reconstruction are calibration/design evidence, not achieved paper improvement."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

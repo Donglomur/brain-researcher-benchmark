@@ -1,0 +1,182 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-014",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "A real ordered source endpoint exists: alpha pRF heldout prediction, including the reported43% median with baseline correction in Fig.7. The original electrode mask and metric implementation are not reconciled with the433-electrode local programme, its prospective equal-person mean, or the portable optimizer. Those local comparisons cannot certify surpassing the original source result.",
+  "source_paper": {
+    "title": "Precise spatial tuning of visually driven alpha oscillations in human visual cortex",
+    "url": "https://elifesciences.org/articles/90387"
+  },
+  "evidence": [
+    {
+      "id": "alpha-paper",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/90387",
+      "locator": "Results2.3 and2.6; Fig.7; Methods: electrode selection, spectral decomposition, pRF model fitting",
+      "supports": "Original alpha/broadband pRF task, historical366-electrode selection and first/second-half cross-validation."
+    },
+    {
+      "id": "alpha-claim",
+      "kind": "paper",
+      "url": "https://elifesciences.org/reviewed-preprints/90387",
+      "locator": "Graphical and statistical support for primary claims, claim5; Fig.7 and Supplementary Fig.7-1",
+      "supports": "Author claim summary reports median cross-validated variance explained43% with model-based correction versus10% without, with31 electrodes for the gain comparison."
+    },
+    {
+      "id": "alpha-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/KenYMB/ECoG_alphaPRF/4321eb4374db782d09f3f43362836f234a4e4f9b/functions/Outline/ecog_prf_analyzePRF.m",
+      "locator": "options lines58–75; analyzePRFdog calls lines166–177",
+      "supports": "Source linear Gaussian-surround route, zero-degree polynomial nuisance, full fit xvalmode0 and within-run cross-validation xvalmode2."
+    },
+    {
+      "id": "alpha-release",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/KenYMB/ECoG_alphaPRF/4321eb4374db782d09f3f43362836f234a4e4f9b/README.md",
+      "locator": "Analysis Setup/Download Data; Getting Started",
+      "supports": "OpenNeuro ds004194 source archive and main/supplementary figure reproduction entrypoints."
+    },
+    {
+      "id": "alpha-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-014/implementations/alpha-programme/spatial/README.md",
+      "locator": "Operator method and resources; Protected grading API",
+      "supports": "Local portable source-shaped comparator is not the historical optimizer;433 released electrodes, source-fold versus literal Eq6 distinction, and equal-person aggregation are explicitly disclosed."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict stimulus-location-dependent alpha and broadband amplitudes with population receptive-field models; the ordered comparison is original cross-validated prediction accuracy, including the source baseline-correction comparison. Larger alpha pRFs or stronger negative gain are descriptive checks, not win scores.",
+      "evidence_ids": [
+        "alpha-paper",
+        "alpha-code"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Author release identifies OpenNeuro ds004194; canonical task names version3.0.0. Bind the exact BIDS runs, aperture matrices and original derived timecourses to the paper experiment before comparing scores.",
+      "evidence_ids": [
+        "alpha-release",
+        "alpha-registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper selection yields366 electrodes from9 participants; the local released roster has433 electrodes. Recover the original QC/visual-selection and figure-specific31-electrode Fig.7 membership, without selecting electrodes by candidate performance.",
+      "evidence_ids": [
+        "alpha-paper",
+        "alpha-claim",
+        "alpha-registration"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Original two-fold within-run prediction: fit the first or second half of the75-sample timecourse, predict the opposite half, then concatenate predictions. The source wrapper uses xvalmode2. A new heldout-run split is an extension.",
+      "evidence_ids": [
+        "alpha-paper",
+        "alpha-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original visual apertures and source ECoG responses with subject/electrode metadata; source spectral processing separates alpha suppression from broadband elevation before spatial fitting. Preserve alpha and broadband conditions.",
+      "evidence_ids": [
+        "alpha-paper",
+        "alpha-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Match original rereferencing, epoch rejection, evoked-response removal, spectral baseline model, beta nuisance terms and target-band selection. The local timecourse-only route does not establish full raw-to-paper parity.",
+      "evidence_ids": [
+        "alpha-paper",
+        "alpha-registration"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Higher cross-validated variance explained is ordered. Reconcile literal paper1−SSE/sum(response²) with the source routine’s foldwise DC projection and exact gain constraints; report percent units and preserve both formulas until equivalence is established.",
+      "evidence_ids": [
+        "alpha-paper",
+        "alpha-code",
+        "alpha-registration"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Fig.7 reports an electrode median; recover its exact original selection and aggregate. The local equal-person mean gain over433 released electrodes is a different estimand and cannot be compared numerically to43%.",
+      "evidence_ids": [
+        "alpha-claim",
+        "alpha-registration"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Fig.7 median cross-validated alpha pRF variance explained (%)",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 43,
+      "description": "Author claim summary for Fig.7 reports43% median with model-based baseline correction (10% without). This is a rounded published figure-level result; exact source values and selection remain necessary.",
+      "evidence_ids": [
+        "alpha-claim"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No original MATLAB author re-fit on the authenticated historical cohort. The local SciPy variable-projection/grid comparator is a separately authored method.",
+      "evidence_ids": [
+        "alpha-code",
+        "alpha-registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Use a defensible change in out-of-sample alpha variance explained beyond source rounding and rerun variability; meaningful margin is not justified by the43-versus10 baseline contrast alone.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Specify a paired hierarchical uncertainty analysis for prediction improvement while retaining the original electrode median as point estimand; participant clustering and figure-specific sample size must be honored.",
+      "independent_unit": "Participant; electrodes, folds and aperture samples are nested observations.",
+      "rationale": "The source explicitly examines participant nesting; source probabilistic atlas resampling is not new biological replication.",
+      "evidence_ids": [
+        "alpha-claim"
+      ]
+    },
+    "paper_win_requires": [
+      "Bind the original366-electrode population and exact figure-specific selections; keep all required alpha/broadband and baseline contrasts.",
+      "Reproduce the source metric/gain branch and original median before claiming improvement over43% and the author rerun.",
+      "Do not count a corrected implementation, portable-optimizer advantage, equal-person433-electrode mean or a new split as an original-paper win.",
+      "Freeze the method, spectral preprocessing, aperture geometry, selection and uncertainty policy before final predictions."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No separately source-verified current-SOTA comparison has been established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Once the original endpoint is recovered, develop pRF/spectral models using only training halves and declared validation feedback; no final-half response may influence fitting seeds or model selection.",
+    "candidate_freeze": "Freeze all preprocessing, model families, gain bounds, original electrode mask, fold membership, numerical scoring and resource/access budgets.",
+    "final_evaluation": "Evaluate both methods on identical original held halves and report the source aggregate plus participant-aware uncertainty; retain descriptive spatial-scale and gain checks without turning them into success scores.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published43% median, native author rerun and local portable comparator remain separate. Only an authenticated original-task comparison supports a paper win."
+  },
+  "blocking_issues": [
+    "Historical366-electrode mask and Fig.7 membership unresolved against433 released electrodes.",
+    "Original metric centering and gain branch not reconciled with current scorer.",
+    "No source-equivalent raw-to-fit preprocessing and competent native author rerun.",
+    "Effect margin, clustered decision rule and concrete episode budgets not fixed."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain spectral/spatial reconstruction and all original grading materials as calibration. The local prospective equal-person corrected-alpha score and SciPy comparator are extensions until the historical source estimand is recovered."
+  }
+}

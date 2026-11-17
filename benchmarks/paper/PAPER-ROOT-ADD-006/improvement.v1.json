@@ -1,0 +1,172 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-006",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The full source paper contains an original ordered held-out localizer decoding endpoint in Fig. 3C,D. Its exact fold/roster/aggregation and numeric author baseline are not yet recovered, so the task remains source-unresolved rather than excluded solely because the legacy reactivation endpoint is descriptive.",
+  "source_paper": {
+    "title": "Heuristics in risky decision-making relate to preferential representation of information",
+    "url": "https://www.nature.com/articles/s41467-024-48547-z"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-024-48547-z",
+      "locator": "Results, Figs. 3\u20135; Methods: Participants, MEG analysis, Decoding outcome stimuli, Relating behavioral weighting of information to preferential representation of stimuli",
+      "supports": "The registered result relates within-participant decoded reactivation to between-participant heuristic weights. Seven-fold localizer classification is a separate decoder validation step; the paper does not define held-out participant prediction of behavioral weights as this result."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/evanrussek/MEG_Heuristics_Risk_Preferential_Information/blob/1c9b3c92c77d4f5a4e4ccfa36d5a695814a2f612/MEG_Code/Task_Reactivation_Analysis.m",
+      "locator": "Task_Reactivation_Analysis.m; paired classifier script Train_Classifiers_Apply_To_Task.m at revision 1c9b3c92c77d4f5a4e4ccfa36d5a695814a2f612",
+      "supports": "Author analysis computes reactivation maps and group associations from localizer-trained classifiers; source code was inspected statically."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-006/task.json",
+      "locator": "primary_outputs; implementations/initial-evaluator-v1/evaluator.py: nested_prediction, HOLDS",
+      "supports": "The existing implementation explicitly describes prospective participant-held-out prediction, unresolved author parity, and no authentic full-cohort qualification. Its LOPO MSE is not a paper baseline."
+    },
+    {
+      "id": "ordered_candidates",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-024-48547-z",
+      "locator": "Fig. 3C,D and Methods: Decoding outcome stimuli",
+      "supports": "The paper itself evaluates held-out localizer outcome-stimulus decoding with seven-fold cross-validation. Three classifiers are tested at train/test timepoint combinations; an example is correct when its target classifier has the highest activation. This is an original ordered accuracy endpoint, distinct from the descriptive reactivation/heuristic association."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "unresolved",
+      "description": "Original Fig. 3C,D localizer decoding of outcome-stimulus identity is an ordered candidate for the whole-paper objective. Its exact scored timepoint map/aggregation and full original evaluation must be selected and bound; the existing neural\u2013behavior association is calibration only.",
+      "evidence_ids": [
+        "ordered_candidates",
+        "registration"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Source MEG risky-choice/localizer recordings are linked in the registration to OpenNeuro ds005065/1.0.0. The complete mapping from that version to all source event tables and behavior-fit artifacts was not independently resolved.",
+      "evidence_ids": [
+        "paper",
+        "registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The paper includes 19 main-analysis participants after two exclusions from 21 recruits. The exact Fig. 3 decoder participant/trial roster and eligibility must be recovered and bound without narrowing it to convenient files.",
+      "evidence_ids": [
+        "paper",
+        "ordered_candidates"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original Fig. 3 uses seven-fold localizer cross-validation (6/7 training, 1/7 testing) across train/test timepoints. Recover original fold assignments, class/null handling and penalty-selection relationship before admission; nested participant-held-out prediction is a different task.",
+      "evidence_ids": [
+        "ordered_candidates",
+        "code"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Candidate requires original localizer sensor epochs and stimulus labels for outcome-vs-other-plus-null classifiers, with all original eligible trials/participants. Exact released event/epoch correspondence for the Fig. 3 evaluation remains unbound.",
+      "evidence_ids": [
+        "ordered_candidates",
+        "code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper describes 0.5-Hz high-pass, 100-Hz downsampling, OSL sensor/ICA cleaning, absolute-95th-percentile scaling and lasso logistic classifiers. Exact source scaling helper, fold-bound preprocessing and historical penalty selection for the Fig. 3 baseline remain to be reconciled.",
+      "evidence_ids": [
+        "paper",
+        "ordered_candidates",
+        "code"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Held-out localizer classification accuracy is ordered higher-is-better; source Fig. 3C,D uses the highest of three outcome-classifier activations as the prediction. Exact map cells and primary aggregation/numeric baseline have not been frozen.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Recover Fig. 3C,D averaging across folds, outcome classes, timepoints and participants. Do not select a favorable diagonal or latency after evaluation or substitute LOPO behavioral-parameter MSE.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Fig. 3 localizer held-out classification accuracy; exact primary map/aggregation unresolved.",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No scalar baseline is admitted: recover the paper\u2019s Fig. 3C,D score or a source-authorized rerun under its seven-fold localizer protocol and exact aggregation. The descriptive association and prospective LOPO MSE are not substitutes.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No reproduced author score for the original decoding candidate is established. The existing descriptive/reference-reconstruction implementation remains calibration only and cannot supply this baseline.",
+      "evidence_ids": [
+        "registration",
+        "ordered_candidates"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful effect cannot be justified until one original decoding endpoint, its metric scale, source baseline and original sampling design are bound. No generic margin is assigned.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover the original evaluation units and dependence structure, then predeclare paired uncertainty for the bound original decoder comparison; no confidence threshold is invented.",
+      "independent_unit": "Participant with localizer trials nested; seven folds and temporal map cells are correlated.",
+      "rationale": "Repeated folds, random subsamples, overlapping windows or decoder repetitions are not independent biological replicates. Exact original protocol and eligible units must be recovered before admission.",
+      "evidence_ids": [
+        "ordered_candidates"
+      ]
+    },
+    "paper_win_requires": [
+      "Bind the original Fig. 3C,D localizer decoding target, all eligible source participants/trials, class/null definition and seven-fold protocol.",
+      "Recover the reported accuracy with exact timepoint aggregation and author baseline route; preserve the source penalty-selection procedure and any evaluation reuse transparently.",
+      "Freeze candidate and meaningful effect/uncertainty/access/resource rules before final evaluation. A new participant split or behavioral-parameter target is an extension, never the original paper win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison is claimed; any later SOTA assessment requires its own primary-source verification.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending recovery and binding of an ordered decoding endpoint actually evaluated in this source paper. Once admitted, iterate only with the original permitted training/validation access.",
+    "candidate_freeze": "Freeze the selected original endpoint, full cohort, source split, preprocessing, baseline route, candidate method and resource/access budgets before final scoring.",
+    "final_evaluation": "Compare on the same original source-paper task and evaluation protocol only after baseline recovery; no local descriptive reconstruction score or newly invented split can earn a paper win.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep paper-reported scores, a source-authorized author rerun, local descriptive calibration and any later SOTA comparator distinct. No original score is inferred from local numerical agreement. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Original Fig. 3 accuracy baseline and primary timepoint/class/participant aggregation are not recovered.",
+    "Exact original folds, event/epoch identities, author scaling helper and penalty-selection provenance remain unresolved.",
+    "Current evaluator\u2019s nested LOPO behavioral-weight MSE changes both target and split; it cannot evaluate this original decoding candidate."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "The initial evaluator reconstructs localizer decoding and first-level effects, then adds nested leave-one-participant-out ridge prediction and MSE. This new generalization task has no source-paper performance comparator and must remain a separately labelled extension; stronger association or reduced local implementation error cannot be a paper win."
+  }
+}

@@ -1,0 +1,184 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-042",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The source v2 Table 2 provides a complete ordered grounding endpoint for all four original subjects. This design preserves that per-subject result vector, rather than an invented pooled paper score. Native annotation/order, author-scoring parity, baseline execution and a valid improvement decision are not yet admitted.",
+  "source_paper": {
+    "title": "UMBRAE: Unified Multimodal Brain Decoding",
+    "url": "https://arxiv.org/html/2404.07202v2"
+  },
+  "evidence": [
+    {
+      "id": "ub-paper",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2404.07202v2",
+      "locator": "Sections4.1,4.2,4.4; Table2; AppendixB andC.2",
+      "supports": "Original four-subject NSD grounding setup and v2 per-subject All acc@0.5 results."
+    },
+    {
+      "id": "ub-inference",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/weihaox/UMBRAE/8c1795c434a41cdd38ce6628b7e1a774f31d9483/umbrae/inference_rec.py",
+      "locator": "test shards, num_val, voxel averaging, model setup and REC prompt generation",
+      "supports": "982-test-image inference, subjects1/2/5/7, averaged fMRI and known-category query route."
+    },
+    {
+      "id": "ub-score",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/weihaox/BrainHub/4838666f1a04d0521c2184fa50b5b77e7e7ac5ee/eval_bbox_rec.py",
+      "locator": "calculate_metric; main category/first-box selection",
+      "supports": "Strict IoU>threshold, first reference/prediction box, query denominator and source traversal semantics."
+    },
+    {
+      "id": "ub-readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/weihaox/UMBRAE/8c1795c434a41cdd38ce6628b7e1a774f31d9483/README.md",
+      "locator": "Pre-trained Models; Training; Inference",
+      "supports": "Author checkpoint, shared-subject training and multimodal model route."
+    },
+    {
+      "id": "ub-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-042/docs/initial-evaluator-v1.md",
+      "locator": "Scientific semantics; prospective corrections; remaining gates",
+      "supports": "Existing evaluator corrects joins/missingness and adds image-cluster uncertainty, but remains unqualified on original native outputs."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Category-conditioned referring-expression comprehension from fMRI: output object coordinates for known query classes. Preserve all four subjects and All-category primary scores; free object discovery, captioning and retrieval are distinct endpoints.",
+      "evidence_ids": [
+        "ub-paper",
+        "ub-inference"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "NSD-derived BrainHub using the original 982 shared images and COCO-derived coordinates. Native annotation version, transformation and stimulus-to-annotation identity join require immutable recovery; current BrainHub commit is not proven to be the paper-time artifact.",
+      "evidence_ids": [
+        "ub-paper",
+        "ub-score"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All completed-session subjects S1,S2,S5,S7. The shared-subject UMBRAE rows, not UMBRAE-Sx rows, are the source comparator.",
+      "evidence_ids": [
+        "ub-paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Original training/test stimulus split: 24,980 training fMRI samples per subject; 982 held-out test stimuli common to the four trained subjects. These are stimulus-held-out, not unseen-subject, results.",
+      "evidence_ids": [
+        "ub-paper",
+        "ub-inference"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Subject fMRI and known category-expression prompts; match source CLIP/Shikra/Vicuna pretrained access and allowed training images. Ground-truth test images/boxes are scorer-side, not candidate inputs.",
+      "evidence_ids": [
+        "ub-paper",
+        "ub-inference",
+        "ub-readme"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source averages repeated test fMRI and uses subject-specific voxel dimensions. Recover exact NSD normalization, ROI selection, COCO square-image box transform, order and checkpoint identities before admitting same-task equivalence.",
+      "evidence_ids": [
+        "ub-inference",
+        "ub-paper"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Per subject All-category acc@0.5 =100 times number of image/category queries with continuous box IoU strictly>0.5 divided by query count. Source uses the first reference box and first extracted prediction; missing outputs must not improve the denominator.",
+      "evidence_ids": [
+        "ub-score",
+        "ub-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Four separately reported per-subject All scores, with fixed salience groups/IoU as secondary diagnostics. The paper does not publish a single four-subject pooled success score; do not replace its result vector with a newly averaged scalar.",
+      "evidence_ids": [
+        "ub-paper",
+        "ub-score"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Table 2 per-subject All-category REC accuracy at strict IoU>0.5 (percent); mandatory S1/S2/S5/S7 vector",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "description": "Source v2 Table 2 UMBRAE cross-subject rows: S1=18.93%,S2=18.27%,S5=18.19%,S7=16.74%. value=null because the original endpoint is a four-subject vector, not a missing source result. Earlier v1 values 15.75/15.30/15.54/14.30 must not replace v2.",
+      "evidence_ids": [
+        "ub-paper"
+      ],
+      "value": null
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "Author inference and BrainHub scoring route exists, but no native paper-equivalent rerun is admitted. Resolve source traversal versus corrected local identity joins and response parsing before comparing.",
+      "evidence_ids": [
+        "ub-inference",
+        "ub-score",
+        "ub-registration"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Justify a gain in original query accuracy beyond parser/order effects and rerun variation, with a declared rule over all four subject endpoints. No arbitrary percentage-point margin or S1-only choice is accepted.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired resampling or an equivalent valid analysis at the shared-stimulus level, keeping every subject and all queries for an image together; define simultaneous decisions over the four source endpoints before selection.",
+      "independent_unit": "shared stimulus image conditional on these four subjects; subjects are not independent copies of each shared image",
+      "rationale": "Category queries and repeated fMRI within one stimulus are dependent. Existing image bootstrap is useful construction evidence but does not by itself establish a justified full-vector victory rule.",
+      "evidence_ids": [
+        "ub-paper",
+        "ub-registration"
+      ]
+    },
+    "paper_win_requires": [
+      "Use v2 full four-subject cross-subject UMBRAE rows and original 982-image All-category populations, with exact query/annotation/order identities.",
+      "Reproduce each published endpoint through the authentic author inference/scoring route; resolve parser and corrected-join differences without silently redefining the metric.",
+      "Exceed the original four-subject result vector under a prospectively justified meaningful-effect and simultaneous uncertainty rule; a favorable S1, class subset or newly pooled mean is insufficient.",
+      "Preserve identical allowed neural data, query information and pretrained image/language priors and report candidate neural-free and shuffled-neural controls.",
+      "New-subject adaptation, changed prompts/input privilege, new split, captioning or image-based grounding gains cannot substitute for this original grounding comparison."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The source-paper comparison is separate from present-day SOTA; no current leaderboard or later-method superiority is asserted.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Iterate candidate brain encoders or allowed adaptations using original training stimuli and an explicitly declared development protocol. Keep all shared test stimulus coordinates and evaluation feedback sealed during selection.",
+    "candidate_freeze": "Seal the complete model/checkpoints, training identities, prior versions, prompt, response parser, decoding settings and query roster before any final original-test evaluation.",
+    "final_evaluation": "Produce all four subjects with a competent source-equivalent baseline on the original shared test stimuli, validate native identities and score the full original per-subject vector once after freeze. Other UMBRAE endpoints retain separate claim requirements.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Source v2 vector is the documentary target; an author rerun calibrates that target. The Shikra-with-ground-truth-image row has stronger inputs and is not the neural comparator; current SOTA is not asserted."
+  },
+  "blocking_issues": [
+    "Immutable paper-time BrainHub annotation transform/order and source-checkpoint lineage are not admitted.",
+    "Author scorer and local corrected keyed scorer require paired numerical parity on native complete outputs.",
+    "The current scalar contract schema needs a machine-readable mandatory endpoint-vector comparison before readiness; null is intentional, not an absent paper score.",
+    "No task-specific meaningful gain, simultaneous uncertainty decision or fixed access/cumulative resource budget is established.",
+    "No authentic baseline/candidate run or actual prior-exposure equivalence is established."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Existing grounding.py is calibration-only and remains intact. Its engineering examples, prospective join corrections and pooled paired summary are not a published-paper win or whole-UMBRAE reproduction."
+  }
+}

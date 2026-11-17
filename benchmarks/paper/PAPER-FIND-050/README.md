@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-FIND-050`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The empirical spectrum/dynamics summaries have no performance ordering, but the existing complete-programme implementation also preserves original Figure 5 memory accuracy tasks. Those are a defensible original-task recovery route. Numeric source curves, invocation/delay grid and paper-code correspondence are unresolved; the authored prospective AUC memory task and five-frame forecasting task are not equivalent substitutes.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 36366 bytes; SHA-256 `3cc7848164ea0a1d4fa9d67bb7324381d44010f5fb39acae2d4fdf4e8302be7e`.
+- Specification identity: 33953 bytes; SHA-256 `d90b528e9bb3ccf543184c75801da2f29cf4559938be9eee974fa3738e924a6b`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,12 +34,12 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Original programme source](implementations/original-programme-source) — Task implementation.
-  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
-- [Initial delivery](contracts/initial-delivery) — Task contract.
-  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
-- [Paper find050 programme](implementations/paper-find050-programme) — Task implementation source.
-  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Original programme source](implementations/original-programme-source) — Calibration only.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Initial delivery](contracts/initial-delivery) — Calibration only.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Paper find050 programme](implementations/paper-find050-programme) — Calibration only.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

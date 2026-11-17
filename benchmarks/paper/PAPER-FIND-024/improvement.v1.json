@@ -1,0 +1,176 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-024",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Source-native rebinding identifies the original cross-split prediction of fixed untied integration-window estimates: tied predictor versus opposite-split untied target has reported Spearman correlation 0.668. Exact split identities, target arrays and aggregation are unresolved. Tied/tied reliability 0.716 is not truth accuracy and cannot be used when a candidate may alter both sides.",
+  "source_paper": {
+    "title": "Temporal integration in human auditory cortex is predominantly yoked to absolute time",
+    "url": "https://www.nature.com/articles/s41593-025-02060-8"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-02060-8",
+      "locator": "Results: Temporal integration windows in human auditory cortex; Fig. 3; Methods: Participants and data collection, Estimating integration windows, Statistics",
+      "supports": "Defines the auditory integration experiment, electrode/participant hierarchy and descriptive structure-yoking estimands."
+    },
+    {
+      "id": "model_code",
+      "kind": "author_code",
+      "url": "https://github.com/snormanhaignere/time-vs-structure/blob/08f2319a99a047ab2d1f631e0bffcfcea8a5bc08/matlab-code/demo_model_fits.m",
+      "locator": "lines 14–56: cross_context_correlation.mat, CU105 demonstration, modelfit_cross_context_corr, tie_shape, intwin_scatter/intwin_maps",
+      "supports": "The author fits gamma-window width with unbiased squared error, ties shape across speech rates and reconstructs Fig. 3."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/README.md",
+      "locator": "Scope; native TCI parity and gamma-window refitting holds",
+      "supports": "The local component computes prospective correlations; it does not implement the full source inference or demonstrate native reproduction."
+    },
+    {
+      "id": "paper_cross_split",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-02060-8",
+      "locator": "Methods: Estimating integration windows from noisy neural responses; paragraph comparing untied/untied, tied/tied and tied/untied nonoverlapping-segment estimates",
+      "supports": "Documents correlations 0.614, 0.716 and 0.668 respectively; only fixed opposite-split untied targets offer the proposed source-native prediction route."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict the source untied integration-window estimates from the opposite nonoverlapping-segment split, retaining those target estimates unchanged across candidates.",
+      "evidence_ids": [
+        "paper_cross_split"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original intracranial speech observations and source CCC/model-fit arrays are identified, but immutable empirical MAT, segment split and target-array binding is incomplete.",
+      "evidence_ids": [
+        "paper",
+        "model_code",
+        "registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Preserve every original participant/electrode and speech-rate entry contributing to the reported cross-split correlation; exact endpoint-specific roster must be recovered, not inferred from another Fig. 3 sample size.",
+      "evidence_ids": [
+        "paper_cross_split",
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Source estimates use two nonoverlapping segment splits. Original segment membership, split direction and any pooling across directions/rates remain unbound; a new story split is an extension.",
+      "evidence_ids": [
+        "paper_cross_split"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Only source predictor-side neural observations, stimulus/segment metadata and allowed anatomical information; opposite-split untied estimates are fixed evaluator targets.",
+      "evidence_ids": [
+        "paper_cross_split",
+        "model_code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve original gamma-power/CCC/noise-ceiling processing and the source untied target-generation procedure. Native TCI dependency and exact split-level fitting configuration must be recovered.",
+      "evidence_ids": [
+        "paper",
+        "model_code",
+        "registration"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Spearman rank correlation of predictor estimates with the fixed source opposite-split untied estimates; higher is better for this noisy-target agreement task, not demonstrated ground-truth accuracy.",
+      "evidence_ids": [
+        "paper_cross_split"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "The exact source pooling of electrodes, participants, rates and split directions for 0.668 must be reproduced before comparison; no new averaging convention may replace it.",
+      "evidence_ids": [
+        "paper_cross_split"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original fixed-untied-target cross-split Spearman correlation",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.668,
+      "description": "Documentary source correlation for tied estimates predicting opposite-split untied estimates. The untied/untied comparator is 0.614; tied/tied 0.716 measures a different reliability comparison and is not the target baseline.",
+      "evidence_ids": [
+        "paper_cross_split"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Source tied/untied route is described but exact split arrays, native TCI code/configuration and output agreement have not been recovered or rerun.",
+      "evidence_ids": [
+        "model_code",
+        "paper_cross_split",
+        "registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful gain must account for the noisy fixed targets and participant/electrode dependence. No numeric margin or claim about true integration-window accuracy is justified yet.",
+      "evidence_ids": [
+        "paper_cross_split",
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "No superiority rule is admitted until original evaluation identities and paired baseline outputs are recovered.",
+      "independent_unit": "Participant, with electrodes and rates nested and identical opposite-split targets shared across comparisons.",
+      "rationale": "Paired correlations require original target/prediction arrays and valid participant-level dependence handling; treating electrodes or both split directions as independent would overstate evidence.",
+      "evidence_ids": [
+        "paper_cross_split",
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Verify admissibility of the original fixed-target prediction route and bind the exact source splits, cohort, preprocessing and correlation reduction.",
+      "Freeze opposite-split untied target arrays independently of the candidate; candidates must never redefine both sides of the correlation.",
+      "Recover or rerun the source tied predictor with the identical target and show improvement over its source-reported 0.668 anchor using justified effect and uncertainty criteria.",
+      "Do not substitute tied/tied 0.716, a biological yoking effect, new holdout split or correlation reconstruction as success.",
+      "Freeze access/resource budgets, method and preprocessing before final scoring; claims remain about noisy-target prediction unless independent truth evidence exists."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The source-paper comparator is distinct from an author rerun and from current SOTA; no current-SOTA comparison was verified.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After admissibility and split recovery, allow source-compatible training/development feedback with evaluator-owned opposite-split untied targets.",
+    "candidate_freeze": "Freeze estimator, native dependencies, preprocessing, tuning decisions and predictor-side outputs before final target access.",
+    "final_evaluation": "Evaluate the frozen predictor against unchanged original opposite-split untied estimates using the source Spearman aggregation and paired uncertainty rule.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep 0.668 fixed-target prediction, 0.614 untied comparator and 0.716 tied/tied reliability distinct; source yoking statistics remain calibration outcomes."
+  },
+  "blocking_issues": [
+    "Original split-level arrays, source participant/electrode roster and correlation aggregation are unresolved.",
+    "Fixed untied target generation and evaluator access boundaries require audit; source targets are noisy and publicly described.",
+    "Native TCI parity, source-author rerun, task-specific effect/uncertainty and concrete episode budgets are incomplete."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve CCC/noise-ceiling and integration/yoking reconstruction as calibration. Current source-native route is the original fixed-untied-target cross-split comparison; optional newly grouped stories and tied/tied self-consistency are not source-paper victory."
+  }
+}

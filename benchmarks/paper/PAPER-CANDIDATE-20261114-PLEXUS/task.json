@@ -1,16 +1,24 @@
 {
+  "schema_version": 1,
   "id": "PAPER-CANDIDATE-20261114-PLEXUS",
   "track": "paper",
   "title": "Network-aware neuronal activity phenotyping across a complete CRISPRi screen",
-  "registration_recommendation": "REGISTER_DRAFT_ONLY",
-  "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
-  "scientific_question": "Does network-aware representation learning recover reproducible neuronal activity phenotypes of the complete52-gene CRISPRi screen beyond single-cell/manual features and plate effects?",
-  "paired_access_conditions": {
-    "A": "Paper and sufficient scientific specification plus identical complete authorized data and train/dev labels; no official implementation.",
-    "B": "The same paper/specification/data and role information plus pinned official code. Missing essential method specification is a construction defect, not an A-arm model failure.",
-    "parity": "Equal execution, tuning and compute budgets; same complete held cases and metric. Public event schedules and paper-provided information remain equally available. Code/model/checkpoint exposure and contamination are audited.",
-    "outcomes": "Separate historical reproduction from prospective improvement. Preserve original test-selection/leakage if reproducing it, label it, and never substitute a corrected split without a distinct prospective result. Narrative cannot replace numeric artifacts."
-  },
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Classify each CRISPRi guide against non-targeting controls from neuronal activity representations, comparing Plexus with manual features. Gene discovery/significance is not itself an ordered improvement target.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Classify each CRISPRi guide against non-targeting controls from neuronal activity representations, comparing Plexus with manual features. Gene discovery/significance is not itself an ordered improvement target.",
+    "Source-paper comparison for Original Figure 4 per-guide AUROC, preserving both complementary well folds and donor strata: AUROC is computed by sklearn roc_curve and auc from guide-positive classifier probabilities; retain the same score unit, eligible cases and two folds. The plotted 0.8 cutoff is not the paper baseline."
+  ],
+  "success_criteria": [
+    "Recover the complete original cohort, data version, fold identities and author AUROC results before admission.",
+    "Beat the original source-paper metric under its same input/exposure and preprocessing conditions; preserve all guide/donor results and controls.",
+    "A four-line whole-plate result, corrected preprocessing protocol or held-plate calibration result is a separately labelled extension.",
+    "Freeze a meaningful effect and uncertainty rule before final scoring; no victory from the 0.8 display cutoff, extra significant genes or numerical reconstruction.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "participant_inputs": "Version-bound processed neural trace/spike/mask arrays plus well/plate/cell-line metadata for every released perturbation and negative control. Released embeddings or held-data-trained checkpoints cannot replace neuronal inputs.",
   "provenance": {
     "paper": {
       "title": "Network-aware self-supervised learning enables high-content phenotypic screening for genetic modifiers of neuronal activity dynamics",
@@ -48,30 +56,22 @@
       "sha256": "c31c181f989bbab1412679ec521c6e069c1cc6b7ad66daa424d50cc3465aac5d"
     }
   },
-  "complete_scope": "Complete 52-gene screen, all released cell lines, plates, wells and controls required for its main screen result. Use processed per-well neuronal traces and metadata, not published embeddings alone. Preserve complete eligible plate/well manifest; training and held plates cannot share wells.",
-  "reference": {
-    "outputs": [
-      "Full per-gene phenotype-effect and significance table",
-      "Network-aware versus single-cell/manual-feature comparison",
-      "Cell-line and plate heterogeneity with complete negative controls"
-    ],
-    "baselines": [
-      "Plexus network-aware model",
-      "Single-cell representation ablation",
-      "Published manual neuronal features"
-    ],
-    "panel": "Main CRISPRi screen result; exact final-paper figure/table mapping must be reconciled with archived v1.0.0 software."
-  },
-  "prospective_improvement": {
-    "endpoint": "Improve held-plate effect reproducibility and perturbation discrimination at a frozen false-discovery rate, with plate-level AUROC and calibration as predictive endpoints. Do not reward simply finding more significant genes.",
-    "heldout_unit": "Whole plate/batch and well; report cell-line transfer separately. Cells are nested observations, not independent experimental replicates.",
-    "controls": [
-      "Plate/well/line-only predictors",
-      "Shuffled treatment labels within permissible blocks",
-      "Network-context ablation at matched input/parameter budget",
-      "Train-only representation/statistics; no use of released held-data-trained checkpoints",
-      "Negative-control treatment calibration"
-    ]
+  "source_family_ids": [
+    "plexus-crispri-52gene"
+  ],
+  "publication_context": {
+    "status": "registered_construction_draft_definition_only",
+    "source_snapshot_date": "2026-11-14",
+    "source_definition_bytes": 7791,
+    "source_definition_sha256": "ec8eb9f750a300b03af45287fadc056ea9920ad2f80f2c0fa373ed55bd124e4b",
+    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
+    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
+    "scientific_definition_changed": false,
+    "runtime_binding": null,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
   },
   "resources": {
     "storage_GiB": [
@@ -92,48 +92,75 @@
     ],
     "basis": "38.59 GB archive, extraction and complete per-well trace batches, three model families across full blocked folds/seeds. Archive expansion and full training cost unmeasured."
   },
-  "remaining_gates": [
-    "Reconcile final-paper v2 data versus v1 availability citation",
-    "Complete plate/line/guide/replicate mapping and screen panel identity",
-    "Archive-to-current-code comparison",
-    "Split-compatible preprocessing/statistics and finite full model grid"
+  "input_assets": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/improvement.v1.json",
+      "bytes": 9258,
+      "sha256": "1b8c4e77cc56f5c674f7836412f87c8473f83f27726c4ef8901aa59da71e11dc"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/historical/task.pre-improvement.v1.json",
+        "bytes": 8641,
+        "sha256": "125009ce994e355a227ce6cf87ab2923a43336ea7dbfe216afdadbcc46b25ef7"
+      },
+      "implementation_ids": [
+        "construction-paper-candidate-20261114-plexus-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending source recovery. A future episode may expose only declared training/validation feedback within the original protocol; changed grouped splits must remain extensions.",
+    "candidate_freeze": "Freeze method, representation exposure, normalization, classifier and hyperparameter search before original-fold final scoring.",
+    "final_evaluation": "Compare frozen original-fold predictions with the recovered complete author baseline; the current prospective evaluator is insufficient for this comparison.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published per-guide AUROCs, an independently rerun author pipeline and any new whole-plate experiment as separately named results."
+  },
+  "blocking_issues": [
+    "Final-paper data-version/code correspondence is unresolved.",
+    "Original complete guide/well roster, fold IDs and score vector are not recovered.",
+    "Representation/checkpoint and pre-split normalization exposure require an explicit same-task policy.",
+    "No admitted original-task evaluator, justified effect rule, uncertainty rule or concrete episode budgets."
   ],
-  "overlap": "No exact identity in finite dedup inputs; transcriptomic perturbation tasks are distinct from this neural-activity phenotype claim.",
-  "common_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
-  "readiness": {
+  "holds": {
+    "task_specific": [
+      "Final-paper data-version/code correspondence is unresolved.",
+      "Original complete guide/well roster, fold IDs and score vector are not recovered.",
+      "Representation/checkpoint and pre-split normalization exposure require an explicit same-task policy.",
+      "No admitted original-task evaluator, justified effect rule, uncertainty rule or concrete episode budgets."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original guide-versus-control AUROC is ordered, but the complete final-paper baseline vector and its archive/version mapping are unrecovered. The installed whole-plate, four-line evaluation changes the original Figure 4 split and population and cannot establish a same-task paper win. Final-paper data-version/code correspondence is unresolved. Original complete guide/well roster, fold IDs and score vector are not recovered. Representation/checkpoint and pre-split normalization exposure require an explicit same-task policy. No admitted original-task evaluator, justified effect rule, uncertainty rule or concrete episode budgets.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/historical/task.pre-improvement.v1.json",
+      "bytes": 8641,
+      "sha256": "125009ce994e355a227ce6cf87ab2923a43336ea7dbfe216afdadbcc46b25ef7"
+    },
+    "notes": "Keep task.json and the prospective whole-plate evaluator unchanged as historical construction/calibration material; its synthetic engineering controls and prospective scores do not certify paper improvement."
+  },
+  "admission": {
     "runnable": false,
-    "inputs_verified": false,
-    "reference_validated": false,
     "research_qualified": false,
-    "reproduction_established": false,
-    "model_evaluated": false,
-    "submission_ready": false
-  },
-  "participant_inputs": "Version-bound processed neural trace/spike/mask arrays plus well/plate/cell-line metadata for every released perturbation and negative control. Released embeddings or held-data-trained checkpoints cannot replace neuronal inputs.",
-  "machine_output": {
-    "predictions": "Held-well/plate perturbation probabilities and phenotype effect estimates keyed by gene, cell line, plate, well and control status.",
-    "tables": "All52 gene effect and significance rows, network versus single-cell/manual-feature contrasts, plate/line heterogeneity, negative-control calibration and full exclusions.",
-    "artifacts": "Train-only representations/models, source/config/provenance, complete grouped uncertainty and fixed multiplicity procedure."
-  },
-  "scoring": "Recompute published screen estimator and network-context ablation. Prospective held-plate discrimination/calibration and effect reproducibility at frozen FDR are separate outcomes; more significant genes alone is not improvement.",
-  "protected_split": "Whole plates/batches and wells; keep all cells from each well together. Inner grouped tuning, TRAIN-only representation/statistics, distinct cell-line transfer. Biological replication is at plate/well/line hierarchy, not cell count.",
-  "comparators": "Plexus network-aware, single-cell ablation and manual neuronal features; plate/well/line-only and permissible block label shuffles at matched input and tuning budgets.",
-  "source_family_ids": [
-    "plexus-crispri-52gene"
-  ],
-  "distinctness": "Complete neuronal network perturbation phenotype screen, with independent biological perturbation and plate hierarchy; no matching existing question found.",
-  "publication_context": {
-    "status": "registered_construction_draft_definition_only",
-    "source_snapshot_date": "2026-11-14",
-    "source_definition_bytes": 7791,
-    "source_definition_sha256": "ec8eb9f750a300b03af45287fadc056ea9920ad2f80f2c0fa373ed55bd124e4b",
-    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
-    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
-    "scientific_definition_changed": false,
-    "runtime_binding": null,
-    "scientifically_qualified": false,
-    "submission_ready": false,
-    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
-    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

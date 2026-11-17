@@ -11,7 +11,7 @@ These families retain scientific source used by, related to, or not yet assigned
 
 Scientific and submission readiness remain **unknown**. Stable artifact IDs and original paths remain in [catalog metadata](../catalog/catalog.json).
 
-## Family folders (20)
+## Family folders (21)
 
 These links group current physical locations for browsing; folder names do not assign scientific ownership.
 
@@ -21,6 +21,7 @@ These links group current physical locations for browsing; folder names do not a
 - [Experimental neuroscience](experimental-neuroscience)
 - [Findlay sleep](findlay-sleep)
 - [Four programmes](four-programmes)
+- [Frozen neural lifecycle v1](frozen-neural-lifecycle-v1)
 - [Functional balance](functional-balance)
 - [GraspBox](graspbox)
 - [Helsinki](helsinki)
@@ -36,7 +37,7 @@ These links group current physical locations for browsing; folder names do not a
 - [ZAPBench](zapbench)
 - [ZuCo2](zuco2)
 
-## Assigned source (6 artifacts)
+## Assigned source (7 artifacts)
 
 | Scientific source | Explicit task owners | Related tasks | Role and scientific scope |
 | --- | --- | --- | --- |
@@ -46,6 +47,7 @@ These links group current physical locations for browsing; folder names do not a
 | [Zuco2 neural085 086 complete v1](zuco2/zuco2-neural085-086-complete-v1) | [NEURAL-085](../neural/NEURAL-085/README.md), [NEURAL-086](../neural/NEURAL-086/README.md) | None assigned | Shared task programme: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. |
 | [Comparison contract](sleep-eog/comparison-contract) | [NEURAL-007](../neural/NEURAL-007/README.md), [NEURAL-008](../neural/NEURAL-008/README.md) | None assigned | Comparison contract: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. |
 | [Programme](reward-spacing/programme) | [NEURAL-045](../neural/NEURAL-045/README.md), [NEURAL-046](../neural/NEURAL-046/README.md), [PAPER-FIND-044](../paper/PAPER-FIND-044/README.md) | None assigned | Programme: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. |
+| [Frozen neural lifecycle v1](frozen-neural-lifecycle-v1) | [NEURAL-007](../neural/NEURAL-007/README.md), [NEURAL-077](../neural/NEURAL-077/README.md) | None assigned | Shared programme lifecycle: Commits source/method before separate per-person development processes, preserves terminal failures, requires all 5450 sleep epochs or 400 EEG trials, and freezes canonical submissions before the unchanged native scoring route. Authentic input staging is verified; Linux hard-memory execution, exact native layouts, four-GiB private grading, protected authoring and scientific qualification remain unestablished. |
 
 ## Related source only (1 artifact)
 

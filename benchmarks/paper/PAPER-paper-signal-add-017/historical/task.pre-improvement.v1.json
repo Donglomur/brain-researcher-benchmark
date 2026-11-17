@@ -1,0 +1,285 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-signal-add-017",
+  "source_id": "paper-signal-add-017",
+  "track": "paper",
+  "title": "EEG-based brain-computer interface enables real-time robotic hand control at individual finger level",
+  "status": "specification_only",
+  "canonical_position_one_based": 41,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41467-025-61064-x",
+    "publication_year": 2025,
+    "venue": "Nature Communications"
+  },
+  "primary_outputs": [
+    "Offline/fine-tuned finger classifier metrics on held-out recorded sessions."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://figshare.com/articles/dataset/29104040"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/example_archive",
+        "recorded_fields": {
+          "name": "S01.zip",
+          "bytes": 16455092934,
+          "md5": "8c20bccf8e92c76b9efb5f924e100548"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "8c20bccf8e92c76b9efb5f924e100548"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "source_record_id": "paper-signal-add-017"
+      },
+      {
+        "json_pointer": "/data_inputs/0/example_input_member",
+        "recorded_fields": {
+          "name": "S01/OfflineImagery/S01_OfflineImagery_R01.mat",
+          "bytes": 108440778
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "source_record_id": "paper-signal-add-017"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "assessment": "21subject MAT archives; observed ZIP member inventory supports eeg.data128channels×time,1024Hz and1-based event samples by publisher/source documentation, not executed payload validation.",
+      "official_code": {
+        "url": "https://github.com/bfinl/Finger-BCI-Decoding",
+        "commit": "c3a51c374d85f7b01e33ec4e998cf007d7da7763",
+        "license": "MIT",
+        "entrypoints": [
+          "main_model_training.py",
+          "Functions.py:load_and_filter_data",
+          "Functions.py:generate_paths",
+          "Functions.py:train_models",
+          "EEGModels_tf.py"
+        ]
+      },
+      "input_routes": [
+        {
+          "manifest_url": "https://api.figshare.com/v2/articles/29104040",
+          "license": "CC BY-NC4.0"
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-017",
+        "versions_and_loader_contract": {
+          "data_contract": {
+            "neural": "Publisher schema and source loader agree: eeg.data128channels ×time, eeg.fsample1024Hz, eeg.time andchannel labels.",
+            "labels": "event.type Target/TrialEnd, event.sample1-based sample index, event.value1thumb/2index/4pinky; source subtracts1before slicing.",
+            "leakage": "Online files also contain prediction and prob_* output fields; these must be removed from candidate inputs, along with evaluation event targets.",
+            "split": "Reproduce original per-person chronological offline/prior-session training; report a separate predeclared participant-generalization extension. Group overlapping1s windows by their original trials and runs.",
+            "controls": "Motor imagery separately from execution; cue/eye/muscle/artifact nuisance controls, temporal alignment shuffle, no-neural and within-session class permutation; subject-level paired uncertainty.",
+            "known_exclusion": "Publisher reports missing event information for S07 OnlineImagery_Sess05_3class_Base; exclude or mark unusable before scoring."
+          },
+          "scope_description": "Reproduce the offline-trained finger motor-imagery decoder and its recorded cross-session/fine-tuning comparisons; this does not reproduce a new human closed-loop robotic-control experiment."
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/bfinl/Finger-BCI-Decoding",
+    "revision_or_archive_version": "c3a51c374d85f7b01e33ec4e998cf007d7da7763",
+    "entrypoints": [
+      "main_model_training.py",
+      "Functions.py:load_and_filter_data",
+      "Functions.py:generate_paths",
+      "Functions.py:train_models",
+      "EEGModels_tf.py"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-017",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/bfinl/Finger-BCI-Decoding",
+            "commit": "c3a51c374d85f7b01e33ec4e998cf007d7da7763",
+            "license": "MIT",
+            "entrypoints": [
+              "main_model_training.py",
+              "Functions.py:load_and_filter_data",
+              "Functions.py:generate_paths",
+              "Functions.py:train_models",
+              "EEGModels_tf.py"
+            ]
+          }
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": {
+        "official_code_license": "MIT",
+        "data_route_licenses": [
+          {
+            "url": "https://api.figshare.com/v2/articles/29104040",
+            "license": "CC BY-NC4.0"
+          }
+        ]
+      },
+      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "recorded_central_outputs": [
+        "Offline/fine-tuned finger classifier metrics on held-out recorded sessions."
+      ],
+      "assessment": "Recorded finger-imagery offline/fine-tuning comparisons are scoped; the real-time human robotic closed-loop headline cannot be recreated by replay alone.",
+      "status": "documented_scoped_proposal_not_numeric_qualification",
+      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
+    },
+    "source_recorded_metrics": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-017",
+        "recorded_metrics": [
+          "Per-trial class accuracy/balanced accuracy and confusion matrices",
+          "Participant-weighted calibration/transfer delta"
+        ]
+      }
+    ],
+    "comparability": [
+      "Same imagery versus execution conditions, window overlap, labels and calibration budget are essential. Published human adaptation feedback is not matched by offline scoring.",
+      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Published closed-loop performance includes human feedback adaptation; replaying recorded files supports only an offline analysis scope.",
+        "Full archive is large; bounded range extraction/download planning is needed. A single observed offline run is108.44MBuncompressed.",
+        "Code uses TensorFlow/EEGNet and local path placeholders; no environment or training executed.",
+        "Data non-commercial terms apply; runtime/storage estimates beyond observed sizes are unmeasured.",
+        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_project_reference_run_evidence_found",
+      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Measure chronological session transfer and participant transfer under equal calibration and artifact-control budgets."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_frozen_or_run",
+      "proposed_panel": "Whole trials/runs and chronological sessions stay together; distinguish within-person calibration from participant transfer. Remove online prediction/probability outputs and hidden target annotations from packets.",
+      "retained_roster_proposal": [
+        "Measure chronological session transfer and participant transfer under equal calibration and artifact-control budgets."
+      ],
+      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_resource_statement": "unmeasured",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": null
+  },
+  "holds": {
+    "task_specific": [
+      "Published closed-loop performance includes human feedback adaptation; replaying recorded files supports only an offline analysis scope.",
+      "Full archive is large; bounded range extraction/download planning is needed. A single observed offline run is108.44MBuncompressed.",
+      "Code uses TensorFlow/EEGNet and local path placeholders; no environment or training executed.",
+      "Data non-commercial terms apply; runtime/storage estimates beyond observed sizes are unmeasured.",
+      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Choose a documented complete subject/session pair, pin target/event schema and the S07 missing-event exclusion, then establish a trial-grouped offline reproduction contract before full archives or training.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Choose a documented complete subject/session pair, pin target/event schema and the S07 missing-event exclusion, then establish a trial-grouped offline reproduction contract before full archives or training.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "48b32c086910b82237a9c18ab406144e5caf3db4ff99fca7f18c88147f674526",
+    "audit_record_sha256": "f8a160b50c013d13790a453e4760d9d8e1aedbbe83c69417efa1ee6ef3b6ebc0",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+          "bytes": 127035,
+          "sha256": "49a22e4974c8ed6c213582386153fff1fdf7b00755481b032ba865a57030ea06"
+        },
+        "record_id": "paper-signal-add-017",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 16,
+        "record_sha256": "39031c20b893bb34cdcb09f8c3f6250b8800ba61bf29c4a4a575670f41338f43"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-paper-signal-add-017",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

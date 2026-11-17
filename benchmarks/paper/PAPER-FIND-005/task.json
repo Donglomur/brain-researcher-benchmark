@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-FIND-005",
-  "source_id": "FIND-005",
   "track": "paper",
   "title": "A brain-wide map of neural activity during complex behaviour",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Decode source stimulus side, choice, feedback and wheel variables by brain region; keep endpoint identities separate and preserve the complete registered regional representation scope.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Decode source stimulus side, choice, feedback and wheel variables by brain region; keep endpoint identities separate and preserve the complete registered regional representation scope.",
+    "Source-paper comparison for Original per-target regional decoding effect vector: balanced accuracy or R-squared, with source session-null correction: Binary balanced accuracy is the mean of class recalls; continuous wheel R-squared is 1-SSE/SST. Use each original target metric and source null correction without replacing them with significance or fraction-responsive scores."
+  ],
+  "success_criteria": [
+    "Recover and pin the original numerical per-target/per-region baseline, masks, folds and coverage before admitting an improvement episode.",
+    "Replay the source decoder on its original within-session task and distinguish that rerun score from the published values.",
+    "Candidate and author comparator must share inputs, preprocessing, split, metric, aggregation and declared budgets; no dropped regions, easier target subsets or newly pooled score can establish paper superiority.",
+    "Freeze the candidate before final comparison and satisfy a justified meaningful-effect and uncertainty rule. More significant regions or smaller p-values alone do not qualify.",
+    "Treat new mouse-held-out splits and the local single-cell evaluator as separately labelled extensions/calibration, never as original-decoder wins.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-005",
   "canonical_position_one_based": 26,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41586-025-09235-0",
     "publication_year": 2025,
     "venue": "Nature"
   },
-  "primary_outputs": [
-    "Brain-wide stimulus, action and feedback representations with common quality filters.",
-    "Comparison of regional encoding/decoding profiles and behavior-related population activity."
-  ],
   "input_assets": {
     "routes": [
       "https://int-brain-lab.github.io/iblenv/notebooks_external/data_release_brainwidemap.html"
@@ -125,115 +136,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "recorded_terms": {
-        "code": "No top-level license identified in inspected paths; permissions for redistribution are unresolved, not presumed.",
-        "data": "Public empirical input route inspected; component license must be read before redistribution if not recorded elsewhere in this record.",
-        "captured_license_heading": "MIT License"
-      },
-      "record_conflicts": [
-        "Saved record contains a captured license heading and a contradictory generic unresolved-code-license note; reconcile against its pinned license before redistribution, rather than assume either absence or permission."
-      ],
-      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
-      "overlap_group": null
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "central_outputs_in_saved_source_contract": [
-        "Brain-wide stimulus, action and feedback representations with common quality filters.",
-        "Comparison of regional encoding/decoding profiles and behavior-related population activity."
-      ],
-      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
-      "missing_or_unfrozen_endpoint_details": "Freeze one whole regional stimulus/action/feedback representation claim and common source QC, rather than treating the full atlas as one cheap demo."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Use the same trial/unit/source masks and mouse-level inference; population decodability is not causal computation. Existing BWB wheel packets do not reproduce this paper."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Freeze one whole regional stimulus/action/feedback representation claim and common source QC, rather than treating the full atlas as one cheap demo.",
-        "Use the same trial/unit/source masks and mouse-level inference; population decodability is not causal computation. Existing BWB wheel packets do not reproduce this paper.",
-        "Shared recording family with FIND-004. Public preprint predates journal by two years; require session/version pinning and mouse-level splits rather than random neurons.",
-        "Shared cohort with FIND-004. Full raw AP voltage is unnecessary for the sorted-spike scope; no spike-sort reproduction claim.",
-        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-        "Execute and independently audit references, controls, grading and measured resources.",
-        "Qualify harness, meaningful difficulty, scientific review and target submission requirements.",
-        "Saved record contains a captured license heading and a contradictory generic unresolved-code-license note; reconcile against its pinned license before redistribution, rather than assume either absence or permission."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
-      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Proposed: evaluate cross-mouse reproducibility and sensitivity to unit counts, session sampling, latent movements and temporal leakage."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "independent_panel_not_established_in_inspected_evidence",
-      "proposed_improvement": [
-        "Proposed: evaluate cross-mouse reproducibility and sensitivity to unit counts, session sampling, latent movements and temporal leakage."
-      ],
-      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
-      "special_gate": "No completed independent improvement result is established here."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "source_roster_estimate_or_statement": {
-      "estimate": "Multicore CPU server for full cohort; workstation for bounded regional analyses; estimated hours to days.",
-      "basis": "Source metadata/static inspection and author runtime statements where explicitly identified; not measured."
-    },
-    "measured_or_static_facts_from_existing_authoring": [],
-    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
-  },
-  "holds": {
-    "task_specific": [
-      "Freeze one whole regional stimulus/action/feedback representation claim and common source QC, rather than treating the full atlas as one cheap demo.",
-      "Use the same trial/unit/source masks and mouse-level inference; population decodability is not causal computation. Existing BWB wheel packets do not reproduce this paper.",
-      "Shared recording family with FIND-004. Public preprint predates journal by two years; require session/version pinning and mouse-level splits rather than random neurons.",
-      "Shared cohort with FIND-004. Full raw AP voltage is unnecessary for the sorted-spike scope; no spike-sort reproduction claim.",
-      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-      "Execute and independently audit references, controls, grading and measured resources.",
-      "Qualify harness, meaningful difficulty, scientific review and target submission requirements.",
-      "Saved record contains a captured license heading and a contradictory generic unresolved-code-license note; reconcile against its pinned license before redistribution, rather than assume either absence or permission."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Map the paper region/condition endpoints to exact session/probe/animal object IDs, with exposure links to prior-localization and RRR, before an explicit bounded source qualification.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Map the paper region/condition endpoints to exact session/probe/animal object IDs, with exposure links to prior-localization and RRR, before an explicit bounded source qualification.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -264,11 +166,80 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "source_roster_estimate_or_statement": {
+      "estimate": "Multicore CPU server for full cohort; workstation for bounded regional analyses; estimated hours to days.",
+      "basis": "Source metadata/static inspection and author runtime statements where explicitly identified; not measured."
+    },
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-005/improvement.v1.json",
+      "bytes": 10845,
+      "sha256": "bd5d664c2ad3c3087597dfaa3d58d3c28c2e2aba4202bee675a22b0b00576ed2"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-005/historical/task.pre-improvement.v1.json",
+        "bytes": 15756,
+        "sha256": "e3871b4438eeb026643dd24f74f8730a706a67b85d70f36c56e9d55838f41174"
+      },
+      "implementation_ids": [
+        "construction-paper-find-005-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending baseline/source reconciliation. Once admitted, iterate only on the declared source training and validation folds with fixed full regional coverage.",
+    "candidate_freeze": "Before final outer-test replay, freeze method, feature windows, hyperparameters, source revision, fold manifest and access/resource ledger.",
+    "final_evaluation": "One protected comparison under the exact original nested-CV scoring contract after competent author replay; public historical targets are not newly blind.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published regional scores, reproduced author decoder scores and candidate scores remain distinct. Initial-evaluator-v1 single-cell sensitivity is calibration only."
+  },
+  "blocking_issues": [
+    "Original numerical per-target regional effect vector is not recovered.",
+    "Complete source cohort, endpoint-specific masks and region coverage remain unfrozen.",
+    "Manuscript versus pinned logistic configuration and unit/region filtering require adjudication.",
+    "No qualified author replay, working protected decoder evaluator, meaningful effect rule, paired uncertainty contract or concrete episode budgets is established."
+  ],
+  "holds": {
+    "task_specific": [
+      "Original numerical per-target regional effect vector is not recovered.",
+      "Complete source cohort, endpoint-specific masks and region coverage remain unfrozen.",
+      "Manuscript versus pinned logistic configuration and unit/region filtering require adjudication.",
+      "No qualified author replay, working protected decoder evaluator, meaningful effect rule, paired uncertainty contract or concrete episode budgets is established."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The broad regional representation registration includes genuine original decoding endpoints. However, the reviewed paper/code do not establish the exact original regional score vector and complete cohort/scoring manifest needed for a paper comparison. The local single-cell significance/fraction evaluator cannot substitute for source population decoding. A new cross-mouse split or pooled scalar would be an extension. Original numerical per-target regional effect vector is not recovered. Complete source cohort, endpoint-specific masks and region coverage remain unfrozen. Manuscript versus pinned logistic configuration and unit/region filtering require adjudication. No qualified author replay, working protected decoder evaluator, meaningful effect rule, paired uncertainty contract or concrete episode budgets is established.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-005/historical/task.pre-improvement.v1.json",
+      "bytes": 15756,
+      "sha256": "e3871b4438eeb026643dd24f74f8730a706a67b85d70f36c56e9d55838f41174"
+    },
+    "notes": "Preserve initial-evaluator-v1 sorted-spike single-cell sensitivity and regional fractions. Its choice-window/profile discrepancy and prospective mouse-weighted summary cannot establish decoder superiority."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

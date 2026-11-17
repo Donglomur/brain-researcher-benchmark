@@ -1,5 +1,11 @@
 # Using implementation source
 
+Current paper success requires surpassing the source paper on the same original
+task. Historical reproduction and prospective new-split components below are
+calibration or extensions. Read each task's `improvement.v1.json` for the current
+comparison, disposition and blockers; source presence cannot promote them to
+paper success. See the [improvement guide](../science/paper-improvement/README.md).
+
 Start with a task page in the [paper](../../benchmarks/paper/README.md) or
 [neural](../../benchmarks/neural/README.md) track. Its definition and source bindings
 identify available implementations, shared programmes, current guidance and

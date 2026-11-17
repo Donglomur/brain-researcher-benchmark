@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-ROOT-ADD-025`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The source paper explicitly defines ten-fold prediction of stimulus angles and behavioral estimates from neural PCs, with held-out Pearson correlation. This ordered source-native decoder is a valid overhaul route even though the main MI/II findings are descriptive. Exact original decoding baseline arrays, source participant/parcel aggregation and fold membership remain unrecovered, so no same-task win is currently admitted.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 96433 bytes; SHA-256 `0e4a5b37da28a0d6936d45af4ff352a5cc64529358f9fae7c09059057b322f2a`.
+- Specification identity: 97908 bytes; SHA-256 `986b79e0a660f3dcb7ce2847047eb250060ee2c4d0ddce7ecd0e90b47267e2f8`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Paper-described supplementary linear encoding/readout from aligned 160 Hz component/behavior packets through source eligibility, sample pairing, matched support, cross-validated univariate regression, component/parcel averaging and participant consistency contrasts, with a grouped-trial sensitivity. Main MI/II estimator/dispatch/bias/null semantics, authentic complete participant/parcel and MAT/export/resampling parity, native figure references and protected scientific qualification remain held; supplied PCA components were fitted across all trials.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Paper-described supplementary linear encoding/readout from aligned 160 Hz component/behavior packets through source eligibility, sample pairing, matched support, cross-validated univariate regression, component/parcel averaging and participant consistency contrasts, with a grouped-trial sensitivity. Main MI/II estimator/dispatch/bias/null semantics, authentic complete participant/parcel and MAT/export/resampling parity, native figure references and protected scientific qualification remain held; supplied PCA components were fitted across all trials. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

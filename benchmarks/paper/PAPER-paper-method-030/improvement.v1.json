@@ -1,0 +1,192 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-030",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original paired-electrophysiology denoising task is ordered, and several numeric secondary results are recovered, but the exact published prominence-binned F1* profile, complete original cohort mapping and spectral/peak evaluation conventions are not recovered. The existing whole-cell held-out panel changes the paper’s self-supervised26-training/22-evaluation design and cannot establish a same-task paper win.",
+  "source_paper": {
+    "title": "Robust self-supervised denoising of voltage imaging data using CellMincer",
+    "url": "https://www.nature.com/articles/s44303-024-00055-x"
+  },
+  "evidence": [
+    {
+      "id": "cell-paper-task",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11618097/",
+      "locator": "Results: CellMincer improves the detection of subthreshold events in real voltage imaging data with paired electrophysiology; paragraphs27–31; Figure3",
+      "supports": "Uses26 available simultaneous BeRST/EP datasets for model training as supported by each implementation, then22 activity-selected datasets for evaluation; Figure3 evaluates trace correlation, spectral noise reduction and prominence-binned peak F1."
+    },
+    {
+      "id": "cell-paper-preprocess",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11618097/",
+      "locator": "Methods: Procuring fluorescence intensity traces and aligning to joint electrophysiology data; paragraphs71–72",
+      "supports": "ROI selection uses raw fluorescence correlation and watershed; common EP/fluorescence trend removal, timing alignment and affine L2 fit precede assessment."
+    },
+    {
+      "id": "cell-paper-metric",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11618097/",
+      "locator": "Methods: Metrics for evaluating denoising performance on real voltage imaging with paired EP; equations21–23; paragraphs73–74",
+      "supports": "Specifies STFT64/48 noise analysis with high-EP-power intervals excluded; fuzzy-event F1 with strict2-ms tolerance, optimization within±0.2mV prominence, and averaging over prominence bins."
+    },
+    {
+      "id": "cell-code-manifest",
+      "kind": "author_code",
+      "url": "https://github.com/cellarium-ai/CellMincer/blob/8cc2dd3192671e4287c16a3a92c4ccdbd2eb7942/configs/manifest/miller-ephys-standard.yaml",
+      "locator": "Entire5-line manifest",
+      "supports": "Author format declares5000 frames, one segment, tyx order and500-Hz sampling; it is not an original cohort/split manifest."
+    },
+    {
+      "id": "cell-code-preprocess",
+      "kind": "author_code",
+      "url": "https://github.com/cellarium-ai/CellMincer/blob/8cc2dd3192671e4287c16a3a92c4ccdbd2eb7942/configs/preprocess/pairedephys.yaml",
+      "locator": "detrend, dejitter, feature_depth and trim entries",
+      "supports": "Pinned preprocessing uses polynomial detrending initialized with501-frame median smoothing, disabled dejitter and stated global feature settings; exact figure-level alignment remains separate."
+    },
+    {
+      "id": "cell-paper-availability",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11618097/",
+      "locator": "Data availability; Code availability",
+      "supports": "Paper links the broad-dsp-cellmincer-data bucket and CellMincerPaperAnalysis repository. The analysis repository returned404 during this review; published availability text does not establish an executable recovered figure script."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Denoise real BeRST voltage movies and recover single-neuron optical traces faithful to simultaneous patch-clamp EP, including small subthreshold events. Preserve Figure3 F1*, lagged/zero-lag correlation and residual spectral fidelity together; stronger TTX-group significance or smoother traces is not improvement.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-metric"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original joint BeRST fluorescence and patch-clamp recordings from cultured rat hippocampal neurons, provided through the author data bucket. An immutable source snapshot and exact raw TIFF/EP-file mapping to the paper assessment have not been authenticated; no payloads were downloaded.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-availability"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The results describe26 available joint datasets and22 selected for discernible activity. The local22-pair inventory and filename-derived cell groups do not establish exact equivalence to the original selected cells/recordings; the article discussion also mentions30 experiments, requiring cohort reconciliation.",
+      "evidence_ids": [
+        "cell-paper-task"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original design trains the self-supervised denoisers on as many as all26 joint datasets and evaluates22 selected recordings; it is not held-out-cell supervised generalization. Method-specific training membership must be recovered. A new whole-cell split is a useful separate extension, never a comparison to the published Figure3 numbers.",
+      "evidence_ids": [
+        "cell-paper-task"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Denoiser training/inference uses raw optical movies without clean targets; global features may use the source-permitted recording context. EP is an assessment and alignment reference, not candidate training input. The original analysis allows grader-side timing/affine alignment using EP, which must be reproduced symmetrically and disclosed.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-preprocess"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Use original raw-derived ROIs for every method; median-filter fluorescence trend at one second, Savitzky–Golay cubic EP smoothing with51-point window, peak-based temporal mapping, interpolation and affine L2 calibration. Exact ROI masks, correspondence choices and all original fitting boundaries remain unbound. Author500-Hz/5000-frame manifest is verified but cannot supply these missing transformations.",
+      "evidence_ids": [
+        "cell-paper-preprocess",
+        "cell-code-manifest",
+        "cell-code-preprocess"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Paper F1*: precision and recall use existential peak matches with absolute time separation<2ms; harmonic mean is maximized over optical prominence p′ in[p−0.2,p+0.2]mV. Exact peak extraction, prominence-bin boundaries and undefined-case policy remain unrecovered. Secondary zero-lag correlation and STFT residual noise are retained; STFT window64/overlap48 are sourced, while the EP-power exclusion threshold and remaining conventions are unresolved.",
+      "evidence_ids": [
+        "cell-paper-metric"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Figure3c reports median trace correlation;3d averages residual log-power reduction by frequency, including>100Hz;3e averages F1* over prominence bins. Exact cell/recording weighting and bin integration need the original analysis. Do not substitute the local seven-point prominence grid or arbitrary scalar average of these endpoints.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-metric"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Figure3e original prominence-binned peak F1* profile, with Figure3c/d trace and spectral-fidelity safeguards",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "description": "The exact Figure3e CellMincer F1* values are not recovered. The source separately reports median zero-lag correlation0.90 and mean noise reduction13.9dB above100Hz, plus relative F1 gains; none is substituted for the F1* profile or a full denoising success score. These numbers are published, not author reruns.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-metric"
+      ],
+      "value": null
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "No authenticated author-baseline rerun on the exact original assessment has been established; source instructions are not an executed score.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-metric"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Justify a gain in the original prominence-binned F1* profile large enough to improve recovery of small electrical events while preserving spike timing and avoiding false events. The paper’s relative F1 gains and secondary13.9dB noise reduction do not define a margin for this task; exact source bins and reference variability are still missing.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-metric"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired recording/cell-cluster resampling with all associated movies kept together; quantify uncertainty of every original prominence bin and safeguard with a declared multiplicity rule. Recover biological/culture grouping before choosing independent units or numerical confidence coverage.",
+      "independent_unit": "Cell or culture preparation according to the original acquisition hierarchy; frames, peaks, overlapping windows and repeated recordings of a cell are dependent.",
+      "rationale": "EP is an external measurement but is also used in original alignment; naive per-frame precision would exaggerate evidence, and original preparation identities and uncertainty conventions remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-metric"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the original26-training/22-evaluation membership and complete Figure3 F1*, correlation and spectral comparison; retain equal self-supervision context and original EP alignment.",
+      "Surpass the source CellMincer F1* profile under a predeclared meaningful-effect rule while satisfying original trace/spike fidelity and false-event safeguards; report every original metric, not only a favorable noise band.",
+      "Replicate the original peak extraction, prominence bins, alignment and spectral mask before a numerical comparison; local prospective grid, spectral defaults and boxcar control are not paper baselines.",
+      "A new held-out-cell split, altered noise condition or smaller subset is an extension, even if its internally matched CellMincer comparison is favorable.",
+      "Freeze candidate and decision rules before final reference scoring; do not train/tune on EP targets or treat stronger TTX separation as the accuracy endpoint."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The source-paper comparator and a rerun of that method are distinct from current SOTA. No current-SOTA claim or verified contemporary comparison is made.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After source recovery, develop on declared optical training recordings and training/development feedback without exposing EP final targets; preserve the paper’s self-supervised observation access and record all attempts. Any prospective held-out-cell experiment is labeled separately.",
+    "candidate_freeze": "Freeze denoiser, original-compatible preprocessing, EP-independent candidate outputs, hyperparameters, seed policy and access/resource ledger before final EP scoring. Grader-side paper alignment is fixed independently of candidate selection.",
+    "final_evaluation": "Score all original22 recordings and every original Figure3 prominence bin plus correlation/spectral safeguards using authenticated CellMincer outputs and identical transformations; no final feedback-driven candidate revisions.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "An authenticated source CellMincer model/run is the required comparator. Raw movies and PMD/SUPPORT/N2S are informative original controls; the local boxcar control and prepared-trace evaluator are calibration components, not a substitute for the source denoiser."
+  },
+  "blocking_issues": [
+    "Exact Figure3e F1* numerical baseline/profile and full published aggregation not recovered; secondary13.9dB and0.90 cannot replace it.",
+    "CellMincerPaperAnalysis author URL returned404; exact peak grid, STFT mask, ROIs and alignment decisions remain unresolved.",
+    "Original26-training/22-evaluation file/cell identities and method-specific training coverage need recovery; current whole-cell split differs from source task.",
+    "Current evaluator consumes prepared traces and implements declared prospective peak/spectral choices; native TIFF/ABF bridge and author-baseline rerun are unqualified.",
+    "Meaningful-effect criterion, valid biological grouping, uncertainty rule and concrete information/compute budgets remain unfrozen."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the prepared-trace evaluator and its explicit prospective panel/grid policies as calibration and separately labeled extension infrastructure. Its22-recording whole-cell split and generated test controls are not proof of reproducing or surpassing the original self-supervised Figure3 result."
+  }
+}

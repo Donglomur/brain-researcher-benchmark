@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-signal-add-001`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The full paper contains original ordered category-decoding evaluations in Fig. 6 and Extended Data Fig. 7a. The exact source task/condition, full eligible cohort, split artifacts and matching baseline are not yet bound, so this task is source-unresolved. Legacy PAC curves and cell-selection inference remain descriptive calibration.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 21335 bytes; SHA-256 `af6f2bf29ed18bc720632f05388a77aab696879bcf83c01ef20872a1e5022aca`.
+- Specification identity: 20038 bytes; SHA-256 `a58420c60e7e92f336e8c1ca58115e329eafdbf7ddd4e2b67ac357f5f1ec8d47`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Pinned 2024 example-recording numerical path to load-dependent LFP Tort comodulograms and phase-bin curves, source-style single-unit count/Poisson comparisons, and a separately prospective patient-grouped load contrast. Authentic recordings and full eligibility, explicit single-unit timing-repair acceptance, native MATLAB numerical/fit parity, figure targets, protected evaluation, component rights and scientific qualification remain held; archive file/participant counts do not establish eligible PAC populations.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Pinned 2024 example-recording numerical path to load-dependent LFP Tort comodulograms and phase-bin curves, source-style single-unit count/Poisson comparisons, and a separately prospective patient-grouped load contrast. Authentic recordings and full eligibility, explicit single-unit timing-repair acceptance, native MATLAB numerical/fit parity, figure targets, protected evaluation, component rights and scientific qualification remain held; archive file/participant counts do not establish eligible PAC populations. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

@@ -1,19 +1,32 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-signal-add-012",
-  "source_id": "paper-signal-add-012",
   "track": "paper",
   "title": "Measuring the dynamic balance of integration and segregation underlying consciousness, anesthesia, and sleep in humans",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Predict behaviorally assessed awake versus loss-of-responsiveness states for the complete original Figure 5b,c Dataset-1 leave-one-subject-out result. This is an explicitly scoped paper result; transition-only and cross-dataset panels are separate original results and need not all be surpassed to claim this scope.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Predict behaviorally assessed awake versus loss-of-responsiveness states for the complete original Figure 5b,c Dataset-1 leave-one-subject-out result. This is an explicitly scoped paper result; transition-only and cross-dataset panels are separate original results and need not all be surpassed to claim this scope.",
+    "Source-paper comparison for Figure 5b,c complete Dataset-1 leave-one-subject-out awake/LOR balanced accuracy across all 19 subjects, with ROC AUC and required source controls retained: Balanced accuracy = (sensitivity + specificity)/2, higher is better; ROC AUC remains a separate reported endpoint. Static ISD and state-contrast significance are not classification accuracy."
+  ],
+  "success_criteria": [
+    "Before candidate outcomes are examined, bind the complete original Figure 5b,c Dataset-1 LOSO panel as the claimed scope, including all 19 subjects, source state/window definitions, required original controls and companion ROC AUC. Report exactly which source result is surpassed.",
+    "Recover and reproduce the original state-label/time mapping, feature definitions, LOSO and sample-selection protocol and author random forest. Historical draws may be unavailable: documented source-conformant stochastic reruns are admissible with provenance, predeclared calibration tolerance and paired candidate-author evaluation on the same draws.",
+    "The candidate must surpass the source-paper balanced-accuracy result itself for the declared complete panel (reported 93%) at recovered source precision under a predeclared justified stochastic-calibration tolerance, as well as improve meaningfully over the calibrated author rerun with valid paired subject-level uncertainty. A weaker author rerun cannot lower the source target or make a candidate below the source result a paper win. Satisfy the panel's predeclared source controls and companion-metric requirements; merely reporting the candidate's relation to 93% is insufficient.",
+    "A different complete original Figure 5 panel can define a separately scoped comparison only when declared before candidate outcomes and retaining all its original participants, conditions, controls and metrics. Do not select an easier subject/window/state subset or favorable panel after seeing results; unrelated transition/transfer panels are not universal prerequisites.",
+    "Do not claim a win from stronger ISD state separation, smaller p-values, a Dataset-3/4/5-only classifier, pooled random windows or a changed nested/held-animal split protocol. Documented random redraws within the original protocol differ from these extensions.",
+    "Keep AUC, balanced accuracy and static ISD distinct and report source-paper, calibrated author-rerun and candidate scores separately.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-signal-add-012",
   "canonical_position_one_based": 87,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41467-024-53299-x",
     "publication_year": 2024,
     "venue": "Nature Communications"
   },
-  "primary_outputs": [
-    "Integration, segregation and ISD state contrasts from real participant time series."
-  ],
   "input_assets": {
     "routes": [
       "https://figshare.com/articles/dataset/26367193"
@@ -173,116 +186,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": {
-        "code": "GPL-3.0",
-        "data": [
-          "CC BY4.0"
-        ]
-      },
-      "declared_overlap_group": null,
-      "existing_graph_evidence_leads": [],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Integration, segregation and ISD state contrasts from real participant time series."
-      ],
-      "construction_specificity": "Integration/segregation/ISD state contrasts are defined broadly; exact aggregation, TR/length policy, motion handling and primary comparison must be frozen. Transition timing remains unavailable.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [
-      {
-        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
-        "record_id": "paper-signal-add-012",
-        "recorded_metrics": [
-          "Original integration-minus-segregation metric",
-          "Paired participant effect intervals and held-out balanced accuracy if a classifier is added"
-        ]
-      }
-    ],
-    "comparability": [
-      "Match GSR/noGSR and observation lengths; compare simpler connectivity/global-amplitude and motion controls.",
-      "Use autocorrelation-preserving nulls and no overlapping-window random train/test split."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Integration/segregation/ISD state contrasts are defined broadly; exact aggregation, TR/length policy, motion handling and primary comparison must be frozen. Transition timing remains unavailable.",
-        "Within-person state pairs and whole participant/cohort holdout for prediction; Dataset4 subcohort overlap needs resolution.",
-        "2,940,877,156B ZIP metadata and19entries do not verify MAT values or all condition semantics. Optional ETC/transition branches remain outside the initial task.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Assess whether ISD adds predictive information beyond motion/global amplitude and simple connectivity, holding out participants/cohorts."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Assess whether ISD adds predictive information beyond motion/global amplitude and simple connectivity, holding out participants/cohorts."
-      ],
-      "independent_panel_gate": "Within-person state pairs and whole participant/cohort holdout for prediction; Dataset4 subcohort overlap needs resolution.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": "unmeasured",
-    "source_resource_evidence": null,
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "Integration/segregation/ISD state contrasts are defined broadly; exact aggregation, TR/length policy, motion handling and primary comparison must be frozen. Transition timing remains unavailable.",
-      "Within-person state pairs and whole participant/cohort holdout for prediction; Dataset4 subcohort overlap needs resolution.",
-      "2,940,877,156B ZIP metadata and19entries do not verify MAT values or all condition semantics. Optional ETC/transition branches remain outside the initial task.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Trace real MAT condition axes to ISD_calculation, pin BCT dependencies, and define one paired state contrast with cohort identity before any numerical run.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Trace real MAT condition axes to ISD_calculation, pin BCT dependencies, and define one paired state contrast with cohort identity before any numerical run.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -385,11 +288,80 @@
       }
     ]
   },
+  "resources": {
+    "roster_statement": "unmeasured",
+    "source_resource_evidence": null,
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-012/improvement.v1.json",
+      "bytes": 14742,
+      "sha256": "a2b1921dd854bbd592fe3d5256cf5e782945199a328e826296cf68e064d8261d"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-signal-add-012/historical/task.pre-improvement.v1.json",
+        "bytes": 20725,
+        "sha256": "66d8975ed4f868e9289d6824b0152105a6f8deaeca9d2efd97b2a8cbb4474aae"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-signal-add-012-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After source recovery and admission, iterate using only permitted training/development feedback under a declared total search budget. Bind the complete original panel, controls, companion metrics, original stochastic sampling procedure and cumulative access before candidate outcomes; no posthoc panel narrowing.",
+    "candidate_freeze": "Freeze the declared complete source panel, feature extraction, model, hyperparameters, sampling/seed policy, calibration tolerance, code and preprocessing before assessment. Resolve historical public-result exposure and original hyperparameter-selection handling; do not replace LOSO with a new nested or held-animal protocol.",
+    "final_evaluation": "Owner runs the frozen candidate and recovered author classifier on all subjects/folds of the predeclared original panel. Use historical samples or documented source-conformant stochastic draws, paired across candidate and author; report subject-level outcomes, required controls and companion metrics without iterative assessment feedback. Claim only this scoped source result.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published panel-specific scores, a calibrated source-conformant author rerun and current SOTA are distinct. Exact historical stochastic membership is not mandatory when original protocol/population, provenance and predeclared calibration tolerance are preserved. The local state-contrast evaluator remains calibration only; changed split protocols are extensions."
+  },
+  "blocking_issues": [
+    "Bind authentic responsiveness labels and times for every subject/state/window needed by the predeclared full Dataset-1 LOSO panel; do not select only readily mapped subjects.",
+    "Recover the original sampling procedure and either historical draws or a documented source-conformant stochastic rerun policy with provenance and predeclared calibration tolerance. Resolve Dataset-2 training-state ambiguity only if a separate declared panel uses it.",
+    "Recover available precision for the scoped 93% balanced-accuracy and 0.984 AUC anchors and bind the panel's required source controls/companion metrics. Other transition/transfer scores are necessary only for claims scoped to those results.",
+    "Build and validate the original classifier/evaluator for the complete declared panel rather than treating the ISD kernel as a prediction benchmark.",
+    "Qualify paired participant-level uncertainty, meaningful effect, calibrated baseline agreement, equal access and concrete cumulative resource/search budgets before activation."
+  ],
+  "holds": {
+    "task_specific": [
+      "Bind authentic responsiveness labels and times for every subject/state/window needed by the predeclared full Dataset-1 LOSO panel; do not select only readily mapped subjects.",
+      "Recover the original sampling procedure and either historical draws or a documented source-conformant stochastic rerun policy with provenance and predeclared calibration tolerance. Resolve Dataset-2 training-state ambiguity only if a separate declared panel uses it.",
+      "Recover available precision for the scoped 93% balanced-accuracy and 0.984 AUC anchors and bind the panel's required source controls/companion metrics. Other transition/transfer scores are necessary only for claims scoped to those results.",
+      "Build and validate the original classifier/evaluator for the complete declared panel rather than treating the ISD kernel as a prediction benchmark.",
+      "Qualify paired participant-level uncertainty, meaningful effect, calibrated baseline agreement, equal access and concrete cumulative resource/search budgets before activation."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The paper contains an ordered consciousness-state prediction task in Figure 5 with a published random-forest baseline. This design scopes the comparison to the complete original Dataset-1 leave-one-subject-out result in Figure 5b,c, including all 19 subjects and its required source controls/companion metrics. Original label/timing bindings, classifier replay and calibrated sampling remain unresolved; the local state-contrast evaluator does not implement this task. No readiness is claimed. Bind authentic responsiveness labels and times for every subject/state/window needed by the predeclared full Dataset-1 LOSO panel; do not select only readily mapped subjects. Recover the original sampling procedure and either historical draws or a documented source-conformant stochastic rerun policy with provenance and predeclared calibration tolerance. Resolve Dataset-2 training-state ambiguity only if a separate declared panel uses it. Recover available precision for the scoped 93% balanced-accuracy and 0.984 AUC anchors and bind the panel's required source controls/companion metrics. Other transition/transfer scores are necessary only for claims scoped to those results. Build and validate the original classifier/evaluator for the complete declared panel rather than treating the ISD kernel as a prediction benchmark. Qualify paired participant-level uncertainty, meaningful effect, calibrated baseline agreement, equal access and concrete cumulative resource/search budgets before activation.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-012/historical/task.pre-improvement.v1.json",
+      "bytes": 20725,
+      "sha256": "66d8975ed4f868e9289d6824b0152105a6f8deaeca9d2efd97b2a8cbb4474aae"
+    },
+    "notes": "Preserve initial-evaluator-v1 ISD calculations and prospective paired state contrasts. Its Dataset-3/5 policy, withheld Dataset-4 and hypothetical classifier proposal do not implement Figure 5 and cannot establish improvement over the paper."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

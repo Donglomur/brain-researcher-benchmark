@@ -30,6 +30,9 @@ RETIRED_ROOTS = ("authoring", "components", "artifacts-build", "verification", "
                  "benchmarks/scientific_components", "benchmarks/scientific_contracts")
 # Runtime outputs are not source. This checker never traverses this directory.
 RUNTIME_ROOTS = (".neurobench",)
+PAPER_REVISION = "paper-improvement/v1"
+PAPER_OBJECTIVE = "surpass_source_paper_same_task"
+PAPER_DISPOSITIONS = {"improvement_ready", "design_ready", "source_unresolved", "ineligible"}
 
 
 def need(value, message):
@@ -136,6 +139,69 @@ def unique_ids(values, known, label):
     return values
 
 
+def metadata_pin(reader, pin, expected_path, label):
+    """Authenticate one explicitly owned metadata file without following its locators."""
+    need(type(pin) is dict and set(pin) == {"path", "bytes", "sha256"},
+         "Closed " + label + " pin required")
+    need(pin["path"] == expected_path, label + " is outside its exact location")
+    need(type(pin["bytes"]) is int and 0 <= pin["bytes"] <= MAX_FILE_BYTES
+         and isinstance(pin["sha256"], str) and re.fullmatch(r"[0-9a-f]{64}", pin["sha256"]),
+         "Invalid " + label + " pin")
+    document, actual = reader.document(expected_path)
+    need(all(actual[k] == pin[k] for k in ("path", "bytes", "sha256")), label + " pin mismatch")
+    return document
+
+
+def paper_revision_members(reader, row, document):
+    """Bind the authorized paper revision to exact historical and current metadata.
+
+    This establishes source lineage only. The catalog's contract validator owns
+    scientific comparison semantics; the metadata cannot qualify execution.
+    """
+    revision = row.get("specification_revision")
+    need(row["track"] == "paper" and type(revision) is dict
+         and set(revision) == {"version", "previous_specification", "improvement_contract"}
+         and revision["version"] == PAPER_REVISION, "Unsupported task specification revision")
+    directory = row["task_directory"]
+    previous = revision["previous_specification"]
+    old = metadata_pin(reader, previous, directory + "/historical/task.pre-improvement.v1.json",
+                       "Historical paper specification")
+    original = row.get("original_specification")
+    need(type(original) is dict and type(original.get("bytes")) is int
+         and all(original.get(key) == previous[key] for key in ("bytes", "sha256")),
+         "Paper revision does not preserve its original specification")
+    relative_path(original.get("path"))
+    old_identity = old.get("id", old.get("candidate_id", old.get("task_id")))
+    need(old_identity == row["specification_id"] and old.get("track", "paper") == "paper"
+         and old.get("objective") != PAPER_OBJECTIVE, "Historical paper specification identity mismatch")
+    contract_pin = revision["improvement_contract"]
+    contract = metadata_pin(reader, contract_pin, directory + "/improvement.v1.json",
+                            "Paper improvement contract")
+    need(contract.get("schema_version") == PAPER_REVISION and contract.get("task_id") == row["id"]
+         and contract.get("objective") == PAPER_OBJECTIVE
+         and type(contract.get("disposition")) is str
+         and contract.get("disposition") in PAPER_DISPOSITIONS,
+         "Paper improvement contract identity or disposition mismatch")
+    legacy = contract.get("legacy")
+    need(type(legacy) is dict and legacy.get("role") == "calibration_only"
+         and legacy.get("original_task") == "historical/task.pre-improvement.v1.json",
+         "Paper improvement contract historical binding mismatch")
+    evaluation = document.get("evaluation")
+    need(document.get("objective") == PAPER_OBJECTIVE and type(evaluation) is dict
+         and evaluation.get("objective") == PAPER_OBJECTIVE
+         and evaluation.get("contract") == contract_pin
+         and evaluation.get("disposition") == contract["disposition"]
+         and evaluation.get("reproduction_role") == "calibration_only"
+         and type(evaluation.get("calibration")) is dict
+         and evaluation["calibration"].get("historical_task") == previous
+         and document.get("status") == contract["disposition"],
+         "Current paper definition is not bound to its improvement contract")
+    need(row["scientific_readiness"] == contract["disposition"]
+         and row["submission_readiness"] == "not_qualified_by_binding",
+         "Paper source binding cannot grant scientific qualification")
+    return {previous["path"], contract_pin["path"]}
+
+
 def check_namespace(root, prefix, boundaries, allowed_files):
     """Check ownership outside artifact boundaries without entering those closures."""
     stack = [prefix]
@@ -222,8 +288,6 @@ def prepare(reader):
         need(directory.casefold() not in task_paths, "Case-ambiguous task home")
         task_paths[directory.casefold()] = directory
         checked_path(root, directory, directory=True)
-        need(row["scientific_readiness"] == row["submission_readiness"] == "unknown",
-             "Source registry cannot grant scientific qualification")
         classification = row["registration_class"]
         need(classification in classes, "Unknown task registration class")
         classes[classification][track] += 1
@@ -235,6 +299,17 @@ def prepare(reader):
         need(identity == row["specification_id"] and row["specification_alias"] == (identity != identifier),
              "Task specification identity or alias mismatch: " + identifier)
         need(document.get("track", track) == track, "Task specification track mismatch")
+        if "specification_revision" in row:
+            revision_members = paper_revision_members(reader, row, document)
+            for path in revision_members:
+                need(path not in members, "Duplicate paper revision metadata")
+                members[path] = "task:" + identifier
+            allowed_files[track].update(revision_members)
+        else:
+            need(row["scientific_readiness"] == row["submission_readiness"] == "unknown",
+                 "Source registry cannot grant scientific qualification")
+            need(track != "paper" or not registry.get("paper_improvement", {}).get("coverage_required"),
+                 "Paper improvement coverage requires every paper revision")
         members[pin["path"]] = "task:" + identifier
         allowed_files[track].update((directory + "/README.md", pin["path"]))
         for item in row.get("documentation", []):
@@ -328,6 +403,22 @@ def prepare(reader):
             members[path] = "registration-provenance"
             if "sha256" in item:
                 expected_pins[path] = item
+    if "paper_improvement" in registry:
+        improvement = registry["paper_improvement"]
+        need(type(improvement) is dict
+             and set(improvement) == {"schema_version", "objective", "coverage_required", "registered_count",
+                                     "pre_improvement_registry"}
+             and improvement["schema_version"] == PAPER_REVISION
+             and improvement["objective"] == PAPER_OBJECTIVE and improvement["coverage_required"] is True
+             and type(improvement["registered_count"]) is int
+             and improvement["registered_count"] == actual_counts["paper"],
+             "Invalid paper improvement coverage metadata")
+        history_pin = improvement["pre_improvement_registry"]
+        history_path = "docs/provenance/registrations/paper-pre-improvement-v1.json"
+        metadata_pin(reader, history_pin, history_path, "Pre-improvement registry")
+        need(history_path not in members, "Duplicate paper registry provenance")
+        members[history_path] = "registration-provenance"
+        expected_pins[history_path] = history_pin
     artifact_files = artifact_members(root, artifacts)
     need(not set(members) & set(artifact_files), "Artifact overlaps task or provenance metadata")
     members.update(artifact_files)

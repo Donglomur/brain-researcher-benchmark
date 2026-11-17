@@ -1,0 +1,183 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-signal-add-019",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Table1 provides an original ordered contrast-left-out latency-prediction endpoint, so the paper is not excluded merely for its descriptive five-event finding. Same-task admission remains source-unresolved: the canonical correct-only population differs from the reviewed source notebook, authentic HMP-derived targets are unqualified, and the full original error-panel comparison is not fixed. Larger timing effects or a new participant-held-out likelihood task cannot count as a paper win.",
+  "source_paper": {
+    "title": "Decision-making components and times revealed by the single-trial electroencephalogram",
+    "url": "https://elifesciences.org/articles/108049"
+  },
+  "evidence": [
+    {
+      "id": "table",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/108049/figures",
+      "locator": "Table1 caption and rows; Fig4 caption",
+      "supports": "Published contrast-left-out RMSE and distinct encoding/decision intervals;40.10ms is the accuracy-condition Fechner decision row, not an overall paper score."
+    },
+    {
+      "id": "utilities",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/utils.py",
+      "locator": "individual_fits; latency_model_fit lines80-97",
+      "supports": "Leave-one-contrast-out fitting within each participant; pooled observed-trial mean vs equal-participant predicted mean; root mean over contrast squared errors."
+    },
+    {
+      "id": "equations",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/models.py",
+      "locator": "latency.lm_func; pieron_func; wf_diffusion; fit",
+      "supports": "Published model equations, bounds, seconds/fraction inputs and in-sample fitting loss distinct from cross-validation score."
+    },
+    {
+      "id": "hmp",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/1-HMP_analyses.ipynb",
+      "locator": "loader/preprocessing cells; behavioral-data creation; latency-law calls with loocv=True; combined-stage cells",
+      "supports": "512Hz source recipe,15 PCs,participant scaling,25ms half-sine; responded-trial selection differs from canonical correct-only primary."
+    },
+    {
+      "id": "data",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/data/README.md",
+      "locator": "preprocessed/ data route",
+      "supports": "OSF preprocessed directory is the author analysis input route; metadata route is not downloaded-payload validation."
+    },
+    {
+      "id": "legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-019/docs/initial-evaluator-v1.md",
+      "locator": "Source and semantic decisions; Calculations and outputs",
+      "supports": "Exporter scorer distinguishes correct-only and all-responded sensitivity; no native HMP fit or numerical source qualification."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict the original fixed HMP-derived inter-event durations from contrast separately by speed/accuracy condition; encoding is event1-to3 and decision event3-to5. Discovery of five events is descriptive calibration.",
+      "evidence_ids": [
+        "table"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Author OSF j6xuv preprocessed EEG epochs are the route. Exact immutable file versions and source-result target exports still need authentication.",
+      "evidence_ids": [
+        "data",
+        "hmp"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Historical registration expects26 participants. Source notebook retains responded trials and defines correctness; reconcile the paper/source retained population with canonical correct-only selection before scoring source Table1.",
+      "evidence_ids": [
+        "hmp",
+        "legacy"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "For each contrast value, fit each participant latency model using the other contrasts and predict the omitted value; repeat separately for each interval and instruction. This is not participant-held-out EEG inference.",
+      "evidence_ids": [
+        "utilities"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Participant,contrast,instruction and source-derived durations for fit contrasts. Candidate predictions must use unchanged original duration targets; changing HMP targets while scoring their predictability changes the task.",
+      "evidence_ids": [
+        "utilities",
+        "hmp"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Source EEG rate512Hz; RT lower limit0.1s,10ms postresponse extension,100microvolt rejection; participant-standardized15-PC HMP with25ms half-sine.100Hz is an alternative recipe.",
+      "evidence_ids": [
+        "hmp"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Original utility returns sqrt(mean over held-out contrasts of (pooled observed mean duration - equal-participant mean predicted duration)^2), in milliseconds. In-sample trial MSE and curve R2 are separate diagnostics.",
+      "evidence_ids": [
+        "utilities",
+        "equations"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Preserve every original interval/combined-stage and speed/accuracy cell. Table1 is a metric panel, not one scalar. A full-panel scientific decision rule is not yet admitted; no easy cell may stand for the whole paper.",
+      "evidence_ids": [
+        "table",
+        "utilities"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Table1 contrast-left-out latency RMSE panel, milliseconds; no invented aggregate",
+    "direction": "lower",
+    "published_baseline": {
+      "status": "verified",
+      "value": 40.1,
+      "description": "Verified scalar provenance anchor only: Table1, Accuracy/Fechner/Decision RMSE40.10ms. Other combined-stage winners are Accuracy/Pieron/Encoding6.60ms, Speed/Pieron/Encoding6.64ms and Speed/Fechner/Decision18.16ms. This value is not a complete-panel success threshold.",
+      "evidence_ids": [
+        "table"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No HMP or author-law fit rerun performed. Source utilities provide the route, but cohort selection and native target identity are unresolved.",
+      "evidence_ids": [
+        "utilities",
+        "hmp"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Minimum useful reduction in milliseconds must account for event-time uncertainty, original error scale and all registered cells; no arbitrary millisecond margin is assigned.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Specify paired participant-resampling with source targets fixed and the original asymmetric aggregation recomputed; account for all interval/condition comparisons before final score.",
+      "independent_unit": "Participant; contrasts, trials and inferred event-probability points within participant are dependent.",
+      "rationale": "No confirmatory rule has been admitted. Repeated calculations on the same biological observations do not create independent samples.",
+      "evidence_ids": []
+    },
+    "paper_win_requires": [
+      "Authenticate original512Hz HMP targets and trial selection; reproduce the original Table1 score panel before accepting candidate law predictions.",
+      "Keep contrast-left-out folds, all participants, all original interval/condition cells and exact observed/predicted weighting; no correct-only subset score may be compared directly to all-responded Table1.",
+      "Fix original latent-duration targets across methods. Moving event estimates to make latency curves easier to predict cannot count as lower prediction error on the same target.",
+      "Predeclare a full-panel superiority rule and meaningful effect before candidate feedback; the40.10ms anchor cannot grant a win by itself.",
+      "A participant-held-out neural likelihood benchmark, leave-one-session split or100Hz recipe is an extension. Five-event reconstruction, larger coefficients or stronger significance alone is calibration."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was reviewed or established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After source reconciliation, allow iteration on training/development law fits while final contrast errors remain inaccessible to candidate selection; source target generation is fixed.",
+    "candidate_freeze": "Freeze candidate law, parameter constraints, all fit-contrast memberships, population choice and complete-panel comparison rule before final evaluation.",
+    "final_evaluation": "Recompute original contrast-left-out RMSE for the full source panel against authentic source predictions and report event/ERP reproduction separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The published table is a numerical source result; exported score kernels are engineering components; rerun author results remain absent. Missing budgets and target parity block activation."
+  },
+  "blocking_issues": [
+    "Original Table1 trial-selection identity unresolved against canonical correct-only population.",
+    "Authentic fixed HMP event-time target exports and full reference panel are not qualified.",
+    "No admitted complete-panel aggregation/superiority rule; scalar40.10ms is one table cell only.",
+    "Native HMP/environment parity, access/resource budgets and meaningful-effect/uncertainty policy remain unresolved."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve export evaluator and source sensitivity outputs. Five-event reconstruction, ERP summaries and proposed participant-held-out likelihood remain calibration or separately labelled extensions, never substitutes for original Table1 performance."
+  }
+}

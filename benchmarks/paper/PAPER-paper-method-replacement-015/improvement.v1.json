@@ -1,0 +1,163 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-replacement-015",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original spike-rate inference endpoint is recoverable, but the exact full retrained-CASCADE correlation baseline, source-era timing/configurations and per-condition panel are not yet bound. Approximate cortical-default performance or a later timing repair cannot serve as the improvement target.",
+  "source_paper": {
+    "title": "Spike Rate Inference from Mouse Spinal Cord Calcium Imaging Data",
+    "url": "https://doi.org/10.1523/JNEUROSCI.1187-24.2025"
+  },
+  "evidence": [
+    {
+      "id": "spinal-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12044035/",
+      "locator": "Methods: Quantification of spike rate inference performance and Spike rate inference with CASCADE and OASIS; Figure 4d\u2013h",
+      "supports": "Original DS40/41 task, leave-one-neuron-out fitting, sampling/noise settings, smoothing and comparison conditions."
+    },
+    {
+      "id": "spinal-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_benchmark_model_within_dataset.py",
+      "locator": "lines 16\u201360 and 70\u201393",
+      "supports": "Current author LOO route, neuron exclusion, preprocessing, correlation/error/bias formulas and summary policies; not proof of historical figure equivalence."
+    },
+    {
+      "id": "spinal-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-replacement-015/implementations/registered-runtime/manifest.json",
+      "locator": "admission; verification; program_execution; program_conditions",
+      "supports": "The registered source advertises a 44-cell construction scope but has no qualified executed author comparison or selected scientific runtime; these are registration facts, not paper validation."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Infer continuous, smoothed spike rates from spinal-cord calcium fluorescence against paired electrophysiology. Discrete-spike detection and in-vivo denoising are different endpoints.",
+      "evidence_ids": [
+        "spinal-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "CASCADE ground-truth datasets DS40 and DS41, as linked by the paper; exact archival bytes and paper code configuration remain to be bound.",
+      "evidence_ids": [
+        "spinal-paper",
+        "spinal-code",
+        "spinal-registration"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Figure 4d\u2013e specifies 21 glutamatergic and 23 GABAergic spinal neurons. Preserve both populations and each original condition; cortex is a separate comparator dataset.",
+      "evidence_ids": [
+        "spinal-paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Within-dataset retraining excludes the test neuron, including its recordings, for every evaluated neuron. Cross-dataset and cortical-default models remain distinct comparators.",
+      "evidence_ids": [
+        "spinal-paper",
+        "spinal-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Extracted calcium \u0394F/F traces; paired electrical spikes provide targets, never candidate inputs.",
+      "evidence_ids": [
+        "spinal-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper Figure 4d\u2013f uses 30 Hz, standardized noise 7 and 50 ms Gaussian target smoothing; other conditions have different kernels. Recover exact resampling/noise realizations, edge handling and source-era dataset-wide delay correction. The current demo noise grid 2,4,6,8 is not this original grid.",
+      "evidence_ids": [
+        "spinal-paper",
+        "spinal-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Pearson correlation of inferred and target spike-rate traces, higher is better. Error and signed bias must remain separate diagnostics rather than a new composite score.",
+      "evidence_ids": [
+        "spinal-paper",
+        "spinal-code"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Original figure boxplots summarize per-neuron results separately by cell type and condition. The current demo additionally pools noise rows; that pooled summary is not the paper estimator.",
+      "evidence_ids": [
+        "spinal-paper",
+        "spinal-code"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Per-neuron spike-rate correlation summarized by the original cell-type and sampling/noise panels",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The paper gives approximate pooled default-CASCADE correlation (~0.47) and relative retraining effects, not the exact complete retrained-CASCADE baseline vector recovered here. Those approximations, p-values and default-model numbers are not the source-paper result to beat.",
+      "evidence_ids": [
+        "spinal-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No qualified rerun of the original author comparison is established. Public source and construction code are a recovery route, not a measured comparator.",
+      "evidence_ids": [
+        "spinal-registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful effect must be justified for this original endpoint after recovering its numerical baseline and measurement variability; no generic percentage or significance-only victory is admitted.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired uncertainty for the complete original panel after recovering source-level dependence and replication; no final decision rule is yet qualified.",
+      "independent_unit": "Paired neurons with all recordings/noise replicas grouped; animal/session clustering must be resolved. Time bins, segments and artificial-noise replicas are not independent biological samples.",
+      "rationale": "Changing the evaluation partition to simplify inference would define a separate extension.",
+      "evidence_ids": []
+    },
+    "paper_win_requires": [
+      "Recover exact original retrained-CASCADE per-cell outputs and every paper sampling/noise condition, with the original held-neuron exclusions.",
+      "Compare candidate and author models on identical fluorescence, target smoothing, alignment, edge masks and cell denominators.",
+      "Retain both glutamatergic and GABAergic cohorts; no favorable cell class, lower noise, slower target or reduced panel can define victory.",
+      "Keep source-era results and the later timing correction separate. Repairing a one-frame discrepancy is calibration, not scientific improvement.",
+      "Require meaningful correlation gain under a justified paired uncertainty rule with bias/error guardrails; new animal splits are extensions."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "Surpassing this source paper is distinct from current SOTA; no contemporary competitor survey or SOTA result is asserted.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After recovering the DS40/41 source-era configuration, iterate on declared training/development neurons while respecting each original leave-one-neuron-out exclusion. Keep all recordings and artificial-noise replicas of the test neuron out of that fit; tune denoisers and spike-rate inference only through the declared development route, with each attempt and timing convention recorded.",
+    "candidate_freeze": "Freeze the full glutamatergic/GABAergic roster, original sampling/noise grid and noise realizations, Gaussian target kernels, alignment and edge masks, source-era delay correction, held-neuron training exclusions, candidate parameters and budgets before final scoring. Do not select a favorable temporal shift using newly exposed final labels.",
+    "final_evaluation": "Evaluate candidate and recovered author models on every original held-neuron and sampling/noise condition. Preserve separate per-cell-type correlation summaries and bias/error diagnostics; retain failures and denominator changes explicitly. Lower noise, wider target smoothing, a subset of cells or the later timing repair cannot establish source-paper superiority.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The comparison target is the matching original retrained-CASCADE result, with cortical-default CASCADE, cross-dataset models, raw fluorescence and OASIS separately identified. Approximate default-model correlation and the modern demo\u2019s different noise grid cannot replace the exact paper baseline. A source-era rerun and a timing-corrected rerun remain separate calibration records."
+  },
+  "blocking_issues": [
+    "Exact full numeric retrained-author baseline and original figure-producing configurations are not recovered.",
+    "Later author demo noise grid differs from the original published main comparison.",
+    "Delay correction, edge masks, random noise replicates and checkpoint training exclusions need source-era authentication.",
+    "Animal/session dependence and full original cell membership need a frozen manifest.",
+    "No qualified evaluator/rerun, justified effect threshold or fixed episode budgets."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "The registered runtime manifest has no qualified entrypoint or executed scientific comparison. Historical 44-cell/132-recording construction counts are not a paper win; all existing source/runtime artifacts remain calibration material."
+  }
+}

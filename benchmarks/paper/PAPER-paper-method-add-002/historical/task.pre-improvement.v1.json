@@ -1,0 +1,645 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-add-002",
+  "source_id": "paper-method-add-002",
+  "track": "paper",
+  "title": "Dimensionality reduction beyond neural subspaces with slice tensor component analysis",
+  "status": "specification_only",
+  "canonical_position_one_based": 80,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41593-024-01626-2",
+    "publication_year": 2024,
+    "venue": "Nature Neuroscience"
+  },
+  "primary_outputs": [
+    "Reconstruction error versus rank/type, recovered neuron/time/trial components, and held-out decoding comparison with PCA/TCA."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://figshare.com/articles/dataset/24961917"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/license",
+        "recorded_fields": {
+          "name": "CC BY 4.0",
+          "url": "https://creativecommons.org/licenses/by/4.0/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": "IBL_neurons_10_warped.npy",
+          "bytes": 705020528,
+          "url": "https://ndownloader.figshare.com/files/43957029",
+          "checksum": "1397b4f084f09e516d13768abaccef34"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "1397b4f084f09e516d13768abaccef34"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/1",
+        "recorded_fields": {
+          "name": "neurons_10_straight_Churchland.npy",
+          "bytes": 57876128,
+          "url": "https://ndownloader.figshare.com/files/43957032",
+          "checksum": "d4f1e2bdb5e57a585a8c6fab00035ec9"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "d4f1e2bdb5e57a585a8c6fab00035ec9"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/2",
+        "recorded_fields": {
+          "name": "neurons_10_curved_Churchland.npy",
+          "bytes": 53726528,
+          "url": "https://ndownloader.figshare.com/files/43957035",
+          "checksum": "c397bc3058869beffd435ee570c60d11"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "c397bc3058869beffd435ee570c60d11"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/3",
+        "recorded_fields": {
+          "name": "wagner_ctx_warped.npy",
+          "bytes": 35054528,
+          "url": "https://ndownloader.figshare.com/files/43957038",
+          "checksum": "b095006ec7c8765e829d054ab0c42053"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "b095006ec7c8765e829d054ab0c42053"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/4",
+        "recorded_fields": {
+          "name": "wagner_cbl_warped.npy",
+          "bytes": 39763328,
+          "url": "https://ndownloader.figshare.com/files/43957041",
+          "checksum": "f62ebf9d44badc8ffb18a8b326bb01a6"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "f62ebf9d44badc8ffb18a8b326bb01a6"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/5",
+        "recorded_fields": {
+          "name": "wagner_ctx_warped.npy",
+          "bytes": 35054528,
+          "url": "https://ndownloader.figshare.com/files/43957092",
+          "checksum": "b095006ec7c8765e829d054ab0c42053"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "b095006ec7c8765e829d054ab0c42053"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/6",
+        "recorded_fields": {
+          "name": "wagner_cbl_warped.npy",
+          "bytes": 39763328,
+          "url": "https://ndownloader.figshare.com/files/43957095",
+          "checksum": "f62ebf9d44badc8ffb18a8b326bb01a6"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "f62ebf9d44badc8ffb18a8b326bb01a6"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/7",
+        "recorded_fields": {
+          "name": "neurons_10_straight_Churchland.npy",
+          "bytes": 57876128,
+          "url": "https://ndownloader.figshare.com/files/43957098",
+          "checksum": "d4f1e2bdb5e57a585a8c6fab00035ec9"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "d4f1e2bdb5e57a585a8c6fab00035ec9"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/8",
+        "recorded_fields": {
+          "name": "neurons_10_curved_Churchland.npy",
+          "bytes": 53726528,
+          "url": "https://ndownloader.figshare.com/files/43957101",
+          "checksum": "c397bc3058869beffd435ee570c60d11"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "c397bc3058869beffd435ee570c60d11"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/9",
+        "recorded_fields": {
+          "name": "IBL_neurons_10_warped.npy",
+          "bytes": 705020528,
+          "url": "https://ndownloader.figshare.com/files/43957110",
+          "checksum": "1397b4f084f09e516d13768abaccef34"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "1397b4f084f09e516d13768abaccef34"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-002"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/0/license",
+        "recorded_fields": {
+          "name": "CC BY 4.0",
+          "url": "https://creativecommons.org/licenses/by/4.0/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-add-002"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/0/file_metadata_examples/0",
+        "recorded_fields": {
+          "name": "IBL_neurons_10_warped.npy",
+          "bytes": 705020528,
+          "url": "https://ndownloader.figshare.com/files/43957029",
+          "checksum": "1397b4f084f09e516d13768abaccef34"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "1397b4f084f09e516d13768abaccef34"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-add-002"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/0/file_metadata_examples/1",
+        "recorded_fields": {
+          "name": "neurons_10_straight_Churchland.npy",
+          "bytes": 57876128,
+          "url": "https://ndownloader.figshare.com/files/43957032",
+          "checksum": "d4f1e2bdb5e57a585a8c6fab00035ec9"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "d4f1e2bdb5e57a585a8c6fab00035ec9"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-add-002"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "paper_url": "https://www.nature.com/articles/s41593-024-01626-2",
+      "data_urls": [
+        "https://figshare.com/articles/dataset/24961917"
+      ],
+      "input_scope": "Processed Churchland straight/curved reaching tensors; exact Figshare file IDs43957032/43957035 distinguish duplicated filenames. Not raw spike acquisition.",
+      "saved_metadata": [
+        {
+          "metadata_url": "https://api.figshare.com/v2/articles/24961917/versions/1",
+          "resolved_record_id": 24961917,
+          "title": "Pellegrino_Stein_Cayco-Gajic_2024_Nat-Neuro",
+          "version": 1,
+          "license": {
+            "value": 1,
+            "name": "CC BY 4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "metadata_inspected": true,
+          "files_downloaded": false,
+          "manifest_file_count": 10,
+          "file_metadata_examples": [
+            {
+              "name": "IBL_neurons_10_warped.npy",
+              "bytes": 705020528,
+              "url": "https://ndownloader.figshare.com/files/43957029",
+              "checksum": "1397b4f084f09e516d13768abaccef34"
+            },
+            {
+              "name": "neurons_10_straight_Churchland.npy",
+              "bytes": 57876128,
+              "url": "https://ndownloader.figshare.com/files/43957032",
+              "checksum": "d4f1e2bdb5e57a585a8c6fab00035ec9"
+            }
+          ],
+          "examples_are_not_selected_transfer_manifest": true
+        }
+      ],
+      "code_url": "https://github.com/caycogajiclab/sliceTCA_paper",
+      "revision_or_archive_version": "62b0ca1267fe9d615111a193080577eda601687e",
+      "entrypoints": [
+        {
+          "path": "run_sliceTCA/churchland_fit.ipynb",
+          "url": "https://github.com/caycogajiclab/sliceTCA_paper/blob/62b0ca1267fe9d615111a193080577eda601687e/run_sliceTCA/churchland_fit.ipynb",
+          "role": "Loads the two exact inspected Figshare arrays and fits the decomposition.",
+          "inspected_as_text": true
+        },
+        "run_sliceTCA/run/cv_search.py",
+        "run_sliceTCA/run/grid_search.py",
+        "figures/Fig2/code/Fig2.py"
+      ],
+      "array_payloads_read_in_this_audit": false
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-add-002",
+        "versions_and_loader_contract": {
+          "scope_description": "Refit sliceTCA on the released Churchland straight/curved-reach tensors and reproduce the decomposition/model-comparison result.",
+          "unresolved_coverage": [
+            "Avoid duplicated filename entries in Figshare by pinning file IDs43957032/43957035. Other IBL/Wagner real arrays are present but separate expansion scope. Data-dependent rank choices must stay within training/validation."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-method-add-002",
+        "versions_and_loader_contract": {
+          "declared_scope": "Refit sliceTCA on the released Churchland straight/curved-reach tensors and reproduce the decomposition/model-comparison result."
+        },
+        "data_section_locators": []
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/caycogajiclab/sliceTCA_paper",
+    "revision_or_archive_version": "62b0ca1267fe9d615111a193080577eda601687e",
+    "entrypoints": [
+      {
+        "path": "run_sliceTCA/churchland_fit.ipynb",
+        "url": "https://github.com/caycogajiclab/sliceTCA_paper/blob/62b0ca1267fe9d615111a193080577eda601687e/run_sliceTCA/churchland_fit.ipynb",
+        "role": "Loads the two exact inspected Figshare arrays and fits the decomposition.",
+        "inspected_as_text": true
+      },
+      "run_sliceTCA/run/cv_search.py",
+      "run_sliceTCA/run/grid_search.py",
+      "figures/Fig2/code/Fig2.py"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-add-002",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/caycogajiclab/sliceTCA_paper",
+            "commit": "62b0ca1267fe9d615111a193080577eda601687e",
+            "author_linkage": [
+              "https://www.nature.com/articles/s41593-024-01626-2",
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC11537991/",
+              "https://doi.org/10.6084/m9.figshare.24961917.v1",
+              "https://github.com/caycogajiclab/sliceTCA_paper",
+              "https://github.com/arthur-pe/slicetca"
+            ],
+            "default_branch": "main",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/README.md",
+            "license_source": null,
+            "file_tree": {
+              "source": "https://api.github.com/repos/caycogajiclab/sliceTCA_paper/git/trees/62b0ca1267fe9d615111a193080577eda601687e?recursive=1",
+              "truncated": false,
+              "paths": [
+                "README.md",
+                "figures/Fig1/go_no.py",
+                "figures/Fig1/losses.ipynb",
+                "figures/Fig1/top_down.py",
+                "figures/Fig2/code/Fig2.py",
+                "figures/Fig2/code/hand_decoding/__init__.py",
+                "figures/Fig2/code/hand_decoding/analysis_functions.py",
+                "figures/Fig2/code/hand_decoding/functions.py",
+                "figures/Fig2/code/hand_decoding/helper_functions.py",
+                "figures/Fig2/code/hand_decoding/plotting.py",
+                "figures/Fig2/files/condition.npy",
+                "figures/Fig2/files/decoding_r2.npy",
+                "figures/Fig2/files/models.npy",
+                "figures/Fig2/files/movement.npy",
+                "figures/Fig2/files/target_angle.npy",
+                "figures/Fig2/files/target_pos.npy",
+                "figures/Fig4/code/README.md",
+                "figures/Fig4/code/classify_weights.py",
+                "figures/Fig4/code/components.py",
+                "figures/Fig4/code/distances.py",
+                "figures/Fig4/code/eigenspectra.py",
+                "figures/Fig4/code/lda_projections.py",
+                "figures/Fig4/files/README.md",
+                "figures/Fig4/files/cbl_data.npy",
+                "figures/Fig4/files/cbl_reconstructed.npy",
+                "figures/Fig4/files/ctx_data.npy",
+                "figures/Fig4/files/ctx_reconstructed.npy",
+                "figures/Fig4/files/sliceTCA_reconstructed.npy",
+                "figures/Fig4/files/timestamps.npy",
+                "figures/Fig5/codes/README.md",
+                "figures/Fig5/codes/components.py",
+                "figures/Fig5/codes/goodness_of_fit.py",
+                "figures/Fig5/files/IBL_raw_data0.npy",
+                "figures/Fig5/files/IBL_raw_data1.npy",
+                "figures/Fig5/files/IBL_raw_data2.npy",
+                "figures/Fig5/files/IBL_raw_data3.npy",
+                "figures/Fig5/files/IBL_raw_data4.npy",
+                "figures/Fig5/files/IBL_raw_data5.npy",
+                "figures/Fig5/files/README.md",
+                "run_sliceTCA/IBL_fit.ipynb",
+                "run_sliceTCA/README.md",
+                "run_sliceTCA/churchland_fit.ipynb",
+                "run_sliceTCA/core/README.md",
+                "run_sliceTCA/core/classes.py",
+                "run_sliceTCA/core/invariance.py",
+                "run_sliceTCA/core/metrics.py",
+                "run_sliceTCA/core/utilities.py",
+                "run_sliceTCA/run/cv_search.py",
+                "run_sliceTCA/run/grid_search.py",
+                "run_sliceTCA/run/run_tca.py",
+                "run_sliceTCA/wagner_fit.ipynb"
+              ],
+              "all_file_count": 65,
+              "rate_remaining": "42"
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "run_sliceTCA/churchland_fit.ipynb",
+              "url": "https://github.com/caycogajiclab/sliceTCA_paper/blob/62b0ca1267fe9d615111a193080577eda601687e/run_sliceTCA/churchland_fit.ipynb",
+              "role": "Loads the two exact inspected Figshare arrays and fits the decomposition.",
+              "inspected_as_text": true
+            },
+            "run_sliceTCA/run/cv_search.py",
+            "run_sliceTCA/run/grid_search.py",
+            "figures/Fig2/code/Fig2.py"
+          ],
+          "dependencies": [
+            "Python",
+            "PyTorch",
+            "NumPy",
+            "SciPy",
+            "author bundled core/slicetca"
+          ]
+        }
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-method-add-002",
+        "recorded": {
+          "code_url": "https://github.com/caycogajiclab/sliceTCA_paper",
+          "code_revision_or_archive_version": "62b0ca1267fe9d615111a193080577eda601687e",
+          "entrypoints": [
+            {
+              "path": "run_sliceTCA/churchland_fit.ipynb",
+              "url": "https://github.com/caycogajiclab/sliceTCA_paper/blob/62b0ca1267fe9d615111a193080577eda601687e/run_sliceTCA/churchland_fit.ipynb",
+              "role": "Loads the two exact inspected Figshare arrays and fits the decomposition.",
+              "inspected_as_text": true
+            },
+            "run_sliceTCA/run/cv_search.py",
+            "run_sliceTCA/run/grid_search.py",
+            "figures/Fig2/code/Fig2.py"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": [
+        "Figshare24961917v1 CC BY4.0",
+        "Inspect bundled analysis and slicetca license separately"
+      ],
+      "declared_overlap_group": "https://api.figshare.com/v2/articles/24961917/versions/1",
+      "existing_graph_evidence_leads": [],
+      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
+      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "documented_outputs": [
+        "Reconstruction error versus rank/type, recovered neuron/time/trial components, and held-out decoding comparison with PCA/TCA."
+      ],
+      "construction_specificity": "Blocked reconstruction error versus rank/type and reaching decoding are documented but are distinct endpoints; exact masking, decoding-target availability and primary aggregation remain unfrozen.",
+      "exact_published_numeric_target_verified_by_this_audit": false
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Specify which observed entries may infer a held-out trial latent variable; trial index exclusion alone is insufficient.",
+      "Match parameter/search budgets against CP/TCA, PCA/Tucker and condition-average controls; fit preprocessing/ranks without protected entries.",
+      "Resolve preprocessing/time-warping and exact MC_Maze overlap before cross-suite split claims."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Blocked reconstruction error versus rank/type and reaching decoding are documented but are distinct endpoints; exact masking, decoding-target availability and primary aggregation remain unfrozen.",
+        "Trial/block with biological-session context preserved; unseen-animal claim unsupported. A future masked-entry panel is operational withholding, not automatically biological independence.",
+        "Later selection memo retains this as a conditional reserve. The111,602,656B selected pair is metadata, not measured runtime or proof of an independent improvement panel; code/core licenses need separate resolution.",
+        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_and_metadata_only_for_this_project",
+      "runnable_reference_demonstrated": false,
+      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Test rank-selection stability, neuron/trial subsampling and held-out-session reconstruction with matched model capacity."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_executed_or_independently_qualified",
+      "proposed_question": [
+        "Test rank-selection stability, neuron/trial subsampling and held-out-session reconstruction with matched model capacity."
+      ],
+      "independent_panel_gate": "Trial/block with biological-session context preserved; unseen-animal claim unsupported. A future masked-entry panel is operational withholding, not automatically biological independence.",
+      "published_targets_are_historically_exposed": true,
+      "prospective_frontier_claim_supported": false
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_statement": "CPU possible; GPU recommended;~112MB Churchland input pair",
+    "source_resource_evidence": "Resource class is an inspection-based estimate, not measured runtime.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "holds": {
+    "task_specific": [
+      "Blocked reconstruction error versus rank/type and reaching decoding are documented but are distinct endpoints; exact masking, decoding-target availability and primary aggregation remain unfrozen.",
+      "Trial/block with biological-session context preserved; unseen-animal claim unsupported. A future masked-entry panel is operational withholding, not automatically biological independence.",
+      "Later selection memo retains this as a conditional reserve. The111,602,656B selected pair is metadata, not measured runtime or proof of an independent improvement panel; code/core licenses need separate resolution.",
+      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Audit trial/behavior/time-warp provenance and define a single protected-block reconstruction contract, including permitted latent inference and fixed comparator selection, before any fit.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Audit trial/behavior/time-warp provenance and define a single protected-block reconstruction contract, including permitted latent inference and fixed comparator selection, before any fit.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "06071ad54047a150c5304955338cc10fd2f8e02736afb18e7115bb9e289fbe71",
+    "audit_record_sha256": "58f11cdacae2c5e7346b2325c32328a6158dd479740573f8a118be7a8173d788",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-add-002",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 51,
+        "record_sha256": "e10b956e5ae1f4194413712c83ad8750194b671f63b9e1009aab57ed476881b4"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+          "bytes": 500587,
+          "sha256": "8893618f482d8301b723a57e2758fef66ab560b84c95650f8ea92f4b37375c3a"
+        },
+        "record_id": "paper-method-add-002",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 134,
+        "record_sha256": "1ac9c59dec217270fc3510377110b97ecbb1b2b0450f8076c5eb50fd792eb535"
+      },
+      {
+        "file": {
+          "path": "authoring/paper-improvement-selection-v1/DECISION_MEMO.md",
+          "bytes": 12599,
+          "sha256": "103d6b70849447a1e81978af779cba548b2ed01a8e0079f5572b123344702f65"
+        },
+        "record_id": null,
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+          "bytes": 3519,
+          "sha256": "d9862c468c3ece0d0e0cfca975f8980cea6a9dfbb7abfe5d3b4b96ca76045ac7"
+        },
+        "current_pin": {
+          "bytes": 4544,
+          "sha256": "963f9e1b6d528573c1c321629a0ab2ba6e1fb25b3e0404e3882b483ea7207c5f"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      },
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+          "bytes": 163669,
+          "sha256": "96c826360af4b8858cb33406e95242d27d7806e5896b98c211ccd3478a76661d"
+        },
+        "current_pin": {
+          "bytes": 166909,
+          "sha256": "974e56e839620059345f5b8ae1f5893e1d404c007864159dc84e6b330f49edca"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      }
+    ],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

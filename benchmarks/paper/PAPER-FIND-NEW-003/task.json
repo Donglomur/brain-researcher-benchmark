@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-FIND-NEW-003",
-  "source_id": "FIND-NEW-003",
   "track": "paper",
   "title": "Distributed control circuits across a brain-and-cord connectome",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Detect synaptic links and assign both partners in the original BANC EM evaluation cutouts; either incorrect partner is a source evaluation error.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Detect synaptic links and assign both partners in the original BANC EM evaluation cutouts; either incorrect partner is a source evaluation error.",
+    "Source-paper comparison for Aggregate synaptic-link F1 on original 16 expert-annotated cutouts (ED Fig. 2b): Aggregate F1=2TP/(2TP+FP+FN), with either partner incorrect counted as an error. Exact prediction-to-expert matching and ambiguity-adjudication rules must be frozen; precision/recall remain required diagnostics."
+  ],
+  "success_criteria": [
+    "Recover exact original 16 cutouts, annotations, partner identities, training/evaluation separation and matching rules.",
+    "Use identical source inputs and original task; a new set of regions, edited gold labels or easier partner-detection target is not a paper win.",
+    "Compare aggregate counts with a verified author baseline and the reported 0.83 F-score, retaining precision/recall and all per-cutout results.",
+    "Freeze candidate thresholds and all postprocessing before final evaluation; predeclare effect, uncertainty and equal access/resource budgets.",
+    "Graph reconstruction/runtime and separate neurotransmitter-classification scores cannot replace this detection endpoint.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-NEW-003",
   "canonical_position_one_based": 8,
   "paper_identity": {
     "url": "https://doi.org/10.1038/s41586-026-10735-w",
     "publication_year": 2026,
     "venue": "Nature"
   },
-  "primary_outputs": [
-    "Brain/cord connectivity organization, sensory-to-effector pathways and feedback architecture from the synaptic graph.",
-    "Influence/centrality and community sensitivity to edge thresholds and annotation uncertainty."
-  ],
   "input_assets": {
     "routes": [
       "https://zenodo.org/records/20350642"
@@ -1324,114 +1335,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "recorded_terms": {
-        "code": "CC BY 4.0 per DESCRIPTION",
-        "data": "Public GCS objects; manuscript data deposit https://doi.org/10.7910/DVN/7WTH1N; verify deposit-specific reuse terms before redistribution"
-      },
-      "record_conflicts": [],
-      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
-      "overlap_group": null
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "central_outputs_in_saved_source_contract": [
-        "Brain/cord connectivity organization, sensory-to-effector pathways and feedback architecture from the synaptic graph.",
-        "Influence/centrality and community sensitivity to edge thresholds and annotation uncertainty."
-      ],
-      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
-      "missing_or_unfrozen_endpoint_details": "Bind v888 graph generation and proofread/annotation filters to selected sensory-to-effector and feedback claims; all-pairs influence and full-paper coverage are broader."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Original graph influence and a new null comparison must use the identical node/edge universe. Degree-preserving/threshold nulls test graph robustness, not measured causal influence."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Bind v888 graph generation and proofread/annotation filters to selected sensory-to-effector and feedback claims; all-pairs influence and full-paper coverage are broader.",
-        "Original graph influence and a new null comparison must use the identical node/edge universe. Degree-preserving/threshold nulls test graph robustness, not measured causal influence.",
-        "One female fly connectome; graph influence is a model, not measured physiological causal influence.",
-        "Pin v888 and synapse flavor v2; v3 produces a different graph.",
-        "GCS metadata last-modified after publication, so use recorded object generations and compare with deposited manuscript snapshot before exact figure matching.",
-        "Avoid R/text scripts that publish to Google Sheets; no external writes authorized.",
-        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-        "Execute and independently audit references, controls, grading and measured resources.",
-        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
-      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Test network and sensory-to-effector conclusions against degree-preserving graph nulls, synapse-threshold choices and annotation uncertainty; seek stable or more efficient influence estimates on the same graph. Graph prediction does not establish physiological causation; this is a proposed improvement test."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "independent_panel_not_established_in_inspected_evidence",
-      "proposed_improvement": [
-        "Test network and sensory-to-effector conclusions against degree-preserving graph nulls, synapse-threshold choices and annotation uncertainty; seek stable or more efficient influence estimates on the same graph. Graph prediction does not establish physiological causation; this is a proposed improvement test."
-      ],
-      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
-      "special_gate": "No completed independent improvement result is established here."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "source_roster_estimate_or_statement": {
-      "estimate": "Approximately 363 MB base metadata+edges plus 1.4 GB code/figure archive; high-memory workstation. Whole-network all-pairs influence can require cluster-scale memory/compute; scoped paths/threshold contrasts smaller, estimated.",
-      "basis": "Static source and archive metadata inspection; estimate, not measured."
-    },
-    "measured_or_static_facts_from_existing_authoring": [],
-    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
-  },
-  "holds": {
-    "task_specific": [
-      "Bind v888 graph generation and proofread/annotation filters to selected sensory-to-effector and feedback claims; all-pairs influence and full-paper coverage are broader.",
-      "Original graph influence and a new null comparison must use the identical node/edge universe. Degree-preserving/threshold nulls test graph robustness, not measured causal influence.",
-      "One female fly connectome; graph influence is a model, not measured physiological causal influence.",
-      "Pin v888 and synapse flavor v2; v3 produces a different graph.",
-      "GCS metadata last-modified after publication, so use recorded object generations and compare with deposited manuscript snapshot before exact figure matching.",
-      "Avoid R/text scripts that publish to Google Sheets; no external writes authorized.",
-      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-      "Execute and independently audit references, controls, grading and measured resources.",
-      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Compare pinned deposited and later GCS graph identities, then specify one complete sensory-to-effector graph contrast with a fixed proofread universe and null ensemble.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Compare pinned deposited and later GCS graph identities, then specify one complete sensory-to-effector graph contrast with a fixed proofread universe and null ensemble.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -1462,11 +1365,82 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "source_roster_estimate_or_statement": {
+      "estimate": "Approximately 363 MB base metadata+edges plus 1.4 GB code/figure archive; high-memory workstation. Whole-network all-pairs influence can require cluster-scale memory/compute; scoped paths/threshold contrasts smaller, estimated.",
+      "basis": "Static source and archive metadata inspection; estimate, not measured."
+    },
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-NEW-003/improvement.v1.json",
+      "bytes": 10469,
+      "sha256": "4d033b36450faa1c93abd5ded53a8b40043a826e0f8f91f6dc3bef64866bfcba"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-NEW-003/historical/task.pre-improvement.v1.json",
+        "bytes": 72228,
+        "sha256": "5ca308edd06539f7af143498b79370f32bee7c38b3d776f07d7d6bb832eb8df7"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-find-new-003"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-FIND-NEW-003/implementations/registered-runtime/manifest.json",
+        "bytes": 8553,
+        "sha256": "663dd6f0a40942aa2f578bbfb545eb274fc2923f97597e0015b74feab6571850"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After original split recovery, expose only source-authorized training/development imagery and feedback; keep the original evaluation annotations protected.",
+    "candidate_freeze": "Freeze detector, partner assignment, checkpoint, thresholds and postprocessing before any final-cutout scoring.",
+    "final_evaluation": "Evaluate every original cutout with original matching rules and aggregate TP/FP/FN; compare to source/author baselines under predeclared effect and uncertainty criteria.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published F-score, exact source counts and reproduced author detector are distinct. Synapses_v3 is not silently substituted for the original v2 result; neurotransmitter prediction remains a separate source task."
+  },
+  "blocking_issues": [
+    "Original cutout coordinates, immutable expert annotations and training overlap have not been recovered.",
+    "Original detector/assignment checkpoints, full evaluation matching/adjudication code and raw baseline counts remain unbound.",
+    "No validated working evaluator, meaningful margin, uncertainty admission or concrete episode budgets exist for the selected route."
+  ],
+  "holds": {
+    "task_specific": [
+      "Original cutout coordinates, immutable expert annotations and training overlap have not been recovered.",
+      "Original detector/assignment checkpoints, full evaluation matching/adjudication code and raw baseline counts remain unbound.",
+      "No validated working evaluator, meaningful margin, uncertainty admission or concrete episode budgets exist for the selected route."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Source-native rebinding selects original synapse detection and partner assignment on the source 16 expert-annotated cutouts (Extended Data Fig. 2b), with reported aggregate F-score 0.83. Original cutout identities, annotations, training overlap, matching rules and author detector/checkpoint remain unbound; descriptive connectome analyses stay calibration. Original cutout coordinates, immutable expert annotations and training overlap have not been recovered. Original detector/assignment checkpoints, full evaluation matching/adjudication code and raw baseline counts remain unbound. No validated working evaluator, meaningful margin, uncertainty admission or concrete episode budgets exist for the selected route.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-NEW-003/historical/task.pre-improvement.v1.json",
+      "bytes": 72228,
+      "sha256": "5ca308edd06539f7af143498b79370f32bee7c38b3d776f07d7d6bb832eb8df7"
+    },
+    "notes": "Preserve graph organization/influence, resource comparisons and all historic source materials as calibration/engineering artifacts. Source-native current objective is the original ED2b synapse-detection task; existing graph runtime is not its evaluator."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

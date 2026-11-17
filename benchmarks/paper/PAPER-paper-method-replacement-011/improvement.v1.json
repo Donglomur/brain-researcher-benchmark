@@ -1,0 +1,180 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-replacement-011",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The paper has an ordered decoding task, but the original release/splits, exact ROC-AUC panel numbers and full source aggregation have not been recovered. The registered implementation tests word responsiveness and cannot stand in for that baseline.",
+  "source_paper": {
+    "title": "Brain Treebank: Large-scale intracranial recordings from naturalistic language stimuli",
+    "url": "https://proceedings.nips.cc/paper_files/paper/2024/hash/aefa2385b3f33abf1526ae4e2c208cd9-Abstract-Datasets_and_Benchmarks_Track.html"
+  },
+  "evidence": [
+    {
+      "id": "treebank-paper",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2411.08343v1",
+      "locator": "Section 4, Fig. 4 and Appendix A.4-A.9; supplementary Figs. 5-7",
+      "supports": "Separates descriptive word responsiveness from held-out single-electrode sentence/word/POS decoding and defines data, preprocessing, split and ROC-AUC display conventions."
+    },
+    {
+      "id": "treebank-identity",
+      "kind": "paper",
+      "url": "https://proceedings.nips.cc/paper_files/paper/2024/hash/aefa2385b3f33abf1526ae4e2c208cd9-Abstract-Datasets_and_Benchmarks_Track.html",
+      "locator": "Abstract and proceedings metadata",
+      "supports": "Identifies the NeurIPS 2024 dataset paper and original ten-participant cohort."
+    },
+    {
+      "id": "treebank-runner",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/regression_runner.py",
+      "locator": "RegressionRunnerTestSet.split_and_train_and_test, lines 31-55",
+      "supports": "Decimates by ten, applies StandardScaler in the logistic-regression pipeline, cross-validates training ROC-AUC and returns test ROC-AUC."
+    },
+    {
+      "id": "treebank-time",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/run_time_tests.py",
+      "locator": "get_crossval_indices; run_electrode_test; run_subject_test; write_summary",
+      "supports": "Different runner paths exist; neural-runner train/validation list appends are reversed and the generic all-ROC summary is not automatically the paper top-ten figure aggregation."
+    },
+    {
+      "id": "treebank-legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1/provenance.json",
+      "locator": "policies; incomplete_task_scope",
+      "supports": "Existing evaluator is a word-responsiveness t-test component with prospective corrections, not the source held-out decoder or a published-score reference."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original ordered task: single-electrode time-resolved classification of sentence onset versus no speech (Fig. 4), with word-onset and noun-versus-verb companion tasks in Figs. 6-7. Counts of significant electrodes and stronger word-response p-values are not performance improvements.",
+      "evidence_ids": [
+        "treebank-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original 2024 Brain Treebank release and movie-aligned annotations are identified, but exact versioned recording, transcript, electrode and example inventories that produced the published decoding panels are not frozen. A later expanded release is not interchangeable.",
+      "evidence_ids": [
+        "treebank-identity",
+        "treebank-paper"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Ten epilepsy participants viewing their recorded English movies. Paper removes 114 corrupted contacts; subject 5 is excluded from anatomical-region analyses because of a frontal lesion, while remaining non-region analyses retain that participant. Preserve the source electrode and region inclusion rules.",
+      "evidence_ids": [
+        "treebank-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Appendix A.9 specifies per-electrode 80/20 train/test with shared splits within participant and five-fold training CV; exact source example IDs, negative subsampling, random seeds and configured regression runner remain unverified. Do not use the neural-runner swapped-index code path to infer paper splits.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-time"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Single-electrode neural activity in 250-ms windows stepped by 100 ms from -1 to +1 s; the prediction input is neural activity, not transcript/audio labels or multiple-electrode features. Sentence timestamps construct targets and no-speech examples.",
+      "evidence_ids": [
+        "treebank-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Recorded sEEG is 2048 Hz. Decoder decimates by ten and uses training-fitted zero-mean/unit-variance scaling. Sentence-positive examples are two-second centered epochs; negatives are drawn from speech-free three-second segments, with balanced classes and the specified temporal buffer. Exact native reconstruction still needs validation.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-runner"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Higher ROC-AUC on held-out examples for each electrode/time window; probabilistic ranking AUC = P(score_positive > score_negative) + 0.5 P(tie). Chance is 0.5. Preserve score curves and source peak-over-time summaries rather than substituting accuracy or significance.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-runner"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Fig. 4a maps per-electrode peak ROC-AUC, and Fig. 4c averages time courses of the ten electrodes per region selected by peak training-CV ROC-AUC. Exact top-ten identities, figure values and a source-equivalent complete-panel decision statistic remain unrecovered. The script generic mean over every ROC is not that panel.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-time"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Held-out ROC-AUC for the original sentence-onset decoding panels, with source electrode/time aggregation",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Primary article contains ROC-AUC plots but reviewed text does not supply an exact numerical panel baseline with recoverable source aggregation. Peak timing (100/300 ms), chance 0.5 and significant-electrode counts are not the decoder baseline.",
+      "evidence_ids": [
+        "treebank-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Author regression route is identifiable; no native rerun, frozen source split or verified numerical figure reproduction exists here.",
+      "evidence_ids": [
+        "treebank-runner",
+        "treebank-time"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Meaningful AUC gain cannot be set before recovering the original panel values and selecting an explicit full-panel source comparison; avoid selecting only favorable electrodes or times.",
+      "evidence_ids": [
+        "treebank-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Resolve source panel and use paired participant-level uncertainty with electrode/time/movie dependence retained; specify multiplicity over evaluated panels and any peak selection before final evaluation.",
+      "independent_unit": "Participant, with movies, electrodes, epochs and windows nested or dependent.",
+      "rationale": "Paper electrode confidence bars are descriptive and do not by themselves justify treating selected electrodes or overlapping epochs as independent units for a new superiority claim.",
+      "evidence_ids": [
+        "treebank-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover exact original release, example/split manifest, electrode exclusions, top-ten selection and numerical author ROC-AUC results for the declared complete paper panel.",
+      "Reproduce the author logistic-regression baseline on the original examples and preserve its single-electrode input condition and all source windows.",
+      "Freeze a meaningful-effect and participant-aware uncertainty rule and show a gain against both the published source result and the reproduced author comparator under equal declared access/resources.",
+      "Do not claim a paper win from the local word-responsiveness t-tests, more significant contacts, new participant/movie splits, pooled multichannel inputs or a cherry-picked region/window."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "This contract compares only with the identified source paper. No current-SOTA search or superiority claim is established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked on source recovery. Once admitted, allow development feedback only from the original training/CV portion for the chosen full decoding panel; retain descriptive responsiveness analyses as calibration.",
+    "candidate_freeze": "Freeze decoder, training procedure, electrode selection, time-window handling and all source mappings before final test replay.",
+    "final_evaluation": "Use original held-out examples and the source paper panel aggregation. New blocked-movie or participant holdouts must be labeled extensions and cannot resolve the missing source baseline.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Compare against the source logistic regression with its training-only scaler and original split; do not relabel the independent paired-t evaluator as the author baseline."
+  },
+  "blocking_issues": [
+    "Recover source ROC-AUC arrays or an independently reproduced exact author baseline for the full original panel.",
+    "Freeze original recording/transcript/example and electrode inventories, negative-sample selection, split seeds and the correct regression runner configuration.",
+    "Verify train-only top-ten electrode selection, complete time-window coverage and paper panel aggregation; generic all-ROC averaging is not equivalent.",
+    "Validate native alignment/preprocessing and retain documented corrupted-contact and subject-5 region exclusions.",
+    "Define meaningful effect, participant-aware uncertainty, fixed access/resource budgets and a working protected decoding evaluator."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the five-window paired word-response component and prospective multiplicity correction as calibration only. It does not implement time-resolved decoding or establish a published performance baseline."
+  }
+}

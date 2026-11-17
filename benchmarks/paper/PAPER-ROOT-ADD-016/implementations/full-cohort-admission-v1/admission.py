@@ -20,7 +20,7 @@ ROOT = HERE.parents[4]
 TASK = "PAPER-ROOT-ADD-016"
 PREFIX = "benchmarks/paper/" + TASK + "/"
 DEPENDENCIES = {
-    PREFIX + "task.json": (19324, "bed3f79d97c1ded8380e92e1ef6f6387d8910a37c890c8d2d4ed9d7477e8ab04"),
+    PREFIX + "historical/task.pre-improvement.v1.json": (19324, "bed3f79d97c1ded8380e92e1ef6f6387d8910a37c890c8d2d4ed9d7477e8ab04"),
     PREFIX + "implementations/matched-artifacts/MODEL_CONTRACT.json":
         (1894, "ce1b65e4434f6b3237671b0a3c141f75ea4817af264282a9a3f25efac0027701"),
     PREFIX + "implementations/matched-artifacts/MATH_SPEC.md":

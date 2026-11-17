@@ -1,6 +1,6 @@
 # Neuroscience Research Benchmarks
 
-Can AI agents reproduce neuroscience findings, improve research methods, and
+Can AI agents surpass published neuroscience methods on their original tasks and
 understand neural data?
 
 This repository develops two benchmark tracks. **The tasks are under construction:**
@@ -13,13 +13,15 @@ The [first difficulty pilot](docs/science/difficulty-pilot-20261117.md) reports
 eight scored agent attempts on four authentic-data endpoints, including baseline
 comparisons and limitations. These scoped development results do not establish
 whole-task scientific qualification.
+The four paper attempts measured reconstruction fidelity only. They are historical
+calibration evidence and establish no source-paper improvement or current-SOTA result.
 
 ## Two research tracks
 
 | Track | Scientific question | Controlled comparison |
 | --- | --- | --- |
-| **Paper reproduction and improvement** | Can an agent reproduce a defined result from a neuroscience paper and then improve it? | Paper + data versus paper + data + official code. Historical reproduction and prospective improvement have separate endpoints. |
-| **Neural-data understanding** | Can an agent interpret neural or behavioral observations and make useful predictions? | A prediction program written in advance versus case-by-case investigation, with explicit tool and scientific-context access. |
+| **Paper improvement** | Can an agent surpass the source paper on the same original scientific task? | Paper + data versus paper + data + official code under fixed matched budgets. Original dataset, cohort, split, inputs, metric and aggregation must match. Reproduction is calibration only. |
+| **Neural-data understanding** | Can an agent interpret neural or behavioral observations and make useful predictions? | A prediction program written in advance versus case-by-case investigation or visual interpretation through a viewer, with explicit information and tool access. |
 
 Each track contains **100 original specifications**. Later expansion drafts bring
 the registered inventory to **116 paper and 118 neural tasks**. These are task
@@ -27,6 +29,14 @@ registrations; conditions, participants, folds and implementation variants are n
 additional benchmarks. All 234 registered tasks have assigned implementation
 source, with coverage and remaining requirements documented per package. Source
 ownership does not establish completion of the full scientific task.
+
+Every current paper definition binds a source-grounded [improvement contract](docs/science/paper-improvement/README.md).
+The [paper catalog](benchmarks/catalog/paper.md) counts improvement-ready tasks,
+source-grounded designs, source-unresolved entries and ineligible papers separately.
+A contract for each registration is not a claim that 116 improvement tasks are ready.
+Descriptive papers without an ordered performance endpoint retain their historical
+materials outside active improvement success. A new split or easier subset is an
+extension; current SOTA requires its own verified comparison.
 
 ## Explore a task
 
@@ -43,6 +53,7 @@ python3 -I -S -B scripts/neurobench.py list --track neural
 python3 -I -S -B scripts/neurobench.py show PAPER-FIND-050
 python3 -I -S -B scripts/neurobench.py implementations PAPER-FIND-050
 python3 -I -S -B scripts/neurobench.py status
+python3 -I -S -B scripts/neurobench.py paper-contract PAPER-FIND-050
 ```
 
 These commands inspect public metadata using Python 3.11 or later and the standard

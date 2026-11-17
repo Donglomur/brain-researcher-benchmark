@@ -1,0 +1,186 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-REP-009",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The author release contains ordered rare/common-context decoding analyses, but the published Figure 3C/3G score vectors, exact source partitions and animal-to-session mapping are not recovered. The existing 17-session fixed-reference probability reconstruction is explicitly calibrated to locally declared conventions and cannot stand in for the paper baseline. Both perturbation panels in the registered target must remain in scope.",
+  "source_paper": {
+    "title": "Control of representation updating by higher-order thalamus enables history-based decision-making",
+    "url": "https://doi.org/10.1016/j.neuron.2026.04.045"
+  },
+  "evidence": [
+    {
+      "id": "author_deposit",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/19465617",
+      "locator": "Version 0; manuscript summary; Figure 3.zip file entry, md5 a09182a53e67bb97f0edcb5fc7e7d02f",
+      "supports": "Authentic figure-specific analysis/data release; Figure 3 archive is 327.3 MB and was not downloaded in this review."
+    },
+    {
+      "id": "author_fig3",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/19465617/files/ff_readme.md?download=1",
+      "locator": "Figure 3 legend and sections 3C, 3F and 3G",
+      "supports": "Defines rare/common block decoding, brain-area inputs, 70/30 trial partition, 17 Figure 3C and 20 Figure 3G sessions, and author R entrypoints."
+    },
+    {
+      "id": "registered_scope",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-REP-009/task.json",
+      "locator": "primary_outputs; evaluation; improvement; holds",
+      "supports": "Registration includes PUL suppression and TRN activation. Its blocked/session-held-out proposal changes the source task."
+    },
+    {
+      "id": "legacy_recipe",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-REP-009/implementations/fixed-reference/public/TASK.md",
+      "locator": "Declared reconstruction conventions 1–7 and primary-document caveat",
+      "supports": "Local seed101/caret/xgboost conventions are not a recovered author result; source/public labels are exposed and animal mapping is unresolved."
+    },
+    {
+      "id": "legacy_metric",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-REP-009/implementations/fixed-reference/public/PUBLIC_SCORING.md",
+      "locator": "Primary error; Complete secondary diagnostics",
+      "supports": "34-cell mean probability discrepancy measures reproduction. Published P = .008 is never a performance target, and exact historical AUC values are unknown."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Decode whether an identical tone occurs in a rare or common block from population neural activity, separately with/without PUL suppression (Figure 3C) and TRN activation (Figure 3G); retain both registered perturbation panels.",
+      "evidence_ids": [
+        "author_fig3"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Author Zenodo record 19465617 Version 0, Figure3.zip; Figure3C_data.RData with Figure3C_analysis.R and Figure3G_data.RData with Figure3G_analysis.R. Release identity is verified, not the contents of the undownloaded archive.",
+      "evidence_ids": [
+        "author_deposit",
+        "author_fig3"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Author legend reports 17 sessions/four animals in 3C and 20 sessions/four animals in 3G. The exact animal/session join and TableS1 discrepancy documented by the existing implementation remain unreconciled; 17 sessions cannot be treated as17 independent animals.",
+      "evidence_ids": [
+        "author_fig3",
+        "legacy_recipe"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original models train on 70% of trials and evaluate the held 30%, separately per condition. Exact paper draws and tuning details are not recovered; the local deterministic seed101 partition is a reconstruction convention. Temporal/session/animal holdout is a separate extension.",
+      "evidence_ids": [
+        "author_fig3",
+        "legacy_recipe"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Preprocessed/binned neural firing: PPC activity only for 3C; PPC and PUL activity for 3G, across the six tones and original laser conditions. Labels, tone identity and session metadata define support and must not become extra decoder predictors.",
+      "evidence_ids": [
+        "author_fig3",
+        "legacy_recipe"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "The author README identifies binned firing data and source scripts; complete upstream bin/window construction and exact Figure3G subsampling are not frozen. The local workspace pivot, zero-fill and feature order conventions have not established all upstream paper preprocessing.",
+      "evidence_ids": [
+        "author_fig3",
+        "legacy_recipe"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Recover the original per-condition ROC-AUC calculation, class direction and source aggregation from the exact author runs before selecting a primary predictive score. The local implementation distinguishes source-auto pROC orientation from fixed Randomised-positive AUC; probability-MAE agreement and perturbation p-values are calibration/descriptive outputs.",
+      "evidence_ids": [
+        "author_fig3",
+        "legacy_metric"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain every original session and both laser conditions within each panel, with panel results separate. The author legend plots one point per recording session; a combined paper-performance scalar and biologically valid independent-unit weighting have not been recovered. The local 34-cell average covers3C reconstruction only.",
+      "evidence_ids": [
+        "author_fig3",
+        "legacy_metric"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Figure3C/3G context-decoding ROC-AUC, pending exact author metric and aggregation recovery",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No exact paper AUC vectors or aggregate score recovered. The Figure3C P = .008 annotation is not predictive performance and is not a baseline.",
+      "evidence_ids": [
+        "author_fig3",
+        "legacy_metric"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Author README provides3C and3G entrypoints, but no admitted faithful rerun. The fixed17-session reference uses declared local conventions and only establishes a reconstruction comparator.",
+      "evidence_ids": [
+        "author_fig3",
+        "legacy_recipe"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful AUC gain must be justified for this context-decoding endpoint after original score variability and complete cohort are recovered; no margin or stronger significance is substituted.",
+      "evidence_ids": [
+        "author_fig3",
+        "legacy_metric"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired candidate-versus-author comparison on identical source test support after animal mapping; model resamples and trials remain nested, with a small-animal-sample procedure justified before evaluation.",
+      "independent_unit": "Mouse; original session-to-mouse mapping unresolved, with repeated sessions nested within mouse.",
+      "rationale": "The published session comparison tests a perturbation effect, not whether one decoder improves on another; overlapping trials and sessions cannot supply independent biological replication.",
+      "evidence_ids": [
+        "author_fig3",
+        "legacy_recipe"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the published numeric baseline and reconcile author preprocessing, class orientation, original partitions and source population for both 3C and3G.",
+      "Freeze candidate and author-reproduction recipes before final evaluation on the same original support and allowed neural inputs.",
+      "Exceed the faithful author decoder by a justified effect with valid paired uncertainty; reproduce the perturbation contrasts without using a larger contrast or smaller p-value as the win.",
+      "Retain all original sessions and both conditions; do not claim whole-paper improvement from the existing3C-only probability reconstruction.",
+      "Label temporally blocked, session-held-out or animal-held-out decoding as an extension, even if it improves over a rerun author algorithm on that new split."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No separately verified current-SOTA comparison; the source-author and local reconstruction baselines remain distinct.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive until source recovery. A future episode may iterate only on declared development feedback inside the original training portion, keeping the same source task and exposing neither protected test labels nor reference probabilities.",
+    "candidate_freeze": "Commit the complete method, feature/access policy, preprocessing, tuning and seed policy before a single owner-controlled final comparison; no adaptive feedback between sessions.",
+    "final_evaluation": "Use the recovered original 3C and3G supports and source metric. Report all condition/session results and candidate-minus-author differences. Existing artifact grading remains a separate calibration outcome.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Recover and independently audit author scripts and numeric paper outputs; retain any source defects and local repairs as declared provenance. A repaired/new-split baseline must not silently replace the original paper result."
+  },
+  "blocking_issues": [
+    "Published3C/3G metric values and exact author train/test/tuning recipe are unrecovered.",
+    "Animal/session mapping and recorded Figure3C annotation discrepancy remain unresolved.",
+    "Upstream firing feature construction, Figure3G subsampling and complete source support are not bound to an evaluator.",
+    "Fixed concrete iteration/access/compute budgets, meaningful effect, biological uncertainty rule and protected same-task evaluator are not admitted.",
+    "Existing exposed-label probability reconstruction cannot establish predictive superiority."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the 17-session34-cell fixed-reference grader and historical probability-MAE results unchanged. They measure reconstruction of explicit local conventions; neither near-zero discrepancy nor a copied-label AUC establishes a paper win."
+  }
+}

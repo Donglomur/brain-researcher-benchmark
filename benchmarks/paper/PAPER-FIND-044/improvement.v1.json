@@ -1,0 +1,190 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-044",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The paper includes an ordered model fit for trials-to-learn across reward intervals, but numeric author-model RSS/AIC baselines, original animal inclusion and exact source mapping are not recovered. The existing 60/600-second numerical reconstruction covers a smaller endpoint set; a new animal-held-out comparison would be an extension, not the original model comparison.",
+  "source_paper": {
+    "title": "Duration between rewards controls the rate of behavioral and dopaminergic learning",
+    "url": "https://www.nature.com/articles/s41593-026-02206-2"
+  },
+  "evidence": [
+    {
+      "id": "fit",
+      "kind": "author_code",
+      "url": "https://github.com/namboodirilab/duration_between_rewards_controls_learning_rate/blob/b7687eba02128049eb50f8a13a7201443e180a21/CODE_simulations/behavior_fit.m",
+      "locator": "Lines 19–22, 66–120, 144–181",
+      "supports": "All-five-ITI model fitting, averaging simulation iterations, log-RSS selection followed by AIC, TDRL censoring and penalty variants."
+    },
+    {
+      "id": "rss",
+      "kind": "author_code",
+      "url": "https://github.com/namboodirilab/duration_between_rewards_controls_learning_rate/blob/b7687eba02128049eb50f8a13a7201443e180a21/CODE_simulations/functions/calculate_rss.m",
+      "locator": "Lines 7–15",
+      "supports": "Summed squared log-space residuals with missing-observation handling."
+    },
+    {
+      "id": "aic",
+      "kind": "author_code",
+      "url": "https://github.com/namboodirilab/duration_between_rewards_controls_learning_rate/blob/b7687eba02128049eb50f8a13a7201443e180a21/CODE_simulations/functions/calculate_aic.m",
+      "locator": "Lines 9–14",
+      "supports": "Raw-scale MSE-based AIC formula with nAnimals and parameter penalty."
+    },
+    {
+      "id": "fig5",
+      "kind": "author_code",
+      "url": "https://github.com/namboodirilab/duration_between_rewards_controls_learning_rate/blob/b7687eba02128049eb50f8a13a7201443e180a21/CODE_figures_and_experimental_analysis/Figure5_ExtDataFig7.py",
+      "locator": "Lines 49–79",
+      "supports": "Five-ITI NWB selection, learner filtering, 37-second windows/7-second baseline and twenty simulation iterations per ITI."
+    },
+    {
+      "id": "correction",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13533829/",
+      "locator": "Author Correction text",
+      "supports": "Correction addresses misalignment of the top-row rasters in Fig. 4b; it does not itself supply a model baseline."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Model number of trials until conditioned responding across ITIs 30, 60, 300, 600 and 3,600 seconds. This source model endpoint is one part of the paper’s behavior/dopamine learning claims.",
+      "evidence_ids": [
+        "fit",
+        "fig5"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Author Figure 5 selects five-condition experimental NWB observations and simulation summaries; exact immutable DANDI release and behavior-summary manifest remain to bind.",
+      "evidence_ids": [
+        "fig5"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Original learning-analysis animals and source learner filtering must be recovered for all five ITIs; the local 38-mouse 60/600-second component is not the full comparison.",
+      "evidence_ids": [
+        "fig5",
+        "fit"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "The recovered original fit uses all five experimental ITIs with models_to_exclude=0, fitting and comparing the same observations. It is not animal-held-out generalization; any new holdout is an extension.",
+      "evidence_ids": [
+        "fit"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original reward/cue schedules, animal learning summaries and the declared model simulation procedures. Source cached summaries are reconstruction outputs, not candidate prediction inputs.",
+      "evidence_ids": [
+        "fit",
+        "fig5"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source Figure 5 uses learner selection and 37-second windows with seven-second baseline; behavior_fit averages simulation iterations and censors TDRL predictions using source trial caps [800,400,88,48,16]. Complete learning-threshold, animal and source-summary mapping must be authenticated.",
+      "evidence_ids": [
+        "fig5",
+        "fit"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Selection RSS sums (log observed trials-to-learn − log mean predicted trials-to-learn)^2, omitting NaNs and assigning infinite loss to missing predictions. Reported AIC instead uses nAnimals×log(raw-scale mean squared error)+2k. These are different ordered metrics; the main source comparison uses k=0 with alternative penalties also calculated.",
+      "evidence_ids": [
+        "rss",
+        "aic",
+        "fit"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Source RSS/AIC aggregate experimental animal observations across the five ITIs against model predictions averaged over simulation iterations. Simulation seeds/iterations are not biological replicates.",
+      "evidence_ids": [
+        "fit",
+        "rss",
+        "aic"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original raw-scale AIC model comparison, with log-space RSS selection reported separately",
+    "direction": "lower",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Numeric published/source-author ANCCR AIC and RSS results have not been recovered; null is intentional. No local reconstruction tolerance or biological P value substitutes for them.",
+      "evidence_ids": [
+        "fit",
+        "rss",
+        "aic"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Author behavior_fit/calculate_rss/calculate_aic give a source-author replay route; it has not been executed or authenticated for the full original comparison.",
+      "evidence_ids": [
+        "fit",
+        "rss",
+        "aic"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A task-specific practically meaningful effect has not been justified; source reproduction tolerances and reported SEM are not improvement margins.",
+      "evidence_ids": [
+        "fit",
+        "rss",
+        "aic"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "No paper-win inference admitted.",
+      "independent_unit": "Mouse, preserving its complete schedule and repeated measurements; simulation iterations are model variability only.",
+      "rationale": "The original fit is in-sample across all ITIs. A valid predeclared improvement claim must account for fitted parameter selection and animal dependence without converting a new holdout into a same-task score.",
+      "evidence_ids": [
+        "fit",
+        "rss",
+        "aic"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover and reproduce the numeric original ANCCR/comparator score vector, complete animal roster and all five ITI conditions.",
+      "Preserve original in-sample fit/selection procedure, missingness/censoring and the correct AIC penalty convention; do not conflate log-RSS selection with raw-scale AIC.",
+      "Freeze the entire registered behavior/dopamine scope or explicitly limit any result claim to the recovered original model endpoint; the 60/600-second subset alone cannot satisfy full-paper superiority.",
+      "Predeclare a scientifically meaningful model-fit improvement, uncertainty rule and equal concrete access/compute budgets before final scoring.",
+      "Label an animal-held-out or new-schedule result as an extension with a separately rerun author comparator."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was performed; source-paper reproduction and source-author reruns are separate claims.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive until numeric baseline and source inclusion are recovered. Development may inspect authorized model-fitting feedback only under a frozen original-task contract.",
+    "candidate_freeze": "Freeze model family, parameter-selection procedure, simulation protocol, input census, metric penalties and full original score support before final evaluation.",
+    "final_evaluation": "Replay author and candidate using identical original observations and model-selection allowance; report AIC and log-RSS separately, plus declared behavior/dopamine scope.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Original author model score is the baseline. Numerical source reconstruction, a locally authored model and an animal-held-out rerun are separately labelled outcomes."
+  },
+  "blocking_issues": [
+    "Original numeric model AIC/RSS and source-selected hyperparameters remain unrecovered.",
+    "Immutable full five-ITI animal/data and learning-summary mapping are unresolved.",
+    "No complete same-task evaluator, justified minimum effect, dependence-aware uncertainty or concrete episode budgets exist.",
+    "Existing numerical scorer covers a 60/600-second component, not the full five-ITI model-comparison and dopamine programme."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain registered-runtime source-compatible eghk reconstruction and its 38-mouse/309-session cue-roster evidence as calibration. Its numerical errors and coverage do not demonstrate source-model improvement."
+  }
+}

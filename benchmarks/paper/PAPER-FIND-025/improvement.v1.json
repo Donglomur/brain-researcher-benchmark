@@ -1,0 +1,193 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-025",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The paper includes ordered decoding and movement-prediction analyses, but final-paper versus author-code metric, cohort and fitting identities remain unresolved. The existing protected signed-VE protocol is prospective; it must not replace the original paper endpoint or convert a residual cognitive finding into a performance win.",
+  "source_paper": {
+    "title": "Separating cognitive and motor processes in the behaving mouse",
+    "url": "https://www.nature.com/articles/s41593-024-01859-1"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-024-01859-1",
+      "locator": "Abstract; Extended Data Figs. 2\u20137; Data availability",
+      "supports": "Study concerns cognitive/motor subspaces and distinct decoding, movement and onset analyses, rather than one monotone subspace score."
+    },
+    {
+      "id": "paper-manuscript",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12874150/",
+      "locator": "Abstract; Methods, Subspace and CD alignment",
+      "supports": "Final-paper manuscript identifies separate subspace reconstruction VE; this does not resolve the movement-prediction score mapping."
+    },
+    {
+      "id": "author-example",
+      "kind": "author_code",
+      "url": "https://github.com/economolab/subspaceID",
+      "locator": "README, HOW TO GET STARTED; exampleData.mat",
+      "supports": "Public kernel is an example-session subspace optimizer using neural rates and movement annotations, not the complete paper cohort."
+    },
+    {
+      "id": "archive",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/13941415",
+      "locator": "Version v1, File organization",
+      "supports": "Author release separates fixed-delay, randomized-delay and photoinactivation cohorts and motion-energy threshold files."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-025/implementations/submission-comparison/CONTRACT.md",
+      "locator": "Three result lanes; Scientific identity and metrics; Protected pairing",
+      "supports": "Inspected implementation records unresolved final-paper/source cohort and decoder joins, corr-squared versus signed VE distinctions, and blocks paper numerical success."
+    },
+    {
+      "id": "reporter",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-025/implementations/submission-comparison/find025_contract.py",
+      "locator": "required_joins; report; pending_plan",
+      "supports": "Reporter validates declared identities and descriptive differences; it does not ingest or score authentic scientific arrays."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Separate ALM movement-related and internal dynamics in delayed-response/water-cued tasks, including choice/context readouts and movement-related neural predictions; descriptive subspace alignment and onset effects are not themselves maximization targets.",
+      "evidence_ids": [
+        "paper",
+        "paper-manuscript"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Author Zenodo 13941415 v1 contains electrophysiology, keypoints and motion energy in separate fixed-delay, randomized-delay and inhibition folders.",
+      "evidence_ids": [
+        "archive"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Exact final-paper animal/session joins remain open: the existing audit records 25/9 paper versus 25/10 source fixed-delay sessions/animals, and 12/6 versus 12/7 two-context support. These registration observations require primary-source adjudication.",
+      "evidence_ids": [
+        "registration"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Final-paper test support and code cross-validation dispatch must be reconciled; the prospective animal-held-out protocol is not the original result.",
+      "evidence_ids": [
+        "registration"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Full session neural activity plus measured keypoint/motion signals and condition labels are identified. Candidate visibility of historical movement thresholds and fitted ranks remains unadmitted.",
+      "evidence_ids": [
+        "archive",
+        "author-example",
+        "registration"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Time grid, lag construction, trial resets, baseline subtraction, smoothing, rank fitting and movement-threshold origin require an authoritative final-paper/code mapping.",
+      "evidence_ids": [
+        "registration"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Movement-prediction corr-squared, signed 1-SSE/SST reconstruction VE, and binary decoding accuracy are distinct. No generic R2 label or prospective metric substitution is admitted.",
+      "evidence_ids": [
+        "paper-manuscript",
+        "registration"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain session, animal, representation and time-panel identities and every original eligible case; no heterogeneous aggregate or favorable-case renormalization has source authority.",
+      "evidence_ids": [
+        "paper",
+        "registration"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Unresolved original movement-prediction and choice/context-decoding endpoint panel",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "unresolved",
+      "description": "No authoritative numerical paper baseline is bound to the full resolved cohort/endpoint matrix. Historical descriptive means cannot set a pass tolerance.",
+      "evidence_ids": [
+        "paper",
+        "archive",
+        "registration"
+      ],
+      "value": null
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "The example subspaceID code is not a full author baseline; the full archive route and selected repairs must be reconciled before a valid rerun.",
+      "evidence_ids": [
+        "paper",
+        "archive",
+        "registration"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Neither stronger subspace separation nor larger residual task information has a universal better direction. Meaningful decoder/prediction gains must be specified only after endpoint adjudication.",
+      "evidence_ids": [
+        "paper",
+        "archive",
+        "registration"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Resolve paired mouse-level inference, endpoint multiplicity and minimum support after resolving the original cohort; existing descriptive comparisons provide no superiority rule.",
+      "independent_unit": "Mouse; sessions/probes and condition blocks remain nested",
+      "rationale": "The independent biological units must be preserved; source significance tests and repeated folds are not a predeclared method-superiority rule.",
+      "evidence_ids": [
+        "paper",
+        "archive",
+        "registration"
+      ]
+    },
+    "paper_win_requires": [
+      "Resolve authoritative final-paper versus code cohort, decoder, time-grid and score mappings before admitting any ordered original endpoint.",
+      "Preserve all original null/potent, DR/WC, choice/context and fixed/randomized-delay panels; no example session substitutes for the paper cohort.",
+      "Compare candidate to both the published result and a verified author rerun using exactly the same target, support and metric.",
+      "A new animal-held-out signed-VE evaluation is an extension; neither it nor stronger residual significance establishes surpassing the source paper."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison has been independently verified; surpassing an author rerun and surpassing the published result remain separate claims.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked on source adjudication. Once the original task is resolved, permit declared development feedback on original training/validation support only; preserve prospective protected comparisons as extensions.",
+    "candidate_freeze": "Freeze the complete case matrix, method, source version/repairs, score formulas, preprocessing privileges, inference/effect rule and concrete budgets before final exposure.",
+    "final_evaluation": "Independently admit and score candidate artifacts on the resolved original panels; the present declaration reporter cannot establish numerical paper success.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep source paper, code-reconstruction, freshly rerun author and prospective extension scores separate. No local authored kernel is a paper comparator. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+  },
+  "blocking_issues": [
+    "Unresolved original animal/session aliases and full claim-to-case mapping.",
+    "Final-paper/code fitting, metric and time-grid discrepancies remain open.",
+    "No authenticated baseline numbers, array evaluator or complete artifact provenance is admitted.",
+    "No same-task effect threshold, uncertainty rule or finite episode budgets are frozen."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Existing code-reconstruction, paper-reproduction and prospective comparison interfaces remain calibration or extension components. Their descriptive differences and metadata validation never constitute a paper win."
+  }
+}

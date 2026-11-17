@@ -1,56 +1,23 @@
 {
-  "schema": "public_neuroscience_construction_draft_v1",
+  "schema_version": 1,
   "id": "paper-pcca-fa-bilateral-pfc-arousal-2026",
   "track": "paper",
   "title": "Reproduce bilateral prefrontal covariance decomposition and pupil-linked arousal, then test protected neural-to-pupil prediction",
-  "registration_date": "2026-11-14",
-  "stage": "registered_construction_draft",
-  "readiness": {
-    "runnable": false,
-    "scientifically_qualified": false,
-    "submission_ready": false,
-    "reference_results_available": false,
-    "agent_results_available": false
-  },
-  "evidence_scope": "A registered paper-result construction draft covering the complete declared empirical assay. Sources and design were independently reviewed; native ingestion, runnable isolation, reference results and scientific qualification remain open. This document is not a candidate input packet or a demonstrated result.",
-  "counting": {
-    "draft_contract": true,
-    "registered": true,
-    "scientifically_qualified": false,
-    "executable_benchmark": false,
-    "model_run": false,
-    "improvement_demonstrated": false
-  },
-  "information_conditions": {
-    "A": {
-      "name": "paper + data",
-      "reproduction": "RA uses full historical data in its own fresh context/workspace, producing historical reconstruction only.",
-      "improvement": "IA uses a separate fresh outer-fold episode with only its authorized training partition, then freezes code before evaluator-owned prediction.",
-      "output": "Separate reproduction and improvement submissions; no sequential reuse of historical reconstruction knowledge."
-    },
-    "B": {
-      "name": "paper + data + official code",
-      "reproduction": "RB uses complete historical data plus exact rights-cleared official code in a separate fresh context/workspace.",
-      "improvement": "IB adds a reviewed official algorithm-code allowlist to the same protected training partition; answer-bearing constants/files and fitted state are denied.",
-      "hold": "Missing implementation, rights or unreviewed answer/algorithm separation blocks B; independent code does not silently substitute."
-    },
-    "pairing": "Identical cases/splits/budgets/seeds; fresh contexts/workspaces/process state for each track×condition×fold. See information_control."
-  },
-  "security": {
-    "public_source_contamination": "Public historical papers/data are not guaranteed absent from pretraining. Report paper/public-data exposure; transformed identifiers and withheld labels reduce simple lookup but do not prove decontamination.",
-    "execution": "Future runner must verify isolated authoring/training/stateless per-case prediction processes, explicit mounts, no network or task-bearing cross-episode caches. These controls are not implemented or tested yet.",
-    "blindness": "Use the mandatory fresh model/context/workspace separation in information_control. Each condition and outer-fold authoring/fit state is isolated; frozen code precedes protected execution; evaluator-only aggregate emits no cross-fold feedback.",
-    "fail_closed": "Missing case rows, duplicates, wrong subject/trial alignment, nonfinite predictions, shape or checksum mismatch, contamination by derived answers, or impossible source-valid counts invalidates a submission; no silent row dropping."
-  },
-  "qualification_path": [
-    "Resolve the enumerated source/rights/method holds with primary evidence; preserve both old and clarified source versions.",
-    "Materialize the complete declared assay outside ordinary Git under an explicit storage/execution plan; verify every publisher digest and native unit.",
-    "Freeze all native identities, exclusions, splits, scorer mathematics, resource budget and reference result tables before exposing test feedback.",
-    "Verify fresh-context/workspace/fold-state separation, exact algorithm-code allowlists and evaluator-only aggregation before claiming protected scores.",
-    "Independent reviewers must verify the complete scientific specification and primary-source identities. Changes to the assay require renewed review.",
-    "Implement and validate source ingestion, isolated runner, scorer and competent baselines; identity permutations, label leakage, missing data and numerical edge cases must fail.",
-    "Execute the untouched official reproduction where possible and a clearly labelled corrected reconstruction where necessary, with observed resource use and uncertainty.",
-    "Only subsequent benchmark runs and independent scientific review may establish results or scientific qualification."
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Recover known across-area and within-area percentage shared variance (%sv) and shared dimensionality (d_shared) from the paper simulated two-population datasets, matching Fig. 3e/f. Original pCCA and pCCA-FA fitting comparisons are retained. Supplementary Fig. 4 neural method comparisons are a separately identified source validation route, not pooled into the recovery score.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Recover known across-area and within-area percentage shared variance (%sv) and shared dimensionality (d_shared) from the paper simulated two-population datasets, matching Fig. 3e/f. Original pCCA and pCCA-FA fitting comparisons are retained. Supplementary Fig. 4 neural method comparisons are a separately identified source validation route, not pooled into the recovery score.",
+    "Source-paper comparison for Source Fig. 3 ground-truth recovery error for across/within %sv and d_shared; exact source loss and summary unresolved: Fig. 3 reports estimated versus true across/within %sv and d_shared; closeness to known truth is ordered, but an exact source-defined scalar recovery loss and its units/combination have not been recovered. Do not invent an average over these different endpoints. Source crossvalidated likelihood is an additional ordered fitting/comparison measure with separate normalization still unresolved."
+  ],
+  "success_criteria": [
+    "Recover the original Fig. 3 parameter draws/datasets, trial-count grid, dimension search, crossvalidation and final fitting protocol, exact ground-truth metrics and numeric pCCA-FA comparator.",
+    "Surpass the source pCCA-FA estimator on the same original recovery task and all original conditions with a justified loss and uncertainty rule; beating only the weaker pCCA control is insufficient.",
+    "Preserve %sv and d_shared endpoints separately unless the source supports an exact combined summary; no cherry-picked trial counts, altered generator or favorable seed subset.",
+    "A fresh simulation draw set, changed variance ratio/dimensionality, new empirical split or protected pupil prediction is an extension, even if both methods are rerun.",
+    "Higher in-sample pupil R², larger covariance components, stronger significance or closer descriptive reconstruction is not an estimator-recovery win.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
   ],
   "paper": {
     "title": "Interactions across hemispheres in prefrontal cortex reflect global cognitive processing",
@@ -60,14 +27,6 @@
     "pmcid": "PMC13247044",
     "url": "https://doi.org/10.1038/s41467-026-71725-0",
     "primary_source_url": "https://www.nature.com/articles/s41467-026-71725-0"
-  },
-  "scientific_unit": {
-    "family": "One paper-derived empirical assay family, not 42 independent benchmark families or three A/B/improvement tasks.",
-    "question": "Do covariance patterns shared between bilateral PFC populations explain more pupil-linked arousal than patterns confined to either hemisphere, and does that advantage survive protected prediction?",
-    "complete_support": "All 42 simultaneous bilateral PFC recording sessions: Pe 16, Wa 10, Sa 16, across three male rhesus macaques. Reproduce the paper's 41-session pupil analysis after its stated one-session Wa pupil-variance exclusion; include all 42 source sessions in the new protected assay unless source-invalid observations fail frozen, outcome-independent eligibility.",
-    "independence": "42 sessions are nested within three animals; two hemispheres and many neurons are not independent animals. No claim of population-general or human performance.",
-    "scope": "Main empirical covariance (% shared variance and dimensionality) and pupil association results, including one-latent and within-animal session-shuffle controls. Every declared source session is included. This is a full empirical assay, not a small convenient exemplar.",
-    "outside_scope": "Simulation recovery under varied generative geometry and neuronal sampling, raw waveform resorting, every supplementary figure, causal arousal manipulation and cross-animal neural-channel transfer are not claimed reproduced."
   },
   "data": {
     "doi": "10.1184/R1/31431415.v1",
@@ -562,415 +521,6 @@
     "environment": "MATLAB preprocessing and Python numpy/scipy/scikit-learn/joblib/psutil/tqdm model analysis. environment.yml is not a solved environment lock; MATLAB toolbox/license and package versions require later executable validation.",
     "provenance_limit": "Release and submodule references identify the selected commits and scientific files. Some source API responses reported the requested commit in a top-level SHA field; that response value is not itself authentication of a Git tree root or a missing release commit object. Verify exact commit, recursive tree, blob and archive bindings before acquisition or execution."
   },
-  "reproduction": {
-    "preprocessing": [
-      "Aggregate source-valid sorted spikes by electrode as multiunit activity; preserve published noise filtering and channel bank mappings. Wa left/right mapping differs from Pe/Sa.",
-      "Reconstruct target-onset-to-go-cue QC, mean rate >=2 Hz and condition-averaged Fano factor <=10, followed by crosstalk exclusion. The Methods' 100 µs versus code's 1 ms coincidence window and at-least 20% versus strict >0.2 threshold need explicit adjudication. Iterative removal updates the reduced coincidence matrix.",
-      "Bin target-offset to cue at 10 ms, remove first 20 bins, align to minimum shared delay length and sum last 100 bins (1 s). Validate all timing units and enough bins before use; do not substitute trial-specific last 1 s.",
-      "Subtract per-target-angle mean over the full session, then centered 25-trial moving mean with truncated edges; this is historical descriptive preprocessing and not protected-prediction preprocessing.",
-      "Use pupil median filtering with 50 samples and truncated edges, average target-offset-to-cue pupil trace, subtract centered 25-trial mean, then published session scaling. Source code uses filtered trace, whereas Methods wording describes subtracting a median-filter value; report the discrepancy.",
-      "Fit joint Gaussian pCCA-FA with shared across-area factors and separate within-area factors plus diagonal noise. Cross-validate dimensions 1..min(15,appropriate channel count) independently for each of three dimensionalities using ten shuffled folds, then final session fit.",
-      "Fit separate OLS regressions of fast pupil signal onto across, right-within and left-within posterior latents. The release compute_pupil_pred.py has CROSSVAL=False; these are fitted descriptive R² values. Repeat one-latent and same-animal cross-session controls."
-    ],
-    "outputs": [
-      "Per-native-session covariance matrices, across/within/private variance fractions,95%-variance dimensionalities, chosen dimensions and likelihoods.",
-      "Per-pupil-session observed/predicted pupil arrays and fitted R² for all three latent groups; separate one-latent control.",
-      "All within-animal cross-session fits (Pe 240,Sa 240,Wa 72 after stated exclusion), with paired source session identities and truncation lengths.",
-      "Animal-stratified and pooled results with exact historical exclusions and separate clustered uncertainty analysis."
-    ],
-    "quantitative_targets": [
-      {
-        "id": "P01",
-        "status": "primary",
-        "source": "Fig 4b caption and Results, across-/within-area interactions",
-        "statistic": "Mean across/within % shared variance",
-        "published": {
-          "across_percent": "11.50",
-          "within_percent": "7.66",
-          "p": "2.6e-7"
-        },
-        "denominator": "84 brain areas,2 per 42 sessions; Pe 32/Wa 20/Sa 32 areas",
-        "test": "Paired one-tailed t-test across-versus-within",
-        "strata": {
-          "Pe": {
-            "p": "0.00048",
-            "areas": 32,
-            "sessions": 16
-          },
-          "Wa": {
-            "p": "0.40",
-            "areas": 20,
-            "sessions": 10
-          },
-          "Sa": {
-            "p": "4.2e-6",
-            "areas": 32,
-            "sessions": 16
-          }
-        },
-        "required": "Both hemisphere-specific variance fractions for every session; pooled and all animal strata. Per-animal means not explicitly quoted in inspected caption must be computed, not inferred from pooled means."
-      },
-      {
-        "id": "P02",
-        "status": "primary",
-        "source": "Fig 4c caption and Methods shared dimensionality",
-        "statistic": "Mean across/within dshared (95% shared covariance threshold)",
-        "published": {
-          "across": "5.41",
-          "within": "4.06",
-          "p": "3.1e-6"
-        },
-        "denominator": "84 areas/42 sessions, paired within area",
-        "test": "Paired one-tailed t-test",
-        "strata": {
-          "Pe": {
-            "p": "0.0013",
-            "areas": 32,
-            "sessions": 16
-          },
-          "Wa": {
-            "p": "0.32",
-            "areas": 20,
-            "sessions": 10
-          },
-          "Sa": {
-            "p": "9.0e-5",
-            "areas": 32,
-            "sessions": 16
-          }
-        },
-        "required": "Chosen latent dimensions,95%covariance-spectrum dimensions and across/within contrasts per area/session; do not compare raw latent orientations."
-      },
-      {
-        "id": "P03",
-        "status": "primary",
-        "source": "Fig 6c caption and Results pupil-linked arousal",
-        "statistic": "Mean full-session fitted fast-pupil R²",
-        "published": {
-          "across": "0.25",
-          "within_right": "0.038",
-          "within_left": "0.030",
-          "p": "1.3e-30"
-        },
-        "denominator": "41 pupil sessions after one Wa exclusion; comparison uses 82 area contrasts=2 per 41 sessions",
-        "test": "One-tailed t-test on per-session R² differences, historical pooled-area analysis",
-        "strata": {
-          "Pe": {
-            "p": "6.7e-12",
-            "areas": 32,
-            "sessions": 16
-          },
-          "Wa": {
-            "p": "1.3e-8",
-            "areas": 18,
-            "sessions": 9
-          },
-          "Sa": {
-            "p": "2.7e-21",
-            "areas": 32,
-            "sessions": 16
-          }
-        },
-        "required": "All 41 session target/prediction arrays for all 3 latent groups plus every animal stratum. These are descriptive fitted values, not held-out prediction."
-      },
-      {
-        "id": "P04",
-        "status": "secondary control",
-        "source": "Methods Explaining variance in pupil diameter",
-        "statistic": "One-latent across-versus-within pupil contrast",
-        "published": {
-          "p": "4.3e-22"
-        },
-        "denominator": "82 areas from 41 sessions; one predictor for each latent group",
-        "test": "One-tailed t-test on differences in R²",
-        "required": "All session/group R² and selected first-latent convention. No scalar mean R² quoted here; reference must establish it."
-      },
-      {
-        "id": "P05",
-        "status": "secondary control",
-        "source": "Methods pupil chance distribution; Fig 6c grey bars",
-        "statistic": "Same-animal mismatched-session regression distribution",
-        "published": {
-          "Pe_pair_fits": 240,
-          "Wa_pair_fits": 72,
-          "Sa_pair_fits": 240,
-          "interval": "95%"
-        },
-        "denominator": "Ordered distinct source/target session pairs 16×15,9×8,16×15; equalized trial count by truncating longer session",
-        "test": "Empirical 95% shuffle interval, not independent new subjects",
-        "required": "All pair identities, truncation lengths, full empirical distributions and interval endpoints. Numeric interval endpoints are not quoted in retained prose; do not invent."
-      },
-      {
-        "id": "P06",
-        "status": "example, not aggregate criterion",
-        "source": "Fig 4a caption, same MonkeyPe example as Fig 2c",
-        "statistic": "Example across/within % shared variance",
-        "published": {
-          "right_across": "14.97",
-          "left_across": "17.47",
-          "right_within": "5.65",
-          "left_within": "7.47"
-        },
-        "denominator": "One session;79 right and 83 left neurons; illustration shows 14 of each",
-        "test": "Descriptive example only",
-        "required": "Resolve exact native example identity before scoring. Never search sessions for closest numerical match; all 42 remain main assay."
-      },
-      {
-        "id": "P07",
-        "status": "example, not aggregate criterion",
-        "source": "Fig 6b caption",
-        "statistic": "Example MonkeySa full-session fitted pupil R²",
-        "published": {
-          "across": "0.35",
-          "within_right": "0.013",
-          "within_left": "0.052",
-          "displayed_trials": 40,
-          "session_trials": 1258
-        },
-        "denominator": "One source session, all 1258 trials;40 shown only for illustration",
-        "test": "Descriptive fitted example",
-        "required": "Pin native session identity; do not substitute 40 displayed trials for full session."
-      }
-    ],
-    "scoring": "Score complete structured outputs and independently recomputed covariance/variance identities, not prose agreement or copied aggregate numbers. Report absolute discrepancies from published rounded means and log10p. Numerical acceptance tolerances remain unset until an independently rerun reference and observed numerical variation are available; published rounding intervals are a diagnostic, not manufactured ground truth.",
-    "invariances": "Compare fitted covariance, sorted variance spectra, predicted pupil values and R². Latent sign/rotation and equivalent factor permutations must not fail a correct reproduction.",
-    "truth_limit": "No original analysis has been executed here and no numerical target has been re-established from data.",
-    "paper_claim_ledger": {
-      "interpretation": "Published values are contextual historical reproduction targets at the stated precision, never established data-derived reference truth, numerical pass tolerances, or protected performance scores to beat.",
-      "completeness": "Finite ledger covers the principal quantitative and curve outputs of the declared complete empirical assay. A missing scalar in the publication remains explicitly unavailable; it is not invented or replaced with a smaller easier task.",
-      "acceptance": "Each row requires native-unit outputs, complete eligible denominator and independently rerun reference before numerical acceptance thresholds are fixed. Main endpoints may not be dropped because source code/reference is missing.",
-      "rows": [
-        {
-          "id": "P01",
-          "status": "primary",
-          "source": "Fig 4b caption and Results, across-/within-area interactions",
-          "statistic": "Mean across/within % shared variance",
-          "published": {
-            "across_percent": "11.50",
-            "within_percent": "7.66",
-            "p": "2.6e-7"
-          },
-          "denominator": "84 brain areas,2 per 42 sessions; Pe 32/Wa 20/Sa 32 areas",
-          "test": "Paired one-tailed t-test across-versus-within",
-          "strata": {
-            "Pe": {
-              "p": "0.00048",
-              "areas": 32,
-              "sessions": 16
-            },
-            "Wa": {
-              "p": "0.40",
-              "areas": 20,
-              "sessions": 10
-            },
-            "Sa": {
-              "p": "4.2e-6",
-              "areas": 32,
-              "sessions": 16
-            }
-          },
-          "required": "Both hemisphere-specific variance fractions for every session; pooled and all animal strata. Per-animal means not explicitly quoted in inspected caption must be computed, not inferred from pooled means."
-        },
-        {
-          "id": "P02",
-          "status": "primary",
-          "source": "Fig 4c caption and Methods shared dimensionality",
-          "statistic": "Mean across/within dshared (95% shared covariance threshold)",
-          "published": {
-            "across": "5.41",
-            "within": "4.06",
-            "p": "3.1e-6"
-          },
-          "denominator": "84 areas/42 sessions, paired within area",
-          "test": "Paired one-tailed t-test",
-          "strata": {
-            "Pe": {
-              "p": "0.0013",
-              "areas": 32,
-              "sessions": 16
-            },
-            "Wa": {
-              "p": "0.32",
-              "areas": 20,
-              "sessions": 10
-            },
-            "Sa": {
-              "p": "9.0e-5",
-              "areas": 32,
-              "sessions": 16
-            }
-          },
-          "required": "Chosen latent dimensions,95%covariance-spectrum dimensions and across/within contrasts per area/session; do not compare raw latent orientations."
-        },
-        {
-          "id": "P03",
-          "status": "primary",
-          "source": "Fig 6c caption and Results pupil-linked arousal",
-          "statistic": "Mean full-session fitted fast-pupil R²",
-          "published": {
-            "across": "0.25",
-            "within_right": "0.038",
-            "within_left": "0.030",
-            "p": "1.3e-30"
-          },
-          "denominator": "41 pupil sessions after one Wa exclusion; comparison uses 82 area contrasts=2 per 41 sessions",
-          "test": "One-tailed t-test on per-session R² differences, historical pooled-area analysis",
-          "strata": {
-            "Pe": {
-              "p": "6.7e-12",
-              "areas": 32,
-              "sessions": 16
-            },
-            "Wa": {
-              "p": "1.3e-8",
-              "areas": 18,
-              "sessions": 9
-            },
-            "Sa": {
-              "p": "2.7e-21",
-              "areas": 32,
-              "sessions": 16
-            }
-          },
-          "required": "All 41 session target/prediction arrays for all 3 latent groups plus every animal stratum. These are descriptive fitted values, not held-out prediction."
-        },
-        {
-          "id": "P04",
-          "status": "secondary control",
-          "source": "Methods Explaining variance in pupil diameter",
-          "statistic": "One-latent across-versus-within pupil contrast",
-          "published": {
-            "p": "4.3e-22"
-          },
-          "denominator": "82 areas from 41 sessions; one predictor for each latent group",
-          "test": "One-tailed t-test on differences in R²",
-          "required": "All session/group R² and selected first-latent convention. No scalar mean R² quoted here; reference must establish it."
-        },
-        {
-          "id": "P05",
-          "status": "secondary control",
-          "source": "Methods pupil chance distribution; Fig 6c grey bars",
-          "statistic": "Same-animal mismatched-session regression distribution",
-          "published": {
-            "Pe_pair_fits": 240,
-            "Wa_pair_fits": 72,
-            "Sa_pair_fits": 240,
-            "interval": "95%"
-          },
-          "denominator": "Ordered distinct source/target session pairs 16×15,9×8,16×15; equalized trial count by truncating longer session",
-          "test": "Empirical 95% shuffle interval, not independent new subjects",
-          "required": "All pair identities, truncation lengths, full empirical distributions and interval endpoints. Numeric interval endpoints are not quoted in retained prose; do not invent."
-        },
-        {
-          "id": "P06",
-          "status": "example, not aggregate criterion",
-          "source": "Fig 4a caption, same MonkeyPe example as Fig 2c",
-          "statistic": "Example across/within % shared variance",
-          "published": {
-            "right_across": "14.97",
-            "left_across": "17.47",
-            "right_within": "5.65",
-            "left_within": "7.47"
-          },
-          "denominator": "One session;79 right and 83 left neurons; illustration shows 14 of each",
-          "test": "Descriptive example only",
-          "required": "Resolve exact native example identity before scoring. Never search sessions for closest numerical match; all 42 remain main assay."
-        },
-        {
-          "id": "P07",
-          "status": "example, not aggregate criterion",
-          "source": "Fig 6b caption",
-          "statistic": "Example MonkeySa full-session fitted pupil R²",
-          "published": {
-            "across": "0.35",
-            "within_right": "0.013",
-            "within_left": "0.052",
-            "displayed_trials": 40,
-            "session_trials": 1258
-          },
-          "denominator": "One source session, all 1258 trials;40 shown only for illustration",
-          "test": "Descriptive fitted example",
-          "required": "Pin native session identity; do not substitute 40 displayed trials for full session."
-        }
-      ],
-      "other_required_outputs": "Complete 42-session covariance matrices, variance decomposition and spectra;41-session historical pupil fits and controls; all 3 animal strata. These define the full declared empirical assay.",
-      "out_of_scope_sections": [
-        "Figures 1 and 3 generative exposition and simulation recovery sweeps",
-        "Figure 5 simulated latent-geometry/angle recovery",
-        "Exhaustive supplementary model comparisons and channel subsampling/geometry perturbations",
-        "Supplementary evoked-pupil/manual-peak analyses",
-        "Raw waveform sorting and causal arousal manipulation"
-      ],
-      "population_warning": "Reported pooled-area p-values reproduce the paper's historical analysis; they do not turn 84 or 82 areas into independent animals.",
-      "source_url": "https://www.nature.com/articles/s41467-026-71725-0"
-    }
-  },
-  "improvement": {
-    "new_estimand": "Held-out raw delay-averaged pupil prediction from contemporaneous bilateral neural counts within the same recorded sessions. This differs intentionally from historical full-session fast-component fitted R²; it may not be compared directly to 0.25 as an improvement over the paper.",
-    "cohort": "All 42 sessions and all source-valid paired correct trials, including the historically excluded Wa session unless its source observations fail fixed technical validity. Publish both 41-session historical subset diagnostic and complete 42-session protected score; the latter remains primary.",
-    "outer_split": "Five contiguous chronological blocks per session, assigned using original complete trial ordinal before QC. Each block is held out once; train on other blocks with a 12-trial guard on either side. This is blocked interpolation, not forecasting or a new-animal split. Trial views, time bins and hemisphere signals never cross partitions.",
-    "inner_split": "Nested four chronological training blocks with the same guard, formed using retained original ordinals. All channel eligibility, condition means, drift nuisance fits, scale estimates, latent dimensions and regression penalties are fit only on the corresponding inner training partition. No protected pupil labels, test covariance refitting or global feature selection.",
-    "target_processing": "Use per-trial median-filtered delay-average pupil, with all filtering confined to that individual observed trace. Score raw units after inverse training-only normalization. Do not subtract a moving average of held-out pupil labels. Any target-angle/linear-trial-index nuisance fit is trained only on available training labels and remains part of prediction.",
-    "neural_processing": "QC and channel decisions based only on training observations; use fixed publisher event codes and task timing, training-only angle means, optional linear drift fit and scaling. No centered cross-boundary trial smoother or all-session factor fit. Source-only artifact masks remain disclosed historical preprocessing.",
-    "baselines": [
-      "Training-mean pupil and training-only angle+linear-trial-index nuisance regression.",
-      "Ridge regression on all valid bilateral counts, selected in inner folds; separate unilateral ridge ablations.",
-      "PCA+ridge and regularized CCA+ridge with equal tuning budgets.",
-      "Independently reconstructed pCCA-FA across-factor+ridge, within-factor+ridge and all-factor+ridge, dimensions selected only inside training. This is an independently implemented protected baseline, not untouched official performance."
-    ],
-    "primary_metric": "For each session, concatenate out-of-fold predictions and compute untruncated R²=1-SSE/sum((y-mean(y))²); do not clip negative R². Average sessions within each animal, then average the three animal means equally. Also report pooled SSE and training-mean skill as diagnostics. Constant-target source cases fail a frozen eligibility audit; they are not silently discarded after scoring.",
-    "improvement_endpoint": "Paired delta of primary R² relative to the strongest prespecified competent baseline chosen using development/inner validation only. Claim improvement only if paired 95% conditional session-block uncertainty lower bound>0, each animal's delta is reported, and no animal has a significant adverse change under the frozen analysis. This supports these recorded animals, not broad species generalization.",
-    "uncertainty": "Report all three animal effects, per-session paired effects and within-animal session/block bootstrap intervals (10000 fixed-seed resamples after method freeze). With only three animals, mark animal-population uncertainty unresolved; bootstrap precision within this cohort is not proof of population-level superiority.",
-    "nulls": "Trial-block circular shifts within session and same-animal mismatched sessions must destroy protected predictive benefit; training-label permutation and intercept-only controls expose leakage. Permutation/shift construction is evaluator-owned and obeys the same splits.",
-    "resource_fairness": "Identical full assay and freeze-time CPU/GPU/RAM/walltime/search budget across candidates and baselines. No subset-based promotion. Budget must be measured and frozen after full-assay preflight; no claimed runtime now.",
-    "submission": "Frozen fit/predict program, source hashes, train-only preprocessing state, hyperparameter trace and predictions for every expected native case; hidden evaluator computes scores.",
-    "authoring_protocol": "information_control governs every fold/condition: fresh authoring with only that training partition, frozen per-fold code, fresh fit state and no cross-fold artifact/score feedback."
-  },
-  "holds": [
-    {
-      "severity": "blocking",
-      "id": "coincidence-time-scale",
-      "evidence": "Methods specify 100 µs coincidences and 20% or more. The released preprocessing bins at 1 ms, the coincidence helper uses binned count cross-products, and the removal threshold is strictly >0.2. These are source-policy distinctions requiring validation.",
-      "impact": "Published and implementation channel-selection rules can differ.",
-      "resolution": "Resolve the 100 µs versus 1 ms and inclusive versus strict threshold policies using exact source provenance; report source-faithful alternatives without tuning exclusions to published outcomes."
-    },
-    {
-      "severity": "blocking",
-      "id": "submodule-rights",
-      "evidence": "Complete pinned cca and fa trees lack LICENSE files; parent Apache license does not establish separate dependency rights.",
-      "resolution": "Confirm rights or rebuild independently for A/protected baselines; B distribution remains held."
-    },
-    {
-      "severity": "blocking",
-      "id": "data-materialization-and-trial-alignment",
-      "evidence": "Only bounded metadata/README/code were inspected; actual native .mat structures and counts not verified.",
-      "resolution": "All 49 files, full 42 sessions, integrity, timing, cross-modal bijection and documented 41-session exclusion must be verified before runner/scorer admission."
-    },
-    {
-      "severity": "blocking",
-      "id": "reference-and-runtime",
-      "evidence": "No run, environment lock, numerical tolerance, result table or observed runtime exists.",
-      "resolution": "Reference reproduction and competent-baseline execution after source discrepancies are resolved."
-    },
-    {
-      "severity": "scientific",
-      "id": "descriptive-vs-protected",
-      "evidence": "CROSSVAL=False and session-wide factor/preprocessing fits.",
-      "resolution": "Keep historical reproduction and protected new estimand separate; never advertise 0.25 as held-out baseline."
-    },
-    {
-      "severity": "scientific",
-      "id": "pupil-filter-wording",
-      "evidence": "Helper returns median-filtered trace; Methods wording describes subtracting median-filter value.",
-      "resolution": "Keep code-faithful and prose-faithful versions distinct pending clarification."
-    },
-    {
-      "severity": "blocking",
-      "id": "information-control-not-implemented",
-      "evidence": "Complete fresh-context/workspace/fold-state/allowlist design is specified but not exercised by a runner.",
-      "resolution": "Verify denial of target/previous-fold artifacts, immutable code hashes, clean fit states and evaluator-only aggregate before protected runs."
-    }
-  ],
   "runtime_storage": {
     "observed_runtime": null,
     "observed_peak_ram": null,
@@ -979,43 +529,83 @@
     "publisher_listed_original_bytes": 1583332461,
     "evidence_limit": "No complete benchmark ingestion, reference execution or agent evaluation has established working storage, peak memory or runtime. Publisher file size is not expanded resource feasibility."
   },
-  "information_control": {
-    "protocol": "Independent historical-reproduction and protected-improvement tracks. Every track, condition and protected outer fold starts a fresh authoring episode and fresh execution state.",
-    "reproduction": {
-      "cohort": "Historical reconstruction covers all 42 bilateral neural sessions and all 41 historically eligible pupil sessions, with the complete declared covariance, dimensionality and pupil-control analyses.",
-      "RA": "Fresh model context/workspace gets paper, specification and complete historical observed data, including outcomes needed for reconstruction. No official code, saved fits or machine-readable answer outputs.",
-      "RB": "Another fresh model context/workspace gets identical historical inputs and budget plus the exact rights-cleared official implementation. Saved original prediction/state/selection answer artifacts remain evaluator-only.",
-      "outputs": "Reproduction results, code, plots, fitted states and transcripts are archived only for reproduction review. They may not enter improvement prompts, examples, filesystem, warm starts, retrieval memory or post-training."
+  "input_assets": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "resources": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "provenance": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/paper-pcca-fa-bilateral-pfc-arousal-2026/improvement.v1.json",
+      "bytes": 14564,
+      "sha256": "5cabc804948b95202b1ce34ace4280f89c381a292dd2f3bdcad4852a3ef418bc"
     },
-    "improvement": {
-      "episode_unit": "For each information condition and each of 5 outer folds, start an independent fresh authoring episode. It receives paper, declared schema and only that outer fold's training features/outcomes, plus allowed algorithm code for B. It may investigate its authorized training data and run nested training-only development. It sees no held-out feature files or outcomes before code freeze.",
-      "why": "A single context seeing all 5 overlapping training sets would learn each later test outcome. Independent per-fold authoring preserves all-cohort out-of-fold coverage without cross-fold label memory. Report performance of the fixed agent/model/prompt/tool-budget protocol across independently authored folds, not one identical program authored after seeing every label.",
-      "freeze": "Freeze each episode's source tree, dependencies, allowed pretrained state, preprocessing specification and model-artifact schema by hash before protected execution. No candidate edits, debugging or new authoring based on protected predictions/logs/scores. Build failures follow a predeclared label-free retry policy or invalidate the episode.",
-      "IA": "Paper and its current outer-training partition only; no official implementation or reproduction artifacts.",
-      "IB": "Same training inputs/budget plus a reviewed official algorithm-code allowlist. Complete raw repository access is not automatic: answer-bearing saved files and hardcoded data-dependent selections are denied. Publish exact excluded/redacted paths, hashes and rationale; label this controlled official-algorithm access, not unrestricted repository access.",
-      "code_hold": "The official algorithm-code allowlist has not been implemented or tested. Manual pupil-peak arrays, full-session factors, saved fits, target-dependent selection and other answer-bearing objects are denied to protected improvement. If algorithm and answer content cannot be separated faithfully and legally, the official-code improvement condition remains blocked; independently authored baseline code does not silently replace it."
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/paper-pcca-fa-bilateral-pfc-arousal-2026/historical/task.pre-improvement.v1.json",
+        "bytes": 59603,
+        "sha256": "e73f78befc63920315646c5a895072289427f6687aed8205f39eef5fb61cf654"
+      },
+      "implementation_ids": [
+        "benchmarks-scientific_components-pcca_descriptive_outputs"
+      ],
+      "runtime_manifest": null
     },
-    "fresh_state": {
-      "author": "New model session/context with no inherited reproduction dialogue, previous fold/condition solutions, retrieval memory, scratchpad or assay-specific adapted weights. Reuse only the declared unchanged base model snapshot.",
-      "filesystem": "New isolated workspace/container/user namespace per track×condition×outerfold. Only explicit input allowlists are mounted. Clear home/tmp, data-bearing package/model caches, notebooks, vector stores, browser sessions, process memory, background workers and serialized fits. Immutable dependency caches require content-addressed audit proving no assay artifacts.",
-      "fit": "Fresh parameters, optimizer, RNG, preprocessing, selected features and latent states for every outer fold and condition. Every inner fold independently fits all transforms/selection/model components on inner-training data; no warm start fitted on its validation outcomes.",
-      "predict": "After code freeze, train in a process that sees only fold-authorized training data. Export a typed model artifact. A separate prediction process receives that artifact plus one held-out case's allowed features at a time; no target, other-fold data, other held-out cases or writable persistent state between cases. This prevents batch test-covariance refitting in the intended inductive task.",
-      "denial": "No shared writable cache, checkpoint, feature selection, fitted parameters, generated code, transcript or score feedback across folds, A/B conditions, or reproduction→improvement. Identical immutable algorithm code is distinct from fitted state."
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Blocked until the original source simulation artifacts, baseline and endpoint aggregation are recovered. After admission, permit estimator development only on declared source development inputs; keep assessment ground truth and original comparison artifacts evaluator-owned.",
+    "candidate_freeze": "Freeze estimation method, hyperparameters, dimension-selection policy, source condition coverage and scoring summary before final comparison on the recovered original Fig. 3 assessment datasets.",
+    "final_evaluation": "Compare candidate recovery with published and authenticated rerun pCCA-FA on identical original datasets and all source trial-count conditions. Any original Supplementary Fig. 4 likelihood comparison must retain its own exact empirical splits/normalization and be reported separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Source pCCA-FA is the performance comparator; pCCA/FA are source controls. Published results, author reruns and current SOTA remain distinct. Existing covariance/pupil reconstruction is calibration; new protected prediction or newly generated simulations cannot silently replace original paper assessment. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+  },
+  "blocking_issues": [
+    "Authenticate original simdataset_varyN_noWS.pkl and parameter/sample draws, generator RNG, trial grid and source-release bindings; the visible CV seed is not an explicit simulation seed.",
+    "Recover source %sv/d_shared numeric curves, exact comparison loss/aggregation and author variability; no invented scalar benchmark.",
+    "Reconcile paper simulation dimensions1–10 with inspected driver0–14, and paper empirical ten-fold policy with the Fig3 driver five-fold CV; freeze the correct original branch and EM/no-warmstart policy.",
+    "Recover Supplementary Fig. 4 empirical comparison endpoint, per-session folds and likelihood normalization before making that separate source-method claim.",
+    "Implement evaluator/author baseline route; justify task-specific minimum effect and uncertainty; fix concrete access/resource budgets."
+  ],
+  "holds": {
+    "task_specific": [
+      "Authenticate original simdataset_varyN_noWS.pkl and parameter/sample draws, generator RNG, trial grid and source-release bindings; the visible CV seed is not an explicit simulation seed.",
+      "Recover source %sv/d_shared numeric curves, exact comparison loss/aggregation and author variability; no invented scalar benchmark.",
+      "Reconcile paper simulation dimensions1–10 with inspected driver0–14, and paper empirical ten-fold policy with the Fig3 driver five-fold CV; freeze the correct original branch and EM/no-warmstart policy.",
+      "Recover Supplementary Fig. 4 empirical comparison endpoint, per-session folds and likelihood normalization before making that separate source-method claim.",
+      "Implement evaluator/author baseline route; justify task-specific minimum effect and uncertainty; fix concrete access/resource budgets."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original paper contains an ordered estimator-validation route: Fig. 3e/f recovery of known across/within shared variance and dimensionality on simulated data, with pCCA comparison, plus Supplementary Fig. 4 method comparisons on neural recordings. The authorized overhaul can select this original source task. Exact original simulation draws/trial-count grid, baseline arrays, loss aggregation and matched evaluation protocol remain unrecovered; in-sample pupil R² is retained only as descriptive calibration. Authenticate original simdataset_varyN_noWS.pkl and parameter/sample draws, generator RNG, trial grid and source-release bindings; the visible CV seed is not an explicit simulation seed. Recover source %sv/d_shared numeric curves, exact comparison loss/aggregation and author variability; no invented scalar benchmark. Reconcile paper simulation dimensions1–10 with inspected driver0–14, and paper empirical ten-fold policy with the Fig3 driver five-fold CV; freeze the correct original branch and EM/no-warmstart policy. Recover Supplementary Fig. 4 empirical comparison endpoint, per-session folds and likelihood normalization before making that separate source-method claim. Implement evaluator/author baseline route; justify task-specific minimum effect and uncertainty; fix concrete access/resource budgets.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/paper-pcca-fa-bilateral-pfc-arousal-2026/historical/task.pre-improvement.v1.json",
+      "bytes": 59603,
+      "sha256": "e73f78befc63920315646c5a895072289427f6687aed8205f39eef5fb61cf654"
     },
-    "denied_artifacts": [
-      "Complete historical source archives containing held-out target observations; reproduction data copies, plots, tables, logs, transcripts and computed answers.",
-      "Full-study fitted nuisance/behavioral value/conflict parameters, pupil fast-component/normalization targets, latent factors, trained weights, selected windows/contacts and manual target-derived constants.",
-      "Original posteriors, decoded states, selected-index files, accuracies and machine-readable answer tables.",
-      "Earlier outer-fold training labels, code, checkpoints, predictions and metrics; another condition's solutions.",
-      "Evaluator native-case maps, held-out labels, reference arrays, null outcomes and aggregate scores."
-    ],
-    "evaluator": {
-      "materialization": "Trusted evaluator alone authenticates the complete source and constructs native case/split manifests. It strips derived target fields and releases only episode-specific inputs; improvement agents never mount full target-bearing study archives.",
-      "coverage": "Every valid case appears exactly once as outer-test data in that condition's fixed aggregate across all declared sessions/participants. Native IDs, denominators and source-invalid exclusions freeze before authoring; difficult cases or missing analyses cannot be dropped.",
-      "aggregate": "Evaluator alone stores episode code hashes and native-keyed predictions, checks coverage/duplicates/nonfinite values and computes prespecified metrics after all episodes/conditions seal. No fold score becomes another episode's input.",
-      "verification_gate": "Future runner must verify allowlists/process identities and attempt denied-target/previous-fold reads, cache carryover, inner-fold preprocessing contamination and post-freeze code mutation. These controls are requirements, not already observed isolation.",
-      "comparison": "A/B share exact cases, splits, unchanged base model, prompt skeleton, tool/compute/tuning budget and matched seed schedule, but never solutions. Competent baselines independently refit on identical folds/targets."
-    },
-    "limits": "Fresh contexts and artifact denial remove within-experiment information transfer, not visible paper aggregates, public-data exposure or pretraining memorization. Record those limits; never call this contamination-free."
+    "notes": "Preserve all existing P01–P05 covariance/pupil outputs, fixed examples and historical empirical assay. Published pupil mean R²=.25 and its within-area comparators are descriptive calibration only. The authorized overhaul selects the paper original Fig. 3 estimator-recovery task; no simulation, model fit or improvement has been run."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

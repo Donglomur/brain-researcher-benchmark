@@ -1,0 +1,199 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-replacement-006",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The original volume-decoding task and Table 1 90-channel PopT+BrainBERT result are identifiable, including all seven downstream participants. Exact historical rows, ranked channel ensembles and checkpoint/feature binding are still unqualified. The existing support-disjoint prospective RMS evaluator cannot stand in for the paper\u2019s random-row task.",
+  "source_paper": {
+    "title": "Population Transformer: Learning Population-level Representations of Neural Activity",
+    "url": "https://arxiv.org/html/2406.03044v4"
+  },
+  "evidence": [
+    {
+      "id": "popt-paper",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2406.03044v4",
+      "locator": "Section 4; Table 1; Appendix A Downstream Training; Appendix C Volume; Appendix D Table 6",
+      "supports": "Original volume endpoint, 90-channel ROC-AUC baseline, subject aggregation, training recipe and downstream recording cohort."
+    },
+    {
+      "id": "popt-readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/README.md",
+      "locator": "Fine-tuning section; data.write_multi_subject_multi_channel and run_train.py routes",
+      "supports": "Author BrainBERT-feature extraction, checkpoint and saved-split route exists; exact historic artifacts are not authenticated."
+    },
+    {
+      "id": "popt-splits",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/tasks/utils.py",
+      "locator": "get_split_idxs, lines 7\u201319",
+      "supports": "Source downstream row splits use train_test_split with random_state=42 and separate saved split identities."
+    },
+    {
+      "id": "popt-roster",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/trial_selections/test_trials.json",
+      "locator": "Entire seven-subject recording roster",
+      "supports": "Pins the downstream subject/trial pairs without reading labels."
+    },
+    {
+      "id": "popt-input",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/conf/data/subject_data_template.yaml",
+      "locator": "samp_frequency, rereference, delta and duration",
+      "supports": "Defines 2048-Hz Laplacian neural inputs and five-second context around words."
+    },
+    {
+      "id": "popt-metric",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/tasks/pt_feature_extract_coords.py",
+      "locator": "get_valid_outs, lines 25\u201340",
+      "supports": "Native ROC-AUC uses sklearn roc_auc_score; rounded-probability F1 is a separate diagnostic."
+    },
+    {
+      "id": "popt-counts",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2406.03044v4/figures/CR_ensemble_scaling.png",
+      "locator": "Figure 3, Volume panel horizontal axis and legend",
+      "supports": "The original electrode-count conditions are 1, 10, 20, 30, 40 and 50; curves compare pretrained PopT, non-pretrained PopT, Linear and Deep NN. Exact curve ordinates were not digitized."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Binary word-volume decoding on the paper\u2019s original Volume endpoint: distinguish top versus bottom RMS-intensity quartiles within each recording. This original endpoint is within the registration\u2019s volume/speech/sentence scope; a result claims this endpoint only. Retain the original Volume electrode-count analysis alongside the 90-electrode Table 1 primary.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-counts"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "The original BrainTreebank intracranial movie recordings and word/audio annotations used for Table 1. Pin exact source-release and derived feature manifests before execution; a newer corpus version cannot silently replace them.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-readme"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All seven source downstream pairs: sub_1/trial001, sub_2/trial006, sub_3/trial000, sub_4/trial000, sub_6/trial004, sub_7/trial000, sub_10/trial000. Table 6 identifies their held-out movies; three share Cars 2.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-roster"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original downstream train/validation/test proportions are .8/.1/.1, using random row splits and saved identities. Exact original word/feature row order and saved membership are not authenticated. Replacing them with the local support-disjoint split creates an extension.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-splits"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Table 1 Volume comparison uses 90 clean Laplacian electrodes per participant with the original BrainBERT temporal embeddings and coordinates; preserve identical feature/checkpoint access and channel-ranking policy. A smaller ensemble is not the Table 1 task. Figure 3 Volume additionally uses the original 1, 10, 20, 30, 40 and 50 electrode conditions; the local 1/10/50/90 grid is not their replacement.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-readme",
+        "popt-input",
+        "popt-counts"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Author source specifies Laplacian rereferencing, 2048 Hz and five-second neural context; paper Appendix C defines per-word RMS with frame length 2048 and hop 512 and extreme-quartile labels. Exact feature timing, original ranked channel membership/order, ties, transcript alignment and native class mapping still need artifact-level reconciliation.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-input",
+        "popt-readme"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Within each participant compute ROC-AUC, equivalently P(score_positive>score_negative)+0.5 P(tie), then source aggregation. Higher is better. F1 and local PopT-minus-linear gains do not replace the absolute PopT source score.",
+      "evidence_ids": [
+        "popt-metric",
+        "popt-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Table 1 reports the mean ROC-AUC across source participants with standard error across subjects; for Volume, BrainBERT+pretrained PopT is 0.87 \u00b1 0.03 at 90 channels. Preserve participant weighting, not pooled words.",
+      "evidence_ids": [
+        "popt-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Table 1 Volume ROC-AUC, BrainBERT inputs, 90 electrodes, mean across seven subjects",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.87,
+      "description": "Table 1 pretrained PopT with BrainBERT: Volume ROC-AUC 0.87 \u00b1 0.03 SEM across subjects, using 90 channels. The linear aggregation 0.66 \u00b1 0.03 is a weaker comparator and beating it is not a paper win.",
+      "evidence_ids": [
+        "popt-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Pinned author extraction, saved-split and fine-tuning routes exist; the original BrainBERT/PopT checkpoint-feature identities, ranked channels, saved row memberships and numeric rerun are not authenticated.",
+      "evidence_ids": [
+        "popt-readme",
+        "popt-splits"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Choose a meaningful ROC-AUC improvement only after exact author calibration and examination of participant-level variability; a gap over the weak linear comparator is not the required effect.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired candidate-versus-author analysis on the complete seven-subject panel with repeated seed effects separated and within-recording temporal dependence plus shared-movie dependence retained. Exact joint uncertainty rule is unresolved.",
+      "independent_unit": "Subject with recording-time clustering; shared movie stimulus is a dependence factor, not seven independent movie replications.",
+      "rationale": "Published subject SEM is descriptive. Resampling individual words as independent or counting overlapping neural contexts would overstate precision.",
+      "evidence_ids": [
+        "popt-paper",
+        "popt-input"
+      ]
+    },
+    "paper_win_requires": [
+      "Bind the original 90-electrode Table 1 Volume task for all seven participants, including source random-row partitions, labels, BrainBERT features and pretrained access.",
+      "Exceed 0.87 published subject-mean ROC-AUC and a calibrated matched pretrained-PopT rerun by a justified predeclared effect with uncertainty.",
+      "Freeze candidate after original training/validation development and before complete original test scoring.",
+      "Report new chronological/support-disjoint splits, fewer electrodes, alternate tasks or narrowed participants as extensions; none establishes Table 1 victory.",
+      "Retain the Figure 3 Volume analysis at all original 1, 10, 20, 30, 40 and 50 electrode counts and its four source comparator curves; recover numerical curves and predeclare how count effects constrain the claim. The 90-electrode primary does not license omitting registered electrode-count effects."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The source-paper comparison is distinct from current SOTA; no current-SOTA search or claim is admitted by this contract.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After historical binding, use the original training/validation rows for candidate development; train-only channel ranking must be reconciled with the historical recipe rather than silently changed.",
+    "candidate_freeze": "Freeze candidate, feature/checkpoint provenance, all seven word rosters/splits, 90-channel membership/order, class mapping, training seeds and metric policy before test access.",
+    "final_evaluation": "Evaluate complete original test rows with author ROC-AUC per subject and source mean aggregation; retain shared-stimulus and temporal uncertainty. Report the complete original Figure 3 Volume electrode-count conditions and comparators alongside the 90-electrode primary.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The stronger-than-paper comparator is pretrained PopT+BrainBERT at 90 channels. Linear/deep concatenation baselines remain calibration controls; new support-disjoint evaluation is separately labeled extension. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Exact original row order, saved .8/.1/.1 memberships and ranked 90-channel membership/order are unauthenticated.",
+    "Native audio/brain alignment, quartile ties, class orientation and feature/checkpoint content identity require qualification.",
+    "Author pretrained-PopT rerun, compatible working evaluator, fixed episode budgets, meaningful effect and joint uncertainty remain absent.",
+    "Pretraining exposure includes downstream subjects; trial disjointness is not unseen-subject or unseen-movie evidence.",
+    "Original Figure 3 Volume curve values and ranked ensembles at 1/10/20/30/40/50 electrodes need recovery; no digitized plot ordinates are treated as a rerun."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain the prospective RMS evaluator and engineering controls. Its support-disjoint split, 1/10/50/90 nested grid and paired PopT-versus-linear gain are calibration/extension outputs. They are not reproduction or victory on Table 1\u2019s original 90-channel random-row evaluation."
+  }
+}

@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-FIND-ADD-006",
-  "source_id": "FIND-ADD-006",
   "track": "paper",
   "title": "Learning reshapes the hippocampal representation hierarchy",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Figure 4D binary context decoding conditional on actual position from speed-equalized CA1 population vectors, preserving the source learning-session support and comparison to its conditional decoder. It is an original paper endpoint; changes in hierarchy depth or curve fidelity are not decoding improvement.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Figure 4D binary context decoding conditional on actual position from speed-equalized CA1 population vectors, preserving the source learning-session support and comparison to its conditional decoder. It is an original paper endpoint; changes in hierarchy depth or curve fidelity are not decoding improvement.",
+    "Source-paper comparison for Figure 4D conditional context-decoding performance, pending source accuracy/error reconciliation: Paper Figure 4/Methods describe a normalized absolute label difference while calling it accuracy; code uses exact-match accuracy_score in the global route. For binary context, accuracy and one-minus-normalized-error can coincide, but the source scoring transformation must be explicitly reconciled and the conditional zero-return array cannot be used as a score."
+  ],
+  "success_criteria": [
+    "Recover exact Figure 4D numeric score, metric transformation and original aggregation.",
+    "Bind the source speed-equalized inputs, all 25 sessions, decoder configuration and original 100-repeat stratified 70/30 plus within-partition-bootstrap protocol. Recovered or regenerated draws are admissible when candidate and author share them and seed/environment provenance plus a justified calibration tolerance are declared in advance.",
+    "Resolve the author conditional-score output defect by independently verifying prediction-derived scoring, without treating zeros as the baseline to beat.",
+    "Freeze candidate and comparison rules before final evaluation; show meaningful performance gain under valid uncertainty on the identical original endpoint.",
+    "Keep hierarchy-curve reconstruction, alternate clustering, larger context separation and new held-animal/day/trial decoding as calibration or extensions, not paper wins.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-ADD-006",
   "canonical_position_one_based": 53,
   "paper_identity": {
     "url": "https://doi.org/10.1073/pnas.2417025122",
     "publication_year": 2025,
     "venue": "PNAS"
   },
-  "primary_outputs": [
-    "Learning-related hierarchy of CA1 population representations and variance-versus-depth curves.",
-    "Speed-adjusted spatial/context coding and conditional decoding across learning and probe sessions."
-  ],
   "input_assets": {
     "routes": [
       "https://research-explorer.ista.ac.at/record/18991"
@@ -116,107 +127,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": {
-        "data": "CC BY-NC-ND 4.0 per repository; redistribution/derivative distribution needs license review.",
-        "code_license_observed_excerpt": "Creative Commons Legal Code\n\nCC0 1.0 Universal\n\n    CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE\n    LEGAL SERVICES. DISTRIBUTION OF THIS DOCUMENT DOES NOT C"
-      },
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Learning-related hierarchy of CA1 population representations and variance-versus-depth curves.",
-        "Speed-adjusted spatial/context coding and conditional decoding across learning and probe sessions."
-      ],
-      "assessment": "CA1 hierarchy/variance-depth and speed-adjusted context/spatial analyses are supported; missing initial sleep session excludes corresponding sleep claims.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Clock conversion must preserve20kHz versus24kHz distinction; neuron count/drift/speed must be matched. New clusters can change representation rather than improve the same metric.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Five rats across five days; hold out animals or days as appropriate.",
-        "Do not confuse 20 kHz spike timestamps and 24 kHz session boundaries.",
-        "One initial sleep session is missing; not all paper scripts are promised by the README. Scope excludes sleep analyses requiring that session.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Proposed: Test robustness to neuron count, session drift and alternative clustering with animal-level uncertainty."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Animal/day-grouped hierarchy stability and alternatives, with held-out clustering/decoder choices. Five rats constrain animal-level uncertainty.",
-      "retained_roster_proposal": [
-        "Proposed: Test robustness to neuron count, session drift and alternative clustering with animal-level uncertainty."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": {
-      "estimate": "Approximately 769 MB release; CPU workstation, hours to days for GLM/decoder resampling, estimated.",
-      "basis": "Static source and archive metadata inspection; estimate, not measured."
-    },
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": {
-      "estimate": "Approximately 769 MB release; CPU workstation, hours to days for GLM/decoder resampling, estimated.",
-      "basis": "Static source and archive metadata inspection; estimate, not measured."
-    }
-  },
-  "holds": {
-    "task_specific": [
-      "Five rats across five days; hold out animals or days as appropriate.",
-      "Do not confuse 20 kHz spike timestamps and 24 kHz session boundaries.",
-      "One initial sleep session is missing; not all paper scripts are promised by the README. Scope excludes sleep analyses requiring that session.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Freeze the awake-session figure/animal subset, validate the three-clock conversion and session-shift mapping, then define train-only hierarchy fitting and matched speed/neuron controls.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Freeze the awake-session figure/animal subset, validate the three-clock conversion and session-shift mapping, then define train-only hierarchy fitting and matched speed/neuron controls.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -257,11 +167,91 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_resource_statement": {
+      "estimate": "Approximately 769 MB release; CPU workstation, hours to days for GLM/decoder resampling, estimated.",
+      "basis": "Static source and archive metadata inspection; estimate, not measured."
+    },
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": {
+      "estimate": "Approximately 769 MB release; CPU workstation, hours to days for GLM/decoder resampling, estimated.",
+      "basis": "Static source and archive metadata inspection; estimate, not measured."
+    }
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-ADD-006/improvement.v1.json",
+      "bytes": 12164,
+      "sha256": "7ccfb8fd4c248ba93630dd0db600301c7b83998808940a8de06d2d05d4715230"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-ADD-006/historical/task.pre-improvement.v1.json",
+        "bytes": 13987,
+        "sha256": "b686265f0b9d9812befdb8a49afb339597d0c98070881b443a3e1946b2af80e6"
+      },
+      "implementation_ids": [
+        "authoring-next-two-unbuilt-papers-20261103",
+        "benchmarks-neuroscience-paper-find-add-006",
+        "components-hierarchy25a-original"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-FIND-ADD-006/implementations/registered-runtime/manifest.json",
+        "bytes": 11484,
+        "sha256": "8de7aa653dad69e34bebf52a3611e10f2f2d550a18971cc57c0400e02ee44d3b"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Not admitted pending baseline, metric and executable source-protocol recovery. Once recovered, use training-only internal validation within the historical or documented regenerated source partitions for iterative decoder choices.",
+    "candidate_freeze": "Freeze the candidate, speed-equalization route, original resampling protocol, paired draw ledger and seeds, metric direction, aggregate, calibration tolerance and budget before protected final predictions.",
+    "final_evaluation": "Complete original Figure 4D context-conditional-on-position comparison on all original support and the original stochastic protocol. Paired regenerated draws with recorded provenance and predeclared calibration tolerance retain the same task; altered animal/day/trial split schemes are extensions.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Numeric paper baseline and independently scored source-conformant author rerun remain distinct. Historical random identities are not mandatory if the original stochastic protocol is rerun transparently, paired across candidate/author and calibrated within a predeclared justified tolerance. Matching Ward curves or beating an unassigned zero return is not improvement."
+  },
+  "blocking_issues": [
+    "Exact numeric Figure 4D baseline and aggregate provenance are missing.",
+    "Paper accuracy/error wording and author score implementation require reconciliation.",
+    "The conditional routine returns an unassigned zero accuracy array; prediction-derived score route requires verification.",
+    "Exact speed-equalization configuration and executable source-conformant rerun comparison remain unresolved; documented paired regenerated draws may replace unrecoverable historical identities while preserving the original protocol and population.",
+    "Task-specific meaningful effect, rat-level uncertainty, concrete budgets and the conditional-decoder evaluator are not admitted."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact numeric Figure 4D baseline and aggregate provenance are missing.",
+      "Paper accuracy/error wording and author score implementation require reconciliation.",
+      "The conditional routine returns an unassigned zero accuracy array; prediction-derived score route requires verification.",
+      "Exact speed-equalization configuration and executable source-conformant rerun comparison remain unresolved; documented paired regenerated draws may replace unrecoverable historical identities while preserving the original protocol and population.",
+      "Task-specific meaningful effect, rat-level uncertainty, concrete budgets and the conditional-decoder evaluator are not admitted."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The paper contains an ordered conditional decoder in Figure 4D, so it is not intrinsically ineligible. However its exact numeric baseline, metric convention and executable source-conformant resampling/speed-equalized input route are unresolved; the existing implementation only reconstructs descriptive Ward-tree curves. Recovery of historical random draw identities is not required for an otherwise documented calibrated rerun of the original protocol. Exact numeric Figure 4D baseline and aggregate provenance are missing. Paper accuracy/error wording and author score implementation require reconciliation. The conditional routine returns an unassigned zero accuracy array; prediction-derived score route requires verification. Exact speed-equalization configuration and executable source-conformant rerun comparison remain unresolved; documented paired regenerated draws may replace unrecoverable historical identities while preserving the original protocol and population. Task-specific meaningful effect, rat-level uncertainty, concrete budgets and the conditional-decoder evaluator are not admitted.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-ADD-006/historical/task.pre-improvement.v1.json",
+      "bytes": 13987,
+      "sha256": "b686265f0b9d9812befdb8a49afb339597d0c98070881b443a3e1946b2af80e6"
+    },
+    "notes": "Preserve hierarchy-programme and original-hierarchy unchanged. Their complete-25-session normalized-curve error and cophenetic discrepancy assess reconstruction under explicit local source conventions, including nonroot normalization; they do not score Figure 4 decoding or stronger-than-paper performance."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

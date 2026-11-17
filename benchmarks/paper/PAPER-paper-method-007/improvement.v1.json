@@ -1,0 +1,180 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-007",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The paper reports an ordered waveform-only tracking validation endpoint and its numeric result. The existing five-mouse/two-day demo and v2 native runtime are a reduced, differently defined comparison, not the original 16-mouse cross-day endpoint; full original data, paper-era code equivalence and scientific admission remain incomplete.",
+  "source_paper": {
+    "title": "Tracking neurons across days with high-density probes",
+    "url": "https://www.nature.com/articles/s41592-024-02440-1"
+  },
+  "evidence": [
+    {
+      "id": "um-paper",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11978519/fullTextXML",
+      "locator": "Results: Validation with stable functional properties, Fig.4; Methods: ROC and AUC; Data availability",
+      "supports": "Original cross-day ISI AUC, animal-level aggregation, eligible recordings and limited public data coverage."
+    },
+    {
+      "id": "um-data",
+      "kind": "author_data",
+      "url": "https://api.figshare.com/v2/articles/24305758/versions/1",
+      "locator": "description; version 1 file metadata",
+      "supports": "The demo comprises IDs1-5 and two consecutive recordings per mouse; this is not the full 16-mouse result population."
+    },
+    {
+      "id": "um-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/EnnyvanBeest/UnitMatch/9320f19b25ee5b06e469517ea94537e8f837d048/README.md",
+      "locator": "Usage; Output; Modules",
+      "supports": "Waveform inputs, unit identity metadata, independent functional validation and author pipeline route."
+    },
+    {
+      "id": "um-functional",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/EnnyvanBeest/UnitMatch/9320f19b25ee5b06e469517ea94537e8f837d048/MATLAB/FunctionalScores/ComputeFunctionalScores.m",
+      "locator": "functional score preparation and ISI calculations",
+      "supports": "Current author functional validation implementation; does not establish paper-era equivalence."
+    },
+    {
+      "id": "um-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-007/implementations/native-paired/installed/native-paired/README.md",
+      "locator": "Scope; Callable sequence; Functional independence",
+      "supports": "Registered runtime explicitly calls the five-mouse endpoint a functional proxy and uses official v2.0 with a benchmark-specific decoder."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Track putative identical neurons across recordings from spike waveforms; evaluate cross-day match versus nonmatch separation using independent ISI fingerprints. AUC measures functional consistency, not ground-truth identity accuracy.",
+      "evidence_ids": [
+        "um-paper",
+        "um-code"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original chronic Neuropixels study recordings supporting Fig. 4. Public demo24305758v1 covers IDs1-5; full datasets for IDs1,7,8 are linked in24411841v1, and remaining full recordings are available only on request. The complete Fig. 4 input release is not recovered.",
+      "evidence_ids": [
+        "um-paper",
+        "um-data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The published cross-day ISI summary uses16 mice. Exact eligible session/location/pair membership must be restored; five mice with two consecutive recordings cannot replace this population.",
+      "evidence_ids": [
+        "um-paper",
+        "um-data"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Within-recording split-half waveforms calibrate matching; functional validation evaluates original across-day recording pairs. There is no original leave-one-mouse-out improvement split. A new held-mouse fold remains an extension.",
+      "evidence_ids": [
+        "um-paper",
+        "um-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Average waveforms at recording sites, position and original unit/session metadata. Functional ISI, population coupling and sensory responses are evaluation information, excluded from matching and candidate selection on final recordings.",
+      "evidence_ids": [
+        "um-paper",
+        "um-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve independently spike-sorted units, author waveform processing/drift correction, good-unit criteria and the paper-era default matching algorithm. Current pinned functional code and the registered v2/greedy decoder have not been reconciled to the publication version.",
+      "evidence_ids": [
+        "um-paper",
+        "um-functional",
+        "um-registration"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "ROC AUC separating ISI-histogram correlations of matches from nonmatches; use original exclusions and require at least 20 matched units per eligible recording comparison. Within-recording matched units are excluded.",
+      "evidence_ids": [
+        "um-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Retain original recording/location summaries within each mouse and then the16-mouse mean with animal-level uncertainty. Match counts, eligible support and pair/day coverage must be retained; neurons and directed pair entries are not independent replicates.",
+      "evidence_ids": [
+        "um-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Fig. 4 cross-day ISI-fingerprint AUC, full 16-mouse population",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "description": "Published mean 0.88 with SEM 0.01 across 16 mice; the within-day 0.94 and example-pair 0.95 are different conditions. This number is not the baseline for the five-mouse demo.",
+      "evidence_ids": [
+        "um-paper"
+      ],
+      "value": 0.88
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "No original-cohort author rerun is established. Recover the paper-era source, full data and original eligible pair roster before comparing; a v2 five-mouse rerun is separate calibration.",
+      "evidence_ids": [
+        "um-paper",
+        "um-code",
+        "um-registration"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A task-specific AUC gain must exceed rerun variability while preserving match yield, all original support and validation independence. No justified magnitude has yet been recovered; strict improvement alone is insufficient.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired animal-level comparison on original per-mouse endpoints, retaining nested recording/location/day structure; choose interval and decision rule after original variability is recovered, before candidate selection.",
+      "independent_unit": "mouse; dependent recordings, units and directed pairs remain grouped",
+      "rationale": "The paper performs statistics across animals. Source SEM is not candidate-versus-baseline uncertainty; functional stability is also a biological assumption.",
+      "evidence_ids": [
+        "um-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Restore and evaluate every original eligible16-mouse recording/location/day comparison using paper-equivalent matching and fingerprint construction.",
+      "Reproduce 0.88 under the original aggregation with a declared calibration tolerance; compare against both the published result and a competent author rerun.",
+      "Demonstrate the predeclared meaningful AUC gain with animal-level uncertainty while preserving matched-unit yield and eligible support; do not improve AUC by selecting fewer easy matches.",
+      "Do not count a five-mouse demo gain, new held-mouse split, changed code version, human-curation agreement or increased match count alone as surpassing the paper."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The source-paper comparison is separate from present-day SOTA; no current leaderboard or later-method superiority is asserted.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After source recovery, iterate waveform-only algorithms on permitted development recordings with final functional targets inaccessible. Freeze any use of development functional information explicitly; it cannot be assumed equivalent to source unsupervised calibration.",
+    "candidate_freeze": "Seal waveform feature definitions, matching policy, preprocessing, source revision, exclusions and all selection choices before final original-cohort functional evaluation.",
+    "final_evaluation": "Run candidate and paper-equivalent native reference on identical full original recordings; keep the legacy five-mouse paired report separately labeled. Compare paired animal endpoints only after full support and provenance admission.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published16-mouse AUC, paper-era author rerun and current v2 demo results are separate records; runtime declaration envelopes are not an approved same-task improvement budget."
+  },
+  "blocking_issues": [
+    "Full original 16-mouse Fig. 4 recordings and eligible session/location/pair roster are not available in the five-mouse release.",
+    "Paper-era default source and native result equivalence are not established for the selected v2 runtime.",
+    "The registered greedy two-day probability decoder, finite-value rules and yield guard are benchmark conventions requiring original-paper parity review.",
+    "Meaningful AUC effect, uncertainty decision, candidate access and concrete cumulative resource budget remain unfrozen."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the original native-paired source, all five-mouse materials and existing graders as calibration/extension evidence. Its strict equal-mouse proxy gain cannot admit a source-paper win."
+  }
+}

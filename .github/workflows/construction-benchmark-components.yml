@@ -20,6 +20,8 @@ env:
   OMP_NUM_THREADS: '1'
   MKL_NUM_THREADS: '1'
 
+# Source identity checks retain original PAPER task bytes as historical calibration evidence.
+# Same-task improvement success is defined by the current task and its improvement contract.
 jobs:
   construction-source-identities:
     runs-on: ubuntu-24.04
@@ -46,8 +48,8 @@ jobs:
           rows = [
               {
                   "path": "benchmarks/integrity/current-closures/construction-cardiac-admission/SOURCE_BINDINGS.json",
-                  "bytes": 4037,
-                  "sha256": "bc8655590abf6e577579464af43ec8125344f6a28230a6713db9ca389ccce7f6"
+                  "bytes": 4924,
+                  "sha256": "e4772aa7cf85bd4d7c2e0cdad22b2ed9a79f32c69ff43beb3a79094ff4ff1b38"
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-dosei-v2/SOURCE_BINDINGS.json",
@@ -61,8 +63,8 @@ jobs:
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-isttc-endpoints/SOURCE_PINS.json",
-                  "bytes": 4885,
-                  "sha256": "ff90e035e920b254a05a98427a7aaa52ce0150163c409e076bee3f4060c14700"
+                  "bytes": 5804,
+                  "sha256": "d3b40e56968d88180ca3d083fab7907c6c3c028a32109155b4a752b5f52841ea"
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-seizure-events/SOURCE_PINS.json",
@@ -221,13 +223,13 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/full-cohort-admission-v1/README.md",
-                  "bytes": 10649,
-                  "sha256": "50484b817debb48c612f8dbeb81759fa433ccd9021ae5888cc3410693b79b74c"
+                  "bytes": 10679,
+                  "sha256": "91aaac7d388960873a16ebdf04873a4a53ce4c215413f1ae8703ab1d0234b2c6"
               },
               {
                   "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/full-cohort-admission-v1/admission.py",
-                  "bytes": 22735,
-                  "sha256": "82d048f99da42230508ed3ca8b042fbcce0e0a67921fd028b3ba5434956d653d"
+                  "bytes": 22765,
+                  "sha256": "de4e8026523b10f22bbbd9c105d540ffaac34a0430cd4cee29b5a3f6b1d39275"
               },
               {
                   "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/full-cohort-admission-v1/test_admission.py",
@@ -255,7 +257,7 @@ jobs:
                   "sha256": "3d40ba1ff118059cf6df88e0a8bd29688486a1b6b57d3cfbcdf597cae04696b9"
               },
               {
-                  "path": "benchmarks/paper/PAPER-ROOT-ADD-016/task.json",
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-016/historical/task.pre-improvement.v1.json",
                   "bytes": 19324,
                   "sha256": "bed3f79d97c1ded8380e92e1ef6f6387d8910a37c890c8d2d4ed9d7477e8ab04"
               },
@@ -335,7 +337,7 @@ jobs:
                   "sha256": "fb74906c301ab11a36ab65688fd94eb75e6efcbfc1e2b9a4fd01177700c346bc"
               },
               {
-                  "path": "benchmarks/paper/PAPER-paper-method-add-004/task.json",
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/historical/task.pre-improvement.v1.json",
                   "bytes": 30897,
                   "sha256": "ae45457700ada5d9a9f578ad4e1eb9bf5825e94850f52753d9b2f9f0d07b0a54"
               },
@@ -373,7 +375,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1"
           ]
           assert len(rows) == 64 > 0
-          assert sum(row['bytes'] for row in rows) == 864989 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 866855 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -416,7 +418,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 864989,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 866855,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -440,13 +442,13 @@ jobs:
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-meg-nested/SOURCE_BINDINGS.json",
-                  "bytes": 5362,
-                  "sha256": "66bece09722e8be166a94399cc7e3dec7f697f8522cf3234c1649cad1cdb0e11"
+                  "bytes": 6281,
+                  "sha256": "c9e721c6c286538c103879cfb331f5f5106bf9c9118b112b6f405cbe554255e9"
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-typing-v1/SOURCE_BINDINGS.json",
-                  "bytes": 2669,
-                  "sha256": "ea934cad864d239141e76b7fb6efe6d70a08f48a667440ffd7c3d01e7be0ff49"
+                  "bytes": 3558,
+                  "sha256": "8729cabc51e5e373b5a64014455cad6614d77deddd6fa4b0d547922b11047a55"
               },
               {
                   "path": "benchmarks/neural/NEURAL-025/docs/train-only-decoding-v1.md",
@@ -509,7 +511,7 @@ jobs:
                   "sha256": "36eafec00f096a5ef22c4e271e61429901369989e72248543643f28913c9e0b6"
               },
               {
-                  "path": "benchmarks/paper/PAPER-ROOT-ADD-002/task.json",
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-002/historical/task.pre-improvement.v1.json",
                   "bytes": 111905,
                   "sha256": "8ab32cd773f3ac22132a9ffe33ad8325594af7af311a70b0040ab068d9f58bf9"
               },
@@ -569,7 +571,7 @@ jobs:
                   "sha256": "0acaa103779e64dde48260780f004fb7f10bdf13a337a29d3c7ad3cb5931d169"
               },
               {
-                  "path": "benchmarks/paper/PAPER-paper-method-add-010/task.json",
+                  "path": "benchmarks/paper/PAPER-paper-method-add-010/historical/task.pre-improvement.v1.json",
                   "bytes": 76435,
                   "sha256": "4a30ed061c0a4dcafbf7a67f24c67df98cfffda9d55cd6a6dd3fb88819e77062"
               },
@@ -595,7 +597,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1"
           ]
           assert len(rows) == 31 > 0
-          assert sum(row['bytes'] for row in rows) == 668191 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 669999 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -638,7 +640,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 668191,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 669999,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY

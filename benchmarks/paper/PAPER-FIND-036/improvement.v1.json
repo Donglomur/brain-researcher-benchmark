@@ -1,0 +1,182 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-036",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The original Figure 6B endpoint has a verified ordered metric, reported 72.71% baseline and author-code route. Complete source cohort/fold admission, a rerun baseline, meaningful effect, uncertainty and fixed execution budgets are still missing, so this is a design rather than a ready improvement task.",
+  "source_paper": {
+    "title": "Population analyses reveal heterogenous encoding in the medial prefrontal cortex during naturalistic foraging",
+    "url": "https://elifesciences.org/articles/93994"
+  },
+  "evidence": [
+    {
+      "id": "foraging-paper",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/93994",
+      "locator": "Figure 6A,B and Results: Population activities in the E-zone encode success and failure of avoidance; Methods: Head-withdrawal-type classification",
+      "supports": "Reports avoidance-versus-escape balanced accuracy of 72.71%, shuffled 51.62%, across 40 sessions, using peri-withdrawal neural activity and stratified fivefold evaluation."
+    },
+    {
+      "id": "foraging-classifier",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/knowblesse/Lobster/2b74d2c2f8d6574b6a1b75c0feb99af5e18bb678/PythonCode/EventClassification/HierarchicalEventClassifier.py",
+      "locator": "EventClassifier.fitBNB; X/y loading and clipping; HW label selection; Batch_EventClassifier",
+      "supports": "Defines seed 622 stratified fivefold splits, BernoulliNB uniform priors, pooled out-of-fold probabilities, 0.5 threshold and mean session accuracy. Code uses an unseeded generator for shuffled labels."
+    },
+    {
+      "id": "foraging-features",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/knowblesse/Lobster/2b74d2c2f8d6574b6a1b75c0feb99af5e18bb678/MatlabCode/ML/generateEventClassifierDataset.m",
+      "locator": "Generate Gaussian Kernel; normalization; Divide by EVENT Marker; Separate Avoid and Escape",
+      "supports": "Defines whole-session normalization, per-event smoothing, event labels and class-block row serialization; preprocessing is transductive with respect to later folds."
+    },
+    {
+      "id": "foraging-window",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/knowblesse/Lobster/2b74d2c2f8d6574b6a1b75c0feb99af5e18bb678/MatlabCode/ML/Batch_generateEventClassifierDataset.m",
+      "locator": "Constants and generateEventClassifierDataset invocation",
+      "supports": "Freezes [-1000,+1000] ms, 50 ms bins, kernel-size 1000 and standard deviation 100; this is 40 bins per unit."
+    },
+    {
+      "id": "foraging-data",
+      "kind": "author_data",
+      "url": "https://datadryad.org/dataset/doi:10.5061/dryad.v9s4mw78c",
+      "locator": "January 14 2026 release; README: EventClassificationData_4C",
+      "supports": "Original classifier archive contains per-session MATLAB X/y matrices; labels 3/4 encode avoidance/escape head withdrawals. Inventory lists the 15.09 MB EventClassificationData_4C.zip."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Figure 6B within-recording discrimination of avoidance head withdrawal versus escape head withdrawal from the same two-second peri-event population activity. This is retrospective peri-event decoding, not the separate early-prediction time-course in Figure 6C.",
+      "evidence_ids": [
+        "foraging-paper",
+        "foraging-window"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Dryad doi:10.5061/dryad.v9s4mw78c January 14 2026 release, EventClassificationData_4C.zip, preserving its processed per-session X/y representation. Complete archive identities and contents still require admission.",
+      "evidence_ids": [
+        "foraging-data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The published endpoint contains all 40 recording sessions. An authenticated archive-member roster and complete original rat/session identity mapping have not been read in this audit, so the exact 40-session inclusion remains an execution gate.",
+      "evidence_ids": [
+        "foraging-paper",
+        "foraging-data"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Author code specifies within-session StratifiedKFold(5, shuffle=True, random_state=622), each original HW row held out once. Preserve seed 622, source row ordering and the original stratification protocol. Authenticate inputs and record package/version provenance when regenerating folds; a documented source-conformant rerun with paired candidate-author folds and predeclared justified calibration tolerance does not require an archived historical membership file. Animal/episode/time-based holdouts change the task.",
+      "evidence_ids": [
+        "foraging-classifier"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "All released X columns and all label-3/4 rows in every original session; training labels map 3=avoidance and 4=escape. Test labels remain protected during candidate execution. Each neuron contributes all 40 original bins.",
+      "evidence_ids": [
+        "foraging-classifier",
+        "foraging-data",
+        "foraging-window"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Preserve source whole-session standardized, Gaussian-smoothed peri-event features and clipping to [-5,5]; BernoulliNB binarizes at zero. Whole-session normalization and symmetric smoothing remain disclosed; training-only preprocessing cannot undo this original transductive representation.",
+      "evidence_ids": [
+        "foraging-features",
+        "foraging-window",
+        "foraging-classifier"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Balanced accuracy per session = 0.5*(avoidance recall + escape recall), after pooling all five out-of-fold predictions and thresholding escape probability at >=0.5. Do not average fold accuracies or substitute probability reconstruction error.",
+      "evidence_ids": [
+        "foraging-classifier",
+        "foraging-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Arithmetic mean of complete session balanced accuracies across all 40 original sessions; the author batch routine computes the mean of its per-session HW accuracies. Session weighting and animal-level uncertainty are distinct.",
+      "evidence_ids": [
+        "foraging-classifier",
+        "foraging-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Equal-session mean Figure 6B avoidance/escape balanced accuracy on original fivefold OOF predictions",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.7271,
+      "description": "Published real-label Figure 6B result is 72.71% = 0.7271. The 51.62% shuffled value is a separate historical control with unseeded randomness, not the primary performance target.",
+      "evidence_ids": [
+        "foraging-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Source-authorized route is the pinned EventClassifier HW branch with all 40 sessions and source-specified fivefold stratification/seed 622. Regenerate folds from authenticated source rows with recorded environment provenance and shared candidate-author membership; calibrate the rerun to the published result under a predeclared justified tolerance. No numeric author rerun is established here; the local probability reference remains calibration.",
+      "evidence_ids": [
+        "foraging-classifier"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful balanced-accuracy gain must be justified from original cohort variability and the behavioral interpretation before final testing. No arbitrary percentage-point margin is adopted.",
+      "evidence_ids": [
+        "foraging-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired candidate-versus-author session differences and an uncertainty procedure that accounts for repeated sessions from the same rat; retain the original equal-session point estimate.",
+      "independent_unit": "Rat for biological replication; sessions are nested observations.",
+      "rationale": "The reported t(39) does not certify 40 independent animals. Without the complete rat/session ledger, neither a cluster-based interval nor a population claim is admitted.",
+      "evidence_ids": [
+        "foraging-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Authenticate all 40 original sessions, source preprocessing and source-protocol folds regenerated with random_state=622 or recovered historical membership; no easier subset, changed time window or altered population.",
+      "Establish a source-conformant author BernoulliNB rerun, document seed 622 and environment/fold provenance, and reconcile it with published 0.7271 under a predeclared justified calibration tolerance before judging candidate performance.",
+      "Exceed the source result on the original balanced-accuracy endpoint with predeclared meaningful effect and valid paired uncertainty; a fit-to-reference score is not success.",
+      "Freeze the candidate before final scoring on the same source-protocol folds as the author baseline, protect labels and prevent class-block row order or original indices from leaking the target.",
+      "Treat nested logistic controls as separate competence checks. A documented rerun of the source protocol retains the same task; whole-animal, episode, time-based or otherwise changed split schemes are extensions."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was verified; source-paper results and any future author rerun remain separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Once admitted, let candidates iterate using training data and internal validation confined to each original outer training partition; final outer-fold labels and other folds' fitted state remain unavailable.",
+    "candidate_freeze": "Commit code, feature handling, hyperparameter-selection rule, probability threshold, all budgets, calibration tolerance and uncertainty rule before source-protocol outer-test feedback. Persist regenerated or recovered fold identities with source seed 622 and environment provenance.",
+    "final_evaluation": "Evaluate every original HW row once out of fold and all 40 session scores against the source-conformant BernoulliNB rerun on identical source-seed-622 folds and the separately reported published 0.7271. Calibrate using the predeclared tolerance; report other comparator results separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Paper score, source-conformant author BNB rerun, unseeded historical shuffle, any documented newly seeded shuffle and local logistic reference are separately named. Regenerating source-protocol folds with seed 622 is admissible with paired membership and calibrated provenance; a changed split scheme cannot validate the same-task claim."
+  },
+  "blocking_issues": [
+    "Authenticate the complete 40-member scientific archive and rat/session mapping without selecting successful sessions.",
+    "Authenticate source rows and validate a source-conformant seed-622 fold/environment reconstruction; run and independently audit the author baseline under a predeclared justified calibration tolerance. Missing archived historical memberships alone are not disqualifying.",
+    "Specify a task-justified minimum effect and uncertainty rule using valid independent units.",
+    "Set concrete access/compute budgets and validate the protected complete-cohort evaluator; existing design/resource estimates are not operational admission."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the complete foraging-programme implementation. Native out-of-fold probability fidelity and seeded-control reconstruction remain calibration only. The existing separately proposed hidden-label decoder design does not yet establish an empirical paper improvement or operational readiness."
+  }
+}

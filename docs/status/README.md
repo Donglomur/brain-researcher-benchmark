@@ -9,7 +9,7 @@ not a leaderboard of completed scientific evaluations.
 | Original specifications | 200 | 100 paper and 100 neural |
 | Expansion drafts | 34 | 16 paper and 18 neural |
 | Registered task entries | 234 | 116 paper and 118 neural; explicit specification aliases remain visible |
-| Implementation artifact records | 364 | Task and shared source records, not runnable-task counts |
+| Implementation artifact records | 372 | Task and shared source records, not runnable-task counts |
 | Tasks with owned implementation source | 234 | Source ownership does not establish complete task execution |
 | Tasks without owned implementation source | 0 | Every registered task has at least one scoped source package |
 | Qualified across complete scientific contracts | Unknown | No complete verified total has been established |
@@ -19,6 +19,20 @@ locations and task relationships. Its source-base counters also retain 95 histor
 runtime declarations and 73 component-lineage entries. Those are different,
 overlapping inventories and must not be added to the task count or treated as
 current execution qualification.
+
+All **116 paper registrations** now bind versioned source-grounded improvement
+contracts. Active paper success requires surpassing an explicitly named original
+source-paper endpoint or complete panel on the same task. Historical reproduction
+graders and pilot attempts are calibration only. The
+[live paper catalog](../../benchmarks/catalog/paper.md) separates source-grounded
+designs, unresolved source comparisons, ineligible papers and improvement-ready
+tasks; coverage is not readiness. The current audit establishes **zero
+improvement-ready tasks** and no new empirical paper wins.
+
+The [same-task improvement guide](../science/paper-improvement/README.md) explains
+the executable contract, conditional comparison admission, preserved definitions
+and calibration dispatch. The [next-build shortlist](../science/paper-improvement/next-builds.md)
+identifies concrete original endpoints and the remaining native-baseline work.
 
 ## Current construction work
 
@@ -87,7 +101,7 @@ or qualification follows from a directory move.
 ## Evidence and limits
 
 The [repository checker](../development/source-integrity.md) covers the declared
-ownership and layout of 364 artifact records; the separate source-integrity checker
+ownership and layout of 372 artifact records; the separate source-integrity checker
 verifies 222 files against recorded pins in four enrolled bundles. These are software/source
 coverage counts. They are not completed scientific evaluations.
 

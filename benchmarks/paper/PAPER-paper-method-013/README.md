@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-method-013`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Design ready
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** design\_ready. The original ten-video experimental task, ordered segmentation metric and numeric source baseline are recoverable. Native assembly, checkpoint/reference equivalence, baseline replay and a protected improvement episode remain incomplete. The existing post-assembly evaluator is useful infrastructure but does not establish a ready same-task comparison.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 30161 bytes; SHA-256 `10ddbdc9848384c6c39c42c55e13e78b4720e2b8649f59c5bddb9f8c03842a12`.
+- Specification identity: 29956 bytes; SHA-256 `c3c8562f67792ae1a173fe74fc72640b3d8583eb4611a7385f42577567f9fe2f`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Post-assembly mask and trace evaluation across ten fixed recordings using strict IoU greater than 0.5 segmentation metrics, common-detected-neuron trace correlations and paired runtime summaries, plus a tile geometry planner. Native frame/crop mapping, patch assembly, checkpoint/reference identity, donor/tuning partitions, rights and operational protected-reference isolation remain held. Scientific qualification is unknown.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Post-assembly mask and trace evaluation across ten fixed recordings using strict IoU greater than 0.5 segmentation metrics, common-detected-neuron trace correlations and paired runtime summaries, plus a tile geometry planner. Native frame/crop mapping, patch assembly, checkpoint/reference identity, donor/tuning partitions, rights and operational protected-reference isolation remain held. Scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

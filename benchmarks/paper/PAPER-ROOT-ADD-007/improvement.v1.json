@@ -1,0 +1,187 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-007",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Source-native rebinding identifies an ordered original task: Bayesian position decoding evaluated by Fig. 1D RMSE across all animals/sessions and original arm conditions. The exact numerical source baseline, evaluation identities, split and reduction are not recovered, so the task is not admitted. Descriptive sequence/replay reconstruction remains calibration.",
+  "source_paper": {
+    "title": "Formation of task representations and replay in mouse medial prefrontal cortex",
+    "url": "https://elifesciences.org/articles/106981"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/106981",
+      "locator": "Figs. 4–6; Methods: Burst detection, Clustering sequences, Bayesian decoder, Position estimation",
+      "supports": "Defines biological sequence formation and replay, source burst/clustering procedure and distinct positional decoding analysis."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://doi.gin.g-node.org/10.12751/g-node.b8k1yn/",
+      "locator": "Description and References",
+      "supports": "Identifies the derived PFC neural/behavioral/mask data and separate raw-data deposit."
+    },
+    {
+      "id": "author_readme",
+      "kind": "author_code",
+      "url": "https://github.com/HamedShabani/PFC_sequence_analysis/blob/039228a3f1e079f5230fbb2bd794a714ab264b5c/README.md",
+      "locator": "Repository Structure: Read_and_cluster, Subsampling, Replay_analysis and Estimate_place_code_error notebooks",
+      "supports": "Documents clustering/replay analysis chain and the separate Figure 1 decoding-error notebook."
+    },
+    {
+      "id": "author_functions",
+      "kind": "author_code",
+      "url": "https://github.com/HamedShabani/PFC_sequence_analysis/blob/039228a3f1e079f5230fbb2bd794a714ab264b5c/mtools.py",
+      "locator": "rankseq, shuffle, templates, check_template and allmot",
+      "supports": "Sequence similarity, null calibration and template construction are source analysis operations, not ground-truth replay accuracy."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-007/docs/initial-evaluator-v1.md",
+      "locator": "Computations and prospective policies; Separate Bayesian trajectory component",
+      "supports": "The local recurrence contrast differs from source spatial replay; native conversion, rate maps and trajectory parity remain held."
+    },
+    {
+      "id": "paper_decoding",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12999172/",
+      "locator": "Results: Task coding in mPFC; Fig. 1C–D and Fig. 5I; Methods: Bayesian decoder, Position estimation, Estimate position using burst data",
+      "supports": "An authentic original position-prediction RMSE route exists; Fig. 1D covers all animals/sessions, while Methods describe exclusion of bursts/neighbors or detected sequences from fitting and burst testing."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict true goal-arm-specific spatial position from the recorded neural population; preserve the complete source Fig. 1D direct and cross-decoding conditions.",
+      "evidence_ids": [
+        "paper_decoding"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original longitudinal mPFC calcium/behavior data are linked through G-Node DOI 10.12751/g-node.b8k1yn and raw-data Zenodo 10528244. Exact files carrying Fig. 1D activity, true positions and session masks require binding.",
+      "evidence_ids": [
+        "data",
+        "paper_decoding",
+        "author_readme"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Fig. 1D includes all animals and sessions in the source analysis. Four-mouse biological identity, session inclusion and inconsistent displayed/file IDs must be reconciled before freezing that roster.",
+      "evidence_ids": [
+        "paper_decoding",
+        "registration"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Source Methods exclude burst/neighbor or detected-sequence timepoints from rate-map fitting and assess burst signals. The exact Fig. 1D training/test timepoints and cross-arm mappings must be recovered rather than inferred from Fig. 5I or replaced with a new split.",
+      "evidence_ids": [
+        "paper_decoding",
+        "author_readme"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Population calcium-transient counts and training rate maps derived from source activity/behavior; true assessment positions are evaluator targets, not candidate inputs.",
+      "evidence_ids": [
+        "paper_decoding"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source transient detection, occupancy/rate-map construction, bin duration, position coordinate normalization and exclusion masks. Methods specify a Poisson decoder, but exact Fig. 1D notebook settings and native conversion remain unbound.",
+      "evidence_ids": [
+        "paper_decoding",
+        "author_readme",
+        "registration"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "RMSE is sqrt(mean((predicted_position-true_position)^2)); lower is better. Source position units/normalization, accepted bins and treatment of undefined predictions must be recovered for exact comparability.",
+      "evidence_ids": [
+        "paper_decoding"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain every source animal/session and left/right direct/cross-decoding stratum in Fig. 1D. The exact source reduction and a defensible joint superiority rule are not yet fixed; no favorable stratum or new macro mean may substitute.",
+      "evidence_ids": [
+        "paper_decoding"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Fig. 1D position-decoding RMSE, with source cohort/arm-condition aggregation pending",
+    "direction": "lower",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Fig. 1D reports RMSE distributions; the text describes about 0.2 for the Fig. 5I median and similarity to Fig. 1D. That approximation is not an exact Fig. 1D baseline.",
+      "evidence_ids": [
+        "paper_decoding"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Author README identifies Estimate_place_code_error.ipynb for Fig. 1; exact source inputs, native notebook settings and an independently verified rerun remain missing.",
+      "evidence_ids": [
+        "author_readme",
+        "registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful RMSE reduction must be justified in the original coordinate units and against source measurement variability; no numeric margin is invented.",
+      "evidence_ids": [
+        "paper_decoding"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "No superiority rule is admitted until original evaluation identities and paired baseline outputs are recovered.",
+      "independent_unit": "Mouse, with paired sessions/trials and timepoints nested within mouse.",
+      "rationale": "Four animals and temporal dependence preclude treating frames as independent replication; paired source baseline outputs and complete source strata are needed.",
+      "evidence_ids": [
+        "paper_decoding"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover exact source activity/behavior files, all-animal/all-session roster, arm mappings, original exclusions and Fig. 1D aggregation.",
+      "Compare a frozen candidate against the original author decoder under identical input access and split; retain every source direct/cross-decoding condition.",
+      "Recover an exact source result or reproduce the source-authorized decoder; an approximate plotted or textual RMSE is insufficient.",
+      "Predeclare meaningful effect, paired uncertainty and resource/access budgets before final scoring.",
+      "A new trial split or local template-recurrence score is an extension, not evidence of surpassing this source prediction task."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The source-paper comparator is distinct from an author rerun and from current SOTA; no current-SOTA comparison was verified.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After original binding, allow iteration only on source-authorized development observations; keep final position targets evaluator-owned.",
+    "candidate_freeze": "Freeze method, dependencies, preprocessing, tuning history and all source condition predictions before final evaluation.",
+    "final_evaluation": "Replay the exact Fig. 1D position task on every original evaluation stratum, compare paired RMSE with the recovered author baseline, and apply a predeclared joint rule.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Use the source Fig. 1D author decoder; preserve Fig. 5I as its distinct original burst analysis. Local recurrence and shuffled controls are not paper baselines."
+  },
+  "blocking_issues": [
+    "Exact Fig. 1D source numerical baseline and original reduction are unresolved.",
+    "Activity/behavior files, animal/session identities, coordinate units and split/exclusion mappings must be bound.",
+    "No validated original-task evaluator, author rerun, justified margin, uncertainty rule or concrete episode budgets are admitted."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the historical sequence-selectivity/replay reconstruction and prospective template-recurrence component as calibration/extension assets. Current source-native objective is position prediction; the local Poisson kernel has not yet been qualified as the original Fig. 1D evaluator."
+  }
+}

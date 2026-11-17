@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-FIND-REP-012`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Ineligible
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** ineligible. The registered core findings and bounded implementation estimate biological associations and intervention effects. The paper provides no ordered held-out performance endpoint for these findings. Stronger association, larger plasticity or smaller p value cannot mean surpassing the paper; a new cross-mouse prediction study would be a separate extension.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 29981 bytes; SHA-256 `1c300cf5110edfc298568b2ff2aeb1c84e7d1e394be9665dcb7931bb6b8ce071`.
+- Specification identity: 26779 bytes; SHA-256 `6f311e84beb927cddcbaaac3f9b354eff45093a98f2c3cf16827636f5b563b86`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -21,14 +32,14 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 ## Implementation artifacts
 
-- [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
-  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Its scoring bridge now resolves the exact pinned public facade and sibling numerical core. The fixed protected reference remains absent from this checkout, so the restored source dependency does not make this route independently runnable. This limit does not apply automatically to sibling implementations of the task.
-- [Rep012 portable](implementations/rep012-portable) — Task implementation source.
-  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
-- [Matched paper packets](implementations/matched-paper-packets) — Matched paper packets.
-  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
-- [Pooled associations](implementations/pooled-associations) — Pooled associations.
-  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Registered runtime](implementations/registered-runtime) — Calibration only.
+  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Its scoring bridge now resolves the exact pinned public facade and sibling numerical core. The fixed protected reference remains absent from this checkout, so the restored source dependency does not make this route independently runnable. This limit does not apply automatically to sibling implementations of the task. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Rep012 portable](implementations/rep012-portable) — Calibration only.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Matched paper packets](implementations/matched-paper-packets) — Calibration only.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Pooled associations](implementations/pooled-associations) — Calibration only.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

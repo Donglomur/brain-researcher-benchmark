@@ -1,0 +1,165 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-006",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original sorting problem has an ordered recovery endpoint, but the exact published Kilosort4 score vectors, publication invocation and metric implementation are unresolved. The paper checks 40 neighboring units whereas v4.0.2 bench.py checks 20; the registered exhaustive one-to-one prospective policy changes the comparison and cannot certify a paper win.",
+  "source_paper": {
+    "title": "Spike sorting with Kilosort4",
+    "url": "https://www.nature.com/articles/s41592-024-02232-7"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11093732/",
+      "locator": "Results: Hybrid and full simulations without drift; Simulations with realistic drift; Figs. 3c/e and 4e-l; Methods: Comparing spike sorting outputs",
+      "supports": "Original synthetic/hybrid populations, matching-score definition, recovery threshold and grouping; 80–90% is a descriptive range, not an exact per-condition numeric baseline."
+    },
+    {
+      "id": "bench",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MouseLand/Kilosort/v4.0.2/kilosort/bench.py",
+      "locator": "nmatch, match_neuron, compare_recordings, load_GT, convert_ks_output",
+      "supports": "Released scorer uses dt=6 and n_check=20; event reuse and output-conversion signature must be reconciled with the publication."
+    },
+    {
+      "id": "reg",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-006/task.json",
+      "locator": "evaluation.current_source_profiles; holds; implementations/registered-runtime/payload/contracts/SOURCE_SEMANTICS.md",
+      "supports": "Existing R_source20/R_paper40/I_bijective_full distinctions and unqualified scientific status; source evidence is not inferred from registration."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Recover the times and unit assignments of injected ground-truth spikes from extracellular voltages, including no-drift hybrids and the full simulation drift conditions used in Figs. 3–4.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original three IBL-background hybrids plus full simulations constructed from IBL waveforms/ISI statistics and measured drift. Publication-specific bytes, producer invocation, version and complete source-data identities are not authenticated by the reviewed metadata.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Fig. 3c pools 300 injected units from three hybrid recordings; full simulations use 600 ground-truth single units each. Fig. 4 includes no, medium, high, fast, step drift and step drift with aligned sites. Natural background neurons are not fully labeled truth.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The paper evaluates fixed simulation cases rather than a supervised train/test split. Exact development exposure, historical parameter tuning and waveform/ISI donor reuse are not recovered; a fresh generator seed or a held-out recording would be an extension.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Extracellular voltage recordings and their probe geometry/sampling metadata; ground-truth spike trains and donor/generator parameters are scoring information, not candidate features.",
+      "evidence_ids": [
+        "paper",
+        "bench"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper source waveforms use 300-Hz high-pass filtering, whitening and pyKilosort estimates from 11 drifting recordings. Match the original voltage scaling, drift, waveform and comparator preprocessing; released defaults do not establish the publication invocation.",
+      "evidence_ids": [
+        "paper",
+        "bench"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Paper unit score is 1−FP−FN: FP is unmatched detected spikes divided by detected spikes and FN is missed truth spikes divided by truth spikes, with matching tolerance ≤0.2 ms and the best of 40 closest detected units. Recovery is score>0.8. Released bench.py checks 20 and its nmatch may reuse an event; paper-faithful bookkeeping remains unresolved.",
+      "evidence_ids": [
+        "paper",
+        "bench"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Retain per-unit score distributions and recovered-unit counts per original simulation, three-hybrid pooling in Fig. 3c, and false-positive/good-unit companions in Fig. 4k. A new equal-family composite is not the published aggregate.",
+      "evidence_ids": [
+        "paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original per-condition number/fraction of ground-truth units with matching score >0.8, with full score distributions and FP/FN companions",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The paper describes Kilosort4 as recovering about 80–90% across conditions, but no exact single scalar or authenticated original vector was recovered. That range must not be encoded as 0.8, 0.85 or 0.9.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No author baseline has been reproduced here. R_source20 is a literal release route, not demonstrated publication parity; R_paper40 requires the actual publication caller/scoring decisions.",
+      "evidence_ids": [
+        "bench",
+        "reg"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "The legacy 0.02 prospective recovery guard is not a source-justified margin for the original paper endpoint. A meaningful per-condition recovery gain must be justified with complete denominator and error-rate protection.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Specify paired condition/recording-level uncertainty after recovering the authentic source panel and replicate structure; do not bootstrap individual spikes as independent experiments.",
+      "independent_unit": "Simulation/recording, accounting for shared waveform and ISI donors; units are nested.",
+      "rationale": "Six drift cases are fixed conditions and share construction roots. Their units are not evidence for independent animal or laboratory replication.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover publication-identical data, all registered paper obligations, original case denominators and Kilosort4 invocation before admitting a comparison.",
+      "Resolve paper40 versus released20 and event-matching semantics without selecting the favorable rule after seeing candidate results.",
+      "Beat both the authenticated published result and a competent author-baseline rerun on the same original cases, using a predeclared meaningful effect and uncertainty rule; retain all failures and false-positive companions.",
+      "Do not count a new simulation seed, a single hybrid, changed event assignment, narrowed unit subset or the local I_bijective_full policy as surpassing the paper."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was established by this source review; a paper baseline is not a present-day SOTA baseline.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Develop candidate sorting methods using only declared public development recordings and validation feedback after donor overlap and access budgets are frozen. Historical source exposure must remain explicit.",
+    "candidate_freeze": "Freeze executable/container, preprocessing, tuning, data manifest and metric profile before accessing the final original-suite scores.",
+    "final_evaluation": "Run candidate and publication-parity reference on all original required cases with the same information and resource policy; until the published metric is recovered, reject paper-win claims.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "A release-code rerun, publication result and independently verified current SOTA are distinct comparators. Reproduction is calibration. No scientific execution or episode budget was authorized by this curation."
+  },
+  "blocking_issues": [
+    "Exact published per-case recovery/score arrays and historical sorter settings are not recovered.",
+    "Paper40 versus release20, event reuse, converter signature, unit/clock/quality policies require source-supported reconciliation.",
+    "Original generator versions/seeds, pyKilosort waveform lineage, donor incidence and full figure/supplement support remain unresolved.",
+    "No working publication-parity evaluator, validated rerun, meaningful-effect rule or fixed access/resource budget exists for admission."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Historical specifications and implementations remain calibration evidence; they do not establish surpassing the source paper."
+  }
+}

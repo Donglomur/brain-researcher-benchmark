@@ -1,16 +1,25 @@
 {
+  "schema_version": 1,
   "id": "PAPER-CANDIDATE-20261114-DUNL",
   "track": "paper",
   "title": "Reproduce and critically audit DUNL whisker event detection under disclosed periodic targets",
-  "registration_recommendation": "REGISTER_DRAFT_ONLY",
-  "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
-  "scientific_question": "Does the released DUNL whisker workflow reproduce the Figure 4F event trade-off, and what does that result establish when the published count, period and phase already determine every programmed target?",
-  "paired_access_conditions": {
-    "A": "Paper and sufficient scientific specification plus identical complete authorized data and train/dev labels; no official implementation.",
-    "B": "The same paper/specification/data and role information plus pinned official code. Missing essential method specification is a construction defect, not an A-arm model failure.",
-    "parity": "Equal execution, tuning and compute budgets; same complete held cases and metric. Public event schedules and paper-provided information remain equally available. Code/model/checkpoint exposure and contamination are audited.",
-    "outcomes": "Separate historical reproduction from prospective improvement. Preserve original test-selection/leakage if reproducing it, label it, and never substitute a corrected split without a distinct prospective result. Narrative cannot replace numeric artifacts."
-  },
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Infer whisker manipulation event onsets from single-trial VPm spikes; Figure 4F compares missed and false events. Shared-kernel reconstruction is a separate output.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Infer whisker manipulation event onsets from single-trial VPm spikes; Figure 4F compares missed and false events. Shared-kernel reconstruction is a separate output.",
+    "Source-paper comparison for Figure 4F missed-event fraction and false-event fraction at 10 ms tolerance (joint endpoint): Current code binarizes positive predictions, marks target neighborhoods within two bins, and computes hit-count/target-count and outside-neighborhood-prediction-count/prediction-count. Miss=1-min(mean_hit,1). Multi-matches count; this is not one-to-one recall or F1. Publication-to-code parity remains unverified."
+  ],
+  "success_criteria": [
+    "Recover the exact Figure 4F DUNL operating point and reproduce it from the publication-aligned author route on every original eligible case.",
+    "Keep the original target, inputs, split, 10 ms neighborhood convention and aggregation; a new split, one-to-one metric, hidden schedule or response-prediction task is a separately labelled extension.",
+    "Freeze the selected method and operating point using permitted training/development feedback before a single protected final comparison under declared access and resource budgets.",
+    "Demonstrate a justified improvement in the predeclared joint miss/false comparison with appropriate uncertainty; matching the paper or reducing local reconstruction loss is insufficient.",
+    "Include the disclosed schedule-only control; algebraic recovery of programmed labels alone is not an observed full-cohort paper win or evidence of neural understanding.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "participant_inputs": "All eligible whisker spike trials, source-defined binning, units/masks, trial origin and baseline context; both arms receive 16 events, 125 ms period, 500 ms phase, and disclosed top-k16/18 policy. Preserve current default 10 neuron pairs/11 allocated channels and 30/20 split as unresolved source behavior, not final-paper truth.",
   "provenance": {
     "paper": {
       "title": "Interpretable deep learning for deconvolutional analysis of neural signals",
@@ -45,297 +54,22 @@
       "sha256": "b14ec0698dd91df2def69b4637410865c8bd2143efe69e57820fbf2f6df580d3"
     }
   },
-  "complete_scope": {
-    "required_scope": "Every paper-eligible neuron and trial of the complete Figure 4 whisker assay; no reduction to plotted examples",
-    "source_default_pairs": [
-      [
-        1,
-        2
-      ],
-      [
-        2,
-        1
-      ],
-      [
-        4,
-        1
-      ],
-      [
-        5,
-        1
-      ],
-      [
-        6,
-        1
-      ],
-      [
-        8,
-        2
-      ],
-      [
-        10,
-        2
-      ],
-      [
-        16,
-        2
-      ],
-      [
-        17,
-        1
-      ],
-      [
-        17,
-        2
-      ]
-    ],
-    "source_default_pair_count": 10,
-    "allocated_neuron_channels": 11,
-    "unfilled_channel": "Under unchanged defaults the eleventh raster/stim/y/baseline channel stays zero; do not drop or fill it silently",
-    "trial_default": 50,
-    "train_default": 30,
-    "test_default": 20,
-    "original_mat_split": "Concatenates trngdata/testdata first, then takes first 30/remaining 20; actual MAT dimensions and paper 25/25 versus current30/20 provenance unresolved",
-    "animal_session_id_map": null,
-    "recording_simultaneity": null,
-    "expected_source_arguments": [
-      {
-        "relative_source_argument": "data/Dir1/Neuron2/Stim3/trngdata",
-        "directory": 1,
-        "neuron": 2,
-        "stimulus": 3,
-        "role": "trngdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir1/Neuron2/Stim3/testdata",
-        "directory": 1,
-        "neuron": 2,
-        "stimulus": 3,
-        "role": "testdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir2/Neuron1/Stim3/trngdata",
-        "directory": 2,
-        "neuron": 1,
-        "stimulus": 3,
-        "role": "trngdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir2/Neuron1/Stim3/testdata",
-        "directory": 2,
-        "neuron": 1,
-        "stimulus": 3,
-        "role": "testdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir4/Neuron1/Stim3/trngdata",
-        "directory": 4,
-        "neuron": 1,
-        "stimulus": 3,
-        "role": "trngdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir4/Neuron1/Stim3/testdata",
-        "directory": 4,
-        "neuron": 1,
-        "stimulus": 3,
-        "role": "testdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir5/Neuron1/Stim3/trngdata",
-        "directory": 5,
-        "neuron": 1,
-        "stimulus": 3,
-        "role": "trngdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir5/Neuron1/Stim3/testdata",
-        "directory": 5,
-        "neuron": 1,
-        "stimulus": 3,
-        "role": "testdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir6/Neuron1/Stim3/trngdata",
-        "directory": 6,
-        "neuron": 1,
-        "stimulus": 3,
-        "role": "trngdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir6/Neuron1/Stim3/testdata",
-        "directory": 6,
-        "neuron": 1,
-        "stimulus": 3,
-        "role": "testdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir8/Neuron2/Stim3/trngdata",
-        "directory": 8,
-        "neuron": 2,
-        "stimulus": 3,
-        "role": "trngdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir8/Neuron2/Stim3/testdata",
-        "directory": 8,
-        "neuron": 2,
-        "stimulus": 3,
-        "role": "testdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir10/Neuron2/Stim3/trngdata",
-        "directory": 10,
-        "neuron": 2,
-        "stimulus": 3,
-        "role": "trngdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir10/Neuron2/Stim3/testdata",
-        "directory": 10,
-        "neuron": 2,
-        "stimulus": 3,
-        "role": "testdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir16/Neuron2/Stim3/trngdata",
-        "directory": 16,
-        "neuron": 2,
-        "stimulus": 3,
-        "role": "trngdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir16/Neuron2/Stim3/testdata",
-        "directory": 16,
-        "neuron": 2,
-        "stimulus": 3,
-        "role": "testdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir17/Neuron1/Stim3/trngdata",
-        "directory": 17,
-        "neuron": 1,
-        "stimulus": 3,
-        "role": "trngdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir17/Neuron1/Stim3/testdata",
-        "directory": 17,
-        "neuron": 1,
-        "stimulus": 3,
-        "role": "testdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir17/Neuron2/Stim3/trngdata",
-        "directory": 17,
-        "neuron": 2,
-        "stimulus": 3,
-        "role": "trngdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      },
-      {
-        "relative_source_argument": "data/Dir17/Neuron2/Stim3/testdata",
-        "directory": 17,
-        "neuron": 2,
-        "stimulus": 3,
-        "role": "testdata",
-        "remote_file_id": null,
-        "bytes": null,
-        "sha256": null,
-        "status": "SOURCE_EXPECTATION_ONLY_NOT_REMOTE_MANIFEST"
-      }
-    ],
-    "filename_semantics": "These are literal loadmat arguments. No remote roster or actual suffix/filesystem existence is claimed."
-  },
-  "reference": {
-    "outputs": [
-      "Full missed-event versus false-event comparison at 10 ms tolerance",
-      "Shared kernel, per-neuron amplitudes and full held-trial reconstruction summaries"
-    ],
-    "baselines": [
-      "Published scipy peak-finding threshold curve with train/dev smoothing selection",
-      "DUNL shared-kernel unknown-support model"
-    ],
-    "panel": "Figure 4C–J, with 4F the primary quantitative claim"
-  },
-  "prospective_improvement": {
-    "status": "HELD_FOR_NEURAL_UNDERSTANDING_OR_FRONTIER_CLAIM",
-    "reason": "Known schedule determines source targets; do not hide public information or invent a harder held schedule. A trial-varying physiological amplitude/kernel endpoint would require a separately justified complete contract and is not another registered task here."
+  "source_family_ids": [
+    "dunl-whisker-rzfyr2886h"
+  ],
+  "publication_context": {
+    "status": "registered_construction_draft_definition_only",
+    "source_snapshot_date": "2026-11-14",
+    "source_definition_bytes": 17368,
+    "source_definition_sha256": "c19e82710e5d8ebf9769781eea6d5eaf3b4a4b19b69ab4ecc162f82f664b83e7",
+    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
+    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
+    "scientific_definition_changed": false,
+    "runtime_binding": null,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
   },
   "resources": {
     "storage_GiB": [
@@ -356,76 +90,77 @@
     ],
     "basis": "Full released whisker assay, fixed-kernel model and all declared baselines across five seeds; upper range includes preprocessing and tuning. Exact trial count and bytes remain unverified."
   },
-  "remaining_gates": [
-    "Complete versioned dataset file roster, sizes/checksums/access and full assay-to-file join",
-    "Final supplement eligibility/exclusions and original paper parameters/split",
-    "Reconcile10 specified neuron pairs versus11 allocated channels without silent repair",
-    "Verify trial-varying stimulus truth against programmed periodic labels; no authentic read selected",
-    "Actual params.pickle/kernel initialization provenance, code version and dtype/runtime",
-    "Preparation requires explicit whisker arguments; default is another assay, kernel16/2 and only_test=True expects codes/rate absent from this whisker preprocessing",
-    "Role-specific physical TRAIN/DEV/HELD exports and fixed inference boundary; in-process role checks alone are insufficient",
-    "Full-path physiological baseline and upstream output-producer binding; no authentic/postprocess arrays read",
-    "The final paper-to-current-commit relation and actual dataset manifest remain unresolved; source-only scorer controls were not executed."
+  "input_assets": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DUNL/improvement.v1.json",
+      "bytes": 11264,
+      "sha256": "b4cfb945694507bf822d9f1c486a9714aa0e3c03ecfc488605bfa63d2ffd3a82"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DUNL/historical/task.pre-improvement.v1.json",
+        "bytes": 17633,
+        "sha256": "750346e19cc38fcdbad50c1e694d2a6281e8647d90cc300b0b115c9598390864"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-dunl-coupled-reconstruction"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending source recovery. If admitted, iterate on original training trials and a declared development policy; do not use final paper test scores for selection.",
+    "candidate_freeze": "Freeze method, weights, threshold/operating point, code and data/configuration identities before final event scoring.",
+    "final_evaluation": "Run complete publication-aligned test cases once, report both original event fractions and author baseline; disclose public schedule assistance and retain reconstruction as a secondary calibration output.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The paper point, reproduced author point and schedule-only control are separate. No invented score, current-code rerun, local grader tolerance or corrected split silently replaces the published baseline."
+  },
+  "blocking_issues": [
+    "Numeric Figure 4F operating point and its source result artifact are not recovered.",
+    "Publication trial split/configuration and exact source output producer are unjoined.",
+    "Complete archive file manifest, ten-neuron/eleven-channel reconciliation and animal/session map remain unresolved.",
+    "The programmed labels are publicly deterministic; any admissible event improvement must disclose this limitation.",
+    "Meaningful joint effect, independent-unit uncertainty, concrete budgets and an authenticated full event evaluator are not established."
   ],
-  "overlap": "DUNL's olfactory data family may overlap existing APCx, but this candidate is the complete whisker event assay and does not count olfactory as an extra task.",
-  "common_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
-  "readiness": {
+  "holds": {
+    "task_specific": [
+      "Numeric Figure 4F operating point and its source result artifact are not recovered.",
+      "Publication trial split/configuration and exact source output producer are unjoined.",
+      "Complete archive file manifest, ten-neuron/eleven-channel reconciliation and animal/session map remain unresolved.",
+      "The programmed labels are publicly deterministic; any admissible event improvement must disclose this limitation.",
+      "Meaningful joint effect, independent-unit uncertainty, concrete budgets and an authenticated full event evaluator are not established."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Figure 4F supplies an ordered missed/false-event comparison, but its numeric DUNL point, exact original split and complete source-to-file cohort join are not recovered. The current release makes the programmed target schedule explicit; hiding it or replacing this with held-response prediction would change the task. The existing coupled reconstruction grader cannot establish an event-detection paper win. Numeric Figure 4F operating point and its source result artifact are not recovered. Publication trial split/configuration and exact source output producer are unjoined. Complete archive file manifest, ten-neuron/eleven-channel reconciliation and animal/session map remain unresolved. The programmed labels are publicly deterministic; any admissible event improvement must disclose this limitation. Meaningful joint effect, independent-unit uncertainty, concrete budgets and an authenticated full event evaluator are not established.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DUNL/historical/task.pre-improvement.v1.json",
+      "bytes": 17633,
+      "sha256": "750346e19cc38fcdbad50c1e694d2a6281e8647d90cc300b0b115c9598390864"
+    },
+    "notes": "Retain historical event auditing and coupled decoder/response loss as calibration components. Neither engineering parity nor a mathematically perfect public schedule establishes a measured scientific improvement."
+  },
+  "admission": {
     "runnable": false,
-    "inputs_verified": false,
-    "reference_validated": false,
     "research_qualified": false,
-    "reproduction_established": false,
-    "model_evaluated": false,
-    "submission_ready": false
-  },
-  "scientific_classification": "PAPER_REPRODUCTION_AND_CRITICAL_ANALYSIS_ONLY",
-  "participant_inputs": "All eligible whisker spike trials, source-defined binning, units/masks, trial origin and baseline context; both arms receive 16 events, 125 ms period, 500 ms phase, and disclosed top-k16/18 policy. Preserve current default 10 neuron pairs/11 allocated channels and 30/20 split as unresolved source behavior, not final-paper truth.",
-  "machine_output": {
-    "events": "Per trial/channel/method ordered event timestamps, amplitudes and candidate threshold-grid identity; full original input/eligibility census.",
-    "reconstruction": "Shared kernels, per-neuron coefficients, complete held-trial reconstructed rates and exact source configuration.",
-    "tables": "Every historical hit/miss/false-event result and aggregation plus separately named one-to-one event results and schedule-only results; discrepancies and zero/unfilled channels explicit."
-  },
-  "scoring": {
-    "historical": "Use the source-extracted exact neighborhood-counting metric at original 10 ms matching and original aggregation/clipping. It is not one-to-one precision/recall; preserve multi-match behavior.",
-    "prospective": "Separately named maximum one-to-one event matching at 10 ms, TP/FP/FN/F1 and timing error, never relabelled historical.",
-    "critical_analysis": "Algebraically PUBLIC_SCHEDULE emits exactly16 programmed targets (500+125*k ms, k0..15) without neural input. An authentic result has not been measured. Event timing accuracy cannot establish neural understanding on that target.",
-    "comparison": "DUNL, published peak-finding curve, train-only matched filter and schedule-only detector; count/period/phase assistance identical."
-  },
-  "protected_split": "Whole trials and authenticated animal/recording groups; historical paper split held until final supplement join. TRAIN/DEV-only tuning and held inference remain separate. Do not force25/25 or silently repair30/20.",
-  "source_overlay": [
-    {
-      "path": null,
-      "bytes": 12827,
-      "sha256": "ce0feda1e39bb76d1f11648097f3abaffcf7e3596c46be2aaea7416b9fffbdb9"
-    },
-    {
-      "path": null,
-      "bytes": 37311,
-      "sha256": "accc28fad90de738a4266ed70aad45bb15a4bb9df81c303f58035c37d736fdf7"
-    },
-    {
-      "path": null,
-      "bytes": 31049,
-      "sha256": "5b43bea96fc35377269dd1fad3dbf2340ea0190951a47a86c0b04c81213eaed1"
-    }
-  ],
-  "custody_disposition": "Root determined the preceding DUNL raw archive cap exceeded the shared allowance: preserve historical noncompliance, no deletion/splitting/retroactive compliance. Scientific/source finding retained; oversized archive not reread in this phase.",
-  "source_family_ids": [
-    "dunl-whisker-rzfyr2886h"
-  ],
-  "distinctness": "Critical reproduction of sparse deconvolution with deterministic schedule assistance; no registered same DOI/code/whisker endpoint found. Other DUNL modalities are excluded, not extra tasks.",
-  "publication_context": {
-    "status": "registered_construction_draft_definition_only",
-    "source_snapshot_date": "2026-11-14",
-    "source_definition_bytes": 17368,
-    "source_definition_sha256": "c19e82710e5d8ebf9769781eea6d5eaf3b4a4b19b69ab4ecc162f82f664b83e7",
-    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
-    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
-    "scientific_definition_changed": false,
-    "runtime_binding": null,
-    "scientifically_qualified": false,
-    "submission_ready": false,
-    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
-    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

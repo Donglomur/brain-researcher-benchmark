@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-replacement-008",
-  "source_id": "paper-method-replacement-008",
   "track": "paper",
   "title": "BaRISTA: Brain Scale Informed Spatiotemporal Representation of Human Intracranial Neural Activity",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Source program: sentence-onset and speech/non-speech classification under main random nonoverlap; four-task chronological classification including volume/optical flow; masked-channel waveform reconstruction; spatial encoding/masking, pretraining-seed, held-person-out and scaling analyses. One classification task or an invented pooled scalar cannot stand in for the complete registered scope.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Source program: sentence-onset and speech/non-speech classification under main random nonoverlap; four-task chronological classification including volume/optical flow; masked-channel waveform reconstruction; spatial encoding/masking, pretraining-seed, held-person-out and scaling analyses. One classification task or an invented pooled scalar cannot stand in for the complete registered scope.",
+    "Source-paper comparison for Main random-nonoverlap sentence-onset ROC-AUC (numeric anchor only; complete original endpoint panel required): Classification ROC-AUC is the probability a positive score ranks above a negative, with half credit for ties, computed over all queries in a session/seed/fold. Native code uses roc_auc_score. Reconstruction reports MSE and R², but historical evaluation denominator/flattening and full reconstruction producer are not recovered; training token loss and locally declared MSE are different quantities."
+  ],
+  "success_criteria": [
+    "Authenticate original recordings, channels, annotations, segmentation and all saved source splits; reconcile the person-6 paper/code session join.",
+    "Exceed the source BaRISTA results on the identical original endpoint panel with matched pretraining people/movies, checkpoints, selection access and resources; report task-wise results against Table 1/2 and Table 16/17 separately.",
+    "Retain all seven people, source seed/fold conditions and original encoding/masking comparisons. Neither a single successful subject nor an easier restricted model/subset is a whole-task win.",
+    "Recover original reconstruction H/checkpoint and evaluation semantics before using Table 3 reconstruction claims; local MSE, token-training loss and original R² are not interchangeable. Complete the other retained full-paper conditions before claiming the registered program surpassed the paper.",
+    "Meet frozen meaningful-effect and dependence-aware uncertainty rules. A new split, new across-task scalar or held-person-out result cannot be compared to the ordinary Table 1 baseline as if it were the same condition.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-replacement-008",
   "canonical_position_one_based": 32,
   "paper_identity": {
     "url": "https://openreview.net/forum?id=LDjBDk3Czb",
     "publication_year": 2025,
     "venue": "NeurIPS"
   },
-  "primary_outputs": [
-    "Per-subject ROC-AUC and multi-seed aggregate for channel-, parcel- and lobe-level models under the same nonoverlapping train/validation/test windows.",
-    "Reproduce chronological-fold sensitivity for speech/sentence tasks and distinguish it from random-split performance."
-  ],
   "input_assets": {
     "routes": [
       "https://braintreebank.dev/",
@@ -723,197 +734,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "recorded_terms": [
-        "USC code license permits educational/research/nonprofit use, copying and modification; commercial use needs separate permission.",
-        "BrainTreebank original-site CC BY4.0; use appropriate recording privacy safeguards and release terms."
-      ],
-      "record_conflicts": [],
-      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
-      "overlap_group": "braintreebank-human-movie-ieeg"
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "central_outputs_in_saved_source_contract": [
-        "Per-subject ROC-AUC and multi-seed aggregate for channel-, parcel- and lobe-level models under the same nonoverlapping train/validation/test windows.",
-        "Reproduce chronological-fold sensitivity for speech/sentence tasks and distinguish it from random-split performance."
-      ],
-      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
-      "missing_or_unfrozen_endpoint_details": "Finetuning spatial-scale comparison is supported; whole pretraining reconstruction is not. Source installation case mismatch and force_nonoverlap configurations need qualification."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Hold source checkpoint exposure, windows, movie identities, labels and training budgets equal. Random nonoverlap and chronological folds are not interchangeable generalization claims."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Finetuning spatial-scale comparison is supported; whole pretraining reconstruction is not. Source installation case mismatch and force_nonoverlap configurations need qualification.",
-        "Hold source checkpoint exposure, windows, movie identities, labels and training budgets equal. Random nonoverlap and chronological folds are not interchangeable generalization claims.",
-        "Published code primarily supports finetuning provided checkpoints, not a claim to retrain the whole pretraining process.",
-        "Random nonoverlap and chronological settings have distinct force_nonoverlap values; mixed settings can invalidate splits.",
-        "Source setup.py asks for README.md while actual file uses different case; case-sensitive installation may need a documented packaging repair.",
-        "BrainTreebank is also used by PopulationTransformer and other candidates; group overlapping subjects/movies across benchmark partitions.",
-        "Unversioned data endpoints require content hashes when acquired; HEAD metadata is an availability check, not integrity validation.",
-        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-        "Execute and independently audit references, controls, grading and measured resources.",
-        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
-      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [
-      {
-        "historical_reproduction": false,
-        "kind": "source_only_inactive_operator_composition",
-        "public_source_base": "c311b970ec2087883350ac69d1b7738342abbbed",
-        "runtime_manifest": "benchmarks/neuroscience/paper-paper-method-replacement-008/manifest.json",
-        "scientific_execution": false,
-        "scope": {
-          "bundled_role_bodies": 83,
-          "classification": {
-            "arms": [
-              "paper_and_data",
-              "paper_data_official_code"
-            ],
-            "candidate_artifacts_both_arms": 22960,
-            "chronological_folds": 5,
-            "chronological_tasks": [
-              "sentence_onset_time",
-              "speech_vs_nonspeech_time",
-              "volume",
-              "optical_flow"
-            ],
-            "contexts": 770,
-            "finetune_seeds": 5,
-            "main_tasks": [
-              "sentence_onset",
-              "speech_vs_nonspeech"
-            ],
-            "people": 7,
-            "source_models": 14,
-            "trusted_chronological_contexts": 700
-          },
-          "external_role_bodies": 2,
-          "functional_roles": 85,
-          "reconstruction": {
-            "arms": [
-              "paper_and_data",
-              "paper_data_official_code"
-            ],
-            "channels": 945,
-            "models": 12,
-            "output_matrices": 22680,
-            "patches_per_channel": 12,
-            "people": [
-              1,
-              2,
-              3,
-              4,
-              6,
-              7,
-              10
-            ],
-            "samples_per_patch": 512,
-            "samples_per_segment": 6144,
-            "score": "declared full-support MSE; original R2 unresolved",
-            "training_cells": 168
-          },
-          "source_files_with_supplements": 99,
-          "wider_original_branches": [
-            "Original pretraining and three-pretraining-seed sensitivity",
-            "Masked-channel reconstruction exact producer and MSE/R² aggregation",
-            "Held-person-out pretraining",
-            "Data-scaling subsets and fixed update budgets",
-            "Attention/interpretation and spectral reconstruction",
-            "Temporal encoder and combined/separate attention ablations"
-          ]
-        }
-      }
-    ],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve spatial-scale pooling or cross-subject robustness with matched checkpoints, labels, folds and training budget; report chronological robustness."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "independent_panel_not_established_in_inspected_evidence",
-      "proposed_improvement": [
-        "Improve spatial-scale pooling or cross-subject robustness with matched checkpoints, labels, folds and training budget; report chronological robustness."
-      ],
-      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
-      "special_gate": "No completed independent improvement result is established here."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "source_roster_estimate_or_statement": "GPU finetuning; public corpus approximately130GB compressed; one subject’s three recordings16.75GB compressed. Checkpoints approximately3.4MB each.",
-    "measured_or_static_facts_from_existing_authoring": [],
-    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
-  },
-  "holds": {
-    "task_specific": [
-      "Finetuning spatial-scale comparison is supported; whole pretraining reconstruction is not. Source installation case mismatch and force_nonoverlap configurations need qualification.",
-      "Hold source checkpoint exposure, windows, movie identities, labels and training budgets equal. Random nonoverlap and chronological folds are not interchangeable generalization claims.",
-      "Published code primarily supports finetuning provided checkpoints, not a claim to retrain the whole pretraining process.",
-      "Random nonoverlap and chronological settings have distinct force_nonoverlap values; mixed settings can invalidate splits.",
-      "Source setup.py asks for README.md while actual file uses different case; case-sensitive installation may need a documented packaging repair.",
-      "BrainTreebank is also used by PopulationTransformer and other candidates; group overlapping subjects/movies across benchmark partitions.",
-      "Unversioned data endpoints require content hashes when acquired; HEAD metadata is an availability check, not integrity validation.",
-      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-      "Execute and independently audit references, controls, grading and measured resources.",
-      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-    ],
-    "current_construction_holds": [
-      "Original H and historical R2 are not recovered; the concrete H/masking/alpha/reference choices remain explicitly source-amended.",
-      "Authentic neural inputs, ordered split/channel/source-clock labels, nine checkpoint/exposure identities and trusted references remain unbound.",
-      "Native dependencies, model execution, complete resource measurements and process/candidate isolation are unqualified.",
-      "Two inherited preprocessing source grants remain unresolved; those bodies are external with exact offline provision and original terms.",
-      "Original pretraining, held-person-out/scaling, interpretation/spectral analysis and architectural ablations remain required and incomplete.",
-      "The source-normalized classifier is not an original raw-data adapter; native collator/support, NaN checkpoint and chronological boundary discrepancies remain.",
-      "Original R2, classification AUC, reference training loss and declared reconstruction MSE are distinct; no result or improvement follows from engineering controls."
-    ],
-    "source_route_reconciliations": [
-      {
-        "current_source": "All85 reviewed source roles retained; full current immutable input manifest and fixed operators supplied. Two upstream helper bodies remain exact external roles.",
-        "historical_records_preserved": true,
-        "old_README_case_note": "Current pinned official source contains README.md and setup.py names README.md. Preserve the historical note; this resolves the textual filename join only, not environment installation.",
-        "source_amended_reconstruction": "Concrete H/training/export/MSE source is implemented, while original H/R2 and full-paper parity remain unresolved."
-      }
-    ]
-  },
-  "next_implementation_action": {
-    "action": "Freeze one complete spatial-scale/chronological contrast with explicit pretraining exposure and person/movie grouping, then resolve bounded recording access and packaging repair.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Freeze one complete spatial-scale/chronological contrast with explicit pretraining exposure and person/movie grouping, then resolve bounded recording access and packaging repair.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite.",
-    "current_source_followup": "Inspect the complete inactive operator composition and retain every authentic-data, model/exposure, native/resource and wider-paper hold. No automatic scientific execution follows."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -956,11 +776,83 @@
       "runtime_manifest": "benchmarks/neuroscience/paper-paper-method-replacement-008/manifest.json"
     }
   },
+  "resources": {
+    "source_roster_estimate_or_statement": "GPU finetuning; public corpus approximately130GB compressed; one subject’s three recordings16.75GB compressed. Checkpoints approximately3.4MB each.",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-008/improvement.v1.json",
+      "bytes": 14555,
+      "sha256": "20f24f84a298fe8fbd7141dfafa59bc9213e6c6e642d52f65fa89388a001de10"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-008/historical/task.pre-improvement.v1.json",
+        "bytes": 50305,
+        "sha256": "25b1a2f5c62c9b4e4f63e486034f705b9698ec44d83bb22bb7c79ba09bb29ff5"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-paper-method-replacement-008"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-008/implementations/registered-runtime/manifest.json",
+        "bytes": 4509,
+        "sha256": "39f1735b773394824b0881f2af27e4bfb771b88a099d314b7d82c25587e91545"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After source binding, iterate on original training/development segments with separate information histories for overlapping source folds/protocols. Keep pretraining selection and finetuning feedback within their original allowed validation partitions.",
+    "candidate_freeze": "Freeze algorithm, pretrained exposure/weights, all preprocessing/spatial joins, seed selection, validation stopping and complete model/endpoint roster before final labels or aggregate comparisons are revealed.",
+    "final_evaluation": "Evaluate a frozen candidate and independent BaRISTA reference on every bound source session/seed/fold with protected labels; report full source tables and separate same-task versus extension conclusions. The chronological combined AUC in the existing implementation is an additional local summary, not a published baseline.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Preserve published rounded table values separately from unrounded author-rerun results. Match source pretraining-selection regimes; never replace missing original checkpoints with duplicated weights, a random model, source-amended H or candidate-controlled reference."
+  },
+  "blocking_issues": [
+    "Resolve exact native session mapping, especially person 6 Table 5 versus pinned HS6_4; acquire bounded metadata hashes before any future scientific run.",
+    "Authenticate original random and chronological row/fold identities, no-overlap boundaries, class-support rules, source-clock alignment and full channel/spatial joins.",
+    "Recover complete original pretraining/checkpoint lineage, reconstruction H and exact MSE/R² evaluation conventions; three released checkpoints do not prove all nine pretraining combinations.",
+    "Bind author per-query prediction export and complete rerun references; rounded helper logs and generated controls do not establish reproduction.",
+    "Freeze endpoint-specific meaningful effects, valid uncertainty with repeated seeds/folds/shared movies, finite feedback budgets, compute budgets and evaluator isolation."
+  ],
+  "holds": {
+    "task_specific": [
+      "Resolve exact native session mapping, especially person 6 Table 5 versus pinned HS6_4; acquire bounded metadata hashes before any future scientific run.",
+      "Authenticate original random and chronological row/fold identities, no-overlap boundaries, class-support rules, source-clock alignment and full channel/spatial joins.",
+      "Recover complete original pretraining/checkpoint lineage, reconstruction H and exact MSE/R² evaluation conventions; three released checkpoints do not prove all nine pretraining combinations.",
+      "Bind author per-query prediction export and complete rerun references; rounded helper logs and generated controls do not establish reproduction.",
+      "Freeze endpoint-specific meaningful effects, valid uncertainty with repeated seeds/folds/shared movies, finite feedback budgets, compute budgets and evaluator isolation."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Source classification targets and numeric results are recoverable, but the complete registered paper program includes original reconstruction and spatial-scale/pretraining analyses whose H/checkpoints, exact reconstruction evaluation and authentic split/source-clock bindings remain unresolved. A paper–code session-label discrepancy also needs resolution. The local chronological AUC aggregate or source-amended reconstruction MSE cannot by itself establish surpassing BaRISTA on its original full task. Resolve exact native session mapping, especially person 6 Table 5 versus pinned HS6_4; acquire bounded metadata hashes before any future scientific run. Authenticate original random and chronological row/fold identities, no-overlap boundaries, class-support rules, source-clock alignment and full channel/spatial joins. Recover complete original pretraining/checkpoint lineage, reconstruction H and exact MSE/R² evaluation conventions; three released checkpoints do not prove all nine pretraining combinations. Bind author per-query prediction export and complete rerun references; rounded helper logs and generated controls do not establish reproduction. Freeze endpoint-specific meaningful effects, valid uncertainty with repeated seeds/folds/shared movies, finite feedback budgets, compute budgets and evaluator isolation.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-008/historical/task.pre-improvement.v1.json",
+      "bytes": 50305,
+      "sha256": "25b1a2f5c62c9b4e4f63e486034f705b9698ec44d83bb22bb7c79ba09bb29ff5"
+    },
+    "notes": "Preserve registered-runtime classification, reconstruction and reference implementations. Their full-support admission, source-amended H, declared MSE and generated controls remain calibration/engineering artifacts. The local equal-person chronological AUC summary is not a reported source scalar and cannot alone yield paper success; original incomplete full-paper branches remain visible."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

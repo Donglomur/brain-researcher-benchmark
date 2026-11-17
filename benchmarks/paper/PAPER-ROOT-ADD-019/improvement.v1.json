@@ -1,0 +1,177 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-019",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The source paper contains a genuine original reaction-time decoding subtask, but its numerical baseline, original fold assignments, native preprocessing and cohort identity are unrecovered. The registered Figure 3 latency reconstruction is descriptive and cannot itself be surpassed. Any eventual Figure 6 decoder result must be explicitly scoped rather than called a whole-paper demixing win.",
+  "source_paper": {
+    "title": "Acetylcholine demixes heterogeneous dopamine signals for learning and moving",
+    "url": "https://www.nature.com/articles/s41593-026-02227-x"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13061617/",
+      "locator": "Figure 6g–h; Methods: Logistic regression model; Statistics and reproducibility; Data availability",
+      "supports": "Source contains an ordered fast-versus-slow reaction-time decoder in addition to descriptive dopamine/acetylcholine timing and learning claims."
+    },
+    {
+      "id": "decode",
+      "kind": "author_code",
+      "url": "https://github.com/constantinoplelab/published/blob/b7b68ca8c107d8ce4a061e16da214307f175c3e5/DMS_AChDA/vis/plot_fig6h.m",
+      "locator": "decodeSpeed and plot_fig6h",
+      "supports": "Loads npx_DMS.mat S/SU, forms contralateral fast/slow quartiles and 0–0.5 s spike predictors, fits ridge logistic models and reports 100*(1-min(kfoldLoss)); exact native implementation contains an outlier-threshold spelling discrepancy."
+    },
+    {
+      "id": "timing",
+      "kind": "author_code",
+      "url": "https://github.com/constantinoplelab/published/blob/b7b68ca8c107d8ce4a061e16da214307f175c3e5/DMS_AChDA/vis/plot_fig3ab_latency.m",
+      "locator": "plot_fig3ab_latency and run_getAvgFlatency",
+      "supports": "Figure 3a–b compares DA-peak/ACh-trough latencies and rank statistics, not predictive accuracy."
+    },
+    {
+      "id": "legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-019/implementations/registered-runtime/README.md",
+      "locator": "Numerical scoring and program execution; scope limits",
+      "supports": "Registered score is latency reconstruction MAE for Figure 3a–b and does not reproduce the whole learning/movement study."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Candidate ordered source subtask is Figure 6g–h: predict whether contralateral reaction time is in the fastest or slowest within-session quartile from simultaneously recorded DMS spiking. This is explicitly a scoped paper subtask; Figure 3 timing and the paper’s full causal demixing claims remain distinct obligations, not silently replaced or won.",
+      "evidence_ids": [
+        "paper",
+        "decode"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Article-linked Zenodo 17457318 behavioral/electrophysiology release; author decoder reads data-published/NpxData/npx_DMS.mat variables S and SU. Exact archive/member identity and row manifest have not been verified here.",
+      "evidence_ids": [
+        "paper",
+        "decode"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper Figure 6h reports 18 sessions from eight rats, restricted to sessions with at least five simultaneously recorded DMS units and contralateral trials. Exact qualifying sessions and rat mapping require an authenticated manifest.",
+      "evidence_ids": [
+        "paper",
+        "decode"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper uses tenfold within-session cross-validation and selects among 11 ridge strengths from 10^-4 to 10^-0.2 by minimum classification error. Author code does not pin fold RNG/assignment in the inspected function; recovering the published split/selection realization is unresolved. A leave-rat-out split would be an extension.",
+      "evidence_ids": [
+        "paper",
+        "decode"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Trial-by-neuron-by-time DMS spike tensor from 0 to 0.5 seconds after reward-port assignment, flattened as predictors. Reaction times determine fast/slow labels; they are scoring labels rather than candidate input. Same neural and behavioral availability must hold for comparator and candidate.",
+      "evidence_ids": [
+        "paper",
+        "decode"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Author code applies recording-hemisphere rules, excludes ipsilateral trials, forms log2 reaction-time quartiles and nearest-grid 0–0.5-second spike windows. The code assigns thres(1) but then indexes thresh(1), so outlier filtering cannot be silently repaired and called the original executable baseline.",
+      "evidence_ids": [
+        "decode"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Per-session cross-validated classification accuracy in percent: 100 times one minus the minimum kfoldLoss among the 11 ridge penalties. It is a source selection-biased CV statistic, not an independent external test accuracy.",
+      "evidence_ids": [
+        "decode",
+        "paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Figure 6h reports the mean across 18 sessions from eight rats. Caption describes SEM but inspected plotting code passes unscaled SD to errorbar; the correct published uncertainty and numerical session scores remain unresolved.",
+      "evidence_ids": [
+        "paper",
+        "decode"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Figure 6h mean within-session cross-validated fast/slow reaction-time classification accuracy (%)",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Paper reports above-chance accuracy in 17 of 18 sessions and plots mean/session scores, but the exact numerical mean is not recovered. Seventeen-of-eighteen above chance is not a classification accuracy baseline.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Pinned plot_fig6h.m exposes a source-authorized route, but the thresh/thres mismatch, unpinned folds and aggregation discrepancy prevent claiming executable historical equivalence. No run was performed.",
+      "evidence_ids": [
+        "decode"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Meaningful gain must be defined in original accuracy units with class balance, session sizes and biological relevance established; no arbitrary percentage-point threshold is asserted.",
+      "evidence_ids": [
+        "paper",
+        "decode"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover all original session predictions/folds, then preregister a paired accuracy comparison retaining rat/session dependence and the original model-selection rule; resolve the source SD-versus-SEM discrepancy before attribution.",
+      "independent_unit": "Rat for biological generalization; sessions and trials are nested within eight rats, and ten CV folds share training data.",
+      "rationale": "Treating 18 sessions or folds as independent rats would overstate evidence. An alternative rat-held-out analysis is valuable only as an explicitly labelled extension.",
+      "evidence_ids": [
+        "paper",
+        "decode"
+      ]
+    },
+    "paper_win_requires": [
+      "Explicitly bind the improvement objective to the original Figure 6 reaction-time decoder without claiming the full demixing mechanism or dropping historical timing obligations.",
+      "Recover the original full 18-session/eight-rat manifest, published numeric accuracy and fold/penalty-selection realization; qualify an author baseline after documenting any source-code correction.",
+      "Use the identical original spike window, contralateral rule, reaction-time quartiles and qualifying sessions; new rat splits or reduced sessions cannot count as the same-task paper win.",
+      "Freeze candidate, concrete access/resource budgets, meaningful effect and dependence-aware uncertainty before final comparison.",
+      "Latency reconstruction agreement, larger DA/ACh phase separation and stronger biological significance do not count as predictive improvement."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison is asserted; the source-paper result and any later author rerun remain separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive until native source comparison and scoped objective are resolved. Prospective candidate development may use only the admitted training/validation feedback under the original source task; no final-label adaptation is authorized.",
+    "candidate_freeze": "Freeze candidate code, session membership, timing/label preprocessing, fold realization and penalty selection before final scores are opened.",
+    "final_evaluation": "If admitted, compare source and candidate on the identical original within-session decoder protocol and report rat-aware paired uncertainty; keep all descriptive timing results separate.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published source score, reproduced author baseline, and any independently source-verified current SOTA separate. Reproduction is calibration only."
+  },
+  "blocking_issues": [
+    "No exact published Figure 6h mean/session accuracy baseline recovered.",
+    "Source code outlier-threshold spelling discrepancy, unpinned fold assignment, and caption SEM versus plotting SD unresolved.",
+    "Authentic full 18-session/eight-rat input mapping and source-author baseline execution unverified.",
+    "Current canonical scorer evaluates descriptive Figure 3 timings; Figure 6 primary binding requires explicit scope reconciliation, not automatic whole-paper success.",
+    "Meaningful effect, uncertainty criterion, protected final comparison and concrete episode budgets remain unadmitted."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve historical-timing-summary, registered-runtime and investigation-and-improvement source unchanged. Figure 3 latency MAE and correlation-curve agreement are calibration only; their numerical correctness cannot establish stronger-than-paper reaction-time decoding or causal demixing."
+  }
+}

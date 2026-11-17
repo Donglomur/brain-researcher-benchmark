@@ -100,34 +100,17 @@ def _current_registry(root):
     return value
 
 
+def current_cli():
+    spec = importlib.util.spec_from_file_location('neurobench_current_cli',
+                                                 Path(__file__).with_name('cli.py'))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def specifications(root=ROOT, complete=False):
-    registry = _current_registry(root)
-    docs, expected = {}, {}
-    for row in registry['tasks']:
-        pin = _object(row.get('specification'), 'Task specification pin')
-        path = _program_pin(root, pin.get('path'), pin.get('sha256'), pin.get('bytes'))
-        doc = _object(read(path), 'Task specification')
-        identity = doc.get('id', doc.get('candidate_id', doc.get('task_id')))
-        if (identity != row.get('specification_id')
-                or row.get('specification_alias') != (identity != row['id'])
-                or doc.get('track', row['track']) != row['track']):
-            raise ValueError('Current task/specification identity differs')
-        if row.get('registration_class') == 'canonical' and (not COMMON.issubset(doc) or doc.get('schema_version') != 1):
-            raise ValueError('Incomplete canonical delivery schema')
-        if row.get('registration_class') == 'canonical':
-            admission = _object(doc.get('admission'), 'Canonical source admission')
-            if (doc.get('status') not in {'specification_only', 'source_only_inactive', 'source_implemented_inactive'}
-                    or admission.get('runnable') is not False
-                    or admission.get('research_qualified') is not False):
-                raise ValueError('Source specifications cannot promote runtime or research admission')
-        docs[row['id']], expected[row['id']] = doc, row
-    if complete:
-        totals = registry.get('source_counts', {})
-        actual = {'paper': sum(row['track'] == 'paper' for row in expected.values()),
-                  'neural': sum(row['track'] == 'neural' for row in expected.values()), 'total': len(expected)}
-        if any(totals.get(key) != number for key, number in actual.items()):
-            raise ValueError('Current registry task totals disagree')
-    return docs, expected
+    # Current paper revisions share the authoritative public validation path.
+    return current_cli().specifications(root, complete=complete)
 
 
 def runtime_manifests(root=ROOT):
@@ -328,6 +311,7 @@ def score_command(task_id, submission, output, root=ROOT, *, review=None, other_
     _, canonical = specifications(root)
     if task_id not in canonical:
         raise ValueError('Unknown canonical task')
+    current_cli().require_paper_role(canonical[task_id], calibration=False)
     runtime = runtime_manifests(root)
     if task_id not in runtime:
         raise ValueError('No local scoring adapter is implemented for ' + task_id)
@@ -383,6 +367,7 @@ def run_command(task_id, program, output, root=ROOT, *, review=None, other_reser
     _, canonical = specifications(root)
     if task_id not in canonical:
         raise ValueError('Unknown canonical task')
+    current_cli().require_paper_role(canonical[task_id], calibration=False)
     runtime = runtime_manifests(root)
     if task_id not in runtime:
         raise ValueError('No local program runner is implemented for ' + task_id)

@@ -1,5 +1,11 @@
 # Direct artifact grading routes
 
+Paper adapters in this guide are historical calibration components. Passing them
+does not satisfy the current paper objective: surpassing the source-paper result
+on the same original task. Inspect `paper-contract ID` for that contract; legacy
+CLI `score` and `run` require explicit `--calibration` for paper IDs. The
+[improvement guide](../science/paper-improvement/README.md) describes comparison admission.
+
 These five source routes grade complete, finished submissions. The commands below
 use the current repository layout. Linked package guides retain their release
 text, including some former source paths; use them for the complete submission

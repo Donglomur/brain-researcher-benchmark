@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-030",
-  "source_id": "paper-method-030",
   "track": "paper",
   "title": "Robust self-supervised denoising of voltage imaging data using CellMincer",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Denoise real BeRST voltage movies and recover single-neuron optical traces faithful to simultaneous patch-clamp EP, including small subthreshold events. Preserve Figure3 F1*, lagged/zero-lag correlation and residual spectral fidelity together; stronger TTX-group significance or smoother traces is not improvement.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Denoise real BeRST voltage movies and recover single-neuron optical traces faithful to simultaneous patch-clamp EP, including small subthreshold events. Preserve Figure3 F1*, lagged/zero-lag correlation and residual spectral fidelity together; stronger TTX-group significance or smoother traces is not improvement.",
+    "Source-paper comparison for Figure3e original prominence-binned peak F1* profile, with Figure3c/d trace and spectral-fidelity safeguards: Paper F1*: precision and recall use existential peak matches with absolute time separation<2ms; harmonic mean is maximized over optical prominence p′ in[p−0.2,p+0.2]mV. Exact peak extraction, prominence-bin boundaries and undefined-case policy remain unrecovered. Secondary zero-lag correlation and STFT residual noise are retained; STFT window64/overlap48 are sourced, while the EP-power exclusion threshold and remaining conventions are unresolved."
+  ],
+  "success_criteria": [
+    "Recover the original26-training/22-evaluation membership and complete Figure3 F1*, correlation and spectral comparison; retain equal self-supervision context and original EP alignment.",
+    "Surpass the source CellMincer F1* profile under a predeclared meaningful-effect rule while satisfying original trace/spike fidelity and false-event safeguards; report every original metric, not only a favorable noise band.",
+    "Replicate the original peak extraction, prominence bins, alignment and spectral mask before a numerical comparison; local prospective grid, spectral defaults and boxcar control are not paper baselines.",
+    "A new held-out-cell split, altered noise condition or smaller subset is an extension, even if its internally matched CellMincer comparison is favorable.",
+    "Freeze candidate and decision rules before final reference scoring; do not train/tune on EP targets or treat stronger TTX separation as the accuracy endpoint.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-030",
   "canonical_position_one_based": 94,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s44303-024-00055-x",
     "publication_year": 2024,
     "venue": "npj Imaging"
   },
-  "primary_outputs": [
-    "Regenerate denoised fluorescence from raw paired TIFF recordings.",
-    "Quantify signal recovery/event timing against matching ABF electrophysiology, with raw and baseline denoisers compared on the same held-out cells."
-  ],
   "input_assets": {
     "routes": [
       "https://storage.googleapis.com/storage/v1/b/broad-dsp-cellmincer-data/o?maxResults=1000"
@@ -3544,106 +3555,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "GCS bucket publicly listed actual raw TIFF and matching ABF files with generation IDs/MD5.",
-        "Code license source pinned centrally; dataset license not stated by GCS listing, verify reuse before redistribution."
-      ],
-      "declared_overlap_group": "https://storage.googleapis.com/storage/v1/b/broad-dsp-cellmincer-data/o?maxResults=1000",
-      "existing_graph_evidence_leads": [],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Regenerate denoised fluorescence from raw paired TIFF recordings.",
-        "Quantify signal recovery/event timing against matching ABF electrophysiology, with raw and baseline denoisers compared on the same held-out cells."
-      ],
-      "construction_specificity": "Voltage/event recovery target is externally measured but exact alignment, event matching, subthreshold fidelity, false-event scoring and paper figure metric must be independently reconstructed.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Compare raw, CellMincer and matched denoisers with equal observation/self-supervision access.",
-      "Report spike timing, subthreshold fidelity and false events separately; denoising smoothness alone is not accuracy."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Voltage/event recovery target is externally measured but exact alignment, event matching, subthreshold fidelity, false-event scoring and paper figure metric must be independently reconstructed.",
-        "Whole cell/recording with acquisition/noise conditions grouped; electrical targets private for assessment and no within-recording adjacent-window leakage.",
-        "Paper-analysis repository404 means figure metric implementation remains a real gate. GCSpublic listing does not establish dataset redistribution license; multiGB/GPUcost unmeasured.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve preservation of subthreshold events and rapid spikes under changed noise or acquisition settings while controlling false events and reporting downstream phenotype robustness."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Improve preservation of subthreshold events and rapid spikes under changed noise or acquisition settings while controlling false events and reporting downstream phenotype robustness."
-      ],
-      "independent_panel_gate": "Whole cell/recording with acquisition/noise conditions grouped; electrical targets private for assessment and no within-recording adjacent-window leakage.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": "GPU; individual raw imaging files and matched electrophysiology, multi-GB selection",
-    "source_resource_evidence": "Inspection-based resource class, not a measured runtime.",
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "Voltage/event recovery target is externally measured but exact alignment, event matching, subthreshold fidelity, false-event scoring and paper figure metric must be independently reconstructed.",
-      "Whole cell/recording with acquisition/noise conditions grouped; electrical targets private for assessment and no within-recording adjacent-window leakage.",
-      "Paper-analysis repository404 means figure metric implementation remains a real gate. GCSpublic listing does not establish dataset redistribution license; multiGB/GPUcost unmeasured.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Map one complete paired TIFF/ABF recording family and alignment/channel units from saved source to a metric contract, including a baseline denoiser and all target access rules.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Map one complete paired TIFF/ABF recording family and alignment/channel units from saved source to a metric contract, including a baseline denoiser and all target access rules.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -3719,11 +3630,80 @@
     ],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_statement": "GPU; individual raw imaging files and matched electrophysiology, multi-GB selection",
+    "source_resource_evidence": "Inspection-based resource class, not a measured runtime.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-030/improvement.v1.json",
+      "bytes": 13932,
+      "sha256": "1a21aa0001a4dd705a3dfd1963a812a7f1354e4f872cc827988a15c4d9c3b5ef"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-030/historical/task.pre-improvement.v1.json",
+        "bytes": 162244,
+        "sha256": "6de9351af83dcd990e576873f65802b6df7df963dbdf3c008100b1d87dc0806e"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-030-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After source recovery, develop on declared optical training recordings and training/development feedback without exposing EP final targets; preserve the paper’s self-supervised observation access and record all attempts. Any prospective held-out-cell experiment is labeled separately.",
+    "candidate_freeze": "Freeze denoiser, original-compatible preprocessing, EP-independent candidate outputs, hyperparameters, seed policy and access/resource ledger before final EP scoring. Grader-side paper alignment is fixed independently of candidate selection.",
+    "final_evaluation": "Score all original22 recordings and every original Figure3 prominence bin plus correlation/spectral safeguards using authenticated CellMincer outputs and identical transformations; no final feedback-driven candidate revisions.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "An authenticated source CellMincer model/run is the required comparator. Raw movies and PMD/SUPPORT/N2S are informative original controls; the local boxcar control and prepared-trace evaluator are calibration components, not a substitute for the source denoiser."
+  },
+  "blocking_issues": [
+    "Exact Figure3e F1* numerical baseline/profile and full published aggregation not recovered; secondary13.9dB and0.90 cannot replace it.",
+    "CellMincerPaperAnalysis author URL returned404; exact peak grid, STFT mask, ROIs and alignment decisions remain unresolved.",
+    "Original26-training/22-evaluation file/cell identities and method-specific training coverage need recovery; current whole-cell split differs from source task.",
+    "Current evaluator consumes prepared traces and implements declared prospective peak/spectral choices; native TIFF/ABF bridge and author-baseline rerun are unqualified.",
+    "Meaningful-effect criterion, valid biological grouping, uncertainty rule and concrete information/compute budgets remain unfrozen."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact Figure3e F1* numerical baseline/profile and full published aggregation not recovered; secondary13.9dB and0.90 cannot replace it.",
+      "CellMincerPaperAnalysis author URL returned404; exact peak grid, STFT mask, ROIs and alignment decisions remain unresolved.",
+      "Original26-training/22-evaluation file/cell identities and method-specific training coverage need recovery; current whole-cell split differs from source task.",
+      "Current evaluator consumes prepared traces and implements declared prospective peak/spectral choices; native TIFF/ABF bridge and author-baseline rerun are unqualified.",
+      "Meaningful-effect criterion, valid biological grouping, uncertainty rule and concrete information/compute budgets remain unfrozen."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original paired-electrophysiology denoising task is ordered, and several numeric secondary results are recovered, but the exact published prominence-binned F1* profile, complete original cohort mapping and spectral/peak evaluation conventions are not recovered. The existing whole-cell held-out panel changes the paper’s self-supervised26-training/22-evaluation design and cannot establish a same-task paper win. Exact Figure3e F1* numerical baseline/profile and full published aggregation not recovered; secondary13.9dB and0.90 cannot replace it. CellMincerPaperAnalysis author URL returned404; exact peak grid, STFT mask, ROIs and alignment decisions remain unresolved. Original26-training/22-evaluation file/cell identities and method-specific training coverage need recovery; current whole-cell split differs from source task. Current evaluator consumes prepared traces and implements declared prospective peak/spectral choices; native TIFF/ABF bridge and author-baseline rerun are unqualified. Meaningful-effect criterion, valid biological grouping, uncertainty rule and concrete information/compute budgets remain unfrozen.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-030/historical/task.pre-improvement.v1.json",
+      "bytes": 162244,
+      "sha256": "6de9351af83dcd990e576873f65802b6df7df963dbdf3c008100b1d87dc0806e"
+    },
+    "notes": "Preserve the prepared-trace evaluator and its explicit prospective panel/grid policies as calibration and separately labeled extension infrastructure. Its22-recording whole-cell split and generated test controls are not proof of reproducing or surpassing the original self-supervised Figure3 result."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

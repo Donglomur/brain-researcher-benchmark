@@ -1,0 +1,165 @@
+{
+  "type": "object",
+  "properties": {
+    "task_id": {
+      "const": "PAPER-FIND-REP-003"
+    },
+    "component": {
+      "const": "opto-figure1h-release-native-v1"
+    },
+    "input_sha256": {
+      "const": "9d2be90908a05684dff9871697f5c37bb4f93522af67bf2625219f12cb4fd19c"
+    },
+    "trials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "mouse": {
+            "type": "string"
+          },
+          "session": {
+            "type": "string"
+          },
+          "trial_number": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "condition": {
+            "enum": [
+              "control",
+              "opto"
+            ]
+          },
+          "selected": {
+            "type": "boolean"
+          },
+          "contact_seconds": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "mouse",
+          "session",
+          "trial_number",
+          "condition",
+          "selected",
+          "contact_seconds"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 3304,
+      "maxItems": 3304
+    },
+    "bin_edges_seconds": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 30,
+      "maxItems": 30
+    },
+    "histograms": {
+      "type": "object",
+      "properties": {
+        "control": {
+          "type": "object",
+          "properties": {
+            "selected_trials": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "counts": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "minItems": 29,
+              "maxItems": 29
+            },
+            "probability": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "minItems": 29,
+              "maxItems": 29
+            },
+            "outside_display_window": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "selected_trials",
+            "counts",
+            "probability",
+            "outside_display_window"
+          ],
+          "additionalProperties": false
+        },
+        "opto": {
+          "type": "object",
+          "properties": {
+            "selected_trials": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "counts": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "minItems": 29,
+              "maxItems": 29
+            },
+            "probability": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "minItems": 29,
+              "maxItems": 29
+            },
+            "outside_display_window": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "selected_trials",
+            "counts",
+            "probability",
+            "outside_display_window"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "control",
+        "opto"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "task_id",
+    "component",
+    "input_sha256",
+    "trials",
+    "bin_edges_seconds",
+    "histograms"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Runtime additionally enforces exact identity coverage, source edges, finite numbers and histogram accounting."
+}

@@ -1,0 +1,161 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-004",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The paper has an ordered neural-decoding R-squared endpoint, but exact regional baseline values and the paper-compatible runtime are unrecovered. Pinned generic author defaults and the local evaluator differ from journal cohort, folds and aggregation; significant regions or a mouse-held-out extension cannot substitute.",
+  "source_paper": {
+    "title": "Brain-wide representations of prior information in mouse decision-making",
+    "url": "https://www.nature.com/articles/s41586-025-09226-1"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12408363/",
+      "locator": "Methods: Inclusion criteria; Electrophysiology data; WFI data; Nested cross-validation; Assessing statistical significance",
+      "supports": "Original modalities, cohort counts, feature windows, nested folds and corrected-score aggregation."
+    },
+    {
+      "id": "author-region",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/prior-localization/blob/380e7e68f31f9b55ec20e3f4863abec9eec25d30/prior_localization/run_scripts/format_outputs_stage_3.py",
+      "locator": "significance_by_region; argument defaults; regional output construction",
+      "supports": "Generic script uses median scores minus median null medians and at least two sessions, unlike the paper methods."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-004/task.json",
+      "locator": "primary_outputs; implementations/initial-evaluator-v1/provenance.json, README.md and evaluator.py",
+      "supports": "Registered task includes neural/movement prior decoding. Local component explicitly names generic script defaults, lists paper conflicts and reports zero authentic runs."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Decode the Bayes-optimal prior from pre-stimulus neural activity; retain movement-predictor and pseudosession controls. Better prior decoding does not prove causal prior computation.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Paper identifies the 2024 IBL release and separate WFI recordings; registration pins the 2023_12_bwm_release loader family. Exact versioned input manifest and modality coverage are not yet reconciled.",
+      "evidence_ids": [
+        "paper",
+        "registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Journal regional analyses contain 414 Ephys sessions/242 regions/2,289 region-sessions and 51 WFI sessions/32 regions/1,539 region-sessions. The exact roster must be recovered, including the separate 171-session movement subset.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Ephys uses nested interleaved fivefold outer and fivefold inner trial CV; WFI uses 50 outer folds and leave-one-out inner CV. Ten random splits are repeated. New held-mouse/session testing changes the original task.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Ephys binned spike counts and WFI pixel fluorescence are modality-specific inputs; behavior/video predictors are controls, not extra oracle information for the neural decoder.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Ephys sums spikes from -600 to -100 ms and uses Lasso; WFI uses frame -2 and Ridge. Preserve published QC, reaction-time and minimum-trial/unit/pixel inclusion.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "R-squared measures prior decoding; corrected R-squared subtracts the median of 1,000 pseudosession scores. Counts of significant regions and smaller p-values do not measure prediction improvement.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Paper takes median R-squared over ten repeats, then mean session corrected R-squared per region. Pinned stage3 instead takes median score minus median null medians and requires two sessions; reconcile the actual publication pipeline.",
+      "evidence_ids": [
+        "paper",
+        "author-region"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Source-paper pre-stimulus Bayes-optimal-prior decoding R-squared and regional null-corrected R-squared",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The paper reports regional decoding plots and related statistics, but an exact publication-linked regional score vector and a source-defined overall improvement scalar were not recovered.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No journal-compatible author rerun is established; the installed evaluator only checks generic pinned-script semantics.",
+      "evidence_ids": [
+        "author-region",
+        "registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Define practically meaningful corrected-R-squared gain on the original complete region/modality panel after recovering baseline variability; do not substitute more significant regions.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Unresolved: use paired original-task score differences with animal-level dependence and declared region/modality multiplicity; determine a valid rule before evaluation.",
+      "independent_unit": "Mouse, retaining repeated sessions and regions within mouse; WFI and Ephys populations remain separate.",
+      "rationale": "Trial folds, regions and repeated sessions are dependent. Pseudosession significance controls drift-related nulls but is not uncertainty for candidate-minus-author improvement.",
+      "evidence_ids": [
+        "paper",
+        "author-region"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover publication-linked numeric baseline scores and resolve all paper-versus-script configuration conflicts.",
+      "Use the original modality-specific inputs, windows, inclusion rules, prior target, trial splits and score aggregation for the complete declared source panel.",
+      "Retain movement/pseudosession controls; do not reward significance or anatomical coverage as if it were higher predictive performance.",
+      "Report new mouse-held-out/session-held-out testing only as an extension, and predeclare meaningful effect and valid paired uncertainty before final scoring."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was source-verified; paper and rerun baselines are separate.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Source recovery blocks admission. Future iteration uses training/inner-validation folds under the original modality-specific protocol, with explicit public-target exposure accounting.",
+    "candidate_freeze": "Freeze preprocessing, prior construction, candidate, feature policy and search configuration before protected outer-fold scoring.",
+    "final_evaluation": "Score on exact original trial partitions and source cohort, preserving ten-run and null corrections; do not use generic-default reconstruction as a paper-win decision.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published regional results, a journal-compatible author rerun and generic-script reconstruction are distinct comparators. No local authored baseline replaces the source."
+  },
+  "blocking_issues": [
+    "Exact source baseline score vector and source-authorized overall comparison rule are missing.",
+    "Original input roster/version and exact fold identities are not bound.",
+    "Paper-versus-script conflicts include estimator/folds, run and regional aggregation, null count, session/unit filters and reaction-time limit.",
+    "No complete same-task evaluator, uncertainty/effect rule or concrete episode budgets are admitted."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the generic-script initial evaluator and historical definition for calibration. Its run-mean, 200-null, 50-fold script protocol and Fisher/BH output are not a journal reconstruction or scientific success criterion."
+  }
+}

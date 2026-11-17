@@ -61,7 +61,7 @@ def perfect_runs(protected, vocabulary):
 
 class InventoryAndIdentityTests(unittest.TestCase):
     def test_full_canonical_population_and_production_subset_rejection(self):
-        inventory = e.load_inventory(PACKAGE.parents[1] / "task.json")
+        inventory = e.load_inventory(PACKAGE.parents[1] / "historical/task.pre-improvement.v1.json")
         self.assertEqual(e.inventory_summary(inventory)["counts"], {"CSI1/train": 4802, "CSI1/test": 84})
         self.assertEqual(len(inventory.paths), 4886)
         with self.assertRaises(e.ContractError):
@@ -252,7 +252,7 @@ class ScoringTests(unittest.TestCase):
 
     def test_production_binding_full_path_and_query_index_controls(self):
         # Metadata-only engineering control of the production binder, not data.
-        inventory = e.load_inventory(PACKAGE.parents[1] / "task.json")
+        inventory = e.load_inventory(PACKAGE.parents[1] / "historical/task.pre-improvement.v1.json")
         audit = {**e.inventory_summary(inventory), "image_disjoint_as_declared": True}
         assessment = {"engineering_fixture": False, "contract_sha256": e.CONTRACT_SHA256,
                       "audit": audit,

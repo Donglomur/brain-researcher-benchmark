@@ -1,0 +1,200 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-add-001",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The original offline stability comparison has ordered, published task-specific medians: isometric force R²=0.91 across 380 Jango pairs and reaching cursor-velocity R²=0.78 across 132 Chewie pairs. This grounds a complete source-task design, not readiness. Original partitions/preprocessing, author replay, metric/CV correspondence, source rights, uncertainty and budgets remain unresolved. The illustrated Day0→Day95 R²0.88 is calibration evidence and cannot establish the complete original task.",
+  "source_paper": {
+    "title": "Stabilizing brain-computer interfaces through alignment of latent dynamics",
+    "url": "https://www.nature.com/articles/s41467-025-59652-y"
+  },
+  "evidence": [
+    {
+      "id": "nomad-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-025-59652-y",
+      "locator": "Figures 2d, 3 and 4; Results: NoMAD stabilizes offline decoding during an unloaded reaching task; Methods: Neural decoding, Evaluation of decoding performance (Eq. 4), Data preprocessing and Data availability",
+      "supports": "Reports separate isometric and reaching panel medians, original cohort/pair counts, variance-weighted R², behavior-free alignment and source decoder/preprocessing protocol. Figure 2d is only an illustrated pair."
+    },
+    {
+      "id": "nomad-final-pdf",
+      "kind": "paper",
+      "url": "https://d-nb.info/1371962510/34",
+      "locator": "Final Nature Communications article, Results on unloaded reaching and Figure 4b–d",
+      "supports": "Publisher article preserved by the German National Library confirms final reaching median R²0.78 for 132 ordered pairs from 12 sessions over 38 days; this differs from earlier preprint 0.77."
+    },
+    {
+      "id": "nomad-demo",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/snel-repo/nomad/aa3c8faadf053d0b22160458854c076dcb13eb7e/demo/demo.ipynb",
+      "locator": "Dataset, decoder training and alignment/evaluation notebook cells",
+      "supports": "Author demonstration identifies Day0/Day95 processed-data workflow and fixed-decoder neural-only alignment, with trial/window choices requiring source correspondence. It is not the complete 512-pair original panel."
+    },
+    {
+      "id": "nomad-utils",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/snel-repo/nomad/aa3c8faadf053d0b22160458854c076dcb13eb7e/demo/utils.py",
+      "locator": "fit_and_eval_decoder, lines 183–227",
+      "supports": "The demonstration uses Ridge.score and a 1e-5 to 1e5 alpha search; this is not the paper variance-weighted R²/ten-fold 1e1 to 1e5 decoder protocol."
+    },
+    {
+      "id": "nomad-license",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/snel-repo/nomad/aa3c8faadf053d0b22160458854c076dcb13eb7e/LICENSE",
+      "locator": "Sections 2.2–2.3",
+      "supports": "Pinned terms restrict modifications/derivatives, distribution, competitive applications and use outside internal noncommercial research; source visibility is not authorization to ignore these restrictions."
+    },
+    {
+      "id": "recovered-component",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators/README.md",
+      "locator": "Complete obligations; Preserved unknowns",
+      "supports": "Recovered operators preserve 512 directed pairs and broader scientific obligations but remain inactive source components with unresolved original recipes, identities and native qualification."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Stabilize the original offline neural-to-behavior decoders through neural-only alignment across the complete monkey session panels: isometric wrist force for Jango (Figure 3) and cursor velocity during reaching for Chewie (Figure 4). Preserve fixed reference decoders and original task-specific outputs; an illustrated Day0→Day95 pair alone cannot satisfy this task.",
+      "evidence_ids": [
+        "nomad-paper",
+        "nomad-final-pdf"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Paper Data availability identifies Jango_ISO_2015 and Chewie_CO_2016 recordings for the isometric and reaching tasks. The public demo supplies only a two-session Day0/Day95 route; authentic complete per-session files, original processing lineage and exact split manifests remain unresolved.",
+      "evidence_ids": [
+        "nomad-paper",
+        "nomad-demo",
+        "recovered-component"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Original isometric panel: Monkey J/Jango, 20 sessions across 95 days and 380 ordered pairs. Original reaching panel: Monkey C/Chewie, 12 sessions across 38 days and 132 ordered pairs. Retain all 512 directed pairs and task-specific outcomes; source human online results are separate claims and are not established by these monkey panels.",
+      "evidence_ids": [
+        "nomad-paper",
+        "nomad-final-pdf",
+        "recovered-component"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "For every original directed pair, preserve reference-day decoder fitting and behavior-hidden target-day neural alignment with held-out behavior scoring. Paper validation reserves 20% in blocks limiting overlap; the two-session demo selects 80% of valid reference trials without a fixed seed. Exact original trial identities, alignment exposure and scoring support are unresolved. A newly chosen split is an extension.",
+      "evidence_ids": [
+        "nomad-paper",
+        "nomad-demo"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "For each original pair, reference-day neural activity and allowed behavior train the latent model/decoder; target-day adaptation receives neural activity without target-day behavior labels. Final target-day force or cursor-velocity labels remain evaluator-owned and cannot influence adaptation or candidate selection.",
+      "evidence_ids": [
+        "nomad-paper",
+        "nomad-demo"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper specifies 20-ms bins, channel exclusions/normalization, behavior-outlier handling and 600-ms overlapping training segments. Exact retained channels, filters, event clocks and original masks remain unresolved. Demo movement-onset windows cannot be equated silently to paper target-onset or other analysis windows.",
+      "evidence_ids": [
+        "nomad-paper",
+        "nomad-demo",
+        "recovered-component"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Paper Eq. 4 uses variance-weighted multi-output R²: 1 minus summed squared residuals across the original behavior dimensions divided by their summed centered target sums of squares. Preserve force and cursor-velocity target units separately. The paper names sklearn r2_score with multioutput=variance_weighted; pinned Ridge.score uses a different aggregation.",
+      "evidence_ids": [
+        "nomad-paper",
+        "nomad-utils"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Compute source variance-weighted R² for each directed session pair, then report separate medians over all 380 isometric pairs and all 132 reaching pairs. The paper does not establish a combined 512-pair median. Figure 2d 0.88 is an illustrated pair and cannot replace either full-panel result. Shared sessions create pair dependence.",
+      "evidence_ids": [
+        "nomad-paper",
+        "nomad-final-pdf",
+        "recovered-component"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Task-stratified median variance-weighted R² on the complete original isometric-force and reaching-cursor-velocity session-pair panels",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.91,
+      "description": "Primary isometric force panel (Figure 3): median R²0.91 across 380 Jango pairs. Mandatory separate reaching panel (final Figure 4): median R²0.78 across 132 Chewie pairs. These are separate task-specific baselines;0.91 is not a combined score. The Figure 2d illustrated Day0→Day95 score0.88 after116 epochs cannot establish either complete panel.",
+      "evidence_ids": [
+        "nomad-paper",
+        "nomad-final-pdf"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No exact source-paper rerun score is established. Author demo provides a route but Ridge.score aggregation, regularization search and trial partition differ from paper Methods; recovered operators are inactive and do not supply authentic results.",
+      "evidence_ids": [
+        "nomad-demo",
+        "nomad-utils",
+        "recovered-component"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Justify meaningful task-specific gains only after resolving original scoring support and author replay variability, preserving reference/target label budgets and long-gap behavior. No arbitrary R² increment, pooled force/velocity average, or statistically significant but practically negligible win is admitted.",
+      "evidence_ids": [
+        "nomad-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired candidate/author contrasts over the complete original panel with reference/test-session dependence and temporal structure retained. Candidate temporal/trial blocks require independent validation; no confidence level or resampling scheme is yet admitted.",
+      "independent_unit": "Original biological animals and dependent reference/target session clusters; temporal/trial blocks are proposed within-session resampling units whose independence is not established. Neither 512 pairs nor optimization seeds are independent animals.",
+      "rationale": "380 directed pairs reuse 20 sessions and are not 380 independent animals; repeated optimization seeds do not create biological replication.",
+      "evidence_ids": [
+        "nomad-paper",
+        "nomad-demo"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover complete original data, trial support, preprocessing and variance-weighted scoring for all 380 isometric and 132 reaching pairs, and reproduce both author panel baselines.",
+      "Surpass the source author method under a predeclared task-specific meaningful-gain and uncertainty rule while preserving original fixed-reference decoders, allowed neural/behavior access and resources; no invented pooled score.",
+      "Keep target-day behavior hidden from adaptation and candidate selection.",
+      "Do not substitute demo uniform-average scores, supervised target-day decoders, local authored baselines, new trial splits or selected favorable pairs for the original source comparison.",
+      "A Figure 2d pair improvement is calibration/subpanel evidence only and cannot satisfy this full original task. Preserve all original pairs, failures and task-specific controls; human online results require their own original evaluation.",
+      "Resolve source-code rights before prohibited modifications, redistribution or competitive use; independent implementation does not itself qualify source/data rights or comparison validity."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA claim; surpassing this source paper and surpassing later methods are separate source-verified comparisons.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Design only. After source-route and rights resolution, iterate alignment methods using original permitted reference-day labeled training and target-day neural-only adaptation plus predeclared development feedback. Preserve the complete original force and reaching task panels and label budgets.",
+    "candidate_freeze": "Seal method code/configuration, every reference state, adaptation/checkpoint rule, preprocessing, complete pair roster and evaluation support before final target behavior or comparisons are opened.",
+    "final_evaluation": "Run frozen candidate and source-author methods on all original 380 isometric and 132 reaching pairs, using Eq.4 R² and separate original median reductions. Report published 0.91/0.78, reproduced author values and candidate values separately, retaining failed pairs. No illustrated-pair result or combined 512-pair score can award task success.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Author baseline must match the paper metric, CV and support. Demo output and independent recovered operators are not automatically historical results; preserve their discrepancies and all broader original obligations."
+  },
+  "blocking_issues": [
+    "Complete original isometric/reaching data and train-validation-scoring trial identities, event support and preprocessing lineage unresolved.",
+    "Pinned demo Ridge.score and alpha/CV recipe differ from paper Methods.",
+    "Author rerun/reference result and working source-matched evaluator not qualified.",
+    "Pinned NoMAD license restrictions unresolved for a modifiable or competitive improvement task.",
+    "Task-specific meaningful effect, dependence-aware uncertainty and fixed concrete access/resource budgets not yet admitted.",
+    "All512 directed pairs and task-specific controls remain required; a Day0/Day95 demonstration cannot satisfy original complete-panel scope."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve Day0/Day95 demonstration and complete recovered-operator source obligations without alteration. Source inspection, operator correctness and reconstruction are calibration/design evidence, not achieved paper improvement."
+  }
+}

@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-033",
-  "source_id": "paper-method-033",
   "track": "paper",
   "title": "MindBridge: A Cross-Subject Brain Decoding Framework",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Reconstruct viewed images for original target subject 7 after adapting a model pretrained on subjects 1, 2 and 5, retaining all Table 2 calibration conditions (500, 1500 and 4000 images). The 4000-image condition is nominated as primary by this design; the paper did not designate a single primary. New target subjects or sessions are extensions.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Reconstruct viewed images for original target subject 7 after adapting a model pretrained on subjects 1, 2 and 5, retaining all Table 2 calibration conditions (500, 1500 and 4000 images). The 4000-image condition is nominated as primary by this design; the paper did not designate a single primary. New target subjects or sessions are extensions.",
+    "Source-paper comparison for Table 2 target-subject-7 mean CLIP two-way identification at 4000 calibration images (proportion): Nominated primary is Table 2 target-7 CLIP two-way identification at 4000 calibration images: for predicted image j, fraction of other real-image features with strictly lower Pearson correlation than its true image; average across j. Use source CLIP ViT-L/14 transforms. Retain all eight paper metrics and all three budget conditions; the primary nomination is a benchmark design choice."
+  ],
+  "success_criteria": [
+    "Recover and freeze original target-7 test split, all 500/1500/4000 calibration memberships, preprocessing, generation/extractor weights and complete source-subject exposure ledger.",
+    "Calibrate authenticated author baselines for all three original Table 2 conditions, pretrained on subjects 1/2/5, using the source best-of-eight target-aware rule under operator-only scoring.",
+    "Freeze candidate method, all eight output candidates and resource/access accounting before final source-protocol evaluation; retain the entire original target-7 test set at each budget.",
+    "At the nominated 4000-image primary condition, exceed published CLIP 0.925 and a competent matched author rerun by a predeclared meaningful amount with valid paired uncertainty. Report all eight metrics at all three original budgets and predeclare how other budget results constrain any adaptation-efficiency claim.",
+    "Do not count a fixed-index protocol, new sessions/splits/calibration subsets, a four-subject Table 1 score or a new curve aggregate as surpassing this original subject-7 task; label these separately.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-033",
   "canonical_position_one_based": 88,
   "paper_identity": {
     "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Wang_MindBridge_A_Cross-Subject_Brain_Decoding_Framework_CVPR_2024_paper.html",
     "publication_year": 2024,
     "venue": "CVPR"
   },
-  "primary_outputs": [
-    "Compare single-subject and bridge-trained decoding on a fixed target subject and held-out images.",
-    "Evaluate adaptation efficiency versus calibration budget with identical stimulus/test identities."
-  ],
   "input_assets": {
     "routes": [
       "https://huggingface.co/api/datasets/pscotti/naturalscenesdataset"
@@ -2679,159 +2690,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Public HF NSD mirror pinned; upstream code redistribution license is unverified at the captured revision; NSD usage agreement and stimulus rights remain separate.",
-        "Author checkpoint route public HF littlepure2333/MindBridge; source NSD stimulus information and COCO annotations required by author preparation."
-      ],
-      "declared_overlap_group": "natural-scenes-dataset-nsd",
-      "existing_graph_evidence_leads": [
-        {
-          "tasks": [
-            "PAPER-paper-method-032",
-            "PAPER-paper-method-033"
-          ],
-          "relation": "shared_literal_overlap_label",
-          "value": "natural-scenes-dataset-nsd",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": false,
-          "biological_overlap_verified": false
-        },
-        {
-          "tasks": [
-            "PAPER-paper-method-033",
-            "PAPER-paper-method-042"
-          ],
-          "relation": "shared_exact_data_locator",
-          "value": "https://huggingface.co/api/datasets/pscotti/naturalscenesdataset",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": false,
-          "biological_overlap_verified": false
-        },
-        {
-          "tasks": [
-            "PAPER-paper-method-033",
-            "PAPER-paper-method-042"
-          ],
-          "relation": "shared_literal_overlap_label",
-          "value": "natural-scenes-dataset-nsd",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": false,
-          "biological_overlap_verified": false
-        },
-        {
-          "tasks": [
-            "PAPER-paper-method-033",
-            "PAPER-paper-method-043"
-          ],
-          "relation": "shared_literal_overlap_label",
-          "value": "natural-scenes-dataset-nsd",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": false,
-          "biological_overlap_verified": false
-        }
-      ],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Compare single-subject and bridge-trained decoding on a fixed target subject and held-out images.",
-        "Evaluate adaptation efficiency versus calibration budget with identical stimulus/test identities."
-      ],
-      "construction_specificity": "Cross-subject transfer and calibration efficiency are documented; exact target person, primary reconstruction/retrieval metric and exposure budget remain unfrozen.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Equal calibration labels, shared-subject exposure and image priors for bridge versus single-subject comparators.",
-      "Neural-free/shuffled-neural controls distinguish image-model priors from neural contribution."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Cross-subject transfer and calibration efficiency are documented; exact target person, primary reconstruction/retrieval metric and exposure budget remain unfrozen.",
-        "Target participant/session and held-out image identities, accounting for shared NSD images across subjects and pretraining.",
-        "AuthorA5000/24GB setting is author-reported, not localmeasurement. Upstream code redistribution license is unverified at the captured revision; NSD agreement and COCO/stimulus rights remain separate.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve calibration efficiency or transfer to new sessions with equal subject/stimulus exposure versus MindBridge and individually trained or shared-subject baselines."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Improve calibration efficiency or transfer to new sessions with equal subject/stimulus exposure versus MindBridge and individually trained or shared-subject baselines."
-      ],
-      "independent_panel_gate": "Target participant/session and held-out image identities, accounting for shared NSD images across subjects and pretraining.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": "GPU; author reports A5000/24GB setting; dataset tens to hundreds GB",
-    "source_resource_evidence": "Inspection-based resource class, not a measured runtime.",
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "Cross-subject transfer and calibration efficiency are documented; exact target person, primary reconstruction/retrieval metric and exposure budget remain unfrozen.",
-      "Target participant/session and held-out image identities, accounting for shared NSD images across subjects and pretraining.",
-      "AuthorA5000/24GB setting is author-reported, not localmeasurement. Upstream code redistribution license is unverified at the captured revision; NSD agreement and COCO/stimulus rights remain separate.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Freeze the target participant, all pretraining/adaptation image memberships and one primary metric before selecting data/checkpoints; group NSD overlap across suites.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Freeze the target participant, all pretraining/adaptation image memberships and one primary metric before selecting data/checkpoints; group NSD overlap across suites.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -2907,11 +2765,78 @@
     ],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_statement": "GPU; author reports A5000/24GB setting; dataset tens to hundreds GB",
+    "source_resource_evidence": "Inspection-based resource class, not a measured runtime.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-033/improvement.v1.json",
+      "bytes": 13297,
+      "sha256": "53e8386057b5743e84ece564ea20edf3003537452cb928089ae3092e5d3e4d3f"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-033/historical/task.pre-improvement.v1.json",
+        "bytes": 128582,
+        "sha256": "837cade4f9794be5e10e129d9c8244135f0841a25b3f42661728d04ee31722c6"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-033-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate using the original source-subject training/development inputs and target-7 calibration access at 500/1500/4000 images. Keep the original target, each full source budget condition and image-prior exposure fixed; do not inspect final test outcomes during iteration.",
+    "candidate_freeze": "Bind code, hyperparameters, preprocessing, priors, checkpoints, seeds, candidate count, selection evaluator and all final generated images before operator scoring.",
+    "final_evaluation": "One protected replay on the complete original 982-image target-7 test set at each of 500, 1500 and 4000 calibration images, with unchanged source scoring. The 4000-image CLIP condition is the nominated primary; all other source conditions and metrics remain reported. Exact final replay service is not yet qualified.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep Table 2 published scores (0.867/0.910/0.925 CLIP at 500/1500/4000), authenticated author reruns and candidate scores separate. Table 1 0.947 is a different experiment. The local fixed-index evaluator is calibration/extension infrastructure, not the published baseline. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Exact immutable test/training and adaptation subset memberships need recovery.",
+    "Source target-aware candidate selection is incompatible with the current fixed-index scorer; source-protocol scoring must be implemented without exposing targets to fitting.",
+    "Feature/prior weight identities, image exposure and NSD/stimulus/code rights are not fully authenticated.",
+    "No competent native replay of all original target-7 calibration conditions, justified effect, complete uncertainty decision or fixed concrete episode budgets."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact immutable test/training and adaptation subset memberships need recovery.",
+      "Source target-aware candidate selection is incompatible with the current fixed-index scorer; source-protocol scoring must be implemented without exposing targets to fitting.",
+      "Feature/prior weight identities, image exposure and NSD/stimulus/code rights are not fully authenticated.",
+      "No competent native replay of all original target-7 calibration conditions, justified effect, complete uncertainty decision or fixed concrete episode budgets."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original subject-7 adaptation task has ordered reconstruction endpoints and recoverable published comparisons at all three source calibration budgets. Its target-aware best-of-eight reconstruction selection differs scientifically from the existing fixed-index evaluator, which cannot establish a source-paper win. Exact adaptation subset identities, exposure manifests, competent author replay, meaningful effect, uncertainty and execution budgets remain unqualified. Exact immutable test/training and adaptation subset memberships need recovery. Source target-aware candidate selection is incompatible with the current fixed-index scorer; source-protocol scoring must be implemented without exposing targets to fitting. Feature/prior weight identities, image exposure and NSD/stimulus/code rights are not fully authenticated. No competent native replay of all original target-7 calibration conditions, justified effect, complete uncertainty decision or fixed concrete episode budgets.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-033/historical/task.pre-improvement.v1.json",
+      "bytes": 128582,
+      "sha256": "837cade4f9794be5e10e129d9c8244135f0841a25b3f42661728d04ee31722c6"
+    },
+    "notes": "Preserve the existing evaluator and engineering tests. Its fixed-index feature scores and prospective adaptation AUC do not reproduce Table 2 source values or constitute improvement success; the separate Table 1 cohort result cannot replace this target-7 task."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

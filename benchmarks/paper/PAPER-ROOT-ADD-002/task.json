@@ -1,19 +1,30 @@
 {
   "schema_version": 1,
   "id": "PAPER-ROOT-ADD-002",
-  "source_id": "ROOT-ADD-002",
   "track": "paper",
   "title": "Non-invasive decoding of typed sentences from human brain activity",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Predict V1 sentence characters from keystroke-aligned EEG or MEG. Match the paper Conv+Trans ablation for the registered neural-only condition; full Brain2Qwerty with N-gram correction is a separate source condition.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Predict V1 sentence characters from keystroke-aligned EEG or MEG. Match the paper Conv+Trans ablation for the registered neural-only condition; full Brain2Qwerty with N-gram correction is a separate source condition.",
+    "Source-paper comparison for V1 neural-only Conv+Trans CER, by modality: CER is character Levenshtein edits divided by reference sentence length. The pinned export compares predictions with true/presented sentences; WER is secondary and cannot replace the source CER."
+  ],
+  "success_criteria": [
+    "Recover original Conv+Trans paper score and validate the exact modality-specific person/session/sentence roster and split.",
+    "Demonstrate improved original CER versus both the published same-condition score and a competent author rerun under matched declared access/resources.",
+    "Do not compare neural-only outputs to the language-assisted29% headline, count alias recordings as independent people, or claim a paper win on a new sentence split.",
+    "Freeze the decoder, preprocessing, thresholds and all selection decisions before one protected final evaluation.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "ROOT-ADD-002",
   "canonical_position_one_based": 20,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41593-026-02303-2",
     "publication_year": 2026,
     "venue": "Nature Neuroscience"
   },
-  "primary_outputs": [
-    "Retrain/evaluate the V1 neural decoder on released EEG/MEG typing recordings and reproduce character/word error comparisons under a frozen subject/session and sentence split."
-  ],
   "input_assets": {
     "routes": [
       "https://huggingface.co/datasets/bcbl190626/SpanishBCBL"
@@ -2942,112 +2953,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "recorded_terms": {
-        "code": "CC BY-NC 4.0",
-        "data": [
-          "CC BY-NC 4.0"
-        ]
-      },
-      "record_conflicts": [],
-      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
-      "overlap_group": "spanishbcbl-typing-v1"
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "central_outputs_in_saved_source_contract": [
-        "Retrain/evaluate the V1 neural decoder on released EEG/MEG typing recordings and reproduce character/word error comparisons under a frozen subject/session and sentence split."
-      ],
-      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
-      "missing_or_unfrozen_endpoint_details": "Bound to V1 neural decoder; V2 embargo and final language-model rescoring/corpus are separate. Multiple recording participant IDs can belong to one person."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Keep CER/WER vocabulary, normalization and sentence/session folds fixed; neural-only versus language-model-assisted outputs are separate endpoints. Cross-session adaptation consumes a declared calibration budget."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Bound to V1 neural decoder; V2 embargo and final language-model rescoring/corpus are separate. Multiple recording participant IDs can belong to one person.",
-        "Keep CER/WER vocabulary, normalization and sentence/session folds fixed; neural-only versus language-model-assisted outputs are separate endpoints. Cross-session adaptation consumes a declared calibration budget.",
-        "Author source and archive metadata were inspected; scientific code was not executed. Readiness applies only to the declared central project.",
-        "Local dependency installation, bounded payload validation, baseline result agreement, runtime measurement, and benchmark packet/grader validation remain before execution qualification.",
-        "V2 embargo excluded. Published final language-model rescoring needs separate corpus/artifact verification; this project is the central V1 neural decoder.",
-        "Resolve multiple participant IDs belonging to one person before splitting; decoder source includes explicit aliases/log fixes.",
-        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-        "Execute and independently audit references, controls, grading and measured resources.",
-        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
-      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve neural-only decoding with calibration or cross-session adaptation at matched training and inference budgets; evaluate CER/WER and participant-level intervals."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "independent_panel_not_established_in_inspected_evidence",
-      "proposed_improvement": [
-        "Improve neural-only decoding with calibration or cross-session adaptation at matched training and inference budgets; evaluate CER/WER and participant-level intervals."
-      ],
-      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
-      "special_gate": "No completed independent improvement result is established here."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "source_roster_estimate_or_statement": "unmeasured",
-    "measured_or_static_facts_from_existing_authoring": [],
-    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
-  },
-  "holds": {
-    "task_specific": [
-      "Bound to V1 neural decoder; V2 embargo and final language-model rescoring/corpus are separate. Multiple recording participant IDs can belong to one person.",
-      "Keep CER/WER vocabulary, normalization and sentence/session folds fixed; neural-only versus language-model-assisted outputs are separate endpoints. Cross-session adaptation consumes a declared calibration budget.",
-      "Author source and archive metadata were inspected; scientific code was not executed. Readiness applies only to the declared central project.",
-      "Local dependency installation, bounded payload validation, baseline result agreement, runtime measurement, and benchmark packet/grader validation remain before execution qualification.",
-      "V2 embargo excluded. Published final language-model rescoring needs separate corpus/artifact verification; this project is the central V1 neural decoder.",
-      "Resolve multiple participant IDs belonging to one person before splitting; decoder source includes explicit aliases/log fixes.",
-      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-      "Execute and independently audit references, controls, grading and measured resources.",
-      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Resolve alias/person and sentence identities in the pinned manifest, freeze the V1-only checkpoint/training and CER/WER contract, and size a lawful bounded recording panel.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Resolve alias/person and sentence identities in the pinned manifest, freeze the V1-only checkpoint/training and CER/WER contract, and size a lawful bounded recording panel.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -3078,11 +2983,77 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "source_roster_estimate_or_statement": "unmeasured",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-002/improvement.v1.json",
+      "bytes": 10712,
+      "sha256": "3880d9dc31b05f5021dceabb66106116251e69b305ceff0032cfafae13853a2e"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-ROOT-ADD-002/historical/task.pre-improvement.v1.json",
+        "bytes": 111905,
+        "sha256": "8ab32cd773f3ac22132a9ffe33ad8325594af7af311a70b0040ab068d9f58bf9"
+      },
+      "implementation_ids": [
+        "construction-typing-v1-transcript-evaluator"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After source recovery, iterate V1 neural decoder changes using original training and validation sentences only; report validation CER by modality and record all attempts.",
+    "candidate_freeze": "Seal code, model, preprocessing, modality, source roster, split, access/resource budgets and selection rule before final scoring.",
+    "final_evaluation": "Use the identical original test sentence/person panel and export CER route with protected references; a newly created split is an extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published Conv+Trans score, independently rerun author Conv+Trans score and full-system language-model score separate. Current source defaults require reconciliation."
+  },
+  "blocking_issues": [
+    "Numeric original neural-only baseline missing.",
+    "Paper-era split membership and complete modality-specific empirical roster not authenticated.",
+    "Current300-epoch/batch64/lr5e-5 defaults differ from paper100-epoch/batch128/lr1e-4 recipe; intended versus typed target conventions need reconciliation.",
+    "No matched author rerun, protected model execution, justified effect, final uncertainty rule, or fixed episode budgets."
+  ],
+  "holds": {
+    "task_specific": [
+      "Numeric original neural-only baseline missing.",
+      "Paper-era split membership and complete modality-specific empirical roster not authenticated.",
+      "Current300-epoch/batch64/lr5e-5 defaults differ from paper100-epoch/batch128/lr1e-4 recipe; intended versus typed target conventions need reconciliation.",
+      "No matched author rerun, protected model execution, justified effect, final uncertainty rule, or fixed episode budgets."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original V1 sentence-decoding task is ordered, but the registered neural-only export has no recovered matching published numeric baseline. The headline MEG CER of 29% includes the language model. Current source defaults also differ from the paper training recipe and split description; a successful local transcript score cannot establish a same-task win. Numeric original neural-only baseline missing. Paper-era split membership and complete modality-specific empirical roster not authenticated. Current300-epoch/batch64/lr5e-5 defaults differ from paper100-epoch/batch128/lr1e-4 recipe; intended versus typed target conventions need reconciliation. No matched author rerun, protected model execution, justified effect, final uncertainty rule, or fixed episode budgets.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-002/historical/task.pre-improvement.v1.json",
+      "bytes": 111905,
+      "sha256": "8ab32cd773f3ac22132a9ffe33ad8325594af7af311a70b0040ab068d9f58bf9"
+    },
+    "notes": "Retain transcript evaluator as calibration only. It validates complete supplied panel coverage but explicitly does not establish authentic population, original decoder competence, or paper reproduction."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

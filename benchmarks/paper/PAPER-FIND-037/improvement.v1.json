@@ -1,0 +1,176 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-037",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The canonical registration explicitly includes behavioral model comparison, and the source provides an ordered BIC comparison, so this is source-unresolved rather than a newly invented prediction task. Exact original BIC values, likelihood/parameter-count semantics and code-to-paper correspondence remain unresolved. EEG association strength is not an ordered paper-win endpoint.",
+  "source_paper": {
+    "title": "The neural correlates of novelty and variability in human decision-making under an active inference framework",
+    "url": "https://elifesciences.org/articles/92892"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://cdn.elifesciences.org/articles/92892/elife-92892-v1.pdf",
+      "locator": "Version-of-record cover; pp. 6-7 Behavioral results/Fig. 4c; pp. 19-20 Participants and EEG processing",
+      "supports": "120-trial behavioral fitting/BIC comparison; model parameter sets; fitting search; EEG processing and descriptive source correlations."
+    },
+    {
+      "id": "author-readme",
+      "kind": "author_code",
+      "url": "https://github.com/andlab-um/FreeEnergyEEG",
+      "locator": "README Description and repository inventory",
+      "supports": "25 behavioral datasets versus 23 preprocessed EEG datasets; analysis and source-regression routes."
+    },
+    {
+      "id": "author-fit",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/andlab-um/FreeEnergyEEG/80418e5d1949631b0e2b54432e6b6956773c43da/code%20for%20data%20analysis/data_fitting.ipynb",
+      "locator": "Behavioral_Data, log_P_rl, Parameter_update_rl, active-inference forward functions",
+      "supports": "Pinned fitting notebook contains task choice/reward parsing and model computations; visible exploratory cells do not alone establish publication-fit identity."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-037/task.json",
+      "locator": "primary_outputs; implementations/registered-runtime/manifest.json and score.py",
+      "supports": "Behavioral comparison is explicitly canonical. Existing scorer is 25-person supplied-fit/forward conformance and excludes EEG, fresh optimization and held-out prediction claims."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Compare active-inference, model-free RL and model-based RL explanations of the original choices. Sensor/source EEG associations remain supporting descriptive outcomes; stronger significance cannot count as improved behavioral modeling.",
+      "evidence_ids": [
+        "paper",
+        "registration"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "FreeEnergyEEG supplies the experiment data and analysis notebooks; the task pins commit 80418e5d1949631b0e2b54432e6b6956773c43da. Exact publication-linked fit/data and EEG exclusion manifests are not bound.",
+      "evidence_ids": [
+        "author-readme",
+        "author-fit",
+        "registration"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "25 behavioral participants; the author repository separately describes 23 preprocessed EEG participants. These are modality-specific populations, not interchangeable cohort sizes. Exact EEG participant exclusions remain a mapping blocker.",
+      "evidence_ids": [
+        "paper",
+        "author-readme"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Paper fits each participant across the original single block of 120 trials and compares BIC. No held-out predictive partition is reported for this comparison; a nested or held-participant evaluation is a separate extension.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Trial histories include cue availability, stay/cue choice, safe/risky choice, context and observed rewards. Preserve information available at each choice; EEG data and fitted source regressors are separate modalities.",
+      "evidence_ids": [
+        "author-readme",
+        "author-fit"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Behavioral parser/likelihood masks and model initialization must match the publication. For EEG the paper specifies 250 Hz, 1-30 Hz, ICA and fsaverage/eLORETA; exact exclusions and preprocessing-to-trial mapping remain unbound.",
+      "evidence_ids": [
+        "paper",
+        "author-fit"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "BIC is the published ordered metric. Freeze its exact likelihood, sample-size convention and effective parameter count before scoring; fitting-notebook output and supplied-fit forward error are not automatically Figure 4c BIC.",
+      "evidence_ids": [
+        "paper",
+        "author-fit"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Original participant-level BIC values and the exact Figure 4c cohort summary/uncertainty need recovery. Do not substitute a smaller participant set, an arbitrary pooled likelihood or a local reference discrepancy.",
+      "evidence_ids": [
+        "paper",
+        "registration"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Figure 4c behavioral Bayesian information criterion (BIC), with original cohort and likelihood convention",
+    "direction": "lower",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Figure 4c compares BIC for the three models, but exact active-inference baseline values and summary formula were not recovered; no figure digitization or local conformance score is used.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The existing 75-fit/25-conformance adapter checks supplied artifacts. It does not establish fresh optimization or exact reproduction of published BIC.",
+      "evidence_ids": [
+        "registration",
+        "author-fit"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful BIC improvement requires a valid declared likelihood/complexity convention and full cohort comparison; no universal BIC threshold or EEG p-value improvement is imposed.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Unresolved: predeclare paired participant-level candidate-minus-author BIC uncertainty and model-family multiplicity after recovering original score semantics.",
+      "independent_unit": "Participant; trials, electrodes, source parcels and time points are nested observations.",
+      "rationale": "Participants provide biological replication. In-sample model fit and descriptive EEG significance do not establish protected predictive improvement.",
+      "evidence_ids": [
+        "paper",
+        "author-readme"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover original Figure 4c BIC values and the publication-compatible active-inference/RL likelihood, parameter-count and aggregation conventions.",
+      "Compare the complete original behavioral cohort on the same choice-estimation task, with all method-selection and public-exposure limits declared.",
+      "Keep the canonical EEG outputs as descriptive/calibration evidence; do not claim their larger correlations or smaller p-values are a paper win.",
+      "A new held-out predictive split or a 23-person behavioral subset is an extension, not a source-paper victory.",
+      "Predeclare candidate freeze, meaningful effect, uncertainty and fixed budgets; forward-conformance success alone is never scientific success."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was source-verified; paper and rerun baselines are separate.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending original BIC recovery and an admission design compatible with in-sample source fitting. Protected prediction on a new split may be useful but must be separately labelled.",
+    "candidate_freeze": "Freeze model family, free parameters, priors/initialization, likelihood masks and optimization/search rule before final original-task comparison.",
+    "final_evaluation": "Recompute original-cohort BIC against the recovered author result and report EEG calibration separately; do not replace Figure 4c by the supplied-artifact discrepancy grader.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Separate published BIC, an authentic author refit and local supplied-fit numerical conformance. Existing runtime seconds are not an authorized improvement-episode allocation."
+  },
+  "blocking_issues": [
+    "Exact published BIC baseline and participant-level summary are unrecovered.",
+    "Paper-versus-notebook likelihood, parameter count, search configuration and final-version identity need reconciliation.",
+    "The original fit uses exposed data; a scientifically valid protected iteration/admission policy is not established.",
+    "EEG exclusion/trial map and full canonical calibration coverage remain incomplete.",
+    "No meaningful-effect/uncertainty rule, original-task improvement evaluator or fixed episode budgets."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain the historical 25-participant supplied-fit and forward-conformance adapter unchanged. It excludes EEG and cannot demonstrate fresh-fitting, stronger-than-paper performance or current SOTA."
+  }
+}

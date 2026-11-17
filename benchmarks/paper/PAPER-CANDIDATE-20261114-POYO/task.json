@@ -1,16 +1,25 @@
 {
+  "schema_version": 1,
   "id": "PAPER-CANDIDATE-20261114-POYO",
   "track": "paper",
   "title": "Cross-session transfer of a unified neural population decoder",
-  "registration_recommendation": "REGISTER_DRAFT_ONLY",
-  "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
-  "scientific_question": "Does cross-source neural population pretraining improve adaptation to genuinely held sessions across the complete four-source158-session paper scope at a fixed adaptation budget?",
-  "paired_access_conditions": {
-    "A": "Paper and sufficient scientific specification plus identical complete authorized data and train/dev labels; no official implementation.",
-    "B": "The same paper/specification/data and role information plus pinned official code. Missing essential method specification is a construction defect, not an A-arm model failure.",
-    "parity": "Equal execution, tuning and compute budgets; same complete held cases and metric. Public event schedules and paper-provided information remain equally available. Code/model/checkpoint exposure and contamination are audited.",
-    "outcomes": "Separate historical reproduction from prospective improvement. Preserve original test-selection/leakage if reproducing it, label it, and never substitute a corrected split without a distinct prospective result. Narrative cannot replace numeric artifacts."
-  },
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Decode two-dimensional hand velocity from neural spikes and transfer the pretrained decoder to new sessions/animals under the original adaptation conditions.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Decode two-dimensional hand velocity from neural spikes and transfer the pretrained decoder to new sessions/animals under the original adaptation conditions.",
+    "Source-paper comparison for Original held-session transfer R² for every published adaptation condition: Original decoding R² is the endpoint. The exact historical dimension weighting, stitching and near-constant behavior are not established by the contemporary TorchMetrics-based callback."
+  ],
+  "success_criteria": [
+    "Bind original source releases, the 158-session pretraining corpus and every separate transfer cohort and adaptation budget before scoring.",
+    "Recover the historical R² implementation, source-specific masks and aggregation; treat the current TorchMetrics policy as an extension until equivalence is established.",
+    "Beat the source-author method on the same original complete transfer panel with matched pretraining/adaptation access and resources; no Perich-only or POYO-MP substitution.",
+    "Keep the Table 2 and NLB results distinct and disclose all population outcomes; a favorable single session or budget cannot count as the complete task win.",
+    "Require predeclared meaningful effect and dependence-aware uncertainty; newly held animals or corrected data splits are separate prospective claims.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "participant_inputs": "Complete published four-source spike/kinematic scope (158 sessions,7 primates,27373 units,>100h as paper targets), with full authenticated source-version/session joins; same adaptation trials and train/dev information in both arms. No Perich-only or POYO-MP substitution.",
   "provenance": {
     "paper": {
       "title": "A Unified, Scalable Framework for Neural Population Decoding",
@@ -157,30 +166,25 @@
       "sha256": "8d7b327437db502dedef40e1918944abf9200eb2572fa023e74f037a65dceb35"
     }
   },
-  "complete_scope": "Complete four-source POYO-1 pretraining/transfer claim and its full held-session adaptation curve. POYO-MP on Perich alone is not a replacement. Freeze all 158 historical sessions or hold reproduction if contemporary conversions do not map completely.",
-  "reference": {
-    "outputs": [
-      "Complete held-session decoding R2 and adaptation-budget curves",
-      "Pretrained versus from-scratch comparison at matched data/compute budget",
-      "Per-source and per-animal outcomes"
-    ],
-    "baselines": [
-      "POYO",
-      "From-scratch same architecture",
-      "Ridge and recurrent decoder under matched training data"
-    ],
-    "panel": "Paper's full multi-dataset decoding and transfer experiments; exact panel/config map remains required."
-  },
-  "prospective_improvement": {
-    "endpoint": "Higher macro-session R2 at a fixed adaptation trial budget on sessions excluded from pretraining, with adaptation compute and calibration reported.",
-    "heldout_unit": "Whole session, plus animal-held sensitivity when the source supports it. No unit/session identifier lookup into held targets.",
-    "controls": [
-      "No-pretraining and shuffled neuron/session identifiers",
-      "Equal total adaptation/tuning budget",
-      "Data-family stratification",
-      "No train/test time-window overlap",
-      "Pretraining contamination manifest including all source versions"
-    ]
+  "source_family_ids": [
+    "churchland-shenoy-2012",
+    "perich-miller-2018",
+    "odoherty-sabes-rtt",
+    "flint-slutzky-2012"
+  ],
+  "publication_context": {
+    "status": "registered_construction_draft_definition_only",
+    "source_snapshot_date": "2026-11-14",
+    "source_definition_bytes": 14281,
+    "source_definition_sha256": "464c8be20b7bca4b0e8abf2d7ac8709e91953cbfe4e060b1f6bd9e71a75b0805",
+    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
+    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
+    "scientific_definition_changed": false,
+    "runtime_binding": null,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
   },
   "resources": {
     "storage_GiB": [
@@ -201,52 +205,77 @@
     ],
     "basis": "Observed three-family archives total about 90.5 GB before Flint and extraction; full multi-session pretraining/transfer grid is substantial. Estimates do not authorize a reduced single-source run."
   },
-  "remaining_gates": [
-    "Complete 158-session historical manifest and preprocessing identity",
-    "Flint access/license/version",
-    "Draft-to-immutable DANDI reconciliation",
-    "Complete original training/transfer configs and modern-source equivalence"
+  "input_assets": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-POYO/improvement.v1.json",
+      "bytes": 10567,
+      "sha256": "c1b827a41bc61b8c0a8db102167a695817fe2ca41222c2d770ca150592a853ef"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-POYO/historical/task.pre-improvement.v1.json",
+        "bytes": 13706,
+        "sha256": "84753e01210be7cfd74585782cbf7f68bb5d8f5947b9189fb5ead4b9ff8c5ada"
+      },
+      "implementation_ids": [
+        "components-poyo-frozen-grid-evaluator"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Once original source/session and transfer-budget joins are recovered, iterate using the permitted 158-session pretraining corpus, original training/validation portions and declared adaptation trials. Keep each transfer evaluation segment outside pretraining and selection. Log pretraining exposure, unit-identification/fine-tuning choices and every adaptation-budget result used for development.",
+    "candidate_freeze": "Freeze the original corpus and transfer rosters, all source preprocessing and behavior normalization, exact train/validation/test trials, adaptation budgets, unit-identification versus fine-tuning recipes, historical R² implementation, panel aggregation and compute/access limits before final transfer evaluation.",
+    "final_evaluation": "Score every recovered original transfer condition and report the Table 2 populations and Table 3 NLB tasks separately, with matched source-author and candidate predictions. Preserve the complete adaptation grid and all failures. The 158-session corpus is not a held-out roster, and contemporary uniform-dimension macro results count only as a labeled extension until historical equivalence is established.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Recover POYO-1’s original pretrained transfer baseline and keep its published panel numbers separate from author reruns, POYO-MP, from-scratch models and local ridge/recurrent references. The frozen-grid component’s contemporary output arithmetic calibrates construction only; it cannot supply a missing 2023 author baseline or turn an unmatched macro score into victory."
+  },
+  "blocking_issues": [
+    "Original immutable four-source/session mapping, including Flint and DANDI release reconciliation.",
+    "Exact historical transfer roster, adaptation budgets, trial splits and model/configuration lineage.",
+    "Original R² and panel-aggregation provenance versus contemporary callback and local uniform-dimension policy.",
+    "No qualified author rerun or complete numeric comparator for the registered grid.",
+    "Meaningful effect, uncertainty, access limits and measured resource envelope remain unspecified."
   ],
-  "overlap": "Shares the Sabes acquisition family with NEURAL-023/024 and DPAD/DFINE; Churchland motor data are related to NEURAL-017/018/019 (MC_Maze), but full acquisition equivalence needs manifest joins. NEURAL-020 is Area2, not established as the same acquisition. New endpoint is full multi-source pretraining and novel-session adaptation.",
-  "common_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
-  "readiness": {
+  "holds": {
+    "task_specific": [
+      "Original immutable four-source/session mapping, including Flint and DANDI release reconciliation.",
+      "Exact historical transfer roster, adaptation budgets, trial splits and model/configuration lineage.",
+      "Original R² and panel-aggregation provenance versus contemporary callback and local uniform-dimension policy.",
+      "No qualified author rerun or complete numeric comparator for the registered grid.",
+      "Meaningful effect, uncertainty, access limits and measured resource envelope remain unspecified."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Published POYO transfer results are identified, but the historical corpus, complete original adaptation grid and exact scoring provenance are not bound to the registered prospective macro-session endpoint. The contemporary frozen-grid consumer cannot establish 2023 task equivalence. Original immutable four-source/session mapping, including Flint and DANDI release reconciliation. Exact historical transfer roster, adaptation budgets, trial splits and model/configuration lineage. Original R² and panel-aggregation provenance versus contemporary callback and local uniform-dimension policy. No qualified author rerun or complete numeric comparator for the registered grid. Meaningful effect, uncertainty, access limits and measured resource envelope remain unspecified.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-POYO/historical/task.pre-improvement.v1.json",
+      "bytes": 13706,
+      "sha256": "84753e01210be7cfd74585782cbf7f68bb5d8f5947b9189fb5ead4b9ff8c5ada"
+    },
+    "notes": "The frozen-grid evaluator explicitly implements a prospective uniform-dimension/session R² policy and authenticates supplied artifacts only. Its engineering checks, modern-source output arithmetic and pretrained-minus-local-reference contrasts are calibration material, not historical paper superiority."
+  },
+  "admission": {
     "runnable": false,
-    "inputs_verified": false,
-    "reference_validated": false,
     "research_qualified": false,
-    "reproduction_established": false,
-    "model_evaluated": false,
-    "submission_ready": false
-  },
-  "participant_inputs": "Complete published four-source spike/kinematic scope (158 sessions,7 primates,27373 units,>100h as paper targets), with full authenticated source-version/session joins; same adaptation trials and train/dev information in both arms. No Perich-only or POYO-MP substitution.",
-  "machine_output": {
-    "predictions": "All held-session behavior trajectories for each adaptation budget and pretrained/from-scratch/baseline model, keyed by source/animal/session/segment.",
-    "tables": "Full decodingR2 and adaptation-budget curves, session macro and per-source/per-animal results, calibration and complete compute accounting.",
-    "artifacts": "Pretraining membership manifest, model provenance/checkpoints, source data mappings, exact adaptation splits/configs and all failures."
-  },
-  "scoring": "Macro-sessionR2 at frozen adaptation trial budgets with every source and animal reported. Compare same architecture from scratch and competent ridge/recurrent references under matched tuning/adaptation resources; historical reproduction and prospective unseen-session improvement separate.",
-  "protected_split": "Entire held sessions excluded from pretraining, normalization and tuning, with animal-held sensitivity where supported. Keep overlapping time windows together and never use unit/session IDs to look up held answers. Public checkpoints require contamination audit.",
-  "comparators": "POYO, matched from-scratch architecture, ridge and recurrent decoder; no-pretraining and shuffled neuron/session identifiers, equal total budget.",
-  "source_family_ids": [
-    "churchland-shenoy-2012",
-    "perich-miller-2018",
-    "odoherty-sabes-rtt",
-    "flint-slutzky-2012"
-  ],
-  "distinctness": "Full multi-source pretraining/adaptation central contribution, distinct from single-session latent movement information, day drift and missingness/nonlinear-placement tasks. Four source datasets and multiple adaptation arms count as one task.",
-  "pipeline_identity": "The four exact pipeline blobs and pipeline_tree_sha are preserved in provenance. Associated pipeline commit remains null/unresolved; no tree-as-commit claim.",
-  "publication_context": {
-    "status": "registered_construction_draft_definition_only",
-    "source_snapshot_date": "2026-11-14",
-    "source_definition_bytes": 14281,
-    "source_definition_sha256": "464c8be20b7bca4b0e8abf2d7ac8709e91953cbfe4e060b1f6bd9e71a75b0805",
-    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
-    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
-    "scientific_definition_changed": false,
-    "runtime_binding": null,
-    "scientifically_qualified": false,
-    "submission_ready": false,
-    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
-    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

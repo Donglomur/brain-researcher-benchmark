@@ -1,0 +1,183 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-CANDIDATE-20261114-CONSENSUS",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Figure 2b supplies an ordered held-neuron prediction task, but its numeric baseline and exact historical execution are unresolved. The local source correction and trial-occurrence adapter do not establish native target isolation or paper parity. Changing to a new blocked split or a training-only PSTH is an extension, not victory over Figure 2b.",
+  "source_paper": {
+    "title": "Reciprocal connections dynamically build consensus between neocortical areas",
+    "url": "https://www.nature.com/articles/s41593-026-02437-3"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02437-3",
+      "locator": "Results: The model captures trial-by-trial variability; Figure 2a,b; Methods model fitting/selection",
+      "supports": "Held-neuron Poisson prediction against a same-condition PSTH; 246 active neurons in seven animals; constrained and unconstrained model comparisons."
+    },
+    {
+      "id": "analysis",
+      "kind": "author_code",
+      "url": "https://github.com/marineschimel/v1lm_nn/blob/eec6021e8b9f9031eb775fc1a10a07e583cf0e29/examples/analyze_fitted_model.ml",
+      "locator": "lines 59, 150\u2013207, 736\u2013774, 974\u20131093",
+      "supports": "Default cached heldout route, 5 ms binning, full-pool leave-current-trial-out PSTH, indexed splits and held-neuron evaluation."
+    },
+    {
+      "id": "fit",
+      "kind": "author_code",
+      "url": "https://github.com/marineschimel/v1lm_nn/blob/eec6021e8b9f9031eb775fc1a10a07e583cf0e29/examples/fit_single_animal.ml",
+      "locator": "trial_ids, select_condition, get_partial_prms and training split construction",
+      "supports": "Native fitting configuration and source trial ordering must match the analysis path."
+    },
+    {
+      "id": "loader",
+      "kind": "author_code",
+      "url": "https://github.com/marineschimel/v1lm_nn/blob/eec6021e8b9f9031eb775fc1a10a07e583cf0e29/lib/data.ml",
+      "locator": "split_and_distribute, lines 81\u201399",
+      "supports": "Training prefix and remaining test suffix are literal occurrence partitions."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://api.figshare.com/v2/articles/30983044/versions/1",
+      "locator": "article version 1; files and folder_structure metadata",
+      "supports": "Versioned seven-animal source deposit and native/NPY trial permutation companions; metadata only was acquired."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict the held neuron\u2019s single-trial firing-rate trajectory from the other simultaneously observed V1/LM neurons; Figure 2b residual Poisson log-likelihood is the original ordered target.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Figshare article 30983044 version 1, DOI 10.6084/m9.figshare.30983044.v1; authenticate file IDs and folder identities before acquisition.",
+      "evidence_ids": [
+        "data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Retain all seven animals and the paper\u2019s active-cell criterion (reported 246 neurons); the exact deposited inclusion/window/mask has not been reconciled to that census.",
+      "evidence_ids": [
+        "paper",
+        "data"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Retain all three original folds and their source trial occurrences. The code indexes trial_ids before selection and partitions a training prefix; authentic native permutation/configuration parity remains unresolved. Do not repair or replace folds silently.",
+      "evidence_ids": [
+        "analysis",
+        "fit",
+        "loader"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Other-neuron spikes and original stimulus/condition timing are available for the query; the target\u2019s current-trial spikes must be absent from recognition observations and all target-derived features.",
+      "evidence_ids": [
+        "paper",
+        "analysis"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source uses dt=0.005 and removes the first 500 ms. Exact native mask/slice semantics and historical analysis configuration need qualification before inferring the original fitted inputs.",
+      "evidence_ids": [
+        "analysis",
+        "fit"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Residual LL = sum_t[y_t log(mu_t)-mu_t-lgamma(y_t+1)] minus the same sum for the leave-current-trial-out condition PSTH; mu is expected count per 5 ms bin. Higher is better.",
+      "evidence_ids": [
+        "paper",
+        "analysis"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Reconcile trial/condition averaging and three-fold neuron summaries with Figure 2b, retaining every animal and active neuron; do not substitute bits/spike or an equal-animal score for the source figure statistic.",
+      "evidence_ids": [
+        "paper",
+        "analysis"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Figure 2b residual Poisson log-likelihood",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No authenticated numeric Figure 2b model score or complete per-neuron reference was recovered. Reported significance and neuron counts are not performance baselines.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No native rerun is established. The author route is examples/fit_single_animal.ml plus analyze_fitted_model.ml; rerun_heldout=false and held-neuron slice/order questions prevent calling that route qualified.",
+      "evidence_ids": [
+        "analysis",
+        "fit"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful residual-LL gain must be set using source units and author rerun variability after parity, without turning a reconstruction tolerance into an improvement margin.",
+      "evidence_ids": [
+        "paper",
+        "analysis"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired animal-level interval/decision rule after resolving the original endpoint; retain neuron/trial nesting and report all seven animal effects.",
+      "independent_unit": "Animal; neurons, trials and folds are nested/repeated.",
+      "rationale": "Seven animals, not 246 independent biological replicates. No threshold or interval coverage has been invented.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the numeric Figure 2b baseline and original trial/condition aggregation with complete seven-animal, three-fold support.",
+      "Resolve native held-target isolation, cached predictions and source-occurrence semantics before interpreting a gain.",
+      "Compare with both original constrained and unconstrained models under identical original inputs and PSTH definition.",
+      "Freeze candidate, meaningful effect, uncertainty and access/resource budgets before final evaluation.",
+      "A new trial split, training-only PSTH, reduced neuron cohort or higher line-attractor score cannot establish this paper win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison has been verified; source-paper reproduction and same-task improvement are separate outcomes.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Disabled pending source reconciliation. Once admitted, iterate using only original training/development observations and matched feedback.",
+    "candidate_freeze": "Freeze source/configuration/dependencies and every selection decision before owner evaluation of the original target queries.",
+    "final_evaluation": "Run the complete original Figure 2b endpoint only after historical parity and independent evaluator validation; public-source exposure remains disclosed.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Preserve reported, independently rerun author, and candidate scores separately. The corrected successor must not be relabelled as the historical author baseline. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Numeric Figure 2b baseline and aggregation are unrecovered.",
+    "Native OCaml/Owl held-neuron slices, cached-output bypass, trial occurrence ordering and active-cell census remain unresolved.",
+    "Original model selection exposure and full-pool PSTH must be accounted for.",
+    "No complete native reference, evaluator, justified effect rule or fixed episode budgets."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the original task and its held-neuron correction/trial-occurrence components as calibration evidence. Invented indexing controls are not scientific reproduction or improvement."
+  }
+}

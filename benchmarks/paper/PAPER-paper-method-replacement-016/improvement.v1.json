@@ -1,0 +1,167 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-replacement-016",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Original model-brain RSA is ordered, but the exact paper model/layer/ROI result vectors and historical native settings are not recovered. Descriptive temporal-model family differences and figure assembly are not themselves improvable performance endpoints. A prospective candidate must be compared against the original full reference catalog, not an arbitrary local model or selected ROI.",
+  "source_paper": {
+    "title": "One Hundred Neural Networks and Brains Watching Videos: Lessons from Alignment",
+    "url": "https://proceedings.iclr.cc/paper_files/paper/2025/file/6ceb6c2150bbf46fd75528a6cd6be793-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2025/file/6ceb6c2150bbf46fd75528a6cd6be793-Paper-Conference.pdf",
+      "locator": "Sections3.1-3.3; Eq.1-3; AppendixB; Figs2,16,17",
+      "supports": "Original RSA definition,99 model conditions,10 participants,102 repeated test videos; PCA and training-video branches differ."
+    },
+    {
+      "id": "calc",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/SergeantChris/hundred_models_brains/5e802ae5e368a1a30940e6b175e47704a3061419/scripts/calc_alignment.py",
+      "locator": "main: feature extraction; RDMCreator; RSA; pvalue and layer-order logic",
+      "supports": "Released script uses PCA100 with102 estimator rows, raw RSA outputs and multiplicity-sensitive layer selection."
+    },
+    {
+      "id": "config",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/SergeantChris/hundred_models_brains/5e802ae5e368a1a30940e6b175e47704a3061419/configs/datasets/bmd.yaml",
+      "locator": "dataset_version, selection, average_external, transform",
+      "supports": "versionB/MNI152/merged_hemispheres_streams_pkl; test selection; subject data not externally averaged."
+    },
+    {
+      "id": "legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-replacement-016/implementations/dimension-branches/CONTRACT.md",
+      "locator": "Published scope; Operation compiler and its limits; Catalog and independent branch bindings",
+      "supports": "Historical branch consumers are nonexecuting and do not authenticate historical scores;92-model Fig16 and51-model Fig17 branches are not99-model completion."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Measure out-of-the-box model-layer representational alignment to each BOLDMoments ROI, using correlation of model and brain dissimilarities; retain all original catalog comparisons.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "BOLDMoments source derivatives versionB in MNI152, merged hemispheres/streams, are specified; immutable source-to-OpenNeuro derivative and stimulus manifest matching the historical run remain unauthenticated.",
+      "evidence_ids": [
+        "config"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "10 human participants; paper compares99 model conditions. The original test analysis uses102 video stimuli, each presented10 times.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Original RSA uses102 repeated test videos. The1000-video training set is a separate Fig17 analysis and cannot replace it or be renamed a hidden test.",
+      "evidence_ids": [
+        "paper",
+        "config"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original video inputs and pretrained model features plus ROI brain responses; no fitted voxel-wise readout or brain-target reweighting in the original emergent-alignment task.",
+      "evidence_ids": [
+        "paper",
+        "calc"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper averages brain repetitions; reduces model features with PCA100 without standardization. Released script specifies102 estimator rows. Match exact video subclip aggregation, checkpoint versions, PCA settings and dependency version before historical parity.",
+      "evidence_ids": [
+        "calc",
+        "config"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "RDM entries are1-Pearson correlation; layer/ROI alignment is Spearman correlation between the upper-triangle model and subject RDM vectors.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Mean layer RSA across subjects; original whole-model score for each ROI is the maximum across model layers, not a mean across arbitrarily selected ROIs.",
+      "evidence_ids": [
+        "paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original per-ROI subject-mean RSA with the paper layer rule; full catalog and ROI profile retained",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Paper provides per-model/ROI figures; no exact authenticated numerical reference vector or justified scalar across ROIs is recovered. Do not digitize a convenient bar as an exact benchmark.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No model feature extraction or RSA rerun performed. Author calc_alignment.py is a route, not measured reproduction.",
+      "evidence_ids": [
+        "calc"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Meaningful alignment gain must be defined after source scores and noise ceilings are recovered; no universal rho margin or chosen-ROI exception is imposed.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired participant-based procedure accounting for ROI/model/layer selection and stimulus dependence; published significance against zero does not test superiority over the strongest paper reference.",
+      "independent_unit": "Human participants, with shared stimuli and correlated ROIs/model layers; RDM pair entries are not independent samples.",
+      "rationale": "No confirmatory rule has been admitted. Repeated calculations on the same biological observations do not create independent samples.",
+      "evidence_ids": []
+    },
+    "paper_win_requires": [
+      "Recover original per-participant/layer/ROI reference scores and full99-condition membership; distinguish92-model Fig16 and51-model Fig17 comparisons explicitly.",
+      "Preserve original102 videos, preprocessing, pretrained exposure and per-ROI layer-max metric. A new stimulus split or altered brain-response fitting is a separate extension.",
+      "Fix any primary across-ROI decision rule before candidate feedback and preserve the whole original profile; winning a selected ROI or weak model is insufficient.",
+      "Disclose public test exposure and freeze candidate and layer-selection procedure before final evaluation; do not call these public videos an unseen benchmark.",
+      "Require meaningful source-relative RSA improvement and valid selection-aware uncertainty; stronger family contrast significance is not a paper win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was reviewed or established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After baseline recovery, develop candidate representations using declared permitted videos/feedback with complete source exposure recorded; all original reference model conditions remain visible in reports.",
+    "candidate_freeze": "Freeze candidate weights, input sampling, model/layer catalog, reduction and aggregation policies before final RSA.",
+    "final_evaluation": "Run the original102-video protocol on the complete participant/ROI population and compare to authentic source scores; report any1000-video extension separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Original paper figures, rerun author metrics and new candidate results must have distinct provenance. Budgets and evaluator qualification remain required before activation."
+  },
+  "blocking_issues": [
+    "Exact original reference vectors and complete checkpoint/dependency manifests absent.",
+    "Historical SRP/no-reduction and training-set configurations are not equivalent to hardcoded current PCA script.",
+    "Public102-video exposure and layer-max selection require an explicit inference/access policy.",
+    "Current source bridge and branch consumers do not execute or qualify scientific feature extraction/RSA.",
+    "No fixed access/resource budget, effect size or superiority uncertainty rule."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Keep registered-runtime and dimension-branches as calibration/source-contract components. Their completeness checks and figure reproduction cannot satisfy scientific improvement."
+  }
+}

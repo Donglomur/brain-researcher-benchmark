@@ -1,0 +1,183 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-signal-add-007",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The original Fig. 4b,d prediction task, public evaluation dataset, metric equations and reported per-sound values are recoverable. Exact masking/aggregation, baseline execution and development-data access are incomplete; the historical held-sound improvement program changes the source split and cannot produce the requested paper win.",
+  "source_paper": {
+    "title": "Modelling neural coding in the auditory midbrain with high resolution and accuracy",
+    "url": "https://www.nature.com/articles/s42256-025-01104-9"
+  },
+  "evidence": [
+    {
+      "id": "icnet-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s42256-025-01104-9",
+      "locator": "Results: ICNet performance across sounds; Fig. 4b,d; Methods: Predictive power metrics and Statistics; Data availability",
+      "supports": "Identifies the original seven-animal/four-sound prediction endpoint and source-reported explained-correlation/variance results."
+    },
+    {
+      "id": "icnet-metrics",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s42256-025-01104-9.pdf",
+      "locator": "pp. 1490-1491, equations (3)-(5), Predictive power metrics and Statistics",
+      "supports": "Explained correlation uses both trial predictions and trial-to-trial reliability after flattening units/time; explains the separate expected-count variance metric and within-animal unit bootstrap."
+    },
+    {
+      "id": "icnet-data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/12636772",
+      "locator": "Version v1 (2024-07-03), Sound and IC recordings sections",
+      "supports": "Exact four thirty-second calibrated sounds, two response trials, animals 3-9, audio/neural rates and measurement-time inputs; metadata only, no neural arrays inspected."
+    },
+    {
+      "id": "icnet-code",
+      "kind": "author_code",
+      "url": "https://github.com/fotisdr/ICNet",
+      "locator": "README: ICNet description and DNN/src contents",
+      "supports": "Author model architecture, pretrained weights and inference example; nine training-animal branches are distinct from the seven-animal evaluation subset."
+    },
+    {
+      "id": "icnet-legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-007/implementations/registered-runtime/manifest.json",
+      "locator": "scope; program_execution.qualification_blockers; verification",
+      "supports": "The local complete-released7/held-sound pair is unqualified, ungraded and not executed; its held-sound folds are prospective extensions."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict inferior-colliculus multi-unit spike-count activity for the original Fig. 4b,d seven-animal/four-sound evaluation. Preserve both trial-specific neural response prediction and reliability-normalized assessment; this scope does not include whole-paper new-animal adaptation or ASR.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-data"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Zenodo 12636772 v1: IC_data_trial1.mat, IC_data_trial2.mat and sound_data.mat. Use all four original thirty-second sounds: speech in quiet, speech in noise, band-limited moving ripples and music.",
+      "evidence_ids": [
+        "icnet-data"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Original evaluation animals 3-9, both successive trials and all source-eligible recorded units (paper Fig. 4d reports 3,476 units across seven animals). These animals were represented during model training; the four evaluation sound excerpts were excluded from training.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-data"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Original model training versus the four held-out evaluation sounds, with both successive evaluation trials used in the source score. The public trial1/trial2 arrays are not a training/test partition. Training on three evaluation sounds, trial1 calibration, or new held-animal folds changes the task and is an extension.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-data"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Calibrated audio waveform, original animal decoder identity and the trial/animal-specific measurement time used for non-stationarity. Characteristic-frequency metadata identifies units but must not permit selecting units using evaluation outcomes.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-data"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Audio rate is 24414.0625 Hz and one neural bin equals 32 audio samples (762.9395 Hz); preserve sound intensities and exact measurement times. Paper evaluates only units with repeated-broadband-noise reliability at least 0.2. The exact reliability mask, initial-context crop/alignment and native prediction-to-trial mapping have not been verified.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-data",
+        "icnet-legacy"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Primary explained correlation (%) = 50*[rho(vec(R1),vec(Rhat1)) + rho(vec(R2),vec(Rhat2))]/rho(vec(R1),vec(R2)), equation (3). Rhat is sampled model activity; the separate variance metric uses predicted expected counts and source equations (4)-(5). Raw RMSE or ordinary correlation is not interchangeable.",
+      "evidence_ids": [
+        "icnet-metrics"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Fig. 4b flattens time and eligible units within each animal, reports all seven animal scores per sound and displays their distribution; Fig. 4d scores individual units separately. Recover the exact reduction underlying the textual per-sound numbers before scalar grading. No newly invented average across sounds or subset of easy units can replace the source endpoint.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-metrics"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Fraction of explainable correlation explained (%) on each of the four original Fig. 4b sounds",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 92.9,
+      "description": "Source-reported explained correlation is 92.9% for speech in quiet, 91.2% for speech in noise, 73.5% for band-limited moving ripples and 91.3% for music. Value 92.9 stores the quiet component only; all four remain required. Corresponding variance values are 91.5%, 83.6%, 64.4% and 83.6%. Exact textual-score reduction must be reconciled; none is a local rerun.",
+      "evidence_ids": [
+        "icnet-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Author pretrained ICNet and inference code provide a baseline route, but no authenticated checkpoint/metric-adapter replay on the original masks, times and two-trial evaluation has been verified.",
+      "evidence_ids": [
+        "icnet-code",
+        "icnet-legacy"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Justify a meaningful gain after native author calibration and quantification of response reliability, sample-generation variability and per-sound headroom. Source scores close to 100% and unequal sound difficulty prohibit an arbitrary universal percentage-point margin.",
+      "evidence_ids": [
+        "icnet-paper",
+        "icnet-metrics"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired animal-level inference for the complete four-sound comparison, preserving within-animal unit/time/trial dependence and accounting separately for stochastic response draws; resolve multiplicity and the full-vector decision before admission.",
+      "independent_unit": "Animal (seven), with repeated sounds/trials and units nested within animal.",
+      "rationale": "Source confidence intervals bootstrap units within animal 1,000 times. Those intervals characterize source reporting and cannot alone support a new animal-level superiority claim or make thousands of units independent animals.",
+      "evidence_ids": [
+        "icnet-metrics"
+      ]
+    },
+    "paper_win_requires": [
+      "Reproduce the source ICNet result using the exact original seven animals, both successive trials, four sounds, reliability masks, measurement times, alignment and equation (3) aggregation.",
+      "Freeze and evaluate a candidate against the published per-sound vector and a verified author baseline, with justified meaningful effect and animal-aware uncertainty over every sound; retain variance and unit-level results as source-comparable checks.",
+      "Resolve lawful access to the original development/training recordings and a matched access/resource policy; do not tune using the public four-sound evaluation responses and then call the score source-equivalent generalization.",
+      "The legacy four-fold held-sound program, trial1 calibration/trial2 scoring, response subset or different animal panel may support labeled extensions only, never a same-task paper win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "This contract compares only with the identified source paper. No current-SOTA search or superiority claim is established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Not admitted. Develop candidate response predictors on source-authorized training/validation recordings only after the original split and access envelope are enforceable. The four released sound-response pairs remain evaluation material for the same-task claim.",
+    "candidate_freeze": "Freeze candidate weights, preprocessing, time inputs, output sampling procedure, random-seed policy and complete access history before evaluator access to the original four-sound responses.",
+    "final_evaluation": "Replay the complete original Fig. 4b,d panel against the authenticated author model, retaining all per-animal/per-sound scores and source reliability masks. Apply an independently justified full-panel decision rule; do not promote held-sound cross-validation to paper superiority.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Authenticate and rerun the released author checkpoint under exact source conditions. The ungraded local pair controller and prospective adapter budgets do not establish a native baseline or an admitted improvement episode."
+  },
+  "blocking_issues": [
+    "Recover exact eligible-unit reliability masks and verify native timing/cropping and both trial-specific measurement times.",
+    "Recover the exact aggregation behind each textual source number and validate equation (3) and separate variance scoring on native author predictions.",
+    "Authenticate the author checkpoint revision and demonstrate numerical baseline agreement; no models or evaluators ran in this audit.",
+    "Original training recordings/access and protected evaluation exposure policy remain unresolved; public evaluation trials cannot become development data for a same-task claim.",
+    "Select a scientifically justified effect, animal-level uncertainty rule, fixed concrete access/resource budgets and a working evaluator; legacy prospective caps are not an admitted measured budget."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Keep the registered complete-released7 program as historical calibration/construction evidence. Its four held-sound folds and trial reuse are explicitly separate extensions; packet closure, source adapters and structural tests do not establish ICNet accuracy or superiority."
+  }
+}

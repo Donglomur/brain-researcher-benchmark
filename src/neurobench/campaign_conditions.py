@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Run a named information condition with the existing qualified task wrappers.
 
-Legacy dispatcher and frozen runtime sources remain unchanged. Conditions are
-not additional task IDs. Metadata and --dry-run never execute candidate code.
+Frozen runtime sources remain historical evidence. Paper conditions are calibration
+only. Conditions are not additional task IDs; metadata and --dry-run execute no candidate.
 """
 import argparse
 import importlib.util
@@ -16,7 +16,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE_PIN = {'bytes': 27022, 'sha256': '8b74ece69c98ee2c9feb11f99c95b2930ed25886769aa8684cb4406f9dbdd4a0'}
+BASE_PIN = {'bytes': 25749, 'sha256': '489f6ea300dd007b6a8dadb6f8c99ae06450700c9b3563c22d108c3ab216ddc1'}
 
 def _base():
     path = ROOT / 'src/neurobench/campaign.py'
@@ -56,11 +56,14 @@ def condition_document(doc, condition):
 
 def list_conditions(root=ROOT):
     rows = []
+    _, canonical = base.specifications(root)
     for ident, (path, doc) in base.runtime_manifests(root).items():
         for condition in base._object(doc.get('program_conditions', {}), 'Program conditions'):
             selected = condition_document(doc, condition)
             rows.append({'id': ident, 'condition': condition,
                          'qualified': base.verified_program_runtime(path, selected, root),
+                         'evaluation_role': 'calibration_only' if canonical[ident]['track'] == 'paper' else 'declared_condition',
+                         'paper_win': False,
                          'additional_task': False})
     return rows
 
@@ -69,6 +72,7 @@ def run_command(task_id, condition, program, output, root=ROOT, *, review=None, 
     _, canonical = base.specifications(root)
     if task_id not in canonical:
         raise ValueError('Unknown canonical task')
+    base.current_cli().require_paper_role(canonical[task_id], calibration=False)
     runtime = base.runtime_manifests(root)
     if task_id not in runtime:
         raise ValueError('No local program runner is implemented for ' + task_id)

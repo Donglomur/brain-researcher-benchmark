@@ -5,22 +5,33 @@
 - **Task ID:** `PAPER-FIND-REP-014`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Ineligible
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** ineligible. Ineligible for the registered cerebellar reward/intervention findings. Reward anticipation, action-delay scaling and intervention-linked learning are observed biological contrasts. The author variance-partition helper reports in-sample R² on condition averages; the local fivefold whole-trial encoding/MSE comparison changes both split and endpoint.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 34867 bytes; SHA-256 `b73073f5e61b8e59f43a1166f74caaf85a3b4e547e2fdc22a53fcbac7d1ce2a3`.
+- Specification identity: 32591 bytes; SHA-256 `b6a7e239045aabb50f8dcea1067e1d048fbd68ee6b7192f8b678a6b248d7f608`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
 ## Implementation artifacts
 
-- [Cerebellar paper programme](implementations/cerebellar-paper-programme) — Task implementation.
-  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Cerebellar paper programme](implementations/cerebellar-paper-programme) — Calibration only.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

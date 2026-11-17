@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-method-add-005`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The original AJILE12 missing-channel experiment has ordered decoding and imputation endpoints, but exact Fig. 3E participant-by-dropout decoding results and paper-equivalent event/mask provenance are not recovered. The current local MSE/PSD/ridge scorer is a prospective reconstruction extension, not the published RF decoding comparison.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 77749 bytes; SHA-256 `98c1df78da7b6063962681eeedfcb553d7126498354fa899399e8dcdb94cd253`.
+- Specification identity: 78971 bytes; SHA-256 `21f7f13671ea7bbc55a4be606ca2894db2ef7244fa9c776e1b6a2e4895ea6e9b`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Prospective 12-participant by 15-mask AJILE12 reconstruction preparation, train-only mean/ridge baselines, one-case export, bound submission collection and private target scoring. Actual fresh process/container/state isolation is required because combined masks expose held channels, and remains unqualified. Native data conversion, diffusion/reference execution, temporal guard bands and published downstream/spectral endpoints remain held; scientific qualification is unknown.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Prospective 12-participant by 15-mask AJILE12 reconstruction preparation, train-only mean/ridge baselines, one-case export, bound submission collection and private target scoring. Actual fresh process/container/state isolation is required because combined masks expose held channels, and remains unqualified. Native data conversion, diffusion/reference execution, temporal guard bands and published downstream/spectral endpoints remain held; scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

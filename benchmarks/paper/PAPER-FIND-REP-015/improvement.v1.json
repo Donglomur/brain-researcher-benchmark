@@ -1,0 +1,166 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-REP-015",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The source paper includes an ordered trial-held-out SVM reward-outcome classification task (Supplementary Fig. 9 and Methods), which the authorized overhaul can adopt as the original reward-detection comparison route. Exact split identities, per-unit/cohort aggregation and published numeric SVM results remain unrecovered. The existing literal F2/F3 reconstruction metric is incompatible with an improvement reward, but that does not disqualify the source-native SVM task.",
+  "source_paper": {
+    "title": "Cerebellar neural populations orchestrate dopamine reward signaling with single-trial precision",
+    "url": "https://doi.org/10.1038/s41467-026-75371-4"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13486697/",
+      "locator": "Supplementary Fig. 9 as referenced in Results; Methods: Machine learning-based search for temporal features of reward codes; Fig. 2h-j and Fig. 3g-q",
+      "supports": "The paper explicitly predicts binary reward outcomes from Gaussian-smoothed DCN/VTA single-unit trial spike trains with train/test splitting and accuracy, sensitivity and F1 metrics. Separate F2/F3 ROC/timing analyses do not supply this SVM baseline."
+    },
+    {
+      "id": "code_metadata",
+      "kind": "author_code",
+      "url": "https://zenodo.org/records/19331923",
+      "locator": "Zenodo record metadata and s9_ML.zip inventory (19,125,236 bytes); script entrypoints named by registration: s9_ML/DCN/DCNdecodingSVM.py and s9_ML/VTA/VTAdecodingSVM.py",
+      "supports": "The author archive exposes the SVM-code retrieval route; only release metadata were reviewed, not these script bodies or their fitted outputs. Exact parameters and splits remain unresolved."
+    },
+    {
+      "id": "legacy_component",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-REP-015/implementations/full-reconstruction/TASK.md",
+      "locator": "Numerical protocol, ROC paragraph, F3 timing paragraph; science.py: area and aggregate",
+      "supports": "The existing complete F2/F3 contract uses a nonstandard false fraction, an asymmetric literal integration convention and same-panel timing selection; it explicitly rewards reconstruction, not increasing area."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict trial reward presence/absence from the temporal firing-rate trace of individual DCN or VTA units, as in the source SVM analysis. This source-native prediction task is the active comparison route; original population ROC/timing findings remain historical descriptive outputs.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Source DCN/VTA reward-processing trial datasets associated with Supplementary Fig. 9; author s9_ML code/data archives provide the route. Exact data revision, file-to-unit/trial mapping and full Figure 9 assessment inventory are not yet verified.",
+      "evidence_ids": [
+        "paper",
+        "code_metadata"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper states SVM search over recorded DCN data and Methods also names VTA single units. Exact SVM-eligible DCN/VTA units, animals, sessions and exclusions must be recovered; seven-mouse F2/F3 counts cannot automatically be assigned to this different source analysis.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The paper explicitly splits trials into training and testing datasets. Split fraction, random seed, stratification, native train/test trial identities, repeated fitting and selection policy remain unrecovered; no new split is silently introduced.",
+      "evidence_ids": [
+        "paper",
+        "code_metadata"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "For each single unit, X is trial-by-time firing rate and Y is the binary reward outcome. Preserve the source observation window and single-unit condition; using pooled population rates or future behavioral information would change the task.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper converts spike trains to continuous rates using Gaussian kernel smoothing. Exact kernel bandwidth, time interval, binning, normalization and fitting boundary require the released DCN/VTA SVM scripts. The old CUSUM/IPS preprocessing is not a substitute.",
+      "evidence_ids": [
+        "paper",
+        "code_metadata"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Source SVM accuracy is (TP+TN)/N, sensitivity is TP/(TP+FN), and F1 is the harmonic mean of precision and sensitivity. Accuracy is an ordered candidate primary endpoint; its source aggregation must be recovered before admission, with all reported metrics retained. Literal F2/F3 curve area is not this metric.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Recover whether Supplementary Fig. 9 reports equal-unit, equal-mouse, trial-weighted or repeated-split summaries and the exact DCN/VTA conditions. Units and trials remain nested in mouse/session; do not borrow the descriptive seven-mouse ROC aggregation.",
+      "evidence_ids": [
+        "paper",
+        "code_metadata"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original held-out SVM reward-outcome accuracy; exact Supplementary Fig. 9 aggregation unresolved, with sensitivity and F1 retained",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Source Methods defines accuracy, sensitivity and F1 but the exact Supplementary Fig. 9 numeric SVM result and assessment support have not been recovered. F2/F3 literal areas, approximate TPR statements and timing values are not substitutes.",
+      "evidence_ids": [
+        "paper",
+        "code_metadata"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Author route: Zenodo19331923 s9_ML.zip, DCN/DCNdecodingSVM.py and VTA/VTAdecodingSVM.py, with the source-referenced HappyML dependency. Script parameters, data mapping, exact split and numeric rerun remain unverified; no model was executed.",
+      "evidence_ids": [
+        "paper",
+        "code_metadata"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Justify a task-specific reward-decoding improvement after recovering the exact source accuracy distribution, class balance and baseline variability; no universal accuracy increment is invented.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired source-test comparison retaining source unit/session structure; exact resampling or interval rule awaits recovery of the original assessment units and repeated-fit design.",
+      "independent_unit": "Animals with sessions/units/trials nested within animal; exact SVM cohort mapping unresolved.",
+      "rationale": "Trial or neuron counts cannot be treated as independent animals, and source stochastic split variation must be distinguished from biological replication.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the exact source SVM dataset/cohort, temporal inputs, Gaussian preprocessing, original train/test memberships, metrics and reported comparator before admitting a win.",
+      "Surpass the source-native single-unit reward classification result under the same source protocol, retaining accuracy, sensitivity and F1; do not quietly switch to an easier population-input task or selected units.",
+      "Require predeclared meaningful improvement, valid paired uncertainty, fixed access/resource budgets and a frozen candidate before source-test evaluation.",
+      "A new animal/trial split is an extension; larger literal F2/F3 area, closer reconstruction, stronger significance or selected lower jitter is not a prediction win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was performed; source results, any future author rerun, and current SOTA are separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending source SVM baseline and split recovery. Once admitted, expose only original training data and separately declared development feedback; reserve source test outcomes for evaluator-owned assessment.",
+    "candidate_freeze": "Freeze code, Gaussian preprocessing, features, SVM alternative/hyperparameters and source-condition coverage before final original-test evaluation.",
+    "final_evaluation": "Compare against exact published SVM result and an authenticated author rerun on the same original DCN/VTA assessment rows; current F2/F3 grader cannot perform this comparison.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published SVM result, rerun author SVM and current SOTA remain separate. Preserve existing F2/F3 descriptive reconstruction as calibration; no local baseline or new split establishes a source-paper win. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+  },
+  "blocking_issues": [
+    "Retrieve and audit the original s9_ML DCN/VTA SVM scripts without substituting the F2/F3 CUSUM detector.",
+    "Recover exact numeric Supplementary Fig. 9 scores, complete source unit/animal/session inventory, class balance and metric aggregation.",
+    "Recover original train/test trial identities, preprocessing parameters, model selection and HappyML dependency version; a fresh split does not match the historical task.",
+    "Implement source-matched evaluator and author baseline route; justify minimum effect and uncertainty; fix concrete access/resource budgets.",
+    "Keep nonstandard F2/F3 ROC integration and same-panel timing selection outside active improvement rewards."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Keep all existing 1,020 F2/F3 reconstruction records, graders and curves as calibration-only historical outputs. The source-native SVM classification route is a distinct original analysis within the paper, selected by the authorized overhaul; it has not been run or declared ready."
+  }
+}

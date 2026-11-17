@@ -5,22 +5,33 @@
 - **Task ID:** `PAPER-FIND-ADD-003`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The original Fig. 4 time-decoding protocol and author baseline route are identifiable, but its exact published numeric panel has not been recovered and independently reproduced. The existing combined prospective score and alternate preprocessing are extensions, not the original source-paper score; the descriptive sequence and behavior findings cannot be optimized into a paper win.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 20367 bytes; SHA-256 `5d3601968923010002d1e71352123be650cd8bf17c6371b0fb9fafd04e9f2c2b`.
+- Specification identity: 19849 bytes; SHA-256 `63c281eea6f583cc54468e7717625b8a1e2a48580179cbe897632da387f81b3e`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
 ## Implementation artifacts
 
-- [Hippocampal programme](implementations/hippocampal-programme) — Task implementation.
-  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Hippocampal programme](implementations/hippocampal-programme) — Calibration only.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

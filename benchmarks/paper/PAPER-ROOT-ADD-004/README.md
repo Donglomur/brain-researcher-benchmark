@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-ROOT-ADD-004`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The source contains a genuine object-versus-scene decoding task (localizer-trained classifiers applied to retrieval EEG), but an exact final-article AUC comparator and complete native protocol are not recovered. Published remembered/nonremembered significance, effect size and respiration-memory correlation do not supply a decoding-performance baseline. The repository implementation explicitly changes preprocessing and time grids, so its results cannot establish a same-task paper win.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 20069 bytes; SHA-256 `747c7a1b8d5a31d116bc510bfe68d987ef5afb4c3a139b297070390c9c2640d9`.
+- Specification identity: 19162 bytes; SHA-256 `a163da4d208b7d4edd3d0d35fa741d951c8319789a620daedeac44e817f0240f`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Prospective normalized-epoch recipe for localizer-to-retrieval decoding, respiration at confidence maxima and exhalation-aligned confidence–alpha/beta coupling across the pinned 18-participant roster. Native MAT extraction and complete trial/channel admission, article/archive/source discrepancies, authentic reference agreement, timing and artifact controls, participant-held-out improvement, rights and protected assessment remain unresolved. Observational coupling does not establish a causal breathing effect.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Prospective normalized-epoch recipe for localizer-to-retrieval decoding, respiration at confidence maxima and exhalation-aligned confidence–alpha/beta coupling across the pinned 18-participant roster. Native MAT extraction and complete trial/channel admission, article/archive/source discrepancies, authentic reference agreement, timing and artifact controls, participant-held-out improvement, rights and protected assessment remain unresolved. Observational coupling does not establish a causal breathing effect. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

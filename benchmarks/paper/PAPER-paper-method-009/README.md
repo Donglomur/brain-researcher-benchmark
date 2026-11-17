@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-method-009`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The registered Fig. 3 task admits an ordered estimation-agreement question, and the paper reports 23% average discrepancy between spike-only and voltage-derived irregularity. However, the exact percentage-error definition, empirical voltage reference pipeline, cohort/segment identities and conflicting 25/50 ms preprocessing are unresolved. The local prospective held-trial evaluator changes the historical evaluation and cannot certify a same-task paper win.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 29438 bytes; SHA-256 `52c52ea135ca8710635d929290d1abdc2344c34c054030167e826a7f01284b96`.
+- Specification identity: 28914 bytes; SHA-256 `14cb9dd87da798aa217873376bba6d2a3a4b0c2e19ea38e67450b70e29210f42`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Prospective intracellular bridge for Pala MATLAB fields, 20-kHz spike detection/interpolation, calibration-only voltage-rate splines at both 25 and 50 ms, operational-time CV², paired pinned DSRP spike estimates and segment summaries. Authentic eight-neuron/five-mouse identity and trial admission, spline and bin-policy reconciliation, the published twenty-segment mapping, native reference agreement, protected grading and empirical resources remain unqualified. Exact MIT upstream estimator bytes and notice are preserved.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Prospective intracellular bridge for Pala MATLAB fields, 20-kHz spike detection/interpolation, calibration-only voltage-rate splines at both 25 and 50 ms, operational-time CV², paired pinned DSRP spike estimates and segment summaries. Authentic eight-neuron/five-mouse identity and trial admission, spline and bin-policy reconciliation, the published twenty-segment mapping, native reference agreement, protected grading and empirical resources remain unqualified. Exact MIT upstream estimator bytes and notice are preserved. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

@@ -10,8 +10,8 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 DESCRIPTOR = Path("benchmarks/integrity/current-closures/numeric-dfine/CURRENT_SOURCE.json")
-DESCRIPTOR_BYTES = 4327
-DESCRIPTOR_SHA256 = "d686b095dc96d73b4fff3dd2359f58f5f6f2d94a927fe45171830bd7a1ef1993"
+DESCRIPTOR_BYTES = 5261
+DESCRIPTOR_SHA256 = "7aa489bfcad71dca1834c5f1698d037b676019c597e7160014c7cd409f838611"
 
 
 def read_pin(root, pin):

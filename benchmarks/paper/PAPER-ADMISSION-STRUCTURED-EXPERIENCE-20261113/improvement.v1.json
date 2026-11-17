@@ -1,0 +1,167 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ADMISSION-STRUCTURED-EXPERIENCE-20261113",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original ephys decoder has an ordered time-prediction error, but its numeric error baseline and a defensible original-score comparison are not recovered. Figure 6f reports a shaping-group difference, not a performance threshold. The existing leave-one-mouse-out, mouse-macro proposal changes the paper protocol and cannot establish a same-task paper win.",
+  "source_paper": {
+    "title": "Structured experience shapes strategy learning and neural dynamics in the medial entorhinal cortex",
+    "url": "https://www.nature.com/articles/s41593-026-02409-7"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02409-7",
+      "locator": "Figure 6f–i; Methods, RNN analysis / Time decoding",
+      "supports": "Ephys shaping cohorts, context-transfer result and ten-fold trial decoding; nearest-1-second statement belongs to the RNN methods."
+    },
+    {
+      "id": "producer",
+      "kind": "author_code",
+      "url": "https://github.com/heyslab/StructuredExperience_NatNeuro_2026/blob/8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8/ms_figures/ephys_time_decoding/time_decoding_ephys.py",
+      "locator": "smoothed_spikes; main.test_model.train_slice",
+      "supports": "40-bin ephys features, original trial-order ten folds, LDA and source-context restriction."
+    },
+    {
+      "id": "consumer",
+      "kind": "author_code",
+      "url": "https://github.com/heyslab/StructuredExperience_NatNeuro_2026/blob/8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8/ms_figures/ephys_time_decoding/test_ephys_decode.py",
+      "locator": "calc_error and mean_mse/error_list/x calculations; lines 205–245",
+      "supports": "0.5-second conversion, circular error, context-pair averaging, absolute across/within gap and session-level t test."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict elapsed time within the 20-second tDNMS trial from MEC spiking, training each decoder on LS, SL or SS trials and testing all three contexts. The Figure 6f biological gap is distinct from the underlying prediction error.",
+      "evidence_ids": [
+        "paper",
+        "producer",
+        "consumer"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Author ephys sessions are identified in the source consumer, but the complete authenticated recording objects and trial/unit rosters have not been admitted. Cached time_decoding.h5 outputs cannot replace fresh inputs.",
+      "evidence_ids": [
+        "producer",
+        "consumer"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Figure 6f compares eight SL-only sessions from four mice with five LS+SL shaping sessions from four mice. Session-to-animal joins still require data authentication.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Original per-session split is np.array_split on the source ordered unique trial list into ten folds; training excludes each fold and source-context LDA predicts every test context. There is no original outer leave-one-mouse-out split.",
+      "evidence_ids": [
+        "producer"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Per-cluster spikes.h5 events with trial, trial_type, result and trial_time used to construct neural features. True bins and metadata define grouping, not predictor columns.",
+      "evidence_ids": [
+        "producer"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Source drops missing rows and literal None trial types, bins events into 40 bins over 0–20 s, applies a centered Gaussian rolling window of 16/std 4, normalizes each unit/trial by sample SD and fills absent feature values with zero. Exact native parity and zero-event trial support remain unverified.",
+      "evidence_ids": [
+        "producer"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Consumer converts bins to 0.5 s and calculates squared circular time error over period 20 s. Figure 6f uses the absolute difference between across-context and within-context mean error; that gap and its t/P value are not a loss to optimize.",
+      "evidence_ids": [
+        "consumer"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Source first averages rows within session and test context, excludes the all-context decoder, then averages the three within-context or six across-context pairs per session and takes their absolute gap. Sessions enter the original group t test; changing to equal-mouse aggregation is an extension.",
+      "evidence_ids": [
+        "consumer"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original source-context circular time-prediction error vector, seconds squared; scalar paper-win rule unresolved",
+    "direction": "lower",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No numeric source prediction-error baseline was recovered. Figure 6f t=3.2 and P=0.00872 describe a shaping comparison and are deliberately not stored as a performance baseline.",
+      "evidence_ids": [
+        "paper",
+        "consumer"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Source producer/consumer provide a rerun route, but no authentic author-baseline replay on the complete source inputs is established.",
+      "evidence_ids": [
+        "paper",
+        "consumer"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A task-specific practically meaningful effect has not been justified; source reproduction tolerances and reported SEM are not improvement margins.",
+      "evidence_ids": [
+        "paper",
+        "consumer"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "No paper-win inference admitted.",
+      "independent_unit": "Mouse; repeated sessions, trials, cells and folds are dependent.",
+      "rationale": "The source session t test reproduces a biological comparison. A candidate-versus-author paired error rule must account for sessions within eight mice and shared training folds; it cannot reuse the t-test P value or regard overlapping leave-one-mouse-out differences as independent.",
+      "evidence_ids": [
+        "paper",
+        "consumer"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the original per-session/context-pair decoder error baseline and authenticate all thirteen sessions and eight mice.",
+      "Preserve source trial folds, source-context access, features and complete query support; an outer held-mouse split or changed aggregation is a labelled extension.",
+      "Predeclare an ordered comparison of the original decoder errors and meaningful effect with valid mouse-level uncertainty; a smaller/larger biological gap or P value is not a win.",
+      "Reproduce the source LDA before candidate evaluation under matched, concrete access and compute budgets."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was performed; source-paper reproduction and source-author reruns are separate claims.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive while baseline and original-score admission remain unresolved. Any later development uses only authorized training/validation feedback under the recovered original split.",
+    "candidate_freeze": "Freeze method, source preprocessing, hyperparameter policy, permitted inputs and complete output support before final original-fold evaluation.",
+    "final_evaluation": "Evaluate candidate and freshly rerun source LDA on the same original folds; report every session/context-pair error and separate the biological Figure 6f reconstruction.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Source LDA is the author comparator. Regularized/local baselines and held-mouse transfer are additional comparisons, never substitutes for the paper result."
+  },
+  "blocking_issues": [
+    "Numeric original error baseline is not recovered; the published t/P values do not fill this gap.",
+    "Complete authentic ephys roster, zero-event-trial policy and source-native numerical parity are unresolved.",
+    "Paper RNN 1-second wording versus ephys 0.5-second code needs method-scope adjudication.",
+    "Existing evaluator implements a prospective pointwise/held-mouse route, not a working original-task paper-win evaluator.",
+    "Original-score decision rule, biological uncertainty, fixed access and resource budgets are not established."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the original Figure 6f reconstruction and initial-evaluator-v1/evaluator.py as calibration/construction evidence. Its mouse-macro leave-one-mouse-out proposal is an explicit extension, not source-paper superiority."
+  }
+}

@@ -1,19 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-signal-add-019",
-  "source_id": "paper-signal-add-019",
   "track": "paper",
   "title": "Decision-making components and times revealed by the single-trial electroencephalogram",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Predict the original fixed HMP-derived inter-event durations from contrast separately by speed/accuracy condition; encoding is event1-to3 and decision event3-to5. Discovery of five events is descriptive calibration.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Predict the original fixed HMP-derived inter-event durations from contrast separately by speed/accuracy condition; encoding is event1-to3 and decision event3-to5. Discovery of five events is descriptive calibration.",
+    "Source-paper comparison for Original Table1 contrast-left-out latency RMSE panel, milliseconds; no invented aggregate: Original utility returns sqrt(mean over held-out contrasts of (pooled observed mean duration - equal-participant mean predicted duration)^2), in milliseconds. In-sample trial MSE and curve R2 are separate diagnostics."
+  ],
+  "success_criteria": [
+    "Authenticate original512Hz HMP targets and trial selection; reproduce the original Table1 score panel before accepting candidate law predictions.",
+    "Keep contrast-left-out folds, all participants, all original interval/condition cells and exact observed/predicted weighting; no correct-only subset score may be compared directly to all-responded Table1.",
+    "Fix original latent-duration targets across methods. Moving event estimates to make latency curves easier to predict cannot count as lower prediction error on the same target.",
+    "Predeclare a full-panel superiority rule and meaningful effect before candidate feedback; the40.10ms anchor cannot grant a win by itself.",
+    "A participant-held-out neural likelihood benchmark, leave-one-session split or100Hz recipe is an extension. Five-event reconstruction, larger coefficients or stronger significance alone is calibration.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-signal-add-019",
   "canonical_position_one_based": 37,
   "paper_identity": {
     "url": "https://elifesciences.org/articles/108049",
     "publication_year": 2025,
     "venue": "eLife"
   },
-  "primary_outputs": [
-    "Five-event inference and the contrast effects on inter-event latencies, plus original ERP/decision accuracy relationships."
-  ],
   "input_assets": {
     "routes": [
       "https://osf.io/j6xuv/"
@@ -113,117 +125,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": {
-        "official_code_license": "BSD-3-Clause",
-        "data_route_licenses": [
-          {
-            "url": "https://osf.io/j6xuv/",
-            "license": "Public read access; node_license is null. An explicit data redistribution license was not observed."
-          }
-        ]
-      },
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Five-event inference and the contrast effects on inter-event latencies, plus original ERP/decision accuracy relationships."
-      ],
-      "assessment": "Five-event EEG inference and contrast-related inter-event latency laws are identified; no numerical central-effect contract or validated event-number selection is present.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [
-      {
-        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
-        "record_id": "paper-signal-add-019",
-        "recorded_metrics": [
-          "Held-out likelihood/model selection",
-          "Participant-level latency effects and intervals",
-          "Original psychophysical-law error measures"
-        ]
-      }
-    ],
-    "comparability": [
-      "100Hz laptop processing differs from the author512Hz recipe. Preserve correct-response selection and distinguish held-out likelihood from explanatory psychophysical-law fits.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "The OSF data license is not specified; artifact access is verified, but redistribution terms must be resolved before bundling data.",
-        "Author estimates about 64 GB RAM for the 512 Hz analysis; recommended 100 Hz laptop setting changes the recipe and must be reported as such.",
-        "Source imports hmp and uses newer API; README pins hmp 1.0.0-b2, but environment compatibility was not executed.",
-        "No neural payload was downloaded; observed format/schema is supported by filenames, archive metadata and the matching official writer/reader.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Compare held-out prediction and reliability of event models against simpler ERP/behavior-only decompositions."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Fit PCA/scaling/event model on development participants only for predictive claims; original whole-data discovery is descriptive. Compare simpler ERP/RT models, event widths and numbers.",
-      "retained_roster_proposal": [
-        "Compare held-out prediction and reliability of event models against simpler ERP/behavior-only decompositions."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": "unmeasured",
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": null
-  },
-  "holds": {
-    "task_specific": [
-      "The OSF data license is not specified; artifact access is verified, but redistribution terms must be resolved before bundling data.",
-      "Author estimates about 64 GB RAM for the 512 Hz analysis; recommended 100 Hz laptop setting changes the recipe and must be reported as such.",
-      "Source imports hmp and uses newer API; README pins hmp 1.0.0-b2, but environment compatibility was not executed.",
-      "No neural payload was downloaded; observed format/schema is supported by filenames, archive metadata and the matching official writer/reader.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Pin hmp1.0.0-b2/API compatibility and exact central event/latency contrasts, then inspect one epoch header/metadata and define participant-held-out evaluation without fitting on held-out event patterns.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Pin hmp1.0.0-b2/API compatibility and exact central event/latency contrasts, then inspect one epoch header/metadata and define participant-held-out evaluation without fitting on held-out event patterns.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -264,11 +165,77 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_resource_statement": "unmeasured",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-019/improvement.v1.json",
+      "bytes": 10793,
+      "sha256": "be27429867bb48d5a0f6d8fb56ebc1a9444e6d7cc2bc3f98754612eacbcd8753"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-signal-add-019/historical/task.pre-improvement.v1.json",
+        "bytes": 14781,
+        "sha256": "ee4a4b656d9a0e4575165c9c02d74fd6889741cbd0cf3e934fb5ad7593aacabd"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-signal-add-019-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After source reconciliation, allow iteration on training/development law fits while final contrast errors remain inaccessible to candidate selection; source target generation is fixed.",
+    "candidate_freeze": "Freeze candidate law, parameter constraints, all fit-contrast memberships, population choice and complete-panel comparison rule before final evaluation.",
+    "final_evaluation": "Recompute original contrast-left-out RMSE for the full source panel against authentic source predictions and report event/ERP reproduction separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The published table is a numerical source result; exported score kernels are engineering components; rerun author results remain absent. Missing budgets and target parity block activation."
+  },
+  "blocking_issues": [
+    "Original Table1 trial-selection identity unresolved against canonical correct-only population.",
+    "Authentic fixed HMP event-time target exports and full reference panel are not qualified.",
+    "No admitted complete-panel aggregation/superiority rule; scalar40.10ms is one table cell only.",
+    "Native HMP/environment parity, access/resource budgets and meaningful-effect/uncertainty policy remain unresolved."
+  ],
+  "holds": {
+    "task_specific": [
+      "Original Table1 trial-selection identity unresolved against canonical correct-only population.",
+      "Authentic fixed HMP event-time target exports and full reference panel are not qualified.",
+      "No admitted complete-panel aggregation/superiority rule; scalar40.10ms is one table cell only.",
+      "Native HMP/environment parity, access/resource budgets and meaningful-effect/uncertainty policy remain unresolved."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Table1 provides an original ordered contrast-left-out latency-prediction endpoint, so the paper is not excluded merely for its descriptive five-event finding. Same-task admission remains source-unresolved: the canonical correct-only population differs from the reviewed source notebook, authentic HMP-derived targets are unqualified, and the full original error-panel comparison is not fixed. Larger timing effects or a new participant-held-out likelihood task cannot count as a paper win. Original Table1 trial-selection identity unresolved against canonical correct-only population. Authentic fixed HMP event-time target exports and full reference panel are not qualified. No admitted complete-panel aggregation/superiority rule; scalar40.10ms is one table cell only. Native HMP/environment parity, access/resource budgets and meaningful-effect/uncertainty policy remain unresolved.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-019/historical/task.pre-improvement.v1.json",
+      "bytes": 14781,
+      "sha256": "ee4a4b656d9a0e4575165c9c02d74fd6889741cbd0cf3e934fb5ad7593aacabd"
+    },
+    "notes": "Preserve export evaluator and source sensitivity outputs. Five-event reconstruction, ERP summaries and proposed participant-held-out likelihood remain calibration or separately labelled extensions, never substitutes for original Table1 performance."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

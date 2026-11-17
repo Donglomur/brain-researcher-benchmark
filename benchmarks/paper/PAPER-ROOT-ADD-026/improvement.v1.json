@@ -1,0 +1,185 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-026",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The paper has an ordered original prediction endpoint: condition-cross-validated broadband-response R\u00b2 for category-scaled delayed normalization. The numeric Figure3C comparator and exact original fit-input/configuration bindings remain unrecovered. Historical fold identities are missing because the source random.sample calls are unseeded and unsaved. This does not permanently exclude a same-task rerun: documented reproduction of the original stochastic12-fold protocol may qualify after source-protocol parity, justified discrepancy tolerance and paired candidate/author folds are established.",
+  "source_paper": {
+    "title": "Temporal dynamics of short-term neural adaptation across human visual cortex",
+    "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012161"
+  },
+  "evidence": [
+    {
+      "id": "adapt-paper",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012161",
+      "locator": "Materials and methods: Subjects, Data preprocessing, Data selection, Data summary, Model fitting and Model evaluation; Figure 3C",
+      "supports": "Defines four participants, 79 responsive electrodes, 72 category-by-temporal response conditions, 12-fold condition cross-validation, and region-wise prediction performance."
+    },
+    {
+      "id": "adapt-readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ABra1993/tAdaptation_ECoG/09cd778fac545d406cba39ba408f0f00fbe39975/README.md",
+      "locator": "Repository description and Structure",
+      "supports": "Links the publication to the Visual ECoG dataset ds004194 and identifies preprocessing, modelling and figure scripts."
+    },
+    {
+      "id": "adapt-fit",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ABra1993/tAdaptation_ECoG/09cd778fac545d406cba39ba408f0f00fbe39975/modelling_modelFit.py",
+      "locator": "model_fit: pseudo-random test selection, fold scoring and output writing; lines 180\u2013246 in reviewed source",
+      "supports": "Each fold takes one condition per category with random.sample, fits the remaining conditions, averages rounded per-condition R\u00b2, and writes scores without test-index identities. Active scaling default P differs from Figure 3 scaling S and must not be silently substituted."
+    },
+    {
+      "id": "adapt-score",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ABra1993/tAdaptation_ECoG/09cd778fac545d406cba39ba408f0f00fbe39975/utils.py",
+      "locator": "r_squared(data, fit)",
+      "supports": "Computes R\u00b2 as 1 minus residual sum of squares divided by variance about the observed trace mean, using NaN-aware sums."
+    },
+    {
+      "id": "adapt-figure",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ABra1993/tAdaptation_ECoG/09cd778fac545d406cba39ba408f0f00fbe39975/mkFigure3.py",
+      "locator": "VA, scaling, per-electrode param_DN_* loading and bootstrap summaries; lines 28\u2013115",
+      "supports": "Figure 3 uses all responsive electrodes, scaling none/S, region-specific bootstrap medians and 68% intervals over 1000 resamples; no single whole-cohort scalar is supplied."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict each selected visual electrode\u2019s broadband response time course to single and repeated image presentations from stimulus timing and image category. The original performance comparator is the category-scaled DN model used in Figure 3C.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-figure"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Visual ECoG dataset OpenNeuro ds004194 is author-linked. Registration names version 3.0.0, but the reviewed primary sources do not pin that version\u2019s exact processed files to the published Figure 3 fit inputs. Freeze the source release, trial manifest and preprocessing lineage before comparison.",
+      "evidence_ids": [
+        "adapt-readme"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Four participants p11\u2013p14; all 79 visually responsive electrodes and their V1\u2013V3/VOTC/LOTC memberships must be preserved. The Data summary gives 17/15/47, while Figure 2C reverses the first two counts; exact electrode-to-area identities require source-roster reconciliation, not selection of whichever grouping favors a candidate.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-figure"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original stochastic rule:12 folds over72 conditions,66 training/six test traces per fold with one test condition per image category and12 temporal conditions per category. Published assignments are absent from the inspected unseeded random.sample implementation. Recover them if available, or reproduce this exact source-authorized stochastic recipe with a logged seed and immutable fold manifest. Candidate and author must share rerun folds; source-protocol parity and a predeclared justified tolerance to published results are required. A changed split unit, altered condition allocation or new participant holdout is an extension.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Binary stimulus-presence time course and image-category identity; target traces comprise six image categories crossed with six single-stimulus durations and six repeated-stimulus ISIs. Fitted parameters, published target traces and assessment labels are not candidate prediction inputs.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Use source common-average rereferencing and broadband extraction, author artifact/trial and responsiveness selection, run-wise prestimulus baseline correction, and averaging within the original 72 conditions. Preserve source-selected electrodes and disclose their selection exposure; a new training-only selection changes the historical population.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-readme"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "For each held-out trace, R\u00b2 = 1 \u2212 sum_t(y_t\u2212prediction_t)\u00b2 / sum_t(y_t\u2212mean(y))\u00b2, using the pinned NaN handling; higher is better. Code rounds condition values to three decimals and fold means to four.",
+      "evidence_ids": [
+        "adapt-score",
+        "adapt-fit"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Average the six held-condition R\u00b2 values within each fold and then the 12 folds per electrode; Figure 3C reports separate V1\u2013V3, VOTC and LOTC summaries. The plot computes medians of bootstrapped electrode medians with 68% intervals, not one published pooled scalar.",
+      "evidence_ids": [
+        "adapt-fit",
+        "adapt-figure"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Figure 3C region-wise cross-validated R\u00b2 of the category-scaled DN model (scaling S)",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The reviewed paper/code identifies Figure 3C and its computation, but the exact numeric three-region comparator and original fold provenance were not recovered. No figure digitization or invented pooled mean is substituted.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-figure"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Author fitting/figure scripts provide a partial route. Source fit inputs and native Figure3 scaling/configuration must be reconciled; historical assignments may be recovered or generated by a documented rerun of the original stochastic recipe. Such a rerun must retain fold provenance, calibrate against published results under a justified predeclared discrepancy tolerance and pair all candidate/author evaluation folds. No fitting was run.",
+      "evidence_ids": [
+        "adapt-fit",
+        "adapt-figure"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A practical R\u00b2 improvement must be justified relative to within-participant/electrode variability and source rounding, with a declared rule across all three original region summaries. No universal margin or favorable-region selection is adopted.",
+      "evidence_ids": [
+        "adapt-fit",
+        "adapt-figure"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Require a predeclared paired comparison respecting participant/electrode dependence and reused training data across folds. If the original stochastic protocol is rerun, retain candidate/author pairing within each logged realization and account for fold-realization variability separately from biological variability. Keep source bootstrap summaries as descriptive comparators.",
+      "independent_unit": "Participants, with electrodes nested within participants and repeated conditions within electrodes",
+      "rationale": "Four participants do not become 79 independent humans or 72 independent folds. The paper\u2019s electrode bootstrap is not automatically a valid superiority test; a defensible rule and sufficient evidence remain to be specified.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-figure"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover full source cohort/input lineage and preserve all72 original conditions and visual areas. Use authenticated historical folds or a provenance-complete rerun of the exact original stochastic12-fold recipe after source-authorized protocol parity is established.",
+      "Recover and calibrate Figure3C category-scaled DN using scalingS, original metric rounding and region aggregation. Predeclare a justified tolerance between the source published result and any stochastic author rerun; pair candidate and author on the same immutable fold realizations. Beating the weaker unscaled DN model alone is insufficient.",
+      "Freeze candidate, meaningful effect, uncertainty and handling of all region summaries before final assessment. Preserve reported adaptation biology as supporting checks, not optimization targets.",
+      "A changed splitting scheme, new participant holdout, reduced electrode set or alternate preprocessing is an extension. Missing historical RNG state alone does not make a faithful source-protocol rerun a different task; an arbitrary new fold recipe cannot substitute for source-protocol parity."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The paper\u2019s DN/two-channel comparisons are historical source comparators; no current-SOTA literature claim was verified.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending source recovery. A future admitted episode may expose declared training/validation feedback under the original condition-CV recipe. Before comparison, freeze either recovered historical folds or logged realizations of a qualified original stochastic recipe; preserve all source exposure and tuning history.",
+    "candidate_freeze": "Freeze code, fitted-state production recipe, stimulus inputs, electrode roster, folds, model-selection decisions and budgets before final evaluation.",
+    "final_evaluation": "Evaluate the frozen candidate and calibrated category-scaled author method on identical original traces and identical frozen folds, using either recovered historical assignments or a qualified original-recipe stochastic rerun. Report all three source region summaries, published-versus-rerun discrepancy and the predeclared superiority rule.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published Figure3 values and native author reruns are separate. A documented faithful original stochastic-protocol rerun may supply the same-task author comparator after parity, calibration tolerance and paired folds are fixed. Altered splitting schemes remain extensions; a local reconstruction wrapper cannot replace the native model baseline."
+  },
+  "blocking_issues": [
+    "Original random fold identities are not recovered. A valid alternative requires source-protocol parity, logged rerun seed/fold manifests, justified predeclared published-result discrepancy tolerance and paired candidate/author folds; these are not yet established.",
+    "Exact numeric Figure 3C category-scaled comparator and its complete fitted-input lineage are unresolved.",
+    "OpenNeuro version 3.0.0 correspondence to publication inputs is not primary-source verified.",
+    "Electrode area roster must reconcile the V1\u2013V3/VOTC caption count conflict without changing the cohort.",
+    "A same-task evaluator, justified region-wise meaningful-effect rule, dependence-aware uncertainty, protected episode and concrete access/resource budgets are not established."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain historical temporal-adaptation task and registered reconstruction implementation. Numerical reconstruction is calibration; superiority requires native candidate/author evaluation on paired folds from the original protocol, whether authenticated historical assignments or a properly qualified stochastic rerun."
+  }
+}

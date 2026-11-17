@@ -179,7 +179,7 @@ class ProgramMetadataTests(unittest.TestCase):
             self.command()
 
     def test_unregistered_and_unknown_tasks_refuse(self):
-        for task, text in [('PAPER-X', 'No local program runner'), ('NEURAL-unknown', 'Unknown canonical')]:
+        for task, text in [('PAPER-X', 'calibration only'), ('NEURAL-unknown', 'Unknown canonical')]:
             with self.subTest(task=task), self.assertRaisesRegex(ValueError, text):
                 module.run_command(task, self.program, self.output, self.root)
 

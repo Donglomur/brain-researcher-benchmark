@@ -1,0 +1,185 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-REP-014",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "ineligible",
+  "disposition_reason": "Ineligible for the registered cerebellar reward/intervention findings. Reward anticipation, action-delay scaling and intervention-linked learning are observed biological contrasts. The author variance-partition helper reports in-sample R² on condition averages; the local fivefold whole-trial encoding/MSE comparison changes both split and endpoint.",
+  "source_paper": {
+    "title": "Predictive and instructive cerebellar encoding of dopamine reward drives motivated behavior",
+    "url": "https://doi.org/10.1038/s41593-026-02449-z"
+  },
+  "evidence": [
+    {
+      "id": "author_release",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/21645651",
+      "locator": "Description; Top-level analysis scripts; Data-file descriptions; Common MATLAB structures; Missing data and filtering",
+      "supports": "Versioned processed calcium/behavior release, source panel mappings, cohort structure and unavailable raw movies/video."
+    },
+    {
+      "id": "main_code",
+      "kind": "author_code",
+      "url": "https://zenodo.org/records/21645651/files/filio-2026-main.zip?download=1",
+      "locator": "filio-2026-main/MainData.m: Compute unaligned neuron avgs; Cell numbers, percentages, MFB/VTA breakdown; 1s-2s DA cell identity alignment; Kinematic v Reward-anticipation Regression (lines 2170–2283)",
+      "supports": "Source response classifications, cross-context comparisons and averaged-condition regression inputs."
+    },
+    {
+      "id": "vp_code",
+      "kind": "author_code",
+      "url": "https://zenodo.org/records/21645651/files/filio-2026-main.zip?download=1",
+      "locator": "filio-2026-main/dependencies/compute_concatenated_VP.m: sections 1–5",
+      "supports": "Kinematic interpolation/PCA, calcium-kernel ramp regressors and ordinary in-sample fitlm R²; no held-out split."
+    },
+    {
+      "id": "learning_code",
+      "kind": "author_code",
+      "url": "https://zenodo.org/records/21645651/files/filio-2026-main.zip?download=1",
+      "locator": "filio-2026-main/learningCurves_gtacr1.m: ED10e–g",
+      "supports": "Intervention-group learning histories and first-to-last behavioral contrasts."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-REP-014/implementations/cerebellar-paper-programme/PUBLIC_CONTRACT.md",
+      "locator": "Numerical reconstruction branches and retrospective neural encoding contract",
+      "supports": "The local fivefold whole-trial animal-balanced MSE task is separately authored, not the original condition-average variance partition."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Characterize granule-cell reward anticipation and action-delay scaling, climbing-fiber reward responses/reinforcement, and effects of granule-cell inhibition on learning.",
+      "evidence_ids": [
+        "author_release",
+        "main_code",
+        "learning_code"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Zenodo 21645651 version 2 processed MATLAB calcium/behavior release and associated filio-2026-main code; raw imaging movies and pose videos are absent.",
+      "evidence_ids": [
+        "author_release"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Release metadata identifies 55 primary sessions, but exact panel-specific animal/cell inclusion and distinct reinforcement/inhibition cohorts are not newly reconciled. Session count is not a universal independent sample size.",
+      "evidence_ids": [
+        "author_release",
+        "main_code"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "Central biological contrasts have no prediction holdout. The inspected author variance partition fits and evaluates full condition averages; the local fivefold trial partition is an extension.",
+      "evidence_ids": [
+        "vp_code",
+        "registration"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Processed GrC/CF neural responses, rewarded/omitted trial events, reaches/kinematics and session/cell/animal identifiers from the original conditions.",
+      "evidence_ids": [
+        "author_release",
+        "main_code"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "The inspected regression uses good-movement neural condition averages, tracking-qualified kinematics, five-frame neural smoothing and source calcium-kernel/PCA feature construction. Raw signal extraction is outside the release.",
+      "evidence_ids": [
+        "main_code",
+        "vp_code",
+        "author_release"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Activity fractions, response timing/correlation, ordinary in-sample R² partitions and intervention learning contrasts are source scientific measurements, not a protected prediction performance score.",
+      "evidence_ids": [
+        "main_code",
+        "vp_code",
+        "learning_code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Original summaries vary across cells, sessions, mice and intervention groups. The local animal-balanced held-out MSE is not the source panel aggregation.",
+      "evidence_ids": [
+        "author_release",
+        "registration"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "No ordered performance score for reward anticipation and cerebellar intervention effects",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "not_applicable",
+      "description": "No ordered baseline for the registered biological contrasts. Native ordinary R² is evaluated on fitted condition averages and cannot be replaced by a held-out MSE value.",
+      "evidence_ids": [
+        "vp_code",
+        "registration"
+      ],
+      "value": null
+    },
+    "reproduced_author_baseline": {
+      "status": "not_applicable",
+      "description": "No author rerun is established. Neither nine-branch numerical agreement nor outperforming the local encoding comparator reproduces an original paper prediction baseline.",
+      "evidence_ids": [
+        "vp_code",
+        "registration"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "not_applicable",
+      "value": null,
+      "rationale": "Larger neural or intervention effects, smaller p values, or higher in-sample R² do not establish a scientifically improved method on these original observations.",
+      "evidence_ids": [
+        "vp_code",
+        "learning_code"
+      ]
+    },
+    "uncertainty": {
+      "status": "not_applicable",
+      "method": "No paper-win uncertainty test is defined for this descriptive/interventional finding.",
+      "independent_unit": "Animal within the relevant experiment; cells/trials/sessions are nested.",
+      "rationale": "Original intervention groups and panel-specific exclusions must be respected; trial folds do not turn repeated observations into independent animals.",
+      "evidence_ids": [
+        "author_release",
+        "learning_code"
+      ]
+    },
+    "paper_win_requires": [
+      "Do not optimize biological effect sizes or significance as a benchmark victory.",
+      "Do not call the local fivefold encoding/MSE improvement a same-task win over the condition-average source analysis.",
+      "Any separately reviewed prediction task must retain its own declared status as an extension unless the exact original predictive task and baseline are recovered."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was performed; biological findings and reconstruction agreement are not SOTA scores.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "No active improvement loop for the registered biological contrasts; preserve source reconstruction as calibration.",
+    "candidate_freeze": "Not applicable to this ineligible finding. Any retrospective encoding extension must freeze a separate task and budgets.",
+    "final_evaluation": "The local reference-match fraction and fivefold comparator cannot award source-paper superiority.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep biological source quantities, numerical author reproduction and separately authored prediction comparisons distinct."
+  },
+  "blocking_issues": [
+    "No ordered same-task algorithmic success endpoint for the registered reward/intervention findings.",
+    "Panel-specific original cohorts and exclusions need reconciliation for calibration.",
+    "The existing fivefold whole-trial prediction route changes the source split and scoring target."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve cerebellar-paper-programme reconstruction branches, scorer and retrospective encoding materials. Numeric reconstruction is calibration; the local prediction task is a separately labelled extension, not paper_win."
+  }
+}

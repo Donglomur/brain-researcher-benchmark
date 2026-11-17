@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-FIND-004`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The paper has an ordered neural-decoding R-squared endpoint, but exact regional baseline values and the paper-compatible runtime are unrecovered. Pinned generic author defaults and the local evaluator differ from journal cohort, folds and aggregation; significant regions or a mouse-held-out extension cannot substitute.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 16157 bytes; SHA-256 `ac5ceceab1a9d99e37d891694395298a8f6da246f67cbe6ba982083174e255f8`.
+- Specification identity: 14027 bytes; SHA-256 `b6b09302224e7e3b7b9e72f845446e8891a80309a24fbf239929aaf70198ff10`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Exports trusted native prediction dictionaries and computes pooled prior R², repeated-run pseudo-session inference, regional Fisher/BH summaries and matched descriptive motor contrasts for the complete declared subset. Pinned generic-script defaults differ from journal methods; paper-wide cohort/multiplicity, authentic target/pseudo-generation and fitting, native formatter compatibility, held-mouse improvement, rights and protected qualification remain unresolved.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Exports trusted native prediction dictionaries and computes pooled prior R², repeated-run pseudo-session inference, regional Fisher/BH summaries and matched descriptive motor contrasts for the complete declared subset. Pinned generic-script defaults differ from journal methods; paper-wide cohort/multiplicity, authentic target/pseudo-generation and fitting, native formatter compatibility, held-mouse improvement, rights and protected qualification remain unresolved. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

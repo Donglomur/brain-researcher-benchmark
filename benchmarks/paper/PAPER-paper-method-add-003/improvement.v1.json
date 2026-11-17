@@ -1,0 +1,177 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-add-003",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The source reports ordered human motion-trace agreement, but the registered Pt01-Pt03 task is currently scored by a new consistency/fidelity panel rather than an exactly recovered paper endpoint. Published per-patient correlations are recoverable; their exact temporal alignment, preprocessing, corresponding author output and an admissible full-cohort comparison remain unresolved. Human agreement must not be relabelled absolute motion accuracy.",
+  "source_paper": {
+    "title": "DREDge: robust motion correction for high-density extracellular recordings across species",
+    "url": "https://www.nature.com/articles/s41592-025-02614-5"
+  },
+  "evidence": [
+    {
+      "id": "dr-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13055889/",
+      "locator": "Results: DREDge rescues spike sorting and LFP features in human brain activity; Extended Data Fig. 2; Methods: Preprocessing of LFP band data",
+      "supports": "Human manual-tracking agreement and LFP preprocessing; recovered source correlations are Pt01 0.98, Pt02 0.99, Pt03 0.85."
+    },
+    {
+      "id": "dr-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/evarol/dredge/ed236113a0b6c29b376065440174da6341a1d875/README.md",
+      "locator": "Introduction; demos; code structure",
+      "supports": "Original AP and LFP motion estimation implementation, rigid/nonrigid modes and registration demos."
+    },
+    {
+      "id": "dr-data",
+      "kind": "author_data",
+      "url": "https://datadryad.org/api/v2/versions/224794/files",
+      "locator": "Version 224794 pages 1 and 2; file inventory only",
+      "supports": "Versioned raw Pt01-Pt03 AP/LFP inputs, metadata, motion tracking CSVs and already-aligned derivatives are distinct assets."
+    },
+    {
+      "id": "dr-local",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-add-003/docs/initial-evaluator-v1.md",
+      "locator": "Implemented computation; Prospective metrics and scientific limits; Source audit",
+      "supports": "Local rigid control, linear interpolation and held-channel consistency/fidelity metrics are prospective and not native paper accuracy/reproduction."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate brain/probe displacement and stabilize the human recordings; the recovered ordered source comparison is agreement of DREDge LFP motion with manual LFP tracking, not independently observed physical displacement.",
+      "evidence_ids": [
+        "dr-paper",
+        "dr-code"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Human Neuropixels deposit Dryad DOI 10.5061/dryad.d2547d840, version 224794: raw AP/LFP data and metadata. Already-aligned data must not replace raw candidate inputs.",
+      "evidence_ids": [
+        "dr-data"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All three source manual-tracking participants Pt01, Pt02 and Pt03; acute mouse, Ultra, chronic or synthetic cohorts are different original paper experiments and cannot substitute for this human registration.",
+      "evidence_ids": [
+        "dr-paper",
+        "dr-data"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "This source human agreement analysis is not a supervised train/test benchmark. Exact recording intervals, dropped samples, temporal matching and any tuning exposure behind the reported correlations are not yet bound. A newly reserved channel/time split is an extension.",
+      "evidence_ids": [
+        "dr-paper",
+        "dr-local"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Raw human LFP with channel geometry and acquisition metadata for motion inference; AP can assess resulting stability. Manual tracks are evaluation references only. Availability of DepthMicronsTracking CSV names does not establish their exact correspondence to the published manual reference.",
+      "evidence_ids": [
+        "dr-code",
+        "dr-data",
+        "dr-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source describes IBL LFP preprocessing, downsampling and spatial sharpening; exact patient-specific settings, edge support and author trace resampling for the correlation endpoint have not been recovered. The local raw-grid linear interpolation differs from native preprocessing/kriging.",
+      "evidence_ids": [
+        "dr-paper",
+        "dr-local"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Published human comparison uses Pearson correlation between DREDge and manual LFP displacement traces per patient. Correlation increases agreement but is insensitive to offset/scale and does not certify physical displacement accuracy. Exact reference/temporal alignment is unresolved; adjacent-time voltage consistency is a different metric.",
+      "evidence_ids": [
+        "dr-paper",
+        "dr-local"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Source reports separate Pearson r values for three patients, not a single cohort threshold. Preserve the full patient vector; do not silently average or select Pt03 to manufacture a scalar paper baseline.",
+      "evidence_ids": [
+        "dr-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original per-patient Pearson correlation with manual LFP motion trace; exact full-cohort admission rule unresolved",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Source vector recovered: Pt01 r=0.98, Pt02 r=0.99, Pt03 r=0.85. No scalar source aggregate is supplied and the exact trace alignment is not bound; null avoids inventing an average or choosing a patient.",
+      "evidence_ids": [
+        "dr-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No authenticated native full-cohort DREDge output or same-endpoint rerun is established. The independent local rigid control and consistency panel are not the author baseline.",
+      "evidence_ids": [
+        "dr-code",
+        "dr-local"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful increase in manual-trace agreement requires a defined original vector comparison and checks that neural fidelity is retained; near-ceiling correlations do not justify an arbitrary universal margin.",
+      "evidence_ids": [
+        "dr-paper",
+        "dr-local"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover original paired traces, then predeclare a patient-preserving analysis that accounts for temporal autocorrelation and the small cohort; do not use raw sample count as independent replication.",
+      "independent_unit": "Participant/recording for cross-person claims; autocorrelation-aware time blocks only for conditional within-recording uncertainty.",
+      "rationale": "Three patients and temporally dense LFP samples cannot yield an inflated independent sample count. A stronger p-value is not a motion improvement.",
+      "evidence_ids": [
+        "dr-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover exact source raw segments, manual references, temporal alignment, preprocessing and native author outputs for Pt01-Pt03.",
+      "Predeclare an ordered full-cohort rule against the recovered source per-patient results without selecting one patient or silently constructing a new reported aggregate.",
+      "Compare frozen candidate and competent author execution on identical original inputs and source metric, with justified effect and dependence-aware uncertainty.",
+      "Retain neural fidelity and report the claim as improvement of source manual-trace agreement; no claim of absolute physical displacement truth follows.",
+      "Do not count local adjacent-time consistency, oversmoothing, new held-channel/time subsets or synthetic-motion accuracy as surpassing the original human task."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA claim is made; source comparisons on other species/recording types do not establish human-task SOTA.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive until source endpoint recovery. Any later iteration must use separately declared development evidence while preserving the source human comparison and recording membership.",
+    "candidate_freeze": "Before source final evaluation, freeze code, registration parameters, preprocessing, input-support policy, displacement outputs and the original alignment/metric evaluator.",
+    "final_evaluation": "Replay both methods on every original Pt01-Pt03 source interval using the recovered manual reference; no new channel/time split can substitute. Operator-held reference traces remain unavailable to candidate fitting.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep source per-patient correlations, a future native author rerun and any prospective consistency diagnostics distinct. No native replay was performed in this curation. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Exact original human temporal support, manual-reference identity and trace alignment need source-level recovery.",
+    "Patient-specific preprocessing and complete native registration/interpolation route are not executed or authenticated.",
+    "No source scalar aggregate or predeclared scientifically valid full-cohort superiority rule is established.",
+    "Current local evaluator measures a different prospective consistency/fidelity endpoint.",
+    "Meaningful effect, temporal-dependence-aware uncertainty, fixed episode budgets and working source endpoint remain unresolved."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve loader, rigid comparator and consistency/fidelity diagnostics. Their engineering correctness or improved internal alignment cannot establish surpassing the published human motion result."
+  }
+}

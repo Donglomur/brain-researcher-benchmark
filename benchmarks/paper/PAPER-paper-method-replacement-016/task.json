@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-replacement-016",
-  "source_id": "paper-method-replacement-016",
   "track": "paper",
   "title": "One Hundred Neural Networks and Brains Watching Videos: Lessons from Alignment",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Measure out-of-the-box model-layer representational alignment to each BOLDMoments ROI, using correlation of model and brain dissimilarities; retain all original catalog comparisons.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Measure out-of-the-box model-layer representational alignment to each BOLDMoments ROI, using correlation of model and brain dissimilarities; retain all original catalog comparisons.",
+    "Source-paper comparison for Original per-ROI subject-mean RSA with the paper layer rule; full catalog and ROI profile retained: RDM entries are1-Pearson correlation; layer/ROI alignment is Spearman correlation between the upper-triangle model and subject RDM vectors."
+  ],
+  "success_criteria": [
+    "Recover original per-participant/layer/ROI reference scores and full99-condition membership; distinguish92-model Fig16 and51-model Fig17 comparisons explicitly.",
+    "Preserve original102 videos, preprocessing, pretrained exposure and per-ROI layer-max metric. A new stimulus split or altered brain-response fitting is a separate extension.",
+    "Fix any primary across-ROI decision rule before candidate feedback and preserve the whole original profile; winning a selected ROI or weak model is insufficient.",
+    "Disclose public test exposure and freeze candidate and layer-selection procedure before final evaluation; do not call these public videos an unseen benchmark.",
+    "Require meaningful source-relative RSA improvement and valid selection-aware uncertainty; stronger family contrast significance is not a paper win.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-replacement-016",
   "canonical_position_one_based": 59,
   "paper_identity": {
     "url": "https://proceedings.iclr.cc/paper_files/paper/2025/file/6ceb6c2150bbf46fd75528a6cd6be793-Paper-Conference.pdf",
     "publication_year": 2025,
     "venue": "ICLR"
   },
-  "primary_outputs": [
-    "Per-subject/region representational-similarity profiles and model-family comparisons for temporal modeling versus classification-task factors using the10participants and102repeated test videos.",
-    "Reproduce architecture/layer profiles and the declared family comparisons, reporting uncertainty over participants and model selection effects."
-  ],
   "input_assets": {
     "routes": [
       "https://openneuro.org/datasets/ds005165/versions/1.0.3",
@@ -8668,108 +8679,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Code GPL-3.0; OpenNeuro dataset_description declaresCC0 for brain data.",
-        "Video stimuli allow noncommercial research/education but prohibit redistribution. Use independent authorized downloads; do not package videos into a public benchmark bundle.",
-        "External pretrained checkpoints and dependencies retain their own licenses."
-      ],
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Per-subject/region representational-similarity profiles and model-family comparisons for temporal modeling versus classification-task factors using the10participants and102repeated test videos.",
-        "Reproduce architecture/layer profiles and the declared family comparisons, reporting uncertainty over participants and model selection effects."
-      ],
-      "assessment": "Central temporal-model/training-task RSA family comparisons are mapped, but official default92models excludes7of99paper models and is not a full99-model replication.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Control training dataset/task, architecture and layer multiplicity. Layer-selected RSA gain can overfit and does not establish shared causal mechanism; modelweights/dependencyversions must match.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "The paper contains99models; default repository config contains92 and excludes seven other-training-dataset conditions. Do not describe the default project as full99-model replication.",
-        "A README.txt derivative link returns404, while480actual input objects are present. Use dataset root README and exact stored manifest; the missing explanatory file is not evidence of missing recordings.",
-        "Unpinned upstream Net2Brain branch and mmaction2 compatibility workaround require dependency locking and reference qualification.",
-        "RSA alignment is not evidence of a shared causal neural mechanism. Model-layer selection and many correlated model/ROI comparisons need explicit correction/validation.",
-        "The public102-video test set has already informed the paper; use it for reproduction/development, not a hidden final improvement test.",
-        "Full corpus source overlaps the BOLDMoments dataset paper and any other BMD model-comparison project; group shared participants/stimuli across benchmark partitions.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve held-out-participant/video representational alignment or achieve equivalent alignment with lower feature-extraction cost, using development-only model/layer selection and a fixed evaluation budget."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Predeclare model/layer/family selection on development observations; public102video test set is already paper-exposed. New participant/video or frozen retrospective split needed for meaningful improvement assessment.",
-      "retained_roster_proposal": [
-        "Improve held-out-participant/video representational alignment or achieve equivalent alignment with lower feature-extraction cost, using development-only model/layer selection and a fixed evaluation budget."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": "GPU feature extraction with CPU/GPU RSA; author reports~50GB fMRI and~10GB checkpoints; stimulus archive3.262GB. Source-derived fMRI total44.494GB; intermediate feature storage/runtime unmeasured.",
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": "Unmeasured planning estimate unless an author-reported figure is separately stated."
-  },
-  "holds": {
-    "task_specific": [
-      "The paper contains99models; default repository config contains92 and excludes seven other-training-dataset conditions. Do not describe the default project as full99-model replication.",
-      "A README.txt derivative link returns404, while480actual input objects are present. Use dataset root README and exact stored manifest; the missing explanatory file is not evidence of missing recordings.",
-      "Unpinned upstream Net2Brain branch and mmaction2 compatibility workaround require dependency locking and reference qualification.",
-      "RSA alignment is not evidence of a shared causal neural mechanism. Model-layer selection and many correlated model/ROI comparisons need explicit correction/validation.",
-      "The public102-video test set has already informed the paper; use it for reproduction/development, not a hidden final improvement test.",
-      "Full corpus source overlaps the BOLDMoments dataset paper and any other BMD model-comparison project; group shared participants/stimuli across benchmark partitions.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Freeze a complete representative model-family contrast with identical participants/videos/layer selection, record92-versus99omissions and stimulus permissions, then lock Net2Brain/mmaction dependencies and storage before feature extraction.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Freeze a complete representative model-family contrast with identical participants/videos/layer selection, record92-versus99omissions and stimulus permissions, then lock Net2Brain/mmaction dependencies and storage before feature extraction.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -8820,11 +8729,85 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_resource_statement": "GPU feature extraction with CPU/GPU RSA; author reports~50GB fMRI and~10GB checkpoints; stimulus archive3.262GB. Source-derived fMRI total44.494GB; intermediate feature storage/runtime unmeasured.",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Unmeasured planning estimate unless an author-reported figure is separately stated."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-016/improvement.v1.json",
+      "bytes": 9606,
+      "sha256": "f0cff295a5bab6fc460916b30fa351a48eafe1ebbbdc93d03b31c2c0304385f6"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-016/historical/task.pre-improvement.v1.json",
+        "bytes": 487933,
+        "sha256": "e03a2b42287391c888e4c6243b62b70d1bda125071880ea5bb857e6ae1d065b7"
+      },
+      "implementation_ids": [
+        "authoring-delivery-20261105-common-remaining-builds-wave14-hundred-models-dimension-branches",
+        "benchmarks-neuroscience-_four_programmes_source_v1",
+        "benchmarks-neuroscience-paper-paper-method-replacement-016"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-016/implementations/registered-runtime/manifest.json",
+        "bytes": 4910,
+        "sha256": "a39beadfdc9e0766abb6f87e26ef2f111128169ad1332c57dc8d1ece588a8cc1"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After baseline recovery, develop candidate representations using declared permitted videos/feedback with complete source exposure recorded; all original reference model conditions remain visible in reports.",
+    "candidate_freeze": "Freeze candidate weights, input sampling, model/layer catalog, reduction and aggregation policies before final RSA.",
+    "final_evaluation": "Run the original102-video protocol on the complete participant/ROI population and compare to authentic source scores; report any1000-video extension separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Original paper figures, rerun author metrics and new candidate results must have distinct provenance. Budgets and evaluator qualification remain required before activation."
+  },
+  "blocking_issues": [
+    "Exact original reference vectors and complete checkpoint/dependency manifests absent.",
+    "Historical SRP/no-reduction and training-set configurations are not equivalent to hardcoded current PCA script.",
+    "Public102-video exposure and layer-max selection require an explicit inference/access policy.",
+    "Current source bridge and branch consumers do not execute or qualify scientific feature extraction/RSA.",
+    "No fixed access/resource budget, effect size or superiority uncertainty rule."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact original reference vectors and complete checkpoint/dependency manifests absent.",
+      "Historical SRP/no-reduction and training-set configurations are not equivalent to hardcoded current PCA script.",
+      "Public102-video exposure and layer-max selection require an explicit inference/access policy.",
+      "Current source bridge and branch consumers do not execute or qualify scientific feature extraction/RSA.",
+      "No fixed access/resource budget, effect size or superiority uncertainty rule."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Original model-brain RSA is ordered, but the exact paper model/layer/ROI result vectors and historical native settings are not recovered. Descriptive temporal-model family differences and figure assembly are not themselves improvable performance endpoints. A prospective candidate must be compared against the original full reference catalog, not an arbitrary local model or selected ROI. Exact original reference vectors and complete checkpoint/dependency manifests absent. Historical SRP/no-reduction and training-set configurations are not equivalent to hardcoded current PCA script. Public102-video exposure and layer-max selection require an explicit inference/access policy. Current source bridge and branch consumers do not execute or qualify scientific feature extraction/RSA. No fixed access/resource budget, effect size or superiority uncertainty rule.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-016/historical/task.pre-improvement.v1.json",
+      "bytes": 487933,
+      "sha256": "e03a2b42287391c888e4c6243b62b70d1bda125071880ea5bb857e6ae1d065b7"
+    },
+    "notes": "Keep registered-runtime and dimension-branches as calibration/source-contract components. Their completeness checks and figure reproduction cannot satisfy scientific improvement."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

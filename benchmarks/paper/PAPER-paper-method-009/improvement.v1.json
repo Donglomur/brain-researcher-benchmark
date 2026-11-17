@@ -1,0 +1,171 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-009",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The registered Fig. 3 task admits an ordered estimation-agreement question, and the paper reports 23% average discrepancy between spike-only and voltage-derived irregularity. However, the exact percentage-error definition, empirical voltage reference pipeline, cohort/segment identities and conflicting 25/50 ms preprocessing are unresolved. The local prospective held-trial evaluator changes the historical evaluation and cannot certify a same-task paper win.",
+  "source_paper": {
+    "title": "A doubly stochastic renewal framework for partitioning spiking variability",
+    "url": "https://www.nature.com/articles/s41467-025-63821-4"
+  },
+  "evidence": [
+    {
+      "id": "dsr-paper",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12484930/fullTextXML",
+      "locator": "Results Sec7, Validation with intracellular voltage recordings, Par22–24 and Fig3; Methods Sec17, Intracellular voltage recordings, Par54–55",
+      "supports": "Reports the 23% discrepancy, eight PV neurons from five mice, twenty 10-second segment estimates, voltage-to-rate procedure and inconsistent 25 ms caption versus 50 ms Results/Methods."
+    },
+    {
+      "id": "dsr-readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/engellab/DSRP/ba0490d064ea299c975e12bb94f3d922468f6b50/README.md",
+      "locator": "Project description, Features and examples; pinned revision ba0490d064ea299c975e12bb94f3d922468f6b50",
+      "supports": "Identifies the DSR simulator and estimator; example pathways use synthetic spike generation and do not supply the complete empirical Figure 3 workflow."
+    },
+    {
+      "id": "dsr-estimator",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/engellab/DSRP/ba0490d064ea299c975e12bb94f3d922468f6b50/src/dsr_project/neuron_stat.py",
+      "locator": "_compute_bin_counts and neuron_stats",
+      "supports": "Provides the native spike-count-based irregularity estimator and defaults, which do not establish the original Figure 3 settings."
+    },
+    {
+      "id": "dsr-generator",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/engellab/DSRP/ba0490d064ea299c975e12bb94f3d922468f6b50/src/dsr_project/time_rescaling.py",
+      "locator": "Time-rescaling spike-generation implementation",
+      "supports": "Maps operational intervals into real-time spike indices given rate; it is not the empirical membrane-voltage spline and real-to-operational validation pipeline."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate spike-generation irregularity phi from spike trains alone and compare against voltage-derived operational-time ISI CV² for the paper’s Fig. 3 intracellular validation. The contribution phi/CVraw² is a biological quantity, not a score to maximize.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Pala/Petersen intracellular whole-cell recordings deposited at Zenodo 1304771, linked in the source paper’s Data availability; original membrane-potential data and spikes define the empirical validation. Synthetic DSR examples do not replace this dataset.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Source Methods specify eight qualifying layer-2/3 barrel-cortex PV neurons from five female mice, at least 20 Hz trial-average firing and at least ten 20-second trials. Exact cell/trial identities and inclusion mapping to the deposited matrix have not been recovered.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Figure 3 divides each recording into twenty 10-second segments and reports mean/SEM across segments; these are repeated estimates, not training/test partitions. Exact segment mapping is unrecovered. Introducing prospective held trials or segment selection creates an extension, not the original validation.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Candidate estimator receives source spike trains with source trial durations and boundaries. Independent membrane-voltage-derived irregularity defines the comparator; providing its estimated target or fitted voltage model as candidate input would change the spike-only task.",
+      "evidence_ids": [
+        "dsr-paper",
+        "dsr-estimator"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source 20-kHz voltage processing detects −30 mV crossings, interpolates 3 ms before/5 ms after spikes, bins voltage/rate and fits a spline over voltage bins. Results and Methods specify 50 ms; Figure 3b specifies 25 ms. Spline, support, exact bin choice and segment use must be recovered from source-authorized evidence rather than selected for candidate advantage.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "The source reports an average discrepancy of 23% between spike-only and voltage-derived phi. The reviewed text does not resolve its denominator, signed/absolute operation and aggregation, so it is not yet an executable percentage-error score.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Figure 3d averages twenty segment estimates per neuron and displays SEM; the eight-neuron summary is not twenty independent biological replicates per cell. The averaging rule producing 23% discrepancy remains unrecovered.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Source-reported average discrepancy between spike-only phi and voltage-derived phi; exact formula unresolved",
+    "direction": "lower",
+    "published_baseline": {
+      "status": "verified",
+      "value": 23,
+      "description": "The Results text explicitly reports 23% average discrepancy. This verifies the reported number only: its denominator/error aggregation and exact preprocessing remain unresolved, so 23 is not an admitted scoring threshold.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The pinned DSR estimator is available, but a source-equivalent empirical voltage-spline pipeline and complete Figure 3 cohort/segment mapping were not recovered. No model or fit was run.",
+      "evidence_ids": [
+        "dsr-estimator",
+        "dsr-readme",
+        "dsr-generator"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Justify a meaningful reduction in the recovered source discrepancy in relation to voltage-reference uncertainty and finite segment variability. No margin can be fixed while the percentage error itself is undefined.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Specify a paired candidate/author comparison with uncertainty that accounts for voltage-reference estimation and segments nested within neurons and mice. The paper’s segment SEM is not by itself a superiority test.",
+      "independent_unit": "Five mice; eight neurons and twenty segments per neuron are nested measurements",
+      "rationale": "The source biological sample is small and dependent; neither segments nor voltage time bins can supply invented independent replication.",
+      "evidence_ids": [
+        "dsr-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the source definition of 23% discrepancy and the exact empirical Fig. 3 pipeline, including source-authorized resolution of 25 versus 50 ms bins.",
+      "Match all eight original neurons, five mice and the twenty-segment mapping; independently calibrate the native author estimator and voltage-derived reference.",
+      "Freeze the spike-only candidate before final comparison and exceed a justified meaningful effect under a valid dependence-aware uncertainty rule.",
+      "Do not count smaller phi, larger phi/CVraw², synthetic-ground-truth performance, newly held-out trials or a new cohort as surpassing the original empirical paper task."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA estimate was verified. DSRP, its native rerun and any new estimator must remain distinct comparison records.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive until exact source validation is recoverable. Any exploratory held-trial stability study must be labelled as an extension and cannot supply the original paper-win score.",
+    "candidate_freeze": "Freeze candidate estimator, source-equivalent preprocessing, cohort/segment manifest, reference construction, metric and budgets before comparison.",
+    "final_evaluation": "Use the recovered original empirical Fig. 3 validation and native author comparator; retain all paired cell-level results and dependence structure. A local natural-cubic held-trial evaluator is not assumed to be the source evaluator.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep the published 23% statement, a future exact author rerun and prospective held-trial results separate. The source physiological fractions 0.26 and 0.27 are not performance baselines."
+  },
+  "blocking_issues": [
+    "Exact mathematical definition and aggregation of reported 23% discrepancy are unresolved.",
+    "Source Results/Methods use 50 ms voltage/rate bins while Fig. 3b states 25 ms.",
+    "Empirical voltage-spline family/support details, source cohort identities and twenty-segment mapping have not been recovered.",
+    "Pinned time_rescaling.py is a spike-generation routine, not the empirical validation pipeline.",
+    "The local evaluator openly uses prospective held trials and natural-cubic policies; this is not native Figure 3 reconstruction.",
+    "No same-task working scorer, justified effect/uncertainty rule, candidate freeze or concrete episode budgets exist."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the initial evaluator and native third-party estimator. Its generated controls and prospective held-trial outputs are calibration/extension evidence only; no authentic reference agreement or scientific improvement has been established."
+  }
+}

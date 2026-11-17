@@ -1,0 +1,189 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-005",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original ordered encoding task and author evaluation route are identifiable, but a comparable numerical source baseline with exact voxel masks, row/session alignment and aggregation has not been recovered. The existing nested image-family ridge evaluator changes the source split and cannot establish a same-task paper win.",
+  "source_paper": {
+    "title": "Distributed representations of behaviour-derived object dimensions in the human visual system",
+    "url": "https://www.nature.com/articles/s41562-024-01980-y"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11576512/",
+      "locator": "Figure 2; Methods: Linear regression on fMRI single-trial estimates; Data availability",
+      "supports": "Original ordered task predicts single-trial voxel responses from 66 dimensions in three THINGS-fMRI participants using leave-one-session-out evaluation."
+    },
+    {
+      "id": "fit",
+      "kind": "author_code",
+      "url": "https://github.com/ViCCo-Group/dimension_encoding/blob/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/scripts/run_linregcv.py",
+      "locator": "find_embedding_fmritrials and main",
+      "supports": "Author joins image dimensions to response rows, globally z-scores dimensions, and invokes LinRegCVPermutation."
+    },
+    {
+      "id": "metric",
+      "kind": "author_code",
+      "url": "https://github.com/ViCCo-Group/dimension_encoding/blob/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/dimension_encoding/glm.py",
+      "locator": "LinRegCVPermutation.__init__, fit_predict_eval, make_splits and fit_and_permute",
+      "supports": "Author default is unshuffled 12-fold linear regression with intercept, Pearson correlation per fold, then arithmetic average across folds."
+    },
+    {
+      "id": "varpart",
+      "kind": "author_code",
+      "url": "https://github.com/ViCCo-Group/dimension_encoding/blob/b1843e7eb92858c9c4a9ef88b4a5faea24752b49/scripts/run_varpart.py",
+      "locator": "make_dimensions_model and main",
+      "supports": "Variance-partition branch selects category-diagnostic dimensions, residualizes predictors/responses, clips negative correlations before squaring, and compares to category/combined models; it is distinct from signed R2."
+    },
+    {
+      "id": "legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-005/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "POLICY, GATES, grouped_folds, ridge_predict, fit_scores and variance_partition",
+      "supports": "Current local evaluator uses a new image-family/category split and nested ridge and explicitly lacks native 12-session replication."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict each original participant’s single-trial fMRI voxel responses to THINGS images from the source image-wise 66-dimensional behavioural embedding. Retain the related Figure 6 category-versus-dimension attribution as a separate source analysis, not a substitute primary score.",
+      "evidence_ids": [
+        "paper",
+        "fit",
+        "varpart"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "THINGS-fMRI, article-linked OpenNeuro ds004192 version 1.0.5 and Figshare collection 6161151, with published single-trial estimates, noise ceilings and image-wise dimension files. Exact artifact hashes and row-order/session alignment have not been admitted.",
+      "evidence_ids": [
+        "paper",
+        "fit"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All three source participants, each viewing 8,740 unique images from 720 object categories over 12 sessions; participant-specific voxels and original inclusion masks must be retained.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original leave-one-session-out 12-fold protocol. Author code uses unshuffled 12-fold KFold over ordered rows; exact session-to-row correspondence must be verified before declaring equivalence. The legacy five-fold image-family/category partition is an extension.",
+      "evidence_ids": [
+        "paper",
+        "metric",
+        "legacy"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source image-wise 66 predicted behavioural dimensions and training-fold response estimates; category labels and the 30 diagnostic dimensions belong to the separately specified variance-partition comparator. Test response estimates remain scoring-only.",
+      "evidence_ids": [
+        "fit",
+        "varpart"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Author fit joins image names and z-scores dimension columns globally before ordinary least squares with intercept. Preserve source single-trial estimate and noise-ceiling conventions. Train-only scaling, nested ridge and signed-R2 replacement are changed methods/protocol choices requiring explicit comparison.",
+      "evidence_ids": [
+        "fit",
+        "metric",
+        "varpart"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Primary source code returns per-voxel Pearson r between predicted and observed responses, averaged across the 12 folds. Figure 2 visualizes noise-ceiling-corrected R2. Exact conversion and masks for a published-comparable scalar remain unresolved; signed SSE/SST R2 cannot silently replace correlation-squared.",
+      "evidence_ids": [
+        "paper",
+        "metric",
+        "varpart"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Fold mean is source-defined per voxel, with separate participant maps. A single across-voxel/across-participant paper-win scalar, its mask and numerical source baseline have not been recovered. Selecting only favorable voxels or a region after seeing scores is prohibited.",
+      "evidence_ids": [
+        "paper",
+        "metric"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original per-voxel 12-session cross-validated Pearson r; published Figure 2 map-to-primary aggregation unresolved",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Figure 2 supplies participant-specific accuracy maps, not a recovered scalar for this contract. Figure 6 reported variance-partition medians are different estimands and must not be repurposed as the full 66-dimension encoding baseline.",
+      "evidence_ids": [
+        "paper",
+        "metric",
+        "varpart"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Source-authorized route: pinned run_linregcv.py with LinRegCVPermutation and original single-trial/embedding/mask artifacts. No source-identical numerical run or agreement with published maps has been verified.",
+      "evidence_ids": [
+        "fit",
+        "metric"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Define a meaningful improvement in the recovered source metric using response reliability and per-participant effects after the original mask/aggregation is fixed; do not invent a universal correlation margin.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired candidate-minus-author comparisons on the identical original folds, with dependence across sessions/images/voxels accounted for; no inferential threshold is yet admitted.",
+      "independent_unit": "Participant for population claims; repeated sessions/stimuli within each of three participants for conditional prediction claims. Voxels and CV folds are not independent participants.",
+      "rationale": "Only three source participants are available, and session CV shares training data. Arbitrary voxelwise significance or a new category holdout cannot establish the requested source-task gain.",
+      "evidence_ids": [
+        "paper",
+        "metric"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover and pin the complete original three-participant input/mask/row/session manifest and numerical author outputs for Figure 2.",
+      "Fix the original fold-wise Pearson metric, any noise-ceiling conversion and aggregation before candidate development; compare the candidate to the original 66-dimension author encoding result.",
+      "Preserve all original participants, sessions and eligible voxels; a family/category holdout, changed population or narrowed voxel subset is a separately labelled extension.",
+      "Freeze candidate, access/resource budgets, task-specific meaningful effect and valid paired uncertainty before final scoring.",
+      "Do not count reproducing Figure 6 variance partitions, lower reconstruction error, or stronger p values as a Figure 2 prediction win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison is asserted; the source-paper result and any later author rerun remain separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending source baseline recovery. Once admitted, use only original training-fold data and internal training-fold validation for iteration; preserve original outer session folds for the frozen comparison.",
+    "candidate_freeze": "Freeze candidate code, feature access, preprocessing, original outer-fold manifest, evaluation mask and model-selection procedure before scoring final folds.",
+    "final_evaluation": "Replay frozen candidate and source author method on all original 12 sessions for each of the three participants; report paired source-metric changes plus all source scope restrictions.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published source score, reproduced author baseline, and any independently source-verified current SOTA separate. Reproduction is calibration only."
+  },
+  "blocking_issues": [
+    "Published-comparable numeric accuracy maps and primary scalar/mask aggregation unrecovered.",
+    "Original response-row order must be reconciled with the author unshuffled 12-fold session protocol and exact artifact versions.",
+    "Source Pearson/correlation-squared/noise-ceiling conventions require full map-level equivalence; current signed-R2 nested evaluator is a different protocol.",
+    "No admitted author-baseline execution, candidate runner, meaningful effect, uncertainty rule or concrete access/resource budgets."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve initial-evaluator-v1 unchanged as calibration/extension infrastructure. Its prospective family/category nested ridge policy is explicitly not the paper’s 12-session encoding benchmark, and its scores cannot satisfy this improvement contract."
+  }
+}

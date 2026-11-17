@@ -1,19 +1,32 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-add-002",
-  "source_id": "paper-method-add-002",
   "track": "paper",
   "title": "Dimensionality reduction beyond neural subspaces with slice tensor component analysis",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Original Fig.2 hand-trajectory decoding from raw or decomposed neural activity, together with original blocked tensor-entry reconstruction error versus rank/type. Neither endpoint can replace the other in the registered combined task.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Original Fig.2 hand-trajectory decoding from raw or decomposed neural activity, together with original blocked tensor-entry reconstruction error versus rank/type. Neither endpoint can replace the other in the registered combined task.",
+    "Source-paper comparison for Fig.2 trial-wise trajectory R2 for straight and curved reaches, reported separately: Trial R2=1-SSE/SST, summing squared error across time and XY and centering true position within trial; velocity decoder cumulatively integrates predicted increments from true start. Reconstruction uses the source masked MSE/root-error convention, which must be reconciled for each original panel before comparison."
+  ],
+  "success_criteria": [
+    "Recover authentic Fig.2 scores and exact source trial/fold identities, and qualify the original author pipeline before any candidate claim.",
+    "Keep original neural/hand inputs, time windows, starting-position access, preprocessing and both reach conditions; no200-case conditional-position substitute.",
+    "Resolve OLS stated in paper versus regularization=1 default in released velocity decoding; freeze a source-supported recipe and report any discrepancy.",
+    "Recover and retain the original blocked-reconstruction error-versus-rank/type panel, masks, edge trimming and full source comparator set as required companion endpoints. Predeclare a joint decision with decoding; a decoding-only result cannot satisfy the combined registration.",
+    "Require a meaningful predeclared improvement against the original source performance with valid uncertainty; reconstruction accuracy, a stronger Wilcoxon p-value or more optimizer restarts alone is insufficient.",
+    "A changed split, training-only rescaling or different neuron/session subset is an extension, not surpassing the original paper task.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-add-002",
   "canonical_position_one_based": 80,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41593-024-01626-2",
     "publication_year": 2024,
     "venue": "Nature Neuroscience"
   },
-  "primary_outputs": [
-    "Reconstruction error versus rank/type, recovered neuron/time/trial components, and held-out decoding comparison with PCA/TCA."
-  ],
   "input_assets": {
     "routes": [
       "https://figshare.com/articles/dataset/24961917"
@@ -450,106 +463,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Figshare24961917v1 CC BY4.0",
-        "Inspect bundled analysis and slicetca license separately"
-      ],
-      "declared_overlap_group": "https://api.figshare.com/v2/articles/24961917/versions/1",
-      "existing_graph_evidence_leads": [],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Reconstruction error versus rank/type, recovered neuron/time/trial components, and held-out decoding comparison with PCA/TCA."
-      ],
-      "construction_specificity": "Blocked reconstruction error versus rank/type and reaching decoding are documented but are distinct endpoints; exact masking, decoding-target availability and primary aggregation remain unfrozen.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Specify which observed entries may infer a held-out trial latent variable; trial index exclusion alone is insufficient.",
-      "Match parameter/search budgets against CP/TCA, PCA/Tucker and condition-average controls; fit preprocessing/ranks without protected entries.",
-      "Resolve preprocessing/time-warping and exact MC_Maze overlap before cross-suite split claims."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Blocked reconstruction error versus rank/type and reaching decoding are documented but are distinct endpoints; exact masking, decoding-target availability and primary aggregation remain unfrozen.",
-        "Trial/block with biological-session context preserved; unseen-animal claim unsupported. A future masked-entry panel is operational withholding, not automatically biological independence.",
-        "Later selection memo retains this as a conditional reserve. The111,602,656B selected pair is metadata, not measured runtime or proof of an independent improvement panel; code/core licenses need separate resolution.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Test rank-selection stability, neuron/trial subsampling and held-out-session reconstruction with matched model capacity."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Test rank-selection stability, neuron/trial subsampling and held-out-session reconstruction with matched model capacity."
-      ],
-      "independent_panel_gate": "Trial/block with biological-session context preserved; unseen-animal claim unsupported. A future masked-entry panel is operational withholding, not automatically biological independence.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": "CPU possible; GPU recommended;~112MB Churchland input pair",
-    "source_resource_evidence": "Resource class is an inspection-based estimate, not measured runtime.",
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "Blocked reconstruction error versus rank/type and reaching decoding are documented but are distinct endpoints; exact masking, decoding-target availability and primary aggregation remain unfrozen.",
-      "Trial/block with biological-session context preserved; unseen-animal claim unsupported. A future masked-entry panel is operational withholding, not automatically biological independence.",
-      "Later selection memo retains this as a conditional reserve. The111,602,656B selected pair is metadata, not measured runtime or proof of an independent improvement panel; code/core licenses need separate resolution.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Audit trial/behavior/time-warp provenance and define a single protected-block reconstruction contract, including permitted latent inference and fixed comparator selection, before any fit.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Audit trial/behavior/time-warp provenance and define a single protected-block reconstruction contract, including permitted latent inference and fixed comparator selection, before any fit.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -635,11 +548,86 @@
     ],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_statement": "CPU possible; GPU recommended;~112MB Churchland input pair",
+    "source_resource_evidence": "Resource class is an inspection-based estimate, not measured runtime.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-add-002/improvement.v1.json",
+      "bytes": 11671,
+      "sha256": "69154fe699db5375dd3e0de11f9f7855aad08fc72f98baab5acb66ccc3a48cda"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-add-002/historical/task.pre-improvement.v1.json",
+        "bytes": 31556,
+        "sha256": "c895d422f3296568844e447ceb55e1f5b5dbd665ee6108e3da35c6f98756f06e"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-slicetca"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-paper-method-add-002/implementations/registered-runtime/manifest.json",
+        "bytes": 6829,
+        "sha256": "a97b4d006df066bac7032fb394acbd55e384b11df055d5c2651ba0d938a84fab"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After source recovery, iterate on a declared development partition while retaining reconstruction and decoding as required, separately reported endpoint panels. No scientific run is authorized by this contract.",
+    "candidate_freeze": "Freeze source-compatible transform, decomposition, decoder, rank/search policy and seed/prediction artifacts before final comparison.",
+    "final_evaluation": "Evaluate the original full Fig.2 decoding and original blocked-reconstruction/rank panels with source-matched exposure and a predeclared joint decision; report both reach conditions, protect final labels operationally and disclose prior public exposure.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published source scores, authentic author reruns and local engineering controls remain separate. Null episode budgets block active admission."
+  },
+  "blocking_issues": [
+    "Exact Fig.2 numerical baseline and original fold/mask provenance not recovered.",
+    "Native data, movement and condition asset hashes not authenticated.",
+    "OLS/ridge discrepancy and reconstruction exposure require source reconciliation.",
+    "Current runtime has no runnable same-task scorer; resource/access budgets, meaningful effect and uncertainty remain unbound.",
+    "Original reconstruction/rank panel masks, numeric error profiles and joint decoding/reconstruction decision rule not recovered.",
+    "Exact source decoder time-index origin/window must be reconciled between Methods and Fig2.py slices; no silent window replacement."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact Fig.2 numerical baseline and original fold/mask provenance not recovered.",
+      "Native data, movement and condition asset hashes not authenticated.",
+      "OLS/ridge discrepancy and reconstruction exposure require source reconciliation.",
+      "Current runtime has no runnable same-task scorer; resource/access budgets, meaningful effect and uncertainty remain unbound.",
+      "Original reconstruction/rank panel masks, numeric error profiles and joint decoding/reconstruction decision rule not recovered.",
+      "Exact source decoder time-index origin/window must be reconciled between Methods and Fig2.py slices; no silent window replacement."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original reaching-decoding and blocked reconstruction endpoints are ordered, but no exact published score and matching source evaluation artifact are recovered. The current 200-case conditional-position programme is a different evaluation and cannot establish a source-paper win. Paper/code decoding and CV discrepancies require reconciliation before admission. Exact Fig.2 numerical baseline and original fold/mask provenance not recovered. Native data, movement and condition asset hashes not authenticated. OLS/ridge discrepancy and reconstruction exposure require source reconciliation. Current runtime has no runnable same-task scorer; resource/access budgets, meaningful effect and uncertainty remain unbound. Original reconstruction/rank panel masks, numeric error profiles and joint decoding/reconstruction decision rule not recovered. Exact source decoder time-index origin/window must be reconciled between Methods and Fig2.py slices; no silent window replacement.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-add-002/historical/task.pre-improvement.v1.json",
+      "bytes": 31556,
+      "sha256": "c895d422f3296568844e447ceb55e1f5b5dbd665ee6108e3da35c6f98756f06e"
+    },
+    "notes": "Retain the full200/400 paired conditional-position programme and every historical grader as calibration/extension evidence only; none can certify the original Fig.2 decoding or blocked reconstruction result."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

@@ -1,0 +1,1694 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-add-005",
+  "source_id": "paper-method-add-005",
+  "track": "paper",
+  "title": "Generating realistic neurophysiological time series with denoising diffusion probabilistic models",
+  "status": "specification_only",
+  "canonical_position_one_based": 84,
+  "paper_identity": {
+    "url": "https://doi.org/10.1016/j.patter.2024.101047",
+    "publication_year": 2024,
+    "venue": "Patterns"
+  },
+  "primary_outputs": [
+    "Train author diffusion model on predeclared ECoG participants/sessions and quantify missing-channel imputation error/spectral fidelity.",
+    "Compare diffusion imputation with channel interpolation/conditional baselines at the same observed-channel budget."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://api.dandiarchive.org/api/dandisets/000055/versions/0.220127.0436/assets/?page_size=100",
+      "https://figshare.com/articles/dataset/16599782"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": "sub-01/sub-01_ses-7_behavior+ecephys.nwb",
+          "bytes": 10273614013,
+          "asset_id": "ccdc3ae1-e98d-4a17-93d8-5b7386689fe0"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/1",
+        "recorded_fields": {
+          "name": "sub-03/sub-03_ses-3_behavior+ecephys.nwb",
+          "bytes": 12993721651,
+          "asset_id": "5122cc42-981c-4fa3-92f4-5f9ccfb8c092"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/2",
+        "recorded_fields": {
+          "name": "sub-02/sub-02_ses-6_behavior+ecephys.nwb",
+          "bytes": 13938729701,
+          "asset_id": "367a151f-020f-4498-b144-d721872cad61"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/3",
+        "recorded_fields": {
+          "name": "sub-03/sub-03_ses-4_behavior+ecephys.nwb",
+          "bytes": 13013447892,
+          "asset_id": "263d8a0a-167b-4a35-83b6-f924a455178f"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/4",
+        "recorded_fields": {
+          "name": "sub-02/sub-02_ses-3_behavior+ecephys.nwb",
+          "bytes": 13932801912,
+          "asset_id": "42f73251-88be-4407-a7bf-4ea671bbb448"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/5",
+        "recorded_fields": {
+          "name": "sub-02/sub-02_ses-4_behavior+ecephys.nwb",
+          "bytes": 13935231305,
+          "asset_id": "f908df60-207d-452b-81a8-3b47680d31c9"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/6",
+        "recorded_fields": {
+          "name": "sub-02/sub-02_ses-5_behavior+ecephys.nwb",
+          "bytes": 13931092404,
+          "asset_id": "3b7d0c35-abdf-4ca2-84a1-706bbd6fea03"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/7",
+        "recorded_fields": {
+          "name": "sub-01/sub-01_ses-5_behavior+ecephys.nwb",
+          "bytes": 15909602501,
+          "asset_id": "7a8fe889-58bc-4b33-a39b-58c32f607723"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/8",
+        "recorded_fields": {
+          "name": "sub-01/sub-01_ses-4_behavior+ecephys.nwb",
+          "bytes": 15925970691,
+          "asset_id": "f47baec3-984b-419c-998e-b47414f9aa4c"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/9",
+        "recorded_fields": {
+          "name": "sub-01/sub-01_ses-3_behavior+ecephys.nwb",
+          "bytes": 15903762527,
+          "asset_id": "7b9e2ca1-9097-488a-b4e9-ac407fb31457"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/10",
+        "recorded_fields": {
+          "name": "sub-04/sub-04_ses-3_behavior+ecephys.nwb",
+          "bytes": 8423945777,
+          "asset_id": "554a74cc-824b-4a02-8b23-63aa51ac2369"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/11",
+        "recorded_fields": {
+          "name": "sub-03/sub-03_ses-5_behavior+ecephys.nwb",
+          "bytes": 12882908477,
+          "asset_id": "c847c7ce-8ff5-4f8b-a55f-08fa775e9070"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/12",
+        "recorded_fields": {
+          "name": "sub-06/sub-06_ses-3_behavior+ecephys.nwb",
+          "bytes": 8620317009,
+          "asset_id": "87c2f790-8f6c-4e73-a54f-f275af6a2680"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/13",
+        "recorded_fields": {
+          "name": "sub-04/sub-04_ses-6_behavior+ecephys.nwb",
+          "bytes": 12991088768,
+          "asset_id": "8d27e55c-2cc4-428b-b8fa-ba57e4ef939a"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/14",
+        "recorded_fields": {
+          "name": "sub-03/sub-03_ses-6_behavior+ecephys.nwb",
+          "bytes": 12766259947,
+          "asset_id": "0dc4d614-b245-4b00-853d-0e3aa8690a2b"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/15",
+        "recorded_fields": {
+          "name": "sub-04/sub-04_ses-4_behavior+ecephys.nwb",
+          "bytes": 13233736922,
+          "asset_id": "d914679e-dd71-4c7e-86be-92eaebfff0cd"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/16",
+        "recorded_fields": {
+          "name": "sub-04/sub-04_ses-7_behavior+ecephys.nwb",
+          "bytes": 13574276744,
+          "asset_id": "c2086647-7ac0-406d-8ec4-cca30cfdd9bd"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/17",
+        "recorded_fields": {
+          "name": "sub-04/sub-04_ses-5_behavior+ecephys.nwb",
+          "bytes": 13534463081,
+          "asset_id": "b2e73f29-0521-4c5b-8674-84e2507902df"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/18",
+        "recorded_fields": {
+          "name": "sub-06/sub-06_ses-4_behavior+ecephys.nwb",
+          "bytes": 12885238804,
+          "asset_id": "eea59c28-3e69-4fb6-a6c0-fbd57dd303cc"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/19",
+        "recorded_fields": {
+          "name": "sub-05/sub-05_ses-3_behavior+ecephys.nwb",
+          "bytes": 17155594911,
+          "asset_id": "c4674f3f-fd0d-471c-a9a4-a0d0eeaed105"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/20",
+        "recorded_fields": {
+          "name": "sub-05/sub-05_ses-7_behavior+ecephys.nwb",
+          "bytes": 16978351793,
+          "asset_id": "8b92ef63-1761-4aa0-8eff-2f0f1af51154"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/21",
+        "recorded_fields": {
+          "name": "sub-05/sub-05_ses-4_behavior+ecephys.nwb",
+          "bytes": 17170906865,
+          "asset_id": "9c88256e-3088-4bbb-b6c5-b4f0e25e4129"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/22",
+        "recorded_fields": {
+          "name": "sub-06/sub-06_ses-7_behavior+ecephys.nwb",
+          "bytes": 12849759318,
+          "asset_id": "91627a3e-186b-4baf-85ce-6fb298d2a0fd"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/23",
+        "recorded_fields": {
+          "name": "sub-06/sub-06_ses-5_behavior+ecephys.nwb",
+          "bytes": 12971863868,
+          "asset_id": "1b8e9511-a2df-440e-b34f-6348d90f4495"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/24",
+        "recorded_fields": {
+          "name": "sub-06/sub-06_ses-6_behavior+ecephys.nwb",
+          "bytes": 12898217183,
+          "asset_id": "c1dbcf02-a819-42e2-8ced-6268fc9e7543"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/25",
+        "recorded_fields": {
+          "name": "sub-12/sub-12_ses-4_behavior+ecephys.nwb",
+          "bytes": 19946639193,
+          "asset_id": "257cec4c-84ba-4047-815c-a790d4f51d7e"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/26",
+        "recorded_fields": {
+          "name": "sub-12/sub-12_ses-3_behavior+ecephys.nwb",
+          "bytes": 19928317351,
+          "asset_id": "3db4e507-c2de-4ab3-a052-88d9800f36d0"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/27",
+        "recorded_fields": {
+          "name": "sub-12/sub-12_ses-6_behavior+ecephys.nwb",
+          "bytes": 19968968331,
+          "asset_id": "edfe2e2e-f771-4dfe-aff2-b902eecc7846"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/28",
+        "recorded_fields": {
+          "name": "sub-12/sub-12_ses-5_behavior+ecephys.nwb",
+          "bytes": 19949722928,
+          "asset_id": "dd6e50f0-c212-478b-b635-470a84f619cc"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/29",
+        "recorded_fields": {
+          "name": "sub-12/sub-12_ses-7_behavior+ecephys.nwb",
+          "bytes": 19611966150,
+          "asset_id": "25f58d6b-87dd-4a76-a88f-97cf49ee0857"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/30",
+        "recorded_fields": {
+          "name": "sub-07/sub-07_ses-3_behavior+ecephys.nwb",
+          "bytes": 10021863235,
+          "asset_id": "5791a9f3-5c0c-484b-b690-b5ce9fea589e"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/31",
+        "recorded_fields": {
+          "name": "sub-07/sub-07_ses-4_behavior+ecephys.nwb",
+          "bytes": 10395219939,
+          "asset_id": "dbf11bb5-e73c-43aa-8f9e-d87807e09971"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/32",
+        "recorded_fields": {
+          "name": "sub-07/sub-07_ses-5_behavior+ecephys.nwb",
+          "bytes": 10409046599,
+          "asset_id": "b33fadbb-a6b1-45aa-8dce-7179a4968fef"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/33",
+        "recorded_fields": {
+          "name": "sub-07/sub-07_ses-6_behavior+ecephys.nwb",
+          "bytes": 10431086594,
+          "asset_id": "9cbcf6f1-1bb2-4054-bd7f-efe76e78caaf"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/34",
+        "recorded_fields": {
+          "name": "sub-07/sub-07_ses-7_behavior+ecephys.nwb",
+          "bytes": 10389089705,
+          "asset_id": "fbb5c167-42a3-4de1-b89b-54f944998d8c"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/35",
+        "recorded_fields": {
+          "name": "sub-08/sub-08_ses-3_behavior+ecephys.nwb",
+          "bytes": 14919492016,
+          "asset_id": "7de9b149-2994-455e-a8c6-5e5893245baf"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/36",
+        "recorded_fields": {
+          "name": "sub-08/sub-08_ses-4_behavior+ecephys.nwb",
+          "bytes": 14898053963,
+          "asset_id": "07fe6ecc-1a51-4655-a925-dcc3ecb6183f"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/37",
+        "recorded_fields": {
+          "name": "sub-08/sub-08_ses-5_behavior+ecephys.nwb",
+          "bytes": 14908358276,
+          "asset_id": "8deb156d-b2f9-45ca-a760-79b6746fd938"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/38",
+        "recorded_fields": {
+          "name": "sub-08/sub-08_ses-6_behavior+ecephys.nwb",
+          "bytes": 14686305858,
+          "asset_id": "7691f8de-eb74-4461-a56b-8b2a690c37a9"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/39",
+        "recorded_fields": {
+          "name": "sub-08/sub-08_ses-7_behavior+ecephys.nwb",
+          "bytes": 14860932771,
+          "asset_id": "7edc7127-d2a5-48c7-96fb-5080c64c075c"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/40",
+        "recorded_fields": {
+          "name": "sub-09/sub-09_ses-3_behavior+ecephys.nwb",
+          "bytes": 19794037714,
+          "asset_id": "b5b123ea-557f-4b69-ad11-8b3ff6bc9bd5"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/41",
+        "recorded_fields": {
+          "name": "sub-09/sub-09_ses-5_behavior+ecephys.nwb",
+          "bytes": 19775078934,
+          "asset_id": "8c8617f8-033d-4f67-b045-9d8a80157d2e"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/42",
+        "recorded_fields": {
+          "name": "sub-09/sub-09_ses-4_behavior+ecephys.nwb",
+          "bytes": 19741644394,
+          "asset_id": "4d960b31-6a46-4578-a620-2dfdad46bf55"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/43",
+        "recorded_fields": {
+          "name": "sub-09/sub-09_ses-7_behavior+ecephys.nwb",
+          "bytes": 19584392586,
+          "asset_id": "03a5fed4-56bf-4562-b86d-a1ee8232b4bc"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/44",
+        "recorded_fields": {
+          "name": "sub-10/sub-10_ses-4_behavior+ecephys.nwb",
+          "bytes": 19723279309,
+          "asset_id": "0d4e2bea-fd00-405f-923c-86141269c39a"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/45",
+        "recorded_fields": {
+          "name": "sub-09/sub-09_ses-6_behavior+ecephys.nwb",
+          "bytes": 19678132251,
+          "asset_id": "9000de0d-961a-43f6-98f8-f8a029021b3d"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/46",
+        "recorded_fields": {
+          "name": "sub-10/sub-10_ses-3_behavior+ecephys.nwb",
+          "bytes": 19715930499,
+          "asset_id": "e22abf61-170a-4d52-89f5-27e394e04afa"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/47",
+        "recorded_fields": {
+          "name": "sub-10/sub-10_ses-5_behavior+ecephys.nwb",
+          "bytes": 19242804839,
+          "asset_id": "ed1be986-96ee-41c7-9c26-70cf63ca6e18"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/48",
+        "recorded_fields": {
+          "name": "sub-10/sub-10_ses-6_behavior+ecephys.nwb",
+          "bytes": 19616485214,
+          "asset_id": "65a1370b-f9ee-414c-a59c-5739a9cf74c5"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/49",
+        "recorded_fields": {
+          "name": "sub-10/sub-10_ses-7_behavior+ecephys.nwb",
+          "bytes": 19486355432,
+          "asset_id": "baa2614a-0320-4b5f-b86c-e56700cedfb0"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/50",
+        "recorded_fields": {
+          "name": "sub-11/sub-11_ses-3_behavior+ecephys.nwb",
+          "bytes": 17160159566,
+          "asset_id": "0b4aac2b-e080-4854-b792-4ea4359e2044"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/51",
+        "recorded_fields": {
+          "name": "sub-11/sub-11_ses-4_behavior+ecephys.nwb",
+          "bytes": 16985717017,
+          "asset_id": "1fc40baf-4007-4d96-9d6a-61213b14aecd"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/52",
+        "recorded_fields": {
+          "name": "sub-11/sub-11_ses-5_behavior+ecephys.nwb",
+          "bytes": 17130638679,
+          "asset_id": "2540d025-f180-4242-aec1-ed0e162597d3"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/53",
+        "recorded_fields": {
+          "name": "sub-11/sub-11_ses-7_behavior+ecephys.nwb",
+          "bytes": 17065046889,
+          "asset_id": "b8f1e63b-9946-4024-bd0e-1d508e2ffa78"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/54",
+        "recorded_fields": {
+          "name": "sub-11/sub-11_ses-6_behavior+ecephys.nwb",
+          "bytes": 17150028045,
+          "asset_id": "b66295f2-40d4-4362-9243-7b7125c091f9"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/license",
+        "recorded_fields": {
+          "name": "CC BY 4.0",
+          "url": "https://creativecommons.org/licenses/by/4.0/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/0",
+        "recorded_fields": {
+          "name": "EC01_ecog_data.nc",
+          "bytes": 1002695684,
+          "url": "https://ndownloader.figshare.com/files/30725915",
+          "md5": "4dec234da43dbb2b962d53c6a9f33c7f"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "4dec234da43dbb2b962d53c6a9f33c7f"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/1",
+        "recorded_fields": {
+          "name": "EC02_ecog_data.nc",
+          "bytes": 291229300,
+          "url": "https://ndownloader.figshare.com/files/30725987",
+          "md5": "ac19ccc3fb97cd95c58dbccd888c9967"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "ac19ccc3fb97cd95c58dbccd888c9967"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/2",
+        "recorded_fields": {
+          "name": "EC03_ecog_data.nc",
+          "bytes": 757634212,
+          "url": "https://ndownloader.figshare.com/files/30725996",
+          "md5": "9f2eb196bef0253ebb055904eb134ca5"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "9f2eb196bef0253ebb055904eb134ca5"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/3",
+        "recorded_fields": {
+          "name": "EC04_ecog_data.nc",
+          "bytes": 364855316,
+          "url": "https://ndownloader.figshare.com/files/30726020",
+          "md5": "1fffc6dc45f642678a102ea27c1c0ab5"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "1fffc6dc45f642678a102ea27c1c0ab5"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/4",
+        "recorded_fields": {
+          "name": "EC05_ecog_data.nc",
+          "bytes": 347893940,
+          "url": "https://ndownloader.figshare.com/files/30726068",
+          "md5": "fb5ca35729c456cdca3b2ee5890786ee"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "fb5ca35729c456cdca3b2ee5890786ee"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/5",
+        "recorded_fields": {
+          "name": "EC06_ecog_data.nc",
+          "bytes": 1127365852,
+          "url": "https://ndownloader.figshare.com/files/30726086",
+          "md5": "465cc0a78c0d1aee6d3065a49a5d1bfb"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "465cc0a78c0d1aee6d3065a49a5d1bfb"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/6",
+        "recorded_fields": {
+          "name": "EC07_ecog_data.nc",
+          "bytes": 702716012,
+          "url": "https://ndownloader.figshare.com/files/30726104",
+          "md5": "9f8e5504349d9c18e247811071ed8f1d"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "9f8e5504349d9c18e247811071ed8f1d"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/7",
+        "recorded_fields": {
+          "name": "EC08_ecog_data.nc",
+          "bytes": 1266080324,
+          "url": "https://ndownloader.figshare.com/files/30726119",
+          "md5": "7017d7f74a7c90898cc5b636f562d8c6"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "7017d7f74a7c90898cc5b636f562d8c6"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/8",
+        "recorded_fields": {
+          "name": "EC09_ecog_data.nc",
+          "bytes": 307148900,
+          "url": "https://ndownloader.figshare.com/files/30726296",
+          "md5": "691e78025b6671e143c7a9ffa870089c"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "691e78025b6671e143c7a9ffa870089c"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/9",
+        "recorded_fields": {
+          "name": "EC10_ecog_data.nc",
+          "bytes": 1261113660,
+          "url": "https://ndownloader.figshare.com/files/30726500",
+          "md5": "09efdcda986503e1973092b749bfef8a"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "09efdcda986503e1973092b749bfef8a"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/10",
+        "recorded_fields": {
+          "name": "EC11_ecog_data.nc",
+          "bytes": 1535501900,
+          "url": "https://ndownloader.figshare.com/files/30726731",
+          "md5": "9b9e8dec9ede1256f61e8b93335efbc8"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "9b9e8dec9ede1256f61e8b93335efbc8"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/11",
+        "recorded_fields": {
+          "name": "EC12_ecog_data.nc",
+          "bytes": 1774573180,
+          "url": "https://ndownloader.figshare.com/files/30727229",
+          "md5": "b8da58cc46281910e75f040cec6f8617"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "b8da58cc46281910e75f040cec6f8617"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/12",
+        "recorded_fields": {
+          "name": "EC01_pose_data.nc",
+          "bytes": 8863564,
+          "url": "https://ndownloader.figshare.com/files/30730142",
+          "md5": "0ad82d44ad5cec99e919792f274a24ec"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "0ad82d44ad5cec99e919792f274a24ec"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/13",
+        "recorded_fields": {
+          "name": "EC02_pose_data.nc",
+          "bytes": 2811964,
+          "url": "https://ndownloader.figshare.com/files/30730151",
+          "md5": "a94b665632b0c20bf8aa12330eaaca43"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "a94b665632b0c20bf8aa12330eaaca43"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/14",
+        "recorded_fields": {
+          "name": "EC03_pose_data.nc",
+          "bytes": 7854964,
+          "url": "https://ndownloader.figshare.com/files/30730169",
+          "md5": "59fd4d10eb1b85810b5f81903c4c7ad8"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "59fd4d10eb1b85810b5f81903c4c7ad8"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/15",
+        "recorded_fields": {
+          "name": "EC04_pose_data.nc",
+          "bytes": 3605396,
+          "url": "https://ndownloader.figshare.com/files/30730172",
+          "md5": "e72a346d14626723285ea4e24521d3d0"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "e72a346d14626723285ea4e24521d3d0"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/16",
+        "recorded_fields": {
+          "name": "EC05_pose_data.nc",
+          "bytes": 2731276,
+          "url": "https://ndownloader.figshare.com/files/30730175",
+          "md5": "f65374ebe2efb28757c54bb3520a6e19"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "f65374ebe2efb28757c54bb3520a6e19"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/17",
+        "recorded_fields": {
+          "name": "EC06_pose_data.nc",
+          "bytes": 11687644,
+          "url": "https://ndownloader.figshare.com/files/30730178",
+          "md5": "a736a12c00f4c613c153497d55c9cf42"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "a736a12c00f4c613c153497d55c9cf42"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/18",
+        "recorded_fields": {
+          "name": "EC07_pose_data.nc",
+          "bytes": 9078732,
+          "url": "https://ndownloader.figshare.com/files/30730181",
+          "md5": "9a7d95f0f44a9753640ffc915a1ced36"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "9a7d95f0f44a9753640ffc915a1ced36"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/19",
+        "recorded_fields": {
+          "name": "EC08_pose_data.nc",
+          "bytes": 11432132,
+          "url": "https://ndownloader.figshare.com/files/30730184",
+          "md5": "eb075e0fe52e3505010cbaadddedd20a"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "eb075e0fe52e3505010cbaadddedd20a"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/20",
+        "recorded_fields": {
+          "name": "EC09_pose_data.nc",
+          "bytes": 2031980,
+          "url": "https://ndownloader.figshare.com/files/30730187",
+          "md5": "b40f86cc9a9511b73877303098bb365d"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "b40f86cc9a9511b73877303098bb365d"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/21",
+        "recorded_fields": {
+          "name": "EC10_pose_data.nc",
+          "bytes": 8339092,
+          "url": "https://ndownloader.figshare.com/files/30730190",
+          "md5": "364295833bff6f18ea1cb10b9bba2597"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "364295833bff6f18ea1cb10b9bba2597"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/22",
+        "recorded_fields": {
+          "name": "EC11_pose_data.nc",
+          "bytes": 12050740,
+          "url": "https://ndownloader.figshare.com/files/30730196",
+          "md5": "9817f8ec418c5b0073c31d788e83b84b"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "9817f8ec418c5b0073c31d788e83b84b"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/data_inputs/1/files/23",
+        "recorded_fields": {
+          "name": "EC12_pose_data.nc",
+          "bytes": 12736588,
+          "url": "https://ndownloader.figshare.com/files/30730202",
+          "md5": "a04eb28c04d0f987cc70ed6aa66e2aac"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "a04eb28c04d0f987cc70ed6aa66e2aac"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-add-005"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/0/file_metadata_examples/0",
+        "recorded_fields": {
+          "name": "sub-01/sub-01_ses-7_behavior+ecephys.nwb",
+          "bytes": 10273614013,
+          "asset_id": "ccdc3ae1-e98d-4a17-93d8-5b7386689fe0"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-add-005"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/0/file_metadata_examples/1",
+        "recorded_fields": {
+          "name": "sub-03/sub-03_ses-3_behavior+ecephys.nwb",
+          "bytes": 12993721651,
+          "asset_id": "5122cc42-981c-4fa3-92f4-5f9ccfb8c092"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-add-005"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/1/license",
+        "recorded_fields": {
+          "name": "CC BY 4.0",
+          "url": "https://creativecommons.org/licenses/by/4.0/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-add-005"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/1/file_metadata_examples/0",
+        "recorded_fields": {
+          "name": "EC01_ecog_data.nc",
+          "bytes": 1002695684,
+          "url": "https://ndownloader.figshare.com/files/30725915",
+          "md5": "4dec234da43dbb2b962d53c6a9f33c7f"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "4dec234da43dbb2b962d53c6a9f33c7f"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-add-005"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/1/file_metadata_examples/1",
+        "recorded_fields": {
+          "name": "EC02_ecog_data.nc",
+          "bytes": 291229300,
+          "url": "https://ndownloader.figshare.com/files/30725987",
+          "md5": "ac19ccc3fb97cd95c58dbccd888c9967"
+        },
+        "checksum_fields_as_recorded": {
+          "md5": "ac19ccc3fb97cd95c58dbccd888c9967"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-add-005"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "paper_url": "https://doi.org/10.1016/j.patter.2024.101047",
+      "data_urls": [
+        "https://api.dandiarchive.org/api/dandisets/000055/versions/0.220127.0436/assets/?page_size=100",
+        "https://figshare.com/articles/dataset/16599782"
+      ],
+      "input_scope": "Figshare16599782v2 processed AJILE EC01–EC12 .nc ECoG matches load_ajile_data; raw DANDI NWB is provenance, not a drop-in input.",
+      "saved_metadata": [
+        {
+          "metadata_url": "https://api.dandiarchive.org/api/dandisets/000055/versions/0.220127.0436/assets/?page_size=100",
+          "version": "0.220127.0436",
+          "total_files": 55,
+          "metadata_inspected": true,
+          "recordings_downloaded": false,
+          "manifest_file_count": 55,
+          "file_metadata_examples": [
+            {
+              "name": "sub-01/sub-01_ses-7_behavior+ecephys.nwb",
+              "bytes": 10273614013,
+              "asset_id": "ccdc3ae1-e98d-4a17-93d8-5b7386689fe0"
+            },
+            {
+              "name": "sub-03/sub-03_ses-3_behavior+ecephys.nwb",
+              "bytes": 12993721651,
+              "asset_id": "5122cc42-981c-4fa3-92f4-5f9ccfb8c092"
+            }
+          ],
+          "examples_are_not_selected_transfer_manifest": true
+        },
+        {
+          "metadata_url": "https://api.figshare.com/v2/articles/16599782",
+          "version": 2,
+          "title": "ECoG and arm position during movement and rest",
+          "license": {
+            "value": 1,
+            "name": "CC BY 4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "metadata_inspected": true,
+          "role": "Processed real AJILE ECoG .nc inputs matching author load_ajile_data; raw NWB not interchangeable.",
+          "manifest_file_count": 24,
+          "file_metadata_examples": [
+            {
+              "name": "EC01_ecog_data.nc",
+              "bytes": 1002695684,
+              "url": "https://ndownloader.figshare.com/files/30725915",
+              "md5": "4dec234da43dbb2b962d53c6a9f33c7f"
+            },
+            {
+              "name": "EC02_ecog_data.nc",
+              "bytes": 291229300,
+              "url": "https://ndownloader.figshare.com/files/30725987",
+              "md5": "ac19ccc3fb97cd95c58dbccd888c9967"
+            }
+          ],
+          "examples_are_not_selected_transfer_manifest": true
+        }
+      ],
+      "code_url": "https://github.com/mackelab/neural_timeseries_diffusion",
+      "revision_or_archive_version": "7e9c3314dc242c36a206d18f13158c049e84cd1d",
+      "entrypoints": [
+        {
+          "path": "scripts/ajile_script.sh",
+          "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/scripts/ajile_script.sh",
+          "role": "Author ECoG training experiment",
+          "inspected_as_text": true
+        },
+        {
+          "path": "ntd/datasets.py",
+          "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/ntd/datasets.py",
+          "role": "load_ajile_data reads exact ECxx_ecog_data.nc schema",
+          "inspected_as_text": true
+        },
+        {
+          "path": "ntd/ajile_imputation_experiment.py",
+          "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/ntd/ajile_imputation_experiment.py",
+          "role": "Author imputation and evaluation implementation",
+          "inspected_as_text": true
+        },
+        {
+          "path": "conf/dataset/ajile.yaml",
+          "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/conf/dataset/ajile.yaml",
+          "role": "Dataset configuration",
+          "inspected_as_text": true
+        }
+      ],
+      "array_payloads_read_in_this_audit": false
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-add-005",
+        "versions_and_loader_contract": {
+          "scope_description": "Neural time-series diffusion for actual human ECoG missing-channel imputation: train on processed AJILE neural observations and reproduce held-out channel reconstruction.",
+          "unresolved_coverage": [
+            "Dataset config filepath is TODO and must point to acquired files; this is a path setting, not absent empirical data.",
+            "Scope excludes CRCNS gated ratLFP and anesthesia data.",
+            "Avoid adjacent-window leakage; specify subject/session and temporally separated evaluation before model selection."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-method-add-005",
+        "versions_and_loader_contract": {
+          "declared_scope": "Neural time-series diffusion for actual human ECoG missing-channel imputation: train on processed AJILE neural observations and reproduce held-out channel reconstruction."
+        },
+        "data_section_locators": []
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/mackelab/neural_timeseries_diffusion",
+    "revision_or_archive_version": "7e9c3314dc242c36a206d18f13158c049e84cd1d",
+    "entrypoints": [
+      {
+        "path": "scripts/ajile_script.sh",
+        "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/scripts/ajile_script.sh",
+        "role": "Author ECoG training experiment",
+        "inspected_as_text": true
+      },
+      {
+        "path": "ntd/datasets.py",
+        "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/ntd/datasets.py",
+        "role": "load_ajile_data reads exact ECxx_ecog_data.nc schema",
+        "inspected_as_text": true
+      },
+      {
+        "path": "ntd/ajile_imputation_experiment.py",
+        "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/ntd/ajile_imputation_experiment.py",
+        "role": "Author imputation and evaluation implementation",
+        "inspected_as_text": true
+      },
+      {
+        "path": "conf/dataset/ajile.yaml",
+        "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/conf/dataset/ajile.yaml",
+        "role": "Dataset configuration",
+        "inspected_as_text": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-add-005",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/mackelab/neural_timeseries_diffusion",
+            "commit": "7e9c3314dc242c36a206d18f13158c049e84cd1d",
+            "author_linkage": [
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC11573898",
+              "https://github.com/mackelab/neural_timeseries_diffusion",
+              "https://crcns.org/data-sets/hc/hc-24",
+              "https://dandiarchive.org/dandiset/000055/0.220127.0436",
+              "http://www.neurotycho.org/anesthesia-task"
+            ],
+            "default_branch": "main",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/mackelab/neural_timeseries_diffusion/7e9c3314dc242c36a206d18f13158c049e84cd1d/README.md",
+            "license_source": "https://raw.githubusercontent.com/mackelab/neural_timeseries_diffusion/7e9c3314dc242c36a206d18f13158c049e84cd1d/LICENSE",
+            "file_tree": {
+              "source": "https://api.github.com/repos/mackelab/neural_timeseries_diffusion/git/trees/7e9c3314dc242c36a206d18f13158c049e84cd1d?recursive=1",
+              "truncated": false,
+              "paths": [
+                "README.md",
+                "conf/__init__.py",
+                "conf/base/wandb_default.yaml",
+                "conf/classifier/no_classifier.yaml",
+                "conf/classifier/tycho_classifier.yaml",
+                "conf/config.yaml",
+                "conf/dataset/ajile.yaml",
+                "conf/dataset/crcns.yaml",
+                "conf/dataset/ner.yaml",
+                "conf/dataset/tycho_conditional.yaml",
+                "conf/dataset/tycho_unconditional.yaml",
+                "conf/diffusion/diffusion_linear_1000.yaml",
+                "conf/diffusion/diffusion_linear_200.yaml",
+                "conf/diffusion/diffusion_linear_500.yaml",
+                "conf/diffusion/diffusion_quad_50.yaml",
+                "conf/diffusion/diffusion_quad_500.yaml",
+                "conf/diffusion_kernel/ou10.yaml",
+                "conf/diffusion_kernel/ou100.yaml",
+                "conf/diffusion_kernel/white_noise.yaml",
+                "conf/experiments/ajile_experiment/ajile_experiment.yaml",
+                "conf/experiments/fake_training_data_experiment/tycho_ftde.yaml",
+                "conf/experiments/generate_samples/generate_samples.yaml",
+                "conf/experiments/likelihood_experiment/likelihood_experiment.yaml",
+                "conf/experiments/long_likelihood_experiment/long_likelihood_experiment.yaml",
+                "conf/experiments/swr_prediction_experiment/swr_prediction_experiment.yaml",
+                "conf/network/ada_conv_ajile.yaml",
+                "conf/network/ada_conv_crcns.yaml",
+                "conf/network/ada_conv_ner.yaml",
+                "conf/network/ada_conv_tycho.yaml",
+                "conf/network/cat_conv_ajile.yaml",
+                "conf/network/cat_conv_crcns.yaml",
+                "conf/network/cat_conv_ner.yaml",
+                "conf/network/cat_conv_tycho.yaml",
+                "conf/optimizer/base_optimizer.yaml",
+                "conf/optimizer/scheduled_optimizer.yaml",
+                "data/S02_data.npy",
+                "notebooks/ajile_plots.ipynb",
+                "notebooks/crcns_plots.ipynb",
+                "notebooks/example_ner_notebook.ipynb",
+                "notebooks/tycho_plots.ipynb",
+                "ntd/__init__.py",
+                "ntd/ajile_imputation_experiment.py",
+                "ntd/datasets.py",
+                "ntd/diffusion_model.py",
+                "ntd/likelihood_computation.py",
+                "ntd/modules.py",
+                "ntd/networks.py",
+                "ntd/train_diffusion_model.py",
+                "ntd/utils/__init__.py",
+                "ntd/utils/classifier_utils.py",
+                "ntd/utils/kernels_and_diffusion_utils.py",
+                "ntd/utils/plotting_utils.py",
+                "ntd/utils/sde_lib.py",
+                "ntd/utils/utils.py",
+                "scripts/ajile_script.sh",
+                "scripts/crcns_script.sh",
+                "scripts/ner_script.sh",
+                "scripts/tycho_conditional_script.sh",
+                "test/test_layers.py"
+              ],
+              "all_file_count": 65,
+              "rate_remaining": "40"
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "scripts/ajile_script.sh",
+              "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/scripts/ajile_script.sh",
+              "role": "Author ECoG training experiment",
+              "inspected_as_text": true
+            },
+            {
+              "path": "ntd/datasets.py",
+              "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/ntd/datasets.py",
+              "role": "load_ajile_data reads exact ECxx_ecog_data.nc schema",
+              "inspected_as_text": true
+            },
+            {
+              "path": "ntd/ajile_imputation_experiment.py",
+              "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/ntd/ajile_imputation_experiment.py",
+              "role": "Author imputation and evaluation implementation",
+              "inspected_as_text": true
+            },
+            {
+              "path": "conf/dataset/ajile.yaml",
+              "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/conf/dataset/ajile.yaml",
+              "role": "Dataset configuration",
+              "inspected_as_text": true
+            }
+          ],
+          "dependencies": [
+            "PyTorch",
+            "xarray",
+            "Hydra",
+            "NumPy/SciPy",
+            "author requirements"
+          ]
+        }
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-method-add-005",
+        "recorded": {
+          "code_url": "https://github.com/mackelab/neural_timeseries_diffusion",
+          "code_revision_or_archive_version": "7e9c3314dc242c36a206d18f13158c049e84cd1d",
+          "entrypoints": [
+            {
+              "path": "scripts/ajile_script.sh",
+              "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/scripts/ajile_script.sh",
+              "role": "Author ECoG training experiment",
+              "inspected_as_text": true
+            },
+            {
+              "path": "ntd/datasets.py",
+              "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/ntd/datasets.py",
+              "role": "load_ajile_data reads exact ECxx_ecog_data.nc schema",
+              "inspected_as_text": true
+            },
+            {
+              "path": "ntd/ajile_imputation_experiment.py",
+              "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/ntd/ajile_imputation_experiment.py",
+              "role": "Author imputation and evaluation implementation",
+              "inspected_as_text": true
+            },
+            {
+              "path": "conf/dataset/ajile.yaml",
+              "url": "https://github.com/mackelab/neural_timeseries_diffusion/blob/7e9c3314dc242c36a206d18f13158c049e84cd1d/conf/dataset/ajile.yaml",
+              "role": "Dataset configuration",
+              "inspected_as_text": true
+            }
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": [
+        "Figshare16599782v2 is public CC BY4.0 and includes EC01–EC12_ecog_data.nc plus arm-position files.",
+        "Author loader cites HTNet preprocessing; associated author HTNet repository links this processed-data family.",
+        "Raw AJILE DANDI manifest is additional provenance, not a drop-in replacement for .nc."
+      ],
+      "declared_overlap_group": "https://api.dandiarchive.org/api/dandisets/000055/versions/0.220127.0436/assets/?page_size=100",
+      "existing_graph_evidence_leads": [],
+      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
+      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "documented_outputs": [
+        "Train author diffusion model on predeclared ECoG participants/sessions and quantify missing-channel imputation error/spectral fidelity.",
+        "Compare diffusion imputation with channel interpolation/conditional baselines at the same observed-channel budget."
+      ],
+      "construction_specificity": "Missing-channel imputation error and spectral fidelity are documented, but normalization, exact missingness mask, target channel/time aggregation and historical split remain unfrozen.",
+      "exact_published_numeric_target_verified_by_this_audit": false
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Compare diffusion with interpolation/conditional baselines under identical observed channels and allowed time context.",
+      "Do not supply target channels through normalization or overlapping windows; distinguish retrospective reconstruction from online prediction."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Missing-channel imputation error and spectral fidelity are documented, but normalization, exact missingness mask, target channel/time aggregation and historical split remain unfrozen.",
+        "Human participant/session and blocked time, with temporal guard bands. Existing improvement text says animal but these selected inputs are human ECoG.",
+        "No gated ratLFP/anesthesia claim. CPU/GPU resource feasibility is unknown; selected subject file sizes are metadata only.",
+        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_and_metadata_only_for_this_project",
+      "runnable_reference_demonstrated": false,
+      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Test blocked-time/animal generalization, event calibration and missingness patterns beyond complete channel removal."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_executed_or_independently_qualified",
+      "proposed_question": [
+        "Test blocked-time/animal generalization, event calibration and missingness patterns beyond complete channel removal."
+      ],
+      "independent_panel_gate": "Human participant/session and blocked time, with temporal guard bands. Existing improvement text says animal but these selected inputs are human ECoG.",
+      "published_targets_are_historically_exposed": true,
+      "prospective_frontier_claim_supported": false
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_statement": "GPU; selected ECoG subject0.29–1.77GB, full processed collection~10GB",
+    "source_resource_evidence": "Resource class is inspection-based estimate, not measured runtime.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "holds": {
+    "task_specific": [
+      "Missing-channel imputation error and spectral fidelity are documented, but normalization, exact missingness mask, target channel/time aggregation and historical split remain unfrozen.",
+      "Human participant/session and blocked time, with temporal guard bands. Existing improvement text says animal but these selected inputs are human ECoG.",
+      "No gated ratLFP/anesthesia claim. CPU/GPU resource feasibility is unknown; selected subject file sizes are metadata only.",
+      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Specify one processed-data participant/session panel, exact missing-channel mask and train-only temporal normalization, and map the author config/loader before an execution proposal.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Specify one processed-data participant/session panel, exact missing-channel mask and train-only temporal normalization, and map the author config/loader before an execution proposal.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "cca7fb5c16916559dcd020acd1048c54c693bf3bb51b583b17491dcc404ee69b",
+    "audit_record_sha256": "520b285c4970119cb6831b7fdd6aed625c4455b83fe2864d31ee61513fbf2f2b",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-add-005",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 54,
+        "record_sha256": "ab18f5eb055b603fc5c914859fa8e5229d74df621118561d6898000da46f8720"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+          "bytes": 500587,
+          "sha256": "8893618f482d8301b723a57e2758fef66ab560b84c95650f8ea92f4b37375c3a"
+        },
+        "record_id": "paper-method-add-005",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 137,
+        "record_sha256": "609ede8d70427fcf77e6d88c16df1e33730e67ff30d94b24afcc8b3066893153"
+      }
+    ],
+    "historical_pin_exceptions": [
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+          "bytes": 3519,
+          "sha256": "d9862c468c3ece0d0e0cfca975f8980cea6a9dfbb7abfe5d3b4b96ca76045ac7"
+        },
+        "current_pin": {
+          "bytes": 4544,
+          "sha256": "963f9e1b6d528573c1c321629a0ab2ba6e1fb25b3e0404e3882b483ea7207c5f"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      },
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+          "bytes": 163669,
+          "sha256": "96c826360af4b8858cb33406e95242d27d7806e5896b98c211ccd3478a76661d"
+        },
+        "current_pin": {
+          "bytes": 166909,
+          "sha256": "974e56e839620059345f5b8ae1f5893e1d404c007864159dc84e6b330f49edca"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      }
+    ],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

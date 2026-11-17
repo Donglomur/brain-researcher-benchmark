@@ -17,6 +17,8 @@ access conditions.
 
 ## Scope assessments and evidence
 
+- [Authentic delivery and prospective freezing](benchmark-construction-wave-20261116.md) describes the four existing endpoints improved after the difficulty pilot, including source discrepancies and runtime limits.
+
 The [paper scope assessment](paper-scope/SCIENTIFIC_SCOPE.md) describes the
 100 original paper candidates, the examined evidence and remaining gaps. It is a
 dated assessment, not a new reproduction or ranking of novelty.

@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-method-replacement-012`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Design ready
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** design\_ready. The original conference paper supplies ordered macro-F1 targets for nine distinct Bugeon label/exposure panels, and pinned author code defines their readout and split regimes. A complete original panel may support a predeclared, precisely scoped paper comparison. Exact paper-era artifact equivalence, native reference execution, meaningful-effect/uncertainty policy and concrete budgets remain unresolved, so this is a source-grounded design rather than an admitted task.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 30426 bytes; SHA-256 `f754a7dba9f43a270143fe1bcd0654a29d4d660626724a07e81593d50dde1bff`.
+- Specification identity: 32386 bytes; SHA-256 `023336e1291423f9da1f52334e2834ed63475b1d27b224007c2435b113e6dc76`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Runs an owner-side NuCLR Bugeon linear readout on supplied embeddings with train-only scaling, validation-only checkpoint selection, exact label families, three distinct split/exposure panels and matched context-ablation diagnostics. Authentic joins/splits, paper-era versus December 2025 equivalence, repeated-cell linkage, native references, optional resampling dependency, rights, protected execution and scientific qualification remain unresolved.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Runs an owner-side NuCLR Bugeon linear readout on supplied embeddings with train-only scaling, validation-only checkpoint selection, exact label families, three distinct split/exposure panels and matched context-ablation diagnostics. Authentic joins/splits, paper-era versus December 2025 equivalence, repeated-cell linkage, native references, optional resampling dependency, rights, protected execution and scientific qualification remain unresolved. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

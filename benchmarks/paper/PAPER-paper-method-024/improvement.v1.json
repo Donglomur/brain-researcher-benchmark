@@ -1,0 +1,197 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-024",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original CBraMod full twelve-dataset program has ordered decoding endpoints, but original cohort/split identities and a complete same-support baseline are unrecovered. The author explicitly disclaims exact split comparability for historical TUAB/TUEV comparisons and replaced their splitting code after publication. The current implementation's person-held-out 30%-label condition changes the original task and is only an extension. Recovering PhysioNet Table 3 alone cannot qualify this full-panel task.",
+  "source_paper": {
+    "title": "CBraMod: A Criss-Cross Brain Foundation Model for EEG Decoding",
+    "url": "https://proceedings.iclr.cc/paper_files/paper/2025/file/bbbd6d915cb90be21c1254a82d45cedd-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "cb-paper",
+      "kind": "paper",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2025/file/bbbd6d915cb90be21c1254a82d45cedd-Paper-Conference.pdf",
+      "locator": "Sections 3.1-3.3; Tables 1-4; Appendix D and E; Appendix K",
+      "supports": "Twelve primary datasets, original prediction tasks, dataset-specific metrics, five-seed mean/SD and original split descriptions; low-label results form a separate condition."
+    },
+    {
+      "id": "cb-split-correction",
+      "kind": "author_code",
+      "url": "https://github.com/wjq-learning/CBraMod/blob/b9e961003214326972c567eff390e75b0287e32a/preprocessing/README.md",
+      "locator": "June 2, 2025 update for TUAB and TUEV",
+      "supports": "Author states published BIOT/LaBraM scores were cited without exact split identities and revised source uses deterministic splits; identifies paper TUAB3.0.1/TUEV2.0.0."
+    },
+    {
+      "id": "cb-physio",
+      "kind": "author_code",
+      "url": "https://github.com/wjq-learning/CBraMod/blob/b9e961003214326972c567eff390e75b0287e32a/preprocessing/preprocessing_physio.py",
+      "locator": "tasks, files_dict and epoch/label loop, lines 8-73",
+      "supports": "Motor imagery runs 04,06,08,10,12,14; sorted staging-root slicing70/19/20;64-channel average reference, highpass0.3Hz,60Hz notch,200Hz resampling,4-second epochs and task-dependent class mapping."
+    },
+    {
+      "id": "cb-evaluator",
+      "kind": "author_code",
+      "url": "https://github.com/wjq-learning/CBraMod/blob/b9e961003214326972c567eff390e75b0287e32a/finetune_evaluator.py",
+      "locator": "Evaluator.get_metrics_for_multiclass, get_metrics_for_binaryclass, get_metrics_for_regression; lines12-72",
+      "supports": "Native sklearn weighted F1/balanced accuracy/kappa, binary sigmoid>0.5, trapezoidal PR area, Pearson/R2/RMSE and complete batch collection; ISRUC context needs native shape qualification."
+    },
+    {
+      "id": "cb-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-024/implementations/cbramod-paired-program/science/runtime/source/benchmark/public/TASK.md",
+      "locator": "Full-scope source checkpoint and original-versus-prospective distinction",
+      "supports": "Canonical implementation retains all12 datasets and five seed slots; original cohorts, native runtime, authentic comparators and paper parity remain unqualified. Earlier task.json PhysioNet scope is not authority to drop11 datasets."
+    },
+    {
+      "id": "cb-interface",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-024/implementations/cbramod-paired-program/science/runtime/source/benchmark/public/contract.py",
+      "locator": "cases; validate_query; submission",
+      "supports": "Existing improvement purpose binds person_heldout_low_label_30pct while reproduction uses paper_original_splits, so its old improvement verdict cannot establish a same-task paper win."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original ten BCI task families across FACED, SEED-V, PhysioNet-MI, SHU-MI, ISRUC, CHB-MIT, BCIC2020-3, Mumtaz2016, SEED-VIG, MentalArithmetic, TUEV and TUAB: emotion, motor imagery, sleep stage, seizure, imagined speech, depression, vigilance regression, mental workload, event type and abnormal EEG prediction. Preserve the full program and central ablations.",
+      "evidence_ids": [
+        "cb-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "All twelve original datasets are required; TUEG pretraining is a distinct input. Author confirms TUAB3.0.1 and TUEV2.0.0; PhysioNet source names EEGMMI1.0.0. Exact archived releases, artifact identities, source-to-row joins and pretraining-overlap manifests are not recovered for the full panel.",
+      "evidence_ids": [
+        "cb-paper",
+        "cb-split-correction",
+        "cb-physio"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper counts include FACED123, SEED-V16, PhysioNet109, SHU25, ISRUC100, CHB-MIT23, BCIC2020-3 15, Mumtaz64, SEED-VIG23 and MentalArithmetic36 participants. Exact participant-to-file mapping and exclusions remain incomplete; overlapping clinical case IDs cannot be presumed independent people.",
+      "evidence_ids": [
+        "cb-paper",
+        "cb-registration"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Retain each original paper split, including within-person trial splits for SEED-V/BCIC2020-3 and original participant splits elsewhere. PhysioNet specifies1-70/71-89/90-109, but code slices an unfiltered sorted staging directory. TUAB/TUEV historical comparison split identities are explicitly unrecovered; deterministic June2025 splits or universal person-held-out splits are different conditions.",
+      "evidence_ids": [
+        "cb-paper",
+        "cb-split-correction",
+        "cb-physio"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source-defined EEG channels, epoch durations and context, original supervision budget and declared pretrained TUEG/model access. ISRUC uses20 successive30-second epochs; preserving sequence context is part of the input. A30%-label condition cannot replace original full-label results.",
+      "evidence_ids": [
+        "cb-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Bind each original dataset recipe to its original cohort and code revision: source uses200Hz one-second patches with task-specific filtering, channels and windowing. PhysioNet preprocessing is directly inspected, but paper/source disagreements and full twelve-dataset native parity remain unresolved; silently correcting staging or sequence joins would change the task.",
+      "evidence_ids": [
+        "cb-paper",
+        "cb-physio",
+        "cb-registration"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Original panel: balanced accuracy, Cohen kappa and weighted F1 for multiclass; balanced accuracy, PR area and ROC area for binary; Pearson correlation, R2 and RMSE for vigilance regression. Higher is better except RMSE. Balanced accuracy is mean class recall; kappa=(observed agreement-chance agreement)/(1-chance agreement); weighted F1 uses class support. No source-defined scalar over heterogeneous datasets exists. Native binary decisions use sigmoid(logit)>0.5; PR area is trapezoidal auc(recall,precision), not average precision. R2=1-SSE/SST and RMSE=sqrt(mean squared error); Pearson uses np.corrcoef. Exact undefined-class and ISRUC sequence handling require runtime qualification.",
+      "evidence_ids": [
+        "cb-paper",
+        "cb-evaluator"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Paper reports mean and standard deviation across five random seeds per dataset, without a single cross-dataset score. Exact five seed identities and SD denominator remain unbound. Subject/trial aggregation and original support must be recovered per endpoint before combining evidence.",
+      "evidence_ids": [
+        "cb-paper",
+        "cb-registration"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Complete paper dataset-specific metric panel; no recovered paper-wide scalar or scientifically admitted primary decision rule",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No single scalar summarizes the full paper task. Recovered original Table3 PhysioNet CBraMod components are balanced accuracy0.6417\u00b10.0091, kappa0.5222\u00b10.0169 and weighted F1 0.6427\u00b10.0100; SHU components are0.6370,0.7139,0.6988. These are published component scores, not a completed full-panel reference or compatible TUAB/TUEV baseline.",
+      "evidence_ids": [
+        "cb-paper",
+        "cb-split-correction"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The pinned source package contains author-loader routes but no authenticated full twelve-dataset original-split rerun and no complete comparator prediction panel. Re-running revised deterministic TUAB/TUEV splits produces a new matched-split baseline, not the historical same-task baseline.",
+      "evidence_ids": [
+        "cb-split-correction",
+        "cb-registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Define meaningful gains per task metric and a non-cherry-picked full-panel decision before evaluation. No common percentage, pooled score or arbitrary tolerance is scientifically justified across emotion, clinical classification and vigilance regression.",
+      "evidence_ids": [
+        "cb-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Original support must be reconstructed before specifying paired hierarchical uncertainty: account for biological participant, session/trial dependence and training-seed variation per dataset, with a predeclared multiplicity rule for the full panel. No threshold or confidence level has been adopted.",
+      "independent_unit": "Biological participants for participant-generalization tasks; original within-person held-out trials conditional on subject for SEED-V/BCIC2020-3; independent training runs for optimization variability, never individual overlapping EEG windows.",
+      "rationale": "Original tasks use different splitting units and clinical files can share people. Five random seeds are not five independent human cohorts.",
+      "evidence_ids": [
+        "cb-paper",
+        "cb-registration"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover original full12 dataset/cohort/split membership and preprocessing, preserving within-person and person-level tasks separately.",
+      "Authenticate source CBraMod checkpoints/recipes and execute an original-task author reference; retain each published table value separately.",
+      "Freeze the complete metric panel, primary decision rule, task-specific meaningful effects, multiplicity/uncertainty and concrete matched budgets before candidate feedback.",
+      "Surpass source-paper results on that complete original support. A PhysioNet-only result, revised TUAB/TUEV partition, different pretraining exposure or person-held-out30%-label program is separately reported extension and cannot satisfy this task."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "Historical reported BIOT/LaBraM and other comparator scores do not establish current SOTA, especially where exact original split comparability is disclaimed.",
+      "evidence_ids": [
+        "cb-split-correction",
+        "cb-paper"
+      ]
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending original full-panel source recovery. Once qualified, allow repeated method changes using only original training/development feedback and declared shared pretrained resources; log all twelve datasets and all runs without dropping failures.",
+    "candidate_freeze": "Freeze candidate, twelve dataset manifests, original splits, source versions, preprocessing, checkpoint identities, per-dataset metrics/decision, seeds and budgets before any original test feedback.",
+    "final_evaluation": "Execute candidate and authenticated author reference on the complete original task panel; report published, rerun and candidate metrics separately with uncertainty. Existing person_heldout_low_label_30pct evaluation remains an extension and cannot issue this paper-win verdict.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Maintain original reported results, source reruns and new-split comparators as distinct. Neither an authored loader approximation nor a paper percentage on unmatched support is a valid author baseline; no convenient dataset subset replaces the full program."
+  },
+  "blocking_issues": [
+    "Original TUAB/TUEV split identities cannot be recovered from the revised deterministic source and author disclaims historical comparator partition parity.",
+    "Complete twelve-dataset source-version/cohort/exclusion/row identity joins remain missing.",
+    "Exact source checkpoint/pretraining exposure, five seeds and aggregation conventions not bound.",
+    "No authenticated complete original-task author reference or native evaluator qualification.",
+    "Task-specific effects, full-panel decision and valid uncertainty remain unspecified.",
+    "Concrete shared access and compute budgets remain unspecified; existing30%-label person-held-out improvement interface is a different task."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the complete paired submitted-program source, all historical task and scorer artifacts. Original-split reproduction is calibration. The historical improvement purpose explicitly selects a new person-held-out30%-label condition and must be labeled extension rather than source-paper victory; structural completeness is not scientific readiness."
+  }
+}

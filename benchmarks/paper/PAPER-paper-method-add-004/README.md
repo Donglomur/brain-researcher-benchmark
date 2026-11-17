@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-method-add-004`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. Known-timescale synthetic estimation can support an improvement endpoint, but original error semantics, exact baseline aggregates, fitter parity and empirical cohort/window identity remain unresolved. Paper Eq. 21 displays signed REE whereas the registered sensitivity policy uses absolute error; lower signed bias is not automatically greater accuracy. Empirical pseudo-REE uses an estimator-derived reference and cannot establish recovery of true neural timescales.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 30897 bytes; SHA-256 `ae45457700ada5d9a9f578ad4e1eb9bf5825e94850f52753d9b2f9f0d07b0a54`.
+- Specification identity: 31646 bytes; SHA-256 `76cac31a182c2f29dc25778f29932ef04510756ab7304a0920d20daebf3a24cc`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,16 +34,16 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Isttc registration](implementations/isttc-registration) — Task implementation.
-  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
-- [Isttc programme](implementations/isttc-programme) — Task implementation.
-  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
-- [Empirical diagnostics](implementations/empirical-diagnostics) — Empirical diagnostics.
-  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
-- [Sensitivity glm v1](implementations/sensitivity-glm-v1) — Task implementation.
-  Scope: Complete empirical sensitivity-grid production and conditional dual-reference reports, with source-formula Figure 7C balanced Gaussian REML fixed effects and variances plus separately labeled prospective mouse uncertainty. Authentic cohort/covariate identity, historical QC and window policies, native R/lme4 parity, protected references and scientific qualification remain held; source profile intervals, other figure endpoints and whole-paper reproduction are outside this component.
-- [Empirical estimation](implementations/empirical-estimation) — Empirical fit producer.
-  Scope: Complete selected 5775-unit/four-estimator fit-production capability through exact external official helper bytes; all 23100 fit coordinates and scientific failures retained. Does not implement Figure 7C GLMs or whole-paper reproduction. Authentic cohort/QC admission, historical numerical parity and scientific qualification remain unverified.
+- [Isttc registration](implementations/isttc-registration) — Calibration only.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Isttc programme](implementations/isttc-programme) — Calibration only.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Empirical diagnostics](implementations/empirical-diagnostics) — Calibration only.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Sensitivity glm v1](implementations/sensitivity-glm-v1) — Calibration only.
+  Scope: Complete empirical sensitivity-grid production and conditional dual-reference reports, with source-formula Figure 7C balanced Gaussian REML fixed effects and variances plus separately labeled prospective mouse uncertainty. Authentic cohort/covariate identity, historical QC and window policies, native R/lme4 parity, protected references and scientific qualification remain held; source profile intervals, other figure endpoints and whole-paper reproduction are outside this component. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Empirical estimation](implementations/empirical-estimation) — Calibration only.
+  Scope: Complete selected 5775-unit/four-estimator fit-production capability through exact external official helper bytes; all 23100 fit coordinates and scientific failures retained. Does not implement Figure 7C GLMs or whole-paper reproduction. Authentic cohort/QC admission, historical numerical parity and scientific qualification remain unverified. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

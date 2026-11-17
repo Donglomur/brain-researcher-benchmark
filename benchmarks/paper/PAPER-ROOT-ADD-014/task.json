@@ -1,19 +1,30 @@
 {
   "schema_version": 1,
   "id": "PAPER-ROOT-ADD-014",
-  "source_id": "ROOT-ADD-014",
   "track": "paper",
   "title": "Precise spatial tuning of visually driven alpha oscillations in human visual cortex",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Predict stimulus-location-dependent alpha and broadband amplitudes with population receptive-field models; the ordered comparison is original cross-validated prediction accuracy, including the source baseline-correction comparison. Larger alpha pRFs or stronger negative gain are descriptive checks, not win scores.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Predict stimulus-location-dependent alpha and broadband amplitudes with population receptive-field models; the ordered comparison is original cross-validated prediction accuracy, including the source baseline-correction comparison. Larger alpha pRFs or stronger negative gain are descriptive checks, not win scores.",
+    "Source-paper comparison for Original Fig.7 median cross-validated alpha pRF variance explained (%): Higher cross-validated variance explained is ordered. Reconcile literal paper1−SSE/sum(response²) with the source routine’s foldwise DC projection and exact gain constraints; report percent units and preserve both formulas until equivalence is established."
+  ],
+  "success_criteria": [
+    "Bind the original366-electrode population and exact figure-specific selections; keep all required alpha/broadband and baseline contrasts.",
+    "Reproduce the source metric/gain branch and original median before claiming improvement over43% and the author rerun.",
+    "Do not count a corrected implementation, portable-optimizer advantage, equal-person433-electrode mean or a new split as an original-paper win.",
+    "Freeze the method, spectral preprocessing, aperture geometry, selection and uncertainty policy before final predictions.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "ROOT-ADD-014",
   "canonical_position_one_based": 62,
   "paper_identity": {
     "url": "https://elifesciences.org/articles/90387",
     "publication_year": 2025,
     "venue": "eLife"
   },
-  "primary_outputs": [
-    "Fit cross-validated alpha and broadband population receptive-field models and reproduce spatial-scale, negative-gain and baseline-model comparisons on the author-specified visual electrodes."
-  ],
   "input_assets": {
     "routes": [
       "https://openneuro.org/datasets/ds004194/versions/3.0.0"
@@ -389,107 +400,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": {
-        "official_code_license": null,
-        "data_route_licenses": [
-          {
-            "url": "https://openneuro.org/datasets/ds004194/versions/3.0.0",
-            "license": "CC0"
-          }
-        ]
-      },
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Fit cross-validated alpha and broadband population receptive-field models and reproduce spatial-scale, negative-gain and baseline-model comparisons on the author-specified visual electrodes."
-      ],
-      "assessment": "Alpha versus broadband pRF scale/gain/baseline contrasts are mapped; exact paper electrode inclusion and validated raw-to-fit scorer are missing.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Alpha negative gain, spatial scale and broadband fits require same aperture/time/spectral normalization and full baseline comparator; good fit does not identify mechanism.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Raw archive pool contains14patients; paper inclusion follows provided subject/electrode selection, not all14 by assumption.",
-        "Legacy OpenNeuro downloader command is obsolete; use stable BIDS archive access. Dependency versions and raw-to-result baseline remain unexecuted.",
-        "Author source and archive metadata were inspected; scientific code was not executed. Readiness applies only to the declared central project.",
-        "Local dependency installation, bounded payload validation, baseline result agreement, runtime measurement, and benchmark packet/grader validation remain before execution qualification.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve held-out-run prediction or compare alternative baseline/spectral models with patient-level uncertainty and epileptic-channel controls."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Participant/run-held-out prediction with fixed spectral/baseline alternatives, patient nesting and epileptic-channel sensitivity.",
-      "retained_roster_proposal": [
-        "Improve held-out-run prediction or compare alternative baseline/spectral models with patient-level uncertainty and epileptic-channel controls."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": "unmeasured",
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": null
-  },
-  "holds": {
-    "task_specific": [
-      "Raw archive pool contains14patients; paper inclusion follows provided subject/electrode selection, not all14 by assumption.",
-      "Legacy OpenNeuro downloader command is obsolete; use stable BIDS archive access. Dependency versions and raw-to-result baseline remain unexecuted.",
-      "Author source and archive metadata were inspected; scientific code was not executed. Readiness applies only to the declared central project.",
-      "Local dependency installation, bounded payload validation, baseline result agreement, runtime measurement, and benchmark packet/grader validation remain before execution qualification.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Map exact paper subject/electrode criteria to BIDS assets and stimulus matrices, replace obsolete downloader without changing scientific preprocessing, then define held-out-run central contrasts.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Map exact paper subject/electrode criteria to BIDS assets and stimulus matrices, replace obsolete downloader without changing scientific preprocessing, then define held-out-run central contrasts.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -530,11 +440,77 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_resource_statement": "unmeasured",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-014/improvement.v1.json",
+      "bytes": 10451,
+      "sha256": "d8f2608f23ed37612d0c848326ce64277a32648fc3f4925ddd486115dfd767d4"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-ROOT-ADD-014/historical/task.pre-improvement.v1.json",
+        "bytes": 25445,
+        "sha256": "6e490c1e30ca23159e0d3f475c0336ce9292c3cd6ce981620bf6e1b5d91cc8de"
+      },
+      "implementation_ids": [
+        "authoring-delivery-20261105-common-remaining-builds-wave16-visual-alpha-complete-program"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Once the original endpoint is recovered, develop pRF/spectral models using only training halves and declared validation feedback; no final-half response may influence fitting seeds or model selection.",
+    "candidate_freeze": "Freeze all preprocessing, model families, gain bounds, original electrode mask, fold membership, numerical scoring and resource/access budgets.",
+    "final_evaluation": "Evaluate both methods on identical original held halves and report the source aggregate plus participant-aware uncertainty; retain descriptive spatial-scale and gain checks without turning them into success scores.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published43% median, native author rerun and local portable comparator remain separate. Only an authenticated original-task comparison supports a paper win."
+  },
+  "blocking_issues": [
+    "Historical366-electrode mask and Fig.7 membership unresolved against433 released electrodes.",
+    "Original metric centering and gain branch not reconciled with current scorer.",
+    "No source-equivalent raw-to-fit preprocessing and competent native author rerun.",
+    "Effect margin, clustered decision rule and concrete episode budgets not fixed."
+  ],
+  "holds": {
+    "task_specific": [
+      "Historical366-electrode mask and Fig.7 membership unresolved against433 released electrodes.",
+      "Original metric centering and gain branch not reconciled with current scorer.",
+      "No source-equivalent raw-to-fit preprocessing and competent native author rerun.",
+      "Effect margin, clustered decision rule and concrete episode budgets not fixed."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "A real ordered source endpoint exists: alpha pRF heldout prediction, including the reported43% median with baseline correction in Fig.7. The original electrode mask and metric implementation are not reconciled with the433-electrode local programme, its prospective equal-person mean, or the portable optimizer. Those local comparisons cannot certify surpassing the original source result. Historical366-electrode mask and Fig.7 membership unresolved against433 released electrodes. Original metric centering and gain branch not reconciled with current scorer. No source-equivalent raw-to-fit preprocessing and competent native author rerun. Effect margin, clustered decision rule and concrete episode budgets not fixed.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-014/historical/task.pre-improvement.v1.json",
+      "bytes": 25445,
+      "sha256": "6e490c1e30ca23159e0d3f475c0336ce9292c3cd6ce981620bf6e1b5d91cc8de"
+    },
+    "notes": "Retain spectral/spatial reconstruction and all original grading materials as calibration. The local prospective equal-person corrected-alpha score and SciPy comparator are extensions until the historical source estimand is recovered."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

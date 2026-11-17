@@ -1,0 +1,202 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-replacement-005",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The final ICML paper reports ordered encoding/decoding endpoints, numerical multi-session NEDS baselines and the original held-out-animal design. An executable same-task comparison is blocked by unresolved original data/trial provenance, paper/code preprocessing discrepancies and native baseline qualification. The local ridge reference is not the paper model.",
+  "source_paper": {
+    "title": "Neural Encoding and Decoding at Scale",
+    "url": "https://proceedings.mlr.press/v267/zhang25bw.html"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://raw.githubusercontent.com/mlresearch/v267/main/assets/zhang25bw/zhang25bw.pdf",
+      "locator": "Final ICML paper Sections 3.1, 4.1, 5.2; Table 1; Appendices A, C and E Table 10",
+      "supports": "Original cohort, task masks, transfer/fine-tuning design, score definitions and reported NEDS baselines; final publisher PDF inspected through an existing primary-source recovery receipt."
+    },
+    {
+      "id": "author_readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/README.md",
+      "locator": "Datasets and Models; training/evaluation script instructions",
+      "supports": "Author baseline route and distinction between pretraining and held-out session lists."
+    },
+    {
+      "id": "train_roster",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/data/train_eids.txt",
+      "locator": "Complete 74-line session roster at pinned revision",
+      "supports": "Original source pretraining session membership."
+    },
+    {
+      "id": "test_roster",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/data/test_eids.txt",
+      "locator": "Complete 10-line session roster at pinned revision",
+      "supports": "Original source held-out session membership."
+    },
+    {
+      "id": "prepare",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/prepare_data.py",
+      "locator": "params; mean_fr/keep_unit_idxs; Data partition block",
+      "supports": "20-ms bins, stimulus-aligned two-second windows, code unit threshold and seeded 70/10/20 trial allocation."
+    },
+    {
+      "id": "evaluation",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/utils/eval_utils.py",
+      "locator": "co_smoothing_eval; neg_log_likelihood; bits_per_spike; plot_psth",
+      "supports": "Evaluation modality masks, Poisson-gain metric, neuron mean, classification accuracy and flattened un-clipped trial R2."
+    },
+    {
+      "id": "preprocess",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/utils/ibl_data_utils.py",
+      "locator": "load_trials_and_mask; align_data",
+      "supports": "Eligibility, alignment, validity-mask and scaling provenance requiring paper/code reconciliation."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict neural spiking from all four behaviors and each behavior individually, and decode choice, block, wheel speed and whisker motion from spikes after multi-session pretraining and target-session fine-tuning. Preserve the full endpoint vector.",
+      "evidence_ids": [
+        "paper",
+        "evaluation"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "IBL repeated-site Neuropixels and behavioral recordings. Exact historical ONE object versions/checksums and processed arrays linked to the reported results remain unresolved; substituting a current download is not demonstrated parity.",
+      "evidence_ids": [
+        "paper",
+        "prepare"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Use all 74 pinned pretraining sessions and 10 pinned held-out sessions. The paper describes 73 pretraining animals plus 10 test animals, with two insertions from one training animal; authenticate the EID/probe/animal join before biological inference.",
+      "evidence_ids": [
+        "paper",
+        "train_roster",
+        "test_roster"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original design fine-tunes each held-out animal using its 70% training trials, selects on 10% validation and scores 20% test. Source uses a seeded random permutation after eligibility processing. Exact original trial IDs/order and exclusion-dependent RNG sequence must be recovered.",
+      "evidence_ids": [
+        "paper",
+        "prepare"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Encoding reveals only the declared all-behavior or single-behavior variables and hides every spike target; decoding reveals spikes and hides all four behaviors. Reward, target aliases, test-derived null rates and arbitrary auxiliary modalities are not candidate inputs.",
+      "evidence_ids": [
+        "evaluation"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "20-ms spike/behavior bins in stimulus-aligned [-0.5,1.5]-s windows. Paper excludes neurons below 2 Hz, while pinned prepare_data.py retains mean_fr>1/0.2 (>5 Hz). Original eligibility, validity-mask handling, behavior scaling and camera lineage require reconciliation rather than silent repair.",
+      "evidence_ids": [
+        "paper",
+        "prepare",
+        "preprocess"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Encoding: each neuron has [Poisson log likelihood(prediction)-log likelihood(evaluation-mean null)]/(total spikes*ln(2)). Choice/block use ordinary accuracy; wheel/whisker use un-clipped R2 across flattened test trials/time bins. Preserve source zero-rate/undefined-neuron behavior and audit its effects.",
+      "evidence_ids": [
+        "paper",
+        "evaluation"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Average defined neuron bits/spike within each test session, then report the ten-session mean and animal-level paired effects. Retain each behavioral endpoint separately; never average bits/spike, R2 and accuracy into one undocumented score.",
+      "evidence_ids": [
+        "paper",
+        "evaluation"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "All-behavior neural encoding bits/spike on the original ten held-out animals after multi-session pretraining and fine-tuning",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "description": "Final ICML Table 1 and Appendix E Table 10 report NEDS encoding 0.27 bits/spike (SEM 0.03). Table 10 companion means: choice accuracy 0.91, block accuracy 0.86, wheel R2 0.64, whisker R2 0.59. These are source scores, not reruns.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "value": 0.27
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "No authentic native multi-session NEDS rerun is qualified. The pinned author repository exposes preparation, pretraining, target-session fine-tuning and evaluation routes, but historical recipe/data discrepancies must be resolved first. The constructed ridge implementation is not NEDS or the exact author linear/RRR comparator.",
+      "evidence_ids": [
+        "author_readme",
+        "prepare",
+        "evaluation"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Predeclare a task-specific bits/spike gain and acceptable joint decoding behavior after author-rerun variability and source rounding are qualified. Published SEM is not a meaningful-effect threshold and does not authorize a universal margin.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired animal-level inference on candidate-minus-author scores with the original ten held-out animals; report seed variability separately and account for the multi-endpoint decision.",
+      "independent_unit": "Held-out mouse after authentic session/probe/animal identity join; neurons, time bins and trials are nested observations.",
+      "rationale": "The paper reports mean and SEM across ten animals/sessions. A fabricated independent-neuron sample size or the local conditional bootstrap cannot establish a qualified paper win.",
+      "evidence_ids": [
+        "paper",
+        "test_roster"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the exact original cohort, eligible units, aligned trials, input masks, preprocessing and 70/10/20 partitions; resolve paper/code discrepancies against source result provenance.",
+      "Run native author NEDS and the frozen candidate with identical pretraining/fine-tuning exposure and fixed resource budgets; retain all 74 training and ten held-out sessions without a convenient subset.",
+      "Surpass published 0.27 encoding bits/spike and the qualified author rerun by the predeclared meaningful effect and uncertainty rule on the same original endpoint.",
+      "Evaluate all single-behavior encoding and four decoding outcomes with a predeclared joint/trade-off rule; an encoding improvement alone cannot silently replace the registered simultaneous encoding/decoding task.",
+      "Do not call a new animal split, corrected-preprocessing variant, local ridge win, improved p-value or reproduced figure a source-paper win; report such results separately as calibration or extensions."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "Table 10 is a historical source comparison with RRR, NDT2 and POYO+. No present-SOTA comparison is established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate with the original source pretraining sessions and target-session training/validation partitions, preserving task masks. Use validation to select methods and hyperparameters; maintain explicit separate neural and behavioral feedback.",
+    "candidate_freeze": "Freeze candidate and author implementations, original-object/unit/trial manifests, mask contract, preprocessing resolution, hyperparameters, seeds, pretrained exposure, resources and joint endpoint decision before final scoring.",
+    "final_evaluation": "Evaluate all original held-out test trials for the same ten target animals after source-permitted fine-tuning; compare the complete endpoint vector with the authentic author baseline. Preserve per-animal results and disclose original public test exposure. A different split remains an extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep final published NEDS scores, a future native rerun, local engineering ridge scores and any separately verified current-SOTA results distinct. A rerun with repaired preprocessing cannot be attributed to the published paper without provenance."
+  },
+  "blocking_issues": [
+    "Authenticate historical ONE object revisions, eligible neurons/trials and exact original split identities; reconcile 2-Hz paper versus >5-Hz code eligibility.",
+    "Resolve presplit behavioral scaling, validity-mask combination and camera lineage against original result-producing artifacts; silent leakage repairs create a changed task.",
+    "Verify the complete native evaluation path and author checkpoint provenance, including full-trial versus potential final-batch behavior; qualify all source endpoint values.",
+    "Authenticate EID/probe/animal joins, including the training animal with two insertions, before uncertainty calculations.",
+    "Qualify native author rerun, source-session completeness, meaningful effect and joint multi-endpoint inference; the constructed ridge and generated controls cannot satisfy these gates.",
+    "Fix concrete training/validation/final-query and resource budgets with protected final scoring before opening an improvement episode."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain the original registration and initial-evaluator-v1 for calibration. Its complete-cohort packets and source-derived metric kernels are useful engineering checks, but its train-only ridge, repaired inclusion/scaling choices and conditional animal bootstrap are prospective constructions rather than source-author results."
+  }
+}

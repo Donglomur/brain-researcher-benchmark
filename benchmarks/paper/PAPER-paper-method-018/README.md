@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-method-018`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The paper reports an ordered Allen test-NLL result, but the split, metric normalization and model flags needed to reproduce that number disagree with the available code path. The local equal-session interaction-gain endpoint is prospective and cannot substitute for exceeding the published full-model task.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 38573 bytes; SHA-256 `7032a947b6b9a0a860301d587d81e83ef5b44adc1764654e0074b4cd8e55718f`.
+- Specification identity: 38435 bytes; SHA-256 `541a4d96a8edc6f04d39f3541c214d210ce2751481f03052482bd425b89e2cbf`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Prepared-artifact evaluator for the complete ten-session history-versus-interaction comparison, with source neural and latent loss components, matched identities/batches and prospective session-level gains. Target-conditioned latent reconstruction is not blind forecasting. Native Allen preprocessing and eligibility, author interface/layout discrepancies, missing anatomical/condition subpanels, authentic figure references, code/data rights, grouped improvement and protected qualification remain unresolved.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Prepared-artifact evaluator for the complete ten-session history-versus-interaction comparison, with source neural and latent loss components, matched identities/batches and prospective session-level gains. Target-conditioned latent reconstruction is not blind forecasting. Native Allen preprocessing and eligibility, author interface/layout discrepancies, missing anatomical/condition subpanels, authentic figure references, code/data rights, grouped improvement and protected qualification remain unresolved. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

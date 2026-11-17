@@ -1,0 +1,170 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-CANDIDATE-20261114-PLEXUS",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original guide-versus-control AUROC is ordered, but the complete final-paper baseline vector and its archive/version mapping are unrecovered. The installed whole-plate, four-line evaluation changes the original Figure 4 split and population and cannot establish a same-task paper win.",
+  "source_paper": {
+    "title": "Network-aware self-supervised learning enables high-content phenotypic screening for genetic modifiers of neuronal activity dynamics",
+    "url": "https://www.nature.com/articles/s42256-025-01156-x"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s42256-025-01156-x",
+      "locator": "Public article metadata, Code availability, dataset references",
+      "supports": "Final paper identity and official Plexus repository/archive relationship; full methods were not accessible in this review."
+    },
+    {
+      "id": "figure4-code",
+      "kind": "author_code",
+      "url": "https://github.com/pgrosjean/plexus/blob/69ccecbcc00f8462c8ce2a9d699be09f4c53ed66/figure_scripts/Figure4/figure_4.py",
+      "locator": "compute_auroc_for_guides and main",
+      "supports": "Per-guide binary AUROC, half-well complementary folds, scaler and classifier semantics, WT WTC11/Patient comparison."
+    },
+    {
+      "id": "data-v2",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/15809433",
+      "locator": "Version v2; Description; Files",
+      "supports": "Archive provides plate statistics, treatment mappings, checkpoints, embeddings/manual features and processed plate/well/FOV Zarr traces."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/task.json",
+      "locator": "complete_scope, prospective_improvement; implementations/initial-evaluator-v1/plexus_evaluator.py and sources.json",
+      "supports": "Current registration requires 52 genes/four lines, whereas local evaluator explicitly implements prospective whole-plate policy; no authentic reference run."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Classify each CRISPRi guide against non-targeting controls from neuronal activity representations, comparing Plexus with manual features. Gene discovery/significance is not itself an ordered improvement target.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Zenodo 15809433 v2 is identified; exact equivalence to the final-paper data, which also cites predecessor record 14714574, remains unresolved.",
+      "evidence_ids": [
+        "data-v2",
+        "paper",
+        "registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Author Figure 4 code evaluates WT WTC11 and WT Patient strata. Complete eligible gene/guide/well identities and their mapping to the 52-gene, four-line registration must be reconciled; do not silently enlarge or narrow this cohort.",
+      "evidence_ids": [
+        "figure4-code",
+        "registration"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Pinned code seeds NumPy with 0, samples half the wells per guide/control, and evaluates both complementary folds. Exact final-paper fold identities and representation-training exposure remain unrecovered; whole-plate holdout is an extension.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Processed neuronal traces/spikes/masks with plate/well/treatment metadata support the representation pipeline; released embeddings and checkpoints are separately exposed artifacts whose provenance must be audited.",
+      "evidence_ids": [
+        "data-v2"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Pinned Figure 4 uses typical-variation normalization, aggregation, and StandardScaler before the guide well split. Final-paper equivalence and permissible normalization/representation access require resolution.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "AUROC is computed by sklearn roc_curve and auc from guide-positive classifier probabilities; retain the same score unit, eligible cases and two folds. The plotted 0.8 cutoff is not the paper baseline.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Author output retains two AUROC observations per guide and plots donor-stratified guide results. No single complete-screen scalar or verified final-paper baseline vector has been recovered.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Figure 4 per-guide AUROC, preserving both complementary well folds and donor strata",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No exact final-paper per-guide/two-fold AUROC vector or authorized full-screen scalar recovered. Neither 0.8 nor counts of significant genes are a numeric model baseline.",
+      "evidence_ids": [
+        "figure4-code",
+        "registration"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Official Figure4/figure_4.py provides a baseline route, but paper/data/code equivalence and authentic execution are not established.",
+      "evidence_ids": [
+        "figure4-code",
+        "data-v2"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful improvement must concern original guide discrimination, not additional discoveries at a changed FDR. Effect threshold awaits the original score distribution and replicate structure.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Unresolved: paired inference must respect shared control wells and biological plate/batch dependence.",
+      "independent_unit": "Biological plate/batch; wells nested within these; cells and reciprocal folds are not independent replicates.",
+      "rationale": "The original fold results share source data and controls. Biological independence and a predeclared familywise comparison rule must be established.",
+      "evidence_ids": [
+        "figure4-code",
+        "data-v2"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the complete original cohort, data version, fold identities and author AUROC results before admission.",
+      "Beat the original source-paper metric under its same input/exposure and preprocessing conditions; preserve all guide/donor results and controls.",
+      "A four-line whole-plate result, corrected preprocessing protocol or held-plate calibration result is a separately labelled extension.",
+      "Freeze a meaningful effect and uncertainty rule before final scoring; no victory from the 0.8 display cutoff, extra significant genes or numerical reconstruction."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was source-verified; paper and rerun baselines are separate.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending source recovery. A future episode may expose only declared training/validation feedback within the original protocol; changed grouped splits must remain extensions.",
+    "candidate_freeze": "Freeze method, representation exposure, normalization, classifier and hyperparameter search before original-fold final scoring.",
+    "final_evaluation": "Compare frozen original-fold predictions with the recovered complete author baseline; the current prospective evaluator is insufficient for this comparison.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published per-guide AUROCs, an independently rerun author pipeline and any new whole-plate experiment as separately named results."
+  },
+  "blocking_issues": [
+    "Final-paper data-version/code correspondence is unresolved.",
+    "Original complete guide/well roster, fold IDs and score vector are not recovered.",
+    "Representation/checkpoint and pre-split normalization exposure require an explicit same-task policy.",
+    "No admitted original-task evaluator, justified effect rule, uncertainty rule or concrete episode budgets."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Keep task.json and the prospective whole-plate evaluator unchanged as historical construction/calibration material; its synthetic engineering controls and prospective scores do not certify paper improvement."
+  }
+}

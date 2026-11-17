@@ -1,0 +1,191 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-NEW-001",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The author preprint contains an ordered WAIC comparison of probability models for inferred astrocytic peak-time distributions. This is a valid candidate predictive-density endpoint and does not require externally labelled sequence truth. Its correspondence to the registered final paper, exact likelihood/WAIC computation, complete input support and final-version numerical baseline remain unresolved. The earlier source-ordering correlation reconstruction is calibration only.",
+  "source_paper": {
+    "title": "Hippocampal astrocytic sequences emerge during learning and memory recall",
+    "url": "https://www.nature.com/articles/s41593-026-02448-0"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02448-0",
+      "locator": "Abstract; Figures 2–5; Data and Code availability",
+      "supports": "Calcium-event sequences in fear conditioning and conditioned-context recall, with behavior association."
+    },
+    {
+      "id": "archive",
+      "kind": "author_data",
+      "url": "https://zenodo.org/api/records/21780255/files/README.md/content",
+      "locator": "Files; Using the imaging data; Scope",
+      "supports": "Released collections/traces/derived exports/behavior and archived code revision 5be84b4; some supplementary notebooks retain absolute paths."
+    },
+    {
+      "id": "crossval",
+      "kind": "author_code",
+      "url": "https://github.com/rsenne/dCA1_Paper/blob/5be84b4/notebooks/figures/Figure3_Cross_valled.ipynb",
+      "locator": "run_cross_validated_analysis; odd/even event split; Argmaxes; Spearman correlation",
+      "supports": "Within-animal odd/even source-ordering correlation and shuffle diagnostics; this legacy calculation is distinct from the peak-time density-model WAIC endpoint."
+    },
+    {
+      "id": "eta",
+      "kind": "author_code",
+      "url": "https://github.com/rsenne/dCA1_Paper/blob/5be84b4/onep/trace_analysis_functions.py",
+      "locator": "eta_individual_cells",
+      "supports": "Cubic interpolation, clipped event window and event-averaged traces."
+    },
+    {
+      "id": "preprint_waic",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13232304/",
+      "locator": "May 25, 2026 preprint version 2; Figure 2h and Results paragraphs on peak distributions; Figure 4e–f; Extended Data Figure 17c",
+      "supports": "Ordered WAIC predictive comparisons of power-law, exponential, Gaussian and uniform peak-time distributions; includes conditioning, recall-context and sex-stratified analyses. This evidence identifies a preprint endpoint, not a verified final-paper baseline."
+    },
+    {
+      "id": "preprint_model",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13232304/",
+      "locator": "Methods, Hierarchical Bayesian Model; Results preceding Figure 2h",
+      "supports": "Gaussian-shaped temporal receptive fields provide inferred peak times; source excludes conditioning peaks during shock (<2 seconds) for the distribution comparison. Final-version preprocessing/likelihood parity is not established."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "unresolved",
+      "description": "Recover the original predictive-density comparison for inferred astrocytic peak times. The May 2026 preprint uses WAIC to compare four distribution families during conditioning and recall; final-paper endpoint correspondence must be verified before activation.",
+      "evidence_ids": [
+        "preprint_waic",
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Zenodo 21780255 and archived revision 5be84b4 supply traces and derived data. The exact peak-time inputs/posterior summaries used by each final-version WAIC comparison have not been authenticated.",
+      "evidence_ids": [
+        "archive",
+        "preprint_model"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Preprint density comparisons cover conditioning and both recall contexts, including sex-stratified recall analyses. Exact final-paper animal/cell inclusion and every source comparison row must be reconciled; the local 21-record prefix component is not this model-input census.",
+      "evidence_ids": [
+        "preprint_waic"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "WAIC is the source predictive-performance estimator; the reviewed text does not establish a separately held-animal test set for density fitting. Recover its original observation units and fit/evaluation access. Odd/even event sorting belongs to the distinct correlation analysis; a newly held-mouse split would be an extension.",
+      "evidence_ids": [
+        "preprint_waic",
+        "crossval"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Source density models use peak times inferred from hierarchical temporal-response fits. Recover the exact original posterior-summary or uncertainty treatment and allowed fitting inputs; sequence labels are not required for this density-estimation task.",
+      "evidence_ids": [
+        "preprint_model",
+        "preprint_waic"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "The preprint fits Gaussian-shaped temporal fields and excludes conditioning peaks below two seconds for distribution comparison. Exact final-paper event support, time windows, priors, peak extraction and code binding remain unverified; the legacy 3303-frame correlation recipe cannot substitute for them.",
+      "evidence_ids": [
+        "preprint_model",
+        "crossval"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "WAIC, lower is better, is explicitly used for predictive density comparison. Recover the source deviance/log-score convention, pointwise likelihood, posterior calculation and effective-complexity term rather than assuming a generic WAIC implementation matches the published numbers.",
+      "evidence_ids": [
+        "preprint_waic"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Source reports separate context and sex-group distribution comparisons. Exact pointwise likelihood aggregation and model-comparison uncertainty must be recovered; cell observations, events and posterior draws cannot automatically be treated as independent biological mice.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original WAIC predictive-density model comparison for inferred astrocytic peak times",
+    "direction": "lower",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Numerical WAIC values were located in the May 25, 2026 preprint version 2, but they are not adopted as the registered final-paper baseline. Final-paper/version reconciliation and exact source comparison support are required.",
+      "evidence_ids": [
+        "preprint_waic",
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No author density-model/WAIC replay is established. Recover the likelihood, priors, posterior summaries and full comparison outputs; the existing source-ordering rho replay is a separate calibration component.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model",
+        "crossval"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A practically meaningful gain on the recovered original WAIC scale must be justified from its uncertainty and scientific use; no universal WAIC threshold, SEM multiple or significance cutoff is imposed.",
+      "evidence_ids": [
+        "preprint_waic"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover the source WAIC uncertainty calculation and validate a paired comparison respecting its likelihood units and nested biological structure before choosing a decision rule.",
+      "independent_unit": "Biological animals, with repeated events/cells nested within animals; original pointwise likelihood units and their treatment remain unresolved.",
+      "rationale": "Source WAIC uncertainty and expected predictive performance are distinct from posterior sampling variability or an increase in source-ordering significance. Preserve the original estimand while assessing dependence.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model"
+      ]
+    },
+    "paper_win_requires": [
+      "Reconcile the preprint predictive-density endpoint with the final published source and recover its numeric author baseline; do not relabel preprint values as final-paper scores.",
+      "Authenticate the complete original animal/cell/context and sex-stratum support, inferred-peak inputs and exact likelihood/preprocessing/WAIC conventions.",
+      "Reproduce all admitted author comparison rows before evaluating a candidate on the same original task, with a predeclared meaningful effect and valid uncertainty.",
+      "Freeze a complete comparison rule before choosing favorable contexts or strata; source-ordering rho, stronger shuffle P values and new held-mouse tasks cannot substitute for the recovered WAIC endpoint.",
+      "Fix equal access and resource budgets for source and candidate methods; label changed data, likelihood support or split as an extension."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was performed. Preprint values, final-paper baseline and fresh author reruns must remain distinct.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive until source-version and evaluator admission. Subsequently permit model development under the recovered original fitting access, with declared development feedback; do not silently add a held-animal protocol or treat observed source peak times as prohibited labels.",
+    "candidate_freeze": "Freeze density family, priors, selection policy, peak-time input construction, posterior computation and complete comparison support before final scoring feedback.",
+    "final_evaluation": "Compare the candidate against a fresh author replay using the exact original source observations and WAIC calculation after final-version reconciliation; report every admitted source context/stratum and its paired uncertainty.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Original power-law and other source density models form the author comparison. Legacy source-ordering reconstruction stays calibration; a new held-animal predictive study is a separately labelled extension."
+  },
+  "blocking_issues": [
+    "May 2026 preprint WAIC endpoint and numbers are not yet reconciled to the September 2026 final paper and archived source release.",
+    "Exact density-model code, likelihood, priors, posterior-summary treatment, WAIC convention and comparison uncertainty are unrecovered.",
+    "Complete original peak-time/animal/cell inclusion and all context/sex comparison rows are not authenticated.",
+    "No author WAIC rerun, working same-task evaluator, justified minimum effect or concrete episode budgets exist."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve all 21-record finite/insufficient dispositions and the disclosed-recipe source-ordering public contract. Those correlation/array reconstructions remain calibration and do not implement the newly recovered original predictive-density WAIC route."
+  }
+}

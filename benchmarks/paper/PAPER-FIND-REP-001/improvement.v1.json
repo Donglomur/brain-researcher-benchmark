@@ -1,0 +1,193 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-REP-001",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Whole-paper review identifies an original ordered prediction task: reward-symbol accuracy in Extended Data Fig. 9a, from models trained to predict the next sensory symbol in the 2ACDC sequence. Exact published scores, model-specific simulation manifests, prediction masks and native evaluation callers remain unrecovered. The legacy Fig. 2f descriptive scope does not limit this authorized source-native rebind; its learning curves remain calibration only.",
+  "source_paper": {
+    "title": "Learning produces an orthogonalized state machine in the hippocampus",
+    "url": "https://www.nature.com/articles/s41586-024-08548-w"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-024-08548-w",
+      "locator": "Results, Progressive decorrelation of neural activity during learning; Fig. 2e\u2013f",
+      "supports": "Original registered result describes six population-correlation learning curves in 11 mice, with increases and decreases in different regions."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/sprustonlab/OSM_Paper_Figures/c1d1788b54c737efe24402e02762eee10da0d0d7/fig_2/Fig_2f.ipynb",
+      "locator": "List all animal names; load pre-computed place field data and calculate correlation matrices; key sections over days",
+      "supports": "Set A cohort, source binF observations, Cue Set A exclusions and region-wise correlation arithmetic."
+    },
+    {
+      "id": "readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/sprustonlab/OSM_Paper_Figures/c1d1788b54c737efe24402e02762eee10da0d0d7/README.md",
+      "locator": "Browsing the data; Data availability; Dependencies",
+      "supports": "Author longitudinal registered-fluorescence route uses vr2p and Figshare 27273552, including multipart archives."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-REP-001/task.json",
+      "locator": "primary_outputs; evaluation; improvement",
+      "supports": "Registered task is longitudinal population-vector/correlation reconstruction; proposed animal-held-out model comparison is an extension."
+    },
+    {
+      "id": "evaluator",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-REP-001/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "population_correlations; region_means; normalize_learning; aggregate_animals; HOLDS",
+      "supports": "Prepared-export Fig. 2f evaluator reconstructs correlations and source summaries, with no qualified prediction task or numeric paper success threshold."
+    },
+    {
+      "id": "model-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11964937/",
+      "locator": "Results, Computational models (paragraphs accompanying Fig. 4e-i); Extended Data Fig. 9a; Methods, Vanilla RNNs, LSTM, Transformers",
+      "supports": "Original next-sensory-symbol prediction objective, reward-symbol accuracy endpoint, generated 2ACDC sequences and model-specific training/testing procedures; descriptive neural correlations are a different endpoint."
+    },
+    {
+      "id": "model-code-route",
+      "kind": "author_code",
+      "url": "https://github.com/sprustonlab/OSM_Paper_Figures",
+      "locator": "Repository root: fig_4 and ext_data_figures directories; README paper attribution; article Code availability",
+      "supports": "Paper-author code repository and figure-directory route verified. The specific prediction-model generator/trainer/evaluator files and publication-era result binding have not been recovered; repository presence does not establish executable baseline equivalence."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict the next sensory symbol in the original 2ACDC task sequences; retain the source reward-symbol prediction-accuracy comparison in Extended Data Fig. 9a. Hidden-state orthogonalization and Fig. 2f mouse learning curves are accompanying descriptive analyses, not substitutes for prediction performance.",
+      "evidence_ids": [
+        "model-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original model dataset consists of generated near/far 2ACDC symbol sequences, rather than the Figshare calcium-imaging arrays. The seven-symbol, 23-step RNN/LSTM task is specified, but exact generated sequences, random seeds and model-specific data versions are not recovered. Do not substitute the distinct CSCG stimulus encoding. Source-equivalent generated sequences may be replayed under the recovered original generator protocol; archived historical sequences are not the only admissible route.",
+      "evidence_ids": [
+        "model-paper",
+        "model-code-route"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The assessment population is the full source model-variant and independent-simulation panel for Extended Data Fig. 9a, including its original near/far trial support. Exact run-to-panel identities and counts remain unbound; the eleven-mouse imaging cohort is not the replication unit for this model prediction score.",
+      "evidence_ids": [
+        "model-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "RNN methods use half of each 40-100-trial sequence for training and half for testing; LSTM uses 100 trials split equally. Transformer uses random chunks and primarily four-symbol test contexts. Recover each original split, overlap, state-reset and selection realization before comparison; these protocols cannot be pooled or replaced by a new held-animal split.",
+      "evidence_ids": [
+        "model-paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original RNN/LSTM inputs are one-hot sensory symbols for grey region, near/far indicator, near/far reward cue, water reward and teleportation. Prediction uses the admitted preceding symbol history; transformer context length is model-specific. Neural fluorescence and future reward labels are not extra predictor inputs.",
+      "evidence_ids": [
+        "model-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source symbol dictionary, trial concatenation, target shift, recurrent-state handling and transformer chunk/context construction. Paper specifies one-hot encoding and next-symbol training, but exact reward-position scoring masks and boundary behavior require the author caller.",
+      "evidence_ids": [
+        "model-paper",
+        "model-code-route"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Higher reward-symbol prediction accuracy is the source endpoint in Extended Data Fig. 9a; next-input accuracy is described for transformer testing. Recover the exact correct-prediction numerator, eligible-position denominator, decision/tie rule and relation between these metrics before scoring. Cross-entropy training loss and hidden-state correlation cannot replace this accuracy.",
+      "evidence_ids": [
+        "model-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain the complete original model/simulation panel and its reported summary. Exact per-run prediction results, reward-position weighting, run aggregation and numerical published scores remain unrecovered; do not pool tokens as independent replicates or select an easier model variant.",
+      "evidence_ids": [
+        "model-paper",
+        "model-code-route"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Extended Data Fig. 9a reward-symbol prediction accuracy under the source model-specific protocols",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "description": "Exact numeric Extended Data Fig. 9a scores and their complete per-simulation support have not been recovered. Qualitative high accuracy and visible bars are not a numerical baseline. No fabricated value or digitized estimate is admitted.",
+      "evidence_ids": [
+        "model-paper"
+      ],
+      "value": null
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "The author repository is linked by the paper and contains model-figure routes, but its exact sequence generator, model configurations, training/evaluation callers and result lineage remain unbound. No authentic author prediction rerun exists in this overhaul.",
+      "evidence_ids": [
+        "model-paper",
+        "model-code-route"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Resolve baseline error rate, accuracy ceiling and stochastic replay variation before justifying a meaningful gain. If the relevant original baseline is already perfect, do not invent headroom by changing task difficulty, context length, endpoint or budget.",
+      "evidence_ids": [
+        "model-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired candidate-author inference on complete independent simulation realizations after recovering source seeds and data support; preserve dependence among tokens, trials and repeated evaluations within a run.",
+      "independent_unit": "Independent training simulation and associated generated-sequence realization, with the exact independence structure unresolved; individual symbols and the separate eleven-mouse imaging cohort are not independent prediction replicates.",
+      "rationale": "Source model summaries and correlation-focused significance tests do not by themselves establish a valid prediction-superiority rule. Replication counts, interval method and meaningful effect remain to be admitted.",
+      "evidence_ids": [
+        "model-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the original Extended Data Fig. 9a accuracy values, complete source model-variant panel and reward-symbol scoring masks; recover either historical sequence/split manifests or the original stochastic generator/split protocol for a calibrated, fully recorded paired rerun.",
+      "Reproduce the appropriate source author prediction baseline with its original inputs, contexts, sequence length, training exposure, selection procedure and metric; no local authored comparator may stand in for it.",
+      "Freeze the candidate, concrete matched access/resource budgets and meaningful-effect/uncertainty rule before final evaluation; surpass both the recovered published result and the verified author rerun on identical original support.",
+      "Retain the entire declared source comparison panel. New symbol distributions, harder tasks, larger contexts, changed splits or faster training are separate extensions unless the original ordered endpoint explicitly supports them.",
+      "Do not convert stronger orthogonalization, closer Fig. 2f reconstruction or smaller descriptive p-values into a prediction-performance win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No independently verified current-SOTA comparison has been made. Source-paper prediction performance and a reproduced author baseline remain distinct quantities.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive until original prediction-source recovery. Once admitted, iterate on source-authorized training/validation feedback for the 2ACDC prediction task. The paper reports some regularization choices using test performance; recover and disclose that history before defining comparable access, without treating those historical scores as an untouched holdout.",
+    "candidate_freeze": "Freeze algorithm, symbol encoding, original generated-sequence/split identities, context/state handling, model-selection access, score masks, baseline version, uncertainty/effect rule and concrete resource ceilings before final scoring.",
+    "final_evaluation": "Independently score frozen candidate and author predictions on the recovered original test-support protocol and exact reward-symbol scoring support, retaining every admitted source condition. Source-equivalent stochastic regeneration is permitted after baseline calibration; a different distribution or corrected split rule remains an extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published Extended Data Fig. 9a scores, independently rerun source models and historical Fig. 2f reconstruction separate. Existing correlation evaluator remains calibration and cannot certify the prediction task. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+  },
+  "blocking_issues": [
+    "Exact Extended Data Fig. 9a numeric baseline and per-run results have not been recovered.",
+    "Original model generator/trainer/scorer entrypoints, publication-era revision and model-to-simulation census remain unbound.",
+    "Generated sequence/split identities, context/state boundaries and reward-symbol prediction denominator remain unresolved.",
+    "Historical test-informed regularization selection requires an explicit comparability and exposure decision; a changed split must remain an extension.",
+    "No prediction evaluator, authentic author rerun, meaningful effect, valid uncertainty or concrete access/resource budgets is admitted."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve historical longitudinal reproduction definitions, the Fig. 2f prepared-export evaluator and all prior evidence as calibration. Whole-paper curation now identifies the original 2ACDC model-prediction task; no legacy numerical-correlation output is promoted to its success criterion."
+  }
+}

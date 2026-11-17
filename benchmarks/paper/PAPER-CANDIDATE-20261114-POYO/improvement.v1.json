@@ -1,0 +1,166 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-CANDIDATE-20261114-POYO",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Published POYO transfer results are identified, but the historical corpus, complete original adaptation grid and exact scoring provenance are not bound to the registered prospective macro-session endpoint. The contemporary frozen-grid consumer cannot establish 2023 task equivalence.",
+  "source_paper": {
+    "title": "A Unified, Scalable Framework for Neural Population Decoding",
+    "url": "https://papers.nips.cc/paper_files/paper/2023/hash/8ca113d122584f12a6727341aaf58887-Abstract-Conference.html"
+  },
+  "evidence": [
+    {
+      "id": "poyo-paper",
+      "kind": "paper",
+      "url": "https://papers.nips.cc/paper_files/paper/2023/file/8ca113d122584f12a6727341aaf58887-Paper-Conference.pdf",
+      "locator": "Tables 1\u20133; sections 3.1, 3.4\u20133.5; Appendices A.4.3, A.5 and B.1",
+      "supports": "Original pretraining versus held-session distinction, transfer results and source-specific evaluation regimes."
+    },
+    {
+      "id": "poyo-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/nerdslab/poyo/6b052f148128ec5d8e3fe7077692b3ffbac92039/src/callbacks.py",
+      "locator": "continuous-output evaluation callback, lines 87\u2013206",
+      "supports": "Contemporary timestamp stitching, R2Score and session averaging; historical algorithm identity is not established by this revision."
+    },
+    {
+      "id": "poyo-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-CANDIDATE-20261114-POYO/implementations/frozen-grid-evaluator/README.md",
+      "locator": "Selected scientific policy; Evidence, controls and remaining work",
+      "supports": "The local consumer selects a prospective TorchMetrics-1.9 uniform-dimension/session policy and explicitly disclaims historical experiment recovery, corpus authentication and native numerical parity."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Decode two-dimensional hand velocity from neural spikes and transfer the pretrained decoder to new sessions/animals under the original adaptation conditions.",
+      "evidence_ids": [
+        "poyo-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Four-source POYO-1 corpus is identified, but original immutable source-to-session joins remain unresolved; later DANDI conversions cannot silently replace 2023 data.",
+      "evidence_ids": [
+        "poyo-paper",
+        "poyo-registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "158 sessions describe POYO-1 pretraining, not 158 held-out evaluations. Table 2 has 2 C center-out, 6 T center-out and 6 T random-target sessions; Table 3 uses distinct NLB datasets. Exact original manifest remains missing.",
+      "evidence_ids": [
+        "poyo-paper",
+        "poyo-registration"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper reserves 20% trials for test and 10% validation within sessions; transfer excludes designated sessions from pretraining. Exact trial membership and all adaptation-budget assignments are not recovered.",
+      "evidence_ids": [
+        "poyo-paper",
+        "poyo-registration"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Spike events with unit identities and permitted adaptation kinematics; no held evaluation velocities or session-target lookup.",
+      "evidence_ids": [
+        "poyo-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve original source-specific preprocessing, lab-level velocity normalization and successful-reaching versus continuous-segment masks. Contemporary pipeline provenance does not prove these historical joins.",
+      "evidence_ids": [
+        "poyo-paper",
+        "poyo-code",
+        "poyo-registration"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Original decoding R\u00b2 is the endpoint. The exact historical dimension weighting, stitching and near-constant behavior are not established by the contemporary TorchMetrics-based callback.",
+      "evidence_ids": [
+        "poyo-paper",
+        "poyo-code",
+        "poyo-registration"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Tables report separate transfer populations and tasks. The registration\u2019s complete adaptation-grid macro endpoint lacks a recovered paper aggregation; do not collapse these panels into an invented scalar.",
+      "evidence_ids": [
+        "poyo-paper",
+        "poyo-code",
+        "poyo-registration"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original held-session transfer R\u00b2 for every published adaptation condition",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Table 2 POYO-1+Finetune reports C-CO 0.9683\u00b10.0118, T-CO 0.9364\u00b10.0132 and T-RT 0.8145\u00b10.0496; Table 3 reports Maze 0.9482 and RTT 0.7378. These are verified distinct panel scores, not the unrecovered complete-grid scalar; value stays null.",
+      "evidence_ids": [
+        "poyo-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No qualified rerun of the original author comparison is established. Public source and construction code are a recovery route, not a measured comparator.",
+      "evidence_ids": [
+        "poyo-registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful effect must be justified for this original endpoint after recovering its numerical baseline and measurement variability; no generic percentage or significance-only victory is admitted.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired uncertainty for the complete original panel after recovering source-level dependence and replication; no final decision rule is yet qualified.",
+      "independent_unit": "Sessions nested in animals and source families, with all windows and adaptation budgets paired; two C sessions or repeated model seeds cannot support an invented independent-sample count.",
+      "rationale": "Changing the evaluation partition to simplify inference would define a separate extension.",
+      "evidence_ids": []
+    },
+    "paper_win_requires": [
+      "Bind original source releases, the 158-session pretraining corpus and every separate transfer cohort and adaptation budget before scoring.",
+      "Recover the historical R\u00b2 implementation, source-specific masks and aggregation; treat the current TorchMetrics policy as an extension until equivalence is established.",
+      "Beat the source-author method on the same original complete transfer panel with matched pretraining/adaptation access and resources; no Perich-only or POYO-MP substitution.",
+      "Keep the Table 2 and NLB results distinct and disclose all population outcomes; a favorable single session or budget cannot count as the complete task win.",
+      "Require predeclared meaningful effect and dependence-aware uncertainty; newly held animals or corrected data splits are separate prospective claims."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "Surpassing this source paper is distinct from current SOTA; no contemporary competitor survey or SOTA result is asserted.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Once original source/session and transfer-budget joins are recovered, iterate using the permitted 158-session pretraining corpus, original training/validation portions and declared adaptation trials. Keep each transfer evaluation segment outside pretraining and selection. Log pretraining exposure, unit-identification/fine-tuning choices and every adaptation-budget result used for development.",
+    "candidate_freeze": "Freeze the original corpus and transfer rosters, all source preprocessing and behavior normalization, exact train/validation/test trials, adaptation budgets, unit-identification versus fine-tuning recipes, historical R\u00b2 implementation, panel aggregation and compute/access limits before final transfer evaluation.",
+    "final_evaluation": "Score every recovered original transfer condition and report the Table 2 populations and Table 3 NLB tasks separately, with matched source-author and candidate predictions. Preserve the complete adaptation grid and all failures. The 158-session corpus is not a held-out roster, and contemporary uniform-dimension macro results count only as a labeled extension until historical equivalence is established.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Recover POYO-1\u2019s original pretrained transfer baseline and keep its published panel numbers separate from author reruns, POYO-MP, from-scratch models and local ridge/recurrent references. The frozen-grid component\u2019s contemporary output arithmetic calibrates construction only; it cannot supply a missing 2023 author baseline or turn an unmatched macro score into victory."
+  },
+  "blocking_issues": [
+    "Original immutable four-source/session mapping, including Flint and DANDI release reconciliation.",
+    "Exact historical transfer roster, adaptation budgets, trial splits and model/configuration lineage.",
+    "Original R\u00b2 and panel-aggregation provenance versus contemporary callback and local uniform-dimension policy.",
+    "No qualified author rerun or complete numeric comparator for the registered grid.",
+    "Meaningful effect, uncertainty, access limits and measured resource envelope remain unspecified."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "The frozen-grid evaluator explicitly implements a prospective uniform-dimension/session R\u00b2 policy and authenticates supplied artifacts only. Its engineering checks, modern-source output arithmetic and pretrained-minus-local-reference contrasts are calibration material, not historical paper superiority."
+  }
+}

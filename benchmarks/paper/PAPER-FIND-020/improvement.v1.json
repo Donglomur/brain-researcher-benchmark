@@ -1,0 +1,177 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-020",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The legacy wiring-association panels are descriptive, but the same paper also evaluates original image-classification accuracy in Figure 6 and digital-twin fidelity in Extended Data Figure 2. Whole-paper improvement eligibility therefore remains source_unresolved rather than ineligible. Recover an exact original performance task and baseline before activating it; no new edge-prediction task or local association score is substituted.",
+  "source_paper": {
+    "title": "Functional connectomics reveals general wiring rule in mouse visual cortex",
+    "url": "https://www.nature.com/articles/s41586-025-08840-3"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-025-08840-3",
+      "locator": "Figure 2; Results: Multi-scale anatomical controls; Methods",
+      "supports": "Connectivity contrasts compare connected neurons, unconnected axon-dendrite-proximity controls and same-region controls."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/cajal/microns-funconn-2025/blob/bc9302a21443453b1f39819676f2388e91bd43a3/funconnect/compute/like2like.py",
+      "locator": "run_like2like_analysis; quantity_names and variable_names",
+      "supports": "Presynaptic means, GLMMs, synapse density/co-travel quantities and bootstrap trends; no heldout predictive score."
+    },
+    {
+      "id": "common",
+      "kind": "author_code",
+      "url": "https://github.com/cajal/microns-funconn-2025/blob/bc9302a21443453b1f39819676f2388e91bd43a3/funconnect/compute/common_inputs.py",
+      "locator": "analyze_connectivity; perform_statistical_analysis",
+      "supports": "Shared-input similarity groups and statistical comparisons are descriptive source endpoints."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://s3.amazonaws.com/bossdb-open-data/iarpa_microns/minnie/functional_data/functional_connectomics/node_and_edge_properties/v1/readme_v1.md",
+      "locator": "Node Data Columns; Edge Data Columns",
+      "supports": "Version-1 node/edge schemas distinguish in-vivo measurements from CvT model-derived responses and provide anatomical/projection covariates."
+    },
+    {
+      "id": "rnn-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41586-025-08840-3",
+      "locator": "Results: Like-to-like connectivity in RNNs; Figure 6a,d; Methods: RNN model; Extended Data Figure 2 and Validation of in silico signal correlations",
+      "supports": "The paper evaluates a 1000-hidden-unit vanilla RNN on image classification and reports test accuracy under matched random/like-to-like connection ablations. It also evaluates digital-twin correspondence with an original in-vivo reference. These are ordered source-native routes beyond legacy association reconstruction."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "unresolved",
+      "description": "Source-native recovery route: Figure 6 image classification and accuracy under the original connection-ablation conditions. Exact improvement target/condition set must be bound before activation. Legacy like-to-like/common-input biological coefficients remain calibration; Extended Data 2 fidelity is another original route, not a freely mixed substitute.",
+      "evidence_ids": [
+        "rnn-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Methods identifies MNIST inputs for the Figure 6 RNN and a FashionMNIST check; exact original dataset/version, manifests and condition assignment remain unrecovered. MICrONS v1 node/edge tables belong to the preserved association analysis and do not define the RNN classification test.",
+      "evidence_ids": [
+        "rnn-paper",
+        "data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Recover the complete original image roster, training/test support, model repetitions and ablation conditions. The biological one-mouse association cohort is not the classifier evaluation population.",
+      "evidence_ids": [
+        "rnn-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Figure 6d explicitly evaluates test accuracy, but original training/development/test memberships, tuning exposure and ablation-selection procedure are not bound in this review. A new split cannot replace the paper experiment.",
+      "evidence_ids": [
+        "rnn-paper"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "The source classifier uses images transformed by a linear input layer and a final-state readout of a 1000-unit recurrent network. Exact original transforms, permitted training information and matched source ablation input conditions need recovery.",
+      "evidence_ids": [
+        "rnn-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve the source image transformations and native RNN/ablation recipe. The source model uses tanh dynamics over 20 time steps; these source details do not establish complete preprocessing or artifact parity.",
+      "evidence_ids": [
+        "rnn-paper"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "The ordered source quantity is Figure 6d test classification accuracy, higher better, conditional on matched ablated connections. Recover exact denominator, complete curve and source setting; biological GLMM coefficients or P values are not this metric.",
+      "evidence_ids": [
+        "rnn-paper",
+        "code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Recover source averaging over images, model seeds and ablation realizations and a predeclared comparison across the full original condition set. No scalar is inferred from a plot or mixed across biological and artificial-network experiments.",
+      "evidence_ids": [
+        "rnn-paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Figure 6 test image-classification accuracy under source ablation conditions; exact comparison binding unresolved",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Figure 6d supplies an ordered accuracy curve, but exact numeric values and full experiment identity were not recovered. Existing wiring slopes, biological contrasts and P values cannot substitute for it.",
+      "evidence_ids": [
+        "rnn-paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No authenticated original RNN classification/ablation rerun is established. The inspected like2like.py and common_inputs.py reconstruct biological associations and are not this author performance baseline.",
+      "evidence_ids": [
+        "rnn-paper",
+        "code",
+        "common"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful accuracy gain requires the recovered source task, complete ablation conditions and author run variation; no arbitrary threshold or stronger biological association defines success.",
+      "evidence_ids": [
+        "rnn-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover source independent fitted runs and ablation randomizations, then predeclare paired candidate-author uncertainty over the same test images and complete original conditions.",
+      "independent_unit": "Independent fitted network/run and source ablation realization; shared test images are paired observations, not mice.",
+      "rationale": "Biological cells/edges and artificial-network test cases cannot be pooled as replicates; exact source replication is unresolved.",
+      "evidence_ids": [
+        "rnn-paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Bind an original ordered task actually evaluated in this source paper, its exact source dataset, original split, full condition set, input access, metric, aggregation and numeric author baseline before activation.",
+      "For the Figure 6 recovery route, preserve source test-image support and matched random/like-to-like ablation settings; a newly invented edge-prediction task does not count.",
+      "Exceed the recovered source result and a competent matched author replay by a predeclared meaningful amount with valid paired uncertainty and fixed budgets.",
+      "Legacy wiring/common-input reconstruction, stronger associations or smaller P values remain calibration only; no source performance win is currently admissible."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison has been verified; source-paper reproduction and same-task improvement are separate outcomes.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending recovery of the exact original Figure 6 performance experiment; later iteration must use only its original training/development access.",
+    "candidate_freeze": "Freeze candidate, original source memberships, preprocessing, source condition set, ablation policy and tuning choices before final test evaluation.",
+    "final_evaluation": "No improvement reward from the legacy biological-association evaluator. A recovered source-native evaluator must score the complete original performance experiment.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Distinguish original reported classification performance, matched author rerun and preserved biological reconstruction. Do not promote local edge predictors or association coefficients to source baselines. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Original source-native performance endpoint and complete condition binding are not yet admitted.",
+    "Figure 6 exact data version, original split memberships, source code/model artifact and accuracy curve values need recovery.",
+    "Original run/ablation replication and aggregation, justified effect, paired uncertainty, concrete budgets and working evaluator are missing.",
+    "The existing node/edge association implementation cannot score the original image-classification endpoint."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve like-to-like/common-input reproduction materials and all recorded source evidence as calibration. Whole-paper review identified native ordered experiments; this contract records recovery gates without silently replacing the historical task or grader."
+  }
+}

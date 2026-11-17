@@ -1,19 +1,30 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-047",
-  "source_id": "paper-method-047",
   "track": "paper",
   "title": "Spike inference from calcium imaging data acquired with GCaMP8 indicators",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Infer time-resolved spike rates from GCaMP8 calcium fluorescence and compare with simultaneous electrophysiological ground truth, preserving pooled-GC8 and variant-specific source comparisons. Interneuron, single-AP and online analyses are separately identified conditions.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Infer time-resolved spike rates from GCaMP8 calcium fluorescence and compare with simultaneous electrophysiological ground truth, preserving pooled-GC8 and variant-specific source comparisons. Interneuron, single-AP and online analyses are separately identified conditions.",
+    "Source-paper comparison for Original-condition per-neuron spike-rate Pearson correlation, with source figure aggregation: Pearson correlation between inferred and ground-truth spike-rate vectors is the ordered candidate primary endpoint; error and bias remain secondary. Demo uses corrcoef on prepared rates and smoothed normalized absolute error/bias. Historical smoothing/timing and exact figure condition must be recovered before adopting its values."
+  ],
+  "success_criteria": [
+    "Recover original Figure1 identities, score, smoothing, sampling/noise conditions and aggregation before comparing methods.",
+    "Use competent pooled and variant-specific author retraining that excludes every test neuron; prove checkpoint membership.",
+    "Surpass the published matching result and author rerun with justified effect/uncertainty while preserving full original cohort and declared access/resources.",
+    "Report timing-bug corrections separately; no win from changing kernels, adding easier cells, selecting noise levels, using a new split or comparing against pre-GCaMP8 defaults alone.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-047",
   "canonical_position_one_based": 25,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41592-026-03183-x",
     "publication_year": 2026,
     "venue": "Nature Methods"
   },
-  "primary_outputs": [
-    "Per-cell spike-rate correlations/error and timing calibration; cross-dataset versus within-dataset generalization, optionally matched OASIS/MLSpike baselines."
-  ],
   "input_assets": {
     "routes": [
       "https://github.com/HelmchenLabSoftware/Cascade/tree/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth"
@@ -5759,106 +5770,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "recorded_terms": [
-        "Code GPL-3.0",
-        "Ground-truth data per-source terms must be retained"
-      ],
-      "record_conflicts": [],
-      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
-      "overlap_group": "cascade-gcamp8-ds30-ds31-ds32"
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "central_outputs_in_saved_source_contract": [
-        "Per-cell spike-rate correlations/error and timing calibration; cross-dataset versus within-dataset generalization, optionally matched OASIS/MLSpike baselines."
-      ],
-      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
-      "missing_or_unfrozen_endpoint_details": "Hold improvement execution: animal mapping, historical50ms versus example25ms target smoothing, corrected TF versus Torch one-frame assignment, and excluded-neuron model provenance remain open."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "GC8 checkpoint configs include evaluated datasets; supplied weights are not demonstrated held-out. A pre-GCaMP8 affine rate-calibration pilot cannot improve Pearson correlation or establish improvement over the paper-trained model."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Hold improvement execution: animal mapping, historical50ms versus example25ms target smoothing, corrected TF versus Torch one-frame assignment, and excluded-neuron model provenance remain open.",
-        "GC8 checkpoint configs include evaluated datasets; supplied weights are not demonstrated held-out. A pre-GCaMP8 affine rate-calibration pilot cannot improve Pearson correlation or establish improvement over the paper-trained model.",
-        "2026-10-27 timing bug fix changes some pretrained outputs. Pin corrected and paper-era variants separately; do not score a bug correction as scientific improvement. No full-paper claim.",
-        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-        "Execute and independently audit references, controls, grading and measured resources.",
-        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_explicit_hold",
-      "scope": "No recording/checkpoint payload or fit/inference in the reviewed preflight; theoretical source allocation exceeds the intended4GiB array budget before copies and needs a separate adapter."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve inference across indicator variants, noise levels or neuron classes with held-out cells/animals, comparing against tuned CASCADE, OASIS and MLSpike under equal training access."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "independent_panel_not_established_in_inspected_evidence",
-      "proposed_improvement": [
-        "Improve inference across indicator variants, noise levels or neuron classes with held-out cells/animals, comparing against tuned CASCADE, OASIS and MLSpike under equal training access."
-      ],
-      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
-      "special_gate": "No completed independent improvement result is established here."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "source_roster_estimate_or_statement": "CPU possible; single GPU preferred",
-    "measured_or_static_facts_from_existing_authoring": [
-      "Saved preflight source requests686788B/5.455321375979111s;117 MAT paths161525514B are metadata sizes. Training source allocates7800000000 nominal array bytes before copies; no empirical RSS measured."
-    ],
-    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
-  },
-  "holds": {
-    "task_specific": [
-      "Hold improvement execution: animal mapping, historical50ms versus example25ms target smoothing, corrected TF versus Torch one-frame assignment, and excluded-neuron model provenance remain open.",
-      "GC8 checkpoint configs include evaluated datasets; supplied weights are not demonstrated held-out. A pre-GCaMP8 affine rate-calibration pilot cannot improve Pearson correlation or establish improvement over the paper-trained model.",
-      "2026-10-27 timing bug fix changes some pretrained outputs. Pin corrected and paper-era variants separately; do not score a bug correction as scientific improvement. No full-paper claim.",
-      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-      "Execute and independently audit references, controls, grading and measured resources.",
-      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Resolve timing/kernel and neuron/animal grouping, define a disjoint baseline/checkpoint contract and memory-safe adapter parity before any recording/model payload or inference.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Resolve timing/kernel and neuron/animal grouping, define a disjoint baseline/checkpoint contract and memory-safe adapter parity before any recording/model payload or inference.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -5978,11 +5889,85 @@
       }
     ]
   },
+  "resources": {
+    "source_roster_estimate_or_statement": "CPU possible; single GPU preferred",
+    "measured_or_static_facts_from_existing_authoring": [
+      "Saved preflight source requests686788B/5.455321375979111s;117 MAT paths161525514B are metadata sizes. Training source allocates7800000000 nominal array bytes before copies; no empirical RSS measured."
+    ],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-047/improvement.v1.json",
+      "bytes": 10602,
+      "sha256": "9d9cb69eeb744c3bddf06385ecc0524becbcec7b80c2f5fa820bd6a23e1d53d3"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-047/historical/task.pre-improvement.v1.json",
+        "bytes": 332355,
+        "sha256": "ad9290ad88bd885cc0a9953b45004335f86f62e1818bd5317543f2d87debd0b7"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-gcamp8"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-paper-method-047/implementations/registered-runtime/manifest.json",
+        "bytes": 5944,
+        "sha256": "69e899ea27b08423b6036df90fa92fd7fd83f0bb43bc853374a42860d54131a5"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After original-task recovery, iterate inference models on permitted training-neuron data and a declared development route; record all fits and avoid direct final-neuron spike-label feedback.",
+    "candidate_freeze": "Freeze training and model membership, source cohort, variants, noise seeds, smoothing/alignment, aggregation, checkpoint/source hashes and resource/access budgets before final scoring.",
+    "final_evaluation": "Generate paired predictions on the unchanged original LOO tests under protected labels, keeping pooled and variant-specific results separate and preserving all original conditions.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep rounded/source reported scores, exact author rerun scores, generic pretrained models and corrected-code variants distinct. Local released117 evidence alone is calibration/extension evidence."
+  },
+  "blocking_issues": [
+    "Historical105-to-released117 cell identity/inclusion mapping missing.",
+    "Exact published baseline numbers and original aggregate not recovered.",
+    "Paper-era smoothing/frame assignment, corrected timing and excluded-neuron model provenance unresolved.",
+    "Animal/session dependence and valid final uncertainty rule missing.",
+    "No working original-task scientific evaluator qualification, matched author rerun, justified margin or frozen episode budgets."
+  ],
+  "holds": {
+    "task_specific": [
+      "Historical105-to-released117 cell identity/inclusion mapping missing.",
+      "Exact published baseline numbers and original aggregate not recovered.",
+      "Paper-era smoothing/frame assignment, corrected timing and excluded-neuron model provenance unresolved.",
+      "Animal/session dependence and valid final uncertainty rule missing.",
+      "No working original-task scientific evaluator qualification, matched author rerun, justified margin or frozen episode budgets."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Spike inference has ordered ground-truth metrics, but the original Figure1 cohort/score and excluded-neuron author models are not recovered for the registered117-file panel. Smoothing/timing and paper-era versus corrected software differ. No numeric paper baseline or same-task win can be inferred from the released-panel controller or a generic pretrained CASCADE checkpoint. Historical105-to-released117 cell identity/inclusion mapping missing. Exact published baseline numbers and original aggregate not recovered. Paper-era smoothing/frame assignment, corrected timing and excluded-neuron model provenance unresolved. Animal/session dependence and valid final uncertainty rule missing. No working original-task scientific evaluator qualification, matched author rerun, justified margin or frozen episode budgets.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-047/historical/task.pre-improvement.v1.json",
+      "bytes": 332355,
+      "sha256": "ad9290ad88bd885cc0a9953b45004335f86f62e1818bd5317543f2d87debd0b7"
+    },
+    "notes": "Keep the released117 paired controller and transitive runtime recovery materials as calibration infrastructure. The registration already disclaims historical Figure1 equivalence and scientific qualification; no new model/data execution occurs in this overhaul."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

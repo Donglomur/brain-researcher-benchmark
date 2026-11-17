@@ -5,39 +5,38 @@
 - **Task ID:** `PAPER-EXP-20261113-003`
 - **Track:** Paper research
 - **Registration:** Expansion draft
-- **Declared specification status:** Registered construction draft
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Declared status fields
+## Current paper-improvement objective
 
-These values are copied from the task definition. They do not establish current execution or scientific qualification.
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
 
-| Field | Declared value |
-| --- | --- |
-| Stage | Registered construction draft |
-| Runnable | No |
-| Reference results qualified | No |
-| Scientifically qualified | No |
-| Submission ready | No |
+**Disposition:** source\_unresolved. The paper contains an original assessment of three pretrained neural decoders against individual reappraisal measures in Figure 5b/Extended Data Table 3, with training-cohort exclusions. This ordered predictive route must be recovered before admission. The legacy three-correlation meta-analysis and newly authored held-study CRPS are not this task; neither larger biological effects nor significance alone constitute improvement.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
 
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 7707 bytes; SHA-256 `1d77440c85e58176ddfbc6b83d0970be35e6e2f9aac615d58ac1c8e31f7b2c46`.
+- Specification identity: 9766 bytes; SHA-256 `ae25462bca15254fa1c8ef20ab5d67c3a3c885daca82482ccbcdcc9a5fed1d17`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261113/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
 ## Implementation artifacts
 
-- [Nider arm64 owner setup v1](implementations/nider-arm64-owner-setup-v1) — Task implementation source.
-  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
-- [Nider full120 reconstruction profile v1](implementations/nider-full120-reconstruction-profile-v1) — Task implementation source.
-  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
-- [Trusted owner](implementations/trusted-owner) — Trusted owner.
-  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Nider arm64 owner setup v1](implementations/nider-arm64-owner-setup-v1) — Calibration only.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Nider full120 reconstruction profile v1](implementations/nider-full120-reconstruction-profile-v1) — Calibration only.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Trusted owner](implementations/trusted-owner) — Calibration only.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

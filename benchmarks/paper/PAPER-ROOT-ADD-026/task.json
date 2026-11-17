@@ -1,19 +1,30 @@
 {
   "schema_version": 1,
   "id": "PAPER-ROOT-ADD-026",
-  "source_id": "ROOT-ADD-026",
   "track": "paper",
   "title": "Temporal dynamics of short-term neural adaptation across human visual cortex",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Predict each selected visual electrode’s broadband response time course to single and repeated image presentations from stimulus timing and image category. The original performance comparator is the category-scaled DN model used in Figure 3C.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Predict each selected visual electrode’s broadband response time course to single and repeated image presentations from stimulus timing and image category. The original performance comparator is the category-scaled DN model used in Figure 3C.",
+    "Source-paper comparison for Original Figure 3C region-wise cross-validated R² of the category-scaled DN model (scaling S): For each held-out trace, R² = 1 − sum_t(y_t−prediction_t)² / sum_t(y_t−mean(y))², using the pinned NaN handling; higher is better. Code rounds condition values to three decimals and fold means to four."
+  ],
+  "success_criteria": [
+    "Recover full source cohort/input lineage and preserve all72 original conditions and visual areas. Use authenticated historical folds or a provenance-complete rerun of the exact original stochastic12-fold recipe after source-authorized protocol parity is established.",
+    "Recover and calibrate Figure3C category-scaled DN using scalingS, original metric rounding and region aggregation. Predeclare a justified tolerance between the source published result and any stochastic author rerun; pair candidate and author on the same immutable fold realizations. Beating the weaker unscaled DN model alone is insufficient.",
+    "Freeze candidate, meaningful effect, uncertainty and handling of all region summaries before final assessment. Preserve reported adaptation biology as supporting checks, not optimization targets.",
+    "A changed splitting scheme, new participant holdout, reduced electrode set or alternate preprocessing is an extension. Missing historical RNG state alone does not make a faithful source-protocol rerun a different task; an arbitrary new fold recipe cannot substitute for source-protocol parity.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "ROOT-ADD-026",
   "canonical_position_one_based": 96,
   "paper_identity": {
     "url": "https://doi.org/10.1371/journal.pcbi.1012161",
     "publication_year": 2024,
     "venue": "PLOS Computational Biology"
   },
-  "primary_outputs": [
-    "Refit delayed divisive-normalization and category-scaled models to measured single/repeated-stimulus iEEG and reproduce adaptation hierarchy and category-selectivity comparisons."
-  ],
   "input_assets": {
     "routes": [
       "https://openneuro.org/datasets/ds004194/versions/3.0.0"
@@ -635,134 +646,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": {
-        "code": null,
-        "data": [
-          "CC0"
-        ]
-      },
-      "declared_overlap_group": "visual-ecog-ds004194",
-      "existing_graph_evidence_leads": [
-        {
-          "tasks": [
-            "PAPER-ROOT-ADD-014",
-            "PAPER-ROOT-ADD-026"
-          ],
-          "relation": "shared_exact_data_locator",
-          "value": "https://openneuro.org/datasets/ds004194/versions/3.0.0",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": false,
-          "biological_overlap_verified": false
-        },
-        {
-          "tasks": [
-            "PAPER-ROOT-ADD-014",
-            "PAPER-ROOT-ADD-026"
-          ],
-          "relation": "shared_literal_overlap_label",
-          "value": "visual-ecog-ds004194",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": false,
-          "biological_overlap_verified": false
-        }
-      ],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Refit delayed divisive-normalization and category-scaled models to measured single/repeated-stimulus iEEG and reproduce adaptation hierarchy and category-selectivity comparisons."
-      ],
-      "construction_specificity": "Delayed divisive-normalization/category-scaling adaptation endpoint documented; exact stimulus/time/interval split, selection policy and metric remain unfrozen.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Compare temporal models at equal flexibility and permitted stimulus histories.",
-      "Refit from observations and keep prior electrode-selection exposure explicit; no fittedmodel outputs in candidate inputs."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Delayed divisive-normalization/category-scaling adaptation endpoint documented; exact stimulus/time/interval split, selection policy and metric remain unfrozen.",
-        "Patient and stimulus/interval groups; electrode responsiveness/category selection must not use protected outcomes. Same VisualECoG family as alphaPRF/olderpaper.",
-        "DataCC0/code license null. Exact selected bytecount, dependencies and localcompute remain unknown; processed-input reproduction excludes raw preprocessing.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve held-out-stimulus/interval prediction with complexity-matched temporal models and patient-level selection/uncertainty controls."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Improve held-out-stimulus/interval prediction with complexity-matched temporal models and patient-level selection/uncertainty controls."
-      ],
-      "independent_panel_gate": "Patient and stimulus/interval groups; electrode responsiveness/category selection must not use protected outcomes. Same VisualECoG family as alphaPRF/olderpaper.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": "unmeasured",
-    "source_resource_evidence": null,
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "Delayed divisive-normalization/category-scaling adaptation endpoint documented; exact stimulus/time/interval split, selection policy and metric remain unfrozen.",
-      "Patient and stimulus/interval groups; electrode responsiveness/category selection must not use protected outcomes. Same VisualECoG family as alphaPRF/olderpaper.",
-      "DataCC0/code license null. Exact selected bytecount, dependencies and localcompute remain unknown; processed-input reproduction excludes raw preprocessing.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Trace event/trial and electrode-selection provenance to one model-prediction endpoint and resolve shared VisualECoG patient/stimulus identities before any holdout.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Trace event/trial and electrode-selection provenance to one model-prediction endpoint and resolve shared VisualECoG patient/stimulus identities before any holdout.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -838,11 +721,84 @@
     ],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_statement": "unmeasured",
+    "source_resource_evidence": null,
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-026/improvement.v1.json",
+      "bytes": 13908,
+      "sha256": "8e037ba9d6cc7f6822118c953b198ded61aa3fa8f10e9d6d3603bef93b1576dd"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-ROOT-ADD-026/historical/task.pre-improvement.v1.json",
+        "bytes": 41949,
+        "sha256": "011bb6964239aa71109c08206af2a25a06910974e96a07862b3701f96958c0e6"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-root-add-026"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-ROOT-ADD-026/implementations/registered-runtime/manifest.json",
+        "bytes": 8384,
+        "sha256": "414050f54f12366cf2ad6e7b3fb77de0d5f32f717d156a4b42738e46cbb81904"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending source recovery. A future admitted episode may expose declared training/validation feedback under the original condition-CV recipe. Before comparison, freeze either recovered historical folds or logged realizations of a qualified original stochastic recipe; preserve all source exposure and tuning history.",
+    "candidate_freeze": "Freeze code, fitted-state production recipe, stimulus inputs, electrode roster, folds, model-selection decisions and budgets before final evaluation.",
+    "final_evaluation": "Evaluate the frozen candidate and calibrated category-scaled author method on identical original traces and identical frozen folds, using either recovered historical assignments or a qualified original-recipe stochastic rerun. Report all three source region summaries, published-versus-rerun discrepancy and the predeclared superiority rule.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published Figure3 values and native author reruns are separate. A documented faithful original stochastic-protocol rerun may supply the same-task author comparator after parity, calibration tolerance and paired folds are fixed. Altered splitting schemes remain extensions; a local reconstruction wrapper cannot replace the native model baseline."
+  },
+  "blocking_issues": [
+    "Original random fold identities are not recovered. A valid alternative requires source-protocol parity, logged rerun seed/fold manifests, justified predeclared published-result discrepancy tolerance and paired candidate/author folds; these are not yet established.",
+    "Exact numeric Figure 3C category-scaled comparator and its complete fitted-input lineage are unresolved.",
+    "OpenNeuro version 3.0.0 correspondence to publication inputs is not primary-source verified.",
+    "Electrode area roster must reconcile the V1–V3/VOTC caption count conflict without changing the cohort.",
+    "A same-task evaluator, justified region-wise meaningful-effect rule, dependence-aware uncertainty, protected episode and concrete access/resource budgets are not established."
+  ],
+  "holds": {
+    "task_specific": [
+      "Original random fold identities are not recovered. A valid alternative requires source-protocol parity, logged rerun seed/fold manifests, justified predeclared published-result discrepancy tolerance and paired candidate/author folds; these are not yet established.",
+      "Exact numeric Figure 3C category-scaled comparator and its complete fitted-input lineage are unresolved.",
+      "OpenNeuro version 3.0.0 correspondence to publication inputs is not primary-source verified.",
+      "Electrode area roster must reconcile the V1–V3/VOTC caption count conflict without changing the cohort.",
+      "A same-task evaluator, justified region-wise meaningful-effect rule, dependence-aware uncertainty, protected episode and concrete access/resource budgets are not established."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The paper has an ordered original prediction endpoint: condition-cross-validated broadband-response R² for category-scaled delayed normalization. The numeric Figure3C comparator and exact original fit-input/configuration bindings remain unrecovered. Historical fold identities are missing because the source random.sample calls are unseeded and unsaved. This does not permanently exclude a same-task rerun: documented reproduction of the original stochastic12-fold protocol may qualify after source-protocol parity, justified discrepancy tolerance and paired candidate/author folds are established. Original random fold identities are not recovered. A valid alternative requires source-protocol parity, logged rerun seed/fold manifests, justified predeclared published-result discrepancy tolerance and paired candidate/author folds; these are not yet established. Exact numeric Figure 3C category-scaled comparator and its complete fitted-input lineage are unresolved. OpenNeuro version 3.0.0 correspondence to publication inputs is not primary-source verified. Electrode area roster must reconcile the V1–V3/VOTC caption count conflict without changing the cohort. A same-task evaluator, justified region-wise meaningful-effect rule, dependence-aware uncertainty, protected episode and concrete access/resource budgets are not established.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-026/historical/task.pre-improvement.v1.json",
+      "bytes": 41949,
+      "sha256": "011bb6964239aa71109c08206af2a25a06910974e96a07862b3701f96958c0e6"
+    },
+    "notes": "Retain historical temporal-adaptation task and registered reconstruction implementation. Numerical reconstruction is calibration; superiority requires native candidate/author evaluation on paired folds from the original protocol, whether authenticated historical assignments or a properly qualified stochastic rerun."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

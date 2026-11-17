@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NEURAL-077 typed viewer action",
+  "description": "Runtime additionally enforces current condition, state, sample window width >=16, no zero scroll, finite exact types, UTF-8 byte limits and terminal first final response. Demo selection is unavailable in zero_shot.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "inspect"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "select"
+        },
+        "record": {
+          "enum": [
+            "query",
+            "demo1",
+            "demo2",
+            "demo3",
+            "demo4"
+          ]
+        }
+      },
+      "required": [
+        "action",
+        "record"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "window"
+        },
+        "start_sample": {
+          "type": "integer",
+          "minimum": -256,
+          "maximum": 752
+        },
+        "stop_sample": {
+          "type": "integer",
+          "minimum": -240,
+          "maximum": 768
+        }
+      },
+      "required": [
+        "action",
+        "start_sample",
+        "stop_sample"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "scroll"
+        },
+        "samples": {
+          "type": "integer",
+          "minimum": -1024,
+          "maximum": 1024
+        }
+      },
+      "required": [
+        "action",
+        "samples"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "zoom"
+        },
+        "factor": {
+          "enum": [
+            0.5,
+            2
+          ]
+        },
+        "center_sample": {
+          "type": "integer",
+          "minimum": -256,
+          "maximum": 767
+        }
+      },
+      "required": [
+        "action",
+        "factor",
+        "center_sample"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "gain"
+        },
+        "units_per_division": {
+          "enum": [
+            1,
+            2,
+            5,
+            10,
+            20,
+            50,
+            100,
+            200,
+            500,
+            1000
+          ]
+        }
+      },
+      "required": [
+        "action",
+        "units_per_division"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "channels"
+        },
+        "channels": {
+          "enum": [
+            [
+              "Cz"
+            ],
+            [
+              "Pz"
+            ],
+            [
+              "Cz",
+              "Pz"
+            ]
+          ]
+        }
+      },
+      "required": [
+        "action",
+        "channels"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "finalize"
+        },
+        "response": {
+          "type": "string",
+          "maxLength": 4096
+        }
+      },
+      "required": [
+        "action",
+        "response"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

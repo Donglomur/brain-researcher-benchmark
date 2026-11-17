@@ -1,19 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-023",
-  "source_id": "paper-method-023",
   "track": "paper",
   "title": "EEGPT: Pretrained Transformer for Universal and Reliable Representation of EEG Signals",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Predict whether a matrix-speller stimulus contains the attended character from its EEG event epoch. Current scope is the complete original PhysioP300 Table 4 panel, including all source subjects, EEGPT and original BENDR/BIOT/LaBraM controls, and all three reported metrics.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Predict whether a matrix-speller stimulus contains the attended character from its EEG event epoch. Current scope is the complete original PhysioP300 Table 4 panel, including all source subjects, EEGPT and original BENDR/BIOT/LaBraM controls, and all three reported metrics.",
+    "Source-paper comparison for PhysioP300 Table 4 AUROC with complete source comparison panel and BAC/Cohen kappa reporting: Primary source component metric is AUROC, higher better: probability that a target event receives a higher class-1 score than a nontarget, with half credit for ties. Probe concatenates all validation-epoch scores before binary metrics. Report BAC and Cohen kappa too; single-class support cannot be silently accepted as a valid AUROC."
+  ],
+  "success_criteria": [
+    "Evaluate the complete original PhysioP300 Table 4 task: all source subjects under LOSO, original EEGPT and BENDR/BIOT/LaBraM control conditions, and AUROC/BAC/Cohen kappa reporting. Unrelated S8 downstream tasks are not prerequisites for this selected panel win.",
+    "Resolve subject/recording/event support, epoch boundaries, scoring reduction, checkpoint and exposure protocol. Establish author-baseline calibration on the original population; protocol-equivalent stochastic reruns with recorded new seeds and justified calibration tolerance are valid.",
+    "Freeze candidate procedure, preprocessing and selection before final scoring; use training/development feedback during iteration, disclose historical public-test exposure, and pair candidate/reference comparisons on the same evaluated support.",
+    "Exceed the source EEGPT result under the original task with a justified predeclared effect and valid paired uncertainty rule, while retaining the complete source panel and reporting all original metrics and failures.",
+    "Keep changed preprocessing without source-parity evidence, new split rules, reduced cohorts and new adaptation regimes as separately labelled extensions. Local controls and successful reproduction alone cannot substitute for the published comparison.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-023",
   "canonical_position_one_based": 83,
   "paper_identity": {
     "url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/4540d267eeec4e5dbd9dae9448f0b739-Abstract-Conference.html",
     "publication_year": 2024,
     "venue": "NeurIPS"
   },
-  "primary_outputs": [
-    "Participant/session-held-out P300 decoding metrics; fine-tuning versus frozen-feature baseline under the same split."
-  ],
   "input_assets": {
     "routes": [
       "https://physionet.org/content/erpbci/1.0.0/"
@@ -168,105 +180,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "erpbci1.0.0 ODC Attribution1.0, open",
-        "Code Apache-2.0; pretrained-model dependencies must be pinned"
-      ],
-      "declared_overlap_group": "physionet-erpbci-1.0.0",
-      "existing_graph_evidence_leads": [],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Participant/session-held-out P300 decoding metrics; fine-tuning versus frozen-feature baseline under the same split."
-      ],
-      "construction_specificity": "P300 prediction is identified but exact paper metric, participant/session fold mapping, epoch/window/channel recipe and preprocessing path are not yet frozen.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Compare fine-tuning and frozen features with equal pretrained access, channel layout and labels.",
-      "Include a smaller supervised baseline; all normalization/channel mapping and model selection confined to training."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "P300 prediction is identified but exact paper metric, participant/session fold mapping, epoch/window/channel recipe and preprocessing path are not yet frozen.",
-        "Participant/session groups with all epochs grouped; checkpoint pretraining membership and downstream dataset overlap unresolved.",
-        "A public dataset and Apache2 code do not identify the required checkpoint or qualify the paper-wide claims. GPU estimate is unmeasured.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve electrode-layout or participant-shift robustness with matched pretraining, labels and adaptation budgets versus EEGPT and smaller supervised baselines."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Improve electrode-layout or participant-shift robustness with matched pretraining, labels and adaptation budgets versus EEGPT and smaller supervised baselines."
-      ],
-      "independent_panel_gate": "Participant/session groups with all epochs grouped; checkpoint pretraining membership and downstream dataset overlap unresolved.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": "single GPU",
-    "source_resource_evidence": "Resource class is an inspection-based estimate, not measured runtime.",
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "P300 prediction is identified but exact paper metric, participant/session fold mapping, epoch/window/channel recipe and preprocessing path are not yet frozen.",
-      "Participant/session groups with all epochs grouped; checkpoint pretraining membership and downstream dataset overlap unresolved.",
-      "A public dataset and Apache2 code do not identify the required checkpoint or qualify the paper-wide claims. GPU estimate is unmeasured.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Resolve the exact preprocessing entrypoint, participant/session split, metric and pretrained checkpoint identity/exposure before bounded schema qualification.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Resolve the exact preprocessing entrypoint, participant/session split, metric and pretrained checkpoint identity/exposure before bounded schema qualification.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -362,11 +275,82 @@
       "new_scientific_runs": 0
     }
   },
+  "resources": {
+    "roster_statement": "single GPU",
+    "source_resource_evidence": "Resource class is an inspection-based estimate, not measured runtime.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-023/improvement.v1.json",
+      "bytes": 13861,
+      "sha256": "f49797676a76733d120b0afcf70a0c3c24ff0b4f3a285cfda58a99ff75833941"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-023/historical/task.pre-improvement.v1.json",
+        "bytes": 19314,
+        "sha256": "8e2b7edffa105c95ac0cffdbbc3e2b4aa184d45c9236295a6084fca53ff1cd25"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-paper-method-023"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Inactive until preparation/protocol reconciliation. Once admitted, candidates may iterate on permitted original training/development subjects using fixed feedback and identical pretrained access; assessment metrics cannot guide subsequent revisions. Preserve the complete PhysioP300 panel and source control conditions.",
+    "candidate_freeze": "Commit the method, data/preprocessing manifest, pretrained state identity, adaptation/search procedure, stopping and selection rule, metric reduction, and resource/access limits before protected evaluation.",
+    "final_evaluation": "Evaluate all original PhysioP300 LOSO subjects and source repetition protocol against calibrated author/control reruns, allowing declared protocol-equivalent new randomness. Report the complete Table 4 metric panel and published scores separately. Preserve full S8 materials as history; unrelated datasets are outside this selected same-task win.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Use source-paper EEGPT as the success comparator. Author rerun is separately identified and must first calibrate against the published row. EEGNet, spectral ridge, fine-tuned variants and prospectively selected control mixtures remain secondary controls, never a replacement source-paper score."
+  },
+  "blocking_issues": [
+    "Paper and converter disagree on epoch length/onset; source-equivalent preparation has not been established.",
+    "Eight-subject converter and nine-subject probe conflict; biological identities, recordings and exclusions require reconciliation.",
+    "Converter output names may overwrite across recordings; complete source event support must be established.",
+    "The reporting epoch/selection semantics and fold-to-run reduction need source-supported reconciliation; exact historical seeds are not required for a documented protocol-equivalent rerun.",
+    "Checkpoint/pretraining exposure parity, calibrated author and original-control reruns, and an admitted working evaluator remain absent.",
+    "Meaningful effect, uncertainty assumptions, concrete access/resource budgets and protected evaluation episode remain unqualified."
+  ],
+  "holds": {
+    "task_specific": [
+      "Paper and converter disagree on epoch length/onset; source-equivalent preparation has not been established.",
+      "Eight-subject converter and nine-subject probe conflict; biological identities, recordings and exclusions require reconciliation.",
+      "Converter output names may overwrite across recordings; complete source event support must be established.",
+      "The reporting epoch/selection semantics and fold-to-run reduction need source-supported reconciliation; exact historical seeds are not required for a documented protocol-equivalent rerun.",
+      "Checkpoint/pretraining exposure parity, calibrated author and original-control reruns, and an admitted working evaluator remain absent.",
+      "Meaningful effect, uncertainty assumptions, concrete access/resource budgets and protected evaluation episode remain unqualified."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The complete original PhysioP300 Table 4 comparison panel is the selected same-task scope. Its published scores are recoverable, but the released preprocessing and training scripts disagree about subject membership and epoch boundaries, and the reporting/selection reduction is not sufficiently reconciled for a calibrated comparison. The broader S8 programme is preserved as history, without requiring unrelated downstream datasets for a PhysioP300 win. Paper and converter disagree on epoch length/onset; source-equivalent preparation has not been established. Eight-subject converter and nine-subject probe conflict; biological identities, recordings and exclusions require reconciliation. Converter output names may overwrite across recordings; complete source event support must be established. The reporting epoch/selection semantics and fold-to-run reduction need source-supported reconciliation; exact historical seeds are not required for a documented protocol-equivalent rerun. Checkpoint/pretraining exposure parity, calibrated author and original-control reruns, and an admitted working evaluator remain absent. Meaningful effect, uncertainty assumptions, concrete access/resource budgets and protected evaluation episode remain unqualified.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-023/historical/task.pre-improvement.v1.json",
+      "bytes": 19314,
+      "sha256": "8e2b7edffa105c95ac0cffdbbc3e2b4aa184d45c9236295a6084fca53ff1cd25"
+    },
+    "notes": "Preserve the original P300 registration and complete S8 source/inspection programme, including seven downstream datasets, reconstruction and prospective designs. Current success concerns the complete original PhysioP300 Table 4 panel; it neither requires unrelated S8 tasks nor claims a whole-programme win. No scientific run was made in this overhaul."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

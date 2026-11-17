@@ -1,19 +1,30 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-034",
-  "source_id": "paper-method-034",
   "track": "paper",
   "title": "MARBLE: interpretable representations of neural population dynamics using geometric deep learning",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Decode rat position within rat1 in Figure 5d; cross-animal consistency is a distinct secondary result.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Decode rat position within rat1 in Figure 5d; cross-animal consistency is a distinct secondary result.",
+    "Source-paper comparison for Figure 5d within-rat mean absolute position error: Mean absolute position error: sum(abs(predicted_position-true_position))/n on the original Figure 5d support, using32-dimensional embeddings and36-neighbor cosine decoding."
+  ],
+  "success_criteria": [
+    "Recover exact original Figure 5d query support, preprocessing, label access and authenticated checkpoint/recipe lineage.",
+    "Use mean error on all original2,000 observations with the source decoder and input regime; do not substitute helper median or1,999 support.",
+    "Qualify the numeric source result and author rerun separately, then freeze meaningful effect, dependence-aware uncertainty and fixed budgets before candidate iteration.",
+    "Preserve the four-rat clean/half-neuron comparator as a labelled extension; a win there is not a source-paper win.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-034",
   "canonical_position_one_based": 54,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41592-024-02582-2",
     "publication_year": 2025,
     "venue": "Nature Methods"
   },
-  "primary_outputs": [
-    "Held-out position MAE against CEBRA-time/behavior; cross-animal consistency and preprocessing-sensitivity outputs."
-  ],
   "input_assets": {
     "routes": [
       "https://dataverse.harvard.edu/api/access/datafile/7609512"
@@ -248,96 +259,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "MIT method code",
-        "Dataverse per-file/data-source terms must be retained"
-      ],
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Held-out position MAE against CEBRA-time/behavior; cross-animal consistency and preprocessing-sensitivity outputs."
-      ],
-      "assessment": "Fig5 rat hippocampal position MAE and cross-animal consistency are documented; full macaque/RNN/simulation claims are excluded.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "CEBRA-time and behavior-supervised CEBRA have different label access; report that explicitly and match preprocessing/decoding folds and temporal guards.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "The direct real-data file is in the author notebook despite the paper availability paragraph emphasizing simulations. Whole macaque/RNN/synthetic coverage is separate. Earlier contribution dates to2023.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve robustness to subsampling or cross-session observation changes while preserving dynamical comparisons and independent held-out behavior prediction."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Predeclared animal/session/time-block generalization with subsampling/observation-shift controls; held-out behavior must remain excluded from unsupervised representation selection.",
-      "retained_roster_proposal": [
-        "Improve robustness to subsampling or cross-session observation changes while preserving dynamical comparisons and independent held-out behavior prediction."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": "single GPU recommended",
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": "Resource class is an inspection-based estimate, not measured runtime."
-  },
-  "holds": {
-    "task_specific": [
-      "The direct real-data file is in the author notebook despite the paper availability paragraph emphasizing simulations. Whole macaque/RNN/synthetic coverage is separate. Earlier contribution dates to2023.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Inspect/pin the rat pickle schema in isolated intake, freeze the author Fig5 split and supervised-versus-unsupervised comparison, then lock Torch/PyG/CEBRA dependencies before reference execution.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Inspect/pin the rat pickle schema in isolated intake, freeze the author Fig5 split and supervised-versus-unsupervised comparison, then lock Torch/PyG/CEBRA dependencies before reference execution.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -457,11 +378,83 @@
       }
     ]
   },
+  "resources": {
+    "roster_resource_statement": "single GPU recommended",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Resource class is an inspection-based estimate, not measured runtime."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-034/improvement.v1.json",
+      "bytes": 9975,
+      "sha256": "0736abf582da026072c8f9af14e262404ba02a31b17e51b3b26efff5717b9396"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-034/historical/task.pre-improvement.v1.json",
+        "bytes": 24007,
+        "sha256": "457ff2e4b512123d50f5345e1f0e9b4f67254e193445772976c5cc6e1dfa08c3"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-paper-method-034",
+        "benchmarks-scientific_components-marble_fit_closed",
+        "paper-method-034-improvement-episode-v1"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-paper-method-034/implementations/registered-runtime/manifest.json",
+        "bytes": 10183,
+        "sha256": "ed0d4f3b9804fc766733d4e942861aa434be8c74f7b2cc8abe4d9fb3c042eeba"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Source-baseline admission first. Later iterate only with declared development feedback after original protocol/support is recovered; do not repurpose the four-rat extension as source evaluation.",
+    "candidate_freeze": "Freeze method, preprocessing, supervision, decoder, dimensionality and all selection decisions before one admitted final original-support evaluation.",
+    "final_evaluation": "Compare against both authenticated published mean error and qualified author rerun under the same original protocol. Public exposure must be recorded; isolation cannot make published targets unseen.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Official checkpoint metadata is a recovery route, not a baseline score. Locally authored train-only comparators are separately labelled and do not repair publication-lineage discrepancies."
+  },
+  "blocking_issues": [
+    "Numeric source baseline and checkpoint bytes/training provenance not admitted.",
+    "Paper/PCA 5, decoder/PCA 20 and training/PCA 10 correspondence unresolved.",
+    "Published 2,000 versus  helper1,999 query support, physical time units and original supervision unresolved.",
+    "Meaningful effect, independent uncertainty units, fixed access/resource budgets and qualified same-task evaluator missing."
+  ],
+  "holds": {
+    "task_specific": [
+      "Numeric source baseline and checkpoint bytes/training provenance not admitted.",
+      "Paper/PCA 5, decoder/PCA 20 and training/PCA 10 correspondence unresolved.",
+      "Published 2,000 versus  helper1,999 query support, physical time units and original supervision unresolved.",
+      "Meaningful effect, independent uncertainty units, fixed access/resource budgets and qualified same-task evaluator missing."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Figure 5d has a genuine ordered mean-position-error endpoint, but the paper and pinned author notebooks disagree on preprocessing/support and checkpoint training provenance is missing. A four-rat clean/half-neuron evaluation, median error or1,999 query rows cannot replace the original 2,000-observation within-rat comparison. Numeric source baseline and checkpoint bytes/training provenance not admitted. Paper/PCA 5, decoder/PCA 20 and training/PCA 10 correspondence unresolved. Published 2,000 versus  helper1,999 query support, physical time units and original supervision unresolved. Meaningful effect, independent uncertainty units, fixed access/resource budgets and qualified same-task evaluator missing.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-034/historical/task.pre-improvement.v1.json",
+      "bytes": 24007,
+      "sha256": "457ff2e4b512123d50f5345e1f0e9b4f67254e193445772976c5cc6e1dfa08c3"
+    },
+    "notes": "Keep fit-closed-comparator, complete48 fit/96 reference coverage and original graders unchanged as calibration/extension evidence. Reuse source-admission findings; do not treat newly authored four-rat support as Figure 5d equivalence."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

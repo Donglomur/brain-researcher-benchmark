@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-replacement-005",
-  "source_id": "paper-method-replacement-005",
   "track": "paper",
   "title": "Neural Encoding and Decoding at Scale",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Predict neural spiking from all four behaviors and each behavior individually, and decode choice, block, wheel speed and whisker motion from spikes after multi-session pretraining and target-session fine-tuning. Preserve the full endpoint vector.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Predict neural spiking from all four behaviors and each behavior individually, and decode choice, block, wheel speed and whisker motion from spikes after multi-session pretraining and target-session fine-tuning. Preserve the full endpoint vector.",
+    "Source-paper comparison for All-behavior neural encoding bits/spike on the original ten held-out animals after multi-session pretraining and fine-tuning: Encoding: each neuron has [Poisson log likelihood(prediction)-log likelihood(evaluation-mean null)]/(total spikes*ln(2)). Choice/block use ordinary accuracy; wheel/whisker use un-clipped R2 across flattened test trials/time bins. Preserve source zero-rate/undefined-neuron behavior and audit its effects."
+  ],
+  "success_criteria": [
+    "Recover the exact original cohort, eligible units, aligned trials, input masks, preprocessing and 70/10/20 partitions; resolve paper/code discrepancies against source result provenance.",
+    "Run native author NEDS and the frozen candidate with identical pretraining/fine-tuning exposure and fixed resource budgets; retain all 74 training and ten held-out sessions without a convenient subset.",
+    "Surpass published 0.27 encoding bits/spike and the qualified author rerun by the predeclared meaningful effect and uncertainty rule on the same original endpoint.",
+    "Evaluate all single-behavior encoding and four decoding outcomes with a predeclared joint/trade-off rule; an encoding improvement alone cannot silently replace the registered simultaneous encoding/decoding task.",
+    "Do not call a new animal split, corrected-preprocessing variant, local ridge win, improved p-value or reproduced figure a source-paper win; report such results separately as calibration or extensions.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-replacement-005",
   "canonical_position_one_based": 57,
   "paper_identity": {
     "url": "https://proceedings.mlr.press/v267/zhang25bw.html",
     "publication_year": 2025,
     "venue": "ICML"
   },
-  "primary_outputs": [
-    "Neural prediction bits/spike and behavioral decoding R²/accuracy by session for author multitask model versus task-specific masking/training baselines.",
-    "Quantify held-out-session transfer and the trade-off between neural encoding and behavior decoding under explicit input masks."
-  ],
   "input_assets": {
     "routes": [
       "https://openalyx.internationalbrainlab.org"
@@ -313,102 +324,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Code MIT; IBL public release terms apply to recording data; snapshot-specific licensing to be preserved at acquisition."
-      ],
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Neural prediction bits/spike and behavioral decoding R²/accuracy by session for author multitask model versus task-specific masking/training baselines.",
-        "Quantify held-out-session transfer and the trade-off between neural encoding and behavior decoding under explicit input masks."
-      ],
-      "assessment": "Multitask versus task-specific masking/decoding and held-out-session finetuning are documented; full aggregate cohort totals differ across paper/README.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Behavior/neural targets may leak through another task input; task-specific mask auditing is central. RRR/BrainWide projects can share IBL sessions and are not independent cohorts.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Exact ONE release hash/file manifest must be frozen before numerical reference qualification; author loader and exact session IDs are present.",
-        "README/cohort counts and paper totals differ; use versioned membership lists and document exclusions, not a guessed count.",
-        "Masked target neural or behavior information must not become visible via other variables; enforce task-specific masks and trial/session holdout.",
-        "Partial cohort experiments are declared bounded projects and cannot substitute for all aggregate paper claims.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve cross-session generalization or Pareto performance across neural and behavioral tasks while matching inputs, session identities and training compute."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Whole-session holdout with explicit task masks and matched supervised/finetuning budgets; compare Pareto neural/behavior metrics, not an average hiding trade-offs.",
-      "retained_roster_proposal": [
-        "Improve cross-session generalization or Pareto performance across neural and behavioral tasks while matching inputs, session identities and training compute."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": "GPU. Author paper reports16RTX8000(48GB)GPUs for full pretraining under2days and a singleA40 under2h for single-session training; these are author reports, not measurements.",
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": "Unmeasured planning estimate unless an author-reported figure is separately stated."
-  },
-  "holds": {
-    "task_specific": [
-      "Exact ONE release hash/file manifest must be frozen before numerical reference qualification; author loader and exact session IDs are present.",
-      "README/cohort counts and paper totals differ; use versioned membership lists and document exclusions, not a guessed count.",
-      "Masked target neural or behavior information must not become visible via other variables; enforce task-specific masks and trial/session holdout.",
-      "Partial cohort experiments are declared bounded projects and cannot substitute for all aggregate paper claims.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Cross-check exact session lists/exclusions and field masks against the paper, select a declared cohort preserving central multitask comparisons, then freeze source assets and baseline compute before training.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Cross-check exact session lists/exclusions and field masks against the paper, select a declared cohort preserving central multitask comparisons, then freeze source assets and baseline compute before training.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -466,11 +381,81 @@
       }
     ]
   },
+  "resources": {
+    "roster_resource_statement": "GPU. Author paper reports16RTX8000(48GB)GPUs for full pretraining under2days and a singleA40 under2h for single-session training; these are author reports, not measurements.",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Unmeasured planning estimate unless an author-reported figure is separately stated."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/improvement.v1.json",
+      "bytes": 12936,
+      "sha256": "8ff082fb4c8bd7cb5ee74d049d606c07acffd8a53479c6e51b2051c6cbd538af"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-005/historical/task.pre-improvement.v1.json",
+        "bytes": 26106,
+        "sha256": "2b84b970780fb271fdfddaa2b459fc41f2db4580cccb923e81c6ded057fd0f3a"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-replacement-005-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate with the original source pretraining sessions and target-session training/validation partitions, preserving task masks. Use validation to select methods and hyperparameters; maintain explicit separate neural and behavioral feedback.",
+    "candidate_freeze": "Freeze candidate and author implementations, original-object/unit/trial manifests, mask contract, preprocessing resolution, hyperparameters, seeds, pretrained exposure, resources and joint endpoint decision before final scoring.",
+    "final_evaluation": "Evaluate all original held-out test trials for the same ten target animals after source-permitted fine-tuning; compare the complete endpoint vector with the authentic author baseline. Preserve per-animal results and disclose original public test exposure. A different split remains an extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep final published NEDS scores, a future native rerun, local engineering ridge scores and any separately verified current-SOTA results distinct. A rerun with repaired preprocessing cannot be attributed to the published paper without provenance."
+  },
+  "blocking_issues": [
+    "Authenticate historical ONE object revisions, eligible neurons/trials and exact original split identities; reconcile 2-Hz paper versus >5-Hz code eligibility.",
+    "Resolve presplit behavioral scaling, validity-mask combination and camera lineage against original result-producing artifacts; silent leakage repairs create a changed task.",
+    "Verify the complete native evaluation path and author checkpoint provenance, including full-trial versus potential final-batch behavior; qualify all source endpoint values.",
+    "Authenticate EID/probe/animal joins, including the training animal with two insertions, before uncertainty calculations.",
+    "Qualify native author rerun, source-session completeness, meaningful effect and joint multi-endpoint inference; the constructed ridge and generated controls cannot satisfy these gates.",
+    "Fix concrete training/validation/final-query and resource budgets with protected final scoring before opening an improvement episode."
+  ],
+  "holds": {
+    "task_specific": [
+      "Authenticate historical ONE object revisions, eligible neurons/trials and exact original split identities; reconcile 2-Hz paper versus >5-Hz code eligibility.",
+      "Resolve presplit behavioral scaling, validity-mask combination and camera lineage against original result-producing artifacts; silent leakage repairs create a changed task.",
+      "Verify the complete native evaluation path and author checkpoint provenance, including full-trial versus potential final-batch behavior; qualify all source endpoint values.",
+      "Authenticate EID/probe/animal joins, including the training animal with two insertions, before uncertainty calculations.",
+      "Qualify native author rerun, source-session completeness, meaningful effect and joint multi-endpoint inference; the constructed ridge and generated controls cannot satisfy these gates.",
+      "Fix concrete training/validation/final-query and resource budgets with protected final scoring before opening an improvement episode."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The final ICML paper reports ordered encoding/decoding endpoints, numerical multi-session NEDS baselines and the original held-out-animal design. An executable same-task comparison is blocked by unresolved original data/trial provenance, paper/code preprocessing discrepancies and native baseline qualification. The local ridge reference is not the paper model. Authenticate historical ONE object revisions, eligible neurons/trials and exact original split identities; reconcile 2-Hz paper versus >5-Hz code eligibility. Resolve presplit behavioral scaling, validity-mask combination and camera lineage against original result-producing artifacts; silent leakage repairs create a changed task. Verify the complete native evaluation path and author checkpoint provenance, including full-trial versus potential final-batch behavior; qualify all source endpoint values. Authenticate EID/probe/animal joins, including the training animal with two insertions, before uncertainty calculations. Qualify native author rerun, source-session completeness, meaningful effect and joint multi-endpoint inference; the constructed ridge and generated controls cannot satisfy these gates. Fix concrete training/validation/final-query and resource budgets with protected final scoring before opening an improvement episode.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/historical/task.pre-improvement.v1.json",
+      "bytes": 26106,
+      "sha256": "2b84b970780fb271fdfddaa2b459fc41f2db4580cccb923e81c6ded057fd0f3a"
+    },
+    "notes": "Retain the original registration and initial-evaluator-v1 for calibration. Its complete-cohort packets and source-derived metric kernels are useful engineering checks, but its train-only ridge, repaired inclusion/scaling choices and conditional animal bootstrap are prospective constructions rather than source-author results."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

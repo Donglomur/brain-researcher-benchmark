@@ -1,0 +1,192 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-011",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The source defines ordered behavioral R2 and neural-state endpoints, but the complete published MINT score vector, exact original memberships, and full author baseline route are not recovered. The bundled full-paper interface contains 17 distinct analysis obligations; neither its earlier Area2-only example nor the four-dataset behavioral panel establishes full-paper improvement.",
+  "source_paper": {
+    "title": "An emerging view of neural geometry in motor cortex supports high-performance decoding",
+    "url": "https://elifesciences.org/articles/89421"
+  },
+  "evidence": [
+    {
+      "id": "mint-paper-task",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11790250/",
+      "locator": "Results: Behavioral decoding across multiple datasets; Comparison to other decoders; Figures 4–5; Methods Datasets and Tables 2–4",
+      "supports": "Four-dataset primary behavioral panel uses 15 behavioral groups and causal neural history. The paper also analyzes nine empirical datasets, simulations, a multitask network, limited data, neuron loss, and NLB neural-state estimation."
+    },
+    {
+      "id": "mint-paper-metric",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11790250/",
+      "locator": "Methods: Decoding R2; Hyperparameter optimization; Neural Latents Benchmark; Table 5",
+      "supports": "Defines 5-ms behavioral coefficient of determination, circular treatment of phase, averaging within groups, ten network initializations, training-only model selection, and separate NLB endpoints."
+    },
+    {
+      "id": "mint-code-scope",
+      "kind": "author_code",
+      "url": "https://github.com/seanmperkins/mint/blob/347206a402ac71ea528752365eebea17e3c770da/README.md",
+      "locator": "Getting Started; Running MINT; Repository Structure",
+      "supports": "Author release is explicitly a basic implementation; some paper variants and search automation are omitted. Provides Area2_Bump, MC_Maze, and MC_RTT examples and a separate comparator repository."
+    },
+    {
+      "id": "mint-code-score",
+      "kind": "author_code",
+      "url": "https://github.com/seanmperkins/mint/blob/347206a402ac71ea528752365eebea17e3c770da/run/utils/evaluate_and_save.m",
+      "locator": "evaluate_and_save and compute_R2",
+      "supports": "Bins reference/prediction traces to 5 ms, concatenates trial samples, removes insufficient-history NaN predictions, and computes 1−SSE/SST for each behavior dimension."
+    },
+    {
+      "id": "mint-code-area2",
+      "kind": "author_code",
+      "url": "https://github.com/seanmperkins/mint/blob/347206a402ac71ea528752365eebea17e3c770da/run/%2Bconfig/area2_bump.m",
+      "locator": "trial_alignment; test_alignment; trajectory settings; causal/history configuration",
+      "supports": "Area2 example uses movement-aligned evaluation −100 to +500 ms, 25-ms smoothing, 20-ms spike bins, and a 240-ms causal history. This verifies one example, not all paper variants."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate behavior from simultaneous neural spikes, preserving the source behavioral variables and the distinct neural-state estimation, generalization, neuron-loss and simulation analyses. Figure 5 assesses 15 groups over four datasets; Figure 8 adds limited-data sessions. These cannot be collapsed with NLB bits/spike or timing into one invented scalar.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "The original nine empirical datasets are Area2_Bump, DMFC_RSG, MC_Cycle, MC_Maze, MC_Maze-L/M/S, MC_RTT and MC_PacMan, plus maze simulations and the multitask network. Source data routes are documented, but exact immutable payload equivalence, generated realizations, and historical NLB submission assets remain unbound.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric",
+        "mint-code-scope"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Table 2 identifies neural populations and trial counts: for the primary panel, Area2_Bump 65 neurons/364 trials, MC_Cycle112/273, MC_Maze182/2295 and MC_RTT130/1080. Full paper populations and source inclusion masks must be frozen; these counts alone do not authenticate unit or trial identities.",
+      "evidence_ids": [
+        "mint-paper-task"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Table 4 specifies primary training/test counts272/92,174/99,1721/574 and810/268 respectively; MC_RTT excludes its first two candidate test segments for shared history support. Original membership/order, validation folds and seeds are unbound. NLB Table5 has distinct hidden trials and held-in/held-out neurons; a fresh split is an extension.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original behavioral decoders receive matched trailing spike observations with20-ms bins, equal original training data and causal information boundaries; source factorial acausal cells remain separately named. NLB permits its own within-epoch neural-state inputs, never hidden evaluation labels.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Tables3–4 specify dataset-dependent alignment, Gaussian smoothing, trajectory averaging/dimensionality and evaluation epochs. Source Area2 config confirms its conventions, but authentic implementation of all datasets, MC_RTT AutoLFADS libraries, phase treatment and full variants is not established.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric",
+        "mint-code-area2"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Behavioral R2 is1−sum(y−prediction)^2/sum(y−mean(y))^2 over the original evaluation samples at5-ms resolution; phase uses circular distances and means. Source NLB bits/spike, PSTH R2 and velocity R2, as well as timing, remain separate estimands. Pearson correlation and MAE reported in the text are not interchangeable with Figure5 R2.",
+      "evidence_ids": [
+        "mint-paper-metric",
+        "mint-code-score"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Average per-dimension R2 within each source behavioral group; average groups for each dataset. Neural network results average ten seed runs. Preserve per-group/per-dataset outputs and all source analysis families; the paper does not define a global accuracy scalar over its17 registered modules.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original behavioral-group R2 vector (Figures5 and8); separate original neural-state and robustness endpoints",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "description": "Exact MINT R2 values for the full original vector were not recovered from reviewed text/code. The paper reports11/15 best behavioral groups and37/42 expressive-method comparisons, but these counts are not an R2 baseline. Reported velocity correlations and MAEs are distinct endpoints and are not substituted.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric",
+        "mint-code-scope"
+      ],
+      "value": null
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "No authenticated author-baseline rerun on the exact original assessment has been established; source instructions are not an executed score.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric",
+        "mint-code-scope"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Justify an R2 gain relative to trial-level reference variability and the original behavior-specific scales across the complete original panel; the text’s negligible ΔR2<0.004 observation is descriptive, not an authorized universal margin. Source-score recovery and a full-family decision rule are still required.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric",
+        "mint-code-scope"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Recover the source trial-bootstrap conventions and predeclare paired trial/contiguous-block resampling appropriate to each source analysis; aggregate seeds separately from biological units and account for multiple endpoint claims. Exact interval coverage and decision rule remain unapproved.",
+      "independent_unit": "Held-out trials within original recordings; contiguous blocks for temporally adjacent MC_RTT segments; animal/session scope for any population generalization. Seeds and behavior dimensions are not independent biological replicates.",
+      "rationale": "The source bootstraps trials and averages network seeds, but full-module dependencies and original trial identities are not established; no universal significance threshold is assigned.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric",
+        "mint-code-scope"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover source numerical performance for every original retained endpoint and authenticate the corresponding data, memberships, preprocessing and author implementation.",
+      "Candidate improvement must be paired with MINT on the identical original task; freeze any primary comparison and non-degradation rule across the original metric family before final scoring.",
+      "Retain the full nine-empirical-dataset and original simulation/network scope of this registration; no Area2-only or four-dataset result may count as full-paper superiority.",
+      "Keep causal and acausal access, limited-data sessions, neural-loss masks and historical NLB evaluation distinct; a new split or newly generated simulation is a separately labeled extension.",
+      "Establish a justified effect margin and dependence-aware uncertainty; beating reconstruction tolerance or a local authored surrogate is not success."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The source-paper comparator and a rerun of that method are distinct from current SOTA. No current-SOTA claim or verified contemporary comparison is made.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After baseline and original membership recovery, iterate only on original training data and training-derived validation feedback; retain all evaluated attempts and original component-specific access boundaries.",
+    "candidate_freeze": "Freeze executable method, preprocessing, hyperparameters, seed policy, all endpoint choices and access/resource ledgers before original final assessment.",
+    "final_evaluation": "Replay the frozen method and authenticated MINT baseline across the original complete scope with paired output-level comparisons; final outputs do not become subsequent tuning feedback.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The pinned basic MATLAB release is a baseline route for its supported examples only. Missing variants must be recovered faithfully; locally authored replacements, reconstruction success and new-split baselines cannot stand in for source MINT."
+  },
+  "blocking_issues": [
+    "Complete exact published MINT score vector is unavailable in the reviewed paper text and code; no invented aggregate score.",
+    "Original data identities, train/test membership, search folds, neural-loss masks and simulation/network realizations need authentication.",
+    "Pinned author code omits paper variants and hyperparameter-search implementation; native equivalence for the complete17-module interface is not established.",
+    "Historical NLB evaluator/submission/version and hidden-label access authority are not bound; no hidden labels were inspected.",
+    "Meaningful-effect and dependence-aware decision rules and concrete candidate access/compute budgets are not fixed."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the original task, full-motormint-v1 interface, original graders and evidence. Its selected four-dataset predecessor and broader17-module construction are calibration/design artifacts; neither engineering controls nor historical R2 reconstruction is active improvement success."
+  }
+}

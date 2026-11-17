@@ -1,20 +1,30 @@
 {
   "schema_version": 1,
   "id": "PAPER-FIND-REP-003",
-  "source_id": "FIND-REP-003",
   "track": "paper",
   "title": "Mouse sensorimotor cortex reflects complex kinematic details during reaching and grasping",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Decode all 24 forelimb joint-angle trajectories from M1-fl and S1-fl neural activity for the original Figure 5 reaching/grasping task. Joint velocities, lagged variants and optogenetic disruption are separate analyses.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Decode all 24 forelimb joint-angle trajectories from M1-fl and S1-fl neural activity for the original Figure 5 reaching/grasping task. Joint velocities, lagged variants and optogenetic disruption are separate analyses.",
+    "Source-paper comparison for Figure 5 held-out variance explained per joint and source mouse/area summary: For every joint and held-out fold, VE = 1 - Var(y - yhat)/Var(y), with MATLAB sample-variance semantics over concatenated test-trial timepoints. Higher is better. This differs from 1 - SSE/SST when residual means are nonzero."
+  ],
+  "success_criteria": [
+    "Recover the numeric original Figure 5 score panel and reproduce the source author decoder on all ten sessions and all 24 joints.",
+    "Bind original folds, RADICaL inputs, cell selection, PCA exposure and exact source VE formula before candidate iteration.",
+    "Predeclare the source-summary comparison and meaningful effect/uncertainty so a favorable subset of joints, mice or areas cannot establish success.",
+    "A lower reconstruction error to saved figures, a gain over the local phase template, a new split or the separate optogenetic histogram does not establish a source-paper win.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-REP-003",
   "canonical_position_one_based": 16,
   "paper_identity": {
     "url": "https://doi.org/10.7554/eLife.106270.3",
     "publication_year": 2026,
     "venue": "eLife"
   },
-  "primary_outputs": [
-    "Recompute neural encoding/decoding of joint motion and reach/grasp dynamics in M1 versus S1.",
-    "Test timing and detailed kinematics of movement disruption under supplied cortical interventions."
-  ],
   "input_assets": {
     "routes": [
       "https://figshare.com/articles/dataset/Data_from_Mouse_sensorimotor_cortex_reflects_complex_kinematic_details_during_reaching_and_grasping_eLife_2025/28326998"
@@ -351,115 +361,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "recorded_terms": {
-        "data": {
-          "value": 1,
-          "name": "CC BY 4.0",
-          "url": "https://creativecommons.org/licenses/by/4.0/"
-        },
-        "data_access": "public repository metadata inspected; no recording payload downloaded",
-        "code": "Repository license requires per-repository confirmation before redistribution; access is public."
-      },
-      "record_conflicts": [],
-      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
-      "overlap_group": null
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "central_outputs_in_saved_source_contract": [
-        "Recompute neural encoding/decoding of joint motion and reach/grasp dynamics in M1 versus S1.",
-        "Test timing and detailed kinematics of movement disruption under supplied cortical interventions."
-      ],
-      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
-      "missing_or_unfrozen_endpoint_details": "Specify central M1/S1 kinematic and disruption outputs; raw segmentation/pose extraction is not revalidated and five mice constrain animal inference."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Match movement phase, detailed joint features and trial sampling; do not let adjacent video frames cross splits. Intervention effect and decoding accuracy have different estimands."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Specify central M1/S1 kinematic and disruption outputs; raw segmentation/pose extraction is not revalidated and five mice constrain animal inference.",
-        "Match movement phase, detailed joint features and trial sampling; do not let adjacent video frames cross splits. Intervention effect and decoding accuracy have different estimands.",
-        "Only five mice; frame-level accuracy is not independent-animal generalization.",
-        "Processed calcium and tracked kinematics do not support revalidating raw segmentation or pose extraction.",
-        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-        "Execute and independently audit references, controls, grading and measured resources.",
-        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
-      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Hold out mice and sessions, compare movement-phase-only against detailed kinematic predictors, and propagate trial/animal uncertainty rather than treating frames as independent."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "independent_panel_not_established_in_inspected_evidence",
-      "proposed_improvement": [
-        "Hold out mice and sessions, compare movement-phase-only against detailed kinematic predictors, and propagate trial/animal uncertainty rather than treating frames as independent."
-      ],
-      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
-      "special_gate": "No completed independent improvement result is established here."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "source_roster_estimate_or_statement": {
-      "estimate": "CPU workstation; multi-GB MAT release; hours for main analyses estimated, optional latent-model fitting additional.",
-      "basis": "File-size metadata and static source inspection; compute is estimated, not measured."
-    },
-    "measured_or_static_facts_from_existing_authoring": [],
-    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
-  },
-  "holds": {
-    "task_specific": [
-      "Specify central M1/S1 kinematic and disruption outputs; raw segmentation/pose extraction is not revalidated and five mice constrain animal inference.",
-      "Match movement phase, detailed joint features and trial sampling; do not let adjacent video frames cross splits. Intervention effect and decoding accuracy have different estimands.",
-      "Only five mice; frame-level accuracy is not independent-animal generalization.",
-      "Processed calcium and tracked kinematics do not support revalidating raw segmentation or pose extraction.",
-      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-      "Execute and independently audit references, controls, grading and measured resources.",
-      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Bind mouse/session/trial joins across neural and optogenetic files, then freeze one kinematic-versus-phase contrast and its independent animal uncertainty.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Bind mouse/session/trial joins across neural and optogenetic files, then freeze one kinematic-versus-phase contrast and its independent animal uncertainty.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -490,11 +391,81 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "source_roster_estimate_or_statement": {
+      "estimate": "CPU workstation; multi-GB MAT release; hours for main analyses estimated, optional latent-model fitting additional.",
+      "basis": "File-size metadata and static source inspection; compute is estimated, not measured."
+    },
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-REP-003/improvement.v1.json",
+      "bytes": 11196,
+      "sha256": "503bef245a651d8dd38e8b826055018a197ef289d6907a3d5cfc29b6e7583951"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-REP-003/historical/task.pre-improvement.v1.json",
+        "bytes": 24810,
+        "sha256": "6158f36058f07a4112a70cbca57d13e26fcfe9ce61a2384ba4f44f0c8de12a36"
+      },
+      "implementation_ids": [
+        "construction-paper-find-rep-003-initial-evaluator-v1",
+        "construction-opto-authentic-delivery-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending the original score panel and matched source route. Subsequent method iteration must use training and designated validation feedback under the declared source input condition.",
+    "candidate_freeze": "Freeze all trial identifiers, cell-selection and PCA choices, source fold manifest, candidate method, original summary comparison and uncertainty rule before final scoring.",
+    "final_evaluation": "Compare both methods on identical original folds and all eligible mouse/area/joint outputs; retain per-mouse paired results and source figure reductions. New held-animal evaluation is an extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The author ridge/RADICaL decoder is the baseline. The locally authored phase template is a diagnostic control, not the published method, and has no authority to define paper victory."
+  },
+  "blocking_issues": [
+    "Numeric published per-joint/mouse VE baseline and exact comparable scalar or multivariate decision remain unrecovered.",
+    "Complete versioned source inputs and original fold manifest have not been authenticated or executed.",
+    "Current normalized scorer lacks source neural fitting/PCA/ROI/ridge parity and uses a prospective comparator/aggregation.",
+    "Meaningful effect, small-sample mouse-level uncertainty, concrete access/resource budgets and working same-task admission remain unfinished."
+  ],
+  "holds": {
+    "task_specific": [
+      "Numeric published per-joint/mouse VE baseline and exact comparable scalar or multivariate decision remain unrecovered.",
+      "Complete versioned source inputs and original fold manifest have not been authenticated or executed.",
+      "Current normalized scorer lacks source neural fitting/PCA/ROI/ridge parity and uses a prospective comparator/aggregation.",
+      "Meaningful effect, small-sample mouse-level uncertainty, concrete access/resource budgets and working same-task admission remain unfinished."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Figure 5 defines a defensible original 24-joint decoding task and author code fixes its variance-explained calculation, but the published per-joint/per-mouse numerical baseline has not been recovered or rerun. The current scorer compares to a newly authored phase template and aggregates differently from the paper; beating that template is not beating the paper. Numeric published per-joint/mouse VE baseline and exact comparable scalar or multivariate decision remain unrecovered. Complete versioned source inputs and original fold manifest have not been authenticated or executed. Current normalized scorer lacks source neural fitting/PCA/ROI/ridge parity and uses a prospective comparator/aggregation. Meaningful effect, small-sample mouse-level uncertainty, concrete access/resource budgets and working same-task admission remain unfinished.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-REP-003/historical/task.pre-improvement.v1.json",
+      "bytes": 24810,
+      "sha256": "6158f36058f07a4112a70cbca57d13e26fcfe9ce61a2384ba4f44f0c8de12a36"
+    },
+    "notes": "Retain normalized joint-angle scorer and optogenetic timing component. Their local phase-template delta and prospective equal-mouse inference are useful diagnostics but do not replace the original Figure 5 method or performance baseline."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

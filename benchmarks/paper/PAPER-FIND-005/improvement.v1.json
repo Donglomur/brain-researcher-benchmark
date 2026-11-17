@@ -1,0 +1,191 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-005",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The broad regional representation registration includes genuine original decoding endpoints. However, the reviewed paper/code do not establish the exact original regional score vector and complete cohort/scoring manifest needed for a paper comparison. The local single-cell significance/fraction evaluator cannot substitute for source population decoding. A new cross-mouse split or pooled scalar would be an extension.",
+  "source_paper": {
+    "title": "A brain-wide map of neural activity during complex behaviour",
+    "url": "https://doi.org/10.1038/s41586-025-09235-0"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12408349/",
+      "locator": "Methods: Neural analyses; Inclusion criteria; Overview of decoding; Decoding target variables; Decoding cross-validation; Decoding significance testing with null distributions",
+      "supports": "Original regional decoding uses balanced accuracy for stimulus/choice/feedback and R-squared for wheel variables, with repeated nested within-session cross-validation and null-corrected regional effects."
+    },
+    {
+      "id": "loader",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/bwm_loading.py",
+      "locator": "bwm_query; bwm_units; load_good_units; filter_units_region; filter_sessions",
+      "supports": "The 2023_12_bwm_release fixture, unit-version check and unit/session/region QC define the source loading route; a complete published scoring roster still needs reconciliation."
+    },
+    {
+      "id": "settings",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/settings_for_BWM_figure/settings_stimside.py",
+      "locator": "TARGET, align_time, time_window, n_runs, estimator_kwargs and trial-mask settings",
+      "supports": "Stimulus-side decoding uses nonzero contrast and 0-100 ms stimulus-aligned input; pinned logistic maximum iterations differs from the manuscript."
+    },
+    {
+      "id": "decoder",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/functions/decoding.py",
+      "locator": "run-specific random seeds; shuffled KFold; balanced_accuracy_score/r2_score; concatenated prediction scoring",
+      "supports": "Author code supplies deterministic run seeds and nested scoring machinery, but no rerun result is established by this inspection."
+    },
+    {
+      "id": "outputs",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/functions/process_outputs.py",
+      "locator": "create_pdtable_from_raw and check_scores",
+      "supports": "Real/null scores are averaged over runs; predictions can be rescored; summary effects retain session and regional identities."
+    },
+    {
+      "id": "pipeline",
+      "kind": "author_code",
+      "url": "https://github.com/int-brain-lab/paper-brain-wide-map/blob/118fc36cb3602934466ad2c6087c2b3b441f9f1f/brainwidemap/decoding/README.md",
+      "locator": "Full-cohort decoding and summary-table generation workflow",
+      "supports": "The source provides a complete-cohort execution route. Debugging subsets are not equivalent to the paper cohort."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Decode source stimulus side, choice, feedback and wheel variables by brain region; keep endpoint identities separate and preserve the complete registered regional representation scope.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "IBL 2023_12_bwm_release with source sorted-spike/trial loaders and unit-version verification.",
+      "evidence_ids": [
+        "loader"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The paper reports 139 mice, 459 sessions/699 insertions, and 201 analyzed regions/62,857 neurons. The exact endpoint-specific session/unit/region manifest and paper eligibility parity are not frozen here.",
+      "evidence_ids": [
+        "paper",
+        "loader"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Nested fivefold random interleaved trial CV within each session; ten repetitions for binary targets and two for wheel targets. Retain original fold/seed rules; mouse-held-out evaluation would change the task.",
+      "evidence_ids": [
+        "paper",
+        "decoder"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source-QC neural population spikes per session/region and declared event windows; behavioral targets are labels, not additional decoder features.",
+      "evidence_ids": [
+        "paper",
+        "settings"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source windows and QC are documented, but manuscript logistic max_iter=20000 versus pinned stimulus config max_iter=1000 and downstream region/unit eligibility require reconciliation before baseline replay.",
+      "evidence_ids": [
+        "paper",
+        "settings",
+        "loader"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Binary balanced accuracy is the mean of class recalls; continuous wheel R-squared is 1-SSE/SST. Use each original target metric and source null correction without replacing them with significance or fraction-responsive scores.",
+      "evidence_ids": [
+        "paper",
+        "decoder"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Score concatenated outer-test predictions per run, average runs per session, then report regional median of session score minus its null median. Significance combines session evidence separately.",
+      "evidence_ids": [
+        "paper",
+        "outputs"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original per-target regional decoding effect vector: balanced accuracy or R-squared, with source session-null correction",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Exact numeric values for the original endpoint-by-region comparison vector were not recovered. Figure descriptions and significance counts are not numeric performance baselines.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Pinned decoder and output-processing route exists but has not been replayed or reconciled to manuscript settings and full source coverage.",
+      "evidence_ids": [
+        "decoder",
+        "outputs",
+        "pipeline"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "An interpretable task-specific gain for each original metric and a rule across the full endpoint/region family must be declared after baseline recovery; no universal margin is assumed.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired candidate-versus-author analysis preserving source folds and all sessions from each mouse, with appropriate multiple-endpoint treatment; no valid superiority rule has been frozen.",
+      "independent_unit": "Mouse for biological uncertainty; repeated folds, sessions and units within mouse are not independent replicates.",
+      "rationale": "The paper null-significance analysis asks whether information is present, not whether a candidate improves the author decoder.",
+      "evidence_ids": [
+        "paper",
+        "decoder"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover and pin the original numerical per-target/per-region baseline, masks, folds and coverage before admitting an improvement episode.",
+      "Replay the source decoder on its original within-session task and distinguish that rerun score from the published values.",
+      "Candidate and author comparator must share inputs, preprocessing, split, metric, aggregation and declared budgets; no dropped regions, easier target subsets or newly pooled score can establish paper superiority.",
+      "Freeze the candidate before final comparison and satisfy a justified meaningful-effect and uncertainty rule. More significant regions or smaller p-values alone do not qualify.",
+      "Treat new mouse-held-out splits and the local single-cell evaluator as separately labelled extensions/calibration, never as original-decoder wins."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No separate current-SOTA source comparison is established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending baseline/source reconciliation. Once admitted, iterate only on the declared source training and validation folds with fixed full regional coverage.",
+    "candidate_freeze": "Before final outer-test replay, freeze method, feature windows, hyperparameters, source revision, fold manifest and access/resource ledger.",
+    "final_evaluation": "One protected comparison under the exact original nested-CV scoring contract after competent author replay; public historical targets are not newly blind.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published regional scores, reproduced author decoder scores and candidate scores remain distinct. Initial-evaluator-v1 single-cell sensitivity is calibration only."
+  },
+  "blocking_issues": [
+    "Original numerical per-target regional effect vector is not recovered.",
+    "Complete source cohort, endpoint-specific masks and region coverage remain unfrozen.",
+    "Manuscript versus pinned logistic configuration and unit/region filtering require adjudication.",
+    "No qualified author replay, working protected decoder evaluator, meaningful effect rule, paired uncertainty contract or concrete episode budgets is established."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve initial-evaluator-v1 sorted-spike single-cell sensitivity and regional fractions. Its choice-window/profile discrepancy and prospective mouse-weighted summary cannot establish decoder superiority."
+  }
+}

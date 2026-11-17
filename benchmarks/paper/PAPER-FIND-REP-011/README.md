@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-FIND-REP-011`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The paper explicitly selects mixed-effects terms using model log-likelihood, so an original evaluated fit-comparison route exists for activity/coactivity responses. Its original candidate model set, complexity constraints, likelihood definition, fitting mode, exact analysis rows and numeric results have not been recovered. This potential source-native route remains blocked; it is not predictive validation and cannot be replaced by the local elimination-fate Brier task.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 28324 bytes; SHA-256 `8a452a1a2f4ad7be2f51af72392f9f5de03db9791b3f19d5e4cb92a9e68dc0f6`.
+- Specification identity: 29123 bytes; SHA-256 `a4ad65cf2d3fb9c970023cb59e6f3430123a0244da3a7ff6a44d06b919c83c68`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Processed binary activity/coactivity derivation, explicit next-visit structural outcomes and fixed competing predictors fitted with leave-one-mouse-out transforms and calibration on a retrospectively adjudicated cohort. Native identity/fate conversion, complete source population, original mixed-effects/spatial/timing analyses and protected replay remain held. The endpoint is neither survival nor causal inference; scientific qualification is unknown.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Processed binary activity/coactivity derivation, explicit next-visit structural outcomes and fixed competing predictors fitted with leave-one-mouse-out transforms and calibration on a retrospectively adjudicated cohort. Native identity/fate conversion, complete source population, original mixed-effects/spatial/timing analyses and protected replay remain held. The endpoint is neither survival nor causal inference; scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

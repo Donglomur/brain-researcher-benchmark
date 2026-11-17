@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-FIND-036",
-  "source_id": "FIND-036",
   "track": "paper",
   "title": "Population analyses reveal heterogenous encoding in the medial prefrontal cortex during naturalistic foraging",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Figure 6B within-recording discrimination of avoidance head withdrawal versus escape head withdrawal from the same two-second peri-event population activity. This is retrospective peri-event decoding, not the separate early-prediction time-course in Figure 6C.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Figure 6B within-recording discrimination of avoidance head withdrawal versus escape head withdrawal from the same two-second peri-event population activity. This is retrospective peri-event decoding, not the separate early-prediction time-course in Figure 6C.",
+    "Source-paper comparison for Equal-session mean Figure 6B avoidance/escape balanced accuracy on original fivefold OOF predictions: Balanced accuracy per session = 0.5*(avoidance recall + escape recall), after pooling all five out-of-fold predictions and thresholding escape probability at >=0.5. Do not average fold accuracies or substitute probability reconstruction error."
+  ],
+  "success_criteria": [
+    "Authenticate all 40 original sessions, source preprocessing and source-protocol folds regenerated with random_state=622 or recovered historical membership; no easier subset, changed time window or altered population.",
+    "Establish a source-conformant author BernoulliNB rerun, document seed 622 and environment/fold provenance, and reconcile it with published 0.7271 under a predeclared justified calibration tolerance before judging candidate performance.",
+    "Exceed the source result on the original balanced-accuracy endpoint with predeclared meaningful effect and valid paired uncertainty; a fit-to-reference score is not success.",
+    "Freeze the candidate before final scoring on the same source-protocol folds as the author baseline, protect labels and prevent class-block row order or original indices from leaking the target.",
+    "Treat nested logistic controls as separate competence checks. A documented rerun of the source protocol retains the same task; whole-animal, episode, time-based or otherwise changed split schemes are extensions.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-036",
   "canonical_position_one_based": 22,
   "paper_identity": {
     "url": "https://elifesciences.org/articles/93994",
     "publication_year": 2026,
     "venue": "eLife"
   },
-  "primary_outputs": [
-    "Population encoding of predator distance/location during naturalistic foraging.",
-    "Event/action discrimination and neural population transition around avoidance, with alternative decoders and grouped resampling."
-  ],
   "input_assets": {
     "routes": [
       "https://doi.org/10.5061/dryad.v9s4mw78c"
@@ -244,112 +255,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "recorded_terms": {
-        "data": "Dryad public release; CC0 per Dryad default terms (https://datadryad.org/terms), confirm any explicitly stated component restrictions.",
-        "captured_license_heading": "MIT License"
-      },
-      "record_conflicts": [],
-      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
-      "overlap_group": null
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "central_outputs_in_saved_source_contract": [
-        "Population encoding of predator distance/location during naturalistic foraging.",
-        "Event/action discrimination and neural population transition around avoidance, with alternative decoders and grouped resampling."
-      ],
-      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
-      "missing_or_unfrozen_endpoint_details": "Freeze predator distance/location and avoidance/event endpoints with exact rat/session/episode inclusion; prepared X/y files need target-timing audit."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Behavior-rich and phase/timing baselines must share windows and trial opportunities. Future event-alignment can encode the answer; overlapping windows cannot cross held-out episodes."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Freeze predator distance/location and avoidance/event endpoints with exact rat/session/episode inclusion; prepared X/y files need target-timing audit.",
-        "Behavior-rich and phase/timing baselines must share windows and trial opportunities. Future event-alignment can encode the answer; overlapping windows cannot cross held-out episodes.",
-        "Split by rat/session, not overlapping windows; future event alignment must not leak targets.",
-        "Recorded activity is observational; decoder importance alone is not causal necessity.",
-        "Exact neural sample/rat exclusions and reproduction tolerances still require experiment specification.",
-        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-        "Execute and independently audit references, controls, grading and measured resources.",
-        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
-      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Proposed: test behavior-rich baselines and held-out animals/episodes, with nulls preserving trajectory and temporal autocorrelation."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "independent_panel_not_established_in_inspected_evidence",
-      "proposed_improvement": [
-        "Proposed: test behavior-rich baselines and held-out animals/episodes, with nulls preserving trajectory and temporal autocorrelation."
-      ],
-      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
-      "special_gate": "No completed independent improvement result is established here."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "source_roster_estimate_or_statement": {
-      "estimate": "1.39 GB release; CPU workstation for conventional models, optional GPU for ANN fitting; hours, estimated.",
-      "basis": "Static source and archive metadata inspection; estimate, not measured."
-    },
-    "measured_or_static_facts_from_existing_authoring": [],
-    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
-  },
-  "holds": {
-    "task_specific": [
-      "Freeze predator distance/location and avoidance/event endpoints with exact rat/session/episode inclusion; prepared X/y files need target-timing audit.",
-      "Behavior-rich and phase/timing baselines must share windows and trial opportunities. Future event-alignment can encode the answer; overlapping windows cannot cross held-out episodes.",
-      "Split by rat/session, not overlapping windows; future event alignment must not leak targets.",
-      "Recorded activity is observational; decoder importance alone is not causal necessity.",
-      "Exact neural sample/rat exclusions and reproduction tolerances still require experiment specification.",
-      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-      "Execute and independently audit references, controls, grading and measured resources.",
-      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Audit event-construction timing from SU/tracking to exported X/y, then freeze a behavior-versus-neural episode-held-out contrast and rat uncertainty.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Audit event-construction timing from SU/tracking to exported X/y, then freeze a behavior-versus-neural episode-held-out contrast and rat uncertainty.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -380,11 +285,80 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "source_roster_estimate_or_statement": {
+      "estimate": "1.39 GB release; CPU workstation for conventional models, optional GPU for ANN fitting; hours, estimated.",
+      "basis": "Static source and archive metadata inspection; estimate, not measured."
+    },
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-036/improvement.v1.json",
+      "bytes": 12605,
+      "sha256": "d49371d0df65e06704c9826a187631b4c863803e78bd97837985edb49480443f"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-036/historical/task.pre-improvement.v1.json",
+        "bytes": 20498,
+        "sha256": "63dcde0b307111fa289be9acae02a33a3c0d7b3c3fe8f64d9333a632b61506d9"
+      },
+      "implementation_ids": [
+        "authoring-delivery-20261105-common-remaining-builds-wave20-paper-program-g"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Once admitted, let candidates iterate using training data and internal validation confined to each original outer training partition; final outer-fold labels and other folds' fitted state remain unavailable.",
+    "candidate_freeze": "Commit code, feature handling, hyperparameter-selection rule, probability threshold, all budgets, calibration tolerance and uncertainty rule before source-protocol outer-test feedback. Persist regenerated or recovered fold identities with source seed 622 and environment provenance.",
+    "final_evaluation": "Evaluate every original HW row once out of fold and all 40 session scores against the source-conformant BernoulliNB rerun on identical source-seed-622 folds and the separately reported published 0.7271. Calibrate using the predeclared tolerance; report other comparator results separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Paper score, source-conformant author BNB rerun, unseeded historical shuffle, any documented newly seeded shuffle and local logistic reference are separately named. Regenerating source-protocol folds with seed 622 is admissible with paired membership and calibrated provenance; a changed split scheme cannot validate the same-task claim."
+  },
+  "blocking_issues": [
+    "Authenticate the complete 40-member scientific archive and rat/session mapping without selecting successful sessions.",
+    "Authenticate source rows and validate a source-conformant seed-622 fold/environment reconstruction; run and independently audit the author baseline under a predeclared justified calibration tolerance. Missing archived historical memberships alone are not disqualifying.",
+    "Specify a task-justified minimum effect and uncertainty rule using valid independent units.",
+    "Set concrete access/compute budgets and validate the protected complete-cohort evaluator; existing design/resource estimates are not operational admission."
+  ],
+  "holds": {
+    "task_specific": [
+      "Authenticate the complete 40-member scientific archive and rat/session mapping without selecting successful sessions.",
+      "Authenticate source rows and validate a source-conformant seed-622 fold/environment reconstruction; run and independently audit the author baseline under a predeclared justified calibration tolerance. Missing archived historical memberships alone are not disqualifying.",
+      "Specify a task-justified minimum effect and uncertainty rule using valid independent units.",
+      "Set concrete access/compute budgets and validate the protected complete-cohort evaluator; existing design/resource estimates are not operational admission."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original Figure 6B endpoint has a verified ordered metric, reported 72.71% baseline and author-code route. Complete source cohort/fold admission, a rerun baseline, meaningful effect, uncertainty and fixed execution budgets are still missing, so this is a design rather than a ready improvement task. Authenticate the complete 40-member scientific archive and rat/session mapping without selecting successful sessions. Authenticate source rows and validate a source-conformant seed-622 fold/environment reconstruction; run and independently audit the author baseline under a predeclared justified calibration tolerance. Missing archived historical memberships alone are not disqualifying. Specify a task-justified minimum effect and uncertainty rule using valid independent units. Set concrete access/compute budgets and validate the protected complete-cohort evaluator; existing design/resource estimates are not operational admission.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-036/historical/task.pre-improvement.v1.json",
+      "bytes": 20498,
+      "sha256": "63dcde0b307111fa289be9acae02a33a3c0d7b3c3fe8f64d9333a632b61506d9"
+    },
+    "notes": "Preserve the complete foraging-programme implementation. Native out-of-fold probability fidelity and seeded-control reconstruction remain calibration only. The existing separately proposed hidden-label decoder design does not yet establish an empirical paper improvement or operational readiness."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }
