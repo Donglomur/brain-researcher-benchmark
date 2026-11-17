@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-FIND-024`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. Source-native rebinding identifies the original cross-split prediction of fixed untied integration-window estimates: tied predictor versus opposite-split untied target has reported Spearman correlation 0.668. Exact split identities, target arrays and aggregation are unresolved. Tied/tied reliability 0.716 is not truth accuracy and cannot be used when a candidate may alter both sides.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 19137 bytes; SHA-256 `c7b6aa9cd264aeb0d7b7021e5fdd2bd2a670ed97cc8cdd01f061bd0b41852201`.
+- Specification identity: 18351 bytes; SHA-256 `4e5697aafca6c9418b8ee9d688db578f53baa3359ec4098ce16e01c0721a10f4`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Prospective segment-aligned cross-context correlations and repeated-presentation noise ceilings from electrode timecourses, with pinned NPZ input and descriptive participant-balanced summaries. Authentic MATLAB conversion/cohort identities, exact native TCI dependencies and numeric parity, gamma-window refitting, absolute-time-versus-structure inference, rights and protected references remain held. This is partial canonical coverage; scientific qualification is unknown.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Prospective segment-aligned cross-context correlations and repeated-presentation noise ceilings from electrode timecourses, with pinned NPZ input and descriptive participant-balanced summaries. Authentic MATLAB conversion/cohort identities, exact native TCI dependencies and numeric parity, gamma-window refitting, absolute-time-versus-structure inference, rights and protected references remain held. This is partial canonical coverage; scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

@@ -1,19 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-signal-add-017",
-  "source_id": "paper-signal-add-017",
   "track": "paper",
   "title": "EEG-based brain-computer interface enables real-time robotic hand control at individual finger level",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Classify imagined or executed thumb/index/pinky activity in the source-defined binary and ternary conditions. Retrospective recorded decoding and online closed-loop control remain distinct targets.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Classify imagined or executed thumb/index/pinky activity in the source-defined binary and ternary conditions. Retrospective recorded decoding and online closed-loop control remain distinct targets.",
+    "Source-paper comparison for Original figure-specific offline finger-classification accuracy: Source offline classification accuracy needs its figure-specific window/trial rule recovered. Online cumulative finger decisions and a local hard-vote replay score are not interchangeable."
+  ],
+  "success_criteria": [
+    "Recover a complete original offline paper panel, exact folds/session membership, decision rule and numeric EEGNet baseline before enabling same-task comparison.",
+    "Match imagery/execution, class roster, complete original participants, chronological training and source-prescribed calibration inputs; keep every trial’s overlapping windows together.",
+    "Compare against the source EEGNet training and fine-tuning procedure under identical allowed input and tuning budgets; nearest-centroid spectral references are calibration only.",
+    "Do not call improved replay accuracy a gain over the online human-adapting Base-versus-Finetune experiment.",
+    "Resolve S07 session-5 missing events without silently shrinking the original panel; predeclare task-specific effect and participant-level uncertainty. New participant-transfer splits are extensions.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-signal-add-017",
   "canonical_position_one_based": 41,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41467-025-61064-x",
     "publication_year": 2025,
     "venue": "Nature Communications"
   },
-  "primary_outputs": [
-    "Offline/fine-tuned finger classifier metrics on held-out recorded sessions."
-  ],
   "input_assets": {
     "routes": [
       "https://figshare.com/articles/dataset/29104040"
@@ -125,116 +137,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": {
-        "official_code_license": "MIT",
-        "data_route_licenses": [
-          {
-            "url": "https://api.figshare.com/v2/articles/29104040",
-            "license": "CC BY-NC4.0"
-          }
-        ]
-      },
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Offline/fine-tuned finger classifier metrics on held-out recorded sessions."
-      ],
-      "assessment": "Recorded finger-imagery offline/fine-tuning comparisons are scoped; the real-time human robotic closed-loop headline cannot be recreated by replay alone.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [
-      {
-        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
-        "record_id": "paper-signal-add-017",
-        "recorded_metrics": [
-          "Per-trial class accuracy/balanced accuracy and confusion matrices",
-          "Participant-weighted calibration/transfer delta"
-        ]
-      }
-    ],
-    "comparability": [
-      "Same imagery versus execution conditions, window overlap, labels and calibration budget are essential. Published human adaptation feedback is not matched by offline scoring.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Published closed-loop performance includes human feedback adaptation; replaying recorded files supports only an offline analysis scope.",
-        "Full archive is large; bounded range extraction/download planning is needed. A single observed offline run is108.44MBuncompressed.",
-        "Code uses TensorFlow/EEGNet and local path placeholders; no environment or training executed.",
-        "Data non-commercial terms apply; runtime/storage estimates beyond observed sizes are unmeasured.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Measure chronological session transfer and participant transfer under equal calibration and artifact-control budgets."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Whole trials/runs and chronological sessions stay together; distinguish within-person calibration from participant transfer. Remove online prediction/probability outputs and hidden target annotations from packets.",
-      "retained_roster_proposal": [
-        "Measure chronological session transfer and participant transfer under equal calibration and artifact-control budgets."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": "unmeasured",
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": null
-  },
-  "holds": {
-    "task_specific": [
-      "Published closed-loop performance includes human feedback adaptation; replaying recorded files supports only an offline analysis scope.",
-      "Full archive is large; bounded range extraction/download planning is needed. A single observed offline run is108.44MBuncompressed.",
-      "Code uses TensorFlow/EEGNet and local path placeholders; no environment or training executed.",
-      "Data non-commercial terms apply; runtime/storage estimates beyond observed sizes are unmeasured.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Choose a documented complete subject/session pair, pin target/event schema and the S07 missing-event exclusion, then establish a trial-grouped offline reproduction contract before full archives or training.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Choose a documented complete subject/session pair, pin target/event schema and the S07 missing-event exclusion, then establish a trial-grouped offline reproduction contract before full archives or training.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -275,11 +177,79 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_resource_statement": "unmeasured",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-017/improvement.v1.json",
+      "bytes": 11057,
+      "sha256": "e009aab05c8d07b33eafd2f716ffcbe8ea2ed5c7a95b293ed5d8fba214aee16d"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-signal-add-017/historical/task.pre-improvement.v1.json",
+        "bytes": 14860,
+        "sha256": "63d23b0d71a7dfceeaa48db2c0df2afe8b1097cfa3056e631285fe18cd63f8ce"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-signal-add-017-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After recovering the chosen original offline figure panel, iterate on its permitted participant/session training data and trial-grouped validation feedback. Respect MI/ME and binary/ternary source routes, including the two Base-folder route for binary fine-tuning. Keep overlapping windows within their original trial and log any preprocessing, EEGNet or calibration change without using final-session labels.",
+    "candidate_freeze": "Freeze the exact offline figure estimand, original participant/session/run roster and exclusions, source MAT conversion, original folds, source-folder calibration access, EEG preprocessing, window-to-trial rule, EEGNet selection/fine-tuning recipe, aggregation and budgets before final scoring. Resolve missing S07 events before freezing the denominator.",
+    "final_evaluation": "Evaluate the frozen candidate and recovered native EEGNet baseline on the same complete original offline panel, retaining every condition and participant result. A same-Finetune-trial replay gain, participant-transfer split or changed calibration allowance is a separate extension. No offline output can establish improvement over the online human-control headline.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Use the figure-matched original offline EEGNet result and qualified rerun as distinct comparators. Keep the online binary/ternary headline scores, local nearest-centroid spectral reference, calibration-augmented replay reference and prospective participant-macro/bootstrap diagnostics separately labeled; none substitutes for the missing original offline baseline."
+  },
+  "blocking_issues": [
+    "Exact original offline panel, numeric score, decision rule and folds/session aggregation are unresolved.",
+    "Complete source-MAT conversion and cohort membership remain unqualified, including S07 missing-event handling.",
+    "Native EEGNet environment, checkpoints, validation selection and first-four-layer fine-tuning freeze have no qualified rerun.",
+    "Local same-Finetune-trial spectral comparison changes the original human-adapting Base/Finetune design.",
+    "No matched author baseline, fixed access/resource budget or justified effect and uncertainty rule."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact original offline panel, numeric score, decision rule and folds/session aggregation are unresolved.",
+      "Complete source-MAT conversion and cohort membership remain unqualified, including S07 missing-event handling.",
+      "Native EEGNet environment, checkpoints, validation selection and first-four-layer fine-tuning freeze have no qualified rerun.",
+      "Local same-Finetune-trial spectral comparison changes the original human-adapting Base/Finetune design.",
+      "No matched author baseline, fixed access/resource budget or justified effect and uncertainty rule."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The registration scopes recorded offline decoding, which is ordered, but its exact source-paper offline baseline and original folds/session mapping are unrecovered. The published online fine-tuned human-control headline is incompatible with replay scoring and cannot be the offline victory threshold. Exact original offline panel, numeric score, decision rule and folds/session aggregation are unresolved. Complete source-MAT conversion and cohort membership remain unqualified, including S07 missing-event handling. Native EEGNet environment, checkpoints, validation selection and first-four-layer fine-tuning freeze have no qualified rerun. Local same-Finetune-trial spectral comparison changes the original human-adapting Base/Finetune design. No matched author baseline, fixed access/resource budget or justified effect and uncertainty rule.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-017/historical/task.pre-improvement.v1.json",
+      "bytes": 14860,
+      "sha256": "63d23b0d71a7dfceeaa48db2c0df2afe8b1097cfa3056e631285fe18cd63f8ce"
+    },
+    "notes": "The initial evaluator’s spectral nearest-centroid and calibration-augmented references use a prospective paired replay protocol. Hard voting, participant means, Brier diagnostics and construction bootstrap intervals cannot certify an original-paper improvement; historical materials remain intact."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

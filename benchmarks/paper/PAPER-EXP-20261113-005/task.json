@@ -1,56 +1,29 @@
 {
-  "schema": "neuroscience-construction-draft-v1",
+  "schema_version": 1,
   "id": "PAPER-EXP-20261113-005",
-  "slug": "pfc-activity-map",
   "track": "paper",
   "title": "A prefrontal cortex map based on single-neuron activity",
-  "state": {
-    "stage": "registered_construction_draft",
-    "runnable": false,
-    "reference_results_qualified": false,
-    "scientifically_qualified": false,
-    "submission_ready": false
-  },
-  "source_families": [
-    "dandi:000473",
-    "dandi:001260",
-    "zenodo:17559037"
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Represent each original KI wide-waveform unit's standardized [log10 firing rate, burstiness, memory] vector by its best-matching SOM prototype, assessed by the original Extended Data Figure2c,d quantization-error panel. Preserve original map capacity and topology; descriptive regional enrichment/hierarchy correlations are not optimization targets.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Represent each original KI wide-waveform unit's standardized [log10 firing rate, burstiness, memory] vector by its best-matching SOM prototype, assessed by the original Extended Data Figure2c,d quantization-error panel. Preserve original map capacity and topology; descriptive regional enrichment/hierarchy correlations are not optimization targets.",
+    "Source-paper comparison for Original Extended Data Figure2c,d quantization-error medians across the complete fixed region panel: For unit j with standardized feature vector z_j and its nearest source-map prototype w_BMN(j), QError_j=||z_j-w_BMN(j)||_2. Lower is better. Compute in the same fixed standardized coordinates and original-capacity SOM; shrinking feature scales, adding nodes or replacing the output with per-unit memorization does not improve the same task."
   ],
-  "source_pins": [
-    {
-      "source_id": "paper-expansion-contracts-v5",
-      "bytes": 53169,
-      "sha256": "a2d24ddbe6e7480a3b5a0e07b4c84eba7e98cb28b7f910ee802919839d2ba821",
-      "selector": {
-        "candidate_id": "PAPER-EXP-20261113-005"
-      }
-    },
-    {
-      "source_id": "registered-expansion-20261113-v2",
-      "bytes": 11688,
-      "sha256": "c2ff7062f1a654e017171d2b836a51ea91e277618b3707f4e672f86b1fe68c68"
-    },
-    {
-      "source_id": "programme-construction-plan-observation-20261113",
-      "bytes": 10537,
-      "sha256": "0a45068859446ab99cd4f83e8ba5e5ae2f8df55cc20d67ed57584a47183c6010"
-    }
+  "success_criteria": [
+    "Recover exact original unit features, masks, standardization, source map node count/topology and Extended Data Figure2c,d QError values for every original region.",
+    "Reproduce the original-capacity author SOM and its complete region-wise QError panel before comparing candidate methods.",
+    "Freeze candidate map-learning method, original capacity/output constraints, allowed feature access, full-panel decision, meaningful effect, uncertainty and resource budgets before scoring.",
+    "Show a justified reduction of original QError under the full fixed-panel rule without changing node count, feature scale, population, representation constraints or source in-sample evaluation condition.",
+    "Retain Figure4 descriptive maps as calibration. Conditional-moment agreement, stronger hierarchy correlations or performance on a new held-animal energy-score split cannot satisfy this source-task win.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
   ],
   "paper": {
     "doi": "10.1038/s41593-025-02190-z",
     "url": "https://www.nature.com/articles/s41593-025-02190-z",
     "venue": "Nature Neuroscience",
     "publication_date": "2026-01-20"
-  },
-  "code": {
-    "url": "https://github.com/hejDMC/pfcmap",
-    "observed_main_commit": "9ae52eddc47fbb590ef4e1b1949507334707a0f1",
-    "paper_cited_archive": "https://zenodo.org/records/17559037",
-    "archive_member": "pfcmap_Github_frozencode_20251108.zip",
-    "archive_member_bytes": 484264,
-    "reported_checksum": "md5:d9a1011bd5241e418396be77c9b80440",
-    "license": "BSD-2-Clause",
-    "historical_join": "The frozen official archive identity has been authenticated during construction; equality to current main, complete dependency qualification and scientific reference reproduction remain separate gates."
   },
   "data": [
     {
@@ -77,54 +50,40 @@
       "cohort_caution": "Observed snapshot postdates publication; subjects across acquisition sources may overlap."
     }
   ],
-  "conditions": {
-    "A": "Full paper, admitted input data and neutral schema/loader documentation.",
-    "B": "The identical input data and resource envelope, plus the historically qualified official analysis code.",
-    "shared_rules": [
-      "Keep grader, held targets, stored reference outputs and full-cohort fitted transforms outside candidate access.",
-      "Disable scored-work network access; freeze candidate submissions and record data/code/environment identities.",
-      "Require actual computation, complete scoped coverage, raw estimates or predictions and a deviation report. A copied figure or printed number cannot establish reproduction."
-    ],
-    "counting": "A/B conditions, reproduction/improvement endpoints and folds remain within one registered task."
+  "code": {
+    "url": "https://github.com/hejDMC/pfcmap",
+    "observed_main_commit": "9ae52eddc47fbb590ef4e1b1949507334707a0f1",
+    "paper_cited_archive": "https://zenodo.org/records/17559037",
+    "archive_member": "pfcmap_Github_frozencode_20251108.zip",
+    "archive_member_bytes": 484264,
+    "reported_checksum": "md5:d9a1011bd5241e418396be77c9b80440",
+    "license": "BSD-2-Clause",
+    "historical_join": "The frozen official archive identity has been authenticated during construction; equality to current main, complete dependency qualification and scientific reference reproduction remain separate gates."
   },
-  "reproduction": {
-    "scope": "Complete Figure 4 analysis from qualified per-unit metrics and anatomical/hierarchy inputs, fitting the full original eligible brain-wide pool. This is analysis reproduction, not a claim to reprocess every raw recording or to replace the original pool with PFC-only units.",
-    "method": "Rebuild SOM, categories, regional enrichment and hierarchy correlations while preserving published eligible recording/region/layer/cell-type criteria.",
-    "required_outputs": [
-      "Per-unit inclusion and exclusion trace, SOM fit and category map.",
-      "Complete category-by-ROI enrichment matrix and derived maps.",
-      "Original Pearson/Kendall correlation vectors, uncertainty and actual eligible ROI set."
-    ],
-    "metric": "Component-wise agreement against an independently rebuilt official reference. No aggregate pass threshold until stochastic policy and tolerances are calibrated."
-  },
-  "improvement": {
-    "kind": "Prospective held-animal distribution prediction; no published forecasting percentage is claimed.",
-    "target": "The three paper unit metrics: log10 firing rate, burstiness and memory; exact source definitions and transformations remain gates.",
-    "query": "Admitted anatomical region/coordinate and opaque unit ID only. Held neural feature values, full-cohort maps and target-derived cell-type labels are excluded.",
-    "split": "Nested animal-held-out splits. Exclude every unit of each test animal across all regions from training; score its complete eligible PFC set. Animals with only non-PFC units are training support. Fit standardization, brain-wide SOM/categories and complexity only on permitted training animals.",
-    "primary_metric": {
-      "name": "Fair 64-draw multivariate energy score",
-      "draws": 64,
-      "formula": "mean_m ||x_m-y||_2 - sum_{m!=n}||x_m-x_n||_2 / (2*M*(M-1)), M=64",
-      "standardization": "Training-only moments for the three features.",
-      "sampling": "Evaluator-owned independent draws from frozen samplers.",
-      "aggregation": "Average unit scores within each animal, then weight animals equally.",
-      "direction": "lower is better"
+  "source_pins": [
+    {
+      "source_id": "paper-expansion-contracts-v5",
+      "bytes": 53169,
+      "sha256": "a2d24ddbe6e7480a3b5a0e07b4c84eba7e98cb28b7f910ee802919839d2ba821",
+      "selector": {
+        "candidate_id": "PAPER-EXP-20261113-005"
+      }
     },
-    "comparators": [
-      "Adapted training-only SOM mixture: estimate region-to-category probabilities with equal total weight per contributing animal; draw a category, then a training feature vector from that category across regions with the same animal weighting.",
-      "Training-only anatomy empirical sampler within region, with equal contributing-animal weight."
-    ],
-    "baseline_status": "These are adapted predictive comparators, not original published forecasting results.",
-    "support": "Freeze unsupported-region, unknown-category and zero-variance rules before exposure. Missing region support blocks qualification; do not delete unfavorable ROIs."
-  },
-  "experimental_unit": "Mouse, with probes/sessions/units nested; animal linkage must be resolved before splitting.",
-  "uncertainty": "Paired animal-level effects and regional/spatial dependence checks. Units, ROIs and 99 probes/sites are not independent animal replicates.",
-  "leakage_controls": [
-    "No evaluation feature responses in fitting or map selection.",
-    "Do not expose full-cohort SOM/category/enrichment products.",
-    "Cell type is not a primary predictor; independently established labels require a separately preregistered evaluator-stratum provenance audit.",
-    "Require an authenticated author-defined recording-to-animal mapping or NWB subject evidence. Unsupported guessing from apparent filename or recording-name prefixes is forbidden; a documented mapping remains legitimate."
+    {
+      "source_id": "registered-expansion-20261113-v2",
+      "bytes": 11688,
+      "sha256": "c2ff7062f1a654e017171d2b836a51ea91e277618b3707f4e672f86b1fe68c68"
+    },
+    {
+      "source_id": "programme-construction-plan-observation-20261113",
+      "bytes": 10537,
+      "sha256": "0a45068859446ab99cd4f83e8ba5e5ae2f8df55cc20d67ed57584a47183c6010"
+    }
+  ],
+  "source_families": [
+    "dandi:000473",
+    "dandi:001260",
+    "zenodo:17559037"
   ],
   "rights": {
     "code": "BSD-2-Clause for repository source.",
@@ -136,12 +95,85 @@
     "measured_runtime": null,
     "dependency_closure": false
   },
-  "construction_gates": [
-    "Qualify frozen-source dependencies and the full original brain-wide reproduction pool.",
-    "Join paper-vintage recordings and animal identities across raw sources.",
-    "Qualify the complete reference and tolerance policy.",
-    "Pin the exact three feature names, definitions, lawful covariates and numerical transforms.",
-    "Implement the common energy-score estimator and train-only baselines; freeze region/variance rules."
+  "input_assets": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "provenance": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-EXP-20261113-005/improvement.v1.json",
+      "bytes": 12121,
+      "sha256": "594c88e07021e38af7cfd7bbae33990111606540341336b1b87d3c35dac247e6"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-EXP-20261113-005/historical/task.pre-improvement.v1.json",
+        "bytes": 8496,
+        "sha256": "84538261a35bc057920bce736b4386334f5325eece6d517d90e48449b314f81e"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-pfc-clean-runtime-source-v1",
+        "benchmarks-neuroscience-pfc-conditional-portable-profile-v1",
+        "components-pfc-conditional-null",
+        "components-pfc-independent-analytical-baseline",
+        "components-pfc-matched-offline-harbor",
+        "components-pfc-science2-package"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Blocked on source recovery. Once qualified, improve the original fixed-capacity SOM representation using declared access to the original training-population features; explicitly label all feedback as in-sample and preserve every original region.",
+    "candidate_freeze": "Freeze map-learning procedure, original unit/feature manifests, standardization, node capacity/topology, source error panel, uncertainty and budgets before final artifact scoring; output cannot encode one prototype per unit.",
+    "final_evaluation": "Compute the source QError formula for candidate and authenticated author prototypes on the exact original population, with every source region median/IQR reported. Any held-animal generalization evaluation is a separate extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The original fixed-capacity author SOM and its published QError panel define the baseline. Local fitted-category/conditional-moment graders and adapted held-animal distribution baselines remain separate calibration or extension artifacts."
+  },
+  "blocking_issues": [
+    "Original per-region numerical QError panel and per-unit prototype/feature lineage remain unrecovered.",
+    "Exact original SOM node count, grid geometry, neighborhood schedule, standardized feature matrices and complete unit/region joins are not authenticated.",
+    "No original-capacity native author replay or working same-task map-learning evaluator is qualified.",
+    "Meaningful reconstruction-error effect, full-panel multiplicity, dependence-aware uncertainty and concrete access/resource budgets remain unspecified.",
+    "The original score is in-sample reconstruction; held-animal forecasting and unrestricted codebook-capacity changes are different tasks."
   ],
-  "contamination_limit": "Public source data and published figure targets prevent claims of demonstrated pretraining independence."
+  "holds": {
+    "task_specific": [
+      "Original per-region numerical QError panel and per-unit prototype/feature lineage remain unrecovered.",
+      "Exact original SOM node count, grid geometry, neighborhood schedule, standardized feature matrices and complete unit/region joins are not authenticated.",
+      "No original-capacity native author replay or working same-task map-learning evaluator is qualified.",
+      "Meaningful reconstruction-error effect, full-panel multiplicity, dependence-aware uncertainty and concrete access/resource budgets remain unspecified.",
+      "The original score is in-sample reconstruction; held-animal forecasting and unrestricted codebook-capacity changes are different tasks."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Source-native rebinding can use the original ordered SOM reconstruction endpoint in Extended Data Figure2c,d: lower quantization error means better representation of the original unit feature vectors. Exact published region-wise errors, source map capacity/topology and complete source-to-unit joins remain unrecovered. Figure4 enrichment and hierarchy findings remain descriptive calibration; the local held-animal energy-score task is a different task. Original per-region numerical QError panel and per-unit prototype/feature lineage remain unrecovered. Exact original SOM node count, grid geometry, neighborhood schedule, standardized feature matrices and complete unit/region joins are not authenticated. No original-capacity native author replay or working same-task map-learning evaluator is qualified. Meaningful reconstruction-error effect, full-panel multiplicity, dependence-aware uncertainty and concrete access/resource budgets remain unspecified. The original score is in-sample reconstruction; held-animal forecasting and unrestricted codebook-capacity changes are different tasks.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-EXP-20261113-005/historical/task.pre-improvement.v1.json",
+      "bytes": 8496,
+      "sha256": "84538261a35bc057920bce736b4386334f5325eece6d517d90e48449b314f81e"
+    },
+    "notes": "Retain complete map reproduction, conditional enrichment reconstruction, numerical graders and animal-deletion sensitivity as calibration. Source-native QError improvement must bind original fixed-capacity map learning; the held-animal64-draw energy-score design is an extension."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
 }

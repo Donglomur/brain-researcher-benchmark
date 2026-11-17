@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-042",
-  "source_id": "paper-method-042",
   "track": "paper",
   "title": "UMBRAE: Unified Multimodal Brain Decoding",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Category-conditioned referring-expression comprehension from fMRI: output object coordinates for known query classes. Preserve all four subjects and All-category primary scores; free object discovery, captioning and retrieval are distinct endpoints.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Category-conditioned referring-expression comprehension from fMRI: output object coordinates for known query classes. Preserve all four subjects and All-category primary scores; free object discovery, captioning and retrieval are distinct endpoints.",
+    "Source-paper comparison for Table 2 per-subject All-category REC accuracy at strict IoU>0.5 (percent); mandatory S1/S2/S5/S7 vector: Per subject All-category acc@0.5 =100 times number of image/category queries with continuous box IoU strictly>0.5 divided by query count. Source uses the first reference box and first extracted prediction; missing outputs must not improve the denominator."
+  ],
+  "success_criteria": [
+    "Use v2 full four-subject cross-subject UMBRAE rows and original 982-image All-category populations, with exact query/annotation/order identities.",
+    "Reproduce each published endpoint through the authentic author inference/scoring route; resolve parser and corrected-join differences without silently redefining the metric.",
+    "Exceed the original four-subject result vector under a prospectively justified meaningful-effect and simultaneous uncertainty rule; a favorable S1, class subset or newly pooled mean is insufficient.",
+    "Preserve identical allowed neural data, query information and pretrained image/language priors and report candidate neural-free and shuffled-neural controls.",
+    "New-subject adaptation, changed prompts/input privilege, new split, captioning or image-based grounding gains cannot substitute for this original grounding comparison.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-042",
   "canonical_position_one_based": 100,
   "paper_identity": {
     "url": "https://arxiv.org/abs/2404.07202",
     "publication_year": 2024,
     "venue": "ECCV"
   },
-  "primary_outputs": [
-    "Reproduce held-out NSD decoding with the author shared/subject adaptation training route.",
-    "Compare task transfer or cross-subject adaptation against the official baseline at matched data and pretrained-model exposure."
-  ],
   "input_assets": {
     "routes": [
       "https://huggingface.co/api/datasets/pscotti/naturalscenesdataset",
@@ -2686,159 +2697,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Author NSD mirror public and pinned; author data download script inspected.",
-        "NSD/stimulus terms and pretrained multimodal model licenses remain separate."
-      ],
-      "declared_overlap_group": "natural-scenes-dataset-nsd",
-      "existing_graph_evidence_leads": [
-        {
-          "tasks": [
-            "PAPER-paper-method-032",
-            "PAPER-paper-method-042"
-          ],
-          "relation": "shared_literal_overlap_label",
-          "value": "natural-scenes-dataset-nsd",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": false,
-          "biological_overlap_verified": false
-        },
-        {
-          "tasks": [
-            "PAPER-paper-method-033",
-            "PAPER-paper-method-042"
-          ],
-          "relation": "shared_exact_data_locator",
-          "value": "https://huggingface.co/api/datasets/pscotti/naturalscenesdataset",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": false,
-          "biological_overlap_verified": false
-        },
-        {
-          "tasks": [
-            "PAPER-paper-method-033",
-            "PAPER-paper-method-042"
-          ],
-          "relation": "shared_literal_overlap_label",
-          "value": "natural-scenes-dataset-nsd",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": false,
-          "biological_overlap_verified": false
-        },
-        {
-          "tasks": [
-            "PAPER-paper-method-042",
-            "PAPER-paper-method-043"
-          ],
-          "relation": "shared_literal_overlap_label",
-          "value": "natural-scenes-dataset-nsd",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": false,
-          "biological_overlap_verified": false
-        }
-      ],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Reproduce held-out NSD decoding with the author shared/subject adaptation training route.",
-        "Compare task transfer or cross-subject adaptation against the official baseline at matched data and pretrained-model exposure."
-      ],
-      "construction_specificity": "Captioning/grounding/transfer is too broad as a single endpoint; one primary downstream metric and exact annotation/response contract are missing.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Equal neuraldata and language/imagepriors; include neural-free and shuffled-neural controls.",
-      "Do not treat a fluentcaption or improvedprior-only output as evidenceof neuralunderstanding; freeze annotation/scoring versions."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Captioning/grounding/transfer is too broad as a single endpoint; one primary downstream metric and exact annotation/response contract are missing.",
-        "Participant and shared image groups with pretrainedmultimodal exposure audited; sameNSDfamily as otherdecoders.",
-        "PublicmainURL isnot immutable data; NSD/stimulus and multimodalmodelterms separate. No end-to-endnumerical reconstruction or localGPUmeasurement.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve spatial grounding or new-subject transfer using matched neural data and identical language/image priors, including neural-free and shuffled-neural controls."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Improve spatial grounding or new-subject transfer using matched neural data and identical language/image priors, including neural-free and shuffled-neural controls."
-      ],
-      "independent_panel_gate": "Participant and shared image groups with pretrainedmultimodal exposure audited; sameNSDfamily as otherdecoders.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": "GPU/high; NSD shards plus large multimodal model",
-    "source_resource_evidence": "Inspection-based resource class, not a measured runtime.",
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "Captioning/grounding/transfer is too broad as a single endpoint; one primary downstream metric and exact annotation/response contract are missing.",
-      "Participant and shared image groups with pretrainedmultimodal exposure audited; sameNSDfamily as otherdecoders.",
-      "PublicmainURL isnot immutable data; NSD/stimulus and multimodalmodelterms separate. No end-to-endnumerical reconstruction or localGPUmeasurement.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Select one paper-grounded grounding/captioning endpoint and pin BrainHub annotationmembership plus all_images.pt contentrevision before runtime or GPU allocation.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Select one paper-grounded grounding/captioning endpoint and pin BrainHub annotationmembership plus all_images.pt contentrevision before runtime or GPU allocation.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -2914,11 +2772,80 @@
     ],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_statement": "GPU/high; NSD shards plus large multimodal model",
+    "source_resource_evidence": "Inspection-based resource class, not a measured runtime.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-042/improvement.v1.json",
+      "bytes": 10871,
+      "sha256": "1569485f23ef8c948e1b56192c31250b749f8454f044e2dafdab9ef990b57a71"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-042/historical/task.pre-improvement.v1.json",
+        "bytes": 128221,
+        "sha256": "a136bac3f4f192ace492257181f68638b4f8c73a4f7e0e4d7793756b3215e455"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-042-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Iterate candidate brain encoders or allowed adaptations using original training stimuli and an explicitly declared development protocol. Keep all shared test stimulus coordinates and evaluation feedback sealed during selection.",
+    "candidate_freeze": "Seal the complete model/checkpoints, training identities, prior versions, prompt, response parser, decoding settings and query roster before any final original-test evaluation.",
+    "final_evaluation": "Produce all four subjects with a competent source-equivalent baseline on the original shared test stimuli, validate native identities and score the full original per-subject vector once after freeze. Other UMBRAE endpoints retain separate claim requirements.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Source v2 vector is the documentary target; an author rerun calibrates that target. The Shikra-with-ground-truth-image row has stronger inputs and is not the neural comparator; current SOTA is not asserted."
+  },
+  "blocking_issues": [
+    "Immutable paper-time BrainHub annotation transform/order and source-checkpoint lineage are not admitted.",
+    "Author scorer and local corrected keyed scorer require paired numerical parity on native complete outputs.",
+    "The current scalar contract schema needs a machine-readable mandatory endpoint-vector comparison before readiness; null is intentional, not an absent paper score.",
+    "No task-specific meaningful gain, simultaneous uncertainty decision or fixed access/cumulative resource budget is established.",
+    "No authentic baseline/candidate run or actual prior-exposure equivalence is established."
+  ],
+  "holds": {
+    "task_specific": [
+      "Immutable paper-time BrainHub annotation transform/order and source-checkpoint lineage are not admitted.",
+      "Author scorer and local corrected keyed scorer require paired numerical parity on native complete outputs.",
+      "The current scalar contract schema needs a machine-readable mandatory endpoint-vector comparison before readiness; null is intentional, not an absent paper score.",
+      "No task-specific meaningful gain, simultaneous uncertainty decision or fixed access/cumulative resource budget is established.",
+      "No authentic baseline/candidate run or actual prior-exposure equivalence is established."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The source v2 Table 2 provides a complete ordered grounding endpoint for all four original subjects. This design preserves that per-subject result vector, rather than an invented pooled paper score. Native annotation/order, author-scoring parity, baseline execution and a valid improvement decision are not yet admitted. Immutable paper-time BrainHub annotation transform/order and source-checkpoint lineage are not admitted. Author scorer and local corrected keyed scorer require paired numerical parity on native complete outputs. The current scalar contract schema needs a machine-readable mandatory endpoint-vector comparison before readiness; null is intentional, not an absent paper score. No task-specific meaningful gain, simultaneous uncertainty decision or fixed access/cumulative resource budget is established. No authentic baseline/candidate run or actual prior-exposure equivalence is established.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-042/historical/task.pre-improvement.v1.json",
+      "bytes": 128221,
+      "sha256": "a136bac3f4f192ace492257181f68638b4f8c73a4f7e0e4d7793756b3215e455"
+    },
+    "notes": "Existing grounding.py is calibration-only and remains intact. Its engineering examples, prospective join corrections and pooled paired summary are not a published-paper win or whole-UMBRAE reproduction."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

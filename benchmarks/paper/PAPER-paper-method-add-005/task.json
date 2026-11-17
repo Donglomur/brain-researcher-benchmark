@@ -1,20 +1,32 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-add-005",
-  "source_id": "paper-method-add-005",
   "track": "paper",
   "title": "Generating realistic neurophysiological time series with denoising diffusion probabilistic models",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Impute whole missing ECoG channels and preserve their utility for rest-versus-movement decoding with the paper fixed random-forest classifier. Correlation/spectral fidelity are additional imputation checks, not interchangeable with classification accuracy.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Impute whole missing ECoG channels and preserve their utility for rest-versus-movement decoding with the paper fixed random-forest classifier. Correlation/spectral fidelity are additional imputation checks, not interchangeable with classification accuracy.",
+    "Source-paper comparison for Fig. 3E per-participant rest-versus-movement RF accuracy at each original channel-dropout level: Original downstream metric is binary rest/movement test accuracy = correct labels divided by all eligible original test events, after source RF decoding of completed observed-plus-imputed channels. Lower local MSE is not equivalent."
+  ],
+  "success_criteria": [
+    "Recover the full original Fig. 3E result vector, all 12-participant day/event identities and original mask-sampling protocol; reproduce author accuracy on historical masks or calibrated source-equivalent paired mask/RF-partition draws.",
+    "Compare to both published DDPM results and a competent author DDPM rerun with original deterministic-neural-network, mean-imputation and fully-observed controls.",
+    "Demonstrate a predeclared meaningful improvement over the original accuracy panel with appropriate participant-level uncertainty and matched observed-channel/time-context access.",
+    "A lower standardized MSE/PSD error, correlation-only gain, new ridge win, changed missingness pattern or new participant/time split is an extension and cannot establish the original decoding win.",
+    "Retain source secondary imputation correlations: surpassing DDPM 0.27 alone does not surpass the paper deterministic imputation result 0.50, and correlation does not guarantee decoding improvement.",
+    "Pair channel masks and RF training partitions across candidate/reference for every declared replicate; mask_seed controls both in the pinned author implementation. Source-equivalent stochastic mask draws are allowed after calibration; changed missingness mechanisms remain extensions.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-add-005",
   "canonical_position_one_based": 84,
   "paper_identity": {
     "url": "https://doi.org/10.1016/j.patter.2024.101047",
     "publication_year": 2024,
     "venue": "Patterns"
   },
-  "primary_outputs": [
-    "Train author diffusion model on predeclared ECoG participants/sessions and quantify missing-channel imputation error/spectral fidelity.",
-    "Compare diffusion imputation with channel interpolation/conditional baselines at the same observed-channel budget."
-  ],
   "input_assets": {
     "routes": [
       "https://api.dandiarchive.org/api/dandisets/000055/versions/0.220127.0436/assets/?page_size=100",
@@ -1508,107 +1520,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Figshare16599782v2 is public CC BY4.0 and includes EC01–EC12_ecog_data.nc plus arm-position files.",
-        "Author loader cites HTNet preprocessing; associated author HTNet repository links this processed-data family.",
-        "Raw AJILE DANDI manifest is additional provenance, not a drop-in replacement for .nc."
-      ],
-      "declared_overlap_group": "https://api.dandiarchive.org/api/dandisets/000055/versions/0.220127.0436/assets/?page_size=100",
-      "existing_graph_evidence_leads": [],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Train author diffusion model on predeclared ECoG participants/sessions and quantify missing-channel imputation error/spectral fidelity.",
-        "Compare diffusion imputation with channel interpolation/conditional baselines at the same observed-channel budget."
-      ],
-      "construction_specificity": "Missing-channel imputation error and spectral fidelity are documented, but normalization, exact missingness mask, target channel/time aggregation and historical split remain unfrozen.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Compare diffusion with interpolation/conditional baselines under identical observed channels and allowed time context.",
-      "Do not supply target channels through normalization or overlapping windows; distinguish retrospective reconstruction from online prediction."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Missing-channel imputation error and spectral fidelity are documented, but normalization, exact missingness mask, target channel/time aggregation and historical split remain unfrozen.",
-        "Human participant/session and blocked time, with temporal guard bands. Existing improvement text says animal but these selected inputs are human ECoG.",
-        "No gated ratLFP/anesthesia claim. CPU/GPU resource feasibility is unknown; selected subject file sizes are metadata only.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Test blocked-time/animal generalization, event calibration and missingness patterns beyond complete channel removal."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Test blocked-time/animal generalization, event calibration and missingness patterns beyond complete channel removal."
-      ],
-      "independent_panel_gate": "Human participant/session and blocked time, with temporal guard bands. Existing improvement text says animal but these selected inputs are human ECoG.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": "GPU; selected ECoG subject0.29–1.77GB, full processed collection~10GB",
-    "source_resource_evidence": "Resource class is inspection-based estimate, not measured runtime.",
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "Missing-channel imputation error and spectral fidelity are documented, but normalization, exact missingness mask, target channel/time aggregation and historical split remain unfrozen.",
-      "Human participant/session and blocked time, with temporal guard bands. Existing improvement text says animal but these selected inputs are human ECoG.",
-      "No gated ratLFP/anesthesia claim. CPU/GPU resource feasibility is unknown; selected subject file sizes are metadata only.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Specify one processed-data participant/session panel, exact missing-channel mask and train-only temporal normalization, and map the author config/loader before an execution proposal.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Specify one processed-data participant/session panel, exact missing-channel mask and train-only temporal normalization, and map the author config/loader before an execution proposal.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -1684,11 +1595,80 @@
     ],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_statement": "GPU; selected ECoG subject0.29–1.77GB, full processed collection~10GB",
+    "source_resource_evidence": "Resource class is inspection-based estimate, not measured runtime.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-add-005/improvement.v1.json",
+      "bytes": 12336,
+      "sha256": "3a33f6a66ffce2faee4de49ac2eec42b677565b5f65c57e61c821066f78672d7"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-add-005/historical/task.pre-improvement.v1.json",
+        "bytes": 77749,
+        "sha256": "98c1df78da7b6063962681eeedfcb553d7126498354fa899399e8dcdb94cd253"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-add-005-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Develop conditional imputation on original training-day windows and declared training-only validation; all final masks are isolated and source evaluation labels stay sealed. The published twelve-person imputation problem replaces no participant with a smaller proxy.",
+    "candidate_freeze": "Seal preprocessing, model training and sampling, data/day identities, channel access, RF recipe and all random seeds before final day 7 evaluation across the complete original mask panel.",
+    "final_evaluation": "After source recovery, apply candidate and paper-trained comparators to identical source test events and observed-channel masks, then unstandardize and score the original RF task. Keep local reconstruction scores as diagnostics.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Original published DDPM accuracy, independently rerun author DDPM and deterministic/mean source controls are distinct. Local mean/ridge reconstructions and rat-ripple F1 cannot substitute for this AJILE12 result. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+  },
+  "blocking_issues": [
+    "Numeric source Fig. 3E accuracy vector and complete participant/dropout/fold aggregation lineage are not recovered.",
+    "Original processed event identities, paper day 7 split, masks and RNG state need exact reconciliation with current author loader and local latest-day implementation.",
+    "No trained author imputation models, deterministic-network baseline or native RF numerical calibration is admitted.",
+    "Current local reconstruction scorer has no original RF-accuracy success path and must remain calibration/extension-only.",
+    "Meaningful effect, paired uncertainty decision and fixed access/cumulative compute budgets remain unresolved."
+  ],
+  "holds": {
+    "task_specific": [
+      "Numeric source Fig. 3E accuracy vector and complete participant/dropout/fold aggregation lineage are not recovered.",
+      "Original processed event identities, paper day 7 split, masks and RNG state need exact reconciliation with current author loader and local latest-day implementation.",
+      "No trained author imputation models, deterministic-network baseline or native RF numerical calibration is admitted.",
+      "Current local reconstruction scorer has no original RF-accuracy success path and must remain calibration/extension-only.",
+      "Meaningful effect, paired uncertainty decision and fixed access/cumulative compute budgets remain unresolved."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original AJILE12 missing-channel experiment has ordered decoding and imputation endpoints, but exact Fig. 3E participant-by-dropout decoding results and paper-equivalent event/mask provenance are not recovered. The current local MSE/PSD/ridge scorer is a prospective reconstruction extension, not the published RF decoding comparison. Numeric source Fig. 3E accuracy vector and complete participant/dropout/fold aggregation lineage are not recovered. Original processed event identities, paper day 7 split, masks and RNG state need exact reconciliation with current author loader and local latest-day implementation. No trained author imputation models, deterministic-network baseline or native RF numerical calibration is admitted. Current local reconstruction scorer has no original RF-accuracy success path and must remain calibration/extension-only. Meaningful effect, paired uncertainty decision and fixed access/cumulative compute budgets remain unresolved.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-add-005/historical/task.pre-improvement.v1.json",
+      "bytes": 77749,
+      "sha256": "98c1df78da7b6063962681eeedfcb553d7126498354fa899399e8dcdb94cd253"
+    },
+    "notes": "Preserve evaluator.py, mean/ridge baselines and historical results. Its MSE/PSD/correlation outputs and180-case reconstructed panel remain calibration or separately labeled extension evidence, never a Fig. 3E paper victory."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

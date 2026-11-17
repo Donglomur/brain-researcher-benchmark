@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-replacement-006",
-  "source_id": "paper-method-replacement-006",
   "track": "paper",
   "title": "Population Transformer: Learning Population-level Representations of Neural Activity",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Binary word-volume decoding on the paper’s original Volume endpoint: distinguish top versus bottom RMS-intensity quartiles within each recording. This original endpoint is within the registration’s volume/speech/sentence scope; a result claims this endpoint only. Retain the original Volume electrode-count analysis alongside the 90-electrode Table 1 primary.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Binary word-volume decoding on the paper’s original Volume endpoint: distinguish top versus bottom RMS-intensity quartiles within each recording. This original endpoint is within the registration’s volume/speech/sentence scope; a result claims this endpoint only. Retain the original Volume electrode-count analysis alongside the 90-electrode Table 1 primary.",
+    "Source-paper comparison for Table 1 Volume ROC-AUC, BrainBERT inputs, 90 electrodes, mean across seven subjects: Within each participant compute ROC-AUC, equivalently P(score_positive>score_negative)+0.5 P(tie), then source aggregation. Higher is better. F1 and local PopT-minus-linear gains do not replace the absolute PopT source score."
+  ],
+  "success_criteria": [
+    "Bind the original 90-electrode Table 1 Volume task for all seven participants, including source random-row partitions, labels, BrainBERT features and pretrained access.",
+    "Exceed 0.87 published subject-mean ROC-AUC and a calibrated matched pretrained-PopT rerun by a justified predeclared effect with uncertainty.",
+    "Freeze candidate after original training/validation development and before complete original test scoring.",
+    "Report new chronological/support-disjoint splits, fewer electrodes, alternate tasks or narrowed participants as extensions; none establishes Table 1 victory.",
+    "Retain the Figure 3 Volume analysis at all original 1, 10, 20, 30, 40 and 50 electrode counts and its four source comparator curves; recover numerical curves and predeclare how count effects constrain the claim. The 90-electrode primary does not license omitting registered electrode-count effects.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-replacement-006",
   "canonical_position_one_based": 61,
   "paper_identity": {
     "url": "https://openreview.net/forum?id=FVuqJt3c4L",
     "publication_year": 2025,
     "venue": "ICLR"
   },
-  "primary_outputs": [
-    "Decode speech/sentence or volume features across held-out movie windows and electrodes; compare PopT+BrainBERT to matched BrainBERT aggregation under identical saved splits.",
-    "Quantify changes with electrode count and subject, reporting per-subject uncertainty rather than pooling correlated windows."
-  ],
   "input_assets": {
     "routes": [
       "https://braintreebank.dev/",
@@ -463,104 +474,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "PopT original code MIT; third-party material retains its own terms.",
-        "BrainTreebank original site CC BY4.0.",
-        "Checkpoint license is not supplied by the PopT model metadata; weights/code redistribution permissions must be resolved before distributing benchmark packets."
-      ],
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Decode speech/sentence or volume features across held-out movie windows and electrodes; compare PopT+BrainBERT to matched BrainBERT aggregation under identical saved splits.",
-        "Quantify changes with electrode count and subject, reporting per-subject uncertainty rather than pooling correlated windows."
-      ],
-      "assessment": "PopT versus BrainBERT aggregation and electrode-count downstream comparisons are documented; independent recreation of pretraining is not supported by the bounded scope.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Match BrainBERT features, channel selection, windows and saved folds; gains from pretrained exposure or overlap are not architectural effects. Subject-level uncertainty replaces pooled-window counts.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "This is a downstream empirical comparison, not independent re-creation of all pretraining or new linguistic ground truth.",
-        "BrainBERT weights have public author-linked preview; archive integrity and exact member names require acquisition qualification.",
-        "Split, subject/movie overlap, channel selection and pretraining exposure must be frozen; BrainTreebank overlaps BaRISTA and the original dataset paper.",
-        "Model weights are explicitly outside the code MIT license; no blanket open-license claim.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve generalization to new electrode subsets or chronological movie segments without increasing label, pretraining or compute exposure."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Whole-subject/movie/chronological/electrode-subset panels with controlled pretraining exposure; overlapping BrainTreebank material must be grouped with BaRISTA and dataset projects.",
-      "retained_roster_proposal": [
-        "Improve generalization to new electrode subsets or chronological movie segments without increasing label, pretraining or compute exposure."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": "GPU feature extraction and finetuning; approximately130GB whole recording corpus, optional subject-bounded subsets; PopT checkpoint repository474MB.",
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": "Unmeasured planning estimate unless an author-reported figure is separately stated."
-  },
-  "holds": {
-    "task_specific": [
-      "This is a downstream empirical comparison, not independent re-creation of all pretraining or new linguistic ground truth.",
-      "BrainBERT weights have public author-linked preview; archive integrity and exact member names require acquisition qualification.",
-      "Split, subject/movie overlap, channel selection and pretraining exposure must be frozen; BrainTreebank overlaps BaRISTA and the original dataset paper.",
-      "Model weights are explicitly outside the code MIT license; no blanket open-license claim.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Close exact BrainBERT weight member/hash/license and subject/movie overlap gates, then freeze one matched PopT-versus-aggregation contrast before expensive feature extraction.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Close exact BrainBERT weight member/hash/license and subject/movie overlap gates, then freeze one matched PopT-versus-aggregation contrast before expensive feature extraction.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -601,11 +514,79 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_resource_statement": "GPU feature extraction and finetuning; approximately130GB whole recording corpus, optional subject-bounded subsets; PopT checkpoint repository474MB.",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Unmeasured planning estimate unless an author-reported figure is separately stated."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-006/improvement.v1.json",
+      "bytes": 12683,
+      "sha256": "7ad0e9e5552477bc67b5f8d77e6d0aecadb81f4a74c13fef0177650bb2412d21"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-006/historical/task.pre-improvement.v1.json",
+        "bytes": 31269,
+        "sha256": "4b06cd0993642d160ce1f953434c777292f771c86d27896feafa5775c64ca4ef"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-replacement-006-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After historical binding, use the original training/validation rows for candidate development; train-only channel ranking must be reconciled with the historical recipe rather than silently changed.",
+    "candidate_freeze": "Freeze candidate, feature/checkpoint provenance, all seven word rosters/splits, 90-channel membership/order, class mapping, training seeds and metric policy before test access.",
+    "final_evaluation": "Evaluate complete original test rows with author ROC-AUC per subject and source mean aggregation; retain shared-stimulus and temporal uncertainty. Report the complete original Figure 3 Volume electrode-count conditions and comparators alongside the 90-electrode primary.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The stronger-than-paper comparator is pretrained PopT+BrainBERT at 90 channels. Linear/deep concatenation baselines remain calibration controls; new support-disjoint evaluation is separately labeled extension. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Exact original row order, saved .8/.1/.1 memberships and ranked 90-channel membership/order are unauthenticated.",
+    "Native audio/brain alignment, quartile ties, class orientation and feature/checkpoint content identity require qualification.",
+    "Author pretrained-PopT rerun, compatible working evaluator, fixed episode budgets, meaningful effect and joint uncertainty remain absent.",
+    "Pretraining exposure includes downstream subjects; trial disjointness is not unseen-subject or unseen-movie evidence.",
+    "Original Figure 3 Volume curve values and ranked ensembles at 1/10/20/30/40/50 electrodes need recovery; no digitized plot ordinates are treated as a rerun."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact original row order, saved .8/.1/.1 memberships and ranked 90-channel membership/order are unauthenticated.",
+      "Native audio/brain alignment, quartile ties, class orientation and feature/checkpoint content identity require qualification.",
+      "Author pretrained-PopT rerun, compatible working evaluator, fixed episode budgets, meaningful effect and joint uncertainty remain absent.",
+      "Pretraining exposure includes downstream subjects; trial disjointness is not unseen-subject or unseen-movie evidence.",
+      "Original Figure 3 Volume curve values and ranked ensembles at 1/10/20/30/40/50 electrodes need recovery; no digitized plot ordinates are treated as a rerun."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original volume-decoding task and Table 1 90-channel PopT+BrainBERT result are identifiable, including all seven downstream participants. Exact historical rows, ranked channel ensembles and checkpoint/feature binding are still unqualified. The existing support-disjoint prospective RMS evaluator cannot stand in for the paper’s random-row task. Exact original row order, saved .8/.1/.1 memberships and ranked 90-channel membership/order are unauthenticated. Native audio/brain alignment, quartile ties, class orientation and feature/checkpoint content identity require qualification. Author pretrained-PopT rerun, compatible working evaluator, fixed episode budgets, meaningful effect and joint uncertainty remain absent. Pretraining exposure includes downstream subjects; trial disjointness is not unseen-subject or unseen-movie evidence. Original Figure 3 Volume curve values and ranked ensembles at 1/10/20/30/40/50 electrodes need recovery; no digitized plot ordinates are treated as a rerun.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-006/historical/task.pre-improvement.v1.json",
+      "bytes": 31269,
+      "sha256": "4b06cd0993642d160ce1f953434c777292f771c86d27896feafa5775c64ca4ef"
+    },
+    "notes": "Retain the prospective RMS evaluator and engineering controls. Its support-disjoint split, 1/10/50/90 nested grid and paired PopT-versus-linear gain are calibration/extension outputs. They are not reproduction or victory on Table 1’s original 90-channel random-row evaluation."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

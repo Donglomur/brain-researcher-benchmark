@@ -5,22 +5,33 @@
 - **Task ID:** `PAPER-paper-method-023`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The complete original PhysioP300 Table 4 comparison panel is the selected same-task scope. Its published scores are recoverable, but the released preprocessing and training scripts disagree about subject membership and epoch boundaries, and the reporting/selection reduction is not sufficiently reconciled for a calibrated comparison. The broader S8 programme is preserved as history, without requiring unrelated downstream datasets for a PhysioP300 win.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 19314 bytes; SHA-256 `8e2b7edffa105c95ac0cffdbbc3e2b4aa184d45c9236295a6084fca53ff1cd25`.
+- Specification identity: 22023 bytes; SHA-256 `3d630bf75ec67ddaaefc02364c730213eaa2ad57c84932770ad826a2601f36b9`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
 ## Implementation artifacts
 
-- [Paper paper method 023](implementations/paper-paper-method-023) — Task implementation source.
-  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Paper paper method 023](implementations/paper-paper-method-023) — Calibration only.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

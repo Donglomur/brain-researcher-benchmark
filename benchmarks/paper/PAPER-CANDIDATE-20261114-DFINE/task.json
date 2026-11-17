@@ -1,16 +1,24 @@
 {
+  "schema_version": 1,
   "id": "PAPER-CANDIDATE-20261114-DFINE",
   "track": "paper",
   "title": "Causal and noncausal latent inference under missing neural observations",
-  "registration_recommendation": "REGISTER_DRAFT_ONLY",
-  "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
-  "scientific_question": "Does flexible latent-state inference retain behavioral information under the full published missing-observation regime, and how do causal filtering and noncausal smoothing differ?",
-  "paired_access_conditions": {
-    "A": "Paper and sufficient scientific specification plus identical complete authorized data and train/dev labels; no official implementation.",
-    "B": "The same paper/specification/data and role information plus pinned official code. Missing essential method specification is a construction defect, not an A-arm model failure.",
-    "parity": "Equal execution, tuning and compute budgets; same complete held cases and metric. Public event schedules and paper-provided information remain equally available. Code/model/checkpoint exposure and contamination are audited.",
-    "outcomes": "Separate historical reproduction from prospective improvement. Preserve original test-selection/leakage if reproducing it, label it, and never substitute a corrected split without a distinct prospective result. Narrative cannot replace numeric artifacts."
-  },
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Predict cursor x/y position and x/y velocity at every test timepoint under source-defined missing neural observations, separately for causal filtering and noncausal smoothing; retain full Figure 7e curves and Extended Data 6e–f comparisons.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Predict cursor x/y position and x/y velocity at every test timepoint under source-defined missing neural observations, separately for causal filtering and noncausal smoothing; retain full Figure 7e curves and Extended Data 6e–f comparisons.",
+    "Source-paper comparison for Complete source behavior-Pearson-CC curves by observed ratio and filtering/smoothing regime: Behavior Pearson CC on all test times, including missing-neural times: r_d=sum((y_d-mean(y_d))*(p_d-mean(p_d)))/sqrt(sum((y_d-mean(y_d))^2)*sum((p_d-mean(p_d))^2)), then arithmetic mean over four dimensions. Current author code maps NaN correlation to zero before the dimension mean; historical caller parity remains a separate binding gate. Higher is better."
+  ],
+  "success_criteria": [
+    "Bind all original seven sessions, five folds, four behavior dimensions, complete ratio grid and mask identities; score every original test timepoint.",
+    "Compare a frozen candidate to independently rerun DFINE and the recovered paper curve under identical masks, preprocessing, readout selection and resource/access allowances.",
+    "Declare separate filtering and smoothing claims; any future observation used in the filtering path invalidates that claim. Retain LDM and SAE zero/neighbor-average controls at original 0.3/0.6 settings.",
+    "Meet the predeclared meaningful improvement and valid uncertainty rule across the original complete endpoint; reproduction, a new integrated-loss scalar, burst-dropout masks or a new split cannot constitute the paper win.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "participant_inputs": "All public grid-reaching sessions/trials required by Figure7e and ED6e–f, spike/kinematic inputs under the identical frozen source-defined missingness masks; no published resultCSV or unmasked held neural values.",
   "provenance": {
     "paper": {
       "title": "Dynamical flexible inference of nonlinear latent factors and structures in neural population activity",
@@ -44,28 +52,22 @@
       "sha256": "5d9319faf0f4288c43ff22d32d8fc9192144a0ab2e7bddc328be163a6ac691ea"
     }
   },
-  "complete_scope": "Entire public grid-reaching missing-observation assay, all paper-defined sessions, folds, observation ratios and both inference regimes. Preserve public-dataset subclaim boundary; do not claim the request-only reaching/saccade cohorts reproduced.",
-  "reference": {
-    "outputs": [
-      "Full published missingness-ratio curves and LDM/SAE comparisons at named0.3/0.6 settings, with exact observed-versus-dropped semantics still held"
-    ],
-    "baselines": [
-      "DFINE",
-      "LDM Kalman filter/smoother",
-      "SAE zero and last/next average imputation"
-    ],
-    "panel": "Figure 7e; Extended Data Figure 6e–f"
-  },
-  "prospective_improvement": {
-    "endpoint": "Reduce held-session integrated behavior prediction loss across the frozen missingness curve; report causal latency/cost separately. Additional burst-dropout evaluation is prospective, not the published uniform-dropout reproduction.",
-    "heldout_unit": "Complete held temporal blocks/session; missingness seeds frozen independently of labels; animal-level limitation disclosed.",
-    "controls": [
-      "Identical masks for all methods",
-      "Past-only imputation in causal arm; future average only in smoothing arm",
-      "Train-only manifold and normalization",
-      "Uniform and separately labeled burst masks",
-      "Observed-ratio and zero-signal baselines"
-    ]
+  "source_family_ids": [
+    "odoherty-sabes-rtt"
+  ],
+  "publication_context": {
+    "status": "registered_construction_draft_definition_only",
+    "source_snapshot_date": "2026-11-14",
+    "source_definition_bytes": 7343,
+    "source_definition_sha256": "1ef29d2543e0fb1c6b707b2ae6206baaf1b79fc36a728020f7dea3ac181622cc",
+    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
+    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
+    "scientific_definition_changed": false,
+    "runtime_binding": null,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
   },
   "resources": {
     "storage_GiB": [
@@ -86,49 +88,77 @@
     ],
     "basis": "Complete published grid-reaching cohorts/folds, full missingness curves and three model families; models fit once per train fold and reuse weights across masks when identical."
   },
-  "remaining_gates": [
-    "Paper update/correction and original mask/grid definition",
-    "Exact session-file mapping",
-    "Train/held filter and mask semantics",
-    "Historical code/runtime reconciliation and license review",
-    "Bind exact observed-versus-dropped ratio semantics; retain dossier/review wording discrepancy until source resolves it."
+  "input_assets": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DFINE/improvement.v1.json",
+      "bytes": 11629,
+      "sha256": "d1201e35e664d7706c2891d628932a168c2c1d41ff9081555e59273b9b8704a9"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DFINE/historical/task.pre-improvement.v1.json",
+        "bytes": 8194,
+        "sha256": "99f0fba73a7d68ae8694db671fc8f48ff2628e6fb9bdaeef5f379283e9d01863"
+      },
+      "implementation_ids": [
+        "benchmarks-scientific_components-dfine_missing_observation"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After source recovery, expose original training data and an inner development policy confined to each source training fold; iterate inference/model choices with identical missingness feedback rules for both access arms.",
+    "candidate_freeze": "Freeze algorithm, hyperparameters, neural selection, readout fitting, preprocessing, code/weight hashes, inference regime and every allowed selection rule before any final source-fold result is revealed.",
+    "final_evaluation": "Run once on the complete bound original support against protected behavior labels and an independently fixed author reference. Public source test data require exposure accounting; changing the split to repair exposure is a separately named extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The trusted comparator is the authenticated source DFINE recipe, not candidate-supplied predictions or a weaker local model. Numerical score equality only calibrates reconstruction; published scores, rerun scores and future comparisons remain separate."
+  },
+  "blocking_issues": [
+    "Exact Figure 7e/Extended Data 6e–f numerical reference values and full observed-ratio grid are missing.",
+    "Seven session-file identities, top-neuron selection provenance and original fivefold sample identities are unbound.",
+    "Original mask seeds/replicate count, 100-step alignment and incomplete trailing-block semantics remain unresolved.",
+    "Current official code and the calibration scorer lack authenticated historical caller parity and a complete empirical reference.",
+    "Meaningful effect, dependence-aware uncertainty, finite feedback/compute budgets and protected execution are not fixed."
   ],
-  "overlap": "Same data family as DPAD and NEURAL-023/024, but primary endpoint is flexible inference under missing samples rather than nonlinear-placement or across-day decoding.",
-  "common_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
-  "readiness": {
+  "holds": {
+    "task_specific": [
+      "Exact Figure 7e/Extended Data 6e–f numerical reference values and full observed-ratio grid are missing.",
+      "Seven session-file identities, top-neuron selection provenance and original fivefold sample identities are unbound.",
+      "Original mask seeds/replicate count, 100-step alignment and incomplete trailing-block semantics remain unresolved.",
+      "Current official code and the calibration scorer lack authenticated historical caller parity and a complete empirical reference.",
+      "Meaningful effect, dependence-aware uncertainty, finite feedback/compute budgets and protected execution are not fixed."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original grid-reaching missing-observation experiment has an ordered behavior-correlation endpoint, but its exact curve values, historical ratio grid, session-file/fold identities and masking realizations are not recovered. Methods resolves the retained-versus-dropped ambiguity: rho is retained observations. The existing numerical component and a newly grouped error curve cannot substitute for the Figure 7e and Extended Data 6e–f paper baseline. Exact Figure 7e/Extended Data 6e–f numerical reference values and full observed-ratio grid are missing. Seven session-file identities, top-neuron selection provenance and original fivefold sample identities are unbound. Original mask seeds/replicate count, 100-step alignment and incomplete trailing-block semantics remain unresolved. Current official code and the calibration scorer lack authenticated historical caller parity and a complete empirical reference. Meaningful effect, dependence-aware uncertainty, finite feedback/compute budgets and protected execution are not fixed.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DFINE/historical/task.pre-improvement.v1.json",
+      "bytes": 8194,
+      "sha256": "99f0fba73a7d68ae8694db671fc8f48ff2628e6fb9bdaeef5f379283e9d01863"
+    },
+    "notes": "Preserve missing-observation/scorer.py and its tests/specification. They check complete prediction/mask shape and CC arithmetic on generated fixtures, not authentic inference or a paper win. Its equal-replicate averaging and partial-block refusal are implementation conventions awaiting source reconciliation; no original grader or evidence is replaced."
+  },
+  "admission": {
     "runnable": false,
-    "inputs_verified": false,
-    "reference_validated": false,
     "research_qualified": false,
-    "reproduction_established": false,
-    "model_evaluated": false,
-    "submission_ready": false
-  },
-  "participant_inputs": "All public grid-reaching sessions/trials required by Figure7e and ED6e–f, spike/kinematic inputs under the identical frozen source-defined missingness masks; no published resultCSV or unmasked held neural values.",
-  "machine_output": {
-    "predictions": "Behavior predictions on every held timepoint/missingness mask/ratio/seed/method and declared filtering or smoothing information profile.",
-    "tables": "Full published missingness curve, LDM/SAE imputation comparisons and full-observation degradation, session outcomes and latency/cost.",
-    "artifacts": "All mask identities, valid support, train-only normalization/manifold and inference configuration."
-  },
-  "scoring": "BehaviorCC under complete original ratios/masks and independently fixed grouped error curve for prospective improvement. Do not resolve the retained dossier versus review wording discrepancy by assuming0.3/0.6 mean observed or dropped; source-bound definition remains a blocker.",
-  "protected_split": "Whole temporal blocks/session with masks selected independently of held labels. Past-only filtering; future observations/imputation only in explicitly noncausal smoothing. TRAIN-only manifold/normalization and inner DEV choice.",
-  "comparators": "DFINE versus LDM Kalman filter/smoother and SAE source-defined zero/average imputations; identical masks across methods, zero-signal/full-observed controls. Any burst dropout remains prospective sensitivity within this task.",
-  "source_family_ids": [
-    "odoherty-sabes-rtt"
-  ],
-  "distinctness": "Missing-observation inference estimand is separately interpretable from DPAD nonlinear-locus attribution and existing chronological drift tasks.",
-  "publication_context": {
-    "status": "registered_construction_draft_definition_only",
-    "source_snapshot_date": "2026-11-14",
-    "source_definition_bytes": 7343,
-    "source_definition_sha256": "1ef29d2543e0fb1c6b707b2ae6206baaf1b79fc36a728020f7dea3ac181622cc",
-    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
-    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
-    "scientific_definition_changed": false,
-    "runtime_binding": null,
-    "scientifically_qualified": false,
-    "submission_ready": false,
-    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
-    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

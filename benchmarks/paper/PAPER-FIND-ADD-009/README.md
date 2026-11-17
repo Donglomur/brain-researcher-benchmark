@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-FIND-ADD-009`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Design ready
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** design\_ready. The final paper has an ordered causal neural-to-voice acoustic endpoint and the author release includes session-specific decoders. A same-task design is identifiable, but the original evaluation/session training manifest, matched evaluator, uncertainty rule and budgets are not qualified. The day195 offline demonstration and control-only archive cannot be substituted for the paper evaluation, and offline replay cannot establish improved closed-loop communication. The canonical scope also includes original control trials and cross-session generalization; Fig. 2b correlation alone is insufficient for a whole-registration win until the complete scope rule is bound.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 19354 bytes; SHA-256 `6407aa25a490bc29f256e5f8e063b1782e633c5c7ec5e4a409d0b864430c3a30`.
+- Specification identity: 20801 bytes; SHA-256 `1a99d7f26e7e78fa28d49217a7e83355f477876f9bbfdce1a81510ddcf97bd06`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Feature-level speech evaluation using speech-only DTW-aligned Pearson correlation across 40 Mel bands and paired-sentence WER/PER summarized across seven listeners, with declared trial/session coverage and exposure checks. Native frontend/DTW/tokenization parity, authentic trial membership, decoder training, waveform generation, original ten-fold controls and protected references remain held. No clinical or whole-paper result is established; scientific qualification is unknown.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Feature-level speech evaluation using speech-only DTW-aligned Pearson correlation across 40 Mel bands and paired-sentence WER/PER summarized across seven listeners, with declared trial/session coverage and exposure checks. Native frontend/DTW/tokenization parity, authentic trial membership, decoder training, waveform generation, original ten-fold controls and protected references remain held. No clinical or whole-paper result is established; scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

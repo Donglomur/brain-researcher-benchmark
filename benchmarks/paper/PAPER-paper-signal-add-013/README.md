@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-signal-add-013`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. Source Figure 5 contains an ordered regression-estimation route: CMRO2 and its task changes are fitted from source hemodynamic inputs with reported stratum-specific R-squared values. This source-native subtask can be investigated independently of the legacy descriptive CALC–CTRL endpoint. Exact native row/mask/model binding and a scientifically valid improvement criterion remain unresolved: CMRO2 is itself derived from these inputs through Fick’s principle, so increasing fitted R-squared may only reconstruct a known identity and cannot by itself establish better physiological estimation.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 16711 bytes; SHA-256 `dc4aa310b2265d05b3cfa88b7f8093ebc82cbac96ca6d67628c9c83b899dcd64`.
+- Specification identity: 18351 bytes; SHA-256 `aa3f20e5085adb38cecfc5ee18e1c7ede4b59bd750d660de0d24bc3fc1329a3b`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Computes the fixed 40-participant CALC-CTRL map contrast, corrected primary and explicitly mixed-lineage original sensitivity, distinct source median reductions and descriptive paired-participant summaries. Authentic maps/masks/geometry, physiological correction, native PLS, figure parity, geometry-preserving spatial nulls, protected references and scientific qualification remain held; data CC0 and upstream code CC BY-NC-SA 4.0 terms remain distinct.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Computes the fixed 40-participant CALC-CTRL map contrast, corrected primary and explicitly mixed-lineage original sensitivity, distinct source median reductions and descriptive paired-participant summaries. Authentic maps/masks/geometry, physiological correction, native PLS, figure parity, geometry-preserving spatial nulls, protected references and scientific qualification remain held; data CC0 and upstream code CC BY-NC-SA 4.0 terms remain distinct. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

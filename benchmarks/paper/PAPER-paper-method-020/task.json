@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-020",
-  "source_id": "paper-method-020",
   "track": "paper",
   "title": "Neuro-Symbolic Decoding of Neural Activity",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Answer semantic queries about the viewed image from CSI1 fMRI: action, position and true/false answers, using the original BOLD5000-QA task in Table 1. This is not visual reconstruction or a new cross-subject task.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Answer semantic queries about the viewed image from CSI1 fMRI: action, position and true/false answers, using the original BOLD5000-QA task in Table 1. This is not visual reconstruction or a new cross-subject task.",
+    "Source-paper comparison for Table 1 BOLD5000-QA CSI1 overall QA accuracy on the publication-identical evaluated query set: Overall structured-answer QA accuracy, proportion of correct evaluated queries, with action/position/T/F companions. Exact original inclusion and decoding aggregation must match Table 1: training source can skip test queries with unseen concepts, whereas the local evaluator includes all declared queries and failures."
+  ],
+  "success_criteria": [
+    "Authenticate the original CSI1 data, complete official test support, original query eligibility, atlas, symbolic-domain access and publication checkpoint selection before comparing with 0.7041.",
+    "Freeze a candidate selected without final-result feedback and evaluate candidate and authenticated author reference under an explicit comparable access policy; resolve historical source test tuning rather than silently copying or repairing it.",
+    "Require a predeclared meaningful gain over the original 0.7041 and the author rerun, plus valid paired uncertainty and complete action/position/T/F reporting.",
+    "Preserve no-neural and shuffled-neural controls with identical non-neural resources; a zero-input inference ablation is not a separately trained language-only baseline.",
+    "The local prospective exhaustive-query train-only protocol, a new image/person split or a smaller query set can support only a labeled extension. A CSI1 result does not establish four-subject or CNeuroMod superiority.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-020",
   "canonical_position_one_based": 18,
   "paper_identity": {
     "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/33c069ac8440595724bcc373c9a52852-Abstract-Conference.html",
     "publication_year": 2026,
     "venue": "ICLR"
   },
-  "primary_outputs": [
-    "Train/evaluate the author neural-symbolic QA decoder using actual per-image fMRI records and the official train/test directory split.",
-    "Measure performance against no-neural-input and shuffled-neural-input controls under identical language models/prompts."
-  ],
   "input_assets": {
     "routes": [
       "https://huggingface.co/api/datasets/PPWangyc/BOLD5000-QA"
@@ -54078,109 +54089,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "recorded_terms": [
-        "HF PPWangyc/BOLD5000-QA is ungated at inspected commit; card MIT.",
-        "Underlying BOLD5000 and image/stimulus rights remain separate; data-card license is not a blanket waiver."
-      ],
-      "record_conflicts": [],
-      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
-      "overlap_group": null
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "central_outputs_in_saved_source_contract": [
-        "Train/evaluate the author neural-symbolic QA decoder using actual per-image fMRI records and the official train/test directory split.",
-        "Measure performance against no-neural-input and shuffled-neural-input controls under identical language models/prompts."
-      ],
-      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
-      "missing_or_unfrozen_endpoint_details": "Specify neural contribution to compositional QA, exact image/person partition and language-model checkpoint; source directory split alone does not establish independence."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Compare identical prompts/models against no-neural and shuffled-neural inputs. Answer-bearing text, shared image identity and pretrained-language priors can dominate QA accuracy."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Specify neural contribution to compositional QA, exact image/person partition and language-model checkpoint; source directory split alone does not establish independence.",
-        "Compare identical prompts/models against no-neural and shuffled-neural inputs. Answer-bearing text, shared image identity and pretrained-language priors can dominate QA accuracy.",
-        "NPY contents not deserialized in this audit; schema checked through author loader and manifest.",
-        "Shared image identity and answer-bearing text must be controlled; require subject/image split and text-only baseline before model benchmarking.",
-        "Does not establish the entire paper across all neural sources.",
-        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-        "Execute and independently audit references, controls, grading and measured resources.",
-        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
-      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve compositional or subject generalization under matched neural inputs, measuring gains over neural-free language and shuffled-neural controls as well as original NEURONA."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "independent_panel_not_established_in_inspected_evidence",
-      "proposed_improvement": [
-        "Improve compositional or subject generalization under matched neural inputs, measuring gains over neural-free language and shuffled-neural controls as well as original NEURONA."
-      ],
-      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
-      "special_gate": "No completed independent improvement result is established here."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "source_roster_estimate_or_statement": "GPU; ~4,888 individual fMRI-QA records; model size determines VRAM",
-    "measured_or_static_facts_from_existing_authoring": [],
-    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
-  },
-  "holds": {
-    "task_specific": [
-      "Specify neural contribution to compositional QA, exact image/person partition and language-model checkpoint; source directory split alone does not establish independence.",
-      "Compare identical prompts/models against no-neural and shuffled-neural inputs. Answer-bearing text, shared image identity and pretrained-language priors can dominate QA accuracy.",
-      "NPY contents not deserialized in this audit; schema checked through author loader and manifest.",
-      "Shared image identity and answer-bearing text must be controlled; require subject/image split and text-only baseline before model benchmarking.",
-      "Does not establish the entire paper across all neural sources.",
-      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-      "Execute and independently audit references, controls, grading and measured resources.",
-      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Design the public text/neural allowlist and a label-blind image/person identity audit before acquiring records or fitting the QA model.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Design the public text/neural allowlist and a label-blind image/person identity audit before acquiring records or fitting the QA model.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -54211,11 +54119,79 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "source_roster_estimate_or_statement": "GPU; ~4,888 individual fMRI-QA records; model size determines VRAM",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-020/improvement.v1.json",
+      "bytes": 11003,
+      "sha256": "cac39eb7f940993c55d80457d2c6c41c2977f4808b60d41e870ee26a59a70a02"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-020/historical/task.pre-improvement.v1.json",
+        "bytes": 2231796,
+        "sha256": "263ea4a405bdee13a1003048c883293b224589ebce6e4816e7a3e5e4b8248182"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-020-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Iterate on the original training data and a development partition within training, with matched query/neural access. Fix how the author test-informed domain and checkpoint are treated before any candidate evaluation; no new external model budget is assumed.",
+    "candidate_freeze": "Freeze candidate source/weights, atlas, query transforms, vocabulary/domain, prompt or no-language-model declaration, eligible test manifest and selection rule before final scores.",
+    "final_evaluation": "Use the original Table 1 test task and independently authenticated reference. Produce exhaustive accounting of original eligible and excluded queries; keep the local all-query extension report separate.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The 0.7041 published score, a rerun of the author recipe and any modern comparator are separate. Calibration of structured decoding or the construction fixture is not a scientific result. Historical test selection must remain disclosed."
+  },
+  "blocking_issues": [
+    "Paper evaluated-query denominator and source unseen-concept exclusion have not been reconciled with the released 2095-test-query count.",
+    "Original checkpoint, seed/configuration and test-based selection history are not authenticated.",
+    "CSI1 stimulus identities, train/test aliases and permitted query-domain exposure require a label-blind audit.",
+    "Existing evaluator changes domain, selection and denominator policy; publication-parity evaluator and native rerun remain absent.",
+    "Meaningful effect, clustered uncertainty decision, and concrete access/resource budgets are not yet fixed."
+  ],
+  "holds": {
+    "task_specific": [
+      "Paper evaluated-query denominator and source unseen-concept exclusion have not been reconciled with the released 2095-test-query count.",
+      "Original checkpoint, seed/configuration and test-based selection history are not authenticated.",
+      "CSI1 stimulus identities, train/test aliases and permitted query-domain exposure require a label-blind audit.",
+      "Existing evaluator changes domain, selection and denominator policy; publication-parity evaluator and native rerun remain absent.",
+      "Meaningful effect, clustered uncertainty decision, and concrete access/resource budgets are not yet fixed."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Table 1 CSI1 overall accuracy 0.7041 is a verified numeric anchor, but the publication-identical evaluated query denominator, checkpoint selection and source scoring identity remain unresolved. Author test-based selection and query skipping differ from the local exhaustive train-only evaluator; that extension cannot be used to claim a source-paper win. Paper evaluated-query denominator and source unseen-concept exclusion have not been reconciled with the released 2095-test-query count. Original checkpoint, seed/configuration and test-based selection history are not authenticated. CSI1 stimulus identities, train/test aliases and permitted query-domain exposure require a label-blind audit. Existing evaluator changes domain, selection and denominator policy; publication-parity evaluator and native rerun remain absent. Meaningful effect, clustered uncertainty decision, and concrete access/resource budgets are not yet fixed.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-020/historical/task.pre-improvement.v1.json",
+      "bytes": 2231796,
+      "sha256": "263ea4a405bdee13a1003048c883293b224589ebce6e4816e7a3e5e4b8248182"
+    },
+    "notes": "Historical specifications and implementations remain calibration evidence; they do not establish surpassing the source paper."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

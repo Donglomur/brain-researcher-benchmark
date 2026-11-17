@@ -1,0 +1,232 @@
+{
+  "schema": "public_neuroscience_construction_draft_v1",
+  "id": "PAPER-CANDIDATE-20261114-CONSENSUS",
+  "track": "paper",
+  "title": "Reproduce held-neuron prediction in a two-area visual cortical dynamics model",
+  "registration_date": "2026-11-14",
+  "scope": "One paper-result task with matched information conditions and separate historical-reproduction and prospective-improvement profiles. This document specifies future construction, not a completed benchmark.",
+  "paper": {
+    "title": "Reciprocal connections dynamically build consensus between neocortical areas",
+    "doi": "10.1038/s41593-026-02437-3",
+    "publisher_url": "https://www.nature.com/articles/s41593-026-02437-3",
+    "date": "2026-09-18",
+    "venue": "Nature Neuroscience",
+    "endpoint": "Figure 2b: constrained versus unconstrained recurrent models, leave-one-neuron-out residual Poisson log-likelihood on test trials",
+    "paper_counts": {
+      "mice": 7,
+      "active_neurons": 246
+    },
+    "claim_limit": "Reproduction of this endpoint does not independently establish the paper's causal consensus or line-attractor interpretation."
+  },
+  "official_code": {
+    "repository": "https://github.com/marineschimel/v1lm_nn",
+    "revision": "eec6021e8b9f9031eb775fc1a10a07e583cf0e29",
+    "fit_entrypoint": "examples/fit_single_animal.ml",
+    "analysis_entrypoint": "examples/analyze_fitted_model.ml",
+    "native_stack": [
+      "OCaml",
+      "dune",
+      "Owl",
+      "OpenBLAS",
+      "MPI"
+    ],
+    "license_status": "GitHub API license is null and no complete LICENSE file was found in the tree. Resolve authoritative license notice/scope before redistribution. Do not substitute presence of an opam declaration for a redistribution audit.",
+    "declared_license": "MIT in v1_lm.opam",
+    "source_included_in_this_package": false
+  },
+  "data": {
+    "accession": "figshare:30983044:v1",
+    "doi": "10.6084/m9.figshare.30983044.v1",
+    "url": "https://doi.org/10.6084/m9.figshare.30983044.v1",
+    "metadata_url": "https://api.figshare.com/v2/articles/30983044/versions/1",
+    "declared_license": "CC BY 4.0",
+    "metadata_file_count": 148,
+    "metadata_total_bytes": 1006514455,
+    "support": "All seven animals; every source file must be matched by version and file ID with its folder and basename. Metadata availability does not authenticate downloaded payloads.",
+    "join_key": "(Figshare article version, file id) -> folder_structure[file id] / file name; retain folder identity, not basename alone",
+    "native_join_gates": [
+      "Inspect NPY headers in a separately bounded acquisition before asserting axis order or trial counts.",
+      "Verify the OCaml-serialized trial_ids_N and NPY companion represent the same exact permutations; do not parse OCaml serialization as Python pickle.",
+      "Preserve one-based native condition/correctness IDs and convert exactly once where the code does; test all selection masks against native output.",
+      "Resolve the exact stimulus window, trial order, control-condition membership and SNR standard-deviation convention before scoring.",
+      "Refuse missing split, stimulus-time, correctness or no-grooming inputs rather than using source fallbacks that invent timings/permutations or treat missing filters as all trials."
+    ],
+    "payloads_included": false,
+    "optional_published_models": {
+      "accession": "figshare:31142140",
+      "url": "https://doi.org/10.6084/m9.figshare.31142140",
+      "metadata_file_count": 426,
+      "metadata_total_bytes": 5688432610,
+      "role": "Optional owner-only historical evidence. Selected fitted weights and cached held-out predictions are excluded from both candidate conditions."
+    }
+  },
+  "information_conditions": [
+    {
+      "id": "paper_data",
+      "visible": [
+        "paper text and methods",
+        "same licensed training/development data view and schema",
+        "task protocol and permitted standard toolchain"
+      ],
+      "hidden": [
+        "official implementation",
+        "official fitted weights",
+        "published final predictions and evaluation arrays",
+        "owner labels and scoring outputs"
+      ],
+      "external_access": "Owner stages allowlisted resources; no unrestricted network/repository lookup during evaluation. Record any pretraining exposure as an unavoidable limitation.",
+      "question": "Can an agent derive and implement the method from the paper and data?"
+    },
+    {
+      "id": "paper_data_official_code",
+      "visible": [
+        "all paper_data inputs",
+        "official code at the pinned commit with full provenance/license notice once cleared"
+      ],
+      "hidden": [
+        "official fitted weights",
+        "final predictions and evaluation arrays",
+        "owner labels and scoring outputs"
+      ],
+      "external_access": "Same network and compute policy as paper_data; code mode is the only intentional information addition.",
+      "question": "How much does access to the authors' implementation improve reproduction or predictive extension?"
+    }
+  ],
+  "matched_conditions": [
+    "same dataset/cohort",
+    "same fitting/evaluation resource ceiling, once measured and preregistered",
+    "same participant program interface",
+    "same owner evaluation",
+    "same independent task seeds",
+    "same baseline checks"
+  ],
+  "historical_reproduction": {
+    "purpose": "Recover the published analysis transparently, using its historical model selection and splits. Label this reproduction, not unseen generalization.",
+    "trial_split": "Follow the three public trial permutations and the source first-two-thirds versus remaining-third division; reproduce all three cross-validation folds and report them without treating folds as independent benchmarks.",
+    "hyperparameters": "Publisher varies latent dimensions 8..24 in steps of 4 and evaluates input-channel variants by cross-validation. Transcribe the complete native selection procedure before execution; do not optimize selection against an ad hoc final score.",
+    "active_cell_rule": "Publisher Methods: a neuron's control-trial stimulus spike-count mean divided by its trial standard deviation is greater than 1. Resolve exact indexing/window/SD convention with native parity. The paper reports 246 qualifying neurons across 7 animals; never discard inconvenient neurons simply to force that count.",
+    "psth_reference": "For published residual likelihood, the paper baseline uses the held neuron's other trials from the same condition, excluding the current trial. That historical analysis is not equivalent to a strictly training-only PSTH; implement and label both protocols separately.",
+    "selection_contamination": "Published hyperparameters and initializations were selected with cross-validated/held-out likelihood. Published fitted model outputs are not evidence of performance on a new untouched test set.",
+    "native_analysis_trap": "examples/analyze_fitted_model.ml sets rerun_heldout=false (observed at line 59). Calling it without a reviewed successor enabling fresh computation cannot establish held-neuron reproduction; existing saved outputs must not masquerade as a fresh run.",
+    "reference_observation_status": "No native baseline has been run. No numeric pass band or claim of matching Figure 2b has been established."
+  },
+  "participant_interface": {
+    "design_state": "specified; adapter and evaluator not implemented",
+    "submission": "One complete source program plus locked dependencies and machine-readable configuration. Model weights must be derived from permitted training data and documented. Evaluation owner freezes and hashes submission before final evaluation.",
+    "fit": "Program fits from permitted train/development records. It cannot load the owner evaluation vault.",
+    "predict": "For each withheld target neuron and trial, provide nonnegative finite expected spike counts per 5 ms bin using other observed neurons plus allowed stimulus/condition metadata; the target neuron's current-trial activity is withheld.",
+    "output_table_fields": [
+      "animal_id",
+      "trial_id",
+      "target_neuron_id",
+      "region",
+      "time_bin",
+      "expected_count"
+    ],
+    "required_report": [
+      "per-animal and per-neuron likelihood outcomes",
+      "coverage and excluded-record reasons fixed by protocol",
+      "model configuration, initialization and selection history",
+      "data/license attribution",
+      "limitations separating prediction from mechanistic interpretation"
+    ],
+    "failure_rules": [
+      "Duplicate, missing or extra evaluation keys fail coverage; no silent intersection.",
+      "NaN, infinity, negative means, mismatched axes, unauthorized files or unpinned dependencies fail validation.",
+      "Do not assign a finite good score to crashed, partial or empty predictions.",
+      "Zero counts follow the mathematical Poisson limit; any positive floor must be explicit and identical for native/participant baselines, with sensitivity reported."
+    ]
+  },
+  "scoring": {
+    "primary": "Residual Poisson log-likelihood per neuron, trial and condition, then historical aggregation matched to Figure 2b.",
+    "formula": "LL = sum_t [ y_t * log(mu_t) - mu_t - lgamma(y_t + 1) ]; residual_LL = LL_candidate - LL_PSTH. When the program returns rate in Hz, mu_t = rate_t * 0.005 seconds, exactly once. Use the mathematical zero-rate limit: y=0, mu=0 contributes 0; y>0, mu=0 contributes negative infinity. Do not silently replace it with a favorable finite score.",
+    "units": "LL is in natural-log units. Report the raw paper-matched total/average explicitly; optional bits/spike is secondary and must not replace the paper metric.",
+    "paper_conditions": "2 visual stimuli by 9 silencing conditions = 18; verify deposited condition mapping before aggregation.",
+    "aggregation_gate": "The article says average over trials and conditions. Freeze trial-versus-condition weights from native parity, not an unverified interpretation of prose. Keep complete per-trial/per-condition values to make differences inspectable.",
+    "baseline_set": [
+      "published constrained recurrent model",
+      "published unconstrained recurrent model",
+      "condition PSTH"
+    ],
+    "paper_parity": [
+      "complete per-neuron support and native prediction/score agreement",
+      "all seven animals and all three folds accounted for",
+      "246 active-neuron claim reconciled to actual deposited data and rule",
+      "source-derived native residual likelihoods reproduced within a tolerance established from numerical precision/repeated native reference evidence"
+    ],
+    "uncertainty": "Animals are the main independent biological unit. Provide seven animal-level effects and a prespecified paired summary/interval; neurons/trials are nested and must not be presented as 246 independent animals. Historical paper tests can be reproduced as labeled descriptive endpoints.",
+    "threshold": "Unspecified until independently generated native references and numerical tolerances exist. No invented accuracy or claimed SOTA threshold."
+  },
+  "prospective_improvement": {
+    "purpose": "A separate phase of the same task tests predictive improvement beyond the reconstructed baseline; a higher positive effect must reflect better withheld predictions, not plotting changes.",
+    "proposal": "Owner preregisters a new blocked trial split per animal and a nested development split before any candidate results. Hidden targets and aggregate final scores remain unavailable during model selection. The original code is rerun using only the allowed fitting data.",
+    "data_caveat": "All original recordings are publicly available. A new split of these recordings is evaluation-hidden, not newly collected or guaranteed training-unseen. Do not claim an uncontaminated frontier test on this basis. Strong frontier claims require genuinely new withheld animals/recordings or a defensible audited exposure study.",
+    "eligibility_mask": "Calculate the prospective active-cell mask from permitted training control trials only and freeze it; do not use final labels to select easy neurons. Keep historical reproduction mask separate.",
+    "reference": "Use a strictly training-only condition PSTH for the prospective comparison. Refit constrained and unconstrained models on the same training subset. Public prefit weights are ineligible unless training exposure can be demonstrated compatible with the split.",
+    "improvement_claim": "Report animal-level paired differences against all preregistered baselines with uncertainty and calibration/coverage diagnostics. Selection and final assessment must be disjoint. No SOTA wording from one fitted model or a reused public test score.",
+    "mechanistic_boundary": "Better held-neuron likelihood is improved prediction. It does not alone overturn or establish consensus dynamics/line attractors.",
+    "budget": "Resource limits and stopping rules remain a preregistration gate after estimating one native fit. No current execution/spending authorization is created by this document."
+  },
+  "protected_evaluation": {
+    "hidden_material": [
+      "final heldout likelihood arrays",
+      "final predictions",
+      "empirical scoring arrays containing withheld activity",
+      "native fitted weights selected with public heldout data",
+      "hidden target spikes",
+      "owner evaluation program writable paths"
+    ],
+    "required_isolation": "Owner-controlled read-only mount for permitted data, distinct private evaluator mount, no host data mounts, disable network after staging, hash inputs/code before and after. Do not rely on instructions alone to hide answers.",
+    "authoring_boundary": "The same arm-specific staged information policy must govern program authoring and execution; official-code retrieval through paper links must not defeat the no-code condition.",
+    "contamination": "Public recordings, paper figures and trained-model exposure cannot be made training-unseen merely by hiding local paths or choosing a fresh split."
+  },
+  "construction_gates": [
+    {
+      "id": "data_acquisition_and_schema",
+      "status": "not_done",
+      "required": "Acquire exactly the public data manifest under separate storage/read budget; authenticate all148 checksums and parse native shapes/trial IDs."
+    },
+    {
+      "id": "code_license_scope",
+      "status": "unresolved",
+      "required": "Obtain/confirm complete MIT notice and applicable source scope before redistributing code."
+    },
+    {
+      "id": "native_environment",
+      "status": "not_done",
+      "required": "Pin OCaml/Owl/dune/MPI/OpenBLAS dependencies and reproduce build from clean environment; no author credentials."
+    },
+    {
+      "id": "native_method_parity",
+      "status": "not_done",
+      "required": "Resolve stimulus windows, condition IDs, permutations, filter variants, active-cell rule, time/rate units, fold aggregation and rerun_heldout control."
+    },
+    {
+      "id": "owner_reference",
+      "status": "not_done",
+      "required": "Run constrained/unconstrained/PSTH reference analyses with immutable provenance and complete seven-animal support."
+    },
+    {
+      "id": "scorer_adversarial_validation",
+      "status": "not_done",
+      "required": "Independently test units, target leakage, empty/partial outputs, duplicate IDs, permutation errors and native prediction parity."
+    },
+    {
+      "id": "prospective_evaluation",
+      "status": "not_done",
+      "required": "Preregister nested splits/exposure policy/resource ceilings; obtain genuinely withheld cohort for strong frontier claims."
+    }
+  ],
+  "readiness": {
+    "registered_construction_draft": true,
+    "runnable": false,
+    "reference_execution_established": false,
+    "scorer_implemented": false,
+    "runner_implemented": false,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "performance_or_SOTA_claim": false
+  },
+  "counting": "One registered draft. Arms, latent dimensions, folds, neurons, conditions, controls and later versions are not additional benchmarks.",
+  "evidence_scope": "Projection of the accepted paper contract V1 and its independent source review at registration. Subsequent implementation or execution requires separate evidence."
+}

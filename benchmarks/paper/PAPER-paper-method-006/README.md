@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-method-006`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Source implemented inactive
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The original sorting problem has an ordered recovery endpoint, but the exact published Kilosort4 score vectors, publication invocation and metric implementation are unresolved. The paper checks 40 neighboring units whereas v4.0.2 bench.py checks 20; the registered exhaustive one-to-one prospective policy changes the comparison and cannot certify a paper win.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 130824 bytes; SHA-256 `bceeb7fb2d302e27c0c7e2278ce41526ab69a5baa4c778b4a7cadd06aeeb118e`.
+- Specification identity: 55934 bytes; SHA-256 `15dc9ba0c84b05717fdd3df10a700486ba9cde8a71642ad4fcb4217a37da6e14`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -21,8 +32,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 ## Implementation artifacts
 
-- [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
-  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Registered runtime](implementations/registered-runtime) — Calibration only.
+  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

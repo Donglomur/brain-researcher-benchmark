@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-method-031`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. FAST has an ordered temporal-fidelity comparison, but the exact numeric source baseline and pixel/ROI/synchronization recipe for the registered real recordings are not recovered. The existing evaluator deliberately uses a prospective group-disjoint recipe, which changes the original same-stack self-supervised task and cannot award a source-paper win. Published throughput alone is not a substitute for denoising quality.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 17637 bytes; SHA-256 `1b43d761bbefff82386fa2a5ae7f03a6a83dc3a62c38abbbfd63b520cdd67b90`.
+- Specification identity: 19082 bytes; SHA-256 `226d7b77017d7fef1864401a0fc84598ea69a2fd6a425b8ef7ae7a2995a99381`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Prospective measurement evaluator over complete exported movie panels: fixed-ROI traces and ΔF/F, temporal agreement and event diagnostics, synthetic-only image errors, and declared end-to-end latency across FAST, candidate and raw-input conditions. Native FAST fitting/inference and original payload ingestion, authentic real calcium/voltage population, figure normalization/tolerance, competent reference, measured lifecycle resources and protected qualification remain open. Real recordings are not treated as clean-target ground truth; source-specific data rights remain separate.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Prospective measurement evaluator over complete exported movie panels: fixed-ROI traces and ΔF/F, temporal agreement and event diagnostics, synthetic-only image errors, and declared end-to-end latency across FAST, candidate and raw-input conditions. Native FAST fitting/inference and original payload ingestion, authentic real calcium/voltage population, figure normalization/tolerance, competent reference, measured lifecycle resources and protected qualification remain open. Real recordings are not treated as clean-target ground truth; source-specific data rights remain separate. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

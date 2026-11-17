@@ -1,0 +1,513 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-002",
+  "source_id": "paper-method-002",
+  "track": "paper",
+  "title": "Jaxley: differentiable simulation enables large-scale training of detailed biophysical models of neural dynamics",
+  "status": "specification_only",
+  "canonical_position_one_based": 50,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41592-025-02895-w",
+    "publication_year": 2025,
+    "venue": "Nature Methods"
+  },
+  "primary_outputs": [
+    "Regenerate stimulus-to-calcium prediction and held-out response fit for the supplied retinal cell.",
+    "Compare fitted biophysical models with fixed/untrained or constrained-parameter controls using identical stimulus splits."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://zenodo.org/records/3708064"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": "data_roi.pickle",
+          "bytes": 814528,
+          "url": "https://zenodo.org/api/records/3708064/files/data_roi.pickle/content",
+          "checksum": "md5:a9140b1044935c5e9068af9627a49c4a"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:a9140b1044935c5e9068af9627a49c4a"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/1",
+        "recorded_fields": {
+          "name": "data_cntr.pickle",
+          "bytes": 24033520,
+          "url": "https://zenodo.org/api/records/3708064/files/data_cntr.pickle/content",
+          "checksum": "md5:73833100d71f45c84d023a9eddcf19ca"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:73833100d71f45c84d023a9eddcf19ca"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/2",
+        "recorded_fields": {
+          "name": "data_stacks_info.pickle",
+          "bytes": 6161,
+          "url": "https://zenodo.org/api/records/3708064/files/data_stacks_info.pickle/content",
+          "checksum": "md5:a87190decf96ec916c24d312f6572c9a"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:a87190decf96ec916c24d312f6572c9a"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/3",
+        "recorded_fields": {
+          "name": "data_morph.pickle",
+          "bytes": 13095603,
+          "url": "https://zenodo.org/api/records/3708064/files/data_morph.pickle/content",
+          "checksum": "md5:bb68695537993a705e29304e33838e20"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:bb68695537993a705e29304e33838e20"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/4",
+        "recorded_fields": {
+          "name": "data_raw.pickle",
+          "bytes": 282995231,
+          "url": "https://zenodo.org/api/records/3708064/files/data_raw.pickle/content",
+          "checksum": "md5:0eb4940aeb834367e439d923e57b4e81"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:0eb4940aeb834367e439d923e57b4e81"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-002"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/5",
+        "recorded_fields": {
+          "name": "data_scans.pickle",
+          "bytes": 2279475,
+          "url": "https://zenodo.org/api/records/3708064/files/data_scans.pickle/content",
+          "checksum": "md5:1e5d67b6b59a6e369c6047f4d14e50b3"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:1e5d67b6b59a6e369c6047f4d14e50b3"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-002"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "assessment": "Zenodo3708064v1.0 retinal data; pinned experiment morphology20161028_1.swc and setup-linked noise/chirp H5 stimuli; setup→train.py→simulate.py bridge is statically documented but not loaded together.",
+      "official_code": {
+        "url": "https://github.com/mackelab/jaxley_experiments",
+        "commit": "5e7a86282adb9d4603b5546ac5d8dad59aec7cc0"
+      },
+      "input_routes": [
+        {
+          "metadata_url": "https://zenodo.org/api/records/3708064",
+          "version": "v1.0",
+          "license": {
+            "id": "cc-by-4.0"
+          }
+        },
+        {
+          "role": "stimulus and morphology inputs"
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-002",
+        "versions_and_loader_contract": {
+          "scope_description": "Paper Fig.4 retinal-ganglion-cell biophysical fitting: fit the supplied detailed morphology to real stimulus/calcium observations and evaluate predictions; excludes other cell types and network experiments.",
+          "unresolved_coverage": [
+            "Entire paper is not covered. Preserve neuron/stimulus pairing and training/test splits; setup has paths to adapt.",
+            "Input record and morphology inspected as metadata/text, not loaded together; compatibility remains a reference-qualification check."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/mackelab/jaxley_experiments",
+    "revision_or_archive_version": "5e7a86282adb9d4603b5546ac5d8dad59aec7cc0",
+    "entrypoints": [
+      {
+        "path": "nex/fig4_rgc/01_setup.ipynb",
+        "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/01_setup.ipynb",
+        "role": "Author raw-data preprocessing and stimulus-loading route",
+        "inspected_as_text": true
+      },
+      {
+        "path": "nex/fig4_rgc/train.py",
+        "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/train.py",
+        "role": "Differentiable biophysical fitting",
+        "inspected_as_text": true
+      },
+      {
+        "path": "nex/fig4_rgc/simulate.py",
+        "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/simulate.py",
+        "role": "Simulate fitted responses",
+        "inspected_as_text": true
+      },
+      {
+        "path": "nex/fig4_rgc/data/20161028_1.swc",
+        "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/data/20161028_1.swc",
+        "role": "Supplied empirical morphology; source tree inspected",
+        "inspected_as_text": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-002",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/mackelab/jaxley_experiments",
+            "commit": "5e7a86282adb9d4603b5546ac5d8dad59aec7cc0",
+            "author_linkage": [
+              "https://www.nature.com/articles/s41592-025-02895-w",
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC12695658/",
+              "https://github.com/jaxleyverse/jaxley",
+              "https://zenodo.org/records/14166049",
+              "https://github.com/mackelab/jaxley_experiments",
+              "https://zenodo.org/records/3708064"
+            ],
+            "default_branch": "main",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/mackelab/jaxley_experiments/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/README.md",
+            "license_source": "https://raw.githubusercontent.com/mackelab/jaxley_experiments/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/LICENSE",
+            "file_tree": {
+              "source": "https://api.github.com/repos/mackelab/jaxley_experiments/git/trees/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0?recursive=1",
+              "truncated": false,
+              "paths": [
+                "README.md",
+                "nex/__init__.py",
+                "nex/colors.py",
+                "nex/fig1_illustration/notebooks/00_illustration.ipynb",
+                "nex/fig1_illustration/notebooks/01_assemble_figure.ipynb",
+                "nex/fig1_illustration/notebooks/01_assemble_tricks_figure.ipynb",
+                "nex/fig1_illustration/notebooks/__init__.py",
+                "nex/fig2_demonstration/asc2swc.py",
+                "nex/fig2_demonstration/notebooks/00_timing.ipynb",
+                "nex/fig2_demonstration/notebooks/00_timing_single_comp.ipynb",
+                "nex/fig2_demonstration/notebooks/01_large_net.ipynb",
+                "nex/fig2_demonstration/notebooks/01_large_net_vis.ipynb",
+                "nex/fig2_demonstration/notebooks/01_large_net_vis_wide.ipynb",
+                "nex/fig2_demonstration/notebooks/02_assemble_figure.ipynb",
+                "nex/fig2_demonstration/notebooks/appendix_01_accuracy.ipynb",
+                "nex/fig2_demonstration/notebooks/test.ipynb",
+                "nex/fig2_demonstration/notebooks/tryout.ipynb",
+                "nex/fig3_l5pc/morphologies/asc2swc.py",
+                "nex/fig3_l5pc/notebooks/01_synthetic.ipynb",
+                "nex/fig3_l5pc/notebooks/02_voltage_imaging.ipynb",
+                "nex/fig3_l5pc/notebooks/02_voltage_imaging_ga.ipynb",
+                "nex/fig3_l5pc/notebooks/02_voltage_imaging_hmc_visualize.ipynb",
+                "nex/fig3_l5pc/notebooks/02_voltage_imaging_mcmc.py",
+                "nex/fig3_l5pc/notebooks/02_voltage_imaging_test.ipynb",
+                "nex/fig3_l5pc/notebooks/02_voltage_imaging_utils.py",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/__init__.py",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/build_simulator.py",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/channels.py",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/genetic_algo/batch_run_ga_25.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/genetic_algo/batch_run_ga_32.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/genetic_algo/batch_run_ga_79.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/genetic_algo/batch_run_ga_86.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/genetic_algo/run_ga.py",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/genetic_algo_low_budget/batch_run_ga_25.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/genetic_algo_low_budget/batch_run_ga_32.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/genetic_algo_low_budget/batch_run_ga_79.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/genetic_algo_low_budget/batch_run_ga_86.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/genetic_algo_low_budget/run_ga.py",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/gradient_descent/batch_run_gd_25.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/gradient_descent/batch_run_gd_32.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/gradient_descent/batch_run_gd_79.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/gradient_descent/batch_run_gd_86.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/gradient_descent/run_gd.py",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/gradient_descent_low_budget/batch_run_gd_25.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/gradient_descent_low_budget/batch_run_gd_32.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/gradient_descent_low_budget/batch_run_gd_79.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/gradient_descent_low_budget/batch_run_gd_86.sh",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/gradient_descent_low_budget/run_gd.py",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/loss_util.py",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/notebooks/01_assemble_figure.ipynb",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/posthoc_summary_stats.py",
+                "nex/fig3_l5pc/notebooks/03_allen_fits/smc_utils.py",
+                "nex/fig3_l5pc/notebooks/04_nonlinear_single_neuron.ipynb",
+                "nex/fig3_l5pc/notebooks/04_nonlinear_single_neuron_ga.ipynb",
+                "nex/fig3_l5pc/notebooks/05_assemble_figure.ipynb",
+                "nex/fig3_l5pc/notebooks/06_assemble_supp_allen.ipynb",
+                "nex/fig3_l5pc/notebooks/07_assemble_supp_hmc_bayesian.ipynb",
+                "nex/fig3_l5pc/notebooks/tmp_test.ipynb",
+                "nex/fig4_rgc/01_setup.ipynb",
+                "nex/fig4_rgc/02_labels_lowpass.ipynb",
+                "nex/fig4_rgc/03_recording_meta.ipynb",
+                "nex/fig4_rgc/04_bc_output.ipynb",
+                "nex/fig4_rgc/05_stimuli_meta.ipynb",
+                "nex/fig4_rgc/README.md",
+                "nex/fig4_rgc/__init__.py",
+                "nex/fig4_rgc/config/hydra/my_submitit_slurm.yaml",
+                "nex/fig4_rgc/config/train.yaml",
+                "nex/fig4_rgc/data/noise.h5",
+                "nex/fig4_rgc/notebooks/01_illustration.ipynb",
+                "nex/fig4_rgc/notebooks/02_loss_function.ipynb",
+                "nex/fig4_rgc/notebooks/03_evaluate.ipynb",
+                "nex/fig4_rgc/notebooks/04_results.ipynb",
+                "nex/fig4_rgc/notebooks/05_ann_inductive_bias.ipynb",
+                "nex/fig4_rgc/notebooks/05_assemble_figure.ipynb",
+                "nex/fig4_rgc/simulate.py",
+                "nex/fig4_rgc/train.py",
+                "nex/fig4_rgc/utils/__init__.py",
+                "nex/fig4_rgc/utils/data_utils.py",
+                "nex/fig4_rgc/utils/dataloader.py",
+                "nex/fig4_rgc/utils/rf_utils.py",
+                "nex/fig4_rgc/utils/transforms.py",
+                "nex/fig4_rgc/utils/utils.py",
+                "nex/fig5_rnn/__init__.py",
+                "nex/fig5_rnn/notebooks/DMS_load_results.ipynb",
+                "nex/fig5_rnn/notebooks/DMS_lyaponuv_calc.ipynb",
+                "nex/fig5_rnn/notebooks/EI_load_results.ipynb",
+                "nex/fig5_rnn/notebooks/EI_lyaponuv_calc.ipynb",
+                "nex/fig5_rnn/notebooks/EI_weight_dists.ipynb",
+                "nex/fig5_rnn/notebooks/plot_initial_dynamics_exponents.ipynb",
+                "nex/fig5_rnn/notebooks/visualise_jacobians.ipynb",
+                "nex/fig5_rnn/scripts/DMS_run_training.py",
+                "nex/fig5_rnn/scripts/DMS_utils.py",
+                "nex/fig5_rnn/scripts/EI_stimulus.py",
+                "nex/fig5_rnn/scripts/EI_train_utils.py",
+                "nex/fig5_rnn/scripts/EI_utils.py",
+                "nex/fig5_rnn/scripts/Lyaponuv.py",
+                "nex/fig5_rnn/scripts/__init__.py",
+                "nex/fig5_rnn/scripts/colors.py",
+                "nex/fig5_rnn/scripts/compute_EI.py",
+                "nex/fig5_rnn/scripts/evidence_integration.py",
+                "nex/fig5_rnn/scripts/evidence_integration_sweep.py",
+                "nex/fig5_rnn/scripts/evidence_integration_weightfreezing.py",
+                "nex/fig5_rnn/scripts/network.py",
+                "nex/fig5_rnn/scripts/parameterisation.py",
+                "nex/fig5_rnn/scripts/psycho_curve.py",
+                "nex/fig5_rnn/scripts/raster_sort.py",
+                "nex/fig5_rnn/scripts/sweep.sh",
+                "nex/fig5_rnn/scripts/sweep_config.yml",
+                "nex/fig6_mnist/load_mnist.py",
+                "nex/fig6_mnist/notebooks/01_forward_passes.ipynb",
+                "nex/fig6_mnist/notebooks/02_train_network.ipynb",
+                "nex/fig6_mnist/notebooks/03_assemble_figure.ipynb",
+                "nex/fig6_mnist/notebooks/03_assemble_figure_2.ipynb",
+                "nex/fig6_mnist/notebooks/04_supp_figure_tuning.ipynb",
+                "nex/tasks.py",
+                "setup.py"
+              ],
+              "all_file_count": 173,
+              "rate_remaining": "55"
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "nex/fig4_rgc/01_setup.ipynb",
+              "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/01_setup.ipynb",
+              "role": "Author raw-data preprocessing and stimulus-loading route",
+              "inspected_as_text": true
+            },
+            {
+              "path": "nex/fig4_rgc/train.py",
+              "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/train.py",
+              "role": "Differentiable biophysical fitting",
+              "inspected_as_text": true
+            },
+            {
+              "path": "nex/fig4_rgc/simulate.py",
+              "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/simulate.py",
+              "role": "Simulate fitted responses",
+              "inspected_as_text": true
+            },
+            {
+              "path": "nex/fig4_rgc/data/20161028_1.swc",
+              "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/data/20161028_1.swc",
+              "role": "Supplied empirical morphology; source tree inspected",
+              "inspected_as_text": true
+            }
+          ],
+          "dependencies": [
+            "JAX",
+            "Jaxley",
+            "NumPy/pandas",
+            "HDF5",
+            "experiment environment requirements"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": [
+        "Zenodo3708064 actual retinal data v1.0, CC BY4.0.",
+        "Experiment code MIT; Jaxley and stimulus-source license must remain attached.",
+        "Public stimulus HDF5 sources are linked by setup notebook; no account required for identified raw GitHub files."
+      ],
+      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "recorded_central_outputs": [
+        "Regenerate stimulus-to-calcium prediction and held-out response fit for the supplied retinal cell.",
+        "Compare fitted biophysical models with fixed/untrained or constrained-parameter controls using identical stimulus splits."
+      ],
+      "assessment": "Fig4 empirical retinal-cell stimulus→calcium prediction with a detailed morphology is supported; full cell/network suite and biological parameter identifiability are not.",
+      "status": "documented_scoped_proposal_not_numeric_qualification",
+      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Compare response prediction and cost under identical stimulus/calcium normalization; a better fit need not recover true conductances. Genetic/gradient baselines need matched optimization budgets.",
+      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Entire paper is not covered. Preserve neuron/stimulus pairing and training/test splits; setup has paths to adapt.",
+        "Input record and morphology inspected as metadata/text, not loaded together; compatibility remains a reference-qualification check.",
+        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_project_reference_run_evidence_found",
+      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve biophysical fitting through hierarchical conductance priors or a better calcium observation model, comparing prediction, calibration and cost with original gradient, genetic-algorithm and simple-model baselines."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_frozen_or_run",
+      "proposed_panel": "Predeclared stimulus/trial holdout, multiple fit seeds and constrained/simple observation-model controls support a meaningful model improvement panel. One cell cannot validate cross-cell generalization.",
+      "retained_roster_proposal": [
+        "Improve biophysical fitting through hierarchical conductance priors or a better calcium observation model, comparing prediction, calibration and cost with original gradient, genetic-algorithm and simple-model baselines."
+      ],
+      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_resource_statement": "GPU advised; raw record ~323MB plus stimuli; morphology supplied in source",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Inspection-based resource class, not a measured runtime."
+  },
+  "holds": {
+    "task_specific": [
+      "Entire paper is not covered. Preserve neuron/stimulus pairing and training/test splits; setup has paths to adapt.",
+      "Input record and morphology inspected as metadata/text, not loaded together; compatibility remains a reference-qualification check.",
+      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Pin all stimulus/raw/morphology/dependency versions and verify cell/time pairing, then freeze the exact Fig4 held-out prediction and constrained-model comparison before a bounded source reference fit.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Pin all stimulus/raw/morphology/dependency versions and verify cell/time pairing, then freeze the exact Fig4 held-out prediction and constrained-model comparison before a bounded source reference fit.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "682190d17dc850a1c59ddde4a937a7e8ae5826d42a25c705b5640e03258a5fe7",
+    "audit_record_sha256": "152ed803a6c84bce275165f3745def542025693954fab072b09c296a5315d1df",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-002",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 1,
+        "record_sha256": "81c7c86f6ad35d48d19834dff081ab432fe8a71ee337623da8215b7198e59337"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-paper-method-002",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

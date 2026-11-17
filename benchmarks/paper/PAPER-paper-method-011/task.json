@@ -1,19 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-011",
-  "source_id": "paper-method-011",
   "track": "paper",
   "title": "An emerging view of neural geometry in motor cortex supports high-performance decoding",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Estimate behavior from simultaneous neural spikes, preserving the source behavioral variables and the distinct neural-state estimation, generalization, neuron-loss and simulation analyses. Figure 5 assesses 15 groups over four datasets; Figure 8 adds limited-data sessions. These cannot be collapsed with NLB bits/spike or timing into one invented scalar.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Estimate behavior from simultaneous neural spikes, preserving the source behavioral variables and the distinct neural-state estimation, generalization, neuron-loss and simulation analyses. Figure 5 assesses 15 groups over four datasets; Figure 8 adds limited-data sessions. These cannot be collapsed with NLB bits/spike or timing into one invented scalar.",
+    "Source-paper comparison for Original behavioral-group R2 vector (Figures5 and8); separate original neural-state and robustness endpoints: Behavioral R2 is1−sum(y−prediction)^2/sum(y−mean(y))^2 over the original evaluation samples at5-ms resolution; phase uses circular distances and means. Source NLB bits/spike, PSTH R2 and velocity R2, as well as timing, remain separate estimands. Pearson correlation and MAE reported in the text are not interchangeable with Figure5 R2."
+  ],
+  "success_criteria": [
+    "Recover source numerical performance for every original retained endpoint and authenticate the corresponding data, memberships, preprocessing and author implementation.",
+    "Candidate improvement must be paired with MINT on the identical original task; freeze any primary comparison and non-degradation rule across the original metric family before final scoring.",
+    "Retain the full nine-empirical-dataset and original simulation/network scope of this registration; no Area2-only or four-dataset result may count as full-paper superiority.",
+    "Keep causal and acausal access, limited-data sessions, neural-loss masks and historical NLB evaluation distinct; a new split or newly generated simulation is a separately labeled extension.",
+    "Establish a justified effect margin and dependence-aware uncertainty; beating reconstruction tolerance or a local authored surrogate is not success.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-011",
   "canonical_position_one_based": 30,
   "paper_identity": {
     "url": "https://elifesciences.org/articles/89421",
     "publication_year": 2025,
     "venue": "eLife"
   },
-  "primary_outputs": [
-    "Held-out behavior reconstruction and per-dimension R2; matched baseline comparison using the same trials."
-  ],
   "input_assets": {
     "routes": [
       "https://www.dropbox.com/s/qjxemfn3ekmpyxh/area2_bump.mat?dl=0"
@@ -381,104 +393,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "recorded_terms": [
-        "NLB underlying recordings CC BY4.0",
-        "Official MINT license restricts use; research use must follow its terms"
-      ],
-      "record_conflicts": [],
-      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
-      "overlap_group": null
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "central_outputs_in_saved_source_contract": [
-        "Held-out behavior reconstruction and per-dimension R2; matched baseline comparison using the same trials."
-      ],
-      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
-      "missing_or_unfrozen_endpoint_details": "Basic fixed-config MINT only; some paper variants and hyperparameter-search automation absent, baseline implementations are separate dependencies."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Match behavior dimensions, smoothing, timing, trials and training observations across MINT and Kalman/Wiener/neural alternatives. Cross-session improvement needs a separately specified session/calibration interface."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Basic fixed-config MINT only; some paper variants and hyperparameter-search automation absent, baseline implementations are separate dependencies.",
-        "Match behavior dimensions, smoothing, timing, trials and training observations across MINT and Kalman/Wiener/neural alternatives. Cross-session improvement needs a separately specified session/calibration interface.",
-        "This covers basic MINT and one task; some paper variants and hyperparameter-search automation are absent. Alternative decoder implementations are a separate pinned dependency.",
-        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-        "Execute and independently audit references, controls, grading and measured resources.",
-        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
-      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve cross-session or limited-data decoding against MINT, Kalman/Wiener, feedforward and recurrent baselines under equal training observations."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "independent_panel_not_established_in_inspected_evidence",
-      "proposed_improvement": [
-        "Improve cross-session or limited-data decoding against MINT, Kalman/Wiener, feedforward and recurrent baselines under equal training observations."
-      ],
-      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
-      "special_gate": "No completed independent improvement result is established here."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "source_roster_estimate_or_statement": "CPU MATLAB workstation",
-    "measured_or_static_facts_from_existing_authoring": [],
-    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
-  },
-  "holds": {
-    "task_specific": [
-      "Basic fixed-config MINT only; some paper variants and hyperparameter-search automation absent, baseline implementations are separate dependencies.",
-      "Match behavior dimensions, smoothing, timing, trials and training observations across MINT and Kalman/Wiener/neural alternatives. Cross-session improvement needs a separately specified session/calibration interface.",
-      "This covers basic MINT and one task; some paper variants and hyperparameter-search automation are absent. Alternative decoder implementations are a separate pinned dependency.",
-      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-      "Execute and independently audit references, controls, grading and measured resources.",
-      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Pin the actual processed MAT content and alternative-decoder versions, then qualify one source MINT evaluation with an independent per-dimension R2 calculation.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Pin the actual processed MAT content and alternative-decoder versions, then qualify one source MINT evaluation with an independent per-dimension R2 calculation.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -528,11 +442,79 @@
       }
     ]
   },
+  "resources": {
+    "source_roster_estimate_or_statement": "CPU MATLAB workstation",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-011/improvement.v1.json",
+      "bytes": 13017,
+      "sha256": "defbd488d449535899d03a28db052cb6ab30e1af04e2fc99c4de4a7d1302c1bb"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-011/historical/task.pre-improvement.v1.json",
+        "bytes": 27841,
+        "sha256": "562a49100c018b617ddb35e21192980079e33bbdba47a6b7a21d754e8ecfd6b1"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-method-011"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After baseline and original membership recovery, iterate only on original training data and training-derived validation feedback; retain all evaluated attempts and original component-specific access boundaries.",
+    "candidate_freeze": "Freeze executable method, preprocessing, hyperparameters, seed policy, all endpoint choices and access/resource ledgers before original final assessment.",
+    "final_evaluation": "Replay the frozen method and authenticated MINT baseline across the original complete scope with paired output-level comparisons; final outputs do not become subsequent tuning feedback.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The pinned basic MATLAB release is a baseline route for its supported examples only. Missing variants must be recovered faithfully; locally authored replacements, reconstruction success and new-split baselines cannot stand in for source MINT."
+  },
+  "blocking_issues": [
+    "Complete exact published MINT score vector is unavailable in the reviewed paper text and code; no invented aggregate score.",
+    "Original data identities, train/test membership, search folds, neural-loss masks and simulation/network realizations need authentication.",
+    "Pinned author code omits paper variants and hyperparameter-search implementation; native equivalence for the complete17-module interface is not established.",
+    "Historical NLB evaluator/submission/version and hidden-label access authority are not bound; no hidden labels were inspected.",
+    "Meaningful-effect and dependence-aware decision rules and concrete candidate access/compute budgets are not fixed."
+  ],
+  "holds": {
+    "task_specific": [
+      "Complete exact published MINT score vector is unavailable in the reviewed paper text and code; no invented aggregate score.",
+      "Original data identities, train/test membership, search folds, neural-loss masks and simulation/network realizations need authentication.",
+      "Pinned author code omits paper variants and hyperparameter-search implementation; native equivalence for the complete17-module interface is not established.",
+      "Historical NLB evaluator/submission/version and hidden-label access authority are not bound; no hidden labels were inspected.",
+      "Meaningful-effect and dependence-aware decision rules and concrete candidate access/compute budgets are not fixed."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The source defines ordered behavioral R2 and neural-state endpoints, but the complete published MINT score vector, exact original memberships, and full author baseline route are not recovered. The bundled full-paper interface contains 17 distinct analysis obligations; neither its earlier Area2-only example nor the four-dataset behavioral panel establishes full-paper improvement. Complete exact published MINT score vector is unavailable in the reviewed paper text and code; no invented aggregate score. Original data identities, train/test membership, search folds, neural-loss masks and simulation/network realizations need authentication. Pinned author code omits paper variants and hyperparameter-search implementation; native equivalence for the complete17-module interface is not established. Historical NLB evaluator/submission/version and hidden-label access authority are not bound; no hidden labels were inspected. Meaningful-effect and dependence-aware decision rules and concrete candidate access/compute budgets are not fixed.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-011/historical/task.pre-improvement.v1.json",
+      "bytes": 27841,
+      "sha256": "562a49100c018b617ddb35e21192980079e33bbdba47a6b7a21d754e8ecfd6b1"
+    },
+    "notes": "Preserve the original task, full-motormint-v1 interface, original graders and evidence. Its selected four-dataset predecessor and broader17-module construction are calibration/design artifacts; neither engineering controls nor historical R2 reconstruction is active improvement success."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

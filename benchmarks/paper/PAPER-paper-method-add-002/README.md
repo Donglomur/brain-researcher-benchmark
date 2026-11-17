@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-method-add-002`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The original reaching-decoding and blocked reconstruction endpoints are ordered, but no exact published score and matching source evaluation artifact are recovered. The current 200-case conditional-position programme is a different evaluation and cannot establish a source-paper win. Paper/code decoding and CV discrepancies require reconciliation before admission.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 31556 bytes; SHA-256 `c895d422f3296568844e447ceb55e1f5b5dbd665ee6108e3da35c6f98756f06e`.
+- Specification identity: 32365 bytes; SHA-256 `306db0950627f47a83fb56d4b3780dc8276c7514d11bbb6a761d9bf6f39d24ca`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -21,8 +32,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 ## Implementation artifacts
 
-- [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
-  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Registered runtime](implementations/registered-runtime) — Calibration only.
+  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

@@ -1,19 +1,32 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-050",
-  "source_id": "paper-method-050",
   "track": "paper",
   "title": "Density-based longitudinal neuron tracking in high-density electrophysiological recordings",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Assign the same neuron across recording sessions using DANT’s original longitudinal tracking task. Increase valid tracking duration while retaining source matching precision/recall, PETH consistency and false-match controls; total matches or track duration alone is not accuracy.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Assign the same neuron across recording sessions using DANT’s original longitudinal tracking task. Increase valid tracking duration while retaining source matching precision/recall, PETH consistency and false-match controls; total matches or track duration alone is not accuracy.",
+    "Source-paper comparison for Figure5D estimated marginal mean tracked length in sessions, conditional on original matching-quality safeguards: Primary Figure5D endpoint is tracked length in sessions estimated by Equation19, not raw pair yield. Mandatory fidelity measures include Figure5E PETH Fisher-z correlation and5H/I precision=TP/(TP+FP), recall=TP/(TP+FN) against joint Kilosort2.5 sorting; that reference is close to ground truth, not direct neuron identity."
+  ],
+  "success_criteria": [
+    "Authenticate the exact original Figure5 units, sessions, exclusions and common preprocessing; reproduce8.63sessions with the original model and source DANT settings before comparison.",
+    "Exceed source DANT tracking duration by a justified meaningful margin while meeting a predeclared non-degradation rule for original matching precision, recall, PETH consistency and false-match controls; never reward over-merging.",
+    "Recover and use original Figure5H/I session pairs and joint-sort reference: published DANT precision96.0%±4.8%SD and recall81.5%±11.2%SD are safeguards, not newly chosen held-out identity labels.",
+    "Retain source Figure5E rate/day/pair-count filters, unmatched-pair analysis and Figure6 cross-shank false-match validation with their original scopes. Recover numerical reference arrays before deciding non-degradation margins.",
+    "Use the same inputs and default-policy boundary for source methods; a new animal split, all13-dataset comparison or probability-calibration task is a separately named extension.",
+    "Freeze candidate and all comparison rules before final scoring; improved p-values, engineered fixture success and local all-pair yield cannot count as surpassing the paper.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-050",
   "canonical_position_one_based": 7,
   "paper_identity": {
     "url": "https://doi.org/10.1016/j.patter.2026.101590",
     "publication_year": 2026,
     "venue": "Patterns"
   },
-  "primary_outputs": [
-    "Neuron matches/probabilities, motion correction and longitudinal stable-unit yield; functional consistency compared with UnitMatch."
-  ],
   "input_assets": {
     "routes": [
       "https://zenodo.org/records/20019488"
@@ -469,104 +482,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "recorded_terms": [
-        "Code GPL-3.0",
-        "Zenodo version20019489 data CC BY4.0"
-      ],
-      "record_conflicts": [],
-      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
-      "overlap_group": "https://zenodo.org/api/records/20019488"
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "central_outputs_in_saved_source_contract": [
-        "Neuron matches/probabilities, motion correction and longitudinal stable-unit yield; functional consistency compared with UnitMatch."
-      ],
-      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
-      "missing_or_unfrozen_endpoint_details": "Define tracking yield and independent validation features on the13 rat datasets; same-neuron identity is not universal direct ground truth."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Match units, motion/quality filtering and UnitMatch settings; confidence calibration needs validation information not reused to produce matches. Animal holdout differs from repeated-session interpolation."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Define tracking yield and independent validation features on the13 rat datasets; same-neuron identity is not universal direct ground truth.",
-        "Match units, motion/quality filtering and UnitMatch settings; confidence calibration needs validation information not reused to produce matches. Animal holdout differs from repeated-session interpolation.",
-        "Zenodo20019488 concept resolves to version20019489. Rename each selected input to spikeInfo.mat in its own data directory before the author converter. Tracking identity remains indirectly validated; full paper may include other species/probe datasets.",
-        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-        "Execute and independently audit references, controls, grading and measured resources.",
-        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
-      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve confidence calibration or robustness under changing waveform quality with matched unit populations and independent validation features, testing generalization across animals."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "independent_panel_not_established_in_inspected_evidence",
-      "proposed_improvement": [
-        "Improve confidence calibration or robustness under changing waveform quality with matched unit populations and independent validation features, testing generalization across animals."
-      ],
-      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
-      "special_gate": "No completed independent improvement result is established here."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "source_roster_estimate_or_statement": "CPU workstation; total archive~23GB; smaller animals~100–160MB",
-    "measured_or_static_facts_from_existing_authoring": [],
-    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
-  },
-  "holds": {
-    "task_specific": [
-      "Define tracking yield and independent validation features on the13 rat datasets; same-neuron identity is not universal direct ground truth.",
-      "Match units, motion/quality filtering and UnitMatch settings; confidence calibration needs validation information not reused to produce matches. Animal holdout differs from repeated-session interpolation.",
-      "Zenodo20019488 concept resolves to version20019489. Rename each selected input to spikeInfo.mat in its own data directory before the author converter. Tracking identity remains indirectly validated; full paper may include other species/probe datasets.",
-      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-      "Execute and independently audit references, controls, grading and measured resources.",
-      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Pin per-animal spikeInfo-to-array conversion, identify session/unit metadata, and predeclare independent functional consistency before testing longitudinal matches.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Pin per-animal spikeInfo-to-array conversion, identify session/unit metadata, and predeclare independent functional consistency before testing longitudinal matches.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -597,11 +512,81 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "source_roster_estimate_or_statement": "CPU workstation; total archive~23GB; smaller animals~100–160MB",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-050/improvement.v1.json",
+      "bytes": 13785,
+      "sha256": "ebf85129b90541030c41ff8e3726465864a4b6a991635a546928307dad5be527"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-050/historical/task.pre-improvement.v1.json",
+        "bytes": 29754,
+        "sha256": "fcd65edd8550ca28997a59ad5199df24179aea1c304ad4140177ba1d45b707d3"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-050-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After original cohort and independent validation recovery, develop matching using declared waveform/session information and permitted development feedback, retaining PETH and final joint-sort references outside matching/tuning. Maintain every candidate evaluation in the ledger.",
+    "candidate_freeze": "Freeze clustering/motion parameters, matching thresholds, preprocessing, eligible populations, seed policy and resource/access budgets before original final matching and fidelity assessment.",
+    "final_evaluation": "Run frozen candidate and authentic DANT/UnitMatch/EMD baselines on identical original units/sessions; estimate the original tracked-length EMM and score all original fidelity checks under the predeclared improvement rule.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published DANT8.63sessions is the historical anchor; an authenticated DANT rerun is separately reported. UnitMatch and EMD are original controls, not replacements for DANT. Source proxies, joint-sort validation and direct ground truth must remain explicitly distinguished."
+  },
+  "blocking_issues": [
+    "Exact Figure5 dataset-file, rat-number, session and unit membership mapping remains unresolved, including source31-session truncations and rat#6 exclusion.",
+    "Native waveform orientation and conversion require verification; UnitMatch half-session waveform support and all original quality filters are unqualified.",
+    "No authenticated DANT/UnitMatch/EMD rerun or original mixed-model output exists for this contract.",
+    "Exact PETH medians, original joint-sort reference pairs/artifacts, unmatched-pair arrays and cross-shank validation outputs are not fully recovered; no arbitrary non-degradation threshold.",
+    "Meaningful tracking improvement, joint uncertainty/quality decision rules and concrete candidate information/compute budgets remain unspecified.",
+    "The local all13-dataset prepared-input evaluator does not implement the original Figure5D EMM or complete original fidelity portfolio."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact Figure5 dataset-file, rat-number, session and unit membership mapping remains unresolved, including source31-session truncations and rat#6 exclusion.",
+      "Native waveform orientation and conversion require verification; UnitMatch half-session waveform support and all original quality filters are unqualified.",
+      "No authenticated DANT/UnitMatch/EMD rerun or original mixed-model output exists for this contract.",
+      "Exact PETH medians, original joint-sort reference pairs/artifacts, unmatched-pair arrays and cross-shank validation outputs are not fully recovered; no arbitrary non-degradation threshold.",
+      "Meaningful tracking improvement, joint uncertainty/quality decision rules and concrete candidate information/compute budgets remain unspecified.",
+      "The local all13-dataset prepared-input evaluator does not implement the original Figure5D EMM or complete original fidelity portfolio."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The source provides a numerical original tracking-duration endpoint and independent matching-quality checks, supporting an improvement design. Exact Figure5 population/session identities, native method parity, quality-reference artifacts and a justified decision rule remain incomplete. Longer tracks alone can be produced by over-merging and never suffice for success. Exact Figure5 dataset-file, rat-number, session and unit membership mapping remains unresolved, including source31-session truncations and rat#6 exclusion. Native waveform orientation and conversion require verification; UnitMatch half-session waveform support and all original quality filters are unqualified. No authenticated DANT/UnitMatch/EMD rerun or original mixed-model output exists for this contract. Exact PETH medians, original joint-sort reference pairs/artifacts, unmatched-pair arrays and cross-shank validation outputs are not fully recovered; no arbitrary non-degradation threshold. Meaningful tracking improvement, joint uncertainty/quality decision rules and concrete candidate information/compute budgets remain unspecified. The local all13-dataset prepared-input evaluator does not implement the original Figure5D EMM or complete original fidelity portfolio.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-050/historical/task.pre-improvement.v1.json",
+      "bytes": 29754,
+      "sha256": "fcd65edd8550ca28997a59ad5199df24179aea1c304ad4140177ba1d45b707d3"
+    },
+    "notes": "Preserve the initial evaluator, roster and tests as conversion/calibration and extension infrastructure. Its all13-dataset paired-yield/PETH outputs are not the original12-dataset Figure5 comparison and cannot establish a paper win, probability calibration or neuron identity accuracy."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

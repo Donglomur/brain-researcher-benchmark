@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-013",
-  "source_id": "paper-method-013",
   "track": "paper",
   "title": "An end-to-end recurrent compressed sensing method to denoise, detect and demix calcium imaging data",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Denoise, detect and demix neurons in the original ten experimental Allen two-photon videos. Primary ordered comparison is original manual-ROI segmentation F1; extracted trace accuracy and runtime remain separately reported source endpoints, not substituted for segmentation.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Denoise, detect and demix neurons in the original ten experimental Allen two-photon videos. Primary ordered comparison is original manual-ROI segmentation F1; extracted trace accuracy and runtime remain separately reported source endpoints, not substituted for segmentation.",
+    "Source-paper comparison for Arithmetic mean segmentation F1 across the ten original Allen experimental videos, using strict IoU>0.5: Match each manual reference ROI to the highest-overlap predicted ROI with strict IoU>0.5. F1=2TP/(Npred+Nref). For trace correlation use the reference ROIs detected by every compared method; those imaging-derived traces do not measure electrical ground truth. Ambiguous many-reference matching requires source resolution."
+  ],
+  "success_criteria": [
+    "Authenticate all ten original recording/frame/manual-reference mappings and the exact full-model checkpoint and native preprocessing/assembly.",
+    "Reproduce source-author per-video F1 and its ten-video mean, keeping the published 0.847 and rerun result distinct.",
+    "Evaluate candidate on all ten original videos under identical source labels, IoU matching and macro-video aggregation; no reduced recordings, new depths, external donors or mini-demo substitutes.",
+    "Keep trace comparison on common detected ROIs and disclose its imaging-derived reference; separately retain original trace/runtime endpoints when claiming improvement of the complete denoise/detect/demix task.",
+    "Freeze method, permitted training/access, reference exposure, meaningful effect, uncertainty rule and concrete resource budget before the final comparison.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-013",
   "canonical_position_one_based": 76,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s42256-024-00892-w",
     "publication_year": 2024,
     "venue": "Nature Machine Intelligence"
   },
-  "primary_outputs": [
-    "Recover segmentation precision/recall/F1 against supplied manual ROIs for frames18501–23500 of the ten identified recordings.",
-    "Compare extracted calcium traces and runtime with declared baseline methods; treat author-constructed trace targets separately from independent electrical ground truth."
-  ],
   "input_assets": {
     "routes": [
       "https://zenodo.org/records/12650420"
@@ -337,107 +348,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Ten exact Allen movie object HEAD requests returned200 without credentials; data are publicly accessible.",
-        "Allen source guide states non-commercial-use terms; retain these separately from code/weight terms.",
-        "Manual ROI files and pretrained H5 model are present in author pinned tree; license/redistribution terms remain a packaging gate."
-      ],
-      "declared_overlap_group": "https://zenodo.org/api/records/12650420",
-      "existing_graph_evidence_leads": [],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Recover segmentation precision/recall/F1 against supplied manual ROIs for frames18501–23500 of the ten identified recordings.",
-        "Compare extracted calcium traces and runtime with declared baseline methods; treat author-constructed trace targets separately from independent electrical ground truth."
-      ],
-      "construction_specificity": "Freeze the paper evaluation frame ranges, patch/tile assembly, ROI matching metric/threshold, trace metric and exact checkpoint; neither movie availability nor hand labels alone define a complete grader.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Run denoise/detect/demix comparisons on identical motion-corrected frames and manual-reference policy.",
-      "Manual ROIs are operational labels, not complete cell truth; derived trace references cannot establish electrical fidelity."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Freeze the paper evaluation frame ranges, patch/tile assembly, ROI matching metric/threshold, trace metric and exact checkpoint; neither movie availability nor hand labels alone define a complete grader.",
-        "Recording/mouse and depth groups; verify donor identities and separate any tuning movies before assessing generalization.",
-        "Observed movie HEAD sizes are approximately60GB each; selected HDF5 access, peak memory and runtime are unmeasured. Allen noncommercial terms and separate weights/code terms apply.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve robustness to motion, neuropil or changed indicator kinetics using external recordings and equal compute versus the original pipeline and calcium-processing baselines."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Improve robustness to motion, neuropil or changed indicator kinetics using external recordings and equal compute versus the original pipeline and calcium-processing baselines."
-      ],
-      "independent_panel_gate": "Recording/mouse and depth groups; verify donor identities and separate any tuning movies before assessing generalization.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": "GPU/high-data: each complete source movie~60–65GB, ten total~613GB; only5,000 frames per recording are analyzed. Author full training used48GB RTX8000; inference resource need unmeasured.",
-    "source_resource_evidence": "Actual movie Content-Length fromHEAD; author README for48GB training hardware. No model run.",
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "Freeze the paper evaluation frame ranges, patch/tile assembly, ROI matching metric/threshold, trace metric and exact checkpoint; neither movie availability nor hand labels alone define a complete grader.",
-      "Recording/mouse and depth groups; verify donor identities and separate any tuning movies before assessing generalization.",
-      "Observed movie HEAD sizes are approximately60GB each; selected HDF5 access, peak memory and runtime are unmeasured. Allen noncommercial terms and separate weights/code terms apply.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Trace exact full-model preprocessing, annotated frame ranges and recording/donor membership into a bounded inference contract; resolve dependency and rights gates before selecting transfer strategy.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Trace exact full-model preprocessing, annotated frame ranges and recording/donor membership into a bounded inference contract; resolve dependency and rights gates before selecting transfer strategy.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -513,11 +423,78 @@
     ],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_statement": "GPU/high-data: each complete source movie~60–65GB, ten total~613GB; only5,000 frames per recording are analyzed. Author full training used48GB RTX8000; inference resource need unmeasured.",
+    "source_resource_evidence": "Actual movie Content-Length fromHEAD; author README for48GB training hardware. No model run.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-013/improvement.v1.json",
+      "bytes": 11395,
+      "sha256": "e1afdcf18b3d9e95ce3327d6407a0939e91a8183de30a939f6bc815ecf52bb93"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-013/historical/task.pre-improvement.v1.json",
+        "bytes": 30161,
+        "sha256": "10ddbdc9848384c6c39c42c55e13e78b4720e2b8649f59c5bddb9f8c03842a12"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-013-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate on allowed synthetic/development inputs and separately declared validation feedback; the original experimental panel remains the final same-task comparison. Public-label exposure must be disclosed.",
+    "candidate_freeze": "Freeze full model weights/code, tiling and merge rules, ROI extraction thresholds, training exposure and resource budget before scoring final assembled outputs.",
+    "final_evaluation": "Run candidate and authenticated author full model on the exact ten movie/frame intervals, then compute original per-video and mean F1 with paired uncertainty; retain source trace/runtime outputs separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published source score, reproduced author baseline, and any independently source-verified current SOTA separate. Reproduction is calibration only."
+  },
+  "blocking_issues": [
+    "Authentic original movie/frame identity, native tiling/merge/reference transformations and exact full checkpoint not yet replay-qualified.",
+    "Ambiguous many-reference matching and frame-index conventions need historical equivalence; current evaluator fails closed on ambiguity.",
+    "No reproduced author baseline or qualified candidate runner on the original ten-video panel.",
+    "Manual-reference exposure, meaningful effect, paired uncertainty, concrete access/resource budgets and full native resource cost remain unresolved."
+  ],
+  "holds": {
+    "task_specific": [
+      "Authentic original movie/frame identity, native tiling/merge/reference transformations and exact full checkpoint not yet replay-qualified.",
+      "Ambiguous many-reference matching and frame-index conventions need historical equivalence; current evaluator fails closed on ambiguity.",
+      "No reproduced author baseline or qualified candidate runner on the original ten-video panel.",
+      "Manual-reference exposure, meaningful effect, paired uncertainty, concrete access/resource budgets and full native resource cost remain unresolved."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original ten-video experimental task, ordered segmentation metric and numeric source baseline are recoverable. Native assembly, checkpoint/reference equivalence, baseline replay and a protected improvement episode remain incomplete. The existing post-assembly evaluator is useful infrastructure but does not establish a ready same-task comparison. Authentic original movie/frame identity, native tiling/merge/reference transformations and exact full checkpoint not yet replay-qualified. Ambiguous many-reference matching and frame-index conventions need historical equivalence; current evaluator fails closed on ambiguity. No reproduced author baseline or qualified candidate runner on the original ten-video panel. Manual-reference exposure, meaningful effect, paired uncertainty, concrete access/resource budgets and full native resource cost remain unresolved.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-013/historical/task.pre-improvement.v1.json",
+      "bytes": 30161,
+      "sha256": "10ddbdc9848384c6c39c42c55e13e78b4720e2b8649f59c5bddb9f8c03842a12"
+    },
+    "notes": "Preserve initial-evaluator-v1 unchanged as post-assembly calibration infrastructure. Its macro-F1, common-ROI trace and pooled diagnostic outputs do not authenticate source execution or establish a paper win; pooled F1 must not replace the published ten-video mean."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

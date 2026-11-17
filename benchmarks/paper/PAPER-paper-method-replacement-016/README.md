@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-method-replacement-016`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. Original model-brain RSA is ordered, but the exact paper model/layer/ROI result vectors and historical native settings are not recovered. Descriptive temporal-model family differences and figure assembly are not themselves improvable performance endpoints. A prospective candidate must be compared against the original full reference catalog, not an arbitrary local model or selected ROI.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 487933 bytes; SHA-256 `e03a2b42287391c888e4c6243b62b70d1bda125071880ea5bb857e6ae1d065b7`.
+- Specification identity: 486250 bytes; SHA-256 `232a77bac2d8d7603d638dc8d995ebf542e6a697834cf73278bdc95a0f07f94b`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -21,12 +32,12 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 ## Implementation artifacts
 
-- [Dimension branches](implementations/dimension-branches) — Task implementation.
-  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Dimension branches](implementations/dimension-branches) — Calibration only.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Four programmes source v1](../../shared/four-programmes/_four_programmes_source_v1) — Shared source distribution.
   Scope: NEURAL-056 is a documented dependency, not a new primary runtime registration. CriticalInit is named in the notice, but its exact registered-ID relationship is not inferred here. Keep combined-distribution license and provenance records attached to the closed source tree.
-- [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
-  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Registered runtime](implementations/registered-runtime) — Calibration only.
+  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

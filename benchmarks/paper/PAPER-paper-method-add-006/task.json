@@ -1,20 +1,30 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-add-006",
-  "source_id": "paper-method-add-006",
   "track": "paper",
   "title": "Neural population geometry and optimal coding of tasks with shared latent structure",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Predict source single-unit 500-ms spike counts from navigation covariates in both rat PFC and CA1; improve the original cross-validated predictive fit. Geometry trends, theory agreement and stronger mixed-effects significance are supporting reproduction outputs, not ordered improvement outcomes.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Predict source single-unit 500-ms spike counts from navigation covariates in both rat PFC and CA1; improve the original cross-validated predictive fit. Geometry trends, theory agreement and stronger mixed-effects significance are supporting reproduction outputs, not ordered improvement outcomes.",
+    "Source-paper comparison for Cross-validated population Poisson D2, separately for PFC and CA1: Higher cross-validated Poisson deviance explained D2 = 1 - D(y,mu)/D(y,mean(y)); D is Poisson deviance with the zero-count log contribution set to zero. Preserve the source PoissonRegressor scoring/null convention, invalid-fold handling and both regional outputs."
+  ],
+  "success_criteria": [
+    "Reconstruct the original eight-rat/eight-session PFC and CA1 populations and author folds, masks, covariates and score aggregation; reconcile every paper/code discrepancy affecting the endpoint.",
+    "Reproduce the author source D2 = 0.29 for PFC and 0.25 for CA1 within a separately justified calibration tolerance before testing a frozen candidate.",
+    "Exceed the source result under a predeclared meaningful-effect and uncertainty policy covering both regions, with equal allowed inputs and fixed training/selection resources; report every regional outcome.",
+    "Do not count a new held-animal split, easier prediction covariates, a selected session subset, a better p-value or a changed geometric statistic as surpassing this source task.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-add-006",
   "canonical_position_one_based": 17,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41593-025-02183-y",
     "publication_year": 2026,
     "venue": "Nature Neuroscience"
   },
-  "primary_outputs": [
-    "Fit the author empirical rat GLMs and recover the coding-geometry comparisons for the declared sessions.",
-    "Compare predictive/geometry stability under alternative regularization with animal/session holdout and the same task covariates."
-  ],
   "input_assets": {
     "routes": [
       "https://api.dandiarchive.org/api/dandisets/000978/versions/0.240511.0307/assets/?page_size=100"
@@ -392,109 +402,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "recorded_terms": [
-        "DANDI000978 version0.240511.0307 public; inspected all9 NWB assets and IDs.",
-        "Preserve DANDI data license and source code license separately."
-      ],
-      "record_conflicts": [],
-      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
-      "overlap_group": "https://api.dandiarchive.org/api/dandisets/000978/versions/0.240511.0307/assets/?page_size=100"
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "central_outputs_in_saved_source_contract": [
-        "Fit the author empirical rat GLMs and recover the coding-geometry comparisons for the declared sessions.",
-        "Compare predictive/geometry stability under alternative regularization with animal/session holdout and the same task covariates."
-      ],
-      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
-      "missing_or_unfrozen_endpoint_details": "Freeze exact sessions, covariates and cross-region geometry contrast; anatomical/animal unit and source GLM ingestion remain unexecuted."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Predictive fit and geometry depend on covariate standardization/regularization and sample size. Better task decoding does not establish optimal biological coding."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Freeze exact sessions, covariates and cross-region geometry contrast; anatomical/animal unit and source GLM ingestion remain unexecuted.",
-        "Predictive fit and geometry depend on covariate standardization/regularization and sample size. Better task decoding does not establish optimal biological coding.",
-        "Does not include all simulations or non-rat comparisons.",
-        "Do not confuse supervised task decoding with proof of an optimal biological code.",
-        "Predeclare primary cross-region contrast and independent animal/session split.",
-        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-        "Execute and independently audit references, controls, grading and measured resources.",
-        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
-      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Quantify finite-sample sensitivity and test predictions under animal-held-out evaluation and nonlinear readouts."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "independent_panel_not_established_in_inspected_evidence",
-      "proposed_improvement": [
-        "Quantify finite-sample sensitivity and test predictions under animal-held-out evaluation and nonlinear readouts."
-      ],
-      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
-      "special_gate": "No completed independent improvement result is established here."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "source_roster_estimate_or_statement": "CPU/high-memory; full recordings hundreds of GB, select declared animals/sessions",
-    "measured_or_static_facts_from_existing_authoring": [],
-    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
-  },
-  "holds": {
-    "task_specific": [
-      "Freeze exact sessions, covariates and cross-region geometry contrast; anatomical/animal unit and source GLM ingestion remain unexecuted.",
-      "Predictive fit and geometry depend on covariate standardization/regularization and sample size. Better task decoding does not establish optimal biological coding.",
-      "Does not include all simulations or non-rat comparisons.",
-      "Do not confuse supervised task decoding with proof of an optimal biological code.",
-      "Predeclare primary cross-region contrast and independent animal/session split.",
-      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-      "Execute and independently audit references, controls, grading and measured resources.",
-      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Inspect source GLM-to-NWB field requirements and propose a bounded animal/session manifest with fixed cross-region covariates, without downloading the hundreds-GB collection.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Inspect source GLM-to-NWB field requirements and propose a bounded animal/session manifest with fixed cross-region covariates, without downloading the hundreds-GB collection.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -525,11 +432,79 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "source_roster_estimate_or_statement": "CPU/high-memory; full recordings hundreds of GB, select declared animals/sessions",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-add-006/improvement.v1.json",
+      "bytes": 11293,
+      "sha256": "2ce6dba979e0ad415d8f4048a0c7767e5c07f7d3d65d876c1d5c3ad4ef1d1352"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-add-006/historical/task.pre-improvement.v1.json",
+        "bytes": 28357,
+        "sha256": "12e49fb9771ec26dd7bf9a907a7af788ddda085b74969694dfe5611522617d73"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-add-006-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Not admitted. After source calibration and fold/access reconciliation, iterate on spike-count prediction using only authorized training/validation feedback while retaining the original source task and both regions.",
+    "candidate_freeze": "Freeze model, hyperparameters, preprocessing, all access records and all evaluation mappings before protected final replay; prohibit candidate changes after final score disclosure.",
+    "final_evaluation": "Replay original complete PFC/CA1 task against the verified author baseline. A separately designed animal holdout may support an extension but cannot replace the source result.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Author Poisson GLM and source fold protocol are the comparator; local source-inspired implementations and geometry reproduction are calibration components only."
+  },
+  "blocking_issues": [
+    "Recover native NWB session/unit mapping and exact original ten-fold assignments and software behavior.",
+    "Reconcile source preprocessing/null-model boundaries and population-score aggregation before claiming equality to the reported numbers.",
+    "Validate the author baseline for both regions; no native reference was executed in this audit.",
+    "The related readout analysis has a paper/code CA1 subset discrepancy (24 versus 19 units); it cannot silently become the predictive endpoint.",
+    "Resolve selection-on-CV-score exposure, meaningful-effect/uncertainty policy, concrete access/resource caps and a working protected evaluator."
+  ],
+  "holds": {
+    "task_specific": [
+      "Recover native NWB session/unit mapping and exact original ten-fold assignments and software behavior.",
+      "Reconcile source preprocessing/null-model boundaries and population-score aggregation before claiming equality to the reported numbers.",
+      "Validate the author baseline for both regions; no native reference was executed in this audit.",
+      "The related readout analysis has a paper/code CA1 subset discrepancy (24 versus 19 units); it cannot silently become the predictive endpoint.",
+      "Resolve selection-on-CV-score exposure, meaningful-effect/uncertainty policy, concrete access/resource caps and a working protected evaluator."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The source contains a genuine ordered rat spike-count prediction endpoint with published regional D2 values. Source anchors support design, but native folds, exact population aggregation, author reproduction, meaningful effect, uncertainty and a protected episode are incomplete; descriptive geometry changes cannot serve as success. Recover native NWB session/unit mapping and exact original ten-fold assignments and software behavior. Reconcile source preprocessing/null-model boundaries and population-score aggregation before claiming equality to the reported numbers. Validate the author baseline for both regions; no native reference was executed in this audit. The related readout analysis has a paper/code CA1 subset discrepancy (24 versus 19 units); it cannot silently become the predictive endpoint. Resolve selection-on-CV-score exposure, meaningful-effect/uncertainty policy, concrete access/resource caps and a working protected evaluator.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-add-006/historical/task.pre-improvement.v1.json",
+      "bytes": 28357,
+      "sha256": "12e49fb9771ec26dd7bf9a907a7af788ddda085b74969694dfe5611522617d73"
+    },
+    "notes": "Preserve the initial rat-GLM/geometry component and its generated controls. Their numerical correctness and geometry agreement do not demonstrate a stronger predictive method, author reproduction or optimal biological coding."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

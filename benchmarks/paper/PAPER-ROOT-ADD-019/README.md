@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-ROOT-ADD-019`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The source paper contains a genuine original reaction-time decoding subtask, but its numerical baseline, original fold assignments, native preprocessing and cohort identity are unrecovered. The registered Figure 3 latency reconstruction is descriptive and cannot itself be surpassed. Any eventual Figure 6 decoder result must be explicitly scoped rather than called a whole-paper demixing win.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 18816 bytes; SHA-256 `40ab45f8c238492b3e10c12547ced32fc62545d896e54008f660f95d486f6c5f`.
+- Specification identity: 18742 bytes; SHA-256 `b94020ff19ede3903e298a34e3a6d81c0d77b19e63404a2575e0fead8f82a98e`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -21,12 +32,12 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 ## Implementation artifacts
 
-- [Investigation and improvement](implementations/investigation-and-improvement) — Task implementation.
-  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
-- [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
-  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. This retained scoring facade requires 1 source or input dependency absent from the public baseline. Correcting its repository locator does not make it runnable from this checkout alone. This limit does not apply automatically to sibling implementations of the task.
-- [Historical timing summary](implementations/historical-timing-summary) — Historical timing summary.
-  Scope: README explicitly identifies historical saved-answer timing endpoint, distinct from the current37-main-figure programme; do not relabel as full current task coverage.
+- [Investigation and improvement](implementations/investigation-and-improvement) — Calibration only.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Registered runtime](implementations/registered-runtime) — Calibration only.
+  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. This retained scoring facade requires 1 source or input dependency absent from the public baseline. Correcting its repository locator does not make it runnable from this checkout alone. This limit does not apply automatically to sibling implementations of the task. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Historical timing summary](implementations/historical-timing-summary) — Calibration only.
+  Scope: README explicitly identifies historical saved-answer timing endpoint, distinct from the current37-main-figure programme; do not relabel as full current task coverage. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

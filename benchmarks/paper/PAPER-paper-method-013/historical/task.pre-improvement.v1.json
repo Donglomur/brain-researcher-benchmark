@@ -1,0 +1,523 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-013",
+  "source_id": "paper-method-013",
+  "track": "paper",
+  "title": "An end-to-end recurrent compressed sensing method to denoise, detect and demix calcium imaging data",
+  "status": "specification_only",
+  "canonical_position_one_based": 76,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s42256-024-00892-w",
+    "publication_year": 2024,
+    "venue": "Nature Machine Intelligence"
+  },
+  "primary_outputs": [
+    "Recover segmentation precision/recall/F1 against supplied manual ROIs for frames18501–23500 of the ten identified recordings.",
+    "Compare extracted calcium traces and runtime with declared baseline methods; treat author-constructed trace targets separately from independent electrical ground truth."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://zenodo.org/records/12650420"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": "KangningZhang/DeepCaImX-v1.0.0.zip",
+          "bytes": 10529104,
+          "url": "https://zenodo.org/api/records/12650420/files/KangningZhang/DeepCaImX-v1.0.0.zip/content",
+          "checksum": "md5:6046ef4adc059ccee8ba31fed1975cb0"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:6046ef4adc059ccee8ba31fed1975cb0"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-013"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/0/file_metadata_examples/0",
+        "recorded_fields": {
+          "name": "KangningZhang/DeepCaImX-v1.0.0.zip",
+          "bytes": 10529104,
+          "url": "https://zenodo.org/api/records/12650420/files/KangningZhang/DeepCaImX-v1.0.0.zip/content",
+          "checksum": "md5:6046ef4adc059ccee8ba31fed1975cb0"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:6046ef4adc059ccee8ba31fed1975cb0"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-013"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "paper_url": "https://www.nature.com/articles/s42256-024-00892-w",
+      "data_urls": [
+        "https://zenodo.org/records/12650420"
+      ],
+      "input_scope": "Ten exact Allen motion-corrected movies at five depths with matching manually labeled ROI files; supplied full pretrained model is synthetic-trained. Mini demos do not establish real-data performance.",
+      "saved_metadata": [
+        {
+          "metadata_url": "https://zenodo.org/api/records/12650420",
+          "resolved_record_id": 12650420,
+          "title": "DeepCaImX: An end-to-end recurrent compressed sensing method to denoise, detect and demix calcium imaging data",
+          "version": "v1.0.0",
+          "license": {
+            "id": "cc-by-4.0"
+          },
+          "metadata_inspected": true,
+          "files_downloaded": false,
+          "manifest_file_count": 1,
+          "file_metadata_examples": [
+            {
+              "name": "KangningZhang/DeepCaImX-v1.0.0.zip",
+              "bytes": 10529104,
+              "url": "https://zenodo.org/api/records/12650420/files/KangningZhang/DeepCaImX-v1.0.0.zip/content",
+              "checksum": "md5:6046ef4adc059ccee8ba31fed1975cb0"
+            }
+          ],
+          "examples_are_not_selected_transfer_manifest": true
+        },
+        {
+          "role": "Actual empirical motion-corrected calcium movies",
+          "source_guide": "https://github.com/AllenInstitute/AllenSDK/wiki/Use-the-Allen-Brain-Observatory-%E2%80%93-Visual-Coding-on-AWS",
+          "frame_selection": "18501–23500; confirm zero/one-based indexing from author preprocessing",
+          "manual_roi_paths": [
+            "Manually Labelled ROIs/ABO/501271265_depth175_ROI_frame18501-23500.mat",
+            "Manually Labelled ROIs/ABO/501704220_depth175_ROI_frame18501-23500.mat",
+            "Manually Labelled ROIs/ABO/524691284_depth275_ROI_frame18501-23500.mat",
+            "Manually Labelled ROIs/ABO/531006860_depth275_ROI_frame18501-23500.mat",
+            "Manually Labelled ROIs/ABO/603516552_depth550_ROI_frame18501-23500.mat",
+            "Manually Labelled ROIs/ABO/604145810_depth550_ROI_frame18501-23500.mat",
+            "Manually Labelled ROIs/ABO/607040613_depth375_ROI_frame18501-23500.mat",
+            "Manually Labelled ROIs/ABO/669233895_depth625_ROI_frame18501-23500.mat",
+            "Manually Labelled ROIs/ABO/671162628_depth625_ROI_frame18501-23500.mat",
+            "Manually Labelled ROIs/ABO/679353932_depth375_ROI_frame18501-23500.mat"
+          ],
+          "metadata_inspected": true,
+          "recording_bytes_downloaded": 0,
+          "manifest_file_count": 10,
+          "file_metadata_examples": [
+            {
+              "session_id": 501271265,
+              "url": "https://allen-brain-observatory.s3.us-west-2.amazonaws.com/visual-coding-2p/ophys_movies/ophys_experiment_501271265.h5",
+              "http_status": 200,
+              "bytes": "60695444088",
+              "etag": "\"d9ed96be3d91fa1630e5400f93dd94d3-7236\"",
+              "modified": "Tue, 05 Jun 2018 08:22:22 GMT"
+            },
+            {
+              "session_id": 501704220,
+              "url": "https://allen-brain-observatory.s3.us-west-2.amazonaws.com/visual-coding-2p/ophys_movies/ophys_experiment_501704220.h5",
+              "http_status": 200,
+              "bytes": "60569078136",
+              "etag": "\"11b764eec5cd6c8ad133d8134fd80091-7221\"",
+              "modified": "Tue, 05 Jun 2018 08:04:30 GMT"
+            }
+          ],
+          "examples_are_not_selected_transfer_manifest": true
+        }
+      ],
+      "code_url": "https://github.com/KangningZhang/DeepCaImX/tree/v1.0.0",
+      "revision_or_archive_version": "305a4827929b2c6e82e44c5c69b2ea9d410e20a4",
+      "entrypoints": [
+        {
+          "path": "Preprocessing of Experimental Samples/Prepro_Exp_Sample.ipynb",
+          "url": "https://github.com/KangningZhang/DeepCaImX/blob/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Preprocessing of Experimental Samples/Prepro_Exp_Sample.ipynb",
+          "role": "Creates experimental clips and trace-reference inputs from raw movies/manualROIs",
+          "inspected_as_text": true
+        },
+        {
+          "path": "Demo (full-version)/DeepCaImX_testing_demo.ipynb",
+          "url": "https://github.com/KangningZhang/DeepCaImX/blob/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Demo (full-version)/DeepCaImX_testing_demo.ipynb",
+          "role": "Released full model inference workflow",
+          "inspected_as_text": true
+        },
+        {
+          "path": "Data Tailor/tailor.m",
+          "url": "https://github.com/KangningZhang/DeepCaImX/blob/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Data Tailor/tailor.m",
+          "role": "Author image-tiling preprocessing",
+          "inspected_as_text": true
+        }
+      ],
+      "array_payloads_read_in_this_audit": false
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-013",
+        "versions_and_loader_contract": {
+          "scope_description": "DeepCaImX empirical Allen two-photon segmentation/demixing across the ten author-annotated recordings at five imaging depths; evaluate supplied pretrained model on actual motion-corrected movies and manual ROI references.",
+          "unresolved_coverage": [
+            "Need implement exact HDF5 frame selection and MATLAB input adaptation before reference execution.",
+            "Supplied full model was trained on synthetic NAOMi inputs; real evaluation must use the identified Allen movies, not mini-demo synthetic examples.",
+            "Manual ROI annotations are operational reference labels, not perfect neuron truth; temporal trace reference is derived from imaging.",
+            "Scope excludes complete synthetic-training regeneration and all possible datasets."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-method-013",
+        "versions_and_loader_contract": {
+          "declared_scope": "DeepCaImX empirical Allen two-photon segmentation/demixing across the ten author-annotated recordings at five imaging depths; evaluate supplied pretrained model on actual motion-corrected movies and manual ROI references."
+        },
+        "data_section_locators": []
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/KangningZhang/DeepCaImX/tree/v1.0.0",
+    "revision_or_archive_version": "305a4827929b2c6e82e44c5c69b2ea9d410e20a4",
+    "entrypoints": [
+      {
+        "path": "Preprocessing of Experimental Samples/Prepro_Exp_Sample.ipynb",
+        "url": "https://github.com/KangningZhang/DeepCaImX/blob/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Preprocessing of Experimental Samples/Prepro_Exp_Sample.ipynb",
+        "role": "Creates experimental clips and trace-reference inputs from raw movies/manualROIs",
+        "inspected_as_text": true
+      },
+      {
+        "path": "Demo (full-version)/DeepCaImX_testing_demo.ipynb",
+        "url": "https://github.com/KangningZhang/DeepCaImX/blob/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Demo (full-version)/DeepCaImX_testing_demo.ipynb",
+        "role": "Released full model inference workflow",
+        "inspected_as_text": true
+      },
+      {
+        "path": "Data Tailor/tailor.m",
+        "url": "https://github.com/KangningZhang/DeepCaImX/blob/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Data Tailor/tailor.m",
+        "role": "Author image-tiling preprocessing",
+        "inspected_as_text": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-013",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/KangningZhang/DeepCaImX/tree/v1.0.0",
+            "commit": "305a4827929b2c6e82e44c5c69b2ea9d410e20a4",
+            "author_linkage": [
+              "https://www.nature.com/articles/s42256-024-00892-w",
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC12327232/",
+              "https://www.nature.com/articles/s42256-024-00892-w?error=cookies_not_supported",
+              "https://github.com/AllenInstitute/AllenSDK/wiki/Use-the-Allen-Brain-Observatory-%E2%80%93-Visual-Coding-on-AWS",
+              "https://zenodo.org/records/12650420",
+              "https://github.com/KangningZhang/DeepCaImX/tree/v1.0.0"
+            ],
+            "default_branch": "main",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/KangningZhang/DeepCaImX/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/README.md",
+            "license_source": "https://raw.githubusercontent.com/KangningZhang/DeepCaImX/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/LICENSE",
+            "file_tree": {
+              "source": "https://api.github.com/repos/KangningZhang/DeepCaImX/git/trees/305a4827929b2c6e82e44c5c69b2ea9d410e20a4?recursive=1",
+              "truncated": false,
+              "paths": [
+                "Data Tailor/tailor.m",
+                "Demo (full-version)/DeepCaImX_testing_demo.ipynb",
+                "Demo (full-version)/DeepCaImX_training_demo.ipynb",
+                "Demo (full-version)/Pretrained Model/DeepCaImX_model.h5",
+                "Demo (mini-version)/DeepCaImX_testing_demo.ipynb",
+                "Demo (mini-version)/DeepCaImX_training_demo.ipynb",
+                "Demo (mini-version)/Pretrained Model/DeepCaImX_model.h5",
+                "Demo (mini-version)/Testing Dataset/LSTM_Data_1.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Data_2.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Data_3.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Data_4.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Data_5.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Masks_1.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Masks_2.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Masks_3.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Masks_4.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Masks_5.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Trace_1.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Trace_2.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Trace_3.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Trace_4.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Trace_5.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Video_1.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Video_2.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Video_3.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Video_4.mat",
+                "Demo (mini-version)/Testing Dataset/LSTM_Video_5.mat",
+                "Manually Labelled ROIs/ABO/501271265_depth175_ROI_frame18501-23500.mat",
+                "Manually Labelled ROIs/ABO/501704220_depth175_ROI_frame18501-23500.mat",
+                "Manually Labelled ROIs/ABO/524691284_depth275_ROI_frame18501-23500.mat",
+                "Manually Labelled ROIs/ABO/531006860_depth275_ROI_frame18501-23500.mat",
+                "Manually Labelled ROIs/ABO/603516552_depth550_ROI_frame18501-23500.mat",
+                "Manually Labelled ROIs/ABO/604145810_depth550_ROI_frame18501-23500.mat",
+                "Manually Labelled ROIs/ABO/607040613_depth375_ROI_frame18501-23500.mat",
+                "Manually Labelled ROIs/ABO/669233895_depth625_ROI_frame18501-23500.mat",
+                "Manually Labelled ROIs/ABO/671162628_depth625_ROI_frame18501-23500.mat",
+                "Manually Labelled ROIs/ABO/679353932_depth375_ROI_frame18501-23500.mat",
+                "Preprocessing of Experimental Samples/Prepro_Exp_Sample.ipynb",
+                "README.md",
+                "Simulated Dataset Generator/FISSA/Data Generator_GCaMP6f.ipynb",
+                "Simulated Dataset Generator/FISSA/Data Generator_GCaMP6s.ipynb",
+                "Simulated Dataset Generator/FISSA/Data Generator_GCaMP7b.ipynb",
+                "Simulated Dataset Generator/FISSA/Data Generator_GCaMP7c.ipynb",
+                "Simulated Dataset Generator/FISSA/Data Generator_GCaMP7f.ipynb",
+                "Simulated Dataset Generator/FISSA/Data Generator_GCaMP7s.ipynb",
+                "Simulated Dataset Generator/FISSA/Data Generator_test.ipynb",
+                "Simulated Dataset Generator/FISSA/Neuron_Library.mat",
+                "Simulated Dataset Generator/FISSA/simcalc.py",
+                "Simulated Dataset Generator/FISSA/simcalclib.py"
+              ],
+              "all_file_count": 57,
+              "rate_remaining": "52"
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "Preprocessing of Experimental Samples/Prepro_Exp_Sample.ipynb",
+              "url": "https://github.com/KangningZhang/DeepCaImX/blob/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Preprocessing of Experimental Samples/Prepro_Exp_Sample.ipynb",
+              "role": "Creates experimental clips and trace-reference inputs from raw movies/manualROIs",
+              "inspected_as_text": true
+            },
+            {
+              "path": "Demo (full-version)/DeepCaImX_testing_demo.ipynb",
+              "url": "https://github.com/KangningZhang/DeepCaImX/blob/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Demo (full-version)/DeepCaImX_testing_demo.ipynb",
+              "role": "Released full model inference workflow",
+              "inspected_as_text": true
+            },
+            {
+              "path": "Data Tailor/tailor.m",
+              "url": "https://github.com/KangningZhang/DeepCaImX/blob/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Data Tailor/tailor.m",
+              "role": "Author image-tiling preprocessing",
+              "inspected_as_text": true
+            }
+          ],
+          "dependencies": [
+            "Python3.9",
+            "TensorFlow2.10 per requirements (installation prose also mentions2.9; resolve environment version)",
+            "MATLAB2023a",
+            "mat73",
+            "OpenCV",
+            "SciPy"
+          ]
+        }
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-method-013",
+        "recorded": {
+          "code_url": "https://github.com/KangningZhang/DeepCaImX/tree/v1.0.0",
+          "code_revision_or_archive_version": "305a4827929b2c6e82e44c5c69b2ea9d410e20a4",
+          "entrypoints": [
+            {
+              "path": "Preprocessing of Experimental Samples/Prepro_Exp_Sample.ipynb",
+              "url": "https://github.com/KangningZhang/DeepCaImX/blob/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Preprocessing of Experimental Samples/Prepro_Exp_Sample.ipynb",
+              "role": "Creates experimental clips and trace-reference inputs from raw movies/manualROIs",
+              "inspected_as_text": true
+            },
+            {
+              "path": "Demo (full-version)/DeepCaImX_testing_demo.ipynb",
+              "url": "https://github.com/KangningZhang/DeepCaImX/blob/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Demo (full-version)/DeepCaImX_testing_demo.ipynb",
+              "role": "Released full model inference workflow",
+              "inspected_as_text": true
+            },
+            {
+              "path": "Data Tailor/tailor.m",
+              "url": "https://github.com/KangningZhang/DeepCaImX/blob/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/Data Tailor/tailor.m",
+              "role": "Author image-tiling preprocessing",
+              "inspected_as_text": true
+            }
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": [
+        "Ten exact Allen movie object HEAD requests returned200 without credentials; data are publicly accessible.",
+        "Allen source guide states non-commercial-use terms; retain these separately from code/weight terms.",
+        "Manual ROI files and pretrained H5 model are present in author pinned tree; license/redistribution terms remain a packaging gate."
+      ],
+      "declared_overlap_group": "https://zenodo.org/api/records/12650420",
+      "existing_graph_evidence_leads": [],
+      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
+      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "documented_outputs": [
+        "Recover segmentation precision/recall/F1 against supplied manual ROIs for frames18501–23500 of the ten identified recordings.",
+        "Compare extracted calcium traces and runtime with declared baseline methods; treat author-constructed trace targets separately from independent electrical ground truth."
+      ],
+      "construction_specificity": "Freeze the paper evaluation frame ranges, patch/tile assembly, ROI matching metric/threshold, trace metric and exact checkpoint; neither movie availability nor hand labels alone define a complete grader.",
+      "exact_published_numeric_target_verified_by_this_audit": false
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Run denoise/detect/demix comparisons on identical motion-corrected frames and manual-reference policy.",
+      "Manual ROIs are operational labels, not complete cell truth; derived trace references cannot establish electrical fidelity."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Freeze the paper evaluation frame ranges, patch/tile assembly, ROI matching metric/threshold, trace metric and exact checkpoint; neither movie availability nor hand labels alone define a complete grader.",
+        "Recording/mouse and depth groups; verify donor identities and separate any tuning movies before assessing generalization.",
+        "Observed movie HEAD sizes are approximately60GB each; selected HDF5 access, peak memory and runtime are unmeasured. Allen noncommercial terms and separate weights/code terms apply.",
+        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_and_metadata_only_for_this_project",
+      "runnable_reference_demonstrated": false,
+      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve robustness to motion, neuropil or changed indicator kinetics using external recordings and equal compute versus the original pipeline and calcium-processing baselines."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_executed_or_independently_qualified",
+      "proposed_question": [
+        "Improve robustness to motion, neuropil or changed indicator kinetics using external recordings and equal compute versus the original pipeline and calcium-processing baselines."
+      ],
+      "independent_panel_gate": "Recording/mouse and depth groups; verify donor identities and separate any tuning movies before assessing generalization.",
+      "published_targets_are_historically_exposed": true,
+      "prospective_frontier_claim_supported": false
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_statement": "GPU/high-data: each complete source movie~60–65GB, ten total~613GB; only5,000 frames per recording are analyzed. Author full training used48GB RTX8000; inference resource need unmeasured.",
+    "source_resource_evidence": "Actual movie Content-Length fromHEAD; author README for48GB training hardware. No model run.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "holds": {
+    "task_specific": [
+      "Freeze the paper evaluation frame ranges, patch/tile assembly, ROI matching metric/threshold, trace metric and exact checkpoint; neither movie availability nor hand labels alone define a complete grader.",
+      "Recording/mouse and depth groups; verify donor identities and separate any tuning movies before assessing generalization.",
+      "Observed movie HEAD sizes are approximately60GB each; selected HDF5 access, peak memory and runtime are unmeasured. Allen noncommercial terms and separate weights/code terms apply.",
+      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Trace exact full-model preprocessing, annotated frame ranges and recording/donor membership into a bounded inference contract; resolve dependency and rights gates before selecting transfer strategy.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Trace exact full-model preprocessing, annotated frame ranges and recording/donor membership into a bounded inference contract; resolve dependency and rights gates before selecting transfer strategy.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "28a1e765778ae3762fb71f27efa107282eb457e26148d749882a781752b1e3c5",
+    "audit_record_sha256": "808fb9779f70ef6ea24536182643ca6a5f57c38ece795e8c54e10a39baabced9",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-013",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 12,
+        "record_sha256": "abe788bd8999f8f5a4d21908720ff96e495a25e1dfb972bd1f1ea8233b0854e2"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+          "bytes": 500587,
+          "sha256": "8893618f482d8301b723a57e2758fef66ab560b84c95650f8ea92f4b37375c3a"
+        },
+        "record_id": "paper-method-013",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 95,
+        "record_sha256": "aee055203dc9a8265c7335c8c4eeb189e0822165bf389a9c1e921546d1c0146e"
+      }
+    ],
+    "historical_pin_exceptions": [
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+          "bytes": 3519,
+          "sha256": "d9862c468c3ece0d0e0cfca975f8980cea6a9dfbb7abfe5d3b4b96ca76045ac7"
+        },
+        "current_pin": {
+          "bytes": 4544,
+          "sha256": "963f9e1b6d528573c1c321629a0ab2ba6e1fb25b3e0404e3882b483ea7207c5f"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      },
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+          "bytes": 163669,
+          "sha256": "96c826360af4b8858cb33406e95242d27d7806e5896b98c211ccd3478a76661d"
+        },
+        "current_pin": {
+          "bytes": 166909,
+          "sha256": "974e56e839620059345f5b8ae1f5893e1d404c007864159dc84e6b330f49edca"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      }
+    ],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

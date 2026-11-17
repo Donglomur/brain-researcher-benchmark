@@ -1,19 +1,30 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-024",
-  "source_id": "paper-method-024",
   "track": "paper",
   "title": "CBraMod: A Criss-Cross Brain Foundation Model for EEG Decoding",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Original ten BCI task families across FACED, SEED-V, PhysioNet-MI, SHU-MI, ISRUC, CHB-MIT, BCIC2020-3, Mumtaz2016, SEED-VIG, MentalArithmetic, TUEV and TUAB: emotion, motor imagery, sleep stage, seizure, imagined speech, depression, vigilance regression, mental workload, event type and abnormal EEG prediction. Preserve the full program and central ablations.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Original ten BCI task families across FACED, SEED-V, PhysioNet-MI, SHU-MI, ISRUC, CHB-MIT, BCIC2020-3, Mumtaz2016, SEED-VIG, MentalArithmetic, TUEV and TUAB: emotion, motor imagery, sleep stage, seizure, imagined speech, depression, vigilance regression, mental workload, event type and abnormal EEG prediction. Preserve the full program and central ablations.",
+    "Source-paper comparison for Complete paper dataset-specific metric panel; no recovered paper-wide scalar or scientifically admitted primary decision rule: Original panel: balanced accuracy, Cohen kappa and weighted F1 for multiclass; balanced accuracy, PR area and ROC area for binary; Pearson correlation, R2 and RMSE for vigilance regression. Higher is better except RMSE. Balanced accuracy is mean class recall; kappa=(observed agreement-chance agreement)/(1-chance agreement); weighted F1 uses class support. No source-defined scalar over heterogeneous datasets exists. Native binary decisions use sigmoid(logit)>0.5; PR area is trapezoidal auc(recall,precision), not average precision. R2=1-SSE/SST and RMSE=sqrt(mean squared error); Pearson uses np.corrcoef. Exact undefined-class and ISRUC sequence handling require runtime qualification."
+  ],
+  "success_criteria": [
+    "Recover original full12 dataset/cohort/split membership and preprocessing, preserving within-person and person-level tasks separately.",
+    "Authenticate source CBraMod checkpoints/recipes and execute an original-task author reference; retain each published table value separately.",
+    "Freeze the complete metric panel, primary decision rule, task-specific meaningful effects, multiplicity/uncertainty and concrete matched budgets before candidate feedback.",
+    "Surpass source-paper results on that complete original support. A PhysioNet-only result, revised TUAB/TUEV partition, different pretraining exposure or person-held-out30%-label program is separately reported extension and cannot satisfy this task.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-024",
   "canonical_position_one_based": 35,
   "paper_identity": {
     "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/bbbd6d915cb90be21c1254a82d45cedd-Abstract-Conference.html",
     "publication_year": 2025,
     "venue": "ICLR"
   },
-  "primary_outputs": [
-    "Participant-held-out decoding metrics and matched REVE/EEGPT or smaller baseline; adaptation data ablation."
-  ],
   "input_assets": {
     "routes": [
       "https://physionet.org/content/eegmmidb/1.0.0/"
@@ -142,96 +153,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "MIT code",
-        "EEGMMI1.0.0 ODC Attribution1.0, open"
-      ],
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Participant-held-out decoding metrics and matched REVE/EEGPT or smaller baseline; adaptation data ablation."
-      ],
-      "assessment": "One PhysioNet motor-imagery transfer endpoint is scoped; the whole multi-dataset foundation-model claim and exact paper score/configuration mapping are not established.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Use identical class definitions, excluded subjects/runs, epochs, calibration budget and scoring for CBraMod/REVE/EEGPT/supervised controls; a new common split is an extension rather than literal published-score reproduction.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "TUAB/TUEV original score comparisons may use mismatched splits; excluded from this scope. Freeze actual included subjects/runs and compare all baselines anew.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve montage shift or low-label adaptation under matched data and compute against CBraMod and independently tuned pretrained/supervised alternatives."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Group whole participants and original trials/runs; compare montage/low-label transfer only on a prespecified untouched analysis partition, with shared EEGMMI exposure across REVE and neural tasks declared.",
-      "retained_roster_proposal": [
-        "Improve montage shift or low-label adaptation under matched data and compute against CBraMod and independently tuned pretrained/supervised alternatives."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": "single GPU",
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": "Resource class is an inspection-based estimate, not measured runtime."
-  },
-  "holds": {
-    "task_specific": [
-      "TUAB/TUEV original score comparisons may use mismatched splits; excluded from this scope. Freeze actual included subjects/runs and compare all baselines anew.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Freeze the exact author PhysioNet cohort/run/class/split configuration and checkpoint hash, then design one subject-level reference comparison with no-neural and simple supervised controls.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Freeze the exact author PhysioNet cohort/run/class/split configuration and checkpoint hash, then design one subject-level reference comparison with no-neural and simple supervised controls.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -292,11 +213,81 @@
       "new_scientific_runs": 0
     }
   },
+  "resources": {
+    "roster_resource_statement": "single GPU",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Resource class is an inspection-based estimate, not measured runtime."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-024/improvement.v1.json",
+      "bytes": 14427,
+      "sha256": "679df637b4b6ac526d7ec8b6a9c5c251d991adcc2ecb6fc722985ffada0f6968"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-024/historical/task.pre-improvement.v1.json",
+        "bytes": 15775,
+        "sha256": "bf48e8e0eb96ad066fd4b09425718028ab9e118051aa9d3171a7de88621631f1"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-cbramod-paired-program"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending original full-panel source recovery. Once qualified, allow repeated method changes using only original training/development feedback and declared shared pretrained resources; log all twelve datasets and all runs without dropping failures.",
+    "candidate_freeze": "Freeze candidate, twelve dataset manifests, original splits, source versions, preprocessing, checkpoint identities, per-dataset metrics/decision, seeds and budgets before any original test feedback.",
+    "final_evaluation": "Execute candidate and authenticated author reference on the complete original task panel; report published, rerun and candidate metrics separately with uncertainty. Existing person_heldout_low_label_30pct evaluation remains an extension and cannot issue this paper-win verdict.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Maintain original reported results, source reruns and new-split comparators as distinct. Neither an authored loader approximation nor a paper percentage on unmatched support is a valid author baseline; no convenient dataset subset replaces the full program."
+  },
+  "blocking_issues": [
+    "Original TUAB/TUEV split identities cannot be recovered from the revised deterministic source and author disclaims historical comparator partition parity.",
+    "Complete twelve-dataset source-version/cohort/exclusion/row identity joins remain missing.",
+    "Exact source checkpoint/pretraining exposure, five seeds and aggregation conventions not bound.",
+    "No authenticated complete original-task author reference or native evaluator qualification.",
+    "Task-specific effects, full-panel decision and valid uncertainty remain unspecified.",
+    "Concrete shared access and compute budgets remain unspecified; existing30%-label person-held-out improvement interface is a different task."
+  ],
+  "holds": {
+    "task_specific": [
+      "Original TUAB/TUEV split identities cannot be recovered from the revised deterministic source and author disclaims historical comparator partition parity.",
+      "Complete twelve-dataset source-version/cohort/exclusion/row identity joins remain missing.",
+      "Exact source checkpoint/pretraining exposure, five seeds and aggregation conventions not bound.",
+      "No authenticated complete original-task author reference or native evaluator qualification.",
+      "Task-specific effects, full-panel decision and valid uncertainty remain unspecified.",
+      "Concrete shared access and compute budgets remain unspecified; existing30%-label person-held-out improvement interface is a different task."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original CBraMod full twelve-dataset program has ordered decoding endpoints, but original cohort/split identities and a complete same-support baseline are unrecovered. The author explicitly disclaims exact split comparability for historical TUAB/TUEV comparisons and replaced their splitting code after publication. The current implementation's person-held-out 30%-label condition changes the original task and is only an extension. Recovering PhysioNet Table 3 alone cannot qualify this full-panel task. Original TUAB/TUEV split identities cannot be recovered from the revised deterministic source and author disclaims historical comparator partition parity. Complete twelve-dataset source-version/cohort/exclusion/row identity joins remain missing. Exact source checkpoint/pretraining exposure, five seeds and aggregation conventions not bound. No authenticated complete original-task author reference or native evaluator qualification. Task-specific effects, full-panel decision and valid uncertainty remain unspecified. Concrete shared access and compute budgets remain unspecified; existing30%-label person-held-out improvement interface is a different task.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-024/historical/task.pre-improvement.v1.json",
+      "bytes": 15775,
+      "sha256": "bf48e8e0eb96ad066fd4b09425718028ab9e118051aa9d3171a7de88621631f1"
+    },
+    "notes": "Preserve the complete paired submitted-program source, all historical task and scorer artifacts. Original-split reproduction is calibration. The historical improvement purpose explicitly selects a new person-held-out30%-label condition and must be labeled extension rather than source-paper victory; structural completeness is not scientific readiness."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

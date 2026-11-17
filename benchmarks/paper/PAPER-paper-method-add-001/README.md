@@ -5,22 +5,33 @@
 - **Task ID:** `PAPER-paper-method-add-001`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Design ready
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** design\_ready. The original offline stability comparison has ordered, published task-specific medians: isometric force R²=0.91 across 380 Jango pairs and reaching cursor-velocity R²=0.78 across 132 Chewie pairs. This grounds a complete source-task design, not readiness. Original partitions/preprocessing, author replay, metric/CV correspondence, source rights, uncertainty and budgets remain unresolved. The illustrated Day0→Day95 R²0.88 is calibration evidence and cannot establish the complete original task.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 34067 bytes; SHA-256 `216699c4e38c1d70250aeb96253eb0cb9b8009a56ba1e07cb6dd9c2d3afc0ea9`.
+- Specification identity: 35630 bytes; SHA-256 `01c8e1107897c06d31968b2752d26dde3898c08946d5e5f8d22046a48dbedffc`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
 ## Implementation artifacts
 
-- [Recovered operators](implementations/recovered-operators) — Recovered operators.
-  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Recovered operators](implementations/recovered-operators) — Calibration only.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-FIND-REP-009",
-  "source_id": "FIND-REP-009",
   "track": "paper",
   "title": "Control of representation updating by higher-order thalamus enables history-based decision-making",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Decode whether an identical tone occurs in a rare or common block from population neural activity, separately with/without PUL suppression (Figure 3C) and TRN activation (Figure 3G); retain both registered perturbation panels.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Decode whether an identical tone occurs in a rare or common block from population neural activity, separately with/without PUL suppression (Figure 3C) and TRN activation (Figure 3G); retain both registered perturbation panels.",
+    "Source-paper comparison for Original Figure3C/3G context-decoding ROC-AUC, pending exact author metric and aggregation recovery: Recover the original per-condition ROC-AUC calculation, class direction and source aggregation from the exact author runs before selecting a primary predictive score. The local implementation distinguishes source-auto pROC orientation from fixed Randomised-positive AUC; probability-MAE agreement and perturbation p-values are calibration/descriptive outputs."
+  ],
+  "success_criteria": [
+    "Recover the published numeric baseline and reconcile author preprocessing, class orientation, original partitions and source population for both 3C and3G.",
+    "Freeze candidate and author-reproduction recipes before final evaluation on the same original support and allowed neural inputs.",
+    "Exceed the faithful author decoder by a justified effect with valid paired uncertainty; reproduce the perturbation contrasts without using a larger contrast or smaller p-value as the win.",
+    "Retain all original sessions and both conditions; do not claim whole-paper improvement from the existing3C-only probability reconstruction.",
+    "Label temporally blocked, session-held-out or animal-held-out decoding as an extension, even if it improves over a rerun author algorithm on that new split.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-REP-009",
   "canonical_position_one_based": 6,
   "paper_identity": {
     "url": "https://doi.org/10.1016/j.neuron.2026.04.045",
     "publication_year": 2026,
     "venue": "Neuron"
   },
-  "primary_outputs": [
-    "Recompute common-versus-rare context information in trial-by-unit firing data.",
-    "Compare neural context coding under pulvinar suppression and TRN activation, retaining experiment and subject identities."
-  ],
   "input_assets": {
     "routes": [
       "https://doi.org/10.5281/zenodo.19465617"
@@ -1393,115 +1404,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "recorded_terms": {
-        "data": {
-          "id": "cc-by-4.0"
-        },
-        "data_access": "public repository metadata inspected; no recording payload downloaded",
-        "code": "Author archived release under its deposit license"
-      },
-      "record_conflicts": [],
-      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
-      "overlap_group": null
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "central_outputs_in_saved_source_contract": [
-        "Recompute common-versus-rare context information in trial-by-unit firing data.",
-        "Compare neural context coding under pulvinar suppression and TRN activation, retaining experiment and subject identities."
-      ],
-      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
-      "missing_or_unfrozen_endpoint_details": "Figure3C/3G supply a concrete context/intervention endpoint; Figure3F has a stale undefined test reference and other folders include summaries rather than equivalent inputs."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Preserve literal-source decoding as a named reproduction branch; independently repaired or temporally blocked/session-held-out fits are new analyses. Match tone, laser condition, counts and firing rates."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Figure3C/3G supply a concrete context/intervention endpoint; Figure3F has a stale undefined test reference and other folders include summaries rather than equivalent inputs.",
-        "Preserve literal-source decoding as a named reproduction branch; independently repaired or temporally blocked/session-held-out fits are new analyses. Match tone, laser condition, counts and firing rates.",
-        "Other release folders largely contain plotted/summary data; no whole-paper reproducibility claim.",
-        "Trial-shuffled decoding can exploit temporal structure; SHAP is not causal importance.",
-        "Artifact-ready means enough inputs/code for a substantial attempt, not error-free code or execution success.",
-        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-        "Execute and independently audit references, controls, grading and measured resources.",
-        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
-      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Replace random trial splits with temporally blocked and session-held-out splits; match tone, trial count and firing-rate distributions across laser conditions; use animal-level contrasts."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "independent_panel_not_established_in_inspected_evidence",
-      "proposed_improvement": [
-        "Replace random trial splits with temporally blocked and session-held-out splits; match tone, trial count and firing-rate distributions across laser conditions; use animal-level contrasts."
-      ],
-      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
-      "special_gate": "No completed independent improvement result is established here."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "source_roster_estimate_or_statement": {
-      "estimate": "Approximately 0.33 GB neural Figure3 archive; parallel CPU, hours estimated.",
-      "basis": "File-size metadata and static source inspection; compute is estimated, not measured."
-    },
-    "measured_or_static_facts_from_existing_authoring": [],
-    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
-  },
-  "holds": {
-    "task_specific": [
-      "Figure3C/3G supply a concrete context/intervention endpoint; Figure3F has a stale undefined test reference and other folders include summaries rather than equivalent inputs.",
-      "Preserve literal-source decoding as a named reproduction branch; independently repaired or temporally blocked/session-held-out fits are new analyses. Match tone, laser condition, counts and firing rates.",
-      "Other release folders largely contain plotted/summary data; no whole-paper reproducibility claim.",
-      "Trial-shuffled decoding can exploit temporal structure; SHAP is not causal importance.",
-      "Artifact-ready means enough inputs/code for a substantial attempt, not error-free code or execution success.",
-      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-      "Execute and independently audit references, controls, grading and measured resources.",
-      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Specify the Figure3C/3G paired perturbation contrast and exact workspace-field joins, document path repairs and exclude the broken3F score until independently repaired and qualified.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Specify the Figure3C/3G paired perturbation contrast and exact workspace-field joins, document path repairs and exclude the broken3F score until independently repaired and qualified.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -1532,11 +1434,87 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "source_roster_estimate_or_statement": {
+      "estimate": "Approximately 0.33 GB neural Figure3 archive; parallel CPU, hours estimated.",
+      "basis": "File-size metadata and static source inspection; compute is estimated, not measured."
+    },
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-REP-009/improvement.v1.json",
+      "bytes": 11624,
+      "sha256": "9cac22f47f687c0d5eb96259f3cfbfcb13a31bb219b7a80a597277beae9afb91"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-REP-009/historical/task.pre-improvement.v1.json",
+        "bytes": 71818,
+        "sha256": "200b04832b08f8898cc228ed775545f6f2c08573dfc47a6b8eaec40655855fae"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-find-rep-009",
+        "components-thalamus17-fixed-reference"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-FIND-REP-009/implementations/registered-runtime/manifest.json",
+        "bytes": 10851,
+        "sha256": "02047f00a8d096bb6a02f8f90b635599fd01b639b574b8e4d3021c0a91a861f0"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Inactive until source recovery. A future episode may iterate only on declared development feedback inside the original training portion, keeping the same source task and exposing neither protected test labels nor reference probabilities.",
+    "candidate_freeze": "Commit the complete method, feature/access policy, preprocessing, tuning and seed policy before a single owner-controlled final comparison; no adaptive feedback between sessions.",
+    "final_evaluation": "Use the recovered original 3C and3G supports and source metric. Report all condition/session results and candidate-minus-author differences. Existing artifact grading remains a separate calibration outcome.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Recover and independently audit author scripts and numeric paper outputs; retain any source defects and local repairs as declared provenance. A repaired/new-split baseline must not silently replace the original paper result."
+  },
+  "blocking_issues": [
+    "Published3C/3G metric values and exact author train/test/tuning recipe are unrecovered.",
+    "Animal/session mapping and recorded Figure3C annotation discrepancy remain unresolved.",
+    "Upstream firing feature construction, Figure3G subsampling and complete source support are not bound to an evaluator.",
+    "Fixed concrete iteration/access/compute budgets, meaningful effect, biological uncertainty rule and protected same-task evaluator are not admitted.",
+    "Existing exposed-label probability reconstruction cannot establish predictive superiority."
+  ],
+  "holds": {
+    "task_specific": [
+      "Published3C/3G metric values and exact author train/test/tuning recipe are unrecovered.",
+      "Animal/session mapping and recorded Figure3C annotation discrepancy remain unresolved.",
+      "Upstream firing feature construction, Figure3G subsampling and complete source support are not bound to an evaluator.",
+      "Fixed concrete iteration/access/compute budgets, meaningful effect, biological uncertainty rule and protected same-task evaluator are not admitted.",
+      "Existing exposed-label probability reconstruction cannot establish predictive superiority."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The author release contains ordered rare/common-context decoding analyses, but the published Figure 3C/3G score vectors, exact source partitions and animal-to-session mapping are not recovered. The existing 17-session fixed-reference probability reconstruction is explicitly calibrated to locally declared conventions and cannot stand in for the paper baseline. Both perturbation panels in the registered target must remain in scope. Published3C/3G metric values and exact author train/test/tuning recipe are unrecovered. Animal/session mapping and recorded Figure3C annotation discrepancy remain unresolved. Upstream firing feature construction, Figure3G subsampling and complete source support are not bound to an evaluator. Fixed concrete iteration/access/compute budgets, meaningful effect, biological uncertainty rule and protected same-task evaluator are not admitted. Existing exposed-label probability reconstruction cannot establish predictive superiority.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-REP-009/historical/task.pre-improvement.v1.json",
+      "bytes": 71818,
+      "sha256": "200b04832b08f8898cc228ed775545f6f2c08573dfc47a6b8eaec40655855fae"
+    },
+    "notes": "Preserve the 17-session34-cell fixed-reference grader and historical probability-MAE results unchanged. They measure reconstruction of explicit local conventions; neither near-zero discrepancy nor a copied-label AUC establishes a paper win."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

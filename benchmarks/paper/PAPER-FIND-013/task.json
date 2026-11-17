@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-FIND-013",
-  "source_id": "FIND-013",
   "track": "paper",
   "title": "Synaptic plasticity rules driving representational shifting in the hippocampus",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Original Fig.6b reconstruction of each empirical onset-centered PF center-of-mass trajectory as a function of lap, comparing linear with plateauing-exponential fits. This is same-observation description, not prediction of unseen animals.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Original Fig.6b reconstruction of each empirical onset-centered PF center-of-mass trajectory as a function of lap, comparing linear with plateauing-exponential fits. This is same-observation description, not prediction of unseen animals.",
+    "Source-paper comparison for Original Fig.6b full2649-PF unadjusted reconstruction R2 comparison; scalar aggregation unresolved: Original unadjusted coefficient of determination R2 for each PF fit, with higher values indicating better reconstruction of the same observations. Source compares a two-parameter line with Amp*(1-exp(-n/tau))+epsilon; do not replace this metric by significance or adjusted R2."
+  ],
+  "success_criteria": [
+    "Recover the exact original2649-PF input and paired linear/nonlinear fit-score vector; reproduce the bounded author plateau-exponential reference on the same observations.",
+    "Preserve original lap support, centering, missingness/interpolation, cohort and unadjusted R2; a new holdout or selected-PF subset cannot replace this reconstruction task.",
+    "Freeze a source-comparable model-capacity and search/selection policy before candidate feedback. Document the original three-parameter nonlinear fit and two-parameter linear comparator; unrestricted interpolation or added effective degrees of freedom cannot earn a paper win.",
+    "Predeclare complete-panel aggregation, meaningful effect and dependence-aware uncertainty; require improved reconstruction against the original author result, not merely a larger effect or smaller p value.",
+    "Retain broader empirical/model/optogenetic outputs as separately assessed historical obligations. A qualified Fig.6b reconstruction gain must be labelled with that scope and cannot establish a plasticity mechanism or every paper claim.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-013",
   "canonical_position_one_based": 71,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41593-025-01894-6",
     "publication_year": 2025,
     "venue": "Nature Neuroscience"
   },
-  "primary_outputs": [
-    "CA1 versus CA3 place-field center-of-mass shifts and per-animal variability.",
-    "Optogenetic effects on field shifts, and empirical discrimination of STDP versus BTSP model predictions."
-  ],
   "input_assets": {
     "routes": [
       "https://github.com/antoinemadar/BTSPvsSTDP"
@@ -192,109 +203,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": {
-        "code": "No top-level license identified in inspected paths; permissions for redistribution are unresolved, not presumed.",
-        "data": "Public empirical input route inspected; component license must be read before redistribution if not recorded elsewhere in this record."
-      },
-      "declared_overlap_group": null,
-      "existing_graph_evidence_leads": [],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "CA1 versus CA3 place-field center-of-mass shifts and per-animal variability.",
-        "Optogenetic effects on field shifts, and empirical discrimination of STDP versus BTSP model predictions."
-      ],
-      "construction_specificity": "Specify exact center-of-mass shift estimand, inclusion/smoothing, per-animal aggregation and one model-discrimination endpoint; published model summaries cannot be assessment inputs.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Compare STDP and BTSP with matched flexibility and training-only parameter choice.",
-      "Separate descriptive model fit from mechanistic identification and separate optogenetic contrast from reanalysis of reused Dong et al. 2021 data."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Specify exact center-of-mass shift estimand, inclusion/smoothing, per-animal aggregation and one model-discrimination endpoint; published model summaries cannot be assessment inputs.",
-        "Whole animal and repeated field trajectories; verify retained animal IDs before a held-out-field/animal comparison. Current input selection may already condition on derived fields.",
-        "Code and selected-data redistribution terms remain unresolved; the 2025 paper does not make the reused recordings newly collected.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Proposed: test competing plasticity models on held-out fields/animals and match smoothing, detection thresholds and model flexibility."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Proposed: test competing plasticity models on held-out fields/animals and match smoothing, detection thresholds and model flexibility."
-      ],
-      "independent_panel_gate": "Whole animal and repeated field trajectories; verify retained animal IDs before a held-out-field/animal comparison. Current input selection may already condition on derived fields.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": {
-      "estimate": "CPU workstation; empirical analysis hours, model parameter sweeps potentially days (estimate).",
-      "basis": "Source metadata/static inspection and author runtime statements where explicitly identified; not measured."
-    },
-    "source_resource_evidence": null,
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "Specify exact center-of-mass shift estimand, inclusion/smoothing, per-animal aggregation and one model-discrimination endpoint; published model summaries cannot be assessment inputs.",
-      "Whole animal and repeated field trajectories; verify retained animal IDs before a held-out-field/animal comparison. Current input selection may already condition on derived fields.",
-      "Code and selected-data redistribution terms remain unresolved; the 2025 paper does not make the reused recordings newly collected.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Trace animal/field identities and original field-selection criteria from the archived tables to one central model comparison, then freeze an input/answer boundary.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Trace animal/field identities and original field-selection criteria from the archived tables to one central model comparison, then freeze an input/answer boundary.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -370,11 +278,87 @@
     ],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_statement": {
+      "estimate": "CPU workstation; empirical analysis hours, model parameter sweeps potentially days (estimate).",
+      "basis": "Source metadata/static inspection and author runtime statements where explicitly identified; not measured."
+    },
+    "source_resource_evidence": null,
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-013/improvement.v1.json",
+      "bytes": 11620,
+      "sha256": "d2a0c233237cb0660b78e2ad6d198a6cbbd5e7f4020c0dc15818cd106e49b347"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-013/historical/task.pre-improvement.v1.json",
+        "bytes": 19590,
+        "sha256": "3bb69a120a48795c359e1d85c5e3ecb0b29965fab4f06781703953261458de89"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-find-013"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-FIND-013/implementations/registered-runtime/manifest.json",
+        "bytes": 8856,
+        "sha256": "bec187e96ed726b72bd1885f5d926b75668bc556eb10f23f6e9b686e47e872dd"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After source recovery and fixed-complexity admission, iterate using the original allowed observed COM inputs and declared fit-feedback budget. Original same-data fitting is intentional; no new predictive split is introduced.",
+    "candidate_freeze": "Freeze candidate family, parameterization, capacity, fitting/search budget, preprocessing and full-panel decision before final scoring.",
+    "final_evaluation": "Replay the frozen candidate and original author route on the complete original2649-PF reconstruction support. Report full paired scores and predeclared aggregation; protect scoring provenance without pretending source-observed trajectories are unseen data.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published full-vector fits, fresh author reruns and local reconstruction controls are distinct. Source mean/median thresholds are not invented; budgets and exact replay must be qualified before activation."
+  },
+  "blocking_issues": [
+    "Exact original2649-PF fit score vector, empirical asset versions and PF/animal/condition mappings unresolved.",
+    "Original regression lap support, missingness/interpolation, parameter initialization/bounds/stopping and native author parity require authentication.",
+    "No fixed source-comparable complexity/search policy or full-panel aggregation is admitted; unconstrained in-sample flexibility is not scientific improvement.",
+    "Meaningful effect, valid paired uncertainty, working source-author/candidate evaluation and concrete episode budgets remain unresolved.",
+    "Canonical task binding must identify the original Fig.6b reconstruction endpoint while preserving broader descriptive/mechanistic history."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact original2649-PF fit score vector, empirical asset versions and PF/animal/condition mappings unresolved.",
+      "Original regression lap support, missingness/interpolation, parameter initialization/bounds/stopping and native author parity require authentication.",
+      "No fixed source-comparable complexity/search policy or full-panel aggregation is admitted; unconstrained in-sample flexibility is not scientific improvement.",
+      "Meaningful effect, valid paired uncertainty, working source-author/candidate evaluation and concrete episode budgets remain unresolved.",
+      "Canonical task binding must identify the original Fig.6b reconstruction endpoint while preserving broader descriptive/mechanistic history."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The final paper contains an original ordered reconstruction task: Fig.6b compares linear and bounded plateauing-exponential fits to the same2649 empirical place-field trajectories using unadjusted R2. In-sample model fit is a valid source endpoint; no new predictive holdout is required. Exact source fit vectors, original observation support, full-panel aggregation and a defensible fixed-complexity superiority rule remain unrecovered. Descriptive biological effects and mechanistic claims remain distinct. Exact original2649-PF fit score vector, empirical asset versions and PF/animal/condition mappings unresolved. Original regression lap support, missingness/interpolation, parameter initialization/bounds/stopping and native author parity require authentication. No fixed source-comparable complexity/search policy or full-panel aggregation is admitted; unconstrained in-sample flexibility is not scientific improvement. Meaningful effect, valid paired uncertainty, working source-author/candidate evaluation and concrete episode budgets remain unresolved. Canonical task binding must identify the original Fig.6b reconstruction endpoint while preserving broader descriptive/mechanistic history.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-013/historical/task.pre-improvement.v1.json",
+      "bytes": 19590,
+      "sha256": "3bb69a120a48795c359e1d85c5e3ecb0b29965fab4f06781703953261458de89"
+    },
+    "notes": "Preserve all processed-trajectory OLS/error/coverage graders and mechanism summaries as calibration. The original paper also contains a valid ordered in-sample fit comparison; these local reconstruction controls do not yet reproduce its complete2649-PF score vector or establish superiority."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

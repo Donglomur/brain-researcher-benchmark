@@ -1,0 +1,147 @@
+{
+  "id": "PAPER-CANDIDATE-20261114-SBIND",
+  "track": "paper",
+  "title": "Joint behavioral decoding and neural prediction from full spatial imaging fields",
+  "registration_recommendation": "REGISTER_DRAFT_ONLY",
+  "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
+  "scientific_question": "Can spatially structured neural dynamics jointly improve behavioral prediction and neural reconstruction in the complete published widefield and fUS benchmarks?",
+  "paired_access_conditions": {
+    "A": "Paper and sufficient scientific specification plus identical complete authorized data and train/dev labels; no official implementation.",
+    "B": "The same paper/specification/data and role information plus pinned official code. Missing essential method specification is a construction defect, not an A-arm model failure.",
+    "parity": "Equal execution, tuning and compute budgets; same complete held cases and metric. Public event schedules and paper-provided information remain equally available. Code/model/checkpoint exposure and contamination are audited.",
+    "outcomes": "Separate historical reproduction from prospective improvement. Preserve original test-selection/leakage if reproducing it, label it, and never substitute a corrected split without a distinct prospective result. Narrative cannot replace numeric artifacts."
+  },
+  "provenance": {
+    "paper": {
+      "title": "Dynamical Modeling of Behaviorally Relevant Spatiotemporal Patterns in Neural Imaging Data",
+      "venue": "ICML / PMLR 267",
+      "year": 2025,
+      "doi": null,
+      "url": "https://proceedings.mlr.press/v267/hosseini25a.html",
+      "identity": "PMLR267:23846–23872; hosseini25a"
+    },
+    "data": [
+      {
+        "doi": "10.14224/1.38599",
+        "version": "CSHL October 2019 record; last modified 2020-07-28",
+        "url": "https://repository.cshl.edu/id/eprint/38599/",
+        "license": "Unresolved in retained landing-page metadata; no open license inferred from public links.",
+        "access": "Data description and storage-link documents public; deposit-request form alone staff-restricted. Exact full-array access/version remains to qualify.",
+        "representation": "Full reconstructed/cropped 128x128 calcium fields with synchronized behavior; compressed spatial/temporal factors may be used only if they exactly reconstruct the specified model input."
+      },
+      {
+        "doi": "10.22002/pa710-cdn95",
+        "version": "1.0.0",
+        "url": "https://data.caltech.edu/records/pa710-cdn95",
+        "license": "CC-BY-NC-4.0",
+        "access": "Open metadata, noncommercial-use restriction; external benchmark distribution/use rights need review.",
+        "observed_bytes": 34253258547,
+        "representation": "2 Hz Power Doppler fields and session metadata in fUS_BMI_Data.zip; no ultrasound RF acquisition needed."
+      }
+    ],
+    "official_code": {
+      "owner": "ShanechiLab",
+      "repo": "https://github.com/ShanechiLab/SBIND",
+      "commit": "c00e006dd298cb8c51d1543641fb3be77cc585ae",
+      "license": "USC educational/research/nonprofit permission; commercial use requires separate permission.",
+      "availability": "Pinned code/README/license and tutorial verified; tutorial uses placeholder random data, not evidence of a complete real-data loader.",
+      "publication_identity": "Current pinned commit, not a frozen paper environment."
+    },
+    "reviewed_dossier": {
+      "path": null,
+      "bytes": 5200,
+      "sha256": "c9086c43c0bc71239a45560a638333a08d7140e606562bfced9022cb5483733a"
+    }
+  },
+  "complete_scope": "Both complete widefield assays plus every source-defined fUS session/condition used for Tables 2–3, retaining spatial fields and all behavioral channels. No replacing the model's image input with published embeddings or an arbitrary ROI subset.",
+  "reference": {
+    "outputs": [
+      "Complete Table 2 behavioral MSE/F1 and neural MSE",
+      "Complete Table 3 fUS classification accuracy and neural MSE",
+      "Attention, two-stage and convolution ablations"
+    ],
+    "baselines": [
+      "SBIND",
+      "DPAD",
+      "CEBRA/TNDM as specified in the paper",
+      "Source-defined no-attention/no-two-stage/no-convolution ablations"
+    ],
+    "panel": "Tables 2–3 and Appendix A.4 preprocessing; final exact baseline grid requires source audit."
+  },
+  "prospective_improvement": {
+    "endpoint": "Improve behavior prediction on held sessions without degrading neural reconstruction under a frozen Pareto rule; calibrated fUS directional probabilities and all-channel widefield error.",
+    "heldout_unit": "Whole trials for historical reproduction; sessions/animals for prospective transfer. Temporal purge around any filtering/context boundary.",
+    "controls": [
+      "Stimulus/time/condition and movement-only baselines",
+      "Spatially permuted fields at matched pixel count",
+      "Train-only image/behavior normalization",
+      "No held labels in behavior-prioritized training",
+      "Report causal preprocessing separately from any noncausal reproduction"
+    ]
+  },
+  "resources": {
+    "storage_GiB": [
+      100,
+      300
+    ],
+    "host_RAM_GiB": [
+      32,
+      64
+    ],
+    "GPU_RAM_GiB": [
+      24,
+      48
+    ],
+    "GPU_hours": [
+      100,
+      2000
+    ],
+    "basis": "Full spatial models across 5/10 folds and baseline/ablation grids. Widefield cropped float32 arrays alone are roughly several GB; 34.25 GB fUS archive is observed, total expansion unknown."
+  },
+  "remaining_gates": [
+    "CSHL data license and exact two assay/session identities",
+    "Complete fUS session/condition-to-paper mapping",
+    "Actual preprocessing implementation beyond placeholder tutorial",
+    "Code/data noncommercial constraints",
+    "Frozen full spatial model/baseline grid and train-only transform policy"
+  ],
+  "overlap": "Shared CSHL family with Rastermap; existing fUS NEURAL-SCOPE-20261114-FUS-DIRECTION cites Caltech10.22002/p5jan-02r60 and Zenodo16732610, whereas this candidate cites pa710-cdn95. Same modality/lab is not proved same acquisition. New central claim is joint spatial representation/dynamics across complete calcium and ultrasound assays.",
+  "common_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+  "readiness": {
+    "runnable": false,
+    "inputs_verified": false,
+    "reference_validated": false,
+    "research_qualified": false,
+    "reproduction_established": false,
+    "model_evaluated": false,
+    "submission_ready": false
+  },
+  "participant_inputs": "Full source-defined cropped128x128 widefield calcium fields with aligned behavior (248+412 trials) and all source-defined fUS sessions/conditions with2Hz Power Doppler fields; compressed factors only if exact input reconstruction is established.",
+  "machine_output": {
+    "predictions": "All held trial/time/channel behavior predictions and neural field predictions; calibrated fUS direction class probabilities, with exact session and pixel/channel masks.",
+    "tables": "Full Tables2–3 and attention/two-stage/convolution ablation rows, every original fold/session and comparator, grouped uncertainty and compute.",
+    "artifacts": "Frozen training/config/input reconstruction, complete census and causal/noncausal preprocessing profile."
+  },
+  "scoring": "Published behavior MSE/F1, neural MSE and fUS classification accuracy on identical held support. Prospective held-session behavior improvement requires frozen neural-reconstruction noninferiority/Pareto rule; exact margins and grid remain unchosen.",
+  "protected_split": "Original whole-trial reproduction, then separately protected whole-session/animal transfer with temporal purge covering filters/context. TRAIN-only normalization; no held behavior in prioritized fitting.",
+  "comparators": "SBIND versus full paper DPAD/CEBRA/TNDM grid and attention/two-stage/convolution ablations; stimulus/time/condition and movement priors and spatial-field permutations.",
+  "source_family_ids": [
+    "cshl-widefield-musall-38599",
+    "caltech-fus-pa710-cdn95"
+  ],
+  "distinctness": "Joint spatiotemporal behavioral/neural modeling is distinct from Rastermap sorting even if acquisitions overlap. Both imaging modalities remain one central method task, not two task counts.",
+  "publication_context": {
+    "status": "registered_construction_draft_definition_only",
+    "source_snapshot_date": "2026-11-14",
+    "source_definition_bytes": 8448,
+    "source_definition_sha256": "d4643ea94d80bad372e4b94ebe4e95c35742645a8610c2939429a873f7213efa",
+    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
+    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
+    "scientific_definition_changed": false,
+    "runtime_binding": null,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+  }
+}

@@ -5,45 +5,44 @@
 - **Task ID:** `PAPER-EXP-20261113-005`
 - **Track:** Paper research
 - **Registration:** Expansion draft
-- **Declared specification status:** Registered construction draft
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Declared status fields
+## Current paper-improvement objective
 
-These values are copied from the task definition. They do not establish current execution or scientific qualification.
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
 
-| Field | Declared value |
-| --- | --- |
-| Stage | Registered construction draft |
-| Runnable | No |
-| Reference results qualified | No |
-| Scientifically qualified | No |
-| Submission ready | No |
+**Disposition:** source\_unresolved. Source-native rebinding can use the original ordered SOM reconstruction endpoint in Extended Data Figure2c,d: lower quantization error means better representation of the original unit feature vectors. Exact published region-wise errors, source map capacity/topology and complete source-to-unit joins remain unrecovered. Figure4 enrichment and hierarchy findings remain descriptive calibration; the local held-animal energy-score task is a different task.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
 
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 8496 bytes; SHA-256 `84538261a35bc057920bce736b4386334f5325eece6d517d90e48449b314f81e`.
+- Specification identity: 11851 bytes; SHA-256 `f26646cd7d0dfa5a692435cf824dcb7f8232f0bf480fa2128bcd72db4787d583`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261113/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
 ## Implementation artifacts
 
-- [Pfc clean runtime source v1](implementations/pfc-clean-runtime-source-v1) — Task implementation profile.
-  Scope: Task association is established by the exact published paper/repository/archive join, not a folder-name inference. This is the Full99 conditional-reconstruction profile and its runtime source, not proof that the broader registered scientific contract is fulfilled. Do not associate it with PAPER-ROOT-ADD-007, which is a different PFC programme. Preserve the two sibling package names and their relative links.
-- [Pfc conditional portable profile v1](implementations/pfc-conditional-portable-profile-v1) — Task implementation profile.
-  Scope: Task association is established by the exact published paper/repository/archive join, not a folder-name inference. This is the Full99 conditional-reconstruction profile and its runtime source, not proof that the broader registered scientific contract is fulfilled. Do not associate it with PAPER-ROOT-ADD-007, which is a different PFC programme. Preserve the two sibling package names and their relative links.
-- [Conditional null](implementations/conditional-null) — Fixed map conditional reconstruction: conditional null.
-  Scope: PFC-map paper/source family, not ROOT-ADD-007. Fixed supplied map and conditional moments are not learned-map refitting or the canonical training-only predictive primary.
-- [Independent analytical baseline](implementations/independent-analytical-baseline) — Fixed map conditional reconstruction: independent analytical baseline.
-  Scope: PFC-map paper/source family, not ROOT-ADD-007. Fixed supplied map and conditional moments are not learned-map refitting or the canonical training-only predictive primary.
-- [Matched offline harbor](implementations/matched-offline-harbor) — Fixed map conditional reconstruction: matched offline harbor.
-  Scope: PFC-map paper/source family, not ROOT-ADD-007. Fixed supplied map and conditional moments are not learned-map refitting or the canonical training-only predictive primary. Offline access profile retains its explicit dependency on the Science2 source package; repair relative sibling locators and new live pins together.
-- [Science2 package](implementations/science2-package) — Fixed map conditional reconstruction: science2 package.
-  Scope: PFC-map paper/source family, not ROOT-ADD-007. Fixed supplied map and conditional moments are not learned-map refitting or the canonical training-only predictive primary.
+- [Pfc clean runtime source v1](implementations/pfc-clean-runtime-source-v1) — Calibration only.
+  Scope: Task association is established by the exact published paper/repository/archive join, not a folder-name inference. This is the Full99 conditional-reconstruction profile and its runtime source, not proof that the broader registered scientific contract is fulfilled. Do not associate it with PAPER-ROOT-ADD-007, which is a different PFC programme. Preserve the two sibling package names and their relative links. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Pfc conditional portable profile v1](implementations/pfc-conditional-portable-profile-v1) — Calibration only.
+  Scope: Task association is established by the exact published paper/repository/archive join, not a folder-name inference. This is the Full99 conditional-reconstruction profile and its runtime source, not proof that the broader registered scientific contract is fulfilled. Do not associate it with PAPER-ROOT-ADD-007, which is a different PFC programme. Preserve the two sibling package names and their relative links. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Conditional null](implementations/conditional-null) — Calibration only.
+  Scope: PFC-map paper/source family, not ROOT-ADD-007. Fixed supplied map and conditional moments are not learned-map refitting or the canonical training-only predictive primary. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Independent analytical baseline](implementations/independent-analytical-baseline) — Calibration only.
+  Scope: PFC-map paper/source family, not ROOT-ADD-007. Fixed supplied map and conditional moments are not learned-map refitting or the canonical training-only predictive primary. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Matched offline harbor](implementations/matched-offline-harbor) — Calibration only.
+  Scope: PFC-map paper/source family, not ROOT-ADD-007. Fixed supplied map and conditional moments are not learned-map refitting or the canonical training-only predictive primary. Offline access profile retains its explicit dependency on the Science2 source package; repair relative sibling locators and new live pins together. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Science2 package](implementations/science2-package) — Calibration only.
+  Scope: PFC-map paper/source family, not ROOT-ADD-007. Fixed supplied map and conditional moments are not learned-map refitting or the canonical training-only predictive primary. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

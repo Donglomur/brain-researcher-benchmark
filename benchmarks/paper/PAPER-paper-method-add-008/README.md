@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-method-add-008`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The same source paper evaluates end-to-end spike sorting against known simulated spike trains in Figure 7 and Figure 7 supplement 1. This is a legitimate ordered original-paper task even though the historical local implementation covers only real-data curation. The source generator and five-seed protocol are recovered, but exact published accuracy/count arrays, dependency-bound matching defaults and figure aggregation are not yet pinned, so no improvement episode is admitted.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 42776 bytes; SHA-256 `6350dbe7e3039ba9625ab4a5e28a31975b63cd8d2c09fbbb9c21ddd2eb0b10c6`.
+- Specification identity: 43949 bytes; SHA-256 `04e695a46c75f81900c6d36e8848d02cb3dcac9ec7e67feddb8eb6ba5e109064`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Reduces complete native exports for four sorters into source curation distributions and a full Kilosort4 Bombcell-good raster. A3702 source-path identity, native sorter/curation execution, configuration and preprocessing discrepancies, model/dependency rights, numeric drift and cross-sorter agreement, protected references and scientific qualification remain open; yield/quality are not universal spike accuracy.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Reduces complete native exports for four sorters into source curation distributions and a full Kilosort4 Bombcell-good raster. A3702 source-path identity, native sorter/curation execution, configuration and preprocessing discrepancies, model/dependency rights, numeric drift and cross-sorter agreement, protected references and scientific qualification remain open; yield/quality are not universal spike accuracy. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

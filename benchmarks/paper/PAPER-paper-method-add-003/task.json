@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-add-003",
-  "source_id": "paper-method-add-003",
   "track": "paper",
   "title": "DREDge: robust motion correction for high-density extracellular recordings across species",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Estimate brain/probe displacement and stabilize the human recordings; the recovered ordered source comparison is agreement of DREDge LFP motion with manual LFP tracking, not independently observed physical displacement.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Estimate brain/probe displacement and stabilize the human recordings; the recovered ordered source comparison is agreement of DREDge LFP motion with manual LFP tracking, not independently observed physical displacement.",
+    "Source-paper comparison for Original per-patient Pearson correlation with manual LFP motion trace; exact full-cohort admission rule unresolved: Published human comparison uses Pearson correlation between DREDge and manual LFP displacement traces per patient. Correlation increases agreement but is insensitive to offset/scale and does not certify physical displacement accuracy. Exact reference/temporal alignment is unresolved; adjacent-time voltage consistency is a different metric."
+  ],
+  "success_criteria": [
+    "Recover exact source raw segments, manual references, temporal alignment, preprocessing and native author outputs for Pt01-Pt03.",
+    "Predeclare an ordered full-cohort rule against the recovered source per-patient results without selecting one patient or silently constructing a new reported aggregate.",
+    "Compare frozen candidate and competent author execution on identical original inputs and source metric, with justified effect and dependence-aware uncertainty.",
+    "Retain neural fidelity and report the claim as improvement of source manual-trace agreement; no claim of absolute physical displacement truth follows.",
+    "Do not count local adjacent-time consistency, oversmoothing, new held-channel/time subsets or synthetic-motion accuracy as surpassing the original human task.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-add-003",
   "canonical_position_one_based": 40,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41592-025-02614-5",
     "publication_year": 2025,
     "venue": "Nature Methods"
   },
-  "primary_outputs": [
-    "Reproduce real-human motion estimates and before/after neural signal alignment for Pt01–Pt03.",
-    "Compare default DREDge with fixed/no correction and alternate registration settings under identical recording segments and held-out consistency metrics."
-  ],
   "input_assets": {
     "routes": [
       "https://datadryad.org/api/v2/versions/224794/files"
@@ -452,102 +463,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Dryad version224794 public exact AP/LFP bins, channel maps, metadata and motion tracking files.",
-        "Pin raw Pt*.imec0.*.bin files, not already DREDge-aligned output files.",
-        "Preserve Dryad and code licenses; no special account requirement identified in metadata."
-      ],
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Reproduce real-human motion estimates and before/after neural signal alignment for Pt01–Pt03.",
-        "Compare default DREDge with fixed/no correction and alternate registration settings under identical recording segments and held-out consistency metrics."
-      ],
-      "assessment": "Human Pt01–Pt03 AP/LFP registration and before/after alignment are documented; no independent human displacement ground truth or qualified central accuracy endpoint exists.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Internal correlation/registration consistency can reward oversmoothing. Include temporal/neural fidelity and no-correction controls, and label any externally unvalidated displacement interpretation.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "No external ground-truth human displacement labels: agreement/consistency or stability gains do not establish absolute biological motion truth.",
-        "Matlab channel map/meta and sampling units must be validated with loader before running.",
-        "Covers released human data, not every species or all synthetic-ground-truth experiments.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Measure robustness to low firing, nonstationary activity and fast motion while holding sorting and interpolation fixed."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Use predefined recording segments and distinct motion/firing regimes, keeping sorter/interpolator fixed. Synthetic known-displacement controls may validate software but do not establish human motion truth.",
-      "retained_roster_proposal": [
-        "Measure robustness to low firing, nonstationary activity and fast motion while holding sorting and interpolation fixed."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": "CPU/GPU; each raw LFP1.6–1.7GB, AP~19–20GB; full deposit137GB",
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": "Resource class is inspection-based estimate, not measured runtime."
-  },
-  "holds": {
-    "task_specific": [
-      "No external ground-truth human displacement labels: agreement/consistency or stability gains do not establish absolute biological motion truth.",
-      "Matlab channel map/meta and sampling units must be validated with loader before running.",
-      "Covers released human data, not every species or all synthetic-ground-truth experiments.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Freeze one raw LFP segment with channel-map/sample-rate contract and a fidelity-preserving metric panel; reserve separate evaluation segments before fitting registration hyperparameters.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Freeze one raw LFP segment with channel-map/sample-rate contract and a fidelity-preserving metric panel; reserve separate evaluation segments before fitting registration hyperparameters.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -588,11 +503,79 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_resource_statement": "CPU/GPU; each raw LFP1.6–1.7GB, AP~19–20GB; full deposit137GB",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Resource class is inspection-based estimate, not measured runtime."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-add-003/improvement.v1.json",
+      "bytes": 10862,
+      "sha256": "f1e90e5dd4abeec863f0890fa55ac948c70d7d7853b3ed4fc72ac73006f4139f"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-add-003/historical/task.pre-improvement.v1.json",
+        "bytes": 30135,
+        "sha256": "d49aa3d8687475d00aecefe55ac9e71e5e8c727e32bf72af95809c109638be68"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-add-003-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Inactive until source endpoint recovery. Any later iteration must use separately declared development evidence while preserving the source human comparison and recording membership.",
+    "candidate_freeze": "Before source final evaluation, freeze code, registration parameters, preprocessing, input-support policy, displacement outputs and the original alignment/metric evaluator.",
+    "final_evaluation": "Replay both methods on every original Pt01-Pt03 source interval using the recovered manual reference; no new channel/time split can substitute. Operator-held reference traces remain unavailable to candidate fitting.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep source per-patient correlations, a future native author rerun and any prospective consistency diagnostics distinct. No native replay was performed in this curation. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Exact original human temporal support, manual-reference identity and trace alignment need source-level recovery.",
+    "Patient-specific preprocessing and complete native registration/interpolation route are not executed or authenticated.",
+    "No source scalar aggregate or predeclared scientifically valid full-cohort superiority rule is established.",
+    "Current local evaluator measures a different prospective consistency/fidelity endpoint.",
+    "Meaningful effect, temporal-dependence-aware uncertainty, fixed episode budgets and working source endpoint remain unresolved."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact original human temporal support, manual-reference identity and trace alignment need source-level recovery.",
+      "Patient-specific preprocessing and complete native registration/interpolation route are not executed or authenticated.",
+      "No source scalar aggregate or predeclared scientifically valid full-cohort superiority rule is established.",
+      "Current local evaluator measures a different prospective consistency/fidelity endpoint.",
+      "Meaningful effect, temporal-dependence-aware uncertainty, fixed episode budgets and working source endpoint remain unresolved."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The source reports ordered human motion-trace agreement, but the registered Pt01-Pt03 task is currently scored by a new consistency/fidelity panel rather than an exactly recovered paper endpoint. Published per-patient correlations are recoverable; their exact temporal alignment, preprocessing, corresponding author output and an admissible full-cohort comparison remain unresolved. Human agreement must not be relabelled absolute motion accuracy. Exact original human temporal support, manual-reference identity and trace alignment need source-level recovery. Patient-specific preprocessing and complete native registration/interpolation route are not executed or authenticated. No source scalar aggregate or predeclared scientifically valid full-cohort superiority rule is established. Current local evaluator measures a different prospective consistency/fidelity endpoint. Meaningful effect, temporal-dependence-aware uncertainty, fixed episode budgets and working source endpoint remain unresolved.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-add-003/historical/task.pre-improvement.v1.json",
+      "bytes": 30135,
+      "sha256": "d49aa3d8687475d00aecefe55ac9e71e5e8c727e32bf72af95809c109638be68"
+    },
+    "notes": "Preserve loader, rigid comparator and consistency/fidelity diagnostics. Their engineering correctness or improved internal alignment cannot establish surpassing the published human motion result."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

@@ -1,20 +1,33 @@
 {
   "schema_version": 1,
   "id": "PAPER-FIND-REP-007",
-  "source_id": "FIND-REP-007",
   "track": "paper",
   "title": "Unsupervised pretraining in biological neural networks",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Recover the source-native retinotopy encoding fit of neural responses to natural images: Fn(img)=an*(K convolved with img)(kn,xn,yn), with positive amplitude an and each neuron's assigned kernel and spatial position. Treat resulting cross-mouse mapping as the original downstream use, not an invented decoder task.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Recover the source-native retinotopy encoding fit of neural responses to natural images: Fn(img)=an*(K convolved with img)(kn,xn,yn), with positive amplitude an and each neuron's assigned kernel and spatial position. Treat resulting cross-mouse mapping as the original downstream use, not an invented decoder task.",
+    "Source-paper comparison for Original fixed-capacity retinotopy neural-response reconstruction endpoint, if an evaluated source comparison can be recovered: Source describes correlation-based matching during fitting, but an evaluated reconstruction statistic, exact formula/normalization, numeric comparison and scored panel are not established. Do not assume a held-out R-squared, invent a loss, or treat lower internal optimizer cost as a paper-performance win."
+  ],
+  "success_criteria": [
+    "First establish that the original paper evaluates an ordered retinotopy reconstruction/estimation endpoint, identify its exact panel/statistic and baseline, and verify that a meaningful fixed-capacity method comparison exists.",
+    "Recover the original reference mouse, image/repeat identities, full eligible cell populations, fitting conditions and exact score aggregation. Source description alone is not evaluator readiness.",
+    "Preserve the original 200 kernels of 13x13, source response parameterization, image processing and complete source evaluation cases; additional kernels, easier subsets or extra inputs cannot create a same-task win.",
+    "Reproduce the source-author method and original evaluated score before comparing a frozen candidate under justified effect and uncertainty requirements.",
+    "Do not invent a held-out split to supply a missing paper benchmark. Any new image-, trial- or mouse-held-out prediction evaluation is an extension; original fit-sample results must be described with their limited scope.",
+    "Do not count a lower unvalidated preprocessing loss, more favorable map, larger biological learning effect or stronger significance as surpassing the paper.",
+    "If further source recovery confirms that no ordered performance evaluation exists, reclassify this route as ineligible rather than manufacture a benchmark.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-REP-007",
   "canonical_position_one_based": 75,
   "paper_identity": {
     "url": "https://doi.org/10.1038/s41586-025-09180-y",
     "publication_year": 2025,
     "venue": "Nature"
   },
-  "primary_outputs": [
-    "Recompute stimulus selectivity and decorrelation across unsupervised and supervised learning conditions.",
-    "Recompute behavior-learning benefit and reward-predictive activity across visual areas."
-  ],
   "input_assets": {
     "routes": [
       "https://janelia.figshare.com/articles/dataset/Unsupervised_pretraining_in_biological_neural_network/28811129"
@@ -400,167 +413,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": {
-        "data": {
-          "value": 1,
-          "name": "CC BY 4.0",
-          "url": "https://creativecommons.org/licenses/by/4.0/"
-        },
-        "data_access": "public repository metadata inspected; no recording payload downloaded",
-        "code": "Repository license requires per-repository confirmation before redistribution; access is public."
-      },
-      "declared_overlap_group": null,
-      "existing_graph_evidence_leads": [
-        {
-          "tasks": [
-            "NEURAL-027",
-            "PAPER-FIND-REP-007"
-          ],
-          "relation": "shared_exact_data_locator",
-          "value": "https://janelia.figshare.com/articles/dataset/Unsupervised_pretraining_in_biological_neural_network/28811129",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": true,
-          "biological_overlap_verified": false
-        },
-        {
-          "tasks": [
-            "NEURAL-027",
-            "PAPER-FIND-REP-007"
-          ],
-          "relation": "shared_exact_paper_locator",
-          "value": "https://doi.org/10.1038/s41586-025-09180-y",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": true,
-          "biological_overlap_verified": false
-        },
-        {
-          "tasks": [
-            "NEURAL-028",
-            "PAPER-FIND-REP-007"
-          ],
-          "relation": "shared_exact_data_locator",
-          "value": "https://janelia.figshare.com/articles/dataset/Unsupervised_pretraining_in_biological_neural_network/28811129",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": true,
-          "biological_overlap_verified": false
-        },
-        {
-          "tasks": [
-            "NEURAL-028",
-            "PAPER-FIND-REP-007"
-          ],
-          "relation": "shared_exact_paper_locator",
-          "value": "https://doi.org/10.1038/s41586-025-09180-y",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": true,
-          "biological_overlap_verified": false
-        }
-      ],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Recompute stimulus selectivity and decorrelation across unsupervised and supervised learning conditions.",
-        "Recompute behavior-learning benefit and reward-predictive activity across visual areas."
-      ],
-      "construction_specificity": "Selectivity/decorrelation and learning-benefit endpoints are documented; exact session progression, d-prime recipe and animal-level statistical comparison remain to freeze.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Match trial counts, recording yield and stimuli/visual area before attributing changes to learning.",
-      "Supervised and unsupervised exposure conditions must retain history; learned representation changes do not uniquely establish a plasticity rule."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Selectivity/decorrelation and learning-benefit endpoints are documented; exact session progression, d-prime recipe and animal-level statistical comparison remain to freeze.",
-        "Animal with all longitudinal exposure/learning sessions grouped; no hidden independent cohort identified.",
-        "Full release roughly 412GB is metadata-derived scale, not a measured analysis requirement. No raw movie extraction validation; code reuse terms need confirmation.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Match trials and recording yield across sessions; quantify animal-held-out changes with behavioral covariates and matched stimulus/area controls."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Match trials and recording yield across sessions; quantify animal-held-out changes with behavioral covariates and matched stimulus/area controls."
-      ],
-      "independent_panel_gate": "Animal with all longitudinal exposure/learning sessions grouped; no hidden independent cohort identified.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": {
-      "estimate": "Full author release approximately 412 GB; server storage and CPU memory/streaming planning required. Main processed analyses hours to days estimated.",
-      "basis": "File-size metadata and static source inspection; compute is estimated, not measured."
-    },
-    "source_resource_evidence": null,
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "Selectivity/decorrelation and learning-benefit endpoints are documented; exact session progression, d-prime recipe and animal-level statistical comparison remain to freeze.",
-      "Animal with all longitudinal exposure/learning sessions grouped; no hidden independent cohort identified.",
-      "Full release roughly 412GB is metadata-derived scale, not a measured analysis requirement. No raw movie extraction validation; code reuse terms need confirmation.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Use the 297-file manifest and experiment-info loader to define a complete longitudinal animal panel, including required transforms/behavior, and estimate that exact subset before transfer.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Use the 297-file manifest and experiment-info loader to define a complete longitudinal animal panel, including required transforms/behavior, and estimate that exact subset before transfer.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -636,11 +488,83 @@
     ],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_statement": {
+      "estimate": "Full author release approximately 412 GB; server storage and CPU memory/streaming planning required. Main processed analyses hours to days estimated.",
+      "basis": "File-size metadata and static source inspection; compute is estimated, not measured."
+    },
+    "source_resource_evidence": null,
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-REP-007/improvement.v1.json",
+      "bytes": 13186,
+      "sha256": "4466649b53e8fd455e2208d4a8735125d36b1ec720229f018b85f72e93fe9c2f"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-REP-007/historical/task.pre-improvement.v1.json",
+        "bytes": 30615,
+        "sha256": "cc67ccdf999414a2835b96969fbed9e058705497546f6466e633c6adc4c0bdf9"
+      },
+      "implementation_ids": [
+        "construction-paper-find-rep-007-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending source recovery and confirmation of an evaluated original endpoint. If admitted later, iterate within the original source fit conditions and fixed capacity with explicitly budgeted feedback; do not silently create a generalization task.",
+    "candidate_freeze": "Before any admitted comparison, freeze model capacity, source-compatible fit algorithm, preprocessing, initialization/selection policy and complete evaluation manifest. The original fitting/evaluation boundaries must first be recovered.",
+    "final_evaluation": "No active final evaluator exists for this route. A future owner evaluation must compare candidate and author method on the same original scored data and metric, clearly identifying any fit-sample limitation. New holdouts are extensions.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published evaluated score, reproduced author fit and current SOTA are separate. Existing biological-contrast evaluators calibrate reconstruction only; neither a locally defined loss nor a new held-out benchmark substitutes for an original source score."
+  },
+  "blocking_issues": [
+    "Determine whether the original paper reports an ordered retinotopy performance evaluation at all; Methods optimization and Extended Data 1 filter/maps alone do not activate a benchmark.",
+    "Recover the exact evaluated score, formula, normalization, original comparator and meaningful comparison at fixed 200-kernel capacity.",
+    "Bind original reference mouse, natural-image identities, repeats, complete eligible neuronal cohort and encoding-response arrays to versioned public inputs.",
+    "Recover source-native retinotopy fitting and scoring entry points, initialization/update/stopping details, original model-selection policy and aggregation.",
+    "Before activation, justify effect and dependent-unit uncertainty, declare concrete access/resource budgets and validate source replay; do not add a holdout to conceal a missing original evaluation."
+  ],
+  "holds": {
+    "task_specific": [
+      "Determine whether the original paper reports an ordered retinotopy performance evaluation at all; Methods optimization and Extended Data 1 filter/maps alone do not activate a benchmark.",
+      "Recover the exact evaluated score, formula, normalization, original comparator and meaningful comparison at fixed 200-kernel capacity.",
+      "Bind original reference mouse, natural-image identities, repeats, complete eligible neuronal cohort and encoding-response arrays to versioned public inputs.",
+      "Recover source-native retinotopy fitting and scoring entry points, initialization/update/stopping details, original model-selection policy and aggregation.",
+      "Before activation, justify effect and dependent-unit uncertainty, declare concrete access/resource budgets and validate source replay; do not add a holdout to conceal a missing original evaluation."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Whole-paper review identifies an original input-to-neural-response fitting procedure in Methods Retinotopy: a fixed 200-kernel convolutional encoding model. This source-native reconstruction route warrants further recovery, but the original evaluated performance endpoint/panel, exact score and meaningful fixed-capacity comparison are unverified. A preprocessing optimizer alone cannot activate an improvement task. Figure 5 mouse learning and descriptive neural contrasts remain distinct; no artificial pretraining experiment or new held-out benchmark is asserted. Determine whether the original paper reports an ordered retinotopy performance evaluation at all; Methods optimization and Extended Data 1 filter/maps alone do not activate a benchmark. Recover the exact evaluated score, formula, normalization, original comparator and meaningful comparison at fixed 200-kernel capacity. Bind original reference mouse, natural-image identities, repeats, complete eligible neuronal cohort and encoding-response arrays to versioned public inputs. Recover source-native retinotopy fitting and scoring entry points, initialization/update/stopping details, original model-selection policy and aggregation. Before activation, justify effect and dependent-unit uncertainty, declare concrete access/resource budgets and validate source replay; do not add a holdout to conceal a missing original evaluation.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-REP-007/historical/task.pre-improvement.v1.json",
+      "bytes": 30615,
+      "sha256": "cc67ccdf999414a2835b96969fbed9e058705497546f6466e633c6adc4c0bdf9"
+    },
+    "notes": "Preserve initial-evaluator-v1 and descriptive selectivity/reward/lick materials. Whole-paper recovery now tracks the unresolved original retinotopy fit as a possible source-native route. It does not assert an artificial pretraining experiment, an evaluated predictive benchmark or a same-task success from existing biological contrasts."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

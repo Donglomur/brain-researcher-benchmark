@@ -1,0 +1,545 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-replacement-003",
+  "source_id": "paper-method-replacement-003",
+  "track": "paper",
+  "title": "A deep learning strategy to identify cell types across species from high-density extracellular recordings",
+  "status": "specification_only",
+  "canonical_position_one_based": 27,
+  "paper_identity": {
+    "url": "https://doi.org/10.1016/j.cell.2025.01.041",
+    "publication_year": 2025,
+    "venue": "Cell"
+  },
+  "primary_outputs": [
+    "Cross-validated cell-type classification against feature-based baselines, with confusion matrices and accuracy versus confidence/coverage.",
+    "Transfer to expert-labeled monkey recordings from mouse-trained models; separate optotagged mouse labels from expert-inferred monkey labels."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://figshare.com/articles/dataset/23702850"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/license",
+        "recorded_fields": {
+          "name": "CC BY-NC-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-003"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": "C4_database_hull_unlabelled.h5",
+          "bytes": 30589152758,
+          "url": "https://ndownloader.figshare.com/files/41720901",
+          "checksum": "md5:89c03497f029ffb60b02d323e084d57a"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:89c03497f029ffb60b02d323e084d57a"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-003"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/1",
+        "recorded_fields": {
+          "name": "C4_database_lisberger.h5",
+          "bytes": 41387556732,
+          "url": "https://ndownloader.figshare.com/files/41721090",
+          "checksum": "md5:ae4977105191e53f860f0571f8d98c18"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:ae4977105191e53f860f0571f8d98c18"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-003"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/2",
+        "recorded_fields": {
+          "name": "C4_database_medina_unlabelled.h5",
+          "bytes": 5950752328,
+          "url": "https://ndownloader.figshare.com/files/42117129",
+          "checksum": "md5:346a13f6fd6b1cb388efbc63a9cc690a"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:346a13f6fd6b1cb388efbc63a9cc690a"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-003"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/3",
+        "recorded_fields": {
+          "name": "C4_database_hausser.h5",
+          "bytes": 43408452946,
+          "url": "https://ndownloader.figshare.com/files/43102990",
+          "checksum": "md5:56a60394ebb2a0515a8509d74124ca9c"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:56a60394ebb2a0515a8509d74124ca9c"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-003"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/4",
+        "recorded_fields": {
+          "name": "C4_database_hull_labelled.h5",
+          "bytes": 2268498044,
+          "url": "https://ndownloader.figshare.com/files/43102996",
+          "checksum": "md5:6928f38e1d3ef5d3f940d57d6003452d"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:6928f38e1d3ef5d3f940d57d6003452d"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-003"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/license",
+        "recorded_fields": {
+          "name": "CC BY-NC-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-replacement-003"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/0",
+        "recorded_fields": {
+          "name": "C4_database_hull_unlabelled.h5",
+          "bytes": 30589152758,
+          "url": "https://ndownloader.figshare.com/files/41720901",
+          "checksum": "md5:89c03497f029ffb60b02d323e084d57a"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:89c03497f029ffb60b02d323e084d57a"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-replacement-003"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/1",
+        "recorded_fields": {
+          "name": "C4_database_lisberger.h5",
+          "bytes": 41387556732,
+          "url": "https://ndownloader.figshare.com/files/41721090",
+          "checksum": "md5:ae4977105191e53f860f0571f8d98c18"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:ae4977105191e53f860f0571f8d98c18"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-replacement-003"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/2",
+        "recorded_fields": {
+          "name": "C4_database_medina_unlabelled.h5",
+          "bytes": 5950752328,
+          "url": "https://ndownloader.figshare.com/files/42117129",
+          "checksum": "md5:346a13f6fd6b1cb388efbc63a9cc690a"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:346a13f6fd6b1cb388efbc63a9cc690a"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-replacement-003"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "C4 waveform/ACG cell observations with optotagged mouse versus expert-labelled monkey classes.",
+      "data_urls": [
+        "https://figshare.com/articles/dataset/23702850"
+      ],
+      "input_version": null,
+      "input_inventory_or_loader_evidence": [
+        {
+          "metadata_url": "https://api.figshare.com/v2/articles/23702850",
+          "version": 1,
+          "doi": "10.5522/04/23702850.v1",
+          "license": {
+            "value": 11,
+            "name": "CC BY-NC-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+          },
+          "files": {
+            "listed_file_count": 5,
+            "representative_files": [
+              {
+                "name": "C4_database_hull_unlabelled.h5",
+                "bytes": 30589152758,
+                "url": "https://ndownloader.figshare.com/files/41720901",
+                "checksum": "md5:89c03497f029ffb60b02d323e084d57a"
+              },
+              {
+                "name": "C4_database_lisberger.h5",
+                "bytes": 41387556732,
+                "url": "https://ndownloader.figshare.com/files/41721090",
+                "checksum": "md5:ae4977105191e53f860f0571f8d98c18"
+              },
+              {
+                "name": "C4_database_medina_unlabelled.h5",
+                "bytes": 5950752328,
+                "url": "https://ndownloader.figshare.com/files/42117129",
+                "checksum": "md5:346a13f6fd6b1cb388efbc63a9cc690a"
+              }
+            ],
+            "limit": "Inventory examples; not payload/schema qualification."
+          },
+          "metadata_inspected": true,
+          "files_downloaded": false
+        }
+      ],
+      "source_bridge": "Reproduce the C4 cerebellar cell-type classification comparison and mouse-to-monkey transfer using the public C4 HDF5 database; evaluate both accuracy and retained coverage, rather than inference on unspecified examples.",
+      "code_url": "https://github.com/m-beau/NeuroPyxels",
+      "code_revision_or_archive_version": "703a10fb43fc7fe0076c9c331e6b52d3195b5e60",
+      "entrypoints": [
+        {
+          "path": "npyx/c4/dataset_init.py",
+          "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/dataset_init.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "npyx/c4/run_deep_classifier.py",
+          "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/run_deep_classifier.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "npyx/c4/run_baseline_classifier.py",
+          "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/run_baseline_classifier.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "npyx/c4/VAE_training/VAE singlechannel wvf.ipynb",
+          "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/VAE_training/VAE%20singlechannel%20wvf.ipynb",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "npyx/c4/VAE_training/conv-VAE logscale 3D ACG.ipynb",
+          "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/VAE_training/conv-VAE%20logscale%203D%20ACG.ipynb",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        }
+      ],
+      "missing_core_inputs_as_recorded": [
+        "Whole-paper acquisition and all species/auxiliary validation are outside declared scope.",
+        "Current source includes legacy encrypted download alternatives; use published public Figshare HDF5 files, not password-protected links.",
+        "VAE training exposure and session/animal grouping must be fixed before classifier evaluation; source supports LOO or five-fold, but unit-level folds alone do not establish animal generalization."
+      ],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-replacement-003",
+        "versions_and_loader_contract": {
+          "scope_description": "Reproduce the C4 cerebellar cell-type classification comparison and mouse-to-monkey transfer using the public C4 HDF5 database; evaluate both accuracy and retained coverage, rather than inference on unspecified examples.",
+          "unresolved_coverage": [
+            "Whole-paper acquisition and all species/auxiliary validation are outside declared scope.",
+            "Current source includes legacy encrypted download alternatives; use published public Figshare HDF5 files, not password-protected links.",
+            "VAE training exposure and session/animal grouping must be fixed before classifier evaluation; source supports LOO or five-fold, but unit-level folds alone do not establish animal generalization."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/m-beau/NeuroPyxels",
+    "revision_or_archive_version": "703a10fb43fc7fe0076c9c331e6b52d3195b5e60",
+    "entrypoints": [
+      {
+        "path": "npyx/c4/dataset_init.py",
+        "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/dataset_init.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "npyx/c4/run_deep_classifier.py",
+        "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/run_deep_classifier.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "npyx/c4/run_baseline_classifier.py",
+        "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/run_baseline_classifier.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "npyx/c4/VAE_training/VAE singlechannel wvf.ipynb",
+        "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/VAE_training/VAE%20singlechannel%20wvf.ipynb",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "npyx/c4/VAE_training/conv-VAE logscale 3D ACG.ipynb",
+        "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/VAE_training/conv-VAE%20logscale%203D%20ACG.ipynb",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-replacement-003",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/m-beau/NeuroPyxels",
+            "commit": "703a10fb43fc7fe0076c9c331e6b52d3195b5e60",
+            "author_linkage": [
+              "https://doi.org/10.1016/j.cell.2025.01.041",
+              "https://github.com/m-beau/NeuroPyxels"
+            ],
+            "license": [
+              "Code GPL-3.0; C4 database CC BY-NC-SA4.0.",
+              "Public Figshare files inspected through metadata; commercial reuse not assumed."
+            ],
+            "snapshot_evidence": "GitHub commit and recursive tree metadata inspected; author README and selected source files read as text.",
+            "file_tree": {
+              "paths": [
+                "npyx/c4/dataset_init.py",
+                "npyx/c4/run_deep_classifier.py",
+                "npyx/c4/run_baseline_classifier.py",
+                "npyx/c4/VAE_training/VAE singlechannel wvf.ipynb",
+                "npyx/c4/VAE_training/conv-VAE logscale 3D ACG.ipynb"
+              ]
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "npyx/c4/dataset_init.py",
+              "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/dataset_init.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "npyx/c4/run_deep_classifier.py",
+              "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/run_deep_classifier.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "npyx/c4/run_baseline_classifier.py",
+              "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/run_baseline_classifier.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "npyx/c4/VAE_training/VAE singlechannel wvf.ipynb",
+              "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/VAE_training/VAE%20singlechannel%20wvf.ipynb",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "npyx/c4/VAE_training/conv-VAE logscale 3D ACG.ipynb",
+              "url": "https://raw.githubusercontent.com/m-beau/NeuroPyxels/703a10fb43fc7fe0076c9c331e6b52d3195b5e60/npyx/c4/VAE_training/conv-VAE%20logscale%203D%20ACG.ipynb",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            }
+          ],
+          "dependencies": [
+            "Python",
+            "PyTorch",
+            "NumPy",
+            "scikit-learn",
+            "h5py",
+            "NeuroPyxels"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "recorded_terms": [
+        "Code GPL-3.0; C4 database CC BY-NC-SA4.0.",
+        "Public Figshare files inspected through metadata; commercial reuse not assumed."
+      ],
+      "record_conflicts": [],
+      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
+      "overlap_group": "https://api.figshare.com/v2/articles/23702850"
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "central_outputs_in_saved_source_contract": [
+        "Cross-validated cell-type classification against feature-based baselines, with confusion matrices and accuracy versus confidence/coverage.",
+        "Transfer to expert-labeled monkey recordings from mouse-trained models; separate optotagged mouse labels from expert-inferred monkey labels."
+      ],
+      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
+      "missing_or_unfrozen_endpoint_details": "Bind class taxonomy, VAE pretraining exposure, animal/lab grouping and accuracy-at-retained-coverage. Five large HDF5 files are not a small matched demonstration."
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Monkey expert labels and mouse optotags are different reference truth. Compare fixed coverage and calibrated uncertainty; unit-level CV cannot establish animal/species generalization."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Bind class taxonomy, VAE pretraining exposure, animal/lab grouping and accuracy-at-retained-coverage. Five large HDF5 files are not a small matched demonstration.",
+        "Monkey expert labels and mouse optotags are different reference truth. Compare fixed coverage and calibrated uncertainty; unit-level CV cannot establish animal/species generalization.",
+        "Whole-paper acquisition and all species/auxiliary validation are outside declared scope.",
+        "Current source includes legacy encrypted download alternatives; use published public Figshare HDF5 files, not password-protected links.",
+        "VAE training exposure and session/animal grouping must be fixed before classifier evaluation; source supports LOO or five-fold, but unit-level folds alone do not establish animal generalization.",
+        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+        "Execute and independently audit references, controls, grading and measured resources.",
+        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
+      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve cross-laboratory/species calibrated accuracy at matched retained coverage, or reduce required waveform/ACG data while retaining performance."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "independent_panel_not_established_in_inspected_evidence",
+      "proposed_improvement": [
+        "Improve cross-laboratory/species calibrated accuracy at matched retained coverage, or reduce required waveform/ACG data while retaining performance."
+      ],
+      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
+      "special_gate": "No completed independent improvement result is established here."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": "GPU classifier/VAE training; all five input HDF5 files approximately123.6GB; mouse-labeled and monkey subsets still substantial.",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "holds": {
+    "task_specific": [
+      "Bind class taxonomy, VAE pretraining exposure, animal/lab grouping and accuracy-at-retained-coverage. Five large HDF5 files are not a small matched demonstration.",
+      "Monkey expert labels and mouse optotags are different reference truth. Compare fixed coverage and calibrated uncertainty; unit-level CV cannot establish animal/species generalization.",
+      "Whole-paper acquisition and all species/auxiliary validation are outside declared scope.",
+      "Current source includes legacy encrypted download alternatives; use published public Figshare HDF5 files, not password-protected links.",
+      "VAE training exposure and session/animal grouping must be fixed before classifier evaluation; source supports LOO or five-fold, but unit-level folds alone do not establish animal generalization.",
+      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+      "Execute and independently audit references, controls, grading and measured resources.",
+      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Freeze class/animal/session and pretraining exclusions using public HDF5 schema evidence, plan bounded access to labelled inputs, and pin feature-based comparators before training.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Freeze class/animal/session and pretraining exclusions using public HDF5 schema evidence, plan bounded access to labelled inputs, and pin feature-based comparators before training.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "e3098e1b2fcb7285c9e4d051d75fa4086950ac5e2d66f49c2a0b2df089e6a97d",
+    "audit_record_sha256": "a016bbcaa9fa236bf6e7eb6fa80cbe794e42ada98a64bb5ba8fca3dce4350603",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-replacement-003",
+        "declared_record_sha256": "791a85f843740f6756e19bce75907d2bac01e93a2c73315702878e5e0ecaa1cb",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 67,
+        "record_sha256": "791a85f843740f6756e19bce75907d2bac01e93a2c73315702878e5e0ecaa1cb"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

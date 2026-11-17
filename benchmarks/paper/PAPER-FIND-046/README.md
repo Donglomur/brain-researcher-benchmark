@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-FIND-046`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Ineligible
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** ineligible. The registered target is estrous/hormone modulation of dopamine and reward-history associations. The paper explicitly avoids calling the behavioral modulation better or worse because the optimized costs/benefits are unobserved. A greater dopamine contrast or smaller P value cannot surpass that finding; fitting a new predictor would change the task.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 17604 bytes; SHA-256 `35e8e70519700bb6b0a94468a19e179aa6ac06fe2f3c374299c938752243fe7f`.
+- Specification identity: 15653 bytes; SHA-256 `d59a4d518279c33683f2e53aa1258f7a1903115a3695d57e23d4762c043d1955`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Computes source-derived Figure 2 stage contrasts and serum-session dopamine AUC/correlation, retaining full declared rat/session and exclusion ledgers without selecting a cross-archive intersection. Native archive/MAT parity, exact empirical cohorts, singleton MATLAB-axis behavior, Figure 3 RPE/history endpoints, BestFits provenance, protected grouped assessment and scientific qualification remain open; stage associations are observational.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Computes source-derived Figure 2 stage contrasts and serum-session dopamine AUC/correlation, retaining full declared rat/session and exclusion ledgers without selecting a cross-archive intersection. Native archive/MAT parity, exact empirical cohorts, singleton MATLAB-axis behavior, Figure 3 RPE/history endpoints, BestFits provenance, protected grouped assessment and scientific qualification remain open; stage associations are observational. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

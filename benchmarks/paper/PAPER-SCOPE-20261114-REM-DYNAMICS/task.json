@@ -1,6 +1,24 @@
 {
+  "schema_version": 1,
+  "id": "PAPER-SCOPE-20261114-REM-DYNAMICS",
+  "track": "paper",
   "title": "Low-dimensional population dynamics in the brainstem gate REM sleep",
-  "counting_unit": "One paper-result family. Reproduction, improvement, code-access conditions, animals, folds and individual output checks add no independent benchmark registrations.",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Figure2h: classify NREM-to-REM versus NREM-to-Wake transitions using each of PC1–PC22 across 10s bins in the preceding 150s. Figure5e: classify whether a dmM laser trial beginning in NREM reaches REM within 60s from each PC at laser onset. Preserve both protocol strata.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Figure2h: classify NREM-to-REM versus NREM-to-Wake transitions using each of PC1–PC22 across 10s bins in the preceding 150s. Figure5e: classify whether a dmM laser trial beginning in NREM reaches REM within 60s from each PC at laser onset. Preserve both protocol strata.",
+    "Source-paper comparison for Original held-trial classification accuracy for Figure2h and 5e, reported separately across source PCs/horizons: Prediction accuracy equals correctly classified held test events divided by all held test events for each PC/bin and repetition. Preserve full2h accuracy curves and 5e accuracy distributions; tsig and Bonferroni tests are descriptive source summaries, not a replacement performance objective."
+  ],
+  "success_criteria": [
+    "Recover exact numeric accuracy arrays and author baseline for both Figure2h and 5e on every original eligible event.",
+    "Use identical original cohort, features/observation regime, preprocessing and original train/test sampling; freeze all comparison endpoints before final labels or scores.",
+    "Show justified accuracy gains with uncertainty accounting for mice and reused events; do not use stronger significance or only an earlier110s threshold as success.",
+    "Preserve separate spontaneous and laser results and all 22-PC reference outputs; a single favorablePC/bin or supported-animal subset cannot stand in for the registered family.",
+    "Report held-mouse generalization, causal filtering, earlier calibration prefixes, Brier loss or added EEG-history predictors as extensions; beating a reimplemented LDA on those changes is not surpassing the source result.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
   "paper": {
     "doi": "10.1038/s41593-026-02314-z",
     "url": "https://www.nature.com/articles/s41593-026-02314-z",
@@ -9,100 +27,6 @@
     "pmcid": "PMC13270127",
     "rights": "Publisher article declares CC-BY-4.0, subject to stated third-party exceptions."
   },
-  "scientific_question": "Can an agent reproduce the complete transition and optogenetic-outcome prediction analyses, then improve prediction under preprocessing that cannot use future neural samples or held outcomes?",
-  "complete_scientific_unit": "Full Figure2h spontaneous-transition analysis across six mice and Figure5e dmM-stimulation-outcome analysis across five mice, preserving both protocols as strata within one paper family. Other paper analyses and interventions are not silently counted as reproduced.",
-  "published_anchors": [
-    {
-      "endpoint": "Figure2h",
-      "population": "six mice;47 NREM-to-REM and377 NREM-to-Wake events reported across Figure2",
-      "result": "PC2 classification first consistently exceeds chance110s before transition; PC1 first does so at transition time.",
-      "statistic": "One-sided tests across25 resampling iterations with Bonferroni correction. These iterations are not biological replicates."
-    },
-    {
-      "endpoint": "Figure5e",
-      "population": "45 dmM laser trials fromfive mice:20 successful,25 unsuccessful; eligibility requires NREM at laser onset.",
-      "result": "PC2 discriminates whether REM occurs within the following60s.",
-      "statistic": "One-sided Bonferroni-corrected test P=.00018,T(9)=8.34 across10 resampling iterations; not a reported fixed accuracy percentage."
-    }
-  ],
-  "candidate_conditions": [
-    {
-      "name": "paper_and_data",
-      "reproduction_exposure": "Paper, complete authentic inputs for the declared reproduction endpoint, common schema and output interface. Full reproduction inputs may contain outcomes later reserved for improvement; this packet is not a protected-improvement packet. No official analysis source or fitted reference parameters.",
-      "improvement_exposure": "Paper, development inputs/labels and only explicitly permitted past calibration material, plus a common schema and output interface. Outer assessment targets, forbidden future signal and future annotations remain with the owner; full-data reproduction material is absent."
-    },
-    {
-      "name": "paper_data_official_code",
-      "reproduction_exposure": "Identical reproduction packet plus the selected official analysis source and declared dependencies. Owner reference caches and fitted answer-parameter artifacts are excluded.",
-      "improvement_exposure": "Identical protected improvement packet plus the selected official analysis source and declared dependencies, audited to exclude fitted answer parameters, held outcomes and reference caches. A reproduction run or its artifacts are not supplied."
-    }
-  ],
-  "evaluation_owner": "Reference construction and private target generation stay outside every candidate context. Reproduction and protected improvement use distinct authoring packets/workspaces/contexts as specified by phase_and_context_isolation. Frozen improvement programs are assessed in fresh offline containers with owner-only targets/reference caches. No model or native run is selected.",
-  "contamination": "Public papers, data and code may already occur in model training. Paper reproduction is an execution/reasoning test with known published anchors, not a claim of unseen scientific discovery. Prospective splits, hidden labels, code-access parity and frozen-program evaluation are required for improvement.",
-  "reproduction": {
-    "required_outputs": [
-      "Complete mouse/session/unit/cut/annotation manifest for all six spontaneous and five dmM mice; keep protocol populations separate and identify any overlap.",
-      "Every eligible transition or laser event with exact temporal windows, original cuts and exclusion reasons; no extra undocumented row trimming.",
-      "Full22-PC by10s-bin spontaneous accuracy curves over the preceding150s,25 original resampling iterations and complete significance/t_sig calculation.",
-      "All22-PC optogenetic-outcome accuracy distributions over10 resampling iterations and all45 eligible trials.",
-      "Per-mouse support and direct numerical checks against article/source-data anchors with predeclared tolerances."
-    ],
-    "original_method": "Whole-session z-scoring, Gaussian smoothing sigma1.5bins at2.5s resolution and PCA after excluding long wake blocks; PC1 sign oriented by REM activity and PC2 by NREM EEG sigma power. Spontaneous LDA uses70/30 random event splits with balanced REM/Wake examples and25 repetitions. Laser LDA uses70/30 random trial splits and10 repetitions.",
-    "source_gaps": [
-      "Inspected neuropyx.py contains the loader and PCA-related functions but no top-level LDA-named entry point. The uninspected large notebook or other source may supply the figure analysis; do not equate a loader with the full reference.",
-      "load_mouse trims sleep annotation to unit-data length when annotation is longer; future authentic intake must disclose and reconcile this instead of silently losing timestamps.",
-      "KCUT/EXCLUDE controls may be data-derived; reproduce them exactly and separately test whether prospective selection uses held data.",
-      "README reports scipy1.33.3; treat this as an unverified version string, not an installable validated runtime."
-    ],
-    "interpretation": "The original analysis conditions on a future transition/event and learns representation from the entire recording. Reproducing it does not establish an online110s warning system. Whole-recording PCA and centered smoothing must remain disclosed."
-  },
-  "improvement": {
-    "proposed_primary": "Event-conditioned probabilistic prediction at one predeclared110s horizon for spontaneous transitions, and at laser onset for dmM outcomes. Use all held eligible events and score Brier loss per mouse, then equal-weight across mice within each protocol. Publish spontaneous and laser results separately, with class-conditional loss and calibration.",
-    "unit_split": "Keep mice out of outer training/model selection. A held mouse may receive a fixed, chronologically earlier calibration prefix whose allowed data and annotations are declared in advance. Freeze representation, sign convention, scaling and model before any scored interval; include a purge gap at least as long as the entire feature/smoothing support. Archive inspection must establish enough calibration and scored support; otherwise this prospective protocol remains unavailable, rather than discarding failing mice.",
-    "causality": "Each prediction packet contains only data no later than its declared cutoff. Use causal smoothing. Candidate programs run fresh with sealed targets and no cross-query state. Whole-recording PCA, future sleep labels, transitions or EEG after cutoff are forbidden.",
-    "all_cases_rule": "All original events remain in reproduction. For the separately defined prospective protocol, retain every event satisfying predeclared temporal-support rules; calibration-only and unsupported events stay in the census with reasons. Do not downsample held Wake cases to manufacture50% prevalence.",
-    "baselines": [
-      "Native paper LDA reconstructed under the same permissible prospective preprocessing",
-      "Prior/class-frequency predictor",
-      "EEG/EMG and elapsed-sleep-history predictor",
-      "Neural plus EEG/EMG predictor under the same folds"
-    ],
-    "scientific_extension": "Quantify the added value of neural activity beyond permitted EEG/EMG/history at equal support and measure whether gain survives held-mouse transfer. The spontaneous event-conditioned task and stimulation-response task do not establish clinical causal efficacy or continuous-time alarm specificity.",
-    "uncertainty": "Biological units are mice, not bootstrap iterations, PCs or events. Report all per-mouse results and paired differences with small-n uncertainty; do not interpret folds from overlapping leave-one-mouse-out fits as independent replications."
-  },
-  "resource_estimate": {
-    "storage_known_compressed_bytes": 22619797342,
-    "expanded_sizes_unknown": true,
-    "planning": "First prepare a complete authenticated archive census. A later scientific unit may use every required processed-rate/annotation/config operand for its full cohorts; this is an explicit endpoint selection, not cherry-picking easy animals. Do not download only the example mouse.",
-    "compute": "PCA/SVD and LDA over all required original recordings; no foundation-model training is inherent. Matrix dimensions and exact runtime must be measured after authentic intake. No asserted wall-time or RAM minimum.",
-    "native_reference_fits": "22 PCs times the exact original time grid times25 spontaneous resamples, plus22 times10 laser resamples. Time-grid endpoint convention must be joined to actual source before locking the count."
-  },
-  "activation_gates": [
-    "Verify reproduction/improvement packet and context separation, including no transfer of full-data reproduction artifacts, outcomes or transcripts into protected improvement.",
-    "Complete authentic five-cohort archive inventory and exact paper-to-cohort/animal/session mapping.",
-    "Complete reference entry points and dependency/runtime lock; identify exact author configuration.",
-    "Transparent resolution of timestamp trimming, drift cuts, neuron exclusions and annotation compatibility.",
-    "Separate faithful transductive reproduction from prospective causal preprocessing and fixed external labels.",
-    "Verify sealed owner-only references and full positive/negative scorer checks.",
-    "Real end-to-end A/B agent study and scientific review remain required."
-  ],
-  "phase_and_context_isolation": {
-    "reproduction": "Use a distinct reproduction workspace, packet and authoring context. This explicitly known-answer reconstruction condition may expose the complete reproduction dataset.",
-    "improvement": "Start a fresh independent authoring context and workspace for each improvement code-access condition and replicate. It receives only the improvement packet. No reproduction transcript, full-data file, reference result, fitted weights, source-derived answer cache, prior session state or adapted candidate program transfers into this context.",
-    "cross_condition": "The paper-and-data context must not inherit source/code/output seen by the paper-data-code context. Common supplied scientific assistance is fixed independently and declared for both.",
-    "assessment": "Freeze the improvement program before outer assessment. Only the owner creates assessment inputs under the declared protocol; sealed labels and forbidden future signals/annotations are not mounted or exposed through tools, logs, filenames or returned scores. Permitted calibration is fixed in advance and is not a channel for full-data reproduction results.",
-    "intentional_transfer": "A deliberately reused/exposed context is a separately labeled transfer/contaminated condition. Its score must not be described as protected improvement and it does not create another benchmark registration.",
-    "limits": "Fresh local context prevents the specific cross-phase transfer above; it does not prove absence of public paper/data memorization from pretraining or other prior exposure. Public-data contamination remains acknowledged."
-  },
-  "schema": "public_neuroscience_paper_construction_draft_v1",
-  "id": "PAPER-SCOPE-20261114-REM-DYNAMICS",
-  "track": "paper",
-  "stage": "registered_construction_draft",
-  "runnable": false,
-  "scientifically_qualified": false,
-  "submission_ready": false,
-  "document_scope": "Public scientific design for review. This is not an activated task, candidate input packet, official-code distribution, numerical reference or release of protected outcomes.",
-  "source_scope": "Source metadata, article and selected official source support this design. Complete data census, authentic reference execution, protected scorer and end-to-end scientific qualification remain required.",
   "provenance": {
     "official_code": {
       "repository": "https://github.com/tortugar/Npx",
@@ -134,5 +58,88 @@
       "acquired": false,
       "format": "Reader documents2.5s unit-count/rate CSVs,1ms spike arrays, sleep annotations, EEG/EMG and per-recording config. Archive structure and expanded byte sizes remain unverified."
     }
+  },
+  "resource_estimate": {
+    "storage_known_compressed_bytes": 22619797342,
+    "expanded_sizes_unknown": true,
+    "planning": "First prepare a complete authenticated archive census. A later scientific unit may use every required processed-rate/annotation/config operand for its full cohorts; this is an explicit endpoint selection, not cherry-picking easy animals. Do not download only the example mouse.",
+    "compute": "PCA/SVD and LDA over all required original recordings; no foundation-model training is inherent. Matrix dimensions and exact runtime must be measured after authentic intake. No asserted wall-time or RAM minimum.",
+    "native_reference_fits": "22 PCs times the exact original time grid times25 spontaneous resamples, plus22 times10 laser resamples. Time-grid endpoint convention must be joined to actual source before locking the count."
+  },
+  "input_assets": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "resources": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-SCOPE-20261114-REM-DYNAMICS/improvement.v1.json",
+      "bytes": 12305,
+      "sha256": "d9ee1c01994b0dd39deb8f7b3acb4819d0c9497c960905b15fbf4bcfdc1060c0"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-SCOPE-20261114-REM-DYNAMICS/historical/task.pre-improvement.v1.json",
+        "bytes": 14126,
+        "sha256": "3f94cbab6d6cdec90241954591948f777ddae9054d1d62d9d497e3523aeedf30"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-components"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending source recovery. A future same-task episode exposes only declared training/validation feedback under the original trial sampling and transductive observation regime; development trials cannot replace the original assessment population.",
+    "candidate_freeze": "Freeze complete prediction code, original input/representation access, selected primary comparison, training/tuning policy and uncertainty before owner evaluation; no final-score-directed selection among PCs or horizons.",
+    "final_evaluation": "Evaluate once against the recovered author baseline using original partitions and all eligible2h/5e cases. Retain per-mouse support and all source accuracy curves/distributions. Report significance reproduction and prospective extensions separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Pin complete author code/dependencies and original figure configuration; reproduce before comparison. Do not turn Npx example loading, local LDA reimplementation or a held-mouse baseline into the published result."
+  },
+  "blocking_issues": [
+    "Original numerical accuracy arrays and Monte Carlo partitions/seeds are not recovered.",
+    "Full archive census, exact cohort/animal/session/event mapping and exclusions are unverified;22.6GB payload was not acquired.",
+    "Complete author figure runner and source runtime closure are missing; module defaults and annotation truncation need reconciliation.",
+    "No fixed primary family-comparison rule, meaningful effect, valid mouse-level uncertainty, access/resource budgets or working protected evaluator is admitted.",
+    "The existing prospective Brier/held-mouse design is scientifically useful but not the same source task."
+  ],
+  "holds": {
+    "task_specific": [
+      "Original numerical accuracy arrays and Monte Carlo partitions/seeds are not recovered.",
+      "Full archive census, exact cohort/animal/session/event mapping and exclusions are unverified;22.6GB payload was not acquired.",
+      "Complete author figure runner and source runtime closure are missing; module defaults and annotation truncation need reconciliation.",
+      "No fixed primary family-comparison rule, meaningful effect, valid mouse-level uncertainty, access/resource budgets or working protected evaluator is admitted.",
+      "The existing prospective Brier/held-mouse design is scientifically useful but not the same source task."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The source supports ordered classification for the complete Figure2h and 5e family, but exact original accuracy arrays, Monte Carlo partitions and executable figure baseline are not recovered. The110-second result is a significance-onset summary, not a numeric accuracy baseline. The registered prospective held-mouse causal/Brier protocol changes inputs, preprocessing, split and metric and is an extension only. Original numerical accuracy arrays and Monte Carlo partitions/seeds are not recovered. Full archive census, exact cohort/animal/session/event mapping and exclusions are unverified;22.6GB payload was not acquired. Complete author figure runner and source runtime closure are missing; module defaults and annotation truncation need reconciliation. No fixed primary family-comparison rule, meaningful effect, valid mouse-level uncertainty, access/resource budgets or working protected evaluator is admitted. The existing prospective Brier/held-mouse design is scientifically useful but not the same source task.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-SCOPE-20261114-REM-DYNAMICS/historical/task.pre-improvement.v1.json",
+      "bytes": 14126,
+      "sha256": "3f94cbab6d6cdec90241954591948f777ddae9054d1d62d9d497e3523aeedf30"
+    },
+    "notes": "Retain the original construction draft and source-faithful2h/5e reconstruction requirements. Reproduction is calibration; the historical causal held-mouse Brier proposal remains a separately labelled extension, never a paper win."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

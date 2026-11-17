@@ -1,19 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-031",
-  "source_id": "paper-method-031",
   "track": "paper",
   "title": "Real-time self-supervised denoising for high-speed fluorescence neural imaging",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Denoise the original neural fluorescence recordings while preserving fast voltage/calcium dynamics and source real-time constraints. The real voltage fidelity endpoint compares denoised pixel fluorescence traces with simultaneous electrophysiology, not with a fabricated clean fluorescence image.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Denoise the original neural fluorescence recordings while preserving fast voltage/calcium dynamics and source real-time constraints. The real voltage fidelity endpoint compares denoised pixel fluorescence traces with simultaneous electrophysiology, not with a fabricated clean fluorescence image.",
+    "Source-paper comparison for Original Figure 3f denoised-fluorescence/electrophysiology Pearson correlation, with source fidelity and speed constraints; exact aggregate unresolved: Figure 3f uses Pearson correlation r=sum((x-xbar)(y-ybar))/sqrt(sum((x-xbar)^2)sum((y-ybar)^2)) between single-pixel ΔF/F and synchronized electrophysiology. Figure 3b analogously compares simulated traces with clean truth; image PSNR/SSIM and throughput are distinct outcomes."
+  ],
+  "success_criteria": [
+    "Recover the exact real-recording author baseline, original pixel/ROI roster, preprocessing, correlation aggregation and permitted same-stack training protocol.",
+    "Compare candidate and FAST on identical original recordings and label access, with predeclared meaningful temporal-fidelity gain and valid uncertainty.",
+    "Preserve original real calcium and voltage scope; synthetic controls or a favorable selected pixel/recording cannot replace it.",
+    "Retain spike fidelity, matched temporal context and hardware-bound end-to-end resource measurements; faster inference or smoother traces alone are insufficient.",
+    "Treat the existing group-disjoint evaluator as an extension unless exact source equivalence is independently established; changed splits never count as original-task victory.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-031",
   "canonical_position_one_based": 63,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41467-025-64681-8",
     "publication_year": 2025,
     "venue": "Nature Communications"
   },
-  "primary_outputs": [
-    "Denoised neural traces and temporal/SNR measures against matched baselines; throughput measured on declared hardware."
-  ],
   "input_assets": {
     "routes": [
       "https://zenodo.org/records/15872025"
@@ -226,96 +238,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Code GPL-3.0",
-        "Zenodo15872025 empirical files CC BY4.0"
-      ],
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Denoised neural traces and temporal/SNR measures against matched baselines; throughput measured on declared hardware."
-      ],
-      "assessment": "FAST denoising and temporal/SNR/latency comparisons on real calcium/voltage inputs are supported; real recordings lack a universal clean target.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Match exposure and end-to-end hardware latency, not just network forward time. SNR improvement can erase spikes/fast events, so temporal fidelity is required.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "The deposit separates real recordings from simulated fast dynamics. Real-data metrics without clean reference must not be presented as denoising ground truth. Full five-collection paper remains broader.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve robustness or quality/latency trade-offs under motion and noise shifts, compared with FAST and other real-time denoisers at a matched end-to-end budget."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Cross-recording noise/motion shifts with independently fixed fidelity metrics and synthetic known-truth controls; no raw biological truth should be invented from smoothed outputs.",
-      "retained_roster_proposal": [
-        "Improve robustness or quality/latency trade-offs under motion and noise shifts, compared with FAST and other real-time denoisers at a matched end-to-end budget."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": "single GPU;149MB single-cell voltage archive or4.2GB calcium TIFF",
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": "Resource class is an inspection-based estimate, not measured runtime."
-  },
-  "holds": {
-    "task_specific": [
-      "The deposit separates real recordings from simulated fast dynamics. Real-data metrics without clean reference must not be presented as denoising ground truth. Full five-collection paper remains broader.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Freeze one real voltage/calcium comparison with temporal-fidelity and matched denoiser controls plus a separate synthetic truth check, then verify input sampling/noise/target semantics before training.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Freeze one real voltage/calcium comparison with temporal-fidelity and matched denoiser controls plus a separate synthetic truth check, then verify input sampling/noise/target semantics before training.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -356,11 +278,79 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_resource_statement": "single GPU;149MB single-cell voltage archive or4.2GB calcium TIFF",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Resource class is an inspection-based estimate, not measured runtime."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-031/improvement.v1.json",
+      "bytes": 11717,
+      "sha256": "6fd7b561ecd8acd666f675bbc3be96bb742801b653f9c0c666d195167603d627"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-031/historical/task.pre-improvement.v1.json",
+        "bytes": 17637,
+        "sha256": "1b43d761bbefff82386fa2a5ae7f03a6a83dc3a62c38abbbfd63b520cdd67b90"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-031-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Inactive until source comparison is recovered. Development may tune denoising with source-permitted raw-stack self-supervision and declared validation feedback; electrophysiology and clean synthetic final targets remain evaluator-owned.",
+    "candidate_freeze": "Seal denoiser/training code, all context windows, source-allowed adaptation rule, checkpoint selection, ROI/baseline recipe and timing boundary before final target comparison.",
+    "final_evaluation": "Replay the author and frozen candidate on identical complete original-recording support and source preprocessing, reporting real voltage, calcium and synthetic controls separately. Measure matched-hardware latency/throughput without substituting it for fidelity.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Source-paper FAST values, newly reproduced FAST values and local prospective evaluator outputs remain separate. No raw-input baseline or group-disjoint extension can replace the source FAST comparator."
+  },
+  "blocking_issues": [
+    "Exact numeric real-voltage FAST correlation baseline and original summary unavailable in reviewed main text/code.",
+    "Original pixel/ROI roster, ΔF/F baseline, synchronization and full archive file/version mapping unresolved.",
+    "Registered real-calcium plus real-voltage coverage not established by existing prospective panel.",
+    "Author Methods versus pinned configuration and native temporal/output handling need reconciliation.",
+    "Source-compatible evaluator, meaningful effect, dependence-aware uncertainty and fixed access/resource budgets remain unqualified."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact numeric real-voltage FAST correlation baseline and original summary unavailable in reviewed main text/code.",
+      "Original pixel/ROI roster, ΔF/F baseline, synchronization and full archive file/version mapping unresolved.",
+      "Registered real-calcium plus real-voltage coverage not established by existing prospective panel.",
+      "Author Methods versus pinned configuration and native temporal/output handling need reconciliation.",
+      "Source-compatible evaluator, meaningful effect, dependence-aware uncertainty and fixed access/resource budgets remain unqualified."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "FAST has an ordered temporal-fidelity comparison, but the exact numeric source baseline and pixel/ROI/synchronization recipe for the registered real recordings are not recovered. The existing evaluator deliberately uses a prospective group-disjoint recipe, which changes the original same-stack self-supervised task and cannot award a source-paper win. Published throughput alone is not a substitute for denoising quality. Exact numeric real-voltage FAST correlation baseline and original summary unavailable in reviewed main text/code. Original pixel/ROI roster, ΔF/F baseline, synchronization and full archive file/version mapping unresolved. Registered real-calcium plus real-voltage coverage not established by existing prospective panel. Author Methods versus pinned configuration and native temporal/output handling need reconciliation. Source-compatible evaluator, meaningful effect, dependence-aware uncertainty and fixed access/resource budgets remain unqualified.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-031/historical/task.pre-improvement.v1.json",
+      "bytes": 17637,
+      "sha256": "1b43d761bbefff82386fa2a5ae7f03a6a83dc3a62c38abbbfd63b520cdd67b90"
+    },
+    "notes": "Preserve trace/fidelity/latency evaluator and its prospective-v1 split honestly as measurement/calibration and extension material. Its engineering tests and new split cannot award a source-paper win."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

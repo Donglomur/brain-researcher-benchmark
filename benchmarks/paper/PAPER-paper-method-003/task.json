@@ -1,19 +1,30 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-003",
-  "source_id": "paper-method-003",
   "track": "paper",
   "title": "REVE: A Foundation Model for EEG – Adapting to Any Setup with Large-Scale Pretraining on 25,000 Subjects",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Four-class motor-imagery classification: left fist, right fist, both fists and feet; the original PhysioNet-MI downstream endpoint, not MAE reconstruction or few-shot transfer.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Four-class motor-imagery classification: left fist, right fist, both fists and feet; the original PhysioNet-MI downstream endpoint, not MAE reconstruction or few-shot transfer.",
+    "Source-paper comparison for PhysioNet-MI four-class balanced accuracy: Balanced accuracy is mean class recall, (1/4) sum_c TP_c/(TP_c+FN_c), higher is better. Cohen kappa and weighted F1 are separately reported supporting metrics, not substitute winning endpoints."
+  ],
+  "success_criteria": [
+    "Recover and bind the precise Table 12 preprocessing, all eligible epochs, original run aggregation and REVE-Base access.",
+    "Exceed the source-paper balanced accuracy and a calibrated author rerun under identical original subjects, runs, labels, preprocessing and inputs, by the predeclared justified effect with uncertainty.",
+    "Freeze candidate and hyperparameters using only participants 1–89 before final evaluation on all source test participants 90–109.",
+    "Do not treat better frozen-feature, few-shot, altered-montage, smaller-cohort or new-split results as a Table 12 paper win.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-003",
   "canonical_position_one_based": 65,
   "paper_identity": {
     "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/20a917f77773ac0fa8bea2bdd6606b66-Abstract-Conference.html",
     "publication_year": 2025,
     "venue": "NeurIPS"
   },
-  "primary_outputs": [
-    "Subject-level balanced accuracy/kappa and comparison against a matched smaller/pretrained-baseline model; adaptation-budget curve."
-  ],
   "input_assets": {
     "routes": [
       "https://physionet.org/content/eegmmidb/1.0.0/"
@@ -141,96 +152,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "EEGMMI1.0.0 ODC Attribution1.0, open",
-        "Code MIT; pretrained weights have separate Responsible Use License"
-      ],
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Subject-level balanced accuracy/kappa and comparison against a matched smaller/pretrained-baseline model; adaptation-budget curve."
-      ],
-      "assessment": "REVE downstream EEGMMI transfer is supported;25,000subject pretraining reproduction and all cross-setup claims are outside scope.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Match subjects/runs, class/epoch definitions, baseline access and compute across CBraMod/EEGNet/other pretrained models. Partial restricted pretraining history limits contamination claims.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Whole pretraining corpus is partly restricted. Model-weight use terms must be honored. Exact released-model hash and training-history overlap belong in run manifests.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve subject or electrode-layout transfer under matched labels and training budgets against REVE, EEGNet and other eligible pretrained baselines."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Whole-participant/montage transfer and adaptation curves with matched labeled calibration; shared EEGMMI/pretraining exposure must be separated from genuinely unseen populations.",
-      "retained_roster_proposal": [
-        "Improve subject or electrode-layout transfer under matched labels and training budgets against REVE, EEGNet and other eligible pretrained baselines."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": "single GPU for fine-tuning",
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": "Resource class is an inspection-based estimate, not measured runtime."
-  },
-  "holds": {
-    "task_specific": [
-      "Whole pretraining corpus is partly restricted. Model-weight use terms must be honored. Exact released-model hash and training-history overlap belong in run manifests.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Bind a permitted checkpoint hash to the exact PhysioNet config and baseline cohort, then prepare a common subject-level reference protocol; do not infer quality from pretrained availability.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Bind a permitted checkpoint hash to the exact PhysioNet config and baseline cohort, then prepare a common subject-level reference protocol; do not infer quality from pretrained availability.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -291,11 +212,77 @@
       "new_scientific_runs": 0
     }
   },
+  "resources": {
+    "roster_resource_statement": "single GPU for fine-tuning",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Resource class is an inspection-based estimate, not measured runtime."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-003/improvement.v1.json",
+      "bytes": 10122,
+      "sha256": "e240691e755cb499b5d18944f60b92ecbf6332c157cb43ef5d950ae0b913bce3"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-003/historical/task.pre-improvement.v1.json",
+        "bytes": 15505,
+        "sha256": "fe883d61f8d08161e5fcb53ca88ab41472fc40c4e8e81cb2b6f5202b708faf2e"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-paper-method-003"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate on original training and validation participants; retain adaptation curves only as separately identified source endpoints.",
+    "candidate_freeze": "Freeze model/checkpoint, preprocessing, class/window manifests, label/pretraining access, hyperparameters, seeds, stopping rules and metric aggregation before test scoring.",
+    "final_evaluation": "One protected evaluation phase on the complete original test partition after exact author calibration and uncertainty/effect policies are accepted.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Calibrate against the original REVE-Base Table 12 recipe; distinguish published 0.6480, the author rerun and other models. A successful numerical reconstruction is calibration only. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Paper versus released PhysioNet preprocessing discrepancy is unresolved.",
+    "Original Table 12 seed/run roster, exact score aggregation and downstream checkpoint/recipe binding are absent.",
+    "No authentic author reproduction, admitted working evaluator, fixed access/resource budgets, justified effect or uncertainty decision rule.",
+    "Released-model identity, original data completeness and pretraining/downstream exposure require manifests; the retained REVE source package has external dependencies and disabled execution."
+  ],
+  "holds": {
+    "task_specific": [
+      "Paper versus released PhysioNet preprocessing discrepancy is unresolved.",
+      "Original Table 12 seed/run roster, exact score aggregation and downstream checkpoint/recipe binding are absent.",
+      "No authentic author reproduction, admitted working evaluator, fixed access/resource budgets, justified effect or uncertainty decision rule.",
+      "Released-model identity, original data completeness and pretraining/downstream exposure require manifests; the retained REVE source package has external dependencies and disabled execution."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original four-class PhysioNet-MI endpoint, participant split and numeric REVE-Base result are recoverable. A same-task design is defensible, but historical preprocessing, run aggregation and checkpoint/recipe parity remain unresolved; the extensive local source proposal is not an executed author baseline. Paper versus released PhysioNet preprocessing discrepancy is unresolved. Original Table 12 seed/run roster, exact score aggregation and downstream checkpoint/recipe binding are absent. No authentic author reproduction, admitted working evaluator, fixed access/resource budgets, justified effect or uncertainty decision rule. Released-model identity, original data completeness and pretraining/downstream exposure require manifests; the retained REVE source package has external dependencies and disabled execution.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-003/historical/task.pre-improvement.v1.json",
+      "bytes": 15505,
+      "sha256": "fe883d61f8d08161e5fcb53ca88ab41472fc40c4e8e81cb2b6f5202b708faf2e"
+    },
+    "notes": "Preserve all REVE S8 reconstruction and engineering materials. The local package covers many tasks and explicitly disables execution; its authored fixed references and prospective endpoints are calibration/development components and do not demonstrate a PhysioNet-MI paper win."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

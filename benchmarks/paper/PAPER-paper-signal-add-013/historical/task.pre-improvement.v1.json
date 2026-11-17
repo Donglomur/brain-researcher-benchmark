@@ -1,0 +1,304 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-signal-add-013",
+  "source_id": "paper-signal-add-013",
+  "track": "paper",
+  "title": "BOLD signal changes can oppose oxygen metabolism across the human cortex",
+  "status": "specification_only",
+  "canonical_position_one_based": 33,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41593-025-02132-9",
+    "publication_year": 2025,
+    "venue": "Nature Neuroscience"
+  },
+  "primary_outputs": [
+    "Central task-dependent BOLD/oxygen-metabolism relationship and its spatial modes from per-subject input maps."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://openneuro.org/datasets/ds004873/versions/2.0.6"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/observed_artifacts/1",
+        "recorded_fields": {
+          "path": "derivatives/sub-p019/qmri/sub-p019_task-calc_space-T2_oef.nii",
+          "bytes": "3010912"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "source_record_id": "paper-signal-add-013"
+      },
+      {
+        "json_pointer": "/data_inputs/0/observed_artifacts/2",
+        "recorded_fields": {
+          "path": "derivatives/sub-p019/anat/sub-p019_BrMsk_CSF.nii",
+          "bytes": "376672"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "source_record_id": "paper-signal-add-013"
+      },
+      {
+        "json_pointer": "/data_inputs/0/observed_artifacts/3",
+        "recorded_fields": {
+          "path": "derivatives/sub-p019/qmri/sub-p019_task-calc_space-MNI152_desc-orig_cmro2.nii.gz",
+          "bytes": "806714"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "source_record_id": "paper-signal-add-013"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "Per-subject quantitative-MRI/BOLD derivative maps after mqBOLD reconstruction.",
+      "data_urls": [
+        "https://openneuro.org/datasets/ds004873/versions/2.0.6"
+      ],
+      "input_version": null,
+      "input_inventory_or_loader_evidence": [
+        {
+          "url": "https://openneuro.org/datasets/ds004873/versions/2.0.6",
+          "git": "eef50ff140a9863c412428b0bd1a14f46f5cd342",
+          "license": "CC0",
+          "metadata_url": "https://raw.githubusercontent.com/OpenNeuroDatasets/ds004873/2.0.6/participants.tsv",
+          "participants_metadata_rows": 75,
+          "primary_analysis_subjects": 40,
+          "observed_artifacts_summary": {
+            "items": 4,
+            "evidence_retained_in_source_record": true
+          },
+          "example_cbf_sha256": "d1a66f4ab1a723aaa2265f7b77fea21edcba90ef960f821aa2836943853995b1",
+          "storage_note": "Four representative derivative artifacts HEAD-verified, not a total storage estimate. The unversionedS3listing points to older1.0.4and must not be used for current availability."
+        }
+      ],
+      "source_bridge": "Reproduce the central task-dependent BOLD-versus-metabolism comparison from released quantitative MRI/BOLD derivative maps in the exact2.0.6snapshot; scope starts after acquisition and mqBOLD reconstruction.",
+      "code_url": "https://github.com/NeuroenergeticsLab/two_modes_of_hemodynamics",
+      "code_revision_or_archive_version": "1b22c2cb03bab0d5cf70da6a45c4d720194dc523",
+      "entrypoints": [
+        "A_preprocessing.ipynb",
+        "B_Fig1.ipynb",
+        "C_Fig2A_PLS.ipynb",
+        "D_Fig2BD.ipynb",
+        "E_Fig3.ipynb",
+        "qBOLD_fun.ipynb"
+      ],
+      "missing_core_inputs_as_recorded": [],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-013",
+        "versions_and_loader_contract": {
+          "data_contract": {
+            "neural": "Task-resolved CBF/OEF/CMRO2 and BOLD maps; exact versioned CBF/OEF/mask/CMRO2 URLs returned200 with sizes matching Git-annex metadata.",
+            "labels": "Actual75-row participants.tsv columns participant_id,sex,age,Hct,O2sat,comments; task names rest/control/mem/calc are encoded in map filenames and code.",
+            "biological_units": "Author source fixes40primary subject IDs, with30full-condition and10additional control/calculation cases. Do not infer75independent usable cases from manifest alone.",
+            "split": "Original within-person contrasts; extensions hold out people and conditions, with ROIs/masks chosen independently of evaluated effect.",
+            "controls": "Vascular/hemodynamic calibration, hematocrit/O2saturation, CBV correction, global signal and spatial autocorrelation; BOLD sign alone is not a direct neural firing measure."
+          },
+          "scope_description": "Reproduce the central task-dependent BOLD-versus-metabolism comparison from released quantitative MRI/BOLD derivative maps in the exact2.0.6snapshot; scope starts after acquisition and mqBOLD reconstruction."
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/NeuroenergeticsLab/two_modes_of_hemodynamics",
+    "revision_or_archive_version": "1b22c2cb03bab0d5cf70da6a45c4d720194dc523",
+    "entrypoints": [
+      "A_preprocessing.ipynb",
+      "B_Fig1.ipynb",
+      "C_Fig2A_PLS.ipynb",
+      "D_Fig2BD.ipynb",
+      "E_Fig3.ipynb",
+      "qBOLD_fun.ipynb"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-013",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/NeuroenergeticsLab/two_modes_of_hemodynamics",
+            "commit": "1b22c2cb03bab0d5cf70da6a45c4d720194dc523",
+            "license": "CC BY-NC-SA4.0",
+            "entrypoints": [
+              "A_preprocessing.ipynb",
+              "B_Fig1.ipynb",
+              "C_Fig2A_PLS.ipynb",
+              "D_Fig2BD.ipynb",
+              "E_Fig3.ipynb",
+              "qBOLD_fun.ipynb"
+            ]
+          }
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "recorded_terms": {
+        "code": "CC BY-NC-SA4.0",
+        "data": [
+          "CC0"
+        ]
+      },
+      "record_conflicts": [],
+      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
+      "overlap_group": null
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "central_outputs_in_saved_source_contract": [
+        "Central task-dependent BOLD/oxygen-metabolism relationship and its spatial modes from per-subject input maps."
+      ],
+      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
+      "missing_or_unfrozen_endpoint_details": "Bind exact snapshot2.0.6,40-person primary eligibility among75 metadata rows, corrected/original CMRO2 and masks; raw reconstruction/independent replication absent."
+    },
+    "source_recorded_metrics": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-013",
+        "recorded_metrics": [
+          "Participant-level metabolic/task contrasts",
+          "Spatial association/PLS mode and uncertainty under appropriate spatial nulls"
+        ]
+      }
+    ],
+    "comparability": [
+      "Keep physiological calibration, masks and PLS/spatial modes fixed for reproduction; spatial nulls and calibration robustness are new analyses, not choose-the-map-that-matches."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Bind exact snapshot2.0.6,40-person primary eligibility among75 metadata rows, corrected/original CMRO2 and masks; raw reconstruction/independent replication absent.",
+        "Keep physiological calibration, masks and PLS/spatial modes fixed for reproduction; spatial nulls and calibration robustness are new analyses, not choose-the-map-that-matches.",
+        "Raw-to-parameter-map reconstruction and full independent replication cohort are outside initialscope.",
+        "Code has local paths and some intermediate masks generated by preceding notebooks; environment and execution have not been qualified.",
+        "Non-commercial share-alike code terms apply independently of CC0 data.",
+        "Exact numerical figure matching requires checking corrected versus original CMRO2 and sample eligibility, not selecting whichever reproduces the result best.",
+        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+        "Execute and independently audit references, controls, grading and measured resources.",
+        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
+      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Test robustness to physiological calibration, mask/ROI choice and spatial nulls; reproduce both agreement and sign-disagreement cases."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "independent_panel_not_established_in_inspected_evidence",
+      "proposed_improvement": [
+        "Test robustness to physiological calibration, mask/ROI choice and spatial nulls; reproduce both agreement and sign-disagreement cases."
+      ],
+      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
+      "special_gate": "No completed independent improvement result is established here."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": "unmeasured",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "holds": {
+    "task_specific": [
+      "Bind exact snapshot2.0.6,40-person primary eligibility among75 metadata rows, corrected/original CMRO2 and masks; raw reconstruction/independent replication absent.",
+      "Keep physiological calibration, masks and PLS/spatial modes fixed for reproduction; spatial nulls and calibration robustness are new analyses, not choose-the-map-that-matches.",
+      "Raw-to-parameter-map reconstruction and full independent replication cohort are outside initialscope.",
+      "Code has local paths and some intermediate masks generated by preceding notebooks; environment and execution have not been qualified.",
+      "Non-commercial share-alike code terms apply independently of CC0 data.",
+      "Exact numerical figure matching requires checking corrected versus original CMRO2 and sample eligibility, not selecting whichever reproduces the result best.",
+      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+      "Execute and independently audit references, controls, grading and measured resources.",
+      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Freeze subject eligibility and corrected/original parameter-map lineage, map the preceding-mask notebook dependency, then define one BOLD-versus-CMRO2 contrast with spatial-null policy.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Freeze subject eligibility and corrected/original parameter-map lineage, map the preceding-mask notebook dependency, then define one BOLD-versus-CMRO2 contrast with spatial-null policy.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "6a7477739215527b7250afb9c433d630b9ebea62e973470bed751dcd86385da1",
+    "audit_record_sha256": "52f12c19818390c4e335574847be5ee5468091a964f9e3deec50506ecf4b83c4",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+          "bytes": 127035,
+          "sha256": "49a22e4974c8ed6c213582386153fff1fdf7b00755481b032ba865a57030ea06"
+        },
+        "record_id": "paper-signal-add-013",
+        "declared_record_sha256": "cdfd15312dea0f33f0148866f2d38ec8debedfd9c19aaf4dba73bf6ecfe27d34",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 12,
+        "record_sha256": "cdfd15312dea0f33f0148866f2d38ec8debedfd9c19aaf4dba73bf6ecfe27d34"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

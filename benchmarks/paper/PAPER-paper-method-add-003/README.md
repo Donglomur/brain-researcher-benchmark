@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-method-add-003`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The source reports ordered human motion-trace agreement, but the registered Pt01-Pt03 task is currently scored by a new consistency/fidelity panel rather than an exactly recovered paper endpoint. Published per-patient correlations are recoverable; their exact temporal alignment, preprocessing, corresponding author output and an admissible full-cohort comparison remain unresolved. Human agreement must not be relabelled absolute motion accuracy.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 30135 bytes; SHA-256 `d49aa3d8687475d00aecefe55ac9e71e5e8c727e32bf72af95809c109638be68`.
+- Specification identity: 30852 bytes; SHA-256 `8e02798f85f2f20a6185e7a06397d7ebd081085830282c6685bbffea7626e102`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Content-pinned raw human LFP segment loading, an independent rigid registration control, shared interpolation and prospective paired consistency/fidelity comparison of supplied default-DREDge/alternate shifts against fixed/no correction, with Pt01–Pt03 cohort summaries. Authentic geometry/preprocessing and current data access, native default/alternate DREDge execution, full-population qualification, figure targets, external motion truth, protected evaluation, rights and scientific qualification remain held.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Content-pinned raw human LFP segment loading, an independent rigid registration control, shared interpolation and prospective paired consistency/fidelity comparison of supplied default-DREDge/alternate shifts against fixed/no correction, with Pt01–Pt03 cohort summaries. Authentic geometry/preprocessing and current data access, native default/alternate DREDge execution, full-population qualification, figure targets, external motion truth, protected evaluation, rights and scientific qualification remain held. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

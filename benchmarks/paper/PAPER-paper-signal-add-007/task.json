@@ -1,19 +1,30 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-signal-add-007",
-  "source_id": "paper-signal-add-007",
   "track": "paper",
   "title": "Modelling neural coding in the auditory midbrain with high resolution and accuracy",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Predict inferior-colliculus multi-unit spike-count activity for the original Fig. 4b,d seven-animal/four-sound evaluation. Preserve both trial-specific neural response prediction and reliability-normalized assessment; this scope does not include whole-paper new-animal adaptation or ASR.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Predict inferior-colliculus multi-unit spike-count activity for the original Fig. 4b,d seven-animal/four-sound evaluation. Preserve both trial-specific neural response prediction and reliability-normalized assessment; this scope does not include whole-paper new-animal adaptation or ASR.",
+    "Source-paper comparison for Fraction of explainable correlation explained (%) on each of the four original Fig. 4b sounds: Primary explained correlation (%) = 50*[rho(vec(R1),vec(Rhat1)) + rho(vec(R2),vec(Rhat2))]/rho(vec(R1),vec(R2)), equation (3). Rhat is sampled model activity; the separate variance metric uses predicted expected counts and source equations (4)-(5). Raw RMSE or ordinary correlation is not interchangeable."
+  ],
+  "success_criteria": [
+    "Reproduce the source ICNet result using the exact original seven animals, both successive trials, four sounds, reliability masks, measurement times, alignment and equation (3) aggregation.",
+    "Freeze and evaluate a candidate against the published per-sound vector and a verified author baseline, with justified meaningful effect and animal-aware uncertainty over every sound; retain variance and unit-level results as source-comparable checks.",
+    "Resolve lawful access to the original development/training recordings and a matched access/resource policy; do not tune using the public four-sound evaluation responses and then call the score source-equivalent generalization.",
+    "The legacy four-fold held-sound program, trial1 calibration/trial2 scoring, response subset or different animal panel may support labeled extensions only, never a same-task paper win.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-signal-add-007",
   "canonical_position_one_based": 56,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s42256-025-01104-9",
     "publication_year": 2025,
     "venue": "Nature Machine Intelligence"
   },
-  "primary_outputs": [
-    "Real-vs-model response correlation/RMSE across the four published sounds, retaining channel reliability exclusions."
-  ],
   "input_assets": {
     "routes": [
       "https://zenodo.org/records/12636772"
@@ -139,116 +150,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": {
-        "official_code_license": "UCL Academic License: non-commercial academic use; redistribution/derivative notification restrictions",
-        "data_route_licenses": [
-          {
-            "url": "https://zenodo.org/api/records/12636772",
-            "license": "CC BY 4.0"
-          }
-        ]
-      },
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Real-vs-model response correlation/RMSE across the four published sounds, retaining channel reliability exclusions."
-      ],
-      "assessment": "Only bounded Fig4 evaluation of ICNet on7gerbils×4sounds is supported; full training/few-shot/new-animal claims require unavailable MTA data.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [
-      {
-        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
-        "record_id": "paper-signal-add-007",
-        "recorded_metrics": [
-          "RMSE and response correlation against repeated-trial reliability",
-          "Published evaluation metric definitions must be translated into a checked scorer before execution."
-        ]
-      }
-    ],
-    "comparability": [
-      "Match audio calibration,32sample neural-bin timing, model time/nonstationarity input and reliability exclusions. Correlation/RMSE changes cannot be scored as novel generalization on this subset.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Full training recordings and novel-animal adaptation data require an MTA; unavailable scope must not be called reproduced.",
-        "Official example predicts from an audio file; an evaluation adapter for released MAT sounds/responses and exact metric implementation still needs writing.",
-        "Code license limits use for commercial entities and restricts redistribution; dataset CC BY does not override those code terms.",
-        "TensorFlow dependencies and checkpoint loading not executed; full academic eligibility must be checked before running/distributing.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Analyze failure modes across characteristic frequency and sound type with matched reliability and model timing inputs."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Published exposed sounds/animals were represented in model training. Trial1 calibration/trial2 evaluation can be named repeat reliability analysis, not a hidden independent improvement panel.",
-      "retained_roster_proposal": [
-        "Analyze failure modes across characteristic frequency and sound type with matched reliability and model timing inputs."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": "unmeasured",
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": null
-  },
-  "holds": {
-    "task_specific": [
-      "Full training recordings and novel-animal adaptation data require an MTA; unavailable scope must not be called reproduced.",
-      "Official example predicts from an audio file; an evaluation adapter for released MAT sounds/responses and exact metric implementation still needs writing.",
-      "Code license limits use for commercial entities and restricts redistribution; dataset CC BY does not override those code terms.",
-      "TensorFlow dependencies and checkpoint loading not executed; full academic eligibility must be checked before running/distributing.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "First freeze the existing-checkpoint/repeat-trial reliability scope and exact sound→response metric adapter, and resolve code-use terms; do not prioritize retraining/new-animal claims without the missing inputs.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "First freeze the existing-checkpoint/repeat-trial reliability scope and exact sound→response metric adapter, and resolve code-use terms; do not prioritize retraining/new-animal claims without the missing inputs.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -289,11 +190,83 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_resource_statement": "unmeasured",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-007/improvement.v1.json",
+      "bytes": 12272,
+      "sha256": "8a16f803416f3fd1b4cb6af33591be9b6ab2643b9f1340b6c90744637b0c186c"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-signal-add-007/historical/task.pre-improvement.v1.json",
+        "bytes": 15941,
+        "sha256": "2a48ca2f3c8403271b2fb4371082a19b68e87c8cfbdc4498b7095ffc266c3e7f"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-auditory-midbrain-paper"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-paper-signal-add-007/implementations/registered-runtime/manifest.json",
+        "bytes": 12466,
+        "sha256": "2c97ca50b8374348aad172225ac7593c4d884ef0899d90d97e39e2b6eb981820"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Not admitted. Develop candidate response predictors on source-authorized training/validation recordings only after the original split and access envelope are enforceable. The four released sound-response pairs remain evaluation material for the same-task claim.",
+    "candidate_freeze": "Freeze candidate weights, preprocessing, time inputs, output sampling procedure, random-seed policy and complete access history before evaluator access to the original four-sound responses.",
+    "final_evaluation": "Replay the complete original Fig. 4b,d panel against the authenticated author model, retaining all per-animal/per-sound scores and source reliability masks. Apply an independently justified full-panel decision rule; do not promote held-sound cross-validation to paper superiority.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Authenticate and rerun the released author checkpoint under exact source conditions. The ungraded local pair controller and prospective adapter budgets do not establish a native baseline or an admitted improvement episode."
+  },
+  "blocking_issues": [
+    "Recover exact eligible-unit reliability masks and verify native timing/cropping and both trial-specific measurement times.",
+    "Recover the exact aggregation behind each textual source number and validate equation (3) and separate variance scoring on native author predictions.",
+    "Authenticate the author checkpoint revision and demonstrate numerical baseline agreement; no models or evaluators ran in this audit.",
+    "Original training recordings/access and protected evaluation exposure policy remain unresolved; public evaluation trials cannot become development data for a same-task claim.",
+    "Select a scientifically justified effect, animal-level uncertainty rule, fixed concrete access/resource budgets and a working evaluator; legacy prospective caps are not an admitted measured budget."
+  ],
+  "holds": {
+    "task_specific": [
+      "Recover exact eligible-unit reliability masks and verify native timing/cropping and both trial-specific measurement times.",
+      "Recover the exact aggregation behind each textual source number and validate equation (3) and separate variance scoring on native author predictions.",
+      "Authenticate the author checkpoint revision and demonstrate numerical baseline agreement; no models or evaluators ran in this audit.",
+      "Original training recordings/access and protected evaluation exposure policy remain unresolved; public evaluation trials cannot become development data for a same-task claim.",
+      "Select a scientifically justified effect, animal-level uncertainty rule, fixed concrete access/resource budgets and a working evaluator; legacy prospective caps are not an admitted measured budget."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original Fig. 4b,d prediction task, public evaluation dataset, metric equations and reported per-sound values are recoverable. Exact masking/aggregation, baseline execution and development-data access are incomplete; the historical held-sound improvement program changes the source split and cannot produce the requested paper win. Recover exact eligible-unit reliability masks and verify native timing/cropping and both trial-specific measurement times. Recover the exact aggregation behind each textual source number and validate equation (3) and separate variance scoring on native author predictions. Authenticate the author checkpoint revision and demonstrate numerical baseline agreement; no models or evaluators ran in this audit. Original training recordings/access and protected evaluation exposure policy remain unresolved; public evaluation trials cannot become development data for a same-task claim. Select a scientifically justified effect, animal-level uncertainty rule, fixed concrete access/resource budgets and a working evaluator; legacy prospective caps are not an admitted measured budget.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-007/historical/task.pre-improvement.v1.json",
+      "bytes": 15941,
+      "sha256": "2a48ca2f3c8403271b2fb4371082a19b68e87c8cfbdc4498b7095ffc266c3e7f"
+    },
+    "notes": "Keep the registered complete-released7 program as historical calibration/construction evidence. Its four held-sound folds and trial reuse are explicitly separate extensions; packet closure, source adapters and structural tests do not establish ICNet accuracy or superiority."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

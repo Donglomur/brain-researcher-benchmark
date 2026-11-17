@@ -1,0 +1,1021 @@
+{
+  "schema": "public_neuroscience_construction_draft_v1",
+  "id": "paper-pcca-fa-bilateral-pfc-arousal-2026",
+  "track": "paper",
+  "title": "Reproduce bilateral prefrontal covariance decomposition and pupil-linked arousal, then test protected neural-to-pupil prediction",
+  "registration_date": "2026-11-14",
+  "stage": "registered_construction_draft",
+  "readiness": {
+    "runnable": false,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "reference_results_available": false,
+    "agent_results_available": false
+  },
+  "evidence_scope": "A registered paper-result construction draft covering the complete declared empirical assay. Sources and design were independently reviewed; native ingestion, runnable isolation, reference results and scientific qualification remain open. This document is not a candidate input packet or a demonstrated result.",
+  "counting": {
+    "draft_contract": true,
+    "registered": true,
+    "scientifically_qualified": false,
+    "executable_benchmark": false,
+    "model_run": false,
+    "improvement_demonstrated": false
+  },
+  "information_conditions": {
+    "A": {
+      "name": "paper + data",
+      "reproduction": "RA uses full historical data in its own fresh context/workspace, producing historical reconstruction only.",
+      "improvement": "IA uses a separate fresh outer-fold episode with only its authorized training partition, then freezes code before evaluator-owned prediction.",
+      "output": "Separate reproduction and improvement submissions; no sequential reuse of historical reconstruction knowledge."
+    },
+    "B": {
+      "name": "paper + data + official code",
+      "reproduction": "RB uses complete historical data plus exact rights-cleared official code in a separate fresh context/workspace.",
+      "improvement": "IB adds a reviewed official algorithm-code allowlist to the same protected training partition; answer-bearing constants/files and fitted state are denied.",
+      "hold": "Missing implementation, rights or unreviewed answer/algorithm separation blocks B; independent code does not silently substitute."
+    },
+    "pairing": "Identical cases/splits/budgets/seeds; fresh contexts/workspaces/process state for each track×condition×fold. See information_control."
+  },
+  "security": {
+    "public_source_contamination": "Public historical papers/data are not guaranteed absent from pretraining. Report paper/public-data exposure; transformed identifiers and withheld labels reduce simple lookup but do not prove decontamination.",
+    "execution": "Future runner must verify isolated authoring/training/stateless per-case prediction processes, explicit mounts, no network or task-bearing cross-episode caches. These controls are not implemented or tested yet.",
+    "blindness": "Use the mandatory fresh model/context/workspace separation in information_control. Each condition and outer-fold authoring/fit state is isolated; frozen code precedes protected execution; evaluator-only aggregate emits no cross-fold feedback.",
+    "fail_closed": "Missing case rows, duplicates, wrong subject/trial alignment, nonfinite predictions, shape or checksum mismatch, contamination by derived answers, or impossible source-valid counts invalidates a submission; no silent row dropping."
+  },
+  "qualification_path": [
+    "Resolve the enumerated source/rights/method holds with primary evidence; preserve both old and clarified source versions.",
+    "Materialize the complete declared assay outside ordinary Git under an explicit storage/execution plan; verify every publisher digest and native unit.",
+    "Freeze all native identities, exclusions, splits, scorer mathematics, resource budget and reference result tables before exposing test feedback.",
+    "Verify fresh-context/workspace/fold-state separation, exact algorithm-code allowlists and evaluator-only aggregation before claiming protected scores.",
+    "Independent reviewers must verify the complete scientific specification and primary-source identities. Changes to the assay require renewed review.",
+    "Implement and validate source ingestion, isolated runner, scorer and competent baselines; identity permutations, label leakage, missing data and numerical edge cases must fail.",
+    "Execute the untouched official reproduction where possible and a clearly labelled corrected reconstruction where necessary, with observed resource use and uncertainty.",
+    "Only subsequent benchmark runs and independent scientific review may establish results or scientific qualification."
+  ],
+  "paper": {
+    "title": "Interactions across hemispheres in prefrontal cortex reflect global cognitive processing",
+    "doi": "10.1038/s41467-026-71725-0",
+    "venue": "Nature Communications",
+    "published": "2026-04-11",
+    "pmcid": "PMC13247044",
+    "url": "https://doi.org/10.1038/s41467-026-71725-0",
+    "primary_source_url": "https://www.nature.com/articles/s41467-026-71725-0"
+  },
+  "scientific_unit": {
+    "family": "One paper-derived empirical assay family, not 42 independent benchmark families or three A/B/improvement tasks.",
+    "question": "Do covariance patterns shared between bilateral PFC populations explain more pupil-linked arousal than patterns confined to either hemisphere, and does that advantage survive protected prediction?",
+    "complete_support": "All 42 simultaneous bilateral PFC recording sessions: Pe 16, Wa 10, Sa 16, across three male rhesus macaques. Reproduce the paper's 41-session pupil analysis after its stated one-session Wa pupil-variance exclusion; include all 42 source sessions in the new protected assay unless source-invalid observations fail frozen, outcome-independent eligibility.",
+    "independence": "42 sessions are nested within three animals; two hemispheres and many neurons are not independent animals. No claim of population-general or human performance.",
+    "scope": "Main empirical covariance (% shared variance and dimensionality) and pupil association results, including one-latent and within-animal session-shuffle controls. Every declared source session is included. This is a full empirical assay, not a small convenient exemplar.",
+    "outside_scope": "Simulation recovery under varied generative geometry and neuronal sampling, raw waveform resorting, every supplementary figure, causal arousal manipulation and cross-animal neural-channel transfer are not claimed reproduced."
+  },
+  "data": {
+    "doi": "10.1184/R1/31431415.v1",
+    "url": "https://api.figshare.com/v2/articles/31431415",
+    "version": 1,
+    "license": "CC-BY-4.0",
+    "selected_files": 49,
+    "selected_bytes": 1583332461,
+    "selection": "Exactly all 42 *_sort0.2.mat correlation-session files, all three cmp_*.mat array geometries, all three pupil_*.mat session collections, and the corr_sessions README file id 62236873. The other study-specific transformed session files in the 92-file deposit are not extra subjects and are not silently substituted.",
+    "schema": "Spike event times from firstspike+cumulative spiketimesdiff at 30 kHz, spikeinfo channel/sort codes, trialcodes and per-trial angle/timing; pupil behav session-name and trial arrays; array identities and geometry. Pe dat+testDat must be concatenated, not treated as a benchmark train/test split.",
+    "identity": "Native session stem, animal, original dat/testDat trial origin and ordinal, original hardware channel and hemisphere form keys. Exact per-session counts and cross-modal trial bijection must be materialized and frozen. Never join only by array position or infer pupil alignment from equal lengths.",
+    "coverage": "Source inventory must reconcile 42 sessions and 3+3 auxiliary files before any scoring. Pupil exclusion must be listed by native Wa session ID with the paper's IQR calculation and pre/post counts; no identity was guessed from metadata.",
+    "native_support_status": "The complete source inventory is identified by publisher metadata. Scientific MAT payloads, native identities, cross-modal joins and publisher checksums have not been verified by benchmark ingestion. Metadata alone does not establish runnable support.",
+    "source_inventory": {
+      "version": 1,
+      "selected_files": 49,
+      "publisher_listed_original_bytes": 1583332461,
+      "payload_verified": false,
+      "files": [
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236927",
+          "file_id": 62236927,
+          "name": "Pe180714_sort0.2.mat",
+          "publisher_md5": "93db2bfae700217641ee5ccaaabba4c8",
+          "publisher_size_bytes": 79354394,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236867",
+          "file_id": 62236867,
+          "name": "Sa191227_sort0.2.mat",
+          "publisher_md5": "4a48c14522effc23ba223f3e7f8ae99d",
+          "publisher_size_bytes": 9128006,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236870",
+          "file_id": 62236870,
+          "name": "Sa191209_sort0.2.mat",
+          "publisher_md5": "f102e10a3a28c4ad10cf7813a729bb43",
+          "publisher_size_bytes": 14613589,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236888",
+          "file_id": 62236888,
+          "name": "Wa180220_sort0.2.mat",
+          "publisher_md5": "adaee7def9d1ca1e7c83221fb525bafb",
+          "publisher_size_bytes": 23392686,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236921",
+          "file_id": 62236921,
+          "name": "Pe180726_sort0.2.mat",
+          "publisher_md5": "afa3e0b3b6a90109c0e305c86dc28532",
+          "publisher_size_bytes": 45371798,
+          "role": "neural_session"
+        },
+        {
+          "animal": null,
+          "download_url": "https://ndownloader.figshare.com/files/62236864",
+          "file_id": 62236864,
+          "name": "cmp_wakko.mat",
+          "publisher_md5": "4d33c1561181bb5189bb4088b0448c80",
+          "publisher_size_bytes": 17720,
+          "role": "geometry"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236897",
+          "file_id": 62236897,
+          "name": "Wa180207_sort0.2.mat",
+          "publisher_md5": "44b79568800f0c998ada70353441713d",
+          "publisher_size_bytes": 28783656,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236915",
+          "file_id": 62236915,
+          "name": "Pe180718_sort0.2.mat",
+          "publisher_md5": "f440e88823d2f57883112acca1ff2a04",
+          "publisher_size_bytes": 34410878,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236882",
+          "file_id": 62236882,
+          "name": "Sa191127_sort0.2.mat",
+          "publisher_md5": "523ce80454fbb042927388ea5e98d1a6",
+          "publisher_size_bytes": 17903323,
+          "role": "neural_session"
+        },
+        {
+          "animal": null,
+          "download_url": "https://ndownloader.figshare.com/files/62236954",
+          "file_id": 62236954,
+          "name": "pupil_pepe.mat",
+          "publisher_md5": "6348f324a2e031e8939a1915d4d1601d",
+          "publisher_size_bytes": 73943227,
+          "role": "pupil"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236930",
+          "file_id": 62236930,
+          "name": "Pe180723_sort0.2.mat",
+          "publisher_md5": "62a4ea24d1414024a6ba5516640aac5d",
+          "publisher_size_bytes": 43393307,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236885",
+          "file_id": 62236885,
+          "name": "Sa191210_sort0.2.mat",
+          "publisher_md5": "0dcecba455bb8cefdccc5067d68acda6",
+          "publisher_size_bytes": 13688550,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236957",
+          "file_id": 62236957,
+          "name": "Pe180720_sort0.2.mat",
+          "publisher_md5": "fb2c2f28d0583092441e7be8707edf86",
+          "publisher_size_bytes": 57783531,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236909",
+          "file_id": 62236909,
+          "name": "Sa191221_sort0.2.mat",
+          "publisher_md5": "afea56b12c259ed30ecebad3d652cac9",
+          "publisher_size_bytes": 24195491,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236969",
+          "file_id": 62236969,
+          "name": "Pe180712_sort0.2.mat",
+          "publisher_md5": "c94b0838fc60c44283da4272bd884a9d",
+          "publisher_size_bytes": 58278479,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236876",
+          "file_id": 62236876,
+          "name": "Sa191228_sort0.2.mat",
+          "publisher_md5": "58799ec5bdb033b3d19ac383e2b4dc29",
+          "publisher_size_bytes": 11430547,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236942",
+          "file_id": 62236942,
+          "name": "Sa191206_sort0.2.mat",
+          "publisher_md5": "f0cf1de005019eb265892e31e22e2b45",
+          "publisher_size_bytes": 41983645,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236900",
+          "file_id": 62236900,
+          "name": "Sa191203_sort0.2.mat",
+          "publisher_md5": "05973dc94c76bf822c04bd4b5553a1dd",
+          "publisher_size_bytes": 23887287,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236981",
+          "file_id": 62236981,
+          "name": "Pe180730_sort0.2.mat",
+          "publisher_md5": "afb0657110df2a68b2b3045c3979b33f",
+          "publisher_size_bytes": 55843978,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236906",
+          "file_id": 62236906,
+          "name": "Wa180218_sort0.2.mat",
+          "publisher_md5": "dc641fcdfa3dd6fab927f3d91c7b65da",
+          "publisher_size_bytes": 23180646,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236960",
+          "file_id": 62236960,
+          "name": "Pe180725_sort0.2.mat",
+          "publisher_md5": "14779c58e9b1585fef4cc8aac9be7ec3",
+          "publisher_size_bytes": 39637075,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236894",
+          "file_id": 62236894,
+          "name": "Pe180717_sort0.2.mat",
+          "publisher_md5": "8e40768b1acfb18b620c4a6abf95083f",
+          "publisher_size_bytes": 12101604,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62237002",
+          "file_id": 62237002,
+          "name": "Wa180211_sort0.2.mat",
+          "publisher_md5": "855ba8ba4dc860b0b4f51d25161605e2",
+          "publisher_size_bytes": 58202648,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236945",
+          "file_id": 62236945,
+          "name": "Sa191224_sort0.2.mat",
+          "publisher_md5": "ebac9dbb667b849533e82ef1ffef87a9",
+          "publisher_size_bytes": 30036032,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236951",
+          "file_id": 62236951,
+          "name": "Pe180801_sort0.2.mat",
+          "publisher_md5": "503bba5fe9837f6e1b1aa812137d6d12",
+          "publisher_size_bytes": 32783056,
+          "role": "neural_session"
+        },
+        {
+          "animal": null,
+          "download_url": "https://ndownloader.figshare.com/files/62236873",
+          "file_id": 62236873,
+          "name": "README.md",
+          "publisher_md5": "1ac088c340a1e7dc51f8cee563ff6729",
+          "publisher_size_bytes": 3190,
+          "role": "source_readme"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236963",
+          "file_id": 62236963,
+          "name": "Sa191211_sort0.2.mat",
+          "publisher_md5": "d21414a8137e5dfb93730f1351e252d7",
+          "publisher_size_bytes": 33051440,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236987",
+          "file_id": 62236987,
+          "name": "Pe180722_sort0.2.mat",
+          "publisher_md5": "732e47a91976410ad57daabcb296c77f",
+          "publisher_size_bytes": 39496482,
+          "role": "neural_session"
+        },
+        {
+          "animal": null,
+          "download_url": "https://ndownloader.figshare.com/files/62236879",
+          "file_id": 62236879,
+          "name": "cmp_satchel.mat",
+          "publisher_md5": "70331252251fe70481279c2f31249c83",
+          "publisher_size_bytes": 18132,
+          "role": "geometry"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236936",
+          "file_id": 62236936,
+          "name": "Sa191204_sort0.2.mat",
+          "publisher_md5": "d0eb760a47001f25eb9e30b37955a0e8",
+          "publisher_size_bytes": 25175337,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62237020",
+          "file_id": 62237020,
+          "name": "Pe180719_sort0.2.mat",
+          "publisher_md5": "8a003fe2191cbff32f9d006581b58b92",
+          "publisher_size_bytes": 88850886,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236948",
+          "file_id": 62236948,
+          "name": "Wa180221_sort0.2.mat",
+          "publisher_md5": "bde974c287d59c4e45280cb3708021fe",
+          "publisher_size_bytes": 28120060,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236924",
+          "file_id": 62236924,
+          "name": "Sa191214_sort0.2.mat",
+          "publisher_md5": "3ad615f6f5b9dae88832eeb6e0ce41a5",
+          "publisher_size_bytes": 20605718,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236912",
+          "file_id": 62236912,
+          "name": "Sa191226_sort0.2.mat",
+          "publisher_md5": "635f80c7c418db82dfdac936cc5221b4",
+          "publisher_size_bytes": 16476137,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236993",
+          "file_id": 62236993,
+          "name": "Sa191208_sort0.2.mat",
+          "publisher_md5": "d67c91e39cfb144dd078526fd1ef24e2",
+          "publisher_size_bytes": 34249019,
+          "role": "neural_session"
+        },
+        {
+          "animal": null,
+          "download_url": "https://ndownloader.figshare.com/files/62236972",
+          "file_id": 62236972,
+          "name": "pupil_wakko.mat",
+          "publisher_md5": "14c376e05678717ea447e6f1d436f0fa",
+          "publisher_size_bytes": 25845662,
+          "role": "pupil"
+        },
+        {
+          "animal": null,
+          "download_url": "https://ndownloader.figshare.com/files/62236891",
+          "file_id": 62236891,
+          "name": "cmp_pepe.mat",
+          "publisher_md5": "2d3ae5ef3ac7c1a86cb8355329205b9f",
+          "publisher_size_bytes": 17526,
+          "role": "geometry"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236933",
+          "file_id": 62236933,
+          "name": "Wa180210_sort0.2.mat",
+          "publisher_md5": "80128584c15e8267239d47ac017a1423",
+          "publisher_size_bytes": 21831467,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236939",
+          "file_id": 62236939,
+          "name": "Wa180222_sort0.2.mat",
+          "publisher_md5": "d7b5aa26e8a9982018013059b0b40a16",
+          "publisher_size_bytes": 21333192,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62237014",
+          "file_id": 62237014,
+          "name": "Pe180724_sort0.2.mat",
+          "publisher_md5": "1e0f52c96805a160e43a4bbf70681780",
+          "publisher_size_bytes": 40188553,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236984",
+          "file_id": 62236984,
+          "name": "Sa191202_sort0.2.mat",
+          "publisher_md5": "48cff8bb9cfad6ae5a0e81ea78053363",
+          "publisher_size_bytes": 25554118,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236990",
+          "file_id": 62236990,
+          "name": "Wa180219_sort0.2.mat",
+          "publisher_md5": "84c8e5819f8b26ceeb3d8f889fba446c",
+          "publisher_size_bytes": 25340956,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62237011",
+          "file_id": 62237011,
+          "name": "Sa191207_sort0.2.mat",
+          "publisher_md5": "27fc5e5ccc2d1ac72c66bde46ad1a07f",
+          "publisher_size_bytes": 31210486,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62237029",
+          "file_id": 62237029,
+          "name": "Pe180728_sort0.2.mat",
+          "publisher_md5": "9888b272220ab295b11fec257af8ffbb",
+          "publisher_size_bytes": 46656048,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62237038",
+          "file_id": 62237038,
+          "name": "Pe180713_sort0.2.mat",
+          "publisher_md5": "f71de4573dfe38ac52975fc4489cf220",
+          "publisher_size_bytes": 47029255,
+          "role": "neural_session"
+        },
+        {
+          "animal": null,
+          "download_url": "https://ndownloader.figshare.com/files/62237068",
+          "file_id": 62237068,
+          "name": "pupil_satchel.mat",
+          "publisher_md5": "d4139cf428dbd39c19020b41dea1741c",
+          "publisher_size_bytes": 82219754,
+          "role": "pupil"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62237053",
+          "file_id": 62237053,
+          "name": "Pe180721_sort0.2.mat",
+          "publisher_md5": "3ff34e599da9480e1de1dd6d656d4c38",
+          "publisher_size_bytes": 49869256,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236978",
+          "file_id": 62236978,
+          "name": "Wa180227_sort0.2.mat",
+          "publisher_md5": "2c71c5f046367057a080a327fc53b807",
+          "publisher_size_bytes": 19739959,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236918",
+          "file_id": 62236918,
+          "name": "Wa180209_sort0.2.mat",
+          "publisher_md5": "02cff5f165a27b14dd29fdf29817e334",
+          "publisher_size_bytes": 7104675,
+          "role": "neural_session"
+        }
+      ]
+    }
+  },
+  "code": {
+    "model_repo": "https://github.com/SmithLabNeuro/pcca_fa",
+    "model_release": "v1.1",
+    "model_commit": "b6255d97a99f73459d49952fe28ff46a69e9a40b",
+    "model_archive_doi": "10.5281/zenodo.18913386",
+    "model_archive_md5": "c6caa0fc4f37624f1225efd7ed5c3548",
+    "model_archive_bytes": 671647,
+    "model_license": "Apache-2.0 in LICENSE and Zenodo metadata",
+    "figures_repo": "https://github.com/meganmcd13/figures-dual-pfc",
+    "figures_release": "v1.0",
+    "figures_commit": "2d749c185b0f0e9944ce2baf9820b6da13c1d75b",
+    "figures_archive_doi": "10.5281/zenodo.18929016",
+    "figures_archive_md5": "35e37e4614f290abf3707df2d365570d",
+    "figures_archive_bytes": 85596,
+    "figures_license": "Apache-2.0 declared in release .zenodo.json and archive metadata; no top-level LICENSE in the inspected tree.",
+    "scientific_version_match": "Default heads d13882eca2eee8cdb5e6ee4b0047b32b01f08754 /3b59632fb5b84c377d82a16ae7dd491e70eba4b5 were inspected. Complete recursive tree comparison with release tags finds only README and .zenodo metadata changes; every scientific-code blob matches release. Do not pin to moving main.",
+    "submodules": [
+      {
+        "repo": "https://github.com/meganmcd13/cca",
+        "commit": "8ea46fa6fd9432e18155105d664b5addf9e38ac7",
+        "license": "No LICENSE in complete pinned tree; Apache scope over this dependency not established."
+      },
+      {
+        "repo": "https://github.com/meganmcd13/fa",
+        "commit": "21ac16d2671ad6eef133261f7ef5555f68471a57",
+        "license": "No LICENSE in complete pinned tree; Apache scope over this dependency not established."
+      }
+    ],
+    "environment": "MATLAB preprocessing and Python numpy/scipy/scikit-learn/joblib/psutil/tqdm model analysis. environment.yml is not a solved environment lock; MATLAB toolbox/license and package versions require later executable validation.",
+    "provenance_limit": "Release and submodule references identify the selected commits and scientific files. Some source API responses reported the requested commit in a top-level SHA field; that response value is not itself authentication of a Git tree root or a missing release commit object. Verify exact commit, recursive tree, blob and archive bindings before acquisition or execution."
+  },
+  "reproduction": {
+    "preprocessing": [
+      "Aggregate source-valid sorted spikes by electrode as multiunit activity; preserve published noise filtering and channel bank mappings. Wa left/right mapping differs from Pe/Sa.",
+      "Reconstruct target-onset-to-go-cue QC, mean rate >=2 Hz and condition-averaged Fano factor <=10, followed by crosstalk exclusion. The Methods' 100 µs versus code's 1 ms coincidence window and at-least 20% versus strict >0.2 threshold need explicit adjudication. Iterative removal updates the reduced coincidence matrix.",
+      "Bin target-offset to cue at 10 ms, remove first 20 bins, align to minimum shared delay length and sum last 100 bins (1 s). Validate all timing units and enough bins before use; do not substitute trial-specific last 1 s.",
+      "Subtract per-target-angle mean over the full session, then centered 25-trial moving mean with truncated edges; this is historical descriptive preprocessing and not protected-prediction preprocessing.",
+      "Use pupil median filtering with 50 samples and truncated edges, average target-offset-to-cue pupil trace, subtract centered 25-trial mean, then published session scaling. Source code uses filtered trace, whereas Methods wording describes subtracting a median-filter value; report the discrepancy.",
+      "Fit joint Gaussian pCCA-FA with shared across-area factors and separate within-area factors plus diagonal noise. Cross-validate dimensions 1..min(15,appropriate channel count) independently for each of three dimensionalities using ten shuffled folds, then final session fit.",
+      "Fit separate OLS regressions of fast pupil signal onto across, right-within and left-within posterior latents. The release compute_pupil_pred.py has CROSSVAL=False; these are fitted descriptive R² values. Repeat one-latent and same-animal cross-session controls."
+    ],
+    "outputs": [
+      "Per-native-session covariance matrices, across/within/private variance fractions,95%-variance dimensionalities, chosen dimensions and likelihoods.",
+      "Per-pupil-session observed/predicted pupil arrays and fitted R² for all three latent groups; separate one-latent control.",
+      "All within-animal cross-session fits (Pe 240,Sa 240,Wa 72 after stated exclusion), with paired source session identities and truncation lengths.",
+      "Animal-stratified and pooled results with exact historical exclusions and separate clustered uncertainty analysis."
+    ],
+    "quantitative_targets": [
+      {
+        "id": "P01",
+        "status": "primary",
+        "source": "Fig 4b caption and Results, across-/within-area interactions",
+        "statistic": "Mean across/within % shared variance",
+        "published": {
+          "across_percent": "11.50",
+          "within_percent": "7.66",
+          "p": "2.6e-7"
+        },
+        "denominator": "84 brain areas,2 per 42 sessions; Pe 32/Wa 20/Sa 32 areas",
+        "test": "Paired one-tailed t-test across-versus-within",
+        "strata": {
+          "Pe": {
+            "p": "0.00048",
+            "areas": 32,
+            "sessions": 16
+          },
+          "Wa": {
+            "p": "0.40",
+            "areas": 20,
+            "sessions": 10
+          },
+          "Sa": {
+            "p": "4.2e-6",
+            "areas": 32,
+            "sessions": 16
+          }
+        },
+        "required": "Both hemisphere-specific variance fractions for every session; pooled and all animal strata. Per-animal means not explicitly quoted in inspected caption must be computed, not inferred from pooled means."
+      },
+      {
+        "id": "P02",
+        "status": "primary",
+        "source": "Fig 4c caption and Methods shared dimensionality",
+        "statistic": "Mean across/within dshared (95% shared covariance threshold)",
+        "published": {
+          "across": "5.41",
+          "within": "4.06",
+          "p": "3.1e-6"
+        },
+        "denominator": "84 areas/42 sessions, paired within area",
+        "test": "Paired one-tailed t-test",
+        "strata": {
+          "Pe": {
+            "p": "0.0013",
+            "areas": 32,
+            "sessions": 16
+          },
+          "Wa": {
+            "p": "0.32",
+            "areas": 20,
+            "sessions": 10
+          },
+          "Sa": {
+            "p": "9.0e-5",
+            "areas": 32,
+            "sessions": 16
+          }
+        },
+        "required": "Chosen latent dimensions,95%covariance-spectrum dimensions and across/within contrasts per area/session; do not compare raw latent orientations."
+      },
+      {
+        "id": "P03",
+        "status": "primary",
+        "source": "Fig 6c caption and Results pupil-linked arousal",
+        "statistic": "Mean full-session fitted fast-pupil R²",
+        "published": {
+          "across": "0.25",
+          "within_right": "0.038",
+          "within_left": "0.030",
+          "p": "1.3e-30"
+        },
+        "denominator": "41 pupil sessions after one Wa exclusion; comparison uses 82 area contrasts=2 per 41 sessions",
+        "test": "One-tailed t-test on per-session R² differences, historical pooled-area analysis",
+        "strata": {
+          "Pe": {
+            "p": "6.7e-12",
+            "areas": 32,
+            "sessions": 16
+          },
+          "Wa": {
+            "p": "1.3e-8",
+            "areas": 18,
+            "sessions": 9
+          },
+          "Sa": {
+            "p": "2.7e-21",
+            "areas": 32,
+            "sessions": 16
+          }
+        },
+        "required": "All 41 session target/prediction arrays for all 3 latent groups plus every animal stratum. These are descriptive fitted values, not held-out prediction."
+      },
+      {
+        "id": "P04",
+        "status": "secondary control",
+        "source": "Methods Explaining variance in pupil diameter",
+        "statistic": "One-latent across-versus-within pupil contrast",
+        "published": {
+          "p": "4.3e-22"
+        },
+        "denominator": "82 areas from 41 sessions; one predictor for each latent group",
+        "test": "One-tailed t-test on differences in R²",
+        "required": "All session/group R² and selected first-latent convention. No scalar mean R² quoted here; reference must establish it."
+      },
+      {
+        "id": "P05",
+        "status": "secondary control",
+        "source": "Methods pupil chance distribution; Fig 6c grey bars",
+        "statistic": "Same-animal mismatched-session regression distribution",
+        "published": {
+          "Pe_pair_fits": 240,
+          "Wa_pair_fits": 72,
+          "Sa_pair_fits": 240,
+          "interval": "95%"
+        },
+        "denominator": "Ordered distinct source/target session pairs 16×15,9×8,16×15; equalized trial count by truncating longer session",
+        "test": "Empirical 95% shuffle interval, not independent new subjects",
+        "required": "All pair identities, truncation lengths, full empirical distributions and interval endpoints. Numeric interval endpoints are not quoted in retained prose; do not invent."
+      },
+      {
+        "id": "P06",
+        "status": "example, not aggregate criterion",
+        "source": "Fig 4a caption, same MonkeyPe example as Fig 2c",
+        "statistic": "Example across/within % shared variance",
+        "published": {
+          "right_across": "14.97",
+          "left_across": "17.47",
+          "right_within": "5.65",
+          "left_within": "7.47"
+        },
+        "denominator": "One session;79 right and 83 left neurons; illustration shows 14 of each",
+        "test": "Descriptive example only",
+        "required": "Resolve exact native example identity before scoring. Never search sessions for closest numerical match; all 42 remain main assay."
+      },
+      {
+        "id": "P07",
+        "status": "example, not aggregate criterion",
+        "source": "Fig 6b caption",
+        "statistic": "Example MonkeySa full-session fitted pupil R²",
+        "published": {
+          "across": "0.35",
+          "within_right": "0.013",
+          "within_left": "0.052",
+          "displayed_trials": 40,
+          "session_trials": 1258
+        },
+        "denominator": "One source session, all 1258 trials;40 shown only for illustration",
+        "test": "Descriptive fitted example",
+        "required": "Pin native session identity; do not substitute 40 displayed trials for full session."
+      }
+    ],
+    "scoring": "Score complete structured outputs and independently recomputed covariance/variance identities, not prose agreement or copied aggregate numbers. Report absolute discrepancies from published rounded means and log10p. Numerical acceptance tolerances remain unset until an independently rerun reference and observed numerical variation are available; published rounding intervals are a diagnostic, not manufactured ground truth.",
+    "invariances": "Compare fitted covariance, sorted variance spectra, predicted pupil values and R². Latent sign/rotation and equivalent factor permutations must not fail a correct reproduction.",
+    "truth_limit": "No original analysis has been executed here and no numerical target has been re-established from data.",
+    "paper_claim_ledger": {
+      "interpretation": "Published values are contextual historical reproduction targets at the stated precision, never established data-derived reference truth, numerical pass tolerances, or protected performance scores to beat.",
+      "completeness": "Finite ledger covers the principal quantitative and curve outputs of the declared complete empirical assay. A missing scalar in the publication remains explicitly unavailable; it is not invented or replaced with a smaller easier task.",
+      "acceptance": "Each row requires native-unit outputs, complete eligible denominator and independently rerun reference before numerical acceptance thresholds are fixed. Main endpoints may not be dropped because source code/reference is missing.",
+      "rows": [
+        {
+          "id": "P01",
+          "status": "primary",
+          "source": "Fig 4b caption and Results, across-/within-area interactions",
+          "statistic": "Mean across/within % shared variance",
+          "published": {
+            "across_percent": "11.50",
+            "within_percent": "7.66",
+            "p": "2.6e-7"
+          },
+          "denominator": "84 brain areas,2 per 42 sessions; Pe 32/Wa 20/Sa 32 areas",
+          "test": "Paired one-tailed t-test across-versus-within",
+          "strata": {
+            "Pe": {
+              "p": "0.00048",
+              "areas": 32,
+              "sessions": 16
+            },
+            "Wa": {
+              "p": "0.40",
+              "areas": 20,
+              "sessions": 10
+            },
+            "Sa": {
+              "p": "4.2e-6",
+              "areas": 32,
+              "sessions": 16
+            }
+          },
+          "required": "Both hemisphere-specific variance fractions for every session; pooled and all animal strata. Per-animal means not explicitly quoted in inspected caption must be computed, not inferred from pooled means."
+        },
+        {
+          "id": "P02",
+          "status": "primary",
+          "source": "Fig 4c caption and Methods shared dimensionality",
+          "statistic": "Mean across/within dshared (95% shared covariance threshold)",
+          "published": {
+            "across": "5.41",
+            "within": "4.06",
+            "p": "3.1e-6"
+          },
+          "denominator": "84 areas/42 sessions, paired within area",
+          "test": "Paired one-tailed t-test",
+          "strata": {
+            "Pe": {
+              "p": "0.0013",
+              "areas": 32,
+              "sessions": 16
+            },
+            "Wa": {
+              "p": "0.32",
+              "areas": 20,
+              "sessions": 10
+            },
+            "Sa": {
+              "p": "9.0e-5",
+              "areas": 32,
+              "sessions": 16
+            }
+          },
+          "required": "Chosen latent dimensions,95%covariance-spectrum dimensions and across/within contrasts per area/session; do not compare raw latent orientations."
+        },
+        {
+          "id": "P03",
+          "status": "primary",
+          "source": "Fig 6c caption and Results pupil-linked arousal",
+          "statistic": "Mean full-session fitted fast-pupil R²",
+          "published": {
+            "across": "0.25",
+            "within_right": "0.038",
+            "within_left": "0.030",
+            "p": "1.3e-30"
+          },
+          "denominator": "41 pupil sessions after one Wa exclusion; comparison uses 82 area contrasts=2 per 41 sessions",
+          "test": "One-tailed t-test on per-session R² differences, historical pooled-area analysis",
+          "strata": {
+            "Pe": {
+              "p": "6.7e-12",
+              "areas": 32,
+              "sessions": 16
+            },
+            "Wa": {
+              "p": "1.3e-8",
+              "areas": 18,
+              "sessions": 9
+            },
+            "Sa": {
+              "p": "2.7e-21",
+              "areas": 32,
+              "sessions": 16
+            }
+          },
+          "required": "All 41 session target/prediction arrays for all 3 latent groups plus every animal stratum. These are descriptive fitted values, not held-out prediction."
+        },
+        {
+          "id": "P04",
+          "status": "secondary control",
+          "source": "Methods Explaining variance in pupil diameter",
+          "statistic": "One-latent across-versus-within pupil contrast",
+          "published": {
+            "p": "4.3e-22"
+          },
+          "denominator": "82 areas from 41 sessions; one predictor for each latent group",
+          "test": "One-tailed t-test on differences in R²",
+          "required": "All session/group R² and selected first-latent convention. No scalar mean R² quoted here; reference must establish it."
+        },
+        {
+          "id": "P05",
+          "status": "secondary control",
+          "source": "Methods pupil chance distribution; Fig 6c grey bars",
+          "statistic": "Same-animal mismatched-session regression distribution",
+          "published": {
+            "Pe_pair_fits": 240,
+            "Wa_pair_fits": 72,
+            "Sa_pair_fits": 240,
+            "interval": "95%"
+          },
+          "denominator": "Ordered distinct source/target session pairs 16×15,9×8,16×15; equalized trial count by truncating longer session",
+          "test": "Empirical 95% shuffle interval, not independent new subjects",
+          "required": "All pair identities, truncation lengths, full empirical distributions and interval endpoints. Numeric interval endpoints are not quoted in retained prose; do not invent."
+        },
+        {
+          "id": "P06",
+          "status": "example, not aggregate criterion",
+          "source": "Fig 4a caption, same MonkeyPe example as Fig 2c",
+          "statistic": "Example across/within % shared variance",
+          "published": {
+            "right_across": "14.97",
+            "left_across": "17.47",
+            "right_within": "5.65",
+            "left_within": "7.47"
+          },
+          "denominator": "One session;79 right and 83 left neurons; illustration shows 14 of each",
+          "test": "Descriptive example only",
+          "required": "Resolve exact native example identity before scoring. Never search sessions for closest numerical match; all 42 remain main assay."
+        },
+        {
+          "id": "P07",
+          "status": "example, not aggregate criterion",
+          "source": "Fig 6b caption",
+          "statistic": "Example MonkeySa full-session fitted pupil R²",
+          "published": {
+            "across": "0.35",
+            "within_right": "0.013",
+            "within_left": "0.052",
+            "displayed_trials": 40,
+            "session_trials": 1258
+          },
+          "denominator": "One source session, all 1258 trials;40 shown only for illustration",
+          "test": "Descriptive fitted example",
+          "required": "Pin native session identity; do not substitute 40 displayed trials for full session."
+        }
+      ],
+      "other_required_outputs": "Complete 42-session covariance matrices, variance decomposition and spectra;41-session historical pupil fits and controls; all 3 animal strata. These define the full declared empirical assay.",
+      "out_of_scope_sections": [
+        "Figures 1 and 3 generative exposition and simulation recovery sweeps",
+        "Figure 5 simulated latent-geometry/angle recovery",
+        "Exhaustive supplementary model comparisons and channel subsampling/geometry perturbations",
+        "Supplementary evoked-pupil/manual-peak analyses",
+        "Raw waveform sorting and causal arousal manipulation"
+      ],
+      "population_warning": "Reported pooled-area p-values reproduce the paper's historical analysis; they do not turn 84 or 82 areas into independent animals.",
+      "source_url": "https://www.nature.com/articles/s41467-026-71725-0"
+    }
+  },
+  "improvement": {
+    "new_estimand": "Held-out raw delay-averaged pupil prediction from contemporaneous bilateral neural counts within the same recorded sessions. This differs intentionally from historical full-session fast-component fitted R²; it may not be compared directly to 0.25 as an improvement over the paper.",
+    "cohort": "All 42 sessions and all source-valid paired correct trials, including the historically excluded Wa session unless its source observations fail fixed technical validity. Publish both 41-session historical subset diagnostic and complete 42-session protected score; the latter remains primary.",
+    "outer_split": "Five contiguous chronological blocks per session, assigned using original complete trial ordinal before QC. Each block is held out once; train on other blocks with a 12-trial guard on either side. This is blocked interpolation, not forecasting or a new-animal split. Trial views, time bins and hemisphere signals never cross partitions.",
+    "inner_split": "Nested four chronological training blocks with the same guard, formed using retained original ordinals. All channel eligibility, condition means, drift nuisance fits, scale estimates, latent dimensions and regression penalties are fit only on the corresponding inner training partition. No protected pupil labels, test covariance refitting or global feature selection.",
+    "target_processing": "Use per-trial median-filtered delay-average pupil, with all filtering confined to that individual observed trace. Score raw units after inverse training-only normalization. Do not subtract a moving average of held-out pupil labels. Any target-angle/linear-trial-index nuisance fit is trained only on available training labels and remains part of prediction.",
+    "neural_processing": "QC and channel decisions based only on training observations; use fixed publisher event codes and task timing, training-only angle means, optional linear drift fit and scaling. No centered cross-boundary trial smoother or all-session factor fit. Source-only artifact masks remain disclosed historical preprocessing.",
+    "baselines": [
+      "Training-mean pupil and training-only angle+linear-trial-index nuisance regression.",
+      "Ridge regression on all valid bilateral counts, selected in inner folds; separate unilateral ridge ablations.",
+      "PCA+ridge and regularized CCA+ridge with equal tuning budgets.",
+      "Independently reconstructed pCCA-FA across-factor+ridge, within-factor+ridge and all-factor+ridge, dimensions selected only inside training. This is an independently implemented protected baseline, not untouched official performance."
+    ],
+    "primary_metric": "For each session, concatenate out-of-fold predictions and compute untruncated R²=1-SSE/sum((y-mean(y))²); do not clip negative R². Average sessions within each animal, then average the three animal means equally. Also report pooled SSE and training-mean skill as diagnostics. Constant-target source cases fail a frozen eligibility audit; they are not silently discarded after scoring.",
+    "improvement_endpoint": "Paired delta of primary R² relative to the strongest prespecified competent baseline chosen using development/inner validation only. Claim improvement only if paired 95% conditional session-block uncertainty lower bound>0, each animal's delta is reported, and no animal has a significant adverse change under the frozen analysis. This supports these recorded animals, not broad species generalization.",
+    "uncertainty": "Report all three animal effects, per-session paired effects and within-animal session/block bootstrap intervals (10000 fixed-seed resamples after method freeze). With only three animals, mark animal-population uncertainty unresolved; bootstrap precision within this cohort is not proof of population-level superiority.",
+    "nulls": "Trial-block circular shifts within session and same-animal mismatched sessions must destroy protected predictive benefit; training-label permutation and intercept-only controls expose leakage. Permutation/shift construction is evaluator-owned and obeys the same splits.",
+    "resource_fairness": "Identical full assay and freeze-time CPU/GPU/RAM/walltime/search budget across candidates and baselines. No subset-based promotion. Budget must be measured and frozen after full-assay preflight; no claimed runtime now.",
+    "submission": "Frozen fit/predict program, source hashes, train-only preprocessing state, hyperparameter trace and predictions for every expected native case; hidden evaluator computes scores.",
+    "authoring_protocol": "information_control governs every fold/condition: fresh authoring with only that training partition, frozen per-fold code, fresh fit state and no cross-fold artifact/score feedback."
+  },
+  "holds": [
+    {
+      "severity": "blocking",
+      "id": "coincidence-time-scale",
+      "evidence": "Methods specify 100 µs coincidences and 20% or more. The released preprocessing bins at 1 ms, the coincidence helper uses binned count cross-products, and the removal threshold is strictly >0.2. These are source-policy distinctions requiring validation.",
+      "impact": "Published and implementation channel-selection rules can differ.",
+      "resolution": "Resolve the 100 µs versus 1 ms and inclusive versus strict threshold policies using exact source provenance; report source-faithful alternatives without tuning exclusions to published outcomes."
+    },
+    {
+      "severity": "blocking",
+      "id": "submodule-rights",
+      "evidence": "Complete pinned cca and fa trees lack LICENSE files; parent Apache license does not establish separate dependency rights.",
+      "resolution": "Confirm rights or rebuild independently for A/protected baselines; B distribution remains held."
+    },
+    {
+      "severity": "blocking",
+      "id": "data-materialization-and-trial-alignment",
+      "evidence": "Only bounded metadata/README/code were inspected; actual native .mat structures and counts not verified.",
+      "resolution": "All 49 files, full 42 sessions, integrity, timing, cross-modal bijection and documented 41-session exclusion must be verified before runner/scorer admission."
+    },
+    {
+      "severity": "blocking",
+      "id": "reference-and-runtime",
+      "evidence": "No run, environment lock, numerical tolerance, result table or observed runtime exists.",
+      "resolution": "Reference reproduction and competent-baseline execution after source discrepancies are resolved."
+    },
+    {
+      "severity": "scientific",
+      "id": "descriptive-vs-protected",
+      "evidence": "CROSSVAL=False and session-wide factor/preprocessing fits.",
+      "resolution": "Keep historical reproduction and protected new estimand separate; never advertise 0.25 as held-out baseline."
+    },
+    {
+      "severity": "scientific",
+      "id": "pupil-filter-wording",
+      "evidence": "Helper returns median-filtered trace; Methods wording describes subtracting median-filter value.",
+      "resolution": "Keep code-faithful and prose-faithful versions distinct pending clarification."
+    },
+    {
+      "severity": "blocking",
+      "id": "information-control-not-implemented",
+      "evidence": "Complete fresh-context/workspace/fold-state/allowlist design is specified but not exercised by a runner.",
+      "resolution": "Verify denial of target/previous-fold artifacts, immutable code hashes, clean fit states and evaluator-only aggregate before protected runs."
+    }
+  ],
+  "runtime_storage": {
+    "observed_runtime": null,
+    "observed_peak_ram": null,
+    "unpacked_bytes": null,
+    "compute_note": "Original dimension search is up to 15^3×10=33750 fits per session, up to 1,417,500 fold fits over 42 sessions plus final/canonical-correlation fits; channel constraints may reduce this. EM default upper limit 1e6 iterations is a bound, not measured convergence time. Nested protected fits add substantial work; no lightweight claim.",
+    "publisher_listed_original_bytes": 1583332461,
+    "evidence_limit": "No complete benchmark ingestion, reference execution or agent evaluation has established working storage, peak memory or runtime. Publisher file size is not expanded resource feasibility."
+  },
+  "information_control": {
+    "protocol": "Independent historical-reproduction and protected-improvement tracks. Every track, condition and protected outer fold starts a fresh authoring episode and fresh execution state.",
+    "reproduction": {
+      "cohort": "Historical reconstruction covers all 42 bilateral neural sessions and all 41 historically eligible pupil sessions, with the complete declared covariance, dimensionality and pupil-control analyses.",
+      "RA": "Fresh model context/workspace gets paper, specification and complete historical observed data, including outcomes needed for reconstruction. No official code, saved fits or machine-readable answer outputs.",
+      "RB": "Another fresh model context/workspace gets identical historical inputs and budget plus the exact rights-cleared official implementation. Saved original prediction/state/selection answer artifacts remain evaluator-only.",
+      "outputs": "Reproduction results, code, plots, fitted states and transcripts are archived only for reproduction review. They may not enter improvement prompts, examples, filesystem, warm starts, retrieval memory or post-training."
+    },
+    "improvement": {
+      "episode_unit": "For each information condition and each of 5 outer folds, start an independent fresh authoring episode. It receives paper, declared schema and only that outer fold's training features/outcomes, plus allowed algorithm code for B. It may investigate its authorized training data and run nested training-only development. It sees no held-out feature files or outcomes before code freeze.",
+      "why": "A single context seeing all 5 overlapping training sets would learn each later test outcome. Independent per-fold authoring preserves all-cohort out-of-fold coverage without cross-fold label memory. Report performance of the fixed agent/model/prompt/tool-budget protocol across independently authored folds, not one identical program authored after seeing every label.",
+      "freeze": "Freeze each episode's source tree, dependencies, allowed pretrained state, preprocessing specification and model-artifact schema by hash before protected execution. No candidate edits, debugging or new authoring based on protected predictions/logs/scores. Build failures follow a predeclared label-free retry policy or invalidate the episode.",
+      "IA": "Paper and its current outer-training partition only; no official implementation or reproduction artifacts.",
+      "IB": "Same training inputs/budget plus a reviewed official algorithm-code allowlist. Complete raw repository access is not automatic: answer-bearing saved files and hardcoded data-dependent selections are denied. Publish exact excluded/redacted paths, hashes and rationale; label this controlled official-algorithm access, not unrestricted repository access.",
+      "code_hold": "The official algorithm-code allowlist has not been implemented or tested. Manual pupil-peak arrays, full-session factors, saved fits, target-dependent selection and other answer-bearing objects are denied to protected improvement. If algorithm and answer content cannot be separated faithfully and legally, the official-code improvement condition remains blocked; independently authored baseline code does not silently replace it."
+    },
+    "fresh_state": {
+      "author": "New model session/context with no inherited reproduction dialogue, previous fold/condition solutions, retrieval memory, scratchpad or assay-specific adapted weights. Reuse only the declared unchanged base model snapshot.",
+      "filesystem": "New isolated workspace/container/user namespace per track×condition×outerfold. Only explicit input allowlists are mounted. Clear home/tmp, data-bearing package/model caches, notebooks, vector stores, browser sessions, process memory, background workers and serialized fits. Immutable dependency caches require content-addressed audit proving no assay artifacts.",
+      "fit": "Fresh parameters, optimizer, RNG, preprocessing, selected features and latent states for every outer fold and condition. Every inner fold independently fits all transforms/selection/model components on inner-training data; no warm start fitted on its validation outcomes.",
+      "predict": "After code freeze, train in a process that sees only fold-authorized training data. Export a typed model artifact. A separate prediction process receives that artifact plus one held-out case's allowed features at a time; no target, other-fold data, other held-out cases or writable persistent state between cases. This prevents batch test-covariance refitting in the intended inductive task.",
+      "denial": "No shared writable cache, checkpoint, feature selection, fitted parameters, generated code, transcript or score feedback across folds, A/B conditions, or reproduction→improvement. Identical immutable algorithm code is distinct from fitted state."
+    },
+    "denied_artifacts": [
+      "Complete historical source archives containing held-out target observations; reproduction data copies, plots, tables, logs, transcripts and computed answers.",
+      "Full-study fitted nuisance/behavioral value/conflict parameters, pupil fast-component/normalization targets, latent factors, trained weights, selected windows/contacts and manual target-derived constants.",
+      "Original posteriors, decoded states, selected-index files, accuracies and machine-readable answer tables.",
+      "Earlier outer-fold training labels, code, checkpoints, predictions and metrics; another condition's solutions.",
+      "Evaluator native-case maps, held-out labels, reference arrays, null outcomes and aggregate scores."
+    ],
+    "evaluator": {
+      "materialization": "Trusted evaluator alone authenticates the complete source and constructs native case/split manifests. It strips derived target fields and releases only episode-specific inputs; improvement agents never mount full target-bearing study archives.",
+      "coverage": "Every valid case appears exactly once as outer-test data in that condition's fixed aggregate across all declared sessions/participants. Native IDs, denominators and source-invalid exclusions freeze before authoring; difficult cases or missing analyses cannot be dropped.",
+      "aggregate": "Evaluator alone stores episode code hashes and native-keyed predictions, checks coverage/duplicates/nonfinite values and computes prespecified metrics after all episodes/conditions seal. No fold score becomes another episode's input.",
+      "verification_gate": "Future runner must verify allowlists/process identities and attempt denied-target/previous-fold reads, cache carryover, inner-fold preprocessing contamination and post-freeze code mutation. These controls are requirements, not already observed isolation.",
+      "comparison": "A/B share exact cases, splits, unchanged base model, prompt skeleton, tool/compute/tuning budget and matched seed schedule, but never solutions. Competent baselines independently refit on identical folds/targets."
+    },
+    "limits": "Fresh contexts and artifact denial remove within-experiment information transfer, not visible paper aggregates, public-data exposure or pretraining memorization. Record those limits; never call this contamination-free."
+  }
+}

@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-032",
-  "source_id": "paper-method-032",
   "track": "paper",
   "title": "MindEye2: Shared-Subject Models Enable fMRI-To-Image With 1 Hour of Data",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: One-hour fMRI-to-image retrieval and reconstruction; primary ordered endpoint is corrected brain-query/image-candidate top-1 retrieval. Reconstruction remains a required companion panel, not an optional replacement endpoint.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: One-hour fMRI-to-image retrieval and reconstruction; primary ordered endpoint is corrected brain-query/image-candidate top-1 retrieval. Reconstruction remains a required companion panel, not an optional replacement endpoint.",
+    "Source-paper comparison for Corrected one-hour image retrieval top-1 fraction (brain query, 300 image candidates): For each 300-item draw, flatten and L2-normalize paired OpenCLIP ViT-bigG-14/laion2b_s39b_b160k token embeddings; score the fraction whose true image has greatest cosine similarity to the brain query. Preserve corrected orientation and qualify native ties/RNG behavior."
+  ],
+  "success_criteria": [
+    "Reproduce the corrected author baseline on the original four subjects, first-session adaptation, shared1000 population and source normalization exposure before comparing a candidate.",
+    "Exceed 0.574 on the original corrected image-retrieval endpoint by the predeclared meaningful effect and uncertainty rule; also exceed the qualified author rerun on identical inputs and retrieval pools.",
+    "Retain brain retrieval and the complete original reconstruction panel, with a predeclared joint/trade-off decision; a retrieval-only subset result is not success for the registered combined task.",
+    "Freeze candidate code, checkpoints, preprocessing, image-model resources and exposure ledger before final scoring; preserve original test identities. A new split, reduced cohort or altered normalization regime is an extension.",
+    "Document public test exposure and reproduce all source evaluation semantics, including repeated presentations and metric direction; the existing generated-control feature scorer is insufficient evidence.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-032",
   "canonical_position_one_based": 89,
   "paper_identity": {
     "url": "https://proceedings.mlr.press/v235/scotti24a.html",
     "publication_year": 2024,
     "venue": "ICML"
   },
-  "primary_outputs": [
-    "Fine-tune the shared-subject model using the one-hour/one-session setting and evaluate held-out image/brain retrieval and reconstruction.",
-    "Reproduce performance difference versus same-data single-subject training/released baseline, with model exposure and image splits declared."
-  ],
   "input_assets": {
     "routes": [
       "https://huggingface.co/api/datasets/pscotti/mindeyev2"
@@ -4142,147 +4153,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Author HF dataset ungated; pin dataset commit.",
-        "NSD usage terms and stimulus rights remain applicable.",
-        "Code MIT; pretrained components retain their own licenses."
-      ],
-      "declared_overlap_group": "natural-scenes-dataset-nsd",
-      "existing_graph_evidence_leads": [
-        {
-          "tasks": [
-            "PAPER-paper-method-032",
-            "PAPER-paper-method-033"
-          ],
-          "relation": "shared_literal_overlap_label",
-          "value": "natural-scenes-dataset-nsd",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": false,
-          "biological_overlap_verified": false
-        },
-        {
-          "tasks": [
-            "PAPER-paper-method-032",
-            "PAPER-paper-method-042"
-          ],
-          "relation": "shared_literal_overlap_label",
-          "value": "natural-scenes-dataset-nsd",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": false,
-          "biological_overlap_verified": false
-        },
-        {
-          "tasks": [
-            "PAPER-paper-method-032",
-            "PAPER-paper-method-043"
-          ],
-          "relation": "shared_literal_overlap_label",
-          "value": "natural-scenes-dataset-nsd",
-          "evidence": [
-            "build/paper_100.json and build/neural_100.json"
-          ],
-          "cross_suite": false,
-          "biological_overlap_verified": false
-        }
-      ],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Fine-tune the shared-subject model using the one-hour/one-session setting and evaluate held-out image/brain retrieval and reconstruction.",
-        "Reproduce performance difference versus same-data single-subject training/released baseline, with model exposure and image splits declared."
-      ],
-      "construction_specificity": "One-hour/one-session adaptation, retrieval and reconstruction are documented; metric direction, candidate pool, exact split and exposure-qualified checkpoint need a frozen contract.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Use corrected image-versus-brain retrieval labels from author README and identical retrieval pool.",
-      "Compare shared pretrained and same-data single-subject/linear retrieval baselines at equal image-model and neural exposure."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "One-hour/one-session adaptation, retrieval and reconstruction are documented; metric direction, candidate pool, exact split and exposure-qualified checkpoint need a frozen contract.",
-        "Target-person calibration session plus protected images/sessions, with shared images/subjects in pretraining disclosed.",
-        "Cannot call released-weight adaptation a rerun of all pretraining/scaling. Fullcollection>100GB andGPUclass are source/planning evidence, not measured local costs.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve low-data transfer or uncertainty under session/domain shift at equal neural examples and image-model access, comparing with MindEye2 and simpler retrieval/linear baselines."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Improve low-data transfer or uncertainty under session/domain shift at equal neural examples and image-model access, comparing with MindEye2 and simpler retrieval/linear baselines."
-      ],
-      "independent_panel_gate": "Target-person calibration session plus protected images/sessions, with shared images/subjects in pretraining disclosed.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": "GPU/high; full collection >100GB, bounded one-subject adaptation uses selected shards/HDF5",
-    "source_resource_evidence": "Inspection-based resource class, not a measured runtime.",
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "One-hour/one-session adaptation, retrieval and reconstruction are documented; metric direction, candidate pool, exact split and exposure-qualified checkpoint need a frozen contract.",
-      "Target-person calibration session plus protected images/sessions, with shared images/subjects in pretraining disclosed.",
-      "Cannot call released-weight adaptation a rerun of all pretraining/scaling. Fullcollection>100GB andGPUclass are source/planning evidence, not measured local costs.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Build an image/participant/session/checkpoint exposure ledger and exact one-session protocol, then pin metric implementations and full required HDF5/shard manifest.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Build an image/participant/session/checkpoint exposure ledger and exact one-session protocol, then pin metric implementations and full required HDF5/shard manifest.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -4358,11 +4228,80 @@
     ],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_statement": "GPU/high; full collection >100GB, bounded one-subject adaptation uses selected shards/HDF5",
+    "source_resource_evidence": "Inspection-based resource class, not a measured runtime.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-032/improvement.v1.json",
+      "bytes": 11381,
+      "sha256": "97752be74ac2af84fbd8441f50e2f4e9ba1e2a518d0b90ec553f8d08d19890b0"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-032/historical/task.pre-improvement.v1.json",
+        "bytes": 185659,
+        "sha256": "be0baca5eebb4c64fa0d6096fdbd9df12aa16e4abf9342c6d16ab0aa433ac9ff"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-032-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate on the original training data and declared validation feedback within that training partition. Restore the full permitted first-session training allocation for final fitting and record all image/neural pretraining exposure. Do not tune from final shared1000 scores.",
+    "candidate_freeze": "Commit candidate algorithm, fitting/selection recipe, checkpoints, pretrained resources, exact trial/image manifests, native normalization/repeat rules and retrieval-pool schedule before final evaluation.",
+    "final_evaluation": "Run the frozen candidate and authentic author baseline on all four original subjects and the same shared1000 test images; report corrected retrieval and full reconstruction results, paired uncertainty and public-test exposure. Newly protected samples are a separate extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published corrected score, reproduced author score and any separately verified current-SOTA score remain distinct. Local numerical controls or a weaker single-subject model cannot replace the source author baseline."
+  },
+  "blocking_issues": [
+    "Authenticate exact NSD/derivative/checkpoint manifests and source exposure, including normalization statistics from more than the adaptation session.",
+    "Reconcile legacy evaluator session-disjoint prospective protection with the original shared1000 test population; do not silently drop first-session test presentations.",
+    "Qualify native feature extraction, repeat aggregation, historical retrieval RNG/ties and all original reconstruction metrics; no authentic full-panel rerun exists.",
+    "Freeze source-task reconstruction trade-offs, meaningful effect and participant-aware uncertainty without treating 30 overlapping pools as independent samples.",
+    "Set concrete access/validation/final-query and compute budgets and protect final scoring; public source test exposure must be disclosed."
+  ],
+  "holds": {
+    "task_specific": [
+      "Authenticate exact NSD/derivative/checkpoint manifests and source exposure, including normalization statistics from more than the adaptation session.",
+      "Reconcile legacy evaluator session-disjoint prospective protection with the original shared1000 test population; do not silently drop first-session test presentations.",
+      "Qualify native feature extraction, repeat aggregation, historical retrieval RNG/ties and all original reconstruction metrics; no authentic full-panel rerun exists.",
+      "Freeze source-task reconstruction trade-offs, meaningful effect and participant-aware uncertainty without treating 30 overlapping pools as independent samples.",
+      "Set concrete access/validation/final-query and compute budgets and protect final scoring; public source test exposure must be disclosed."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original one-session retrieval/reconstruction task and corrected published retrieval score are recoverable. Native feature/reference parity, full reconstruction evaluation, exact historical preprocessing and sample manifests, a meaningful effect rule, and measured episode budgets remain unqualified; the feature-only component cannot admit an improvement win. Authenticate exact NSD/derivative/checkpoint manifests and source exposure, including normalization statistics from more than the adaptation session. Reconcile legacy evaluator session-disjoint prospective protection with the original shared1000 test population; do not silently drop first-session test presentations. Qualify native feature extraction, repeat aggregation, historical retrieval RNG/ties and all original reconstruction metrics; no authentic full-panel rerun exists. Freeze source-task reconstruction trade-offs, meaningful effect and participant-aware uncertainty without treating 30 overlapping pools as independent samples. Set concrete access/validation/final-query and compute budgets and protect final scoring; public source test exposure must be disclosed.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-032/historical/task.pre-improvement.v1.json",
+      "bytes": 185659,
+      "sha256": "be0baca5eebb4c64fa0d6096fdbd9df12aa16e4abf9342c6d16ab0aa433ac9ff"
+    },
+    "notes": "The original task and initial-evaluator-v1 remain calibration materials. Frozen-pool feature scoring and generated tests do not establish native reproduction or stronger-than-paper performance; their prospective split/RNG policies must not redefine the paper task."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

@@ -1,0 +1,879 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-043",
+  "source_id": "paper-method-043",
+  "track": "paper",
+  "title": "NeuroPictor: Refining fMRI-to-Image Reconstruction via Multi-individual Pretraining and Multi-level Modulation",
+  "status": "specification_only",
+  "canonical_position_one_based": 91,
+  "paper_identity": {
+    "url": "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06746.pdf",
+    "publication_year": 2024,
+    "venue": "ECCV"
+  },
+  "primary_outputs": [
+    "Fine-tune on declared NSD subject(s) and reproduce held-out image reconstruction metrics.",
+    "Compare multi-individual pretrained and matched target-only conditions, distinguishing raw-data pretraining from use of a released encoder."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://huggingface.co/api/models/Fudan-fMRI/neuropictor"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": ".gitattributes"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/1",
+        "recorded_fields": {
+          "name": "NSD/COCO_73k_annots_curated.npy"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/2",
+        "recorded_fields": {
+          "name": "NSD/HCP_ROIs.csv"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/3",
+        "recorded_fields": {
+          "name": "NSD/cortex_roi.npz"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/4",
+        "recorded_fields": {
+          "name": "NSD/fmri_npy.zip"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/5",
+        "recorded_fields": {
+          "name": "NSD/nsddata_stimuli.zip"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/6",
+        "recorded_fields": {
+          "name": "NSD/sub1257_shared_triallabel.npy"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/7",
+        "recorded_fields": {
+          "name": "NSD/unique_triallabel.npy"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/8",
+        "recorded_fields": {
+          "name": "NSD/vc_masks.npy"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/9",
+        "recorded_fields": {
+          "name": "NSD/vc_roi.npz"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/10",
+        "recorded_fields": {
+          "name": "NSD_full_brain/HCP_ROIs.csv"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/11",
+        "recorded_fields": {
+          "name": "NSD_full_brain/cortex_roi.npz"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/12",
+        "recorded_fields": {
+          "name": "NSD_full_brain/fmri/01_norm.h5"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/13",
+        "recorded_fields": {
+          "name": "NSD_full_brain/fmri/02_norm.h5"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/14",
+        "recorded_fields": {
+          "name": "NSD_full_brain/fmri/03_norm.h5"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/15",
+        "recorded_fields": {
+          "name": "NSD_full_brain/fmri/04_norm.h5"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/16",
+        "recorded_fields": {
+          "name": "NSD_full_brain/fmri/05_norm.h5"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/17",
+        "recorded_fields": {
+          "name": "NSD_full_brain/fmri/06_norm.h5"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/18",
+        "recorded_fields": {
+          "name": "NSD_full_brain/fmri/07_norm.h5"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/19",
+        "recorded_fields": {
+          "name": "NSD_full_brain/fmri/08_norm.h5"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/20",
+        "recorded_fields": {
+          "name": "NSD_full_brain/vc_masks.npy"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/21",
+        "recorded_fields": {
+          "name": "NSD_full_brain/vc_roi.npz"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/22",
+        "recorded_fields": {
+          "name": "README.md"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/23",
+        "recorded_fields": {
+          "name": "ckpt/NSD/finetune_single_sub/sub01/epoch_015.pth"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/24",
+        "recorded_fields": {
+          "name": "ckpt/NSD/finetune_single_sub/sub02/epoch_015.pth"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/25",
+        "recorded_fields": {
+          "name": "ckpt/NSD/finetune_single_sub/sub05/epoch_015.pth"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/26",
+        "recorded_fields": {
+          "name": "ckpt/NSD/finetune_single_sub/sub07/epoch_015.pth"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/27",
+        "recorded_fields": {
+          "name": "ckpt/NSD/pretrain_multi_sub/sub_all_mask/epoch_015.pth"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/28",
+        "recorded_fields": {
+          "name": "ckpt/NSD/pretrain_multi_sub/sub_all_womask/epoch_080.pth"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/29",
+        "recorded_fields": {
+          "name": "ckpt/SD21/control_sd21_ini.ckpt"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/30",
+        "recorded_fields": {
+          "name": "ckpt/fMRI2fMRI_UKB/checkpoint_120000.pth"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/31",
+        "recorded_fields": {
+          "name": "ckpt/fMRI2fMRI_UKB/fMRI_AutoEncoder.yaml"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/32",
+        "recorded_fields": {
+          "name": "demo_data.zip"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/33",
+        "recorded_fields": {
+          "name": "results/sub01.zip"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/34",
+        "recorded_fields": {
+          "name": "results/sub02.zip"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/35",
+        "recorded_fields": {
+          "name": "results/sub05.zip"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/36",
+        "recorded_fields": {
+          "name": "results/sub07.zip"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-043"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/0/file_metadata_examples/0",
+        "recorded_fields": {
+          "name": ".gitattributes"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-043"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/0/file_metadata_examples/1",
+        "recorded_fields": {
+          "name": "NSD/COCO_73k_annots_curated.npy"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-043"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "paper_url": "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06746.pdf",
+      "data_urls": [
+        "https://huggingface.co/api/models/Fudan-fMRI/neuropictor"
+      ],
+      "input_scope": "Pinned NeuroPictor deposit includes NSD neural inputs and encoder/checkpoints; this uses released pretraining and does not reproduce all UKB/other-source raw pretraining.",
+      "saved_metadata": [
+        {
+          "metadata_url": "https://huggingface.co/api/models/Fudan-fMRI/neuropictor",
+          "version": "04ead78eaf0b54a5acfb535aedb87ed27895816b",
+          "gated": false,
+          "license": "mit",
+          "total_files": 37,
+          "metadata_inspected": true,
+          "manifest_file_count": 37,
+          "file_metadata_examples": [
+            {
+              "name": ".gitattributes"
+            },
+            {
+              "name": "NSD/COCO_73k_annots_curated.npy"
+            }
+          ],
+          "examples_are_not_selected_transfer_manifest": true
+        }
+      ],
+      "code_url": "https://github.com/jingyanghuo/neuropictor",
+      "revision_or_archive_version": "b676b5be320ebb1b12919afd4cf6152e2c45db5d",
+      "entrypoints": [
+        {
+          "path": "train.py",
+          "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/train.py",
+          "role": "Author NSD fine-tuning/pretraining entrypoint",
+          "inspected_as_text": true
+        },
+        {
+          "path": "dataset/dataset.py",
+          "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/dataset/dataset.py",
+          "role": "NSDImageDataset actual neural/image loader",
+          "inspected_as_text": true
+        },
+        {
+          "path": "reconstruction.py",
+          "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/reconstruction.py",
+          "role": "Generate reconstructions",
+          "inspected_as_text": true
+        },
+        {
+          "path": "eval_metrics.py",
+          "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/eval_metrics.py",
+          "role": "Author metric evaluation",
+          "inspected_as_text": true
+        }
+      ],
+      "array_payloads_read_in_this_audit": false
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-043",
+        "versions_and_loader_contract": {
+          "scope_description": "NeuroPictor NSD multi-individual transfer and fMRI-image reconstruction using released encoder/checkpoints and actual NSD voxel inputs.",
+          "unresolved_coverage": [
+            "Cannot reproduce complete UKB/other-source raw pretraining collection from this package; scope uses released pretrained model.",
+            "Freeze NSD participant/image split and source overlap.",
+            "Validate exact tensor schemas and evaluation metric versions during reference qualification."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-method-043",
+        "versions_and_loader_contract": {
+          "declared_scope": "NeuroPictor NSD multi-individual transfer and fMRI-image reconstruction using released encoder/checkpoints and actual NSD voxel inputs."
+        },
+        "data_section_locators": []
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/jingyanghuo/neuropictor",
+    "revision_or_archive_version": "b676b5be320ebb1b12919afd4cf6152e2c45db5d",
+    "entrypoints": [
+      {
+        "path": "train.py",
+        "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/train.py",
+        "role": "Author NSD fine-tuning/pretraining entrypoint",
+        "inspected_as_text": true
+      },
+      {
+        "path": "dataset/dataset.py",
+        "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/dataset/dataset.py",
+        "role": "NSDImageDataset actual neural/image loader",
+        "inspected_as_text": true
+      },
+      {
+        "path": "reconstruction.py",
+        "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/reconstruction.py",
+        "role": "Generate reconstructions",
+        "inspected_as_text": true
+      },
+      {
+        "path": "eval_metrics.py",
+        "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/eval_metrics.py",
+        "role": "Author metric evaluation",
+        "inspected_as_text": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-043",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/jingyanghuo/neuropictor",
+            "commit": "b676b5be320ebb1b12919afd4cf6152e2c45db5d",
+            "author_linkage": [
+              "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06746.pdf",
+              "https://arxiv.org/abs/2403.18211",
+              "https://github.com/jingyanghuo/neuropictor",
+              "https://huggingface.co/Fudan-fMRI/neuropictor/tree/main/NSD"
+            ],
+            "default_branch": "main",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/jingyanghuo/neuropictor/b676b5be320ebb1b12919afd4cf6152e2c45db5d/README.md",
+            "license_source": null
+          },
+          "entrypoints": [
+            {
+              "path": "train.py",
+              "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/train.py",
+              "role": "Author NSD fine-tuning/pretraining entrypoint",
+              "inspected_as_text": true
+            },
+            {
+              "path": "dataset/dataset.py",
+              "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/dataset/dataset.py",
+              "role": "NSDImageDataset actual neural/image loader",
+              "inspected_as_text": true
+            },
+            {
+              "path": "reconstruction.py",
+              "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/reconstruction.py",
+              "role": "Generate reconstructions",
+              "inspected_as_text": true
+            },
+            {
+              "path": "eval_metrics.py",
+              "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/eval_metrics.py",
+              "role": "Author metric evaluation",
+              "inspected_as_text": true
+            }
+          ],
+          "dependencies": [
+            "PyTorch",
+            "OmegaConf",
+            "diffusion-model stack",
+            "CUDA"
+          ]
+        }
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-method-043",
+        "recorded": {
+          "code_url": "https://github.com/jingyanghuo/neuropictor",
+          "code_revision_or_archive_version": "b676b5be320ebb1b12919afd4cf6152e2c45db5d",
+          "entrypoints": [
+            {
+              "path": "train.py",
+              "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/train.py",
+              "role": "Author NSD fine-tuning/pretraining entrypoint",
+              "inspected_as_text": true
+            },
+            {
+              "path": "dataset/dataset.py",
+              "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/dataset/dataset.py",
+              "role": "NSDImageDataset actual neural/image loader",
+              "inspected_as_text": true
+            },
+            {
+              "path": "reconstruction.py",
+              "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/reconstruction.py",
+              "role": "Generate reconstructions",
+              "inspected_as_text": true
+            },
+            {
+              "path": "eval_metrics.py",
+              "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/eval_metrics.py",
+              "role": "Author metric evaluation",
+              "inspected_as_text": true
+            }
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": [
+        "HF Fudan-fMRI/neuropictor ungated and pinned; contains NSD neural ZIP/HDF5 inputs and pretrained encoder/checkpoints.",
+        "Deposit MIT tag does not supersede NSD/stimulus or other pretraining-source terms."
+      ],
+      "declared_overlap_group": "natural-scenes-dataset-nsd",
+      "existing_graph_evidence_leads": [
+        {
+          "tasks": [
+            "PAPER-paper-method-032",
+            "PAPER-paper-method-043"
+          ],
+          "relation": "shared_literal_overlap_label",
+          "value": "natural-scenes-dataset-nsd",
+          "evidence": [
+            "build/paper_100.json and build/neural_100.json"
+          ],
+          "cross_suite": false,
+          "biological_overlap_verified": false
+        },
+        {
+          "tasks": [
+            "PAPER-paper-method-033",
+            "PAPER-paper-method-043"
+          ],
+          "relation": "shared_literal_overlap_label",
+          "value": "natural-scenes-dataset-nsd",
+          "evidence": [
+            "build/paper_100.json and build/neural_100.json"
+          ],
+          "cross_suite": false,
+          "biological_overlap_verified": false
+        },
+        {
+          "tasks": [
+            "PAPER-paper-method-042",
+            "PAPER-paper-method-043"
+          ],
+          "relation": "shared_literal_overlap_label",
+          "value": "natural-scenes-dataset-nsd",
+          "evidence": [
+            "build/paper_100.json and build/neural_100.json"
+          ],
+          "cross_suite": false,
+          "biological_overlap_verified": false
+        }
+      ],
+      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
+      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "documented_outputs": [
+        "Fine-tune on declared NSD subject(s) and reproduce held-out image reconstruction metrics.",
+        "Compare multi-individual pretrained and matched target-only conditions, distinguishing raw-data pretraining from use of a released encoder."
+      ],
+      "construction_specificity": "Held-out reconstruction and pretrained-versus-target-only comparison documented; exact primary metric, image pool, tensor schema and initialization exposure remain unfrozen.",
+      "exact_published_numeric_target_verified_by_this_audit": false
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Equal target data, pretrained diffusion/image priors and tuning budgets for all variants.",
+      "Keep structural/perceptual metrics distinct; neural-free controls and protected stimulus IDs required."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Held-out reconstruction and pretrained-versus-target-only comparison documented; exact primary metric, image pool, tensor schema and initialization exposure remain unfrozen.",
+        "Participant/image/session groups with overlapping NSD/shared encoder exposure explicitly mapped.",
+        "Deposit MIT tag does not supersede source NSD/stimulus/pretraining terms. GPUhigh is unmeasured and no fullpretraining claim is supported.",
+        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_and_metadata_only_for_this_project",
+      "runnable_reference_demonstrated": false,
+      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve low-data transfer or structural fidelity at equal neural training data and diffusion-model access against NeuroPictor and matched reconstruction/retrieval methods."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_executed_or_independently_qualified",
+      "proposed_question": [
+        "Improve low-data transfer or structural fidelity at equal neural training data and diffusion-model access against NeuroPictor and matched reconstruction/retrieval methods."
+      ],
+      "independent_panel_gate": "Participant/image/session groups with overlapping NSD/shared encoder exposure explicitly mapped.",
+      "published_targets_are_historically_exposed": true,
+      "prospective_frontier_claim_supported": false
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_statement": "GPU/high; NSD data tens of GB plus image models",
+    "source_resource_evidence": "Inspection-based resource class, not a measured runtime.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "holds": {
+    "task_specific": [
+      "Held-out reconstruction and pretrained-versus-target-only comparison documented; exact primary metric, image pool, tensor schema and initialization exposure remain unfrozen.",
+      "Participant/image/session groups with overlapping NSD/shared encoder exposure explicitly mapped.",
+      "Deposit MIT tag does not supersede source NSD/stimulus/pretraining terms. GPUhigh is unmeasured and no fullpretraining claim is supported.",
+      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Resolve checkpoint provenance and exact NSD subject/image membership, then freeze one metric and matched comparator before tensor/schema acquisition.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Resolve checkpoint provenance and exact NSD subject/image membership, then freeze one metric and matched comparator before tensor/schema acquisition.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "37db9061b184f95937dad69379b7eb25eaa3573b4dddbc44810c9cba14a7ce13",
+    "audit_record_sha256": "18e1cad001a076b8feed9e39da92e1e886b25e5a2115c779212e1c53f2c70140",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-043",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 42,
+        "record_sha256": "58471063bc0a4031b2bff91305bfa1da7a13ca884e502f90dc60791a7a7eec47"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+          "bytes": 500587,
+          "sha256": "8893618f482d8301b723a57e2758fef66ab560b84c95650f8ea92f4b37375c3a"
+        },
+        "record_id": "paper-method-043",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 125,
+        "record_sha256": "ce1214542e24eadb7aa1ca1760e774133aed15764186bd80a52d71c9cf8ab50c"
+      }
+    ],
+    "historical_pin_exceptions": [
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+          "bytes": 3519,
+          "sha256": "d9862c468c3ece0d0e0cfca975f8980cea6a9dfbb7abfe5d3b4b96ca76045ac7"
+        },
+        "current_pin": {
+          "bytes": 4544,
+          "sha256": "963f9e1b6d528573c1c321629a0ab2ba6e1fb25b3e0404e3882b483ea7207c5f"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      },
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+          "bytes": 163669,
+          "sha256": "96c826360af4b8858cb33406e95242d27d7806e5896b98c211ccd3478a76661d"
+        },
+        "current_pin": {
+          "bytes": 166909,
+          "sha256": "974e56e839620059345f5b8ae1f5893e1d404c007864159dc84e6b330f49edca"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      }
+    ],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

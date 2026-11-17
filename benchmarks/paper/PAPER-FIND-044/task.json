@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "id": "PAPER-FIND-044",
-  "source_id": "FIND-044",
   "track": "paper",
   "title": "Duration between rewards controls the rate of behavioral and dopaminergic learning",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Model number of trials until conditioned responding across ITIs 30, 60, 300, 600 and 3,600 seconds. This source model endpoint is one part of the paper’s behavior/dopamine learning claims.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Model number of trials until conditioned responding across ITIs 30, 60, 300, 600 and 3,600 seconds. This source model endpoint is one part of the paper’s behavior/dopamine learning claims.",
+    "Source-paper comparison for Original raw-scale AIC model comparison, with log-space RSS selection reported separately: Selection RSS sums (log observed trials-to-learn − log mean predicted trials-to-learn)^2, omitting NaNs and assigning infinite loss to missing predictions. Reported AIC instead uses nAnimals×log(raw-scale mean squared error)+2k. These are different ordered metrics; the main source comparison uses k=0 with alternative penalties also calculated."
+  ],
+  "success_criteria": [
+    "Recover and reproduce the numeric original ANCCR/comparator score vector, complete animal roster and all five ITI conditions.",
+    "Preserve original in-sample fit/selection procedure, missingness/censoring and the correct AIC penalty convention; do not conflate log-RSS selection with raw-scale AIC.",
+    "Freeze the entire registered behavior/dopamine scope or explicitly limit any result claim to the recovered original model endpoint; the 60/600-second subset alone cannot satisfy full-paper superiority.",
+    "Predeclare a scientifically meaningful model-fit improvement, uncertainty rule and equal concrete access/compute budgets before final scoring.",
+    "Label an animal-held-out or new-schedule result as an extension with a separately rerun author comparator.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-044",
   "canonical_position_one_based": 9,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41593-026-02206-2",
     "publication_year": 2026,
     "venue": "Nature Neuroscience"
   },
-  "primary_outputs": [
-    "Reward-spacing effects on learning trajectories and dopamine responses.",
-    "Comparison of elapsed-time versus trial-count accounts across experimental schedules."
-  ],
   "input_assets": {
     "routes": [
       "https://dandiarchive.org/dandiset/001632/"
@@ -276,112 +287,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "recorded_terms": {
-        "data": [
-          "spdx:CC-BY-4.0"
-        ],
-        "code": "No top-level license identified in inspected paths; permissions for redistribution are unresolved, not presumed."
-      },
-      "record_conflicts": [],
-      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
-      "overlap_group": null
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "central_outputs_in_saved_source_contract": [
-        "Reward-spacing effects on learning trajectories and dopamine responses.",
-        "Comparison of elapsed-time versus trial-count accounts across experimental schedules."
-      ],
-      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
-      "missing_or_unfrozen_endpoint_details": "Bind the published correction, exact animal/schedule/photometry subset and learning-timescale definition;1222 draft assets are not1222 independent neural experiments."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Trial-count versus elapsed-time accounts require matched reward opportunities, schedule duration and animal-level predictions; changes in correction or source inclusion are not algorithmic improvement."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Bind the published correction, exact animal/schedule/photometry subset and learning-timescale definition;1222 draft assets are not1222 independent neural experiments.",
-        "Trial-count versus elapsed-time accounts require matched reward opportunities, schedule duration and animal-level predictions; changes in correction or source inclusion are not algorithmic improvement.",
-        "Public archive/code routes are explicit; exact release and photometry/behavior mapping need audit. A published correction must be incorporated before numerical targets are frozen.",
-        "Mutable DANDI draft is pinned by the inspected asset-ID manifest rather than an immutable published release. 126 archive animals include behavior-only cohorts; paper correction must be included.",
-        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-        "Execute and independently audit references, controls, grading and measured resources.",
-        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
-      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Proposed: compare per-trial and elapsed-time models with animal-held-out predictions and matched reward-count/session-duration contrasts."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "independent_panel_not_established_in_inspected_evidence",
-      "proposed_improvement": [
-        "Proposed: compare per-trial and elapsed-time models with animal-held-out predictions and matched reward-count/session-duration contrasts."
-      ],
-      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
-      "special_gate": "No completed independent improvement result is established here."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "source_roster_estimate_or_statement": {
-      "estimate": "CPU workstation; 4.1 GB archive; empirical analyses hours, model sweeps potentially days (estimate).",
-      "basis": "Source metadata/static inspection and author runtime statements where explicitly identified; not measured."
-    },
-    "measured_or_static_facts_from_existing_authoring": [],
-    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
-  },
-  "holds": {
-    "task_specific": [
-      "Bind the published correction, exact animal/schedule/photometry subset and learning-timescale definition;1222 draft assets are not1222 independent neural experiments.",
-      "Trial-count versus elapsed-time accounts require matched reward opportunities, schedule duration and animal-level predictions; changes in correction or source inclusion are not algorithmic improvement.",
-      "Public archive/code routes are explicit; exact release and photometry/behavior mapping need audit. A published correction must be incorporated before numerical targets are frozen.",
-      "Mutable DANDI draft is pinned by the inspected asset-ID manifest rather than an immutable published release. 126 archive animals include behavior-only cohorts; paper correction must be included.",
-      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-      "Execute and independently audit references, controls, grading and measured resources.",
-      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Freeze asset IDs and corrected paper endpoint, verify which animals have photometry versus behavior only, and specify one matched reward-spacing/model contrast.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Freeze asset IDs and corrected paper endpoint, verify which animals have photometry versus behavior only, and specify one matched reward-spacing/model contrast.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -412,11 +317,85 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "source_roster_estimate_or_statement": {
+      "estimate": "CPU workstation; 4.1 GB archive; empirical analyses hours, model sweeps potentially days (estimate).",
+      "basis": "Source metadata/static inspection and author runtime statements where explicitly identified; not measured."
+    },
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-044/improvement.v1.json",
+      "bytes": 10083,
+      "sha256": "e6f41100f1c443c2e4327355045d478dc91abf236b5b62bae9f98b64829983b7"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-044/historical/task.pre-improvement.v1.json",
+        "bytes": 22078,
+        "sha256": "6b11ffa42bd79893505177bb2676ffe542f50f5f006658b861ae14967002ff42"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-find-044",
+        "components-reward-complete-programme"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-FIND-044/implementations/registered-runtime/manifest.json",
+        "bytes": 12530,
+        "sha256": "780f6054794a141e5d404e30f7a7e6e117dacff94107398b498cd963df309cf8"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Inactive until numeric baseline and source inclusion are recovered. Development may inspect authorized model-fitting feedback only under a frozen original-task contract.",
+    "candidate_freeze": "Freeze model family, parameter-selection procedure, simulation protocol, input census, metric penalties and full original score support before final evaluation.",
+    "final_evaluation": "Replay author and candidate using identical original observations and model-selection allowance; report AIC and log-RSS separately, plus declared behavior/dopamine scope.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Original author model score is the baseline. Numerical source reconstruction, a locally authored model and an animal-held-out rerun are separately labelled outcomes."
+  },
+  "blocking_issues": [
+    "Original numeric model AIC/RSS and source-selected hyperparameters remain unrecovered.",
+    "Immutable full five-ITI animal/data and learning-summary mapping are unresolved.",
+    "No complete same-task evaluator, justified minimum effect, dependence-aware uncertainty or concrete episode budgets exist.",
+    "Existing numerical scorer covers a 60/600-second component, not the full five-ITI model-comparison and dopamine programme."
+  ],
+  "holds": {
+    "task_specific": [
+      "Original numeric model AIC/RSS and source-selected hyperparameters remain unrecovered.",
+      "Immutable full five-ITI animal/data and learning-summary mapping are unresolved.",
+      "No complete same-task evaluator, justified minimum effect, dependence-aware uncertainty or concrete episode budgets exist.",
+      "Existing numerical scorer covers a 60/600-second component, not the full five-ITI model-comparison and dopamine programme."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The paper includes an ordered model fit for trials-to-learn across reward intervals, but numeric author-model RSS/AIC baselines, original animal inclusion and exact source mapping are not recovered. The existing 60/600-second numerical reconstruction covers a smaller endpoint set; a new animal-held-out comparison would be an extension, not the original model comparison. Original numeric model AIC/RSS and source-selected hyperparameters remain unrecovered. Immutable full five-ITI animal/data and learning-summary mapping are unresolved. No complete same-task evaluator, justified minimum effect, dependence-aware uncertainty or concrete episode budgets exist. Existing numerical scorer covers a 60/600-second component, not the full five-ITI model-comparison and dopamine programme.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-044/historical/task.pre-improvement.v1.json",
+      "bytes": 22078,
+      "sha256": "6b11ffa42bd79893505177bb2676ffe542f50f5f006658b861ae14967002ff42"
+    },
+    "notes": "Retain registered-runtime source-compatible eghk reconstruction and its 38-mouse/309-session cue-roster evidence as calibration. Its numerical errors and coverage do not demonstrate source-model improvement."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

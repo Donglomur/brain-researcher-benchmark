@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-signal-add-021",
+  "source_id": "paper-signal-add-021",
+  "track": "paper",
+  "title": "Perturbing human V1 degrades the fidelity of visual working memory",
+  "status": "specification_only",
+  "canonical_position_one_based": 60,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41467-025-57882-8",
+    "publication_year": 2025,
+    "venue": "Nature Communications"
+  },
+  "primary_outputs": [
+    "Paired TMS/no-TMS EEG alpha/beta effects and the associated location-specific behavioral perturbation contrast."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://osf.io/hf5a4/"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/neural_input",
+        "recorded_fields": {
+          "name": "masterTFR_allsubs.mat",
+          "bytes": 298290277,
+          "download_url": "https://osf.io/download/f4yg5/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "source_record_id": "paper-signal-add-021"
+      },
+      {
+        "json_pointer": "/data_inputs/0/behavior_input",
+        "recorded_fields": {
+          "name": "behavioralData_allsubs.csv",
+          "bytes": 4926544,
+          "download_url": "https://osf.io/download/jx82h/"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "source_record_id": "paper-signal-add-021"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "assessment": "OSF masterTFR_allsubs.mat has15participant arrays and behavioralData_allsubs.csv; author source IDs agree. Original cluster_stats_TFR.m hardcodes16, so unchanged execution is not ready.",
+      "official_code": {
+        "url": "https://github.com/clayspacelab/Dake_Curtis_TMSV1_2025",
+        "commit": "1e2c149e6e61f85b45acb8486c0fb31dc38d2dfa",
+        "license": "Apache-2.0",
+        "entrypoints": [
+          "generateFigure2B.m",
+          "generateFigure2.py",
+          "eegHelpers/create_topo.m"
+        ]
+      },
+      "input_routes": [
+        {
+          "url": "https://osf.io/hf5a4/",
+          "manifest": "https://api.osf.io/v2/nodes/hf5a4/files/osfstorage/67c0626d206270d7072e915c/",
+          "license": "Public access, but OSF node_license is null; redistribution license unresolved."
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-021",
+        "versions_and_loader_contract": {
+          "data_contract": {
+            "neural": "Actual HDF5 metadata shows mTFR/NT and mTFR/T, pin/pout and ipsi/contra/all fields. Full-sensor powspctrm has HDF5 shape [15,200,53,62], corresponding to MATLAB [62 channels,53 frequencies,200 times,15 participants]. Single-region arrays preserve 15 participants. These are physiological time-frequency inputs, not group test statistics.",
+            "labels": "NT=no TMS, T=TMS; pin/pout=target inside/outside phosphene field. Source explicitly lists retained IDs [1,3,5,6,7,10,12,14,15,17,22,23,25,26,27] and aligns sensors by stimulated hemisphere.",
+            "time_alignment": "mTFR time and freq arrays are present. The author figure selects 0.5–2 seconds versus 3–4.5 seconds and 7–20 Hz; a revised endpoint must be frozen separately.",
+            "split": "Pair whole participants across conditions; all days of a person remain together. Trial-level behavioral data can support within-person contrasts, not independent trial-count inference.",
+            "controls": "Pre-TMS baseline, opposite visual hemifield, spatial specificity, blink/ocular contamination, and post-pulse artifact interval. Published processed arrays cannot independently test the original artifact removal."
+          },
+          "scope_description": "Recompute the participant-paired EEG time-frequency perturbation effect and accompanying trial-level behavioral contrasts from released derivatives. This bounded scope does not repeat TMS delivery, raw EEG artifact rejection, or MRI targeting."
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/clayspacelab/Dake_Curtis_TMSV1_2025",
+    "revision_or_archive_version": "1e2c149e6e61f85b45acb8486c0fb31dc38d2dfa",
+    "entrypoints": [
+      "generateFigure2B.m",
+      "generateFigure2.py",
+      "eegHelpers/create_topo.m"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-021",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/clayspacelab/Dake_Curtis_TMSV1_2025",
+            "commit": "1e2c149e6e61f85b45acb8486c0fb31dc38d2dfa",
+            "license": "Apache-2.0",
+            "entrypoints": [
+              "generateFigure2B.m",
+              "generateFigure2.py",
+              "eegHelpers/create_topo.m"
+            ]
+          }
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": {
+        "official_code_license": "Apache-2.0",
+        "data_route_licenses": [
+          {
+            "url": "https://osf.io/hf5a4/",
+            "license": "Public access, but OSF node_license is null; redistribution license unresolved."
+          }
+        ]
+      },
+      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "recorded_central_outputs": [
+        "Paired TMS/no-TMS EEG alpha/beta effects and the associated location-specific behavioral perturbation contrast."
+      ],
+      "assessment": "Participant-paired TMS/no-TMS time-frequency and behavioral effects are central and have actual derivative metadata; raw pulse-artifact removal/MRI targeting are excluded.",
+      "status": "documented_scoped_proposal_not_numeric_qualification",
+      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
+    },
+    "source_recorded_metrics": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-021",
+        "recorded_metrics": [
+          "Paired participant time-frequency effect and cluster-based uncertainty",
+          "Behavioral error and participant-level TMS delta"
+        ]
+      }
+    ],
+    "comparability": [
+      "Do not grade subject-average plots as uncertainty evidence. Fixed published preprocessing limits claims about TMS artifacts;15-versus16repair requires validation.",
+      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "OSF data has no explicit project license; access is verified, redistribution requires terms resolution.",
+        "Primary figure script averages subjects, so uncertainty must retain the original participant arrays.",
+        "Original author-linked cluster_stats_TFR.m hardcodes subj=16 while released arrays and retained-ID source contain 15. An explicit correction and validation are required before execution; no unchanged-script execution readiness claimed.",
+        "Raw preprocessing and pulse-artifact alternatives cannot be reproduced from the released time-frequency arrays alone.",
+        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_project_reference_run_evidence_found",
+      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Test sensitivity to time/frequency windows and participant exclusions without using outcome-selected thresholds."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_frozen_or_run",
+      "proposed_panel": "Paired whole-person contrasts with preregistered windows and artifact/spatial controls; participant exclusion/time-frequency selection cannot be optimized on the evaluation contrast.",
+      "retained_roster_proposal": [
+        "Test sensitivity to time/frequency windows and participant exclusions without using outcome-selected thresholds."
+      ],
+      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_resource_statement": "unmeasured",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": null
+  },
+  "holds": {
+    "task_specific": [
+      "OSF data has no explicit project license; access is verified, redistribution requires terms resolution.",
+      "Primary figure script averages subjects, so uncertainty must retain the original participant arrays.",
+      "Original author-linked cluster_stats_TFR.m hardcodes subj=16 while released arrays and retained-ID source contain 15. An explicit correction and validation are required before execution; no unchanged-script execution readiness claimed.",
+      "Raw preprocessing and pulse-artifact alternatives cannot be reproduced from the released time-frequency arrays alone.",
+      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Prepare a transparent15participant mapping/shape repair and freeze the published temporal/frequency contrast plus paired scorer; resolve OSF/secondary-code license before packaging.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Prepare a transparent15participant mapping/shape repair and freeze the published temporal/frequency contrast plus paired scorer; resolve OSF/secondary-code license before packaging.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "c7e84b8e4247cc87e3a9e6e6a0af3909da610c736de71d7d7c82fc4cad4ce621",
+    "audit_record_sha256": "c6c4f3c0e54d858a099f73cd26723a8f5d49875bdfdf4bb4fc4408999475184f",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+          "bytes": 127035,
+          "sha256": "49a22e4974c8ed6c213582386153fff1fdf7b00755481b032ba865a57030ea06"
+        },
+        "record_id": "paper-signal-add-021",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 20,
+        "record_sha256": "9ebcc8c087bc6c044d832545cb04ad7ddbc464c74b8c9df08976967863d24715"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-paper-signal-add-021",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

@@ -1,0 +1,440 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-ROOT-ADD-005",
+  "source_id": "ROOT-ADD-005",
+  "track": "paper",
+  "title": "Distributed representations of behaviour-derived object dimensions in the human visual system",
+  "status": "specification_only",
+  "canonical_position_one_based": 81,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41562-024-01980-y",
+    "publication_year": 2024,
+    "venue": "Nature Human Behaviour"
+  },
+  "primary_outputs": [
+    "Re-estimate image-wise encoding and variance partitioning of 66 behavior-derived object dimensions in the three THINGS-fMRI participants from single-trial voxel response tables."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://figshare.com/articles/dataset/20492835"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": "betas_csv.zip",
+          "bytes": 42955087212,
+          "url": "https://ndownloader.figshare.com/files/43635873",
+          "checksum": "md5:5f8c5f136c780169a98ee4baf27d1d96"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:5f8c5f136c780169a98ee4baf27d1d96"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+        "source_record_id": "ROOT-ADD-005"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/0/file_metadata_examples/0",
+        "recorded_fields": {
+          "name": "betas_csv.zip",
+          "bytes": 42955087212,
+          "url": "https://ndownloader.figshare.com/files/43635873",
+          "checksum": "md5:5f8c5f136c780169a98ee4baf27d1d96"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:5f8c5f136c780169a98ee4baf27d1d96"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-ROOT-ADD-005"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "paper_url": "https://www.nature.com/articles/s41562-024-01980-y",
+      "data_urls": [
+        "https://figshare.com/articles/dataset/20492835"
+      ],
+      "input_scope": "THINGS-fMRI single-trial responses and voxel/stimulus metadata for three participants, plus per-image66-dimensional behavior embeddings/category-shape descriptors; raw fMRI preprocessing excluded.",
+      "saved_metadata": [
+        {
+          "url": "https://api.figshare.com/v2/articles/20492835/versions/2",
+          "title": "THINGS-data: fMRI Single Trial Responses (table format)",
+          "version": 2,
+          "license": "CC0",
+          "schema": "sub-{01,02,03}_ResponseData.h5 plus VoxelMetadata.csv and StimulusMetadata.csv; exact table names in pinned dimension_encoding.utils.load_singletrial_data match the official THINGS-data use notebook.",
+          "additional_inputs": "Code repository includes per-image 66-dimensional embeddings, image filenames and category/shape metadata.",
+          "shared_manifest_evidence": "signals_readiness.json D-H010",
+          "manifest_file_count": 1,
+          "file_metadata_examples": [
+            {
+              "name": "betas_csv.zip",
+              "bytes": 42955087212,
+              "url": "https://ndownloader.figshare.com/files/43635873",
+              "checksum": "md5:5f8c5f136c780169a98ee4baf27d1d96"
+            }
+          ],
+          "examples_are_not_selected_transfer_manifest": true
+        }
+      ],
+      "code_url": "https://github.com/ViCCo-Group/dimension_encoding",
+      "revision_or_archive_version": "b1843e7eb92858c9c4a9ef88b4a5faea24752b49",
+      "entrypoints": [
+        "scripts/run_linregcv.py",
+        "scripts/run_varpart.py",
+        "dimension_encoding/utils.py"
+      ],
+      "array_payloads_read_in_this_audit": false
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+        "record_id": "ROOT-ADD-005",
+        "versions_and_loader_contract": {
+          "scope_description": "Re-estimate image-wise encoding and variance partitioning of 66 behavior-derived object dimensions in the three THINGS-fMRI participants from single-trial voxel response tables.",
+          "missing_core_inputs": []
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "ROOT-ADD-005",
+        "versions_and_loader_contract": {
+          "declared_scope": "Re-estimate image-wise encoding and variance partitioning of 66 behavior-derived object dimensions in the three THINGS-fMRI participants from single-trial voxel response tables."
+        },
+        "data_section_locators": []
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/ViCCo-Group/dimension_encoding",
+    "revision_or_archive_version": "b1843e7eb92858c9c4a9ef88b4a5faea24752b49",
+    "entrypoints": [
+      "scripts/run_linregcv.py",
+      "scripts/run_varpart.py",
+      "dimension_encoding/utils.py"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+        "record_id": "ROOT-ADD-005",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/ViCCo-Group/dimension_encoding",
+            "commit": "b1843e7eb92858c9c4a9ef88b4a5faea24752b49",
+            "entrypoints": [
+              "scripts/run_linregcv.py",
+              "scripts/run_varpart.py",
+              "dimension_encoding/utils.py"
+            ],
+            "license": "MIT",
+            "inspection": "Pinned file tree, README and named analysis/loader source read statically; no author code run"
+          }
+        }
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "ROOT-ADD-005",
+        "recorded": {
+          "code_url": "https://github.com/ViCCo-Group/dimension_encoding",
+          "code_revision_or_archive_version": "b1843e7eb92858c9c4a9ef88b4a5faea24752b49",
+          "entrypoints": [
+            "scripts/run_linregcv.py",
+            "scripts/run_varpart.py",
+            "dimension_encoding/utils.py"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "saved_terms": {
+        "code": "MIT",
+        "data": [
+          "CC0"
+        ]
+      },
+      "declared_overlap_group": "THINGS-fMRI-3subjects",
+      "existing_graph_evidence_leads": [
+        {
+          "tasks": [
+            "NEURAL-051",
+            "PAPER-ROOT-ADD-005"
+          ],
+          "relation": "shared_stimulus_family",
+          "value": "things-stimulus-family",
+          "evidence": [
+            "catalog/RELATIONSHIPS.md; build/paper_100.json overlap_group; build/neural_100.json source_ids"
+          ],
+          "cross_suite": true,
+          "biological_overlap_verified": false,
+          "scope_limit": "Different acquisitions and modalities can share object/image families. Exact image and participant intersections must be resolved separately."
+        },
+        {
+          "tasks": [
+            "NEURAL-052",
+            "PAPER-ROOT-ADD-005"
+          ],
+          "relation": "shared_stimulus_family",
+          "value": "things-stimulus-family",
+          "evidence": [
+            "catalog/RELATIONSHIPS.md; build/paper_100.json overlap_group; build/neural_100.json source_ids"
+          ],
+          "cross_suite": true,
+          "biological_overlap_verified": false,
+          "scope_limit": "Different acquisitions and modalities can share object/image families. Exact image and participant intersections must be resolved separately."
+        },
+        {
+          "tasks": [
+            "NEURAL-053",
+            "PAPER-ROOT-ADD-005"
+          ],
+          "relation": "shared_stimulus_family",
+          "value": "things-stimulus-family",
+          "evidence": [
+            "catalog/RELATIONSHIPS.md; build/paper_100.json overlap_group; build/neural_100.json source_ids"
+          ],
+          "cross_suite": true,
+          "biological_overlap_verified": false,
+          "scope_limit": "Different acquisitions and modalities can share object/image families. Exact image and participant intersections must be resolved separately."
+        },
+        {
+          "tasks": [
+            "NEURAL-054",
+            "PAPER-ROOT-ADD-005"
+          ],
+          "relation": "shared_stimulus_family",
+          "value": "things-stimulus-family",
+          "evidence": [
+            "catalog/RELATIONSHIPS.md; build/paper_100.json overlap_group; build/neural_100.json source_ids"
+          ],
+          "cross_suite": true,
+          "biological_overlap_verified": false,
+          "scope_limit": "Different acquisitions and modalities can share object/image families. Exact image and participant intersections must be resolved separately."
+        },
+        {
+          "tasks": [
+            "NEURAL-055",
+            "PAPER-ROOT-ADD-005"
+          ],
+          "relation": "shared_stimulus_family",
+          "value": "things-stimulus-family",
+          "evidence": [
+            "catalog/RELATIONSHIPS.md; build/paper_100.json overlap_group; build/neural_100.json source_ids"
+          ],
+          "cross_suite": true,
+          "biological_overlap_verified": false,
+          "scope_limit": "Different acquisitions and modalities can share object/image families. Exact image and participant intersections must be resolved separately."
+        },
+        {
+          "tasks": [
+            "NEURAL-056",
+            "PAPER-ROOT-ADD-005"
+          ],
+          "relation": "shared_stimulus_family",
+          "value": "things-stimulus-family",
+          "evidence": [
+            "catalog/RELATIONSHIPS.md; build/paper_100.json overlap_group; build/neural_100.json source_ids"
+          ],
+          "cross_suite": true,
+          "biological_overlap_verified": false,
+          "scope_limit": "Different acquisitions and modalities can share object/image families. Exact image and participant intersections must be resolved separately."
+        },
+        {
+          "tasks": [
+            "NEURAL-057",
+            "PAPER-ROOT-ADD-005"
+          ],
+          "relation": "shared_stimulus_family",
+          "value": "things-stimulus-family",
+          "evidence": [
+            "catalog/RELATIONSHIPS.md; build/paper_100.json overlap_group; build/neural_100.json source_ids"
+          ],
+          "cross_suite": true,
+          "biological_overlap_verified": false,
+          "scope_limit": "Different acquisitions and modalities can share object/image families. Exact image and participant intersections must be resolved separately."
+        }
+      ],
+      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
+      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "documented_outputs": [
+        "Re-estimate image-wise encoding and variance partitioning of 66 behavior-derived object dimensions in the three THINGS-fMRI participants from single-trial voxel response tables."
+      ],
+      "construction_specificity": "Encoding/variance-partitioning target is documented; exact response normalization, correlated-feature attribution, cross-validation and scoring aggregation remain to freeze.",
+      "exact_published_numeric_target_verified_by_this_audit": false
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Nested feature/model selection and image-family grouping prevent near-duplicate stimulus leakage.",
+      "Compare66-dimensional encoding against category/shape and simpler regularized baselines with equal stimulus exposure."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Encoding/variance-partitioning target is documented; exact response normalization, correlated-feature attribution, cross-validation and scoring aggregation remain to freeze.",
+        "Image-family/category holdout within each participant; three people do not support a broad participant-generalization claim and cross-subject voxel transfer needs its own model.",
+        "Saved43GB archive size is not required RAM; subset access remains unresolved. THINGS overlaps other papers/signal tasks; source-dataCC0 does not settle all original image rights.",
+        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_and_metadata_only_for_this_project",
+      "runnable_reference_demonstrated": false,
+      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve held-out-image/category prediction or explanation over the 66-dimensional and categorical/shape baselines using nested image-family splits and participant-level reporting."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "not_executed_or_independently_qualified",
+      "proposed_question": [
+        "Improve held-out-image/category prediction or explanation over the 66-dimensional and categorical/shape baselines using nested image-family splits and participant-level reporting."
+      ],
+      "independent_panel_gate": "Image-family/category holdout within each participant; three people do not support a broad participant-generalization claim and cross-subject voxel transfer needs its own model.",
+      "published_targets_are_historically_exposed": true,
+      "prospective_frontier_claim_supported": false
+    },
+    "qualified": false
+  },
+  "resources": {
+    "roster_statement": "unmeasured",
+    "source_resource_evidence": null,
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "holds": {
+    "task_specific": [
+      "Encoding/variance-partitioning target is documented; exact response normalization, correlated-feature attribution, cross-validation and scoring aggregation remain to freeze.",
+      "Image-family/category holdout within each participant; three people do not support a broad participant-generalization claim and cross-subject voxel transfer needs its own model.",
+      "Saved43GB archive size is not required RAM; subset access remains unresolved. THINGS overlaps other papers/signal tasks; source-dataCC0 does not settle all original image rights.",
+      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Bind stimulus IDs across response/embedding metadata and map paper cross-validation/variance-partition formulas to one central endpoint before selecting an exact subset.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Bind stimulus IDs across response/embedding metadata and map paper cross-validation/variance-partition formulas to one central endpoint before selecting an exact subset.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "b866d9e7721721173e1786736b7b4faaf2a38b2bcd4ddd7bbee2fb68ae37e0fc",
+    "audit_record_sha256": "982c2fcf8b8315cb749780650b84b0af65766dd1ff6af9cda13a2f17e9274610",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+          "bytes": 140656,
+          "sha256": "0cf7be08fe06c0b83492908e1ebb2c18eb5b9dd7a78fbd7ed8b10b2fb677bcb1"
+        },
+        "record_id": "ROOT-ADD-005",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 4,
+        "record_sha256": "41964417b24bf6d6885e09508bc8adfaf673cf5c04c39b578a1c8d1d7be44388"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+          "bytes": 500587,
+          "sha256": "8893618f482d8301b723a57e2758fef66ab560b84c95650f8ea92f4b37375c3a"
+        },
+        "record_id": "ROOT-ADD-005",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 167,
+        "record_sha256": "c1dc547e5964cc0196872286e55a05bb18cba7f861abefce14cffa5e6684030a"
+      }
+    ],
+    "historical_pin_exceptions": [
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+          "bytes": 3519,
+          "sha256": "d9862c468c3ece0d0e0cfca975f8980cea6a9dfbb7abfe5d3b4b96ca76045ac7"
+        },
+        "current_pin": {
+          "bytes": 4544,
+          "sha256": "963f9e1b6d528573c1c321629a0ab2ba6e1fb25b3e0404e3882b483ea7207c5f"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      },
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+          "bytes": 163669,
+          "sha256": "96c826360af4b8858cb33406e95242d27d7806e5896b98c211ccd3478a76661d"
+        },
+        "current_pin": {
+          "bytes": 166909,
+          "sha256": "974e56e839620059345f5b8ae1f5893e1d404c007864159dc84e6b330f49edca"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      }
+    ],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

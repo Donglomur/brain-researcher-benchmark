@@ -1,16 +1,24 @@
 {
+  "schema_version": 1,
   "id": "PAPER-CANDIDATE-20261114-NPVC",
   "track": "paper",
   "title": "Projection-specific population information in parietal cortex",
-  "registration_recommendation": "REGISTER_DRAFT_ONLY",
-  "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
-  "scientific_question": "Do projection-defined PPC populations exhibit the reported information-enhancing/limiting interaction structure, beyond individual-neuron, behavioral and sampling explanations?",
-  "paired_access_conditions": {
-    "A": "Paper and sufficient scientific specification plus identical complete authorized data and train/dev labels; no official implementation.",
-    "B": "The same paper/specification/data and role information plus pinned official code. Missing essential method specification is a construction defect, not an A-arm model failure.",
-    "parity": "Equal execution, tuning and compute budgets; same complete held cases and metric. Public event schedules and paper-provided information remain equally available. Code/model/checkpoint exposure and contamination are audited.",
-    "outcomes": "Separate historical reproduction from prospective improvement. Preserve original test-selection/leakage if reproducing it, label it, and never substitute a corrected split without a distinct prospective result. Narrative cannot replace numeric artifacts."
-  },
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Predict held-out single-neuron deconvolved PPC activity conditional on the original task and movement variables, preserving Figure 2b,c. Larger motif enrichment or interaction information is not itself better predictive performance.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Predict held-out single-neuron deconvolved PPC activity conditional on the original task and movement variables, preserving Figure 2b,c. Larger motif enrichment or interaction information is not itself better predictive performance.",
+    "Source-paper comparison for Figure 2 held-out fraction of deviance explained, with original per-neuron support and source normalization: Eq. 6 FDE=(L_model-L_null)/(L_sat-L_null), using held-out log-likelihoods. NPvC null uses the marginal activity density and its saturated term uses the peak over the source 200-point activity grid. GLM and NPvC have distinct source normalizers; preserve and audit those conventions rather than silently sharing a denominator."
+  ],
+  "success_criteria": [
+    "Recover exact Figure 2 support, the original split protocol, fitted source preprocessing, likelihood normalizers and numeric NPvC baseline; unrecoverable historical random memberships alone do not bar a documented source-conformant rerun.",
+    "Compare candidate and author NPvC on identical held-out folds from the recovered source protocol, whether historical or documented regenerated draws, with the original population/aggregation and predeclared calibration tolerance, meaningful effect and uncertainty rule.",
+    "Retain GLM and original NPvC as separate baselines; beating GLM alone does not surpass the paper's NPvC result.",
+    "Do not reward higher motif enrichment, stronger p-values, graph-calculation fidelity, changed epochs or a held-animal extension as the same-task paper win.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "participant_inputs": "All70 released session files with trial-aligned neural responses, stimulus/task/behavior variables, projection identities and source eligibility. Raw imaging is unnecessary only if complete released analysis signals and their provenance satisfy every required panel.",
   "provenance": {
     "paper": {
       "title": "Specialized structure of neural population codes in parietal cortex outputs",
@@ -44,30 +52,22 @@
       "sha256": "d6da360d605cc886f66e0e6dc7b5f7ff77ec15248725faf58f2aca2c159a3fde"
     }
   },
-  "complete_scope": "All 70 released data files and all paper-defined eligible populations, with ACC, RSC, contralateral PPC and unlabeled groups retained. Reproduce the full choice-information/motif claim across all source-defined sessions and both outcome conditions, not only selected triplets.",
-  "reference": {
-    "outputs": [
-      "Figure 2 held-out FDE distributions",
-      "Population-size information curves and information-enhancing/limiting motif summaries",
-      "Projection-group and correct/error contrasts with original uncertainty plus animal-grouped sensitivity"
-    ],
-    "baselines": [
-      "NPvC",
-      "GLM",
-      "Independent-neuron and source-defined interaction-shuffle nulls"
-    ],
-    "panel": "Figures 2–6; exact numeric panel-to-file mapping is a pre-admission blocker."
-  },
-  "prospective_improvement": {
-    "endpoint": "Improved held-trial predictive log likelihood/FDE with maintained calibration, then test whether projection-specific motif conclusions survive held-animal and movement-controlled analysis.",
-    "heldout_unit": "Whole trials within session for model reproduction; whole mouse for generalization, with grouped uncertainty. Animal IDs must be recovered before accepting the latter.",
-    "controls": [
-      "Movement-only and task-only predictors",
-      "Rate and distance matched projection comparisons",
-      "Pair-preserving versus fully shuffled correlation nulls",
-      "Equal trial counts for correct/error analysis without dropping the complete original-cohort report",
-      "No cell/triplet pseudoreplication"
-    ]
+  "source_family_ids": [
+    "ppc-projection-harvard-NL1CAQ"
+  ],
+  "publication_context": {
+    "status": "registered_construction_draft_definition_only",
+    "source_snapshot_date": "2026-11-14",
+    "source_definition_bytes": 7721,
+    "source_definition_sha256": "f1f41d31548085e197e3c34b08546db9d6e7e56d4e95e24a3c4d25a04482f671",
+    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
+    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
+    "scientific_definition_changed": false,
+    "runtime_binding": null,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
   },
   "resources": {
     "storage_GiB": [
@@ -88,48 +88,75 @@
     ],
     "basis": "14.98 GB compressed release plus complete extraction/features; kernel/copula dependence fits and population resampling can dominate. No measured timing."
   },
-  "remaining_gates": [
-    "Explicit code-use/redistribution permission",
-    "Real-data pipeline and complete panel mapping beyond simulation README",
-    "Exact animal/session ledger",
-    "Finite complete population-size and resampling workload without silently truncating combinatorial analysis"
+  "input_assets": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-NPVC/improvement.v1.json",
+      "bytes": 10950,
+      "sha256": "a2513e2b050eda6179d33c40af80365125d58b8f1f5c0fc95856e4e7b55ee7c5"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-NPVC/historical/task.pre-improvement.v1.json",
+        "bytes": 8573,
+        "sha256": "4e286a4758ae25f0cee2723dece00d5db572e2343dbb7c16897d57c86553886b"
+      },
+      "implementation_ids": [
+        "components-npvc-signed-motifs"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Not admitted until original FDE evaluation is recovered. Then expose only the source-compatible training and internal validation information for iterative candidate development.",
+    "candidate_freeze": "Freeze code, hyperparameters, transforms, permitted inputs, the source-protocol fold ledger, recorded seeds, calibration tolerance, metric and aggregation before protected final predictions are scored.",
+    "final_evaluation": "One complete original-support Figure 2 comparison on shared candidate-author folds generated by the original protocol. A documented stochastic rerun is the same task; a changed split unit, held-animal scheme, population or time window is an extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published FDE distribution, reproduced NPvC and GLM, and any future current-SOTA claim are distinct. Document regenerated-draw provenance and calibrate the source-author rerun within a predeclared justified tolerance. Historical motif reconstruction is calibration only."
+  },
+  "blocking_issues": [
+    "Exact Figure 2 per-neuron numeric baseline and original aggregation are missing.",
+    "The 70-file registration inventory is not an authenticated 59-session/ten-mouse eligible-cohort ledger.",
+    "The original split unit/protocol and real-data source execution route remain unresolved; exact historical random memberships are not mandatory when a documented source-conformant calibrated rerun can be established.",
+    "Meaningful effect, uncertainty, fixed access/compute budgets and full evaluator admission are incomplete."
   ],
-  "overlap": "No exact paper/code/data identity found in the finite 220 registry or six unregistered dossiers; broader population-information topics are not treated as duplicate identities.",
-  "common_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
-  "readiness": {
+  "holds": {
+    "task_specific": [
+      "Exact Figure 2 per-neuron numeric baseline and original aggregation are missing.",
+      "The 70-file registration inventory is not an authenticated 59-session/ten-mouse eligible-cohort ledger.",
+      "The original split unit/protocol and real-data source execution route remain unresolved; exact historical random memberships are not mandatory when a documented source-conformant calibrated rerun can be established.",
+      "Meaningful effect, uncertainty, fixed access/compute budgets and full evaluator admission are incomplete."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The source has a genuine FDE prediction endpoint, but the published numeric baseline, source split protocol/cohort mapping and scalar comparison are unrecovered. Exact historical random memberships are not intrinsically required if a source-conformant rerun is documented and calibrated. The existing signed-motif implementation cannot establish stronger-than-paper neural prediction. Exact Figure 2 per-neuron numeric baseline and original aggregation are missing. The 70-file registration inventory is not an authenticated 59-session/ten-mouse eligible-cohort ledger. The original split unit/protocol and real-data source execution route remain unresolved; exact historical random memberships are not mandatory when a documented source-conformant calibrated rerun can be established. Meaningful effect, uncertainty, fixed access/compute budgets and full evaluator admission are incomplete.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-NPVC/historical/task.pre-improvement.v1.json",
+      "bytes": 8573,
+      "sha256": "4e286a4758ae25f0cee2723dece00d5db572e2343dbb7c16897d57c86553886b"
+    },
+    "notes": "Preserve implementations/signed-motifs unchanged. It computes exact supplied-graph triplet statistics and finite two-pool probabilities, supplies no authentic graph cohort or fitted NPvC, and is calibration only; it is not a Figures 2-6 improvement evaluator."
+  },
+  "admission": {
     "runnable": false,
-    "inputs_verified": false,
-    "reference_validated": false,
     "research_qualified": false,
-    "reproduction_established": false,
-    "model_evaluated": false,
-    "submission_ready": false
-  },
-  "participant_inputs": "All70 released session files with trial-aligned neural responses, stimulus/task/behavior variables, projection identities and source eligibility. Raw imaging is unnecessary only if complete released analysis signals and their provenance satisfy every required panel.",
-  "machine_output": {
-    "predictions": "Per held trial/neuron or declared population size, predictive distributions/rates on the exact response grid with model and fold identity.",
-    "tables": "Figure2 FDE, Figures3–6 information curves and interaction/motif estimates; all projection groups, correct/error trials, population sizes and animal/session outcomes; numerical data underlying plots and uncertainty.",
-    "artifacts": "Frozen fitted models, training identities, complete null/control outputs and source-defined estimator/config manifest."
-  },
-  "scoring": "Recompute published FDE/information estimators and held-trial predictive log likelihood, then grouped projection contrasts. Exact estimator normalization and panel-to-file map must be source-bound before running. No triplet count is an independent animal sample.",
-  "protected_split": "Original trial splits for reproduction; independent whole-mouse generalization where authentic IDs permit. TRAIN-only normalization/interaction fitting and inner grouped DEV selection; no held-label triplet selection.",
-  "comparators": "NPvC, GLM, independent-neuron and source-defined interaction shuffles; movement/task-only predictors and rate/distance-matched contrasts. Preserve complete cohort alongside equal-trial sensitivity.",
-  "source_family_ids": [
-    "ppc-projection-harvard-NL1CAQ"
-  ],
-  "distinctness": "Projection-specific population interaction and information structure; neither a cosmetic decoder variant nor an existing same-paper task.",
-  "publication_context": {
-    "status": "registered_construction_draft_definition_only",
-    "source_snapshot_date": "2026-11-14",
-    "source_definition_bytes": 7721,
-    "source_definition_sha256": "f1f41d31548085e197e3c34b08546db9d6e7e56d4e95e24a3c4d25a04482f671",
-    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
-    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
-    "scientific_definition_changed": false,
-    "runtime_binding": null,
-    "scientifically_qualified": false,
-    "submission_ready": false,
-    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
-    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

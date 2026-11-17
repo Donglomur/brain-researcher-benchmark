@@ -5,25 +5,36 @@
 - **Task ID:** `PAPER-CANDIDATE-20261114-CONSENSUS`
 - **Track:** Paper research
 - **Registration:** Expansion draft
-- **Declared specification status:** Not declared
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. Figure 2b supplies an ordered held-neuron prediction task, but its numeric baseline and exact historical execution are unresolved. The local source correction and trial-occurrence adapter do not establish native target isolation or paper parity. Changing to a new blocked split or a training-only PSTH is an extension, not victory over Figure 2b.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 16302 bytes; SHA-256 `7584103d81a57dd629606b8885d99b968529a96cb73f89a08519778171f5009e`.
+- Specification identity: 9954 bytes; SHA-256 `75453afa9e267397e4987b48255386261fa2efc1b90fef3115b64bbc4acbfb88`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
 ## Implementation artifacts
 
-- [Held neuron](implementations/held-neuron) — Held neuron.
-  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
-- [Trial occurrences](implementations/trial-occurrences) — Trial occurrences.
-  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Held neuron](implementations/held-neuron) — Calibration only.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Trial occurrences](implementations/trial-occurrences) — Calibration only.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

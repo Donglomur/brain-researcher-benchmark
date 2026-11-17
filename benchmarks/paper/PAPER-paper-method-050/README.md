@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-method-050`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Design ready
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** design\_ready. The source provides a numerical original tracking-duration endpoint and independent matching-quality checks, supporting an improvement design. Exact Figure5 population/session identities, native method parity, quality-reference artifacts and a justified decision rule remain incomplete. Longer tracks alone can be produced by over-merging and never suffice for success.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 29754 bytes; SHA-256 `fcd65edd8550ca28997a59ad5199df24179aea1c304ad4140177ba1d45b707d3`.
+- Specification identity: 31816 bytes; SHA-256 `9835616704ca15d048306fd01989ac6a446da7677ba940073c6098e9a2496d21`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Converts pinned spikeInfo HDF5 references into numeric arrays and computes paired full-population tracking-yield/PETH diagnostics with complete declared unit and animal accounting. Native schema/time units, real animal grouping, UnitMatch half-waveforms, PETH exclusion from every matching path, Figure 5 day/rate/three-method comparisons, true identity labels, protected lineage and scientific qualification remain open.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Converts pinned spikeInfo HDF5 references into numeric arrays and computes paired full-population tracking-yield/PETH diagnostics with complete declared unit and animal accounting. Native schema/time units, real animal grouping, UnitMatch half-waveforms, PETH exclusion from every matching path, Figure 5 day/rate/three-method comparisons, true identity labels, protected lineage and scientific qualification remain open. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

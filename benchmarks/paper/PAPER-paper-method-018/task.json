@@ -1,20 +1,30 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-018",
-  "source_id": "paper-method-018",
   "track": "paper",
   "title": "Identifying interactions across brain areas while accounting for individual-neuron dynamics with a Transformer-based variational autoencoder",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Estimate held-out-trial spike-count intensity with the full GLM-Transformer and compare its reconstruction NLL to source ablations. Posterior inference sees target-population activity; this is not blind forecasting or proof of causal coupling.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Estimate held-out-trial spike-count intensity with the full GLM-Transformer and compare its reconstruction NLL to source ablations. Posterior inference sees target-population activity; this is not blind forecasting or proof of causal coupling.",
+    "Source-paper comparison for Allen Visual Coding Table S1 full-model test negative log likelihood: Table S1 names test negative log likelihood. Poisson NLL is sum(exp(eta)-y*eta+log(y!)); pinned loss_function instead averages the first two terms and adds beta times KL. Recover the exact total, constant, KL and model-flag convention that produced 4.218e7."
+  ],
+  "success_criteria": [
+    "Reconcile the exact Table S1 dataset, split, preprocessing, model flags, posterior inference and total-NLL reduction before any active improvement episode.",
+    "Beat the full GLM-Transformer source result and its calibrated author rerun; increasing a local history-to-interaction difference does not establish that result.",
+    "Retain all ten sessions and the same available inputs; a new split or different target-conditioning rule is an extension.",
+    "Require predeclared meaningful effect and valid uncertainty; causal-interaction claims require separate evidence.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-018",
   "canonical_position_one_based": 48,
   "paper_identity": {
     "url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/ac643478c07baa8432690555e4702b65-Paper-Conference.pdf",
     "publication_year": 2025,
     "venue": "NeurIPS"
   },
-  "primary_outputs": [
-    "Fit multi-session GLM-Transformer on the ten author-specified Allen sessions and reproduce held-out prediction/coupling ablations.",
-    "Compare history-only and interaction-enabled models with matched training and test trials."
-  ],
   "input_assets": {
     "routes": [
       "https://portal.brain-map.org/explore/circuits/visual-coding-neuropixels"
@@ -627,102 +637,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Allen visual-coding NWB public through EcephysProjectCache warehouse.",
-        "Code reuse license unresolved; do not redistribute code under an invented license.",
-        "Allen dataset terms must be preserved."
-      ],
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Fit multi-session GLM-Transformer on the ten author-specified Allen sessions and reproduce held-out prediction/coupling ablations.",
-        "Compare history-only and interaction-enabled models with matched training and test trials."
-      ],
-      "assessment": "Fig5 multi-session held-out neural prediction/history-versus-interaction ablations have a loader/training route; missing anatomical/condition pickles exclude associated subpanels.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Keep neuron history, trial/stimulus conditioning and training capacity matched. Predictive gain does not identify directed biological influence under hidden common input.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Fig.5 notebook defaults to precomputed local joblib and trained model; official loader/training path can regenerate inputs/model.",
-        "Anatomical membership/condition pickle files are not supplied; exclude associated group-specific subpanels until those are reconstructed and validated.",
-        "No claim that the proposed predictions identify causal influence or directed biological connectivity.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve robustness to shared unobserved inputs or neuron subsampling while retaining coupling interpretability, assessed separately from predictive likelihood."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Session/trial-held-out likelihood with history-only and shared-input alternatives; improve robustness under neuron subsampling without converting coupling scores into causal connectivity.",
-      "retained_roster_proposal": [
-        "Improve robustness to shared unobserved inputs or neuron subsampling while retaining coupling interpretability, assessed separately from predictive likelihood."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": "GPU; ten-session NWB collection may require tens of GB",
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": "Inspection-based resource class, not a measured runtime."
-  },
-  "holds": {
-    "task_specific": [
-      "Fig.5 notebook defaults to precomputed local joblib and trained model; official loader/training path can regenerate inputs/model.",
-      "Anatomical membership/condition pickle files are not supplied; exclude associated group-specific subpanels until those are reconstructed and validated.",
-      "No claim that the proposed predictions identify causal influence or directed biological connectivity.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Pin exact Allen assets and reconstruct only the declared supported Fig5 input/condition map; freeze history/interactions ablation configurations and likelihood definition before training.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Pin exact Allen assets and reconstruct only the declared supported Fig5 input/condition map; freeze history/interactions ablation configurations and likelihood definition before training.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -780,11 +694,77 @@
       }
     ]
   },
+  "resources": {
+    "roster_resource_statement": "GPU; ten-session NWB collection may require tens of GB",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Inspection-based resource class, not a measured runtime."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-018/improvement.v1.json",
+      "bytes": 10323,
+      "sha256": "c5d750e8e18645662d1c968bd74e540590ef166f52f68cf3ef161b405ebe8ebd"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-018/historical/task.pre-improvement.v1.json",
+        "bytes": 38573,
+        "sha256": "7032a947b6b9a0a860301d587d81e83ef5b44adc1764654e0074b4cd8e55718f"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-018-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "No active improvement episode until paper/code metric and split identities are recovered; then use only source training/validation feedback for iteration.",
+    "candidate_freeze": "Freeze model, source data/axes, trial memberships, inference batches, conditioning flags, normalization and original author baseline before final scoring.",
+    "final_evaluation": "Evaluate the complete original Table S1 held-out observations using its recovered score convention; local prospective gains remain separately labeled.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The source full-model Table S1 score is the comparator. Reproduction of paper components, ablation reconstruction or generated engineering controls is calibration only. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+  },
+  "blocking_issues": [
+    "Paper/code validation-test split naming and original memberships are unresolved.",
+    "Table S1 total NLL versus released mean variational loss, omitted Poisson constant and replicate definition are unresolved.",
+    "Native notebook/trainer flags and interface, target-conditioned encoder layout and inference batches require reconciliation.",
+    "No authenticated complete Allen preprocessing/reference run, fixed budgets, justified improvement effect or final uncertainty rule."
+  ],
+  "holds": {
+    "task_specific": [
+      "Paper/code validation-test split naming and original memberships are unresolved.",
+      "Table S1 total NLL versus released mean variational loss, omitted Poisson constant and replicate definition are unresolved.",
+      "Native notebook/trainer flags and interface, target-conditioned encoder layout and inference batches require reconciliation.",
+      "No authenticated complete Allen preprocessing/reference run, fixed budgets, justified improvement effect or final uncertainty rule."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The paper reports an ordered Allen test-NLL result, but the split, metric normalization and model flags needed to reproduce that number disagree with the available code path. The local equal-session interaction-gain endpoint is prospective and cannot substitute for exceeding the published full-model task. Paper/code validation-test split naming and original memberships are unresolved. Table S1 total NLL versus released mean variational loss, omitted Poisson constant and replicate definition are unresolved. Native notebook/trainer flags and interface, target-conditioned encoder layout and inference batches require reconciliation. No authenticated complete Allen preprocessing/reference run, fixed budgets, justified improvement effect or final uncertainty rule.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-018/historical/task.pre-improvement.v1.json",
+      "bytes": 38573,
+      "sha256": "7032a947b6b9a0a860301d587d81e83ef5b44adc1764654e0074b4cd8e55718f"
+    },
+    "notes": "Retain initial-evaluator-v1 unchanged. Its equal-session interaction gain, altered history flags and generated controls are prospective/calibration components; they cannot be compared numerically with Table S1 full-model NLL or called blind prediction."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

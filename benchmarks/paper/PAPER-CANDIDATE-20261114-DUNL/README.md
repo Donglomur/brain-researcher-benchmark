@@ -5,23 +5,34 @@
 - **Task ID:** `PAPER-CANDIDATE-20261114-DUNL`
 - **Track:** Paper research
 - **Registration:** Expansion draft
-- **Declared specification status:** Not declared
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. Figure 4F supplies an ordered missed/false-event comparison, but its numeric DUNL point, exact original split and complete source-to-file cohort join are not recovered. The current release makes the programmed target schedule explicit; hiding it or replacing this with held-response prediction would change the task. The existing coupled reconstruction grader cannot establish an event-detection paper win.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 17633 bytes; SHA-256 `750346e19cc38fcdbad50c1e694d2a6281e8647d90cc300b0b115c9598390864`.
+- Specification identity: 10883 bytes; SHA-256 `d8dc910c11ef68e5d247361445b7e1acd15f147a90724d26af628c04b596388e`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114-v11/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
 ## Implementation artifacts
 
-- [Dunl coupled reconstruction](implementations/dunl-coupled-reconstruction) — Task implementation source.
-  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Dunl coupled reconstruction](implementations/dunl-coupled-reconstruction) — Calibration only.
+  Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

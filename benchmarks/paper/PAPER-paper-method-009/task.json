@@ -1,20 +1,30 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-009",
-  "source_id": "paper-method-009",
   "track": "paper",
   "title": "A doubly stochastic renewal framework for partitioning spiking variability",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Estimate spike-generation irregularity phi from spike trains alone and compare against voltage-derived operational-time ISI CV² for the paper’s Fig. 3 intracellular validation. The contribution phi/CVraw² is a biological quantity, not a score to maximize.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Estimate spike-generation irregularity phi from spike trains alone and compare against voltage-derived operational-time ISI CV² for the paper’s Fig. 3 intracellular validation. The contribution phi/CVraw² is a biological quantity, not a score to maximize.",
+    "Source-paper comparison for Source-reported average discrepancy between spike-only phi and voltage-derived phi; exact formula unresolved: The source reports an average discrepancy of 23% between spike-only and voltage-derived phi. The reviewed text does not resolve its denominator, signed/absolute operation and aggregation, so it is not yet an executable percentage-error score."
+  ],
+  "success_criteria": [
+    "Recover the source definition of 23% discrepancy and the exact empirical Fig. 3 pipeline, including source-authorized resolution of 25 versus 50 ms bins.",
+    "Match all eight original neurons, five mice and the twenty-segment mapping; independently calibrate the native author estimator and voltage-derived reference.",
+    "Freeze the spike-only candidate before final comparison and exceed a justified meaningful effect under a valid dependence-aware uncertainty rule.",
+    "Do not count smaller phi, larger phi/CVraw², synthetic-ground-truth performance, newly held-out trials or a new cohort as surpassing the original empirical paper task.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-009",
   "canonical_position_one_based": 28,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41467-025-63821-4",
     "publication_year": 2025,
     "venue": "Nature Communications"
   },
-  "primary_outputs": [
-    "Recover per-neuron irregularity and fraction of total ISI variability using spike-only and voltage-based estimates.",
-    "Test estimation stability across recording segments and compare DSR with raw CV²/Poisson reference under fixed neuron inclusion and preprocessing."
-  ],
   "input_assets": {
     "routes": [
       "https://zenodo.org/records/1304771"
@@ -426,109 +436,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "recorded_terms": [
-        "Zenodo1304771 actual data.mat1.31GB plus original analysis helpers, CC BY4.0.",
-        "Author DSRP code MIT at inspected commit."
-      ],
-      "record_conflicts": [],
-      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
-      "overlap_group": "https://zenodo.org/api/records/1304771"
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "central_outputs_in_saved_source_contract": [
-        "Recover per-neuron irregularity and fraction of total ISI variability using spike-only and voltage-based estimates.",
-        "Test estimation stability across recording segments and compare DSR with raw CV²/Poisson reference under fixed neuron inclusion and preprocessing."
-      ],
-      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
-      "missing_or_unfrozen_endpoint_details": "Eight neurons/five mice Fig3 validation is the scope; assemble voltage-spline/ingestion bridge and reconcile25ms caption versus50ms methods before exact matching."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Independent voltage-derived irregularity is a valuable comparator, but preprocessing/window choice changes the estimand. Keep native spike-only and voltage estimates paired, with held-segment uncertainty and neuron nesting."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Eight neurons/five mice Fig3 validation is the scope; assemble voltage-spline/ingestion bridge and reconcile25ms caption versus50ms methods before exact matching.",
-        "Independent voltage-derived irregularity is a valuable comparator, but preprocessing/window choice changes the estimand. Keep native spike-only and voltage estimates paired, with held-segment uncertainty and neuron nesting.",
-        "An empirical ingestion/voltage-spline analysis wrapper must be assembled from paper methods and deposited Pala analysis helpers; repository examples alone are synthetic.",
-        "Paper body/methods specify50ms bins while Fig.3 caption says25ms: resolve by predeclared sensitivity analysis before claiming exact figure agreement.",
-        "Eight qualifying neurons/five mice; do not generalize the full cross-area hierarchy from this bounded intracellular scope.",
-        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-        "Execute and independently audit references, controls, grading and measured resources.",
-        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
-      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve finite-sample stability or uncertainty calibration of spike-only irregularity while preserving agreement with independent voltage-derived estimates; use held-out segments and report neuron-level effects."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "independent_panel_not_established_in_inspected_evidence",
-      "proposed_improvement": [
-        "Improve finite-sample stability or uncertainty calibration of spike-only irregularity while preserving agreement with independent voltage-derived estimates; use held-out segments and report neuron-level effects."
-      ],
-      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
-      "special_gate": "No completed independent improvement result is established here."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "source_roster_estimate_or_statement": "CPU;~1.31GB empirical input",
-    "measured_or_static_facts_from_existing_authoring": [],
-    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
-  },
-  "holds": {
-    "task_specific": [
-      "Eight neurons/five mice Fig3 validation is the scope; assemble voltage-spline/ingestion bridge and reconcile25ms caption versus50ms methods before exact matching.",
-      "Independent voltage-derived irregularity is a valuable comparator, but preprocessing/window choice changes the estimand. Keep native spike-only and voltage estimates paired, with held-segment uncertainty and neuron nesting.",
-      "An empirical ingestion/voltage-spline analysis wrapper must be assembled from paper methods and deposited Pala analysis helpers; repository examples alone are synthetic.",
-      "Paper body/methods specify50ms bins while Fig.3 caption says25ms: resolve by predeclared sensitivity analysis before claiming exact figure agreement.",
-      "Eight qualifying neurons/five mice; do not generalize the full cross-area hierarchy from this bounded intracellular scope.",
-      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
-      "Execute and independently audit references, controls, grading and measured resources.",
-      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Specify the empirical Pala MAT-to-voltage/spike wrapper and prespecified25/50ms sensitivity, then validate its definitions on generated inputs before a bounded real-cell reference.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Specify the empirical Pala MAT-to-voltage/spike wrapper and prespecified25/50ms sensitivity, then validate its definitions on generated inputs before a bounded real-cell reference.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -559,11 +466,81 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "source_roster_estimate_or_statement": "CPU;~1.31GB empirical input",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-009/improvement.v1.json",
+      "bytes": 10909,
+      "sha256": "6fbf09c8da0a79802f6627d55e4258b11fa6cf1bdcf70b00dc382cddc0567e10"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-009/historical/task.pre-improvement.v1.json",
+        "bytes": 29438,
+        "sha256": "52c52ea135ca8710635d929290d1abdc2344c34c054030167e826a7f01284b96"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-009-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Inactive until exact source validation is recoverable. Any exploratory held-trial stability study must be labelled as an extension and cannot supply the original paper-win score.",
+    "candidate_freeze": "Freeze candidate estimator, source-equivalent preprocessing, cohort/segment manifest, reference construction, metric and budgets before comparison.",
+    "final_evaluation": "Use the recovered original empirical Fig. 3 validation and native author comparator; retain all paired cell-level results and dependence structure. A local natural-cubic held-trial evaluator is not assumed to be the source evaluator.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep the published 23% statement, a future exact author rerun and prospective held-trial results separate. The source physiological fractions 0.26 and 0.27 are not performance baselines."
+  },
+  "blocking_issues": [
+    "Exact mathematical definition and aggregation of reported 23% discrepancy are unresolved.",
+    "Source Results/Methods use 50 ms voltage/rate bins while Fig. 3b states 25 ms.",
+    "Empirical voltage-spline family/support details, source cohort identities and twenty-segment mapping have not been recovered.",
+    "Pinned time_rescaling.py is a spike-generation routine, not the empirical validation pipeline.",
+    "The local evaluator openly uses prospective held trials and natural-cubic policies; this is not native Figure 3 reconstruction.",
+    "No same-task working scorer, justified effect/uncertainty rule, candidate freeze or concrete episode budgets exist."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact mathematical definition and aggregation of reported 23% discrepancy are unresolved.",
+      "Source Results/Methods use 50 ms voltage/rate bins while Fig. 3b states 25 ms.",
+      "Empirical voltage-spline family/support details, source cohort identities and twenty-segment mapping have not been recovered.",
+      "Pinned time_rescaling.py is a spike-generation routine, not the empirical validation pipeline.",
+      "The local evaluator openly uses prospective held trials and natural-cubic policies; this is not native Figure 3 reconstruction.",
+      "No same-task working scorer, justified effect/uncertainty rule, candidate freeze or concrete episode budgets exist."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The registered Fig. 3 task admits an ordered estimation-agreement question, and the paper reports 23% average discrepancy between spike-only and voltage-derived irregularity. However, the exact percentage-error definition, empirical voltage reference pipeline, cohort/segment identities and conflicting 25/50 ms preprocessing are unresolved. The local prospective held-trial evaluator changes the historical evaluation and cannot certify a same-task paper win. Exact mathematical definition and aggregation of reported 23% discrepancy are unresolved. Source Results/Methods use 50 ms voltage/rate bins while Fig. 3b states 25 ms. Empirical voltage-spline family/support details, source cohort identities and twenty-segment mapping have not been recovered. Pinned time_rescaling.py is a spike-generation routine, not the empirical validation pipeline. The local evaluator openly uses prospective held trials and natural-cubic policies; this is not native Figure 3 reconstruction. No same-task working scorer, justified effect/uncertainty rule, candidate freeze or concrete episode budgets exist.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-009/historical/task.pre-improvement.v1.json",
+      "bytes": 29438,
+      "sha256": "52c52ea135ca8710635d929290d1abdc2344c34c054030167e826a7f01284b96"
+    },
+    "notes": "Preserve the initial evaluator and native third-party estimator. Its generated controls and prospective held-trial outputs are calibration/extension evidence only; no authentic reference agreement or scientific improvement has been established."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

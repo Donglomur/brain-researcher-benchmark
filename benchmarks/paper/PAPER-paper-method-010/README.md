@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-method-010`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The source paper has a defensible ordered task: recover the original within-module ordering in its Figure 1 five-module simulation benchmark. The original generator, population, ten realization IDs and metric implementations are recoverable, but the published numeric Rastermap score panel and original result artifact have not been recovered and pinned. No scientific run establishes an author replay. The legacy empirical evaluator is not the simulation scorer and cannot establish this paper win.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 28326 bytes; SHA-256 `8764f79a3610f0323b82f342d2bfde9a98b5551241604d44af8684c1a97932bd`.
+- Specification identity: 29064 bytes; SHA-256 `cc334ec68c203a7f9b64390e5b6a00123a4c0b469a45d0b6d5ae514063a089cc`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Evaluates both complete declared processed hippocampal and mouse source populations using prospective held-out neighborhood retention, behavior-to-superneuron prediction and paired tie-aware order stability. Native Rastermap fitting/preprocessing, source paper/tutorial differences, zero-variance exclusions, empirical baselines, protected execution, rights and full-population quadratic runtime/memory qualification remain open.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Evaluates both complete declared processed hippocampal and mouse source populations using prospective held-out neighborhood retention, behavior-to-superneuron prediction and paired tie-aware order stability. Native Rastermap fitting/preprocessing, source paper/tutorial differences, zero-variance exclusions, empirical baselines, protected execution, rights and full-population quadratic runtime/memory qualification remain open. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-ROOT-ADD-007`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. Source-native rebinding identifies an ordered original task: Bayesian position decoding evaluated by Fig. 1D RMSE across all animals/sessions and original arm conditions. The exact numerical source baseline, evaluation identities, split and reduction are not recovered, so the task is not admitted. Descriptive sequence/replay reconstruction remains calibration.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 51355 bytes; SHA-256 `5b90d33727d900a940a6e7bb01bd614b91fa7d7756c18c922bc6f51f040b4466`.
+- Specification identity: 48887 bytes; SHA-256 `174fd6aa242d39991602c5df2d539c9e173afea22a89a850b4982fa9e7e475d5`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Declared four-mouse sequence clustering and descriptive counts, prospective matched-phase template recurrence, and separate Poisson trajectory replay primitives. Native safe conversion and cell identities, waveform/rate-map normalization, Skaggs selectivity, full figure replay, authentic references, rights and protected evaluation remain held. Template recurrence does not establish native spatial replay; scientific qualification is unknown.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Declared four-mouse sequence clustering and descriptive counts, prospective matched-phase template recurrence, and separate Poisson trajectory replay primitives. Native safe conversion and cell identities, waveform/rate-map normalization, Skaggs selectivity, full figure replay, authentic references, rights and protected evaluation remain held. Template recurrence does not establish native spatial replay; scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

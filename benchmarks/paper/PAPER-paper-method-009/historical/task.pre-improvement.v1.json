@@ -1,0 +1,569 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-009",
+  "source_id": "paper-method-009",
+  "track": "paper",
+  "title": "A doubly stochastic renewal framework for partitioning spiking variability",
+  "status": "specification_only",
+  "canonical_position_one_based": 28,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41467-025-63821-4",
+    "publication_year": 2025,
+    "venue": "Nature Communications"
+  },
+  "primary_outputs": [
+    "Recover per-neuron irregularity and fraction of total ISI variability using spike-only and voltage-based estimates.",
+    "Test estimation stability across recording segments and compare DSR with raw CV²/Poisson reference under fixed neuron inclusion and preprocessing."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://zenodo.org/records/1304771"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": "remTrialswithAPs.m",
+          "bytes": 464,
+          "url": "https://zenodo.org/api/records/1304771/files/remTrialswithAPs.m/content",
+          "checksum": "md5:87e9d4743fddfc127fb17b3fdb3ab3a4"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:87e9d4743fddfc127fb17b3fdb3ab3a4"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-009"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/1",
+        "recorded_fields": {
+          "name": "suptitleAP.m",
+          "bytes": 2983,
+          "url": "https://zenodo.org/api/records/1304771/files/suptitleAP.m/content",
+          "checksum": "md5:a35b6a8782eb8e8b232cc45009e0a30b"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:a35b6a8782eb8e8b232cc45009e0a30b"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-009"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/2",
+        "recorded_fields": {
+          "name": "PalaPetersen_Analysis.m",
+          "bytes": 42821,
+          "url": "https://zenodo.org/api/records/1304771/files/PalaPetersen_Analysis.m/content",
+          "checksum": "md5:7f8fec83affc4c95c973a9b5346a126e"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:7f8fec83affc4c95c973a9b5346a126e"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-009"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/3",
+        "recorded_fields": {
+          "name": "medianFiltAPs.m",
+          "bytes": 182,
+          "url": "https://zenodo.org/api/records/1304771/files/medianFiltAPs.m/content",
+          "checksum": "md5:a5ddc625ab4d6fe17fc626fb8016d9cb"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:a5ddc625ab4d6fe17fc626fb8016d9cb"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-009"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/4",
+        "recorded_fields": {
+          "name": "data.mat",
+          "bytes": 1310739375,
+          "url": "https://zenodo.org/api/records/1304771/files/data.mat/content",
+          "checksum": "md5:dc333d3d03b79460f2ec1d36122206c8"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:dc333d3d03b79460f2ec1d36122206c8"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-009"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/5",
+        "recorded_fields": {
+          "name": "DataViewer.m",
+          "bytes": 31733,
+          "url": "https://zenodo.org/api/records/1304771/files/DataViewer.m/content",
+          "checksum": "md5:d3295de9d808f96cdeba7b1d2b7c60d4"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:d3295de9d808f96cdeba7b1d2b7c60d4"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-009"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/6",
+        "recorded_fields": {
+          "name": "blankAPs.m",
+          "bytes": 652,
+          "url": "https://zenodo.org/api/records/1304771/files/blankAPs.m/content",
+          "checksum": "md5:6027fe2a94b99e65cb98d1613053989f"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:6027fe2a94b99e65cb98d1613053989f"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-009"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/7",
+        "recorded_fields": {
+          "name": "2018_Pala_eLife.pdf",
+          "bytes": 2603705,
+          "url": "https://zenodo.org/api/records/1304771/files/2018_Pala_eLife.pdf/content",
+          "checksum": "md5:931cc72f974a6ffcfa5e3937875e5fa5"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:931cc72f974a6ffcfa5e3937875e5fa5"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-009"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/8",
+        "recorded_fields": {
+          "name": "retrieveSegDur.m",
+          "bytes": 858,
+          "url": "https://zenodo.org/api/records/1304771/files/retrieveSegDur.m/content",
+          "checksum": "md5:e6a174334bc6278900d348ae4c921a32"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:e6a174334bc6278900d348ae4c921a32"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-009"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/9",
+        "recorded_fields": {
+          "name": "PalaPetersen_Plot.m",
+          "bytes": 48346,
+          "url": "https://zenodo.org/api/records/1304771/files/PalaPetersen_Plot.m/content",
+          "checksum": "md5:45b7b3184d1dbbd929ba1ea49c2db833"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:45b7b3184d1dbbd929ba1ea49c2db833"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-009"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/10",
+        "recorded_fields": {
+          "name": "lowpassfilt.m",
+          "bytes": 545,
+          "url": "https://zenodo.org/api/records/1304771/files/lowpassfilt.m/content",
+          "checksum": "md5:38336254c589ccf0f0a8d257b270ac04"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:38336254c589ccf0f0a8d257b270ac04"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-009"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/11",
+        "recorded_fields": {
+          "name": "DataViewer.fig",
+          "bytes": 90072,
+          "url": "https://zenodo.org/api/records/1304771/files/DataViewer.fig/content",
+          "checksum": "md5:d98a218f5f333e43f0ac251aa17e4643"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:d98a218f5f333e43f0ac251aa17e4643"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-009"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/0",
+        "recorded_fields": {
+          "name": "remTrialswithAPs.m",
+          "bytes": 464,
+          "url": "https://zenodo.org/api/records/1304771/files/remTrialswithAPs.m/content",
+          "checksum": "md5:87e9d4743fddfc127fb17b3fdb3ab3a4"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:87e9d4743fddfc127fb17b3fdb3ab3a4"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-009"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/1",
+        "recorded_fields": {
+          "name": "suptitleAP.m",
+          "bytes": 2983,
+          "url": "https://zenodo.org/api/records/1304771/files/suptitleAP.m/content",
+          "checksum": "md5:a35b6a8782eb8e8b232cc45009e0a30b"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:a35b6a8782eb8e8b232cc45009e0a30b"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-009"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/2",
+        "recorded_fields": {
+          "name": "PalaPetersen_Analysis.m",
+          "bytes": 42821,
+          "url": "https://zenodo.org/api/records/1304771/files/PalaPetersen_Analysis.m/content",
+          "checksum": "md5:7f8fec83affc4c95c973a9b5346a126e"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:7f8fec83affc4c95c973a9b5346a126e"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-009"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "Intracellular membrane-voltage and spikes from qualifying PV neurons; empirical wrapper not supplied end to end.",
+      "data_urls": [
+        "https://zenodo.org/records/1304771"
+      ],
+      "input_version": null,
+      "input_inventory_or_loader_evidence": [
+        {
+          "metadata_url": "https://zenodo.org/api/records/1304771",
+          "record_id": 1304771,
+          "title": "Data set for \"State-dependent cell-type-specific membrane potential dynamics and unitary synaptic inputs in awake mice\"",
+          "license": {
+            "id": "cc-by-4.0"
+          },
+          "files": {
+            "listed_file_count": 12,
+            "representative_files": [
+              {
+                "name": "remTrialswithAPs.m",
+                "bytes": 464,
+                "url": "https://zenodo.org/api/records/1304771/files/remTrialswithAPs.m/content",
+                "checksum": "md5:87e9d4743fddfc127fb17b3fdb3ab3a4"
+              },
+              {
+                "name": "suptitleAP.m",
+                "bytes": 2983,
+                "url": "https://zenodo.org/api/records/1304771/files/suptitleAP.m/content",
+                "checksum": "md5:a35b6a8782eb8e8b232cc45009e0a30b"
+              },
+              {
+                "name": "PalaPetersen_Analysis.m",
+                "bytes": 42821,
+                "url": "https://zenodo.org/api/records/1304771/files/PalaPetersen_Analysis.m/content",
+                "checksum": "md5:7f8fec83affc4c95c973a9b5346a126e"
+              }
+            ],
+            "limit": "Inventory examples; not payload/schema qualification."
+          },
+          "metadata_inspected": true,
+          "role": "Actual20kHz whole-cell membrane-potential recordings, not source-data plot outputs"
+        }
+      ],
+      "source_bridge": "Paper Fig.3 intracellular validation of variability partitioning: compare the official spike-only irregularity estimator to independent voltage-based time rescaling in eight qualifying PV neurons from five mice.",
+      "code_url": "https://github.com/engellab/DSRP",
+      "code_revision_or_archive_version": "ba0490d064ea299c975e12bb94f3d922468f6b50",
+      "entrypoints": [
+        {
+          "path": "src/dsr_project/neuron_stat.py",
+          "url": "https://github.com/engellab/DSRP/blob/ba0490d064ea299c975e12bb94f3d922468f6b50/src/dsr_project/neuron_stat.py",
+          "role": "Official spiking-irregularity estimator",
+          "inspected_as_text": true
+        },
+        {
+          "path": "src/dsr_project/time_rescaling.py",
+          "url": "https://github.com/engellab/DSRP/blob/ba0490d064ea299c975e12bb94f3d922468f6b50/src/dsr_project/time_rescaling.py",
+          "role": "Operational-time rescaling implementation",
+          "inspected_as_text": true
+        },
+        {
+          "path": "README.md",
+          "url": "https://github.com/engellab/DSRP/blob/ba0490d064ea299c975e12bb94f3d922468f6b50/README.md",
+          "role": "Parameter definitions and author paper linkage",
+          "inspected_as_text": true
+        }
+      ],
+      "missing_core_inputs_as_recorded": [
+        "An empirical ingestion/voltage-spline analysis wrapper must be assembled from paper methods and deposited Pala analysis helpers; repository examples alone are synthetic.",
+        "Paper body/methods specify50ms bins while Fig.3 caption says25ms: resolve by predeclared sensitivity analysis before claiming exact figure agreement.",
+        "Eight qualifying neurons/five mice; do not generalize the full cross-area hierarchy from this bounded intracellular scope."
+      ],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-009",
+        "versions_and_loader_contract": {
+          "scope_description": "Paper Fig.3 intracellular validation of variability partitioning: compare the official spike-only irregularity estimator to independent voltage-based time rescaling in eight qualifying PV neurons from five mice.",
+          "unresolved_coverage": [
+            "An empirical ingestion/voltage-spline analysis wrapper must be assembled from paper methods and deposited Pala analysis helpers; repository examples alone are synthetic.",
+            "Paper body/methods specify50ms bins while Fig.3 caption says25ms: resolve by predeclared sensitivity analysis before claiming exact figure agreement.",
+            "Eight qualifying neurons/five mice; do not generalize the full cross-area hierarchy from this bounded intracellular scope."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/engellab/DSRP",
+    "revision_or_archive_version": "ba0490d064ea299c975e12bb94f3d922468f6b50",
+    "entrypoints": [
+      {
+        "path": "src/dsr_project/neuron_stat.py",
+        "url": "https://github.com/engellab/DSRP/blob/ba0490d064ea299c975e12bb94f3d922468f6b50/src/dsr_project/neuron_stat.py",
+        "role": "Official spiking-irregularity estimator",
+        "inspected_as_text": true
+      },
+      {
+        "path": "src/dsr_project/time_rescaling.py",
+        "url": "https://github.com/engellab/DSRP/blob/ba0490d064ea299c975e12bb94f3d922468f6b50/src/dsr_project/time_rescaling.py",
+        "role": "Operational-time rescaling implementation",
+        "inspected_as_text": true
+      },
+      {
+        "path": "README.md",
+        "url": "https://github.com/engellab/DSRP/blob/ba0490d064ea299c975e12bb94f3d922468f6b50/README.md",
+        "role": "Parameter definitions and author paper linkage",
+        "inspected_as_text": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-009",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/engellab/DSRP",
+            "commit": "ba0490d064ea299c975e12bb94f3d922468f6b50",
+            "author_linkage": [
+              "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12484930/fullTextXML",
+              "https://github.com/engellab/DSRP/blob/ba0490d064ea299c975e12bb94f3d922468f6b50/README.md"
+            ],
+            "default_branch": "main",
+            "license": "MIT",
+            "snapshot_evidence": "GitHub public repo/HEAD API inspected2026-10-29",
+            "readme_source": "https://raw.githubusercontent.com/engellab/DSRP/ba0490d064ea299c975e12bb94f3d922468f6b50/README.md"
+          },
+          "entrypoints": [
+            {
+              "path": "src/dsr_project/neuron_stat.py",
+              "url": "https://github.com/engellab/DSRP/blob/ba0490d064ea299c975e12bb94f3d922468f6b50/src/dsr_project/neuron_stat.py",
+              "role": "Official spiking-irregularity estimator",
+              "inspected_as_text": true
+            },
+            {
+              "path": "src/dsr_project/time_rescaling.py",
+              "url": "https://github.com/engellab/DSRP/blob/ba0490d064ea299c975e12bb94f3d922468f6b50/src/dsr_project/time_rescaling.py",
+              "role": "Operational-time rescaling implementation",
+              "inspected_as_text": true
+            },
+            {
+              "path": "README.md",
+              "url": "https://github.com/engellab/DSRP/blob/ba0490d064ea299c975e12bb94f3d922468f6b50/README.md",
+              "role": "Parameter definitions and author paper linkage",
+              "inspected_as_text": true
+            }
+          ],
+          "dependencies": [
+            "Python>=3.8",
+            "NumPy>=1.21",
+            "SciPy>=1.7",
+            "MAT data reader",
+            "Matplotlib optional"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "access_conditions": {
+    "conditions": [
+      "paper_and_data",
+      "paper_data_official_code"
+    ],
+    "common": [
+      "the same versioned paper and approved empirical inputs",
+      "the same task/assessment and declared noncode resources"
+    ],
+    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
+    "release_status": "candidate-specific_public_packets_not_registered",
+    "source_specific_rights_and_exposure": {
+      "recorded_terms": [
+        "Zenodo1304771 actual data.mat1.31GB plus original analysis helpers, CC BY4.0.",
+        "Author DSRP code MIT at inspected commit."
+      ],
+      "record_conflicts": [],
+      "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
+      "overlap_group": "https://zenodo.org/api/records/1304771"
+    },
+    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "central_outputs_in_saved_source_contract": [
+        "Recover per-neuron irregularity and fraction of total ISI variability using spike-only and voltage-based estimates.",
+        "Test estimation stability across recording segments and compare DSR with raw CV²/Poisson reference under fixed neuron inclusion and preprocessing."
+      ],
+      "documentation_level": "Source-supported central scope; numerical reconstruction coverage is stated separately.",
+      "missing_or_unfrozen_endpoint_details": "Eight neurons/five mice Fig3 validation is the scope; assemble voltage-spline/ingestion bridge and reconcile25ms caption versus50ms methods before exact matching."
+    },
+    "source_recorded_metrics": [],
+    "comparability": [
+      "Independent voltage-derived irregularity is a valuable comparator, but preprocessing/window choice changes the estimand. Keep native spike-only and voltage estimates paired, with held-segment uncertainty and neuron nesting."
+    ],
+    "unresolved_grading": {
+      "task_specific_gates": [
+        "Eight neurons/five mice Fig3 validation is the scope; assemble voltage-spline/ingestion bridge and reconcile25ms caption versus50ms methods before exact matching.",
+        "Independent voltage-derived irregularity is a valuable comparator, but preprocessing/window choice changes the estimand. Keep native spike-only and voltage estimates paired, with held-segment uncertainty and neuron nesting.",
+        "An empirical ingestion/voltage-spline analysis wrapper must be assembled from paper methods and deposited Pala analysis helpers; repository examples alone are synthetic.",
+        "Paper body/methods specify50ms bins while Fig.3 caption says25ms: resolve by predeclared sensitivity analysis before claiming exact figure agreement.",
+        "Eight qualifying neurons/five mice; do not generalize the full cross-area hierarchy from this bounded intracellular scope.",
+        "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+        "Execute and independently audit references, controls, grading and measured resources.",
+        "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+      ],
+      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "reproduction_evidence": {
+    "historical": {
+      "status": "source_only_no_executed_reference_established_in_inspected_evidence",
+      "scope": "Pinned source/loader/manifest evidence supports an attempt; no benchmark runtime or figure agreement is inferred."
+    },
+    "historical_integration_classification": "no_empirical_reference_established",
+    "current_classification": "no_empirical_reference_established",
+    "current_followups": [],
+    "reconciliations": [],
+    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
+  },
+  "improvement": {
+    "proposal": [
+      "Improve finite-sample stability or uncertainty calibration of spike-only irregularity while preserving agreement with independent voltage-derived estimates; use held-out segments and report neuron-level effects."
+    ],
+    "independent_panel_and_evaluation_status": {
+      "status": "independent_panel_not_established_in_inspected_evidence",
+      "proposed_improvement": [
+        "Improve finite-sample stability or uncertainty calibration of spike-only irregularity while preserving agreement with independent voltage-derived estimates; use held-out segments and report neuron-level effects."
+      ],
+      "required_independence": "Freeze the scientific estimand, training/selection access and biological/stimulus/session units before assessment; keep source reconstruction separate from new evaluation. Public source test data are not globally unseen.",
+      "special_gate": "No completed independent improvement result is established here."
+    },
+    "qualified": false
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": "CPU;~1.31GB empirical input",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "holds": {
+    "task_specific": [
+      "Eight neurons/five mice Fig3 validation is the scope; assemble voltage-spline/ingestion bridge and reconcile25ms caption versus50ms methods before exact matching.",
+      "Independent voltage-derived irregularity is a valuable comparator, but preprocessing/window choice changes the estimand. Keep native spike-only and voltage estimates paired, with held-segment uncertainty and neuron nesting.",
+      "An empirical ingestion/voltage-spline analysis wrapper must be assembled from paper methods and deposited Pala analysis helpers; repository examples alone are synthetic.",
+      "Paper body/methods specify50ms bins while Fig.3 caption says25ms: resolve by predeclared sensitivity analysis before claiming exact figure agreement.",
+      "Eight qualifying neurons/five mice; do not generalize the full cross-area hierarchy from this bounded intracellular scope.",
+      "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+      "Execute and independently audit references, controls, grading and measured resources.",
+      "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+    ],
+    "current_construction_holds": [],
+    "source_route_reconciliations": []
+  },
+  "next_implementation_action": {
+    "action": "Specify the empirical Pala MAT-to-voltage/spike wrapper and prespecified25/50ms sensitivity, then validate its definitions on generated inputs before a bounded real-cell reference.",
+    "basis": "integrated task-specific audit action",
+    "historical_audit_action": "Specify the empirical Pala MAT-to-voltage/spike wrapper and prespecified25/50ms sensitivity, then validate its definitions on generated inputs before a bounded real-cell reference.",
+    "execution_authorized_by_manifest": false,
+    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "4766da2a12227213253f9d7e07da82ea5bd8a3c48b8c2b7775cd5b95c10f278e",
+    "audit_record_sha256": "8b66a79f5b740f0a0051feaf629e811ac3f8f4f897eb95ffef64f310799517bb",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-009",
+        "declared_record_sha256": "f007006d956296996788bc149ea0f5d1412ff99ae57cdf8b7958176fa0e6d8a5",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 8,
+        "record_sha256": "f007006d956296996788bc149ea0f5d1412ff99ae57cdf8b7958176fa0e6d8a5"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_canonical_paper_source_specification",
+    "new_scientific_runs": 0
+  }
+}

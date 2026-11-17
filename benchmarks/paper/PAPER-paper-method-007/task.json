@@ -1,19 +1,30 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-007",
-  "source_id": "paper-method-007",
   "track": "paper",
   "title": "Tracking neurons across days with high-density probes",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Track putative identical neurons across recordings from spike waveforms; evaluate cross-day match versus nonmatch separation using independent ISI fingerprints. AUC measures functional consistency, not ground-truth identity accuracy.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Track putative identical neurons across recordings from spike waveforms; evaluate cross-day match versus nonmatch separation using independent ISI fingerprints. AUC measures functional consistency, not ground-truth identity accuracy.",
+    "Source-paper comparison for Original Fig. 4 cross-day ISI-fingerprint AUC, full 16-mouse population: ROC AUC separating ISI-histogram correlations of matches from nonmatches; use original exclusions and require at least 20 matched units per eligible recording comparison. Within-recording matched units are excluded."
+  ],
+  "success_criteria": [
+    "Restore and evaluate every original eligible16-mouse recording/location/day comparison using paper-equivalent matching and fingerprint construction.",
+    "Reproduce 0.88 under the original aggregation with a declared calibration tolerance; compare against both the published result and a competent author rerun.",
+    "Demonstrate the predeclared meaningful AUC gain with animal-level uncertainty while preserving matched-unit yield and eligible support; do not improve AUC by selecting fewer easy matches.",
+    "Do not count a five-mouse demo gain, new held-mouse split, changed code version, human-curation agreement or increased match count alone as surpassing the paper.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-007",
   "canonical_position_one_based": 98,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41592-024-02440-1",
     "publication_year": 2024,
     "venue": "Nature Methods"
   },
-  "primary_outputs": [
-    "Pairwise matching probabilities and accepted matches; functional-score agreement and stable-unit yield per animal."
-  ],
   "input_assets": {
     "routes": [
       "https://figshare.com/articles/dataset/24305758"
@@ -301,105 +312,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Data Figshare24305758 v1 CC BY4.0",
-        "Code README CC BY-NC-SA4.0"
-      ],
-      "declared_overlap_group": "https://api.figshare.com/v2/articles/24305758/versions/1",
-      "existing_graph_evidence_leads": [],
-      "graph_caveat": "Edges are metadata/declared-family leads, not independently verified shared participant membership; absence of an edge is not independence.",
-      "unknowns": "Full-text redistribution, component/stimulus rights and actual pretraining exposure require task-specific qualification; public access is not sufficient."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "documented_outputs": [
-        "Pairwise matching probabilities and accepted matches; functional-score agreement and stable-unit yield per animal."
-      ],
-      "construction_specificity": "Pairwise probabilities/matches and functional-score agreement documented; exact matching/threshold, truth proxy and animal-level metric remain unfrozen.",
-      "exact_published_numeric_target_verified_by_this_audit": false
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Freeze paper-era v1.0.0_UnitMatch for published-number comparison; current commit is a distinct version.",
-      "Calibrate confidence on permitted animals and evaluate drift/dropout robustness without calling waveform matches true labels."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Pairwise probabilities/matches and functional-score agreement documented; exact matching/threshold, truth proxy and animal-level metric remain unfrozen.",
-        "Mouse with both sessions grouped; functional validation features must remain independent of fitting and threshold selection.",
-        "Five mice cover only the released project. CodeCCBYNC-SA4/dataCCBY4 terms affect redistribution and adaptation;~5.8GBpackage is metadata scale.",
-        "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_and_metadata_only_for_this_project",
-      "runnable_reference_demonstrated": false,
-      "note": "No project-specific empirical reference execution evidence found in the inspected authoring inventory/readiness records; source presence does not establish runnable dependencies or numerical agreement."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve confidence calibration or robustness to drift/dropout relative to UnitMatch using independent validation features and equal available recordings."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_executed_or_independently_qualified",
-      "proposed_question": [
-        "Improve confidence calibration or robustness to drift/dropout relative to UnitMatch using independent validation features and equal available recordings."
-      ],
-      "independent_panel_gate": "Mouse with both sessions grouped; functional validation features must remain independent of fitting and threshold selection.",
-      "published_targets_are_historically_exposed": true,
-      "prospective_frontier_claim_supported": false
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_statement": "CPU workstation; approximately5.8GB packaged data",
-    "source_resource_evidence": "Resource class is an inspection-based estimate, not measured runtime.",
-    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
-    "known_local_scientific_runtime_seconds": null
-  },
-  "holds": {
-    "task_specific": [
-      "Pairwise probabilities/matches and functional-score agreement documented; exact matching/threshold, truth proxy and animal-level metric remain unfrozen.",
-      "Mouse with both sessions grouped; functional validation features must remain independent of fitting and threshold selection.",
-      "Five mice cover only the released project. CodeCCBYNC-SA4/dataCCBY4 terms affect redistribution and adaptation;~5.8GBpackage is metadata scale.",
-      "Prospective input/output boundary, source transformations, equal access budgets, baseline/grader execution, isolated candidate replay and independent scientific review remain required within the declared scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Separate fitting waveform features from independent functional validation and define a mouse-level calibration/assessment split before any pipeline execution.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Separate fitting waveform features from independent functional validation and define a mouse-level calibration/assessment split before any pipeline execution.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -475,11 +387,83 @@
     ],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_statement": "CPU workstation; approximately5.8GB packaged data",
+    "source_resource_evidence": "Resource class is an inspection-based estimate, not measured runtime.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-007/improvement.v1.json",
+      "bytes": 10592,
+      "sha256": "fb0028def33b2be2f66c2c84ed5d5d9ed74118ec3fbb758f53578bb3d1fa1606"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-007/historical/task.pre-improvement.v1.json",
+        "bytes": 23235,
+        "sha256": "3e3892fcf6d8112e483f4d88b7aa35858a92504da07771f69813886b5c9cecaf"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-paper-method-007",
+        "benchmarks-scientific_components-unitmatch_native_paired"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-paper-method-007/implementations/registered-runtime/manifest.json",
+        "bytes": 18801,
+        "sha256": "2c3e3deb6c045b893e0907e72971f153af3e3190df47839093d15f357091f44e"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After source recovery, iterate waveform-only algorithms on permitted development recordings with final functional targets inaccessible. Freeze any use of development functional information explicitly; it cannot be assumed equivalent to source unsupervised calibration.",
+    "candidate_freeze": "Seal waveform feature definitions, matching policy, preprocessing, source revision, exclusions and all selection choices before final original-cohort functional evaluation.",
+    "final_evaluation": "Run candidate and paper-equivalent native reference on identical full original recordings; keep the legacy five-mouse paired report separately labeled. Compare paired animal endpoints only after full support and provenance admission.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published16-mouse AUC, paper-era author rerun and current v2 demo results are separate records; runtime declaration envelopes are not an approved same-task improvement budget."
+  },
+  "blocking_issues": [
+    "Full original 16-mouse Fig. 4 recordings and eligible session/location/pair roster are not available in the five-mouse release.",
+    "Paper-era default source and native result equivalence are not established for the selected v2 runtime.",
+    "The registered greedy two-day probability decoder, finite-value rules and yield guard are benchmark conventions requiring original-paper parity review.",
+    "Meaningful AUC effect, uncertainty decision, candidate access and concrete cumulative resource budget remain unfrozen."
+  ],
+  "holds": {
+    "task_specific": [
+      "Full original 16-mouse Fig. 4 recordings and eligible session/location/pair roster are not available in the five-mouse release.",
+      "Paper-era default source and native result equivalence are not established for the selected v2 runtime.",
+      "The registered greedy two-day probability decoder, finite-value rules and yield guard are benchmark conventions requiring original-paper parity review.",
+      "Meaningful AUC effect, uncertainty decision, candidate access and concrete cumulative resource budget remain unfrozen."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The paper reports an ordered waveform-only tracking validation endpoint and its numeric result. The existing five-mouse/two-day demo and v2 native runtime are a reduced, differently defined comparison, not the original 16-mouse cross-day endpoint; full original data, paper-era code equivalence and scientific admission remain incomplete. Full original 16-mouse Fig. 4 recordings and eligible session/location/pair roster are not available in the five-mouse release. Paper-era default source and native result equivalence are not established for the selected v2 runtime. The registered greedy two-day probability decoder, finite-value rules and yield guard are benchmark conventions requiring original-paper parity review. Meaningful AUC effect, uncertainty decision, candidate access and concrete cumulative resource budget remain unfrozen.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-007/historical/task.pre-improvement.v1.json",
+      "bytes": 23235,
+      "sha256": "3e3892fcf6d8112e483f4d88b7aa35858a92504da07771f69813886b5c9cecaf"
+    },
+    "notes": "Preserve the original native-paired source, all five-mouse materials and existing graders as calibration/extension evidence. Its strict equal-mouse proxy gain cannot admit a source-paper win."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

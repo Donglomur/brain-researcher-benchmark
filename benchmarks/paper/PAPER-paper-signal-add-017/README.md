@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-paper-signal-add-017`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The registration scopes recorded offline decoding, which is ordered, but its exact source-paper offline baseline and original folds/session mapping are unrecovered. The published online fine-tuned human-control headline is incompatible with replay scoring and cannot be the offline victory threshold.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 14860 bytes; SHA-256 `63d23b0d71a7dfceeaa48db2c0df2afe8b1097cfa3056e631285fe18cd63f8ce`.
+- Specification identity: 15633 bytes; SHA-256 `74380d9eadbd39670727702cdfe2e6a76d1336ac8c94605be0f680e488db65e8`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -23,8 +34,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
-  Scope: Complete frozen selected numeric-export roster to source-aligned finger-EEG trials/windows, chronological calibration routing, target-free packets, a train-only prospective spectral reference and hard-vote trial/participant metrics with paired uncertainty. Authentic MAT conversion and complete source population, native TensorFlow EEGNet preprocessing/fine-tuning, protected numerical references, artifact controls, source rights/resources and scientific qualification remain held. Recorded replay does not reproduce closed-loop human feedback adaptation.
+- [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
+  Scope: Complete frozen selected numeric-export roster to source-aligned finger-EEG trials/windows, chronological calibration routing, target-free packets, a train-only prospective spectral reference and hard-vote trial/participant metrics with paired uncertainty. Authentic MAT conversion and complete source population, native TensorFlow EEGNet preprocessing/fine-tuning, protected numerical references, artifact controls, source rights/resources and scientific qualification remain held. Recorded replay does not reproduce closed-loop human feedback adaptation. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

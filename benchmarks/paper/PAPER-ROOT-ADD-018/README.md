@@ -5,15 +5,26 @@
 - **Task ID:** `PAPER-ROOT-ADD-018`
 - **Track:** Paper research
 - **Registration:** Original canonical specification
-- **Declared specification status:** Specification only
+- **Declared specification status:** Source unresolved
 - **Scientific and submission readiness:** Unknown
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Current paper-improvement objective
+
+**Success:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule.
+
+**Disposition:** source\_unresolved. The paper combines descriptive OFC/state-inference results with native neural-model comparisons. The registered complete-paper design identifies a genuine held-neuron conditional-prediction branch, but its exact native split, score, author producer and numerical baseline are unresolved. The existing 60/20/20 future-time prediction policy is explicitly a prospective extension and cannot be used to claim surpassing the paper on its original task.
+
+- [Source-grounded improvement contract](improvement.v1.json)
+- [Preserved historical task definition (calibration only)](historical/task.pre-improvement.v1.json)
+
+Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 18220 bytes; SHA-256 `7f569804ee030189277432aad730d7522bf84ac6498663b1404cf199b6bcc4d2`.
+- Specification identity: 18547 bytes; SHA-256 `17ba1586e6e164350bb6d9a6c9346cec4aec9e1dcfe0b312945e6ef65ececf12`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -21,12 +32,12 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 ## Implementation artifacts
 
-- [Tensor source analysis](implementations/tensor-source-analysis) — Task implementation.
-  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
-- [Original author source](implementations/original-author-source) — Task implementation.
-  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
-- [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
-  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Tensor source analysis](implementations/tensor-source-analysis) — Calibration only.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Original author source](implementations/original-author-source) — Calibration only.
+  Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Registered runtime](implementations/registered-runtime) — Calibration only.
+  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

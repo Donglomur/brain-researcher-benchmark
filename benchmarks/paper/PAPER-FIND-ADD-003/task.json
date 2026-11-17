@@ -1,20 +1,30 @@
 {
   "schema_version": 1,
   "id": "PAPER-FIND-ADD-003",
-  "source_id": "FIND-ADD-003",
   "track": "paper",
   "title": "Hippocampal sequences represent working memory and implicit timing",
-  "status": "specification_only",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Original time decoding predicts one of seven elapsed-time bins during the short-delay window, separately for standard-short and standard-long cues. Retain the original behavior, sequence and odor analyses as required context, without turning their biological contrast into a decoder score.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Original time decoding predicts one of seven elapsed-time bins during the short-delay window, separately for standard-short and standard-long cues. Retain the original behavior, sequence and odor analyses as required context, without turning their biological contrast into a decoder score.",
+    "Source-paper comparison for Fig. 4D Pearson time-bin decoding correlation, preserving standard-short and standard-long panels: Pearson correlation corr(allrealbin,allpredbin), not fraction-correct accuracy, measures predicted versus actual bin indices across held-out trials. Higher correlation is the ordered decoder direction."
+  ],
+  "success_criteria": [
+    "Authenticate the published per-session time-decoding results and independently rerun the original native baseline on the complete 11-animal, 44-session cohort.",
+    "Use original seven-bin labels, standard-trial membership, full-trial leave-one-out support, eligibility, source processed inputs and correlation aggregation for both methods.",
+    "Predeclare a meaningful gain and valid animal-level uncertainty without selecting favorable cues, days or mice; retain all original output families as contextual controls.",
+    "Changing to the no-smoothing/no-flooring input, a prospective split or combined score defines an extension and cannot establish the original paper win.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-ADD-003",
   "canonical_position_one_based": 46,
   "paper_identity": {
     "url": "https://doi.org/10.1016/j.celrep.2025.116383",
     "publication_year": 2025,
     "venue": "Cell Reports"
   },
-  "primary_outputs": [
-    "Unexpected-delay effects on working-memory behavior.",
-    "Odor-selective CA1 sequences and time/odor decoding across standard and reversal trials."
-  ],
   "input_assets": {
     "routes": [
       "https://datadryad.org/dataset/doi:10.5061/dryad.vdncjsz7p"
@@ -248,109 +258,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": {
-        "data": "Dryad public release; CC0 per Dryad default terms (https://datadryad.org/terms), confirm any explicitly stated component restrictions.",
-        "code": "No top-level license identified in inspected paths; permissions for redistribution are unresolved, not presumed."
-      },
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Unexpected-delay effects on working-memory behavior.",
-        "Odor-selective CA1 sequences and time/odor decoding across standard and reversal trials."
-      ],
-      "assessment": "Unexpected-delay behavior, odor-selectiveCA1 sequences and time/odor decoding are supported; raw-movie preprocessing and all paper panels are not.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Compare identical animals/trials across smoothed/floored and alternative recipes; saved binarydecoding.mat is an answer artifact, not independent reference data.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Avoid grading against saved binarydecoding.mat or sequence-selection outputs alone.",
-        "Use animals rather than cells/trials as replication units; first visible preprint March 2025.",
-        "Planning and metadata inspection only: no recording payloads downloaded, code executed, or full-paper reproduction qualified. Freeze a figure-to-input contract, versions, licenses and independent assessment before execution.",
-        "11 imaging animals, 23 behavior animals; cells/trials are nested observations. Inputs are Suite2P-derived aligned calcium, not raw movies. Include locomotion/licking controls and animal-level uncertainty.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Proposed: Compare original smoothing/flooring with unsmoothed deconvolution; test timing claims with locomotion/licking controls and mouse-level uncertainty."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Mouse-level held-out sequence discovery and locomotion/lick controls; standard/reversal trials must be grouped with prior exposure explicit. Decode targets cannot inform cell selection on evaluation trials.",
-      "retained_roster_proposal": [
-        "Proposed: Compare original smoothing/flooring with unsmoothed deconvolution; test timing claims with locomotion/licking controls and mouse-level uncertainty."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": {
-      "estimate": "CPU workstation with64GB RAM advisable for10.7GB trial-aligned array; full release24.35GB; hours to days estimated.",
-      "basis": "Source metadata/static inspection and author runtime statements where explicitly identified; not measured."
-    },
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": {
-      "estimate": "CPU workstation with64GB RAM advisable for10.7GB trial-aligned array; full release24.35GB; hours to days estimated.",
-      "basis": "Source metadata/static inspection and author runtime statements where explicitly identified; not measured."
-    }
-  },
-  "holds": {
-    "task_specific": [
-      "Avoid grading against saved binarydecoding.mat or sequence-selection outputs alone.",
-      "Use animals rather than cells/trials as replication units; first visible preprint March 2025.",
-      "Planning and metadata inspection only: no recording payloads downloaded, code executed, or full-paper reproduction qualified. Freeze a figure-to-input contract, versions, licenses and independent assessment before execution.",
-      "11 imaging animals, 23 behavior animals; cells/trials are nested observations. Inputs are Suite2P-derived aligned calcium, not raw movies. Include locomotion/licking controls and animal-level uncertainty.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Freeze one central delay/time-versus-odor contrast and cell-selection policy, map trial/animal IDs and both preprocessing variants, then prepare an animal-grouped reference with behavior controls.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Freeze one central delay/time-versus-odor contrast and cell-selection policy, map trial/animal IDs and both preprocessing variants, then prepare an animal-grouped reference with behavior controls.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -391,11 +298,83 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_resource_statement": {
+      "estimate": "CPU workstation with64GB RAM advisable for10.7GB trial-aligned array; full release24.35GB; hours to days estimated.",
+      "basis": "Source metadata/static inspection and author runtime statements where explicitly identified; not measured."
+    },
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": {
+      "estimate": "CPU workstation with64GB RAM advisable for10.7GB trial-aligned array; full release24.35GB; hours to days estimated.",
+      "basis": "Source metadata/static inspection and author runtime statements where explicitly identified; not measured."
+    }
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-ADD-003/improvement.v1.json",
+      "bytes": 10702,
+      "sha256": "25f5bbb5dfefb4ac7fdc4169578c39853cc7683b051e3329a3185d899cf6b2d9"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-ADD-003/historical/task.pre-improvement.v1.json",
+        "bytes": 20367,
+        "sha256": "5d3601968923010002d1e71352123be650cd8bf17c6371b0fb9fafd04e9f2c2b"
+      },
+      "implementation_ids": [
+        "authoring-delivery-20261105-common-remaining-builds-wave20-paper-program-h"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Baseline recovery blocks activation. Thereafter iterate on declared training/validation feedback while preserving the original trial-LOO scientific endpoint and source input condition.",
+    "candidate_freeze": "Freeze algorithm, all native split/input joins, original panel aggregation, development visibility, baseline runtime, effect/inference rule and finite budgets before final evaluation.",
+    "final_evaluation": "Obtain predictions for every original test trial from the frozen candidate and author method, score correlation independently, and preserve all undefined/failed sessions without denominator shrinkage.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published output files are historical score evidence only. Fresh native author results are a separate comparator; local reconstruction MAE and prospective combined scores remain calibration/extension results."
+  },
+  "blocking_issues": [
+    "Exact published numeric Fig. 4D panel is identified but uninspected and unbound.",
+    "Complete original ROI/trial/session joins, MATLAB defaults and native rerun provenance are not authenticated.",
+    "No source-faithful aggregate superiority rule, meaningful effect, uncertainty procedure or concrete episode budgets is admitted.",
+    "Current prospective grader changes endpoint/input conditions and cannot certify a source-paper win."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact published numeric Fig. 4D panel is identified but uninspected and unbound.",
+      "Complete original ROI/trial/session joins, MATLAB defaults and native rerun provenance are not authenticated.",
+      "No source-faithful aggregate superiority rule, meaningful effect, uncertainty procedure or concrete episode budgets is admitted.",
+      "Current prospective grader changes endpoint/input conditions and cannot certify a source-paper win."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original Fig. 4 time-decoding protocol and author baseline route are identifiable, but its exact published numeric panel has not been recovered and independently reproduced. The existing combined prospective score and alternate preprocessing are extensions, not the original source-paper score; the descriptive sequence and behavior findings cannot be optimized into a paper win. Exact published numeric Fig. 4D panel is identified but uninspected and unbound. Complete original ROI/trial/session joins, MATLAB defaults and native rerun provenance are not authenticated. No source-faithful aggregate superiority rule, meaningful effect, uncertainty procedure or concrete episode budgets is admitted. Current prospective grader changes endpoint/input conditions and cannot certify a source-paper win.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-ADD-003/historical/task.pre-improvement.v1.json",
+      "bytes": 20367,
+      "sha256": "5d3601968923010002d1e71352123be650cd8bf17c6371b0fb9fafd04e9f2c2b"
+    },
+    "notes": "Preserve eight-family reconstruction and both preprocessing variants. Native reference agreement measures reproduction; prospective combined contrasts and unsmoothed inputs remain explicitly labelled extensions."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }

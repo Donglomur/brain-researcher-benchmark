@@ -1,20 +1,32 @@
 {
   "schema_version": 1,
   "id": "PAPER-paper-method-002",
-  "source_id": "paper-method-002",
   "track": "paper",
   "title": "Jaxley: differentiable simulation enables large-scale training of detailed biophysical models of neural dynamics",
-  "status": "specification_only",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Original task.json retinal target: predict dendritic calcium of the supplied transient Off-alpha retinal ganglion cell from checkerboard stimulation using its detailed morphology. This is final published Figure 3, despite author directory nex/fig4_rgc and historical Fig4 labels. The broader 36-family implementation is retained and must not be declared won by this single endpoint.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Original task.json retinal target: predict dendritic calcium of the supplied transient Off-alpha retinal ganglion cell from checkerboard stimulation using its detailed morphology. This is final published Figure 3, despite author directory nex/fig4_rgc and historical Fig4 labels. The broader 36-family implementation is retained and must not be declared won by this single endpoint.",
+    "Source-paper comparison for Mean masked held-out Pearson correlation across the original 147 retinal recording sites: For each recording site compute Pearson correlation between predicted and observed held-out calcium on its valid mask; then take the arithmetic mean across the 147 sites. Training loss or neuron-simulator numerical agreement cannot replace this response-prediction score."
+  ],
+  "success_criteria": [
+    "Pin the original 20161028_1 morphology, all recording-field/ROI identities, 147-site cache and exact published train/validation/test indices.",
+    "Reproduce the source author method on the identical full retinal task and distinguish its score from the rounded published 0.25.",
+    "Freeze candidate and all hyperparameter selection before final labels; compare identical allowable stimuli, masks and normalization with the original mean-Pearson metric.",
+    "Justify task-specific effect and dependence-aware uncertainty, and fix concrete access/resource budgets before admission.",
+    "Do not replace the full original retinal population with the reduced-data seven-field experiment, an Allen cell, simulator parity, or a smaller site subset.",
+    "Resolve task.json retinal scope versus the full36 implementation explicitly; a scoped retinal win cannot be reported as surpassing every source-paper result.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-002",
   "canonical_position_one_based": 50,
   "paper_identity": {
     "url": "https://www.nature.com/articles/s41592-025-02895-w",
     "publication_year": 2025,
     "venue": "Nature Methods"
   },
-  "primary_outputs": [
-    "Regenerate stimulus-to-calcium prediction and held-out response fit for the supplied retinal cell.",
-    "Compare fitted biophysical models with fixed/untrained or constrained-parameter controls using identical stimulus splits."
-  ],
   "input_assets": {
     "routes": [
       "https://zenodo.org/records/3708064"
@@ -369,100 +381,6 @@
     ],
     "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
   },
-  "access_conditions": {
-    "conditions": [
-      "paper_and_data",
-      "paper_data_official_code"
-    ],
-    "common": [
-      "the same versioned paper and approved empirical inputs",
-      "the same task/assessment and declared noncode resources"
-    ],
-    "code_condition_extra": "Only the approved official-code snapshot. Dependencies and noncode resources must be declared equally. No operator verifier, private labels, reference answers or other-attempt history.",
-    "release_status": "candidate-specific_public_packets_not_registered",
-    "source_specific_rights_and_exposure": {
-      "saved_terms": [
-        "Zenodo3708064 actual retinal data v1.0, CC BY4.0.",
-        "Experiment code MIT; Jaxley and stimulus-source license must remain attached.",
-        "Public stimulus HDF5 sources are linked by setup notebook; no account required for identified raw GitHub files."
-      ],
-      "additional_gate": "Preserve archive/code/weight terms separately. Unknown licensing is unresolved rather than presumed permissive; public access does not establish model non-exposure."
-    },
-    "comparison_limit": "Public paper/results and data exposure are retained. No blind, causal code-benefit or compute-equivalence claim is established."
-  },
-  "evaluation": {
-    "observable_endpoints": {
-      "recorded_central_outputs": [
-        "Regenerate stimulus-to-calcium prediction and held-out response fit for the supplied retinal cell.",
-        "Compare fitted biophysical models with fixed/untrained or constrained-parameter controls using identical stimulus splits."
-      ],
-      "assessment": "Fig4 empirical retinal-cell stimulus→calcium prediction with a detailed morphology is supported; full cell/network suite and biological parameter identifiability are not.",
-      "status": "documented_scoped_proposal_not_numeric_qualification",
-      "missing_common_contract": "Exact score/estimand, inclusion, figure-specific reference outputs and numerical tolerances must be frozen; source text alone does not establish reproduction."
-    },
-    "source_recorded_metrics": [],
-    "comparability": [
-      "Compare response prediction and cost under identical stimulus/calcium normalization; a better fit need not recover true conductances. Genetic/gradient baselines need matched optimization budgets.",
-      "Paper+data versus +official-code arms still need one identical empirical task, matched noncode resources/budgets, separate source exposure, and preserved reproduction→improvement stages."
-    ],
-    "unresolved_grading": {
-      "task_specific_gates": [
-        "Entire paper is not covered. Preserve neuron/stimulus pairing and training/test splits; setup has paths to adapt.",
-        "Input record and morphology inspected as metadata/text, not loaded together; compatibility remains a reference-qualification check.",
-        "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-      ],
-      "meaning": "Endpoint documentation is not a frozen numeric target, tolerance, independently verified grader or difficulty qualification."
-    },
-    "executor_ref": null,
-    "scorer_ref": null,
-    "binary_reward_registered": false
-  },
-  "reproduction_evidence": {
-    "historical": {
-      "status": "source_only_no_project_reference_run_evidence_found",
-      "meaning": "No applicable execution evidence found in saved authoring records during this audit; not an observed runtime failure. Source readiness labels are not adopted as execution qualification."
-    },
-    "historical_integration_classification": "no_empirical_reference_established",
-    "current_classification": "no_empirical_reference_established",
-    "current_followups": [],
-    "reconciliations": [],
-    "scope": "Existing bounded evidence only; no new runtime and no whole-paper qualification inferred."
-  },
-  "improvement": {
-    "proposal": [
-      "Improve biophysical fitting through hierarchical conductance priors or a better calcium observation model, comparing prediction, calibration and cost with original gradient, genetic-algorithm and simple-model baselines."
-    ],
-    "independent_panel_and_evaluation_status": {
-      "status": "not_frozen_or_run",
-      "proposed_panel": "Predeclared stimulus/trial holdout, multiple fit seeds and constrained/simple observation-model controls support a meaningful model improvement panel. One cell cannot validate cross-cell generalization.",
-      "retained_roster_proposal": [
-        "Improve biophysical fitting through hierarchical conductance priors or a better calcium observation model, comparing prediction, calibration and cost with original gradient, genetic-algorithm and simple-model baselines."
-      ],
-      "exposure": "Published paper/results and public inputs are exposed construction/development material; no sealed final assessment or independent model attempt is established."
-    },
-    "qualified": false
-  },
-  "resources": {
-    "roster_resource_statement": "GPU advised; raw record ~323MB plus stimuli; morphology supplied in source",
-    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
-    "source_basis": "Inspection-based resource class, not a measured runtime."
-  },
-  "holds": {
-    "task_specific": [
-      "Entire paper is not covered. Preserve neuron/stimulus pairing and training/test splits; setup has paths to adapt.",
-      "Input record and morphology inspected as metadata/text, not loaded together; compatibility remains a reference-qualification check.",
-      "An executable reference, independent metric audit, controls/adversaries, grouped improvement assessment and measured resource envelope remain required for this central scope."
-    ],
-    "current_construction_holds": [],
-    "source_route_reconciliations": []
-  },
-  "next_implementation_action": {
-    "action": "Pin all stimulus/raw/morphology/dependency versions and verify cell/time pairing, then freeze the exact Fig4 held-out prediction and constrained-model comparison before a bounded source reference fit.",
-    "basis": "integrated task-specific audit action",
-    "historical_audit_action": "Pin all stimulus/raw/morphology/dependency versions and verify cell/time pairing, then freeze the exact Fig4 held-out prediction and constrained-model comparison before a bounded source reference fit.",
-    "execution_authorized_by_manifest": false,
-    "when_prior_action_has_completed": "Consult linked current followups and holds before repeating a historical action; no automatic retry or source-state overwrite."
-  },
   "provenance": {
     "canonical_roster": {
       "path": "docs/neuroscience-benchmarks/build/paper_100.json",
@@ -503,11 +421,82 @@
     "historical_pin_exceptions": [],
     "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
   },
+  "resources": {
+    "roster_resource_statement": "GPU advised; raw record ~323MB plus stimuli; morphology supplied in source",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Inspection-based resource class, not a measured runtime."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-002/improvement.v1.json",
+      "bytes": 13085,
+      "sha256": "b7c83b20cca52ce0c282953357ea1a3f43592d33791fde4f23f9e8eaaa90e569"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-002/historical/task.pre-improvement.v1.json",
+        "bytes": 28093,
+        "sha256": "d8f437bfee21b13dca7844816bf8cb4b6793460de96ce0f3871c3fd818e52c89"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-paper-method-002",
+        "benchmarks-scientific_components-jaxley_allen_selector"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/manifest.json",
+        "bytes": 2374,
+        "sha256": "f88310dabe7780bba587f417955b7cde46febaea7dc59698a336e42411b22b5d"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate on original training stimuli with the original validation mechanism; keep the published final test indices and response labels out of feedback.",
+    "candidate_freeze": "Freeze model equations/architecture, morphology treatment, optimization recipe, randomization, resource use and validation-selected checkpoint procedure before final test comparison.",
+    "final_evaluation": "Replay candidate and admitted author comparator on the exact original retinal test indices and 147-site mask, recording mean and site-level correlations and the preregistered uncertainty rule. Preserve broader programme obligations separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published source score, reproduced author baseline, and any independently source-verified current SOTA separate. Reproduction is calibration only."
+  },
+  "blocking_issues": [
+    "Exact published split/index/checkpoint/cache configuration and raw-ROI-to-147-site correspondence unresolved.",
+    "Pinned default config is not proven to reproduce the published 0.25 result.",
+    "Canonical full36 scope differs from retinal task.json; binding must explicitly preserve broader obligations rather than silently narrowing success.",
+    "Native input/backend equivalence, author replay, working candidate evaluation, meaningful effect, uncertainty rule and concrete episode budgets unqualified."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact published split/index/checkpoint/cache configuration and raw-ROI-to-147-site correspondence unresolved.",
+      "Pinned default config is not proven to reproduce the published 0.25 result.",
+      "Canonical full36 scope differs from retinal task.json; binding must explicitly preserve broader obligations rather than silently narrowing success.",
+      "Native input/backend equivalence, author replay, working candidate evaluation, meaningful effect, uncertainty rule and concrete episode budgets unqualified."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original retinal response-prediction task has an ordered metric, recoverable author route and published mean correlation 0.25. Exact historical cache, published split/checkpoint, author replay and admission remain incomplete. This design is explicitly retinal-scoped; the expanded 36-family implementation remains preserved and cannot receive whole-programme success from this endpoint. Exact published split/index/checkpoint/cache configuration and raw-ROI-to-147-site correspondence unresolved. Pinned default config is not proven to reproduce the published 0.25 result. Canonical full36 scope differs from retinal task.json; binding must explicitly preserve broader obligations rather than silently narrowing success. Native input/backend equivalence, author replay, working candidate evaluation, meaningful effect, uncertainty rule and concrete episode budgets unqualified.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-002/historical/task.pre-improvement.v1.json",
+      "bytes": 28093,
+      "sha256": "d8f437bfee21b13dca7844816bf8cb4b6793460de96ce0f3871c3fd818e52c89"
+    },
+    "notes": "Preserve registered-runtime full36/four-condition source and Allen selector unchanged. They remain calibration/prospective infrastructure with their existing holds. Simulation agreement, source dispatch completion and retinal prediction are different outcomes; none implies a whole-paper win."
+  },
   "admission": {
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_canonical_paper_source_specification",
-    "new_scientific_runs": 0
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
   }
 }
