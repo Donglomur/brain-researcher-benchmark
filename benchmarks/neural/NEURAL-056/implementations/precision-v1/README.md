@@ -34,7 +34,7 @@ people and three arms, and rejects mixed outer-person records before scoring.
 Put this directory and the preserved shared package on the Python import path:
 
 ```text
-benchmarks/neural/NEURAL-056/precision-v1
+benchmarks/neural/NEURAL-056/implementations/precision-v1
 benchmarks/shared/four-programmes/_four_programmes_source_v1/originals/authoring/delivery-20261105/common/remaining-builds-wave37/neural056-complete-program/successor-v3/package
 ```
 

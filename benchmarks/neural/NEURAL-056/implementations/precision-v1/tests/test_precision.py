@@ -12,7 +12,7 @@ import unittest
 from unittest.mock import patch
 
 HERE = Path(__file__).resolve().parents[1]
-REPO = HERE.parents[3]
+REPO = HERE.parents[4]
 SOURCE = REPO / ("benchmarks/shared/four-programmes/_four_programmes_source_v1/originals/"
                  "authoring/delivery-20261105/common/remaining-builds-wave37/"
                  "neural056-complete-program/successor-v3/package")
