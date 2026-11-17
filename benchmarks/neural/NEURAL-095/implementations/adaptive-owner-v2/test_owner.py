@@ -26,7 +26,8 @@ builder = importlib.util.module_from_spec(SPEC); SPEC.loader.exec_module(builder
 c, unused = builder.helpers()
 BASE, Q = c.BASE, c.Q
 IDS = tuple('case%06d' % i for i in range(258))
-CHILD_PYTHON = '/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11'
+# These generated actors have no platform sandbox; use the test environment.
+CHILD_PYTHON = sys.executable
 CALLBACK = b'''calls = 0
 def decide(context):
     global calls
@@ -213,6 +214,9 @@ class OwnerControls(unittest.TestCase):
         self.assertIsNone(negative['scientific_pass_floor'])
 
     def test_08_real_owner_composition_complete_four_cells_adapts_and_closes(self):
+        self._run_real_owner_composition()
+
+    def _run_real_owner_composition(self, expected_spawn_failure=None):
         entry = builder.module('_actual_entry_e2e', self.root / BASE / 'entrypoint.py', self.captured[BASE + '/entrypoint.py'])
         unused, config, stack, runtime = entry.bootstrap(self.config_path, self.config_sha)
         out = Path(config.value['output_root']); out.mkdir()
@@ -286,6 +290,7 @@ exec(compile(body, str(p), 'exec'), ns)
         class Supervisor:
             def __init__(self, config, stack, runtime, session, budget, work_end):
                 self.key = session.mode; self.binding = config.value['actor']['arms'][self.key]
+                self.proc = None
             def launch(self):
                 channel = channels[str(out / 'arms' / self.key / 'arm.sock')]
                 cwd = out / 'actors' / self.key; cwd.mkdir()
@@ -295,6 +300,9 @@ exec(compile(body, str(p), 'exec'), ns)
                 actors.append(self.proc); channel.proc = self.proc
                 self.proc.stdin.write(c.canonical(c.decode((self_root / self.binding['config']['path']).read_bytes())) + b'\n'); self.proc.stdin.flush()
             def stop(self):
+                if self.proc is None:
+                    events.append('actor-never-started')
+                    return {'absence_verified': True}
                 code = self.proc.wait(timeout=5)
                 self_test.assertEqual(code, 0, self.proc.stderr.read().decode())
                 events.append('actor-stopped'); return {'absence_verified': True}
@@ -323,6 +331,18 @@ exec(compile(body, str(p), 'exec'), ns)
                  patch.object(stack.actor_runtime, 'Supervisor', Supervisor), \
                  patch.object(stack.live.PairedEvaluator, '_pair', generated_pair):
                 study, actual_backends, budget = stack.controller.compose(config, stack, runtime, time.monotonic()+120)
+                if expected_spawn_failure is not None:
+                    with patch.object(subprocess, 'Popen', side_effect=expected_spawn_failure) as spawn:
+                        with self.assertRaises(FileNotFoundError) as raised:
+                            study.run()
+                    self.assertIs(raised.exception, expected_spawn_failure)
+                    self.assertEqual(spawn.call_count, 1)
+                    self.assertEqual(actors, [])
+                    self.assertEqual(numeric_requests, [])
+                    self.assertEqual(events, ['actor-never-started'])
+                    self.assertFalse(study.outputs)
+                    self.assertTrue(all(b.closed and b.actor_absent for b in backends))
+                    return
                 result = study.run()
             self.assertEqual(result['status'], 'four_cell_outputs_scored')
             self.assertEqual(len(study.outputs), 4)
@@ -348,6 +368,17 @@ exec(compile(body, str(p), 'exec'), ns)
                 if channel.proc:
                     for stream in (channel.proc.stdin,channel.proc.stdout,channel.proc.stderr):
                         if not stream.closed: stream.close()
+
+
+class SpawnFailureControls(unittest.TestCase):
+    # Construct a separate generated deployment, so the successful four-cell
+    # control's output directory is never reused or overwritten.
+    setUpClass = classmethod(OwnerControls.setUpClass.__func__)
+    tearDownClass = classmethod(OwnerControls.tearDownClass.__func__)
+
+    def test_spawn_failure_keeps_original_error_without_scoring(self):
+        failure = FileNotFoundError('generated actor spawn failure')
+        OwnerControls._run_real_owner_composition(self, expected_spawn_failure=failure)
 
 
 if __name__ == '__main__':
