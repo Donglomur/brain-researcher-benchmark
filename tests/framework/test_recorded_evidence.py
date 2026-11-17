@@ -50,7 +50,7 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(result['counts']['viewer_interpretation_attempts'], 0)
         self.assertEqual(result['counts']['historical_profiles'], 3)
         self.assertEqual(result['counts']['historical_programme_controls'], 4)
-        self.assertEqual(result['counts']['authentic_engineering_reports'], 2)
+        self.assertEqual(result['counts']['authentic_engineering_reports'], 3)
         for rows in result['records'].values():
             for row in rows:
                 self.assertEqual(row['qualification_effect'], 'none')
@@ -156,7 +156,7 @@ class EvidenceTests(unittest.TestCase):
             evidence.load(self.root)
 
     def test_native_controls_are_separate_from_pilot_and_historical_attempts(self):
-        for name in evidence.PUBLIC_REPORTS:
+        for name in (evidence.PILOT, evidence.HISTORY, evidence.DIRECT, evidence.VIEWER, evidence.NATIVE):
             self.install(name)
         result = evidence.load(self.root)
         self.assertEqual(result['counts']['native_operator_controls'], 8)
@@ -236,6 +236,129 @@ class EvidenceTests(unittest.TestCase):
         self.assertNotIn('private-ledger-sentinel', json.dumps(result))
         self.assertEqual(result['counts']['native_operator_control_reports'], 1)
         self.assertEqual(result['counts']['pilot_attempts'], 0)
+
+    def test_viewer_transport_is_authentic_scripted_engineering_not_model_evidence(self):
+        self.install(evidence.TRANSPORT)
+        result = evidence.load(self.root, {'NEURAL-077'})
+        row = result['records']['NEURAL-077'][0]
+        self.assertEqual(row['category'], 'authentic_viewer_transport')
+        self.assertEqual(row['coverage']['valid_unscored_sessions'], 400)
+        self.assertEqual(row['software_controls']['authentic_boundary_checks'], 15)
+        self.assertEqual(row['software_controls']['generated_subprocess_tests'], 9)
+        self.assertEqual(len(row['preserved_counterexamples']), 2)
+        self.assertIn('parent environment recovery', row['preserved_counterexamples'][0])
+        self.assertIn('invalid final', row['preserved_counterexamples'][1])
+        self.assertIn('macos_profile', row['actual_boundary'])
+        self.assertEqual(row['qualification_effect'], 'none')
+        self.assertFalse(row['scoring_performed'])
+        self.assertEqual(result['counts']['authentic_engineering_reports'], 1)
+        self.assertEqual(result['counts']['authentic_viewer_transport_reports'], 1)
+        self.assertEqual(result['counts']['scripted_viewer_sessions'], 400)
+        self.assertEqual(result['counts']['viewer_interpretation_attempts'], 0)
+        self.assertEqual(result['counts']['pilot_attempts'], 0)
+
+    def test_viewer_transport_incomplete_or_contradictory_reports_refuse(self):
+        mutations = {
+            'model': lambda d: d.update(new_model_trials=1),
+            'targets': lambda d: d.update(query_target_reads=1),
+            'scoring': lambda d: d.update(scoring_performed=True),
+            'subset': lambda d: d['verification'].update(authentic_final_source_queries=399),
+            'incomplete': lambda d: d['verification'].update(authentic_final_source_valid_unscored=399),
+            'wrong-controls': lambda d: d['verification'].update(authentic_control_checks=14),
+            'no-demo-control': lambda d: d['verification'].update(authentic_four_demo_control=False),
+            'dropped-denial': lambda d: d['actual_boundary']['tested_denials'].pop(),
+            'counterexample-loss': lambda d: d['preserved_counterexamples'].pop(),
+            'source-substitution': lambda d: d['source_reuse'].update(normalizer_parser_scorer_copied=True),
+            'source-path': lambda d: d['implementation_sha256'].update({'/private/source.py': 'a' * 64}),
+            'bad-receipt': lambda d: d['verification'].update(complete_transport_receipt_sha256='bad'),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label):
+                document = self.document(evidence.TRANSPORT)
+                mutate(document)
+                self.install(evidence.TRANSPORT, document)
+                with self.assertRaises(ValueError):
+                    evidence.load(self.root)
+
+    def test_viewer_transport_never_opens_retained_sources_or_receipts(self):
+        document = self.document(evidence.TRANSPORT)
+        document['implementation_sha256']['transport.py'] = 'd' * 64
+        document['private_receipt_path'] = '/private-ledger-sentinel/receipt.json'
+        self.install(evidence.TRANSPORT, document)
+        original = Path.open
+        def guarded(path, *args, **kwargs):
+            self.assertEqual(path.relative_to(self.root).as_posix(), evidence.TRANSPORT)
+            return original(path, *args, **kwargs)
+        with patch.object(Path, 'open', guarded):
+            result = evidence.load(self.root)
+        self.assertNotIn('private-ledger-sentinel', json.dumps(result))
+        self.assertEqual(result['records']['NEURAL-077'][0]['reported_implementation_sha256']['transport.py'], 'd' * 64)
+
+    def test_native_repair_adds_distinct_controls_without_new_tasks_or_solver_trials(self):
+        for name in evidence.PUBLIC_REPORTS:
+            self.install(name)
+        result = evidence.load(self.root)
+        self.assertEqual(result['counts']['native_operator_controls'], 16)
+        self.assertEqual(result['counts']['native_operator_control_reports'], 2)
+        self.assertEqual(result['counts']['native_control_tasks'], 2)
+        self.assertEqual(result['counts']['pilot_attempts'], 8)
+        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 5)
+        self.assertEqual(result['counts']['public_reports'], 7)
+        rows = [row for items in result['records'].values() for row in items
+                if row['category'] == 'native_operator_control']
+        self.assertEqual(len({row['id'] for row in rows}), 4)
+        self.assertEqual(sum(control['owned_containers'] for row in rows for control in row['controls']), 24)
+        for task in ('NEURAL-007', 'NEURAL-077'):
+            selected = [row for row in rows if row['task_id'] == task]
+            self.assertEqual({row['report_role'] for row in selected},
+                             {'original_operator_controls', 'rename_repair_validation'})
+            original = next(row for row in selected if row['report_role'] == 'original_operator_controls')
+            repaired = next(row for row in selected if row['report_role'] == 'rename_repair_validation')
+            self.assertEqual(repaired['repair']['previous_report'], original['source'])
+            self.assertTrue(all(control['source_unchanged_before'] and control['source_unchanged_after']
+                                for control in repaired['controls']))
+            self.assertEqual(repaired['qualification_effect'], 'none')
+            self.assertEqual(repaired['model_attempts_recorded'], 0)
+
+    def test_native_repair_requires_authentic_original_report_join(self):
+        self.install(evidence.NATIVE_REPAIR)
+        with self.assertRaisesRegex(ValueError, 'preserved original report'):
+            evidence.load(self.root)
+        self.install(evidence.NATIVE)
+        document = self.document(evidence.NATIVE)
+        document['scope'] += ' Altered original report.'
+        self.install(evidence.NATIVE, document)
+        with self.assertRaisesRegex(ValueError, 'predecessor report pin mismatch'):
+            evidence.load(self.root)
+
+    def test_native_repair_contradictions_and_reused_receipts_refuse(self):
+        original = self.document(evidence.NATIVE)
+        self.install(evidence.NATIVE)
+        mutations = {
+            'role': lambda d: d.update(report_role='original_operator_controls'),
+            'missing-repair': lambda d: d.pop('repair'),
+            'wrong-path': lambda d: d['repair']['previous_report'].update(path='/private/prior.json'),
+            'wrong-pin': lambda d: d['repair']['previous_report'].update(sha256='a' * 64),
+            'not-preserved': lambda d: d['repair'].update(previous_evidence_preserved=False),
+            'not-public-cli': lambda d: d['repair'].update(public_entrypoint=['python3', 'private.py']),
+            'source-changed': lambda d: d['controls'][0].update(source_unchanged_after=False),
+            'source-inventory-changed': lambda d: d['operator_source_inventory'].update(sha256='a' * 64),
+            'no-new-revision': lambda d: d.update(source_commit=original['source_commit']),
+            'cumulative-double-count': lambda d: d['totals'].update(cumulative_native_attempts_including_previous_report=24),
+            'cumulative-containers': lambda d: d['totals'].update(cumulative_owned_containers_including_previous_report=12),
+            'reused-old-receipt': lambda d: d['controls'][0].update(retained_receipt=copy.deepcopy(original['controls'][0]['retained_receipt'])),
+            'reused-other-case': lambda d: d['controls'][0].update(retained_receipt=copy.deepcopy(original['controls'][1]['retained_receipt'])),
+            'reused-old-digest': lambda d: d['controls'][0]['retained_receipt'].update(sha256=original['controls'][0]['retained_receipt']['sha256']),
+            'duplicate-receipt': lambda d: d['controls'][0].update(retained_receipt=copy.deepcopy(d['controls'][1]['retained_receipt'])),
+            'private-dispatch-locator': lambda d: d['repair']['dispatch_source']['src/neurobench/cli.py'].update(path='/private/source.py'),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label):
+                document = self.document(evidence.NATIVE_REPAIR)
+                mutate(document)
+                self.install(evidence.NATIVE_REPAIR, document)
+                with self.assertRaises(ValueError):
+                    evidence.load(self.root)
 
     def test_malformed_duplicate_and_nonfinite_json_refuse(self):
         path = self.install(evidence.PILOT)

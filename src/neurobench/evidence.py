@@ -20,7 +20,9 @@ HISTORY = 'docs/provenance/execution/historical-evidence-v1/profiles.json'
 DIRECT = 'benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json'
 VIEWER = 'benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json'
 NATIVE = 'docs/status/operator-controls-20261116.json'
-PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER, NATIVE)
+TRANSPORT = 'benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/EVIDENCE.json'
+NATIVE_REPAIR = 'docs/status/operator-controls-rename-20261116.json'
+PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER, NATIVE, TRANSPORT, NATIVE_REPAIR)
 MEMBER_LIMIT = 1024 * 1024
 SCOPE = ('Recorded within the selected public reports only. Reports are not current '
          'runtime verification, protected evaluation or complete scientific qualification.')
@@ -294,11 +296,116 @@ def engineering_records(doc, source, viewer=False):
     return [row]
 
 
+def viewer_transport_records(doc, source):
+    """Record scripted local transport controls without treating them as model trials."""
+    require(doc.get('schema') == 'neural077_visual_transport_evidence_v1'
+            and doc.get('scoring_performed') is False
+            and doc.get('authentic_data_predictions_or_paths_in_public_git') is False,
+            'unsupported viewer transport engineering report')
+    require(all(integer(doc[key]) == 0 for key in
+                ('new_download_bytes', 'new_model_trials', 'paid_api_calls', 'query_target_reads')),
+            'viewer transport control cannot claim model trials, targets or acquisitions')
+    verification = obj(doc['verification'])
+    require(all(integer(verification[key]) == expected for key, expected in
+                (('authentic_final_source_queries', 400), ('authentic_final_source_valid_unscored', 400),
+                 ('authentic_control_checks', 15), ('generated_subprocess_tests_passed', 9)))
+            and verification['authentic_four_demo_control'] is True
+            and verification['unchanged_npz_validator_passed'] is True,
+            'viewer transport complete population or controls differ')
+    implementation = obj(doc['implementation_sha256'])
+    require(set(implementation) == {'SOURCE_BINDINGS.json', 'scripted_client.py', 'transport.py'},
+            'viewer transport implementation identity set differs')
+    implementation = {name: digest(value) for name, value in implementation.items()}
+    boundary = obj(doc['actual_boundary'])
+    denials = texts(boundary['tested_denials'])
+    require(len(denials) == 7 and set(denials) == {
+        'authentic public packet reads', 'operator session reads', 'file writes', 'network socket',
+        'child process', 'parent argv/environment KERN_PROCARGS2', 'inherited secret environment'},
+        'viewer transport tested boundary differs')
+    boundary = {key: text(boundary[key]) for key in ('first_final', 'macos_profile', 'participant_process',
+                                                   'population_collection', 'wire_capture')}
+    boundary['tested_denials'] = denials
+    reuse = obj(doc['source_reuse'])
+    require(reuse['normalizer_parser_scorer_copied'] is False and reuse['viewer'] == '../visual-viewer-v1',
+            'viewer transport source reuse differs')
+    counterexamples = texts(doc['preserved_counterexamples'])
+    require(len(counterexamples) == 2 and len(set(counterexamples)) == 2,
+            'both viewer transport counterexamples must remain recorded')
+    row = record('neural077-authentic-viewer-transport-v1', 'NEURAL-077', 'authentic_viewer_transport', source, '',
+                 doc['scope'], 'scripted local macOS complete collection and four-demo boundary controls', doc['limitations'])
+    row.update(coverage={'scripted_queries': 400, 'valid_unscored_sessions': 400},
+               software_controls={'authentic_boundary_checks': 15, 'generated_subprocess_tests': 9},
+               reported_implementation_sha256=implementation, actual_boundary=boundary,
+               source_reuse={'normalizer_parser_scorer_copied': False, 'viewer': reuse['viewer'],
+                             'complete_collection': text(reuse['complete_collection'])},
+               preserved_counterexamples=counterexamples, model_attempts_recorded=0,
+               scoring_performed=False, original_records_in_publication=False,
+               retained_receipt_sha256={key: digest(verification[key]) for key in (
+                   'authentic_controls_receipt_sha256', 'complete_transport_receipt_sha256',
+                   'frozen_control_protocol_sha256', 'sandbox_counterexample_receipt_sha256')})
+    return [row]
+
+
+def checked_native_repair(doc):
+    require(doc.get('report_role') == 'rename_repair_validation', 'native repair report role differs')
+    repair = obj(doc['repair'])
+    require(all(repair.get(key) is True for key in (
+        'previous_evidence_preserved', 'fresh_checkout',
+        'exact_source_checked_before_and_after_each_native_attempt', 'direct_task_validator_import_regression_passed')),
+        'native repair evidence or source checks contradicted')
+    previous = obj(repair['previous_report'])
+    require(set(previous) == {'path', 'bytes', 'sha256'} and previous['path'] == NATIVE,
+            'native repair predecessor path differs')
+    integer(previous['bytes'], 1)
+    digest(previous['sha256'])
+    require(repair['public_entrypoint'] == ['python3', '-I', '-S', '-B', 'scripts/neurobench.py', 'operator'],
+            'native repair must exercise actual public entrypoint')
+    dispatch = obj(repair['dispatch_source'])
+    require(set(dispatch) == {'scripts/neurobench.py', 'src/neurobench/cli.py',
+                             'src/neurobench/catalog.py', 'src/neurobench/operator_routes.py'},
+            'native repair dispatch source identity set differs')
+    for pin in dispatch.values():
+        obj(pin)
+        require(set(pin) == {'bytes', 'sha256'}, 'native repair dispatch pin has unexpected locator')
+        integer(pin['bytes'], 1)
+        digest(pin['sha256'])
+    return {'problem': text(repair['problem']), 'change': text(repair['change']),
+            'previous_report': dict(previous), 'previous_evidence_preserved': True,
+            'public_entrypoint': list(repair['public_entrypoint']), 'dispatch_source': dispatch,
+            'fresh_checkout': True, 'exact_source_checked_before_and_after_each_native_attempt': True,
+            'direct_task_validator_import_regression_passed': True, 'protocol_sha256': digest(repair['protocol_sha256'])}
+
+
+def checked_native_repair_lineage(doc, previous):
+    """Join only the two explicit public reports, not historical source locators."""
+    require(previous is not None, 'native repair requires the preserved original report')
+    original_doc, original_source = previous
+    require(doc['repair']['previous_report'] == original_source, 'native repair predecessor report pin mismatch')
+    require(doc['source_commit'] != original_doc['source_commit']
+            and doc['operator_source_inventory'] == original_doc['operator_source_inventory']
+            and doc['sleep_adapter_commit'] == original_doc['sleep_adapter_commit'],
+            'native repair changed original grader source or lacks a new dispatch revision')
+    prior_receipts = {row['retained_receipt']['sha256'] for row in original_doc['controls']}
+    require(all(row['retained_receipt']['sha256'] not in prior_receipts for row in doc['controls']),
+            'native repair repeats a previous control receipt')
+    totals = obj(doc['totals'])
+    require(integer(totals['cumulative_native_attempts_including_previous_report'])
+            == len(original_doc['controls']) + len(doc['controls'])
+            and integer(totals['cumulative_owned_containers_including_previous_report'])
+            == sum(row['owned_containers'] for report in (original_doc, doc) for row in report['controls'])
+            and totals['cumulative_owned_container_absence_verified'] is True,
+            'native repair cumulative totals disagree with distinct report rows')
+
+
 def native_operator_records(doc, source):
     """Summarize the executed source revision without inspecting private receipts."""
     require(type(doc.get('schema_version')) is int and doc['schema_version'] == 1
             and doc.get('kind') == 'authentic_development_operator_controls'
             and doc.get('purpose') == 'development-control', 'unsupported native operator control report')
+    is_repair = source['path'] == NATIVE_REPAIR
+    repair = checked_native_repair(doc) if is_repair else None
+    require(is_repair or ('report_role' not in doc and 'repair' not in doc),
+            'original native report cannot assert a repair role')
     source_commit = text(doc['source_commit'])
     require(len(source_commit) == 40 and all(c in '0123456789abcdef' for c in source_commit),
             'invalid native control source revision')
@@ -381,11 +488,17 @@ def native_operator_records(doc, source):
                     'observed_exit', 'status', 'private_stage_dispatched', 'target_loader_attempts',
                     'owned_containers', 'all_owned_containers_absent')}
         selected['expected_refusal'] = case in ('incomplete', 'wrong-target')
+        if is_repair:
+            require(control.get('source_unchanged_before') is True and control.get('source_unchanged_after') is True,
+                    'native repair source stability contradicted')
+            selected.update(source_unchanged_before=True, source_unchanged_after=True)
         for name in ('retained_result', 'retained_receipt'):
             pin = obj(control[name])
             require(set(pin) == {'bytes', 'sha256'}, 'native retained evidence must have no locator')
             selected[name] = {'bytes': integer(pin['bytes'], 1), 'sha256': digest(pin['sha256'])}
         controls_by_task[task].append(selected)
+    require(len({row['retained_receipt']['sha256'] for row in controls}) == len(controls),
+            'native controls must retain distinct attempt receipts')
     totals = obj(doc['totals'])
     require(integer(totals['native_attempts']) == len(controls)
             and integer(totals['owned_containers']) == sum(row['owned_containers'] for row in controls)
@@ -397,7 +510,7 @@ def native_operator_records(doc, source):
     for index, panel in enumerate(panels):
         task = panel['task_id']
         require(len(controls_by_task[task]) == 4, 'native panel controls incomplete')
-        row = record('native-operator-controls-20261116:' + task, task, 'native_operator_control', source,
+        row = record('native-' + Path(source['path']).stem + ':' + task, task, 'native_operator_control', source,
                      '/panels/' + str(index), doc['scope'], panel['condition'], doc['limits'])
         row.update(coverage={key: panel[key] for key in ('development_people', 'development_rows', 'public_input_files', 'training_people')},
                    primary_metric=panel['primary_metric'], companion_metric=panel['companion_metric'],
@@ -410,7 +523,10 @@ def native_operator_records(doc, source):
                    public_input_observation=text(doc['public_input_observation']),
                    counterexamples_preserved=texts(doc['counterexamples_preserved']),
                    evidence_custody=text(doc['evidence_custody']), model_attempts_recorded=0,
-                   original_records_in_publication=False)
+                   original_records_in_publication=False,
+                   report_role='rename_repair_validation' if is_repair else 'original_operator_controls')
+        if repair is not None:
+            row['repair'] = repair
         result.append(row)
     return result
 
@@ -428,16 +544,20 @@ def load(root, task_ids=None):
         require(not isinstance(task_ids, str), 'task ID allowlist must be a collection')
         task_ids = set(task_ids)
         require(all(type(item) is str and item for item in task_ids), 'invalid task ID allowlist')
-    records, reports = {}, []
+    records, reports, captured_reports = {}, [], {}
     for relative, project in ((PILOT, pilot_records), (HISTORY, historical_records),
                               (DIRECT, engineering_records), (VIEWER, lambda doc, source: engineering_records(doc, source, True)),
-                              (NATIVE, native_operator_records)):
+                              (NATIVE, native_operator_records), (TRANSPORT, viewer_transport_records),
+                              (NATIVE_REPAIR, native_operator_records)):
         try:
             captured = read(root, relative)
             if captured is None:
                 continue
             doc, source = captured
             projected = project(doc, source)
+            if relative == NATIVE_REPAIR:
+                checked_native_repair_lineage(doc, captured_reports.get(NATIVE))
+            captured_reports[relative] = (doc, source)
             reports.append(source)
             for row in projected:
                 require(task_ids is None or row['task_id'] in task_ids, 'report names unregistered task: ' + row['task_id'])
@@ -452,7 +572,10 @@ def load(root, task_ids=None):
         'paper_calibration_attempts': categories['paper_calibration_attempt'],
         'neural_programme_attempts': categories['neural_programme_attempt'],
         'direct_interpretation_attempts': 0, 'viewer_interpretation_attempts': 0,
-        'authentic_engineering_reports': categories['authentic_input_materialization'] + categories['authentic_viewer_rendering'],
+        'authentic_engineering_reports': categories['authentic_input_materialization'] + categories['authentic_viewer_rendering'] + categories['authentic_viewer_transport'],
+        'authentic_viewer_transport_reports': categories['authentic_viewer_transport'],
+        'scripted_viewer_sessions': sum(row['coverage']['valid_unscored_sessions'] for items in records.values() for row in items
+                                        if row['category'] == 'authentic_viewer_transport'),
         'historical_profiles': categories['historical_paper_calibration'] + categories['historical_programme_control'],
         'historical_programme_controls': sum(len(row.get('controls', [])) for items in records.values() for row in items
                                             if row['category'] == 'historical_programme_control'),
